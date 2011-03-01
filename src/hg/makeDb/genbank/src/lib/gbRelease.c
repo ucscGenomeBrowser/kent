@@ -17,10 +17,10 @@
 static char const rcsid[] = "$Id: gbRelease.c,v 1.5 2007/11/16 18:19:50 markd Exp $";
 
 /* size power of hash tables for shared strings */
-#define STR_MEM_HASH_SIZE   24
+#define STR_MEM_HASH_SIZE   20
 
 /* size power of hash for entries */
-#define ACC_HASH_SIZE       24
+#define ACC_HASH_SIZE       20
 
 /* Size for unhash local memory block */
 #define LM_BLOCK_SIZE       1048576

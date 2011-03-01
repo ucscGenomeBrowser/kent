@@ -1395,7 +1395,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Gm12878
 	shortLabel Gm12878
-	longLabel H3K27Me3 - An repressor mark on Gm12878 cells from ENCODE
+	longLabel H3K27Me3 - A repressor mark on Gm12878 cells from ENCODE
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	type wig 0.00 9323.50
@@ -1404,7 +1404,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3H1hesc
 	shortLabel H1 ES
-	longLabel H3K27Me3 - An repressor mark on H1 ES cells from ENCODE
+	longLabel H3K27Me3 - A repressor mark on H1 ES cells from ENCODE
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 255,212,128
@@ -1413,7 +1413,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Hepg2
 	shortLabel HepG2
-	longLabel H3K27Me3 - An repressor mark on HepG2 cells from ENCODE
+	longLabel H3K27Me3 - A repressor mark on HepG2 cells from ENCODE
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 212,255,128
@@ -1422,7 +1422,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Hmec
 	shortLabel HMEC
-	longLabel H3K27Me3 - An repressor mark on HMEC cells from ENCODE 
+	longLabel H3K27Me3 - A repressor mark on HMEC cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 120,235,120
@@ -1431,7 +1431,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Hsmm
 	shortLabel HSMM
-	longLabel H3K27Me3 - An repressor mark on HSMM cells from ENCODE 
+	longLabel H3K27Me3 - A repressor mark on HSMM cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 120,235,204
@@ -1440,7 +1440,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Huvec
 	shortLabel HUVEC
-	longLabel H3K27Me3 - An repressor mark on HUVEC cells from ENCODE 
+	longLabel H3K27Me3 - A repressor mark on HUVEC cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 128,212,255
@@ -1449,7 +1449,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3K562
 	shortLabel K562
-	longLabel H3K27Me3 - An repressor mark on K562 cells from ENCODE 
+	longLabel H3K27Me3 - A repressor mark on K562 cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 128,128,255
@@ -1458,7 +1458,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Nhek
 	shortLabel NHEK
-	longLabel H3K27Me3 - An repressor mark on NHEK cells from ENCODE 
+	longLabel H3K27Me3 - A repressor mark on NHEK cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 212,128,255
@@ -1467,7 +1467,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Nhlf
 	shortLabel NHLF
-	longLabel H3K27Me3 - An repressor mark on NHLF cells from ENCODE 
+	longLabel H3K27Me3 - A repressor mark on NHLF cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 255,128,212
@@ -1513,7 +1513,6 @@ include wgEncodeUwDGF.ra
 
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
 include wgEncodeUwDnaseSeq.ra
-include wgEncodeUwDnaseSeq.new.ra
 
 
 # UW DNAase-seq southerns

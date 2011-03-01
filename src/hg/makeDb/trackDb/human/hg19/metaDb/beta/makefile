@@ -14,6 +14,9 @@ wgEncodeRikenCage.ra \
 wgEncodeUwHistone.ra \
 wgEncodeSunyAlbanyTiling.ra \
 wgEncodeCaltechRnaSeq.ra \
+wgEncodeUwAffyExonArray.ra \
+wgEncodeUwTfbs.ra \
+wgEncodeOpenChromChip.ra \
 
 include ../../../../makefile.metaDb
 

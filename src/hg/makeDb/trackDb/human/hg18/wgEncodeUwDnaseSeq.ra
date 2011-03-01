@@ -5,7 +5,6 @@
 track wgEncodeUwDnaseSeq
 compositeTrack on
 shortLabel UW DNaseI HS
-release beta,public
 longLabel ENCODE Univ. Washington DNaseI Hypersensitivity by Digital DNaseI
 group regulation
 subGroup1 view Views aPeaks=Peaks cHot=Hot_Spots zRawSig=Raw_Signal
@@ -23,7 +22,6 @@ wgEncode 1
 
     track wgEncodeUwDnaseSeqViewaPeaks
     shortLabel Peaks
-    release beta,public
     view aPeaks
     visibility pack
     subTrack wgEncodeUwDnaseSeq
@@ -35,7 +33,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Bjtert
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel BJ Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in BJ cells)
         subGroups view=aPeaks cellType=BJ rank=1st
         type narrowPeak
@@ -43,7 +40,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Bjtert
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel BJ Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in BJ cells)
         subGroups view=aPeaks cellType=BJ rank=2nd
         type narrowPeak
@@ -51,7 +47,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Caco2
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel Caco-2 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in Caco-2 cells)
         subGroups view=aPeaks cellType=Caco2 rank=1st
         type narrowPeak
@@ -59,7 +54,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Caco2
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel Caco-2 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in Caco-2 cells)
         subGroups view=aPeaks cellType=Caco2 rank=2nd
         type narrowPeak
@@ -67,7 +61,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Gm06990
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel GM06990 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in GM06990 cells)
         subGroups view=aPeaks cellType=GM06990 rank=1st
         type narrowPeak
@@ -75,7 +68,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Gm06990
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel GM06990 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in GM06990 cells)
         subGroups view=aPeaks cellType=GM06990 rank=2nd
         type narrowPeak
@@ -83,7 +75,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Gm12878
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel GM12878 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in GM12878 cells)
         subGroups view=aPeaks cellType=1GM12878 rank=2nd
         color 153,38,0
@@ -92,7 +83,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Gm12878
         subTrack wgEncodeUwDnaseSeqViewaPeaks
         shortLabel GM12878 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in GM12878 cells)
         subGroups view=aPeaks cellType=1GM12878 rank=1st
         color 153,38,0
@@ -101,7 +91,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1H1es
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel H1-hESC Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in H1-hESC cells)
         subGroups view=aPeaks cellType=1H1 rank=1st
         type narrowPeak
@@ -110,7 +99,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Helas3
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HeLa-S3 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HeLa-S3 cells)
         subGroups view=aPeaks cellType=2HELA rank=1st
         color 0,102,136
@@ -119,7 +107,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Helas3
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HeLa-S3 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HeLa-S3 cells)
         subGroups view=aPeaks cellType=2HELA rank=2nd
         color 0,102,136
@@ -128,7 +115,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Hepg2
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HepG2 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HepG2 cells)
         subGroups view=aPeaks cellType=2HEPG2 rank=1st
         color 189,0,157
@@ -137,7 +123,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Hepg2
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HepG2 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HepG2 cells)
         subGroups view=aPeaks cellType=2HEPG2 rank=2nd
         color 189,0,157
@@ -146,7 +131,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Hgf
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HGF Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HGF cells)
         subGroups view=aPeaks cellType=HGF rank=1st
         type narrowPeak
@@ -154,7 +138,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Hgf
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HGF Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HGF cells)
         subGroups view=aPeaks cellType=HGF rank=2nd
         type narrowPeak
@@ -162,7 +145,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Hl60V2
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HL-60 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HL-60 cells)
         subGroups view=aPeaks cellType=HL60 rank=1st
         type narrowPeak
@@ -170,7 +152,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Hl60
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HL-60 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HL-60 cells)
         subGroups view=aPeaks cellType=HL60 rank=2nd
         type narrowPeak
@@ -178,7 +159,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Hmec
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HMEC Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HMEC cells)
         subGroups view=aPeaks cellType=HMEC rank=1st
         type narrowPeak
@@ -186,7 +166,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Hrcepic
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HRCEpiC Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HRCEpiC cells)
         subGroups view=aPeaks cellType=HRC rank=1st
         type narrowPeak
@@ -194,7 +173,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Hrcepic
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HRC Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HRCEpiC cells)
         subGroups view=aPeaks cellType=HRC rank=2nd
         type narrowPeak
@@ -202,7 +180,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Hre
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HRE Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HRE cells)
         subGroups view=aPeaks cellType=HRE rank=1st
         type narrowPeak
@@ -210,7 +187,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Hre
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HRE Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HRE cells)
         subGroups view=aPeaks cellType=HRE rank=2nd
         type narrowPeak
@@ -218,7 +194,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Huvec
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HUVEC Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HUVEC cells)
         subGroups view=aPeaks cellType=2HUVEC rank=1st
         color 224,75,0
@@ -227,7 +202,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Jurkat
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel Jurkat Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in Jurkat cells)
         subGroups view=aPeaks cellType=Jurkat rank=1st
         type narrowPeak
@@ -235,7 +209,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1K562
         subTrack wgEncodeUwDnaseSeqViewaPeaks
         shortLabel K562 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in K562 cells)
         subGroups view=aPeaks cellType=1K562 rank=1st
         color 46,0,184
@@ -244,7 +217,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2K562
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel K562 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in K562 cells)
         subGroups view=aPeaks cellType=1K562 rank=2nd
         color 46,0,184
@@ -253,7 +225,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Mcf7
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel MCF-7 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in MCF-7 cells)
         subGroups view=aPeaks cellType=MCF7 rank=1st
         type narrowPeak
@@ -261,7 +232,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Nhek
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel NHEK Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in NHEK cells)
         subGroups view=aPeaks cellType=NHEK rank=1st
         color 179,0,134
@@ -270,7 +240,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Panc1
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel PANC-1 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in PANC-1 cells)
         subGroups view=aPeaks cellType=PANC1 rank=1st
         type narrowPeak
@@ -278,7 +247,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Panc1
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel PANC-1 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in PANC-1 cells)
         subGroups view=aPeaks cellType=PANC1 rank=2nd
         type narrowPeak
@@ -286,7 +254,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Saec
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel SAEC Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in SAEC cells)
         subGroups view=aPeaks cellType=SAEC rank=1st
         type narrowPeak
@@ -294,7 +261,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Saec
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel SAEC Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in SAEC cells)
         subGroups view=aPeaks cellType=SAEC rank=2nd
         type narrowPeak
@@ -302,7 +268,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1SkmcV2
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel SKMC Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in SKMC cells)
         subGroups view=aPeaks cellType=SKMC rank=1st
         type narrowPeak
@@ -310,7 +275,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Skmc
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel SKMC Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in SKMC cells)
         subGroups view=aPeaks cellType=SKMC rank=2nd
         type narrowPeak
@@ -318,7 +282,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Sknshra
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel SK-N-SH_RA Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in SK-N-SH_RA cells)
         subGroups view=aPeaks cellType=SKNSHRA rank=1st
         type narrowPeak
@@ -326,7 +289,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2SknshraV2
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel SK-N-SH_RA Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in SK-N-SH_RA cells)
         subGroups view=aPeaks cellType=SKNSHRA rank=2nd
         type narrowPeak
@@ -334,7 +296,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Th1
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel Th1 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in Th1 cells)
         subGroups view=aPeaks cellType=Th1 rank=1st
         type narrowPeak
@@ -342,7 +303,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Th2
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel Th2 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in Th2 cells)
         subGroups view=aPeaks cellType=Th2 rank=1st
         type narrowPeak
@@ -350,7 +310,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Jurkat
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel Jurkat Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in Jurkat cells)
         subGroups view=aPeaks cellType=Jurkat rank=2nd
         type narrowPeak
@@ -358,7 +317,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Cmk
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel CMK Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in CMK cells)
         subGroups view=aPeaks cellType=CMK rank=1st
         type narrowPeak
@@ -366,7 +324,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Gm12865
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel GM12865 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in GM12865 cells)
         subGroups view=aPeaks cellType=GM12865 rank=1st
         type narrowPeak
@@ -374,23 +331,14 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Gm12865
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel GM12865 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in GM12865 cells)
         subGroups view=aPeaks cellType=GM12865 rank=2nd
         type narrowPeak
 
-        track wgEncodeUwDnaseSeqPeaksRep1JurkatG1
-        subTrack wgEncodeUwDnaseSeqViewaPeaks off
-        shortLabel Jurkat Pk 1
-        release beta,public
-        longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in Jurkat cells)
-        subGroups view=aPeaks cellType=JurkatG1 rank=1st
-        type narrowPeak
 
         track wgEncodeUwDnaseSeqPeaksRep2Mcf7
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel MCF-7 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in MCF-7 cells)
         subGroups view=aPeaks cellType=MCF7 rank=2nd
         type narrowPeak
@@ -398,7 +346,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Nb4
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel NB4 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in NB4 cells)
         subGroups view=aPeaks cellType=NB4 rank=2nd
         type narrowPeak
@@ -406,7 +353,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Nb4V2
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel NB4 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in NB4 cells)
         subGroups view=aPeaks cellType=NB4 rank=1st
         type narrowPeak
@@ -414,7 +360,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Nhdfneo
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel NHDF-neo Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in NHDF-neo cells)
         subGroups view=aPeaks cellType=NHDFneo rank=2nd
         type narrowPeak
@@ -422,7 +367,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Nhdfneo
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel NHDF-neo Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in NHDF-neo cells)
         subGroups view=aPeaks cellType=NHDFneo rank=1st
         type narrowPeak
@@ -430,7 +374,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Nhlf
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel NHLF Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in NHLF cells)
         subGroups view=aPeaks cellType=NHLF rank=1st
         type narrowPeak
@@ -438,7 +381,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Nhlf
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel NHLF Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in NHLF cells)
         subGroups view=aPeaks cellType=NHLF rank=2nd
         type narrowPeak
@@ -446,7 +388,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1H7es
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel H7-hESC Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in H7-hESC cells)
         subGroups view=aPeaks cellType=H7es rank=1st
         type narrowPeak
@@ -454,7 +395,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Hae
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HAEpiC Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HAEpiC cells)
         subGroups view=aPeaks cellType=HAE rank=1st
         type narrowPeak
@@ -462,7 +402,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Hae
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HAEpiC Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HAEpiC cells)
         subGroups view=aPeaks cellType=HAE rank=2nd
         type narrowPeak
@@ -470,7 +409,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Hcf
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HCF Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HCF cells)
         subGroups view=aPeaks cellType=HCF rank=2nd
         type narrowPeak
@@ -478,7 +416,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Hcf
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HCF Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HCF cells)
         subGroups view=aPeaks cellType=HCF rank=1st
         type narrowPeak
@@ -486,7 +423,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Hcm
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HCM Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HCM cells)
         subGroups view=aPeaks cellType=HCM rank=2nd
         type narrowPeak
@@ -494,7 +430,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Hcm
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HCM Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HCM cells)
         subGroups view=aPeaks cellType=HCM rank=1st
         type narrowPeak
@@ -502,7 +437,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Hcpe
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HCPEpiC Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HCPEpiC cells)
         subGroups view=aPeaks cellType=HCPE rank=1st
         type narrowPeak
@@ -510,7 +444,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Hcpe
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HCPEpiC Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HCPEpiC cells)
         subGroups view=aPeaks cellType=HCPE rank=2nd
         type narrowPeak
@@ -518,7 +451,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Hee
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HEEpiC Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HEEpiC cells)
         subGroups view=aPeaks cellType=HEE rank=1st
         type narrowPeak
@@ -526,31 +458,14 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Hee
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HEEpiC Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HEEpiC cells)
         subGroups view=aPeaks cellType=HEE rank=2nd
         type narrowPeak
 
-        track wgEncodeUwDnaseSeqPeaksRep1Hipe
-        subTrack wgEncodeUwDnaseSeqViewaPeaks off
-        shortLabel HIPEpiC Pk 1
-        release beta,public
-        longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HIPEpiC cells)
-        subGroups view=aPeaks cellType=HIPE rank=1st
-        type narrowPeak
-
-        track wgEncodeUwDnaseSeqPeaksRep2Hipe
-        subTrack wgEncodeUwDnaseSeqViewaPeaks off
-        shortLabel HIPEpiC Pk 2
-        release beta,public
-        longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HIPEpiC cells)
-        subGroups view=aPeaks cellType=HIPE rank=2nd
-        type narrowPeak
 
         track wgEncodeUwDnaseSeqPeaksRep1Hnpce
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HNPCEpiC Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HNPCEpiC cells)
         subGroups view=aPeaks cellType=HNPCE rank=1st
         type narrowPeak
@@ -558,7 +473,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Hnpce
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HNPCEpiC Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HNPCEpiC cells)
         subGroups view=aPeaks cellType=HNPCE rank=2nd
         type narrowPeak
@@ -566,7 +480,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Hrpe
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HRPEpiC Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HRPEpiC cells)
         subGroups view=aPeaks cellType=HRPE rank=2nd
         type narrowPeak
@@ -574,7 +487,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Hrpe
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel HRPEpiC Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HRPEpiC cells)
         subGroups view=aPeaks cellType=HRPE rank=1st
         type narrowPeak
@@ -582,7 +494,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Ag04449
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel AG04449 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in AG04449 cells)
         subGroups view=aPeaks cellType=AG04449 rank=1st
         type narrowPeak
@@ -590,7 +501,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Ag04449
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel AG04449 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in AG04449 cells)
         subGroups view=aPeaks cellType=AG04449 rank=2nd
         type narrowPeak
@@ -598,7 +508,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Ag04450
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel AG04450 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in AG04450 cells)
         subGroups view=aPeaks cellType=AG04450 rank=2nd
         type narrowPeak
@@ -606,7 +515,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Ag04450
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel AG04450 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in AG04450 cells)
         subGroups view=aPeaks cellType=AG04450 rank=1st
         type narrowPeak
@@ -614,7 +522,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Ag09309
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel AG09309 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in AG09309 cells)
         subGroups view=aPeaks cellType=AG09309 rank=1st
         type narrowPeak
@@ -622,7 +529,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Ag09309
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel AG09309 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in AG09309 cells)
         subGroups view=aPeaks cellType=AG09309 rank=2nd
         type narrowPeak
@@ -630,7 +536,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Ag09319
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel AG09319 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in AG09319 cells)
         subGroups view=aPeaks cellType=AG09319 rank=2nd
         type narrowPeak
@@ -638,7 +543,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Ag09319
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel AG09319 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in AG09319 cells)
         subGroups view=aPeaks cellType=AG09319 rank=1st
         type narrowPeak
@@ -646,7 +550,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep2Ag10803
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel AG10803 Pk 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in AG10803 cells)
         subGroups view=aPeaks cellType=AG10803 rank=2nd
         type narrowPeak
@@ -654,14 +557,12 @@ wgEncode 1
         track wgEncodeUwDnaseSeqPeaksRep1Ag10803
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel AG10803 Pk 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in AG10803 cells)
         subGroups view=aPeaks cellType=AG10803 rank=1st
         type narrowPeak
 
     track wgEncodeUwDnaseSeqViewcHot
     shortLabel Hot Spots
-    release beta,public
     view cHot
     visibility pack
     subTrack wgEncodeUwDnaseSeq
@@ -673,7 +574,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Bjtert
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel BJ Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in BJ cells)
         subGroups view=cHot cellType=BJ rank=1st
         type broadPeak
@@ -681,7 +581,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Bjtert
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel BJ Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in BJ cells)
         subGroups view=cHot cellType=BJ rank=2nd
         type broadPeak
@@ -689,7 +588,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Caco2
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel Caco-2 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in Caco-2 cells)
         subGroups view=cHot cellType=Caco2 rank=1st
         type broadPeak
@@ -697,7 +595,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Caco2
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel Caco-2 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in Caco-2 cells)
         subGroups view=cHot cellType=Caco2 rank=2nd
         type broadPeak
@@ -705,7 +602,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Gm06990
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel GM06990 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in GM06990 cells)
         subGroups view=cHot cellType=GM06990 rank=1st
         type broadPeak
@@ -713,7 +609,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Gm06990
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel GM06990 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in GM06990 cells)
         subGroups view=cHot cellType=GM06990 rank=2nd
         type broadPeak
@@ -721,7 +616,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Gm12878
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel GM12878 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in GM12878 cells)
         subGroups view=cHot cellType=1GM12878 rank=2nd
         color 153,38,0
@@ -730,7 +624,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Gm12878
         subTrack wgEncodeUwDnaseSeqViewcHot
         shortLabel GM12878 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in GM12878 cells)
         subGroups view=cHot cellType=1GM12878 rank=1st
         color 153,38,0
@@ -739,7 +632,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1H1es
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel H1-hESC 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in H1-hESC cells)
         subGroups view=cHot cellType=1H1 rank=1st
         type broadPeak
@@ -748,7 +640,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Helas3
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HeLa-S3 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HeLa-S3 cells)
         subGroups view=cHot cellType=2HELA rank=1st
         color 0,102,136
@@ -757,7 +648,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Helas3
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HeLa-S3 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HeLa-S3 cells)
         subGroups view=cHot cellType=2HELA rank=2nd
         color 0,102,136
@@ -766,7 +656,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Hepg2
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HepG2 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HepG2 cells)
         subGroups view=cHot cellType=2HEPG2 rank=1st
         color 189,0,157
@@ -775,7 +664,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Hepg2
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HepG2 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HepG2 cells)
         subGroups view=cHot cellType=2HEPG2 rank=2nd
         color 189,0,157
@@ -784,7 +672,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Hgf
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HGF Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HGF cells)
         subGroups view=cHot cellType=HGF rank=1st
         type broadPeak
@@ -792,7 +679,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Hgf
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HGF Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HGF cells)
         subGroups view=cHot cellType=HGF rank=2nd
         type broadPeak
@@ -800,7 +686,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Hl60V2
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HL-60 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HL-60 cells)
         subGroups view=cHot cellType=HL60 rank=1st
         type broadPeak
@@ -808,7 +693,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Hl60
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HL-60 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HL-60 cells)
         subGroups view=cHot cellType=HL60 rank=2nd
         type broadPeak
@@ -816,7 +700,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Hmec
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HMEC Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HMEC cells)
         subGroups view=cHot cellType=HMEC rank=1st
         type broadPeak
@@ -824,7 +707,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Hrcepic
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HRCEpiC Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HRCEpiC cells)
         subGroups view=cHot cellType=HRC rank=1st
         type broadPeak
@@ -832,7 +714,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Hrcepic
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HRCEpiC Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HRCEpiC cells)
         subGroups view=cHot cellType=HRC rank=2nd
         type broadPeak
@@ -840,7 +721,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Hre
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HRE Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HRE cells)
         subGroups view=cHot cellType=HRE rank=1st
         type broadPeak
@@ -848,7 +728,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Hre
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HRE Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HRE cells)
         subGroups view=cHot cellType=HRE rank=2nd
         type broadPeak
@@ -856,7 +735,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Huvec
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HUVEC Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HUVEC cells)
         subGroups view=cHot cellType=2HUVEC rank=1st
         color 224,75,0
@@ -865,7 +743,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Jurkat
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel Jurkat Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in Jurkat cells)
         subGroups view=cHot cellType=Jurkat rank=1st
         type broadPeak
@@ -873,7 +750,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1K562
         subTrack wgEncodeUwDnaseSeqViewcHot
         shortLabel K562 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in K562 cells)
         subGroups view=cHot cellType=1K562 rank=1st
         color 46,0,184
@@ -882,7 +758,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2K562
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel K562 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in K562 cells)
         subGroups view=cHot cellType=1K562 rank=2nd
         color 46,0,184
@@ -891,7 +766,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Mcf7
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel MCF-7 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in MCF-7 cells)
         subGroups view=cHot cellType=MCF7 rank=1st
         type broadPeak
@@ -899,7 +773,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Nhek
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel NHEK 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in NHEK cells)
         subGroups view=cHot cellType=NHEK rank=1st
         color 179,0,134
@@ -908,7 +781,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Panc1
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel PANC-1 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in PANC-1 cells)
         subGroups view=cHot cellType=PANC1 rank=1st
         type broadPeak
@@ -916,7 +788,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Panc1
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel PANC-1 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in PANC-1 cells)
         subGroups view=cHot cellType=PANC1 rank=2nd
         type broadPeak
@@ -924,7 +795,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Saec
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel SAEC 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in SAEC cells)
         subGroups view=cHot cellType=SAEC rank=1st
         type broadPeak
@@ -932,7 +802,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Saec
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel SAEC 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in SAEC cells)
         subGroups view=cHot cellType=SAEC rank=2nd
         type broadPeak
@@ -940,7 +809,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1SkmcV2
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel SKMC Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in SKMC cells)
         subGroups view=cHot cellType=SKMC rank=1st
         type broadPeak
@@ -948,7 +816,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Skmc
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel SKMC Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in SKMC cells)
         subGroups view=cHot cellType=SKMC rank=2nd
         type broadPeak
@@ -956,7 +823,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Sknshra
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel SK-N-SH_RAHspot1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in SK-N-SH_RA cells)
         subGroups view=cHot cellType=SKNSHRA rank=1st
         type broadPeak
@@ -964,7 +830,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2SknshraV2
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel SK-N-SH_RAHspot2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in SK-N-SH_RA cells)
         subGroups view=cHot cellType=SKNSHRA rank=2nd
         type broadPeak
@@ -972,7 +837,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Th1
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel Th1 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in Th1 cells)
         subGroups view=cHot cellType=Th1 rank=1st
         type broadPeak
@@ -980,7 +844,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Th2
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel Th2 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in Th2 cells)
         subGroups view=cHot cellType=Th2 rank=1st
         type broadPeak
@@ -988,7 +851,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Jurkat
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel Jurkat Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in Jurkat cells)
         subGroups view=cHot cellType=Jurkat rank=2nd
         type broadPeak
@@ -996,7 +858,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Cmk
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel CMK Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in CMK cells)
         subGroups view=cHot cellType=CMK rank=1st
         type broadPeak
@@ -1004,7 +865,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Gm12865
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel GM12865 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in GM12865 cells)
         subGroups view=cHot cellType=GM12865 rank=1st
         type broadPeak
@@ -1012,23 +872,14 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Gm12865
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel GM12865 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in GM12865 cells)
         subGroups view=cHot cellType=GM12865 rank=2nd
         type broadPeak
 
-        track wgEncodeUwDnaseSeqHotspotsRep1JurkatG1
-        subTrack wgEncodeUwDnaseSeqViewcHot off
-        shortLabel Jurkat Hspot 1
-        release beta,public
-        longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in Jurkat cells)
-        subGroups view=cHot cellType=JurkatG1 rank=1st
-        type broadPeak
 
         track wgEncodeUwDnaseSeqHotspotsRep2Mcf7
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel MCF-7 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in MCF-7 cells)
         subGroups view=cHot cellType=MCF7 rank=2nd
         type broadPeak
@@ -1036,7 +887,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Nb4
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel NB4 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in NB4 cells)
         subGroups view=cHot cellType=NB4 rank=2nd
         type broadPeak
@@ -1044,7 +894,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Nb4V2
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel NB4 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in NB4 cells)
         subGroups view=cHot cellType=NB4 rank=1st
         type broadPeak
@@ -1052,7 +901,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Nhdfneo
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel NHDF-neo Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in NHDF-neo cells)
         subGroups view=cHot cellType=NHDFneo rank=2nd
         type broadPeak
@@ -1060,7 +908,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Nhdfneo
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel NHDF-neo Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in NHDF-neo cells)
         subGroups view=cHot cellType=NHDFneo rank=1st
         type broadPeak
@@ -1068,7 +915,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Nhlf
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel NHLF Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in NHLF cells)
         subGroups view=cHot cellType=NHLF rank=1st
         type broadPeak
@@ -1076,7 +922,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Nhlf
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel NHLF 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in NHLF cells)
         subGroups view=cHot cellType=NHLF rank=2nd
         type broadPeak
@@ -1084,7 +929,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1H7es
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel H7-hESC Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in H7-hESC cells)
         subGroups view=cHot cellType=H7es rank=1st
         type broadPeak
@@ -1092,7 +936,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Hae
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HAEpiC Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HAEpiC cells)
         subGroups view=cHot cellType=HAE rank=1st
         type broadPeak
@@ -1100,7 +943,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Hae
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HAEpiC Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HAEpiC cells)
         subGroups view=cHot cellType=HAE rank=2nd
         type broadPeak
@@ -1108,7 +950,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Hcf
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HCF Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HCF cells)
         subGroups view=cHot cellType=HCF rank=2nd
         type broadPeak
@@ -1116,7 +957,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Hcf
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HCF Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HCF cells)
         subGroups view=cHot cellType=HCF rank=1st
         type broadPeak
@@ -1124,7 +964,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Hcm
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HCM Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HCM cells)
         subGroups view=cHot cellType=HCM rank=2nd
         type broadPeak
@@ -1132,7 +971,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Hcm
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HCM Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HCM cells)
         subGroups view=cHot cellType=HCM rank=1st
         type broadPeak
@@ -1140,7 +978,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Hcpe
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HCPEpiC Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HCPEpiC cells)
         subGroups view=cHot cellType=HCPE rank=1st
         type broadPeak
@@ -1148,7 +985,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Hcpe
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HCPEpiC Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HCPEpiC cells)
         subGroups view=cHot cellType=HCPE rank=2nd
         type broadPeak
@@ -1156,7 +992,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Hee
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HEEpiC Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HEEpiC cells)
         subGroups view=cHot cellType=HEE rank=1st
         type broadPeak
@@ -1164,31 +999,14 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Hee
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HEEpiC Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HEEpiC cells)
         subGroups view=cHot cellType=HEE rank=2nd
         type broadPeak
 
-        track wgEncodeUwDnaseSeqHotspotsRep1Hipe
-        subTrack wgEncodeUwDnaseSeqViewcHot off
-        shortLabel HIPEpiC Hspot 1
-        release beta,public
-        longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HIPEpiC cells)
-        subGroups view=cHot cellType=HIPE rank=1st
-        type broadPeak
-
-        track wgEncodeUwDnaseSeqHotspotsRep2Hipe
-        subTrack wgEncodeUwDnaseSeqViewcHot off
-        shortLabel HIPEpiC Hspot 2
-        release beta,public
-        longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HIPEpiC cells)
-        subGroups view=cHot cellType=HIPE rank=2nd
-        type broadPeak
 
         track wgEncodeUwDnaseSeqHotspotsRep1Hnpce
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HNPCEpiC Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HNPCEpiC cells)
         subGroups view=cHot cellType=HNPCE rank=1st
         type broadPeak
@@ -1196,7 +1014,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Hnpce
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HNPCEpiC Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HNPCEpiC cells)
         subGroups view=cHot cellType=HNPCE rank=2nd
         type broadPeak
@@ -1204,7 +1021,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Hrpe
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HRPEpiC Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HRPEpiC cells)
         subGroups view=cHot cellType=HRPE rank=2nd
         type broadPeak
@@ -1212,7 +1028,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Hrpe
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel HRPEpiC Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HRPEpiC cells)
         subGroups view=cHot cellType=HRPE rank=1st
         type broadPeak
@@ -1220,7 +1035,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Ag04449
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel AG04449 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in AG04449 cells)
         subGroups view=cHot cellType=AG04449 rank=1st
         type broadPeak
@@ -1228,7 +1042,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Ag04449
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel AG04449 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in AG04449 cells)
         subGroups view=cHot cellType=AG04449 rank=2nd
         type broadPeak
@@ -1236,7 +1049,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Ag04450
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel AG04450 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in AG04450 cells)
         subGroups view=cHot cellType=AG04450 rank=2nd
         type broadPeak
@@ -1244,7 +1056,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Ag04450
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel AG04450 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in AG04450 cells)
         subGroups view=cHot cellType=AG04450 rank=1st
         type broadPeak
@@ -1252,7 +1063,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Ag09309
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel AG09309 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in AG09309 cells)
         subGroups view=cHot cellType=AG09309 rank=1st
         type broadPeak
@@ -1260,7 +1070,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Ag09309
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel AG09309 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in AG09309 cells)
         subGroups view=cHot cellType=AG09309 rank=2nd
         type broadPeak
@@ -1268,7 +1077,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Ag09319
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel AG09319 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in AG09319 cells)
         subGroups view=cHot cellType=AG09319 rank=2nd
         type broadPeak
@@ -1276,7 +1084,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Ag09319
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel AG09319 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in AG09319 cells)
         subGroups view=cHot cellType=AG09319 rank=1st
         type broadPeak
@@ -1284,7 +1091,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep2Ag10803
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel AG10803 Hspot 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in AG10803 cells)
         subGroups view=cHot cellType=AG10803 rank=2nd
         type broadPeak
@@ -1292,14 +1098,12 @@ wgEncode 1
         track wgEncodeUwDnaseSeqHotspotsRep1Ag10803
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel AG10803 Hspot 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in AG10803 cells)
         subGroups view=cHot cellType=AG10803 rank=1st
         type broadPeak
 
     track wgEncodeUwDnaseSeqViewzRawSig
     shortLabel Raw Signal
-    release beta,public
     view zRawSig
     visibility full
     subTrack wgEncodeUwDnaseSeq
@@ -1313,7 +1117,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Bjtert
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel BJ Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in BJ cells)
         subGroups view=zRawSig cellType=BJ rank=1st
         type wig 1.00 227006.00
@@ -1321,7 +1124,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Bjtert
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel BJ Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in BJ cells)
         subGroups view=zRawSig cellType=BJ rank=2nd
         type wig 1.00 103741.00
@@ -1329,7 +1131,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Caco2
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel Caco-2 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in Caco-2 cells)
         subGroups view=zRawSig cellType=Caco2 rank=1st
         type wig 1.00 59677.00
@@ -1337,7 +1138,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Caco2
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel Caco-2 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in Caco-2 cells)
         subGroups view=zRawSig cellType=Caco2 rank=2nd
         type wig 1.00 50377.00
@@ -1345,7 +1145,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Gm06990
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel GM06990 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in GM06990 cells)
         subGroups view=zRawSig cellType=GM06990 rank=1st
         type wig 1.00 69023.00
@@ -1353,7 +1152,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Gm06990
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel GM06990 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in GM06990 cells)
         subGroups view=zRawSig cellType=GM06990 rank=2nd
         type wig 1.00 111633.00
@@ -1361,7 +1159,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Gm12878
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel GM12878 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in GM12878 cells)
         subGroups view=zRawSig cellType=1GM12878 rank=2nd
         color 153,38,0
@@ -1370,7 +1167,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Gm12878
         subTrack wgEncodeUwDnaseSeqViewzRawSig
         shortLabel GM12878 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in GM12878 cells)
         subGroups view=zRawSig cellType=1GM12878 rank=1st
         color 153,38,0
@@ -1379,7 +1175,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1H1es
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel H1-hESC Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in H1-hESC cells)
         subGroups view=zRawSig cellType=1H1 rank=1st
         type wig 1.00 117718.00
@@ -1388,7 +1183,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Helas3
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HeLa-S3 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HeLa-S3 cells)
         subGroups view=zRawSig cellType=2HELA rank=1st
         color 0,102,136
@@ -1397,7 +1191,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Helas3
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HeLa-S3 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HeLa-S3 cells)
         subGroups view=zRawSig cellType=2HELA rank=2nd
         color 0,102,136
@@ -1406,7 +1199,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Hepg2
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HepG2 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HepG2 cells)
         subGroups view=zRawSig cellType=2HEPG2 rank=1st
         color 189,0,157
@@ -1415,7 +1207,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Hepg2
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HepG2 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HepG2 cells)
         subGroups view=zRawSig cellType=2HEPG2 rank=2nd
         color 189,0,157
@@ -1424,7 +1215,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Hgf
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HGF Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HGF cells)
         subGroups view=zRawSig cellType=HGF rank=1st
         type wig 1.00 26501.00
@@ -1432,7 +1222,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Hgf
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HGF Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HGF cells)
         subGroups view=zRawSig cellType=HGF rank=2nd
         type wig 1.00 49107.00
@@ -1440,7 +1229,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Hl60V2
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HL-60 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HL-60 cells)
         subGroups view=zRawSig cellType=HL60 rank=1st
         type wig 1.00 29171.00
@@ -1448,7 +1236,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Hl60
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HL-60 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HL-60 cells)
         subGroups view=zRawSig cellType=HL60 rank=2nd
         type wig 1.00 30472.00
@@ -1456,7 +1243,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Hmec
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HMEC Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HMEC cells)
         subGroups view=zRawSig cellType=HMEC rank=1st
         type wig 1.00 357743.00
@@ -1464,7 +1250,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Hrcepic
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HRCEpiC Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HRCEpiC cells)
         subGroups view=zRawSig cellType=HRC rank=1st
         type wig 1.00 38524.00
@@ -1472,7 +1257,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Hrcepic
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HRCEpiC Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HRCEpiC cells)
         subGroups view=zRawSig cellType=HRC rank=2nd
         type wig 1.00 35517.00
@@ -1480,7 +1264,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Hre
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HRE Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HRE cells)
         subGroups view=zRawSig cellType=HRE rank=1st
         type wig 1.00 61056.00
@@ -1488,7 +1271,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Hre
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HRE Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HRE cells)
         subGroups view=zRawSig cellType=HRE rank=2nd
         type wig 1.00 47939.00
@@ -1496,7 +1278,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Huvec
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HUVEC Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HUVEC cells)
         subGroups view=zRawSig cellType=2HUVEC rank=1st
         color 224,75,0
@@ -1505,7 +1286,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Jurkat
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel Jurkat Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in Jurkat cells)
         subGroups view=zRawSig cellType=Jurkat rank=1st
         type wig 1.00 112803.00
@@ -1513,7 +1293,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1K562
         subTrack wgEncodeUwDnaseSeqViewzRawSig
         shortLabel K562 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in K562 cells)
         subGroups view=zRawSig cellType=1K562 rank=1st
         color 46,0,184
@@ -1522,7 +1301,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2K562
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel K562 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in K562 cells)
         subGroups view=zRawSig cellType=1K562 rank=2nd
         color 46,0,184
@@ -1531,7 +1309,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Mcf7
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel MCF-7 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in MCF-7 cells)
         subGroups view=zRawSig cellType=MCF7 rank=1st
         type wig 1.00 154299.00
@@ -1539,7 +1316,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Nhek
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel NHEK Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in NHEK cells)
         subGroups view=zRawSig cellType=NHEK rank=1st
         color 179,0,134
@@ -1548,7 +1324,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Panc1
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel PANC-1 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in PANC-1 cells)
         subGroups view=zRawSig cellType=PANC1 rank=1st
         type wig 1.00 85830.00
@@ -1556,7 +1331,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Panc1
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel PANC-1 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in PANC-1 cells)
         subGroups view=zRawSig cellType=PANC1 rank=2nd
         type wig 1.00 95840.00
@@ -1564,7 +1338,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Saec
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel SAEC Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in SAEC cells)
         subGroups view=zRawSig cellType=SAEC rank=1st
         type wig 1.00 44462.00
@@ -1572,7 +1345,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Saec
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel SAEC Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in SAEC cells)
         subGroups view=zRawSig cellType=SAEC rank=2nd
         type wig 1.00 30862.00
@@ -1580,7 +1352,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1SkmcV2
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel SKMC Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in SKMC cells)
         subGroups view=zRawSig cellType=SKMC rank=1st
         type wig 1.00 9411.00
@@ -1588,7 +1359,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Skmc
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel SKMC Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in SKMC cells)
         subGroups view=zRawSig cellType=SKMC rank=2nd
         type wig 1.00 13585.00
@@ -1596,7 +1366,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Sknshra
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel SK-N-SH_RA Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in SK-N-SH_RA cells)
         subGroups view=zRawSig cellType=SKNSHRA rank=1st
         type wig 1.00 24217.00
@@ -1604,7 +1373,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel SK-N-SH_RA Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in SK-N-SH_RA cells)
         subGroups view=zRawSig cellType=SKNSHRA rank=2nd
         type wig 1.00 62564.00
@@ -1612,7 +1380,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Th1
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel Th1 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in Th1 cells)
         subGroups view=zRawSig cellType=Th1 rank=1st
         type wig 1.00 66149.00
@@ -1620,7 +1387,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Th2
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel Th2 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in Th2 cells)
         subGroups view=zRawSig cellType=Th2 rank=1st
         type wig 1.00 59010.00
@@ -1628,7 +1394,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Jurkat
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel Jurkat Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in Jurkat cells)
         subGroups view=zRawSig cellType=Jurkat rank=2nd
         type wig 1.00 40532.00
@@ -1636,7 +1401,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Cmk
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel CMK Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in CMK cells)
         subGroups view=zRawSig cellType=CMK rank=1st
         type wig 1.00 238072.00
@@ -1644,7 +1408,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Gm12865
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel GM12865 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in GM12865 cells)
         subGroups view=zRawSig cellType=GM12865 rank=1st
         type wig 1.00 82951.00
@@ -1652,23 +1415,14 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Gm12865
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel GM12865 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in GM12865 cells)
         subGroups view=zRawSig cellType=GM12865 rank=2nd
         type wig 1.00 77440.00
 
-        track wgEncodeUwDnaseSeqRawSignalRep1JurkatG1
-        subTrack wgEncodeUwDnaseSeqViewzRawSig off
-        shortLabel Jurkat Raw 1
-        release beta,public
-        longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in Jurkat cells)
-        subGroups view=zRawSig cellType=JurkatG1 rank=1st
-        type wig 1.00 179155.00
 
         track wgEncodeUwDnaseSeqRawSignalRep2Mcf7
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel MCF-7 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in MCF-7 cells)
         subGroups view=zRawSig cellType=MCF7 rank=2nd
         type wig 1.00 268262.00
@@ -1676,7 +1430,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Nb4
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel NB4 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in NB4 cells)
         subGroups view=zRawSig cellType=NB4 rank=2nd
         type wig 1.00 75569.00
@@ -1684,7 +1437,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Nb4V2
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel NB4 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in NB4 cells)
         subGroups view=zRawSig cellType=NB4 rank=1st
         type wig 1.00 78086.00
@@ -1692,7 +1444,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Nhdfneo
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel NHDF-neo Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in NHDF-neo cells)
         subGroups view=zRawSig cellType=NHDFneo rank=2nd
         type wig 1.00 195691.00
@@ -1700,7 +1451,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Nhdfneo
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel NHDF-neo Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in NHDF-neo cells)
         subGroups view=zRawSig cellType=NHDFneo rank=1st
         type wig 1.00 120883.00
@@ -1708,7 +1458,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Nhlf
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel NHLF Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in NHLF cells)
         subGroups view=zRawSig cellType=NHLF rank=1st
         type wig 1.00 179232.00
@@ -1716,7 +1465,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Nhlf
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel NHLF Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in NHLF cells)
         subGroups view=zRawSig cellType=NHLF rank=2nd
         type wig 1.00 98467.00
@@ -1724,7 +1472,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1H7es
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel H7-hESC Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in H7-hESC cells)
         subGroups view=zRawSig cellType=H7es rank=1st
         type wig 1.00 145801.00
@@ -1732,7 +1479,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Hae
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HAEpiC Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HAEpiC cells)
         subGroups view=zRawSig cellType=HAE rank=1st
         type wig 1.00 35088.00
@@ -1740,7 +1486,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Hae
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HAEpiC Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HAEpiC cells)
         subGroups view=zRawSig cellType=HAE rank=2nd
         type wig 1.00 188525.00
@@ -1748,7 +1493,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Hcf
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HCF Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HCF cells)
         subGroups view=zRawSig cellType=HCF rank=2nd
         type wig 1.00 184183.00
@@ -1756,7 +1500,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Hcf
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HCF Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HCF cells)
         subGroups view=zRawSig cellType=HCF rank=1st
         type wig 1.00 177624.00
@@ -1764,7 +1507,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Hcm
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HCM Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HCM cells)
         subGroups view=zRawSig cellType=HCM rank=2nd
         type wig 1.00 95043.00
@@ -1772,7 +1514,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Hcm
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HCM Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HCM cells)
         subGroups view=zRawSig cellType=HCM rank=1st
         type wig 1.00 187079.00
@@ -1780,7 +1521,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Hcpe
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HCPEpiC Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HCPEpiC cells)
         subGroups view=zRawSig cellType=HCPE rank=1st
         type wig 1.00 39385.00
@@ -1788,7 +1528,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Hcpe
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HCPEpiC Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HCPEpiC cells)
         subGroups view=zRawSig cellType=HCPE rank=2nd
         type wig 1.00 196371.00
@@ -1796,7 +1535,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Hee
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HEEpiC Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HEEpiC cells)
         subGroups view=zRawSig cellType=HEE rank=1st
         type wig 1.00 201379.00
@@ -1804,31 +1542,14 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Hee
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HEEpiC Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HEEpiC cells)
         subGroups view=zRawSig cellType=HEE rank=2nd
         type wig 1.00 174596.00
 
-        track wgEncodeUwDnaseSeqRawSignalRep1Hipe
-        subTrack wgEncodeUwDnaseSeqViewzRawSig off
-        shortLabel HIPEpiC Raw 1
-        release beta,public
-        longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HIPEpiC cells)
-        subGroups view=zRawSig cellType=HIPE rank=1st
-        type wig 1.00 124227.00
-
-        track wgEncodeUwDnaseSeqRawSignalRep2Hipe
-        subTrack wgEncodeUwDnaseSeqViewzRawSig off
-        shortLabel HIPEpiC Raw 2
-        release beta,public
-        longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HIPEpiC cells)
-        subGroups view=zRawSig cellType=HIPE rank=2nd
-        type wig 1.00 77756.00
 
         track wgEncodeUwDnaseSeqRawSignalRep1Hnpce
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HNPCEpiC Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HNPCEpiC cells)
         subGroups view=zRawSig cellType=HNPCE rank=1st
         type wig 1.00 237926.00
@@ -1836,7 +1557,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Hnpce
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HNPCEpiC Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HNPCEpiC cells)
         subGroups view=zRawSig cellType=HNPCE rank=2nd
         type wig 1.00 193606.00
@@ -1844,7 +1564,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Hrpe
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HRPEpiC Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HRPEpiC cells)
         subGroups view=zRawSig cellType=HRPE rank=2nd
         type wig 1.00 182418.00
@@ -1852,7 +1571,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Hrpe
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel HRPEpiC Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HRPEpiC cells)
         subGroups view=zRawSig cellType=HRPE rank=1st
         type wig 1.00 283908.00
@@ -1860,7 +1578,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Ag04449
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel AG04449 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in AG04449 cells)
         subGroups view=zRawSig cellType=AG04449 rank=1st
         type wig 1.00 158528.00
@@ -1868,7 +1585,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Ag04449
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel AG04449 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in AG04449 cells)
         subGroups view=zRawSig cellType=AG04449 rank=2nd
         type wig 1.00 162798.00
@@ -1876,7 +1592,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Ag04450
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel AG04450 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in AG04450 cells)
         subGroups view=zRawSig cellType=AG04450 rank=2nd
         type wig 1.00 186407.00
@@ -1884,7 +1599,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Ag04450
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel AG04450 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in AG04450 cells)
         subGroups view=zRawSig cellType=AG04450 rank=1st
         type wig 1.00 106507.00
@@ -1892,7 +1606,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Ag09309
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel AG09309 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in AG09309 cells)
         subGroups view=zRawSig cellType=AG09309 rank=1st
         type wig 1.00 295754.00
@@ -1900,7 +1613,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Ag09309
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel AG09309 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in AG09309 cells)
         subGroups view=zRawSig cellType=AG09309 rank=2nd
         type wig 1.00 258858.00
@@ -1908,7 +1620,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Ag09319
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel AG09319 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in AG09319 cells)
         subGroups view=zRawSig cellType=AG09319 rank=2nd
         type wig 1.00 176987.00
@@ -1916,7 +1627,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Ag09319
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel AG09319 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in AG09319 cells)
         subGroups view=zRawSig cellType=AG09319 rank=1st
         type wig 1.00 201289.00
@@ -1924,7 +1634,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep2Ag10803
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel AG10803 Raw 2
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in AG10803 cells)
         subGroups view=zRawSig cellType=AG10803 rank=2nd
         type wig 1.00 173817.00
@@ -1932,7 +1641,6 @@ wgEncode 1
         track wgEncodeUwDnaseSeqRawSignalRep1Ag10803
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel AG10803 Raw 1
-        release beta,public
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in AG10803 cells)
         subGroups view=zRawSig cellType=AG10803 rank=1st
         type wig 1.00 185903.00

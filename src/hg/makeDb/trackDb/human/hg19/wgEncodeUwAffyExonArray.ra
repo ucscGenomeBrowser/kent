@@ -4,13 +4,14 @@ track wgEncodeUwAffyExonArray
 compositeTrack on
 shortLabel UW Affy Exon
 longLabel ENCODE UW Affy All-Exon Arrays
-release alpha
+release alpha,beta
 group expression
 subGroup1 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K562&nbsp;(Tier_1) 4-HeLaS3=HeLa-S3&nbsp;(Tier_2) 5-HepG2=HepG2&nbsp;(Tier_2) 6-HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AOAF BE2C=BE2_C BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 H7es=H7es HAc=HAc HA-sp=HA-sp HAE=HAE HBMEC=HBMEC HCF=HCF HCFaa=HCFaa HCM=HCM HCPE=HCPE HCONF=HCONF HCT116=HCT116 HEE=HEE HEK293=HEK293 HGF=HGF HIPE=HIPE HL60=HL60 HMEC=HMEC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-Lbl HMVECLLy=HMVEC-LLy HNPCE=HNPCE HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCE HRCEpiC=HRCEpiC HRE=HRE HRGEC=HRGEC HRPE=HRPE HSMM=HSMM HSMMt=HSMMtube HVMF=HVMF Jurkat=Jurkat LNCaP=LNCaP MCF7=MCF-7 NB4=NB4 NHA=NHA NHEK=NHEK NHDF-Ad=NHDF-Ad NHDF-neo=NHDF-neo NHLF=NHLF PANC1=PANC-1 RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1 WI38=WI-38 WI38t=WI-38_<i>Tamoxifen<\i>
 subGroup2 rep Rep rep1=1 rep2=2 
 dimensions dimensionX=rep dimensionY=cellType 
 boxedCfg on
 sortOrder cellType=+ rep=+
+fileSortOrder cell=Cell_Line replicate=Rep origAssembly=Assembly<BR>originally<BR>mapped<BR>to fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 visibility hide
@@ -21,7 +22,7 @@ wgEncode 1
 superTrack wgEncodeExonArraySuper dense
 
     track wgEncodeUwAffyExonArrayViewSimpleSignal
-    release alpha
+    release alpha,beta
     shortLabel Simple Signal
     view SimpleSignal
     visibility full
@@ -34,7 +35,7 @@ superTrack wgEncodeExonArraySuper dense
     windowingFunction mean
 
         track wgEncodeUwAffyExonArrayCaco2SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel Caco-2 1
         longLabel Caco-2 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -44,7 +45,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayGm06990SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel GM06990 1
         longLabel GM06990 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -54,7 +55,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayGm06990SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel GM06990 2
         longLabel GM06990 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -64,7 +65,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHepg2SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HepG2 1
         longLabel HepG2 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -75,7 +76,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHepg2SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HepG2 2
         longLabel HepG2 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -86,7 +87,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHl60SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HL-60 1
         longLabel HL-60 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -96,7 +97,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArraySkmcSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel SKMC 2
         longLabel SKMC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -106,7 +107,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArraySknshraSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel SK-N-SH_RA 2
         longLabel SK-N-SH_RA Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -116,7 +117,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArraySknshraSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel SK-N-SH_RA 1
         longLabel SK-N-SH_RA Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -126,7 +127,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayTh1SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel Th1 1
         longLabel Th1 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -136,7 +137,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHelas3SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HeLa-S3 1
         longLabel HeLa-S3 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -147,7 +148,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHreSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRE 2
         longLabel HRE Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -157,7 +158,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHreSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRE 1
         longLabel HRE Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -167,7 +168,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHrceSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRCEpiC 1
         longLabel HRCEpiC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -177,7 +178,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHrceSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRCEpiC 2
         longLabel HRCEpiC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -187,7 +188,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArraySaecSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel SAEC 2
         longLabel SAEC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -197,7 +198,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArraySaecSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel SAEC 1
         longLabel SAEC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -207,7 +208,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayBjSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel BJ 1
         longLabel BJ Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -217,7 +218,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayBjSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel BJ 2
         longLabel BJ Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -227,7 +228,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayK562SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal
         shortLabel K562 1
         longLabel K562 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -238,7 +239,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayK562SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal
         shortLabel K562 2
         longLabel K562 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -249,7 +250,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayJurkatSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel Jurkat 1
         longLabel Jurkat Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -259,7 +260,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayGm12878SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal
         shortLabel GM12878 1
         longLabel GM12878 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -270,7 +271,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHelas3SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HeLa-S3 2
         longLabel HeLa-S3 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -281,7 +282,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayCaco2SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel Caco-2 2
         longLabel Caco-2 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -291,7 +292,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmecSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMEC 1
         longLabel HMEC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -301,7 +302,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHuvecSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HUVEC 1
         longLabel HUVEC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -312,7 +313,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayMcf7SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel MCF-7 1
         longLabel MCF-7 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -322,7 +323,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayNhekSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHEK 1
         longLabel NHEK Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -333,7 +334,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayPanc1SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel PANC-1 2
         longLabel PANC-1 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -343,7 +344,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayPanc1SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel PANC-1 1
         longLabel PANC-1 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -353,7 +354,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHgfSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HGF 1
         longLabel HGF Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -363,7 +364,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHgfSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HGF 2
         longLabel HGF Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -373,7 +374,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHl60SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HL-60 2
         longLabel HL-60 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -383,7 +384,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArraySkmcSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel SKMC 1
         longLabel SKMC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -393,7 +394,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayMcf7SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel MCF-7 2
         longLabel MCF-7 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -403,7 +404,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayJurkatSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel Jurkat 2
         longLabel Jurkat Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -413,7 +414,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayNb4SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NB4 1
         longLabel NB4 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -423,7 +424,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayNb4SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NB4 2
         longLabel NB4 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -433,7 +434,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHrpeSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRPEpiC 1
         longLabel HRPEpiC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -443,7 +444,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHrpeSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRPEpiC 2
         longLabel HRPEpiC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -453,7 +454,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHaeSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HAEpiC 1
         longLabel HAEpiC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -463,7 +464,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHaeSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HAEpiC 2
         longLabel HAEpiC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -473,7 +474,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHipeSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HIPEpiC 1
         longLabel HIPEpiC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -483,7 +484,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHipeSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HIPEpiC 2
         longLabel HIPEpiC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -493,7 +494,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayAg10803SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG10803 1
         longLabel AG10803 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -503,7 +504,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayAg10803SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG10803 2
         longLabel AG10803 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -513,7 +514,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayAg09309SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG09309 1
         longLabel AG09309 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -523,7 +524,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayAg09309SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG09309 2
         longLabel AG09309 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -533,7 +534,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayAg04449SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG04449 1
         longLabel AG04449 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -543,7 +544,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayAg04449SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG04449 2
         longLabel AG04449 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -553,7 +554,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayAg04450SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG04450 1
         longLabel AG04450 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -563,7 +564,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayAg04450SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG04450 2
         longLabel AG04450 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -573,7 +574,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayAg09319SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG09319 1
         longLabel AG09319 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -583,7 +584,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayAg09319SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG09319 2
         longLabel AG09319 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -593,7 +594,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHcfSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCF 1
         longLabel HCF Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -603,7 +604,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHcfSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCF 2
         longLabel HCF Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -613,7 +614,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHcpeSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCPEpiC 1
         longLabel HCPEpiC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -623,7 +624,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHcpeSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCPEpiC 2
         longLabel HCPEpiC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -633,7 +634,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayNhdfneoSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHDF-neo 1
         longLabel NHDF-neo Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -643,7 +644,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayNhdfneoSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHDF-neo 2
         longLabel NHDF-neo Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -653,7 +654,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHnpceSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HNPCEpiC 1
         longLabel HNPCEpiC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -663,7 +664,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHnpceSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HNPCEpiC 2
         longLabel HNPCEpiC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -673,7 +674,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHcmSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCM 1
         longLabel HCM Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -683,7 +684,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHcmSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCM 2
         longLabel HCM Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -693,7 +694,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHeeSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HEEpiC 1
         longLabel HEEpiC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -703,7 +704,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHeeSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HEEpiC 2
         longLabel HEEpiC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -713,7 +714,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayNhlfSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHLF 1
         longLabel NHLF Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -723,7 +724,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayNhlfSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHLF 2
         longLabel NHLF Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -733,7 +734,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayH7esSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel H7-hESC 1
         longLabel H7-hESC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -743,7 +744,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayCmkSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel CMK 1
         longLabel CMK Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -753,7 +754,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2110 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayH7esSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel H7-hESC 2
         longLabel H7-hESC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -763,7 +764,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmecSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMEC 2
         longLabel HMEC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -773,7 +774,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHconfSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HConF 1
         longLabel HConF Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -783,7 +784,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHconfSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HConF 2
         longLabel HConF Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -793,7 +794,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmvecllySimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-LLy 1
         longLabel HMVEC-LLy Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -803,7 +804,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmvecllySimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-LLy 2
         longLabel HMVEC-LLy Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -813,7 +814,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmvecdlyneoSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dLy-Neo 1
         longLabel HMVEC-dLy-Neo Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -823,7 +824,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmvecdlyneoSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dLy-Neo 2
         longLabel HMVEC-dLy-Neo Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -833,7 +834,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmvecdlyadSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dLy-Ad 2
         longLabel HMVEC-dLy-Ad Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -843,7 +844,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmvecdlyadSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dLy-Ad 1
         longLabel HMVEC-dLy-Ad Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -853,7 +854,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmvecdneoSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dNeo 1
         longLabel HMVEC-dNeo Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -863,7 +864,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmvecdneoSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dNeo 2
         longLabel HMVEC-dNeo Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -873,7 +874,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHDF-Ad 1
         longLabel NHDF-Ad Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -883,7 +884,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHDF-Ad 2
         longLabel NHDF-Ad Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -893,7 +894,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmveclblSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-LBl 1
         longLabel HMVEC-LBl Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -903,7 +904,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmveclblSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-LBl 2
         longLabel HMVEC-LBl Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -913,7 +914,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dBl-Ad 1
         longLabel HMVEC-dBl-Ad Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -923,7 +924,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dBl-Ad 2
         longLabel HMVEC-dBl-Ad Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -933,7 +934,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmvecdblneoSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dBl-Neo 1
         longLabel HMVEC-dBl-Neo Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -943,7 +944,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmvecdblneoSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dBl-Neo 2
         longLabel HMVEC-dBl-Neo Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -953,7 +954,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHpdlfSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HPdLF 1
         longLabel HPdLF Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -963,7 +964,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHpdlfSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HPdLF 2
         longLabel HPdLF Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -973,7 +974,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHek293SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HEK293 1
         longLabel HEK293 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -983,7 +984,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHek293SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HEK293 2
         longLabel HEK293 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -993,7 +994,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayAoafSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AoAF 1
         longLabel AoAF Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1003,7 +1004,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayAoafSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AoAF 2
         longLabel AoAF Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1013,7 +1014,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCFaa 1
         longLabel HCFaa Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1023,7 +1024,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCFaa 2
         longLabel HCFaa Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1033,7 +1034,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHpafSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HPAF 1
         longLabel HPAF Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1043,7 +1044,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHpafSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HPAF 2
         longLabel HPAF Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1053,7 +1054,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHpfSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HPF 1
         longLabel HPF Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1063,7 +1064,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHpfSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HPF 2
         longLabel HPF Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1073,7 +1074,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHvmfSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HVMF 1
         longLabel HVMF Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1083,7 +1084,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHvmfSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HVMF 2
         longLabel HVMF Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1093,7 +1094,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHct116SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCT-116 1
         longLabel HCT-116 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1103,7 +1104,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHct116SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCT-116 2
         longLabel HCT-116 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1113,7 +1114,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmfSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMF 1
         longLabel HMF Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1123,7 +1124,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHmfSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMF 2
         longLabel HMF Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1133,7 +1134,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayNhaSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NH-A 1
         longLabel NH-A Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1143,7 +1144,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayNhaSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NH-A 2
         longLabel NH-A Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1153,7 +1154,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayHbmecSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HBMEC 1
         longLabel HBMEC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1163,7 +1164,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=2109 dateSubmitted=2010-08-19
 
         track wgEncodeUwAffyExonArrayA549SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel A549 1
         longLabel A549 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1173,7 +1174,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayA549SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel A549 2
         longLabel A549 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1183,7 +1184,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayHaspSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HA-sp 1
         longLabel HA-sp Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1193,7 +1194,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayHaspSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HA-sp 2
         longLabel HA-sp Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1203,7 +1204,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayHbmecSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HBMEC 2
         longLabel HBMEC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1213,7 +1214,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayRptecSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel RPTEC 1
         longLabel RPTEC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1223,7 +1224,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayRptecSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel RPTEC 2
         longLabel RPTEC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1233,7 +1234,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayBe2cSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel BE2_C 1
         longLabel BE2_C Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1243,7 +1244,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayBe2cSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel BE2_C 2
         longLabel BE2_C Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1253,7 +1254,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayHacSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HAc 1
         longLabel HAc Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1263,7 +1264,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayHacSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HAc 2
         longLabel HAc Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1273,7 +1274,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayHrgecSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRGEC 1
         longLabel HRGEC Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1283,7 +1284,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayHrgecSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRGEC 2
         longLabel HRGEC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1293,7 +1294,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayHsmmSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HSMM 1
         longLabel HSMM Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1303,7 +1304,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayHsmmSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HSMM 2
         longLabel HSMM Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1313,7 +1314,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HSMMtube 1
         longLabel HSMMtube Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1323,7 +1324,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayHuvecSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HUVEC 2
         longLabel HUVEC Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1334,7 +1335,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayLncapSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel LNCaP 1
         longLabel LNCaP Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1345,7 +1346,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayLncapSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel LNCaP 2
         longLabel LNCaP Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1356,7 +1357,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayWi38SimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel WI-38 1
         longLabel WI-38 Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1366,7 +1367,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel WI-38 2
         longLabel WI-38 Affy All Exon Array Signal Rep 2 from ENCODE/UW
@@ -1376,7 +1377,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel WI-38 tam 1
         longLabel WI-38 (tamoxifen) Affy All Exon Array Signal Rep 1 from ENCODE/UW
@@ -1386,7 +1387,7 @@ superTrack wgEncodeExonArraySuper dense
         # subId=3216 dateSubmitted=2011-01-11
 
         track wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel WI-38 tam 2
         longLabel WI-38 (tamoxifen) Affy All Exon Array Signal Rep 2 from ENCODE/UW

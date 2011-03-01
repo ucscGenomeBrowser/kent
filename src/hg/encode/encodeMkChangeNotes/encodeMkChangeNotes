@@ -223,7 +223,7 @@ def main(argv=None):
                 if gbdb_path != None and os.path.exists(gbdb_path + ".bai"):
                     new_gbdbs_list.append(gbdb_path + ".bai")
                 else:
-                    warn = "could not find %s file for %s" % (gbdb_path + ".bai", f)
+                    warn = "could not find %s file for %s" % (str(gbdb_path) + ".bai", f)
                     warnings.append(warn)
                     print >>sys.stderr, warn
 

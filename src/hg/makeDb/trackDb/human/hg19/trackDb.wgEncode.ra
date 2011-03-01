@@ -6,7 +6,6 @@ include wgEncodeSuper.ra
 include wgEncodeUwAffyExonArray.ra
 include wgEncodeSydhTfbs.ra
 include wgEncodeSydhHistone.ra
-include wgEncodeOpenChromChip.ra
 include wgEncodeOpenChromDnase.ra
 include wgEncodeOpenChromFaire.ra
 include wgEncodeOpenChromSynth.ra
@@ -62,17 +61,23 @@ include wgEncodeUwDgf.new.ra alpha
 include wgEncodeUwDnase.ra beta,public
 include wgEncodeUwDnase.new.ra alpha
 
+#UW TFBS (wrangler: Venkat)
+include wgEncodeUwTfbs.ra alpha,beta
+
+#UTA TFBS (wrangler: Tim)
+include wgEncodeOpenChromChip.ra alpha,beta
+
 # SUNY Rip-Seq Tracks (wrangler: Cricket)
-include wgEncodeSunyAlbanyGeneSt.ra
-include wgEncodeSunyAlbanyTiling.ra
-include wgEncodeSunySwitchgear.ra
-include wgEncodeSunyRipSeq.ra
+include wgEncodeSunyAlbanyGeneSt.ra alpha
+include wgEncodeSunyAlbanyTiling.ra beta,public
+include wgEncodeSunyAlbanyTiling.new.ra alpha
+include wgEncodeSunySwitchgear.ra alpha
+include wgEncodeSunyRipSeq.ra alpha 
 
 include wgEncodeGisRnaSeq.ra
 include wgEncodeGisRnaPet.ra
 include wgEncodeGisDnaPet.ra
 include wgEncodeAffyRnaChip.ra
-include wgEncodeUwTfbs.ra
 include wgEncodeCshlLongRnaSeq.ra
 include wgEncodeYaleRnaSeq.ra
 include wgEncodeBuOrchid.ra

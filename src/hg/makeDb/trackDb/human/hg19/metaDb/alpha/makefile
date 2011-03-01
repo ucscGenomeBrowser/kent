@@ -23,6 +23,7 @@ wgEncodeSunySwitchgear.ra \
 wgEncodeSydhHistone.ra \
 wgEncodeSydhNsome.ra \
 wgEncodeSydhTfbs.ra \
+wgEncodeUmassDekker5C.ra \
 wgEncodeUncBsuProt.ra \
 wgEncodeUwAffyExonArray.ra \
 wgEncodeUwHistone.ra \
