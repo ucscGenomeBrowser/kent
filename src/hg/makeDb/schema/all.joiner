@@ -2005,7 +2005,6 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd.ensInfo.name minCheck=0.9
     $kgDb.knownToEnsembl.value chopAfter=.
-    $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30
     $danRer.ensZfishBlastTab.query
     $danRer.ensZfishBlastTab.target
     $danRer.ceBlastTab.query
@@ -2014,6 +2013,12 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $danRer.mmBlastTab.query
     $danRer.rnBlastTab.query
     $danRer.scBlastTab.query
+
+#pulled this line into its own rule to reflect lack of dependency
+identifier ensemblTranscriptId2 external=Ensembl
+"Ensembl Transcript ID"
+    $gbd,!ce6,!ce9,!felCat3.ensGene.name chopAfter=.
+    $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30 
 
 identifier ensemblTranscriptIdCe external=Ensembl dependency
 "Ensembl Transcript ID for C. elegans"
