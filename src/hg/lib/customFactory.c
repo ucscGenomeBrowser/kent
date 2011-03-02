@@ -36,8 +36,7 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
-/* for regular expressions */
-#include "hgFindSpec.h" 
+#include "regexHelper.h" 
 
 static char const rcsid[] = "$Id: customFactory.c,v 1.126 2010/06/01 20:38:07 galt Exp $";
 
@@ -867,19 +866,19 @@ else if (count < 1)
     errAbort("Error line 1 of custom track, type is pgSnp but count is less than 1");
 char pattern[128]; /* include count in pattern */
 safef(pattern, sizeof(pattern), "^[ACTG-]+(\\/[ACTG-]+){%d}$", count - 1);
-if (! matchRegex(row[3], pattern) && type == NULL)
+if (! regexMatchNoCase(row[3], pattern) && type == NULL)
     return FALSE;
-else if (! matchRegex(row[3], pattern))
+else if (! regexMatchNoCase(row[3], pattern))
     errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but allele is invalid %s", count, row[3]);
 safef(pattern, sizeof(pattern), "^[0-9]+(,[0-9]+){%d}$", count - 1);
-if (! matchRegex(row[5], pattern) && type == NULL)
+if (! regexMatchNoCase(row[5], pattern) && type == NULL)
     return FALSE;
-else if (! matchRegex(row[5], pattern))
+else if (! regexMatchNoCase(row[5], pattern))
     errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but frequency is invalid (%s)", count, row[5]);
 safef(pattern, sizeof(pattern), "^[0-9.]+(,[0-9.]+){%d}$", count - 1);
-if (! matchRegex(row[6], pattern) && type == NULL)
+if (! regexMatchNoCase(row[6], pattern) && type == NULL)
     return FALSE;
-else if (! matchRegex(row[6], pattern))
+else if (! regexMatchNoCase(row[6], pattern))
     errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but score is invalid (%s)", count, row[6]);
 /* if get here must be pgSnp format */
 return TRUE;

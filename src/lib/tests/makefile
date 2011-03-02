@@ -166,7 +166,7 @@ base64Decode: ${BIN_DIR}/testBase64 mkdirs
 quotedPTests: quotedPEncode quotedPDecode
 
 ${BIN_DIR}/testQuotedP:  mkdirs testQuotedP.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/testQuotedP testQuotedP.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/testQuotedP testQuotedP.o ${MYLIBS} ${L}
 
 quotedPEncode: ${BIN_DIR}/testQuotedP mkdirs
 	${BIN_DIR}/testQuotedP 'taxes are quite high ' > output/$@.out
@@ -177,14 +177,14 @@ quotedPDecode: ${BIN_DIR}/testQuotedP mkdirs
 	diff expected/$@.out output/$@.out
 
 ${BIN_DIR}/mimeDecodeTest:  mkdirs mimeDecodeTest.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/mimeDecodeTest mimeDecodeTest.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/mimeDecodeTest mimeDecodeTest.o ${MYLIBS} ${L}
 
 mimeDecodeTest: ${BIN_DIR}/mimeDecodeTest mkdirs
 	${BIN_DIR}/mimeDecodeTest -cid -autoBoundary output < input/$@.txt
 	diff expected/noName1.html output/noName1.html
 
 ${BIN_DIR}/safeTester:  mkdirs safeTester.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/safeTester safeTester.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/safeTester safeTester.o ${MYLIBS} ${L}
 
 safeTest: ${BIN_DIR}/safeTester mkdirs
 	${BIN_DIR}/safeTester
@@ -234,7 +234,7 @@ gff3DiscontiousTest: ${gff3Tester} mkdirs
 
 ${BIN_DIR}/gff3Tester: gff3Tester.o ${MYLIBS}
 	${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} -o ${BIN_DIR}/gff3Tester gff3Tester.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/gff3Tester gff3Tester.o ${MYLIBS} ${L}
 
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out fetchUrlTest

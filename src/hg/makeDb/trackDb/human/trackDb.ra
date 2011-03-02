@@ -1251,6 +1251,7 @@ noScoreFilter .
 exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
+html dgvOldColors
 dataVersion v9
 
 track covMask1kGPilotLowCov
@@ -2979,17 +2980,6 @@ priority 0
 track eponine override
 priority 0
 
-track omimGene
-shortLabel OMIM Genes
-longLabel OMIM-Associated Genes
-group phenDis
-priority 29.6
-visibility hide
-color 0, 0, 200
-type bed 4
-hgsid on
-url http://www.ncbi.nlm.nih.gov/omim/
-
 track omimLocation
 shortLabel OMIM Locations
 longLabel All OMIM Cytogenetic Locations
@@ -3000,39 +2990,6 @@ color 0, 100, 100
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
-
-track omimComposite
-compositeTrack on
-shortLabel OMIM Comp
-group phenDis
-priority 29.8
-visibility hide
-type bed 4
-hgsid on
-
-    track omimLocationClass2
-    shortLabel OMIM Loc Class 2
-    parent omimComposite
-    longLabel OMIM-Associated Phenotype Class 2 Locations
-    group phenDis
-    priority 8
-    visibility hide
-    color 120, 100, 0
-    type bed 4
-    hgsid on
-    url http://www.omim.org/entry/
-
-    track omimGeneClass2
-    shortLabel OMIM Class 2
-    parent omimComposite
-    longLabel OMIM-Associated Phenotype Class 2 Genes
-    group phenDis
-    priority 7
-    visibility hide
-    color 240, 100, 0
-    type bed 4
-    hgsid on
-    url http://www.omim.org/entry/
 
 track omimGeneClass3
 shortLabel OMIM Genes (Class 3)
@@ -3484,8 +3441,17 @@ xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
 termRegex AC[0-9]{6}
 searchPriority 52
 
-searchName omimGeneAcc
-searchTable omimGene
+searchName omimAvSnpAcc
+searchTable omimAvSnp
+searchMethod exact
+searchType bed
+shortCircuit 1
+semiShortCircuit 1
+termRegex ([0-9]{6})+\.+([0-9]{4})
+searchPriority 10
+
+searchName omimGeneClass3Acc
+searchTable omimGeneClass3
 searchMethod exact
 searchType bed
 shortCircuit 1
@@ -3494,10 +3460,9 @@ termRegex ([0-9]{6})
 searchPriority 10
 
 searchName omimGeneLocAcc
-searchTable omimGeneLocation
+searchTable omimLocation
 searchMethod exact
 searchType bed
-shortCircuit 1
 semiShortCircuit 1
 termRegex ([0-9]{6})
 searchPriority 10
