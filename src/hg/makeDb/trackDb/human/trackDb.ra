@@ -1251,6 +1251,7 @@ noScoreFilter .
 exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
+html dgvOldColors
 dataVersion v9
 
 track covMask1kGPilotLowCov
