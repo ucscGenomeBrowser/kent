@@ -39,8 +39,8 @@ gdb      = argv[2];
 ensGdb   = argv[3];
    
 outf = fopen("bioCycPathway.tmp", "w");
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn2= hAllocConn(gdb);
+conn3= hAllocConn(gdb);
 	
 sprintf(query2, "select * from %s.pathways;", bioCycDb);
 sr2 = sqlMustGetResult(conn2, query2);
