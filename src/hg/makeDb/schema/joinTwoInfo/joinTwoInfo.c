@@ -68,6 +68,24 @@ for (el = list; el != NULL; el = el->next)
 return count;
 }
 
+int countUniqInHash(struct slName *list, struct hash *hash)
+/* Count number of items in list that are also in hash */
+{
+struct hash *uniqHash = hashNew(0);
+struct slName *el;
+for (el = list; el != NULL; el = el->next)
+    {
+    if (hashLookup(hash, el->name))
+	{
+	hashStore(uniqHash, el->name);
+	}
+    }
+int count = uniqHash->elCount;
+hashFree(&uniqHash);
+return count;
+}
+
+
 void joinTwoInfo(char *spec1, char *spec2)
 /* joinTwoInfo - Look at two columns in two tables in mySQL and see how joinable they look.. */
 {
@@ -86,10 +104,12 @@ struct slName *list2 = getColumn(s2[0], s2[1], s2[2], lm);
 struct hash *uniq2 = uniqHash(list2);
 int countOneInTwo = countInHash(list1, uniq2);
 int countTwoInOne = countInHash(list2, uniq1);
-printf("%s: %d items, %d unique items, %d items in %s\n",
-	spec1, slCount(list1), uniq1->elCount, countOneInTwo, spec2);
-printf("%s: %d items, %d unique items, %d items in %s\n",
-	spec2, slCount(list2), uniq2->elCount, countTwoInOne, spec1);
+int countUniqOneInTwo = countUniqInHash(list1, uniq2);
+int countUniqTwoInOne = countUniqInHash(list2, uniq1);
+printf("%s: %d items, %d unique items, %d items (%d unique) in %s\n",
+	spec1, slCount(list1), uniq1->elCount, countOneInTwo, countUniqOneInTwo, spec2);
+printf("%s: %d items, %d unique items, %d items (%d unique) in %s\n",
+	spec2, slCount(list2), uniq2->elCount, countTwoInOne, countUniqTwoInOne, spec1);
 
 lmCleanup(&lm);
 }
