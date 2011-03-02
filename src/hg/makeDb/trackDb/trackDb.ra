@@ -1576,7 +1576,7 @@ type bed 6 .
 
 track snp132Common
 shortLabel Common SNPs (132)
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 132) Found in >= 1% of Samples
+longLabel Simple Nucleotide Polymorphisms (dbSNP 132) Found in >= 1% of Samples
 group varRep
 priority 99.0921
 visibility dense
@@ -1589,8 +1589,8 @@ maxWindowToDraw 10000000
 type bed 6 +
 
 track snp132Patient
-shortLabel Patient SNPs (132)
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 132) Observed in a Clinical Setting
+shortLabel Patient SNPs(132)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 132) Observed in a Clinical Setting
 group varRep
 priority 99.0922
 visibility hide
@@ -1603,8 +1603,8 @@ maxWindowToDraw 10000000
 type bed 6 +
 
 track snp132NonUnique
-shortLabel Problem SNPs (132)
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 132) That Map to Multiple Genomic Loci
+shortLabel Mult. SNPs (132)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 132) That Map to Multiple Genomic Loci
 group varRep
 priority 99.0923
 visibility hide
@@ -1619,7 +1619,7 @@ type bed 6 +
 
 track snp132
 shortLabel All SNPs (132)
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 132)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 132)
 group varRep
 priority 99.0925
 visibility hide
