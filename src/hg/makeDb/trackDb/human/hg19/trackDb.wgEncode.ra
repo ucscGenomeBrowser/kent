@@ -8,11 +8,11 @@ include wgEncodeSydhTfbs.ra
 include wgEncodeSydhHistone.ra
 include wgEncodeDukeAffyExon.ra alpha
 
-###Open Chromatin by DNaseI HS and FAIRE Tracks (super track)###
+###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 #UNC FAIRE (wrangler: tim)
-include wgEncodeOpenChromFaire.ra
+include wgEncodeOpenChromFaire.ra alpha
 
-#Open Chrom Synth ((wrangler: tim)
+#Open Chrom Synth (wrangler: tim)
 include wgEncodeOpenChromSynth.ra
 
 #Duke DNaseI HS (wrangler: tim)
@@ -25,7 +25,7 @@ include wgEncodeUwDnase.new.ra alpha
 #UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.ra beta,public
 include wgEncodeUwDgf.new.ra alpha
-###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track)###
+###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 
 
 # Nucleosome
