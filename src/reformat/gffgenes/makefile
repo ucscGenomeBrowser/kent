@@ -6,7 +6,7 @@ O = gffgenes.o
 
 ${BINDIR}/gffgenes: ${O}
 	${CC} ${COPT} -o ${BINDIR}/gffgenes $O \
-		../../lib/${MACHTYPE}/jkweb.a
+		../../lib/${MACHTYPE}/jkweb.a ${L}
 	${STRIP} ${BINDIR}/gffgenes${EXE}
 
 clean:

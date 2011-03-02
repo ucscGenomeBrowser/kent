@@ -2164,7 +2164,7 @@ assert(tables || files); // Cant exclude both
 struct mdbObj *mdbObjs = *pMdbObjs;
 struct mdbObj *mdbObjsDropped  = NULL;
 if (tables)
-    mdbObjsDropped = mdbObjsFilter(&mdbObjs,"tableName",NULL,FALSE);
+    mdbObjsDropped = mdbObjsFilter(&mdbObjs,"objType","table",FALSE);
 
 if (files)
     {
@@ -2937,16 +2937,17 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
         warn("mdb search by date is not yet implemented.");
         }
     }
-// Be sure to include table of file in selections
+// Be sure to include table or file in selections
 if (tables)
-    dyStringAppend(dyTerms,"tableName=? ");
+    dyStringAppend(dyTerms,"objType=table ");
 if (files)
     dyStringAppend(dyTerms,"fileName=? ");
 
 // Build the mdbByVals struct and then select all mdbObjs in one query
 struct mdbByVar *mdbByVars = mdbByVarsLineParse(dyStringContents(dyTerms));
 dyStringClear(dyTerms);
-struct mdbObj *mdbObjs = mdbObjsQueryByVars(conn,NULL,mdbByVars); // Uses master table metaDb not sandbox versions
+char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
+struct mdbObj *mdbObjs = mdbObjsQueryByVars(conn,tableName,mdbByVars);
 
 return mdbObjs;
 }

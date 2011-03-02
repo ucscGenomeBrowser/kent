@@ -21,13 +21,13 @@ else
     if ( $#argv > 2 ) then
         set ctimeArg = $3
     endif
-    pushd $1
+    pushd $2
     find . -type f -ctime $ctimeArg -print > $tmpDir/modifiedFiles.txt
     cat $tmpDir/modifiedFiles.txt | sed 's/^/wc -l /' |bash > $tmpDir/sizes.new
     popd
-    pushd $2
+    pushd $1
     cat $tmpDir/modifiedFiles.txt | sed 's/^/wc -l /' |bash > $tmpDir/sizes.old 
     popd
     sdiff $tmpDir/sizes.old $tmpDir/sizes.new
-    rm -r $tmpDir
+    #rm -r $tmpDir
 endif

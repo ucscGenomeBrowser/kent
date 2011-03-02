@@ -11,6 +11,7 @@
 #include "cart.h"
 #include "hgFind.h"
 #include "hgFindSpec.h"
+#include "regexHelper.h"
 
 static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.12 2008/09/03 19:18:21 markd Exp $";
 
@@ -79,7 +80,7 @@ for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
     boolean matches = TRUE;
     boolean tablesExist = hTableOrSplitExists(database, hfs->searchTable);
     if (isNotEmpty(termToSearch) && isNotEmpty(hfs->termRegex))
-	matches = matchRegex(termToSearch, hfs->termRegex);
+	matches = regexMatchNoCase(termToSearch, hfs->termRegex);
     if (isNotEmpty(hfs->xrefTable))
 	tablesExist |= hTableExists(database, hfs->xrefTable);
     if (matches && tablesExist)
@@ -107,7 +108,7 @@ for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
     boolean matches = TRUE;
     boolean tablesExist = hTableOrSplitExists(database, hfs->searchTable);
     if (isNotEmpty(termToSearch) && isNotEmpty(hfs->termRegex))
-	matches = matchRegex(termToSearch, hfs->termRegex);
+	matches = regexMatchNoCase(termToSearch, hfs->termRegex);
     if (isNotEmpty(hfs->xrefTable))
 	tablesExist |= hTableExists(database, hfs->xrefTable);
     if (matches && tablesExist)
@@ -194,9 +195,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     if (isEmpty(row[0]))
 	continue;
-    if (! matchRegex(row[0], exp))
+    if (! regexMatchNoCase(row[0], exp))
 	{
-	if (isNotEmpty(altExp) && matchRegex(row[0], altExp))
+	if (isNotEmpty(altExp) && regexMatchNoCase(row[0], altExp))
 	    continue;
 	if (errCount < 1 ||
 	    (errCount < 10 && verboseLevel() > 1))

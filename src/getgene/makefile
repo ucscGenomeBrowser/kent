@@ -3,7 +3,7 @@ include ../inc/common.mk
 O = getgene.o 
 
 getgene.exe: $(O)
-	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a ${L}
 	mv ${AOUT} getgene.exe
 
 install: getgene.exe	

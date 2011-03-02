@@ -13,8 +13,6 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.61 2010/06/10 20:13:29 braney Exp $";
-
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
    and return a phoney filename for it, or NULL if no sig found. */
@@ -198,6 +196,77 @@ lf->buf = s;
 return lf;
 }
 
+struct lineFile *lineFileOnTabix(char *fileName, bool zTerm)
+/* Wrap a line file around a data file that has been compressed and indexed
+ * by the tabix command line program.  The index file <fileName>.tbi must be
+ * readable in addition to fileName. If there's a problem, warn & return NULL.
+ * This works only if kent/src has been compiled with USE_TABIX=1 and linked
+ * with the tabix C library. */
+{
+#ifdef USE_TABIX
+int tbiNameSize = strlen(fileName) + strlen(".tbi") + 1;
+char *tbiName = needMem(tbiNameSize);
+safef(tbiName, tbiNameSize, "%s.tbi", fileName);
+tabix_t *tabix = ti_open(fileName, tbiName);
+if (tabix == NULL)
+    {
+    warn("Unable to open \"%s\"", fileName);
+    freez(&tbiName);
+    return NULL;
+    }
+if ((tabix->idx = ti_index_load(tbiName)) == NULL)
+    {
+    warn("Unable to load tabix index from \"%s\"", tbiName);
+    freez(&tbiName);
+    return NULL;
+    }
+struct lineFile *lf = needMem(sizeof(struct lineFile));
+lf->fileName = cloneString(fileName);
+lf->fd = -1;
+lf->bufSize = 64 * 1024;
+lf->buf = needMem(lf->bufSize);
+lf->zTerm = zTerm;
+lf->tabix = tabix;
+freez(&tbiName);
+return lf;
+#else // no USE_TABIX
+warn(COMPILE_WITH_TABIX, "lineFileOnTabix");
+return NULL;
+#endif // no USE_TABIX
+}
+
+boolean lineFileSetTabixRegion(struct lineFile *lf, char *seqName, int start, int end)
+/* Assuming lf was created by lineFileOnTabix, tell tabix to seek to the specified region
+ * and return TRUE (or if unable, return FALSE). */
+{
+#ifdef USE_TABIX
+if (lf->tabix == NULL)
+    errAbort("lineFileSetTabixRegion: lf->tabix is NULL.  Did you open lf with lineFileOnTabix?");
+int tabixSeqId = ti_get_tid(lf->tabix->idx, seqName);
+if (tabixSeqId < 0 && startsWith("chr", seqName))
+    // We will get some files that have chr-less Ensembl chromosome names:
+    tabixSeqId = ti_get_tid(lf->tabix->idx, seqName+strlen("chr"));
+if (tabixSeqId < 0)
+    return FALSE;
+ti_iter_t iter = ti_queryi(lf->tabix, tabixSeqId, start, end);
+if (iter == NULL)
+    return FALSE;
+if (lf->tabixIter != NULL)
+    ti_iter_destroy(lf->tabixIter);
+lf->tabixIter = iter;
+lf->bufOffsetInFile = ti_bgzf_tell(lf->tabix->fp);
+lf->bytesInBuf = 0;
+lf->lineIx = -1;
+lf->lineStart = 0;
+lf->lineEnd = 0;
+return TRUE;
+#else // no USE_TABIX
+warn(COMPILE_WITH_TABIX, "lineFileSetTabixRegion");
+return FALSE;
+#endif // no USE_TABIX
+}
+
+
 void lineFileExpandBuf(struct lineFile *lf, int newSize)
 /* Expand line file buffer. */
 {
@@ -245,9 +314,18 @@ lf->reuse = TRUE;
 }
 
 
+INLINE void noTabixSupport(struct lineFile *lf, char *where)
+{
+#ifdef USE_TABIX
+if (lf->tabix != NULL)
+    lineFileAbort(lf, "%s: not implemented for lineFile opened with lineFileOnTabix.", where);
+#endif // USE_TABIX
+}
+
 void lineFileSeek(struct lineFile *lf, off_t offset, int whence)
 /* Seek to read next line from given position. */
 {
+noTabixSupport(lf, "lineFileSeek");
 if (lf->pl != NULL)
     errnoAbort("Can't lineFileSeek on a compressed file: %s", lf->fileName);
 lf->reuse = FALSE;
@@ -333,6 +411,30 @@ if (lf->reuse)
     return TRUE;
     }
 
+#ifdef USE_TABIX
+if (lf->tabix != NULL && lf->tabixIter != NULL)
+    {
+    // Just use line-oriented ti_read:
+    int lineSize = 0;
+    const char *line = ti_read(lf->tabix, lf->tabixIter, &lineSize);
+    if (line == NULL)
+	return FALSE;
+    lf->bufOffsetInFile = -1;
+    lf->bytesInBuf = lineSize;
+    lf->lineIx = -1;
+    lf->lineStart = 0;
+    lf->lineEnd = lineSize;
+    if (lineSize > lf->bufSize)
+	// shouldn't be!  but just in case:
+	lineFileExpandBuf(lf, lineSize * 2);
+    safecpy(lf->buf, lf->bufSize, line);
+    *retStart = lf->buf;
+    if (retSize != NULL)
+	*retSize = lineSize;
+    return TRUE;
+    }
+#endif // USE_TABIX
+
 determineNlType(lf, buf+endIx, bytesInBuf);
 
 /* Find next end of line in buffer. */
@@ -380,6 +482,14 @@ while (!gotLf)
     lf->bufOffsetInFile += oldEnd;
     if (lf->fd >= 0)
 	readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
+#ifdef USE_TABIX
+    else if (lf->tabix != NULL && readSize > 0)
+	{
+	readSize = ti_bgzf_read(lf->tabix->fp, buf+sizeLeft, readSize);
+	if (readSize < 1)
+	    return FALSE;
+	}
+#endif // USE_TABIX
     else
         readSize = 0;
 
@@ -519,6 +629,14 @@ if ((lf = *pLf) != NULL)
 	close(lf->fd);
 	freeMem(lf->buf);
 	}
+#ifdef USE_TABIX
+    else if (lf->tabix != NULL)
+	{
+	if (lf->tabixIter != NULL)
+	    ti_iter_destroy(lf->tabixIter);
+	ti_close(lf->tabix);
+	}
+#endif // USE_TABIX
     freeMem(lf->fileName);
     metaDataFree(lf);
     freez(pLf);

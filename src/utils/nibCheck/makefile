@@ -9,7 +9,7 @@ O = nibCheck.o
 
 nibCheck: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/nibCheck $O $(MYLIBS) $L
-	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) -lm
+	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) ${L} -lm
 	mv ${AOUT} nibCheck
 	chmod a+rx nibCheck
 

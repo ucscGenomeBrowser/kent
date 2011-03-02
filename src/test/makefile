@@ -1,7 +1,7 @@
 include ../inc/common.mk
 
 ../cgi-bin/test.cgi: ../lib/$(MACHTYPE)/jkweb.a test.c
-	${CC} ${COPT} ${CFLAGS} -I../inc test.c ../lib/$(MACHTYPE)/jkweb.a -lm
+	${CC} ${COPT} ${CFLAGS} -I../inc test.c ../lib/$(MACHTYPE)/jkweb.a ${L} -lm
 	chmod a+x ${AOUT}
 	mv ${AOUT} ../cgi-bin/test.cgi
 
@@ -9,7 +9,7 @@ MYLIBDIR = ../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 testRangeTree: ${MYLIBS} testRangeTree.c
-	${CC} ${COPT} ${CFLAGS} -I../inc -I../hg/inc testRangeTree.c ${MYLIBS} -lm -o testRangeTree
+	${CC} ${COPT} ${CFLAGS} -I../inc -I../hg/inc testRangeTree.c ${MYLIBS} ${L} -lm -o testRangeTree
 	chmod a+x testRangeTree
 	./testRangeTree -verbose=0
 	hexdump -f out/testRangeTree.fmt out/testRangeTree.out > out/testRangeTree.hexdump2
@@ -17,7 +17,7 @@ testRangeTree: ${MYLIBS} testRangeTree.c
 	rm out/testRangeTree.out out/testRangeTree.hexdump2 testRangeTree
 
 testGenomeRangeTree: ${MYLIBS} testGenomeRangeTree.c
-	${CC} ${COPT} ${CFLAGS} -I../inc -I../hg/inc testGenomeRangeTree.c ${MYLIBS} -lm -o testGenomeRangeTree
+	${CC} ${COPT} ${CFLAGS} -I../inc -I../hg/inc testGenomeRangeTree.c ${MYLIBS} ${L} -lm -o testGenomeRangeTree
 	chmod a+x testGenomeRangeTree
 	./testGenomeRangeTree -verbose=0
 	hexdump -n 58 -f out/testGenomeRangeTree.fmt out/testGenomeRangeTree.out > out/testGenomeRangeTree.hexdump2
@@ -42,5 +42,4 @@ test:
 #	@${MKDIR} out
 
 clean:
-	
 
