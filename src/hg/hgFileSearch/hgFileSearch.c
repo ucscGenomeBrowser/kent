@@ -106,7 +106,7 @@ static int getTermArray(struct sqlConnection *conn, char ***pLabels, char ***pTe
 int ix = 0, count = 0;
 char **labels;
 char **values;
-struct slPair *pairs = mdbValLabelSearch(conn, type, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
+struct slPair *pairs = mdbValLabelSearch(conn, type, MDB_VAL_STD_TRUNCATION, FALSE, TRUE); // Files not Tables
 count = slCount(pairs) + 1; // make room for "Any"
 AllocArray(labels, count);
 AllocArray(values, count);

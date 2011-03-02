@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = dnadust.o 
 
 dnadust.exe: $(O)
-	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L}
 	mv ${AOUT} dnadust.exe
 	chmod a+rx dnadust.exe
 

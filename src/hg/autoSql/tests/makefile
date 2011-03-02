@@ -67,7 +67,7 @@ doc2: mkout
 
 # testHarness
 testHarness: output/mainTest.o output/simpleTest.o testHarness.o
-	${CC} -o testHarness testHarness.o output/mainTest.o ${MYLIBS} ${MYSQLLIBS}
+	${CC} -o testHarness testHarness.o output/mainTest.o ${MYLIBS} ${MYSQLLIBS} ${L}
 	./testHarness > output/testHarness.out
 	${DIFF} expected/testHarness.out output/testHarness.out
 

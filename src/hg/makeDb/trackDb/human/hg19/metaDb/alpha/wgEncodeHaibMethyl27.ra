@@ -724,6 +724,50 @@ tableName wgEncodeHaibMethylArrayCmkUwSitesRep2
 treatment None
 view Sites
 
+metaObject wgEncodeHaibMethylArrayGm12878SitesRep1
+objType table
+cell GM12878
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeHaibMethylArrayGm12878SitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl27K
+labVersion Methyl27K
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3526
+tableName wgEncodeHaibMethylArrayGm12878SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayGm12878SitesRep2
+objType table
+cell GM12878
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeHaibMethylArrayGm12878SitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl27K
+labVersion Methyl27K
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3526
+tableName wgEncodeHaibMethylArrayGm12878SitesRep2
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethylArrayGm12891HaibSitesRep1
 objType table
 cell GM12891
@@ -1032,6 +1076,50 @@ tableName wgEncodeHaibMethylArrayHepg2HaibSitesRep4
 treatment None
 view Sites
 
+metaObject wgEncodeHaibMethylArrayHepg2SitesRep1
+objType table
+cell HepG2
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeHaibMethylArrayHepg2SitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl27K
+labVersion Methyl27K
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3526
+tableName wgEncodeHaibMethylArrayHepg2SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHepg2SitesRep2
+objType table
+cell HepG2
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeHaibMethylArrayHepg2SitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl27K
+labVersion Methyl27K
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3526
+tableName wgEncodeHaibMethylArrayHepg2SitesRep2
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethylArrayHipeUwSitesRep2
 objType table
 cell HIPEpiC
@@ -1274,6 +1362,50 @@ tableName wgEncodeHaibMethylArrayK562HaibSitesRep4
 treatment None
 view Sites
 
+metaObject wgEncodeHaibMethylArrayK562SitesRep1
+objType table
+cell K562
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeHaibMethylArrayK562SitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl27K
+labVersion Methyl27K
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3526
+tableName wgEncodeHaibMethylArrayK562SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayK562SitesRep2
+objType table
+cell K562
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeHaibMethylArrayK562SitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl27K
+labVersion Methyl27K
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3526
+tableName wgEncodeHaibMethylArrayK562SitesRep2
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethylArrayMcf7DukeSitesRep2
 objType table
 cell MCF-7
@@ -1472,4 +1604,4 @@ tableName wgEncodeHaibMethylArraySknshraUwSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -63452353
+# MAGIC: 303888118

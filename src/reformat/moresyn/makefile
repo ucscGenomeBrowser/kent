@@ -5,7 +5,7 @@ O = moresyn.o
 A = moresyn
 
 moresyn: ${O}
-	${CC} -o ${BINDIR}/$A $O ../../lib/${MACHTYPE}/jkweb.a
+	${CC} -o ${BINDIR}/$A $O ../../lib/${MACHTYPE}/jkweb.a ${L}
 	${STRIP} ${BINDIR}/$A${EXE}
 
 clean:

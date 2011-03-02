@@ -8,7 +8,7 @@ O = affyPairsToSample normalizeSampleFile avgTranscriptomeExps maxTranscriptomeE
 	groupSamples
 
 %: %.c 
-	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o ${BINDIR}/$@ $(addsuffix .c,$@) $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o ${BINDIR}/$@ $(addsuffix .c,$@) $(MYLIBS) ${L}
 
 all : $(O)
 
