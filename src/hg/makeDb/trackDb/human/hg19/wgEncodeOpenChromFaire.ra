@@ -35,7 +35,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
     scoreMin 600
 
         track wgEncodeOpenChromFaireGm12878Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks
         shortLabel GM12878 FAIRE Pk
         longLabel GM12878 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -45,7 +44,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1480 dateSubmitted=2010-06-15
 
         track wgEncodeOpenChromFaireH1hescPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks
         shortLabel H1-hESC FAIRE Pk
         longLabel H1-hESC FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -55,7 +53,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1496 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHelas3Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HeLa-S3 FAIRE Pk
         longLabel HeLa-S3 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -65,7 +62,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1497 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireGm19239Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel GM19239 FAIRE Pk
         longLabel GM19239 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -74,7 +70,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1508 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireGm18507Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel GM18507 FAIRE Pk
         longLabel GM18507 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -83,7 +78,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1513 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHepg2Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HepG2 FAIRE Pk
         longLabel HepG2 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -93,7 +87,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1515 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHuvecPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HUVEC FAIRE Pk
         longLabel HUVEC FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -103,7 +96,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1529 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireNhekPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel NHEK FAIRE Pk
         longLabel NHEK FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -113,7 +105,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1530 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireK562Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks
         shortLabel K562 FAIRE Pk
         longLabel K562 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -123,7 +114,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1531 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFairePanisletsPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel PanIslet FAIRE Pk
         longLabel PanIslets FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -132,7 +122,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1546 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireHelas3Ifna4hPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HeLa IFa FAIRE Pk
         longLabel HeLa-S3 IFNa 4hr FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -142,7 +131,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1611 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireHelas3Ifng4hPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HeLa IFg FAIRE Pk
         longLabel HeLa-S3 IFNg 4hr FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -152,7 +140,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1612 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireMedulloPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Medullo FAIRE Pk
         longLabel Medullo FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -161,7 +148,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2501 dateSubmitted=2010-10-16
 
         track wgEncodeOpenChromFaireGm12892Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel GM12892 FAIRE Pk
         longLabel GM12892 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -170,7 +156,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2488 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireGm12891Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel GM12891 FAIRE Pk
         longLabel GM12891 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -179,7 +164,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2494 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireAstrocyPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Astrocy FAIRE Pk
         longLabel Astrocy FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -188,7 +172,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2481 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireGlioblaPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Gliobla FAIRE Pk
         longLabel Gliobla FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -197,7 +180,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2515 dateSubmitted=2010-10-20
 
         track wgEncodeOpenChromFaireK562OhureaPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel K562 urea FAIR Pk
         longLabel K562 Hydroxyurea FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -207,7 +189,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2772 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromFaireK562NabutPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel K562 NaBu FAIR Pk
         longLabel K562 Sodium Butyrate FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -217,7 +198,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2771 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromFaireHtr8Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HTR8svn FAIRE Pk
         longLabel HTR8svn FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -226,7 +206,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3379 dateSubmitted=2011-01-19
 
         track wgEncodeOpenChromFaireMcf7HypoxlacPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel MCF7 hypox FAI Pk
         longLabel MCF-7 Hypoxia LacAcid FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -235,7 +214,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3378 dateSubmitted=2011-01-19
 
         track wgEncodeOpenChromFaireUrotsaUt189Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Urothl ec FAIR Pk
         longLabel Urothelia UT189 E.coli FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -244,7 +222,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3278 dateSubmitted=2011-01-18
 
         track wgEncodeOpenChromFaireUrotsaPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Urothl FAIRE Pk
         longLabel Urothelia FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -253,7 +230,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3277 dateSubmitted=2011-01-18
 
         track wgEncodeOpenChromFaireA549Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel A549 FAIRE Pk
         longLabel A549 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -262,7 +238,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3496 dateSubmitted=2011-01-22
 
         track wgEncodeOpenChromFaireNhbePk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel NHBE FAIRE Pk
         longLabel NHBE FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -284,7 +259,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
     maxHeightPixels 100:32:16
 
         track wgEncodeOpenChromFaireGm12878Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal
         shortLabel GM12878 FAIRE DS
         longLabel GM12878 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -294,7 +268,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1480 dateSubmitted=2010-06-15
 
         track wgEncodeOpenChromFaireH1hescSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal
         shortLabel H1-hESC FAIRE DS
         longLabel H1-hESC FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -304,7 +277,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1496 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHelas3Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel HeLa-S3 FAIRE DS
         longLabel HeLa-S3 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -314,7 +286,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1497 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireGm19239Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel GM19239 FAIRE DS
         longLabel GM19239 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -323,7 +294,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1508 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireGm18507Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel GM18507 FAIRE DS
         longLabel GM18507 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -332,7 +302,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1513 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHepg2Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel HepG2 FAIRE DS
         longLabel HepG2 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -342,7 +311,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1515 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHuvecSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel HUVEC FAIRE DS
         longLabel HUVEC FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -352,7 +320,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1529 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireNhekSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel NHEK FAIRE DS
         longLabel NHEK FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -362,7 +329,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1530 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireK562Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal
         shortLabel K562 FAIRE DS
         longLabel K562 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -372,7 +338,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1531 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFairePanisletsSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel PanIslet FAIRE DS
         longLabel PanIslets FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -381,7 +346,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1546 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireHelas3Ifna4hSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel HeLa IFa FAIRE DS
         longLabel HeLa-S3 IFNa 4hr FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -391,7 +355,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1611 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireHelas3Ifng4hSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel HeLa IFg FAIRE DS
         longLabel HeLa-S3 IFNg 4hr FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -401,7 +364,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1612 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireMedulloSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel Medullo FAIRE DS
         longLabel Medullo FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -410,7 +372,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2501 dateSubmitted=2010-10-16
 
         track wgEncodeOpenChromFaireGm12892Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel GM12892 FAIRE DS
         longLabel GM12892 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -419,7 +380,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2488 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireGm12891Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel GM12891 FAIRE DS
         longLabel GM12891 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -428,7 +388,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2494 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireAstrocySig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel Astrocy FAIRE DS
         longLabel Astrocy FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -437,7 +396,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2481 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireGlioblaSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel Gliobla FAIRE DS
         longLabel Gliobla FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -446,7 +404,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2515 dateSubmitted=2010-10-20
 
         track wgEncodeOpenChromFaireK562OhureaSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel K562 urea FAIR DS
         longLabel K562 Hydroxyurea FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -456,7 +413,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2772 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromFaireK562NabutSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel K562 NaBu FAIR DS
         longLabel K562 Na Butyrate FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -466,7 +422,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2771 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromFaireHtr8Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel HTR8svn FAIRE DS
         longLabel HTR8svn FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -475,7 +430,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3379 dateSubmitted=2011-01-19
 
         track wgEncodeOpenChromFaireMcf7HypoxlacSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel MCF7 hypox FAI DS
         longLabel MCF-7 Hypoxia FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -484,7 +438,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3378 dateSubmitted=2011-01-19
 
         track wgEncodeOpenChromFaireUrotsaUt189Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel Urothl ec FAIR DS
         longLabel Urothelia UT189 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -493,7 +446,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3278 dateSubmitted=2011-01-18
 
         track wgEncodeOpenChromFaireUrotsaSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel Urothl FAIRE DS
         longLabel Urothelia FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -502,7 +454,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3277 dateSubmitted=2011-01-18
 
         track wgEncodeOpenChromFaireA549Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel A549 FAIRE DS
         longLabel A549 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -511,7 +462,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3496 dateSubmitted=2011-01-22
 
         track wgEncodeOpenChromFaireNhbeSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel NHBE FAIRE DS
         longLabel NHBE FAIRE Density Signal from ENCODE/OpenChrom(UNC)
@@ -533,7 +483,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
     maxHeightPixels 100:32:16
 
         track wgEncodeOpenChromFaireGm12878BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo
         shortLabel GM12878 FAIRE OS
         longLabel GM12878 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -543,7 +492,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1480 dateSubmitted=2010-06-15
 
         track wgEncodeOpenChromFaireH1hescBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo
         shortLabel H1-hESC FAIRE OS
         longLabel H1-hESC FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -553,7 +501,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1496 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHelas3BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel HeLa-S3 FAIRE OS
         longLabel HeLa-S3 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -563,7 +510,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1497 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireGm19239BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel GM19239 FAIRE OS
         longLabel GM19239 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -572,7 +518,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1508 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireGm18507BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel GM18507 FAIRE OS
         longLabel GM18507 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -581,7 +526,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1513 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHepg2BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel HepG2 FAIRE OS
         longLabel HepG2 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -591,7 +535,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1515 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHuvecBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel HUVEC FAIRE OS
         longLabel HUVEC FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -601,7 +544,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1529 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireNhekBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel NHEK FAIRE OS
         longLabel NHEK FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -611,7 +553,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1530 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireK562BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo
         shortLabel K562 FAIRE OS
         longLabel K562 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -621,7 +562,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1531 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFairePanisletsBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel PanIslet FAIRE OS
         longLabel PanIslets FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -630,7 +570,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1546 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel HeLa IFa FAIRE OS
         longLabel HeLa-S3 IFNa 4hr FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -640,7 +579,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1611 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireHelas3Ifng4hBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel HeLa IFg FAIRE OS
         longLabel HeLa-S3 IFNg 4hr FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -650,7 +588,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1612 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireMedulloBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel Medullo FAIRE OS
         longLabel Medullo FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -659,7 +596,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2501 dateSubmitted=2010-10-16
 
         track wgEncodeOpenChromFaireGm12892BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel GM12892 FAIRE OS
         longLabel GM12892 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -668,7 +604,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2488 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireGm12891BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel GM12891 FAIRE OS
         longLabel GM12891 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -677,7 +612,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2494 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireAstrocyBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel Astrocy FAIRE OS
         longLabel Astrocy FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -686,7 +620,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2481 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireGlioblaBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel Gliobla FAIRE OS
         longLabel Gliobla FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -695,7 +628,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2515 dateSubmitted=2010-10-20
 
         track wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel K562 urea FAIR OS
         longLabel K562 Hydroxyurea FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -705,7 +637,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2772 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromFaireK562NabutBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel K562 NaBu FAIR OS
         longLabel K562 Na Butyrate FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -715,7 +646,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2771 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromFaireHtr8BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel HTR8svn FAIRE OS
         longLabel HTR8svn FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -724,7 +654,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3379 dateSubmitted=2011-01-19
 
         track wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel MCF7 hypox FAI OS
         longLabel MCF-7 Hypoxia FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -733,7 +662,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3378 dateSubmitted=2011-01-19
 
         track wgEncodeOpenChromFaireUrotsaUt189BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel Urothl ec FAIR OS
         longLabel Urothelia UT189 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -742,7 +670,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3278 dateSubmitted=2011-01-18
 
         track wgEncodeOpenChromFaireUrotsaBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel Urothl FAIRE OS
         longLabel Urothelia FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -751,7 +678,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3277 dateSubmitted=2011-01-18
 
         track wgEncodeOpenChromFaireA549BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel A549 FAIRE OS
         longLabel A549 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
@@ -760,7 +686,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3496 dateSubmitted=2011-01-22
 
         track wgEncodeOpenChromFaireNhbeBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel NHBE FAIRE OS
         longLabel NHBE FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
