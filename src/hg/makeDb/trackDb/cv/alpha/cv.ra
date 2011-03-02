@@ -3306,7 +3306,7 @@ termId 7043
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
 color 153,38,0
 sex M
-protocol
+protocol UW(Stam):416B_Stam_protocol.pdf
 
 term AtT-20
 tag AtT20
@@ -3362,7 +3362,7 @@ termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 153,38,0
 sex U
-protocol LICR(Ren):Cerebellum_Ren_protocol.pdf
+protocol LICR(Ren):Cerebellum_Ren_protocol.pdf UW(Stam):Tissue_Stam_protocol.pdf
 
 term Cerebrum
 tag Cerebrum
@@ -3376,7 +3376,7 @@ termId
 termUrl
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Tissue_Stam_protocol.pdf
 
 term CH12
 tag CH12
@@ -3412,7 +3412,7 @@ termId
 termUrl
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):ES-CJ7_Stam_protocol.pdf
 
 
 term Colon
@@ -3455,7 +3455,7 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Fibroblast_Stam_protocol.pdf
 
 
 term G1E
@@ -3514,7 +3514,7 @@ termId
 termUrl
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Tissue_Stam_protocol.pdf
 
 term Limb
 tag Limb
@@ -3543,7 +3543,7 @@ termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 153,38,0
 sex U
-protocol LICR(Ren):Liver_Ren_protocol.pdf
+protocol LICR(Ren):Liver_Ren_protocol.pdf UW(Stam):Tissue_Stam_protocol.pdf
 
 term Lung
 tag Lung
@@ -3601,7 +3601,7 @@ description Leukemia (K562 analog)
 tissue Blood
 color 46,0,184
 sex M
-protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf
+protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf UW(Stam):MEL_Stam_protocol.pdf
 
 #Missing VendorName and termId
 term Myocyte
@@ -3747,7 +3747,7 @@ termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Tissue_Stam_protocol.pdf
 
 term WholeBrain
 tag WholeBrain
@@ -3761,7 +3761,7 @@ termId 7005
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Tissue_Stam_protocol.pdf
 
 
 
