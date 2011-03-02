@@ -3893,27 +3893,34 @@ html numtSeq
 searchTable numtSMitochondrionChrPlacement
 searchMethod exact
 searchType bed
-shortCircuit 1
+#shortCircuit 1
 searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
 
 searchTable numtSMitochondrion
 searchMethod exact
 searchType bed
-shortCircuit 1
+#shortCircuit 1
 searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
 
 searchTable numtS
 searchMethod exact
 searchType bed
-shortCircuit 1
+#shortCircuit 1
 searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
 
 searchTable numtSAssembled
 searchMethod exact
 searchType bed
-shortCircuit 1
+#shortCircuit 1
 searchPriority 15
-
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
 
 track cactusMaf
 shortLabel cactusMaf
