@@ -569,20 +569,20 @@ identifier encodePseudogeneUcsc dependency
     $hg.encodePseudogeneUcsc.name dupeOk
     $hg.encodePseudogeneClass.name minCheck=0.22 unique
 
-identifier refGeneRetro dependency
-"Link refGene to ucscRetroInfo"
-    $hg,mm9.refGene.name dupeOk
-    $hg,mm9.ucscRetroInfo.refSeq minCheck=0.96
+#identifier refGeneRetro dependency
+#"Link refGene to ucscRetroInfo"
+    #$hg,mm9.refGene.name dupeOk
+    #$hg,mm9.ucscRetroInfo.refSeq minCheck=0.96
 
-identifier retroRefGene dependency
-"Link ucscRetroInfo to refGene"
-    $hg,mm9.ucscRetroInfo.refSeq dupeOk
-    $hg,mm9.refGene.name minCheck=0.11
+#identifier retroRefGene dependency
+#"Link ucscRetroInfo to refGene"
+    #$hg,mm9.ucscRetroInfo.refSeq dupeOk
+    #$hg,mm9.refGene.name minCheck=0.11
 
-identifier ucscRetroInfo dependency
-"Link together Ucsc Retrogenes and ucsc retroGene alignments"
-    $hg,mm9.ucscRetroInfo.name unique
-    $hg,mm9.ucscRetroAli.qName unique
+#identifier ucscRetroInfo dependency
+#"Link together Ucsc Retrogenes and ucsc retroGene alignments"
+    #$hg,mm9.ucscRetroInfo.name unique
+    #$hg,mm9.ucscRetroAli.qName unique
 
 identifier encodePseudogeneUcsc2 dependency
 "Link together Ucsc Pseudogenes and class"
