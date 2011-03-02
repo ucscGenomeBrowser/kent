@@ -29,7 +29,7 @@
 # termUrl (URL for term in the ontology. Links with termId on cellTypes.html)
 # color (specifies color code for track data of this cell type, rgb values)
 # sex (used in documentation and validation.  Should correspond to a "type sex" stanza)
-# tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.  
+# tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.
 #       Should correspond to a "type tier" stanza)
 # protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
 # category: (T for tissue, L for cell line, or P for primary cells.  Not used in human)
@@ -9161,12 +9161,11 @@ term mapAlgorithm
 type typeOfTerm
 label Mapping algorithm
 description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 500
-# This is Caltech only and possibly should be retired.  (11/3/10)  
-## Note that if there were more than 2 instances of this type this would be multiSelect searchable
+# This is Caltech only and possibly should be retired.  (11/3/10)
 
 term md5sum
 type typeOfTerm
@@ -9190,11 +9189,11 @@ term origAssembly
 type typeOfTerm
 label Assembly originally mapped to
 description Some experiments are originally performed and mapped to an earlier assembly of the reference genome and then are remapped or lifted over to a more recent assembly.
-searchable select
+searchable multiSelect
 cvDefined no
 validate list: hg18,hg19,mm9
 priority 305
-# Could be cv.ra term  ## If there were more than 2 to choose from in one organism this would be multiSelect
+# Could be cv.ra term
 
 term parentTable
 type typeOfTerm
@@ -9307,27 +9306,25 @@ term seqPlatform
 type typeOfTerm
 label Sequencing Platform
 description Sequencing platform used in high-throughput sequencing experiment.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 500
-## If there were more than 2 this would be multiSelect
 
 term setType
 type typeOfTerm
 label Experiment or Input
 description ChIP-seq experiments often require 'input' or control results to be subtracted from the experimental results.  This term clearly identifies which datasets are being used as the experiment and which are the input.
-searchable select
+searchable multiSelect
 cvDefined no
 priority 350
 validate list: exp,input,control
-## If there were more than 2 this would be multiSelect
 
 term sex
 type typeOfTerm
 label Sex of donor organism
 description The sex of a cell line or tissue sample affects the genome target of an experiment.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 130
