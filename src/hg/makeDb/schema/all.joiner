@@ -179,9 +179,9 @@ identifier UniProtId external=UniProt
      $kgDb2.kgProtAlias.displayID minCheck=0.80
      $kgDb2.kgSpAlias.alias minCheck=0.20
      $kgDb2.kgXref.spDisplayID minCheck=0.80
-     $kgDb3.kgXref.spDisplayID minCheck=0.50
+     $kgDb3.kgXref.spDisplayID minCheck=0.50 exclude=
      $kgDb2.knownCanonical.protein minCheck=0.80
-     $gbd.spMrna.spID minCheck=0.80
+     $gbd.spMrna.spID minCheck=0.80 exclude=
      dm1.bdgpSwissProt.spSymbol minCheck=0.80
      dm1.flyBaseSwissProt.spSymbol minCheck=0.80
 
@@ -218,8 +218,8 @@ identifier UniProtAccession external=UniProt
      $kgDb2.kgSpAlias.spID  minCheck=0.2
      $kgDb2.kgProtMap.qName minCheck=0.9
      $kgDb2.kgXref.spID minCheck=0.9
-     $kgDb3.kgSpAlias.spID minCheck=0.50
-     $kgDb3.kgXref.spID minCheck=0.50
+     $kgDb3.kgSpAlias.spID minCheck=0.50 exclude=
+     $kgDb3.kgXref.spID minCheck=0.50 exclude=
      $gbd.pepMwAa.accession minCheck=0.9
      $gbd.pepPi.accession minCheck=0.9
      $ce.sangerCanonical.protein minCheck=0.8
