@@ -2782,10 +2782,10 @@ identifier transMapExtFileSplicedEstId
     hgFixed.transMapExtFileSplicedEst.id unique
 
 # transMap and knownGenes
-identifier transMapGeneUcscGenesId
+identifier transMapGeneUcscGenesId fuzzy
 "UCSC Genes and transMapGene table"
-    hgFixed.transMapGeneUcscGenes.id dupeOk
-    $kgDb3.knownGene.name full
+    hgFixed.transMapGeneUcscGenes.id 
+    $kgDb3.knownGene.name
 
 identifier transMapAlnKnownGeneHgId
 "UCSC Genes and transMapAln table"
