@@ -201,6 +201,7 @@ struct sqlResult *sr;
 struct peptideMapping *pos = NULL;
 int rowOffset;
 genericHeader(tdb, NULL);
+/* Just get the current item. */
 sr = hOrderedRangeQuery(conn, tdb->track, chrom, start, end, NULL, &rowOffset);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -213,11 +214,11 @@ else
     }
 printf("<B>Item:</B> %s<BR>\n", pos->name);
 printf("<B>Score:</B> %d<BR>\n", pos->score);
+printPos(pos->chrom, pos->chromStart, pos->chromEnd, pos->strand, TRUE, item);
 printf("<B>Raw Score:</B> %f<BR>\n", pos->rawScore);
-printf("<B>Spectrum ID:</B> %s<BR>\n", pos->spectrumId);
 printf("<B>Peptide Rank:</B> %d<BR>\n", pos->peptideRank);
 printf("<B>Peptide Repeat Count:</B> %d<BR>\n", pos->peptideRepeatCount);
-printPos(pos->chrom, pos->chromStart, pos->chromEnd, pos->strand, TRUE, item);
+printf("<B>Spectrum ID:</B> %s<BR>\n", pos->spectrumId);
 if (pos->peptideRepeatCount > 1)
     {
     char query[256];
