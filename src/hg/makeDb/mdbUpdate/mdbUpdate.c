@@ -81,7 +81,6 @@ static struct optionSpec optionSpecs[] = {
     {"encodeExp",OPTION_BOOLEAN},// Update Experiments as defined in the hgFixed.encodeExp table
     {"setVars", OPTION_STRING}, // Allows setting multiple var=val pairs
     {"delete",  OPTION_BOOLEAN},// delete one obj or obj/var
-    {"binary",  OPTION_BOOLEAN},// val is binary (NOT YET IMPLEMENTED) implies -val={file}
     {"replace", OPTION_BOOLEAN},// replace entire obj when loading from file
     {"recreate",OPTION_BOOLEAN},// creates or recreates the table
     {"force",   OPTION_BOOLEAN},// override restrictions on shared table
@@ -231,9 +230,7 @@ if(optionExists("obj"))
         usage(); // Must not have submitted formatted file also
         }
 
-    mdbObjs = mdbObjCreate(optionVal("obj",  NULL),var,
-                            (optionExists("binary") ? "binary" : "txt"), // FIXME: don't know how to deal with binary yet
-                            val);
+    mdbObjs = mdbObjCreate(optionVal("obj",  NULL),var,val);
     mdbObjs->deleteThis = deleteIt;
 
     if(setVars != NULL)
@@ -265,11 +262,17 @@ else if(optionExists("vars") || optionExists("composite"))
         {
         mdbByVars = mdbByVarsLineParse(optionVal("vars", NULL));
         if (optionExists("composite"))
-            mdbByVarAppend(mdbByVars,"composite", NULL,optionVal("composite", NULL),FALSE);
+            mdbByVarAppend(mdbByVars,"composite", optionVal("composite", NULL),FALSE);
+        // Would be nice to do this as mdbPrint.  However -var and -val are values to be set
+        //if (optionExists("var"))
+        //    mdbByVarAppend(mdbByVars,optionVal("var", NULL), optionVal("val", NULL),FALSE);
         }
     else //if (optionExists("composite"))
         {
-        mdbByVars = mdbByVarCreate("composite", NULL,optionVal("composite", NULL));
+        mdbByVars = mdbByVarCreate("composite", optionVal("composite", NULL));
+        // Would be nice to do this as mdbPrint.  However -var and -val are values to be set
+        //if (optionExists("var"))
+        //    mdbByVarAppend(mdbByVars,optionVal("var", NULL), optionVal("val", NULL),FALSE);
         }
     mdbObjs = mdbObjsQueryByVars(conn,table,mdbByVars);
 
@@ -277,9 +280,7 @@ else if(optionExists("vars") || optionExists("composite"))
     if(setVars != NULL)
         mdbObjSwapVars(mdbObjs,setVars,deleteIt);
     else if (!encodeExp)
-        mdbObjTransformToUpdate(mdbObjs,var,
-                            (optionExists("binary") ? "binary" : "txt"), // FIXME: don't know how to deal with binary yet
-                             val,deleteIt);
+        mdbObjTransformToUpdate(mdbObjs,var,val,deleteIt);
     }
 else // Must be submitting formatted file
     {
