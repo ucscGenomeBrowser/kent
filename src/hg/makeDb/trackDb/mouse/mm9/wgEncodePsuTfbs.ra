@@ -97,7 +97,7 @@ wgEncode 1
 
         track wgEncodePsuTfbsG1eTal1sc12984ME0S129InputPk
         release alpha
-        parent wgEncodePsuTfbsViewPeaks off
+        parent wgEncodePsuTfbsViewPeaks
         shortLabel G1E TAL1_(SC-12984) Pk
         longLabel ENCODE PSU TFBS Peaks (TAL1_(SC-12984) in G1E cells)
         subGroups view=Peaks age=E0 factor=TAL1SC12984 cellType=G1E control=Input sex=M strain=S129
@@ -178,12 +178,12 @@ wgEncode 1
         	color 46,0,184
         	# subId=3044 dateSubmitted=2010-12-01
 
-        track wgEncodePsuTfbsG1eTal1sc12984ME0S129InputSig
-        release alpha
-        parent wgEncodePsuViewSignal off
-        shortLabel G1E TAL1_(SC-12984) Sig
-        longLabel ENCODE PSU TFBS Signal (TAL1_(SC-12984) in G1E cells)
-        subGroups view=Signal age=E0 factor=TAL1SC12984 cellType=G1E control=Input sex=M strain=S129
-        type bigWig 1.000000 212.000000
-        color 153,38,0
-        # subId=3052 dateSubmitted=2011-02-11
+        	track wgEncodePsuTfbsG1eTal1sc12984ME0S129InputSig
+        	release alpha
+        	parent wgEncodePsuViewSignal
+        	shortLabel G1E TAL1_(SC-12984)
+        	longLabel ENCODE PSU TFBS Signal (TAL1_(SC-12984) in G1E cells)
+        	subGroups view=Signal age=E0 factor=TAL1SC12984 cellType=G1E control=Input sex=M strain=S129
+        	type bigWig 1.000000 212.000000
+        	color 153,38,0
+        	# subId=3052 dateSubmitted=2011-02-11
