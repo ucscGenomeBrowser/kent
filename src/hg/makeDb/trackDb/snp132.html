@@ -202,8 +202,9 @@ display according to several attributes:
 	    check: this reference SNP was clustered from submitted SNPs
 	    with non-overlapping sets of observed alleles.</LI>
         <LI><B>Some Assembly's Allele Does Not Match Observed</B> - 
-	    Quality check: the reference assembly's allele at the mapped 
-	    position is not present in this SNP's observed alleles.</LI>
+	    Quality check: at least one assembly mapped by dbSNP has an allele
+            at the mapped position that is not present in this SNP's observed
+            alleles.</LI>
       </UL>
     </LI>
   </UL>
@@ -226,7 +227,8 @@ display according to several attributes:
       <LI>Weight can be 0, 1, 2, 3 or 10.   
       <LI>Weight = 1 are the highest quality alignments.
       <LI>Weight = 0 and weight = 10 are excluded from the data set.
-      <LI>A filter on maximum weight value is supported, which defaults to 1.
+      <LI>A filter on maximum weight value is supported, which defaults to 1
+        on all tracks except the Mult. SNPs track, which defaults to 3.
       </UL>
     </LI>
     <LI>

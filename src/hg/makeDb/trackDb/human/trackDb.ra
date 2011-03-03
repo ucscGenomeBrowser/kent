@@ -2980,6 +2980,17 @@ priority 0
 track eponine override
 priority 0
 
+track omimGene
+shortLabel OMIM Genes
+longLabel OMIM-Associated Genes
+group phenDis
+priority 29.6
+visibility hide
+color 0, 0, 200
+type bed 4
+hgsid on
+url http://www.ncbi.nlm.nih.gov/omim/
+
 track omimLocation
 shortLabel OMIM Locations
 longLabel All OMIM Cytogenetic Locations

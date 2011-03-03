@@ -36,7 +36,7 @@ wgEncode 1
 track wgEncodeRbpSuper
 superTrack on
 group regulation
-shortLabel ENC RBP
+shortLabel ENC RNA Binding
 longLabel ENCODE RNA Binding Proteins
 wgEncode 1
 
