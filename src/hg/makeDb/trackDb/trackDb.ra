@@ -1575,7 +1575,7 @@ exonArrows on
 type bed 6 .
 
 track snp132Common
-shortLabel Common SNPs (132)
+shortLabel Common SNPs(132)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 132) Found in >= 1% of Samples
 group varRep
 priority 99.0921
@@ -1603,7 +1603,7 @@ maxWindowToDraw 10000000
 type bed 6 +
 
 track snp132NonUnique
-shortLabel Mult. SNPs (132)
+shortLabel Mult. SNPs(132)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 132) That Map to Multiple Genomic Loci
 group varRep
 priority 99.0923
@@ -1618,7 +1618,7 @@ maxWindowToDraw 10000000
 type bed 6 +
 
 track snp132
-shortLabel All SNPs (132)
+shortLabel All SNPs(132)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 132)
 group varRep
 priority 99.0925
