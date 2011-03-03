@@ -14,7 +14,7 @@ dimensionBchecked rep0,rep1,rep3
 fileSortOrder cell=Cell_Line labProtocolId=<i>Protocol<BR>ID</i>  localization=Localization rnaExtract=RNA<BR>Extract view=View dccRep=DCC<BR>Replicate replicate=Lab<BR>Replicate bioRep=Cross_Lab<BR>BioReplicate fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 sortOrder view=- cellType=+ localization=+ rnaExtract=+ rep=+
 dragAndDrop subTracks
-controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract rep=dccRep
 noInherit on
 priority 0
 type bed 3
