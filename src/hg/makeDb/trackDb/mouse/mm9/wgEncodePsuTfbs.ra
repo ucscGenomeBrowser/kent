@@ -12,7 +12,7 @@ subGroup6 strain Strain 2a4b=B10.H-2aH-4bp/Wts S129=129 C57BL6=C57BL/6
 subGroup7 control Control Input=Input
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ sex=+ age=+ strain=+ control=+ view=+
-controlledVocabulary encode/cv.ra cellType factor sex age strain control
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody sex=sex age=age strain=strain control=control
 dragAndDrop subTracks
 visibilityViewDefaults  Peaks=dense Signal=full
 noInherit on
