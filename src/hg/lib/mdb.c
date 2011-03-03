@@ -3000,7 +3000,7 @@ return retVal;
 }
 
 // TODO: decide to make this public or hide it away inside the one function so far that uses it.
-//static struct hash *cvHash = NULL;
+static struct hash *cvHash = NULL;
 static char *cv_file()
 // return default location of cv.ra
 {
@@ -3039,29 +3039,31 @@ if (!tables || !files)
 dyStringAppend(dyQuery," order by val");
 
 // Establish cv hash
-struct hash *varHash = mdbCvTermHash(var);
+if (cvHash == NULL)
+    cvHash = raReadAll(cgiUsualString("ra", cv_file()), "term");
 
 struct slPair *pairs = NULL, *pair;
 struct sqlResult *sr = sqlGetResult(conn, dyStringContents(dyQuery));
 dyStringFree(&dyQuery);
 char **row;
+struct hash *ra = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(pair);
     char *name = cloneString(row[0]);
     pair = slPairNew(name,name);  // defaults the label to the metaDb.val
-    struct hash *valHash = hashFindVal(varHash,name);
-    if (valHash == NULL && sameString(var,"lab"))  // FIXME: ugly special case to be removed when metaDb is cleaned up!
+    ra = hashFindVal(cvHash,name);
+    if (ra == NULL && sameString(var,"lab"))  // FIXME: ugly special case to be removed when metaDb is cleaned up!
         {
         char *val = cloneString(name);
-        valHash = hashFindVal(varHash,strUpper(val));
-        if (valHash == NULL)
-            valHash = hashFindVal(varHash,strLower(val));
+        ra = hashFindVal(cvHash,strUpper(val));
+        if (ra == NULL)
+            ra = hashFindVal(cvHash,strLower(val));
         freeMem(val);
         }
-    if (valHash != NULL)
+    if (ra != NULL)
         {
-        char *label = hashFindVal(valHash,"label");
+        char *label = hashFindVal(ra,"label");
         if (label != NULL)
             {
             freeMem(pair->name); // Allocated when pair was created

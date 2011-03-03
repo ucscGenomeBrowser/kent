@@ -6,10 +6,27 @@ include wgEncodeSuper.ra
 include wgEncodeUwAffyExonArray.ra
 include wgEncodeSydhTfbs.ra
 include wgEncodeSydhHistone.ra
-include wgEncodeOpenChromDnase.ra
-include wgEncodeOpenChromFaire.ra
-include wgEncodeOpenChromSynth.ra
 include wgEncodeDukeAffyExon.ra alpha
+
+###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
+#UNC FAIRE (wrangler: tim)
+include wgEncodeOpenChromFaire.ra alpha
+
+#Open Chrom Synth (wrangler: tim)
+include wgEncodeOpenChromSynth.ra
+
+#Duke DNaseI HS (wrangler: tim)
+include wgEncodeOpenChromDnase.ra
+
+#Uw Dnase-Seq (wrangler: Venkat)
+include wgEncodeUwDnase.ra beta,public
+include wgEncodeUwDnase.new.ra alpha
+
+#UW DNase DGF (wrangler: Venkat)
+include wgEncodeUwDgf.ra beta,public
+include wgEncodeUwDgf.new.ra alpha
+###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
+
 
 # Nucleosome
 include wgEncodeSydhNsome.ra
@@ -53,13 +70,6 @@ include wgEncodeBroadHistone.ra
 #UW Histone (wrangler:Venkat)
 include wgEncodeUwHistone.ra
 
-#UW DNase DGF (wrangler: Venkat)
-include wgEncodeUwDgf.ra beta,public
-include wgEncodeUwDgf.new.ra alpha
-
-#Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.ra beta,public
-include wgEncodeUwDnase.new.ra alpha
 
 #UW TFBS (wrangler: Venkat)
 include wgEncodeUwTfbs.ra alpha,beta
