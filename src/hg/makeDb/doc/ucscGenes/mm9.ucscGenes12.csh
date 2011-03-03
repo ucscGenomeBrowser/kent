@@ -7,6 +7,9 @@
 
 #	"$Id: mm9.ucscGenes12.csh,v 1.5 2010/04/06 20:11:30 kent Exp $"
 
+# NCBI Taxon 10090 for mouse, 9606 for human
+set taxon = 10090
+
 # Directories
 set genomes = /hive/data/genomes
 set dir = $genomes/mm9/bed/ucsc.12
@@ -42,11 +45,12 @@ endif
 # make tempDb same as db.
 set tempPrefix = "tmp"
 set tmpSuffix = "Foo12"
-set tempDb = ${tempPrefix}${tmpSuffix}
+#set tempDb = ${tempPrefix}${tmpSuffix}
+set tempDb = mm9
 set bioCycTempDb = tmpBioCyc${tmpSuffix}
 
 # Table for SNPs
-set snpTable = snp130
+set snpTable = snp128
 
 # Public version number
 set lastVer = 4
@@ -73,9 +77,6 @@ set bioCycGenes = /hive/data/outside/bioCyc/090623/genes.col
 
 # Tracks
 set multiz = multiz4way
-
-# NCBI Taxon
-set taxon = 9606
 
 # Previous gene set
 set oldGeneBed = $genomes/mm9/bed/ucsc.10/ucscGenes.bed
@@ -744,6 +745,10 @@ hgLoadSqlTab $tempDb kgProtAlias ~/kent/src/hg/lib/kgProtAlias.sql ucscGenes.pro
 # Load up kgProtMap2 table that says where exons are in terms of CDS
 hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
+
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
 cd $dir
 hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl
@@ -756,12 +761,15 @@ hgMapToGene $db -tempDb=$tempDb allenBrainAli -type=psl knownGene knownToAllenBr
 
 hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
 
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 # Create knownToTreefam table.  This is via a slow perl script that does remote queries of
 # the treefam database..  Takes ~5 hours.  Can and should run it in the background really.
 # Nothing else depends on the result.
 cd $dir
 hgMapToGene $db ensGene knownGene knownToEnsembl -noLoad
+hgMapToGene $db -tempDb=$tempDb $snpTable knownGene knownToCdsSnp -all -cds -ignoreStrand
 ~/kent/src/hg/protein/ensembl2treefam.pl < knownToEnsembl.tab > knownToTreefam.temp
 grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
@@ -772,7 +780,6 @@ if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
     hgMapToGene $db -tempDb=$tempDb affyUclaNorm knownGene knownToU133
     hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
-    hgMapToGene $db -tempDb=$tempDb $snpTable knownGene knownToCdsSnp -all -cds -ignoreStrand
     knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
 endif
 
@@ -1247,8 +1254,6 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 #
 # Finally, need to wait until after testing, but update databases in other organisms
@@ -1266,7 +1271,4 @@ hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
 synBlastp.csh $ratDb $db
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 

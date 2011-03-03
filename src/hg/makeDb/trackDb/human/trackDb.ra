@@ -1251,6 +1251,7 @@ noScoreFilter .
 exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
+html dgvOldColors
 dataVersion v9
 
 track covMask1kGPilotLowCov
@@ -2978,6 +2979,17 @@ priority 0
 
 track eponine override
 priority 0
+
+track omimGene
+shortLabel OMIM Genes
+longLabel OMIM-Associated Genes
+group phenDis
+priority 29.6
+visibility hide
+color 0, 0, 200
+type bed 4
+hgsid on
+url http://www.ncbi.nlm.nih.gov/omim/
 
 track omimLocation
 shortLabel OMIM Locations
