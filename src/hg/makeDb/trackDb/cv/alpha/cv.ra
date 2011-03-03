@@ -8991,6 +8991,18 @@ validate none
 hidden yes
 priority 910
 
+
+term dccRep
+type typeOfTerm
+label Browser Replicate 
+description PROVISIONAL This replicate number is based on submission to the browser, it may not reflect the replicates the contibuting labs have attached to their data.
+serchable yes
+cvDefined on
+validate integer
+hidden no
+priority 240 #How do I set this?  
+
+
 # term expVars
 # type typeOfTerm
 # label Experimental variables
