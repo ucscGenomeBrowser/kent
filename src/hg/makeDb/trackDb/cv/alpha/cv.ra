@@ -9000,7 +9000,7 @@ serchable yes
 cvDefined on
 validate integer
 hidden no
-priority 240 #How do I set this?  
+priority 241 
 
 
 # term expVars
