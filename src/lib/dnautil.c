@@ -1039,7 +1039,7 @@ return TRUE;
 /* Tables to convert from 0-20 to ascii single letter representation
  * of proteins. */
 int aaVal[256];
-AA valToAa[20];
+AA valToAa[21];
 
 AA aaChars[256];	/* 0 except for value aa characters.  Converts to upper case rest. */
 
@@ -1072,9 +1072,22 @@ struct aminoAcidTable aminoAcidTable[] =
     {15, 'S',  "ser", "serine"},
     {16, 'T',  "thr", "threonine"},
     {17, 'V',  "val", "valine"},
-    {18, 'W',  "try", "tryptophan"},
+    {18, 'W',  "trp", "tryptophan"},
     {19, 'Y',  "tyr", "tyrosine"},
+    {20, 'X',  "ter", "termination"},
 };
+
+char *aaAbbr(int i)
+/* return pointer to AA abbrevation */
+{
+return(aminoAcidTable[i].abbreviation);
+}
+
+char aaLetter(int i)
+/* return AA letter */
+{
+return(aminoAcidTable[i].letter);
+}
 
 static void initAaVal()
 /* Initialize aaVal and valToAa tables. */
