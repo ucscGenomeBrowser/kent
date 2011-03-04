@@ -21,8 +21,7 @@ void mdbStaticLoad(char **row, struct mdb *ret)
 
 ret->obj = row[0];
 ret->var = row[1];
-ret->varType = row[2];
-ret->val = row[3];
+ret->val = row[2];
 }
 
 struct mdb *mdbLoadByQuery(struct sqlConnection *conn, char *query)
@@ -57,8 +56,8 @@ void mdbSaveToDb(struct sqlConnection *conn, struct mdb *el, char *tableName, in
  * If worried about this use mdbSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%s)",
-	tableName,  el->obj,  el->var,  el->varType,  el->val);
+dyStringPrintf(update, "insert into %s values ( '%s','%s',%s)",
+	tableName,  el->obj,  el->var,  el->val);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -73,19 +72,17 @@ void mdbSaveToDbEscaped(struct sqlConnection *conn, struct mdb *el, char *tableN
  * before inserting into database. */
 {
 struct dyString *update = newDyString(updateSize);
-char  *obj, *var, *varType, *val;
+char  *obj, *var, *val;
 obj = sqlEscapeString(el->obj);
 var = sqlEscapeString(el->var);
-varType = sqlEscapeString(el->varType);
 val = sqlEscapeString(el->val);
 
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s')",
-	tableName,  obj,  var,  varType,  val);
+dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')",
+	tableName,  obj,  var,  val);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&obj);
 freez(&var);
-freez(&varType);
 freez(&val);
 }
 
@@ -98,8 +95,7 @@ struct mdb *ret;
 AllocVar(ret);
 ret->obj = cloneString(row[0]);
 ret->var = cloneString(row[1]);
-ret->varType = cloneString(row[2]);
-ret->val = cloneString(row[3]);
+ret->val = cloneString(row[2]);
 return ret;
 }
 
@@ -150,7 +146,6 @@ if (ret == NULL)
     AllocVar(ret);
 ret->obj = sqlStringComma(&s);
 ret->var = sqlStringComma(&s);
-ret->varType = sqlStringComma(&s);
 ret->val = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -165,7 +160,6 @@ struct mdb *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->obj);
 freeMem(el->var);
-freeMem(el->varType);
 freeMem(el->val);
 freez(pEl);
 }
@@ -195,10 +189,6 @@ fprintf(f, "%s", el->var);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->varType);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->val);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
@@ -222,14 +212,6 @@ fputc('"',f);
 fputc(':',f);
 fputc('"',f);
 fprintf(f, "%s", el->var);
-fputc('"',f);
-fputc(',',f);
-fputc('"',f);
-fprintf(f,"varType");
-fputc('"',f);
-fputc(':',f);
-fputc('"',f);
-fprintf(f, "%s", el->varType);
 fputc('"',f);
 fputc(',',f);
 fputc('"',f);
@@ -314,7 +296,6 @@ while((thisRow = slPopHead(mdbPtr)) != NULL)
 
     AllocVar(mdbVar);
     mdbVar->var     = thisRow->var;
-    mdbVar->varType = mdbVarTypeStringToEnum(thisRow->varType);
     mdbVar->val     = thisRow->val;
     slAddHead(&(mdbObj->vars),mdbVar);
     if ( buildHashes )
@@ -354,8 +335,6 @@ while((thisRow = slPopHead(mdbPtr)) != NULL)
         AllocVar(rootVar);
         limbVal = NULL;  // Very important!
         rootVar->var     = thisRow->var;
-        rootVar->varType = mdbVarTypeStringToEnum(thisRow->varType);
-        freeMem(thisRow->varType);
         if ( buildHashes )
             rootVar->valHash = hashNew(0);
         slAddHead(&rootVars,rootVar);
@@ -363,7 +342,6 @@ while((thisRow = slPopHead(mdbPtr)) != NULL)
     else
         {
         freeMem(thisRow->var);  // Already got this from prev row
-        freeMem(thisRow->varType);
         }
 
     // Continue with limb
@@ -374,7 +352,7 @@ while((thisRow = slPopHead(mdbPtr)) != NULL)
             slReverse(&(limbVal->objs));
         // Start new val
         AllocVar(limbVal);
-        limbVal->val     = thisRow->val;     // FIXME: binary?
+        limbVal->val     = thisRow->val;
         if ( buildHashes )
             {
             hashAddUnique(rootVar->valHash, limbVal->val, limbVal); // Pointer to struct to get to objHash
@@ -422,7 +400,7 @@ for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
         {
         if(mdbVar->var != NULL)
             crc += hashCrc(mdbVar->var);
-        if(mdbVar->varType == vtTxt && mdbVar->val != NULL)
+        if(mdbVar->val != NULL)
             crc += hashCrc(mdbVar->val);
         }
     }
@@ -447,28 +425,6 @@ const struct mdbVar *b = *((struct mdbVar **)vb);
 return strcasecmp(a->var, b->var);
 }
 
-
-// -------------- Enum to Strings --------------
-enum mdbVarType mdbVarTypeStringToEnum(char *varType)
-// Convert metadata varType string to enum
-{
-if(sameWord(varType,"txt"))
-    return vtTxt;
-if(sameWord(varType,"binary"))
-    return vtBinary;
-return vtUnknown;
-}
-
-char *mdbVarTypeEnumToString(enum mdbVarType varType)
-// Convert metadata varType enum string
-{
-switch (varType)
-    {
-    case vtTxt:    return "txt";
-    case vtBinary: return "binary";
-    default:       return "unknown";
-    }
-}
 
 // ------ Parsing lines ------
 
@@ -505,7 +461,6 @@ char *cloneVars = cloneString(varPairs);
 
         AllocVar(mdbVar);
         mdbVar->var = cloneNextWordByDelimiter(&(words[ix]),'=');
-        mdbVar->varType = vtTxt;                               // FIXME: binary?
         mdbVar->val = cloneString(words[ix]);
         verbose(3, "mdbObjAddVarPairs() var=val: %s=%s\n",mdbVar->var,mdbVar->val);
         struct mdbVar *oldVar = (struct mdbVar *)hashFindVal(mdbObj->varHash, mdbVar->var);
@@ -714,7 +669,7 @@ return mdbByVars;
 }
 
 // ------ Loading from args, hashes and tdb ------
-struct mdbByVar*mdbByVarCreate(char *var, char *varType,char *val)
+struct mdbByVar*mdbByVarCreate(char *var, char *val)
 /* Creates a singular var=val pair struct for metadata queries. */
 {
 struct mdbByVar *mdbByVar = NULL;
@@ -724,7 +679,6 @@ struct mdbByVar *mdbByVar = NULL;
 
     AllocVar(mdbByVar);
     mdbByVar->var = cloneString(var);
-    mdbByVar->varType = (varType==NULL?vtUnknown:mdbVarTypeStringToEnum(varType));
 
     if(val != NULL)
         {
@@ -738,15 +692,14 @@ struct mdbByVar *mdbByVar = NULL;
 return mdbByVar;
 }
 
-boolean mdbByVarAppend(struct mdbByVar *mdbByVars,char *var, char *varType,char *val,boolean notEqual)
+boolean mdbByVarAppend(struct mdbByVar *mdbByVars,char *var,char *val,boolean notEqual)
 /* Adds a another var to a list of mdbByVar pairs to be used in metadata queries. */
 {
 // Does var already exist in mdbByVars?
-enum mdbVarType newVarType = (varType==NULL?vtUnknown:mdbVarTypeStringToEnum(varType));
 struct mdbByVar *mdbByVar = mdbByVars;
 for(;mdbByVar!=NULL;mdbByVar=mdbByVar->next)
     {
-    if (sameString(mdbByVar->var,var) && mdbByVar->varType == newVarType && mdbByVar->notEqual == notEqual)
+    if (sameString(mdbByVar->var,var) && mdbByVar->notEqual == notEqual)
         {
         struct mdbLimbVal * limbVal = mdbByVar->vals;
         for(;limbVal!=NULL;limbVal=limbVal->next)
@@ -764,14 +717,14 @@ for(;mdbByVar!=NULL;mdbByVar=mdbByVar->next)
     }
 
 // Not found so add it
-struct mdbByVar *newVar = mdbByVarCreate(var, varType,val);
+struct mdbByVar *newVar = mdbByVarCreate(var, val);
 newVar->notEqual = notEqual;
 slAddTail(&mdbByVars,newVar); // Add to tail to avoid changing passed in pointer
 
 return TRUE;
 }
 
-struct mdbObj *mdbObjCreate(char *obj,char *var, char *varType,char *val)
+struct mdbObj *mdbObjCreate(char *obj,char *var, char *val)
 /* Creates a singular mdbObj query object based on obj and all other optional params. */
 {
 struct mdbObj *mdbObj = NULL;
@@ -788,7 +741,6 @@ struct mdbObj *mdbObj = NULL;
         AllocVar(mdbVar);
 
         mdbVar->var     = cloneString(var);
-        mdbVar->varType = (varType==NULL?vtUnknown:mdbVarTypeStringToEnum(varType));
         if(val != NULL)
             mdbVar->val     = cloneString(val);
         mdbObj->vars = mdbVar; // Only one
@@ -820,7 +772,6 @@ while((objEl = hashNext(&objCookie)) != NULL)
         struct mdbVar * mdbVar;
         AllocVar(mdbVar);
         mdbVar->var     = cloneString(varEl->name);
-        mdbVar->varType = vtTxt;                    // FIXME: binary?
         mdbVar->val     = cloneString(varEl->val);
         hashAdd(mdbObj->varHash, mdbVar->var, mdbVar); // pointer to struct to resolve type
         slAddHead(&(mdbObj->vars),mdbVar);
@@ -908,12 +859,10 @@ char *sqlCreate =
 "CREATE TABLE %s (\n"
 "    obj varchar(255) not null,      # Object name or ID.\n"
 "    var varchar(255) not null,      # Metadata variable name.\n"
-"    varType enum ('txt','binary')   # Most vars are txt\n"
-"            not null default 'txt',\n"
-"    val longblob not null,          # Metadata value.\n"
+"    val varchar(2048) not null,     # Metadata value.\n"
 "  #Indices\n"
 "    PRIMARY KEY(obj,var),\n"
-"    UNIQUE(var,val(32),obj)\n"
+"    INDEX varKey (var,val(32),obj)\n"
 ")";
 
 if(sqlTableExists(conn,tblName))
@@ -1091,13 +1040,12 @@ for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
             struct mdbObj *objExists = mdbObjQueryByObj(conn,tableName,mdbObj->obj,mdbVar->var);
             if(objExists)
                 {
-                if(differentString(mdbVar->val,objExists->vars->val)
-                || mdbVar->varType != objExists->vars->varType)
+                if(differentString(mdbVar->val,objExists->vars->val))
                     {
                     safef(query, sizeof(query),
-                        "update %s set varType = '%s', val = '%s' where obj = '%s' and var = '%s'",
+                        "update %s set val = '%s' where obj = '%s' and var = '%s'",
                             tableName,
-                            mdbVarTypeEnumToString(mdbVar->varType),sqlEscapeString(mdbVar->val), // FIXME: binary val?
+                            sqlEscapeString(mdbVar->val),
                             mdbObj->obj,mdbVar->var);
                     verbose(2, "Requesting update of 1 row:\n\t%s;\n",query);
                     if(!testOnly)
@@ -1110,9 +1058,9 @@ for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
             }
         // Finally ready to insert new vars
         safef(query, sizeof(query),
-            "insert into %s values ( '%s','%s','%s','%s')",
-                tableName,mdbObj->obj,mdbVar->var,mdbVarTypeEnumToString(mdbVar->varType),
-                sqlEscapeString(mdbVar->val)); // FIXME: binary val?  // FIXME Strip quotes
+            "insert into %s values ( '%s','%s','%s')",
+                tableName,mdbObj->obj,mdbVar->var,
+                sqlEscapeString(mdbVar->val)); // FIXME Strip quotes
         verbose(2, "Requesting insert of one row:\n\t%s;\n",query);
         if(!testOnly)
             sqlUpdate(conn, query);
@@ -1125,58 +1073,40 @@ return count;
 int mdbObjsLoadToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,boolean testOnly)
 // Adds mdb Objs with minimal error checking
 {
-char query[8192];
-struct mdbObj *mdbObj;
-struct mdbVar *mdbVar;
 int count = 0;
 
 if (tableName == NULL)
     tableName = MDB_DEFAULT_NAME;
 
 if (!sqlTableExists(conn,tableName))
-    errAbort("mdbObjsSetToDb attempting to update non-existent table named '%s'.\n",tableName);
+    errAbort("mdbObjsLoadToDb attempting to load non-existent table named '%s'.\n",tableName);
 
-for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
-    {
-    if (mdbObj->deleteThis)
-        continue;
+assert(mdbObjs != NULL);  // If this is the case, then be vocal
 
-    for(mdbVar = mdbObj->vars;mdbVar != NULL; mdbVar = mdbVar->next)
-        {
-        stripEnclosingDoubleQuotes(mdbVar->val); // Ensures values are stripped of enclosing quotes
+#define MDB_TEMPORARY_TAB_FILE "temporaryMdb.tab"
+#define SHOW_TIMING(last,msg) { int now = clock1000(); verbose(0,"%04ldms - %s\n",(now - (last)),(msg)); (last) = now; }
+long lastTime = 0;
+SHOW_TIMING(lastTime,"Before printing tab delimited file");
 
-        // Finally ready to insert new vars
-        safef(query, sizeof(query),
-            "insert into %s values ( '%s','%s','%s','%s')",
-                tableName,mdbObj->obj,mdbVar->var,mdbVarTypeEnumToString(mdbVar->varType),
-                sqlEscapeString(mdbVar->val)); // FIXME: binary val?  // FIXME Strip quotes
-        verbose(2, "Requesting insert of one row:\n\t%s;\n",query);
-        if (!testOnly)
-            {
-            // Use the sqlGetResultExt() instead of the normal sqlUpdate() in order to getany error messages
-            unsigned int errorNo = 0;
-            char *errorMsg = NULL;
-            struct sqlResult *sr = sqlGetResultExt(conn, query, &errorNo, &errorMsg);
-            if (errorNo != 0)
-                verbose(1, "INSERT failed: %s\n",errorMsg);
-            else
-                count++;
-            if (sr) // Should will be null, but just for good measure
-                sqlFreeResult(&sr);
-            }
-        else
-            {
-            struct mdbObj *objExists = mdbObjQueryByObj(conn,tableName,mdbObj->obj,mdbVar->var);
-            if(objExists)
-                {
-                verbose(1, "INSERT will fail for obj:%s and var:%s\n",mdbObj->obj,mdbVar->var);
-                mdbObjsFree(&objExists);
-                }
-            else
-                count++; // Of course this does not find duplicates within the mdbObjs list.
-            }
-        }
-    }
+count = mdbObjPrintToTabFile(mdbObjs,MDB_TEMPORARY_TAB_FILE);
+
+// Disable keys in hopes of speeding things up.  No danger since it only disables non-unique keys
+char query[8192];
+safef(query, sizeof(query),"alter table %s disable keys",tableName);
+sqlUpdate(conn, query);
+
+// Quick? load
+SHOW_TIMING(lastTime,"Before loading the mdb from tab-delimited file");
+sqlLoadTabFile(conn, MDB_TEMPORARY_TAB_FILE, tableName, SQL_TAB_FILE_WARN_ON_ERROR|SQL_TAB_FILE_WARN_ON_WARN);
+SHOW_TIMING(lastTime,"Done 'LOAD DATA INFILE' mysql command for the mdb");
+
+// Enabling the keys again
+safef(query, sizeof(query),"alter table %s enable keys",tableName);
+sqlUpdate(conn, query);
+SHOW_TIMING(lastTime,"Done re-enabling keys");
+
+unlink(MDB_TEMPORARY_TAB_FILE);
+
 return count;
 }
 
@@ -1195,7 +1125,7 @@ struct mdbObj *mdbObjQuery(struct sqlConnection *conn,char *table,struct mdbObj 
         return NULL;
 
     struct dyString *dy = newDyString(4096);
-    dyStringPrintf(dy, "select obj,var,varType,val from %s", table);
+    dyStringPrintf(dy, "select obj,var,val from %s", table);
     if(mdbObj != NULL && mdbObj->obj != NULL)
         {
         dyStringPrintf(dy, " where obj %s '%s'",
@@ -1231,7 +1161,7 @@ struct mdbObj *mdbObjQuery(struct sqlConnection *conn,char *table,struct mdbObj 
         if(mdbObj->vars != NULL)
             dyStringPrintf(dy, ")");
         }
-    dyStringPrintf(dy, " order by binary obj, var");
+    dyStringPrintf(dy, " order by binary obj, var");    // binary forces case-sensitive sort
     verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
     struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
@@ -1247,7 +1177,7 @@ struct mdbObj *mdbObjQueryByObj(struct sqlConnection *conn,char *table,char *obj
 if(obj == NULL)
     return mdbObjQuery(conn,table,NULL);
 
-struct mdbObj *queryObj  = mdbObjCreate(obj,var,NULL,NULL);
+struct mdbObj *queryObj  = mdbObjCreate(obj,var,NULL);
 struct mdbObj *resultObj = mdbObjQuery(conn,table,queryObj);
 mdbObjsFree(&queryObj);
 return resultObj;
@@ -1265,7 +1195,7 @@ struct mdbByVar *mdbByVarsQuery(struct sqlConnection *conn,char *table,struct md
         return NULL;
 
     struct dyString *dy = newDyString(4096);
-    dyStringPrintf(dy, "select obj,var,varType,val from %s", table);
+    dyStringPrintf(dy, "select obj,var,val from %s", table);
 
     struct mdbByVar *rootVar;
     for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
@@ -1335,7 +1265,7 @@ struct mdbByVar *mdbByVarQueryByVar(struct sqlConnection *conn,char *table,char 
 if(varName == NULL)
     return mdbByVarsQuery(conn,table,NULL);
 
-struct mdbByVar *queryVar  = mdbByVarCreate(varName,NULL,val);
+struct mdbByVar *queryVar  = mdbByVarCreate(varName,val);
 struct mdbByVar *resultVar = mdbByVarsQuery(conn,table,queryVar);
 mdbByVarsFree(&queryVar);
 return resultVar;
@@ -1347,19 +1277,19 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 {
 // MOST POPULAR WAY TO QUERY MDB.  Building example queries like:
 // "cell=GM12878" or "cell!=GM12878"
-//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val = 'GM12878') ORDER BY T1.obj, T1.var;
-//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val != 'GM12878') ORDER BY T1.obj, T1.var;
+//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val = 'GM12878') ORDER BY T1.obj, T1.var;
+//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val != 'GM12878') ORDER BY T1.obj, T1.var;
 // "cell=GM%" or "cell!=GM%"
-//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%') ORDER BY T1.obj, T1.var;
-//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val NOT LIKE 'GM%') ORDER BY T1.obj, T1.var;
+//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%') ORDER BY T1.obj, T1.var;
+//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val NOT LIKE 'GM%') ORDER BY T1.obj, T1.var;
 // "cell=" or "cell!="
-//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell') ORDER BY T1.obj, T1.var;
-//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE NOT EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell') ORDER BY T1.obj, T1.var;
+//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell') ORDER BY T1.obj, T1.var;
+//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE NOT EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell') ORDER BY T1.obj, T1.var;
 // "cell=GM12878,K562" or "cell!=GM12878,K562"
-//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val IN ('GM12878','K562')) ORDER BY T1.obj, T1.var;
-//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val NOT IN ('K562','GM12878')) ORDER BY T1.obj, T1.var;
+//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val IN ('GM12878','K562')) ORDER BY T1.obj, T1.var;
+//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val NOT IN ('K562','GM12878')) ORDER BY T1.obj, T1.var;
 // "cell=GM% cell!=GM12878"  (very powerful)
-//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%')
+//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%')
 //                                                           AND EXISTS (SELECT T3.obj FROM metaDb T3 WHERE T3.obj = T1.obj AND T3.var = 'cell' AND T3.val != 'GM12878') ORDER BY T1.obj, T1.var;
 
     if(table == NULL)
@@ -1368,7 +1298,7 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
         return NULL;
 
     struct dyString *dy = newDyString(4096);
-    dyStringPrintf(dy, "SELECT T1.obj,T1.var,T1.varType,T1.val FROM %s T1", table);
+    dyStringPrintf(dy, "SELECT T1.obj,T1.var,T1.val FROM %s T1", table);
 
     struct mdbByVar *rootVar;
     boolean gotVar = FALSE;
@@ -1428,7 +1358,7 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
             dyStringPrintf(dy, ")");
         dyStringPrintf(dy, ")");
         }
-    dyStringPrintf(dy, " ORDER BY binary T1.obj, T1.var");
+    dyStringPrintf(dy, " ORDER BY binary T1.obj, T1.var");  // binary forces case sensitive sort
     verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
     struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
@@ -1451,9 +1381,7 @@ if(mdbVar != NULL && mdbVar->var != NULL)
         fprintf(outF, " %s=",mdbVar->var);
     if(mdbVar->val != NULL)
         {
-        if(mdbVar->varType == vtBinary)
-            fprintf(outF, "binary");
-        else if(!raStyle && strchr(mdbVar->val, ' ') != NULL) // Has blanks
+        if(!raStyle && strchr(mdbVar->val, ' ') != NULL) // Has blanks
             fprintf(outF, "\"%s\"",mdbVar->val);
         else
             fprintf(outF, "%s",mdbVar->val);
@@ -1518,10 +1446,7 @@ if (mdbObj!=NULL)
     for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (!sameOk(MDB_OBJ_TYPE,mdbVar->var) || (!objTypeExclude && mdbObj->varHash == NULL))
-            {
-            if (mdbVar->varType == vtTxt)
-                dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
-            }
+            dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
         }
     char *line = dyStringCannibalize(&dyLine);
     if (line)
@@ -1547,13 +1472,39 @@ mdbObjPrintToStream(mdbObjs, raStyle, stdout);
 }
 
 void mdbObjPrintToFile(struct mdbObj *mdbObjs,boolean raStyle, char *file)
-// prints objs and var=val pairs as formatted metadata lines or ra style
+// prints (to file) objs and var=val pairs as formatted metadata lines or ra style
 {
 FILE *f = mustOpen(file, "w");
 
 mdbObjPrintToStream(mdbObjs, raStyle, f);
 
 fclose(f);
+}
+
+int mdbObjPrintToTabFile(struct mdbObj *mdbObjs, char *file)
+// prints all objs as tab delimited obj var val into file for SQL LOAD DATA.  Returns count.
+{
+FILE *tabFile = mustOpen(file, "w");
+int count = 0;
+
+struct mdbObj *mdbObj = NULL;
+for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
+    {
+    if(mdbObj->obj == NULL)
+        continue;
+
+    struct mdbVar *mdbVar = NULL;
+    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+        {
+        if (mdbVar->var == NULL || mdbVar->val == NULL)
+            continue;
+        fprintf(tabFile, "%s\t%s\t%s\n",mdbObj->obj,mdbVar->var,sqlEscapeString(mdbVar->val));
+        count++;
+        }
+    }
+
+fclose(tabFile);
+return count;
 }
 
 void mdbByVarPrint(struct mdbByVar *mdbByVars,boolean raStyle)
@@ -1586,9 +1537,7 @@ for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
         else
             printf("%s %s=",MDB_METAVAR_RAKEY,rootVar->var);
 
-        if(rootVar->varType == vtBinary)
-            printf("binary");
-        else if(!raStyle && strchr(limbVal->val, ' ') != NULL) // Has blanks
+        if(!raStyle && strchr(limbVal->val, ' ') != NULL) // Has blanks
             printf("\"%s\"",limbVal->val);
         else
             printf("%s",limbVal->val);
@@ -2034,7 +1983,6 @@ if (mdbVar != NULL)
     {
     if (mdbVar->val != NULL)
         freeMem(mdbVar->val);
-    mdbVar->varType = vtTxt;
     mdbVar->val = cloneString(val);
     if (mdbObj->varHash != NULL)
         hashReplace(mdbObj->varHash, mdbVar->var, mdbVar); // pointer to struct to resolve type
@@ -2045,7 +1993,6 @@ else
     AllocVar(mdbVar);
 
     mdbVar->var     = cloneString(var);
-    mdbVar->varType = vtTxt;
     mdbVar->val     = cloneString(val);
     slAddHead(&mdbObj->vars,mdbVar); // Only one
     if (mdbObj->varHash != NULL)
@@ -2218,7 +2165,7 @@ if (mdbObjsDropped)
 return mdbObjsDropped;
 }
 
-void mdbObjTransformToUpdate(struct mdbObj *mdbObjs, char *var, char *varType,char *val,boolean deleteThis)
+void mdbObjTransformToUpdate(struct mdbObj *mdbObjs, char *var, char *val,boolean deleteThis)
 // Turns one or more mdbObjs into the stucture needed to add/update or delete.
 {
 struct mdbObj *mdbObj = NULL;
@@ -2238,7 +2185,6 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
         AllocVar(mdbVar);
 
         mdbVar->var     = cloneString(var);
-        mdbVar->varType = (varType==NULL?vtUnknown:mdbVarTypeStringToEnum(varType));
         if(val != NULL)
             mdbVar->val     = cloneString(val);
         mdbObj->vars = mdbVar; // Only one
@@ -2272,7 +2218,6 @@ if(mdbObj->vars != NULL)
             newVar->var = cloneString(mdbVar->var);
         if(mdbVar->val != NULL)
             newVar->val = cloneString(mdbVar->val);
-        newVar->varType    = mdbVar->varType;
         if(newVar->var != NULL && newVar->val != NULL)
             hashAdd(newObj->varHash, newVar->var, newVar); // pointer to struct to resolve type
         slAddHead(&(newObj->vars),newVar);
@@ -2705,7 +2650,7 @@ while(mdbObjs != NULL)
             if (updateObj)
                 {
                 mdbObjSetVarInt(obj,EXP_ID_NAME,expId);
-                struct mdbObj *newObj = mdbObjCreate(obj->obj,EXP_ID_NAME, "txt" ,experimentId);
+                struct mdbObj *newObj = mdbObjCreate(obj->obj,EXP_ID_NAME, experimentId);
                 char buf[128];
                 safef(buf,sizeof(buf),"wgEncode%c%06d",(startsWith("mm",db)?'M':'H'),expId);
                 mdbObjSetVar(newObj,DCC_ACCESSION,buf);
@@ -2886,7 +2831,7 @@ char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 
 // Build a query string
 struct dyString *dyQuery = dyStringNew(512);
-dyStringPrintf(dyQuery,"select l1.obj, l1.var, l1.varType, l1.val from %s l1",tableName);
+dyStringPrintf(dyQuery,"select l1.obj, l1.var, l1.val from %s l1",tableName);
 
 if (var != NULL || val != NULL)
     dyStringPrintf(dyQuery," where exists (select l2.obj from %s l2 where l2.obj = l1.obj and ",tableName);
