@@ -10,6 +10,11 @@
 #               - Signal = full
 #       - Short Labels: 
 #               Template: [cell] {factor] [view]
+#		- Cells: Abbreviation for cells
+#			- G1E-ER4+E2 = G1E-ER4
+#               - Factors: Will have the target distinction in them only to allow for 17 character limit
+#                       - GATA1_(SC-265) = GATA1
+#                       - TAL1_(SC-12984) = TAL1
 #               - Views: For consistency sake view will be
 #                       - Peaks = Pk
 #                       - Signal = Sg
@@ -97,7 +102,7 @@ wgEncode 1
         	track wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk
         	release alpha
         	parent wgEncodePsuTfbsViewPeaks 
-        	shortLabel G1E-ER4+E2 CTCF Pk
+        	shortLabel G1E-ER4 CTCF Pk
         	longLabel G1E-ER4+E2 CTCF TFBS ChIP-seq Peaks from ENCODE/PSU
         	subGroups view=Peaks age=E0 factor=CTCF cellType=G1E_ER4_E2 control=Input sex=M strain=S129
         	type broadPeak
@@ -107,7 +112,7 @@ wgEncode 1
         	track wgEncodePsuTfbsG1eeR4e2Gata1sc265ME0S129InputPk
         	release alpha
         	parent wgEncodePsuTfbsViewPeaks 
-        	shortLabel G1E-ER4+E2 GATA1_(SC-265) Pk
+        	shortLabel G1E-ER4 GATA1 Pk
         	longLabel G1E-ER4+E2 GATA1_(SC-265) TFBS ChIP-seq Peaks from ENCODE/PSU
         	subGroups view=Peaks age=E0 factor=GATA1SC265 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
         	type broadPeak
@@ -127,7 +132,7 @@ wgEncode 1
         	track wgEncodePsuTfbsG1eTal1sc12984ME0S129InputPk
         	release alpha
         	parent wgEncodePsuTfbsViewPeaks
-        	shortLabel G1E TAL1_(SC-12984) Pk
+        	shortLabel G1E TAL1 Pk
         	longLabel G1E TAL1_(SC-12984) TFBS ChIP-seq Peaks from ENCODE/PSU
         	subGroups view=Peaks age=E0 factor=TAL1SC12984 cellType=G1E control=Input sex=M strain=S129
         	type broadPeak
@@ -180,7 +185,7 @@ wgEncode 1
        		track wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig
         	release alpha
         	parent wgEncodePsuViewSignal 
-        	shortLabel G1E-ER4+E2 CTCF Sg
+        	shortLabel G1E-ER4 CTCF Sg
         	longLabel G1E-ER4+E2 CTCF TFBS ChIP-seq Signal from ENCODE/PSU
         	subGroups view=Signal age=E0 factor=CTCF cellType=G1E_ER4_E2 control=Input sex=M strain=S129
         	type bigWig 1.000000 161.000000
@@ -190,7 +195,7 @@ wgEncode 1
         	track wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputSig
         	release alpha
        		parent wgEncodePsuViewSignal 
-        	shortLabel G1E-ER4+E2 GATA1_(SC-265) Sg
+        	shortLabel G1E-ER4 GATA1 Sg
         	longLabel G1E-ER4+E2 GATA1_(SC-265) TFBS ChIP-seq Signal from ENCODE/PSU
         	subGroups view=Signal age=E0 factor=GATA1SC265 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
         	type bigWig 1.000000 163.000000
@@ -210,7 +215,7 @@ wgEncode 1
         	track wgEncodePsuTfbsG1eTal1sc12984ME0S129InputSig
         	release alpha
         	parent wgEncodePsuViewSignal
-        	shortLabel G1E TAL1_(SC-12984) Sg
+        	shortLabel G1E TAL1 Sg
         	longLabel G1E TAL1_(SC-12984) TFBS ChIP-seq Signal from ENCODE/PSU
         	subGroups view=Signal age=E0 factor=TAL1SC12984 cellType=G1E control=Input sex=M strain=S129
         	type bigWig 1.000000 212.000000
