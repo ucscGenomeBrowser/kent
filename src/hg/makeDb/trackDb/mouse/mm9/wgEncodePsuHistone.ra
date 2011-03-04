@@ -12,6 +12,7 @@ subGroup6 strain Strain S129=129
 subGroup7 control Control Input=Input
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ sex=+ age=+ strain=+ control=+ view=+
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target sex=Sex age=Age strain=Strain control=Control view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody sex=sex age=age strain=strain control=control
 dragAndDrop subTracks
 visibilityViewDefaults  Peaks=dense Signal=full
