@@ -153,8 +153,7 @@ include wgEncodeUchicagoTfbs.ra
 include wgEncodeSunyAlbanyGeneSt.ra alpha
 
 # SUNY Tiling Array (wrangler: cricket)
-include wgEncodeSunyAlbanyTiling.ra beta,public
-include wgEncodeSunyAlbanyTiling.new.ra alpha
+include wgEncodeSunyAlbanyTiling.ra
 
 # SUNY SwitchGear (wrangler: cricket)
 include wgEncodeSunySwitchgear.ra alpha
