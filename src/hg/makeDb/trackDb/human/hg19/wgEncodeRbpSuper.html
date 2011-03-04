@@ -7,6 +7,13 @@
 </head>
 <body>
 <h2>Description</h2>
+<!--
+<p>In eukaryotic organisms gene regulatory networks require an additional level of coordination that links transcriptional and post-transcriptional processes. Messenger RNAs have traditionally been viewed as passive molecules in the pathw
+ay from transcription
+ to translation. However, it is now clear that RNA-binding proteins play a major role in regulating multiple mRNAs in o
+rder to facilitate gene expression patterns. These tracks show RNA sequences found (via multiple techniques) to be associated with particular RNA-binding proteins.   </p>
+-->
+
 <p>In humans, every messenger RNA (mRNA) undergoes extensive processing
 by RNA-binding proteins (RBPs). These RBPs regulate both the
 forms and abundances of mRNAs in the cell through processes including
@@ -26,7 +33,7 @@ RNAs and RBPs are then separated by reverse cross-linking, and the RNAs
 are then identified via sequencing (RIP-seq) or microarray analysis
 (RIP-chip). <br>
 </p>
-<p>The tracks of this supertrack include two types of
+<p>The tracks in this supertrack include two types of
 information. When the purified RNA is analyzed with a gene
 expression array, the output identifies genes whose transcripts were
 bound by the given RBPs. Examples of this include SUNY GeneST and
@@ -34,8 +41,18 @@ SUNY Switchgear. Alternatively, when the purified RNA is
 sequenced or is analyzed with a tiling array, the output also
 identifies the location where the RBP bound the pre-mRNA
 transcripts. Examples of this include SUNY RIP Tiling and SUNY
-RIP -seq.<br>
+RIP-seq.<br>
 </p>
+
+<h3>Please note:</h3>
+<P>
+RIP input tracks (both array and sequencing based) were created for use in downstream informatic 
+analysis to produce RBP specific RIP tracks. Low abundance RNA that is undetectable in the input samples may 
+be proportionally enriched to the point of detection in the RIPs. This may be confusing to some users expecting
+to see RIP as a subset of input. Users seeking information on total RNA, should examine the "expression" RNA-seq 
+tracks produced by other ENCODE groups.
+</P>
+
 <h2>Display Conventions</h2>
 <p>
 These tracks are multi-view composite tracks that contains multiple
@@ -60,23 +77,44 @@ facilitate integrative analysis. Consequently, additional ENCODE tracks
 may contain data that is relevant to the data in these tracks.</p>
 <h2>References</h2>
 <p>
-Sanchez-Diaz P, Penalva LO.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/17114948">Post-transcription
-meets post-genomic: the saga of RNA binding proteins in a new era.</a>
-RNA Biol. 2006 Jul;3(3):101-9.</p>
-<p>
-Glisovic T, Bachorik JL, Yong J, Dreyfuss G.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/18342629">
-RNA-binding proteins and post-transcriptional gene regulation.</a> 
-FEBS Lett. 2008 Jun 18;582(14):1977-86.
-</p>
-<p>
 Baroni TE, Chittur SV, George AD, Tenenbaum SA. 
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/18369977">
 Advances in RIP-chip analysis : RNA-binding protein immunoprecipitation-microarray
 profiling.</a>
-Methods Mol Biol. 2008;419:93-108.
+<em>Methods Mol Biol. </em> 2008;419:93-108.
 </p>
+
+<p>George AD, Tenenbaum SA. <a href="http://www.ncbi.nlm.nih.gov/pubmed/17114943" >
+MicroRNA modulation of RNA-binding protein regulatory elements. </a><em>RNA Biol</em>. 2006;3(2):57-9. Epub 2006 Apr 1.
+</p>
+
+<p>
+Glisovic T, Bachorik JL, Yong J, Dreyfuss G.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/18342629">
+RNA-binding proteins and post-transcriptional gene regulation.</a> 
+<em>FEBS Lett.</em> 2008 Jun 18;582(14):1977-86.
+</p>
+<p>Keene JD, Tenenbaum SA. <a href="http://www.ncbi.nlm.nih.gov/pubmed/12086614">
+Eukaryotic mRNPs may represent posttranscriptional operons. </a><em>Mol Cell</em>. 2002;9(6):1161-7.
+</p>
+
+
+<p>Penalva LO, Tenenbaum SA, Keene JD. <a href="http://www.ncbi.nlm.nih.gov/pubmed/14770002">
+Gene expression analysis of messenger RNP complexes. </a><em>Methods Mol Biol</em>. 2004;257:125-34.
+</p>
+
+
+
+<p>Tenenbaum SA, Lager PJ, Carson CC, Keene JD. <a href="http://www.ncbi.nlm.nih.gov/pubmed/12054896">
+Ribonomics: identifying mRNA subsets in mRNP complexes using antibodies to RNA-binding proteins and genomic arrays.
+</a><em>Methods</em>. 2002 Feb;26(2):191-8. </p>
+
+<p>
+Sanchez-Diaz P, Penalva LO.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17114948">Post-transcription
+meets post-genomic: the saga of RNA binding proteins in a new era.</a>
+<em>RNA Biol.</em> 2006 Jul;3(3):101-9.</p>
+
 <h2>Data Release Policy</h2>
 <p>
 Data users may freely use ENCODE data, but may not, without prior

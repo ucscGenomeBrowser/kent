@@ -56,7 +56,7 @@ void mdbSaveToDb(struct sqlConnection *conn, struct mdb *el, char *tableName, in
  * If worried about this use mdbSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%s)",
+dyStringPrintf(update, "insert into %s set obj='%s', var='%s', val='%s'",
 	tableName,  el->obj,  el->var,  el->val);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -77,7 +77,7 @@ obj = sqlEscapeString(el->obj);
 var = sqlEscapeString(el->var);
 val = sqlEscapeString(el->val);
 
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')",
+dyStringPrintf(update, "insert into %s set obj='%s', var='%s', val='%s'",
 	tableName,  obj,  var,  val);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -855,6 +855,20 @@ void mdbReCreate(struct sqlConnection *conn,char *tblName,boolean testOnly)
 // Creates ore Recreates the named mdb.
 {
 char *sqlCreate =
+#define MDB_STILL_HAS_VARTYPE
+#ifdef MDB_STILL_HAS_VARTYPE
+"# Contains metadata for a table, file or other objects.\n"
+"CREATE TABLE %s (\n"
+"    obj varchar(255) not null,      # Object name or ID.\n"
+"    var varchar(255) not null,      # Metadata variable name.\n"
+"    varType enum ('txt','binary')   # OBSOLETE All vars are txt\n"
+"            not null default 'txt',\n"
+"    val varchar(2048) not null,     # Metadata value.\n"
+"  #Indices\n"
+"    PRIMARY KEY(obj,var),\n"
+"    INDEX varKey (var,val(32),obj)\n"
+")";
+#else///ifndef MDB_STILL_HAS_VARTYPE
 "# Contains metadata for a table, file or other objects.\n"
 "CREATE TABLE %s (\n"
 "    obj varchar(255) not null,      # Object name or ID.\n"
@@ -864,6 +878,7 @@ char *sqlCreate =
 "    PRIMARY KEY(obj,var),\n"
 "    INDEX varKey (var,val(32),obj)\n"
 ")";
+#endif///ndef MDB_STILL_HAS_VARTYPE
 
 if(sqlTableExists(conn,tblName))
     verbose(2, "Table '%s' already exists.  It will be recreated.\n",tblName);
@@ -1058,7 +1073,7 @@ for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
             }
         // Finally ready to insert new vars
         safef(query, sizeof(query),
-            "insert into %s values ( '%s','%s','%s')",
+            "insert into %s set obj='%s', var='%s', val='%s'",
                 tableName,mdbObj->obj,mdbVar->var,
                 sqlEscapeString(mdbVar->val)); // FIXME Strip quotes
         verbose(2, "Requesting insert of one row:\n\t%s;\n",query);
@@ -1498,7 +1513,11 @@ for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
         {
         if (mdbVar->var == NULL || mdbVar->val == NULL)
             continue;
+#ifdef MDB_STILL_HAS_VARTYPE
+        fprintf(tabFile, "%s\t%s\ttxt\t%s\n",mdbObj->obj,mdbVar->var,sqlEscapeString(mdbVar->val));
+#else///ifndef MDB_STILL_HAS_VARTYPE
         fprintf(tabFile, "%s\t%s\t%s\n",mdbObj->obj,mdbVar->var,sqlEscapeString(mdbVar->val));
+#endif///ndef MDB_STILL_HAS_VARTYPE
         count++;
         }
     }
