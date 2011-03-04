@@ -128,6 +128,12 @@ Codon codonVal(DNA *start);
 DNA *valToCodon(int val);
 /* Return  codon corresponding to val (0-63) */
 
+extern char *aaAbbr(int i);
+/* return pointer to AA abbrevation */
+
+extern char aaLetter(int i);
+/* return AA letter */
+
 void dnaTranslateSome(DNA *dna, char *out, int outSize);
 /* Translate DNA upto a stop codon or until outSize-1 amino acids, 
  * whichever comes first. Output will be zero terminated. */
