@@ -63,7 +63,7 @@ wgEncode 1
         	release alpha
         	parent wgEncodePsuHistoneViewPeaks 
         	shortLabel G1E-ER4+E2 H3K4me1 Pk
-        	longLabel ENCODE PSU TFBS Peaks (H3K4me1 in G1E-ER4+E2 cells)
+        	longLabel G1E-ER4+E2 H3K4me1 Histone Modifications Peaks from ENCODE/PSU
         	subGroups view=Peaks age=E0 factor=H3K4me1 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
         	type broadPeak
         	color 153,38,0
@@ -74,7 +74,7 @@ wgEncode 1
         	release alpha
         	parent wgEncodePsuHistoneViewPeaks 
         	shortLabel G1E-ER4+E2 H3K27me3 Pk
-        	longLabel ENCODE PSU TFBS Peaks (H3K27me3 in G1E-ER4+E2 cells)
+        	longLabel G1E-ER4+E2 H3K27me3 Histone Modifications Peaks from ENCODE/PSU
         	subGroups view=Peaks age=E0 factor=H3K27me3 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
         	type broadPeak
         	color 153,38,0
@@ -85,7 +85,7 @@ wgEncode 1
         	release alpha
         	parent wgEncodePsuHistoneViewPeaks 
         	shortLabel G1E-ER4+E2 H3K4me3 Pk
-        	longLabel ENCODE PSU TFBS Peaks (H3K4me3 in G1E-ER4+E2 cells)
+        	longLabel G1E-ER4+E2 H3K4me3 Histone Modifications Peaks from ENCODE/PSU
         	subGroups view=Peaks age=E0 factor=H3K4me3 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
         	type broadPeak
         	color 153,38,0
@@ -96,7 +96,7 @@ wgEncode 1
         	release alpha
         	parent wgEncodePsuHistoneViewPeaks 
         	shortLabel G1E H3K4me3 Pk
-        	longLabel ENCODE PSU TFBS Peaks (H3K4me3 in G1E cells)
+        	longLabel G1E H3K4me3 Histone Modifications Peaks from ENCODE/PSU
         	subGroups view=Peaks age=E0 factor=H3K4me3 cellType=G1E control=Input sex=M strain=S129
         	type broadPeak
         	color 153,38,0
@@ -106,7 +106,7 @@ wgEncode 1
         	release alpha
         	parent wgEncodePsuHistoneViewPeaks
         	shortLabel G1E H3K4me1 Pk
-        	longLabel ENCODE PSU TFBS Peaks (H3K4me1 in G1E cells)
+        	longLabel G1E H3K4me1 Histone Modifications Peaks from ENCODE/PSU
         	subGroups view=Peaks age=E0 factor=H3K4me1 cellType=G1E control=Input sex=M strain=S129
         	type broadPeak
         	color 153,38,0
@@ -128,8 +128,8 @@ wgEncode 1
       		track wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputSig
        		release alpha
         	parent wgEncodePsuHistoneViewSignal
-        	shortLabel G1E-ER4+E2 H3K4me1 Sig
-        	longLabel ENCODE PSU TFBS Signal (H3K4me1 in G1E-ER4+E2 cells)
+        	shortLabel G1E-ER4+E2 H3K4me1 Sg
+        	longLabel G1E-ER4+E2 H3K4me1 Histone Modifications Signal from ENCODE/PSU
         	subGroups view=Signal age=E0 factor=H3K4me1 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
         	type bigWig 1.000000 158.000000
         	color 153,38,0
@@ -138,8 +138,8 @@ wgEncode 1
         	track wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig
         	release alpha
         	parent wgEncodePsuHistoneViewSignal 
-        	shortLabel G1E-ER4+E2 H3K27me3 Sig
-        	longLabel ENCODE PSU TFBS Signal (H3K27me3 in G1E-ER4+E2 cells)
+        	shortLabel G1E-ER4+E2 H3K27me3 Sg
+        	longLabel G1E-ER4+E2 H3K27me3 Histone Modifications Signal from ENCODE/PSU
         	subGroups view=Signal age=E0 factor=H3K27me3 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
         	type bigWig 1.000000 265.000000
         	color 153,38,0
@@ -148,8 +148,8 @@ wgEncode 1
         	track wgEncodePsuHistoneG1eer4e2H3k4me3ME0S129InputSig
         	release alpha
         	parent wgEncodePsuHistoneViewSignal 
-        	shortLabel G1E-ER4+E2 H3K4me3 Sig
-        	longLabel ENCODE PSU TFBS Signal (H3K4me3 in G1E-ER4+E2 cells)
+        	shortLabel G1E-ER4+E2 H3K4me3 Sg
+        	longLabel G1E-ER4+E2 H3K4me3 Histone Modifications Signal from ENCODE/PSU
         	subGroups view=Signal age=E0 factor=H3K4me3 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
         	type bigWig 1.000000 336.000000
         	color 153,38,0
@@ -158,8 +158,8 @@ wgEncode 1
         	track wgEncodePsuHistoneG1eH3k4me3ME0S129InputSig
         	release alpha
         	parent wgEncodePsuHistoneViewSignal 
-        	shortLabel G1E H3K4me3 Sig
-        	longLabel ENCODE PSU TFBS Signal (H3K4me3 in G1E cells)
+        	shortLabel G1E H3K4me3 Sg
+        	longLabel G1E H3K4me3 Histone Modifications Signal from ENCODE/PSU
         	subGroups view=Signal age=E0 factor=H3K4me3 cellType=G1E control=Input sex=M strain=S129
         	type bigWig 1.000000 300.000000
         	color 153,38,0
@@ -168,8 +168,8 @@ wgEncode 1
         	track wgEncodePsuHistoneG1eH3k4me1ME0S129InputSig
         	release alpha
         	parent wgEncodePsuHistoneViewSignal 
-        	shortLabel G1E H3K4me1 Sig
-        	longLabel ENCODE PSU TFBS Signal (H3K4me1 in G1E cells)
+        	shortLabel G1E H3K4me1 Sg
+        	longLabel G1E H3K4me1 Histone Modifications Signal from ENCODE/PSU
         	subGroups view=Signal age=E0 factor=H3K4me1 cellType=G1E control=Input sex=M strain=S129
         	type bigWig 1.000000 144.000000
         	color 153,38,0
