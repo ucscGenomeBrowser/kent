@@ -1331,16 +1331,6 @@ noInherit on
             color 153,38,0
         # subId=1582 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsGm12878Egr1Pcr2xPkRep2
-            release alpha
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel GM878 Egr-1  Pk 2
-            longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Egr-1 in GM12878 cells)
-            subGroups view=Peaks factor=EGR1 cellType=GM12878 protocol=PCR2x treatment=None rep=rep2
-            type broadPeak
-            color 153,38,0
-        # subId=1582 dateSubmitted=2010-06-21
-
             track wgEncodeHaibTfbsGm12878Usf1Pcr2xPkRep1
             release alpha
             subTrack wgEncodeHaibTfbsViewPeaks off
@@ -6633,26 +6623,6 @@ noInherit on
         type bigWig 0.113983 698.262024
         # subId=3035 dateSubmitted=2011-01-20
 
-        track wgEncodeHaibTfbsK562Usf1Pcr2xRawRep2
-        release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 USF-1 Raw 2
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (USF-1 in K562 cells)
-        subGroups view=RawSignal factor=USF1 cellType=K562 protocol=PCR2x treatment=None rep=rep2
-        type bigWig 0.109477 251.003998
-        color 46,0,184
-        # subId=3035 dateSubmitted=2011-01-20
-
-        track wgEncodeHaibTfbsK562Egr1Pcr2xRawRep2
-        release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 Egr-1 Raw 2
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Egr-1 in K562 cells)
-        subGroups view=RawSignal factor=EGR1 cellType=K562 protocol=PCR2x treatment=None rep=rep2
-        type bigWig 0.115937 105.821999
-        color 46,0,184
-        # subId=3035 dateSubmitted=2011-01-20
-
         track wgEncodeHaibTfbsGm12878Usf1Pcr2xRawRep2
         release alpha
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -6660,16 +6630,6 @@ noInherit on
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (USF-1 in GM12878 cells)
         subGroups view=RawSignal factor=USF1 cellType=GM12878 protocol=PCR2x treatment=None rep=rep2
         type bigWig 0.101472 198.022003
-        color 153,38,0
-        # subId=3035 dateSubmitted=2011-01-20
-
-        track wgEncodeHaibTfbsGm12878Egr1Pcr2xRawRep2
-        release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM12878 Egr-1 Raw 2
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Egr-1 in GM12878 cells)
-        subGroups view=RawSignal factor=EGR1 cellType=GM12878 protocol=PCR2x treatment=None rep=rep2
-        type bigWig 0.148748 119.817001
         color 153,38,0
         # subId=3035 dateSubmitted=2011-01-20
 

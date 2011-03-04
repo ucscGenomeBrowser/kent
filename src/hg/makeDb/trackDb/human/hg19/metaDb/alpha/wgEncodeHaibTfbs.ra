@@ -1,3 +1,26 @@
+metaObject wgEncodeHaibTfbsA549ControlPcr1xDex100nmRawRep1
+objType table
+antibody Control
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL474
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeHaibTfbsA549ControlPcr1xDex100nmRawRep1.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL474
+project wgEncode
+protocol PCR1x
+replicate 1
+setType input
+subId 3035
+tableName wgEncodeHaibTfbsA549ControlPcr1xDex100nmRawRep1
+treatment DEX_100nM
+view RawSignal
+
 metaObject wgEncodeHaibTfbsA549ControlPcr1xDexaAlnRep1
 objType file
 antibody Control
@@ -9910,6 +9933,31 @@ origAssembly hg18
 project wgEncode
 protocol PCR2x
 replicate 1
+setType exp
+subId 3098
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsGm12878Usf1Pcr2xAlnRep2
+objType file
+antibody USF-1
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL218
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
+fileIndex wgEncodeHaibTfbsGm12878Usf1Pcr2xAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsGm12878Usf1Pcr2xAlnRep2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL483
+origAssembly hg18
+project wgEncode
+protocol PCR2x
+replicate 2
 setType exp
 subId 3098
 treatment None
@@ -33701,4 +33749,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -2113838112
+# MAGIC: -1469542327
