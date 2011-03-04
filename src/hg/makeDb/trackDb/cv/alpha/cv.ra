@@ -8994,8 +8994,8 @@ priority 910
 
 term dccRep
 type typeOfTerm
-label Browser Replicate 
-description PROVISIONAL This replicate number is based on submission to the browser, it may not reflect the replicates the contibuting labs have attached to their data.
+label UCSC replicate number
+description PROVISIONAL This replicate number is based on submission to the UCSC browser, it may not reflect the replicate number assigned by the contributing lab.
 serchable yes
 cvDefined off
 validate integer
