@@ -1,3 +1,31 @@
+# Stanford/Yale ChIP-seq wrangler:vsmalladi)
+
+# Notes:
+#       - Track Long Label: Transcription Factor Binding Sites by ChIP-seq from ENCODE/PSU
+#       - Track Short Label: PSU TFBS
+#       - View Long Labels: [cell] [factor] TFBS ChIP-seq [view] from ENCODE/PSU
+#       - cellType Order: Ordering is alphabetical
+#       - Default View selections
+#               - Peaks = dense
+#               - Signal = full
+#       - Short Labels: 
+#               Template: [cell] {factor] [view]
+#               - Views: For consistency sake view will be
+#                       - Peaks = Pk
+#                       - Signal = Sg
+#       - Tracks On: All Cell Lines on with the following facots on by default
+#               CTCF - Signals and Peaks
+#               GATA1 (SC-265) - Signals and Peaks
+#               TAL1 (SC-12984) - Signals and Peaks
+#       - Matrix Dimensions:
+#               X - Cell Line
+#               Y - Factor
+#	-View specific changes
+#		-Signal
+#			- windowing function = maximum
+
+
+
 track wgEncodePsuTfbs
 compositeTrack on
 shortLabel PSU TFBS
@@ -48,7 +76,7 @@ wgEncode 1
 
 	        track wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputPk
 	        release alpha
-	        parent wgEncodePsuTfbsViewPeaks 
+	        parent wgEncodePsuTfbsViewPeaks off 
 	        shortLabel CH12 Pol2-4H8 Pk
 	        longLabel ENCODE PSU TFBS Peaks (Pol2-4H8 in CH12 cells)
 	        subGroups view=Peaks age=immortal factor=POL24H8 cellType=CH12 control=Input sex=F strain=2a4b
@@ -117,7 +145,7 @@ wgEncode 1
         viewLimits 2:15
         autoScale off
         maxHeightPixels 100:16:16
-        windowingFunction mean
+        windowingFunction maximum
 
 	        track wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputSig
 	        release alpha
@@ -131,7 +159,7 @@ wgEncode 1
 
 	        track wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig
 	        release alpha
-	        parent wgEncodePsuViewSignal 
+	        parent wgEncodePsuViewSignal off 
 	        shortLabel CH12 Pol2-4H8 Sig
 	        longLabel ENCODE PSU TFBS Signal (Pol2-4H8 in CH12 cells)
 	        subGroups view=Signal age=immortal factor=POL24H8 cellType=CH12 control=Input sex=F strain=2a4b
