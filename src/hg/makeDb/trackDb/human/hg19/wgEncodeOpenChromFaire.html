@@ -163,15 +163,17 @@ Peaks were further refined using a shape detection algorithm to identify
 local maxima and boundaries of the Signal (Base Overlap) within each
 significant region.
 </P>
-<P>ENCODE Array data were normalized using the Tukey biweight normalization, and
-peaks were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple
-levels of significance.  Regions matched on size to these peaks that were
-devoid of any significant signal were also created to allow for ROC analysis.
+<P>Data from the high-resolution 1% ENCODE tiled microarrays supplied by
+NimbleGen were normalized using the Tukey biweight normalization, and peaks
+were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple levels
+of significance. Regions matched on size to these peaks that were devoid of
+any significant signal were also created.  These data were used for additional
+verification of Tier 1 and Tier 2 cell lines by ROC analysis.
 </P>
 
 <h2>Release Notes</h2>
 <P>
-Release 1 (Feb 2011) of this track consists of a remapping of all previously
+Release 1 (March 2011) of this track consists of a remapping of all previously
 released experiments to the human reference genome <B>GRCh37/hg19</B>
 (these data were previously mapped to <B>NCBI36/hg18</B>;
 please see the Release Notes section of the hg18
