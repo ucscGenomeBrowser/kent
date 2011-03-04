@@ -1,3 +1,26 @@
+# PSU Histone(wrangler:vsmalladi)
+
+# Notes:
+#       - Track Long Label: Histone Modifications by ChIP-seq from ENCODE/PSU
+#       - Track Short Label: PSU Histone
+#       - View Long Labels: [cell] [factor] Histone Modifications [view] from ENCODE/PSU 
+#       - cellType Order: Ordering is alphabetical
+#       - Default View selections
+#               - Peaks = dense
+#               - Signal = full
+#       - Short Labels: 
+#               Template: [cell] {factor] [view]
+#               - Views: For consistency sake view will be
+#                       - Peaks = Pk
+#                       - Signal = Sg
+#       - Tracks On: All tracks on 
+#       - Matrix Dimensions:
+#               X - Cell Line
+#               Y - Factor
+#	- View Specific changes
+#               -Signal
+#                       - windowing function = maximum
+
 track wgEncodePsuHistone
 compositeTrack on
 shortLabel PSU Histone
@@ -20,7 +43,6 @@ noInherit on
 priority 0
 type bed 3
 wgEncode 1
-
 
         #####Peak Tracks###########
 	track wgEncodePsuHistoneViewPeaks
@@ -101,7 +123,7 @@ wgEncode 1
 	viewLimits 2:15
 	autoScale off
 	maxHeightPixels 100:16:16
-	windowingFunction mean
+	windowingFunction maximum
 
       		track wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputSig
        		release alpha
