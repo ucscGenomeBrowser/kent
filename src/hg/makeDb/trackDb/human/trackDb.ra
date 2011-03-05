@@ -1222,7 +1222,7 @@ color 150,0,150
 type bed 4 +
 
 track dgv
-release alpha
+release beta, public
 shortLabel DGV Struct Var
 longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
 group varRep
@@ -1236,22 +1236,6 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v10
-
-track dgv
-release beta,public
-shortLabel DGV Struct Var
-longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
-group varRep
-priority 144.8
-visibility hide
-color 0,100,0
-itemRgb on
-type bed 9 +
-noScoreFilter .
-exonArrows off
-urlLabel DGV Browser and Report:
-url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
-dataVersion v9
 
 track covMask1kGPilotLowCov
 compositeTrack on
@@ -2978,6 +2962,17 @@ priority 0
 
 track eponine override
 priority 0
+
+track omimGene
+shortLabel OMIM Genes
+longLabel OMIM-Associated Genes
+group phenDis
+priority 29.6
+visibility hide
+color 0, 0, 200
+type bed 4
+hgsid on
+url http://www.ncbi.nlm.nih.gov/omim/
 
 track omimLocation
 shortLabel OMIM Locations

@@ -8,6 +8,7 @@
 #include "customTrack.h"
 #include "web.h"
 #include "encode/encodePeak.h"
+#include "peptideMapping.h"
 
 #ifdef UNUSED
 static boolean pairInList(struct slPair *pair, struct slPair *list)
@@ -187,4 +188,59 @@ for (inter = interList; inter != NULL; inter = inter->next)
     }
 webPrintLinkTableEnd();
 sqlFreeResult(&sr);
+}
+
+void doPeptideMapping(struct sqlConnection *conn, struct trackDb *tdb, char *item)
+/* Print details for a peptideMapping track.  */
+{
+char *chrom = cartString(cart,"c");
+int start = cgiInt("o");
+int end = cgiInt("t");
+char **row;
+struct sqlResult *sr;
+struct peptideMapping *pos = NULL;
+int rowOffset;
+genericHeader(tdb, NULL);
+/* Just get the current item. */
+sr = hOrderedRangeQuery(conn, tdb->track, chrom, start, end, NULL, &rowOffset);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    pos = peptideMappingLoad(row + rowOffset);
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    errAbort("No items in range");
+    }
+printf("<B>Item:</B> %s<BR>\n", pos->name);
+printf("<B>Score:</B> %d<BR>\n", pos->score);
+printPos(pos->chrom, pos->chromStart, pos->chromEnd, pos->strand, TRUE, item);
+printf("<B>Raw Score:</B> %f<BR>\n", pos->rawScore);
+printf("<B>Peptide Rank:</B> %d<BR>\n", pos->peptideRank);
+printf("<B>Peptide Repeat Count:</B> %d<BR>\n", pos->peptideRepeatCount);
+printf("<B>Spectrum ID:</B> %s<BR>\n", pos->spectrumId);
+if (pos->peptideRepeatCount > 1)
+    {
+    char query[256];
+    struct peptideMapping anotherPos;
+    safef(query, sizeof(query), "select * from %s where name=\'%s\' and not (chrom=\'%s\' and chromStart=%d and chromEnd=%d)", 
+	  tdb->track, pos->name, pos->chrom, pos->chromStart, pos->chromEnd);
+    printf("<BR>\n");
+    webPrintLinkTableStart();
+    webPrintLabelCell("Other genomic loci");
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	char s[1024];
+	peptideMappingStaticLoad(row + rowOffset, &anotherPos);
+	safef(s, sizeof(s), "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>",
+	      hgTracksPathAndSettings(), database, anotherPos.chrom, anotherPos.chromStart+1, 
+	      anotherPos.chromEnd, anotherPos.chrom, anotherPos.chromStart+1, anotherPos.chromEnd);
+	webPrintLinkTableNewRow();
+	webPrintLinkCell(s);
+	}
+    webPrintLinkTableEnd();
+    sqlFreeResult(&sr);
+    }    
+peptideMappingFree(&pos);
 }

@@ -3836,6 +3836,10 @@ else if (wordCount > 0)
 	{
 	doEncodeFiveC(conn, tdb);
 	}
+    else if (sameString(type, "peptideMapping"))
+	{
+	doPeptideMapping(conn, tdb, item);
+	}
     else if (sameString(type, "chromGraph"))
 	{
 	doChromGraph(tdb);

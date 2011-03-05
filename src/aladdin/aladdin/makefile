@@ -3,7 +3,7 @@ include ../../inc/common.mk
 O = aladdin.o 
 
 aladdin.exe: $(O)
-	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a -lm
+	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a ${L} -lm
 	mv ${AOUT} aladdin.exe
 	chmod a+rx aladdin.exe
 

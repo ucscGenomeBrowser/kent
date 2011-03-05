@@ -1160,7 +1160,7 @@ XXX - running - Wed Feb 23 11:24:40 PST 2011
     #	947862300 bases of 2571531505 (36.860%) in intersection
 
 ############################################################################
-# LASTZ Zebrafish DanRer7 (DONE - 2011-02-23 - Hiram)
+# LASTZ Zebrafish DanRer7 (DONE - 2011-02-23 - 03-01 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzDanRer7.2011-02-23
     cd /hive/data/genomes/panTro3/bed/lastzDanRer7.2011-02-23
 
@@ -1198,22 +1198,23 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
-XXX - running - Wed Feb 23 11:28:40 PST 2011
-    #	real    314m18.227s
+    #	real    8921m45.996s - lots of swarm cluster interference from 
+    #			up to nine other lastz runs I have going as well
+    #			as everyone else there.
     cat fb.panTro3.chainDanRer7Link.txt 
-    #	952605822 bases of 2897316137 (32.879%) in intersection
+    #	74190141 bases of 2900529764 (2.558%) in intersection
 
-    #	running the swap - DONE - 2009-06-02
+    #	running the swap - DONE - 2011-03-01
     mkdir /hive/data/genomes/danRer7/bed/blastz.panTro3.swap
     cd /hive/data/genomes/danRer7/bed/blastz.panTro3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/panTro3/bed/lastzDanRer7.2011-02-23/DEF \
-	-swap -noLoadChainSplit \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    188m0.163s
+	-swap -syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    28m29.184s
     cat fb.danRer7.chainPanTro3Link.txt 
-    #	947862300 bases of 2571531505 (36.860%) in intersection
+    #	82066902 bases of 1409770109 (5.821%) in intersection
 
 ############################################################################
 # construct download files (DONE - 2011-02-23 - Hiram)
