@@ -29,7 +29,7 @@
 # termUrl (URL for term in the ontology. Links with termId on cellTypes.html)
 # color (specifies color code for track data of this cell type, rgb values)
 # sex (used in documentation and validation.  Should correspond to a "type sex" stanza)
-# tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.  
+# tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.
 #       Should correspond to a "type tier" stanza)
 # protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
 # category: (T for tissue, L for cell line, or P for primary cells.  Not used in human)
@@ -2358,7 +2358,7 @@ tissue Brain
 vendorName ATCC
 vendorId HTB-11
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
-karyotype hyperdiploid female with a modal chromosome number of 47
+karyotype hyperdiploid female with a modal chromosome number of 47
 termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
 sex F
@@ -3116,7 +3116,7 @@ description T98G is a fibroblast cell line derived from a glioblastoma multiform
 karyotype hyper-pentaploid male with a modal chromosome number around 128 to 132. There are numerous chromosome abnormalities and marker chromosomes.
 tissue Brain
 vendorName ATCC
-vendorId CRL­1690
+vendorId CRL-1690
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
 termId BTO:0001583
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583
@@ -3219,7 +3219,7 @@ tissue Brain
 vendorName ATCC
 vendorId HTB-14
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-14&Template=cellBiology
-karyotype hypodiploid female with a modal chromosome number of 44 in 48% of cells and a 5.9% rate of higher ploidy
+karyotype hypodiploid female with a modal chromosome number of 44 in 48% of cells and a 5.9% rate of higher ploidy
 termId BTO:0002036
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036
 sex F
@@ -3306,7 +3306,7 @@ termId 7043
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
 color 153,38,0
 sex M
-protocol
+protocol UW(Stam):416B_Stam_protocol.pdf
 
 term AtT-20
 tag AtT20
@@ -3362,7 +3362,7 @@ termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 153,38,0
 sex U
-protocol LICR(Ren):Cerebellum_Ren_protocol.pdf
+protocol LICR(Ren):Cerebellum_Ren_protocol.pdf UW(Stam):Tissue_Stam_protocol.pdf
 
 term Cerebrum
 tag Cerebrum
@@ -3376,7 +3376,7 @@ termId
 termUrl
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Tissue_Stam_protocol.pdf
 
 term CH12
 tag CH12
@@ -3412,7 +3412,7 @@ termId
 termUrl
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):ES-CJ7_Stam_protocol.pdf
 
 
 term Colon
@@ -3455,7 +3455,7 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Fibroblast_Stam_protocol.pdf
 
 
 term G1E
@@ -3473,8 +3473,8 @@ color 153,38,0
 sex U
 protocol PSU(Hardison):G1E_Hardison_protocol.pdf
 
-term G1E-E4+E2
-tag G1E_E4_E2
+term G1E-ER4+E2
+tag G1E_ER4_E2
 type Cell Line
 organism Mouse
 tissue Blood
@@ -3514,7 +3514,7 @@ termId
 termUrl
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Tissue_Stam_protocol.pdf
 
 term Limb
 tag Limb
@@ -3543,7 +3543,7 @@ termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 153,38,0
 sex U
-protocol LICR(Ren):Liver_Ren_protocol.pdf
+protocol LICR(Ren):Liver_Ren_protocol.pdf UW(Stam):Tissue_Stam_protocol.pdf
 
 term Lung
 tag Lung
@@ -3601,7 +3601,7 @@ description Leukemia (K562 analog)
 tissue Blood
 color 46,0,184
 sex M
-protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf
+protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf UW(Stam):MEL_Stam_protocol.pdf
 
 #Missing VendorName and termId
 term Myocyte
@@ -3747,7 +3747,7 @@ termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Tissue_Stam_protocol.pdf
 
 term WholeBrain
 tag WholeBrain
@@ -3761,7 +3761,7 @@ termId 7005
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Tissue_Stam_protocol.pdf
 
 
 
@@ -4290,7 +4290,7 @@ lab  Myers
 lots  J0505
 targetId EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
-validation EBF1_(SC-137065)(Immunoblot):human_EBF1_SC-137065_validation_Myers.pdf
+validation EBF1_(SC-137065)(Immunoprecipitation-WesternBlotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
 
 term eGFP-FOS
 tag eFOS
@@ -4581,7 +4581,7 @@ targetId
 targetUrl
 lab Myers / Wold
 lots F1804
-validation GABP(Immunoblot):human_GABPa_G-1_validation_Myers.pdf
+validation GABP(Immunoprecipitation-WesternBlot,MassSpec):human_GABP1_validation_Myers.pdf
 
 term GATA-1
 tag GATA1
@@ -4653,7 +4653,7 @@ orderUrl http://www.scbt.com/datasheet-267-gata-2-cg2-96-antibody.html
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Myers
-validation GATA2_(SC-267)(Immunoblot):human_GATA2_SC-267_validation_Myers.pdf
+validation GATA2_(SC-267)(Immunoprecipitation-WesternBlot,MassSpec):human_GATA2_SC-267_validation_Myers.pdf
 
 term  GATA3_(SC-268)
 tag  GATA3SC268
@@ -5514,7 +5514,7 @@ orderUrl http://www.scbt.com/datasheet-1975-pax-5-n-19-antibody.html
 lab Myers
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
-validation PAX5-N19(Immunoblot):human_PAX5_N-19_validation_Myers.pdf
+validation PAX5-N19(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5_N-19_validation_Myers.pdf
 
 term PAX5_(N-15)
 tag PAX5N15
@@ -5572,7 +5572,7 @@ lab Myers
 lots J0109
 targetId GeneCards:PITX1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PITX1
-validation missing
+validation PITX1_(SC-81979)(Immunoprecipitation-WesternBlot,MassSpec):human_PITX1_SC-81979_validation_Myers.pdf
 
 term Pol2
 tag POL2
@@ -5702,7 +5702,7 @@ orderUrl  http://www.scbt.com/product.php?datasheet=22805
 lab Myers
 targetId
 targetUrl
-validation PU.1(Immunoblot):human_PU.1_H-135_validation_Myers.pdf
+validation PU.1(Immunoprecipitation-WesternBlot,MassSpec):human_PU.1_validation_Myers.pdf
 
 term Rad21
 tag RAD21
@@ -6091,7 +6091,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF12
 validation TCF12(Immunoprecipitation-WesternBlot,MassSpec):human_TCF12_A-20_validation_Myers.pdf
 
 ##This does not appear in metaDb
-term TCF3
+term TCF3_(SC-349)
 tag TCF3
 type Antibody
 target TCF3
@@ -6103,7 +6103,7 @@ orderUrl http://www.scbt.com/datasheet-349-e2a-e12-v-18-antibody.html
 lab Myers
 targetId GeneCard:TCF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF3
-validation TCF3(Immunoblot):human_TCF3_V-18_validation_Myers.pdf
+validation TCF3_(SC-349)(Immunoprecipitation-WesternBlot,MassSpec):human_TCF3_SC349_validation_Myers.pdf
 
 term TCF4
 tag TCF4
@@ -6218,7 +6218,7 @@ lab  Myers
 lots  E2810
 targetId GeneCards:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
-validation USF1_SC-8983(Immunoblot):human_USF1_SC-8983_validation_Myers.pdf
+validation USF1_SC-8983(Immunoprecipitation-WesternBlot,MassSpec):human_USF1_SC-8983_validation_Myers.pdf
 
 term USF2
 tag USF2
@@ -6303,7 +6303,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/pro
 lab Myers
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
-validation YY1_(SC-281)(Immunoblot):human_YY1_SC-281_validation_Myers.pdf
+validation YY1_(SC-281)(Immunoprecipitation-WesternBlot,MassSpec):human_YY1_SC-281_validation_Myers.pdf
 
 term ZBTB33
 tag ZBTB33
@@ -6333,7 +6333,7 @@ lab  Myers
 lots  H2406
 targetId GeneCards:ZBTB7A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB7A
-validation ZBTB7A_SC-34508(Immunoblot):human_ZBTB7A_SC-34508_validation_Myers.pdf
+validation ZBTB7A_SC-34508(Immunoprecipitation-WesternBlot,MassSpec):human_ZBTB7A_SC-34508_validation_Myers.pdf
 
 term ZEB1_(SC-25388)
 tag ZEB1SC25388
@@ -7652,7 +7652,7 @@ type treatment
 
 term pravastatin
 tag PRAVAST
-description For sterol deprivation, cells were cultured with pravastatin (2 µM; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
+description For sterol deprivation, cells were cultured with pravastatin (2 M; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
 type treatment
 
 term Prednisolone_100nM
@@ -8991,6 +8991,18 @@ validate none
 hidden yes
 priority 910
 
+
+term dccRep
+type typeOfTerm
+label UCSC replicate number
+description PROVISIONAL This replicate number is based on submission to the UCSC browser, it may not reflect the replicate number assigned by the contributing lab.
+serchable yes
+cvDefined off
+validate integer
+hidden no
+priority 241 
+
+
 # term expVars
 # type typeOfTerm
 # label Experimental variables
@@ -9161,12 +9173,11 @@ term mapAlgorithm
 type typeOfTerm
 label Mapping algorithm
 description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 500
-# This is Caltech only and possibly should be retired.  (11/3/10)  
-## Note that if there were more than 2 instances of this type this would be multiSelect searchable
+# This is Caltech only and possibly should be retired.  (11/3/10)
 
 term md5sum
 type typeOfTerm
@@ -9190,11 +9201,11 @@ term origAssembly
 type typeOfTerm
 label Assembly originally mapped to
 description Some experiments are originally performed and mapped to an earlier assembly of the reference genome and then are remapped or lifted over to a more recent assembly.
-searchable select
+searchable multiSelect
 cvDefined no
 validate list: hg18,hg19,mm9
 priority 305
-# Could be cv.ra term  ## If there were more than 2 to choose from in one organism this would be multiSelect
+# Could be cv.ra term
 
 term parentTable
 type typeOfTerm
@@ -9307,27 +9318,25 @@ term seqPlatform
 type typeOfTerm
 label Sequencing Platform
 description Sequencing platform used in high-throughput sequencing experiment.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 500
-## If there were more than 2 this would be multiSelect
 
 term setType
 type typeOfTerm
 label Experiment or Input
 description ChIP-seq experiments often require 'input' or control results to be subtracted from the experimental results.  This term clearly identifies which datasets are being used as the experiment and which are the input.
-searchable select
+searchable multiSelect
 cvDefined no
 priority 350
 validate list: exp,input,control
-## If there were more than 2 this would be multiSelect
 
 term sex
 type typeOfTerm
 label Sex of donor organism
 description The sex of a cell line or tissue sample affects the genome target of an experiment.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 130

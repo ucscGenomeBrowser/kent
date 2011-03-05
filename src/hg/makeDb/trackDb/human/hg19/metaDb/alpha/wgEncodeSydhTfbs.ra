@@ -23405,27 +23405,6 @@ tableName wgEncodeSydhTfbsHuvecInputStdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsHuvecInputUcdAln
-objType file
-antibody Input
-cell HUVEC
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HUVEC/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-20
-dateUnrestricted 2011-02-20
-fileIndex wgEncodeSydhTfbsHuvecInputUcdAln.bam.bai
-fileName wgEncodeSydhTfbsHuvecInputUcdAln.bam
-grant Snyder
-lab UCD
-project wgEncode
-setType input
-subId 1207
-treatment None
-view Alignments
-
 metaObject wgEncodeSydhTfbsHuvecInputUcdAlnRep1
 objType file
 antibody Input
@@ -36265,4 +36244,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -728349655
+# MAGIC: 1957857909

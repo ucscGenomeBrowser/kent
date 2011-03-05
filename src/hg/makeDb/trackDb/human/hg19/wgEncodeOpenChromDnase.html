@@ -1,5 +1,4 @@
 <H2>Description</H2>
-<DIV style='max-width: 900px;'>
 <P>These tracks display DNaseI hypersensitivity (HS) evidence as part of the
 four <B><em>Open Chromatin</em></B> track sets.
 DNaseI is an enzyme that has long been used to map general
@@ -119,7 +118,9 @@ in the sam/bam format using samtools.
 </P>
 <P>Only those that aligned to 4 or fewer locations were retained. Other sequences
 were also filtered based on their alignment to problematic regions
-(such as satellites and rRNA genes - see The <em>Duke excluded regions</em> track).
+(such as satellites and rRNA genes - see
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/supplemental/"
+ TARGET=ucscDownloads>supplemental materials</a>).
 The mappings of these short reads to the genome are available for
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/"
 TARGET=_BLANK>download</A>.</P>
@@ -145,15 +146,17 @@ Significant regions were determined by fitting the data to a gamma distribution 
 calculate p-values. Contiguous regions where p-values were below a 0.05/0.01
 threshold were considered significant.
 </P>
-<P>ENCODE Array data were normalized using the Tukey biweight normalization, and
-peaks were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple
-levels of significance.  Regions matched on size to these peaks that were
-devoid of any significant signal were also created to allow for ROC analysis.
+<P>Data from the high-resolution 1% ENCODE tiled microarrays supplied by
+NimbleGen were normalized using the Tukey biweight normalization, and peaks
+were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple levels
+of significance. Regions matched on size to these peaks that were devoid of
+any significant signal were also created.  These data were used for additional
+verification of Tier 1 and Tier 2 cell lines by ROC analysis.
 </P>
 
 <h2>Release Notes</h2>
 <P>
-Release 1 (Feb 2011) of this track consists of a remapping of all previously
+Release 1 (March 2011) of this track consists of a remapping of all previously
 released experiments to the human reference genome <B>GRCh37/hg19</B>
 (these data were previously mapped to <B>NCBI36/hg18</B>;
 please see the Release Notes section of the hg18
@@ -294,4 +297,3 @@ following the release of the dataset.  This date is listed in the <EM>Restricted
 Until</EM> column on the track configuration page and the download page.  The
 full data release policy for ENCODE is available <A HREF="../ENCODE/terms.html"
 TARGET=_BLANK>here</A>.
-</DIV>

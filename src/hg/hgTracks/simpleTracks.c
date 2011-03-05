@@ -12079,6 +12079,12 @@ else if (sameWord(type, "encodeFiveC"))
     bedMethods(track);
     track->loadItems = loadSimpleBed;
     }
+else if (sameWord(type, "peptideMapping"))
+    {
+    track->bedSize = 6;
+    bedMethods(track);
+    track->loadItems = loadSimpleBed;
+    }
 else if (sameWord(type, "chromGraph"))
     {
     chromGraphMethods(track);
