@@ -774,7 +774,7 @@ hPrintf("</TD></TR>\n");
 }
 
 /* Composite track subtrack merge line. */
-boolean canSubtrackMerge = (curTrack && tdbIsComposite(curTrack));
+boolean canSubtrackMerge = (curTrack && tdbIsComposite(curTrack) && !isBam);
 if (canSubtrackMerge)
     {
     hPrintf("<TR><TD><B>subtrack merge:</B>\n");
