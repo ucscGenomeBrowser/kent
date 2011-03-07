@@ -1222,7 +1222,6 @@ color 150,0,150
 type bed 4 +
 
 track dgv
-release beta, public
 shortLabel DGV Struct Var
 longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
 group varRep
