@@ -3002,6 +3002,17 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 
+track omimGene2
+shortLabel OMIM Genes 2
+longLabel OMIM Genes 2
+group phenDis
+priority 29.73
+visibility pack
+color 220, 0, 0
+type bed 4
+hgsid on
+url http://www.omim.org/entry/
+
 track omimGeneClass3
 shortLabel OMIM Genes (Class 3)
 longLabel OMIM Genes (Class 3, with Known Molecular Basis of Disorder)
