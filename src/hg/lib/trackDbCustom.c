@@ -696,7 +696,7 @@ else if(sameWord("narrowPeak",type)
     cType = cfgPeak;
 else if(sameWord("genePred",type))
         cType = cfgGenePred;
-else if(sameWord("bedLogR",type))
+else if(sameWord("bedLogR",type) || sameWord("peptideMapping", type))
     cType = cfgBedScore;
 else if(startsWith("bed ", type))
     {

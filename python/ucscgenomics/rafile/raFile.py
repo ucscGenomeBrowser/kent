@@ -1,96 +1,91 @@
 import sys
 import re
 import orderedDict
-import raEntry
 
 class RaFile(orderedDict.OrderedDict):
     """
     Stores an Ra file in a set of entries, one for each stanza in the file.
     """
 
+    def __init__(self, entryType):
+       self.__entryType = entryType 
+       orderedDict.OrderedDict.__init__(self)
+ 
     def read(self, filePath):
         """
-        Reads an rafile, separating it by keyField, and internalizes it.
-
-        keyField must be the first field in each entry.
+        Reads an rafile stanza by stanza, and internalizes it.
         """
 
         file = open(filePath, 'r')
-        entry = None 
-        raKey = None
+
+        entry = self.__entryType()
+        stanza = list()
 
         for line in file:
-
+ 
             line = line.strip()
 
-            # put all commented lines in the list only
-            if (line.startswith('#')):
-                self._ordering.append(line)
+            if line.startswith('#'):
                 continue
 
-            # a blank line indicates we need to move to the next entry
-            if (len(line) == 0):
-                raKey = None
-                entry = None
-                continue
-
-            # check if we're at the first key in a new entry
-            #if (line.split()[0].strip() == keyField):
-            if (entry == None): 
-                if len(line.split()) < 2:
-                    raise KeyError()
-
-                raKey = line.split(' ', 1)[0].strip()
-                raVal = line.split(' ', 1)[1].strip()
-                entry = raEntry.RaEntry()
-                entry.add(raKey, raVal)
-                self.add(raVal, entry)
-
-            # otherwise we should be somewhere in the middle of an entry
-            elif (entry != None):
-                raKey = line.split()[0].strip()
-                raVal = ''
-
-                if len(line.split()) > 1:
-                    raVal = line.split(' ', 1)[1].strip()
-
-                entry.add(raKey, raVal)
-
-            # we only get here if we didn't find the keyField at the beginning
+            if line != '':
+                stanza.append(line)
             else:
-                raise KeyError()
+               name = entry.readStanza(stanza)
+               self[name] = entry
+               entry = self.__entryType()
+               stanza = list()
 
         file.close()
 
-    def write(self):
-        """
-        Write out the entire RaFile.
-        """
-
-        print self
-
-    def writeEntry(self, key):
-        """
-        Write out a single stanza, specified by key
-        """
-
-        print self.getValue(key)
-
-    def iterValues(self):
-        """
-        Return an iterator over the values in the dictionary
-        """
-
-        for item in self._ordering:
-            if item.startswith('#'):
-                continue
-            yield self.getValue(item)
 
     def __str__(self):
         str = ''
-        for key in self._ordering:
-            if key.startswith('#'):
-                str = str + key + '\n'
-            else:
-                str = str + self._dictionary[key].__str__() + '\n'
+        for key in self:
+            str = str + self[key].__str__() + '\n'
         return str
+
+
+class RaEntry(orderedDict.OrderedDict):
+    """
+    Holds an individual entry in the RaFile.
+    """
+
+    def readStanza(self, stanza):
+        """
+        Populates this entry from a single stanza
+        """
+
+        for line in stanza:
+            self.__readLine(line)
+
+        return self.__readName(stanza[0])
+
+
+    def __readName(self, line):
+        """
+        Extracts the Stanza's name from the value of the first line of the
+        stanza.
+        """
+
+        if len(line.split(' ', 1)) != 2:
+            raise ValueError()
+
+        return line.split(' ', 1)[1].strip()
+
+
+    def __readLine(self, line):
+        """
+        Reads a single line from the stanza, extracting the key-value pair
+        """
+
+        raKey, raVal = map(str, line.split(' ', 1))
+        self[raKey] = raVal
+
+
+    def __str__(self):
+        str = ''
+        for key in self:
+            str = str + key + ' ' + self[key] + '\n'
+        return str
+

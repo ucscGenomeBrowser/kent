@@ -25,14 +25,8 @@ This track shows the positions of canonical UCSC genes that have been
 associated with identifiers in the Online Mendelian Inheritance in Man
 (<A HREF="http://www.omim.org/"
 TARGET=_blank>OMIM</A>) database.
-Class 3 OMIM records have been mapped to a specific gene by OMIM.
-The associations are based on HGNC gene symbols of UCSC Genes
-and OMIM genemap entries.
-To simplify the track, annotations on splice variants have been
-collapsed so that only canonical UCSC splice variants are displayed.
-</P>
-
-<P>OMIM is a compendium of human genes and genetic phenotypes. The full-text, 
+Class 3 OMIM records have been mapped to a specific gene by OMIM,
+a compendium of human genes and genetic phenotypes. The full-text, 
 referenced overviews in OMIM contain information on all known Mendelian 
 disorders and over 12,000 genes. OMIM is authored and edited at the 
 McKusick-Nathans Institute of Genetic Medicine, Johns Hopkins University 
@@ -57,7 +51,9 @@ are shown when mousing over each entry.
 
 <H2>Methods</H2>
 <P>
-This track was constructed as follows: 
+The mappings displayed in this track are based on the HGNC symbol,
+where available, from the UCSC Genes track, associated with OMIM genemap 
+entries as follows: 
 <UL>
 <LI>The OMIM <TT>genemap</TT> data file is downloaded from ftp://ftp.ncbi.nih.gov/repository/OMIM/genemap.  
 The data are loaded into an MySQL table, <TT>omimGeneMap</TT>.

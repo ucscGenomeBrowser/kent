@@ -1,0 +1,92 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release1 of the "ENCODE wgEncodePsuHistone"
+The composite track is wgEncodePsuHistone
+# WARNINGS #################################################
+############################################################
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release1 (new+untouched):
+    Tables: 10
+    Files: 34
+    Gbdbs: 5
+
+A) Untouched Tables (0):
+
+A') Untouched Files (0 downloadables, 0 gbdbs):
+
+B) Deprecated tables (0):
+
+B') Deprecated files (0 downloadables, 0 gbdbs):
+
+C) New tables (10):
+wgEncodePsuHistoneG1eH3k4me1ME0S129InputPk
+wgEncodePsuHistoneG1eH3k4me1ME0S129InputSig
+wgEncodePsuHistoneG1eH3k4me3ME0S129InputPk
+wgEncodePsuHistoneG1eH3k4me3ME0S129InputSig
+wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk
+wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig
+wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputPk
+wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputSig
+wgEncodePsuHistoneG1eer4e2H3k4me3ME0S129InputPk
+wgEncodePsuHistoneG1eer4e2H3k4me3ME0S129InputSig
+
+C') New files (31 downloadables, 5 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eH3k4me1ME0S129InputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eH3k4me1ME0S129InputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eH3k4me1ME0S129InputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eH3k4me1ME0S129InputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eH3k4me1ME0S129InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eH3k4me3ME0S129InputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eH3k4me3ME0S129InputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eH3k4me3ME0S129InputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eH3k4me3ME0S129InputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eH3k4me3ME0S129InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eInputME0S129AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eInputME0S129AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eInputME0S129RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k4me3ME0S129InputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k4me3ME0S129InputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k4me3ME0S129InputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k4me3ME0S129InputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2H3k4me3ME0S129InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2InputME0S129AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2InputME0S129AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/wgEncodePsuHistoneG1eer4e2InputME0S129RawDataRep1.fastq.gz
+
+/gbdb/mm9/bbi/wgEncodePsuHistoneG1eH3k4me1ME0S129InputSig.bigWig
+/gbdb/mm9/bbi/wgEncodePsuHistoneG1eH3k4me3ME0S129InputSig.bigWig
+/gbdb/mm9/bbi/wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig.bigWig
+/gbdb/mm9/bbi/wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputSig.bigWig
+/gbdb/mm9/bbi/wgEncodePsuHistoneG1eer4e2H3k4me3ME0S129InputSig.bigWig
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuHistone/release1/md5sum.txt
