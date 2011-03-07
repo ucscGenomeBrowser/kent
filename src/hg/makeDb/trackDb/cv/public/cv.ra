@@ -8845,7 +8845,7 @@ term age
 type typeOfTerm
 label Age of donor organism
 description The age of the organism used to produce tissue or cell line.
-searchable multiSelect
+searchable select
 cvDefined yes
 priority 140
 validate cv
@@ -8863,7 +8863,7 @@ term Antibody
 type typeOfTerm
 label Antibody or target protein
 description The antibody to a specific protein.  Used in immuno-precipitation to target certain fractions of biological interest.
-searchable multiSelect
+searchable select
 cvDefined yes
 validate cv or control
 priority 190
@@ -8881,7 +8881,7 @@ term cellType
 type typeOfTerm
 label Cell, tissue or DNA sample
 description Cell line or tissue used as the source of experimental material.
-searchable multiSelect
+searchable select
 cvDefined yes
 validate cv or None
 priority 120
@@ -8906,7 +8906,7 @@ term control
 type typeOfTerm
 label Control or Input for ChIPseq
 description The type of control (or 'input') used in ChIP-seq experiments to remove background noise before peak calling.
-searchable multiSelect
+searchable select
 cvDefined yes
 validate cv
 priority 230
@@ -8926,7 +8926,7 @@ term dataType
 type typeOfTerm
 label Experiment (Assay) type
 description The types of experiments such as ChIP-seq, DNAse-seq and RNA-seq.
-searchable multiSelect
+searchable select
 cvDefined yes
 validate cv
 priority 030
@@ -8935,7 +8935,7 @@ term dataVersion
 type typeOfTerm
 label ENCODE Data Freeze
 description The ENCODE project declares specific data freezes for data to be used in papers or analysis.
-searchable multiSelect
+searchable select
 cvDefined no
 priority 310
 validate none # ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
@@ -9074,7 +9074,7 @@ term grant
 type typeOfTerm
 label Principal Investigator on grant
 description Principle investigator holding the grant by which a set of experiments are financed. Several labs led by other PI's may be under one grant.
-searchable multiSelect
+searchable select
 cvDefined yes
 validate cv
 priority 015
@@ -9093,7 +9093,7 @@ term lab
 type typeOfTerm
 label Lab producing data
 description The name of the lab producing the data.  Often many labs are working together under one grant or one project.
-searchable multiSelect
+searchable select
 cvDefined yes
 validate cv
 priority 020
@@ -9138,7 +9138,7 @@ term localization
 type typeOfTerm
 label Cellular compartment
 description The cellular compartment from which RNA is extracted. Primarily used by the Transcriptome Project.
-searchable multiSelect
+searchable select
 cvDefined yes
 validate cv
 priority 160
@@ -9166,7 +9166,7 @@ term obtainedBy
 type typeOfTerm
 label Obtained by
 description The production group that grew the cells and isolated genomic DNA.
-searchable multiSelect
+searchable select
 cvDefined no #(Defined by lab)
 validate none
 priority 500
@@ -9226,7 +9226,7 @@ term protocol
 type typeOfTerm
 label Library Protocol
 description Lab specific protocol that may cover a number of steps in an experiment.  Most typically this identifies methods for building a DNA or RNA library.
-searchable multiSelect
+searchable select
 cvDefined yes
 validate cv or None
 priority 200
@@ -9246,7 +9246,7 @@ term readType
 type typeOfTerm
 label Paired/Single reads lengths
 description Specific information about cDNA sequence reads including length, directionality and single versus paired read.
-searchable multiSelect
+searchable select
 cvDefined yes
 validate cv
 priority 500
@@ -9256,7 +9256,7 @@ term replicate
 type typeOfTerm
 label Replicate number
 description The biological replicate of a particular experiment.
-searchable multiSelect
+searchable select
 cvDefined no
 validate integer
 priority 240
@@ -9274,7 +9274,7 @@ term rnaExtract
 type typeOfTerm
 label RNA Extract
 description Fraction of total cellular RNA selected for by an experiment. This includes size fractionation (long versus short) and feature frationation (PolyA-, PolyA+, rRNA-).
-searchable multiSelect
+searchable select
 cvDefined yes
 validate cv
 priority 150
@@ -9283,7 +9283,7 @@ term run
 type typeOfTerm
 label Sequencing Run
 description Sequencing run
-searchable multiSelect
+searchable select
 cvDefined no
 validate integer
 priority 500
@@ -9340,7 +9340,7 @@ term strain
 type typeOfTerm
 label Strain of organism
 description The strain of the doner organism used in an experiment.
-searchable multiSelect
+searchable select
 cvDefined yes
 validate cv
 priority 110
@@ -9379,7 +9379,7 @@ term treatment
 type typeOfTerm
 label Treatment
 description Treatment used as an experimental variable in a series of experiments.
-searchable multiSelect
+searchable select
 cvDefined yes
 validate cv or None
 priority 180
@@ -9409,7 +9409,7 @@ term view
 type typeOfTerm
 label View - Peaks or Signals
 description Different track formats often allow different views of the data of a single experiment.  These views sometimes represent different stages of processing, such as experimental 'signal' resulting directly from high-throughput sequencing and called 'peaks' which result from further analysis.
-searchable multiSelect
+searchable select
 cvDefined no
 validate none  # When this is cv defined it then change to cv
 priority 035
