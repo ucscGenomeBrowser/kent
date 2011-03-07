@@ -196,6 +196,9 @@ tblBldRemakePslTable(conn, tmpTbl, "all_mrna");
 
 struct hash* accSet = getOrfeomeAccs(conn);
 buildOrfeomeAccTmpTbl(conn, accSet);
+#ifdef DUMP_HASH_STATS
+hashPrintStats(accSet, "orfeomeAccSet", stderr);
+#endif
 hashFree(&accSet);
 
 loadOrfeomeMrnaTbl(conn, tmpTbl);

@@ -110,6 +110,9 @@ void gbConfFree(struct gbConf** confPtr)
 struct gbConf* conf = *confPtr;
 if (conf != NULL)
     {
+#ifdef DUMP_HASH_STATS
+    hashPrintStats(conf->hash, "gbConf", stderr);
+#endif
     hashFree(&conf->hash);
     freez(confPtr);
     }

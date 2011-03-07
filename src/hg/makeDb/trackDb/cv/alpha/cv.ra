@@ -3837,7 +3837,7 @@ orderUrl http://www.scbt.com/datasheet-8975-ap-2alpha-h-79-antibody.html
 lab Farnham
 targetId GeneCard:TFAP2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2A
-validation missing
+validation AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
 
 term AP-2gamma
 tag AP2gamma
@@ -3851,7 +3851,7 @@ orderUrl http://www.scbt.com/datasheet-8977-ap-2gamma-h-77-antibody.html
 lab Farnham
 targetId GeneCard:GTFAP2C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C
-validation missing
+validation AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
 
 term ATF3
 tag ATF3
@@ -8001,7 +8001,7 @@ description C57 black 6, the most common inbred strain of laboratory mouse
 term RIII
 tag RIII
 type strain
-description High mammary tumour incidence in unfostered substrains.
+description High mammary tumor incidence in unfostered substrains.
 
 term 129
 tag S129
