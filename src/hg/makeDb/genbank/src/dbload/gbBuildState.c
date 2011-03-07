@@ -620,9 +620,6 @@ if (!*maxShrinkageExceeded)
         }
     }
 
-#ifdef DUMP_HASH_STATS
-hashPrintStats(ssData.seqHash, "stateSeq", stderr);
-#endif
 hashFree(&ssData.seqHash);
 
 gbVerbLeave(3, "build state table");
@@ -680,9 +677,6 @@ for (acc = gbStatAccs; acc != NULL; acc = acc->next)
         }
     }
 
-#ifdef DUMP_HASH_STATS
-hashPrintStats(seqTblAccs, "seqTblAccs", stderr);
-#endif
 hashFree(&seqTblAccs);
 slFreeList(&gbStatAccs);
 if (cnt == 0)

@@ -17,13 +17,13 @@
 static char const rcsid[] = "$Id: gbRelease.c,v 1.5 2007/11/16 18:19:50 markd Exp $";
 
 /* size power of hash tables for shared strings */
-#define STR_MEM_HASH_SIZE   24
+#define STR_MEM_HASH_SIZE   20
 
 /* size power of hash for entries */
-#define ACC_HASH_SIZE       24
+#define ACC_HASH_SIZE       20
 
 /* Size for unhash local memory block */
-#define LM_BLOCK_SIZE       41048576
+#define LM_BLOCK_SIZE       1048576
 
 static void getUpdates(struct gbRelease* release, char* updateGlob, struct slName** head)
 /* Search for update directories, adding to list. If a update is not
@@ -107,12 +107,6 @@ void gbReleaseUnload(struct gbRelease* release)
 struct gbUpdate* update;
 for (update = release->updates; update != NULL; update = update->next)
     clearUpdate(update);
-#ifdef DUMP_HASH_STATS
-if (release->entryStrs != NULL)
-    hashPrintStats(release->entryStrs, "releaseEntryStrs", stderr);
-if (release->entryTbl != NULL)
-    hashPrintStats(release->entryTbl, "releaseEntries", stderr);
-#endif
 gbIgnoreFree(&release->ignore);
 hashFree(&release->entryStrs);
 hashFree(&release->entryTbl);
@@ -124,12 +118,6 @@ void gbReleaseFree(struct gbRelease** relPtr)
 struct gbRelease* release = *relPtr;
 if (release != NULL)
     {
-#ifdef DUMP_HASH_STATS
-    if (release->entryStrs != NULL)
-        hashPrintStats(release->entryStrs, "releaseEntryStrs", stderr);
-    if (release->entryTbl != NULL)
-        hashPrintStats(release->entryTbl, "releaseEntries", stderr);
-#endif
     hashFree(&release->entryStrs);
     hashFree(&release->entryTbl);
     lmCleanup(&release->metaMem);
@@ -349,9 +337,6 @@ while ((hel = hashNext(&cookie)) != NULL)
     slSafeAddHead(&prefixes, newSlName(hel->name));
 if (prefixes != NULL)
     slNameSort(&prefixes);
-#ifdef DUMP_HASH_STATS
-hashPrintStats(prefixHash, "prefix", stderr);
-#endif
 hashFree(&prefixHash);
 return prefixes;
 

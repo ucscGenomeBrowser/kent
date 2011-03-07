@@ -172,9 +172,6 @@ void uniqueStrTblFree(struct uniqueStrTbl** ust)
 /* Free a uniqueStrTbl object */
 {
 sqlUpdaterFree(&(*ust)->updater);
-#ifdef DUMP_HASH_STATS
-hashPrintStats((*ust)->hash, "uniqueStr", stderr);
-#endif
 hashFree(&(*ust)->hash);
 freez(ust);
 }

@@ -67,7 +67,7 @@ static char *IGNORE_IDX = "etc/ignore.idx";
 char ignoreIdx[PATH_LEN];
 struct gbIgnore* ignore;
 AllocVar(ignore);
-ignore->accHash = hashNew(22);
+ignore->accHash = hashNew(23);
 
 safef(ignoreIdx, sizeof(ignoreIdx), "%s/%s", release->index->gbRoot,
       IGNORE_IDX);
@@ -82,9 +82,6 @@ void gbIgnoreFree(struct gbIgnore** ignorePtr)
 struct gbIgnore* ignore = *ignorePtr;
 if (ignore != NULL)
     {
-#ifdef DUMP_HASH_STATS
-    hashPrintStats(ignore->accHash, "ignoreAcc", stderr);
-#endif
     hashFree(&ignore->accHash);
     freeMem(ignore);
     *ignorePtr = NULL;

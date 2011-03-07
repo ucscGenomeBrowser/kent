@@ -347,10 +347,6 @@ return updater;
 void gbStatusTblFree(struct gbStatusTbl** statusTbl)
 /* Free a gbStatusTbl object */
 {
-#ifdef DUMP_HASH_STATS
-hashPrintStats((*statusTbl)->accHash, "statusAcc", stderr);
-hashPrintStats((*statusTbl)->strPool, "statusStr", stderr);
-#endif
 hashFree(&(*statusTbl)->accHash);
 hashFree(&(*statusTbl)->strPool);
 freez(statusTbl);

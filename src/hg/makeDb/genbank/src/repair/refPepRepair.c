@@ -335,10 +335,6 @@ static void brokenRefPepTblFree(struct brokenRefPepTbl **brpTblPtr)
 {
 struct brokenRefPepTbl *brpTbl = *brpTblPtr;
 /* all dynamic memory is hash localmem */
-#ifdef DUMP_HASH_STATS
-hashPrintStats(brpTbl->protAccHash, "protAcc", stderr);
-hashPrintStats(brpTbl->protFaHash, "protFa", stderr);
-#endif
 hashFree(&brpTbl->protAccHash);
 hashFree(&brpTbl->protFaHash);
 freeMem(brpTbl);

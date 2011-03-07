@@ -355,9 +355,6 @@ raProtFaSize = 0;
 if (raLocusTag == NULL)
     raLocusTag = dyStringNew(128);
 dyStringClear(raLocusTag);
-#ifdef DUMP_HASH_STATS
-hashPrintStats(raMiscDiffTbl, "raMiscDiff", stderr);
-#endif
 hashFree(&raMiscDiffTbl);
 gbMiscDiffFreeList(&raMiscDiffs);
 freez(&raWarn);
@@ -545,9 +542,6 @@ while ((raf = gRaFieldTableList) != NULL)
     gRaFieldTableList = gRaFieldTableList->next;
     raFieldFree(raf);
     }
-#ifdef DUMP_HASH_STATS
-hashPrintStats(gRaFields, "raFields", stderr);
-#endif
 hashFree(&gRaFields);
 }
 

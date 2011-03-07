@@ -57,9 +57,6 @@ if ((srcDb == GB_REFSEQ) && ((protAccVer = hashFindVal(raRec, "prt")) != NULL))
     ver = gbSplitAccVer(protAccVer, protAcc);
     raInfoAdd(rit, raRec, protAcc, ver, "prs", "pfo", "pfs", pepExtId);
     }
-#ifdef DUMP_HASH_STATS
-hashPrintStats(raRec, "raRec", stderr);
-#endif
 hashFree(&raRec);
 return TRUE;
 }
