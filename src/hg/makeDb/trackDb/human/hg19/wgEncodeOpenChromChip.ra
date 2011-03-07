@@ -345,7 +345,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
     minLimit 0
     maxLimit 0.2
     autoScale off
-    windowingFunction maximum
+    windowingFunction mean+whiskers
     maxHeightPixels 100:32:16
 
         track wgEncodeOpenChromChipGm12878CmycSig
@@ -742,7 +742,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
     minLimit 0
     maxLimit 50
     autoScale off
-    windowingFunction maximum
+    windowingFunction mean+whiskers
     maxHeightPixels 100:32:16
 
         track wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal
