@@ -28999,6 +28999,28 @@ tableName wgEncodeHaibTfbsSknshraYy1c20V0416102RawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsT47dControlV0416102Dmso2RawDataRep1
+objType file
+antibody Control
+cell T-47D
+composite wgEncodeHaibTfbs
+controlId SL1881
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-10-21
+fileName wgEncodeHaibTfbsT47dControlV0416102Dmso2RawDataRep1.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL1881
+project wgEncode
+protocol v041610.2
+replicate 1
+setType input
+subId 3108
+treatment DMSO_0.02pct
+view RawData
+
 metaObject wgEncodeHaibTfbsT47dControlV0416102Dmso2RawDataRep2
 objType file
 antibody Control
@@ -30491,4 +30513,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1554198483
+# MAGIC: -1059075173
