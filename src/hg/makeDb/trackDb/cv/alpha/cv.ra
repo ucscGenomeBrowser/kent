@@ -7456,124 +7456,124 @@ description Input library was prepared at UC Davis.
 
 term androgen
 tag ANDRO
-description 12hrs, 1nM Methyltrienolone (R1881) (Crawford)
+description 12 hrs, 1 nM Methyltrienolone (R1881) (Crawford)
 type treatment
 label Methyltrienolone
 
 term Alpha-amanitin_50ug_9hr
 tag AMA50ug9h
 type treatment
-description 9h with 50ug/ml alpha-amanitin
+description 9h with 50 ug/ml alpha-amanitin
 
 term Betamethasone_100nM
 tag BMETH
-description 1h,100nM Betamethasone (Myers)
+description 1 h,100 nM Betamethasone (Myers)
 type treatment
 
 term BPA_100nM
 tag BPA1h
-description 1h,100nM Bisphenol A  (Myers)
+description 1 h,100 nM Bisphenol A  (Myers)
 type treatment
 
 term BPA_100nM_4hr
 tag BPA14h
-description 4h,100nM Bisphenol A (Myers)
+description 4 h,100 nM Bisphenol A (Myers)
 type treatment
 
 term DEX_100nM
 tag DEX100nM
-description 1h,100nM DEX (Myers)
+description 1 h,100 nM DEX (Myers)
 type treatment
 
 term DEX_100pM
 tag DEX100pM
-description 1h,100pM DEX (Myers)
+description 1 h,100 pM DEX (Myers)
 type treatment
 
 term DEX_1nM
 tag DEX1nM
-description 1h,1nM DEX (Myers)
+description 1 h,1 nM DEX (Myers)
 type treatment
 
 term DEX_50nM
 tag DEX50nM
-description 1h,50nM DEX (Myers)
+description 1 h,50 nM DEX (Myers)
 type treatment
 
 term DEX_5nM
 tag DEX5nM
-description 1h,5nM DEX (Myers)
+description 1 h,5 nM DEX (Myers)
 type treatment
 
 term DEX_500pM
 tag DEX500pM
-description 1h,500pM DEX (Myers)
+description 1 h,500 pM DEX (Myers)
 type treatment
 
 term DMSO_0.02pct
 tag DMSO2
-description 1h,0.02% DMSO (Myers)
+description 1 h,0.02% DMSO (Myers)
 type treatment
 
 term DMSO_0.02pct_24hr
 tag DMSO224h
-description 24h,0.02% DMSO (Myers)
+description 24 h,0.02% DMSO (Myers)
 type treatment
 
 term DMSO_2.0pct
 tag DMSO20
-description 5d,2% DMSO (Weissman)
+description 5 d,2% DMSO (Weissman)
 type treatment
 
 term DMSO_4hr
 tag DMSO4hr
-description 4hr DMSO (Myers)
+description 4 hr DMSO (Myers)
 type treatment
 
 term Estradiol_10nM
 tag ESTRADIa1h
-description  1h,10nM Estradiol  (Myers)
+description  1 h,10 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_24hr
 tag ESTRADIa24hh
-description  24,10nM Estradiol  (Myers)
+description  24 hr,10 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_1nM
 tag ESTRADIb1h
-description  1h,1nM Estradiol  (Myers)
+description  1 h,1 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_4hr
 tag ESTRADIa4h
-description  4h,10nM Estradiol (Myers)
+description  4 h,10 nM Estradiol (Myers)
 type treatment
 
 term estrogen
 tag ESTRO
-description 45min, 100nM Estradiol (Crawford)
+description 45 min, 100 nM Estradiol (Crawford)
 type treatment
 label Estradiol_100nM
 
 term EtOH_0.01pct
 tag ETOH01
-description 36h,0.01% EtOH (Snyder)
+description 36 h,0.01% EtOH (Snyder)
 type treatment
 
 term EtOH_0.01pct_4hr
 tag ETOH01b
-description 4h,0.01% EtOH (Snyder)
+description 4 h,0.01% EtOH (Snyder)
 type treatment
 
 term EtOH_0.01pct_12hr
 tag ETOH01c
-description 12h,0.01% EtOH (Snyder)
+description 12 h,0.01% EtOH (Snyder)
 type treatment
 
 term EtOH_0.02pct
 tag ETOH02
-description 1h,0.02% EtOH (Myers)
+description 1 h,0.02% EtOH (Myers)
 type treatment
 
 term forskolin
@@ -7583,12 +7583,12 @@ type treatment
 
 term Genistein_100nM
 tag GEN1h
-description  1h,100nM Genistein   (Myers)
+description  1 h,100 nM Genistein   (Myers)
 type treatment
 
 term Genistein_100nM_4hr
 tag GEN4h
-description  4h,100nM Genistein   (Myers)
+description  4 h,100 nM Genistein   (Myers)
 type treatment
 
 term Hypoxia_LacAcid
@@ -7629,7 +7629,7 @@ type treatment
 
 term insulin
 tag INSLN
-description Human DMEM with 0.5% BSA supplemented with 100nM insulin and 10uM 22-hydroxycholesterol for 6h. (Snyder)
+description Human DMEM with 0.5% BSA supplemented with 100 nM insulin and 10 uM 22-hydroxycholesterol for 6 h. (Snyder)
 type treatment
 
 term MNaseD
@@ -7657,7 +7657,7 @@ type treatment
 
 term Prednisolone_100nM
 tag PREDNIS
-description 1h,100nM Prednisolone (Myers)
+description 1 h,100 nM Prednisolone (Myers)
 type treatment
 
 term serum_free_media
@@ -7667,12 +7667,12 @@ type treatment
 
 term TAM_1uM_36hr
 tag TAM
-description 36h, 1uM tamoxifen (Myers)
+description 36 h, 1 uM tamoxifen (Myers)
 type treatment
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
-description 72 hours with 20nM 4-hydroxytamoxifen (Stam)
+description 72 hours with 20 nM 4-hydroxytamoxifen (Stam)
 type treatment
 label 4-OHTAM_20nM_72hr
 
