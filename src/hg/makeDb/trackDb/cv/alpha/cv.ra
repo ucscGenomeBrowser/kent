@@ -4986,7 +4986,7 @@ tag H3K79me2
 type Antibody
 target H3K79me2
 antibodyDescription Rabbit polyclonal antibody raised against a peptide containing K79 di-methylation
-targetDescription Lysine 79 methylation acts as a marker of inactive chromatin regions that is critical for transcriptional silencing.
+targetDescription H3K79me2 is a mark of the transcriptional transition region - ie, the region between the initiation marks (K4me3, etc) and the elongation marks (K36me3). 
 orderUrl http://www.activemotif.com/catalog/details/39143/histone-h3-dimethyl-lys79-antibody-pab.html
 vendorName Active Motif
 vendorId 39143
