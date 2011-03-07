@@ -317,8 +317,11 @@ void verboseSetLevel(int verbosity);
 /* Set verbosity level in log.  0 for no logging,
  * higher number for increasing verbosity. */
 
-void zeroBytes(void *vpt, int count);
+INLINE void zeroBytes(void *vpt, int count)
 /* fill a specified area of memory with zeroes */
+{
+memset(vpt, '\0', count);
+}
 
 #define ZeroVar(v) zeroBytes(v, sizeof(*v))
 
