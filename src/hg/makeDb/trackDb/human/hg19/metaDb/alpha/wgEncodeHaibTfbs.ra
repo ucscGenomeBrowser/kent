@@ -11307,29 +11307,6 @@ subId 3096
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibTfbsGm12892Pol24h8V0416102RawRep1
-objType table
-antibody Pol2-4H8
-cell GM12892
-composite wgEncodeHaibTfbs
-controlId SL818
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-01
-dateUnrestricted 2011-09-01
-fileName wgEncodeHaibTfbsGm12892Pol24h8V0416102RawRep1.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL946
-project wgEncode
-protocol v041610.2
-replicate 1
-setType exp
-subId 3037
-tableName wgEncodeHaibTfbsGm12892Pol24h8V0416102RawRep1
-treatment None
-view RawSignal
-
 metaObject wgEncodeHaibTfbsGm12892Pol2V0416102AlnRep1
 objType file
 antibody Pol2
@@ -30513,4 +30490,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1059075173
+# MAGIC: -1735595208
