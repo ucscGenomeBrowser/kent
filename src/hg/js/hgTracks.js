@@ -1,5 +1,4 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.69 2010/06/11 18:14:23 larrym Exp $
 
 var debug = false;
 var originalPosition;
@@ -27,6 +26,7 @@ var currentMapItem;
 var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
 var supportZoomCodon = false;
+var newJQuery = false;       // temporary #define for use while testing jQuery 1.5/jQuery UI 1.8 in dev trees
 
 function initVars(img)
 {
@@ -1197,17 +1197,30 @@ $(document).ready(function()
 {
     var db = getDb();
     if(jQuery.fn.autocomplete && $('input#suggest') && db) {
-        $('input#suggest').autocomplete({
-                                            delay: 500,
-                                            minchars: 2,
-                                            ajax_get: ajaxGet(function () {return db;}, new Object),
-                                            callback: function (obj) {
-                                                setPosition(obj.id, commify(getSizeFromCoordinates(obj.id)));
-                                                // jQuery('body').css('cursor', 'wait');
-                                                // document.TrackHeaderForm.submit();
-                                            }
-                                        });
+        if(newJQuery) {
+            $('input#suggest').autocomplete({
+                                                delay: 500,
+                                                minLength: 2,
+                                                source: ajaxGet(function () {return db;}, new Object),
+                                                select: function (event, ui) {
+                                                        setPosition(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
+                                                        // jQuery('body').css('cursor', 'wait');
+                                                        // document.TrackHeaderForm.submit();
+                                                    }
+                                            });
 
+        } else {
+            $('input#suggest').autocomplete({
+                                                delay: 500,
+                                                minchars: 2,
+                                                ajax_get: ajaxGet(function () {return db;}, new Object),
+                                                callback: function (obj) {
+                                                    setPosition(obj.id, commify(getSizeFromCoordinates(obj.id)));
+                                                    // jQuery('body').css('cursor', 'wait');
+                                                    // document.TrackHeaderForm.submit();
+                                                }
+                                            });
+        }
         // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
         // working, which is a major annoyance.
         // $('input#suggest').focus();
@@ -1537,22 +1550,42 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                     }
                 } else {
                     var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
+                    var reg = new RegExp("hgg_gene=([^&]+)");
+                    var a = reg.exec(href);
+                    var name;
+                    // pull item name out of the url so we can set hgFind.matches (redmine 3062)
+                    if(a && a[1]) {
+                        name = a[1];
+                    } else {
+                        reg = new RegExp("[&?]i=([^&]+)");
+                        a = reg.exec(href);
+                        if(a && a[1]) {
+                            name = a[1];
+                        }
+                    }
                     if(browser == "safari" || imageV2) {
                         // We need to parse out more stuff to support resetting the position under imageV2 via ajax, but it's probably possible.
                         // See comments below on safari problems.
                         jQuery('body').css('cursor', 'wait');
+                        var ele;
                         if(document.TrackForm)
-                            document.TrackForm.submit();
+                            ele = document.TrackForm;
                         else
-                            document.TrackHeaderForm.submit();
+                            ele = document.TrackHeaderForm;
+                        if(name)
+                            $(ele).append("<input type='hidden' name='hgFind.matches' value='" + name + "'>");
+                        ele.submit();
                     } else {
                         // XXXX This attempt to "update whole track image in place" didn't work for a variety of reasons, so this is dead code, but
                         // I'm leaving it in case we try to implement this functionality in the future.
                         jQuery('body').css('cursor', '');
+                        var data = "hgt.trackImgOnly=1&hgt.ideogramToo=1&position=" + newPosition + "&hgsid=" + getHgsid();
+                        if(name)
+                            data += "&hgFind.matches=" + name;
                         $.ajax({
                                    type: "GET",
                                    url: "../cgi-bin/hgTracks",
-                                   data: "hgt.trackImgOnly=1&hgt.ideogramToo=1&position=" + newPosition + "&hgsid=" + getHgsid(),
+                                   data: data,
                                    dataType: "html",
                                    trueSuccess: handleUpdateTrackMap,
                                    success: catchErrorOrDispatch,
@@ -1664,6 +1697,30 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
             reloadFloatingItem();
             updateTrackImg(id, "hgt.transparentImage=0", "");
         }
+    } else if (cmd == 'locateItem') {
+        // currently experimental
+        // o["Locate item" ] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "locateItem"); return true; }};
+        $('#hgLookupDialog').dialog({
+                               resizable: false,
+                               height: 'auto',
+                               width: 'auto',
+                               modal: true,
+                               closeOnEscape: true,
+                               autoOpen: false,
+                               buttons: { "OK": function() {
+                                              $(this).dialog("close");
+                                          }},
+                                    });
+        // this doesn't work (not sure why).
+        $('input#itemLookupSuggest').autocomplete({
+            delay: 500,
+            minLength: 2,
+            source: ajaxGet(function () {return db;}, new Object),
+            select: function (event, ui) {
+                setPosition(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
+            }
+            });
+        $('#hgLookupDialog').dialog('open');
     } else {   // if( cmd in 'hide','dense','squish','pack','full','show' )
         // Change visibility settings:
         //
