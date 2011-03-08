@@ -2992,8 +2992,8 @@ hgsid on
 url http://www.ncbi.nlm.nih.gov/omim/
 
 track omimLocation
-shortLabel OMIM Locations
-longLabel All OMIM Cytogenetic Locations
+shortLabel OMIM Loci
+longLabel OMIM Non-Gene Entry Cytogenetic Locations
 group phenDis
 priority 29.75
 visibility hide
@@ -3003,22 +3003,11 @@ hgsid on
 url http://www.omim.org/entry/
 
 track omimGene2
-shortLabel OMIM Genes 2
-longLabel OMIM Genes 2
+shortLabel OMIM Genes
+longLabel OMIM Genes
 group phenDis
 priority 29.73
-visibility pack
-color 220, 0, 0
-type bed 4
-hgsid on
-url http://www.omim.org/entry/
-
-track omimGeneClass3
-shortLabel OMIM Genes (Class 3)
-longLabel OMIM Genes (Class 3, with Known Molecular Basis of Disorder)
-group phenDis
-priority 29.73
-visibility pack
+visibility hide
 color 220, 0, 0
 type bed 4
 hgsid on
@@ -3029,7 +3018,7 @@ shortLabel OMIM AV SNPs
 longLabel OMIM Allelic Variant SNPs
 group phenDis
 priority 29.71
-visibility dense
+visibility hide
 color 220,0,0
 type bed 4
 hgsid on
@@ -3472,8 +3461,8 @@ semiShortCircuit 1
 termRegex ([0-9]{6})+\.+([0-9]{4})
 searchPriority 10
 
-searchName omimGeneClass3Acc
-searchTable omimGeneClass3
+searchName omimGene2Acc
+searchTable omimGene2
 searchMethod exact
 searchType bed
 shortCircuit 1
