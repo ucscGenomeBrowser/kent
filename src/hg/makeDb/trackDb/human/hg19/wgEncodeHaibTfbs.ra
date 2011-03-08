@@ -4142,15 +4142,6 @@ noInherit on
         color 0,107,27
         # subId=3029 dateSubmitted=2010-11-29
 
-        track wgEncodeHaibTfbsT47dCtcfV0416102Dmso2RawRep2
-        release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel T-47D CTCF Raw 2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (CTCF in T-47D cells)
-        subGroups view=RawSignal factor=CTCF cellType=T47D protocol=V0416102 treatment=DMSO2 rep=rep2
-        type bigWig 0.176584 285.800995
-        # subId=3029 dateSubmitted=2010-11-29
-
         track wgEncodeHaibTfbsK562E2f6h50V0416102RawRep2
         release alpha
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4284,15 +4275,6 @@ noInherit on
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Control in GM12892 cells)
         subGroups view=RawSignal factor=zControl cellType=GM12892 protocol=V0416102 treatment=None rep=rep1
         type bigWig 0.173756 207.464996
-        # subId=3037 dateSubmitted=2010-12-01
-
-        track wgEncodeHaibTfbsGm12892Pol24h8V0416102RawRep1
-        release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM12892 Pol2-4H8 Raw 1
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Pol2-4H8 in GM12892 cells)
-        subGroups view=RawSignal factor=POL24H8 cellType=GM12892 protocol=V0416102 treatment=None rep=rep1
-        type bigWig 0.166554 187.289993
         # subId=3037 dateSubmitted=2010-12-01
 
         track wgEncodeHaibTfbsGm12892Taf1V0416102RawRep2
