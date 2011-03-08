@@ -23,6 +23,7 @@ gbRoot=/cluster/data/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 databases=`gbGetDatabases etc/align.dbs`
+maxParallel=16
 
 buildTime=var/build/build.time
 
@@ -52,7 +53,7 @@ if [ "x$workdir" = "x" ] ; then
     workdir="work/daily/align.$date"
 fi
 
-nice gbAlignStep $finish $keep -workdir=$workdir $databases
+nice -14 gbAlignStep -maxParallel=$maxParallel $finish $keep -workdir=$workdir $databases
 
 gbMkTimeFile $buildTime
 
