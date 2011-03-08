@@ -7750,27 +7750,27 @@ description Flow sorted, G1 phase
 term chr21
 tag chr21
 type region
-description PROVISIONAL  Chromsome 21
+description Chromsome 21
 
 term ENM
 tag ENM
 type region
-description PROVISIONAL  ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+description ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
 
 term ENR
 tag ENR
 type region
-description PROVISIONAL  ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
 
 term UW-5C-Myc-Region
 tag uw5cMyc
 type region
-description PROVISIONAL  Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
+description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
 
 term UW-5C-Gene-Regions
 tag uw5cGene
 type region
-description PROVISIONAL  Set of 25 regions interrogated in UW 5C gene-targeted experiments
+description Set of 25 regions interrogated in UW 5C gene-targeted experiments
 
 
 ### restrictionEnzyme
@@ -9039,7 +9039,7 @@ priority 910
 term dccRep
 type typeOfTerm
 label UCSC replicate number
-description PROVISIONAL This replicate number is based on submission to the UCSC browser, it may not reflect the replicate number assigned by the contributing lab.
+description This replicate number is based on submission to the UCSC browser, it may not reflect the replicate number assigned by the contributing lab.
 serchable yes
 cvDefined off
 validate integer
@@ -9335,7 +9335,7 @@ priority 500
 term region
 type typeOfTerm
 label Genomic region(s)
-description PROVISIONAL  Genomic region(s) targeted by an experiment that is not whole-genome
+description Genomic region(s) targeted by an experiment that is not whole-genome
 searchable multiSelect
 cvDefined yes
 validate cv
