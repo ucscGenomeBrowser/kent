@@ -598,7 +598,7 @@ close (FH);
     cd /hive/data/genomes/panTro2/bed/blat.panTro3.2011-02-22
 
 ############################################################################
-# Orangutan Lastz run (DONE - 2011-02-22 - Hiram)
+# Orangutan Lastz run (DONE - 2011-02-22,03-07 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzPonAbe2.2011-02-22
     cd /hive/data/genomes/panTro3/bed/lastzPonAbe2.2011-02-22
     cat << '_EOF_' > DEF
@@ -637,13 +637,21 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-syntenicNet > do.log 2>&1 &
-XXX - running - Tue Feb 22 12:19:34 PST 2011
-(remember syntenicNet)
-#	real    173m22.880s
+# Completed: 417312 of 417312 jobs
+# CPU time in finished jobs:   77534399s 1292239.98m 21537.33h  897.39d  2.459 y
+# IO & Wait Time:              29461264s  491021.07m  8183.68h  340.99d  0.934 y
+# Average job time:                 256s       4.27m     0.07h    0.00d
+# Longest finished job:            5657s      94.28m     1.57h    0.07d
+# Submission to last job:       1020433s   17007.22m   283.45h   11.81d
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-continue=cat -syntenicNet > cat.log 2>&1 &
+    #	Elapsed time: 260m12s
     cat fb.panTro3.chainPonAbe2Link.txt 
-#	2747983350 bases of 2897316137 (94.846%) in intersection
+    #	2598464298 bases of 2900529764 (89.586%) in intersection
 
-#	running the swap - DONE - 2009-05-24
+    #	running the swap - DONE - 2011-03-07
     ssh swarm
     mkdir /hive/data/genomes/ponAbe2/bed/blastz.panTro3.swap
     cd /hive/data/genomes/ponAbe2/bed/blastz.panTro3.swap
@@ -652,12 +660,12 @@ XXX - running - Tue Feb 22 12:19:34 PST 2011
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-syntenicNet -workhorse=hgwdev -smallClusterHub=memk \
 	-bigClusterHub=swarm > swap.log 2>&1 &
-#	real    723m41.377s
+    #	real    94m54.955s
     cat fb.ponAbe2.chainPanTro3Link.txt 
-#	2761343871 bases of 2909485072 (94.908%) in intersection
+    #	2714550129 bases of 3093572278 (87.748%) in intersection
 
 ############################################################################
-# Rhesus Lastz run (DONE - 2011-02-22 - Hiram)
+# Rhesus Lastz run (DONE - 2011-02-22,03-07 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzRheMac2.2011-02-22
     cd /hive/data/genomes/panTro3/bed/lastzRheMac2.2011-02-22
     cat << '_EOF_' > DEF
@@ -696,27 +704,36 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-syntenicNet > do.log 2>&1 &
-XXX - running - Tue Feb 22 12:19:34 PST 2011
-(remember syntenicNet)
+# Completed: 334530 of 334530 jobs
+# CPU time in finished jobs:   71819683s 1196994.72m 19949.91h  831.25d  2.277 y
+# IO & Wait Time:              28582136s  476368.93m  7939.48h  330.81d  0.906 y
+# Average job time:                 300s       5.00m     0.08h    0.00d
+# Longest finished job:            5511s      91.85m     1.53h    0.06d
+# Submission to last job:        986049s   16434.15m   273.90h   11.41d
 #	real    173m22.880s
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-continue=cat -syntenicNet > cat.log 2>&1 &
+    #	real    147m59.726s
     cat fb.panTro3.chainRheMac2Link.txt 
-#	2747983350 bases of 2897316137 (94.846%) in intersection
+    #	2359352558 bases of 2900529764 (81.342%) in intersection
 
-#	running the swap - DONE - 2009-05-24
+    #	running the swap - DONE - 2011-03-07
     ssh swarm
     mkdir /hive/data/genomes/rheMac2/bed/blastz.panTro3.swap
     cd /hive/data/genomes/rheMac2/bed/blastz.panTro3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	-swap /hive/data/genomes/panTro3/bed/lastzRheMac2.2011-02-22/DEF \
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-	-syntenicNet -workhorse=hgwdev -smallClusterHub=memk \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
 	-bigClusterHub=swarm > swap.log 2>&1 &
-#	real    723m41.377s
+    #	real    74m46.709s
     cat fb.rheMac2.chainPanTro3Link.txt 
-#	2761343871 bases of 2909485072 (94.908%) in intersection
+    #	2267730573 bases of 2646704109 (85.681%) in intersection
 
 ############################################################################
-# Marmoset Lastz run (DONE - 2011-02-22 - Hiram)
+# Marmoset Lastz run (DONE - 2011-02-22,03-07 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzCalJac3.2011-02-22
     cd /hive/data/genomes/panTro3/bed/lastzCalJac3.2011-02-22
     cat << '_EOF_' > DEF
@@ -755,24 +772,34 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-syntenicNet > do.log 2>&1 &
-XXX - running - Tue Feb 22 12:19:34 PST 2011
-(remember syntenicNet)
-#	real    173m22.880s
-    cat fb.panTro3.chainCalJac3Link.txt 
-#	2747983350 bases of 2897316137 (94.846%) in intersection
+# Completed: 489888 of 489888 jobs
+# CPU time in finished jobs:   68728510s 1145475.16m 19091.25h  795.47d  2.179 y
+# IO & Wait Time:              29884276s  498071.27m  8301.19h  345.88d  0.948 y
+# Average job time:                 201s       3.35m     0.06h    0.00d
+# Longest finished job:            5588s      93.13m     1.55h    0.06d
+# Submission to last job:        997302s   16621.70m   277.03h   11.54d
 
-#	running the swap - DONE - 2009-05-24
+
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-continue=cat -syntenicNet > cat.log 2>&1 &
+    #	Elapsed time: 169m39s
+    cat fb.panTro3.chainCalJac3Link.txt 
+    #	2020558070 bases of 2900529764 (69.662%) in intersection
+
+    #	running the swap - DONE - 2011-05-07
     ssh swarm
     mkdir /hive/data/genomes/calJac3/bed/blastz.panTro3.swap
     cd /hive/data/genomes/calJac3/bed/blastz.panTro3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	-swap /hive/data/genomes/panTro3/bed/lastzCalJac3.2011-02-22/DEF \
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-	-syntenicNet -workhorse=hgwdev -smallClusterHub=memk \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
 	-bigClusterHub=swarm > swap.log 2>&1 &
-#	real    723m41.377s
+    #	real    83m36.955s
     cat fb.calJac3.chainPanTro3Link.txt 
-#	2761343871 bases of 2909485072 (94.908%) in intersection
+    #	1994778494 bases of 2752505800 (72.471%) in intersection
 
 ############################################################################
 # GENBANK ALIGNMENTS (WORKING - 2011-02-22 - Hiram)
@@ -911,19 +938,19 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - Wed Feb 23 11:02:40 PST 2011
-    #	real    314m18.227s
+    #	 Elapsed time: 17693m37s
     cat fb.panTro3.chainMm9Link.txt 
-    #	952605822 bases of 2897316137 (32.879%) in intersection
+    #	929446765 bases of 2900529764 (32.044%) in intersection
 
-    #	running the swap - DONE - 2009-06-02
+    #	running the swap - DONE - 2011-03-08
     mkdir /hive/data/genomes/mm9/bed/blastz.panTro3.swap
     cd /hive/data/genomes/mm9/bed/blastz.panTro3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/panTro3/bed/lastzMm9.2011-02-23/DEF \
-	-swap -noLoadChainSplit \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap -syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+XXX - running - Tue Mar  8 09:44:45 PST 2011
     #	real    188m0.163s
     cat fb.mm9.chainPanTro3Link.txt 
     #	947862300 bases of 2571531505 (36.860%) in intersection
@@ -948,7 +975,7 @@ XXX - running - Wed Feb 23 11:02:40 PST 2011
     #	2772816267 bases of 2900529764 (95.597%) in intersection
 
 ##############################################################################
-# LASTZ Dog CanFam2 (DONE - 2011-02-23 - Hiram)
+# LASTZ Dog CanFam2 (DONE - 2011-02-23,03-08 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzCanFam2.2011-02-23
     cd /hive/data/genomes/panTro3/bed/lastzCanFam2.2011-02-23
 
@@ -980,25 +1007,24 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - Wed Feb 23 11:08:40 PST 2011
-    #	real    314m18.227s
-    cat fb.panTro3.chainCanFam2Link.txt 
-    #	952605822 bases of 2897316137 (32.879%) in intersection
+    #	Elapsed time: 16114m13s
+    cat fb.panTro3.chainCanFam2Link.txt
+    #	1496334162 bases of 2900529764 (51.588%) in intersection
 
     #	running the swap - DONE - 2009-06-02
     mkdir /hive/data/genomes/canFam2/bed/blastz.panTro3.swap
     cd /hive/data/genomes/canFam2/bed/blastz.panTro3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/panTro3/bed/lastzCanFam2.2011-02-23/DEF \
-	-swap -noLoadChainSplit \
+	-swap -syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    188m0.163s
+    #	real    96m3.779s
     cat fb.canFam2.chainPanTro3Link.txt 
-    #	947862300 bases of 2571531505 (36.860%) in intersection
+    #	1438499360 bases of 2384996543 (60.315%) in intersection
 
 ############################################################################
-# LASTZ Horse EquCab2 (DONE - 2011-02-23 - Hiram)
+# LASTZ Horse EquCab2 (DONE - 2011-02-23,03-08 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzEquCab2.2011-02-23
     cd /hive/data/genomes/panTro3/bed/lastzEquCab2.2011-02-23
 
@@ -1030,22 +1056,21 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - Wed Feb 23 11:10:40 PST 2011
-    #	real    314m18.227s
+    #	Elapsed time: 16686m37s
     cat fb.panTro3.chainEquCab2Link.txt 
-    #	952605822 bases of 2897316137 (32.879%) in intersection
+    #	1638902226 bases of 2900529764 (56.504%) in intersection
 
     #	running the swap - DONE - 2009-06-02
     mkdir /hive/data/genomes/equCab2/bed/blastz.panTro3.swap
     cd /hive/data/genomes/equCab2/bed/blastz.panTro3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/panTro3/bed/lastzEquCab2.2011-02-23/DEF \
-	-swap -noLoadChainSplit \
+	-swap -syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    188m0.163s
+    #	real    131m12.302s
     cat fb.equCab2.chainPanTro3Link.txt 
-    #	947862300 bases of 2571531505 (36.860%) in intersection
+    #	1599680730 bases of 2428790173 (65.863%) in intersection
 
 ############################################################################
 # LASTZ Opossum MonDom5 (DONE - 2011-02-23 - Hiram)
@@ -1104,7 +1129,7 @@ XXX - running - Wed Feb 23 11:21:40 PST 2011
     #	947862300 bases of 2571531505 (36.860%) in intersection
 
 ############################################################################
-# LASTZ Chicken GalGal3 (DONE - 2011-02-23 - Hiram)
+# LASTZ Chicken GalGal3 (DONE - 2011-02-23,03-03 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzGalGal3.2011-02-23
     cd /hive/data/genomes/panTro3/bed/lastzGalGal3.2011-02-23
 
@@ -1142,22 +1167,22 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
-XXX - running - Wed Feb 23 11:24:40 PST 2011
-    #	real    314m18.227s
+    #	real    10418m46.398s (lots of swarm interference due to many lastz)
+    #	== 7d 5h 38m
     cat fb.panTro3.chainGalGal3Link.txt 
-    #	952605822 bases of 2897316137 (32.879%) in intersection
+    #	132163568 bases of 2900529764 (4.557%) in intersection
 
     #	running the swap - DONE - 2009-06-02
     mkdir /hive/data/genomes/galGal3/bed/blastz.panTro3.swap
     cd /hive/data/genomes/galGal3/bed/blastz.panTro3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/panTro3/bed/lastzGalGal3.2011-02-23/DEF \
-	-swap -noLoadChainSplit \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    188m0.163s
+	-swap -syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    35m47.071s
     cat fb.galGal3.chainPanTro3Link.txt 
-    #	947862300 bases of 2571531505 (36.860%) in intersection
+    #	115892900 bases of 1042591351 (11.116%) in intersection
 
 ############################################################################
 # LASTZ Zebrafish DanRer7 (DONE - 2011-02-23 - 03-01 - Hiram)
@@ -1283,7 +1308,6 @@ endif
     para create jobList
     para try
     para check ... etc
-XXX - running - Wed Feb 23 15:26:43 PST 2011
     para time
 # Completed: 24132 of 24132 jobs
 # CPU time in finished jobs:        262s       4.36m     0.07h    0.00d  0.000 y
