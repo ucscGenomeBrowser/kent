@@ -1196,12 +1196,15 @@ function postToSaveSettings(obj)
 $(document).ready(function()
 {
     var db = getDb();
+    if(document.getElementById("hgt.newJQuery") != null) {
+        newJQuery = true;
+    }
     if(jQuery.fn.autocomplete && $('input#suggest') && db) {
         if(newJQuery) {
             $('input#suggest').autocomplete({
                                                 delay: 500,
                                                 minLength: 2,
-                                                source: ajaxGet(function () {return db;}, new Object),
+                                                source: ajaxGet(function () {return db;}, new Object, true),
                                                 select: function (event, ui) {
                                                         setPosition(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
                                                         // jQuery('body').css('cursor', 'wait');
@@ -1213,7 +1216,7 @@ $(document).ready(function()
             $('input#suggest').autocomplete({
                                                 delay: 500,
                                                 minchars: 2,
-                                                ajax_get: ajaxGet(function () {return db;}, new Object),
+                                                ajax_get: ajaxGet(function () {return db;}, new Object, false),
                                                 callback: function (obj) {
                                                     setPosition(obj.id, commify(getSizeFromCoordinates(obj.id)));
                                                     // jQuery('body').css('cursor', 'wait');
