@@ -59,6 +59,7 @@ DIRS = \
 	bedGraphToBigWig \
 	bedRemoveOverlap \
 	bedToBigBed \
+	bigBedInfo \
 	bigBedSummary \
 	bigBedToBed \
 	bigWigInfo \
