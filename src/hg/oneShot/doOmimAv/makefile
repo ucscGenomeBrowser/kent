@@ -1,38 +1,14 @@
-
 include ../../../inc/common.mk
 
 L += -lm $(MYSQLLIBS)
-MYLIBDIR = ../../../lib/$(MACHTYPE)
+MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-A = doOmimAv
+O = doOmimAv.o
 
-O = $A.o
-
-my: compile
-	mv $A ${BINDIR}/$A
-
-mgsc: compile
-	mv $A /usr/local/apache/cgi-bin-mgsc/$A
-
-alpha: compile
-	mv $A /usr/local/apache/cgi-bin/$A
-
-beta: compile
-	mv $A /usr/local/apache/cgi-bin-beta/$A
-
-
-compile: $O 
-	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
-	mv ${AOUT} $A${EXE}
-#	${STRIP} $A${EXE}
-	chmod a+rx $A
-
-lib:
-	cd ../../lib && ${MAKE}
-
-tags: 
-	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
+doOmimAv: $O $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/doOmimAv $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/doOmimAv${EXE}
 
 clean::
 	rm -f ${O}
