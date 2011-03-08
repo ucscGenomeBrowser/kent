@@ -648,19 +648,19 @@ subId 3052
 tableName wgEncodePsuTfbsG1eTal1sc12984ME0S129InputSig
 view Signal
 
-metaObject wgEncodePsuTfbsG1ee4e2CtcfME0S129InputAlnRep1
+metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep1
 objType file
 age E0
 antibody CTCF
-cell G1E-E4+E2
+cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-E4+E2/Input/Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
-fileName wgEncodePsuTfbsG1ee4e2CtcfME0S129InputAlnRep1.bam
+fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
@@ -673,19 +673,19 @@ strain 129
 subId 3032
 view Alignments
 
-metaObject wgEncodePsuTfbsG1ee4e2CtcfME0S129InputPk
+metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk
 objType table
 age E0
 antibody CTCF
-cell G1E-E4+E2
+cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-E4+E2/Input/Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
-fileName wgEncodePsuTfbsG1ee4e2CtcfME0S129InputPk.broadPeak.gz
+fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
@@ -695,22 +695,22 @@ setType exp
 sex M
 strain 129
 subId 3032
-tableName wgEncodePsuTfbsG1ee4e2CtcfME0S129InputPk
+tableName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk
 view Peaks
 
-metaObject wgEncodePsuTfbsG1ee4e2CtcfME0S129InputRawDataRep1
+metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRawDataRep1
 objType file
 age E0
 antibody CTCF
-cell G1E-E4+E2
+cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-E4+E2/Input/Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
-fileName wgEncodePsuTfbsG1ee4e2CtcfME0S129InputRawDataRep1.fastq.gz
+fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
@@ -723,19 +723,19 @@ strain 129
 subId 3032
 view RawData
 
-metaObject wgEncodePsuTfbsG1ee4e2CtcfME0S129InputSig
+metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig
 objType table
 age E0
 antibody CTCF
-cell G1E-E4+E2
+cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-E4+E2/Input/Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
-fileName wgEncodePsuTfbsG1ee4e2CtcfME0S129InputSig.bigWig
+fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
@@ -743,24 +743,24 @@ project wgEncode
 seqPlatform Illumina_GA2
 setType exp
 sex M
-strain 129
 subId 3032
-tableName wgEncodePsuTfbsG1ee4e2CtcfME0S129InputSig
+tableName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig
+train 129
 view Signal
 
-metaObject wgEncodePsuTfbsG1ee4e2Gata1sc265ME0S129InputAlnRep1
+metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputAlnRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-E4+E2
+cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-E4+E2/Input/Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1ee4e2Gata1sc265ME0S129InputAlnRep1.bam
+fileName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12may2009ln415jun2009ln4ln8-gata1-g1e-er4e2-combined-groomed-canonical
@@ -773,19 +773,19 @@ strain 129
 subId 3033
 view Alignments
 
-metaObject wgEncodePsuTfbsG1ee4e2Gata1sc265ME0S129InputPk
+metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputPk
 objType table
 age E0
 antibody GATA1_(SC-265)
-cell G1E-E4+E2
+cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-E4+E2/Input/Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1ee4e2Gata1sc265ME0S129InputPk.broadPeak.gz
+fileName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12may2009ln415jun2009ln4ln8-gata1-g1e-er4e2-combined-groomed-canonical
@@ -795,22 +795,22 @@ setType exp
 sex M
 strain 129
 subId 3033
-tableName wgEncodePsuTfbsG1ee4e2Gata1sc265ME0S129InputPk
+tableName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputPk
 view Peaks
 
-metaObject wgEncodePsuTfbsG1ee4e2Gata1sc265ME0S129InputRawDataRep1
+metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputRawDataRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-E4+E2
+cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-E4+E2/Input/Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1ee4e2Gata1sc265ME0S129InputRawDataRep1.fastq.gz
+fileName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12may2009ln415jun2009ln4ln8-gata1-g1e-er4e2-combined-groomed-canonical
@@ -823,19 +823,19 @@ strain 129
 subId 3033
 view RawData
 
-metaObject wgEncodePsuTfbsG1ee4e2Gata1sc265ME0S129InputSig
+metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputSig
 objType table
 age E0
 antibody GATA1_(SC-265)
-cell G1E-E4+E2
+cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-E4+E2/Input/Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1ee4e2Gata1sc265ME0S129InputSig.bigWig
+fileName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12may2009ln415jun2009ln4ln8-gata1-g1e-er4e2-combined-groomed-canonical
@@ -845,22 +845,22 @@ setType exp
 sex M
 strain 129
 subId 3033
-tableName wgEncodePsuTfbsG1ee4e2Gata1sc265ME0S129InputSig
+tableName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputSig
 view Signal
 
-metaObject wgEncodePsuTfbsG1ee4e2InputME0S129AlnRep1
+metaObject wgEncodePsuTfbsG1eer4e2InputME0S129AlnRep1
 objType file
 age E0
 antibody Input
-cell G1E-E4+E2
+cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control None
-controlId G1E-E4+E2/Input/None
+controlId G1E-ER4+E2/Input/None
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1ee4e2InputME0S129AlnRep1.bam
+fileName wgEncodePsuTfbsG1eer4e2InputME0S129AlnRep1.bam
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
@@ -873,19 +873,19 @@ strain 129
 subId 3033
 view Alignments
 
-metaObject wgEncodePsuTfbsG1ee4e2InputME0S129RawDataRep1
+metaObject wgEncodePsuTfbsG1eer4e2InputME0S129RawDataRep1
 objType file
 age E0
 antibody Input
-cell G1E-E4+E2
+cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control None
-controlId G1E-E4+E2/Input/None
+controlId G1E-ER4+E2/Input/None
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1ee4e2InputME0S129RawDataRep1.fastq.gz
+fileName wgEncodePsuTfbsG1eer4e2InputME0S129RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
@@ -1048,4 +1048,4 @@ strain C57BL/6
 subId 3044
 view RawData
 
-# MAGIC: -1696647417
+# MAGIC: 624999852

@@ -5140,7 +5140,7 @@ if (tg->subType == lfWithBarbs)
     }
 }
 
-char *decipherPhenotypeList(struct track *tg, struct bed *item)
+char *decipherPhenotypeList(struct track *tg, char *name)
 /* Return list of diseases associated with a DECIPHER entry */
 {
 struct sqlConnection *conn;
@@ -5153,7 +5153,7 @@ int i=0;
 conn = hAllocConn(database);
 
 safef(query,sizeof(query),
-        "select distinct phenotype from decipherRaw where id='%s' order by phenotype", item->name);
+        "select distinct phenotype from decipherRaw where id='%s' order by phenotype", name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -5185,10 +5185,36 @@ sqlFreeResult(&sr);
 return(decipherBuffer);
 }
 
+void decipherLoad(struct track *tg)
+/* Convert bed4 to linkedFeatures so we can have next "exon" arrows. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct linkedFeatures *lfList = NULL;
+int rowOffset = 0;
+struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
+char **row = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct bed *bed = bedLoad(row+rowOffset);
+    bed->score = 1000;
+    bed->strand[0] = '.';
+    bed->thickStart = bed->chromStart;
+    bed->thickEnd = bed->chromEnd;
+    struct linkedFeatures *lf = bedMungToLinkedFeatures(&bed, tg->tdb, 4, 0, 1000, FALSE);
+    lf->extra = cloneString(decipherPhenotypeList(tg, lf->name));
+    slAddHead(&lfList, lf);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
+tg->items = lfList;
+}
+
 Color decipherColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw DECIPHER entry */
 {
-struct bed *bedItem = item;
+struct linkedFeatures *lf = item;
 int col = tg->ixColor;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -5201,7 +5227,7 @@ char *decipherId = NULL;
 	RED:	If the entry is a deletion (mean ratio < 0)
 	BLUE:	If the entry is a duplication (mean ratio > 0)
 */
-safef(cond_str, sizeof(cond_str),"name='%s' ", bedItem->name);
+safef(cond_str, sizeof(cond_str),"name='%s' ", lf->name);
 decipherId = sqlGetField(database, "decipher", "name", cond_str);
 if (decipherId != NULL)
     {
@@ -5246,14 +5272,13 @@ static void decipherDrawAt(struct track *tg, void *item,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single superfamily item at position. */
 {
-struct bed *bed = item;
-char *sPhenotypes;
+struct linkedFeatures *lf = item;
+char *sPhenotypes = lf->extra;
 int heightPer = tg->heightPer;
-int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
-int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 int w;
 
-sPhenotypes = decipherPhenotypeList(tg, item);
 w = x2-x1;
 if (w < 1)
     w = 1;
@@ -5270,7 +5295,7 @@ if (color)
     if (tg->drawName && vis != tvSquish)
 	{
 	/* Clip here so that text will tend to be more visible... */
-	char *s = tg->itemName(tg, bed);
+	char *s = tg->itemName(tg, item);
 	w = x2-x1;
 	if (w > mgFontStringWidth(font, s))
 	    {
@@ -5278,29 +5303,33 @@ if (color)
 	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
 	    }
 	}
-    if (vis != tvDense)
-   	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
-	         tg->track, tg->mapItemName(tg, bed), sPhenotypes);
-    }
-if (tg->subType == lfWithBarbs)
-    {
-    int dir = 0;
-    if (bed->strand[0] == '+')
-	dir = 1;
-    else if(bed->strand[0] == '-')
-	dir = -1;
-    if (dir != 0 && w > 2)
-	{
-	int midY = y + (heightPer>>1);
-	Color textColor = hvGfxContrastingColor(hvg, color);
-	clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
-		dir, textColor, TRUE);
-	}
     }
 }
+
+void decipherMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+		     char *itemName, char *mapItemName, int start, int end,
+		     int x, int y, int width, int height)
+/* Special mouseover text from lf->extra (phenotype list). */
+{
+// Don't bother if we are imageV2 and a dense child.
+if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
+    {
+    struct linkedFeatures *lf = item;
+    char *directUrl = trackDbSetting(tg->tdb, "directUrl");
+    boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
+    char *phenotypes = lf->extra;
+    char *mouseOverText = isEmpty(phenotypes) ? lf->name : phenotypes;
+    mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,
+                    mapItemName, mouseOverText, directUrl, withHgsid, NULL);
+    }
+}
+
 void decipherMethods(struct track *tg)
 /* Methods for DECIPHER track. */
 {
+linkedFeaturesMethods(tg);
+tg->loadItems = decipherLoad;
+tg->mapItem = decipherMapItem;
 tg->itemColor   = decipherColor;
 tg->drawItemAt 	= decipherDrawAt;
 }
@@ -12076,6 +12105,12 @@ else if (sameWord(type, "bed6FloatScore"))
 else if (sameWord(type, "encodeFiveC"))
     {
     track->bedSize = 3;
+    bedMethods(track);
+    track->loadItems = loadSimpleBed;
+    }
+else if (sameWord(type, "peptideMapping"))
+    {
+    track->bedSize = 6;
     bedMethods(track);
     track->loadItems = loadSimpleBed;
     }

@@ -53,7 +53,7 @@ from genbank.fileOps import prLine, prRow, prRowv
 import glob
 
 # collect profile output from gbAlignGet runs
-collectGmonOut = False
+collectGmonOut = True
 gmonOutDir = "profiles"
 
 absBinDir = os.path.abspath(myBinDir)

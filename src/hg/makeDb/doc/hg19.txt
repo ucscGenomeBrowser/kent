@@ -14462,3 +14462,34 @@ TMPDIR=/scratch/tmp
     #	2772816267 bases of 2900529764 (95.597%) in intersection
 
 ############################################################################
+# MAKE tfbsConsSites and tfbsConsFactors for TFBS conserved track (DONE weirauch braney 03/07/11)
+# Questions?  braney at soe.ucsc.edu
+
+ssh hgwdev
+mkdir /cluster/data/hg19/bed/tfbsCons
+cd /cluster/data/hg19/bed/tfbsCons
+
+# Define all parameters in 'PARAMS.txt'
+# Define all chromosomes in 'CHROMS.txt'
+# Get tfbsConsUtils.tar.gz from Matt Weirauch with Perl scripts  weirauch@soe.ucsc.edu
+set tarfile=/cluster/data/hg19/bed/tfbsCons/tfbsConsUtils.tar.gz
+tar zxf $tarfile
+
+nice ./getRefseqStats.pl &
+nice ./getBatchQueries.pl &
+
+ssh swarm
+mkdir /cluster/bluearc/braney/tfloc
+mkdir /hive/users/weirauch/tfloc_hg18
+# Copy ./tmp/ctfbs_batch_list.txt to this dir
+# Copy ./scripts/doit to this dir
+para create ctfbs_batch_list.txt
+para try
+para push
+
+# When the run is done (within a day or so), the results will be in individual dirs, one for each chromosome.
+
+nice ./getBedFile.pl &
+
+hgLoadBed -noSort hg19  tfbsConsSites -sqlTable=$HOME/kent/src/hg/lib/tfbsConsSites.sql tfbsConsSites.bed -tab
+hgLoadSqlTab hg19 tfbsConsFactors $HOME/kent/src/hg/lib/tfbsConsFactors.sql tfbsConsFactors.bed
