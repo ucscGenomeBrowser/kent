@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 # recursive target to do install to DEST, with extra excludes EXCL.
 
-CSS_FILES=HGStyle.css autocomplete.css blueStyle.css floretStyle.css jquery-ui.css jquery.contextmenu.css ui.dropdownchecklist.css 
+CSS_FILES=HGStyle.css autocomplete.css blueStyle.css floretStyle.css jquery-ui.css jquery.contextmenu.css ui.dropdownchecklist.css jquery.ui.autocomplete.css
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \
