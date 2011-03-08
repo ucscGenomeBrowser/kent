@@ -29043,29 +29043,6 @@ tableName wgEncodeHaibTfbsT47dCtcfV0416102Dmso2RawRep1
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsT47dCtcfV0416102Dmso2RawRep2
-objType table
-antibody CTCF
-cell T-47D
-composite wgEncodeHaibTfbs
-controlId SL1881
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-11-29
-dateUnrestricted 2011-08-28
-fileName wgEncodeHaibTfbsT47dCtcfV0416102Dmso2RawRep2.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL3014
-project wgEncode
-protocol v041610.2
-replicate 2
-setType exp
-subId 3029
-tableName wgEncodeHaibTfbsT47dCtcfV0416102Dmso2RawRep2
-treatment DMSO_0.02pct
-view RawSignal
-
 metaObject wgEncodeHaibTfbsT47dCtcfsc5916V0416102Dmso2AlnRep1
 objType file
 antibody CTCF_(SC-5916)
@@ -30490,4 +30467,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1735595208
+# MAGIC: 702871651
