@@ -7745,6 +7745,32 @@ tag G1
 type phase
 description Flow sorted, G1 phase
 
+### region
+# genomic regions used in experiments that are not whole-genome
+term chr21
+tag chr21
+type region
+description PROVISIONAL  Chromsome 21
+
+term ENM
+tag ENM
+type region
+description PROVISIONAL  ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+
+term ENR
+tag ENR
+type region
+description PROVISIONAL  ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+
+term UW-5C-Myc-Region
+tag uw5cMyc
+type region
+description PROVISIONAL  Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
+
+term UW-5C-Gene-Regions
+tag uw5cGene
+type region
+description PROVISIONAL  Set of 25 regions interrogated in UW 5C gene-targeted experiments
 
 
 ### restrictionEnzyme
@@ -9305,6 +9331,15 @@ cvDefined yes
 validate cv
 priority 500
 #description Length of single or paired-end reads in a high-throughput sequencing experiment.
+
+term region
+type typeOfTerm
+label Genomic region(s)
+description PROVISIONAL  Genomic region(s) targeted by an experiment that is not whole-genome
+searchable multiSelect
+cvDefined yes
+validate cv
+priority 500
 
 term replicate
 type typeOfTerm

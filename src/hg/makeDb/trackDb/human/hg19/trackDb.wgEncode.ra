@@ -9,9 +9,6 @@ include wgEncodeGencodeV5.ra alpha
 # UNC/BSU Proteogenomics (wrangler: cline)
 include wgEncodeUncBsuProt.ra alpha
 
-# GIS ChIA-pet (wrangler: braney)
-include wgEncodeGisChiaPet.ra alpha
-
 # Nucleosome (wrangler: venkat)
 include wgEncodeSydhNsome.ra
 
@@ -30,7 +27,16 @@ include wgEncodeBuOrchid.ra
 # Affy Rna Chip (wrangler: braney)
 include wgEncodeAffyRnaChip.ra
 
+# Chromatin Interactions ------
 
+# GIS ChIA-pet (wrangler: braney)
+include wgEncodeGisChiaPet.ra alpha
+
+# UMass-Dekker 5C (wrangler: kate)
+#include wgEncodeUmassDekker5C.ra alpha
+
+# UW 5C (wrangler: kate)
+include wgEncodeUw5C.ra alpha
 
 
 # Encode Affy Exon -------------------------------------------- 
@@ -40,10 +46,6 @@ include wgEncodeUwAffyExonArray.ra
 
 # Duke Affy Exon (wrangler: cricket)
 include wgEncodeDukeAffyExon.ra alpha
-
-
-
-
 
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
