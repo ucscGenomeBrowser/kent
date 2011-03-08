@@ -2318,22 +2318,29 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     && !tdbIsDownloadsOnly(tdb))
 	// NOTE: tdb if composite, is not yet populated with it's own subtracks!
         continue;
-    printf("<TR>");
-    printf("<TD NOWRAP><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>",
-                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
-    printf("<TD>");
+    printf("<TR><TD NOWRAP>");
     if (tdbIsDownloadsOnly(tdb))
-        printf("&nbsp;");
+        printf("%s&nbsp;",tdb->shortLabel);
     else
-    {
+        printf("<A HREF='%s?%s=%u&c=%s&g=%s'>%s</A>&nbsp;",
+                (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
+                cartSessionVarName(), cartSessionId(cart),
+                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
+    printf("</TD><TD>");
+    if (tdbIsDownloadsOnly(tdb))
+        {
+        printf("<A HREF='%s?%s=%u&g=%s'>Downloads</A>",
+                hgFileUiName(),cartSessionVarName(), cartSessionId(cart), cgiEncode(tdb->track));
+        }
+    else
+        {
         enum trackVisibility tv =
                         hTvFromString(cartUsualString(cart, tdb->track,
                                                 hStringFromTv(tdb->visibility)));
         hTvDropDownClassVisOnly(tdb->track, tv, tdb->canPack,
                                 tv == tvHide ?  "hiddenText" : "normalText",
                                 trackDbSetting(tdb, "onlyVisibility"));
-    }
+        }
     printf("<TD>%s", tdb->longLabel);
     char *dataVersion = trackDbSetting(tdb, "dataVersion");
     if (dataVersion)
