@@ -2264,7 +2264,8 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
         continue;
     printf("<TR>");
     printf("<TD NOWRAP><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>",
-                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+                (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
+                cartSessionVarName(), cartSessionId(cart),
                 chromosome, cgiEncode(tdb->track), tdb->shortLabel);
     printf("<TD>");
     if (tdbIsDownloadsOnly(tdb))
