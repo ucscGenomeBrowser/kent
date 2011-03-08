@@ -31,7 +31,7 @@ group             expression
 variables         cell,readType,insertLength
 assembly          hg19
 dataVersion       3
-dataVersionComment Standarization with other RNA groups
+dataVersionComment New Elements Formats
 validationSettings none
 
 
@@ -63,8 +63,21 @@ required         no
 downloadOnly     yes
 
 view             Junctions
-type             bed6 +   
+type             bed 6+   
 hasReplicates    yes
 required         no
 downloadOnly     yes
+
+view             ExonsGencV3c
+type             gtf    
+hasReplicates    yes
+required         yes
+downloadOnly     yes
+
+view             TSS
+type             gtf
+hasReplicates    yes
+required         yes
+downloadOnly     yes
+
 

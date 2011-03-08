@@ -140,7 +140,7 @@ priority 103.29
         track phyloP13wayAll
         subTrack cons13wayViewphyloP on
         subGroups view=phyloP 
-        shortLabel 13 Way PhyloP Cons
+        shortLabel PhyloP Cons
         longLabel  Basewise Conservation by PhyloP
         noInherit on
         #configurable on
@@ -165,7 +165,7 @@ priority 103.29
         track phastCons13way
         subTrack cons13wayViewphastcons on
         subGroups view=phastcons 
-        shortLabel 13 Way Cons
+        shortLabel PhastCons Cons
         longLabel Conservation by PhastCons
         noInherit on
         #configurable on
@@ -186,9 +186,9 @@ priority 103.29
 
         # Conserved Elements (Most Conserved)
         track phastConsElements13way
-        subTrack cons13wayViewelements off
+        subTrack cons13wayViewelements on
         subGroups view=elements 
-        shortLabel 13 Way El
+        shortLabel Most Conserved
         longLabel Conserved Elements
         noInherit on
         color 170,100,50
