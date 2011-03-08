@@ -3837,7 +3837,7 @@ orderUrl http://www.scbt.com/datasheet-8975-ap-2alpha-h-79-antibody.html
 lab Farnham
 targetId GeneCard:TFAP2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2A
-validation missing
+validation AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
 
 term AP-2gamma
 tag AP2gamma
@@ -3851,7 +3851,7 @@ orderUrl http://www.scbt.com/datasheet-8977-ap-2gamma-h-77-antibody.html
 lab Farnham
 targetId GeneCard:GTFAP2C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C
-validation missing
+validation AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
 
 term ATF3
 tag ATF3
@@ -4986,7 +4986,7 @@ tag H3K79me2
 type Antibody
 target H3K79me2
 antibodyDescription Rabbit polyclonal antibody raised against a peptide containing K79 di-methylation
-targetDescription Lysine 79 methylation acts as a marker of inactive chromatin regions that is critical for transcriptional silencing.
+targetDescription H3K79me2 is a mark of the transcriptional transition region - ie, the region between the initiation marks (K4me3, etc) and the elongation marks (K36me3). 
 orderUrl http://www.activemotif.com/catalog/details/39143/histone-h3-dimethyl-lys79-antibody-pab.html
 vendorName Active Motif
 vendorId 39143
@@ -8001,7 +8001,7 @@ description C57 black 6, the most common inbred strain of laboratory mouse
 term RIII
 tag RIII
 type strain
-description High mammary tumour incidence in unfostered substrains.
+description High mammary tumor incidence in unfostered substrains.
 
 term 129
 tag S129
@@ -9020,6 +9020,16 @@ validate integer
 hidden no
 priority 241 
 
+term docId
+type typeOfTerm
+label UCSC document identification
+description PROVISIONAL This is the document identification assigned byt UCSC. 
+serchable no 
+cvDefined off
+validate none  #Brian?
+hidden no #maybe this will be hidden?  Brian?
+priority 311 
+
 
 # term expVars
 # type typeOfTerm
@@ -9395,6 +9405,16 @@ searchable freeText
 cvDefined no
 validate integer
 priority 335
+
+term submitPath
+type typeOfTerm
+label Name of file given by lab.  
+description PROVISIONAL This is the name of the file as submitted by the lab to UCSC.
+serchable no 
+cvDefined off
+validate none  
+hidden no  #I want this hidden, but "yes" did not work
+priority 312 
 
 term submittedDataVersion
 type typeOfTerm

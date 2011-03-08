@@ -65,14 +65,6 @@ newBuf[len] = 0;
 return newBuf;
 }
 
-/* fill a specified area of memory with zeroes */
-void zeroBytes(void *vpt, int count)
-{
-char *pt = (char*)vpt;
-while (--count>=0)
-    *pt++=0;
-}
-
 /* Reverse the order of the bytes. */
 void reverseBytes(char *bytes, long length)
 {

@@ -24,19 +24,27 @@ Note that the html file in lower-level directories
 can override the html in higher-level directories
 without requiring an entry in trackDb.ra.
 
-
 There may be subdirectories for each organism such
 as 'mouse', and underneath these directories for
 each database, such as 'hg7'.  There are a trackDb.ra
 file and xxx.html files in these subdirectories.
-Tracks descriptions in the subdirectory will
+Track descriptions in the subdirectory will
 over-ride track descriptions in the parent directory.
 This allows you to customize a track for
 each version of the database.
 
-After editing a track definition here
-hgTrackDb to bring it into the MySQL database.  To update
-your personal copy (on hgwdev-userName) do
+xxx.html files may include the contents of other files
+using this syntax:
+
+<!--#insert file="sharedText.html"-->
+
+where "sharedText.html" is a relative path, relative to
+the directory that contains the xxx.html file.
+
+
+After editing a track definition here, run ./loadTracks
+which invokes hgTrackDb to bring it into the MySQL database.
+To update your personal copy (on hgwdev-userName) do
     make update
 to do it on genome-test do
     make alpha
