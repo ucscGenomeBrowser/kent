@@ -9,7 +9,11 @@ ifdef LOWELAB
 endif
 
 user:
-	${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}
+	if test -d ${DOCUMENTROOT}-${USER}; then \
+	    ${MAKE} doInstall DEST=${DOCUMENTROOT}-${USER}/js/${USER}; \
+	else \
+	    ${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}; \
+	fi
 
 alpha:
 	${GITUP}

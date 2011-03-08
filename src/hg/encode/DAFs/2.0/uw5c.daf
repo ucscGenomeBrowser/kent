@@ -1,4 +1,4 @@
-# Data Agreement File for UMass 5C (Dekker lab)
+# Data Agreement File for UW 5C
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -6,11 +6,11 @@
 dafVersion        2.0
 
 # Lab and general info
-grant             Dekker
-lab               UMass-Dekker
-compositeSuffix  UmassDekker5C
+grant             Stam
+lab               UW
 dataType          5C
-variables         cell
+compositeSuffix   Uw5C
+variables         cell, region
 assembly          hg19
 
 validationSettings skipValidateFiles
@@ -21,3 +21,8 @@ type             download
 downloadOnly     yes
 required         yes
 hasReplicates    yes
+
+view            RawData
+type            fastq
+required        no
+hasReplicates   yes
