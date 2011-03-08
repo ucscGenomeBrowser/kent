@@ -179,9 +179,9 @@ identifier UniProtId external=UniProt
      $kgDb2.kgProtAlias.displayID minCheck=0.80
      $kgDb2.kgSpAlias.alias minCheck=0.20
      $kgDb2.kgXref.spDisplayID minCheck=0.80
-     $kgDb3.kgXref.spDisplayID minCheck=0.50
+     $kgDb3.kgXref.spDisplayID minCheck=0.50 exclude=
      $kgDb2.knownCanonical.protein minCheck=0.80
-     $gbd.spMrna.spID minCheck=0.80
+     $gbd.spMrna.spID minCheck=0.80 exclude=
      dm1.bdgpSwissProt.spSymbol minCheck=0.80
      dm1.flyBaseSwissProt.spSymbol minCheck=0.80
 
@@ -218,8 +218,8 @@ identifier UniProtAccession external=UniProt
      $kgDb2.kgSpAlias.spID  minCheck=0.2
      $kgDb2.kgProtMap.qName minCheck=0.9
      $kgDb2.kgXref.spID minCheck=0.9
-     $kgDb3.kgSpAlias.spID minCheck=0.50
-     $kgDb3.kgXref.spID minCheck=0.50
+     $kgDb3.kgSpAlias.spID minCheck=0.50 exclude=
+     $kgDb3.kgXref.spID minCheck=0.50 exclude=
      $gbd.pepMwAa.accession minCheck=0.9
      $gbd.pepPi.accession minCheck=0.9
      $ce.sangerCanonical.protein minCheck=0.8
@@ -569,20 +569,20 @@ identifier encodePseudogeneUcsc dependency
     $hg.encodePseudogeneUcsc.name dupeOk
     $hg.encodePseudogeneClass.name minCheck=0.22 unique
 
-identifier refGeneRetro dependency
-"Link refGene to ucscRetroInfo"
-    $hg,mm9.refGene.name dupeOk
-    $hg,mm9.ucscRetroInfo.refSeq minCheck=0.96
+#identifier refGeneRetro dependency
+#"Link refGene to ucscRetroInfo"
+    #$hg,mm9.refGene.name dupeOk
+    #$hg,mm9.ucscRetroInfo.refSeq minCheck=0.96
 
-identifier retroRefGene dependency
-"Link ucscRetroInfo to refGene"
-    $hg,mm9.ucscRetroInfo.refSeq dupeOk
-    $hg,mm9.refGene.name minCheck=0.11
+#identifier retroRefGene dependency
+#"Link ucscRetroInfo to refGene"
+    #$hg,mm9.ucscRetroInfo.refSeq dupeOk
+    #$hg,mm9.refGene.name minCheck=0.11
 
-identifier ucscRetroInfo dependency
-"Link together Ucsc Retrogenes and ucsc retroGene alignments"
-    $hg,mm9.ucscRetroInfo.name unique
-    $hg,mm9.ucscRetroAli.qName unique
+#identifier ucscRetroInfo dependency
+#"Link together Ucsc Retrogenes and ucsc retroGene alignments"
+    #$hg,mm9.ucscRetroInfo.name unique
+    #$hg,mm9.ucscRetroAli.qName unique
 
 identifier encodePseudogeneUcsc2 dependency
 "Link together Ucsc Pseudogenes and class"
@@ -2005,7 +2005,6 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd.ensInfo.name minCheck=0.9
     $kgDb.knownToEnsembl.value chopAfter=.
-    $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30
     $danRer.ensZfishBlastTab.query
     $danRer.ensZfishBlastTab.target
     $danRer.ceBlastTab.query
@@ -2014,6 +2013,12 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $danRer.mmBlastTab.query
     $danRer.rnBlastTab.query
     $danRer.scBlastTab.query
+
+#pulled this line into its own rule to reflect lack of dependency
+identifier ensemblTranscriptId2 external=Ensembl
+"Ensembl Transcript ID"
+    $gbd,!ce6,!ce9,!felCat3.ensGene.name chopAfter=.
+    $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30 
 
 identifier ensemblTranscriptIdCe external=Ensembl dependency
 "Ensembl Transcript ID for C. elegans"
@@ -2782,10 +2787,10 @@ identifier transMapExtFileSplicedEstId
     hgFixed.transMapExtFileSplicedEst.id unique
 
 # transMap and knownGenes
-identifier transMapGeneUcscGenesId
+identifier transMapGeneUcscGenesId fuzzy
 "UCSC Genes and transMapGene table"
-    hgFixed.transMapGeneUcscGenes.id dupeOk
-    $kgDb3.knownGene.name full
+    hgFixed.transMapGeneUcscGenes.id 
+    $kgDb3.knownGene.name
 
 identifier transMapAlnKnownGeneHgId
 "UCSC Genes and transMapAln table"

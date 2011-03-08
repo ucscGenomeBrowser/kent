@@ -9272,11 +9272,11 @@ mm9.upstreamMaf = multiz30way /hive/data/genomes/mm9/bed/multiz30way/species.lis
 
 
 #############################################################################
-# MAKE PCR TARGET FOR UCSC GENES (DONE 11/4/08)
+# MAKE PCR TARGET FOR UCSC GENES (DONE 11/4/08) (REDONE 2/24/11)
     ssh hgwdev
     mkdir /cluster/data/mm9/bed/mrnaPcr
     cd /cluster/data/mm9/bed/mrnaPcr
-    genePredToBed /cluster/data/mm9/bed/ucsc.10/ucscGenes.gp > ucscGenes.bed
+    genePredToBed /cluster/data/mm9/bed/ucsc.12/ucscGenes.gp > ucscGenes.bed
     hgsql mm9 -NBe 'select kgId,geneSymbol from kgXref' \
     | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \
       > idSub.txt
@@ -9284,17 +9284,17 @@ mm9.upstreamMaf = multiz30way /hive/data/genomes/mm9/bed/multiz30way/species.lis
     sequenceForBed -keepName -db=mm9 -bedIn=ucscGenesIdSubbed.bed \
       -fastaOut=stdout \
     | faToTwoBit stdin kgTargetSeq.2bit
-    cut -f 1-10 /cluster/data/mm9/bed/ucsc.10/ucscGenes.gp \
+    cut -f 1-10 /cluster/data/mm9/bed/ucsc.12/ucscGenes.gp \
     | genePredToFakePsl mm9 stdin kgTargetAli.psl /dev/null
 
     # Load up the UCSC Genes target PSL table and put 2bit in /gbdb::
     cd /cluster/data/mm9/bed/mrnaPcr
     hgLoadPsl mm9 kgTargetAli.psl
     mkdir /gbdb/mm9/targetDb
-    ln -s /cluster/data/mm9/bed/mrnaPcr/kgTargetSeq.2bit /gbdb/mm9/targetDb/
+    ln -s /cluster/data/mm9/bed/mrnaPcr/kgTargetSeq.2bit /gbdb/mm9/targetDb/kgTargetSeq12.2bit
 
     # Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on
-    # /gbdb/mm9/targetDb/kgTargetSeq.2bit .
+    # /gbdb/mm9/targetDb/kgTargetSeq12.2bit .
 
     ssh hgwdev
     # Add records to hgcentraltest blatServers and targetDb:

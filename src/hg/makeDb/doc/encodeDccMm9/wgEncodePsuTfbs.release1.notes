@@ -1,0 +1,121 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release1 of the "ENCODE wgEncodePsuTfbs"
+The composite track is wgEncodePsuTfbs
+# WARNINGS #################################################
+############################################################
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release1 (new+untouched):
+    Tables: 14
+    Files: 57
+    Gbdbs: 7
+
+A) Untouched Tables (0):
+
+A') Untouched Files (0 downloadables, 0 gbdbs):
+
+B) Deprecated tables (0):
+
+B') Deprecated files (0 downloadables, 0 gbdbs):
+
+C) New tables (14):
+wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputPk
+wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputSig
+wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputPk
+wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig
+wgEncodePsuTfbsG1eCtcfME0S129InputPk
+wgEncodePsuTfbsG1eCtcfME0S129InputSig
+wgEncodePsuTfbsG1eTal1sc12984ME0S129InputPk
+wgEncodePsuTfbsG1eTal1sc12984ME0S129InputSig
+wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk
+wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig
+wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputPk
+wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputSig
+wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputPk
+wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputSig
+
+C') New files (54 downloadables, 7 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRepPeaksRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRepPeaksRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRepSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRepSignalRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12InputFImmortal2a4bAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12InputFImmortal2a4bAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12InputFImmortal2a4bRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eCtcfME0S129InputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eCtcfME0S129InputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eCtcfME0S129InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eInputME0S129AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eInputME0S129AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eInputME0S129RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eTal1sc12984ME0S129InputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eTal1sc12984ME0S129InputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eTal1sc12984ME0S129InputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eTal1sc12984ME0S129InputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eTal1sc12984ME0S129InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eer4e2InputME0S129AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eer4e2InputME0S129AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsG1eer4e2InputME0S129RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputPk.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsMelInputMImmortalC57bl6AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsMelInputMImmortalC57bl6AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/wgEncodePsuTfbsMelInputMImmortalC57bl6RawDataRep1.fastq.gz
+
+/gbdb/mm9/bbi/wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputSig.bigWig
+/gbdb/mm9/bbi/wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig.bigWig
+/gbdb/mm9/bbi/wgEncodePsuTfbsG1eCtcfME0S129InputSig.bigWig
+/gbdb/mm9/bbi/wgEncodePsuTfbsG1eTal1sc12984ME0S129InputSig.bigWig
+/gbdb/mm9/bbi/wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig.bigWig
+/gbdb/mm9/bbi/wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputSig.bigWig
+/gbdb/mm9/bbi/wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputSig.bigWig
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodePsuTfbs/release1/md5sum.txt

@@ -29,7 +29,7 @@
 # termUrl (URL for term in the ontology. Links with termId on cellTypes.html)
 # color (specifies color code for track data of this cell type, rgb values)
 # sex (used in documentation and validation.  Should correspond to a "type sex" stanza)
-# tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.  
+# tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.
 #       Should correspond to a "type tier" stanza)
 # protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
 # category: (T for tissue, L for cell line, or P for primary cells.  Not used in human)
@@ -2358,7 +2358,7 @@ tissue Brain
 vendorName ATCC
 vendorId HTB-11
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
-karyotype hyperdiploid female with a modal chromosome number of 47
+karyotype hyperdiploid female with a modal chromosome number of 47
 termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
 sex F
@@ -2478,6 +2478,24 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 protocol HudsonAlpha:Jurkat_protocol.pdf UW_Stam:Jurkat_Stam_protocol.pdf
+
+term LHCN-M2
+tag LHCNM2
+type Cell Line
+tier 3
+organism human
+description Skeletal muscle myoblast
+lineage LHCN-M2 are a line of human skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old Caucasian male heart transplant donor.  They are immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN").   Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
+karyotype 
+sex M
+tissue Skeletal muscle myoblast
+vendorName Woodring Wright, M.D., Ph.D.
+vendorId (None)
+orderUrl http://www.utsouthwestern.edu/findfac/professional/0,,18156,00.html
+termId BTO:0000023
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO:0000023
+protocol Wold:LHCNM2_Wold_protocol.pdf
+
 
 term LHSR
 tag LHSR
@@ -3116,7 +3134,7 @@ description T98G is a fibroblast cell line derived from a glioblastoma multiform
 karyotype hyper-pentaploid male with a modal chromosome number around 128 to 132. There are numerous chromosome abnormalities and marker chromosomes.
 tissue Brain
 vendorName ATCC
-vendorId CRL­1690
+vendorId CRL-1690
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
 termId BTO:0001583
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583
@@ -3219,7 +3237,7 @@ tissue Brain
 vendorName ATCC
 vendorId HTB-14
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-14&Template=cellBiology
-karyotype hypodiploid female with a modal chromosome number of 44 in 48% of cells and a 5.9% rate of higher ploidy
+karyotype hypodiploid female with a modal chromosome number of 44 in 48% of cells and a 5.9% rate of higher ploidy
 termId BTO:0002036
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036
 sex F
@@ -3306,7 +3324,7 @@ termId 7043
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
 color 153,38,0
 sex M
-protocol
+protocol UW(Stam):416B_Stam_protocol.pdf
 
 term AtT-20
 tag AtT20
@@ -3362,7 +3380,7 @@ termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 153,38,0
 sex U
-protocol LICR(Ren):Cerebellum_Ren_protocol.pdf
+protocol LICR(Ren):Cerebellum_Ren_protocol.pdf UW(Stam):Tissue_Stam_protocol.pdf
 
 term Cerebrum
 tag Cerebrum
@@ -3376,7 +3394,7 @@ termId
 termUrl
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Tissue_Stam_protocol.pdf
 
 term CH12
 tag CH12
@@ -3412,7 +3430,7 @@ termId
 termUrl
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):ES-CJ7_Stam_protocol.pdf
 
 
 term Colon
@@ -3455,7 +3473,7 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Fibroblast_Stam_protocol.pdf
 
 
 term G1E
@@ -3473,8 +3491,8 @@ color 153,38,0
 sex U
 protocol PSU(Hardison):G1E_Hardison_protocol.pdf
 
-term G1E-E4+E2
-tag G1E_E4_E2
+term G1E-ER4+E2
+tag G1E_ER4_E2
 type Cell Line
 organism Mouse
 tissue Blood
@@ -3514,7 +3532,7 @@ termId
 termUrl
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Tissue_Stam_protocol.pdf
 
 term Limb
 tag Limb
@@ -3543,7 +3561,7 @@ termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 153,38,0
 sex U
-protocol LICR(Ren):Liver_Ren_protocol.pdf
+protocol LICR(Ren):Liver_Ren_protocol.pdf UW(Stam):Tissue_Stam_protocol.pdf
 
 term Lung
 tag Lung
@@ -3601,7 +3619,7 @@ description Leukemia (K562 analog)
 tissue Blood
 color 46,0,184
 sex M
-protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf
+protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf UW(Stam):MEL_Stam_protocol.pdf
 
 #Missing VendorName and termId
 term Myocyte
@@ -3747,7 +3765,7 @@ termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Tissue_Stam_protocol.pdf
 
 term WholeBrain
 tag WholeBrain
@@ -3761,7 +3779,7 @@ termId 7005
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 153,38,0
 sex U
-protocol
+protocol UW(Stam):Tissue_Stam_protocol.pdf
 
 
 
@@ -3819,7 +3837,7 @@ orderUrl http://www.scbt.com/datasheet-8975-ap-2alpha-h-79-antibody.html
 lab Farnham
 targetId GeneCard:TFAP2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2A
-validation missing
+validation AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
 
 term AP-2gamma
 tag AP2gamma
@@ -3833,7 +3851,7 @@ orderUrl http://www.scbt.com/datasheet-8977-ap-2gamma-h-77-antibody.html
 lab Farnham
 targetId GeneCard:GTFAP2C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C
-validation missing
+validation AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
 
 term ATF3
 tag ATF3
@@ -4290,7 +4308,7 @@ lab  Myers
 lots  J0505
 targetId EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
-validation EBF1_(SC-137065)(Immunoblot):human_EBF1_SC-137065_validation_Myers.pdf
+validation EBF1_(SC-137065)(Immunoprecipitation-WesternBlotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
 
 term eGFP-FOS
 tag eFOS
@@ -4305,7 +4323,7 @@ lab White
 lots
 targetId GeneCards:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
-validation missing
+validation human_validation_White.pdf
 
 term eGFP-GATA2
 tag eGATA2
@@ -4320,7 +4338,7 @@ lab White
 lots
 targetId GeneCards:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation missing
+validation human_validation_White.pdf
 
 term eGFP-HDAC8
 tag eHDAC8
@@ -4335,7 +4353,7 @@ lab White
 lots
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
-validation missing
+validation human_validation_White.pdf
 
 term eGFP-JunB
 tag eJunB
@@ -4350,7 +4368,7 @@ lab White
 lots
 targetId GeneCards:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
-validation missing
+validation human_validation_White.pdf
 
 term eGFP-JunD
 tag eJunD
@@ -4365,7 +4383,7 @@ lab White
 lots
 targetId GeneCards:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
-validation missing
+validation human_validation_White.pdf
 
 term eGFP-NR4A1
 tag eNR4A1
@@ -4380,7 +4398,7 @@ lab White
 lots
 targetId GeneCards:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
-validation missing
+validation human_validation_White.pdf
 
 term  ELF1_(SC-631)
 tag  ELF1SC631
@@ -4581,7 +4599,7 @@ targetId
 targetUrl
 lab Myers / Wold
 lots F1804
-validation GABP(Immunoblot):human_GABPa_G-1_validation_Myers.pdf
+validation GABP(Immunoprecipitation-WesternBlot,MassSpec):human_GABP1_validation_Myers.pdf
 
 term GATA-1
 tag GATA1
@@ -4653,7 +4671,7 @@ orderUrl http://www.scbt.com/datasheet-267-gata-2-cg2-96-antibody.html
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Myers
-validation GATA2_(SC-267)(Immunoblot):human_GATA2_SC-267_validation_Myers.pdf
+validation GATA2_(SC-267)(Immunoprecipitation-WesternBlot,MassSpec):human_GATA2_SC-267_validation_Myers.pdf
 
 term  GATA3_(SC-268)
 tag  GATA3SC268
@@ -4968,7 +4986,7 @@ tag H3K79me2
 type Antibody
 target H3K79me2
 antibodyDescription Rabbit polyclonal antibody raised against a peptide containing K79 di-methylation
-targetDescription Lysine 79 methylation acts as a marker of inactive chromatin regions that is critical for transcriptional silencing.
+targetDescription H3K79me2 is a mark of the transcriptional transition region - ie, the region between the initiation marks (K4me3, etc) and the elongation marks (K36me3). 
 orderUrl http://www.activemotif.com/catalog/details/39143/histone-h3-dimethyl-lys79-antibody-pab.html
 vendorName Active Motif
 vendorId 39143
@@ -5258,31 +5276,16 @@ term Max
 tag MAX
 type Antibody
 target Max
-antibodyDescription rabbit polyclonal, epitope mapping at the C-terminus of Max of human origin
-targetDescription MYC associated factor X
-vendorName Santa Cruz Biotech
-vendorId sc-197
-orderUrl http://www.scbt.com/product.php?datasheet=197
-lab Snyder
-targetId GeneCard:MAX
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Max
-validation missing
-
-term  MAX_(C-17)
-tag  MAXC17
-type Antibody
-target  MAX_(C-17)
 antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Max of human origin.
 targetDescription  The protein encoded by this gene is a member of the basic helix-loop-helix leucine zipper (bHLHZ) family of transcription factors. It is able to form homodimers and heterodimers with other family members, which include Mad, Mxi1 and Myc. Myc is an oncoprotein implicated in cell proliferation, differentiation and apoptosis. The homodimers and heterodimers compete for a common DNA target site (the E box) and rearrangement among these dimer forms provides a complex system of transcriptional regulation. Multiple alternatively spliced transcript variants have been described for this gene but the full-length nature for some of them is unknown (RefSeq).
 vendorName Santa Cruz Biotech
 vendorId sc-197
 orderUrl http://www.scbt.com/datasheet-197-max-c-17-antibody.html
-lab  Myers
+lab  Myers, Snyder
 lots  J0809
-targetId MAX
+targetId GeneCards:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
-validation MAX_C-17(Immunoprecipitation-WesternBlot,MassSpec):human_MAX_C-17_validation_Myers.pdf
-
+validation MAX(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_MAX_validation_Myers.pdf
 
 
 ##This does not appear in metaDb
@@ -5529,7 +5532,7 @@ orderUrl http://www.scbt.com/datasheet-1975-pax-5-n-19-antibody.html
 lab Myers
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
-validation PAX5-N19(Immunoblot):human_PAX5_N-19_validation_Myers.pdf
+validation PAX5-N19(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5_N-19_validation_Myers.pdf
 
 term PAX5_(N-15)
 tag PAX5N15
@@ -5587,7 +5590,7 @@ lab Myers
 lots J0109
 targetId GeneCards:PITX1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PITX1
-validation missing
+validation PITX1_(SC-81979)(Immunoprecipitation-WesternBlot,MassSpec):human_PITX1_SC-81979_validation_Myers.pdf
 
 term Pol2
 tag POL2
@@ -5717,7 +5720,7 @@ orderUrl  http://www.scbt.com/product.php?datasheet=22805
 lab Myers
 targetId
 targetUrl
-validation PU.1(Immunoblot):human_PU.1_H-135_validation_Myers.pdf
+validation PU.1(Immunoprecipitation-WesternBlot,MassSpec):human_PU.1_validation_Myers.pdf
 
 term Rad21
 tag RAD21
@@ -6106,7 +6109,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF12
 validation TCF12(Immunoprecipitation-WesternBlot,MassSpec):human_TCF12_A-20_validation_Myers.pdf
 
 ##This does not appear in metaDb
-term TCF3
+term TCF3_(SC-349)
 tag TCF3
 type Antibody
 target TCF3
@@ -6118,7 +6121,7 @@ orderUrl http://www.scbt.com/datasheet-349-e2a-e12-v-18-antibody.html
 lab Myers
 targetId GeneCard:TCF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF3
-validation TCF3(Immunoblot):human_TCF3_V-18_validation_Myers.pdf
+validation TCF3_(SC-349)(Immunoprecipitation-WesternBlot,MassSpec):human_TCF3_SC349_validation_Myers.pdf
 
 term TCF4
 tag TCF4
@@ -6233,7 +6236,7 @@ lab  Myers
 lots  E2810
 targetId GeneCards:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
-validation USF1_SC-8983(Immunoblot):human_USF1_SC-8983_validation_Myers.pdf
+validation USF1_SC-8983(Immunoprecipitation-WesternBlot,MassSpec):human_USF1_SC-8983_validation_Myers.pdf
 
 term USF2
 tag USF2
@@ -6318,7 +6321,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/pro
 lab Myers
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
-validation YY1_(SC-281)(Immunoblot):human_YY1_SC-281_validation_Myers.pdf
+validation YY1_(SC-281)(Immunoprecipitation-WesternBlot,MassSpec):human_YY1_SC-281_validation_Myers.pdf
 
 term ZBTB33
 tag ZBTB33
@@ -6348,7 +6351,7 @@ lab  Myers
 lots  H2406
 targetId GeneCards:ZBTB7A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB7A
-validation ZBTB7A_SC-34508(Immunoblot):human_ZBTB7A_SC-34508_validation_Myers.pdf
+validation ZBTB7A_SC-34508(Immunoprecipitation-WesternBlot,MassSpec):human_ZBTB7A_SC-34508_validation_Myers.pdf
 
 term ZEB1_(SC-25388)
 tag ZEB1SC25388
@@ -7471,124 +7474,124 @@ description Input library was prepared at UC Davis.
 
 term androgen
 tag ANDRO
-description 12hrs, 1nM Methyltrienolone (R1881) (Crawford)
+description 12 hrs, 1 nM Methyltrienolone (R1881) (Crawford)
 type treatment
 label Methyltrienolone
 
 term Alpha-amanitin_50ug_9hr
 tag AMA50ug9h
 type treatment
-description 9h with 50ug/ml alpha-amanitin
+description 9h with 50 ug/ml alpha-amanitin
 
 term Betamethasone_100nM
 tag BMETH
-description 1h,100nM Betamethasone (Myers)
+description 1 h,100 nM Betamethasone (Myers)
 type treatment
 
 term BPA_100nM
 tag BPA1h
-description 1h,100nM Bisphenol A  (Myers)
+description 1 h,100 nM Bisphenol A  (Myers)
 type treatment
 
 term BPA_100nM_4hr
 tag BPA14h
-description 4h,100nM Bisphenol A (Myers)
+description 4 h,100 nM Bisphenol A (Myers)
 type treatment
 
 term DEX_100nM
 tag DEX100nM
-description 1h,100nM DEX (Myers)
+description 1 h,100 nM DEX (Myers)
 type treatment
 
 term DEX_100pM
 tag DEX100pM
-description 1h,100pM DEX (Myers)
+description 1 h,100 pM DEX (Myers)
 type treatment
 
 term DEX_1nM
 tag DEX1nM
-description 1h,1nM DEX (Myers)
+description 1 h,1 nM DEX (Myers)
 type treatment
 
 term DEX_50nM
 tag DEX50nM
-description 1h,50nM DEX (Myers)
+description 1 h,50 nM DEX (Myers)
 type treatment
 
 term DEX_5nM
 tag DEX5nM
-description 1h,5nM DEX (Myers)
+description 1 h,5 nM DEX (Myers)
 type treatment
 
 term DEX_500pM
 tag DEX500pM
-description 1h,500pM DEX (Myers)
+description 1 h,500 pM DEX (Myers)
 type treatment
 
 term DMSO_0.02pct
 tag DMSO2
-description 1h,0.02% DMSO (Myers)
+description 1 h,0.02% DMSO (Myers)
 type treatment
 
 term DMSO_0.02pct_24hr
 tag DMSO224h
-description 24h,0.02% DMSO (Myers)
+description 24 h,0.02% DMSO (Myers)
 type treatment
 
 term DMSO_2.0pct
 tag DMSO20
-description 5d,2% DMSO (Weissman)
+description 5 d,2% DMSO (Weissman)
 type treatment
 
 term DMSO_4hr
 tag DMSO4hr
-description 4hr DMSO (Myers)
+description 4 hr DMSO (Myers)
 type treatment
 
 term Estradiol_10nM
 tag ESTRADIa1h
-description  1h,10nM Estradiol  (Myers)
+description  1 h,10 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_24hr
 tag ESTRADIa24hh
-description  24,10nM Estradiol  (Myers)
+description  24 hr,10 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_1nM
 tag ESTRADIb1h
-description  1h,1nM Estradiol  (Myers)
+description  1 h,1 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_4hr
 tag ESTRADIa4h
-description  4h,10nM Estradiol (Myers)
+description  4 h,10 nM Estradiol (Myers)
 type treatment
 
 term estrogen
 tag ESTRO
-description 45min, 100nM Estradiol (Crawford)
+description 45 min, 100 nM Estradiol (Crawford)
 type treatment
 label Estradiol_100nM
 
 term EtOH_0.01pct
 tag ETOH01
-description 36h,0.01% EtOH (Snyder)
+description 36 h,0.01% EtOH (Snyder)
 type treatment
 
 term EtOH_0.01pct_4hr
 tag ETOH01b
-description 4h,0.01% EtOH (Snyder)
+description 4 h,0.01% EtOH (Snyder)
 type treatment
 
 term EtOH_0.01pct_12hr
 tag ETOH01c
-description 12h,0.01% EtOH (Snyder)
+description 12 h,0.01% EtOH (Snyder)
 type treatment
 
 term EtOH_0.02pct
 tag ETOH02
-description 1h,0.02% EtOH (Myers)
+description 1 h,0.02% EtOH (Myers)
 type treatment
 
 term forskolin
@@ -7598,12 +7601,12 @@ type treatment
 
 term Genistein_100nM
 tag GEN1h
-description  1h,100nM Genistein   (Myers)
+description  1 h,100 nM Genistein   (Myers)
 type treatment
 
 term Genistein_100nM_4hr
 tag GEN4h
-description  4h,100nM Genistein   (Myers)
+description  4 h,100 nM Genistein   (Myers)
 type treatment
 
 term Hypoxia_LacAcid
@@ -7644,7 +7647,7 @@ type treatment
 
 term insulin
 tag INSLN
-description Human DMEM with 0.5% BSA supplemented with 100nM insulin and 10uM 22-hydroxycholesterol for 6h. (Snyder)
+description Human DMEM with 0.5% BSA supplemented with 100 nM insulin and 10 uM 22-hydroxycholesterol for 6 h. (Snyder)
 type treatment
 
 term MNaseD
@@ -7667,12 +7670,12 @@ type treatment
 
 term pravastatin
 tag PRAVAST
-description For sterol deprivation, cells were cultured with pravastatin (2 µM; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
+description For sterol deprivation, cells were cultured with pravastatin (2 M; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
 type treatment
 
 term Prednisolone_100nM
 tag PREDNIS
-description 1h,100nM Prednisolone (Myers)
+description 1 h,100 nM Prednisolone (Myers)
 type treatment
 
 term serum_free_media
@@ -7682,12 +7685,12 @@ type treatment
 
 term TAM_1uM_36hr
 tag TAM
-description 36h, 1uM tamoxifen (Myers)
+description 36 h, 1 uM tamoxifen (Myers)
 type treatment
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
-description 72 hours with 20nM 4-hydroxytamoxifen (Stam)
+description 72 hours with 20 nM 4-hydroxytamoxifen (Stam)
 type treatment
 label 4-OHTAM_20nM_72hr
 
@@ -7998,7 +8001,7 @@ description C57 black 6, the most common inbred strain of laboratory mouse
 term RIII
 tag RIII
 type strain
-description High mammary tumour incidence in unfostered substrains.
+description High mammary tumor incidence in unfostered substrains.
 
 term 129
 tag S129
@@ -9006,6 +9009,28 @@ validate none
 hidden yes
 priority 910
 
+
+term dccRep
+type typeOfTerm
+label UCSC replicate number
+description PROVISIONAL This replicate number is based on submission to the UCSC browser, it may not reflect the replicate number assigned by the contributing lab.
+serchable yes
+cvDefined off
+validate integer
+hidden no
+priority 241 
+
+term docId
+type typeOfTerm
+label UCSC document identification
+description PROVISIONAL This is the document identification assigned byt UCSC. 
+serchable no 
+cvDefined off
+validate none  #Brian?
+hidden no #maybe this will be hidden?  Brian?
+priority 311 
+
+
 # term expVars
 # type typeOfTerm
 # label Experimental variables
@@ -9176,12 +9201,11 @@ term mapAlgorithm
 type typeOfTerm
 label Mapping algorithm
 description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 500
-# This is Caltech only and possibly should be retired.  (11/3/10)  
-## Note that if there were more than 2 instances of this type this would be multiSelect searchable
+# This is Caltech only and possibly should be retired.  (11/3/10)
 
 term md5sum
 type typeOfTerm
@@ -9205,11 +9229,11 @@ term origAssembly
 type typeOfTerm
 label Assembly originally mapped to
 description Some experiments are originally performed and mapped to an earlier assembly of the reference genome and then are remapped or lifted over to a more recent assembly.
-searchable select
+searchable multiSelect
 cvDefined no
 validate list: hg18,hg19,mm9
 priority 305
-# Could be cv.ra term  ## If there were more than 2 to choose from in one organism this would be multiSelect
+# Could be cv.ra term
 
 term parentTable
 type typeOfTerm
@@ -9322,27 +9346,25 @@ term seqPlatform
 type typeOfTerm
 label Sequencing Platform
 description Sequencing platform used in high-throughput sequencing experiment.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 500
-## If there were more than 2 this would be multiSelect
 
 term setType
 type typeOfTerm
 label Experiment or Input
 description ChIP-seq experiments often require 'input' or control results to be subtracted from the experimental results.  This term clearly identifies which datasets are being used as the experiment and which are the input.
-searchable select
+searchable multiSelect
 cvDefined no
 priority 350
 validate list: exp,input,control
-## If there were more than 2 this would be multiSelect
 
 term sex
 type typeOfTerm
 label Sex of donor organism
 description The sex of a cell line or tissue sample affects the genome target of an experiment.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 130
@@ -9383,6 +9405,16 @@ searchable freeText
 cvDefined no
 validate integer
 priority 335
+
+term submitPath
+type typeOfTerm
+label Name of file given by lab.  
+description PROVISIONAL This is the name of the file as submitted by the lab to UCSC.
+serchable no 
+cvDefined off
+validate none  
+hidden no  #I want this hidden, but "yes" did not work
+priority 312 
 
 term submittedDataVersion
 type typeOfTerm

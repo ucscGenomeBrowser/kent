@@ -830,175 +830,6 @@ panTro3.upstreamGeneTbl = refGene
     make etc-update
 
 ############################################################################
-# HUMAN (hg18) PROTEINS TRACK (Working braney 2011-02-22)
-    # bash  if not using bash shell already
-)
-    cd /cluster/data/panTro3
-    mkdir /cluster/data/panTro3/blastDb
-
-    awk '{if ($2 > 1000000) print $1}' chrom.sizes > 1meg.lst
-    twoBitToFa -seqList=1meg.lst  panTro3.2bit temp.fa
-    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
-#  1371 pieces of 1371 written
-    rm temp.fa 1meg.lst
-
-    awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
-    twoBitToFa -seqList=less1meg.lst  panTro3.2bit temp.fa
-    faSplit about temp.fa 1000000 blastDb/y 
-    rm temp.fa less1meg.lst
-
-    cd blastDb
-    for i in *.fa
-    do
-	/hive/data/outside/blast229/formatdb -i $i -p F
-    done
-    rm *.fa
-    ls *.nsq | wc -l
-# 1421
-
-    mkdir -p /cluster/data/panTro3/bed/tblastn.hg18KG
-    cd /cluster/data/panTro3/bed/tblastn.hg18KG
-    echo  ../../blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
-    wc -l query.lst
-# 1421 query.lst
-
-   # we want around 250000 jobs
-   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(250000/`wc query.lst | awk '{print $1}'`\)
-
-# 36727/(250000/1421) = 208.756268
-
-   mkdir -p kgfa
-   split -l 209 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
-   cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
-   done
-   cd ..
-   ls -1S kgfa/*.fa > kg.lst
-   wc kg.lst
-#  176  176 2288 kg.lst
-
-   mkdir -p blastOut
-   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
-   tcsh
-   cd /cluster/data/panTro3/bed/tblastn.hg18KG
-   cat << '_EOF_' > blastGsub
-#LOOP
-blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
-#ENDLOOP
-'_EOF_'
-
-   cat << '_EOF_' > blastSome
-#!/bin/sh
-BLASTMAT=/hive/data/outside/blast229/data
-export BLASTMAT
-g=`basename $2`
-f=/tmp/`basename $3`.$g
-for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
-do
-if /hive/data/outside/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
-then
-        mv $f.8 $f.1
-        break;
-fi
-done
-if test -f  $f.1
-then
-    if /cluster/bin/i386/blastToPsl $f.1 $f.2
-    then
-	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/panTro3/blastDb.lft carry $f.2
-        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
-        if pslCheck -prot $3.tmp
-        then                  
-            mv $3.tmp $3     
-            rm -f $f.1 $f.2 $f.3 $f.4
-        fi
-        exit 0               
-    fi                      
-fi                         
-rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
-exit 1
-'_EOF_'
-    # << happy emacs
-    chmod +x blastSome
-    exit 
-    
-    ssh swarm
-    cd /cluster/data/panTro3/bed/tblastn.hg18KG
-    gensub2 query.lst kg.lst blastGsub blastSpec
-    para create blastSpec
-#    para try, check, push, check etc.
-
-    para time
-
-# Completed: 449196 of 449196 jobs
-# CPU time in finished jobs:   17546812s  292446.87m  4874.11h  203.09d  0.556 y
-# IO & Wait Time:               3314556s   55242.59m   920.71h   38.36d  0.105 y
-# Average job time:                  46s       0.77m     0.01h    0.00d
-# Longest finished job:             697s      11.62m     0.19h    0.01d
-# Submission to last job:         31706s     528.43m     8.81h    0.37d
-
-    ssh swarm
-    cd /cluster/data/panTro3/bed/tblastn.hg18KG
-    mkdir chainRun
-    cd chainRun
-    tcsh
-    cat << '_EOF_' > chainGsub
-#LOOP
-chainOne $(path1)
-#ENDLOOP
-'_EOF_'
-
-    cat << '_EOF_' > chainOne
-(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin ../c.`basename $1`.psl)
-'_EOF_'
-    chmod +x chainOne
-    ls -1dS ../blastOut/kg?? > chain.lst
-    gensub2 chain.lst single chainGsub chainSpec
-    # do the cluster run for chaining
-    para create chainSpec
-    para try, check, push, check etc.
-
-# Completed: 176 of 176 jobs
-# CPU time in finished jobs:      70348s    1172.47m    19.54h    0.81d  0.002 y
-# IO & Wait Time:                 36253s     604.21m    10.07h    0.42d  0.001 y
-# Average job time:                 606s      10.09m     0.17h    0.01d
-# Longest finished job:           15700s     261.67m     4.36h    0.18d
-# Submission to last job:         15708s     261.80m     4.36h    0.18d
-
-    cd /cluster/data/panTro3/bed/tblastn.hg18KG/blastOut
-    for i in kg??
-    do
-       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
-       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
-       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
-       echo $i
-    done
-    sort u.*.psl m60* | uniq | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > ../blastHg18KG.psl
-    cd ..
-    pslCheck blastHg18KG.psl
-# checked: 45598 failed: 0 errors: 0
-
-    # load table 
-    ssh hgwdev
-    cd /cluster/data/panTro3/bed/tblastn.hg18KG
-    hgLoadPsl panTro3 blastHg18KG.psl
-
-    # check coverage
-    featureBits panTro3 blastHg18KG 
-# 21889813 bases of 1409770109 (1.553%) in intersection
-
-    featureBits panTro3 blastHg18KG refGene  -enrichment
-# blastHg18KG 1.553%, refGene 1.960%, both 0.816%, cover 52.58%, enrich 26.83x
-
-    featureBits panTro3 blastHg18KG ensGene  -enrichment
-# blastHg18KG 1.553%, ensGene 3.961%, both 1.392%, cover 89.68%, enrich 22.64x
-
-    rm -rf blastOut
-#end tblastn
-
-############################################################################
 # LASTZ Rat Rn4 (DONE - 2011-02-22 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22
     cd /hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22
@@ -1329,7 +1160,7 @@ XXX - running - Wed Feb 23 11:24:40 PST 2011
     #	947862300 bases of 2571531505 (36.860%) in intersection
 
 ############################################################################
-# LASTZ Zebrafish DanRer7 (DONE - 2011-02-23 - Hiram)
+# LASTZ Zebrafish DanRer7 (DONE - 2011-02-23 - 03-01 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzDanRer7.2011-02-23
     cd /hive/data/genomes/panTro3/bed/lastzDanRer7.2011-02-23
 
@@ -1367,22 +1198,23 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
-XXX - running - Wed Feb 23 11:28:40 PST 2011
-    #	real    314m18.227s
+    #	real    8921m45.996s - lots of swarm cluster interference from 
+    #			up to nine other lastz runs I have going as well
+    #			as everyone else there.
     cat fb.panTro3.chainDanRer7Link.txt 
-    #	952605822 bases of 2897316137 (32.879%) in intersection
+    #	74190141 bases of 2900529764 (2.558%) in intersection
 
-    #	running the swap - DONE - 2009-06-02
+    #	running the swap - DONE - 2011-03-01
     mkdir /hive/data/genomes/danRer7/bed/blastz.panTro3.swap
     cd /hive/data/genomes/danRer7/bed/blastz.panTro3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/panTro3/bed/lastzDanRer7.2011-02-23/DEF \
-	-swap -noLoadChainSplit \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    188m0.163s
+	-swap -syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodk -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    28m29.184s
     cat fb.danRer7.chainPanTro3Link.txt 
-    #	947862300 bases of 2571531505 (36.860%) in intersection
+    #	82066902 bases of 1409770109 (5.821%) in intersection
 
 ############################################################################
 # construct download files (DONE - 2011-02-23 - Hiram)

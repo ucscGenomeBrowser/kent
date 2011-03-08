@@ -8390,7 +8390,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 2/1/11 angie)
+# NHGRI GWAS CATALOG (DONE 3/1/11 angie)
+# Updated 2/1/11
 # Updated 12/7/10
 # Updated 11/1/10
 # Updated 10/6/10
@@ -8418,7 +8419,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 5435 elements of size 22
+#Loaded 5467 elements of size 22
 
 
 ######################################################################## 
@@ -13749,7 +13750,18 @@ liftOver hg18.gl.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.gl.{bed,u
 hgLoadBed -noLoad hg19 gl hg19.gl.bed
 mv bed.tab hg19.gl.withBin.bed
 awk 'BEGIN{OFS="\t";}{fname=$2"_gl.txt"; print $1, $5, $3, $4, $7 >> fname;}' hg19.gl.withBin.bed
-for f in chr*.txt; do hgLoadSqlTab hg19 ${f%.txt} hg18.chr1_gl.sql $f; done
+cd ../
+for tab in `echo show tables like "'chr%_gl'" | hgsql hg19 | tail -n +2`; do 
+  echo select frag from $tab | hgsql hg19 | tail -n +2  >> gl.names; 
+done
+sed 's/_.*//' gl.names | sort | uniq > uniq.gl.names
+cut -f4 hg19.clonePos.bed4p > hg19.clonePos.names
+diff uniq.gl.names hg19.clonePos.names | grep '<' | sed 's/< //' > bad_gl.names
+for f in chr*.txt; do 
+   tab=${f%.txt}
+   grep -v -f ../bad_gl.names $f > ${tab}.update.txt
+   hgLoadSqlTab hg19 ${tab} hg18.chr1_gl.sql ${tab}.update.txt; 
+done
 
 #############################################################################
 # MGI MOUSE QTL LIFT (DONE 2010-12-30, Andy)
@@ -14450,3 +14462,34 @@ TMPDIR=/scratch/tmp
     #	2772816267 bases of 2900529764 (95.597%) in intersection
 
 ############################################################################
+# MAKE tfbsConsSites and tfbsConsFactors for TFBS conserved track (DONE weirauch braney 03/07/11)
+# Questions?  braney at soe.ucsc.edu
+
+ssh hgwdev
+mkdir /cluster/data/hg19/bed/tfbsCons
+cd /cluster/data/hg19/bed/tfbsCons
+
+# Define all parameters in 'PARAMS.txt'
+# Define all chromosomes in 'CHROMS.txt'
+# Get tfbsConsUtils.tar.gz from Matt Weirauch with Perl scripts  weirauch@soe.ucsc.edu
+set tarfile=/cluster/data/hg19/bed/tfbsCons/tfbsConsUtils.tar.gz
+tar zxf $tarfile
+
+nice ./getRefseqStats.pl &
+nice ./getBatchQueries.pl &
+
+ssh swarm
+mkdir /cluster/bluearc/braney/tfloc
+mkdir /hive/users/weirauch/tfloc_hg18
+# Copy ./tmp/ctfbs_batch_list.txt to this dir
+# Copy ./scripts/doit to this dir
+para create ctfbs_batch_list.txt
+para try
+para push
+
+# When the run is done (within a day or so), the results will be in individual dirs, one for each chromosome.
+
+nice ./getBedFile.pl &
+
+hgLoadBed -noSort hg19  tfbsConsSites -sqlTable=$HOME/kent/src/hg/lib/tfbsConsSites.sql tfbsConsSites.bed -tab
+hgLoadSqlTab hg19 tfbsConsFactors $HOME/kent/src/hg/lib/tfbsConsFactors.sql tfbsConsFactors.bed

@@ -1,5 +1,4 @@
 <H2>Description</H2>
-<DIV style='max-width: 900px;'>
 <P>These tracks display chromatin immunoprecipitation (ChIP-seq) evidence as
 part of the four <B><em>Open Chromatin</em></B> track sets.
 ChIP-seq is a method to identify the specific location of proteins that are
@@ -126,10 +125,12 @@ in the sam/bam format using samtools.
 </P>
 <P>Only those that aligned to 4 or fewer locations were retained. Other sequences
 were also filtered based on their alignment to problematic regions
-(such as satellites and rRNA genes - see The <em>Duke excluded regions</em> track).
+(such as satellites and rRNA genes - see
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/supplemental/"
+ TARGET=ucscDownloads>supplemental materials</a>).
 The mappings of these short reads to the genome are available for
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/"
-TARGET=_BLANK>download</A>.
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/" TARGET=_BLANK>
+download</A>.
 </P>
 <P>The resulting digital signal was converted to a continuous wiggle track using
 F-Seq that employs Parzen kernel density estimation to create base pair scores
@@ -158,15 +159,17 @@ density signal.  Significant regions were determined by fitting the
 data to a gamma distribution to calculate p-values. Contiguous regions
 where p-values were below a 0.05/0.01 threshold were considered significant.
 </P>
-<P>ENCODE Array data were normalized using the Tukey biweight normalization, and
-peaks were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple
-levels of significance.  Regions matched on size to these peaks that were
-devoid of any significant signal were also created to allow for ROC analysis.
+<P>Data from the high-resolution 1% ENCODE tiled microarrays supplied by
+NimbleGen were normalized using the Tukey biweight normalization, and peaks
+were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple levels
+of significance. Regions matched on size to these peaks that were devoid of
+any significant signal were also created.  These data were used for additional
+verification of Tier 1 and Tier 2 cell lines by ROC analysis.
 </P>
 
 <h2>Release Notes</h2>
 <P>
-Release 1 (Feb 2011) of this track consists of a remapping of all previously
+Release 1 (March 2011) of this track consists of a remapping of all previously
 released experiments to the human reference genome <B>GRCh37/hg19</B>
 (these data were previously mapped to <B>NCBI36/hg18</B>;
 please see the Release Notes section of the hg18
@@ -184,7 +187,7 @@ release:
 regions were cloned into functional tissue culture reporter assays to test for
 enhancer and insulator activity.  Coordinates and results from these
 experiments can be found
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/supplemental/"
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/supplemental/"
  TARGET=ucscDownloads>here</a>.
 </UL></P>
 
@@ -308,4 +311,3 @@ following the release of the dataset.  This date is listed in the <EM>Restricted
 Until</EM> column on the track configuration page and the download page.  The
 full data release policy for ENCODE is available <A HREF="../ENCODE/terms.html"
 TARGET=_BLANK>here</A>.
-</DIV>
