@@ -418,9 +418,13 @@ boolean hHostHasPrefix(char *prefix);
 /* Return TRUE if this is running on web-server with host name prefix */
 
 boolean hIsPrivateHost(void);
-/* Return TRUE if this is running on private (development) web-server. 
+/* Return TRUE if this is running on private (development) web-server.
  * This was originally genome-test as well as hgwdev, however genome-test
  * may be repurposed to direct users to the preview site instead of development site. */
+
+boolean hIsBetaHost(void);
+/* Return TRUE if this is running on beta (QA) web-server.
+ * Use sparingly as behavior on beta should be as close to RR as possible. */
 
 boolean hIsPreviewHost(void);
 /* Return TRUE if this is running on preview web-server.  The preview
