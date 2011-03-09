@@ -16,10 +16,37 @@
 #define TRACK_SEARCH_BUTTON      "track search"
 #define TRACK_SEARCH_HINT        "Search for tracks in this genome assembly"
 
+#define ANYLABEL                 "Any"
+
+#define METADATA_NAME_PREFIX     "hgt_mdbVar"
+#define METADATA_VALUE_PREFIX    "hgt_mdbVal"
+
+// Currently selected tab
+enum searchTab {
+    simpleTab   = 0,
+    advancedTab = 1,
+    filesTab    = 2,
+};
+
 void getSearchTrixFile(char *database, char *buf, int len);
 // Fill-in the name of the track search trix file
 
 boolean isSearchTracksSupported(char *database, struct cart *cart);
 // Return TRUE if searchTracks is supported for this database and javascript is supported too
+
+struct slPair *fileFormatSearchWhiteList(void);
+// Gets the whitelist of approved file formats that is allowed for search
+
+char *fileFormatSelectHtml(char *name, char *selected, char *extraHtml);
+// returns an allocated string of HTML for the fileType select drop down
+
+struct slPair *mdbVarsRelevant(struct sqlConnection *conn);
+// returns a white list of mdb vars that are relevant to the currect DB
+
+struct slPair *mdbSelectPairs(struct cart *cart,enum searchTab selectedTab, struct slPair *mdbVars);
+// Returns the current mdb  vars and vals in the table of drop down selects
+
+char *mdbSelectsHtmlRows(struct sqlConnection *conn,struct slPair *mdbSelects, struct slPair *mdbVars,int cols);
+// genereates the html for the table rows containing mdb var and val selects
 
 #endif /* SEARCHTRACKS_H */
