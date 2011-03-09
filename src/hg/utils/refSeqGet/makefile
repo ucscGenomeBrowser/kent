@@ -19,6 +19,7 @@ test::
 
 clean::
 	rm -f ${A} ${O}
+	(cd tests && ${MAKE} clean)
 
 refSeqVerInfo.o: refSeqVerInfo.h refSeqVerInfo.c
 refSeqGet.o:  refSeqVerInfo.h refSeqGet.c

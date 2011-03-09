@@ -16,4 +16,4 @@ compile: ${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
 clean::
-	rm -f ${O}
+	rm -f ${O} ${A}${EXE}
