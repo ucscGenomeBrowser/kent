@@ -7790,6 +7790,11 @@ type restrictionEnzyme
 ### tag:   This is the camel case convention that we use in our file names
 ### label: This will be used for human display and should also match NHGRI with any further information
 
+term 5C
+tag 5C
+type dataType
+label 5C
+description PROVISIONAL 5C Interactions
 
 term AffyExonArray
 tag AffyExonArray

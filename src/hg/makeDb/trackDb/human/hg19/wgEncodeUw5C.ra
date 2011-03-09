@@ -1,8 +1,11 @@
+# University of Washington 5C
+#  Currently downloads only, there is an empty table for now
+
 track wgEncodeUw5C
-type bed
+type downloadsOnly
+#type bed
 shortLabel UW 5C Interactions
 longLabel Chromatin Interactions by 5C from ENCODE/Univ. Washington
 group regulation
 fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-controlledVocabulary encode/cv.ra cellType
 wgEncode 1

@@ -1712,7 +1712,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                                autoOpen: false,
                                buttons: { "OK": function() {
                                               $(this).dialog("close");
-                                          }},
+                                          }}
                                     });
         // this doesn't work (not sure why).
         $('input#itemLookupSuggest').autocomplete({
