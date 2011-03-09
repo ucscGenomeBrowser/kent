@@ -1382,6 +1382,50 @@ hg17KgIdConfig(tdb);
 baseColorDrawOptDropDown(cart, tdb);
 }
 
+void omimLocationConfig(struct trackDb *tdb)
+/* Put up OMIM Location track controls */
+{
+char varName[64];
+char *geneLabel;
+safef(varName, sizeof(varName), "%s.label", tdb->track);
+geneLabel = cartUsualString(cart, varName, "OMIM ID");
+printf("<BR><B>Include Entries of:</B> ");
+printf("<UL>\n");
+printf("<LI>");
+labelMakeCheckBox(tdb, "class1", "class 1: disorder positioned by mapping of the wildtype gene", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "class2", "class 2: disease phenotype mapped", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "class3", "class 3: molecular basis of the disorder is known", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "class4", "class 4: chromosome deletion or duplication syndrome", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "others", "others", TRUE);
+printf("</UL>");
+}
+
+void omimGene2Config(struct trackDb *tdb)
+/* Put up OMIM Genes track controls */
+{
+char varName[64];
+char *geneLabel;
+safef(varName, sizeof(varName), "%s.label", tdb->track);
+geneLabel = cartUsualString(cart, varName, "OMIM ID");
+printf("<BR><B>Include Entries of:</B> ");
+printf("<UL>\n");
+printf("<LI>");
+labelMakeCheckBox(tdb, "class1", "class 1: disorder positioned by mapping of the wildtype gene", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "class2", "class 2: disease phenotype mapped", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "class3", "class 3: molecular basis of the disorder is known", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "class4", "class 4: chromosome deletion or duplication syndrome", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "others", "others", TRUE);
+printf("</UL>");
+}
+
 void omimGeneIdConfig(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
@@ -1442,6 +1486,18 @@ void knownGeneUI(struct trackDb *tdb)
 knownGeneIdConfig(tdb);
 knownGeneShowWhatUi(tdb);
 baseColorDrawOptDropDown(cart, tdb);
+}
+
+void omimLocationUI(struct trackDb *tdb)
+/* Put up omimLcation-specific controls */
+{
+omimLocationConfig(tdb);
+}
+
+void omimGene2UI(struct trackDb *tdb)
+/* Put up omimGene2-specific controls */
+{
+omimGene2Config(tdb);
 }
 
 void omimGeneUI(struct trackDb *tdb)
@@ -2262,22 +2318,29 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     && !tdbIsDownloadsOnly(tdb))
 	// NOTE: tdb if composite, is not yet populated with it's own subtracks!
         continue;
-    printf("<TR>");
-    printf("<TD NOWRAP><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>",
-                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
-    printf("<TD>");
+    printf("<TR><TD NOWRAP>");
     if (tdbIsDownloadsOnly(tdb))
-        printf("&nbsp;");
+        printf("%s&nbsp;",tdb->shortLabel);
     else
-    {
+        printf("<A HREF='%s?%s=%u&c=%s&g=%s'>%s</A>&nbsp;",
+                (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
+                cartSessionVarName(), cartSessionId(cart),
+                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
+    printf("</TD><TD>");
+    if (tdbIsDownloadsOnly(tdb))
+        {
+        printf("<A HREF='%s?%s=%u&g=%s'>Downloads</A>",
+                hgFileUiName(),cartSessionVarName(), cartSessionId(cart), cgiEncode(tdb->track));
+        }
+    else
+        {
         enum trackVisibility tv =
                         hTvFromString(cartUsualString(cart, tdb->track,
                                                 hStringFromTv(tdb->visibility)));
         hTvDropDownClassVisOnly(tdb->track, tv, tdb->canPack,
                                 tv == tvHide ?  "hiddenText" : "normalText",
                                 trackDbSetting(tdb, "onlyVisibility"));
-    }
+        }
     printf("<TD>%s", tdb->longLabel);
     char *dataVersion = trackDbSetting(tdb, "dataVersion");
     if (dataVersion)
@@ -2334,6 +2397,10 @@ else if (sameString(track, "rgdGene2"))
         rgdGene2UI(tdb);
 else if (sameString(track, "knownGene"))
         knownGeneUI(tdb);
+else if (sameString(track, "omimLocation"))
+        omimLocationUI(tdb);
+else if (sameString(track, "omimGene2"))
+        omimGene2UI(tdb);
 else if (sameString(track, "omimGene"))
         omimGeneUI(tdb);
 else if (sameString(track, "hg17Kg"))

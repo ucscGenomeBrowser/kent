@@ -13,6 +13,9 @@ matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 track chainNetGorGor2 override
 priority 240.3
 
+track chainNetPanTro3 override
+priority 250.3
+
 track chainNetPanTro2 override
 priority 250.3
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
