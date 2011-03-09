@@ -2555,7 +2555,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
-fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep1.bed.gz
+fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep1.bed9.gz
 geoSampleAccession GSM683939
 grant Myers
 lab HudsonAlpha
@@ -2575,7 +2575,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
-fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep3.bed.gz
+fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep3.bed9.gz
 geoSampleAccession GSM683867
 grant Myers
 lab HudsonAlpha
