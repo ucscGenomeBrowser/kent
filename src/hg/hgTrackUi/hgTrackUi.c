@@ -2225,7 +2225,10 @@ printf("include\n");
 cgiMakeRadioButton(cartVarName, "exclude", !isInclude);
 printf("exclude<BR>\n");
 safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterPmId", tdb->track);
-struct slName *checked = cartOptionalSlNameList(cart, cartVarName);
+boolean filterPmIdInCart = cartListVarExists(cart, cartVarName);
+struct slName *checked = NULL;
+if (filterPmIdInCart)
+    checked = cartOptionalSlNameList(cart, cartVarName);
 #define MAX_DGV_REFS 128
 char *labelArr[MAX_DGV_REFS], *valueArr[MAX_DGV_REFS];
 int refCount = 0;
@@ -2239,6 +2242,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	  "&list_uids=%s&dopt=Abstract&tool=genome.ucsc.edu\" TARGET=_BLANK>%s</A>", pmId, ref);
     labelArr[refCount] = cloneString(label);
     valueArr[refCount++] = cloneString(pmId);
+    if (! filterPmIdInCart)
+	slNameAddHead(&checked, pmId);
     if (refCount >= MAX_DGV_REFS)
 	errAbort("dgvUi: %s has too many references (max %d)", tdb->track, MAX_DGV_REFS);
     }
