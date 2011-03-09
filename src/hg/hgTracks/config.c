@@ -15,6 +15,11 @@
 #include "imageV2.h"
 #include "searchTracks.h"
 
+#define DOWNLOADS_ONLY_TRACKS_INCLUDED
+#ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
+#include "fileUi.h"
+#endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
+
 static void textSizeDropDown()
 /* Create drop down for font size. */
 {
@@ -189,6 +194,7 @@ for (group = groupList; group != NULL; group = group->next)
     /* Scan track list to determine which supertracks have visible member
      * tracks, and to insert a track in the list for the supertrack.
      * Sort tracks and supertracks together by priority */
+    makeGlobalTrackHash(trackList);
     groupTrackListAddSuper(cart, group);
 
     if (!withPriorityOverride)
@@ -206,14 +212,24 @@ for (group = groupList; group != NULL; group = group->next)
             slAddTail(&refList, ref);
             if (tdbIsSuper(track->tdb))
                 {
-                struct trackRef *tr2;
-                for (tr2 = group->trackList; tr2 != NULL; tr2 = tr2->next)
+                struct slRef *child = track->tdb->children;
+                for (; child != NULL; child=child->next)
                     {
-                    char *parent = tr2->track->tdb->parentName;
-                    if (parent && sameString(parent, track->track))
+                    struct trackDb *childTdb = child->val;
+                    struct track *childTrack = hashFindVal(trackHash, childTdb->track);
+#ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
+                    // Try adding downloadsOnly track
+                    if (childTrack == NULL && tdbIsDownloadsOnly(childTdb))
+                        {
+                        AllocVar(childTrack);           // Fake a track!
+                        childTrack->tdb = childTdb;
+                        childTrack->hasUi = FALSE;
+                        }
+#endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
+                    if (childTrack != NULL)
                         {
                         AllocVar(ref);
-                        ref->track = tr2->track;
+                        ref->track = childTrack;
                         slAddTail(&refList, ref);
                         }
                     }
@@ -236,18 +252,17 @@ for (group = groupList; group != NULL; group = group->next)
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 
         // Print an icon before the title when one is defined
-        hPrintPennantIcon(track->tdb);
+        hPrintPennantIcon(tdb);
 
-	if (track->hasUi)
-	    hPrintf("<A %s%s%s HREF=\"%s?%s=%u&g=%s&hgTracksConfigPage=configure\">",
-                tdb->parent ? "TITLE=\"Part of super track: " : "",
-                tdb->parent ? tdb->parent->shortLabel : "",
-                tdb->parent ? "...\"" : "", hgTrackUiName(),
-		cartSessionVarName(), cartSessionId(cart), track->track);
-        hPrintf(" %s", track->shortLabel);
-        if (tdbIsSuper(track->tdb))
+        if (track->hasUi)
+	    hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%u&g=%s&hgTracksConfigPage=configure'>",
+                tdb->parent ? "Part of super track: " : "Configure ",
+                tdb->parent ? tdb->parent->shortLabel : tdb->shortLabel,
+                hgTrackUiName(),cartSessionVarName(), cartSessionId(cart), track->track);
+        hPrintf(" %s", tdb->shortLabel);
+        if (tdbIsSuper(tdb))
             hPrintf("...");
-	if (track->hasUi)
+        if (track->hasUi)
 	    hPrintf("</A>");
 	hPrintf("</TD>");
         hPrintf("<TD NOWRAP>");
@@ -257,7 +272,13 @@ for (group = groupList; group != NULL; group = group->next)
 
 	/* If track is not on this chrom print an informational
 	   message for the user. */
-	if (hTrackOnChrom(track->tdb, chromName))
+#ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
+        if (tdbIsDownloadsOnly(tdb))
+            hPrintf("<A TITLE='Downloadable files...' HREF='%s?%s=%u&g=%s'>Downloads</A>", // No vis display for downloadsOnly
+                hgFileUiName(),cartSessionVarName(), cartSessionId(cart), tdb->track);
+        else
+#endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
+        if (hTrackOnChrom(track->tdb, chromName))
 	    {
             if (tdbIsSuper(track->tdb))
                 {
@@ -277,23 +298,30 @@ for (group = groupList; group != NULL; group = group->next)
 	    hPrintf("[No data-%s]", chromName);
 	hPrintf("</TD>");
 	hPrintf("<TD NOWRAP>");
-	hPrintf("%s", track->longLabel);
+	hPrintf("%s", tdb->longLabel);
 	hPrintf("</TD>");
 #ifdef PRIORITY_CHANGES_IN_CONFIG_UI
         if (withPriorityOverride)
             {
             hPrintf("<TD>");
-            safef(pname, sizeof(pname), "%s.priority",track->track);
-            hDoubleVar(pname, (double)track->priority, 4);
-            hPrintf("</TD>");
-            hPrintf("<TD>\n");
-            /* suppress group pull-down for supertrack members */
-            if (tdbIsSuperTrackChild(track->tdb))
-                hPrintf("&nbsp");
+#ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
+            if (tdbIsDownloadsOnly(tdb))
+                hPrintf("&nbsp</TD><TD>\n&nbsp");
             else
+#endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
                 {
-                safef(gname, sizeof(gname), "%s.group",track->track);
-                printGroupListHtml(gname, groupList, track->groupName);
+                safef(pname, sizeof(pname), "%s.priority",track->track);
+                hDoubleVar(pname, (double)track->priority, 4);
+                hPrintf("</TD>");
+                hPrintf("<TD>\n");
+                /* suppress group pull-down for supertrack members */
+                if (tdbIsSuperTrackChild(track->tdb))
+                    hPrintf("&nbsp");
+                else
+                    {
+                    safef(gname, sizeof(gname), "%s.group",track->track);
+                    printGroupListHtml(gname, groupList, track->groupName);
+                    }
                 }
             hPrintf("</TD>");
             }

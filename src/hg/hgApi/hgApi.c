@@ -7,6 +7,7 @@
 #include "hPrint.h"
 #include "dystring.h"
 #include "hui.h"
+#include "searchTracks.h"
 
 static char const rcsid[] = "$Id: hgApi.c,v 1.3 2010/05/30 21:11:47 larrym Exp $";
 
@@ -106,7 +107,7 @@ else if(!strcmp(cmd, "metaDb"))
             {
             if(pair != pairs)
                 dyStringPrintf(output, ",\n");
-            dyStringPrintf(output, "['%s','%s']", javaScriptLiteralEncode(pair->name), javaScriptLiteralEncode(pair->val));
+            dyStringPrintf(output, "['%s','%s']", javaScriptLiteralEncode(mdbPairLabel(pair)), javaScriptLiteralEncode(mdbPairVal(pair)));
             }
         dyStringPrintf(output, "\n]\n");
         }
@@ -137,32 +138,27 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
             fail("Unsupported 'cmd' parameter");
 
         enum mdbCvSearchable searchBy = mdbCvSearchMethod(var);
+        char name[128];
+        safef(name,sizeof name,"%s%i",METADATA_VALUE_PREFIX,ix);
         if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByMultiSelect)
             {
-            dyStringPrintf(output,"<SELECT NAME='%s%i' onchange='findTracksMdbValChanged(this); style='min-width:200px; font-size:.9em;",METADATA_VALUE_PREFIX,ix);
-            if (searchBy == cvsSearchBySingleSelect)
-                dyStringPrintf(output,"' class='mdbVal'>\n");
-            else
-                dyStringPrintf(output," display:none;' class='mdbVal filterBy' multiple>\n");
-
-            // Get options list
             struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
-            if (pairs == NULL)
-                fail("No selectable values for this metadata variable");
-
-            #define ANYLABEL "Any"
-            slPairAdd(&pairs, ANYLABEL, ANYLABEL); // Need to add Any to the list
-            struct slPair *pair;
-            // All options
-            for (pair = pairs; pair != NULL; pair = pair->next)
-                dyStringPrintf(output, "<OPTION VALUE=\"%s\">%s</OPTION>\n", javaScriptLiteralEncode(pair->val), javaScriptLiteralEncode(pair->name));
-            dyStringPrintf(output,"</SELECT>\n");
-            slPairFreeList(&pairs);
+            if (slCount(pairs) > 0)
+                {
+                char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvsSearchByMultiSelect),
+                        name, pairs,NULL, ANYLABEL,"mdbVal", "style='min-width: 200px; font-size: .9em;' onchange='findTracksMdbValChanged(this);'");
+                if (dropDownHtml)
+                    {
+                    dyStringAppend(output,dropDownHtml);
+                    freeMem(dropDownHtml);
+                    }
+                slPairFreeList(&pairs);
+                }
             }
         else if (searchBy == cvsSearchByFreeText)
             {
-            dyStringPrintf(output,"<input type='text' name='%s%i' value='' class='mdbVal freeText' onchange='findTracksMdbValChanged(this);' style='max-width:310px; width:310px; font-size:.9em;'>",
-                            METADATA_VALUE_PREFIX, ix);
+            dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal freeText' onchange='findTracksMdbValChanged(this);' style='max-width:310px; width:310px; font-size:.9em;'>",
+                            name);
             }
         //else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByDateRange)
         //    {

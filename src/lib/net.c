@@ -17,6 +17,7 @@
 #include "cheapcgi.h"
 #include "https.h"
 #include "sqlNum.h"
+#include <utime.h>
 
 static char const rcsid[] = "$Id: net.c,v 1.80 2010/04/14 07:42:06 galt Exp $";
 
@@ -1856,6 +1857,43 @@ close(out);
 
 /* delete the status file - by passing TRUE */
 writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, TRUE);  // DEBUG RESTORE!!
+
+/* restore original file datestamp mtime from last-modified header */
+struct tm tm;
+// Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
+// These strings are always GMT
+if (strptime(dateString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
+    {
+    warn("unable to parse last-modified string [%s]", dateString);
+    }
+else
+    {
+    time_t t;
+    // convert to UTC (GMT) time
+    t = mktimeFromUtc(&tm);
+    if (t == -1)
+	{
+	warn("mktimeFromUtc failed while converting last-modified string to UTC [%s]", dateString);
+	}
+    else
+	{
+	// update the file mtime
+	struct utimbuf ut;
+	struct stat mystat;
+	ZeroVar(&mystat);
+	if (stat(outTemp,&mystat)==0)
+	    {
+	    ut.actime = mystat.st_atime;
+	    ut.modtime = t;
+	    if (utime(outTemp, &ut)==-1)
+		{
+		char errMsg[256];
+                safef(errMsg, sizeof(errMsg), "paraFetch: error setting modification time of %s to %s\n", outTemp, dateString);
+		perror(errMsg);
+		}
+	    }
+	}
+    }
 
 /* rename the successful download to the original name */
 rename(outTemp, origPath);

@@ -1,32 +1,39 @@
 <!-- Display image in righthand corner -->
 <TABLE ALIGN=RIGHT BORDER=0 WIDTH=185>
   <TR><TD ALIGN=RIGHT>
-    <A HREF="*** link to sequencing center's project page"
+    <A HREF="http://piggenome.org/"
     TARGET=_blank>
-    <IMG SRC="/images/Meleagris_gallopavo.jpg" WIDTH=*** HEIGHT=*** ALT="Turkey"></A>
+    <IMG SRC="/images/Meleagris_gallopavo.jpg" WIDTH=193 HEIGHT=300 ALT="Turkey"></A>
   </TD></TR>
   <TR><TD ALIGN=RIGHT> 
     <FONT SIZE=-1><em>Meleagris gallopavo</em><BR> 
     </FONT>
     <FONT SIZE=-2> 
-      Photo courtesy of ***
-      (<A HREF="*** link to source" 
-      TARGET=_blank>***source</A>)
+      Photo courtesy of USDA
+      (<A HREF="http://www.ars.usda.gov/is/graphics/photos/" 
+      TARGET=_blank>Agricultural Research Service</A>)
     </FONT>
   </TD></TR>
 </TABLE>
 
 <P>
-The Dec. 2009 <em>Meleagris gallopavo</em> draft assembly 
-(TGC (NCBI Project ID: 10805, Accession: GCA_000146605.1)) was produced by the *** sequencing center.
+The Dec. 2009 <em>Meleagris gallopavo</em> draft assembly
+(TGC Turkey_2.01 (NCBI project <A HREF="http://www.ncbi.nlm.nih.gov/genomeprj/10805"
+TARGET=_blank>10805</A>, <A HREF="ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Meleagris_gallopavo/Turkey_2.01/"
+TARGET=_blank>GCA_000003025.2</A>))
+was produced by the Turkey Genome Consortium at 
+<A HREF="http://www.cals.vt.edu/departments/apsc.php"
+TARGET=_blank>Virginia Tech, Animal and Poultry Sciences</A> in Blacksburg, VA, USA. 
+
+
 
 <H3>Sample position queries</H3>
 <P>
 A genome position can be specified by the accession number of a
-sequenced genomic region, an mRNA or EST, a chromosomal coordinate
+sequenced genomic supercontig, an mRNA or EST, a chromosomal coordinate
 range, or keywords from the GenBank description of an mRNA. The
 following list shows examples of valid position queries for the
-Turkey genome.  See the
+chicken genome.  See the
 <A HREF="../goldenPath/help/hgTracksHelp.html"
     TARGET=_blank>User's Guide</A> for more information.
 <P>
@@ -43,9 +50,9 @@ Turkey genome.  See the
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Displays first million bases of chr 3</TD>
     </TR>
-    <TR><TD VALIGN=Top NOWRAP>chr3:1000000+2000</TD>
+    <TR><TD VALIGN=Top NOWRAP>chr3:23000+4000</TD>
        	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays a region of chr 3 that spans 2000 bases, starting with position 1000000 </TD>
+       	<TD VALIGN=Top>Displays a region of chr 3 that spans 4000 bases, starting with position 23,000 </TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
     <TR><TD VALIGN=Top>BX950328</TD>
@@ -56,13 +63,40 @@ Turkey genome.  See the
     <TR><TD VALIGN=Top>BU335953</TD>
         <TD WIDTH=14>&nbsp;</TD>
       	<TD VALIGN=Top>Displays region of EST with GenBank accession
-		BU335953 on chr Z</TD>
+		AF070471 on chr 9</TD>
     </TR>
+    <TR><TD VALIGN=Top>CWNT-8C</TD>
+        <TD WIDTH=14>&nbsp;</TD>
+       	<TD VALIGN=Top>Displays region of genome with gene symbol CWNT-8C</TD>
+    </TR>
+    <TR>
+	<TD VALIGN=Top>NM_204735</TD>
+        <TD WIDTH=14>&nbsp;</TD>
+	<TD VALIGN=Top>Displays the region of genome with RefSeq identifier
+		NM_204735</TD>
+    </TR>
+    <TR><TD VALIGN=Top>374180</TD>
+        <TD WIDTH=14>&nbsp;</TD>
+	<TD VALIGN=Top>Displays the region of genome with Entrez Gene
+		identifier 374180</TD>
+    </TR>
+<!--
+    <TR><TD VALIGN=Top>ENSGALT00000023622</TD>
+        <TD WIDTH=14>&nbsp;</TD>
+	<TD VALIGN=Top>Displays the region of genome with Ensembl identifier 
+	ENSGALT00000023622. NOTE: Due to space constraints, the Genome Browser 
+	displays abridged Ensembl identifiers, but the full ID name must be
+	used in searches. For example, the ENSGALT00000023622 identifier
+	displays as ENSGAL23622 in the Genome Browser.</TD>
+    </TR>
+-->
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
+<!--
     <TR><TD VALIGN=Top>pseudogene mRNA</TD>
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Lists transcribed pseudogenes, but not cDNAs</TD>
     </TR>
+-->
     <TR><TD VALIGN=Top>homeobox caudal</TD>
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD>
@@ -75,9 +109,9 @@ Turkey genome.  See the
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD>
     </TR>
-    <TR><TD VALIGN=Top>zhang</TD>
+    <TR><TD VALIGN=Top>jarvis</TD>
         <TD WIDTH=14>&nbsp;</TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zhang</TD>
+	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Jarvis</TD>
     </TR>
     <TR><TD VALIGN=Top>Taguchi,T.</TD>
         <TD WIDTH=14>&nbsp;</TD>
@@ -92,9 +126,11 @@ Turkey genome.  See the
 
 <HR>
 <H3>Assembly details</H3>
+<H4> **** TBD ****</H4>
 <P>
-The genome has been sequenced to ***X coverage.
-Approximately 88% of the sequence has been anchored to chromosomes, 
+In this assembly, 198,000 additional reads covering all contig ends and regions 
+of low quality have been added to the original assembly's 6.6X coverage.
+Approximately 95% of the sequence has been anchored to chromosomes, 
 which include autosomes 1-24, 26-28, and 32, and sex chromosomes W and Z. 
 (In contrast to mammals, the female chicken is heterogametic (ZW) and the 
 male is homogametic (ZZ).) 
@@ -103,27 +139,50 @@ have been concatenated into the virtual
 chromosomes &quot;chr*_random&quot;, separated by gaps of 10,000 bp. 
 Unanchored contigs that could not be localized to a chromosome 
 have been concatenated into the virtual 
-chromosome &quot;chrUn&quot;, separated by gaps of 1,000 bp in order 
-to reduce the total size of chrUn. 
+chromosome &quot;chrUn_random&quot;, separated by gaps of 100 bp to reduce the 
+total size of chrUn_random. 
 The chicken 
 mitochondrial sequence is also available as the virtual chromosome 
 &quot;chrM&quot;. 
 </P>
-
-
+<P>
+This assembly has the following statistics.
+<UL>
+<LI>ultracontigs: N50 = 15.5 Mb (n=19); longest ultracontig = 80.3 Mb (chr3)
+<LI>supercontigs: N50 = 11.1 Mb (n=26); longest supercontig = 52 Mb (chr2)  
+<LI>contigs: N50 = 45 kb (n=5863); longest contig = 625 kb
+</UL>
+In this context, a contig is defined
+as a contiguous stretch of DNA, a supercontig is a set of ordered/oriented 
+contigs linked by read-pairing data, and an ultracontig is an 
+ordered/oriented list of supercontigs. The N50 size is the length such that 
+50% of the assembled genome lies in blocks of the N50 size or longer.
+</P>
+<P>
+Although centromere positions are indicated on this assembly, little is known 
+of their exact sequence.  The centromeres of
+18 chromosomes were tentatively localized based on FISH hybridization
+using BAC clones, genetic markers flanking the centromeres in
+coordination with mapping gaps in the physical map, repetitive
+sequence content, and analysis of proximity to the constrictions of
+the mitotic metaphase chromosomes. For more information on the process
+used to create the chromosomal sequences and assign centromere locations, see 
+the WUSTL <em>Gallus gallus</em> 
+<A HREF="http://genome.wustl.edu/pub/organism/Other_Vertebrates/Gallus_gallus/assembly/Gallus_gallus-2.1/ASSEMBLY" TARGET=_blank>assembly release
+notes</A>.</P>
 <P>
 Bulk downloads of the sequence and annotation data are available via 
-the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/melGal1/">FTP
-server</A> or the <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#turkey">Downloads</A> page. 
-
-  *** Developer -- remove this if no conditions for use:
-These data have
-<A HREF="../goldenPath/credits.html#turkey_use">specific 
-conditions for use</A>. 
-
-The Turkey browser annotation tracks were generated by UCSC and 
+the Genome Browser 
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/galGal3/">FTP server</A> or 
+the 
+<A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#chicken">Downloads</A> 
+page. These data have 
+<A HREF="../goldenPath/credits.html#chicken_use">specific conditions for 
+use</A>. 
+The chicken browser annotation tracks were generated by UCSC and 
 collaborators worldwide. See the 
-<A HREF="/goldenPath/credits.html#turkey_credits">Credits</A> 
+<A HREF="/goldenPath/credits.html#chicken_credits">Credits</A> 
 page for a detailed list of the organizations and individuals who contributed 
 to the success of this release. 
 </P>
+

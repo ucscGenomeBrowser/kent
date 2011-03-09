@@ -14,11 +14,8 @@ struct gbIgnoreAcc
     unsigned srcDb;
 };
 
-struct gbIgnore
+struct gbIgnore;
 /* table of accessions and moddates to ignore */
-{
-    struct hash* accHash;  /* hash by acc. */
-};
 
 struct gbIgnore* gbIgnoreLoad(struct gbRelease* release);
 /* Load the ignore index.  It is loading into the memory associated with 
@@ -36,6 +33,10 @@ struct gbIgnoreAcc* gbIgnoreGet(struct gbIgnore *ignore, char *acc,
 
 struct gbIgnoreAcc* gbIgnoreFind(struct gbIgnore *ignore, char *acc);
 /* get the list of gbIgnore entries for an accession, or NULL */
+
+
+struct hashCookie gbIgnoreFirst(struct gbIgnore *ignore);
+/* get cookie to iterate over hash */
 
 #endif
 

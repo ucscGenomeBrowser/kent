@@ -73,6 +73,7 @@ struct hash
     int elCount;		/* Count of elements. */
     boolean autoExpand;         /* Automatically expand hash */
     float expansionFactor;      /* Expand when elCount > size*expansionFactor */
+    int numResizes;             /* number of times resize was called */
     };
 
 #define defaultExpansionFactor 1.0
@@ -249,6 +250,9 @@ void hashFreeList(struct hash **pList);
 
 void hashHisto(struct hash *hash, char *fname);
 /* Output bucket usage counts to a file for producing a histogram  */
+
+void hashPrintStats(struct hash *hash, char *label, FILE *fh);
+/* print statistic about a hash table */
 
 struct hashEl *hashReplace(struct hash *hash, char *name, void *val);
 /* Replace an existing element in hash table, or add it if not present. */
