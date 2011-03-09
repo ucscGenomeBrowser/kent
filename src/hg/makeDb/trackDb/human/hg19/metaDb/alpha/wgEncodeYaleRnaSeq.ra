@@ -366,7 +366,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-27
 dateUnrestricted 2011-02-27
-fileName wgEncodeYaleRnaSeqK562NonpolyarrnaolyaRawData.fastq.gz
+fileName wgEncodeYaleRnaSeqK562NonpolyarrnaRawData.fastq.gz
 grant Snyder
 lab Yale
 origAssembly hg19
@@ -443,7 +443,7 @@ dataVersion ENCODE Feb 2009 Freeze
 dateResubmitted 2010-12-07
 dateSubmitted 2009-03-17
 dateUnrestricted 2009-12-17
-fileName wgEncodeYaleRnaSeqk562PolyaRawData.fastq.gz
+fileName wgEncodeYaleRnaSeqK562PolyaRawData.fastq.gz
 grant Snyder
 lab Yale
 origAssembly hg18
