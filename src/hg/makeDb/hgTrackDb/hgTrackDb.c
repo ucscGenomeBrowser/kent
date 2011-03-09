@@ -343,13 +343,18 @@ else
 // server-side-include-like syntax that tells us to replace the HTML
 // comment with the contents of some other HTML file (relative path)
 // [which itself may include such HTML comments].
-// This has substrs: substrs[0] is the entire match, substrs[1] is
-// the relative path to pull in.
+// This regex has substrs:
+// * substrs[0] is the entire match
+// * substrs[1] is an optional '#if (db==xxxYyy1)' before #insert
+// * substrs[2] is the database from the #if, or empty if substrs[1] is empty
+// * substrs[3] is the relative path to pull in.
 const static char *insertHtmlRegex =
-    "<!--[[:space:]]*#insert[[:space:]]+file[[:space:]]*=[[:space:]]*"
+    "<!--"
+    "([[:space:]]*#if[[:space:]]*\\(db[[:space:]]*==[[:space:]]*([[:alnum:]]+)[[:space:]]*\\))?"
+    "[[:space:]]*#insert[[:space:]]+file[[:space:]]*=[[:space:]]*"
     "\"([^/][^\"]+)\"[[:space:]]*-->";
 
-static char *readHtmlRecursive(char *fileName)
+static char *readHtmlRecursive(char *fileName, char *database)
 /* Slurp in an html file.  Wherever it contains insertHtmlRegex, recursively slurp that in
  * and replace insertHtmlRegex with the contents. */
 {
@@ -357,34 +362,42 @@ char *html;
 readInGulp(fileName, &html, NULL);
 if (isEmpty(html))
     return html;
-regmatch_t substrs[2];
+regmatch_t substrs[4];
 while (regexMatchSubstr(html, insertHtmlRegex, substrs, ArraySize(substrs)))
     {
     struct dyString *dy = dyStringNew(0);
     // All text before the regex match:
     dyStringAppendN(dy, html, substrs[0].rm_so);
-    // Recursively pull in inserted file contents from relative path, replacing regex match:
-    char dir[PATH_LEN];
-    splitPath(fileName, dir, NULL, NULL);
-    char insertFileName[PATH_LEN+FILENAME_LEN];
-    safecpy(insertFileName, sizeof(insertFileName), dir);
-    safencat(insertFileName, sizeof(insertFileName), html+substrs[1].rm_so,
-	     (substrs[1].rm_eo - substrs[1].rm_so));
-    if (!fileExists(insertFileName))
-	errAbort("readHtmlRecursive: relative path '%s' (#insert'ed in %s) not found",
-		 insertFileName, fileName);
-    char *insertedText = readHtmlRecursive(insertFileName);
-    dyStringAppend(dy, insertedText);
+    // Is there an #if before the #insert ?
+    boolean doInsert = TRUE;
+    if (substrs[1].rm_so != -1 &&
+	(! sameStringN(database, html+substrs[2].rm_so, (substrs[2].rm_eo - substrs[2].rm_so))))
+	doInsert = FALSE;
+    if (doInsert)
+	{
+	// Recursively pull in inserted file contents from relative path, replacing regex match:
+	char dir[PATH_LEN];
+	splitPath(fileName, dir, NULL, NULL);
+	char insertFileName[PATH_LEN+FILENAME_LEN];
+	safecpy(insertFileName, sizeof(insertFileName), dir);
+	safencat(insertFileName, sizeof(insertFileName), html+substrs[3].rm_so,
+		 (substrs[3].rm_eo - substrs[3].rm_so));
+	if (!fileExists(insertFileName))
+	    errAbort("readHtmlRecursive: relative path '%s' (#insert'ed in %s) not found",
+		     insertFileName, fileName);
+	char *insertedText = readHtmlRecursive(insertFileName, database);
+	dyStringAppend(dy, insertedText);
+	freez(&insertedText);
+	}
     // All text after the regex match:
     dyStringAppend(dy, html+substrs[0].rm_eo);
-    freez(&insertedText);
     freez(&html);
     html = dyStringCannibalize(&dy);
     }
 return html;
 }
 
-static void layerOnHtml(char *dirName, struct trackDb *tdbList)
+static void layerOnHtml(char *dirName, struct trackDb *tdbList, char *database)
 /* Read in track HTML call bottom-up. */
 {
 char fileName[512];
@@ -399,7 +412,7 @@ for (td = tdbList; td != NULL; td = td->next)
 	safef(fileName, sizeof(fileName), "%s/%s.html", dirName, htmlName);
 	if (fileExists(fileName))
             {
-	    td->html = readHtmlRecursive(fileName);
+	    td->html = readHtmlRecursive(fileName, database);
             // Check for note ASCII characters at higher levels of verboseness.
             // Normally, these are acceptable ISO-8859-1 characters
             if  ((verboseLevel() >= 2) && hasNonAsciiChars(td->html))
@@ -641,9 +654,9 @@ tdbList = pruneOrphans(tdbList, trackHash);
 hashFree(&trackHash);
 
 /* Read in HTML bits onto what remains. */
-layerOnHtml(asmDir, tdbList);
-layerOnHtml(orgDir, tdbList);
-layerOnHtml(rootDir, tdbList);
+layerOnHtml(asmDir, tdbList, database);
+layerOnHtml(orgDir, tdbList, database);
+layerOnHtml(rootDir, tdbList, database);
 
 /* Set up parent/subtracks pointers. */
 tdbList = trackDbLinkUpGenerations(tdbList);

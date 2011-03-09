@@ -42,11 +42,19 @@ static boolean regexMatchSubstrMaybeCase(const char *string, const char *exp,
  * regexec fills in substrArr with substring offsets. */
 {
 int compileFlags = REG_EXTENDED;
+char desc[256];
+safecpy(desc, sizeof(desc), "Regular expression");
 if (isCaseInsensitive)
+    {
     compileFlags |= REG_ICASE;
+    safecat(desc, sizeof(desc), " (case insensitive)");
+    }
 if (substrArr == NULL)
     compileFlags |= REG_NOSUB;
-const regex_t *compiledExp = regexCompile(exp, "Regular expression w/substrings", compileFlags);
+else
+    safecat(desc, sizeof(desc), " with substrings");
+
+const regex_t *compiledExp = regexCompile(exp, desc, compileFlags);
 return(regexec(compiledExp, string, substrArrSize, substrArr, 0) == 0);
 }
 

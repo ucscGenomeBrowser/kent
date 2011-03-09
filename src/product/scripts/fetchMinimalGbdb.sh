@@ -50,8 +50,10 @@ date -u
 mkdir -p ${GBDB}/${DB}/
 echo "#  checking for ${DB}.2bit file"
 ${RSYNC} --partial --stats \
-    ${HGDOWNLOAD}/gbdb/${DB}/${DB}.2bit \
-     ${GBDB}/${DB}/${DB}.2bit
+    ${HGDOWNLOAD}/gbdb/${DB}/${DB}.2bit ${GBDB}/${DB}/${DB}.2bit
+echo "#  checking for trackDb.ix and trackDb.ixx files"
+${RSYNC} --partial --stats ${HGDOWNLOAD}/gbdb/${DB}/trackDb.ix \
+	${HGDOWNLOAD}/gbdb/${DB}/trackDb.ixx ${GBDB}/${DB}/
 echo "#  checking for ${DB}/nib/ directory"
 ${RSYNC} --partial --stats \
     ${HGDOWNLOAD}/gbdb/${DB}/nib/ ${GBDB}/${DB}/nib/

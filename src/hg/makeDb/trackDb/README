@@ -40,6 +40,9 @@ using this syntax:
 
 where "sharedText.html" is a relative path, relative to
 the directory that contains the xxx.html file.
+This can also be made conditional on a database:
+
+<!-- #if (db==hg19) #insert file="human/hg19/specialNote.html" -->
 
 
 After editing a track definition here, run ./loadTracks

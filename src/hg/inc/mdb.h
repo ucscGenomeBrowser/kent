@@ -370,9 +370,11 @@ struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, bo
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
 
 struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files);
-// Search the metaDb table for vals by var and returns controlled vocabulary (cv) label
-// (if it exists) and val as a pair.  Can impose (non-zero) limit on returned string size of name.
-// Return is case insensitive sorted on name (label or else val).
+// Search the metaDb table for vals by var and returns val (as pair->name) and controlled vocabulary (cv) label
+// (if it exists) (as pair->val).  Can impose (non-zero) limit on returned string size of name.
+// Return is case insensitive sorted on label (cv label or else val).
+#define mdbPairVal(pair) (pair)->name
+#define mdbPairLabel(pair) (pair)->val
 
 struct hash *mdbCvTermHash(char *term);
 // returns a hash of hashes of a term which should be defined in cv.ra
