@@ -13035,9 +13035,10 @@ hgLoadBed hg19 darned allChroms.bed
     # once this has been QAed, will auto-update from genbank scripts
 
 #############################################################################
-# NEW SNP132 (DONE 1/24/11 angie)
-# Previously loaded 1/5 -- reloaded 1/24 to get rid of a couple exceptions
-# that were derived from dbSNP bitfields
+# NEW SNP132 (DONE 3/8/11 angie)
+# 3/8/11: Re-ran snpNcbiToUcsc & reloaded to not count PAR SNPs as multiply mapped
+# Reloaded 1/24/11 to get rid of a couple exceptions that were derived from dbSNP bitfields
+# Previously loaded 1/5/11
     # New table type snp132Ext, with same columns as snp125 plus exceptions,
     # allele freqs, and submitter handles, using new script doDbSnp.pl.
     mkdir -p /hive/data/outside/dbSNP/132/human
@@ -13077,6 +13078,46 @@ EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
       -continue=loadDbSnp >>& do.log &
     tail -f do.log
+
+    # 3/8/11:
+    cd /hive/data/outside/dbSNP/132/human
+    mkdir -p `cat workingDir`
+    cp -p ucscNcbiSnp.bed.gz `cat workingDir`
+    cd `cat workingDir`
+    hgsql hg19 -NBe 'select chrom,chromStart,chromEnd,name from par' > par.bed
+    snpNcbiToUcsc -par=par.bed \
+      -snp132Ext ucscNcbiSnp.bed.gz /hive/data/genomes/hg19/hg19.2bit snp132
+    # No change to snp132Errors.bed; only change to snp132ExceptionDesc.tab was
+    # the MultipleAlignments count; snp132.bed items that lost their MultipleAlignments
+    # exceptions were X & Y PAR matches.
+    gzip snp132.bed snp132ExceptionDesc.tab snp132Errors.bed
+    mv snp132* /hive/data/outside/dbSNP/132/human/
+    cd /hive/data/outside/dbSNP/132/human/
+    # Doh, dbSNP also assigned a weight of 3 to the PAR SNPs, and that is triggering
+    # our snp132NonUnique filter (below).  I sent dbSNP an email about that, and will
+    # tweak weight to 1 where I find a PAR SNP without MultipleAlignments, since I see
+    # it as a bug fix.
+    zcat snp132.bed.gz \
+    | awk -F"\t" 'BEGIN{OFS="\t";} \
+           (($1 == "chrX" && \
+             (($3 > 60000 && $2 < 2699520) || ($3 > 154931043 && $2 < 155260560))) || \
+            ($1 == "chrY" && \
+             (($3 > 10000 && $2 < 2649520) || ($3 > 59034049 && $2 < 59363566)))) && \
+           $18 !~/MultipleAlignments/ {$17 = 1;} \
+           {print;}' > snp132.parWeightTweak.bed
+      wc -l snp132.parWeightTweak.bed
+#33026121 snp132.parWeightTweak.bed
+    # Make sure only the weight has changed:
+    zcat snp132.bed.gz | cut -f 1-16,18-25 > /data/tmp/snp132.weightless.bed
+    cut -f 1-16,18-25 snp132.parWeightTweak.bed > /data/tmp/snp132.parTweak.weightless.bed
+    cmp /data/tmp/snp132*.weightless.bed
+    # No output, good.
+    # Reload snp132 with the tweaked weights:
+    hgLoadBed -tab -onServer -tmpDir=$TMPDIR -allowStartEqualEnd \
+      hg19 snp132 -sqlTable=snp132.sql snp132.parWeightTweak.bed
+    zcat snp132ExceptionDesc.tab.gz \
+    | hgLoadSqlTab hg19 snp132ExceptionDesc $HOME/kent/src/hg/lib/snp125ExceptionDesc.sql stdin
+    gzip snp132.parWeightTweak.bed
 
 
 #############################################################################
@@ -14242,12 +14283,14 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
 
 
 #############################################################################
-# FILTER SNP132 (DONE 1/24/11 angie)
+# FILTER SNP132 (DONE 3/8/11 angie)
+# 3/8/11: redone after snp132 with tweaked weights in PARs, see above
+# Previously done 1/24/11 after snp132
     # Redmine: Track #1684 (SNPs 132 (dbSNP))
     # Make several tracks that are filtered subsets of snp132:
     # First, filter out the multiply-aligned and/or weight >1 SNPs [any other exceptions?]
     cd /hive/data/outside/dbSNP/132/human
-    zcat snp132.bed.gz \
+    zcat snp132.parWeightTweak.bed.gz \
     | perl -we \
       'open($nonUnique, "| gzip -c > snp132NonUnique.bed.gz") || die; \
        open($common,    "| gzip -c > snp132Common.bed.gz") || die; \
@@ -14278,13 +14321,13 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
        close($nonUnique);  close($common); \
        close($patient);  close($misc);'
     zcat snp132NonUnique.bed.gz | wc -l
-#3644436
+#3568988
     zcat snp132Common.bed.gz | wc -l
-#14009545
+#14024295
     zcat snp132Patient.bed.gz | wc -l
 #18084
     zcat snp132Misc.bed.gz | wc -l
-#15354056
+#15414754
 
     # Load tables
     foreach subset (NonUnique Common Patient Misc)
@@ -14493,3 +14536,102 @@ nice ./getBedFile.pl &
 
 hgLoadBed -noSort hg19  tfbsConsSites -sqlTable=$HOME/kent/src/hg/lib/tfbsConsSites.sql tfbsConsSites.bed -tab
 hgLoadSqlTab hg19 tfbsConsFactors $HOME/kent/src/hg/lib/tfbsConsFactors.sql tfbsConsFactors.bed
+#########################################################################
+# BUILD OMIM RELATED TRACKS (started 1/13/2011, refined, and finally done 03/08/11 Fan)
+
+ssh hgwdev
+cd /hive/data/genomes/hg19/bed
+mkdir -p omim/03052011
+cd omim/03052011
+
+# download the file morbidmap and genemap from OMIM
+
+wget --timestamping ftp://ftp.ncbi.nih.gov/repository/OMIM/genemap
+wget --timestamping ftp://ftp.ncbi.nih.gov/repository/OMIM/omim.txt.Z
+
+# put mim2gene.txt and mimAV.txt emailed from OMIM here.
+
+cat genemap|sed -e 's/|/\t/g' > genemap.tab
+
+#changed string to blob for disorders1, disorders2, disorders3. 
+hgLoadSqlTab -warn hg19 omimGeneMap ~/kent/src/hg/lib/omimGeneMap.sql genemap.tab
+
+# Build OMIM phenotype class 3 subtrack
+
+hgsql hg19 -e 'drop table mim2gene'
+hgsql hg19 < ~/kent/src/hg/lib/mim2gene.sql
+hgsql hg19 -e 'load data local infile "mim2gene.txt" into table mim2gene ignore 1 lines'
+
+doOmimDisorders hg19 omimDisorderMap.tab
+hgsql hg19 -e "drop table omimDisorderMap"
+hgsql hg19 < ~/kent/src/hg/lib/omimDisorderMap.sql
+hgLoadSqlTab -warn hg19 omimDisorderMap ~/kent/src/hg/lib/omimDisorderMap.sql omimDisorderMap.tab 
+
+# build omimGeneSymbol table
+
+doOmimGeneSymbols hg19 j.out
+cat j.out |sort -u >omimGeneSymbol.tab
+hgLoadSqlTab -warn hg19 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab 
+
+parseOmimDisorder hg19 omimDisorderPhenotype.tab
+hgLoadSqlTab -warn hg19 omimDisorderPhenotype ~/kent/src/hg/lib/omimDisorderPhenotype.sql omimDisorderPhenotype.tab 
+
+hgsql hg19 -N -e \
+'select chrom, txStart, txEnd, m.omimId from mim2gene m, refLink l, refGene g where geneId <>"-" and m.omimId=l.omimId and l.mrnaAcc=g.name' |sort -u > omimGeneAll.tab
+
+hgLoadBed hg19 omimGene2 omimGeneAll.tab
+
+# The following clean up could be done.
+rm j.out
+
+##############################################################
+# build the omimAvSnp track
+
+cd /hive/data/genomes/hg19/bed/omim/03052011
+mkdir av
+cd av
+
+# get the mimAV.txt data file from OMIM
+
+cut -f 1 mimAV.txt >j1
+cut -f 2 mimAV.txt >j2
+cut -f 3  mimAV.txt >j3
+cut -f 4  mimAV.txt >j4
+cut -f 5  mimAV.txt >j5
+
+cat j1 |sed -e 's/\./\t/' >j1.2
+
+cat j4 |sed -e 's/,/\t/' >j4-2
+cut -f 1 j4-2 >j4.1
+cut -f 2 j4-2 >j4.2
+
+paste j1 j1.2 j3 j4 j4.1 j4.2 j5 j2 >omimAv.tab
+
+hgsql hg19 -e 'drop table omimAv'
+hgsql hg19 < ~/src/hg/lib/omimAv.sql
+hgsql hg19 -e 'load data local infile "omimAv.tab" into table omimAv'
+hgsql hg19 -e 'update omimAv set repl2 = rtrim(ltrim(repl2))'
+
+doOmimAv hg19 omimAvRepl.tab  2>j.err
+
+hgsql hg19 -e "drop table omimAvRepl"
+hgsql hg19 < ~/kent/src/hg/lib/omimAvRepl.sql
+hgsql hg19 -e 'load data local infile "omimAvRepl.tab" into table omimAvRepl'
+
+rm j1.2  j1 j2 j3  j4  j4-2  j4.1  j4.2  j5
+##############################################################
+# build the omimLocation track
+
+cd /hive/data/genomes/hg19/bed/omim/03052011
+mkdir location
+cd location
+
+doOmimLocation hg19 omimLocation.bed 2>j.err
+hgLoadBed hg19 omimLocation omimLocation.bed
+
+# Remove all gene entries in omimGene2
+
+hgsql hg19 -N -e \
+'delete from omimLocation where name  in (select name from omimGene2) '
+
+##############################################################
