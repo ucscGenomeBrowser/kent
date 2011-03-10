@@ -182,8 +182,8 @@ if(numMetadataSelects)
 else
     {
     // create defaults
-    slPairAdd(&mdbSelectPairs,"cell",    cloneString(ANYLABEL));
-    slPairAdd(&mdbSelectPairs,"antibody",cloneString(ANYLABEL));
+    slPairAdd(&mdbSelectPairs,"cell",    NULL);
+    slPairAdd(&mdbSelectPairs,"antibody",NULL);
     }
 
 slReverse(&mdbSelectPairs);
@@ -220,7 +220,7 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
     safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, row);
 
     // Left side select of vars
-    dropDownHtml = cgiMakeSingleSelectDropList(buf, mdbVars,mdbSelect->name, ANYLABEL,"mdbVar","style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
+    dropDownHtml = cgiMakeSingleSelectDropList(buf, mdbVars,mdbSelect->name, NULL,"mdbVar","style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
     if (dropDownHtml)
         {
         dyStringAppend(output,dropDownHtml);

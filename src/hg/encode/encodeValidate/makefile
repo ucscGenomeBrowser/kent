@@ -15,6 +15,7 @@ CVDIR=../../makeDb/trackDb/cv/alpha
 
 PIPELINE_PATH=/hive/groups/encode/dcc/pipeline
 CONFIG_DIR = ${PIPELINE_PATH}/${PIPELINE_DIR}/config
+ENCODEDCC_DIR = ${PIPELINE_PATH}/downloads/encodeDCC
 
 all:
 	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts PIPELINE_DIR=encpipeline_${USER} scripts config
@@ -24,6 +25,8 @@ alpha:
 
 install:
 	@${MAKE} --no-print-directory SCRIPTS=${ENCODE_PIPELINE_BIN} PIPELINE_DIR=encpipeline_prod scripts config 
+	cp -p ${CVDIR}/${CV} ${ENCODEDCC_DIR}/cv.ra.tmp
+	mv -f  ${ENCODEDCC_DIR}/cv.ra.tmp ${ENCODEDCC_DIR}/cv.ra
 
 # recursive targets, arguments:
 #   SCRIPTS PIPELINE_DIR
