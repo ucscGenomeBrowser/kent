@@ -7978,6 +7978,13 @@ type dataType
 label RNA-seq
 description sequencing of short RNAs
 
+term Snp
+tag Snp
+type dataType
+label SNPs
+description Single-nucleotide polymorphism (Provisional)
+
+
 term Switchgear
 tag Switchgear
 type dataType
