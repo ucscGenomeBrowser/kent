@@ -10,10 +10,10 @@ subGroup3 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
 subGroup4 obtainedBy ObtainedBy UW=UW HAIB=HudsonAlpha BioChain=BioChain Yale=Yale Duke=Duke
 subGroup5 treatment Treatment None=None
 dimensions dimY=cellType dimZ=rep dimX=obtainedBy
-dimensionZchecked rep1,rep3
-fileSortOrder cell=Cell_Line obtainedBy=Obtained_By replicate=Rep dataType=Data_Type fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+dimensionZchecked rep1
+fileSortOrder cell=Cell_Line obtainedBy=Obtained_By replicate=Rep labVersion=Data_Type fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 sortOrder cellType=+ rep=+ obtainedBy=+
-controlledVocabulary encode/cv.ra cellType=cell obtainedBy=lab treatment=treatment
+controlledVocabulary encode/cv.ra cellType=cell obtainedBy=obtainedBy treatment=treatment
 dragAndDrop subTracks
 priority 0
 type bed 9
@@ -396,7 +396,7 @@ html wgEncodeHaibMethyl27
         # subId=3337 dateSubmitted=2011-01-19
 
         track wgEncodeHaibMethylArrayHepg2HaibSitesRep3
-        parent wgEncodeHaibMethylArrayViewSites on 
+        parent wgEncodeHaibMethylArrayViewSites off
         shortLabel HepG2 3
         longLabel HepG2 Methylation (27K) by Illumina Bead Arrays Rep 3 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=2HepG2 obtainedBy=HAIB treatment=None rep=rep3
@@ -564,7 +564,7 @@ html wgEncodeHaibMethyl27
         # subId=3337 dateSubmitted=2011-01-19
 
         track wgEncodeHaibMethylArrayK562HaibSitesRep3
-        parent wgEncodeHaibMethylArrayViewSites on
+        parent wgEncodeHaibMethylArrayViewSites off
         shortLabel K562 3
         longLabel K562 Methylation (27K) by Illumina Bead Arrays Rep 3 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep3
@@ -581,7 +581,7 @@ html wgEncodeHaibMethyl27
         # subId=3526 dateSubmitted=2011-02-14
 
         track wgEncodeHaibMethylArrayGm12878SitesRep2
-        parent wgEncodeHaibMethylArrayViewSites
+        parent wgEncodeHaibMethylArrayViewSites off
         shortLabel GM12878 2
         longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 2 (in GM12878 cells)
         subGroups view=Sites cellType=1GM12878 obtainedBy=HAIB treatment=None rep=rep2
@@ -590,7 +590,7 @@ html wgEncodeHaibMethyl27
         # subId=3526 dateSubmitted=2011-02-14
 
         track wgEncodeHaibMethylArrayHepg2SitesRep1
-        parent wgEncodeHaibMethylArrayViewSites off
+        parent wgEncodeHaibMethylArrayViewSites on 
         shortLabel HepG2 1
         longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 1 (in HepG2 cells)
         subGroups view=Sites cellType=2HepG2 obtainedBy=HAIB treatment=None rep=rep1
@@ -617,7 +617,7 @@ html wgEncodeHaibMethyl27
         # subId=3526 dateSubmitted=2011-02-14
 
         track wgEncodeHaibMethylArrayK562SitesRep2
-        parent wgEncodeHaibMethylArrayViewSites
+        parent wgEncodeHaibMethylArrayViewSites off
         shortLabel K562 2
         longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 2 (in K562 cells)
         subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep2
