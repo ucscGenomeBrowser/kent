@@ -186,6 +186,10 @@ void extFileTblFree(struct extFileTbl** eftPtr)
 struct extFileTbl* eft = *eftPtr;
 if (eft != NULL)
     {
+#ifdef DUMP_HASH_STATS
+    hashPrintStats(eft->pathHash, "extFilePath", stderr);
+    hashPrintStats(eft->idHash, "extFileId", stderr);
+#endif
     hashFree(&eft->pathHash);
     hashFree(&eft->idHash);
     freez(eftPtr);

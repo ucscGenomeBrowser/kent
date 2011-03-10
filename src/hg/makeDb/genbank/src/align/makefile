@@ -4,7 +4,6 @@ include ${GBROOT}/common.mk
 O = gbAlignCommon.o gbAlignGet.o gbAlignInstall.o
 
 PROGS = ${GB_BINDIR}/gbAlignSetup \
-	${GB_BINDIR}/gbAlignRSync \
 	${GB_BINDIR}/gbAlignRun \
 	${GB_BINDIR}/gbAlignFinish \
 	${GB_BINDIR}/gbAlignStep \

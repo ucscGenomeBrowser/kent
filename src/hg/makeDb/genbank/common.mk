@@ -36,6 +36,9 @@ endif
 INCL = -I${GBROOT}/src/inc -I${KENT}/inc -I${KENT}/hg/inc
 CFLAGS = ${COPT} ${STATIC} -DJK_WARN -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE ${HG_WARN} ${INCL}
 
+# for debugging hash usage
+#CFLAGS += -DDUMP_HASH_STATS
+
 GB_BINDIR = ${GBROOT}/bin
 GB_BINARCH = ${GB_BINDIR}/${MACHTYPE}
 GB_LIBDIR = ${GBROOT}/lib

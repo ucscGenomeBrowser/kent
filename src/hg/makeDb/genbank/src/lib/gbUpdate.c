@@ -33,24 +33,36 @@ struct gbUpdate* gbUpdateNew(struct gbRelease* release, char* updateName)
 /* create a new update object */
 {
 struct gbUpdate* update;
+AllocVar(update);
 
-gbReleaseAllocMetaVar(release, update);
 update->isFull = sameString(updateName, GB_FULL_UPDATE);
 if (update->isFull)
     {
-    update->name = GB_FULL_UPDATE;
+    update->name = cloneString(GB_FULL_UPDATE);
     update->shortName = GB_FULL_UPDATE;
     }
 else
     {
     if (!startsWith(GB_DAILY_UPDATE_PREFIX, updateName))
         errAbort("invalid update name: \"%s\"", updateName);
-    update->name = lmCloneString(release->metaMem, updateName);
+    update->name = cloneString(updateName);
     update->shortName = update->name + strlen(GB_DAILY_UPDATE_PREFIX);
     }
 update->release = release;
 
 return update;
+}
+
+void gbUpdateFree(struct gbUpdate **updatePtr)
+/* free an update object */
+{
+struct gbUpdate *update = *updatePtr;
+if (update != NULL)
+    {
+    freeMem(update->name);
+    freeMem(update);
+    *updatePtr = NULL;
+    }
 }
 
 int gbUpdateCmp(struct gbUpdate* update1, struct gbUpdate* update2)
