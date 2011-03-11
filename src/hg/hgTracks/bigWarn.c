@@ -8,14 +8,8 @@
 static int bigWarnNumLines(char *errMsg)
 /* Count number of lines in err msg */
 {
-int n = 0;
-char *nl = errMsg;
+int n = countChars(errMsg, '\n');
 int sl = strlen(errMsg);
-while ((nl = strchr(nl,'\n')))
-    {
-    ++n;
-    ++nl;
-    }
 if ((sl > 0) && (errMsg[sl-1]!='\n'))
     ++n;
 return n;

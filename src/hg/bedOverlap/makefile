@@ -2,7 +2,7 @@ include ../../inc/common.mk
 
 
 L += -lm $(MYSQLLIBS)
-MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
+MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = bedOverlap.o

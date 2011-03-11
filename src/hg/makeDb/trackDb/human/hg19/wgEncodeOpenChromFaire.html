@@ -1,5 +1,4 @@
 <H2>Description</H2>
-<DIV style='max-width: 900px;'>
 <P>These tracks display Formaldehyde-Assisted Isolation of Regulatory Elements
 (FAIRE) evidence as part of the four <B><em>Open Chromatin</em></B> track sets.
 FAIRE is a method to isolate and identify nucleosome-depleted regions of
@@ -125,7 +124,9 @@ in the sam/bam format using samtools.
 </P>
 <P>Only those that aligned to 4 or fewer locations were retained. Other sequences
 were also filtered based on their alignment to problematic regions
-(such as satellites and rRNA genes - see The <em>Duke excluded regions</em> track).
+(such as satellites and rRNA genes - see
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/supplemental/"
+ TARGET=ucscDownloads>supplemental materials</a>).
 The mappings of these short reads to the genome are available for
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/"
 TARGET=_BLANK>download</A>.
@@ -164,15 +165,17 @@ Peaks were further refined using a shape detection algorithm to identify
 local maxima and boundaries of the Signal (Base Overlap) within each
 significant region.
 </P>
-<P>ENCODE Array data were normalized using the Tukey biweight normalization, and
-peaks were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple
-levels of significance.  Regions matched on size to these peaks that were
-devoid of any significant signal were also created to allow for ROC analysis.
+<P>Data from the high-resolution 1% ENCODE tiled microarrays supplied by
+NimbleGen were normalized using the Tukey biweight normalization, and peaks
+were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple levels
+of significance. Regions matched on size to these peaks that were devoid of
+any significant signal were also created.  These data were used for additional
+verification of Tier 1 and Tier 2 cell lines by ROC analysis.
 </P>
 
 <h2>Release Notes</h2>
 <P>
-Release 1 (Feb 2011) of this track consists of a remapping of all previously
+Release 1 (March 2011) of this track consists of a remapping of all previously
 released experiments to the human reference genome <B>GRCh37/hg19</B>
 (these data were previously mapped to <B>NCBI36/hg18</B>;
 please see the Release Notes section of the hg18
@@ -190,7 +193,7 @@ release:
 regions were cloned into functional tissue culture reporter assays to test for
 enhancer and insulator activity.  Coordinates and results from these
 experiments can be found
-<A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/supplemental/"
+<A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/supplemental/"
  TARGET=ucscDownloads>here</a>.  <!-- WARNING: Change to hgdownload.cse.ucsc.edu on release -->
 </ul></P>
 
@@ -313,4 +316,3 @@ following the release of the dataset.  This date is listed in the <EM>Restricted
 Until</EM> column on the track configuration page and the download page.  The
 full data release policy for ENCODE is available <A HREF="../ENCODE/terms.html"
 TARGET=_BLANK>here</A>.
-</DIV>

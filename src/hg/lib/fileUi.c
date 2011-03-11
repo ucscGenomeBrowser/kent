@@ -56,16 +56,24 @@ if (foundFiles == NULL
     char cmd[512];
     char *words[10];
     char *server = hDownloadsServer();
-    if (sameString(server,"hgdownload-test.cse.ucsc.edu")) // genome-test is different
+
+    boolean useRsync = TRUE;
+    if (hIsPrivateHost())
         {
-        // Does not work: rsync -avn rsync://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone
+        // For hgwdev (which is the same machine as "hgdownload-test.cse.ucsc.edu") rsync does not work
         // Use ls -log --time=ctime --time-style=long-iso /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone
         safef(cmd,sizeof(cmd),"ls -log --time-style=long-iso /usr/local/apache/htdocs-hgdownload/goldenPath/%s/%s/%s/", db,dir,subDir);
+        useRsync = FALSE;
+        }
+    else if (hIsBetaHost())
+        {
+        // For hgwbeta, the files are being looked for one test in a "beta/" subdir.  Have to rsync
+        server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+        safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/beta/", server, db, dir, subDir);
         }
     else  // genome and hgwbeta can use rsync
         {
         // Works:         rsync -avn rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/
-        //safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/%s | grep %s", server, db, subDir,dir,fileName,fileName);
         safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
         }
     //warn("cmd: %s",cmd);
@@ -76,7 +84,7 @@ if (foundFiles == NULL
         if (!endsWith(buf,".md5sum")) // Just ignore these
             {
             int count = chopLine(buf, words);
-            if (count >= 6 && sameString(server,"hgdownload-test.cse.ucsc.edu")) // genome-test is different
+            if (count >= 6 && useRsync == FALSE) // hgwdev is same as hgdownloads-test so can't use rsync
                 {
                 //-rw-rw-r-- 5  502826550 2010-10-22 16:51 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878ControlStdRawDataRep1.fastq.gz
                 AllocVar(oneFile);
@@ -89,7 +97,7 @@ if (foundFiles == NULL
                     oneFile->fileName = cloneString(words[5]);
                 slAddHead(&foundFiles,oneFile);
                 }
-            else if (count == 5 && differentString(server,"hgdownload-test.cse.ucsc.edu"))// genome and hgwbeta can use rsync
+            else if (count == 5 && useRsync == TRUE)// genome and hgwbeta can use rsync because files are on different machine
                 {
                 //-rw-rw-r--    26420982 2009/09/29 14:53:30 wgEncodeBroadChipSeq/wgEncodeBroadChipSeqSignalNhlfH4k20me1.wig.gz
                 AllocVar(oneFile);
@@ -104,6 +112,11 @@ if (foundFiles == NULL
         }
     pclose(scriptOutput);
 
+    // mark this as done to avoid excessive io
+    savedDb     = cloneString(db);
+    savedDir    = cloneString(dir);
+    savedSubDir = cloneString(subDir);
+
     if (foundFiles == NULL)
         {
         AllocVar(oneFile);
@@ -113,11 +126,6 @@ if (foundFiles == NULL
         warn("No files found for command:\n%s",cmd);
         return NULL;
         }
-
-    // mark this as done to avoid excessive io
-    savedDb     = cloneString(db);
-    savedDir    = cloneString(dir);
-    savedSubDir = cloneString(subDir);
     }
 
 // special code that only gets called in debug mode
@@ -153,6 +161,7 @@ if (oneFile != NULL && oneFile->fileType == NULL)
     }
 return oneFile;
 }
+
 
 static sortOrder_t *fileSortOrderGet(struct cart *cart,struct trackDb *parentTdb,struct mdbObj *mdbObjs)
 /* Parses 'fileSortOrder' trackDb/cart instructions and returns a sort order struct or NULL.
@@ -327,6 +336,32 @@ if (sortOrder && fileList)
     }
 }
 
+static char *removeCommonMdbVarsNotInSortOrder(struct mdbObj *mdbObjs,sortOrder_t *sortOrder)
+{  // Removes varaibles common to all mdbObjs and not found in sortOrder. Returns allocated string oh removed var=val pairs
+if (sortOrder != NULL)
+    {
+    // Remove common vars from mdbs grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
+    // However, keep the term if it is in the sortOrder
+    struct dyString *dyCommon = dyStringNew(256);
+    char *commonTerms[] = { "grant", "lab", "dataType", "control", "setType" };
+    int tIx=0,sIx = 0;
+    for(;tIx<ArraySize(commonTerms);tIx++)
+        {
+        for(sIx = 0;
+            sIx<sortOrder->count && differentString(commonTerms[tIx],sortOrder->column[sIx]);
+            sIx++) ;
+        if (sIx<sortOrder->count) // Found in sort Order so leave it in mdbObjs
+            continue;
+
+        char *val = mdbRemoveCommonVar(mdbObjs, commonTerms[tIx]); // All mdbs have it and have the same val for it.
+        if (val)
+            dyStringPrintf(dyCommon,"%s=%s ",commonTerms[tIx],val);
+        }
+    return dyStringCannibalize(&dyCommon);
+    }
+return NULL;
+}
+
 static void filesDownloadsPreamble(char *db, struct trackDb *tdb)
 {
 // Do not bother getting preamble.html
@@ -336,17 +371,25 @@ static void filesDownloadsPreamble(char *db, struct trackDb *tdb)
 puts("<p><B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
 puts("in publication  until the restriction date noted for the given data file.</B></p>");
 
+char *server = hDownloadsServer();
+char *subDir = "";
+if (hIsBetaHost())
+    {
+    server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+    subDir = "/beta";
+    }
+
 struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
 if (oneFile != NULL)
     {
-    printf("<p>\n<B>Supplemental materials</b> may be found <A HREF='http://%s/goldenPath/%s/%s/%s/supplemental/' TARGET=ucscDownloads>here</A>.</p>\n",
-          hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, tdb->track);
+    printf("<p>\n<B>Supplemental materials</b> may be found <A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>here</A>.</p>\n",
+          server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
     }
 puts("<p>\nThere are two files within this directory that contain information about the downloads:");
-printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s/files.txt' TARGET=ucscDownloads>files.txt</A> which is a tab-separated file with the name and metadata for each download.</LI>\n",
-                hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, tdb->track);
-printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A> which is a list of the md5sum output for each download.</LI>\n",
-                hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, tdb->track);
+printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A> which is a tab-separated file with the name and metadata for each download.</LI>\n",
+                server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
+printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A> which is a list of the md5sum output for each download.</LI>\n",
+                server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 
 
 puts("<P>");
@@ -410,6 +453,13 @@ columnCount++;
 printf("</TR></THEAD>\n");
 
 // Now the files...
+char *server = hDownloadsServer();
+char *subDir = "";
+if (hIsBetaHost())
+    {
+    server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+    subDir = "/beta";
+    }
 struct fileDb *oneFile = fileList;
 printf("<TBODY class='sortable sorting'>\n"); // 'sorting' is a fib but it conveniently greys the list till the table is initialized.
 for( ;oneFile!= NULL;oneFile=oneFile->next)
@@ -426,8 +476,8 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
     else
         field = mdbObjFindValue(oneFile->mdb,"composite");
     assert(field != NULL);
-    printf("<A HREF='http://%s/goldenPath/%s/%s/%s/%s' title='Download %s ...' TARGET=ucscDownloads>",
-                hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, field, oneFile->fileName, oneFile->fileName);
+    printf("<A HREF='http://%s/goldenPath/%s/%s/%s%s/%s' title='Download %s ...' TARGET=ucscDownloads>",
+                server,db,ENCODE_DCC_DOWNLOADS, field, subDir, oneFile->fileName, oneFile->fileName);
     printf("<input type='button' value='Download'>");
     printf("</a>");
 
@@ -534,7 +584,6 @@ if (tdb->table != NULL)
     tdb->track = tdb->table;
 
 boolean debug = cartUsualBoolean(cart,"debug",FALSE);
-int ix;
 
 struct sqlConnection *conn = sqlConnect(db);
 char *mdbTable = mdbTableName(conn,TRUE); // Look for sandBox name first
@@ -558,19 +607,6 @@ if (slCount(mdbList) == 0)
     warn("No files specified in metadata for: %s\n%s",tdb->track,tdb->longLabel);
     return;
     }
-
-// Remove common vars from mdbs grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
-char *commonTerms[] = { "grant", "lab", "dataType", "control", "setType" };
-struct dyString *dyCommon = dyStringNew(256);
-for(ix=0;ix<ArraySize(commonTerms);ix++)
-    {
-    char *val = mdbRemoveCommonVar(mdbList, commonTerms[ix]);// All mdbs have it and have the same val for it.
-    if (val)
-        dyStringPrintf(dyCommon,"%s=%s ",commonTerms[ix],val);
-    }
-if (debug && dyStringLen(dyCommon))
-    warn("These terms are common:%s",dyStringContents(dyCommon));
-dyStringFree(&dyCommon);
 
 // Verify file existance and make fileList of those found
 struct fileDb *fileList = NULL, *oneFile = NULL; // Will contain found files
@@ -637,19 +673,27 @@ if (debug)
     fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "listAll");
     }
 
+// Now update all files with their sortable fields and sort the list
+sortOrder_t *sortOrder = fileSortOrderGet(cart,tdb,mdbFiles);
+if (sortOrder != NULL)
+    {
+    char *vars = removeCommonMdbVarsNotInSortOrder(mdbFiles,sortOrder);
+    if (vars)
+        {
+        if (debug)
+            warn("These terms are common:%s",vars);
+        freeMem(vars);
+        }
+
+    // Fill in and sort fileList
+    fileDbSortList(&fileList,sortOrder);
+    }
+
 // FilterBoxes ?
     // Dimensions
     // cart contents
     //boolean filterAble = dimensionsExist(tdb);
     //membersForAll_t* membersForAll = membersForAllSubGroupsGet(tdb,cart);
-
-// Now update all files with their sortable fields and sort the list
-sortOrder_t *sortOrder = fileSortOrderGet(cart,tdb,mdbFiles);
-if (sortOrder != NULL)
-    {
-    // Fill in and sort fileList
-    fileDbSortList(&fileList,sortOrder);
-    }
 
 jsIncludeFile("hui.js",NULL);
 jsIncludeFile("ajax.js",NULL);

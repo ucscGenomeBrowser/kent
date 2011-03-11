@@ -222,7 +222,7 @@ void lineFileRemoveInitialCustomTrackLines(struct lineFile *lf);
      "http://samtools.sourceforge.net/ and rebuilt kent/src with USE_TABIX=1\n" \
      "(see http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables)."
 
-struct lineFile *lineFileOnTabix(char *fileName, bool zTerm);
+struct lineFile *lineFileOnTabix(char *fileOrUrl, bool zTerm);
 /* Wrap a line file around a data file that has been compressed and indexed
  * by the tabix command line program.  The index file <fileName>.tbi must be
  * readable in addition to fileName. If there's a problem, warn & return NULL.
@@ -231,7 +231,7 @@ struct lineFile *lineFileOnTabix(char *fileName, bool zTerm);
 
 boolean lineFileSetTabixRegion(struct lineFile *lf, char *seqName, int start, int end);
 /* Assuming lf was created by lineFileOnTabix, tell tabix to seek to the specified region
- * and return TRUE (or if unable, return FALSE). */
+ * and return TRUE (or if there are no items in region, return FALSE). */
 
 #endif /* LINEFILE_H */
 

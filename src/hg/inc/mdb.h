@@ -14,7 +14,6 @@ struct mdb
     struct mdb *next;  /* Next in singly linked list. */
     char *obj;	/* Object name or ID. */
     char *var;	/* Metadata variable name. */
-    char *varType;	/* txt | binary */
     char *val;	/* Metadata value. */
     };
 
@@ -105,20 +104,11 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 // By Var: a variable has many possible values and each value may be defined for more than one object.
 //         Therefore, querying by var results in a (3 level) one to many to many structure.
 
-enum mdbVarType
-// metadata Variavble are only certain declared types
-    {
-    vtTxt     =0,  // Txt is default
-    vtBinary  =1,  // Could support binary blobs
-    vtUnknown =99  // Not determined.
-    };
-
 struct mdbVar
 // The metadata var=val construct. This is contained by mdbObj
     {
     struct mdbVar* next;     // Next in singly linked list of variables
     char *var;               // Metadata variable name.
-    enum mdbVarType varType; // txt | binary
     char *val;               // Metadata value.
     };
 
@@ -154,18 +144,10 @@ struct mdbByVar
     {
     struct mdbByVar* next;   // Next in singly linked list of variables
     char *var;               // Metadata variable name.
-    enum mdbVarType varType; // txt | binary
     boolean notEqual;        // For querying only
     struct mdbLimbVal* vals; // list of values associated with this var
     struct hash* valHash;    // if NOT NULL: hash of vals  (val str to limbVal struct)
     };
-
-// -------------- Enum to Strings --------------
-enum mdbVarType mdbVarTypeStringToEnum(char *varType);
-// Convert metadata varType string to enum
-
-char *mdbVarTypeEnumToString(enum mdbVarType varType);
-// Convert metadata varType enum string
 
 // ------ Parsing lines ------
 struct mdbObj *metadataLineParse(char *line);
@@ -176,13 +158,13 @@ struct mdbByVar *mdbByVarsLineParse(char *line);
 
 
 // ------ Loading from args, hashes ------
-struct mdbObj *mdbObjCreate(char *obj,char *var, char *varType,char *val);
+struct mdbObj *mdbObjCreate(char *obj,char *var, char *val);
 /* Creates a singular mdbObj query object based on obj and all other optional params. */
 
-struct mdbByVar *mdbByVarCreate(char *var, char *varType,char *val);
+struct mdbByVar *mdbByVarCreate(char *var, char *val);
 /* Creates a singular var=val pair struct for metadata queries. */
 
-boolean mdbByVarAppend(struct mdbByVar *mdbByVars,char *var, char *varType,char *val,boolean notEqual);
+boolean mdbByVarAppend(struct mdbByVar *mdbByVars,char *var, char *val,boolean notEqual);
 /* Adds a another var to a list of mdbByVar pairs to be used in metadata queries. */
 
 struct mdbObj *mdbObjsLoadFromHashes(struct hash *objsHash);
@@ -246,6 +228,9 @@ void mdbObjPrintToFile(struct mdbObj *mdbObjs,boolean raStyle, char *file);
 
 void mdbObjPrintToStream(struct mdbObj *mdbObjs,boolean raStyle, FILE *outF);
 // prints (to stream) objs and var=val pairs as formatted metadata lines or ra style
+
+int mdbObjPrintToTabFile(struct mdbObj *mdbObjs, char *file);
+// prints all objs as tab delimited obj var val into file for SQL LOAD DATA.  Returns count.
 
 char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude);
 // returns NULL or a line for a single mdbObj as "var1=val1; var2=val2 ...".  Must be freed.
@@ -325,7 +310,7 @@ struct mdbObj *mdbObjIntersection(struct mdbObj **a, struct mdbObj *b);
 // return duplicate objs from an intersection of two mdbObj lists.
 // List b is untouched but pA will contain the resulting intersection
 
-void mdbObjTransformToUpdate(struct mdbObj *mdbObjs, char *var, char *varType,char *val,boolean deleteThis);
+void mdbObjTransformToUpdate(struct mdbObj *mdbObjs, char *var, char *val,boolean deleteThis);
 // Turns one or more mdbObjs into the stucture needed to add/update or delete.
 
 struct mdbObj *mdbObjClone(const struct mdbObj *mdbObj);
@@ -385,9 +370,11 @@ struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, bo
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
 
 struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files);
-// Search the metaDb table for vals by var and returns controlled vocabulary (cv) label
-// (if it exists) and val as a pair.  Can impose (non-zero) limit on returned string size of name.
-// Return is case insensitive sorted on name (label or else val).
+// Search the metaDb table for vals by var and returns val (as pair->name) and controlled vocabulary (cv) label
+// (if it exists) (as pair->val).  Can impose (non-zero) limit on returned string size of name.
+// Return is case insensitive sorted on label (cv label or else val).
+#define mdbPairVal(pair) (pair)->name
+#define mdbPairLabel(pair) (pair)->val
 
 struct hash *mdbCvTermHash(char *term);
 // returns a hash of hashes of a term which should be defined in cv.ra
