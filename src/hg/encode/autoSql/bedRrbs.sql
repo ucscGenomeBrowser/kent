@@ -10,7 +10,7 @@ CREATE TABLE bedRrbs (
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	        # Name of item
-    cappedReadCount int unsigned not null,	# num reads capped at 1000
+    score int unsigned not null,	# num reads capped at 1000
     strand char(1) not null,	        # + or -
     thickStart int unsigned not null,	# Start of where display should be thick
     thickEnd int unsigned not null,	# End of where display should be thick 
