@@ -9058,15 +9058,16 @@ validate integer
 hidden no
 priority 241 
 
-term docId
-type typeOfTerm
-label UCSC document identification
-description PROVISIONAL This is the document identification assigned byt UCSC. 
-serchable no 
-cvDefined off
-validate none  #Brian?
-hidden no #maybe this will be hidden?  Brian?
-priority 311 
+#This should be removed if it is not needed by 5/10/2011
+#term docId
+#type typeOfTerm
+#label UCSC document identification
+#description PROVISIONAL This is the document identification assigned byt UCSC. 
+#serchable no 
+#cvDefined off
+#validate none  #Brian?
+#hidden no #maybe this will be hidden?  Brian?
+#priority 311 
 
 
 # term expVars
@@ -9453,15 +9454,16 @@ cvDefined no
 validate integer
 priority 335
 
-term submitPath
-type typeOfTerm
-label Name of file given by lab.  
-description PROVISIONAL This is the name of the file as submitted by the lab to UCSC.
-serchable no 
-cvDefined off
-validate none  
-hidden no  #I want this hidden, but "yes" did not work
-priority 312 
+#This should be removed if it is not needed by 5/10/2011
+#term submitPath
+#type typeOfTerm
+#label Name of file given by lab.  
+#description PROVISIONAL This is the name of the file as submitted by the lab to UCSC.
+#serchable no 
+#cvDefined off
+#validate none  
+#hidden no  #I want this hidden, but "yes" did not work
+#priority 312 
 
 term submittedDataVersion
 type typeOfTerm
