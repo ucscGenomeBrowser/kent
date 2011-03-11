@@ -3345,6 +3345,7 @@ tablesIgnored $galGal
     caCondor454
 
 tablesIgnored $danRer
+	ncbiIncidentDb
     phastConsElements
     wz_ests
 
@@ -3459,6 +3460,7 @@ tablesIgnored $hg
     laminB1
     laminB1Lads
     mammalPsg
+    ncbiIncidentDb
     nimhBipolarUs
     nimhBipolarDe
     ntHumChimpCodingDiff
@@ -3507,6 +3509,7 @@ tablesIgnored $hg
     wgEncode%
 
 tablesIgnored $mm
+	ncbiIncidentDb
     syntenyRat
     syntenyHuman
     rikenCageCtssMinus
