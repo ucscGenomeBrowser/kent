@@ -367,23 +367,27 @@ if(all)
     }
 else if(optionExists("obj"))
     {
-    mdbObjs = mdbObjCreate(optionVal("obj",  NULL),optionVal("var", NULL), NULL,optionVal("val", NULL));
-    }
-else if(optionExists("var"))
-    {
-    mdbByVars = mdbByVarCreate(optionVal("var", NULL),NULL,optionVal("val", NULL));
-    if (optionExists("composite"))
-        mdbByVarAppend(mdbByVars,"composite", NULL,optionVal("composite", NULL),FALSE);
+    mdbObjs = mdbObjCreate(optionVal("obj",  NULL),optionVal("var", NULL), optionVal("val", NULL));
     }
 else if(optionExists("vars"))
     {
     mdbByVars = mdbByVarsLineParse(optionVal("vars", NULL));
     if (optionExists("composite"))
-        mdbByVarAppend(mdbByVars,"composite", NULL,optionVal("composite", NULL),FALSE);
+        mdbByVarAppend(mdbByVars,"composite", optionVal("composite", NULL),FALSE);
+    if (optionExists("var"))
+        mdbByVarAppend(mdbByVars,optionVal("var", NULL), optionVal("val", NULL),FALSE);
     }
 else if(optionExists("composite"))
     {
-    mdbByVars = mdbByVarCreate("composite", NULL,optionVal("composite", NULL));
+    mdbByVars = mdbByVarCreate("composite", optionVal("composite", NULL));
+    if (optionExists("var"))
+        mdbByVarAppend(mdbByVars,optionVal("var", NULL), optionVal("val", NULL),FALSE);
+    }
+else if(optionExists("var"))
+    {
+    mdbByVars = mdbByVarCreate(optionVal("var", NULL),optionVal("val", NULL));
+    if (optionExists("composite"))
+        mdbByVarAppend(mdbByVars,"composite", optionVal("composite", NULL),FALSE);
     }
 else
     usage();

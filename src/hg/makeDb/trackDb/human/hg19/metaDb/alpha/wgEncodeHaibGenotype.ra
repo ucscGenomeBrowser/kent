@@ -9,15 +9,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeA549RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeA549RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeAg04449RegionsRep1
 objType table
@@ -30,15 +30,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeAg04449RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeAg04449RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeAg04450RegionsRep2
 objType table
@@ -51,15 +51,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeAg04450RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeAg04450RegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeAg09309RegionsRep1
 objType table
@@ -72,15 +72,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeAg09309RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeAg09309RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeAg09319RegionsRep2
 objType table
@@ -93,15 +93,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeAg09319RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeAg09319RegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeAg10803RegionsRep1
 objType table
@@ -114,15 +114,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeAg10803RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeAg10803RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeAosmcRegionsRep1
 objType table
@@ -135,15 +135,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeAosmcRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Duke
+labVersion Illumina 1MDuo
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeAosmcRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeAstrocyRegionsRep1
 objType table
@@ -156,15 +156,30 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeAstrocyRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Duke
+labVersion Illumina 1MDuo
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeAstrocyRegionsRep1
 treatment None
-view Regions
+view CNV
+
+metaObject wgEncodeHaibGenotypeBalleleSnp
+objType file
+composite wgEncodeHaibGenotype
+dataType Snp
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-10
+dateUnrestricted 2011-12-10
+fileName wgEncodeHaibGenotypeBalleleSnp.txt.gz
+grant Myers
+lab HudsonAlpha
+labVersion B_allele
+project wgEncode
+subId 3763
+view SNP
 
 metaObject wgEncodeHaibGenotypeBcjejunumh12817nRegionsRep1
 objType table
@@ -177,15 +192,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeBcjejunumh12817nRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeBcjejunumh12817nRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeBcsmallintestine0111002RegionsRep1
 objType table
@@ -198,15 +213,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeBcsmallintestine0111002RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeBcsmallintestine0111002RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeBjRegionsRep1
 objType table
@@ -219,15 +234,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeBjRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeBjRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeCaco2RegionsRep1
 objType table
@@ -240,15 +255,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeCaco2RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeCaco2RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeChorionRegionsRep1
 objType table
@@ -261,15 +276,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeChorionRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Duke
+labVersion Illumina 1MDuo
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeChorionRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeCmkRegionsRep2
 objType table
@@ -282,15 +297,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeCmkRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeCmkRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeGm06990RegionsRep1
 objType table
@@ -303,15 +318,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeGm06990RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeGm06990RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeGm12878RegionsRep1
 objType table
@@ -324,15 +339,15 @@ dateUnrestricted 2011-10-08
 fileName wgEncodeHaibGenotypeGm12878RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3195
 tableName wgEncodeHaibGenotypeGm12878RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeGm12878RegionsRep2
 objType table
@@ -345,15 +360,15 @@ dateUnrestricted 2011-11-17
 fileName wgEncodeHaibGenotypeGm12878RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
 replicate 2
 subId 3536
 tableName wgEncodeHaibGenotypeGm12878RegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeGm12891RegionsRep2
 objType table
@@ -366,15 +381,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeGm12891RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeGm12891RegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeGm12892RegionsRep2
 objType table
@@ -387,15 +402,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeGm12892RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeGm12892RegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeGm19239RegionsRep1
 objType table
@@ -408,15 +423,30 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeGm19239RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Duke
+labVersion Illumina 1MDuo
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeGm19239RegionsRep1
 treatment None
-view Regions
+view CNV
+
+metaObject wgEncodeHaibGenotypeGtypeSnp
+objType file
+composite wgEncodeHaibGenotype
+dataType Snp
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-10
+dateUnrestricted 2011-12-10
+fileName wgEncodeHaibGenotypeGtypeSnp.txt.gz
+grant Myers
+lab HudsonAlpha
+labVersion Gtype
+project wgEncode
+subId 3763
+view SNP
 
 metaObject wgEncodeHaibGenotypeH1hescRegionsRep2
 objType table
@@ -429,15 +459,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeH1hescRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeH1hescRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHaeRegionsRep1
 objType table
@@ -450,15 +480,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHaeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeHaeRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHaeRegionsRep2
 objType table
@@ -471,15 +501,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHaeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHaeRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHcfRegionsRep1
 objType table
@@ -492,15 +522,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHcfRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeHcfRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHcfRegionsRep2
 objType table
@@ -513,15 +543,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHcfRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHcfRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHcmRegionsRep1
 objType table
@@ -534,15 +564,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHcmRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeHcmRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHcmRegionsRep2
 objType table
@@ -555,15 +585,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHcmRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHcmRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHcpeRegionsRep1
 objType table
@@ -576,15 +606,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHcpeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeHcpeRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHcpeRegionsRep2
 objType table
@@ -597,15 +627,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHcpeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHcpeRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHeeRegionsRep2
 objType table
@@ -618,15 +648,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHeeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHeeRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHek293RegionsRep2
 objType table
@@ -639,15 +669,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHek293RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHek293RegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHelas3RegionsRep2
 objType table
@@ -660,15 +690,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHelas3RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHelas3RegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHepg2RegionsRep1
 objType table
@@ -681,15 +711,15 @@ dateUnrestricted 2011-11-17
 fileName wgEncodeHaibGenotypeHepg2RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
 replicate 1
 subId 3536
 tableName wgEncodeHaibGenotypeHepg2RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHipeRegionsRep1
 objType table
@@ -702,15 +732,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHipeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeHipeRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHipeRegionsRep2
 objType table
@@ -723,15 +753,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHipeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHipeRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHl60RegionsRep1
 objType table
@@ -744,15 +774,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHl60RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeHl60RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHmecRegionsRep2
 objType table
@@ -765,15 +795,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHmecRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHmecRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHnpceRegionsRep1
 objType table
@@ -786,15 +816,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHnpceRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeHnpceRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHpaeRegionsRep1
 objType table
@@ -807,15 +837,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHpaeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeHpaeRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHpaeRegionsRep2
 objType table
@@ -828,15 +858,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHpaeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHpaeRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHrceRegionsRep1
 objType table
@@ -849,15 +879,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeHrceRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeHrceRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHrceRegionsRep2
 objType table
@@ -870,15 +900,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeHrceRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeHrceRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHreRegionsRep1
 objType table
@@ -891,15 +921,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeHreRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeHreRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHreRegionsRep2
 objType table
@@ -912,15 +942,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeHreRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeHreRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHrpeRegionsRep1
 objType table
@@ -933,15 +963,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeHrpeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeHrpeRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHrpeRegionsRep2
 objType table
@@ -954,15 +984,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeHrpeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeHrpeRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHsmmRegionsRep2
 objType table
@@ -975,15 +1005,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHsmmRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Duke
+labVersion Illumina 1MDuo
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHsmmRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHsmmRegionsRep3
 objType table
@@ -996,15 +1026,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHsmmRegionsRep3.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Duke
+labVersion Illumina 1MDuo
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 3
 subId 3432
 tableName wgEncodeHaibGenotypeHsmmRegionsRep3
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHsmmRegionsRep6
 objType table
@@ -1017,15 +1047,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHsmmRegionsRep6.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Duke
+labVersion Illumina 1MDuo
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 6
 subId 3432
 tableName wgEncodeHaibGenotypeHsmmRegionsRep6
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHtr8RegionsRep1
 objType table
@@ -1038,15 +1068,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHtr8RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Duke
+labVersion Illumina 1MDuo
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeHtr8RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHuvecRegionsRep2
 objType table
@@ -1059,15 +1089,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeHuvecRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHuvecRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeImr90RegionsRep1
 objType table
@@ -1080,15 +1110,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeImr90RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeImr90RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeImr90RegionsRep2
 objType table
@@ -1101,15 +1131,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeImr90RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeImr90RegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeJurkatRegionsRep1
 objType table
@@ -1122,15 +1152,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeJurkatRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeJurkatRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeJurkatRegionsRep2
 objType table
@@ -1143,15 +1173,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeJurkatRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeJurkatRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeK562RegionsRep1
 objType table
@@ -1164,15 +1194,15 @@ dateUnrestricted 2011-11-17
 fileName wgEncodeHaibGenotypeK562RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
 replicate 1
 subId 3536
 tableName wgEncodeHaibGenotypeK562RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeLncapRegionsRep1
 objType table
@@ -1185,15 +1215,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeLncapRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeLncapRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeMcf10aesRegionsRep1
 objType table
@@ -1206,15 +1236,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeMcf10aesRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Kevin Struhl
+labVersion Illumina 1MDuo
+obtainedBy Kevin Struhl
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeMcf10aesRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeMcf10aesRegionsRep2
 objType table
@@ -1227,15 +1257,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeMcf10aesRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Kevin Struhl
+labVersion Illumina 1MDuo
+obtainedBy Kevin Struhl
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeMcf10aesRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeMcf10aesRegionsRep3
 objType table
@@ -1248,15 +1278,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeMcf10aesRegionsRep3.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Kevin Struhl
+labVersion Illumina 1MDuo
+obtainedBy Kevin Struhl
 origAssembly hg19
 project wgEncode
 replicate 3
 subId 3303
 tableName wgEncodeHaibGenotypeMcf10aesRegionsRep3
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeMcf10aesTamRegionsRep1
 objType table
@@ -1269,15 +1299,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeMcf10aesTamRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Kevin Struhl
+labVersion Illumina 1MDuo
+obtainedBy Kevin Struhl
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeMcf10aesTamRegionsRep1
 treatment TAM_1uM_36hr
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeMcf7RegionsRep1
 objType table
@@ -1290,15 +1320,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeMcf7RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeMcf7RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeMcf7RegionsRep2
 objType table
@@ -1311,15 +1341,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeMcf7RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeMcf7RegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeMelanoRegionsRep1
 objType table
@@ -1332,15 +1362,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeMelanoRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Duke
+labVersion Illumina 1MDuo
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeMelanoRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeMelanoRegionsRep2
 objType table
@@ -1353,15 +1383,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeMelanoRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Duke
+labVersion Illumina 1MDuo
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeMelanoRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeMyometrRegionsRep1
 objType table
@@ -1374,15 +1404,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeMyometrRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion Duke
+labVersion Illumina 1MDuo
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeMyometrRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeNb4RegionsRep1
 objType table
@@ -1395,15 +1425,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeNb4RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeNb4RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeNb4RegionsRep2
 objType table
@@ -1416,15 +1446,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeNb4RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeNb4RegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeNhaRegionsRep1
 objType table
@@ -1437,15 +1467,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeNhaRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeNhaRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeNhaRegionsRep2
 objType table
@@ -1458,15 +1488,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeNhaRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeNhaRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeNhbeRegionsRep1
 objType table
@@ -1479,15 +1509,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeNhbeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeNhbeRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeNhbeRegionsRep2
 objType table
@@ -1500,15 +1530,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeNhbeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeNhbeRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeNhdfneoRegionsRep1
 objType table
@@ -1521,15 +1551,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeNhdfneoRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeNhdfneoRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeNt2d1RegionsRep1
 objType table
@@ -1542,15 +1572,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeNt2d1RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeNt2d1RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeOvcar3RegionsRep1
 objType table
@@ -1563,15 +1593,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeOvcar3RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion UW
+labVersion Illumina 1MDuo
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeOvcar3RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypePanc1RegionsRep1
 objType table
@@ -1584,15 +1614,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypePanc1RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypePanc1RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypePanc1RegionsRep2
 objType table
@@ -1605,15 +1635,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypePanc1RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypePanc1RegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypePfsk1RegionsRep1
 objType table
@@ -1626,15 +1656,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypePfsk1RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypePfsk1RegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypePrecRegionsRep1
 objType table
@@ -1647,15 +1677,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypePrecRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypePrecRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeRptecRegionsRep1
 objType table
@@ -1668,15 +1698,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeRptecRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeRptecRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeRptecRegionsRep2
 objType table
@@ -1689,15 +1719,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeRptecRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeRptecRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeSaecRegionsRep1
 objType table
@@ -1710,15 +1740,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeSaecRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeSaecRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeSaecRegionsRep2
 objType table
@@ -1731,15 +1761,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeSaecRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeSaecRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeSkmcRegionsRep1
 objType table
@@ -1752,15 +1782,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeSkmcRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeSkmcRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeSkmcRegionsRep2
 objType table
@@ -1773,15 +1803,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeSkmcRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeSkmcRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeSknshraRegionsRep1
 objType table
@@ -1794,15 +1824,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeSknshraRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3303
 tableName wgEncodeHaibGenotypeSknshraRegionsRep1
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeSknshraRegionsRep2
 objType table
@@ -1815,15 +1845,15 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeHaibGenotypeSknshraRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion John Stam
+labVersion Illumina 1MDuo
+obtainedBy John Stam
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeSknshraRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeT47dRegionsRep2
 objType table
@@ -1836,15 +1866,15 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeT47dRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeT47dRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeU87RegionsRep1
 objType table
@@ -1857,14 +1887,14 @@ dateUnrestricted 2011-10-20
 fileName wgEncodeHaibGenotypeU87RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Illumina 1MDuo
-labVersion HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3432
 tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
-view Regions
+view CNV
 
-# MAGIC: 156690289
+# MAGIC: 163836298

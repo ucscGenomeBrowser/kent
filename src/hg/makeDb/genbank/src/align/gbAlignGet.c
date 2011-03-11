@@ -210,18 +210,25 @@ gbFaClose(&inFa);
 gbVerbLeave(2, "copying from %s", inFasta);
 }
 
-void markAligns(struct gbSelect* select, unsigned orgCat)
+void markAligns(struct gbSelect* select, unsigned orgCat, struct gbAlignInfo *alignInfo)
 /* create a file indicating that sequences either needs aligned or migated for
  * this for this partation.  This is used to determine what needs to be
  * installed after the alignment.  This is needed  because they might be all
- * be migrate, so that fasta can't be the indicator. */
+ * be migrate, so that fasta can't be the indicator.  If there is nothing
+ * to process, just create an empty alidx so that no more processing is
+ * done. This is a performance win to prevent gbAlignInstall from parsing
+ * indixes again. */
 {
 char path[PATH_LEN];
 FILE* fh;
 unsigned orgCatsHold = select->orgCats;
 select->orgCats = orgCat;
 
-gbAlignedGetPath(select, "aligns", workDir, path);
+if (gbEntryCntsHaveAny(&alignInfo->migrate, orgCat) || gbEntryCntsHaveAny(&alignInfo->align, orgCat))
+    gbAlignedGetPath(select, "aligns", workDir, path);
+else
+    gbAlignedGetIndex(select, path);
+
 fh = gbMustOpenOutput(path);
 gbOutputRename(path, &fh);
 
@@ -234,8 +241,6 @@ struct gbAlignInfo gbAlignGet(struct gbSelect* select,
  * or there is no previously aligned release, prevSelect should be NULL.
  */
 {
-struct gbAlignInfo alignInfo;
-
 gbVerbEnter(1, "gbAlignGet: %s", gbSelectDesc(select));
 if (prevSelect != NULL)
     prevSelect->orgCats = select->orgCats;
@@ -250,7 +255,7 @@ if (prevSelect != NULL)
 
 /* select entries to align */
 gbVerbEnter(2, "selecting seqs to align");
-alignInfo = gbAlignFindNeedAligned(select, prevSelect);
+struct gbAlignInfo alignInfo = gbAlignFindNeedAligned(select, prevSelect);
 gbVerbLeave(2, "selecting seqs to align");
 
 if (alignInfo.migrate.accTotalCnt > 0)
@@ -268,9 +273,9 @@ if (alignInfo.align.accTotalCnt > 0)
 
 /* leave calling cards */
 if (select->orgCats & GB_NATIVE)
-    markAligns(select, GB_NATIVE);
+    markAligns(select, GB_NATIVE, &alignInfo);
 if (select->orgCats & GB_XENO)
-    markAligns(select, GB_XENO);
+    markAligns(select, GB_XENO, &alignInfo);
 
 /* print before releasing memory */
 gbVerbLeave(1, "gbAlignGet: %s", gbSelectDesc(select));
