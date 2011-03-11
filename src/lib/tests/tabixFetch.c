@@ -47,7 +47,7 @@ char *range = cloneString(words[1]);
 wordCount = chopByChar(range, '-', words, ArraySize(words));
 if (wordCount != 2)
     errAbort(BAD_POS_FORMAT, position);
-*retStart = sqlUnsigned(words[0]);
+*retStart = sqlUnsigned(words[0]) - 1;
 *retEnd = sqlUnsigned(words[1]);
 }
 
