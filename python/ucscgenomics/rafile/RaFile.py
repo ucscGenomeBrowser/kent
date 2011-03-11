@@ -1,15 +1,15 @@
 import sys
 import re
-import orderedDict
+import OrderedDict
 
-class RaFile(orderedDict.OrderedDict):
+class RaFile(OrderedDict.OrderedDict):
     """
     Stores an Ra file in a set of entries, one for each stanza in the file.
     """
 
     def __init__(self, entryType):
        self.__entryType = entryType 
-       orderedDict.OrderedDict.__init__(self)
+       OrderedDict.OrderedDict.__init__(self)
  
     def read(self, filePath):
         """
@@ -77,7 +77,7 @@ class RaFile(orderedDict.OrderedDict):
         return str
 
 
-class RaEntry(orderedDict.OrderedDict):
+class RaEntry(OrderedDict.OrderedDict):
     """
     Holds an individual entry in the RaFile.
     """
