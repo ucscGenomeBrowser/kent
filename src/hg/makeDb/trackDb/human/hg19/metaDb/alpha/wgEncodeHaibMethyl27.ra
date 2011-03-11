@@ -9,8 +9,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayAg04449UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -31,8 +29,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayAg04450UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -53,8 +49,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayAg09309UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -75,8 +69,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayAg09319UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -97,8 +89,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayAg10803UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -119,8 +109,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcadiposeuhn00001BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -141,8 +129,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcadrenalglandh12803nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -163,8 +149,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcbladder0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -185,8 +169,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcbrainh11058nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -207,8 +189,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcbreast0203015BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -229,8 +209,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBccolon0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -251,8 +229,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBccolonh12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -273,8 +249,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcesophagus0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -295,8 +269,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcesophagush12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -317,8 +289,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcjejunumh12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -339,8 +309,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBckidney0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -361,8 +329,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBckidneyh12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -383,8 +349,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcleftventriclen41BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -405,8 +369,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcleukocyteuhn00204BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -427,8 +389,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcliver0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -449,8 +409,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBclung0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -471,8 +429,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBclungh12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -493,8 +449,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcpancreash12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -515,8 +469,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcpenish12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -537,8 +489,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcpericardiumh12529nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -559,8 +509,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcplacentauhn00189BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -581,8 +529,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcprostateglandh12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -603,8 +549,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcrectumn29BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -625,8 +569,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcskeletalmuscle0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -647,8 +589,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcskeletalmuscleh12817nBiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -669,8 +609,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcskin0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -691,8 +629,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayBcsmallintestine0111002BiochainSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy BioChain
 origAssembly hg19
 project wgEncode
@@ -713,8 +649,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayCmkUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -735,8 +669,6 @@ dateUnrestricted 2011-11-14
 fileName wgEncodeHaibMethylArrayGm12878SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
@@ -757,8 +689,6 @@ dateUnrestricted 2011-11-14
 fileName wgEncodeHaibMethylArrayGm12878SitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
@@ -779,8 +709,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayGm12891HaibSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -801,8 +729,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayGm12891HaibSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -823,8 +749,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayGm12892HaibSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -845,8 +769,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayGm12892HaibSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -867,8 +789,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayH1hescHaibSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -889,8 +809,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayH1hescHaibSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -911,8 +829,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHaeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -933,8 +849,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHcfUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -955,8 +869,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHcmUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -977,8 +889,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHcpeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -999,8 +909,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHeeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1021,8 +929,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHek293YaleSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy Yale
 origAssembly hg19
 project wgEncode
@@ -1043,8 +949,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHepg2HaibSitesRep3.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1065,8 +969,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHepg2HaibSitesRep4.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1087,8 +989,6 @@ dateUnrestricted 2011-11-14
 fileName wgEncodeHaibMethylArrayHepg2SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
@@ -1109,8 +1009,6 @@ dateUnrestricted 2011-11-14
 fileName wgEncodeHaibMethylArrayHepg2SitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
@@ -1131,8 +1029,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHipeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1153,8 +1049,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHmecUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1175,8 +1069,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHnpceUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1197,8 +1089,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHpaeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1219,8 +1109,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHrceUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1241,8 +1129,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHreUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1263,8 +1149,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayHrpeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1285,8 +1169,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayImr90UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1307,8 +1189,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayJurkatUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1329,8 +1209,6 @@ dateUnrestricted 2011-10-07
 fileName wgEncodeHaibMethylArrayK562HaibSitesRep3.bed9.gz
 grant Myers
 lab HudsonAlpha
-labExpId K562_Rep3
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1351,8 +1229,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayK562HaibSitesRep4.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1373,8 +1249,6 @@ dateUnrestricted 2011-11-14
 fileName wgEncodeHaibMethylArrayK562SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
@@ -1395,8 +1269,6 @@ dateUnrestricted 2011-11-14
 fileName wgEncodeHaibMethylArrayK562SitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K
-labVersion Methyl27K
 obtainedBy HudsonAlpha
 origAssembly hg18
 project wgEncode
@@ -1417,8 +1289,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayMcf7DukeSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -1439,8 +1309,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayNb4UwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1461,8 +1329,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayNhaUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1483,8 +1349,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayNhbeUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1505,8 +1369,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayNhdfneoUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1527,8 +1389,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArrayRptecUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1549,8 +1409,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArraySaecUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1571,8 +1429,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArraySkmcUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1593,8 +1449,6 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeHaibMethylArraySknshraUwSitesRep2.bed.gz
 grant Myers
 lab HudsonAlpha
-labExpId Methyl27K_1
-labVersion Methyl27K
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1604,4 +1458,4 @@ tableName wgEncodeHaibMethylArraySknshraUwSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 303888118
+# MAGIC: 2020696536

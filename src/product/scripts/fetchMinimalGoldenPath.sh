@@ -50,8 +50,8 @@ date -u
 mkdir -p ${GOLD}/${DB}/database
 ${RSYNC} --partial --stats \
     --include="/chromInfo.*" --include="/*gold*" --include="/*gap.txt.gz" \
-    --include="/grp.*" --include="/trackDb.*" --include="/hgFindSpec.*" \
-    --include="/*gap.sql" --exclude="*" \
+    --include="/grp.*" --include="/metaDb.*" --include="/trackDb.*" \
+    --include="/hgFindSpec.*" --include="/*gap.sql" --exclude="*" \
     ${HGDOWNLOAD}/goldenPath/${DB}/database/ \
      ${GOLD}/${DB}/database/
 time1=`date "+%s"`

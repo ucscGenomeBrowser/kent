@@ -19,15 +19,12 @@
 struct hash *trackHash = NULL;	// Is this needed?
 boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTiming=." . */
 
-#define ANYLABEL                 "Any"
 #define FILE_SEARCH              "hgfs_Search"
 #define FILE_SEARCH_FORM         "fileSearch"
 #define FILE_SEARCH_CURRENT_TAB  "fsCurTab"
 #define FILE_SEARCH_ON_FILETYPE  "fsFileType"
 
 // These are common with trackSearch.  Should they be?
-#define METADATA_NAME_PREFIX     "hgt_mdbVar"
-#define METADATA_VALUE_PREFIX    "hgt_mdbVal"
 #define TRACK_SEARCH_SIMPLE      "tsSimple"
 #define TRACK_SEARCH_ON_NAME     "tsName"
 #define TRACK_SEARCH_ON_GROUP    "tsGroup"
@@ -36,12 +33,6 @@ boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTim
 
 //#define USE_TABS
 //#define SUPPORT_COMPOSITE_SEARCH
-
-// Currently selected tab
-enum searchTab {
-    simpleTab   = 0,
-    filesTab    = 2,
-};
 
 #ifdef OMIT_SUPPORT_COMPOSITE_SEARCH
 // make a matchString function to support "contains", "is" etc. and wildcards in contains
@@ -96,273 +87,7 @@ if(words)
     }
 return FALSE;
 }
-
 #endif///def SUPPORT_COMPOSITE_SEARCH
-
-static int getTermArray(struct sqlConnection *conn, char ***pLabels, char ***pTerms, char *type)
-// Pull out all term fields from ra entries with given type
-// Returns count of items found and items via the terms argument.
-{
-int ix = 0, count = 0;
-char **labels;
-char **values;
-struct slPair *pairs = mdbValLabelSearch(conn, type, MDB_VAL_STD_TRUNCATION, FALSE, TRUE); // Files not Tables
-count = slCount(pairs) + 1; // make room for "Any"
-AllocArray(labels, count);
-AllocArray(values, count);
-labels[ix] = cloneString(ANYLABEL);
-values[ix] = cloneString(ANYLABEL);
-struct slPair *pair = NULL;
-while((pair = slPopHead(&pairs)) != NULL)
-    {
-    ix++;
-    labels[ix] = pair->name;
-    values[ix] = pair->val;
-    freeMem(pair);
-    }
-*pLabels = labels;
-*pTerms = values;
-return count;
-}
-
-static int getFileFormatTypes(char ***pLabels, char ***pTypes)
-{
-char *crudeTypes[] = {
-    ANYLABEL,
-    "bam",
-    "bam.bai",
-    "tagAlign",
-    "bed.gz",
-    "bigBed",
-    "broadPeak",
-    "narrowPeak",
-    "fastq",
-    "bigWig",
-    "wig"
-};
-char *nicerTypes[] = {
-    ANYLABEL,
-    "Alignment binary (bam) - binary SAM",
-    "Alignment binary index (bai) - binary SAM index",
-    "Alignment tags (tagAlign)",
-    "bed - browser extensible data",
-    "bigBed - self index, often remote bed format",
-    "Peaks Broad (broadPeak) - ENCODE large region peak format",
-    "Peaks Narrow (narrowPeak) - ENCODE small region peak format",
-    "Raw Sequence (fastq) - High throughput sequence format",
-    "Signal (bigWig) - self index, often remote wiggle format",
-    "Signal (wig) - wiggle format"
-};
-
-int ix = 0, count = sizeof(crudeTypes)/sizeof(char *);
-char **labels;
-char **values;
-AllocArray(labels, count);
-AllocArray(values, count);
-for(ix=0;ix<count;ix++)
-    {
-    labels[ix] = cloneString(nicerTypes[ix]);
-    values[ix] = cloneString(crudeTypes[ix]);
-    }
-*pLabels = labels;
-*pTypes = values;
-return count;
-}
-
-static int metaDbVars(struct sqlConnection *conn, char *** metaVars, char *** metaLabels)
-// Search the assemblies metaDb table; If name == NULL, we search every metadata field.
-{
-char query[256];
-struct slPair *oneTerm,*whiteList = mdbCvWhiteList(TRUE,FALSE);
-int count =0, whiteCount = slCount(whiteList);
-char **retVar = needMem(sizeof(char *) * whiteCount);
-char **retLab = needMem(sizeof(char *) * whiteCount);
-
-for(oneTerm=whiteList;oneTerm!=NULL;oneTerm=oneTerm->next)
-    {
-    safef(query, sizeof(query), "select count(*) from metaDb where var = '%s'",oneTerm->name);
-    if(sqlQuickNum(conn,query) > 0)
-        {
-        retVar[count] = oneTerm->name;
-        retLab[count] = oneTerm->val;
-        count++;
-        }
-    }
-// Don't do it, unless you clone strings above:  slPairFreeValsAndList(&whileList);
-
-*metaVars = retVar;
-*metaLabels = retLab;
-return count;
-}
-
-static int printMdbSelects(struct sqlConnection *conn,struct cart *cart,enum searchTab selectedTab,char ***pMdbVar,char ***pMdbVal,int *numMetadataNonEmpty,int cols)
-// Prints a table of mdb selects if appropriate and returns number of them
-// TODO: move to lib since hgTracks and hgFileSearch share it
-{
-// figure out how many metadata selects are visible.
-int delSearchSelect = cartUsualInt(cart, TRACK_SEARCH_DEL_ROW, 0);   // 1-based row to delete
-int addSearchSelect = cartUsualInt(cart, TRACK_SEARCH_ADD_ROW, 0);   // 1-based row to insert after
-int numMetadataSelects = 0;
-char **mdbVar = NULL;
-char **mdbVal = NULL;
-char **mdbVars = NULL;
-char **mdbVarLabels = NULL;
-int i, count = metaDbVars(conn, &mdbVars, &mdbVarLabels);
-
-for(;;)
-    {
-    char buf[256];
-    safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, numMetadataSelects + 1);
-    char *str = cartOptionalString(cart, buf);
-    if(isEmpty(str))
-        break;
-    else
-        numMetadataSelects++;
-    }
-
-if(delSearchSelect)
-    numMetadataSelects--;
-if(addSearchSelect)
-    numMetadataSelects++;
-
-if(numMetadataSelects)
-    {
-    mdbVar = needMem(sizeof(char *) * numMetadataSelects);
-    mdbVal = needMem(sizeof(char *) * numMetadataSelects);
-    *pMdbVar = mdbVar;
-    *pMdbVal = mdbVal;
-    int i;
-    for(i = 0; i < numMetadataSelects; i++)
-        {
-        char buf[256];
-        int offset;   // used to handle additions/deletions
-        if(addSearchSelect > 0 && i >= addSearchSelect)
-            offset = 0; // do nothing to offset (i.e. copy data from previous row)
-        else if(delSearchSelect > 0 && i + 1 >= delSearchSelect)
-            offset = 2;
-        else
-            offset = 1;
-        safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + offset);
-        mdbVar[i] = cloneString(cartOptionalString(cart, buf));
-        if(selectedTab!=simpleTab)
-            {
-            int j;
-            boolean found = FALSE;
-            // We need to make sure mdbVar[i] is valid in this assembly; if it isn't, reset it to "cell".
-            for(j = 0; j < count && !found; j++)
-                if(sameString(mdbVars[j], mdbVar[i]))
-                    found = TRUE;
-            if(found)
-                {
-                safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
-                enum mdbCvSearchable searchBy = mdbCvSearchMethod(mdbVar[i]);
-                if (searchBy == cvsSearchByMultiSelect)
-                    {
-                    // Adding support for multi-selects as comma delimited list of values
-                    struct slName *vals = cartOptionalSlNameList(cart,buf);
-                    if (vals)
-                        {
-                        mdbVal[i] = slNameListToString(vals,','); // A comma delimited list of values
-                        slNameFreeList(&vals);
-                        }
-                    }
-                else
-                    mdbVal[i] = cloneString(cartUsualString(cart, buf, ANYLABEL));
-
-                if (mdbVal[i] != NULL && sameString(mdbVal[i], ANYLABEL))
-                    mdbVal[i] = NULL;
-                }
-            else
-                {
-                mdbVar[i] = cloneString("cell");
-                mdbVal[i] = NULL;
-                }
-            if(!isEmpty(mdbVal[i]))
-                (*numMetadataNonEmpty)++;
-            }
-        }
-    if(delSearchSelect > 0)
-        {
-        char buf[255];
-        safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, numMetadataSelects + 1);
-        cartRemove(cart, buf);
-        safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, numMetadataSelects + 1);
-        cartRemove(cart, buf);
-        }
-    }
-else
-    {
-    // create defaults
-    numMetadataSelects = 2;
-    mdbVar = needMem(sizeof(char *) * numMetadataSelects);
-    mdbVal = needMem(sizeof(char *) * numMetadataSelects);
-    mdbVar[0] = "cell";
-    mdbVar[1] = "antibody";
-    mdbVal[0] = ANYLABEL;
-    mdbVal[1] = ANYLABEL;
-    }
-
-    printf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'><em style='color:%s; width:200px;'>ENCODE terms</em></td></tr>\n", cols,COLOR_DARKGREY);
-    for(i = 0; i < numMetadataSelects; i++)
-        {
-        char **terms = NULL, **labels = NULL;
-        char buf[256];
-        int len;
-
-    #define PLUS_MINUS_BUTTON "<input type='button' id='%sButton%d' value='%c' style='font-size:.7em;' title='%s' onclick='findTracksMdbSelectPlusMinus(this,%d)'>"
-    #define PRINT_PM_BUTTON(type,num,value) printf(PLUS_MINUS_BUTTON, (type), (num), (value), ((value) == '+' ? "add another row after":"delete"), (num))
-        printf("<tr valign='top' class='mdbSelect'><td nowrap>\n");
-        if(numMetadataSelects > 2 || i >= 2)
-            PRINT_PM_BUTTON("minus", i + 1, '-');
-        else
-            printf("&nbsp;");
-        PRINT_PM_BUTTON("plus", i + 1, '+');
-
-        printf("</td><td>and&nbsp;</td><td colspan=3 nowrap>\n");
-        safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
-        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
-        // TODO: move to lib since hgTracks and hgApi share
-        safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-        enum mdbCvSearchable searchBy = mdbCvSearchMethod(mdbVar[i]);
-        if (searchBy == cvsSearchByMultiSelect)
-            {
-            printf("</td>\n<td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>is among</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
-            #define MULTI_SELECT_CBS_FORMAT "<SELECT MULTIPLE=true name='%s' style='display: none; min-width:200px; font-size:.9em;' class='filterBy mdbVal' onchange='findTracksMdbValChanged(this)'>\n"
-            printf(MULTI_SELECT_CBS_FORMAT,buf);
-            len = getTermArray(conn, &labels, &terms, mdbVar[i]);
-            int tix=0;
-            for(;tix < len;tix++)
-                {
-                char *selected = findWordByDelimiter(terms[tix],',', mdbVal[i]);
-                printf("<OPTION%s value='%s'>%s</OPTION>\n",(selected != NULL?" SELECTED":""),terms[tix],labels[tix]);
-                }
-            printf("</SELECT>\n");
-            }
-        else if (searchBy == cvsSearchBySingleSelect)
-            {
-            printf("</td>\n<td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>is</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
-            len = getTermArray(conn, &labels, &terms, mdbVar[i]);
-            cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px; font-size:.9em;' onchange='findTracksMdbValChanged(this);'");
-            }
-        else if (searchBy == cvsSearchByFreeText)
-            {
-            printf("</td>\n<td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>contains</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
-            printf("<input type='text' name='%s' value='%s' class='mdbVal freeText' style='max-width:310px; width:310px; font-size:.9em;' onchange='findTracksMdbVarChanged(true);'>\n",
-                    buf,(mdbVal[i] ? mdbVal[i]: ""));
-            }
-        else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
-            {
-            // TO BE IMPLEMENTED
-            }
-        printf("<span id='helpLink%i'>&nbsp;</span></td>\n", i + 1);
-        printf("</tr>\n");
-        }
-
-    printf("<tr><td colspan='%d' align='right' style='height:10px; max-height:10px;'>&nbsp;</td></tr>", cols);
-    //printf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'>&nbsp;</td></tr>", cols);
-
-return numMetadataSelects;
-}
 
 #ifdef USE_TABS
 static struct slRef *simpleSearchForTdbs(struct trix *trix,char **descWords,int descWordCount)
@@ -432,10 +157,6 @@ char *descSearch=FALSE;
 boolean doSearch = sameWord(cartUsualString(cart, FILE_SEARCH,"no"), "search");
 struct sqlConnection *conn = hAllocConn(db);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
-int numMetadataSelects;
-int numMetadataNonEmpty = 0;
-char **mdbVar = NULL;
-char **mdbVal = NULL;
 #ifdef ONE_FUNC
 struct hash *parents = newHash(4);
 #endif///def ONE_FUNC
@@ -577,19 +298,30 @@ printf("<tr><td colspan=2></td><td align='right'>&nbsp;</td>\n");
 printf("<td nowrap><b style='max-width:100px;'>Data Format:</b></td>");
 printf("<td align='right'>is</td>\n");
 printf("<td colspan='%d'>", cols - 4);
-char **formatTypes = NULL;
-char **formatLabels = NULL;
-int formatCount = getFileFormatTypes(&formatLabels, &formatTypes);
-cgiMakeDropListFull(FILE_SEARCH_ON_FILETYPE, formatLabels, formatTypes, formatCount, fileTypeSearch, "class='fileTypeSearch' style='min-width:40%; font-size:.9em;'");
+char *dropDownHtml = fileFormatSelectHtml(FILE_SEARCH_ON_FILETYPE,fileTypeSearch,"style='min-width:40%; font-size:.9em;'");
+if (dropDownHtml)
+    {
+    puts(dropDownHtml);
+    freeMem(dropDownHtml);
+    }
 printf("</td></tr>\n");
 if (selectedTab==filesTab && fileTypeSearch)
     searchTermsExist = TRUE;
 
-// Metadata selects require careful accounting
+// mdb selects
+struct slPair *mdbSelects = NULL;
 if(metaDbExists)
-    numMetadataSelects = printMdbSelects(conn, cart, selectedTab, &mdbVar, &mdbVal, &numMetadataNonEmpty, cols);
-else
-    numMetadataSelects = 0;
+    {
+    struct slPair *mdbVars = mdbVarsRelevant(conn);
+    mdbSelects = mdbSelectPairs(cart,selectedTab, mdbVars);
+    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols);
+    if (output)
+        {
+        printf(output);
+        freeMem(output);
+        }
+    slPairFreeList(&mdbVars);
+    }
 
 printf("</table>\n");
 printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", FILE_SEARCH);
@@ -636,16 +368,6 @@ if (doSearch && selectedTab==simpleTab && descWordCount <= 0)
 
 if(doSearch)
     {
-    // Convert to slPair list
-    int ix=0;
-    struct slPair *mdbPairs = NULL;
-    for(ix = 0; ix < numMetadataSelects; ix++)
-        {
-        if(!isEmpty(mdbVal[ix]))
-            slAddHead(&mdbPairs,slPairNew(mdbVar[ix],mdbVal[ix]));
-        }
-    slReverse(&mdbPairs);
-
     // Now search
 #ifdef USE_TABS
     struct slRef *foundTdbs = NULL;
@@ -673,12 +395,12 @@ if(doSearch)
     else if(selectedTab==filesTab && mdbPairs != NULL)
 #endif///def USE_TABS
         {
-        fileSearchResults(db, conn, mdbPairs, fileTypeSearch);
+        fileSearchResults(db, conn, mdbSelects, fileTypeSearch);
         if (measureTiming)
             uglyTime("Searched for files");
         }
 
-    slPairFreeList(&mdbPairs);
+    slPairFreeList(&mdbSelects);
     }
 hFreeConn(&conn);
 

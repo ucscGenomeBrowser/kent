@@ -20,7 +20,7 @@ type bed 3
 noInherit on
 wgEncode 1
 maxWindowToDraw 10000000
-html wgEncodeCaltechRnaSeq.new.html
+html wgEncodeCaltechRnaSeq.new
 
 	track wgEncodeCaltechRnaSeqViewGeneModel
 	shortLabel GeneModel

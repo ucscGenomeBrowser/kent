@@ -57,7 +57,7 @@ gbReleaseLoadIgnore(release);
 safef(tmpDir, sizeof(tmpDir), "%s/ignore", workDir);
 
 /* build delete object */
-cookie = hashFirst(release->ignore->accHash);
+cookie = gbIgnoreFirst(release->ignore);
 while ((hel = hashNext(&cookie)) != NULL)
     {
     struct gbIgnoreAcc* igAcc;
