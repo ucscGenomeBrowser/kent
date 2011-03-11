@@ -3105,10 +3105,6 @@ termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Stellate_Crawford_protocol.pdf
 
-#
-# NOTE: this cell type was added provisionally, before all its metadata was collected, so
-# that Venkat could finish a submission that he'd accidentally started with the
-# standard HEK93 cell line.
 term T-REx-HEK293
 tag tHEK293
 type Cell Line
@@ -7794,7 +7790,7 @@ term 5C
 tag 5C
 type dataType
 label 5C
-description PROVISIONAL 5C Interactions
+description 5C Interactions
 
 term AffyExonArray
 tag AffyExonArray
@@ -7982,7 +7978,7 @@ term Snp
 tag Snp
 type dataType
 label SNPs
-description Single-nucleotide polymorphism (Provisional)
+description Single-nucleotide polymorphism 
 
 
 term Switchgear
