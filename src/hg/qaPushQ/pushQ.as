@@ -1,7 +1,7 @@
 table pushQ
 "Push Queue"
     (
-    char [6]  qid;       "Queue Id"
+    char [6]  qid;        "Queue Id"
     char [6]  pqid;       "Parent Queue Id if split off another"
     char [1]  priority;   "Priority"
     uint      rank;       "Rank for display sort"
@@ -28,11 +28,12 @@ table pushQ
     char [10] initdate;   "Initial Submission Date"
     char [10] lastdate;   "Last QA Date"
     uint      bounces;    "Bounce-count (num times bounced back to developer)"
-    char[16]   lockUser;   "User who has locked record, or empty string"
+    char[16]  lockUser;   "User who has locked record, or empty string"
     char[16]  lockDateTime; "When user placed lock, or empty string"
-    lstring   releaseLog;  "Release Log entry"
+    lstring   releaseLog; "Release Log entry"
     lstring   featureBits;"Feature Bits results"
     lstring   releaseLogUrl;  "Release Log URL"
+    char [1]  importance; "Importance"
     )
 
 table users
