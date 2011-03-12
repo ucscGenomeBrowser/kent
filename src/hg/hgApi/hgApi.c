@@ -100,7 +100,7 @@ else if(!strcmp(cmd, "metaDb"))
             var = sqlEscapeString(var);
         else
             fail("Missing var parameter");
-        struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
+        struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, TRUE, FALSE); // not tags, yes tables, not files
         struct slPair *pair;
         dyStringPrintf(output, "[\n");
         for (pair = pairs; pair != NULL; pair = pair->next)
@@ -142,7 +142,7 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
         safef(name,sizeof name,"%s%i",METADATA_VALUE_PREFIX,ix);
         if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByMultiSelect)
             {
-            struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
+            struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, TRUE, FALSE); // not tags, yes tables, not files
             if (slCount(pairs) > 0)
                 {
                 char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvsSearchByMultiSelect),
@@ -160,10 +160,10 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
             dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal freeText' onchange='findTracksMdbValChanged(this);' style='max-width:310px; width:310px; font-size:.9em;'>",
                             name);
             }
-        //else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByDateRange)
-        //    {
-        //    // TO BE IMPLEMENTED
-        //    }
+        else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
+            {
+            // TO BE IMPLEMENTED
+            }
         else
             fail("Metadata variable not searchable");
 
