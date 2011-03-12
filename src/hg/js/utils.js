@@ -2136,3 +2136,172 @@ function findTracksSwitchTabs(ui)
     }
 }
 
+/////////////////////////////////////////////////////
+// filterTable functions
+
+function filterTableFilterVar(filter)
+{ // returns the var associated with a fileFilter
+
+    if($(filter).hasClass('filterBy') == false)
+        return undefined;
+    if($(filter).hasClass('filterTable') == false)
+        return undefined;
+
+    // Find the var for this filter
+    var classes = $(filter).attr("class").split(' ');
+    classes = aryRemove(classes,"filterBy","filterTable");
+    if (classes.length > 1 ) {
+        warn('Too many classes for filterBy: ' + classes);
+        return undefined;
+    }
+    return classes.pop();
+}
+
+function filterTablesTrsSurviving(filterClass)
+// returns a list of trs that satisfy all filters
+// If defined, will exclude filter identified by filterClass
+{
+    // find all filterable table rows
+    var showTrs = $('tr.filterable'); // Default all
+    if (showTrs.length == 0)
+        return undefined;
+
+    // Find all filters
+    var filters = $("select.filterBy");
+    if (filters.length == 0)
+        return undefined;
+
+    // Exclude one if requested.
+    if (filterClass != undefined && filterClass.length > 0)
+        filters = $(filters).not('.' + filterClass);
+
+    // For each filter, filter the list of trs that matches that filter
+    $(filters).each(function (i) {
+        var val = $(this).val();
+        if (val.length == 0)
+            return;
+        val = val.join();
+        if(val.indexOf("All") == 0)
+            return;
+
+        // Get the filter variable
+        var filterVar = filterTableFilterVar(this);
+        if (filterVar == undefined)
+            return;
+
+        // Get the selected values for this filter
+        var classes = $(this).val();
+        if (classes.length == 0)
+            return;
+
+        var varTds = $(showTrs).children('td.' + filterVar);
+        var filteredTrs = new Array;
+        var ix =0;
+        for(;ix<classes.length;ix++) {
+            var tds = $(varTds).filter('.' + classes[ix]);
+            if (tds.length > 0) {
+                if (filteredTrs.length == 0)
+                    filteredTrs = $(tds).parent('tr').get();
+                else
+                    filteredTrs = filteredTrs.concat( $(tds).parent('tr').get() );
+            }
+        }
+        // The following tighter code may take too long
+        //var filterVals = 'td.'+filterVar+'.' + classes.join(',td.'+filterVar+'.');   // "td.cell.GM12878,td.cell.K562,td.cell.H1-hESC"
+        //var filteredTrs = $(showTrs).filter(":has(" + filterVals + ")");
+
+        if (filteredTrs.length > 0)
+            showTrs = filteredTrs;
+    });
+    return showTrs;
+}
+
+function _filterTable()
+{ // Called by filter onchange event.  Will show/hide trs based upon all filters
+    var showTrs = filterTablesTrsSurviving();
+    if (showTrs == undefined)
+        return;
+    //$('tr.filterable').hide();  // <========= This is what is taking so long!
+    $('tr.filterable').css('display', 'none')
+
+    $(showTrs).show();
+
+    // Update count
+    var counter = $('.filesCount');
+    if(counter != undefined)
+        $(counter).text($(showTrs).length + " / ");
+
+    var tbody = $( $('tr.filterable')[0] ).parent('tbody.sorting');
+    if (tbody != undefined)
+         $(tbody).removeClass('sorting');
+}
+
+function filterTableTrigger()
+{ // Called by filter onchange event.  Will show/hide trs based upon all filters
+    var tbody = $( $('tr.filterable')[0] ).parent('tbody');
+    if (tbody != undefined)
+         $(tbody).addClass('sorting');
+
+    setTimeout('_filterTable();',10); // Just in case
+}
+
+function filterTable()
+{ // Called by filter onchange event.  Will show/hide trs based upon all filters
+    waitOnFunction(filterTableTrigger );
+}
+
+function filterTableExcludeOptions(filter)
+{ // bound to 'click' event inside ui.dorpdownchecklist.js.
+  // Will mark all options in one filterBy box that are inconsistent with the current
+  // selections in other filterBy boxes.  Mark with class ".excluded"
+
+    // Find the var for this filter
+    var filterVar = filterTableFilterVar(filter);
+    if (filterVar == undefined)
+        return false;
+
+    // Look at list of visible trs.
+    var visibleTrs = filterTablesTrsSurviving(filterVar);
+    if (visibleTrs == undefined)
+        return false;
+
+    // Compare to the list of all trs
+    var allTrs = $('tr.filterable'); // Default all
+    if (allTrs.length == 0)
+        return false;
+    if (allTrs.length == visibleTrs.length) {
+        $(filter).children('option.excluded').removeClass('excluded');   // remove .excluded" from all
+        return true;  // Nothing more to do.  All are already excluded
+    }
+
+    // Find the tds that belong to this var
+    var tds = $(visibleTrs).find('td.'+filterVar);
+    if (tds.length == 0) {
+        $(filter).children('option').addClass('excluded');   // add .excluded" to all
+        return true;
+    }
+
+    // Find the val classes
+    var classes = new Array();
+    $(tds).each(function (i) {
+        var someClass = $(this).attr("class").split(' ');
+        someClass = aryRemove(someClass,filterVar);
+        var val = someClass.pop()
+        if (aryFind(classes,val) == -1)
+            classes.push(val);
+    });
+    if (classes.length == 0) {
+        $(filter).children('option').addClass('excluded');   // add .excluded" to all
+        return true;
+    }
+
+    // Find all options with those classes
+    $(filter).children('option').each(function (i) {
+        if (aryFind(classes,$(this).val()) != -1)
+            $(this).removeClass('excluded'); // remove .excluded from matching
+        else
+            $(this).addClass('excluded');    // add .excluded" to non-matching
+    });
+    return true;
+}
+
