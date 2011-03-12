@@ -439,7 +439,7 @@ if (sortOrder != NULL)
             // Note filterBox has classes: filterBy & {var}
             if (dropDownHtml)
                 {
-                dyStringPrintf(dyFilters,"<td align='left'>\n%s:<BR>\n%s</td><td width=10>&nbsp;</td>\n",
+                dyStringPrintf(dyFilters,"<td align='left'>\n<B>%s</B>:<BR>\n%s</td><td width=10>&nbsp;</td>\n",
                                labelWithVocabLink(var,sortOrder->title[sIx],relevantVals),dropDownHtml);
                 freeMem(dropDownHtml);
                 count++;
