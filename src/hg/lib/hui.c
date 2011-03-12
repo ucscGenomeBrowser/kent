@@ -182,10 +182,11 @@ if(showShortLabel)
     dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
 // Get the hash of mdb and cv term types
-struct hash *cvTermTypes = mdbCvTermTypeHash();
+struct hash *cvTermTypes = (struct hash *)mdbCvTermTypeHash();
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType dccInternalNotes"); // Don't bother showing these (suggest: "composite project dataType view tableName")
+mdbObjRemoveHiddenVars(mdbObj);
 mdbObjReorderVars(mdbObj,"grant lab dataType cell treatment antibody protocol replicate view setType inputType",FALSE); // Bring to front
 mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName fileIndex",TRUE); // Send to back
 struct mdbVar *mdbVar;
