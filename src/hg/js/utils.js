@@ -2178,7 +2178,7 @@ function filterTablesTrsSurviving(filterClass)
     // For each filter, filter the list of trs that matches that filter
     $(filters).each(function (i) {
         var val = $(this).val();
-        if (val.length == 0)
+        if (val == null || val.length == 0)
             return;
         val = val.join();
         if(val.indexOf("All") == 0)
