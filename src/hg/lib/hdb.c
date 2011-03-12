@@ -3057,7 +3057,7 @@ boolean hIsPrivateHost()
  * This was originally genome-test as well as hgwdev, however genome-test
  * may be repurposed to direct users to the preview site instead of development site. */
 {
-return hHostHasPrefix("hgwdev");
+return hHostHasPrefix("hgwdev") || hHostHasPrefix("genome-test");  // FIXME: If genome-test
 }
 
 boolean hIsBetaHost()
