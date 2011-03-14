@@ -1,3 +1,8 @@
+metaObject wgEncodeUwAffyExonArray
+objType composite
+composite wgEncodeUwAffyExonArray
+expVars lab,dataType,cell,treatment
+
 metaObject wgEncodeUwAffyExonArrayA549SimpleSignalRep1
 objType table
 accession GSM651560
@@ -2647,4 +2652,4 @@ tableName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
 treatment None
 view SimpleSignal
 
-# MAGIC: 1840175316
+# MAGIC: 557421393
