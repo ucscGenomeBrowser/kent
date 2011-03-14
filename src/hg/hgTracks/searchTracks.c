@@ -750,7 +750,7 @@ if(metaDbExists)
     char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols);
     if (output)
         {
-        printf(output);
+        puts(output);
         freeMem(output);
         }
     slPairFreeList(&mdbVars);
