@@ -8966,86 +8966,33 @@ TMPDIR=/scratch/tmp
       /bin/ls peaks/*.narrowPeak.gz > peak.lst
       regClusterMakeTableOfTables ans01 peak.lst partial.table
 
-      # Unfortunately at this point only about half of the peak files actually
-      # have metaDb data associated with them.
-
-
+      # Unfortunately at this point only about 90% of the peak files actually
+      # have metaDb data associated with them in metaDb, so run C program that
+      # adds cell, antibody, treatment columns.
       regClusterAttachMetadataToTableOfTables hg19 partial.table peak.table
 
+      # Make three column file: fileName, cell+treatment, antibody
+      awk -F '\t' '{printf ( "%s\t%s\t%s\n", $1, ($10 == "None" ? $8 : $8 "+" $10), $9 ) ; }' peak.table > fileCellAb.tab
 
-      # Create inputTrackTable - two columns: <table> <cell>
-      tdbQuery "select track,subGroups from hg19 where parent[0]='wgEncodeUwDnaseSeqViewaPeaks'" -noCompSub | awk '/track/ {printf("%s\t", $2);} /subGroups/ {printf("%s\tNone\n", $3);}' | sed s/cellType=// > wgEncodeRegDnaseClusteredInputs.tab 
 
-      # Next time around might do this to fetch from metaDb instead of
-      # trackDb:
-      #   mdbQuery "select tableName,cell from hg19 where dataType like 'dnase%' and lab='Uw' and view = 'Peaks'" out=tab > wgEncodeRegDnaseClusteredInputs.tab
+      # Create config file out for clustering job, using a table assigning
+      # cell lines+treatments to single letter codes edited by hand.  In
+      # the future may be able to automate this by having fixed upper case codes for
+      # tier1&2 cell lines, and then just use first letter lower case codes
+      # for rest. That is the pattern cellLetter2.tab follows anyway.
+      cp ~/kent/src/hg/regulate/regClusterBedExpCfg/cellLetter2.tab .
+      regClusterBedExpCfg -tabList fileCellAb.tab cluster.cfg -cellLetter=cellLetter2.tab
 
-      # Load table
-      hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable.sql wgEncodeRegDnaseClusteredInputs.tab
+      # Do the actual clustering 
+      hgBedsToBedExps -dupeLetterOk cluster.cfg peak.bed peak.exps
 
-      # Create the Transcription Factor Binding Site subtrack.  This is a bit
-      # complex because it is merging data from the Snyder lab (yale) and from
-      # HudsonAlpha (hud),  and the hud data has replicates while the yale
-      # data does not.
-
-      # Create hud/replicates directory full of gzipped narrow peak files,
-      # converting broad peak files as needed.
-      mkdir -p /cluster/data/hg19/bed/wgEncodeReg/tfbs/hud/replicates
-      cd /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeHudsonalphaChipSeq
-      foreach i (*.narrowPeak*.gz)
-           cp $i /cluster/data/hg19/bed/wgEncodeReg/tfbs/hud/replicates 
-      end
-      foreach i (*.broadPeak*.gz)
-            zcat $i | awk '{printf("%s\t%d\n", $0, ($3-$2)/2);}' > \
-	    /cluster/data/hg19/bed/wgEncodeReg/tfbs/hud/replicates/$i:r:r.narrowPeak
-      end
-      cd /cluster/data/hg19/bed/wgEncodeReg/tfbs/hud/replicates
-      gzip *.narrowPeak
-
-      # Get ra file that includes the file name and other info we need for hud
-      cd /cluster/data/hg19/bed/wgEncodeReg/tfbs/hud
-      mkdir hud
-      cd hud
-      mdbQuery "select fileName,antibody,cell,replicate,treatment from hg19 \
-	where view='Peaks' and lab='HudsonAlpha' and dataType='ChipSeq'" \
-	-out=ra | sed s/broadPeak/narrowPeak/ >  hud.ra
-
-      # Generate merged dir full of merged replicates.
-      mkdir merged
-      encodeMergeReplicatesBatch hud.ra replicates merge.sh merged.ra merged
-      chmod a+x merge.sh
-      merge.sh
-
-      # Generate symbolic links to directories containing pooled peak files
-      # for yale and for hud
-      cd /cluster/data/hg19/bed/wgEncodeReg/tfbs
-      ln -s /cluster/data/hg19/bed/wgEncodeReg/tfbs/hud/merged hudPeaks
-      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeYaleChIPseq yalePeaks
-
-      # Get ra file that includes the file name and other info we need for yale
-      mdbQuery "select fileName,antibody,cell,treatment from hg19 where lab like '%Snyder%' and dataType like 'ChipSeq' and view='Peaks'" out=ra | sed 's/wgEncode/yalePeaks\/wgEncode/' > yale.ra
-
-      # Get ra file for hud
-      cat hud/merged.ra | sed 's/wgEncode/hudPeaks\/wgEncode/' > hud.ra
-
-      # Combine both ra files and convert to three column tab-separated
-      cat yale.ra hud.ra | raToTab stdin bothLabs.tab -cols=fileName,cell,antibody
-
-      # Set up config file for clustering job.  This includes calculating some
-      # normalization factors for the score.  The cellLetter.tab assigns
-      # letters to cell lines, and is created by hand in the source tree.
-      cp ~/kent/src/hg/regulate/regClusterBedExpCfg/cellLetter.tab .
-      regClusterBedExpCfg -tabList bothLabs.tab bothLabs.cfg -cellLetter=cellLetter.tab
-
-      # Do the actual clustering and load results into database
-      hgBedsToBedExps -dupeLetterOk bothLabs.cfg peak.bed peak.exps
-      awk '$2 != $3' peak.bed > filtered.bed
-      hgLoadBed hg19 wgEncodeRegTfbsClustered filtered.bed
+      # Load database
+      hgLoadBed hg19 wgEncodeRegTfbsClustered peak.bed
       hgLoadSqlTab hg19 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
 
-      # Create inputTrackTable - three columns: <table> <source> <factor>
-      mdbQuery "select tableName,cell,antibody from hg19 where (lab like '%Snyder%' or lab='HudsonAlpha') and dataType like 'ChipSeq' and view='Peaks' and antibody not like 'Pol2%'" -out=tab > wgEncodeRegTfbsClusteredInputs.tab
-      hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable.sql wgEncodeRegTfbsClusteredInputs.tab
+      # Create inputTrackTable - four columns: <table> <source> <factor> <treatment>
+      awk '{printf("%s\t%s\t%s\t%s\n", $7, $8, $9, $10);}' peak.table > wgEncodeRegTfbsClusteredInputs.tab
+      hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable2.sql wgEncodeRegTfbsClusteredInputs.tab
 
 
 ########################################################################
