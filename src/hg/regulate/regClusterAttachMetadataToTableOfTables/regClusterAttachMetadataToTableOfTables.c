@@ -128,7 +128,7 @@ else
 /* Looks like all of the HAIB missing metadata have no treatment. */
 treatment = "None";
 
-/* Set return variables, clean up, and go home. */
+/* Clean up, set return variables, and go home. */
 freez(&cellId);
 freez(&abId);
 *retCell = cell;
@@ -147,10 +147,13 @@ char *row[7];
 
 while (lineFileRow(lf, row))
     {
+    /* Get object ID and attempt to find basic experimental variables from metadata. */
     char *obj = row[6];
     char *cell = NULL, *antibody=NULL, *treatment=NULL;
     if (!getMetaFromMetaDb(conn, obj, &cell, &antibody, &treatment))
         getMetaFromObjName(obj, &cell, &antibody, &treatment);
+
+    /* Write out first fields unchanged, and append our new fields. */
     int i;
     for (i=0; i<7; ++i)
     	fprintf(f, "%s\t", row[i]);
@@ -161,6 +164,7 @@ while (lineFileRow(lf, row))
     fprintf(f, "%s\n", treatment);
     }
 
+/* Clean up and go home. */
 carefulClose(&f);
 lineFileClose(&lf);
 sqlDisconnect(&conn);
