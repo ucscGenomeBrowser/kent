@@ -40,7 +40,7 @@ variables         cell, antibody, treatment, control
 assembly          mm9
 
 medianFragmentLength 200
-validationSettings validateFiles.bam:mismatches=3,bamPercent=99.9;validateFiles.fastq:quick=1000
+validationSettings validateFiles.bam:mismatches=3,nMatch,matchFirst=32,bamPercent=99.9;validateFiles.fastq:quick=1000
 
 # Track/view definition
 view             Peaks
