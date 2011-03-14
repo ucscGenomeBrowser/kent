@@ -26,4 +26,4 @@ install:
 
 doInstall:
 	@mkdir -p ${DEST}/
-	./cpAndLinkToResourceFiles.pl -destDir=${DEST} ${CSS_FILES}
+	../../utils/cpAndLinkToResourceFiles.pl -destDir=${DEST} -versionFile=../../inc/versionInfo.h ${CSS_FILES}
