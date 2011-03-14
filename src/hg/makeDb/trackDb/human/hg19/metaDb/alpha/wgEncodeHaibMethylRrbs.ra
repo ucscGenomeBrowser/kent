@@ -12,7 +12,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683830
 grant Myers
 lab HudsonAlpha
@@ -33,7 +33,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683897
 grant Myers
 lab HudsonAlpha
@@ -54,7 +54,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683817
 grant Myers
 lab HudsonAlpha
@@ -75,7 +75,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683880
 grant Myers
 lab HudsonAlpha
@@ -96,7 +96,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683767
 grant Myers
 lab HudsonAlpha
@@ -117,7 +117,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683886
 grant Myers
 lab HudsonAlpha
@@ -138,7 +138,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683915
 grant Myers
 lab HudsonAlpha
@@ -159,7 +159,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683864
 grant Myers
 lab HudsonAlpha
@@ -180,7 +180,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683809
 grant Myers
 lab HudsonAlpha
@@ -201,7 +201,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683912
 grant Myers
 lab HudsonAlpha
@@ -222,7 +222,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsAosmcDukeSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAosmcDukeSitesRep1.bed9.gz
 geoSampleAccession GSM683814
 grant Myers
 lab HudsonAlpha
@@ -242,7 +242,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsAosmcDukeSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAosmcDukeSitesRep2.bed9.gz
 geoSampleAccession GSM683910
 grant Myers
 lab HudsonAlpha
@@ -262,7 +262,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsAstrocyUncSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAstrocyUncSitesRep1.bed9.gz
 geoSampleAccession GSM683765
 grant Myers
 lab HudsonAlpha
@@ -282,7 +282,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsAstrocyUncSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAstrocyUncSitesRep2.bed9.gz
 geoSampleAccession GSM683882
 grant Myers
 lab HudsonAlpha
@@ -302,7 +302,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683786
 grant Myers
 lab HudsonAlpha
@@ -322,7 +322,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683883
 grant Myers
 lab HudsonAlpha
@@ -342,7 +342,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcbrainh11058nBiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcbrainh11058nBiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683908
 grant Myers
 lab HudsonAlpha
@@ -362,7 +362,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcbrainh11058nBiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcbrainh11058nBiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683798
 grant Myers
 lab HudsonAlpha
@@ -382,7 +382,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcbreast0203015BiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcbreast0203015BiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683834
 grant Myers
 lab HudsonAlpha
@@ -402,7 +402,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcbreast0203015BiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcbreast0203015BiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683761
 grant Myers
 lab HudsonAlpha
@@ -422,7 +422,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBckidney0111002BiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBckidney0111002BiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683870
 grant Myers
 lab HudsonAlpha
@@ -442,7 +442,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBckidney0111002BiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBckidney0111002BiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683878
 grant Myers
 lab HudsonAlpha
@@ -462,7 +462,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcleftventriclen41BiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcleftventriclen41BiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683846
 grant Myers
 lab HudsonAlpha
@@ -482,7 +482,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcleftventriclen41BiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcleftventriclen41BiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683895
 grant Myers
 lab HudsonAlpha
@@ -502,7 +502,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683876
 grant Myers
 lab HudsonAlpha
@@ -522,7 +522,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683759
 grant Myers
 lab HudsonAlpha
@@ -542,7 +542,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcliver0111002BiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcliver0111002BiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683914
 grant Myers
 lab HudsonAlpha
@@ -562,7 +562,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcliver0111002BiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcliver0111002BiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683782
 grant Myers
 lab HudsonAlpha
@@ -582,7 +582,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBclung0111002BiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBclung0111002BiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683821
 grant Myers
 lab HudsonAlpha
@@ -602,7 +602,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBclung0111002BiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBclung0111002BiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683940
 grant Myers
 lab HudsonAlpha
@@ -622,7 +622,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcpancreash12817nBiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcpancreash12817nBiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683848
 grant Myers
 lab HudsonAlpha
@@ -642,7 +642,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcpancreash12817nBiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcpancreash12817nBiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683819
 grant Myers
 lab HudsonAlpha
@@ -662,7 +662,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683899
 grant Myers
 lab HudsonAlpha
@@ -682,7 +682,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683820
 grant Myers
 lab HudsonAlpha
@@ -702,7 +702,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683796
 grant Myers
 lab HudsonAlpha
@@ -722,7 +722,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683893
 grant Myers
 lab HudsonAlpha
@@ -742,7 +742,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683789
 grant Myers
 lab HudsonAlpha
@@ -762,7 +762,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683811
 grant Myers
 lab HudsonAlpha
@@ -782,7 +782,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683931
 grant Myers
 lab HudsonAlpha
@@ -802,7 +802,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683868
 grant Myers
 lab HudsonAlpha
@@ -822,7 +822,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcskin0111002BiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcskin0111002BiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683865
 grant Myers
 lab HudsonAlpha
@@ -842,7 +842,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcskin0111002BiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcskin0111002BiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683892
 grant Myers
 lab HudsonAlpha
@@ -862,7 +862,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcstomach0111002BiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcstomach0111002BiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683947
 grant Myers
 lab HudsonAlpha
@@ -882,7 +882,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcstomach0111002BiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcstomach0111002BiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683877
 grant Myers
 lab HudsonAlpha
@@ -902,7 +902,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBctestisn30BiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBctestisn30BiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683781
 grant Myers
 lab HudsonAlpha
@@ -922,7 +922,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBctestisn30BiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBctestisn30BiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683850
 grant Myers
 lab HudsonAlpha
@@ -942,7 +942,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcuterusbn0765BiochainSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcuterusbn0765BiochainSitesRep1.bed9.gz
 geoSampleAccession GSM683803
 grant Myers
 lab HudsonAlpha
@@ -962,7 +962,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBcuterusbn0765BiochainSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBcuterusbn0765BiochainSitesRep2.bed9.gz
 geoSampleAccession GSM683911
 grant Myers
 lab HudsonAlpha
@@ -982,7 +982,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBe2cHaibSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBe2cHaibSitesRep1.bed9.gz
 geoSampleAccession GSM683885
 grant Myers
 lab HudsonAlpha
@@ -1002,7 +1002,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBe2cHaibSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBe2cHaibSitesRep2.bed9.gz
 geoSampleAccession GSM683869
 grant Myers
 lab HudsonAlpha
@@ -1022,7 +1022,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBjUwSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBjUwSitesRep1.bed9.gz
 geoSampleAccession GSM683779
 grant Myers
 lab HudsonAlpha
@@ -1042,7 +1042,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsBjUwSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsBjUwSitesRep2.bed9.gz
 geoSampleAccession GSM683763
 grant Myers
 lab HudsonAlpha
@@ -1062,7 +1062,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683778
 grant Myers
 lab HudsonAlpha
@@ -1083,7 +1083,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683930
 grant Myers
 lab HudsonAlpha
@@ -1104,7 +1104,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsEcc1HaibSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsEcc1HaibSitesRep1.bed9.gz
 geoSampleAccession GSM683845
 grant Myers
 lab HudsonAlpha
@@ -1124,7 +1124,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsEcc1HaibSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsEcc1HaibSitesRep2.bed9.gz
 geoSampleAccession GSM683925
 grant Myers
 lab HudsonAlpha
@@ -1144,7 +1144,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683766
 grant Myers
 lab HudsonAlpha
@@ -1165,7 +1165,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683847
 grant Myers
 lab HudsonAlpha
@@ -1186,7 +1186,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-15
 dateUnrestricted 2011-04-15
-fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683906
 grant Myers
 lab HudsonAlpha
@@ -1207,7 +1207,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-15
 dateUnrestricted 2011-04-15
-fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683927
 grant Myers
 lab HudsonAlpha
@@ -1228,7 +1228,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
-fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683774
 grant Myers
 lab HudsonAlpha
@@ -1249,7 +1249,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
-fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683841
 grant Myers
 lab HudsonAlpha
@@ -1270,7 +1270,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683835
 grant Myers
 lab HudsonAlpha
@@ -1291,7 +1291,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683921
 grant Myers
 lab HudsonAlpha
@@ -1312,7 +1312,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683902
 grant Myers
 lab HudsonAlpha
@@ -1333,7 +1333,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683887
 grant Myers
 lab HudsonAlpha
@@ -1354,7 +1354,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683903
 grant Myers
 lab HudsonAlpha
@@ -1375,7 +1375,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683843
 grant Myers
 lab HudsonAlpha
@@ -1396,7 +1396,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683777
 grant Myers
 lab HudsonAlpha
@@ -1417,7 +1417,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683938
 grant Myers
 lab HudsonAlpha
@@ -1438,7 +1438,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683770
 grant Myers
 lab HudsonAlpha
@@ -1459,7 +1459,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683879
 grant Myers
 lab HudsonAlpha
@@ -1480,7 +1480,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683824
 grant Myers
 lab HudsonAlpha
@@ -1501,7 +1501,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683858
 grant Myers
 lab HudsonAlpha
@@ -1522,7 +1522,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683837
 grant Myers
 lab HudsonAlpha
@@ -1543,7 +1543,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683829
 grant Myers
 lab HudsonAlpha
@@ -1564,7 +1564,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683852
 grant Myers
 lab HudsonAlpha
@@ -1585,7 +1585,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683922
 grant Myers
 lab HudsonAlpha
@@ -1606,7 +1606,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683936
 grant Myers
 lab HudsonAlpha
@@ -1627,7 +1627,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683849
 grant Myers
 lab HudsonAlpha
@@ -1648,7 +1648,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-15
 dateUnrestricted 2011-04-15
-fileName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683788
 grant Myers
 lab HudsonAlpha
@@ -1669,7 +1669,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-15
 dateUnrestricted 2011-04-15
-fileName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683898
 grant Myers
 lab HudsonAlpha
@@ -1690,7 +1690,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683839
 grant Myers
 lab HudsonAlpha
@@ -1711,7 +1711,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683807
 grant Myers
 lab HudsonAlpha
@@ -1732,7 +1732,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683825
 grant Myers
 lab HudsonAlpha
@@ -1752,7 +1752,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683769
 grant Myers
 lab HudsonAlpha
@@ -1772,7 +1772,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683825
 grant Myers
 lab HudsonAlpha
@@ -1793,7 +1793,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683769
 grant Myers
 lab HudsonAlpha
@@ -1814,7 +1814,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683926
 grant Myers
 lab HudsonAlpha
@@ -1835,7 +1835,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683828
 grant Myers
 lab HudsonAlpha
@@ -1856,7 +1856,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsHepatocytesDukeSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHepatocytesDukeSitesRep1.bed9.gz
 geoSampleAccession GSM683764
 grant Myers
 lab HudsonAlpha
@@ -1876,7 +1876,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsHepatocytesDukeSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHepatocytesDukeSitesRep2.bed9.gz
 geoSampleAccession GSM683872
 grant Myers
 lab HudsonAlpha
@@ -1896,7 +1896,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683795
 grant Myers
 lab HudsonAlpha
@@ -1916,7 +1916,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683855
 grant Myers
 lab HudsonAlpha
@@ -1936,7 +1936,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683795
 grant Myers
 lab HudsonAlpha
@@ -1957,7 +1957,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683855
 grant Myers
 lab HudsonAlpha
@@ -1978,7 +1978,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683816
 grant Myers
 lab HudsonAlpha
@@ -1999,7 +1999,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683942
 grant Myers
 lab HudsonAlpha
@@ -2020,7 +2020,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683944
 grant Myers
 lab HudsonAlpha
@@ -2041,7 +2041,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683854
 grant Myers
 lab HudsonAlpha
@@ -2062,7 +2062,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683844
 grant Myers
 lab HudsonAlpha
@@ -2083,7 +2083,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683808
 grant Myers
 lab HudsonAlpha
@@ -2104,7 +2104,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683794
 grant Myers
 lab HudsonAlpha
@@ -2125,7 +2125,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683913
 grant Myers
 lab HudsonAlpha
@@ -2146,7 +2146,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683901
 grant Myers
 lab HudsonAlpha
@@ -2167,7 +2167,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683851
 grant Myers
 lab HudsonAlpha
@@ -2188,7 +2188,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-15
 dateUnrestricted 2011-04-15
-fileName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683831
 grant Myers
 lab HudsonAlpha
@@ -2209,7 +2209,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-15
 dateUnrestricted 2011-04-15
-fileName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683943
 grant Myers
 lab HudsonAlpha
@@ -2230,7 +2230,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-15
 dateUnrestricted 2011-04-15
-fileName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683773
 grant Myers
 lab HudsonAlpha
@@ -2251,7 +2251,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-15
 dateUnrestricted 2011-04-15
-fileName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683905
 grant Myers
 lab HudsonAlpha
@@ -2272,7 +2272,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep3.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep3.bed9.gz
 geoSampleAccession GSM683941
 grant Myers
 lab HudsonAlpha
@@ -2292,7 +2292,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep4.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep4.bed9.gz
 geoSampleAccession GSM683836
 grant Myers
 lab HudsonAlpha
@@ -2312,7 +2312,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep5.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep5.bed9.gz
 geoSampleAccession GSM683932
 grant Myers
 lab HudsonAlpha
@@ -2332,7 +2332,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep6.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep6.bed9.gz
 geoSampleAccession GSM683826
 grant Myers
 lab HudsonAlpha
@@ -2352,7 +2352,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsHsmmSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHsmmSitesRep1.bed9.gz
 geoSampleAccession GSM683818
 grant Myers
 lab HudsonAlpha
@@ -2373,7 +2373,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsHsmmSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHsmmSitesRep2.bed9.gz
 geoSampleAccession GSM683907
 grant Myers
 lab HudsonAlpha
@@ -2394,7 +2394,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3.bed9.gz
 geoSampleAccession GSM683801
 grant Myers
 lab HudsonAlpha
@@ -2414,7 +2414,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsHsmmtDukeSitesRep4.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHsmmtDukeSitesRep4.bed9.gz
 geoSampleAccession GSM683871
 grant Myers
 lab HudsonAlpha
@@ -2434,7 +2434,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsHsmmtDukeSitesRep5.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHsmmtDukeSitesRep5.bed9.gz
 geoSampleAccession GSM683813
 grant Myers
 lab HudsonAlpha
@@ -2454,7 +2454,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsHsmmtDukeSitesRep6.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHsmmtDukeSitesRep6.bed9.gz
 geoSampleAccession GSM683900
 grant Myers
 lab HudsonAlpha
@@ -2474,7 +2474,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683945
 grant Myers
 lab HudsonAlpha
@@ -2495,7 +2495,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683799
 grant Myers
 lab HudsonAlpha
@@ -2516,7 +2516,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsHtb11HaibSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHtb11HaibSitesRep1.bed9.gz
 geoSampleAccession GSM683888
 grant Myers
 lab HudsonAlpha
@@ -2536,7 +2536,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsHtb11HaibSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHtb11HaibSitesRep2.bed9.gz
 geoSampleAccession GSM683775
 grant Myers
 lab HudsonAlpha
@@ -2556,7 +2556,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
-fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep1.bed9.gz
 geoSampleAccession GSM683939
 grant Myers
 lab HudsonAlpha
@@ -2576,7 +2576,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
-fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep3.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep3.bed9.gz
 geoSampleAccession GSM683867
 grant Myers
 lab HudsonAlpha
@@ -2596,7 +2596,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
-fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683823
 grant Myers
 lab HudsonAlpha
@@ -2617,7 +2617,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
-fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683815
 grant Myers
 lab HudsonAlpha
@@ -2638,7 +2638,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-15
 dateUnrestricted 2011-04-15
-fileName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683792
 grant Myers
 lab HudsonAlpha
@@ -2659,7 +2659,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-15
 dateUnrestricted 2011-04-15
-fileName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683806
 grant Myers
 lab HudsonAlpha
@@ -2680,7 +2680,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683856
 grant Myers
 lab HudsonAlpha
@@ -2701,7 +2701,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683780
 grant Myers
 lab HudsonAlpha
@@ -2722,7 +2722,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683946
 grant Myers
 lab HudsonAlpha
@@ -2743,7 +2743,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683776
 grant Myers
 lab HudsonAlpha
@@ -2764,7 +2764,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsLncapDukeSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsLncapDukeSitesRep1.bed9.gz
 geoSampleAccession GSM683862
 grant Myers
 lab HudsonAlpha
@@ -2784,7 +2784,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsLncapDukeSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsLncapDukeSitesRep2.bed9.gz
 geoSampleAccession GSM683924
 grant Myers
 lab HudsonAlpha
@@ -2804,7 +2804,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsLncapUwSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsLncapUwSitesRep1.bed9.gz
 geoSampleAccession GSM683863
 grant Myers
 lab HudsonAlpha
@@ -2824,7 +2824,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsLncapUwSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsLncapUwSitesRep2.bed9.gz
 geoSampleAccession GSM683768
 grant Myers
 lab HudsonAlpha
@@ -2844,7 +2844,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-08
-fileName wgEncodeHaibMethylRrbsMcf10aesTamYaleSitesRep3.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMcf10aesTamYaleSitesRep3.bed9.gz
 geoSampleAccession GSM683933
 grant Myers
 lab HudsonAlpha
@@ -2864,7 +2864,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
-fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683853
 grant Myers
 lab HudsonAlpha
@@ -2885,7 +2885,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
-fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683791
 grant Myers
 lab HudsonAlpha
@@ -2906,7 +2906,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-08
-fileName wgEncodeHaibMethylRrbsMcf10aesYaleSitesRep3.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMcf10aesYaleSitesRep3.bed9.gz
 geoSampleAccession GSM683812
 grant Myers
 lab HudsonAlpha
@@ -2926,7 +2926,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
-fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683896
 grant Myers
 lab HudsonAlpha
@@ -2947,7 +2947,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
-fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683822
 grant Myers
 lab HudsonAlpha
@@ -2968,7 +2968,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683787
 grant Myers
 lab HudsonAlpha
@@ -2989,7 +2989,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683793
 grant Myers
 lab HudsonAlpha
@@ -3010,7 +3010,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683787
 grant Myers
 lab HudsonAlpha
@@ -3030,7 +3030,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683793
 grant Myers
 lab HudsonAlpha
@@ -3050,7 +3050,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683787
 grant Myers
 lab HudsonAlpha
@@ -3070,7 +3070,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683793
 grant Myers
 lab HudsonAlpha
@@ -3090,7 +3090,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsMelanoSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMelanoSitesRep1.bed9.gz
 geoSampleAccession GSM683860
 grant Myers
 lab HudsonAlpha
@@ -3111,7 +3111,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsMelanoSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMelanoSitesRep2.bed9.gz
 geoSampleAccession GSM683840
 grant Myers
 lab HudsonAlpha
@@ -3132,7 +3132,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsMelanoSitesRep3.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMelanoSitesRep3.bed9.gz
 geoSampleAccession GSM683935
 grant Myers
 lab HudsonAlpha
@@ -3153,7 +3153,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsMyometrDukeSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMyometrDukeSitesRep1.bed9.gz
 geoSampleAccession GSM683889
 grant Myers
 lab HudsonAlpha
@@ -3173,7 +3173,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsMyometrDukeSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMyometrDukeSitesRep2.bed9.gz
 geoSampleAccession GSM683762
 grant Myers
 lab HudsonAlpha
@@ -3193,7 +3193,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683857
 grant Myers
 lab HudsonAlpha
@@ -3214,7 +3214,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683827
 grant Myers
 lab HudsonAlpha
@@ -3235,7 +3235,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
-fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683873
 grant Myers
 lab HudsonAlpha
@@ -3256,7 +3256,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
-fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683923
 grant Myers
 lab HudsonAlpha
@@ -3277,7 +3277,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683859
 grant Myers
 lab HudsonAlpha
@@ -3298,7 +3298,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683785
 grant Myers
 lab HudsonAlpha
@@ -3319,7 +3319,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683797
 grant Myers
 lab HudsonAlpha
@@ -3340,7 +3340,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683861
 grant Myers
 lab HudsonAlpha
@@ -3361,7 +3361,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsNt2d1UwSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsNt2d1UwSitesRep1.bed9.gz
 geoSampleAccession GSM683832
 grant Myers
 lab HudsonAlpha
@@ -3381,7 +3381,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsNt2d1UwSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsNt2d1UwSitesRep2.bed9.gz
 geoSampleAccession GSM683804
 grant Myers
 lab HudsonAlpha
@@ -3401,7 +3401,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683832
 grant Myers
 lab HudsonAlpha
@@ -3422,7 +3422,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683929
 grant Myers
 lab HudsonAlpha
@@ -3443,7 +3443,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
-fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683928
 grant Myers
 lab HudsonAlpha
@@ -3464,7 +3464,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
-fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683881
 grant Myers
 lab HudsonAlpha
@@ -3485,7 +3485,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsPanc1HaibSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsPanc1HaibSitesRep1.bed9.gz
 geoSampleAccession GSM683866
 grant Myers
 lab HudsonAlpha
@@ -3505,7 +3505,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsPanc1HaibSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsPanc1HaibSitesRep2.bed9.gz
 geoSampleAccession GSM683920
 grant Myers
 lab HudsonAlpha
@@ -3525,7 +3525,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsPanisletsSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsPanisletsSitesRep1.bed9.gz
 geoSampleAccession GSM683874
 grant Myers
 lab HudsonAlpha
@@ -3546,7 +3546,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsPanisletsSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsPanisletsSitesRep2.bed9.gz
 geoSampleAccession GSM683934
 grant Myers
 lab HudsonAlpha
@@ -3567,7 +3567,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsPanisletsSitesRep3.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsPanisletsSitesRep3.bed9.gz
 geoSampleAccession GSM683790
 grant Myers
 lab HudsonAlpha
@@ -3588,7 +3588,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsPanisletsSitesRep4.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsPanisletsSitesRep4.bed9.gz
 geoSampleAccession GSM683891
 grant Myers
 lab HudsonAlpha
@@ -3609,7 +3609,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsPanisletsSitesRep5.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsPanisletsSitesRep5.bed9.gz
 geoSampleAccession GSM683805
 grant Myers
 lab HudsonAlpha
@@ -3630,7 +3630,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsPfsk1HaibSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsPfsk1HaibSitesRep1.bed9.gz
 geoSampleAccession GSM683810
 grant Myers
 lab HudsonAlpha
@@ -3650,7 +3650,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsPfsk1HaibSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsPfsk1HaibSitesRep2.bed9.gz
 geoSampleAccession GSM683909
 grant Myers
 lab HudsonAlpha
@@ -3670,7 +3670,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsPrecUwSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsPrecUwSitesRep1.bed9.gz
 geoSampleAccession GSM683838
 grant Myers
 lab HudsonAlpha
@@ -3690,7 +3690,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsPrecUwSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsPrecUwSitesRep2.bed9.gz
 geoSampleAccession GSM683760
 grant Myers
 lab HudsonAlpha
@@ -3710,7 +3710,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsProgfibSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsProgfibSitesRep1.bed9.gz
 geoSampleAccession GSM683875
 grant Myers
 lab HudsonAlpha
@@ -3731,7 +3731,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsProgfibSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsProgfibSitesRep2.bed9.gz
 geoSampleAccession GSM683783
 grant Myers
 lab HudsonAlpha
@@ -3752,7 +3752,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsRptecSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsRptecSitesRep1.bed9.gz
 geoSampleAccession GSM683802
 grant Myers
 lab HudsonAlpha
@@ -3773,7 +3773,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsRptecSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsRptecSitesRep2.bed9.gz
 geoSampleAccession GSM683772
 grant Myers
 lab HudsonAlpha
@@ -3794,7 +3794,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683916
 grant Myers
 lab HudsonAlpha
@@ -3815,7 +3815,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683833
 grant Myers
 lab HudsonAlpha
@@ -3836,7 +3836,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683894
 grant Myers
 lab HudsonAlpha
@@ -3857,7 +3857,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683784
 grant Myers
 lab HudsonAlpha
@@ -3878,7 +3878,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsSknmcHaibSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsSknmcHaibSitesRep1.bed9.gz
 geoSampleAccession GSM683884
 grant Myers
 lab HudsonAlpha
@@ -3898,7 +3898,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsSknmcHaibSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsSknmcHaibSitesRep2.bed9.gz
 geoSampleAccession GSM683918
 grant Myers
 lab HudsonAlpha
@@ -3918,7 +3918,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep1.bed9.gz
 geoSampleAccession GSM683800
 grant Myers
 lab HudsonAlpha
@@ -3939,7 +3939,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
-fileName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2.bed9.gz
 geoSampleAccession GSM683919
 grant Myers
 lab HudsonAlpha
@@ -3960,7 +3960,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep1.bed9.gz
 geoSampleAccession GSM683937
 grant Myers
 lab HudsonAlpha
@@ -3980,7 +3980,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep2.bed9.gz
 geoSampleAccession GSM683771
 grant Myers
 lab HudsonAlpha
@@ -4000,7 +4000,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep1.bed9.gz
 geoSampleAccession GSM683904
 grant Myers
 lab HudsonAlpha
@@ -4020,7 +4020,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep2.bed9.gz
 geoSampleAccession GSM683842
 grant Myers
 lab HudsonAlpha
@@ -4040,7 +4040,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsU87HaibSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsU87HaibSitesRep1.bed9.gz
 geoSampleAccession GSM683917
 grant Myers
 lab HudsonAlpha
@@ -4060,7 +4060,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsU87HaibSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsU87HaibSitesRep2.bed9.gz
 geoSampleAccession GSM683890
 grant Myers
 lab HudsonAlpha
