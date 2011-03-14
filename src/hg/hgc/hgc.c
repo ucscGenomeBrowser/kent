@@ -3836,6 +3836,10 @@ else if (wordCount > 0)
 	{
 	doEncodeFiveC(conn, tdb);
 	}
+    else if (sameString(type, "peptideMapping"))
+	{
+	doPeptideMapping(conn, tdb, item);
+	}
     else if (sameString(type, "chromGraph"))
 	{
 	doChromGraph(tdb);
@@ -9803,17 +9807,19 @@ chrom      = cartOptionalString(cart, "c");
 chromStart = cartOptionalString(cart, "o");
 chromEnd   = cartOptionalString(cart, "t");
 
-avId = strdup(itemName);
+avId       = strdup(itemName);
+safef(avString, sizeof(avString), "%s", itemName);
 
 chp = strstr(itemName, ".");
 *chp = '\0';
 omimId = strdup(itemName);
 
+chp = avString;
+chp = strstr(avString, ".");
+*chp = '#';
+
 if (url != NULL && url[0] != 0)
     {
-    printf("<B>OMIM Entry ");fflush(stdout);
-    printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
-    printf("%s</A></B>", itemName);
     safef(query, sizeof(query),
     	  "select title1, title2,  format(seqNo/10000,4), v.description from omimGeneMap m, omimAv v where m.omimId=%s and m.omimId=v.omimId and v.avId='%s';", itemName, avId);
 
@@ -9822,30 +9828,33 @@ if (url != NULL && url[0] != 0)
     if (row != NULL)
     	{
 	seqId = strdup(row[2]);
-	safef(avString, sizeof(avString), "%s#%s", omimId, seqId+2L);
 	if (row[0] != NULL)
 	    {
 	    title1 = cloneString(row[0]);
-    	    printf(": %s", title1);
 	    }
 	if (row[1] != NULL)
 	    {
 	    title2 = cloneString(row[1]);
-    	    printf(" %s ", title2);
 	    }
-	avDesc = row[3];
+	avDesc = cloneString(row[3]);
 	}
     sqlFreeResult(&sr);
+    
+    printf("<B>OMIM Allelic Variant: ");
+    printf("<A HREF=\"%s%s\" target=_blank>", url, avString);
+    printf("%s</A></B>", avId);
+    printf(" %s", avDesc);
+
+    printf("<BR><B>OMIM Entry ");
+    printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
+    printf("%s</A></B>", itemName);
+    if (title1 != NULL) printf(": %s", title1);
+    if (title2 != NULL) printf(" %s ", title2);
     
     printf("<BR>\n");
     printf("<B>OMIM page at NCBI: ");
     printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
     printf("%s</A></B><BR>", itemName);
-
-    printf("<B>Allelic Variant: ");fflush(stdout);
-    printf("<A HREF=\"%s%s\" target=_blank>", url, avString);
-    printf("%s</A></B>", avId);
-    printf(" %s", avDesc);
 
     safef(query, sizeof(query),
     	  "select replStr from omimAvRepl where avId=%s;", avId);
@@ -23823,7 +23832,7 @@ else if (sameWord(table, "omimGeneClass2"))
     {
     doOmimGeneClass3(tdb, item);
     }
-else if (sameWord(table, "omimGeneClass3"))
+else if (sameWord(table, "omimGene2"))
     {
     doOmimGeneClass3(tdb, item);
     }

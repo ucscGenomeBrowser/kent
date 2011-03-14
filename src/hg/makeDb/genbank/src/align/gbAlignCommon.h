@@ -31,6 +31,11 @@ struct gbAlignInfo
     struct gbEntryCnts align;    /* entries to align or aligned */
 };
 
+INLINE boolean gbEntryCntsHaveAny(struct gbEntryCnts *entryCnts, unsigned orgCat)
+{
+return (entryCnts->accCnt[orgCat] + entryCnts->recCnt[orgCat]) > 0;
+}
+
 void gbCountNeedAligned(struct gbEntryCnts* cnts, struct gbEntry* entry,
                         unsigned accIncr, unsigned recIncr);
 /* Increment counts or entries to process */

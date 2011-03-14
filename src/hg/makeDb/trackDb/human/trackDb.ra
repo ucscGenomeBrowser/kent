@@ -45,6 +45,8 @@ visibility hide
 color 0,0,0
 type bed 4
 tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
+prevExonText Left edge
+nextExonText Right edge
 
 track caseControl
 compositeTrack on
@@ -1222,7 +1224,6 @@ color 150,0,150
 type bed 4 +
 
 track dgv
-release alpha
 shortLabel DGV Struct Var
 longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
 group varRep
@@ -1236,23 +1237,6 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v10
-
-track dgv
-release beta,public
-shortLabel DGV Struct Var
-longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
-group varRep
-priority 144.8
-visibility hide
-color 0,100,0
-itemRgb on
-type bed 9 +
-noScoreFilter .
-exonArrows off
-urlLabel DGV Browser and Report:
-url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
-html dgvOldColors
-dataVersion v9
 
 track covMask1kGPilotLowCov
 compositeTrack on
@@ -2980,9 +2964,20 @@ priority 0
 track eponine override
 priority 0
 
+track omimGene
+shortLabel OMIM Genes
+longLabel OMIM-Associated Genes
+group phenDis
+priority 29.6
+visibility hide
+color 0, 0, 200
+type bed 4
+hgsid on
+url http://www.ncbi.nlm.nih.gov/omim/
+
 track omimLocation
-shortLabel OMIM Locations
-longLabel All OMIM Cytogenetic Locations
+shortLabel OMIM Loci
+longLabel OMIM Non-Gene Entry Cytogenetic Locations
 group phenDis
 priority 29.75
 visibility hide
@@ -2991,12 +2986,12 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 
-track omimGeneClass3
-shortLabel OMIM Genes (Class 3)
-longLabel OMIM Genes (Class 3, with Known Molecular Basis of Disorder)
+track omimGene2
+shortLabel OMIM Genes
+longLabel OMIM Genes
 group phenDis
 priority 29.73
-visibility pack
+visibility hide
 color 220, 0, 0
 type bed 4
 hgsid on
@@ -3007,7 +3002,7 @@ shortLabel OMIM AV SNPs
 longLabel OMIM Allelic Variant SNPs
 group phenDis
 priority 29.71
-visibility dense
+visibility hide
 color 220,0,0
 type bed 4
 hgsid on
@@ -3450,8 +3445,8 @@ semiShortCircuit 1
 termRegex ([0-9]{6})+\.+([0-9]{4})
 searchPriority 10
 
-searchName omimGeneClass3Acc
-searchTable omimGeneClass3
+searchName omimGene2Acc
+searchTable omimGene2
 searchMethod exact
 searchType bed
 shortCircuit 1

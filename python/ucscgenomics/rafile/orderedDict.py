@@ -1,99 +1,49 @@
-class OrderedDict(object):
+class OrderedDict(dict):
     """
-    Abstract class containing all shared functionality between the RaFile and
-    RaEntry classes.
+    A Dictionary ADT that preserves ordering of its keys through a parallel
+    list.
 
-    Contains a dictionary to hold each entry, as well as a list to hold the
-    computationally arbitrary ordering we wish to preserve between reads and
-    writes.  
+    Inherits from the dict built-in python class, extending functionality 
+    relevant to ordering.
     """
+
 
     def __init__(self):
-        self._dictionary = dict()
-        self._ordering = list()
+        self.__ordering = list()
+        dict.__init__(self)
 
-    def add(self, key, value):
-        """
-        Add a key-value pair to the dictionary, and put its key in the list.
-        """
 
-        key = key.strip()
+    def __setitem__(self, key, value):
+        dict.__setitem__(self, key, value)
+        self.__ordering.append(key)
+   
+    def __delitem__(self, key):
+        dict.__delitem(self, key)
+        self.__ordering.remove(key)
 
-        if (key in self._dictionary):
-            raise KeyError()
 
-        if (key == None or key == ''):
-            return
-        
-        self._dictionary[key] = value
-        self._ordering.append(key)
-        
-    def remove(self, key):
-        """
-        Remove a key-value pair from the dictionary, and the key from the list.
-        """
-
-        key = key.strip()
-
-        if (key not in self._dictionary):
-            raise KeyError()
-
-        if (key == None or key == ''):
-            return
-
-        del self._dictionary[key]
-        self._ordering.remove(key)
-
-    def getValue(self, key):
-        """
-        Return the value associated with a key in the dictionary.
-        """
-
-        if (key not in self._dictionary):
-            return None
-
-        return self._dictionary[key]
-
-    def getKeyAt(self, index):
-        """
-        Return the key associated with the index in this list
-        """
-
-        if (index > len(self._ordering)):
-            raise IndexError()
-
-        return self._ordering[index]
-
-    def getValueAt(self, index):
-        """
-        Return the value associated with an index in the list.
-        """
-
-        if (index > len(self._ordering)):
-            raise IndexError()
-
-        return self._dictionary[self._ordering[index]]
-
-    def count(self):
-        """
-        Return the length of the list.
-        """
-
-        return len(self._ordering)
-
-    def iterKeys(self):
-        """
-        Return an iterator over the keys in the ordering
-        """
-
-        for item in self._ordering:
+    def __iter__(self):
+        for item in self.__ordering:
             yield item
 
-    def iterValues(self):
-        """
-        Return an iterator over the values in the dictionary
-        """
 
-        for item in self._ordering:
-            yield self.getValue(item)
+    def iterkeys(self):
+        self.__iter__()
+
+
+    def itervalues(self):
+        for item in self.__ordering:
+            yield self[item]
+
+
+    def iteritems(self):
+        for item in self.__ordering:
+            yield item, self[item]
+
+
+    def __str__(self):
+        str = ''
+        for item in self.iteritems():
+            str += item.__str__() + '\n'
+        return str
 

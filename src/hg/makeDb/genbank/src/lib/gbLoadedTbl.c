@@ -319,6 +319,10 @@ struct gbLoadedTbl *loadedTbl = *loadedTblPtr;
 if (loadedTbl != NULL)
     {
     assert(loadedTbl->uncommitted == NULL);
+#ifdef DUMP_HASH_STATS
+    hashPrintStats(loadedTbl->releaseHash, "loadedRelease", stderr);
+    hashPrintStats(loadedTbl->entryHash, "loadedEntry", stderr);
+#endif
     hashFree(&loadedTbl->releaseHash);
     hashFree(&loadedTbl->entryHash);
     free(loadedTbl);

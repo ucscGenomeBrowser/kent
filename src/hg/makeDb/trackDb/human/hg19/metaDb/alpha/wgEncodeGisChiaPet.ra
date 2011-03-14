@@ -1,7 +1,6 @@
 metaObject wgEncodeGisChiaPetHCT116D000005584
 objType file
 antibody Pol2
-assembly hg19
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -13,6 +12,7 @@ fileName wgEncodeGisChiaPetHCT116D000005584.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+origAssembly hg19
 project wgEncode
 replicate 1
 run 3r32
@@ -24,7 +24,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetHCT116D000005585
 objType file
 antibody Pol2
-assembly hg19
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -36,6 +35,7 @@ fileName wgEncodeGisChiaPetHCT116D000005585.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+origAssembly hg19
 project wgEncode
 replicate 1
 run 3r32
@@ -47,7 +47,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetHCT116D000005586
 objType file
 antibody Pol2
-assembly hg19
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -59,6 +58,7 @@ fileName wgEncodeGisChiaPetHCT116D000005586.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+origAssembly hg19
 project wgEncode
 replicate 1
 run 4r32
@@ -70,7 +70,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetHCT116D000005587
 objType file
 antibody Pol2
-assembly hg19
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -82,6 +81,7 @@ fileName wgEncodeGisChiaPetHCT116D000005587.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+origAssembly hg19
 project wgEncode
 replicate 1
 run 4r32
@@ -93,7 +93,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetHCT116D000005588
 objType file
 antibody Pol2
-assembly hg19
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -105,6 +104,7 @@ fileName wgEncodeGisChiaPetHCT116D000005588.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+origAssembly hg19
 project wgEncode
 replicate 1
 run 5r51
@@ -116,7 +116,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetHCT116D000005589
 objType file
 antibody Pol2
-assembly hg19
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -128,6 +127,7 @@ fileName wgEncodeGisChiaPetHCT116D000005589.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+origAssembly hg19
 project wgEncode
 replicate 1
 run 5r51
@@ -139,7 +139,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetHCT116D000005590
 objType file
 antibody Pol2
-assembly hg19
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -151,6 +150,7 @@ fileName wgEncodeGisChiaPetHCT116D000005590.bam
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+origAssembly hg19
 project wgEncode
 replicate 1
 run 3r32
@@ -162,7 +162,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetHCT116D000005591
 objType file
 antibody Pol2
-assembly hg19
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -174,6 +173,7 @@ fileName wgEncodeGisChiaPetHCT116D000005591.bam
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+origAssembly hg19
 project wgEncode
 replicate 1
 run 4r32
@@ -185,7 +185,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetHCT116D000005592
 objType file
 antibody Pol2
-assembly hg19
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -197,6 +196,7 @@ fileName wgEncodeGisChiaPetHCT116D000005592.bam
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+origAssembly hg19
 project wgEncode
 replicate 1
 run 5r51
@@ -208,7 +208,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetHCT116D000005593
 objType table
 antibody Pol2
-assembly hg19
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -220,6 +219,7 @@ fileName wgEncodeGisChiaPetHCT116D000005593.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3267
@@ -231,7 +231,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetHeLaS3D000005563
 objType file
 antibody Pol2
-assembly hg19
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -243,6 +242,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005563.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r78
@@ -254,7 +254,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetHeLaS3D000005564
 objType file
 antibody Pol2
-assembly hg19
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -266,6 +265,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005564.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r78
@@ -277,7 +277,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetHeLaS3D000005565
 objType file
 antibody Pol2
-assembly hg19
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -289,6 +288,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005565.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+origAssembly hg19
 project wgEncode
 replicate 1
 run 2r35
@@ -300,7 +300,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetHeLaS3D000005566
 objType file
 antibody Pol2
-assembly hg19
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -312,6 +311,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005566.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+origAssembly hg19
 project wgEncode
 replicate 1
 run 2r35
@@ -323,7 +323,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetHeLaS3D000005567
 objType file
 antibody Pol2
-assembly hg19
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -335,6 +334,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005567.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+origAssembly hg19
 project wgEncode
 replicate 1
 run 3r56
@@ -346,7 +346,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetHeLaS3D000005568
 objType file
 antibody Pol2
-assembly hg19
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -358,6 +357,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005568.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+origAssembly hg19
 project wgEncode
 replicate 1
 run 3r56
@@ -369,7 +369,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetHeLaS3D000005569
 objType file
 antibody Pol2
-assembly hg19
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -381,6 +380,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005569.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r78
@@ -392,7 +392,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetHeLaS3D000005570
 objType file
 antibody Pol2
-assembly hg19
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -404,6 +403,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005570.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+origAssembly hg19
 project wgEncode
 replicate 1
 run 2r35
@@ -415,7 +415,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetHeLaS3D000005571
 objType file
 antibody Pol2
-assembly hg19
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -427,6 +426,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005571.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+origAssembly hg19
 project wgEncode
 replicate 1
 run 3r56
@@ -438,7 +438,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetHeLaS3D000005572
 objType table
 antibody Pol2
-assembly hg19
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -450,6 +449,7 @@ fileName wgEncodeGisChiaPetHeLaS3D000005572.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3266
@@ -461,7 +461,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetK562D000005622
 objType file
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -473,6 +472,7 @@ fileName wgEncodeGisChiaPetK562D000005622.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK004
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r119
@@ -484,7 +484,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetK562D000005623
 objType file
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -496,6 +495,7 @@ fileName wgEncodeGisChiaPetK562D000005623.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK004
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r119
@@ -507,7 +507,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetK562D000005624
 objType file
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -519,6 +518,7 @@ fileName wgEncodeGisChiaPetK562D000005624.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK004
+origAssembly hg19
 project wgEncode
 replicate 1
 run 5r35
@@ -530,7 +530,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetK562D000005625
 objType file
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -542,6 +541,7 @@ fileName wgEncodeGisChiaPetK562D000005625.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK004
+origAssembly hg19
 project wgEncode
 replicate 1
 run 5r35
@@ -553,7 +553,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetK562D000005626
 objType file
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -565,6 +564,7 @@ fileName wgEncodeGisChiaPetK562D000005626.bam
 grant Ruan
 lab GIS-Ruan
 labVersion CHK004
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r119
@@ -576,7 +576,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetK562D000005627
 objType file
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -588,6 +587,7 @@ fileName wgEncodeGisChiaPetK562D000005627.bam
 grant Ruan
 lab GIS-Ruan
 labVersion CHK004
+origAssembly hg19
 project wgEncode
 replicate 1
 run 5r35
@@ -599,7 +599,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetK562D000005628
 objType table
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -611,6 +610,7 @@ fileName wgEncodeGisChiaPetK562D000005628.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK004
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3276
@@ -622,7 +622,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetK562D000005636
 objType file
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -634,6 +633,7 @@ fileName wgEncodeGisChiaPetK562D000005636.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK016
+origAssembly hg19
 project wgEncode
 replicate 2
 run 1r132
@@ -645,7 +645,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetK562D000005637
 objType file
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -657,6 +656,7 @@ fileName wgEncodeGisChiaPetK562D000005637.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK016
+origAssembly hg19
 project wgEncode
 replicate 2
 run 1r132
@@ -668,7 +668,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetK562D000005638
 objType file
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -680,6 +679,7 @@ fileName wgEncodeGisChiaPetK562D000005638.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK016
+origAssembly hg19
 project wgEncode
 replicate 2
 run 3r62
@@ -691,7 +691,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetK562D000005639
 objType file
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -703,6 +702,7 @@ fileName wgEncodeGisChiaPetK562D000005639.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK016
+origAssembly hg19
 project wgEncode
 replicate 2
 run 3r62
@@ -714,7 +714,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetK562D000005640
 objType file
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -726,6 +725,7 @@ fileName wgEncodeGisChiaPetK562D000005640.bam
 grant Ruan
 lab GIS-Ruan
 labVersion CHK016
+origAssembly hg19
 project wgEncode
 replicate 2
 run 1r132
@@ -737,7 +737,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetK562D000005641
 objType file
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -749,6 +748,7 @@ fileName wgEncodeGisChiaPetK562D000005641.bam
 grant Ruan
 lab GIS-Ruan
 labVersion CHK016
+origAssembly hg19
 project wgEncode
 replicate 2
 run 3r62
@@ -760,7 +760,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetK562D000005642
 objType table
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -772,6 +771,7 @@ fileName wgEncodeGisChiaPetK562D000005642.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK016
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3282
@@ -783,7 +783,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetK562D000006820
 objType file
 antibody Pol2
-assembly hg19
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -795,6 +794,7 @@ fileName wgEncodeGisChiaPetK562D000006820.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion RNAPII_K562
+origAssembly hg19
 project wgEncode
 replicate pooled
 subId 3382
@@ -805,7 +805,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetMCF7D000005608
 objType file
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -817,6 +816,7 @@ fileName wgEncodeGisChiaPetMCF7D000005608.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM040
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r114
@@ -828,7 +828,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetMCF7D000005609
 objType file
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -840,6 +839,7 @@ fileName wgEncodeGisChiaPetMCF7D000005609.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM040
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r114
@@ -851,7 +851,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetMCF7D000005610
 objType file
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -863,6 +862,7 @@ fileName wgEncodeGisChiaPetMCF7D000005610.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM040
+origAssembly hg19
 project wgEncode
 replicate 1
 run 4r32
@@ -874,7 +874,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetMCF7D000005611
 objType file
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -886,6 +885,7 @@ fileName wgEncodeGisChiaPetMCF7D000005611.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM040
+origAssembly hg19
 project wgEncode
 replicate 1
 run 4r32
@@ -897,7 +897,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetMCF7D000005612
 objType file
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -909,6 +908,7 @@ fileName wgEncodeGisChiaPetMCF7D000005612.bam
 grant Ruan
 lab GIS-Ruan
 labVersion CHM040
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r114
@@ -920,7 +920,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetMCF7D000005613
 objType file
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -932,6 +931,7 @@ fileName wgEncodeGisChiaPetMCF7D000005613.bam
 grant Ruan
 lab GIS-Ruan
 labVersion CHM040
+origAssembly hg19
 project wgEncode
 replicate 1
 run 4r32
@@ -943,7 +943,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetMCF7D000005614
 objType table
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -955,6 +954,7 @@ fileName wgEncodeGisChiaPetMCF7D000005614.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM040
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3279
@@ -966,7 +966,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetMCF7D000005629
 objType file
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -978,6 +977,7 @@ fileName wgEncodeGisChiaPetMCF7D000005629.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM053
+origAssembly hg19
 project wgEncode
 replicate 2
 run 4r39
@@ -989,7 +989,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetMCF7D000005630
 objType file
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1001,6 +1000,7 @@ fileName wgEncodeGisChiaPetMCF7D000005630.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM053
+origAssembly hg19
 project wgEncode
 replicate 2
 run 4r39
@@ -1012,7 +1012,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetMCF7D000005631
 objType file
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1024,6 +1023,7 @@ fileName wgEncodeGisChiaPetMCF7D000005631.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM053
+origAssembly hg19
 project wgEncode
 replicate 2
 run 5r35
@@ -1035,7 +1035,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetMCF7D000005632
 objType file
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1047,6 +1046,7 @@ fileName wgEncodeGisChiaPetMCF7D000005632.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM053
+origAssembly hg19
 project wgEncode
 replicate 2
 run 5r35
@@ -1058,7 +1058,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetMCF7D000005633
 objType file
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1070,6 +1069,7 @@ fileName wgEncodeGisChiaPetMCF7D000005633.bam
 grant Ruan
 lab GIS-Ruan
 labVersion CHM053
+origAssembly hg19
 project wgEncode
 replicate 2
 run 4r39
@@ -1081,7 +1081,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetMCF7D000005634
 objType file
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1093,6 +1092,7 @@ fileName wgEncodeGisChiaPetMCF7D000005634.bam
 grant Ruan
 lab GIS-Ruan
 labVersion CHM053
+origAssembly hg19
 project wgEncode
 replicate 2
 run 5r35
@@ -1104,7 +1104,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetMCF7D000005635
 objType table
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1116,6 +1115,7 @@ fileName wgEncodeGisChiaPetMCF7D000005635.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM053
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3281
@@ -1127,7 +1127,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetMCF7D000005643
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1139,6 +1138,7 @@ fileName wgEncodeGisChiaPetMCF7D000005643.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM001
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r56
@@ -1150,7 +1150,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetMCF7D000005644
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1162,6 +1161,7 @@ fileName wgEncodeGisChiaPetMCF7D000005644.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM001
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r56
@@ -1173,7 +1173,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetMCF7D000005645
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1185,6 +1184,7 @@ fileName wgEncodeGisChiaPetMCF7D000005645.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM001
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r63
@@ -1196,7 +1196,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetMCF7D000005646
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1208,6 +1207,7 @@ fileName wgEncodeGisChiaPetMCF7D000005646.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM001
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r63
@@ -1219,7 +1219,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetMCF7D000005647
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1231,6 +1230,7 @@ fileName wgEncodeGisChiaPetMCF7D000005647.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHM001
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r56
@@ -1242,7 +1242,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetMCF7D000005648
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1254,6 +1253,7 @@ fileName wgEncodeGisChiaPetMCF7D000005648.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHM001
+origAssembly hg19
 project wgEncode
 replicate 1
 run 1r63
@@ -1265,7 +1265,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetMCF7D000005649
 objType table
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1277,6 +1276,7 @@ fileName wgEncodeGisChiaPetMCF7D000005649.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM001
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3284
@@ -1288,7 +1288,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetMCF7D000005650
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1300,6 +1299,7 @@ fileName wgEncodeGisChiaPetMCF7D000005650.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH015
+origAssembly hg19
 project wgEncode
 replicate 2
 run 1r56
@@ -1311,7 +1311,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetMCF7D000005651
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1323,6 +1322,7 @@ fileName wgEncodeGisChiaPetMCF7D000005651.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH015
+origAssembly hg19
 project wgEncode
 replicate 2
 run 1r56
@@ -1334,7 +1334,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetMCF7D000005652
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1346,6 +1345,7 @@ fileName wgEncodeGisChiaPetMCF7D000005652.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH015
+origAssembly hg19
 project wgEncode
 replicate 2
 run 1r63
@@ -1357,7 +1357,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetMCF7D000005653
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1369,6 +1368,7 @@ fileName wgEncodeGisChiaPetMCF7D000005653.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH015
+origAssembly hg19
 project wgEncode
 replicate 2
 run 1r63
@@ -1380,7 +1380,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetMCF7D000005654
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1392,6 +1391,7 @@ fileName wgEncodeGisChiaPetMCF7D000005654.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHH015
+origAssembly hg19
 project wgEncode
 replicate 2
 run 1r56
@@ -1403,7 +1403,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetMCF7D000005655
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1415,6 +1414,7 @@ fileName wgEncodeGisChiaPetMCF7D000005655.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHH015
+origAssembly hg19
 project wgEncode
 replicate 2
 run 1r63
@@ -1426,7 +1426,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetMCF7D000005656
 objType table
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1438,6 +1437,7 @@ fileName wgEncodeGisChiaPetMCF7D000005656.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHH015
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3285
@@ -1449,7 +1449,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetMCF7D000005657
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1461,6 +1460,7 @@ fileName wgEncodeGisChiaPetMCF7D000005657.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+origAssembly hg19
 project wgEncode
 replicate 3
 run 2r35
@@ -1472,7 +1472,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetMCF7D000005658
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1484,6 +1483,7 @@ fileName wgEncodeGisChiaPetMCF7D000005658.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+origAssembly hg19
 project wgEncode
 replicate 3
 run 2r35
@@ -1495,7 +1495,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetMCF7D000005659
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1507,6 +1506,7 @@ fileName wgEncodeGisChiaPetMCF7D000005659.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+origAssembly hg19
 project wgEncode
 replicate 3
 run 3r31
@@ -1518,7 +1518,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetMCF7D000005660
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1530,6 +1529,7 @@ fileName wgEncodeGisChiaPetMCF7D000005660.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+origAssembly hg19
 project wgEncode
 replicate 3
 run 3r31
@@ -1541,7 +1541,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetMCF7D000005661
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1553,6 +1552,7 @@ fileName wgEncodeGisChiaPetMCF7D000005661.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+origAssembly hg19
 project wgEncode
 replicate 3
 run 3r36
@@ -1564,7 +1564,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetMCF7D000005662
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1576,6 +1575,7 @@ fileName wgEncodeGisChiaPetMCF7D000005662.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+origAssembly hg19
 project wgEncode
 replicate 3
 run 3r36
@@ -1587,7 +1587,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetMCF7D000005663
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1599,6 +1598,7 @@ fileName wgEncodeGisChiaPetMCF7D000005663.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+origAssembly hg19
 project wgEncode
 replicate 3
 run 5r2
@@ -1610,7 +1610,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetMCF7D000005664
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1622,6 +1621,7 @@ fileName wgEncodeGisChiaPetMCF7D000005664.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+origAssembly hg19
 project wgEncode
 replicate 3
 run 5r2
@@ -1633,7 +1633,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetMCF7D000005665
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1645,6 +1644,7 @@ fileName wgEncodeGisChiaPetMCF7D000005665.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+origAssembly hg19
 project wgEncode
 replicate 3
 run 2r35
@@ -1656,7 +1656,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetMCF7D000005666
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1668,6 +1667,7 @@ fileName wgEncodeGisChiaPetMCF7D000005666.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+origAssembly hg19
 project wgEncode
 replicate 3
 run 3r31
@@ -1679,7 +1679,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetMCF7D000005667
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1691,6 +1690,7 @@ fileName wgEncodeGisChiaPetMCF7D000005667.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+origAssembly hg19
 project wgEncode
 replicate 3
 run 3r36
@@ -1702,7 +1702,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetMCF7D000005668
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1714,6 +1713,7 @@ fileName wgEncodeGisChiaPetMCF7D000005668.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+origAssembly hg19
 project wgEncode
 replicate 3
 run 5r2
@@ -1725,7 +1725,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetMCF7D000005669
 objType table
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1737,6 +1736,7 @@ fileName wgEncodeGisChiaPetMCF7D000005669.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 3286
@@ -1748,7 +1748,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetMCF7D000006821
 objType file
 antibody Pol2
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1760,6 +1759,7 @@ fileName wgEncodeGisChiaPetMCF7D000006821.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion RNAPII
+origAssembly hg19
 project wgEncode
 replicate pooled
 subId 3383
@@ -1770,7 +1770,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetMCF7D000006822
 objType file
 antibody ERalpha_a
-assembly hg19
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1782,6 +1781,7 @@ fileName wgEncodeGisChiaPetMCF7D000006822.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion ER
+origAssembly hg19
 project wgEncode
 replicate pooled
 subId 3385
@@ -1792,7 +1792,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetNB4D000005594
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1804,6 +1803,7 @@ fileName wgEncodeGisChiaPetNB4D000005594.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+origAssembly hg19
 project wgEncode
 replicate 1
 run 2r53
@@ -1815,7 +1815,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetNB4D000005595
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1827,6 +1826,7 @@ fileName wgEncodeGisChiaPetNB4D000005595.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+origAssembly hg19
 project wgEncode
 replicate 1
 run 2r53
@@ -1838,7 +1838,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetNB4D000005596
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1850,6 +1849,7 @@ fileName wgEncodeGisChiaPetNB4D000005596.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+origAssembly hg19
 project wgEncode
 replicate 1
 run 6r12
@@ -1861,7 +1861,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetNB4D000005597
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1873,6 +1872,7 @@ fileName wgEncodeGisChiaPetNB4D000005597.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+origAssembly hg19
 project wgEncode
 replicate 1
 run 6r12
@@ -1884,7 +1884,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetNB4D000005598
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1896,6 +1895,7 @@ fileName wgEncodeGisChiaPetNB4D000005598.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+origAssembly hg19
 project wgEncode
 replicate 1
 run 6r14
@@ -1907,7 +1907,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetNB4D000005599
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1919,6 +1918,7 @@ fileName wgEncodeGisChiaPetNB4D000005599.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+origAssembly hg19
 project wgEncode
 replicate 1
 run 6r14
@@ -1930,7 +1930,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetNB4D000005600
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1942,6 +1941,7 @@ fileName wgEncodeGisChiaPetNB4D000005600.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+origAssembly hg19
 project wgEncode
 replicate 1
 run 2r53
@@ -1953,7 +1953,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetNB4D000005601
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1965,6 +1964,7 @@ fileName wgEncodeGisChiaPetNB4D000005601.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+origAssembly hg19
 project wgEncode
 replicate 1
 run 6r12
@@ -1976,7 +1976,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetNB4D000005602
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -1988,6 +1987,7 @@ fileName wgEncodeGisChiaPetNB4D000005602.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+origAssembly hg19
 project wgEncode
 replicate 1
 run 6r14
@@ -1999,7 +1999,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetNB4D000005603
 objType table
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -2011,6 +2010,7 @@ fileName wgEncodeGisChiaPetNB4D000005603.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3268
@@ -2022,7 +2022,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetNB4D000005615
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -2034,6 +2033,7 @@ fileName wgEncodeGisChiaPetNB4D000005615.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN010
+origAssembly hg19
 project wgEncode
 replicate 2
 run 2r53
@@ -2045,7 +2045,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetNB4D000005616
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -2057,6 +2056,7 @@ fileName wgEncodeGisChiaPetNB4D000005616.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN010
+origAssembly hg19
 project wgEncode
 replicate 2
 run 2r53
@@ -2068,7 +2068,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetNB4D000005617
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -2080,6 +2079,7 @@ fileName wgEncodeGisChiaPetNB4D000005617.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN010
+origAssembly hg19
 project wgEncode
 replicate 2
 run 3r30
@@ -2091,7 +2091,6 @@ view FastqRd1
 metaObject wgEncodeGisChiaPetNB4D000005618
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -2103,6 +2102,7 @@ fileName wgEncodeGisChiaPetNB4D000005618.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN010
+origAssembly hg19
 project wgEncode
 replicate 2
 run 3r30
@@ -2114,7 +2114,6 @@ view FastqRd2
 metaObject wgEncodeGisChiaPetNB4D000005619
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -2126,6 +2125,7 @@ fileName wgEncodeGisChiaPetNB4D000005619.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHN010
+origAssembly hg19
 project wgEncode
 replicate 2
 run 2r53
@@ -2137,7 +2137,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetNB4D000005620
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -2149,6 +2148,7 @@ fileName wgEncodeGisChiaPetNB4D000005620.bam
 grant Ruan
 lab GIS-Ruan
 labVersion IHN010
+origAssembly hg19
 project wgEncode
 replicate 2
 run 3r30
@@ -2160,7 +2160,6 @@ view Alignments
 metaObject wgEncodeGisChiaPetNB4D000005621
 objType table
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -2172,6 +2171,7 @@ fileName wgEncodeGisChiaPetNB4D000005621.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion IHN010
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3280
@@ -2183,7 +2183,6 @@ view Interactions
 metaObject wgEncodeGisChiaPetNB4D000006819
 objType file
 antibody Pol2
-assembly hg19
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
@@ -2195,6 +2194,7 @@ fileName wgEncodeGisChiaPetNB4D000006819.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion RNAPII_NB4
+origAssembly hg19
 project wgEncode
 replicate pooled
 subId 3381
@@ -2202,4 +2202,4 @@ submitPath gisChIA-PET_RNAPII_NB4_combined/RNAPII_NB4T.chromInteractons.bed
 type bed 12
 view Interactions
 
-# MAGIC: 2106786450
+# MAGIC: 1387807780

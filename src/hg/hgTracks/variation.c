@@ -526,6 +526,19 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+static char *snp125MapItemName(struct track *tg, void *item)
+/* Now that snp125->name is overwritten when adding chimp allele suffix, we need
+ * to strip it back off for links to hgc. */
+{
+static char mapName[256];
+struct snp125 *snp = item;
+safecpy(mapName, sizeof(mapName), snp->name);
+char *ptr = strchr(mapName, ' ');
+if (ptr != NULL)
+    *ptr = '\0';
+return mapName;
+}
+
 static Color snp132ColorByAlleleFreq(struct snp132Ext *snp, struct hvGfx *hvg)
 /* If snp has allele freq data, return a shade from red (rare) to blue (common);
  * otherwise return black. */
@@ -1337,6 +1350,7 @@ tg->drawItems     = snpDrawItems;
 tg->drawItemAt    = snp125DrawItemAt;
 tg->freeItems     = freeSnp125;
 tg->loadItems     = loadSnp125;
+tg->mapItemName   = snp125MapItemName;
 tg->itemNameColor = snp125Color;
 tg->itemColor     = snp125Color;
 }

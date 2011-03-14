@@ -22,7 +22,7 @@ alpha:
 beta:
 	${GITUP}
 	${MAKE} doInstall destDir=${DOCUMENTROOT} extra=doSymLink
-	cd style && echo style && ${MAKE} beta
+#	cd style && echo style && ${MAKE} beta
 
 alphaCancerPublic:
 	${MAKE} doInstallCancerPublic destDir=${DOCUMENTROOT} extra=doSymLink

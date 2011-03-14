@@ -212,7 +212,7 @@ while (--n >= 0)
     {
     tile *= 20;
     aa = aaVal[(int)(*pep++)];
-    if (aa < 0)
+    if (aa < 0 || aa > 19)
         return -1;
     tile += aa;
     }

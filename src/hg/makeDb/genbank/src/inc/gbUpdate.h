@@ -32,6 +32,9 @@ void gbUpdateNameFromFile(char* updateName, char* fileName);
 struct gbUpdate* gbUpdateNew(struct gbRelease* release, char* updateName);
 /* create a new update object */
 
+void gbUpdateFree(struct gbUpdate **updatePtr);
+/* free an update object */
+
 int gbUpdateCmp(struct gbUpdate* update1, struct gbUpdate* update2);
 /* compare two updates for sorting. */
 

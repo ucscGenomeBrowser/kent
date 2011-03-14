@@ -3041,7 +3041,7 @@ else
 boolean hHostHasPrefix(char *prefix)
 /* Return TRUE if this is running on web-server with host name prefix */
 {
-if (prefix == NULL) 
+if (prefix == NULL)
     return FALSE;
 
 char *httpHost = getenv("HTTP_HOST");
@@ -3053,11 +3053,18 @@ return startsWith(prefix, httpHost);
 }
 
 boolean hIsPrivateHost()
-/* Return TRUE if this is running on private (development) web-server. 
+/* Return TRUE if this is running on private (development) web-server.
  * This was originally genome-test as well as hgwdev, however genome-test
  * may be repurposed to direct users to the preview site instead of development site. */
 {
-return hHostHasPrefix("hgwdev");
+return hHostHasPrefix("hgwdev") || hHostHasPrefix("genome-test");  // FIXME: If genome-test
+}
+
+boolean hIsBetaHost()
+/* Return TRUE if this is running on beta (QA) web-server.
+ * Use sparingly as behavior on beta should be as close to RR as possible. */
+{
+return hHostHasPrefix("hgwbeta");
 }
 
 boolean hIsPreviewHost()
@@ -3073,7 +3080,7 @@ return hHostHasPrefix("genome-preview");
 char *hBrowserName()
 /* Return browser name based on host name */
 {
-return (hIsPreviewHost() ? "Preview Genome Browser" : 
+return (hIsPreviewHost() ? "Preview Genome Browser" :
         (hIsPrivateHost() ? "TEST Genome Browser" : "Genome Browser"));
 }
 

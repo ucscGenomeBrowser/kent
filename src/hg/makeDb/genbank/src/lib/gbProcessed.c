@@ -77,7 +77,7 @@ processed->entry = entry;
 processed->update = update;
 processed->version = version;
 processed->modDate = modDate;
-processed->organism = gbReleaseAllocEntryStr(update->release, organism);
+processed->organism = gbReleaseObtainOrgName(update->release, organism);
 processed->orgCat = gbGenomeOrgCat(update->release->genome, organism);
 processed->molType = molType;
 return processed;
