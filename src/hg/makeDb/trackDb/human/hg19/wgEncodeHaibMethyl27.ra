@@ -574,7 +574,7 @@ html wgEncodeHaibMethyl27
         track wgEncodeHaibMethylArrayGm12878SitesRep1
         parent wgEncodeHaibMethylArrayViewSites
         shortLabel GM12878 1
-        longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 1 (in GM12878 cells)
+        longLabel GM12878 Methylation (27K) by Illumina Bead Arrays Rep 1 ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1GM12878 obtainedBy=HAIB treatment=None rep=rep1
         type bed 9
         origAssembly hg18
@@ -583,7 +583,7 @@ html wgEncodeHaibMethyl27
         track wgEncodeHaibMethylArrayGm12878SitesRep2
         parent wgEncodeHaibMethylArrayViewSites off
         shortLabel GM12878 2
-        longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 2 (in GM12878 cells)
+        longLabel GM12878 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1GM12878 obtainedBy=HAIB treatment=None rep=rep2
         type bed 9
         origAssembly hg18
@@ -592,7 +592,7 @@ html wgEncodeHaibMethyl27
         track wgEncodeHaibMethylArrayHepg2SitesRep1
         parent wgEncodeHaibMethylArrayViewSites on 
         shortLabel HepG2 1
-        longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 1 (in HepG2 cells)
+        longLabel HepG2 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=2HepG2 obtainedBy=HAIB treatment=None rep=rep1
         type bed 9
         origAssembly hg18
@@ -601,7 +601,7 @@ html wgEncodeHaibMethyl27
         track wgEncodeHaibMethylArrayHepg2SitesRep2
         parent wgEncodeHaibMethylArrayViewSites off
         shortLabel HepG2 2
-        longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 2 (in HepG2 cells)
+        longLabel HepG2 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=2HepG2 obtainedBy=HAIB treatment=None rep=rep2
         type bed 9
         origAssembly hg18
@@ -610,7 +610,7 @@ html wgEncodeHaibMethyl27
         track wgEncodeHaibMethylArrayK562SitesRep1
         parent wgEncodeHaibMethylArrayViewSites
         shortLabel K562 1
-        longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 1 (in K562 cells)
+        longLabel K562 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep1
         type bed 9
         origAssembly hg18
@@ -619,7 +619,7 @@ html wgEncodeHaibMethyl27
         track wgEncodeHaibMethylArrayK562SitesRep2
         parent wgEncodeHaibMethylArrayViewSites off
         shortLabel K562 2
-        longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 2 (in K562 cells)
+        longLabel K562 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep2
         type bed 9
         origAssembly hg18

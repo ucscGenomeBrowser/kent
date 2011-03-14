@@ -455,7 +455,11 @@
                 $(document).bind("click", hide);
                 //self.sourceSelect.trigger("focus");
                 try {
-                    if(filterCompositeExcludeOptions(self.sourceSelect)) {
+                    if($(self.sourceSelect).hasClass('filterComp')
+                           && filterCompositeExcludeOptions(self.sourceSelect)) {
+                        self._updateOptions();
+                    } else if($(self.sourceSelect).hasClass('filterTable')
+                           && filterTableExcludeOptions(self.sourceSelect)) {
                         self._updateOptions();
                     }
                 }

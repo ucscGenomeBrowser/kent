@@ -1704,13 +1704,13 @@ for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
 return FALSE;
 }
 
-boolean mdbObjsContainAtleastOne(struct mdbObj *mdbObjs, char *var)
+boolean mdbObjsContainAltleastOneMatchingVar(struct mdbObj *mdbObjs, char *var, char *val)
 // Returns TRUE if any object in set contains var
 {
 struct mdbObj *mdbObj = mdbObjs;
 for(;mdbObj!=NULL; mdbObj=mdbObj->next)
     {
-    if(mdbObjContains(mdbObj, var, NULL))
+    if(mdbObjContains(mdbObj, var, val))
         return TRUE;
     }
 return FALSE;
@@ -1964,6 +1964,31 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     }
     if(words != NULL)
         freeMem(words);
+}
+
+void mdbObjRemoveHiddenVars(struct mdbObj *mdbObjs)
+// Prunes list of vars for mdb objs that have been declared as hidden in cv.ra typeOfTerms
+{
+// make comma delimited list of hidden vars
+struct hash *cvTermTypes = (struct hash *)mdbCvTermTypeHash();
+struct hashEl *el, *elList = hashElListHash(cvTermTypes);
+struct dyString *dyRemoveVars = dyStringNew(256);
+
+for (el = elList; el != NULL; el = el->next)
+    {
+    struct hash *varHash = el->val;
+    if (SETTING_IS_ON(hashFindVal(varHash, "hidden")))
+        {
+        assert(mdbCvSearchMethod(el->name) == cvsNotSearchable);  // Good idea to assert but cv.ra is a user updatable file
+        dyStringPrintf(dyRemoveVars,"%s ",el->name);
+        }
+    }
+hashElFreeList(&elList);
+
+if (dyStringLen(dyRemoveVars))
+    mdbObjRemoveVars(mdbObjs, dyStringContents(dyRemoveVars));
+
+dyStringFree(&dyRemoveVars);
 }
 
 char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var)
@@ -2264,7 +2289,7 @@ int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full)
 // Validates vars and vals against cv.ra.  Returns count of errors found.
 // Full considers vars not defined in cv as invalids
 {
-struct hash *termTypeHash = mdbCvTermTypeHash();
+struct hash *termTypeHash = (struct hash *)mdbCvTermTypeHash();
 struct mdbObj *mdbObj = NULL;
 int invalids = 0;
 for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
@@ -2305,7 +2330,7 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
                 }
 
            // cvDefined so every val should be in cv
-           struct hash *cvTermHash = mdbCvTermHash(mdbVar->var);
+           struct hash *cvTermHash = (struct hash *)mdbCvTermHash(mdbVar->var);
            if (cvTermHash == NULL)
                 {
                 verbose(1,"ERROR in cv.ra: Term %s says validate in cv but not found as a cv term.\n",mdbVar->var);
@@ -2318,7 +2343,7 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
                     continue;
                 else if (orControl && sameString(orControl,"or control"))
                     {
-                    cvTermHash = mdbCvTermHash("control");
+                    cvTermHash = (struct hash *)mdbCvTermHash("control");
                     if (cvTermHash == NULL)
                         {
                         verbose(1,"ERROR in cv.ra: Term control says validate in cv but not found as a cv term.\n");
@@ -2900,7 +2925,7 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
         {
         // TO BE IMPLEMENTED
         // Requires new mdbObjSearch API and more than one (char *)onePair->val
-        warn("mdb search by date is not yet implemented.");
+        warn("mdb search by date or number is not yet implemented.");
         }
     }
 // Be sure to include table or file in selections
@@ -2980,8 +3005,9 @@ if(!fileExists(filePath))
 return filePath;
 }
 
-struct hash *mdbCvTermHash(char *term)
+const struct hash *mdbCvTermHash(char *term)
 // returns a hash of hashes of a term which should be defined in cv.ra
+// NOTE: in static memory: DO NOT FREE
 {
 static struct hash *cvHashOfHashOfHashes = NULL;
 if (sameString(term,"cell"))
@@ -3004,9 +3030,10 @@ if (cvTermHash == NULL)
 return cvTermHash;
 }
 
-struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files)
+struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags, boolean tables, boolean files)
 // Search the metaDb table for vals by var and returns val (as pair->name) and controlled vocabulary (cv) label
 // (if it exists) (as pair->val).  Can impose (non-zero) limit on returned string size of name.
+// if requested, return cv tag instead of mdb val.  If requested, limit to table objs or file objs
 // Return is case insensitive sorted on label (cv label or else val).
 {  // TODO: Change this to use normal mdb struct routines?
 if (!tables && !files)
@@ -3025,43 +3052,45 @@ dyStringPrintf(dyQuery," from %s l1 where l1.var='%s' ",tableName,var);
 if (!tables || !files)
     dyStringPrintf(dyQuery,"and exists (select l2.obj from %s l2 where l2.obj = l1.obj and l2.var='objType' and l2.val='%s')",
                    tableName,tables?"table":"file");
-dyStringAppend(dyQuery," order by val");
 
-struct hash *varHash = mdbCvTermHash(var);
+struct hash *varHash = (struct hash *)mdbCvTermHash(var);
 
-struct slPair *pairs = NULL, *pair;
+struct slPair *pairs = NULL;
 struct sqlResult *sr = sqlGetResult(conn, dyStringContents(dyQuery));
 dyStringFree(&dyQuery);
 char **row;
-struct hash *valHash = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    AllocVar(pair);
-    char *name = cloneString(row[0]);
-    pair = slPairNew(name,name);  // defaults the label to the metaDb.val
-    valHash = hashFindVal(varHash,name);
-    if (valHash != NULL)
+    char *val = row[0];
+    char *label = NULL;
+    if (varHash != NULL)
         {
-        char *label = hashFindVal(valHash,"label");
-        if (label != NULL)
+        struct hash *valHash = hashFindVal(varHash,val);
+        if (valHash != NULL)
             {
-            label = strSwapChar(cloneString(label),'_',' ');  // vestigial _ meaning space
-            if (limit > 0 && strlen(label) > limit)
-                label[limit] = '\0';
-            freeMem(pair->val); // Allocated when pair was created
-            pair->val = label;
+            label = cloneString(hashOptionalVal(valHash,"label",row[0]));
+            if (tags)
+                {
+                char *tag = hashFindVal(valHash,"tag");
+                if (tag != NULL)
+                    val = tag;
+                }
             }
         }
-    slAddHead(&pairs, pair);
+    if (label == NULL);
+        label = cloneString(row[0]);
+    label = strSwapChar(label,'_',' ');  // vestigial _ meaning space
+    slPairAdd(&pairs,val,label);
     }
 sqlFreeResult(&sr);
 slPairValSortCase(&pairs);
 return pairs;
 }
 
-struct hash *mdbCvTermTypeHash()
+const struct hash *mdbCvTermTypeHash()
 // returns a hash of hashes of mdb and controlled vocabulary (cv) term types
 // Those terms should contain label,description,searchable,cvDefined,hidden
+// NOTE: in static memory: DO NOT FREE
 { // NOTE: "typeOfTerm" is specialized, so don't use mdbCvTermHash
 static struct hash *cvHashOfTermTypes = NULL;
 
@@ -3084,7 +3113,6 @@ if (cvHashOfTermTypes == NULL)
         }
     }
 
-
 return cvHashOfTermTypes;
 }
 
@@ -3095,7 +3123,7 @@ struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvDefined)
 struct slPair *whitePairs = NULL;
 
 // Get the list of term types from thew cv
-struct hash *termTypeHash = mdbCvTermTypeHash();
+struct hash *termTypeHash = (struct hash *)mdbCvTermTypeHash();
 struct hashCookie hc = hashFirst(termTypeHash);
 struct hashEl *hEl;
 while ((hEl = hashNext(&hc)) != NULL)
@@ -3137,7 +3165,7 @@ enum mdbCvSearchable mdbCvSearchMethod(char *term)
 // returns whether the term is searchable // TODO: replace with mdbCvWhiteList() returning struct
 {
 // Get the list of term types from thew cv
-struct hash *termTypeHash = mdbCvTermTypeHash();
+struct hash *termTypeHash = (struct hash *)mdbCvTermTypeHash();
 struct hash *termHash = hashFindVal(termTypeHash,term);
 if (termHash != NULL)
     {
@@ -3150,6 +3178,10 @@ if (termHash != NULL)
             return cvsSearchByMultiSelect;
         if (sameWord(searchable,"freeText"))
             return cvsSearchByFreeText;
+        //if (sameWord(searchable,"date"))
+        //    return cvsSearchByDateRange;
+        //if (sameWord(searchable,"numeric"))
+        //    return cvsSearchByIntegerRange;
         }
     }
 return cvsNotSearchable;
@@ -3159,7 +3191,7 @@ const char *cvLabel(char *term)
 // returns cv label if term found or else just term
 {
 // Get the list of term types from thew cv
-struct hash *termTypeHash = mdbCvTermTypeHash();
+struct hash *termTypeHash = (struct hash *)mdbCvTermTypeHash();
 struct hash *termHash = hashFindVal(termTypeHash,term);
 if (termHash != NULL)
     {

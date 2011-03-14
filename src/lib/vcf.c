@@ -254,6 +254,13 @@ static const char *filterOrAltRegex =
     "<ID=([A-Za-z0-9]+),"
     "Description=\"([^\"]+)\">$";
 
+INLINE void nonAsciiWorkaround(char *line)
+// Workaround for annoying 3-byte quote marks included in some 1000 Genomes files:
+{
+(void)strSwapStrs(line, strlen(line)+1, "\342\200\234", "\"");
+(void)strSwapStrs(line, strlen(line)+1, "\342\200\235", "\"");
+}
+
 static void parseMetadataLine(struct vcfFile *vcff, char *line)
 /* Parse a VCF header line beginning with "##" that defines a metadata. */
 {
@@ -288,6 +295,7 @@ if (startsWith("##fileformat=", line))
 else if (startsWith("##INFO=", line) || startsWith("##FORMAT=", line))
     {
     boolean isInfo = startsWith("##INFO=", line);
+    nonAsciiWorkaround(line);
     if (regexMatchSubstr(line, infoOrFormatRegex, substrs, ArraySize(substrs)))
 	// substrs[2] is ID/key, substrs[3] is Number, [4] is Type and [5] is Description.
 	{
