@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 # recursive target to do install to DEST, with extra excludes EXCL.
 
-CSS_FILES=HGStyle.css autocomplete.css blueStyle.css floretStyle.css jquery-ui.css jquery.contextmenu.css ui.dropdownchecklist.css 
+CSS_FILES=HGStyle.css autocomplete.css blueStyle.css floretStyle.css jquery-ui.css jquery.contextmenu.css ui.dropdownchecklist.css jquery.ui.autocomplete.css
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \
@@ -26,4 +26,4 @@ install:
 
 doInstall:
 	@mkdir -p ${DEST}/
-	./cpAndLinkToResourceFiles.pl -destDir=${DEST} ${CSS_FILES}
+	../../utils/cpAndLinkToResourceFiles.pl -destDir=${DEST} -versionFile=../../inc/versionInfo.h ${CSS_FILES}
