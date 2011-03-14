@@ -60,7 +60,7 @@ if (foundFiles == NULL
     char *server = hDownloadsServer();
 
     boolean useRsync = TRUE;
-    if (hIsPrivateHost())
+    if (hIsPrivateHost() || hIsPreviewHost())
         {
         // For hgwdev (which is the same machine as "hgdownload-test.cse.ucsc.edu") rsync does not work
         // Use ls -log --time=ctime --time-style=long-iso /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone
