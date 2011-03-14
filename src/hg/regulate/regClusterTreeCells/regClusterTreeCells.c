@@ -31,8 +31,7 @@ struct treeNode
 /* An element in a hierarchical tree.  We use this general structure because it's so
  * easy even though we are just making a binary tree. */
     {
-    struct treeNode *next;	/* Pointer to next sibling if any. */
-    struct treeNode *children;	/* Pointer to children if any. */
+    struct treeNode *left, *right;	/* Two children */
     int vectorSize;		/* # of items in vector below. */
     float *vector;		/* Array of doubles, in this case gene expression values. */
     char *fileName;		/* File data came from. */
@@ -199,7 +198,7 @@ for (i=0; i<nodesUsed; ++i)
     a = array[i];
     if (!a->merged)
 	{
-	for (j=0; j<i-1; ++j)
+	for (j=0; j<i; ++j)
 	    {
 	    b = array[j];
 	    if (!b->merged)
@@ -229,31 +228,100 @@ for (i=0; i<size; ++i)
 return x;
 }
 
-void rOutputTree(FILE *f, struct treeNode *node, int indent)
+void rOutputTree(FILE *f, struct treeNode *parent, struct treeNode *node, int level, int prefixSize, int suffixSize)
 /* Recursively output tree. */
 {
 if (node->fileName)
     {
-    spaceOut(f, indent);
-    fprintf(f, "%s\n", node->fileName);
+    char *s = node->fileName + prefixSize;
+    int len = strlen(s) - suffixSize;
+    mustWrite(f, s, len);
     }
 else
     {
-    spaceOut(f, indent);
-    fprintf(f, "(\n");
-    struct treeNode *child;
-    for (child = node->children; child != NULL; child = child->next)
-       rOutputTree(f, child, indent+1);
-    spaceOut(f, indent);
-    fprintf(f, ")\n");
+    fprintf(f, "(");
+    rOutputTree(f, node, node->left, level+1, prefixSize, suffixSize);
+    fprintf(f, ",");
+    rOutputTree(f, node, node->right, level+1, prefixSize, suffixSize);
+    fprintf(f, ")");
     }
+if (parent != NULL)
+    fprintf(f, ":%g", treeNodeDistance(parent, node));
+fprintf(f, " ");
 }
 
-void outputTree(char *fileName, struct treeNode *root)
+char *findCommonPrefix(struct slName *list)
+/* Find common prefix to list of names. */
+{
+/* Deal with short special cases. */
+if (list == NULL)
+   errAbort("Can't findCommonPrefix on empty list");
+if (list->next == NULL)
+   return cloneString("");
+
+int prefixSize = BIGNUM;
+struct slName *el, *next;
+for (el = list; el != NULL; el = next)
+    {
+    next = el->next;
+    if (next == NULL)
+        break;
+    int same = countSame(el->name, next->name);
+    if (same < prefixSize)
+        prefixSize = same;
+    }
+return cloneStringZ(list->name, prefixSize);
+}
+
+int countSameAtEnd(char *a, char *b)
+/* Count number of chars at end of string that are the same between a and b. */
+{
+int aLen = strlen(a), bLen = strlen(b);
+int minLen = min(aLen, bLen);
+int sameCount = 0;
+a += aLen-1;
+b += bLen-1;
+int i;
+for (i=0; i<minLen; ++i)
+    {
+    if (a[-i] == b[-i])
+        ++sameCount;
+    else
+        break;
+    }
+return sameCount;
+}
+
+char *findCommonSuffix(struct slName *list)
+/* Find common suffix to list of names. */
+{
+/* Deal with short special cases. */
+if (list == NULL)
+   errAbort("Can't findCommonPrefix on empty list");
+if (list->next == NULL)
+   return cloneString("");
+
+int suffixSize = BIGNUM;
+struct slName *el, *next;
+for (el = list; el != NULL; el = next)
+    {
+    next = el->next;
+    if (next == NULL)
+        break;
+    int same = countSameAtEnd(el->name, next->name);
+    if (same < suffixSize)
+        suffixSize = same;
+    }
+return cloneStringZ(list->name + strlen(list->name) - suffixSize, suffixSize);
+}
+
+void outputTree(char *fileName, struct slName *inFileList, struct treeNode *root)
 /* Output tree to file. */
 {
 FILE *f = mustOpen(fileName, "w");
-rOutputTree(f, root, 0);
+char *commonPrefix = findCommonPrefix(inFileList);
+char *commonSuffix = findCommonSuffix(inFileList);
+rOutputTree(f, NULL, root, 0, strlen(commonPrefix), strlen(commonSuffix));
 carefulClose(&f);
 }
 
@@ -321,8 +389,8 @@ for ( ;nodesUsed <treeNodeCount; ++nodesUsed)
     AllocVar(join);
     join->vectorSize = itemCount;
     join->vector = averageVectors(aNode->vector, bNode->vector, join->vectorSize);
-    join->children = aNode;
-    aNode->next = bNode;
+    join->left = aNode;
+    join->right = bNode;
     aNode->merged = bNode->merged = TRUE;
 
     /* Put vector in array, and in distanceMatrix */
@@ -333,7 +401,7 @@ for ( ;nodesUsed <treeNodeCount; ++nodesUsed)
     }
 verbose(1, "done main loop\n");
 
-outputTree(outTree, join);
+outputTree(outTree, inFileList, join);
 
 lmCleanup(&lm);
 }
