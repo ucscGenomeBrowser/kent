@@ -19,11 +19,16 @@ errAbort(
   "usage:\n"
   "   regClusterTreeCells inFiles.lst output.tree\n"
   "options:\n"
-  "   -=XXX\n"
+  "   -short - Abbreviate output by removing stuff shared by all.\n"
+  "   -rename=twoCol.tab - Rename files according to file/name columns\n"
   );
 }
 
+struct hash *renameHash = NULL;
+
 static struct optionSpec options[] = {
+   {"short", OPTION_BOOLEAN},
+   {"rename", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -233,9 +238,17 @@ void rOutputTree(FILE *f, struct treeNode *parent, struct treeNode *node, int le
 {
 if (node->fileName)
     {
-    char *s = node->fileName + prefixSize;
-    int len = strlen(s) - suffixSize;
-    mustWrite(f, s, len);
+    if (renameHash)
+        {
+	char *s = hashMustFindVal(renameHash, node->fileName);
+	mustWrite(f, s, strlen(s));
+	}
+    else
+	{
+	char *s = node->fileName + prefixSize;
+	int len = strlen(s) - suffixSize;
+	mustWrite(f, s, len);
+	}
     }
 else
     {
@@ -319,9 +332,14 @@ void outputTree(char *fileName, struct slName *inFileList, struct treeNode *root
 /* Output tree to file. */
 {
 FILE *f = mustOpen(fileName, "w");
-char *commonPrefix = findCommonPrefix(inFileList);
-char *commonSuffix = findCommonSuffix(inFileList);
+char *commonPrefix = "", *commonSuffix = "";
+if (optionExists("short"))
+    {
+    commonPrefix = findCommonPrefix(inFileList);
+    commonSuffix = findCommonSuffix(inFileList);
+    }
 rOutputTree(f, NULL, root, 0, strlen(commonPrefix), strlen(commonSuffix));
+fputc('\n', f);
 carefulClose(&f);
 }
 
@@ -357,8 +375,9 @@ for (inFile = inFileList; inFile != NULL; inFile = inFile->next)
     struct treeNode *treeNode = readTabFileAsNode(inFile->name, 0, 1, 2, 6, bedList, itemCount);
     normalizeTreeNode(treeNode);
     array[nodesUsed++] = treeNode;
+    verboseDot();
     }
-verbose(1, "Read %d x %d = %ld data values total\n", inFileCount, itemCount, 
+verbose(1, "\nRead %d x %d = %ld data values total\n", inFileCount, itemCount, 
 	(long)itemCount * (long)inFileCount);
 
 /* Create look up array for pairwise distances.  This needs to be big enough to hold all nodes,
@@ -398,8 +417,9 @@ for ( ;nodesUsed <treeNodeCount; ++nodesUsed)
     distanceMatrix[nodesUsed] = needLargeZeroedMem((nodesUsed+1) * sizeof(double));
     for (j=0; j<nodesUsed; ++j)
         distanceMatrix[nodesUsed][j] = treeNodeDistance(join, array[j]);
+    verboseDot();
     }
-verbose(1, "done main loop\n");
+verbose(1, "\ndone main loop\n");
 
 outputTree(outTree, inFileList, join);
 
@@ -412,6 +432,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+char *renameFile = optionVal("rename", NULL);
+if (renameFile != NULL)
+    renameHash = hashTwoColumnFile(renameFile);
 regClusterTreeCells(argv[1], argv[2]);
 return 0;
 }
