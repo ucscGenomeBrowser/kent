@@ -1,0 +1,128 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release1 of the "ENCODE wgEncodeGisChiaPet"
+The composite track is wgEncodeGisChiaPet
+# WARNINGS #################################################
+1 - table wgEncodeGisChiaPetNB4D000006819 does not exist, from filetype bed
+2 - table wgEncodeGisChiaPetMCF7D000006822 does not exist, from filetype bed
+3 - table wgEncodeGisChiaPetMCF7D000006821 does not exist, from filetype bed
+############################################################
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release1 (new+untouched):
+    Tables: 11
+    Files: 71
+    Gbdbs: 0
+
+A) Untouched Tables (0):
+
+A') Untouched Files (0 downloadables, 0 gbdbs):
+
+B) Deprecated tables (0):
+
+B') Deprecated files (0 downloadables, 0 gbdbs):
+
+C) New tables (11):
+wgEncodeGisChiaPetHCT116D000005593
+wgEncodeGisChiaPetHeLaS3D000005572
+wgEncodeGisChiaPetK562D000005628
+wgEncodeGisChiaPetK562D000005642
+wgEncodeGisChiaPetMCF7D000005614
+wgEncodeGisChiaPetMCF7D000005635
+wgEncodeGisChiaPetMCF7D000005649
+wgEncodeGisChiaPetMCF7D000005656
+wgEncodeGisChiaPetMCF7D000005669
+wgEncodeGisChiaPetNB4D000005603
+wgEncodeGisChiaPetNB4D000005621
+
+C') New files (68 downloadables, 0 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHCT116D000005584.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHCT116D000005585.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHCT116D000005586.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHCT116D000005587.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHCT116D000005588.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHCT116D000005589.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHCT116D000005593.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHeLaS3D000005563.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHeLaS3D000005564.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHeLaS3D000005565.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHeLaS3D000005566.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHeLaS3D000005567.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHeLaS3D000005568.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetHeLaS3D000005572.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetK562D000005622.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetK562D000005623.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetK562D000005624.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetK562D000005625.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetK562D000005628.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetK562D000005636.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetK562D000005637.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetK562D000005638.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetK562D000005639.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetK562D000005642.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005608.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005609.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005610.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005611.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005614.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005629.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005630.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005631.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005632.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005635.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005643.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005644.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005645.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005646.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005649.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005650.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005651.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005652.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005653.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005656.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005657.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005658.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005659.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005660.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005661.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005662.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005663.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005664.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000005669.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000006821.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetMCF7D000006822.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetNB4D000005594.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetNB4D000005595.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetNB4D000005596.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetNB4D000005597.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetNB4D000005598.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetNB4D000005599.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetNB4D000005603.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetNB4D000005615.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetNB4D000005616.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetNB4D000005617.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetNB4D000005618.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetNB4D000005621.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/wgEncodeGisChiaPetNB4D000006819.bed.gz
+
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisChiaPet/release1/md5sum.txt

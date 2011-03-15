@@ -37,8 +37,6 @@
 #include "hgFind.h"
 #endif /* GBROWSE */
 #include "hui.h"
-#include "bigBed.h"
-#include "bigWig.h"
 
 static char const rcsid[] = "$Id: hdb.c,v 1.433 2010/05/21 16:39:57 angie Exp $";
 
@@ -3043,7 +3041,7 @@ else
 boolean hHostHasPrefix(char *prefix)
 /* Return TRUE if this is running on web-server with host name prefix */
 {
-if (prefix == NULL) 
+if (prefix == NULL)
     return FALSE;
 
 char *httpHost = getenv("HTTP_HOST");
@@ -3055,11 +3053,18 @@ return startsWith(prefix, httpHost);
 }
 
 boolean hIsPrivateHost()
-/* Return TRUE if this is running on private (development) web-server. 
+/* Return TRUE if this is running on private (development) web-server.
  * This was originally genome-test as well as hgwdev, however genome-test
  * may be repurposed to direct users to the preview site instead of development site. */
 {
-return hHostHasPrefix("hgwdev");
+return hHostHasPrefix("hgwdev") || hHostHasPrefix("genome-test");  // FIXME: If genome-test
+}
+
+boolean hIsBetaHost()
+/* Return TRUE if this is running on beta (QA) web-server.
+ * Use sparingly as behavior on beta should be as close to RR as possible. */
+{
+return hHostHasPrefix("hgwbeta");
 }
 
 boolean hIsPreviewHost()
@@ -3075,7 +3080,7 @@ return hHostHasPrefix("genome-preview");
 char *hBrowserName()
 /* Return browser name based on host name */
 {
-return (hIsPreviewHost() ? "Preview Genome Browser" : 
+return (hIsPreviewHost() ? "Preview Genome Browser" :
         (hIsPrivateHost() ? "TEST Genome Browser" : "Genome Browser"));
 }
 
@@ -4938,61 +4943,4 @@ if (fileName == NULL)
 	errAbort("Missing fileName in %s table", table);
     }
 return fileName;
-}
-
-void printUpdateTime(char *database, struct trackDb *tdb,
-    struct customTrack *ct)
-/* display table update time */
-{
-/* have not decided what to do for a composite container */
-if (tdbIsComposite(tdb))
-    return;
-struct sqlConnection *conn = NULL;
-char *tableName = NULL;
-if (isCustomTrack(tdb->track))
-    {
-    if (ct)
-	{
-	conn =  hAllocConn(CUSTOM_TRASH);
-	tableName = ct->dbTableName;
-	}
-    }
-else if (startsWith("big", tdb->type))
-    {
-    char *tableName = hTableForTrack(database, tdb->table);
-    struct sqlConnection *conn =  hAllocConnTrack(database, tdb);
-    char *bbiFileName = bbiNameFromSettingOrTable(tdb, conn, tableName);
-    hFreeConn(&conn);
-    struct bbiFile *bbi = NULL;
-    if (startsWith("bigBed", tdb->type))
-	bbi = bigBedFileOpen(bbiFileName);
-    if (startsWith("bigWig", tdb->type))
-	bbi = bigWigFileOpen(bbiFileName);
-    time_t timep = 0;
-    if (bbi)
-	{
-	timep = bbiUpdateTime(bbi);
-	bbiFileClose(&bbi);
-	}
-    printBbiUpdateTime(&timep);
-    }
-else
-    {
-    tableName = hTableForTrack(database, tdb->table);
-    conn = hAllocConnTrack(database, tdb);
-    }
-if (tableName)
-    {
-    char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
-    if (date != NULL)
-	printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", date);
-    }
-hFreeConn(&conn);
-}
-
-void printBbiUpdateTime(time_t *timep)
-/* for bbi files, print out the timep value */
-{
-    printf ("<B>Data last updated:&nbsp;</B>%s<BR>\n",
-	sqlUnixTimeToDate(timep, FALSE));
 }

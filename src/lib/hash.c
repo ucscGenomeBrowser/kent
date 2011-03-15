@@ -324,7 +324,9 @@ if (hel == NULL)
   }
 else
   {
-  ++hel->val;
+  hel->val = ((char *)hel->val)+1;
+  /* The much simpler ++hel->val works for gnu C, but really adding one to a void pointer
+   * I think is not well defined. */
   }
 }
 
@@ -405,6 +407,7 @@ for (i=0; i<hash->size; ++i)
 	slReverse(&hash->table[i]);
     }
 freeMem(oldTable);
+hash->numResizes++;
 }
 
 
@@ -647,6 +650,28 @@ int i;
 for (i=0; i<hash->size; ++i)
     fprintf(fh, "%d\n", bucketLen(hash->table[i]));
 carefulClose(&fh);
+}
+
+void hashPrintStats(struct hash *hash, char *label, FILE *fh)
+/* print statistic about a hash table */
+{
+// count up usage
+int i, occupiedCnt = 0, maxBucket = 0;
+for (i=0; i<hash->size; ++i)
+    {
+    if (hash->table[i] != NULL)
+        occupiedCnt++;
+    int sz = bucketLen(hash->table[i]);
+    maxBucket = max(maxBucket, sz);
+    }
+
+fprintf(fh, "hashTable\t%s\n", label);
+fprintf(fh, "tableSize\t%d\t%d\n", hash->size, hash->powerOfTwoSize);
+fprintf(fh, "numElements\t%d\n", hash->elCount);
+fprintf(fh, "occupied\t%d\t%0.4f\n", occupiedCnt, ((hash->size == 0) ? 0.0 : ((float)occupiedCnt)/hash->size));
+fprintf(fh, "maxBucket\t%d\n", maxBucket);
+fprintf(fh, "numResizes\t%d\n", hash->numResizes);
+fprintf(fh, "\n");
 }
 
 struct hashEl *hashReplace(struct hash *hash, char *name, void *val)

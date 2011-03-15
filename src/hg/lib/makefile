@@ -59,7 +59,6 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o kg1ToKg2.o \
     jgiGene.o \
     kgAlias.o kgColor.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
-    knetUdc.o \
     ld.o ld2.o lfs.o liftOver.o liftOverChain.o liftUp.o \
     llaInfo.o lsSnpPdb.o lsSnpPdbChimera.o mafFrames.o mafGene.o mafSummary.o \
     makeItemsItem.o mammalPsg.o mapSts.o \

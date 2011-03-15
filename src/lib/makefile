@@ -23,20 +23,21 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o \
     hash.o histogram.o hmmPfamParse.o hmmstats.o htmlPage.o htmshell.o \
     https.o intExp.o intValTree.o internet.o itsa.o \
-    jointalign.o jpegSize.o keys.o kxTok.o linefile.o localmem.o log.o \
+    jointalign.o jpegSize.o keys.o knetUdc.o kxTok.o linefile.o localmem.o log.o \
     maf.o mafFromAxt.o mafScore.o md5.o memalloc.o memgfx.o metaWig.o mgCircle.o \
     mgPolygon.o mime.o net.o nib.o nibTwo.o nt4.o numObscure.o \
     obscure.o oldGff.o oligoTm.o options.o osunix.o pairHmm.o peakCluster.o \
     phyloTree.o pipeline.o portimpl.o pngwrite.o psGfx.o psPoly.o pscmGfx.o \
     psl.o pslGenoShow.o pslShow.o pslTbl.o pslTransMap.o pthreadWrap.o \
     qa.o quickHeap.o quotedP.o \
-    ra.o rbTree.o rangeTree.o repMask.o rle.o rnautil.o rqlEval.o rqlParse.o rudp.o \
+    ra.o rainbow.o rbTree.o rangeTree.o regexHelper.o repMask.o \
+    rle.o rnautil.o rqlEval.o rqlParse.o rudp.o \
     scoreWindow.o seg.o seqOut.o seqStats.o servBrcMcw.o servCrunx.o \
     servcis.o servcl.o servmsII.o servpws.o shaRes.o slog.o snof.o \
     snofmake.o snofsig.o spaceSaver.o spacedColumn.o spacedSeed.o \
     splatAli.o sqlList.o sqlNum.o subText.o sufa.o sufx.o synQueue.o \
     tabRow.o textOut.o tokenizer.o trix.o twoBit.o \
-    udc.o vGfx.o vPng.o verbose.o \
+    udc.o vcf.o vGfx.o vPng.o verbose.o \
     wildcmp.o wormdna.o \
     xAli.o xa.o xap.o xenshow.o xmlEscape.o xp.o zlibFace.o
 

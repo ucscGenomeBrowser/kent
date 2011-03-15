@@ -1,6 +1,7 @@
 metaObject wgEncodeUwDgf
 objType composite
 composite wgEncodeUwDgf
+expVars lab,dataType,cell
 geoSeriesAccession GSE26328
 
 metaObject wgEncodeUwDgfAoafAln
@@ -2214,4 +2215,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: -1849932064
+# MAGIC: 658779939

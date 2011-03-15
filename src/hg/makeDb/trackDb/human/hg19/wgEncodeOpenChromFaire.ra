@@ -1,31 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeChromatinMap.ra,v 1.1 2010/05/27 21:34:43 tdreszer Exp $
-
-# Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
-# Notes:
-#       - Track Long Label:  Formaldehyde Assisted Isolation of Regulatory Elements by FAIRE-seq from ENCODE/Duke (Open Chromatin)
-#       - Track Short Label: UNC FAIRE HS
-#       - View Long Labels: [cell] [treatment] FAIRE [view] from ENCODE/UNC (Open Chromatin)
-#       - cellType Order: Ordering is based on tier and alphabetical within a tier
-#       - Default Tracks on: Peaks,Base Overlap Signal and F-Seq Desnsity Signals for the following Cells
-#               - GM12878
-#               - H1-hESC
-#               - K562
-#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
-#       - Default View selections
-#               - Peaks = dense
-#               - F-Seq Density Signal = full
-#               - Base Overlap Signal = full
-#       - View Displays: Deafult view filters:
-#               - Peaks: ?
-#               - F-Seq Density Signal: Range: 0-> 0.3
-#               - Base Overlap Signal: Range: 0 -> 50
-#       - Short Labels:
-#               Template: [cell][treatment] [view]
-#               - Views: For consistency sake view will be
-#                       - Peaks = Pk
-#                       - F-seq Density Signal = FD
-#                       - Base Overlap Signal = BO
-
+# Open Chromatin UNC FAIRE (wrangler: Tim, assisted by Venkat)
 
 track wgEncodeOpenChromFaire
 compositeTrack on
@@ -33,7 +6,7 @@ superTrack wgEncodeDNAseSuper dense
 shortLabel UNC FAIRE
 longLabel Open Chromatin by FAIRE from ENCODE/OpenChrom(UNC Chapel Hill)
 group regulation
-subGroup1 view Views Peaks=Peaks SIG=F-Seq_Density_Signal SIGBO=Base_Overlap_Signal
+subGroup1 view Views Peaks=Peaks SIG=Density_Signal SIGBO=Overlap_Signal
 subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K5=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEP=HepG2&nbsp;(Tier_2) 2HUV=HUVEC&nbsp;(Tier_2) A549=A549 AOSMC=AoSMC Astrocy=Astrocy CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC  HSMM=HSMM HSMMt=HSMMtube HTR8=HTR8svn LHSR=LHSR MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib UROtsa=Urothelia
 #subGroup2 cellType Cell_Line AOSMC=AoSMC CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier2</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK_<i>Tier2</i> PANI=PanIslets PROG=ProgFib
 subGroup3 treatment Treatment AANONE=None ANDRO=Methyltrienolone&nbsp;(androgen) ESTRO=Estrogen HYPOXLAC=Hypoxia_LacAcid IFNa4h=IFN&alpha_4hrs IFNg4h=IFN&gamma_4hrs NaBut=Sodium_Butyrate OHUrea=Hydroxyurea SERUMFREE=Serum_Free UT189=UT189_E.coli
@@ -62,7 +35,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
     scoreMin 600
 
         track wgEncodeOpenChromFaireGm12878Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks
         shortLabel GM12878 FAIRE Pk
         longLabel GM12878 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -72,7 +44,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1480 dateSubmitted=2010-06-15
 
         track wgEncodeOpenChromFaireH1hescPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks
         shortLabel H1-hESC FAIRE Pk
         longLabel H1-hESC FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -82,7 +53,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1496 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHelas3Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HeLa-S3 FAIRE Pk
         longLabel HeLa-S3 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -92,7 +62,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1497 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireGm19239Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel GM19239 FAIRE Pk
         longLabel GM19239 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -101,7 +70,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1508 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireGm18507Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel GM18507 FAIRE Pk
         longLabel GM18507 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -110,7 +78,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1513 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHepg2Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HepG2 FAIRE Pk
         longLabel HepG2 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -120,7 +87,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1515 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHuvecPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HUVEC FAIRE Pk
         longLabel HUVEC FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -130,7 +96,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1529 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireNhekPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel NHEK FAIRE Pk
         longLabel NHEK FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -140,7 +105,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1530 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireK562Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks
         shortLabel K562 FAIRE Pk
         longLabel K562 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -150,7 +114,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1531 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFairePanisletsPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel PanIslet FAIRE Pk
         longLabel PanIslets FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -159,7 +122,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1546 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireHelas3Ifna4hPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HeLa IFa FAIRE Pk
         longLabel HeLa-S3 IFNa 4hr FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -169,7 +131,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1611 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireHelas3Ifng4hPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HeLa IFg FAIRE Pk
         longLabel HeLa-S3 IFNg 4hr FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -179,7 +140,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1612 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireMedulloPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Medullo FAIRE Pk
         longLabel Medullo FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -188,7 +148,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2501 dateSubmitted=2010-10-16
 
         track wgEncodeOpenChromFaireGm12892Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel GM12892 FAIRE Pk
         longLabel GM12892 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -197,7 +156,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2488 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireGm12891Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel GM12891 FAIRE Pk
         longLabel GM12891 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -206,7 +164,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2494 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireAstrocyPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Astrocy FAIRE Pk
         longLabel Astrocy FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -215,7 +172,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2481 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireGlioblaPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Gliobla FAIRE Pk
         longLabel Gliobla FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -224,7 +180,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2515 dateSubmitted=2010-10-20
 
         track wgEncodeOpenChromFaireK562OhureaPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel K562 urea FAIR Pk
         longLabel K562 Hydroxyurea FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -234,7 +189,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2772 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromFaireK562NabutPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel K562 NaBu FAIR Pk
         longLabel K562 Sodium Butyrate FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -244,7 +198,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2771 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromFaireHtr8Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HTR8svn FAIRE Pk
         longLabel HTR8svn FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -253,7 +206,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3379 dateSubmitted=2011-01-19
 
         track wgEncodeOpenChromFaireMcf7HypoxlacPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel MCF7 hypox FAI Pk
         longLabel MCF-7 Hypoxia LacAcid FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -262,7 +214,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3378 dateSubmitted=2011-01-19
 
         track wgEncodeOpenChromFaireUrotsaUt189Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Urothl ec FAIR Pk
         longLabel Urothelia UT189 E.coli FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -271,7 +222,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3278 dateSubmitted=2011-01-18
 
         track wgEncodeOpenChromFaireUrotsaPk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Urothl FAIRE Pk
         longLabel Urothelia FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -280,7 +230,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3277 dateSubmitted=2011-01-18
 
         track wgEncodeOpenChromFaireA549Pk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel A549 FAIRE Pk
         longLabel A549 FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -289,7 +238,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3496 dateSubmitted=2011-01-22
 
         track wgEncodeOpenChromFaireNhbePk
-        release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel NHBE FAIRE Pk
         longLabel NHBE FAIRE Peaks from ENCODE/OpenChrom(UNC)
@@ -307,248 +255,223 @@ dataVersion through the ENCODE Jan 2011 Freeze
     minLimit 0
     maxLimit 0.3
     autoScale off
-    windowingFunction maximum
+    windowingFunction mean+whiskers
     maxHeightPixels 100:32:16
 
         track wgEncodeOpenChromFaireGm12878Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal
-        shortLabel GM12878 FAIRE FD
-        longLabel GM12878 FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel GM12878 FAIRE DS
+        longLabel GM12878 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=1GM treatment=AANONE
         type bigWig 0.000000 0.559800
         color 153,38,0
         # subId=1480 dateSubmitted=2010-06-15
 
         track wgEncodeOpenChromFaireH1hescSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal
-        shortLabel H1-hESC FAIRE FD
-        longLabel H1-hESC FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel H1-hESC FAIRE DS
+        longLabel H1-hESC FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=1H1 treatment=AANONE
         type bigWig 0.000000 0.304500
         color 0,107,27
         # subId=1496 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHelas3Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel HeLa-S3 FAIRE FD
-        longLabel HeLa-S3 FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel HeLa-S3 FAIRE DS
+        longLabel HeLa-S3 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=2HELA treatment=AANONE
         type bigWig 0.000000 0.549300
         color 0,119,158
         # subId=1497 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireGm19239Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel GM19239 FAIRE FD
-        longLabel GM19239 FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel GM19239 FAIRE DS
+        longLabel GM19239 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=GM19239 treatment=AANONE
         type bigWig 0.000000 1.023000
         # subId=1508 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireGm18507Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel GM18507 FAIRE FD
-        longLabel GM18507 FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel GM18507 FAIRE DS
+        longLabel GM18507 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=GM18507 treatment=AANONE
         type bigWig 0.000000 0.867300
         # subId=1513 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHepg2Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel HepG2 FAIRE FD
-        longLabel HepG2 FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel HepG2 FAIRE DS
+        longLabel HepG2 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=2HEP treatment=AANONE
         type bigWig 0.000000 0.832300
         color 189,0,157
         # subId=1515 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHuvecSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel HUVEC FAIRE FD
-        longLabel HUVEC FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel HUVEC FAIRE DS
+        longLabel HUVEC FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=2HUV treatment=AANONE
         type bigWig 0.000000 1.260500
         color 224,75,0
         # subId=1529 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireNhekSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel NHEK FAIRE FD
-        longLabel NHEK FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel NHEK FAIRE DS
+        longLabel NHEK FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=NHEK treatment=AANONE
         type bigWig 0.000000 0.643100
         color 179,0,134
         # subId=1530 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireK562Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal
-        shortLabel K562 FAIRE FD
-        longLabel K562 FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel K562 FAIRE DS
+        longLabel K562 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=1K5 treatment=AANONE
         type bigWig 0.000000 0.392200
         color 46,0,184
         # subId=1531 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFairePanisletsSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel PanIslet FAIRE FD
-        longLabel PanIslets FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel PanIslet FAIRE DS
+        longLabel PanIslets FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=PANI treatment=AANONE
         type bigWig 0.000000 0.373200
         # subId=1546 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireHelas3Ifna4hSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel HeLa IFa FAIRE FD
-        longLabel HeLa-S3 IFNa 4hr FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel HeLa IFa FAIRE DS
+        longLabel HeLa-S3 IFNa 4hr FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=2HELA treatment=IFNa4h
         type bigWig 0.000000 0.670000
         color 0,119,158
         # subId=1611 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireHelas3Ifng4hSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel HeLa IFg FAIRE FD
-        longLabel HeLa-S3 IFNg 4hr FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel HeLa IFg FAIRE DS
+        longLabel HeLa-S3 IFNg 4hr FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=2HELA treatment=IFNg4h
         type bigWig 0.000000 0.697800
         color 0,119,158
         # subId=1612 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireMedulloSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Medullo FAIRE FD
-        longLabel Medullo FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Medullo FAIRE DS
+        longLabel Medullo FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=MEDULLO treatment=AANONE
         type bigWig 0.000000 0.433400
         # subId=2501 dateSubmitted=2010-10-16
 
         track wgEncodeOpenChromFaireGm12892Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel GM12892 FAIRE FD
-        longLabel GM12892 FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel GM12892 FAIRE DS
+        longLabel GM12892 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=GM12892 treatment=AANONE
         type bigWig 0.000000 0.395000
         # subId=2488 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireGm12891Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel GM12891 FAIRE FD
-        longLabel GM12891 FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel GM12891 FAIRE DS
+        longLabel GM12891 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=GM12891 treatment=AANONE
         type bigWig 0.000000 0.636800
         # subId=2494 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireAstrocySig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Astrocy FAIRE FD
-        longLabel Astrocy FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Astrocy FAIRE DS
+        longLabel Astrocy FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=Astrocy treatment=AANONE
         type bigWig 0.000000 0.459700
         # subId=2481 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireGlioblaSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Gliobla FAIRE FD
-        longLabel Gliobla FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Gliobla FAIRE DS
+        longLabel Gliobla FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=Gliobla treatment=AANONE
         type bigWig 0.000000 0.367200
         # subId=2515 dateSubmitted=2010-10-20
 
         track wgEncodeOpenChromFaireK562OhureaSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel K562 urea FAIR FD
-        longLabel K562 Hydroxyurea FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel K562 urea FAIR DS
+        longLabel K562 Hydroxyurea FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=1K5 treatment=OHUrea
         type bigWig 0.000000 0.142500
         color 46,0,184
         # subId=2772 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromFaireK562NabutSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel K562 NaBu FAIR FD
-        longLabel K562 Na Butyrate FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel K562 NaBu FAIR DS
+        longLabel K562 Na Butyrate FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=1K5 treatment=NaBut
         type bigWig 0.000000 0.145600
         color 46,0,184
         # subId=2771 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromFaireHtr8Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel HTR8svn FAIRE FD
-        longLabel HTR8svn FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel HTR8svn FAIRE DS
+        longLabel HTR8svn FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups treatment=AANONE view=SIG cellType=HTR8
         type bigWig 0.000000 0.335400
         # subId=3379 dateSubmitted=2011-01-19
 
         track wgEncodeOpenChromFaireMcf7HypoxlacSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel MCF7 hypox FAI FD
-        longLabel MCF-7 Hypoxia FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel MCF7 hypox FAI DS
+        longLabel MCF-7 Hypoxia FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=MCF7 treatment=HYPOXLAC
         type bigWig 0.000000 0.601300
         # subId=3378 dateSubmitted=2011-01-19
 
         track wgEncodeOpenChromFaireUrotsaUt189Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Urothl ec FAIR FD
-        longLabel Urothelia UT189 FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Urothl ec FAIR DS
+        longLabel Urothelia UT189 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=UROtsa treatment=UT189
         type bigWig 0.000000 0.338000
         # subId=3278 dateSubmitted=2011-01-18
 
         track wgEncodeOpenChromFaireUrotsaSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Urothl FAIRE FD
-        longLabel Urothelia FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Urothl FAIRE DS
+        longLabel Urothelia FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups treatment=AANONE view=SIG cellType=UROtsa
         type bigWig 0.000000 0.358300
         # subId=3277 dateSubmitted=2011-01-18
 
         track wgEncodeOpenChromFaireA549Sig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel A549 FAIRE FD
+        shortLabel A549 FAIRE DS
         longLabel A549 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=A549 treatment=AANONE
         type bigWig 0.000000 0.403700
         # subId=3496 dateSubmitted=2011-01-22
 
         track wgEncodeOpenChromFaireNhbeSig
-        release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel NHBE FAIRE FD
-        longLabel NHBE FAIRE F-Seq Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel NHBE FAIRE DS
+        longLabel NHBE FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=NHBE treatment=AANONE
         type bigWig 0.000000 0.366700
         # subId=3507 dateSubmitted=2011-02-11
 
 
     track wgEncodeOpenChromFaireViewSigBo
-    shortLabel Overlap Signal
+    shortLabel Base Overlap Signal
     view SIGBO
     visibility full
     subTrack wgEncodeOpenChromFaire
@@ -556,241 +479,216 @@ dataVersion through the ENCODE Jan 2011 Freeze
     minLimit 0
     maxLimit 50
     autoScale off
-    windowingFunction maximum
+    windowingFunction mean+whiskers
     maxHeightPixels 100:32:16
 
         track wgEncodeOpenChromFaireGm12878BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo
-        shortLabel GM12878 FAIRE BO
-        longLabel GM12878 FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel GM12878 FAIRE OS
+        longLabel GM12878 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=1GM treatment=AANONE
         type bigWig 0.000000 2739.000000
         color 153,38,0
         # subId=1480 dateSubmitted=2010-06-15
 
         track wgEncodeOpenChromFaireH1hescBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo
-        shortLabel H1-hESC FAIRE BO
-        longLabel H1-hESC FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel H1-hESC FAIRE OS
+        longLabel H1-hESC FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=1H1 treatment=AANONE
         type bigWig 0.000000 1584.000000
         color 0,107,27
         # subId=1496 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHelas3BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel HeLa-S3 FAIRE BO
-        longLabel HeLa-S3 FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel HeLa-S3 FAIRE OS
+        longLabel HeLa-S3 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=2HELA treatment=AANONE
         type bigWig 0.000000 2532.000000
         color 0,119,158
         # subId=1497 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireGm19239BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel GM19239 FAIRE BO
-        longLabel GM19239 FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel GM19239 FAIRE OS
+        longLabel GM19239 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=GM19239 treatment=AANONE
         type bigWig 0.000000 1562.000000
         # subId=1508 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireGm18507BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel GM18507 FAIRE BO
-        longLabel GM18507 FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel GM18507 FAIRE OS
+        longLabel GM18507 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=GM18507 treatment=AANONE
         type bigWig 0.000000 2552.000000
         # subId=1513 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHepg2BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel HepG2 FAIRE BO
-        longLabel HepG2 FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel HepG2 FAIRE OS
+        longLabel HepG2 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=2HEP treatment=AANONE
         type bigWig 0.000000 4481.000000
         color 189,0,157
         # subId=1515 dateSubmitted=2010-06-16
 
         track wgEncodeOpenChromFaireHuvecBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel HUVEC FAIRE BO
-        longLabel HUVEC FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel HUVEC FAIRE OS
+        longLabel HUVEC FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=2HUV treatment=AANONE
         type bigWig 0.000000 2531.000000
         color 224,75,0
         # subId=1529 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireNhekBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel NHEK FAIRE BO
-        longLabel NHEK FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel NHEK FAIRE OS
+        longLabel NHEK FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=NHEK treatment=AANONE
         type bigWig 0.000000 3137.000000
         color 179,0,134
         # subId=1530 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireK562BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo
-        shortLabel K562 FAIRE BO
-        longLabel K562 FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel K562 FAIRE OS
+        longLabel K562 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=1K5 treatment=AANONE
         type bigWig 0.000000 3174.000000
         color 46,0,184
         # subId=1531 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFairePanisletsBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel PanIslet FAIRE BO
-        longLabel PanIslets FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel PanIslet FAIRE OS
+        longLabel PanIslets FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=PANI treatment=AANONE
         type bigWig 0.000000 984.000000
         # subId=1546 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel HeLa IFa FAIRE BO
-        longLabel HeLa-S3 IFNa 4hr FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel HeLa IFa FAIRE OS
+        longLabel HeLa-S3 IFNa 4hr FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=2HELA treatment=IFNa4h
         type bigWig 0.000000 1431.000000
         color 0,119,158
         # subId=1611 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireHelas3Ifng4hBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel HeLa IFg FAIRE BO
-        longLabel HeLa-S3 IFNg 4hr FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel HeLa IFg FAIRE OS
+        longLabel HeLa-S3 IFNg 4hr FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=2HELA treatment=IFNg4h
         type bigWig 0.000000 1430.000000
         color 0,119,158
         # subId=1612 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireMedulloBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Medullo FAIRE BO
-        longLabel Medullo FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Medullo FAIRE OS
+        longLabel Medullo FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=MEDULLO treatment=AANONE
         type bigWig 0.000000 3221.000000
         # subId=2501 dateSubmitted=2010-10-16
 
         track wgEncodeOpenChromFaireGm12892BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel GM12892 FAIRE BO
-        longLabel GM12892 FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel GM12892 FAIRE OS
+        longLabel GM12892 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=GM12892 treatment=AANONE
         type bigWig 0.000000 1267.000000
         # subId=2488 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireGm12891BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel GM12891 FAIRE BO
-        longLabel GM12891 FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel GM12891 FAIRE OS
+        longLabel GM12891 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=GM12891 treatment=AANONE
         type bigWig 0.000000 1602.000000
         # subId=2494 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireAstrocyBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Astrocy FAIRE BO
-        longLabel Astrocy FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Astrocy FAIRE OS
+        longLabel Astrocy FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=Astrocy treatment=AANONE
         type bigWig 0.000000 1226.000000
         # subId=2481 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromFaireGlioblaBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Gliobla FAIRE BO
-        longLabel Gliobla FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Gliobla FAIRE OS
+        longLabel Gliobla FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=Gliobla treatment=AANONE
         type bigWig 0.000000 2386.000000
         # subId=2515 dateSubmitted=2010-10-20
 
         track wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel K562 urea FAIR BO
-        longLabel K562 Hydroxyurea FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel K562 urea FAIR OS
+        longLabel K562 Hydroxyurea FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=1K5 treatment=OHUrea
         type bigWig 0.000000 1562.000000
         color 46,0,184
         # subId=2772 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromFaireK562NabutBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel K562 NaBu FAIR BO
-        longLabel K562 Na Butyrate FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel K562 NaBu FAIR OS
+        longLabel K562 Na Butyrate FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=1K5 treatment=NaBut
         type bigWig 0.000000 1560.000000
         color 46,0,184
         # subId=2771 dateSubmitted=2010-10-27
 
         track wgEncodeOpenChromFaireHtr8BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel HTR8svn FAIRE BO
-        longLabel HTR8svn FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel HTR8svn FAIRE OS
+        longLabel HTR8svn FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups treatment=AANONE view=SIGBO cellType=HTR8
         type bigWig 0.000000 1371.000000
         # subId=3379 dateSubmitted=2011-01-19
 
         track wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel MCF7 hypox FAI BO
-        longLabel MCF-7 Hypoxia FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel MCF7 hypox FAI OS
+        longLabel MCF-7 Hypoxia FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=MCF7 treatment=HYPOXLAC
         type bigWig 0.000000 1609.000000
         # subId=3378 dateSubmitted=2011-01-19
 
         track wgEncodeOpenChromFaireUrotsaUt189BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Urothl ec FAIR BO
-        longLabel Urothelia UT189 FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Urothl ec FAIR OS
+        longLabel Urothelia UT189 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=UROtsa treatment=UT189
         type bigWig 0.000000 1424.000000
         # subId=3278 dateSubmitted=2011-01-18
 
         track wgEncodeOpenChromFaireUrotsaBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Urothl FAIRE BO
-        longLabel Urothelia FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Urothl FAIRE OS
+        longLabel Urothelia FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups treatment=AANONE view=SIGBO cellType=UROtsa
         type bigWig 0.000000 1146.000000
         # subId=3277 dateSubmitted=2011-01-18
 
         track wgEncodeOpenChromFaireA549BaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel A549 FAIRE BO
-        longLabel A549 FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel A549 FAIRE OS
+        longLabel A549 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=A549 treatment=AANONE
         type bigWig 0.000000 1563.000000
         # subId=3496 dateSubmitted=2011-01-22
 
         track wgEncodeOpenChromFaireNhbeBaseOverlapSignal
-        release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel NHBE FAIRE BO
-        longLabel NHBE FAIRE Base Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel NHBE FAIRE OS
+        longLabel NHBE FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=NHBE treatment=AANONE
         type bigWig 0.000000 1478.000000
         # subId=3507 dateSubmitted=2011-02-11

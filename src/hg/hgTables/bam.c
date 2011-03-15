@@ -265,7 +265,7 @@ return tLength;
 }
 
 static void addFilteredBedsOnRegion(char *fileName, struct region *region, 
-	char *table, struct asFilter *filter, struct lm *bedLm, struct bed **pBedList)
+	char *table, struct asFilter *filter, struct lm *bedLm, struct bed **pBedList, struct hash *idHash)
 /* Add relevant beds in reverse order to pBedList */
 {
 struct lm *lm = lmInit(0);
@@ -278,6 +278,9 @@ for (sam = samList; sam != NULL; sam = sam->next)
     samAlignmentToRow(sam, numBuf, row);
     if (asFilterOnRow(filter, row))
         {
+	if ((idHash != NULL) && (hashLookup(idHash, sam->qName) == NULL))
+	    continue;
+
 	struct bed *bed;
 	lmAllocVar(bedLm, bed);
 	bed->chrom = lmCloneString(bedLm, sam->rName);
@@ -298,6 +301,7 @@ struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn,
 /* Figure out bam file name get column info and filter. */
 struct asObject *as = bamAsObj();
 struct asFilter *filter = asFilterFromCart(cart, db, table, as);
+struct hash *idHash = identifierHash(db, table);
 
 /* Get beds a region at a time. */
 struct bed *bedList = NULL;
@@ -305,7 +309,7 @@ struct region *region;
 for (region = regionList; region != NULL; region = region->next)
     {
     char *fileName = bamFileName(table, conn, region->chrom);
-    addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList);
+    addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList, idHash);
     freeMem(fileName);
     }
 slReverse(&bedList);

@@ -1,3 +1,8 @@
+metaObject wgEncodeOpenChromDnase
+objType composite
+composite wgEncodeOpenChromDnase
+expVars lab,dataType,cell,treatment
+
 metaObject wgEncodeOpenChromDnase8988tAlnRep1
 objType file
 cell 8988T
@@ -6636,4 +6641,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 95879887
+# MAGIC: 1448392362

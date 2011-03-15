@@ -1,6 +1,7 @@
 metaObject wgEncodeCshlShortRnaSeq
 objType composite
 composite wgEncodeCshlShortRnaSeq
+expVars lab,dataType,cell,localization,rnaExtract
 geoSeriesAccession GSE24565
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1
@@ -6334,4 +6335,4 @@ rnaExtract shortTotal
 subId 3377
 view RawData
 
-# MAGIC: 139306534
+# MAGIC: -1142194358

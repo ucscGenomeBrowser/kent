@@ -7,6 +7,10 @@
 #ifndef LINEFILE_H
 #define LINEFILE_H
 
+#ifdef USE_TABIX
+#include "tabix.h"
+#endif
+
 enum nlType {
  nlt_undet, /* undetermined */
  nlt_unix,  /* lf   */
@@ -44,6 +48,10 @@ struct lineFile
     struct metaOutput *metaOutput;   /* list of FILE handles to write metaData to */
     bool isMetaUnique;          /* if set, do not repeat comments in output */
     struct hash *metaLines;     /* save lines to suppress repetition */
+#ifdef USE_TABIX
+    tabix_t *tabix;		/* A tabix-compressed file and its binary index file (.tbi) */
+    ti_iter_t tabixIter;	/* An iterator to get decompressed indexed lines of text */
+#endif
     };
 
 char *getFileNameFromHdrSig(char *m);
@@ -206,6 +214,24 @@ void lineFileSetUniqueMetaData(struct lineFile *lf);
 
 void lineFileRemoveInitialCustomTrackLines(struct lineFile *lf);
 /* remove initial browser and track lines */
+
+/*----- Optionally-compiled wrapper on tabix (compression + indexing): -----*/
+
+#define COMPILE_WITH_TABIX "%s: Sorry, this functionality is available only when\n" \
+    "you have installed the tabix library from\n" \
+     "http://samtools.sourceforge.net/ and rebuilt kent/src with USE_TABIX=1\n" \
+     "(see http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables)."
+
+struct lineFile *lineFileOnTabix(char *fileOrUrl, bool zTerm);
+/* Wrap a line file around a data file that has been compressed and indexed
+ * by the tabix command line program.  The index file <fileName>.tbi must be
+ * readable in addition to fileName. If there's a problem, warn & return NULL.
+ * This works only if kent/src has been compiled with USE_TABIX=1 and linked
+ * with the tabix C library. */
+
+boolean lineFileSetTabixRegion(struct lineFile *lf, char *seqName, int start, int end);
+/* Assuming lf was created by lineFileOnTabix, tell tabix to seek to the specified region
+ * and return TRUE (or if there are no items in region, return FALSE). */
 
 #endif /* LINEFILE_H */
 

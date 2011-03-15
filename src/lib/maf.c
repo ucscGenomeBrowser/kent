@@ -212,7 +212,7 @@ for (;;)
 		comp->rightStatus = *row[4];
 		comp->rightLen = atoi(row[5]);
 		}
-		if (sameString(word, "q"))
+            if (sameString(word, "q"))
 		{
 		struct mafComp *comp;
 		int wordCount;

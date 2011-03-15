@@ -2,51 +2,124 @@
 
 include wgEncodeSuper.ra
 
-#Encode Composite tracks
-include wgEncodeUwAffyExonArray.ra
-include wgEncodeSydhTfbs.ra
-include wgEncodeSydhHistone.ra
-include wgEncodeOpenChromChip.ra
-include wgEncodeOpenChromDnase.ra
-include wgEncodeOpenChromFaire.ra
-include wgEncodeOpenChromSynth.ra
-include wgEncodeDukeAffyExon.ra
-
-# Nucleosome
-include wgEncodeSydhNsome.ra
-
-#  GENCODE genes (wrangler: braney )
+# GENCODE genes (wrangler: braney )
 include wgEncodeGencode.ra
 include wgEncodeGencodeV5.ra alpha
 
+# UNC/BSU Proteogenomics (wrangler: cline)
+include wgEncodeUncBsuProt.ra alpha
+
+# Nucleosome (wrangler: venkat)
+include wgEncodeSydhNsome.ra
+
+# GIS RNA PET (wrangler: cricket)
+include wgEncodeGisRnaPet.ra
+
+# GIS DNA PET (wrangler: cricket)
+include wgEncodeGisDnaPet.ra
+
+# HAIB Genotype (CNV) (wrangler: Cricket)
+include wgEncodeHaibGenotype.ra alpha
+
+# BU Orchid (wrangler: cricket)
+include wgEncodeBuOrchid.ra
+
+# Affy Rna Chip (wrangler: braney)
+include wgEncodeAffyRnaChip.ra
+
+# Chromatin Interactions ------
+
+# GIS ChIA-pet (wrangler: braney)
+include wgEncodeGisChiaPet.ra alpha
+
+# UMass-Dekker 5C (wrangler: kate)
+#include wgEncodeUmassDekker5C.ra alpha
+
+# UW 5C (wrangler: kate)
+include wgEncodeUw5C.ra alpha
+
+
+# Encode Affy Exon -------------------------------------------- 
+
+# UW Affy Exon (wrangler: cricket)
+include wgEncodeUwAffyExonArray.ra
+
+# Duke Affy Exon (wrangler: cricket)
+include wgEncodeDukeAffyExon.ra alpha
+
+
+###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
+#UNC FAIRE (wrangler: tim)
+include wgEncodeOpenChromFaire.ra alpha,beta
+
+#Open Chrom Synth (wrangler: tim)
+include wgEncodeOpenChromSynth.ra
+
+#Duke DNaseI HS (wrangler: tim)
+include wgEncodeOpenChromDnase.ra
+
+#Uw Dnase-Seq (wrangler: Venkat)
+include wgEncodeUwDnase.ra beta,public
+include wgEncodeUwDnase.new.ra alpha
+
+#UW DNase DGF (wrangler: Venkat)
+include wgEncodeUwDgf.ra beta,public
+include wgEncodeUwDgf.new.ra alpha
+###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
+
+
+
+
+# ENCODE RNA SEQ -----------------------------------
+
 # Riken CAGE (wrangler: cricket)
-include wgEncodeRikenCage.ra beta
-include wgEncodeRikenCage.new.ra alpha
+include wgEncodeRikenCage.ra alpha,beta
+#include wgEncodeRikenCage.new.ra alpha
 
 # CSHL Small RNA (wrangler: cricket)
 include wgEncodeCshlShortRnaSeq.ra beta,public
 include wgEncodeCshlShortRnaSeq.new.ra alpha
 
-# UNC/BSU Proteogenomics (wrangler: cline)
-include wgEncodeUncBsuProt.ra alpha
+# GIS RNA Seq (wrangler: cricket)
+include wgEncodeGisRnaSeq.ra
 
-# GIS ChIA-pet (wrangler: braney)
-include wgEncodeGisChiaPet.ra alpha
+# Caltech RNA Seq (wrangler: cricket)
+include wgEncodeCaltechRnaSeq.ra beta,public
+include wgEncodeCaltechRnaSeq.new.ra alpha
+
+# CSHL Long Rna Seq (wrangler: cricket)
+include wgEncodeCshlLongRnaSeq.ra
+
+# Yale Rna Seq (wrangler: cricket)
+include wgEncodeYaleRnaSeq.ra
+
+#HAIB RNA-seq (wrangler: Cricket)
+include wgEncodeHaibRnaSeq.ra alpha
+
+
+
+
+
+
+# ENCODE DNA Methyl ---------------------------------------
 
 #HAIB Methyl-Seq (wrangler: Vankat) most likely never leaving alpha
 include wgEncodeHaibMethylSeq.ra
+
 #HAIB Methyl Array (wrangler:Cricket)
 #include wgEncodeHaibMethylArray.ra
 include wgEncodeHaibMethyl27.ra alpha
+
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
 include wgEncodeHaibMethylRrbs.ra beta,public
 include wgEncodeHaibMethylRrbs.new.ra alpha
-#HAIB Genotype (CNV) (wrangler: Cricket)
-include wgEncodeHaibGenotype.ra alpha
-#HAIB RNA-seq (wrangler: Cricket)
-include wgEncodeHaibRnaSeq.ra alpha
-#HAIB TFBS (wrangler: Venkat)
-include wgEncodeHaibTfbs.ra
+
+
+
+
+
+
+# ENCODE HISTONE --------------------------------------
 
 #Broad Histone (wrangler: Tim)
 include wgEncodeBroadHistone.ra
@@ -54,34 +127,42 @@ include wgEncodeBroadHistone.ra
 #UW Histone (wrangler:Venkat)
 include wgEncodeUwHistone.ra
 
-#UW DNase DGF (wrangler: Venkat)
-include wgEncodeUwDgf.ra beta,public
-include wgEncodeUwDgf.new.ra alpha
+# SYDH Histone (wrangler: Venkat)
+include wgEncodeSydhHistone.ra
 
-#Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.ra beta,public
-include wgEncodeUwDnase.new.ra alpha
 
-# SUNY Rip-Seq Tracks (wrangler: Cricket)
-include wgEncodeSunyAlbanyGeneSt.ra alpha
-include wgEncodeSunyAlbanyTiling.ra beta,public
-include wgEncodeSunyAlbanyTiling.new.ra alpha
-include wgEncodeSunySwitchgear.ra alpha
-include wgEncodeSunyRipSeq.ra alpha 
+# ENCODE TFBS -------------------------------------------
 
-include wgEncodeGisRnaSeq.ra
-include wgEncodeGisRnaPet.ra
-include wgEncodeGisDnaPet.ra
-include wgEncodeAffyRnaChip.ra
-include wgEncodeUwTfbs.ra
-include wgEncodeCshlLongRnaSeq.ra
-include wgEncodeYaleRnaSeq.ra
-include wgEncodeBuOrchid.ra
+# UW TFBS (wrangler: Venkat)
+include wgEncodeUwTfbs.ra alpha,beta
+
+# UTA TFBS (wrangler: Tim)
+include wgEncodeOpenChromChip.ra alpha,beta
+
+# HAIB TFBS (wrangler: Venkat)
+include wgEncodeHaibTfbs.ra
+
+# SYDH TFBS (wrangler: Venkat)
+include wgEncodeSydhTfbs.ra
+
+# U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra
 
-# Caltech RNA Seq
-include wgEncodeCaltechRnaSeq.ra beta,public
-include wgEncodeCaltechRnaSeq.new.ra alpha
+
+# SUNY RBP -----------------------------------------
+
+# SUNY Gene ST (wrangler: cricket)
+include wgEncodeSunyAlbanyGeneSt.ra alpha
+
+# SUNY Tiling Array (wrangler: cricket)
+include wgEncodeSunyAlbanyTiling.ra
+
+# SUNY SwitchGear (wrangler: cricket)
+include wgEncodeSunySwitchgear.ra alpha
+
+# SUNY Rip-seq (wrangler: cricket)
+include wgEncodeSunyRipSeq.ra alpha 
+
 
 track wgEncodeMapability
 compositeTrack on

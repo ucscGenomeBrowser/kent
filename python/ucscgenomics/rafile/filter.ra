@@ -1,9 +1,30 @@
-_name All
-_add MissingTermTagDesc
+_filter AddTerm
+_add MissingTerm
 
-_name TermTagDesc
+_filter AddTag
+_add MissingTag
+
+_filter AddDesc
+_add MissingDescription
+
+_filter Term
 term .+
-tag .+
-description .+
-_remove MissingTermTagDesc
+_remove MissingTerm
 
+_filter Tag
+tag .+
+_remove MissingTag
+
+_filter Desc
+description .+
+_remove MissingDescription
+
+_check UniqueTerm
+_behavior 2
+_key term
+_add TermNotUnique
+
+_check UniqueTag
+_behavior 2
+_key tag
+_add TagNotUnique 

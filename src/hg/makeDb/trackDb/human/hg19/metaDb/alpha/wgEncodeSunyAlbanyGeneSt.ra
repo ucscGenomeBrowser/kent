@@ -1,3 +1,8 @@
+metaObject wgEncodeSunyAlbanyGeneSt
+objType composite
+composite wgEncodeSunyAlbanyGeneSt
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna
 objType table
 antibody CELF1
@@ -475,4 +480,4 @@ subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 984264056
+# MAGIC: 1961181920

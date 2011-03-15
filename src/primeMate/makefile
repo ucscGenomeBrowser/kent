@@ -3,7 +3,7 @@ include ../inc/common.mk
 O = primeMate.o
 
 primeMate.exe: $(O) 
-	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a ${L}
 	mv ${AOUT} primeMate.exe
 
 install: primeMate.exe	

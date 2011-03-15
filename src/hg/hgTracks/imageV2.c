@@ -10,7 +10,7 @@
 #include "imageV2.h"
 #include "hgTracks.h"
 #include "hgConfig.h"
-#include "hgFindSpec.h"
+#include "regexHelper.h"
 
 static char const rcsid[] = "$Id: imageV2.c,v 1.32 2010/05/24 19:53:42 hiram Exp $";
 
@@ -289,7 +289,7 @@ dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"hasChildren\": %d,", slCount(tra
 if (!configurable || track->hasUi == FALSE)
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"none\",");
 else if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
-    matchRegex(track->track, "^snp[0-9]+") || matchRegex(track->track, "^cons[0-9]+way") || matchRegex(track->track, "^multiz") ? "off" : "on"), "off"))
+    regexMatch(track->track, "^snp[0-9]+") || regexMatch(track->track, "^cons[0-9]+way") || regexMatch(track->track, "^multiz") ? "off" : "on"), "off"))
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"clickThrough\",");
 else
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"popup\",");
