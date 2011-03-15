@@ -1,3 +1,8 @@
+metaObject wgEncodeSydhHistone
+objType composite
+composite wgEncodeSydhHistone
+expVars lab,dataType,cell,treatment,antibody,control
+
 metaObject wgEncodeSydhHistoneK562H3k27me3UcdAlnRep1
 objType file
 antibody H3K27me3
@@ -1639,4 +1644,4 @@ tableName wgEncodeSydhHistoneU2osH3k9me3UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1410053698
+# MAGIC: 156498280

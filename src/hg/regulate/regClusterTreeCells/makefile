@@ -1,13 +1,13 @@
-include ../../inc/common.mk
+include ../../../inc/common.mk
 
 L += -lm
-MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-A = tabixFetch
-O = tabixFetch.o
+A = regClusterTreeCells
+O = regClusterTreeCells.o
 
-tabixFetch: ${O} ${MYLIBS}
+regClusterTreeCells: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 

@@ -95,6 +95,11 @@ priority 510.3
 chainLinearGap loose
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
+track chainNetPanTro3 override
+priority 530.3
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+chainLinearGap loose
+
 track chainNetPanTro2 override
 priority 530.3
 chainLinearGap loose

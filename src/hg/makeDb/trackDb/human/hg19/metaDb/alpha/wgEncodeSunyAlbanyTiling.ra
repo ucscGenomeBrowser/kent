@@ -1,3 +1,8 @@
+metaObject wgEncodeSunyAlbanyTiling
+objType composite
+composite wgEncodeSunyAlbanyTiling
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeSunyAlbanyTilingGm12878Elavl1RbpAssocRna
 objType table
 antibody ELAVL1
@@ -150,4 +155,4 @@ subId 1245
 tableName wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 107326309
+# MAGIC: 1084272973

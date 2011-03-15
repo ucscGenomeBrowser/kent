@@ -1,3 +1,8 @@
+metaObject wgEncodeOpenChromFaire
+objType composite
+composite wgEncodeOpenChromFaire
+expVars lab,dataType,cell,treatment
+
 metaObject wgEncodeOpenChromFaireA549AlnRep1
 objType file
 cell A549
@@ -2902,7 +2907,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeAlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
@@ -2921,7 +2926,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeAlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
@@ -2940,7 +2945,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -2959,7 +2964,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbePk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.1
 origAssembly hg18
 project wgEncode
@@ -3020,7 +3025,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeSig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_generic_female
 origAssembly hg18
 project wgEncode
@@ -3540,4 +3545,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 2022290371
+# MAGIC: -956119105

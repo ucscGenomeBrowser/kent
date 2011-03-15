@@ -1,3 +1,8 @@
+metaObject wgEncodeGisChiaPet
+objType composite
+composite wgEncodeGisChiaPet
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeGisChiaPetHCT116D000005584
 objType file
 antibody Pol2
@@ -2202,4 +2207,4 @@ submitPath gisChIA-PET_RNAPII_NB4_combined/RNAPII_NB4T.chromInteractons.bed
 type bed 12
 view Interactions
 
-# MAGIC: 1387807780
+# MAGIC: 1355258854

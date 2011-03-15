@@ -254,8 +254,9 @@ char *mdbObjFindValue(struct mdbObj *mdbObj, char *var);
 boolean mdbObjContains(struct mdbObj *mdbObj, char *var, char *val);
 // Returns TRUE if object contains var, val or both
 
-boolean mdbObjsContainAtleastOne(struct mdbObj *mdbObjs, char *var);
+boolean mdbObjsContainAltleastOneMatchingVar(struct mdbObj *mdbObjs, char *var, char *val);
 // Returns TRUE if any object in set contains var
+#define mdbObjsContainAtleastOne(mdbObjs, var) mdbObjsContainAltleastOneMatchingVar((mdbObjs),(var),NULL)
 
 struct mdbObj *mdbObjsCommonVars(struct mdbObj *mdbObjs);
 // Returns a new mdbObj with all vars that are contained in every obj passed in.
@@ -277,6 +278,9 @@ void mdbObjsSortOnVarPairs(struct mdbObj **mdbObjs,struct slPair *varValPairs);
 
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars);
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
+
+void mdbObjRemoveHiddenVars(struct mdbObj *mdbObjs);
+// Prunes list of vars for mdb objs that have been declared as hidden in cv.ra typeOfTerms
 
 char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var);
 // Removes var from set of mdbObjs but only if all that hav it have a commmon val
@@ -369,17 +373,22 @@ struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, bo
 // Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
 
-struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files);
-// Search the metaDb table for vals by var and returns controlled vocabulary (cv) label
-// (if it exists) and val as a pair.  Can impose (non-zero) limit on returned string size of name.
-// Return is case insensitive sorted on name (label or else val).
+struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags, boolean tables, boolean files);
+// Search the metaDb table for vals by var and returns val (as pair->name) and controlled vocabulary (cv) label
+// (if it exists) (as pair->val).  Can impose (non-zero) limit on returned string size of name.
+// if requested, return cv tag instead of mdb val.  If requested, limit to table objs or file objs
+// Return is case insensitive sorted on label (cv label or else val).
+#define mdbPairVal(pair) (pair)->name
+#define mdbPairLabel(pair) (pair)->val
 
-struct hash *mdbCvTermHash(char *term);
+const struct hash *mdbCvTermHash(char *term);
 // returns a hash of hashes of a term which should be defined in cv.ra
+// NOTE: in static memory: DO NOT FREE
 
-struct hash *mdbCvTermTypeHash();
+const struct hash *mdbCvTermTypeHash();
 // returns a hash of hashes of mdb and controlled vocabulary (cv) term types
 // Those terms should contain label,descrition,searchable,cvDefined,hidden
+// NOTE: in static memory: DO NOT FREE
 
 struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvLinks);
 // returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.

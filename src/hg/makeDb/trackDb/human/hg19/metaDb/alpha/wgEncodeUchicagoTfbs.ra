@@ -1,3 +1,8 @@
+metaObject wgEncodeUchicagoTfbs
+objType composite
+composite wgEncodeUchicagoTfbs
+expVars lab,dataType,cell,antibody,control
+
 metaObject wgEncodeUchicagoTfbsK562EfosControlAlnRep1
 objType file
 antibody eGFP-FOS
@@ -18,6 +23,69 @@ seqPlatform Illumina_GA2
 setType exp
 subId 3310
 view Alignments
+
+metaObject wgEncodeUchicagoTfbsK562EfosControlPk
+objType table
+antibody eGFP-FOS
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control
+controlId K562/Input/Control
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562EfosControlPk.narrowPeak.gz
+grant White
+lab UChicago
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+tableName wgEncodeUchicagoTfbsK562EfosControlPk
+view Peaks
+
+metaObject wgEncodeUchicagoTfbsK562EfosControlRawDataRep1
+objType file
+antibody eGFP-FOS
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control
+controlId K562/Input/Control
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562EfosControlRawDataRep1.fastq.gz
+grant White
+lab UChicago
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+view RawData
+
+metaObject wgEncodeUchicagoTfbsK562EfosControlSig
+objType table
+antibody eGFP-FOS
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control
+controlId K562/Input/Control
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562EfosControlSig.bigWig
+grant White
+lab UChicago
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+tableName wgEncodeUchicagoTfbsK562EfosControlSig
+view Signal
 
 metaObject wgEncodeUchicagoTfbsK562EfosControlfosAlnRep2
 objType file
@@ -103,69 +171,6 @@ setType exp
 subId 3310
 view RawData
 
-metaObject wgEncodeUchicagoTfbsK562EfosControlPk
-objType table
-antibody eGFP-FOS
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control
-controlId K562/Input/Control
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562EfosControlPk.narrowPeak.gz
-grant White
-lab UChicago
-project wgEncode
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-tableName wgEncodeUchicagoTfbsK562EfosControlPk
-view Peaks
-
-metaObject wgEncodeUchicagoTfbsK562EfosControlRawDataRep1
-objType file
-antibody eGFP-FOS
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control
-controlId K562/Input/Control
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562EfosControlRawDataRep1.fastq.gz
-grant White
-lab UChicago
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-view RawData
-
-metaObject wgEncodeUchicagoTfbsK562EfosControlSig
-objType table
-antibody eGFP-FOS
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control
-controlId K562/Input/Control
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562EfosControlSig.bigWig
-grant White
-lab UChicago
-project wgEncode
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-tableName wgEncodeUchicagoTfbsK562EfosControlSig
-view Signal
-
 metaObject wgEncodeUchicagoTfbsK562Egata2ControlAlnRep1
 objType file
 antibody eGFP-GATA2
@@ -186,48 +191,6 @@ seqPlatform Illumina_GA2
 setType exp
 subId 3310
 view Alignments
-
-metaObject wgEncodeUchicagoTfbsK562Egata2Controlgata2AlnRep2
-objType file
-antibody eGFP-GATA2
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control_eGFP-GATA2
-controlId K562/Input/Control_eGFP-GATA2
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562Egata2Controlgata2AlnRep2.bam
-grant White
-lab UChicago
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-view Alignments
-
-metaObject wgEncodeUchicagoTfbsK562Egata2Controlgata2RawDataRep2
-objType file
-antibody eGFP-GATA2
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control_eGFP-GATA2
-controlId K562/Input/Control_eGFP-GATA2
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562Egata2Controlgata2RawDataRep2.fastq.gz
-grant White
-lab UChicago
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-view RawData
 
 metaObject wgEncodeUchicagoTfbsK562Egata2ControlPk
 objType table
@@ -292,6 +255,48 @@ subId 3310
 tableName wgEncodeUchicagoTfbsK562Egata2ControlSig
 view Signal
 
+metaObject wgEncodeUchicagoTfbsK562Egata2Controlgata2AlnRep2
+objType file
+antibody eGFP-GATA2
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control_eGFP-GATA2
+controlId K562/Input/Control_eGFP-GATA2
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562Egata2Controlgata2AlnRep2.bam
+grant White
+lab UChicago
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+view Alignments
+
+metaObject wgEncodeUchicagoTfbsK562Egata2Controlgata2RawDataRep2
+objType file
+antibody eGFP-GATA2
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control_eGFP-GATA2
+controlId K562/Input/Control_eGFP-GATA2
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562Egata2Controlgata2RawDataRep2.fastq.gz
+grant White
+lab UChicago
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+view RawData
+
 metaObject wgEncodeUchicagoTfbsK562Ehdac8ControlAlnRep1
 objType file
 antibody eGFP-HDAC8
@@ -312,48 +317,6 @@ seqPlatform Illumina_GA2
 setType exp
 subId 3310
 view Alignments
-
-metaObject wgEncodeUchicagoTfbsK562Ehdac8Controlhdac8AlnRep2
-objType file
-antibody eGFP-HDAC8
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control_eGFP-HDAC8
-controlId K562/Input/Control_eGFP-HDAC8
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562Ehdac8Controlhdac8AlnRep2.bam
-grant White
-lab UChicago
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-view Alignments
-
-metaObject wgEncodeUchicagoTfbsK562Ehdac8Controlhdac8RawDataRep2
-objType file
-antibody eGFP-HDAC8
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control_eGFP-HDAC8
-controlId K562/Input/Control_eGFP-HDAC8
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562Ehdac8Controlhdac8RawDataRep2.fastq.gz
-grant White
-lab UChicago
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-view RawData
 
 metaObject wgEncodeUchicagoTfbsK562Ehdac8ControlPk
 objType table
@@ -418,6 +381,48 @@ subId 3310
 tableName wgEncodeUchicagoTfbsK562Ehdac8ControlSig
 view Signal
 
+metaObject wgEncodeUchicagoTfbsK562Ehdac8Controlhdac8AlnRep2
+objType file
+antibody eGFP-HDAC8
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control_eGFP-HDAC8
+controlId K562/Input/Control_eGFP-HDAC8
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562Ehdac8Controlhdac8AlnRep2.bam
+grant White
+lab UChicago
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+view Alignments
+
+metaObject wgEncodeUchicagoTfbsK562Ehdac8Controlhdac8RawDataRep2
+objType file
+antibody eGFP-HDAC8
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control_eGFP-HDAC8
+controlId K562/Input/Control_eGFP-HDAC8
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562Ehdac8Controlhdac8RawDataRep2.fastq.gz
+grant White
+lab UChicago
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+view RawData
+
 metaObject wgEncodeUchicagoTfbsK562EjunbControlAlnRep1
 objType file
 antibody eGFP-JunB
@@ -438,48 +443,6 @@ seqPlatform Illumina_GA2
 setType exp
 subId 3310
 view Alignments
-
-metaObject wgEncodeUchicagoTfbsK562EjunbControljunbAlnRep2
-objType file
-antibody eGFP-JunB
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control_eGFP-JunB
-controlId K562/Input/Control_eGFP-JunB
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562EjunbControljunbAlnRep2.bam
-grant White
-lab UChicago
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-view Alignments
-
-metaObject wgEncodeUchicagoTfbsK562EjunbControljunbRawDataRep2
-objType file
-antibody eGFP-JunB
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control_eGFP-JunB
-controlId K562/Input/Control_eGFP-JunB
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562EjunbControljunbRawDataRep2.fastq.gz
-grant White
-lab UChicago
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-view RawData
 
 metaObject wgEncodeUchicagoTfbsK562EjunbControlPk
 objType table
@@ -544,6 +507,48 @@ subId 3310
 tableName wgEncodeUchicagoTfbsK562EjunbControlSig
 view Signal
 
+metaObject wgEncodeUchicagoTfbsK562EjunbControljunbAlnRep2
+objType file
+antibody eGFP-JunB
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control_eGFP-JunB
+controlId K562/Input/Control_eGFP-JunB
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562EjunbControljunbAlnRep2.bam
+grant White
+lab UChicago
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+view Alignments
+
+metaObject wgEncodeUchicagoTfbsK562EjunbControljunbRawDataRep2
+objType file
+antibody eGFP-JunB
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control_eGFP-JunB
+controlId K562/Input/Control_eGFP-JunB
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562EjunbControljunbRawDataRep2.fastq.gz
+grant White
+lab UChicago
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+view RawData
+
 metaObject wgEncodeUchicagoTfbsK562EjundControlAlnRep1
 objType file
 antibody eGFP-JunD
@@ -564,6 +569,69 @@ seqPlatform Illumina_GA2
 setType exp
 subId 3310
 view Alignments
+
+metaObject wgEncodeUchicagoTfbsK562EjundControlPk
+objType table
+antibody eGFP-JunD
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control
+controlId K562/Input/Control
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562EjundControlPk.narrowPeak.gz
+grant White
+lab UChicago
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+tableName wgEncodeUchicagoTfbsK562EjundControlPk
+view Peaks
+
+metaObject wgEncodeUchicagoTfbsK562EjundControlRawDataRep1
+objType file
+antibody eGFP-JunD
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control
+controlId K562/Input/Control
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562EjundControlRawDataRep1.fastq.gz
+grant White
+lab UChicago
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+view RawData
+
+metaObject wgEncodeUchicagoTfbsK562EjundControlSig
+objType table
+antibody eGFP-JunD
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control
+controlId K562/Input/Control
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562EjundControlSig.bigWig
+grant White
+lab UChicago
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+tableName wgEncodeUchicagoTfbsK562EjundControlSig
+view Signal
 
 metaObject wgEncodeUchicagoTfbsK562EjundControljundAlnRep2
 objType file
@@ -649,69 +717,6 @@ setType exp
 subId 3310
 view RawData
 
-metaObject wgEncodeUchicagoTfbsK562EjundControlPk
-objType table
-antibody eGFP-JunD
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control
-controlId K562/Input/Control
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562EjundControlPk.narrowPeak.gz
-grant White
-lab UChicago
-project wgEncode
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-tableName wgEncodeUchicagoTfbsK562EjundControlPk
-view Peaks
-
-metaObject wgEncodeUchicagoTfbsK562EjundControlRawDataRep1
-objType file
-antibody eGFP-JunD
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control
-controlId K562/Input/Control
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562EjundControlRawDataRep1.fastq.gz
-grant White
-lab UChicago
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-view RawData
-
-metaObject wgEncodeUchicagoTfbsK562EjundControlSig
-objType table
-antibody eGFP-JunD
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control
-controlId K562/Input/Control
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562EjundControlSig.bigWig
-grant White
-lab UChicago
-project wgEncode
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-tableName wgEncodeUchicagoTfbsK562EjundControlSig
-view Signal
-
 metaObject wgEncodeUchicagoTfbsK562Enr4a1ControlAlnRep1
 objType file
 antibody eGFP-NR4A1
@@ -732,48 +737,6 @@ seqPlatform Illumina_GA2
 setType exp
 subId 3310
 view Alignments
-
-metaObject wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1AlnRep2
-objType file
-antibody eGFP-NR4A1
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control_eGFP-NR4A1
-controlId K562/Input/Control_eGFP-NR4A1
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1AlnRep2.bam
-grant White
-lab UChicago
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-view Alignments
-
-metaObject wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1RawDataRep2
-objType file
-antibody eGFP-NR4A1
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control_eGFP-NR4A1
-controlId K562/Input/Control_eGFP-NR4A1
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1RawDataRep2.fastq.gz
-grant White
-lab UChicago
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2
-setType exp
-subId 3310
-view RawData
 
 metaObject wgEncodeUchicagoTfbsK562Enr4a1ControlPk
 objType table
@@ -838,6 +801,48 @@ subId 3310
 tableName wgEncodeUchicagoTfbsK562Enr4a1ControlSig
 view Signal
 
+metaObject wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1AlnRep2
+objType file
+antibody eGFP-NR4A1
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control_eGFP-NR4A1
+controlId K562/Input/Control_eGFP-NR4A1
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1AlnRep2.bam
+grant White
+lab UChicago
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+view Alignments
+
+metaObject wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1RawDataRep2
+objType file
+antibody eGFP-NR4A1
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control_eGFP-NR4A1
+controlId K562/Input/Control_eGFP-NR4A1
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1RawDataRep2.fastq.gz
+grant White
+lab UChicago
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+subId 3310
+view RawData
+
 metaObject wgEncodeUchicagoTfbsK562InputControlAlnRep1
 objType file
 antibody Input
@@ -858,6 +863,27 @@ seqPlatform Illumina_GA2
 setType input
 subId 3310
 view Alignments
+
+metaObject wgEncodeUchicagoTfbsK562InputControlRawDataRep1
+objType file
+antibody Input
+cell K562
+composite wgEncodeUchicagoTfbs
+control Control
+controlId K562/Input/Control
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-27
+dateUnrestricted 2011-10-27
+fileName wgEncodeUchicagoTfbsK562InputControlRawDataRep1.fastq.gz
+grant White
+lab UChicago
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType input
+subId 3310
+view RawData
 
 metaObject wgEncodeUchicagoTfbsK562InputControlfosAlnRep2
 objType file
@@ -1195,25 +1221,4 @@ setType input
 subId 3310
 view RawData
 
-metaObject wgEncodeUchicagoTfbsK562InputControlRawDataRep1
-objType file
-antibody Input
-cell K562
-composite wgEncodeUchicagoTfbs
-control Control
-controlId K562/Input/Control
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-27
-dateUnrestricted 2011-10-27
-fileName wgEncodeUchicagoTfbsK562InputControlRawDataRep1.fastq.gz
-grant White
-lab UChicago
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2
-setType input
-subId 3310
-view RawData
-
-# MAGIC: 1742016509
+# MAGIC: 1756836547

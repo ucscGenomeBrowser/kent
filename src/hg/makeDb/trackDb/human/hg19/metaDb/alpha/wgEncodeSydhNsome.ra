@@ -1,3 +1,8 @@
+metaObject wgEncodeSydhNsome
+objType composite
+composite wgEncodeSydhNsome
+expVars lab,dataType,cell
+
 metaObject wgEncodeSydhNsomeGM12878D000005683
 objType file
 assembly hg19
@@ -942,4 +947,4 @@ tableName wgEncodeSydhNsomeK562D000005724
 type bam
 view Alignments
 
-# MAGIC: 1456035480
+# MAGIC: -1954199493

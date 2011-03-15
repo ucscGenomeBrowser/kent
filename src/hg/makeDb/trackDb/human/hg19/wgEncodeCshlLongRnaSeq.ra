@@ -5,7 +5,7 @@ superTrack wgEncodeRnaSeqSuper
 shortLabel CSHL Long RNA-seq
 longLabel Long RNA-seq from ENCODE/Cold Spring Harbor Lab
 group expression
-subGroup1 view Views Contigs=Contigs TranscriptDeNovo=TranscriptDeNovo ExonGencV3c=ExonGencV3c TranscriptGencV3c=TranscriptGencV3c PlusRawSig=Plus_Raw_Signal MinusRawSig=Minus_Raw_Signal Alignments=Alignments
+subGroup1 view Views TranscriptDeNovo=TranscriptDeNovo Contigs=Contigs ExonGencV3c=ExonGencV3c TranscriptGencV3c=TranscriptGencV3c PlusRawSig=Plus_Raw_Signal MinusRawSig=Minus_Raw_Signal Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HeLaS3=HeLa-S3 HepG2=HepG2 HUVEC=HUVEC NHEK=NHEK A549=A549 AG04450=AG04450 BJ=BJ HMEC=HMEC  HSMM=HSMM MCF7=MCF-7  NHLF=NHLF SKNSHRA=SK-N-SH_RA
 subGroup3 localization Localization cell=Whole_Cell cytosol=Cytosol nucleus=Nucleus polysome=Polysome nucleoplasm=Nucleoplasm chromatin=Chromatin nucleolus=Nucleolos
 subGroup4 rnaExtract RNA_Extract pAP=PolyA+ pAM=PolyA- total=Total_RNA
@@ -15,8 +15,8 @@ sortOrder view=- cellType=+ localization=+ rnaExtract=+ rep=+
 fileSortOrder cell=Cell_Line labProtocolId=<i>Protocol<BR>ID</i>  localization=Localization rnaExtract=RNA<BR>Extract view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-dimensionZchecked longNonPolyA,longPolyA,total
-dimensionAchecked rep1,rep2,rep3,rep4,rep5
+dimensionZchecked pAP,pAM,total
+dimensionAchecked rep1,Pooled
 priority 0
 type bed 3
 wgEncode 1
@@ -4013,7 +4013,7 @@ noInherit on
 #        shortLabel NHEK cell longPolyA
 #        longLabel ENCODE CSHL Long Contigs (longPolyA in NHEK cell)
 #        subGroups view=Contigs rep=Pooled cellType=NHEK localization=cell rnaExtract=pAP
-#        type bedRnaElements
+#        type bed 6
 #        color 179,0,134
 #        # subId=3658 dateSubmitted=2011-02-18
 
@@ -4023,7 +4023,7 @@ noInherit on
         shortLabel NHEK cell longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in NHEK cell)
         subGroups view=Contigs rep=Pooled cellType=NHEK localization=cell rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 179,0,134
         # subId=3659 dateSubmitted=2011-02-18
 
@@ -4033,7 +4033,7 @@ noInherit on
         shortLabel HeLa-S3 cell longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in HeLa-S3 cell)
         subGroups view=Contigs rep=Pooled cellType=HeLaS3 localization=cell rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 0,119,158
         # subId=3630 dateSubmitted=2011-02-18
 
@@ -4043,7 +4043,7 @@ noInherit on
         shortLabel HepG2 cell longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in HepG2 cell)
         subGroups view=Contigs rep=Pooled cellType=HepG2 localization=cell rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 189,0,157
         # subId=3640 dateSubmitted=2011-02-18
 
@@ -4053,7 +4053,7 @@ noInherit on
         shortLabel GM12878 cytosol longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in GM12878 cytosol)
         subGroups view=Contigs rep=Pooled cellType=GM12878 localization=cytosol rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 153,38,0
         # subId=3607 dateSubmitted=2011-02-18
 
@@ -4063,7 +4063,7 @@ noInherit on
         shortLabel H1-hESC cytosol longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in H1-hESC cytosol)
         subGroups view=Contigs rep=Pooled cellType=H1hESC localization=cytosol rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 0,107,27
         # subId=3615 dateSubmitted=2011-02-18
 
@@ -4073,7 +4073,7 @@ noInherit on
         shortLabel HeLa-S3 cytosol longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in HeLa-S3 cytosol)
         subGroups view=Contigs rep=Pooled cellType=HeLaS3 localization=cytosol rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 0,119,158
         # subId=3631 dateSubmitted=2011-02-18
 
@@ -4083,7 +4083,7 @@ noInherit on
         shortLabel NHEK cytosol longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in NHEK cytosol)
         subGroups view=Contigs rep=Pooled cellType=NHEK localization=cytosol rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 179,0,134
         # subId=3652 dateSubmitted=2011-02-18
 
@@ -4093,7 +4093,7 @@ noInherit on
         shortLabel HUVEC cytosol longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in HUVEC cytosol)
         subGroups view=Contigs rep=Pooled cellType=HUVEC localization=cytosol rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 224,75,0
         # subId=3623 dateSubmitted=2011-02-18
 
@@ -4103,7 +4103,7 @@ noInherit on
         shortLabel H1-hESC cell longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in H1-hESC cell)
         subGroups view=Contigs rep=Pooled cellType=H1hESC localization=cell rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 0,107,27
         # subId=3614 dateSubmitted=2011-02-18
 
@@ -4113,7 +4113,7 @@ noInherit on
         shortLabel HUVEC cell longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in HUVEC cell)
         subGroups view=Contigs rep=Pooled cellType=HUVEC localization=cell rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 224,75,0
         # subId=3628 dateSubmitted=2011-02-18
 
@@ -4123,7 +4123,7 @@ noInherit on
         shortLabel K562 cytosol longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in K562 cytosol)
         subGroups view=Contigs rep=Pooled cellType=K562 localization=cytosol rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 46,0,184
         # subId=3643 dateSubmitted=2011-02-18
 
@@ -4133,7 +4133,7 @@ noInherit on
         shortLabel GM12878 cytosol longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in GM12878 cytosol)
         subGroups view=Contigs rep=Pooled cellType=GM12878 localization=cytosol rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 153,38,0
         # subId=3608 dateSubmitted=2011-02-18
 
@@ -4143,7 +4143,7 @@ noInherit on
         shortLabel HeLa-S3 cytosol longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in HeLa-S3 cytosol)
         subGroups view=Contigs rep=Pooled cellType=HeLaS3 localization=cytosol rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 0,119,158
         # subId=3632 dateSubmitted=2011-02-18
 
@@ -4153,7 +4153,7 @@ noInherit on
         shortLabel HepG2 cytosol longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in HepG2 cytosol)
         subGroups view=Contigs rep=Pooled cellType=HepG2 localization=cytosol rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 189,0,157
         # subId=3636 dateSubmitted=2011-02-18
 
@@ -4163,7 +4163,7 @@ noInherit on
         shortLabel GM12878 nucleus longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in GM12878 nucleus)
         subGroups view=Contigs rep=Pooled cellType=GM12878 localization=nucleus rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 153,38,0
         # subId=3610 dateSubmitted=2011-02-18
 
@@ -4173,7 +4173,7 @@ noInherit on
         shortLabel HepG2 nucleus longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in HepG2 nucleus)
         subGroups view=Contigs rep=Pooled cellType=HepG2 localization=nucleus rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 189,0,157
         # subId=3638 dateSubmitted=2011-02-18
 
@@ -4183,7 +4183,7 @@ noInherit on
         shortLabel H1-hESC cytosol longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in H1-hESC cytosol)
         subGroups view=Contigs rep=Pooled cellType=H1hESC localization=cytosol rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 0,107,27
         # subId=3616 dateSubmitted=2011-02-18
 
@@ -4193,7 +4193,7 @@ noInherit on
         shortLabel K562 nucleus longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in K562 nucleus)
         subGroups view=Contigs rep=Pooled cellType=K562 localization=nucleus rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 46,0,184
         # subId=3647 dateSubmitted=2011-02-18
 
@@ -4203,7 +4203,7 @@ noInherit on
         shortLabel H1-hESC nucleus longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in H1-hESC nucleus)
         subGroups view=Contigs rep=Pooled cellType=H1hESC localization=nucleus rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 0,107,27
         # subId=3618 dateSubmitted=2011-02-18
 
@@ -4213,7 +4213,7 @@ noInherit on
         shortLabel HeLa-S3 nucleus longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in HeLa-S3 nucleus)
         subGroups view=Contigs rep=Pooled cellType=HeLaS3 localization=nucleus rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 0,119,158
         # subId=3634 dateSubmitted=2011-02-18
 
@@ -4223,7 +4223,7 @@ noInherit on
         shortLabel K562 cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in K562 cell)
         subGroups view=Contigs rep=Pooled cellType=K562 localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 46,0,184
         # subId=3648 dateSubmitted=2011-02-18
 
@@ -4233,7 +4233,7 @@ noInherit on
         shortLabel GM12878 cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in GM12878 cell)
         subGroups view=Contigs rep=Pooled cellType=GM12878 localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 153,38,0
         # subId=3611 dateSubmitted=2011-02-18
 
@@ -4243,7 +4243,7 @@ noInherit on
         shortLabel H1-hESC cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in H1-hESC cell)
         subGroups view=Contigs rep=Pooled cellType=H1hESC localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 0,107,27
         # subId=3613 dateSubmitted=2011-02-18
 
@@ -4253,7 +4253,7 @@ noInherit on
 #        shortLabel NHEK cell longNonPolyA
 #        longLabel ENCODE CSHL Long Contigs (longNonPolyA in NHEK cell)
 #        subGroups view=Contigs rep=Pooled cellType=NHEK localization=cell rnaExtract=pAM
-#        type bedRnaElements
+#        type bed 6
 #        color 179,0,134
 #        # subId=3656 dateSubmitted=2011-02-18
 
@@ -4263,7 +4263,7 @@ noInherit on
         shortLabel NHEK cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in NHEK cell)
         subGroups view=Contigs rep=Pooled cellType=NHEK localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 179,0,134
         # subId=3657 dateSubmitted=2011-02-18
 
@@ -4273,7 +4273,7 @@ noInherit on
         shortLabel MCF-7 cell longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in MCF-7 cell)
         subGroups view=Contigs rep=Pooled cellType=MCF7 localization=cell rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         # subId=3651 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHuvecCytosolPapContigs
@@ -4282,7 +4282,7 @@ noInherit on
         shortLabel HUVEC cytosol longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in HUVEC cytosol)
         subGroups view=Contigs rep=Pooled cellType=HUVEC localization=cytosol rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 224,75,0
         # subId=3624 dateSubmitted=2011-02-18
 
@@ -4292,7 +4292,7 @@ noInherit on
         shortLabel HUVEC nucleus longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in HUVEC nucleus)
         subGroups view=Contigs rep=Pooled cellType=HUVEC localization=nucleus rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 224,75,0
         # subId=3626 dateSubmitted=2011-02-18
 
@@ -4302,7 +4302,7 @@ noInherit on
         shortLabel NHLF cell longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in NHLF cell)
         subGroups view=Contigs rep=Pooled cellType=NHLF localization=cell rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         # subId=3661 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHmecCellPapContigs
@@ -4311,7 +4311,7 @@ noInherit on
         shortLabel HMEC cell longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in HMEC cell)
         subGroups view=Contigs rep=Pooled cellType=HMEC localization=cell rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         # subId=3620 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHsmmCellPapContigs
@@ -4320,7 +4320,7 @@ noInherit on
         shortLabel HSMM cell longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in HSMM cell)
         subGroups view=Contigs rep=Pooled cellType=HSMM localization=cell rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         # subId=3622 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaContigs
@@ -4329,7 +4329,7 @@ noInherit on
         shortLabel HUVEC cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in HUVEC cell)
         subGroups view=Contigs rep=Pooled cellType=HUVEC localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 224,75,0
         # subId=3627 dateSubmitted=2011-02-18
 
@@ -4339,7 +4339,7 @@ noInherit on
         shortLabel HeLa-S3 cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in HeLa-S3 cell)
         subGroups view=Contigs rep=Pooled cellType=HeLaS3 localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 0,119,158
         # subId=3629 dateSubmitted=2011-02-18
 
@@ -4349,7 +4349,7 @@ noInherit on
         shortLabel HepG2 cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in HepG2 cell)
         subGroups view=Contigs rep=Pooled cellType=HepG2 localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 189,0,157
         # subId=3639 dateSubmitted=2011-02-18
 
@@ -4359,7 +4359,7 @@ noInherit on
         shortLabel NHEK cytosol longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in NHEK cytosol)
         subGroups view=Contigs rep=Pooled cellType=NHEK localization=cytosol rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 179,0,134
         # subId=3653 dateSubmitted=2011-02-18
 
@@ -4369,7 +4369,7 @@ noInherit on
         shortLabel NHEK nucleus longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in NHEK nucleus)
         subGroups view=Contigs rep=Pooled cellType=NHEK localization=nucleus rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         color 179,0,134
         # subId=3655 dateSubmitted=2011-02-18
 
@@ -4379,7 +4379,7 @@ noInherit on
         shortLabel MCF-7 cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in MCF-7 cell)
         subGroups view=Contigs rep=Pooled cellType=MCF7 localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         # subId=3650 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaContigs
@@ -4388,7 +4388,7 @@ noInherit on
         shortLabel HSMM cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in HSMM cell)
         subGroups view=Contigs rep=Pooled cellType=HSMM localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         # subId=3621 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaContigs
@@ -4397,7 +4397,7 @@ noInherit on
         shortLabel NHLF cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in NHLF cell)
         subGroups view=Contigs rep=Pooled cellType=NHLF localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         # subId=3660 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHmecCellPamContigs
@@ -4406,7 +4406,7 @@ noInherit on
         shortLabel HMEC cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in HMEC cell)
         subGroups view=Contigs rep=Pooled cellType=HMEC localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         # subId=3619 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqAg04450CellPapContigs
@@ -4415,7 +4415,7 @@ noInherit on
         shortLabel AG04450 cell longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in AG04450 cell)
         subGroups view=Contigs rep=Pooled cellType=AG04450 localization=cell rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         # subId=3604 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqSknshraCellPapContigs
@@ -4424,7 +4424,7 @@ noInherit on
         shortLabel SK-N-SH_RA cell longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in SK-N-SH_RA cell)
         subGroups view=Contigs rep=Pooled cellType=SKNSHRA localization=cell rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         # subId=3663 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqBjCellPapContigs
@@ -4433,7 +4433,7 @@ noInherit on
         shortLabel BJ cell longPolyA
         longLabel ENCODE CSHL Long Contigs (longPolyA in BJ cell)
         subGroups view=Contigs rep=Pooled cellType=BJ localization=cell rnaExtract=pAP
-        type bedRnaElements
+        type bed 6
         # subId=3606 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaContigs
@@ -4442,7 +4442,7 @@ noInherit on
         shortLabel AG04450 cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in AG04450 cell)
         subGroups view=Contigs rep=Pooled cellType=AG04450 localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         # subId=3603 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaContigs
@@ -4451,7 +4451,7 @@ noInherit on
         shortLabel SK-N-SH_RA cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in SK-N-SH_RA cell)
         subGroups view=Contigs rep=Pooled cellType=SKNSHRA localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         # subId=3662 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqA549CellLongnonpolyaContigs
@@ -4460,7 +4460,7 @@ noInherit on
         shortLabel A549 cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in A549 cell)
         subGroups view=Contigs rep=Pooled cellType=A549 localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         # subId=3601 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqBjCellLongnonpolyaContigs
@@ -4469,7 +4469,7 @@ noInherit on
         shortLabel BJ cell longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in BJ cell)
         subGroups view=Contigs rep=Pooled cellType=BJ localization=cell rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         # subId=3605 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqK562ChromatinTotalContigs
@@ -4478,7 +4478,7 @@ noInherit on
         shortLabel K562 chromatin total
         longLabel ENCODE CSHL Long Contigs (total in K562 chromatin)
         subGroups view=Contigs rep=Pooled cellType=K562 localization=chromatin rnaExtract=total
-        type bedRnaElements
+        type bed 6
         color 46,0,184
         # subId=3641 dateSubmitted=2011-02-18
 
@@ -4488,7 +4488,7 @@ noInherit on
         shortLabel K562 nucleolus total
         longLabel ENCODE CSHL Long Contigs (total in K562 nucleolus)
         subGroups view=Contigs rep=Pooled cellType=K562 localization=nucleolus rnaExtract=total
-        type bedRnaElements
+        type bed 6
         color 46,0,184
         # subId=3644 dateSubmitted=2011-02-18
 
@@ -4498,7 +4498,7 @@ noInherit on
         shortLabel K562 nucleoplasm total
         longLabel ENCODE CSHL Long Contigs (total in K562 nucleoplasm)
         subGroups view=Contigs rep=Pooled cellType=K562 localization=nucleoplasm rnaExtract=total
-        type bedRnaElements
+        type bed 6
         color 46,0,184
         # subId=3645 dateSubmitted=2011-02-18
 
@@ -4508,7 +4508,7 @@ noInherit on
         shortLabel K562 nucleus longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in K562 nucleus)
         subGroups view=Contigs rep=Pooled cellType=K562 localization=nucleus rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 46,0,184
         # subId=3646 dateSubmitted=2011-02-18
 
@@ -4518,7 +4518,7 @@ noInherit on
         shortLabel GM12878 nucleus longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in GM12878 nucleus)
         subGroups view=Contigs rep=Pooled cellType=GM12878 localization=nucleus rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 153,38,0
         # subId=3609 dateSubmitted=2011-02-18
 
@@ -4528,7 +4528,7 @@ noInherit on
         shortLabel H1-hESC nucleus longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in H1-hESC nucleus)
         subGroups view=Contigs rep=Pooled cellType=H1hESC localization=nucleus rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 0,107,27
         # subId=3617 dateSubmitted=2011-02-18
 
@@ -4538,7 +4538,7 @@ noInherit on
         shortLabel HeLa-S3 nucleus longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in HeLa-S3 nucleus)
         subGroups view=Contigs rep=Pooled cellType=HeLaS3 localization=nucleus rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 0,119,158
         # subId=3633 dateSubmitted=2011-02-18
 
@@ -4548,7 +4548,7 @@ noInherit on
         shortLabel HepG2 nucleus longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in HepG2 nucleus)
         subGroups view=Contigs rep=Pooled cellType=HepG2 localization=nucleus rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 189,0,157
         # subId=3637 dateSubmitted=2011-02-18
 
@@ -4558,7 +4558,7 @@ noInherit on
         shortLabel NHEK nucleus longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in NHEK nucleus)
         subGroups view=Contigs rep=Pooled cellType=NHEK localization=nucleus rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 179,0,134
         # subId=3654 dateSubmitted=2011-02-18
 
@@ -4568,7 +4568,7 @@ noInherit on
         shortLabel HUVEC nucleus longNonPolyA
         longLabel ENCODE CSHL Long Contigs (longNonPolyA in HUVEC nucleus)
         subGroups view=Contigs rep=Pooled cellType=HUVEC localization=nucleus rnaExtract=pAM
-        type bedRnaElements
+        type bed 6
         color 224,75,0
         # subId=3625 dateSubmitted=2011-02-18
 	

@@ -82,7 +82,7 @@ errAbort(
   "   options:\n"
   "      -retries=N  Number of retries per job - default 4.\n"
   "      -maxQueue=N  Number of jobs to allow on parasol queue. \n"
-  "         Default 1000000.\n"
+  "         Default 2000000.\n"
   "      -minPush=N  Minimum number of jobs to queue. \n"
   "         Default 1.  Overrides maxQueue.\n"
   "      -maxPush=N  Maximum number of jobs to queue - default 100000.\n"
@@ -173,7 +173,7 @@ errAbort(
 /* Variables that can be set from command line. */
 
 int retries = 4;
-int maxQueue = 1000000;
+int maxQueue = 2000000;
 int minPush = 1;
 int maxPush = 100000;
 int warnTime = 3*24*60;
