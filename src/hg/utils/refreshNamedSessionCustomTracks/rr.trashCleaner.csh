@@ -231,9 +231,8 @@ chmod 666 /var/tmp/rr.8hour.egrep
 cp -p /var/tmp/rr.8hour.egrep ${rmLogDir}/8hour.${dateStamp}.txt
 gzip ${rmLogDir}/8hour.${dateStamp}.txt
 set count8 = `egrep "noMatchToNothing|^$trashDir" /var/tmp/rr.8hour.egrep | sed -e '/noMatchToNothing/d' | wc -l`
-egrep "noMatchToNothing|^$trashDir" /var/tmp/rr.8hour.egrep | sed -e '/noMatchToNothing/d' | xargs --no-run-if-empty rm -f
+egrep "noMatchToNothing|^$trashDir" /var/tmp/rr.8hour.egrep | sed -e "/noMatchToNothing/d; s/'/\\\'/" | xargs --no-run-if-empty rm -f
 ${ECHO} "after 8 hour find rr cleaner "`$dateCmd`" $count8"
-
 # the /bin/csh trick avoids an error exit when du errors out
 set kbAfter = \
 `/bin/csh -c "du --apparent-size -ksc ${trashDir} | grep ${trashDir} | cut -f1 || /bin/true"`
@@ -251,7 +250,7 @@ chmod 666 /var/tmp/rr.72hour.egrep
 cp -p /var/tmp/rr.72hour.egrep ${rmLogDir}/72hour.${dateStamp}.txt
 gzip ${rmLogDir}/72hour.${dateStamp}.txt
 set count72 = `egrep "noMatchToNothing|^$trashDir" /var/tmp/rr.72hour.egrep | sed -e '/noMatchToNothing/d' | wc -l`
-egrep "noMatchToNothing|^$trashDir" /var/tmp/rr.72hour.egrep | sed -e '/noMatchToNothing/d' | xargs --no-run-if-empty rm -f
+egrep "noMatchToNothing|^$trashDir" /var/tmp/rr.72hour.egrep | sed -e "/noMatchToNothing/d; s/'/\\\'/" | xargs --no-run-if-empty rm -f
 ${ECHO} "after 72 hour find rr cleaner "`$dateCmd`" $count72"
 
 # the /bin/csh trick avoids an error exit when du errors out
@@ -278,6 +277,7 @@ chmod 666 "${considerRemoval}"
 rm -f "${saveList}"
 rm -f "${alreadySaved}"
 rm -f "${sessionFiles}"
+grep VmPeak "${refreshList}"
 rm -f "${refreshList}"
 
 ${ECHO} "SUCCESS trash cleaning "`$dateCmd`

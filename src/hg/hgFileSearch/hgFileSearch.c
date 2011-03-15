@@ -31,60 +31,88 @@ boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTim
 #define TRACK_SEARCH_ON_DESCR    "tsDescr"
 #define TRACK_SEARCH_SORT        "tsSort"
 
-//#define USE_TABS
-//#define SUPPORT_COMPOSITE_SEARCH
+#define SUPPORT_COMPOSITE_SEARCH
+#ifdef SUPPORT_COMPOSITE_SEARCH
+    //#define USE_TABS
+#endif///def SUPPORT_COMPOSITE_SEARCH
 
-#ifdef OMIT_SUPPORT_COMPOSITE_SEARCH
+#ifdef SUPPORT_COMPOSITE_SEARCH
 // make a matchString function to support "contains", "is" etc. and wildcards in contains
 
 //    ((sameString(op, "is") && !strcasecmp(track->shortLabel, str)) ||
 
-static boolean isNameMatch(struct trackDb *tdb, char *str, char *op)
-{
-return str && strlen(str) &&
-    ((sameString(op, "is") && !strcasecmp(tdb->shortLabel, str)) ||
-    (sameString(op, "is") && !strcasecmp(tdb->longLabel, str)) ||
-    (sameString(op, "contains") && containsStringNoCase(tdb->shortLabel, str) != NULL) ||
-    (sameString(op, "contains") && containsStringNoCase(tdb->longLabel, str) != NULL));
-}
-
-static boolean isDescriptionMatch(struct trackDb *tdb, char **words, int wordCount)
+static boolean isDescriptionMatch(struct trackDb *tdb, struct slName *wordList)
 // We parse str and look for every word at the start of any word in track description (i.e. google style).
 {
-if(words)
-    {
-    // We do NOT lookup up parent hierarchy for html descriptions.
-    char *html = tdb->html;
-    if(!isEmpty(html))
-        {
-        // This probably could be made more efficient by parsing the html into some kind of b-tree, but I am assuming
-        // that the inner html loop while only happen for 1-2 words for vast majority of the tracks.
+if (tdb->html == NULL)
+    return (wordList != NULL);
 
-        int i, numMatches = 0;
-        html = stripRegEx(html, "<[^>]*>", REG_ICASE);
-        for(i = 0; i < wordCount; i++)
-            {
-            char *needle = words[i];
-            char *haystack, *tmp = cloneString(html);
-            boolean found = FALSE;
-            while((haystack = nextWord(&tmp)))
-                {
-                char *ptr = strstrNoCase(haystack, needle);
-                if(ptr != NULL && ptr == haystack)
-                    {
-                    found = TRUE;
-                    break;
-                    }
-                }
-            if(found)
-                numMatches++;
-            else
-                break;
-            }
-        if(numMatches == wordCount)
-            return TRUE;
+struct slName *word = wordList;
+for(; word != NULL; word = word->next)
+    {
+    if (!wildMatch(word->name, tdb->html))
+        return FALSE;
+    }
+return TRUE;
+}
+
+static struct trackDb *tdbFilterOn(struct trackDb **pTdbList, char *name, char *description, char *group)
+// returns tdbs that pach supplied criterion, leaving unmatched in list passed in
+{
+// Set the word list up once
+struct slName *wordList = NULL;
+if (description)
+    wordList = slNameListOfUniqueWords(cloneString(description));
+
+struct trackDb *tdbList = *pTdbList;
+struct trackDb *tdbRejects = NULL;
+struct trackDb *tdbMatched = NULL;
+while (tdbList != NULL)
+    {
+    struct trackDb *tdb = slPopHead(&tdbList);
+
+    if (name && (!wildMatch(name,tdb->shortLabel) && !wildMatch(name,tdb->longLabel)))
+        slAddHead(&tdbRejects,tdb);
+    else if (group && differentString(tdb->grp,group))
+        slAddHead(&tdbRejects,tdb);
+    else if (description && !isDescriptionMatch(tdb, wordList))
+        slAddHead(&tdbRejects,tdb);
+    else
+        slAddHead(&tdbMatched,tdb);
+    }
+//slReverse(&tdbRejects); // Needed?
+//slReverse(&tdbMatched); // Needed?
+
+*pTdbList = tdbRejects;
+
+return tdbMatched;
+}
+
+static boolean mdbSelectsAddFoundComposites(struct slPair **pMdbSelects,struct trackDb *tdbsFound)
+// Adds a composite mdbSelect (if found in tdbsFound) to the head of the pairs list.
+{
+// create comma separated list of composites
+struct dyString *dyComposites = dyStringNew(256);
+struct trackDb *tdb = tdbsFound;
+for(;tdb != NULL; tdb = tdb->next)
+    {
+    if (tdbIsComposite(tdb))
+        dyStringPrintf(dyComposites,"%s,",tdb->track);
+    else if (tdbIsCompositeChild(tdb))
+        {
+        struct trackDb *composite = tdbGetComposite(tdb);
+        dyStringPrintf(dyComposites,"%s,",composite->track);
         }
     }
+if (dyStringLen(dyComposites) > 0)
+    {
+    char *composites = dyStringCannibalize(&dyComposites);
+    composites[strlen(composites) - 1] = '\0';  // drop the last ','
+    slPairAdd(pMdbSelects,"composite",composites); // Composite should not already be in the list, because it is only indirectly sortable
+    return TRUE;
+    }
+
+dyStringFree(&dyComposites);
 return FALSE;
 }
 #endif///def SUPPORT_COMPOSITE_SEARCH
@@ -151,20 +179,19 @@ if (!advancedJavascriptFeaturesEnabled(cart))
     }
 #ifdef SUPPORT_COMPOSITE_SEARCH
 char *nameSearch = cartOptionalString(cart, TRACK_SEARCH_ON_NAME);
+char *descSearch=NULL;
 #endif///def SUPPORT_COMPOSITE_SEARCH
 char *fileTypeSearch = cartOptionalString(cart, FILE_SEARCH_ON_FILETYPE);
-char *descSearch=FALSE;
 boolean doSearch = sameWord(cartUsualString(cart, FILE_SEARCH,"no"), "search");
 struct sqlConnection *conn = hAllocConn(db);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 #ifdef ONE_FUNC
 struct hash *parents = newHash(4);
 #endif///def ONE_FUNC
-char **descWords = NULL;
-int descWordCount = 0;
 boolean searchTermsExist = FALSE;  // FIXME: Why is this needed?
 int cols;
 
+#ifdef SUPPORT_COMPOSITE_SEARCH
 #ifdef USE_TABS
 enum searchTab selectedTab = simpleTab;
 char *currentTab = cartUsualString(cart, FILE_SEARCH_CURRENT_TAB, "simpleTab");
@@ -172,9 +199,7 @@ if(sameString(currentTab, "simpleTab"))
     {
     selectedTab = simpleTab;
     descSearch = cartOptionalString(cart, TRACK_SEARCH_SIMPLE);
-    #ifdef SUPPORT_COMPOSITE_SEARCH
     freez(&nameSearch);
-    #endif///def SUPPORT_COMPOSITE_SEARCH
     }
 else if(sameString(currentTab, "filesTab"))
     {
@@ -195,6 +220,7 @@ char trixFile[HDB_MAX_PATH_STRING];
 getSearchTrixFile(db, trixFile, sizeof(trixFile));
 trix = trixOpen(trixFile);
 #endif///def USE_TABS
+#endif///def SUPPORT_COMPOSITE_SEARCH
 
 printf("<div style='max-width:1080px;'>");
 // FIXME: Do we need a form at all?
@@ -208,6 +234,7 @@ printf("<input type='hidden' name='db' value='%s'>\n", db);
 printf("<input type='hidden' name='%s' value=''>\n",TRACK_SEARCH_DEL_ROW);
 printf("<input type='hidden' name='%s' value=''>\n",TRACK_SEARCH_ADD_ROW);
 
+#ifdef SUPPORT_COMPOSITE_SEARCH
 #ifdef USE_TABS
 printf("<input type='hidden' name='%s' id='currentTab' value='%s'>\n", FILE_SEARCH_CURRENT_TAB, currentTab);
 printf("<div id='tabs' style='display:none; %s'>\n"
@@ -234,6 +261,7 @@ printf("</div>\n");
 //#else///ifndef USE_TABS
 //printf("<div id='noTabs' style='width:1060px;'>\n");//,cgiBrowser()==btIE?"width:1060px;":"max-width:inherit;");
 #endif///def USE_TABS
+#endif///def SUPPORT_COMPOSITE_SEARCH
 
 // Files tab
 printf("<div id='filesTab' style='width:inherit;'>\n"
@@ -317,7 +345,7 @@ if(metaDbExists)
     char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols);
     if (output)
         {
-        printf(output);
+        puts(output);
         freeMem(output);
         }
     slPairFreeList(&mdbVars);
@@ -330,9 +358,18 @@ printf("<input type='submit' name='submit' value='cancel' class='cancel' style='
 //printf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
 printf("</div>\n");
 
+#ifdef SUPPORT_COMPOSITE_SEARCH
 #ifdef USE_TABS
 printf("</div>\n"); // End tabs div
 #endif///def USE_TABS
+
+if(nameSearch != NULL && !strlen(nameSearch))
+    nameSearch = NULL;
+if(descSearch != NULL && !strlen(descSearch))
+    descSearch = NULL;
+if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
+    groupSearch = NULL;
+#endif///def SUPPORT_COMPOSITE_SEARCH
 
 printf("</form>\n");
 printf("</div>"); // Restricts to max-width:1000px;
@@ -340,31 +377,11 @@ printf("</div>"); // Restricts to max-width:1000px;
 if (measureTiming)
     uglyTime("Rendered tabs");
 
-if(descSearch != NULL && !strlen(descSearch))
-    descSearch = NULL;
-#ifdef SUPPORT_COMPOSITE_SEARCH
-if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
-    groupSearch = NULL;
-#endif///def SUPPORT_COMPOSITE_SEARCH
 
-if(!isEmpty(descSearch))
-    {
-    char *tmp = cloneString(descSearch);
-    char *val = nextWord(&tmp);
-    struct slName *el, *descList = NULL;
-    int i;
-    while (val != NULL)
-        {
-        slNameAddTail(&descList, val);
-        descWordCount++;
-        val = nextWord(&tmp);
-        }
-    descWords = needMem(sizeof(char *) * descWordCount);
-    for(i = 0, el = descList; el != NULL; i++, el = el->next)
-        descWords[i] = strLower(el->name);
-    }
-if (doSearch && selectedTab==simpleTab && descWordCount <= 0)
+#ifdef USE_TABS
+if (doSearch && selectedTab==simpleTab && isEmpty(descSearch))
     doSearch = FALSE;
+#endif///def USE_TABS
 
 if(doSearch)
     {
@@ -395,6 +412,18 @@ if(doSearch)
     else if(selectedTab==filesTab && mdbPairs != NULL)
 #endif///def USE_TABS
         {
+        #ifdef SUPPORT_COMPOSITE_SEARCH
+        if (nameSearch || descSearch || groupSearch)
+            {  // Use nameSearch, descSearch and groupSearch to narrow down the list of composites.
+
+            struct trackDb *tdbList = hTrackDb(db);
+            struct trackDb *tdbsMatch = tdbFilterOn(&tdbList, nameSearch, descSearch, groupSearch);
+
+            // Now we have a list of tracks, so we need a unique list of composites to add to mdbSelects
+            mdbSelectsAddFoundComposites(&mdbSelects,tdbsMatch);
+            }
+        #endif///def SUPPORT_COMPOSITE_SEARCH
+
         fileSearchResults(db, conn, mdbSelects, fileTypeSearch);
         if (measureTiming)
             uglyTime("Searched for files");
