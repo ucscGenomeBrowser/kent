@@ -60,17 +60,6 @@ Contiguous regions where p-values were below a 0.05/0.01 threshold were
 considered significant.  The solid vertical line in the peak represents the
 point with highest signal.</DD>
 </P>
-<P><DT><I>Peaks (Zinba)</I></DT>
-<DD>Enriched regions for FAIRE data were called
-using ZINBA (Zero Inflated Negative Binomial Algorithm). ZINBA is a flexible
-statistical method that uses a generalized linear model to select genomic
-windows with enriched sequence counts after adjusting for relevant confounding
-factors such as mapability, GC content, and copy number alterations.
-Significant regions are selected using the set of standardized residuals
-below a false discovery rate (qvalue) threshold. Peaks were further refined
-using a shape detection algorithm to identify local maxima and boundaries of
-the Raw Base Overlap Signal data within each significant region.</DD>
-</P>
 <P><DT><I>F-Seq Density Signal</I></DT>
 <DD>Density graph (wiggle) of signal
 enrichment calculated using F-Seq for the combined set of sequences from all
