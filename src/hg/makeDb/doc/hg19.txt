@@ -8968,7 +8968,8 @@ TMPDIR=/scratch/tmp
 
       # Unfortunately at this point only about 90% of the peak files actually
       # have metaDb data associated with them in metaDb, so run C program that
-      # adds cell, antibody, treatment columns.
+      # takes it from metaDb if possible, otherwise tries to get it from file
+      # names.
       regClusterAttachMetadataToTableOfTables hg19 partial.table peak.table
 
       # Make three column file: fileName, cell+treatment, antibody
@@ -8993,6 +8994,61 @@ TMPDIR=/scratch/tmp
       # Create inputTrackTable - four columns: <table> <source> <factor> <treatment>
       awk '{printf("%s\t%s\t%s\t%s\n", $7, $8, $9, $10);}' peak.table > wgEncodeRegTfbsClusteredInputs.tab
       hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable2.sql wgEncodeRegTfbsClusteredInputs.tab
+
+      # Do work to figure out how to color cells.  This is based on
+      # hierarchical clustering of wbEncodeUwAffyAllExon.
+      mkdir -p /hive/data/genomes/hg19/bed/wgEncodeReg/cellColors
+      cd /hive/data/genomes/hg19/bed/wgEncodeReg
+
+      # Start with some alas time consuming data cleanup to get rid of
+      # overlaps - losing about 10% of the data in the process which is
+      # totally ok.
+      mkdir allExon
+      cd allExon
+      mkdir inLinks noOverlap onlyCommon
+      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeUwAffyExonArray/*.gz inLinks
+      cd inLinks
+      foreach i (*.gz)
+          bedRemoveOverlap $i ../noOverlap/$i:r
+      end
+      cd ..
+      
+      # Now make up a file of regions present in all inputs for further data
+      # cleanup
+      bedCommonRegions noOverlap/*.* > commonExons.bed
+      cd noOverlap
+      foreach i (*.broadPeak)
+	  echo processing $i
+          bedRestrictToPositions $i ../commonExons.bed ../onlyCommon/$i
+      end
+      rm -r noOverlap
+
+      # Now pool replicates where possible
+      mdbQuery "select fileName,cell,replicate from hg19 where composite='wgEncodeUwAffyExonArray' and view='SimpleSignal'" -out=ra \
+         | sed 's/\.gz//g' > replicate.ra
+      encodeMergeReplicatesBatch replicate.ra onlyCommon merge.sh merged.ra merged
+      mkdir merged
+      chmod a+x merge.sh
+      merge.sh
+
+      # Resort merged output - somehow gets slightly messed by
+      # encodeMergeReplicates.
+      cd merged
+      foreach i (*.broadPeak)
+          echo sorting $i
+          sort -k 1,1 -k 2,2n $i > tmp
+	  mv tmp $i
+      end
+
+      # Make file that converts fileName to cell
+      raToTab merged.ra -cols=fileName,cell stdout \
+         | sed 's/wgEncode/merged\/wgEncode/' > fileToCell.tab
+
+      # Now build the tree. Took 2.5 minutes
+      ls -1 merged/*.broadPeak > clusterInput.lst
+      regClusterTreeCells rename=fileToCell.tab clusterInput.lst cluster.tree cluster.distances
+
+
 
 
 ########################################################################
