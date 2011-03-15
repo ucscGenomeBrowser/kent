@@ -9,6 +9,7 @@
 #include "dnaseq.h"
 #include "bamFile.h"
 #include "htmshell.h"
+#include "rainbow.h"
 
 void usage()
 {
@@ -136,8 +137,11 @@ fprintf(f, "</TR>\n");
 fprintf(f, "</TABLE>\n");
 fprintf(f, "<BR><BR>\n");
 
+
 double midBright = brightness(0, 0, 255);
 double prettyBright = brightness(165,165,165);
+double rainbowStep = 1.0/30.0;
+double rainbowPos = 0;
 
 fprintf(f, "More detail on central rainbow and normalized version.<BR>\n");
 fprintf(f, "<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=0>\n");
@@ -185,12 +189,53 @@ for (colorIx = rainStart; colorIx < rainEnd; ++colorIx)
     fprintf(f, "<TD>%d</TD> ", g);
     fprintf(f, "<TD>%d</TD> ", b);
 
+    struct rgbColor col = lightRainbowAtPos(rainbowPos);
+    fprintf(f, "<TD BGCOLOR='#%02X%02X%02X'>&nbsp;&nbsp;&nbsp;&nbsp;</TD>\n",
+            col.r, col.g, col.b);
+    fprintf(f, "<TD>%f</TD> ", rainbowPos);
+    rainbowPos += rainbowStep;
 
     pt += 3;
     fprintf(f, "</TR>\n");
     }
 fprintf(f, "</TABLE>\n");
 fprintf(f, "<BR><BR>\n");
+
+/* Print out light spectrum in some detail. */
+fprintf(f, "Light rainbow from lightRainbowAtPos.<BR>\n");
+fprintf(f, "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>\n");
+int i;
+int stepCount = 200;
+double colorStep = 1.0/stepCount;
+rainbowPos = 0.0;
+fprintf(f, "<TR>\n");
+for (i=0; i<stepCount; ++i)
+    {
+    struct rgbColor col = lightRainbowAtPos(rainbowPos);
+    fprintf(f, "<TD BGCOLOR='#%02X%02X%02X'>&nbsp;</TD>\n",
+            col.r, col.g, col.b);
+    rainbowPos += colorStep;
+    }
+fprintf(f, "</TR>\n");
+fprintf(f, "</TABLE>\n");
+fprintf(f, "<BR><BR>\n");
+
+/* Print out saturated spectrum in some detail. */
+fprintf(f, "Saturated rainbow from saturatedRainbowAtPos.<BR>\n");
+fprintf(f, "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>\n");
+rainbowPos = 0.0;
+fprintf(f, "<TR>\n");
+for (i=0; i<stepCount; ++i)
+    {
+    struct rgbColor col = saturatedRainbowAtPos(rainbowPos);
+    fprintf(f, "<TD BGCOLOR='#%02X%02X%02X'>&nbsp;</TD>\n",
+            col.r, col.g, col.b);
+    rainbowPos += colorStep;
+    }
+fprintf(f, "</TR>\n");
+fprintf(f, "</TABLE>\n");
+fprintf(f, "<BR><BR>\n");
+
 
 /* Finally just print out the one we like, the last one, as a C structure. */
 fprintf(f, "And the last 3 columns in C<BR>");
@@ -206,6 +251,20 @@ for (colorIx = rainStart; colorIx < rainEnd; ++colorIx)
     int oneBright=brightness(lightR, lightG, lightB);
     double scale = prettyBright/oneBright;
     int r = lightR*scale, g = lightG*scale, b = lightB*scale;
+    fprintf(f, "    {%d, %d, %d},\n", r, g, b);
+    }
+fprintf(f, "    };\n");
+fprintf(f, "</tt></pre>");
+
+/* Also, what the heck, print out the fully saturated one with the varying brightness. */
+fprintf(f, "And the vivid rainbow columns in C<BR>");
+fprintf(f, "<pre><tt>");
+fprintf(f, "struct rgbColor saturatedRainbow[30] = {\n");
+pt = init_cmap + rainStart * 3;
+for (colorIx = rainStart; colorIx < rainEnd; ++colorIx)
+    {
+    int r = pt[0]*4, g = pt[1]*4, b = pt[2]*4;
+    pt += 3;
     fprintf(f, "    {%d, %d, %d},\n", r, g, b);
     }
 fprintf(f, "    };\n");
