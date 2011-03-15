@@ -70,8 +70,11 @@ if (foundFiles == NULL
     else if (hIsBetaHost())
         {
         // For hgwbeta, the files are being looked for one test in a "beta/" subdir.  Have to rsync
-        server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
-        safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/beta/", server, db, dir, subDir);
+        //server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+        //safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/beta/", server, db, dir, subDir);
+        // FIXME: Need cluster-admins help to get rsync solution
+        safef(cmd,sizeof(cmd),"ls -log --time-style=long-iso /hive/groups/encode/dcc/pipeline/downloads/%s/%s/beta/", db,subDir);
+        useRsync = FALSE;
         }
     else  // genome and hgwbeta can use rsync
         {
@@ -842,7 +845,7 @@ if (slCount(mdbList) == 0)
 mdbObjsSortOnVars(&mdbList, "composite");
 mdbObjRemoveHiddenVars(mdbList);
 
-#define FOUND_FILE_LIMIT 1000
+#define FOUND_FILE_LIMIT 2000
 int fileCount = 0;
 // Verify file existance and make fileList of those found
 struct fileDb *fileList = NULL, *oneFile = NULL; // Will contain found files
@@ -870,7 +873,6 @@ while(mdbList && fileCount < FOUND_FILE_LIMIT)
                     slAddHead(&mdbFiles,mdbFile);
                     fileCount++;
                     found = TRUE;
-                    continue;
                     }
                 }
                 else
