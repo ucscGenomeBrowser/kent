@@ -647,9 +647,11 @@ char *type = typeOpt;
 
 if (requested != NULL) // if no type, find it from requested terms.  Will validate that terms match type
 {                  // NOTE: Enter here even if there is a type, to confirm the type
-    while ((hEl = hashNext(&hc)) != NULL)
+    while ((hEl = hashNext(&hc)) != NULL)  // FIXME: This should be using mdbCv APIs to get hashes.  One per "request[]"
         {
         ra = (struct hash *)hEl->val;
+        if (sameWord(hashMustFindVal(ra, "type"),"typeOfTerm"))
+            continue;
         char *val = hashFindVal(ra, *queryBy);
         if (val != NULL)
             {
