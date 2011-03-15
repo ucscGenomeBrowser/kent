@@ -101,7 +101,7 @@ ifeq (${USE_TABIX},1)
         TABIXLIB = ${TABIXDIR}/libtabix.a
     endif
     HG_INC += -I${TABIXINC}
-    L+=${TABIXLIB}
+    L+=${TABIXLIB} -lz
     HG_DEFS+=-DUSE_TABIX
     ifeq (${KNETFILE_HOOKS},1)
 	HG_DEFS+=-DKNETFILE_HOOKS
