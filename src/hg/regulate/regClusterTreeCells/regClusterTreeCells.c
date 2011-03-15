@@ -17,7 +17,7 @@ errAbort(
   "regClusterTreeCells - Create a binary tree of cell types based on hierarchical clustering\n"
   "(Eisen style) of expression data.\n"
   "usage:\n"
-  "   regClusterTreeCells inFiles.lst output.tree\n"
+  "   regClusterTreeCells inFiles.lst output.tree output.distances\n"
   "options:\n"
   "   -short - Abbreviate output by removing stuff shared by all.\n"
   "   -rename=twoCol.tab - Rename files according to file/name columns\n"
@@ -343,7 +343,57 @@ fputc('\n', f);
 carefulClose(&f);
 }
 
-void regClusterTreeCells(char *inFiles, char *outTree)
+struct slRef *rRefList = NULL;
+
+void rMakeRefList(struct treeNode *node)
+/* Recursively add references to leaf nodes to rRefList */
+{
+if (node->fileName)
+    {
+    refAdd(&rRefList, node);
+    }
+else
+    {
+    rMakeRefList(node->left);
+    rMakeRefList(node->right);
+    }
+}
+
+struct slRef *makeRefsToLeaves(struct treeNode *root)
+/* Make a refList of treeNodes that are leaves ordered according to tree. */
+{
+rRefList = NULL;
+rMakeRefList(root);
+slReverse(&rRefList);
+return rRefList;
+}
+
+void outputDistancesOfNeighbors(char *fileName, struct treeNode *root)
+/* Output three column file of format <cellA> <cellB> <distanceA-B>
+ * where lines in file or ordered by tree. */
+{
+struct slRef *ref, *refList = makeRefsToLeaves(root);
+FILE *f = mustOpen(fileName, "w");
+for (ref = refList; ref != NULL; ref = ref->next)
+    {
+    struct slRef *next = ref->next;
+    if (next == NULL)
+        next = refList;  // wrap at end
+    struct treeNode *a = ref->val;
+    struct treeNode *b = next->val;
+    char *aString = a->fileName;
+    char *bString = b->fileName;
+    if (renameHash)
+        {
+	aString = hashMustFindVal(renameHash, aString);
+	bString = hashMustFindVal(renameHash, bString);
+	}
+    fprintf(f, "%s\t%s\t%g\n", aString, bString, treeNodeDistance(a, b));
+    }
+carefulClose(&f);
+}
+
+void regClusterTreeCells(char *inFiles, char *outTree, char *outDistances)
 /* regClusterTreeCells - Create a binary tree of cell types based on hierarchical clustering 
  * (Eisen style) of expression data.. */
 {
@@ -422,6 +472,7 @@ for ( ;nodesUsed <treeNodeCount; ++nodesUsed)
 verbose(1, "\ndone main loop\n");
 
 outputTree(outTree, inFileList, join);
+outputDistancesOfNeighbors(outDistances, join);
 
 lmCleanup(&lm);
 }
@@ -430,11 +481,11 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
 char *renameFile = optionVal("rename", NULL);
 if (renameFile != NULL)
     renameHash = hashTwoColumnFile(renameFile);
-regClusterTreeCells(argv[1], argv[2]);
+regClusterTreeCells(argv[1], argv[2], argv[3]);
 return 0;
 }
