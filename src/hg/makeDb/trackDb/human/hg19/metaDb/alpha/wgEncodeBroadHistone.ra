@@ -1,3 +1,8 @@
+metaObject wgEncodeBroadHistone
+objType composite
+composite wgEncodeBroadHistone
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeBroadHistoneGm12878ControlStdAlnRep1
 objType file
 antibody Control
@@ -21082,4 +21087,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: -1086729565
+# MAGIC: -1022200335

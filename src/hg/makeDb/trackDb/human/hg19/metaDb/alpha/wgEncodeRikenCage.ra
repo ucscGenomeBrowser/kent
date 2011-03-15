@@ -1,3 +1,8 @@
+metaObject wgEncodeRikenCage
+objType composite
+composite wgEncodeRikenCage
+expVars lab,dataType,cell,localization,rnaExtract
+
 metaObject wgEncodeRikenCageA549CellPapAlnRep1
 objType table
 bioRep 021WC
@@ -6771,4 +6776,4 @@ rnaExtract longPolyA
 subId 3804
 view TSS
 
-# MAGIC: 1107901997
+# MAGIC: -1798173089

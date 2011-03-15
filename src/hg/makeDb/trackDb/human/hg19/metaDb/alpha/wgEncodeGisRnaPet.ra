@@ -1,3 +1,8 @@
+metaObject wgEncodeGisRnaPet
+objType composite
+composite wgEncodeGisRnaPet
+expVars lab,dataType,cell,localization,rnaExtract
+
 metaObject wgEncodeGisRnaPetGm12878CytosolPapAlnRep1
 objType table
 cell GM12878
@@ -2504,4 +2509,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSig
 
-# MAGIC: -122271835
+# MAGIC: 1265208525

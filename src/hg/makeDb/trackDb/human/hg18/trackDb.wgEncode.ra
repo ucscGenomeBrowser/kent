@@ -1744,7 +1744,8 @@ include trackDb.wgEncodeYaleRnaSeq.ra
 
 
 # Yale TFBS (wrangler: Venkat, assisted by Tim)
-include wgEncodeYaleChIPseq.ra
+include wgEncodeYaleChIPseq.ra beta,public
+include wgEncodeYaleChIPseq.new.ra alpha
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
 include wgEncodeHudsonalphaChipSeq.ra

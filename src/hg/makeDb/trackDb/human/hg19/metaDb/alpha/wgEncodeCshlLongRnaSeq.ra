@@ -1,3 +1,8 @@
+metaObject wgEncodeCshlLongRnaSeq
+objType composite
+composite wgEncodeCshlLongRnaSeq
+expVars lab,dataType,cell,localization,rnaExtract
+
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1
 objType table
 bioRep 021WC
@@ -21801,4 +21806,4 @@ subId 3663
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV3c
 view TranscriptGencV3c
 
-# MAGIC: -1707698850
+# MAGIC: 837809822
