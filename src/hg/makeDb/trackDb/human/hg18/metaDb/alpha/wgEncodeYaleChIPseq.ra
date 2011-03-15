@@ -1,26 +1,3 @@
-metaObject wgEncodeYaleChIPseqAlignmentsHelas3ifngInput
-objType file
-antibody Input
-cell HeLa-S3
-composite wgEncodeYaleChIPseq
-control std
-controlId HeLa-S3/IFNg30/Input/std
-dataType ChipSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-dccInternalNotes GEO accession provided by lab: GSE12872
-fileName wgEncodeYaleChIPseqAlignmentsHelas3ifngInput.tagAlign.gz
-fragLength 200
-grant Snyder
-lab Yale
-labVersion uncorrected
-project wgEncode
-setType input
-subId 107
-treatment IFNg30
-view Alignments
-
 metaObject wgEncodeYaleChIPseqAlignmentsHelas3Input
 objType file
 antibody Input
@@ -42,6 +19,29 @@ project wgEncode
 setType input
 subId 107
 treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsHelas3ifngInput
+objType file
+antibody Input
+cell HeLa-S3
+composite wgEncodeYaleChIPseq
+control std
+controlId HeLa-S3/IFNg30/Input/std
+dataType ChipSeq
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+dccInternalNotes GEO accession provided by lab: GSE12872
+fileName wgEncodeYaleChIPseqAlignmentsHelas3ifngInput.tagAlign.gz
+fragLength 200
+grant Snyder
+lab Yale
+labVersion uncorrected
+project wgEncode
+setType input
+subId 107
+treatment IFNg30
 view Alignments
 
 metaObject wgEncodeYaleChIPseqAlignmentsNb4Input
@@ -1952,55 +1952,6 @@ subId 538
 treatment None
 view Alignments
 
-metaObject wgEncodeYaleChIPseqAlignmentsRep1Hepg2bInputV2
-objType file
-antibody Input
-cell HepG2b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqAlignmentsRep1Hepg2bInputV2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-project wgEncode
-setType input
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep1Hepg2bTr4V2
-objType file
-antibody TR4
-cell HepG2b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqAlignmentsRep1Hepg2bTr4V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
 metaObject wgEncodeYaleChIPseqAlignmentsRep1Hepg2CebpbForskln
 objType file
 antibody CEBPB
@@ -2315,6 +2266,55 @@ submittedDataVersion V2 - corrected locations
 treatment pravastatin
 view Alignments
 
+metaObject wgEncodeYaleChIPseqAlignmentsRep1Hepg2bInputV2
+objType file
+antibody Input
+cell HepG2b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqAlignmentsRep1Hepg2bInputV2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+project wgEncode
+setType input
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep1Hepg2bTr4V2
+objType file
+antibody TR4
+cell HepG2b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqAlignmentsRep1Hepg2bTr4V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
 metaObject wgEncodeYaleChIPseqAlignmentsRep1HuvecCjun
 objType file
 antibody c-Jun
@@ -2445,130 +2445,6 @@ submittedDataVersion V2 - corrected locations
 treatment None
 view Alignments
 
-metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bE2f4V2
-objType file
-antibody E2F4
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqAlignmentsRep1K562bE2f4V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2),
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bE2f6V2
-objType file
-antibody E2F6
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeYaleChIPseqAlignmentsRep1K562bE2f6V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bGata1
-objType file
-antibody GATA-1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeYaleChIPseqAlignmentsRep1K562bGata1.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001), uncorrected
-project wgEncode
-replicate 1
-setType exp
-subId 227
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bGata2V2
-objType file
-antibody GATA-2
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-09-02
-dateUnrestricted 2010-06-02
-fileName wgEncodeYaleChIPseqAlignmentsRep1K562bGata2V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bInputV2
-objType file
-antibody Input
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqAlignmentsRep1K562bInputV2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-project wgEncode
-setType input
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562Brf1V2
 objType file
 antibody BRF1
@@ -2634,156 +2510,6 @@ project wgEncode
 replicate 1
 setType exp
 subId 893
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1Mnase
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-16
-dateUnrestricted 2010-10-15
-fileName wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1Mnase.tagAlign.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 1088
-treatment MNaseD
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1V2
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bTr4V2
-objType file
-antibody TR4
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-06-22
-dateUnrestricted 2010-03-22
-fileName wgEncodeYaleChIPseqAlignmentsRep1K562bTr4V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bYy1V2
-objType file
-antibody YY1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-09-03
-dateUnrestricted 2010-06-03
-fileName wgEncodeYaleChIPseqAlignmentsRep1K562bYy1V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bZnf263V2
-objType file
-antibody ZNF263
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeYaleChIPseqAlignmentsRep1K562bZnf263V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bZnf274
-objType file
-antibody ZNF274
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-05
-dateUnrestricted 2010-10-04
-fileName wgEncodeYaleChIPseqAlignmentsRep1K562bZnf274.tagAlign.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 860
 treatment None
 view Alignments
 
@@ -3300,48 +3026,6 @@ submittedDataVersion V2 - corrected locations
 treatment None
 view Alignments
 
-metaObject wgEncodeYaleChIPseqAlignmentsRep1K562Nfya
-objType file
-antibody NF-YA
-cell K562
-composite wgEncodeYaleChIPseq
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-02
-dateUnrestricted 2010-07-02
-fileName wgEncodeYaleChIPseqAlignmentsRep1K562Nfya.tagAlign.gz
-grant Snyder
-lab Harvard
-project wgEncode
-replicate 1
-setType exp
-subId 614
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep1K562Nfyb
-objType file
-antibody NF-YB
-cell K562
-composite wgEncodeYaleChIPseq
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-02
-dateUnrestricted 2010-07-02
-fileName wgEncodeYaleChIPseqAlignmentsRep1K562Nfyb.tagAlign.gz
-grant Snyder
-lab Harvard
-project wgEncode
-replicate 1
-setType exp
-subId 615
-treatment None
-view Alignments
-
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562Pol2Ifna30V2
 objType file
 antibody Pol2
@@ -3735,6 +3419,280 @@ replicate 1
 setType exp
 subId 634
 submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bE2f4V2
+objType file
+antibody E2F4
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqAlignmentsRep1K562bE2f4V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2),
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bE2f6V2
+objType file
+antibody E2F6
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeYaleChIPseqAlignmentsRep1K562bE2f6V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bGata1
+objType file
+antibody GATA-1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-27
+dateUnrestricted 2009-11-27
+fileName wgEncodeYaleChIPseqAlignmentsRep1K562bGata1.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001), uncorrected
+project wgEncode
+replicate 1
+setType exp
+subId 227
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bGata2V2
+objType file
+antibody GATA-2
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-09-02
+dateUnrestricted 2010-06-02
+fileName wgEncodeYaleChIPseqAlignmentsRep1K562bGata2V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bInputV2
+objType file
+antibody Input
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqAlignmentsRep1K562bInputV2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+project wgEncode
+setType input
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1Mnase
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-16
+dateUnrestricted 2010-10-15
+fileName wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1Mnase.tagAlign.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 1088
+treatment MNaseD
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1V2
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bTr4V2
+objType file
+antibody TR4
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-06-22
+dateUnrestricted 2010-03-22
+fileName wgEncodeYaleChIPseqAlignmentsRep1K562bTr4V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bYy1V2
+objType file
+antibody YY1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-09-03
+dateUnrestricted 2010-06-03
+fileName wgEncodeYaleChIPseqAlignmentsRep1K562bYy1V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bZnf263V2
+objType file
+antibody ZNF263
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileName wgEncodeYaleChIPseqAlignmentsRep1K562bZnf263V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bZnf274
+objType file
+antibody ZNF274
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-05
+dateUnrestricted 2010-10-04
+fileName wgEncodeYaleChIPseqAlignmentsRep1K562bZnf274.tagAlign.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 860
 treatment None
 view Alignments
 
@@ -5657,32 +5615,6 @@ subId 538
 treatment None
 view Alignments
 
-metaObject wgEncodeYaleChIPseqAlignmentsRep2Hepg2bTr4V2
-objType file
-antibody TR4
-cell HepG2b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqAlignmentsRep2Hepg2bTr4V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
 metaObject wgEncodeYaleChIPseqAlignmentsRep2Hepg2CebpbForskln
 objType file
 antibody CEBPB
@@ -5997,6 +5929,32 @@ submittedDataVersion V2 - corrected locations
 treatment pravastatin
 view Alignments
 
+metaObject wgEncodeYaleChIPseqAlignmentsRep2Hepg2bTr4V2
+objType file
+antibody TR4
+cell HepG2b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqAlignmentsRep2Hepg2bTr4V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
 metaObject wgEncodeYaleChIPseqAlignmentsRep2HuvecCjun
 objType file
 antibody c-Jun
@@ -6127,107 +6085,6 @@ submittedDataVersion V2 - corrected locations
 treatment None
 view Alignments
 
-metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bE2f4V2
-objType file
-antibody E2F4
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqAlignmentsRep2K562bE2f4V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2),
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bE2f6V2
-objType file
-antibody E2F6
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeYaleChIPseqAlignmentsRep2K562bE2f6V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bGata1
-objType file
-antibody GATA-1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeYaleChIPseqAlignmentsRep2K562bGata1.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001), uncorrected
-project wgEncode
-replicate 2
-setType exp
-subId 227
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bGata2V2
-objType file
-antibody GATA-2
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-09-02
-dateUnrestricted 2010-06-02
-fileName wgEncodeYaleChIPseqAlignmentsRep2K562bGata2V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
 metaObject wgEncodeYaleChIPseqAlignmentsRep2K562Brf1V2
 objType file
 antibody BRF1
@@ -6293,156 +6150,6 @@ project wgEncode
 replicate 2
 setType exp
 subId 893
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1Mnase
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-16
-dateUnrestricted 2010-10-15
-fileName wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1Mnase.tagAlign.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 1088
-treatment MNaseD
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1V2
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bTr4V2
-objType file
-antibody TR4
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-06-22
-dateUnrestricted 2010-03-22
-fileName wgEncodeYaleChIPseqAlignmentsRep2K562bTr4V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bYy1V2
-objType file
-antibody YY1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-09-03
-dateUnrestricted 2010-06-03
-fileName wgEncodeYaleChIPseqAlignmentsRep2K562bYy1V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bZnf263V2
-objType file
-antibody ZNF263
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeYaleChIPseqAlignmentsRep2K562bZnf263V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bZnf274
-objType file
-antibody ZNF274
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-05
-dateUnrestricted 2010-10-04
-fileName wgEncodeYaleChIPseqAlignmentsRep2K562bZnf274.tagAlign.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 860
 treatment None
 view Alignments
 
@@ -6863,48 +6570,6 @@ submittedDataVersion V2 - corrected locations
 treatment None
 view Alignments
 
-metaObject wgEncodeYaleChIPseqAlignmentsRep2K562Nfya
-objType file
-antibody NF-YA
-cell K562
-composite wgEncodeYaleChIPseq
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-02
-dateUnrestricted 2010-07-02
-fileName wgEncodeYaleChIPseqAlignmentsRep2K562Nfya.tagAlign.gz
-grant Snyder
-lab Harvard
-project wgEncode
-replicate 2
-setType exp
-subId 614
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep2K562Nfyb
-objType file
-antibody NF-YB
-cell K562
-composite wgEncodeYaleChIPseq
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-02
-dateUnrestricted 2010-07-02
-fileName wgEncodeYaleChIPseqAlignmentsRep2K562Nfyb.tagAlign.gz
-grant Snyder
-lab Harvard
-project wgEncode
-replicate 2
-setType exp
-subId 615
-treatment None
-view Alignments
-
 metaObject wgEncodeYaleChIPseqAlignmentsRep2K562Pol2Ifna30V2
 objType file
 antibody Pol2
@@ -7298,6 +6963,257 @@ replicate 2
 setType exp
 subId 634
 submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bE2f4V2
+objType file
+antibody E2F4
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqAlignmentsRep2K562bE2f4V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2),
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bE2f6V2
+objType file
+antibody E2F6
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeYaleChIPseqAlignmentsRep2K562bE2f6V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bGata1
+objType file
+antibody GATA-1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-27
+dateUnrestricted 2009-11-27
+fileName wgEncodeYaleChIPseqAlignmentsRep2K562bGata1.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001), uncorrected
+project wgEncode
+replicate 2
+setType exp
+subId 227
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bGata2V2
+objType file
+antibody GATA-2
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-09-02
+dateUnrestricted 2010-06-02
+fileName wgEncodeYaleChIPseqAlignmentsRep2K562bGata2V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1Mnase
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-16
+dateUnrestricted 2010-10-15
+fileName wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1Mnase.tagAlign.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 1088
+treatment MNaseD
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1V2
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bTr4V2
+objType file
+antibody TR4
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-06-22
+dateUnrestricted 2010-03-22
+fileName wgEncodeYaleChIPseqAlignmentsRep2K562bTr4V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bYy1V2
+objType file
+antibody YY1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-09-03
+dateUnrestricted 2010-06-03
+fileName wgEncodeYaleChIPseqAlignmentsRep2K562bYy1V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bZnf263V2
+objType file
+antibody ZNF263
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2009-11-22
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileName wgEncodeYaleChIPseqAlignmentsRep2K562bZnf263V2.tagAlign.gz
+fragLength 200
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 634
+submittedDataVersion V2 - corrected locations
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bZnf274
+objType file
+antibody ZNF274
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-05
+dateUnrestricted 2010-10-04
+fileName wgEncodeYaleChIPseqAlignmentsRep2K562bZnf274.tagAlign.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 860
 treatment None
 view Alignments
 
@@ -9881,30 +9797,6 @@ tableName wgEncodeYaleChIPseqPeaksHelas3Ha
 treatment None
 view Peaks
 
-metaObject wgEncodeYaleChIPseqPeaksHelas3ifngStat1
-objType table
-antibody STAT1
-cell HeLa-S3
-composite wgEncodeYaleChIPseq
-control std
-controlId HeLa-S3/IFNg30/Input/std
-dataType ChipSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-dccInternalNotes GEO accession provided by lab: GSE12872
-fileName wgEncodeYaleChIPseqPeaksHelas3ifngStat1.narrowPeak.gz
-grant Snyder
-lab Yale
-labVersion chrom start +1 for this file,
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0
-subId 13
-tableName wgEncodeYaleChIPseqPeaksHelas3ifngStat1
-treatment IFNg30
-view Peaks
-
 metaObject wgEncodeYaleChIPseqPeaksHelas3Ini1Musigg
 objType table
 antibody Ini1
@@ -10131,27 +10023,28 @@ tableName wgEncodeYaleChIPseqPeaksHelas3Tr4
 treatment None
 view Peaks
 
-metaObject wgEncodeYaleChIPseqPeaksHepg2bTr4
+metaObject wgEncodeYaleChIPseqPeaksHelas3ifngStat1
 objType table
-antibody TR4
-cell HepG2b
+antibody STAT1
+cell HeLa-S3
 composite wgEncodeYaleChIPseq
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
+control std
+controlId HeLa-S3/IFNg30/Input/std
 dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqPeaksHepg2bTr4.narrowPeak.gz
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+dccInternalNotes GEO accession provided by lab: GSE12872
+fileName wgEncodeYaleChIPseqPeaksHelas3ifngStat1.narrowPeak.gz
 grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+lab Yale
+labVersion chrom start +1 for this file,
 project wgEncode
 setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 372
-tableName wgEncodeYaleChIPseqPeaksHepg2bTr4
-treatment None
+softwareVersion PeakSeq1.0
+subId 13
+tableName wgEncodeYaleChIPseqPeaksHelas3ifngStat1
+treatment IFNg30
 view Peaks
 
 metaObject wgEncodeYaleChIPseqPeaksHepg2CebpbForskln
@@ -10407,6 +10300,29 @@ tableName wgEncodeYaleChIPseqPeaksHepg2Srebp2
 treatment pravastatin
 view Peaks
 
+metaObject wgEncodeYaleChIPseqPeaksHepg2bTr4
+objType table
+antibody TR4
+cell HepG2b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqPeaksHepg2bTr4.narrowPeak.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 372
+tableName wgEncodeYaleChIPseqPeaksHepg2bTr4
+treatment None
+view Peaks
+
 metaObject wgEncodeYaleChIPseqPeaksHuvecCjun
 objType table
 antibody c-Jun
@@ -10519,101 +10435,6 @@ tableName wgEncodeYaleChIPseqPeaksK562Bdp1
 treatment None
 view Peaks
 
-metaObject wgEncodeYaleChIPseqPeaksK562bE2f4
-objType table
-antibody E2F4
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-07-20
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqPeaksK562bE2f4.narrowPeak.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2),
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 439
-tableName wgEncodeYaleChIPseqPeaksK562bE2f4
-treatment None
-view Peaks
-
-metaObject wgEncodeYaleChIPseqPeaksK562bE2f6
-objType table
-antibody E2F6
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeYaleChIPseqPeaksK562bE2f6.narrowPeak.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 371
-tableName wgEncodeYaleChIPseqPeaksK562bE2f6
-treatment None
-view Peaks
-
-metaObject wgEncodeYaleChIPseqPeaksK562bGata1V2
-objType table
-antibody GATA-1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-06-30
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeYaleChIPseqPeaksK562bGata1V2.narrowPeak.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 404
-submittedDataVersion V2 - corrected start location, pValue and point peak
-tableName wgEncodeYaleChIPseqPeaksK562bGata1V2
-treatment None
-view Peaks
-
-metaObject wgEncodeYaleChIPseqPeaksK562bGata2
-objType table
-antibody GATA-2
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-02
-dateUnrestricted 2010-06-02
-fileName wgEncodeYaleChIPseqPeaksK562bGata2.narrowPeak.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 460
-tableName wgEncodeYaleChIPseqPeaksK562bGata2
-treatment None
-view Peaks
-
 metaObject wgEncodeYaleChIPseqPeaksK562Brf1
 objType table
 antibody BRF1
@@ -10679,146 +10500,6 @@ project wgEncode
 setType exp
 subId 893
 tableName wgEncodeYaleChIPseqPeaksK562Brg1Musigg
-treatment None
-view Peaks
-
-metaObject wgEncodeYaleChIPseqPeaksK562bSetdb1
-objType table
-antibody SETDB1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeYaleChIPseqPeaksK562bSetdb1.narrowPeak.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 377
-tableName wgEncodeYaleChIPseqPeaksK562bSetdb1
-treatment None
-view Peaks
-
-metaObject wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase
-objType table
-antibody SETDB1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-16
-dateUnrestricted 2010-10-15
-fileName wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase.narrowPeak.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 1088
-tableName wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase
-treatment MNaseD
-view Peaks
-
-metaObject wgEncodeYaleChIPseqPeaksK562bTr4
-objType table
-antibody TR4
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-22
-dateUnrestricted 2010-03-22
-fileName wgEncodeYaleChIPseqPeaksK562bTr4.narrowPeak.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 380
-tableName wgEncodeYaleChIPseqPeaksK562bTr4
-treatment None
-view Peaks
-
-metaObject wgEncodeYaleChIPseqPeaksK562bYy1
-objType table
-antibody YY1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-03
-dateUnrestricted 2010-06-03
-fileName wgEncodeYaleChIPseqPeaksK562bYy1.narrowPeak.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 467
-tableName wgEncodeYaleChIPseqPeaksK562bYy1
-treatment None
-view Peaks
-
-metaObject wgEncodeYaleChIPseqPeaksK562bZnf263V2
-objType table
-antibody ZNF263
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-06-30
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeYaleChIPseqPeaksK562bZnf263V2.narrowPeak.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 404
-submittedDataVersion V2 - corrected start location, pValue and point peak
-tableName wgEncodeYaleChIPseqPeaksK562bZnf263V2
-treatment None
-view Peaks
-
-metaObject wgEncodeYaleChIPseqPeaksK562bZnf274
-objType table
-antibody ZNF274
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-05
-dateUnrestricted 2010-10-04
-fileName wgEncodeYaleChIPseqPeaksK562bZnf274.narrowPeak.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 860
-tableName wgEncodeYaleChIPseqPeaksK562bZnf274
 treatment None
 view Peaks
 
@@ -11340,50 +11021,6 @@ tableName wgEncodeYaleChIPseqPeaksK562Nfe2V2
 treatment None
 view Peaks
 
-metaObject wgEncodeYaleChIPseqPeaksK562Nfya
-objType table
-antibody NF-YA
-cell K562
-composite wgEncodeYaleChIPseq
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-02
-dateUnrestricted 2010-07-02
-fileName wgEncodeYaleChIPseqPeaksK562Nfya.narrowPeak.gz
-grant Snyder
-lab Harvard
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0
-subId 614
-tableName wgEncodeYaleChIPseqPeaksK562Nfya
-treatment None
-view Peaks
-
-metaObject wgEncodeYaleChIPseqPeaksK562Nfyb
-objType table
-antibody NF-YB
-cell K562
-composite wgEncodeYaleChIPseq
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-02
-dateUnrestricted 2010-07-02
-fileName wgEncodeYaleChIPseqPeaksK562Nfyb.narrowPeak.gz
-grant Snyder
-lab Harvard
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0
-subId 615
-tableName wgEncodeYaleChIPseqPeaksK562Nfyb
-treatment None
-view Peaks
-
 metaObject wgEncodeYaleChIPseqPeaksK562Pol2Musigg
 objType table
 antibody Pol2
@@ -11613,6 +11250,241 @@ tableName wgEncodeYaleChIPseqPeaksK562Xrcc4
 treatment None
 view Peaks
 
+metaObject wgEncodeYaleChIPseqPeaksK562bE2f4
+objType table
+antibody E2F4
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateResubmitted 2009-07-20
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqPeaksK562bE2f4.narrowPeak.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2),
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 439
+tableName wgEncodeYaleChIPseqPeaksK562bE2f4
+treatment None
+view Peaks
+
+metaObject wgEncodeYaleChIPseqPeaksK562bE2f6
+objType table
+antibody E2F6
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeYaleChIPseqPeaksK562bE2f6.narrowPeak.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 371
+tableName wgEncodeYaleChIPseqPeaksK562bE2f6
+treatment None
+view Peaks
+
+metaObject wgEncodeYaleChIPseqPeaksK562bGata1V2
+objType table
+antibody GATA-1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateResubmitted 2009-06-30
+dateSubmitted 2009-02-27
+dateUnrestricted 2009-11-27
+fileName wgEncodeYaleChIPseqPeaksK562bGata1V2.narrowPeak.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 404
+submittedDataVersion V2 - corrected start location, pValue and point peak
+tableName wgEncodeYaleChIPseqPeaksK562bGata1V2
+treatment None
+view Peaks
+
+metaObject wgEncodeYaleChIPseqPeaksK562bGata2
+objType table
+antibody GATA-2
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-02
+dateUnrestricted 2010-06-02
+fileName wgEncodeYaleChIPseqPeaksK562bGata2.narrowPeak.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 460
+tableName wgEncodeYaleChIPseqPeaksK562bGata2
+treatment None
+view Peaks
+
+metaObject wgEncodeYaleChIPseqPeaksK562bSetdb1
+objType table
+antibody SETDB1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeYaleChIPseqPeaksK562bSetdb1.narrowPeak.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 377
+tableName wgEncodeYaleChIPseqPeaksK562bSetdb1
+treatment None
+view Peaks
+
+metaObject wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase
+objType table
+antibody SETDB1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-16
+dateUnrestricted 2010-10-15
+fileName wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase.narrowPeak.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 1088
+tableName wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase
+treatment MNaseD
+view Peaks
+
+metaObject wgEncodeYaleChIPseqPeaksK562bTr4
+objType table
+antibody TR4
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-22
+dateUnrestricted 2010-03-22
+fileName wgEncodeYaleChIPseqPeaksK562bTr4.narrowPeak.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 380
+tableName wgEncodeYaleChIPseqPeaksK562bTr4
+treatment None
+view Peaks
+
+metaObject wgEncodeYaleChIPseqPeaksK562bYy1
+objType table
+antibody YY1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-03
+dateUnrestricted 2010-06-03
+fileName wgEncodeYaleChIPseqPeaksK562bYy1.narrowPeak.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 467
+tableName wgEncodeYaleChIPseqPeaksK562bYy1
+treatment None
+view Peaks
+
+metaObject wgEncodeYaleChIPseqPeaksK562bZnf263V2
+objType table
+antibody ZNF263
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateResubmitted 2009-06-30
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileName wgEncodeYaleChIPseqPeaksK562bZnf263V2.narrowPeak.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 404
+submittedDataVersion V2 - corrected start location, pValue and point peak
+tableName wgEncodeYaleChIPseqPeaksK562bZnf263V2
+treatment None
+view Peaks
+
+metaObject wgEncodeYaleChIPseqPeaksK562bZnf274
+objType table
+antibody ZNF274
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-05
+dateUnrestricted 2010-10-04
+fileName wgEncodeYaleChIPseqPeaksK562bZnf274.narrowPeak.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 860
+tableName wgEncodeYaleChIPseqPeaksK562bZnf274
+treatment None
+view Peaks
+
 metaObject wgEncodeYaleChIPseqPeaksMcf7Hae2f1
 objType table
 antibody HA-E2F1
@@ -11766,27 +11638,6 @@ subId 191
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataHelas3ifngInput
-objType file
-antibody Input
-cell HeLa-S3
-composite wgEncodeYaleChIPseq
-control std
-controlId HeLa-S3/IFNg30/Input/std
-dataType ChipSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-dccInternalNotes GEO accession provided by lab: GSE12872
-fileName wgEncodeYaleChIPseqRawDataHelas3ifngInput.fastq.gz
-grant Snyder
-lab Yale
-project wgEncode
-setType input
-subId 15
-treatment IFNg30
-view RawData
-
 metaObject wgEncodeYaleChIPseqRawDataHelas3Input
 objType file
 antibody Input
@@ -11808,6 +11659,27 @@ subId 14
 treatment None
 view RawData
 
+metaObject wgEncodeYaleChIPseqRawDataHelas3ifngInput
+objType file
+antibody Input
+cell HeLa-S3
+composite wgEncodeYaleChIPseq
+control std
+controlId HeLa-S3/IFNg30/Input/std
+dataType ChipSeq
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+dccInternalNotes GEO accession provided by lab: GSE12872
+fileName wgEncodeYaleChIPseqRawDataHelas3ifngInput.fastq.gz
+grant Snyder
+lab Yale
+project wgEncode
+setType input
+subId 15
+treatment IFNg30
+view RawData
+
 metaObject wgEncodeYaleChIPseqRawDataHepg2bInput
 objType file
 antibody Input
@@ -11825,27 +11697,6 @@ lab UCD
 project wgEncode
 setType input
 subId 374
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataK562bInput
-objType file
-antibody Input
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqRawDataK562bInput.fastq.gz
-grant Snyder
-lab UCD
-labVersion Illumina 2.0, low confidence sequences excluded
-project wgEncode
-setType input
-subId 335
 treatment None
 view RawData
 
@@ -11946,6 +11797,27 @@ lab Yale
 project wgEncode
 setType input
 subId 17
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataK562bInput
+objType file
+antibody Input
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqRawDataK562bInput.fastq.gz
+grant Snyder
+lab UCD
+labVersion Illumina 2.0, low confidence sequences excluded
+project wgEncode
+setType input
+subId 335
 treatment None
 view RawData
 
@@ -13480,28 +13352,6 @@ subId 553
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataRep1Helas3ifngStat1
-objType file
-antibody STAT1
-cell HeLa-S3
-composite wgEncodeYaleChIPseq
-control std
-controlId HeLa-S3/IFNg30/Input/std
-dataType ChipSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-dccInternalNotes GEO accession provided by lab: GSE12872
-fileName wgEncodeYaleChIPseqRawDataRep1Helas3ifngStat1.fastq.gz
-grant Snyder
-lab Yale
-project wgEncode
-replicate 1
-setType exp
-subId 13
-treatment IFNg30
-view RawData
-
 metaObject wgEncodeYaleChIPseqRawDataRep1Helas3Ini1Musigg
 objType file
 antibody Ini1
@@ -13782,26 +13632,26 @@ subId 538
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataRep1Hepg2bTr4
+metaObject wgEncodeYaleChIPseqRawDataRep1Helas3ifngStat1
 objType file
-antibody TR4
-cell HepG2b
+antibody STAT1
+cell HeLa-S3
 composite wgEncodeYaleChIPseq
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
+control std
+controlId HeLa-S3/IFNg30/Input/std
 dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqRawDataRep1Hepg2bTr4.fastq.gz
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+dccInternalNotes GEO accession provided by lab: GSE12872
+fileName wgEncodeYaleChIPseqRawDataRep1Helas3ifngStat1.fastq.gz
 grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
+lab Yale
 project wgEncode
 replicate 1
 setType exp
-subId 372
-treatment None
+subId 13
+treatment IFNg30
 view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataRep1Hepg2CebpbForskln
@@ -14108,6 +13958,28 @@ subId 243
 treatment pravastatin
 view RawData
 
+metaObject wgEncodeYaleChIPseqRawDataRep1Hepg2bTr4
+objType file
+antibody TR4
+cell HepG2b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqRawDataRep1Hepg2bTr4.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
+project wgEncode
+replicate 1
+setType exp
+subId 372
+treatment None
+view RawData
+
 metaObject wgEncodeYaleChIPseqRawDataRep1HuvecCjun
 objType file
 antibody c-Jun
@@ -14236,96 +14108,6 @@ subId 383
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataRep1K562bE2f4
-objType file
-antibody E2F4
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqRawDataRep1K562bE2f4.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
-project wgEncode
-replicate 1
-setType exp
-subId 334
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep1K562bE2f6
-objType file
-antibody E2F6
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeYaleChIPseqRawDataRep1K562bE2f6.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001) Lane A is Illumina 2.0, low confidence sequences excluded
-project wgEncode
-replicate 1
-setType exp
-subId 371
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep1K562bGata1
-objType file
-antibody GATA-1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeYaleChIPseqRawDataRep1K562bGata1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 227
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep1K562bGata2
-objType file
-antibody GATA-2
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-02
-dateUnrestricted 2010-06-02
-fileName wgEncodeYaleChIPseqRawDataRep1K562bGata2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 460
-treatment None
-view RawData
-
 metaObject wgEncodeYaleChIPseqRawDataRep1K562Brf1
 objType file
 antibody BRF1
@@ -14388,144 +14170,6 @@ project wgEncode
 replicate 1
 setType exp
 subId 893
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep1K562bSetdb1
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeYaleChIPseqRawDataRep1K562bSetdb1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 377
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep1K562bSetdb1Mnase
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-16
-dateUnrestricted 2010-10-15
-fileName wgEncodeYaleChIPseqRawDataRep1K562bSetdb1Mnase.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 1088
-treatment MNaseD
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep1K562bTr4
-objType file
-antibody TR4
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-22
-dateUnrestricted 2010-03-22
-fileName wgEncodeYaleChIPseqRawDataRep1K562bTr4.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 380
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep1K562bYy1
-objType file
-antibody YY1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-03
-dateUnrestricted 2010-06-03
-fileName wgEncodeYaleChIPseqRawDataRep1K562bYy1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 467
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep1K562bZnf263
-objType file
-antibody ZNF263
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeYaleChIPseqRawDataRep1K562bZnf263.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 205
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep1K562bZnf274
-objType file
-antibody ZNF274
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-05
-dateUnrestricted 2010-10-04
-fileName wgEncodeYaleChIPseqRawDataRep1K562bZnf274.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 860
 treatment None
 view RawData
 
@@ -15064,48 +14708,6 @@ subId 189
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataRep1K562Nfya
-objType file
-antibody NF-YA
-cell K562
-composite wgEncodeYaleChIPseq
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-02
-dateUnrestricted 2010-07-02
-fileName wgEncodeYaleChIPseqRawDataRep1K562Nfya.fastq.gz
-grant Snyder
-lab Harvard
-project wgEncode
-replicate 1
-setType exp
-subId 614
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep1K562Nfyb
-objType file
-antibody NF-YB
-cell K562
-composite wgEncodeYaleChIPseq
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-02
-dateUnrestricted 2010-07-02
-fileName wgEncodeYaleChIPseqRawDataRep1K562Nfyb.fastq.gz
-grant Snyder
-lab Harvard
-project wgEncode
-replicate 1
-setType exp
-subId 615
-treatment None
-view RawData
-
 metaObject wgEncodeYaleChIPseqRawDataRep1K562Pol2
 objType file
 antibody Pol2
@@ -15321,6 +14923,234 @@ project wgEncode
 replicate 1
 setType exp
 subId 320
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep1K562bE2f4
+objType file
+antibody E2F4
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqRawDataRep1K562bE2f4.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
+project wgEncode
+replicate 1
+setType exp
+subId 334
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep1K562bE2f6
+objType file
+antibody E2F6
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeYaleChIPseqRawDataRep1K562bE2f6.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001) Lane A is Illumina 2.0, low confidence sequences excluded
+project wgEncode
+replicate 1
+setType exp
+subId 371
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep1K562bGata1
+objType file
+antibody GATA-1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-27
+dateUnrestricted 2009-11-27
+fileName wgEncodeYaleChIPseqRawDataRep1K562bGata1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 227
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep1K562bGata2
+objType file
+antibody GATA-2
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-02
+dateUnrestricted 2010-06-02
+fileName wgEncodeYaleChIPseqRawDataRep1K562bGata2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 460
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep1K562bSetdb1
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeYaleChIPseqRawDataRep1K562bSetdb1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 377
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep1K562bSetdb1Mnase
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-16
+dateUnrestricted 2010-10-15
+fileName wgEncodeYaleChIPseqRawDataRep1K562bSetdb1Mnase.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 1088
+treatment MNaseD
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep1K562bTr4
+objType file
+antibody TR4
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-22
+dateUnrestricted 2010-03-22
+fileName wgEncodeYaleChIPseqRawDataRep1K562bTr4.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 380
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep1K562bYy1
+objType file
+antibody YY1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-03
+dateUnrestricted 2010-06-03
+fileName wgEncodeYaleChIPseqRawDataRep1K562bYy1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 467
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep1K562bZnf263
+objType file
+antibody ZNF263
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileName wgEncodeYaleChIPseqRawDataRep1K562bZnf263.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 205
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep1K562bZnf274
+objType file
+antibody ZNF274
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-05
+dateUnrestricted 2010-10-04
+fileName wgEncodeYaleChIPseqRawDataRep1K562bZnf274.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 860
 treatment None
 view RawData
 
@@ -16906,28 +16736,6 @@ subId 553
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataRep2Helas3ifngStat1
-objType file
-antibody STAT1
-cell HeLa-S3
-composite wgEncodeYaleChIPseq
-control std
-controlId HeLa-S3/IFNg30/Input/std
-dataType ChipSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-dccInternalNotes GEO accession provided by lab: GSE12872
-fileName wgEncodeYaleChIPseqRawDataRep2Helas3ifngStat1.fastq.gz
-grant Snyder
-lab Yale
-project wgEncode
-replicate 2
-setType exp
-subId 13
-treatment IFNg30
-view RawData
-
 metaObject wgEncodeYaleChIPseqRawDataRep2Helas3Ini1Musigg
 objType file
 antibody Ini1
@@ -17186,27 +16994,26 @@ subId 538
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataRep2Hepg2bTr4
+metaObject wgEncodeYaleChIPseqRawDataRep2Helas3ifngStat1
 objType file
-antibody TR4
-cell HepG2b
+antibody STAT1
+cell HeLa-S3
 composite wgEncodeYaleChIPseq
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
+control std
+controlId HeLa-S3/IFNg30/Input/std
 dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqRawDataRep2Hepg2bTr4.fastq.gz
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+dccInternalNotes GEO accession provided by lab: GSE12872
+fileName wgEncodeYaleChIPseqRawDataRep2Helas3ifngStat1.fastq.gz
 grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+lab Yale
 project wgEncode
 replicate 2
 setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 372
-treatment None
+subId 13
+treatment IFNg30
 view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataRep2Hepg2CebpbForskln
@@ -17513,6 +17320,29 @@ subId 243
 treatment pravastatin
 view RawData
 
+metaObject wgEncodeYaleChIPseqRawDataRep2Hepg2bTr4
+objType file
+antibody TR4
+cell HepG2b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqRawDataRep2Hepg2bTr4.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 372
+treatment None
+view RawData
+
 metaObject wgEncodeYaleChIPseqRawDataRep2HuvecCjun
 objType file
 antibody c-Jun
@@ -17641,97 +17471,6 @@ subId 383
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataRep2K562bE2f4
-objType file
-antibody E2F4
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqRawDataRep2K562bE2f4.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
-project wgEncode
-replicate 2
-setType exp
-subId 334
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep2K562bE2f6
-objType file
-antibody E2F6
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeYaleChIPseqRawDataRep2K562bE2f6.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 371
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep2K562bGata1
-objType file
-antibody GATA-1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeYaleChIPseqRawDataRep2K562bGata1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 227
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep2K562bGata2
-objType file
-antibody GATA-2
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-02
-dateUnrestricted 2010-06-02
-fileName wgEncodeYaleChIPseqRawDataRep2K562bGata2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 460
-treatment None
-view RawData
-
 metaObject wgEncodeYaleChIPseqRawDataRep2K562Brf1
 objType file
 antibody BRF1
@@ -17794,144 +17533,6 @@ project wgEncode
 replicate 2
 setType exp
 subId 893
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep2K562bSetdb1
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeYaleChIPseqRawDataRep2K562bSetdb1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 377
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep2K562bSetdb1Mnase
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-16
-dateUnrestricted 2010-10-15
-fileName wgEncodeYaleChIPseqRawDataRep2K562bSetdb1Mnase.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 1088
-treatment MNaseD
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep2K562bTr4
-objType file
-antibody TR4
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-22
-dateUnrestricted 2010-03-22
-fileName wgEncodeYaleChIPseqRawDataRep2K562bTr4.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 380
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep2K562bYy1
-objType file
-antibody YY1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-03
-dateUnrestricted 2010-06-03
-fileName wgEncodeYaleChIPseqRawDataRep2K562bYy1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 467
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep2K562bZnf263
-objType file
-antibody ZNF263
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeYaleChIPseqRawDataRep2K562bZnf263.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 205
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep2K562bZnf274
-objType file
-antibody ZNF274
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-05
-dateUnrestricted 2010-10-04
-fileName wgEncodeYaleChIPseqRawDataRep2K562bZnf274.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 860
 treatment None
 view RawData
 
@@ -18466,48 +18067,6 @@ subId 189
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataRep2K562Nfya
-objType file
-antibody NF-YA
-cell K562
-composite wgEncodeYaleChIPseq
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-02
-dateUnrestricted 2010-07-02
-fileName wgEncodeYaleChIPseqRawDataRep2K562Nfya.fastq.gz
-grant Snyder
-lab Harvard
-project wgEncode
-replicate 2
-setType exp
-subId 614
-treatment None
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep2K562Nfyb
-objType file
-antibody NF-YB
-cell K562
-composite wgEncodeYaleChIPseq
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-02
-dateUnrestricted 2010-07-02
-fileName wgEncodeYaleChIPseqRawDataRep2K562Nfyb.fastq.gz
-grant Snyder
-lab Harvard
-project wgEncode
-replicate 2
-setType exp
-subId 615
-treatment None
-view RawData
-
 metaObject wgEncodeYaleChIPseqRawDataRep2K562Pol2
 objType file
 antibody Pol2
@@ -18722,6 +18281,235 @@ project wgEncode
 replicate 2
 setType exp
 subId 320
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep2K562bE2f4
+objType file
+antibody E2F4
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqRawDataRep2K562bE2f4.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
+project wgEncode
+replicate 2
+setType exp
+subId 334
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep2K562bE2f6
+objType file
+antibody E2F6
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeYaleChIPseqRawDataRep2K562bE2f6.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 371
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep2K562bGata1
+objType file
+antibody GATA-1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-27
+dateUnrestricted 2009-11-27
+fileName wgEncodeYaleChIPseqRawDataRep2K562bGata1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 227
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep2K562bGata2
+objType file
+antibody GATA-2
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-02
+dateUnrestricted 2010-06-02
+fileName wgEncodeYaleChIPseqRawDataRep2K562bGata2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 460
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep2K562bSetdb1
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeYaleChIPseqRawDataRep2K562bSetdb1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 377
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep2K562bSetdb1Mnase
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-16
+dateUnrestricted 2010-10-15
+fileName wgEncodeYaleChIPseqRawDataRep2K562bSetdb1Mnase.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 1088
+treatment MNaseD
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep2K562bTr4
+objType file
+antibody TR4
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-22
+dateUnrestricted 2010-03-22
+fileName wgEncodeYaleChIPseqRawDataRep2K562bTr4.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 380
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep2K562bYy1
+objType file
+antibody YY1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-03
+dateUnrestricted 2010-06-03
+fileName wgEncodeYaleChIPseqRawDataRep2K562bYy1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 467
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep2K562bZnf263
+objType file
+antibody ZNF263
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileName wgEncodeYaleChIPseqRawDataRep2K562bZnf263.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 205
+treatment None
+view RawData
+
+metaObject wgEncodeYaleChIPseqRawDataRep2K562bZnf274
+objType file
+antibody ZNF274
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-05
+dateUnrestricted 2010-10-04
+fileName wgEncodeYaleChIPseqRawDataRep2K562bZnf274.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 860
 treatment None
 view RawData
 
@@ -20362,31 +20150,6 @@ tableName wgEncodeYaleChIPseqRel2SignalHek293Pol2
 treatment None
 view Signal
 
-metaObject wgEncodeYaleChIPseqRel2SignalHelas3ifngInput
-objType table
-antibody Input
-cell HeLa-S3
-composite wgEncodeYaleChIPseq
-control std
-controlId HeLa-S3/IFNg30/Input/std
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-03-20
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-dccInternalNotes GEO accession provided by lab: GSE12872
-fileName wgEncodeYaleChIPseqRel2SignalHelas3ifngInput.bedGraph4.gz
-grant Snyder
-lab Yale
-project wgEncode
-setType input
-softwareVersion PeakSeq1.0
-subId 279
-submittedDataVersion V2 - corrected sparse signals
-tableName wgEncodeYaleChIPseqRel2SignalHelas3ifngInput
-treatment IFNg30
-view Signal
-
 metaObject wgEncodeYaleChIPseqRel2SignalHelas3Input
 objType table
 antibody Input
@@ -20436,6 +20199,31 @@ tableName wgEncodeYaleChIPseqRel2SignalHelas3Pol2
 treatment None
 view Signal
 
+metaObject wgEncodeYaleChIPseqRel2SignalHelas3ifngInput
+objType table
+antibody Input
+cell HeLa-S3
+composite wgEncodeYaleChIPseq
+control std
+controlId HeLa-S3/IFNg30/Input/std
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateResubmitted 2009-03-20
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+dccInternalNotes GEO accession provided by lab: GSE12872
+fileName wgEncodeYaleChIPseqRel2SignalHelas3ifngInput.bedGraph4.gz
+grant Snyder
+lab Yale
+project wgEncode
+setType input
+softwareVersion PeakSeq1.0
+subId 279
+submittedDataVersion V2 - corrected sparse signals
+tableName wgEncodeYaleChIPseqRel2SignalHelas3ifngInput
+treatment IFNg30
+view Signal
+
 metaObject wgEncodeYaleChIPseqRel2SignalHepg2Input
 objType table
 antibody Input
@@ -20458,56 +20246,6 @@ subId 279
 submittedDataVersion V2 - corrected sparse signals
 tableName wgEncodeYaleChIPseqRel2SignalHepg2Input
 treatment pravastatin
-view Signal
-
-metaObject wgEncodeYaleChIPseqRel2SignalK562bGata1
-objType table
-antibody GATA-1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-05-02
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeYaleChIPseqRel2SignalK562bGata1.bedGraph4.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 324
-submittedDataVersion V2 - corrected sparse signals
-tableName wgEncodeYaleChIPseqRel2SignalK562bGata1
-treatment None
-view Signal
-
-metaObject wgEncodeYaleChIPseqRel2SignalK562bZnf263
-objType table
-antibody ZNF263
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-05-02
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeYaleChIPseqRel2SignalK562bZnf263.bedGraph4.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 324
-submittedDataVersion V2 - corrected sparse signals
-tableName wgEncodeYaleChIPseqRel2SignalK562bZnf263
-treatment None
 view Signal
 
 metaObject wgEncodeYaleChIPseqRel2SignalK562Cfos
@@ -20675,6 +20413,56 @@ softwareVersion PeakSeq1.0
 subId 324
 submittedDataVersion V2 - corrected sparse signals
 tableName wgEncodeYaleChIPseqRel2SignalK562Pol2
+treatment None
+view Signal
+
+metaObject wgEncodeYaleChIPseqRel2SignalK562bGata1
+objType table
+antibody GATA-1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateResubmitted 2009-05-02
+dateSubmitted 2009-02-27
+dateUnrestricted 2009-11-27
+fileName wgEncodeYaleChIPseqRel2SignalK562bGata1.bedGraph4.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 324
+submittedDataVersion V2 - corrected sparse signals
+tableName wgEncodeYaleChIPseqRel2SignalK562bGata1
+treatment None
+view Signal
+
+metaObject wgEncodeYaleChIPseqRel2SignalK562bZnf263
+objType table
+antibody ZNF263
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateResubmitted 2009-05-02
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileName wgEncodeYaleChIPseqRel2SignalK562bZnf263.bedGraph4.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 324
+submittedDataVersion V2 - corrected sparse signals
+tableName wgEncodeYaleChIPseqRel2SignalK562bZnf263
 treatment None
 view Signal
 
@@ -22118,31 +21906,6 @@ tableName wgEncodeYaleChIPseqSignalHelas3Ha
 treatment None
 view Signal
 
-metaObject wgEncodeYaleChIPseqSignalHelas3ifngStat1V2
-objType table
-antibody STAT1
-cell HeLa-S3
-composite wgEncodeYaleChIPseq
-control std
-controlId HeLa-S3/IFNg30/Input/std
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-07-21
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-dccInternalNotes GEO accession provided by lab: GSE12872
-fileName wgEncodeYaleChIPseqSignalHelas3ifngStat1V2.bedGraph4.gz
-grant Snyder
-lab Yale
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0
-subId 442
-submittedDataVersion V2 - corrected sparse signals
-tableName wgEncodeYaleChIPseqSignalHelas3ifngStat1V2
-treatment IFNg30
-view Signal
-
 metaObject wgEncodeYaleChIPseqSignalHelas3Ini1Musigg
 objType table
 antibody Ini1
@@ -22417,49 +22180,29 @@ tableName wgEncodeYaleChIPseqSignalHelas3Tr4
 treatment None
 view Signal
 
-metaObject wgEncodeYaleChIPseqSignalHepg2bInput
+metaObject wgEncodeYaleChIPseqSignalHelas3ifngStat1V2
 objType table
-antibody Input
-cell HepG2b
+antibody STAT1
+cell HeLa-S3
 composite wgEncodeYaleChIPseq
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
+control std
+controlId HeLa-S3/IFNg30/Input/std
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqSignalHepg2bInput.bedGraph4.gz
+dateResubmitted 2009-07-21
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+dccInternalNotes GEO accession provided by lab: GSE12872
+fileName wgEncodeYaleChIPseqSignalHelas3ifngStat1V2.bedGraph4.gz
 grant Snyder
-lab UCD
-project wgEncode
-setType input
-softwareVersion PeakSeq1.0
-subId 374
-tableName wgEncodeYaleChIPseqSignalHepg2bInput
-treatment None
-view Signal
-
-metaObject wgEncodeYaleChIPseqSignalHepg2bTr4
-objType table
-antibody TR4
-cell HepG2b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqSignalHepg2bTr4.bedGraph4.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+lab Yale
 project wgEncode
 setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 372
-tableName wgEncodeYaleChIPseqSignalHepg2bTr4
-treatment None
+softwareVersion PeakSeq1.0
+subId 442
+submittedDataVersion V2 - corrected sparse signals
+tableName wgEncodeYaleChIPseqSignalHelas3ifngStat1V2
+treatment IFNg30
 view Signal
 
 metaObject wgEncodeYaleChIPseqSignalHepg2CebpbForskln
@@ -22762,6 +22505,51 @@ tableName wgEncodeYaleChIPseqSignalHepg2Srebp2V2
 treatment pravastatin
 view Signal
 
+metaObject wgEncodeYaleChIPseqSignalHepg2bInput
+objType table
+antibody Input
+cell HepG2b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqSignalHepg2bInput.bedGraph4.gz
+grant Snyder
+lab UCD
+project wgEncode
+setType input
+softwareVersion PeakSeq1.0
+subId 374
+tableName wgEncodeYaleChIPseqSignalHepg2bInput
+treatment None
+view Signal
+
+metaObject wgEncodeYaleChIPseqSignalHepg2bTr4
+objType table
+antibody TR4
+cell HepG2b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqSignalHepg2bTr4.bedGraph4.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 372
+tableName wgEncodeYaleChIPseqSignalHepg2bTr4
+treatment None
+view Signal
+
 metaObject wgEncodeYaleChIPseqSignalHuvecCjun
 objType table
 antibody c-Jun
@@ -22895,97 +22683,6 @@ tableName wgEncodeYaleChIPseqSignalK562Bdp1
 treatment None
 view Signal
 
-metaObject wgEncodeYaleChIPseqSignalK562bE2f4
-objType table
-antibody E2F4
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqSignalK562bE2f4.bedGraph4.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2),
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 334
-tableName wgEncodeYaleChIPseqSignalK562bE2f4
-treatment None
-view Signal
-
-metaObject wgEncodeYaleChIPseqSignalK562bE2f6
-objType table
-antibody E2F6
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeYaleChIPseqSignalK562bE2f6.bedGraph4.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 371
-tableName wgEncodeYaleChIPseqSignalK562bE2f6
-treatment None
-view Signal
-
-metaObject wgEncodeYaleChIPseqSignalK562bGata2
-objType table
-antibody GATA-2
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-02
-dateUnrestricted 2010-06-02
-fileName wgEncodeYaleChIPseqSignalK562bGata2.bedGraph4.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 460
-tableName wgEncodeYaleChIPseqSignalK562bGata2
-treatment None
-view Signal
-
-metaObject wgEncodeYaleChIPseqSignalK562bInput
-objType table
-antibody Input
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileName wgEncodeYaleChIPseqSignalK562bInput.bedGraph4.gz
-grant Snyder
-lab UCD
-project wgEncode
-setType input
-softwareVersion PeakSeq1.0
-subId 335
-tableName wgEncodeYaleChIPseqSignalK562bInput
-treatment None
-view Signal
-
 metaObject wgEncodeYaleChIPseqSignalK562Brf1
 objType table
 antibody BRF1
@@ -23050,121 +22747,6 @@ project wgEncode
 setType exp
 subId 893
 tableName wgEncodeYaleChIPseqSignalK562Brg1Musigg
-treatment None
-view Signal
-
-metaObject wgEncodeYaleChIPseqSignalK562bSetdb1
-objType table
-antibody SETDB1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeYaleChIPseqSignalK562bSetdb1.bedGraph4.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 377
-tableName wgEncodeYaleChIPseqSignalK562bSetdb1
-treatment None
-view Signal
-
-metaObject wgEncodeYaleChIPseqSignalK562bSetdb1Mnase
-objType table
-antibody SETDB1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-16
-dateUnrestricted 2010-10-15
-fileName wgEncodeYaleChIPseqSignalK562bSetdb1Mnase.bedGraph4.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 1088
-tableName wgEncodeYaleChIPseqSignalK562bSetdb1Mnase
-treatment MNaseD
-view Signal
-
-metaObject wgEncodeYaleChIPseqSignalK562bTr4
-objType table
-antibody TR4
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-22
-dateUnrestricted 2010-03-22
-fileName wgEncodeYaleChIPseqSignalK562bTr4.bedGraph4.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 380
-tableName wgEncodeYaleChIPseqSignalK562bTr4
-treatment None
-view Signal
-
-metaObject wgEncodeYaleChIPseqSignalK562bYy1
-objType table
-antibody YY1
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-03
-dateUnrestricted 2010-06-03
-fileName wgEncodeYaleChIPseqSignalK562bYy1.bedGraph4.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 467
-tableName wgEncodeYaleChIPseqSignalK562bYy1
-treatment None
-view Signal
-
-metaObject wgEncodeYaleChIPseqSignalK562bZnf274
-objType table
-antibody ZNF274
-cell K562b
-composite wgEncodeYaleChIPseq
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-05
-dateUnrestricted 2010-10-04
-fileName wgEncodeYaleChIPseqSignalK562bZnf274.bedGraph4.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 860
-tableName wgEncodeYaleChIPseqSignalK562bZnf274
 treatment None
 view Signal
 
@@ -23652,50 +23234,6 @@ tableName wgEncodeYaleChIPseqSignalK562Nelfe
 treatment None
 view Signal
 
-metaObject wgEncodeYaleChIPseqSignalK562Nfya
-objType table
-antibody NF-YA
-cell K562
-composite wgEncodeYaleChIPseq
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-02
-dateUnrestricted 2010-07-02
-fileName wgEncodeYaleChIPseqSignalK562Nfya.bedGraph4.gz
-grant Snyder
-lab Harvard
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0
-subId 614
-tableName wgEncodeYaleChIPseqSignalK562Nfya
-treatment None
-view Signal
-
-metaObject wgEncodeYaleChIPseqSignalK562Nfyb
-objType table
-antibody NF-YB
-cell K562
-composite wgEncodeYaleChIPseq
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-02
-dateUnrestricted 2010-07-02
-fileName wgEncodeYaleChIPseqSignalK562Nfyb.bedGraph4.gz
-grant Snyder
-lab Harvard
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0
-subId 615
-tableName wgEncodeYaleChIPseqSignalK562Nfyb
-treatment None
-view Signal
-
 metaObject wgEncodeYaleChIPseqSignalK562Pol2Musigg
 objType table
 antibody Pol2
@@ -23897,6 +23435,212 @@ tableName wgEncodeYaleChIPseqSignalK562Xrcc4
 treatment None
 view Signal
 
+metaObject wgEncodeYaleChIPseqSignalK562bE2f4
+objType table
+antibody E2F4
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqSignalK562bE2f4.bedGraph4.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2),
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 334
+tableName wgEncodeYaleChIPseqSignalK562bE2f4
+treatment None
+view Signal
+
+metaObject wgEncodeYaleChIPseqSignalK562bE2f6
+objType table
+antibody E2F6
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeYaleChIPseqSignalK562bE2f6.bedGraph4.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 371
+tableName wgEncodeYaleChIPseqSignalK562bE2f6
+treatment None
+view Signal
+
+metaObject wgEncodeYaleChIPseqSignalK562bGata2
+objType table
+antibody GATA-2
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-02
+dateUnrestricted 2010-06-02
+fileName wgEncodeYaleChIPseqSignalK562bGata2.bedGraph4.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 460
+tableName wgEncodeYaleChIPseqSignalK562bGata2
+treatment None
+view Signal
+
+metaObject wgEncodeYaleChIPseqSignalK562bInput
+objType table
+antibody Input
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileName wgEncodeYaleChIPseqSignalK562bInput.bedGraph4.gz
+grant Snyder
+lab UCD
+project wgEncode
+setType input
+softwareVersion PeakSeq1.0
+subId 335
+tableName wgEncodeYaleChIPseqSignalK562bInput
+treatment None
+view Signal
+
+metaObject wgEncodeYaleChIPseqSignalK562bSetdb1
+objType table
+antibody SETDB1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeYaleChIPseqSignalK562bSetdb1.bedGraph4.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 377
+tableName wgEncodeYaleChIPseqSignalK562bSetdb1
+treatment None
+view Signal
+
+metaObject wgEncodeYaleChIPseqSignalK562bSetdb1Mnase
+objType table
+antibody SETDB1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-16
+dateUnrestricted 2010-10-15
+fileName wgEncodeYaleChIPseqSignalK562bSetdb1Mnase.bedGraph4.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 1088
+tableName wgEncodeYaleChIPseqSignalK562bSetdb1Mnase
+treatment MNaseD
+view Signal
+
+metaObject wgEncodeYaleChIPseqSignalK562bTr4
+objType table
+antibody TR4
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-22
+dateUnrestricted 2010-03-22
+fileName wgEncodeYaleChIPseqSignalK562bTr4.bedGraph4.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 380
+tableName wgEncodeYaleChIPseqSignalK562bTr4
+treatment None
+view Signal
+
+metaObject wgEncodeYaleChIPseqSignalK562bYy1
+objType table
+antibody YY1
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-03
+dateUnrestricted 2010-06-03
+fileName wgEncodeYaleChIPseqSignalK562bYy1.bedGraph4.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 467
+tableName wgEncodeYaleChIPseqSignalK562bYy1
+treatment None
+view Signal
+
+metaObject wgEncodeYaleChIPseqSignalK562bZnf274
+objType table
+antibody ZNF274
+cell K562b
+composite wgEncodeYaleChIPseq
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-05
+dateUnrestricted 2010-10-04
+fileName wgEncodeYaleChIPseqSignalK562bZnf274.bedGraph4.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+project wgEncode
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 860
+tableName wgEncodeYaleChIPseqSignalK562bZnf274
+treatment None
+view Signal
+
 metaObject wgEncodeYaleChIPseqSignalMcf7Hae2f1
 objType table
 antibody HA-E2F1
@@ -24035,4 +23779,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: 2068039523
+# MAGIC: 2044256113
