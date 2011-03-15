@@ -324,7 +324,9 @@ if (hel == NULL)
   }
 else
   {
-  ++hel->val;
+  hel->val = ((char *)hel->val)+1;
+  /* The much simpler ++hel->val works for gnu C, but really adding one to a void pointer
+   * I think is not well defined. */
   }
 }
 
