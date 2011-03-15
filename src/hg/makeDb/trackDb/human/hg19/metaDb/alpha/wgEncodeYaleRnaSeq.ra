@@ -1,3 +1,8 @@
+metaObject wgEncodeYaleRnaSeq
+objType composite
+composite wgEncodeYaleRnaSeq
+expVars lab,dataType,cell,treatment,rnaExtract
+
 metaObject wgEncodeYaleRnaSeqGm12878PolyaAln
 objType table
 cell GM12878
@@ -453,4 +458,4 @@ subId 276
 treatment None
 view RawData
 
-# MAGIC: 504221097
+# MAGIC: -1951084303

@@ -83,10 +83,10 @@ C') New files (24 downloadables, 0 gbdbs):
 
 D) Additional items:
     current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release1//
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release1/
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/
 
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release1//index.html
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release1//files.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release1//md5sum.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release1/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release1/md5sum.txt

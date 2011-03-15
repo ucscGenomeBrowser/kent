@@ -1,3 +1,8 @@
+metaObject wgEncodeOpenChromFaire
+objType composite
+composite wgEncodeOpenChromFaire
+expVars lab,dataType,cell,treatment
+
 metaObject wgEncodeOpenChromFaireA549AlnRep1
 objType file
 cell A549
@@ -3540,4 +3545,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1986336116
+# MAGIC: -956119105

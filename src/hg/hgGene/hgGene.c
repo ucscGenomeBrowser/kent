@@ -12,6 +12,7 @@
 #include "dbDb.h"
 #include "hdb.h"
 #include "web.h"
+#include "botDelay.h"
 #include "ra.h"
 #include "spDb.h"
 #include "genePred.h"
@@ -627,6 +628,7 @@ void cartMain(struct cart *theCart)
 /* We got the persistent/CGI variable cart.  Now
  * set up the globals and make a web page. */
 {
+hgBotDelay();
 cart = theCart;
 getDbAndGenome(cart, &database, &genome, oldVars);
 getGenomeSettings();
