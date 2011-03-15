@@ -394,24 +394,6 @@ replicate 1
 subId 925
 view Alignments
 
-metaObject wgEncodeUwDnaseSeqAlignmentsRep1Hl60
-objType file
-cell HL-60
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-04-29
-dateUnrestricted 2010-01-29
-fileName wgEncodeUwDnaseSeqAlignmentsRep1Hl60.tagAlign.gz
-grant Stam
-lab UW
-labVersion Eland (SolexaPipeline-0.2.2.5)
-project wgEncode
-rank 1st
-replicate 1
-subId 311
-view Alignments
-
 metaObject wgEncodeUwDnaseSeqAlignmentsRep1Hl60V2
 objType file
 cell HL-60
@@ -613,24 +595,6 @@ replicate 1
 subId 592
 view Alignments
 
-metaObject wgEncodeUwDnaseSeqAlignmentsRep1Nb4
-objType file
-cell NB4
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-19
-dateUnrestricted 2010-06-19
-fileName wgEncodeUwDnaseSeqAlignmentsRep1Nb4.tagAlign.gz
-grant Stam
-lab UW
-labVersion Eland (GAPipeline-1.4)
-project wgEncode
-rank 1st
-replicate 1
-subId 509
-view Alignments
-
 metaObject wgEncodeUwDnaseSeqAlignmentsRep1Nb4V2
 objType file
 cell NB4
@@ -738,24 +702,6 @@ project wgEncode
 rank 1st
 replicate 1
 subId 514
-view Alignments
-
-metaObject wgEncodeUwDnaseSeqAlignmentsRep1Skmc
-objType file
-cell SKMC
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-04-29
-dateUnrestricted 2010-01-29
-fileName wgEncodeUwDnaseSeqAlignmentsRep1Skmc.tagAlign.gz
-grant Stam
-lab UW
-labVersion Eland (SolexaPipeline-0.2.2.5)
-project wgEncode
-rank 1st
-replicate 1
-subId 313
 view Alignments
 
 metaObject wgEncodeUwDnaseSeqAlignmentsRep1SkmcV2
@@ -1427,24 +1373,6 @@ replicate 2
 subId 754
 view Alignments
 
-metaObject wgEncodeUwDnaseSeqAlignmentsRep2Sknshra
-objType file
-cell SK-N-SH_RA
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-02
-dateUnrestricted 2010-04-01
-fileName wgEncodeUwDnaseSeqAlignmentsRep2Sknshra.tagAlign.gz
-grant Stam
-lab UW
-labVersion Eland (GAPipeline-1.4)
-project wgEncode
-rank 2nd
-replicate 2
-subId 402
-view Alignments
-
 metaObject wgEncodeUwDnaseSeqAlignmentsRep2SknshraV2
 objType file
 cell SK-N-SH_RA
@@ -1863,25 +1791,6 @@ subId 735
 tableName wgEncodeUwDnaseSeqHotspotsRep1Hgf
 view Hotspots
 
-metaObject wgEncodeUwDnaseSeqHotspotsRep1Hl60
-objType table
-cell HL-60
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-04-29
-dateUnrestricted 2010-01-29
-fileName wgEncodeUwDnaseSeqHotspotsRep1Hl60.broadPeak.gz
-grant Stam
-lab UW
-labVersion Hotspot-v5.0
-project wgEncode
-rank 1st
-replicate 1
-subId 311
-tableName wgEncodeUwDnaseSeqHotspotsRep1Hl60
-view Hotspots
-
 metaObject wgEncodeUwDnaseSeqHotspotsRep1Hl60V2
 objType table
 cell HL-60
@@ -2189,25 +2098,6 @@ rank 1st
 replicate 1
 subId 514
 tableName wgEncodeUwDnaseSeqHotspotsRep1Saec
-view Hotspots
-
-metaObject wgEncodeUwDnaseSeqHotspotsRep1Skmc
-objType table
-cell SKMC
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-04-29
-dateUnrestricted 2010-01-29
-fileName wgEncodeUwDnaseSeqHotspotsRep1Skmc.broadPeak.gz
-grant Stam
-lab UW
-labVersion Hotspot-v5.0
-project wgEncode
-rank 1st
-replicate 1
-subId 313
-tableName wgEncodeUwDnaseSeqHotspotsRep1Skmc
 view Hotspots
 
 metaObject wgEncodeUwDnaseSeqHotspotsRep1SkmcV2
@@ -2897,25 +2787,6 @@ subId 754
 tableName wgEncodeUwDnaseSeqHotspotsRep2Skmc
 view Hotspots
 
-metaObject wgEncodeUwDnaseSeqHotspotsRep2Sknshra
-objType table
-cell SK-N-SH_RA
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-02
-dateUnrestricted 2010-04-01
-fileName wgEncodeUwDnaseSeqHotspotsRep2Sknshra.broadPeak.gz
-grant Stam
-lab UW
-labVersion Hotspot-v5.1
-project wgEncode
-rank 2nd
-replicate 2
-subId 402
-tableName wgEncodeUwDnaseSeqHotspotsRep2Sknshra
-view Hotspots
-
 metaObject wgEncodeUwDnaseSeqHotspotsRep2SknshraV2
 objType table
 cell SK-N-SH_RA
@@ -3336,25 +3207,6 @@ subId 735
 tableName wgEncodeUwDnaseSeqPeaksRep1Hgf
 view Peaks
 
-metaObject wgEncodeUwDnaseSeqPeaksRep1Hl60
-objType table
-cell HL-60
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-04-29
-dateUnrestricted 2010-01-29
-fileName wgEncodeUwDnaseSeqPeaksRep1Hl60.narrowPeak.gz
-grant Stam
-lab UW
-labVersion lmax-v1.0, FDR 0.5%
-project wgEncode
-rank 1st
-replicate 1
-subId 311
-tableName wgEncodeUwDnaseSeqPeaksRep1Hl60
-view Peaks
-
 metaObject wgEncodeUwDnaseSeqPeaksRep1Hl60V2
 objType table
 cell HL-60
@@ -3662,25 +3514,6 @@ rank 1st
 replicate 1
 subId 514
 tableName wgEncodeUwDnaseSeqPeaksRep1Saec
-view Peaks
-
-metaObject wgEncodeUwDnaseSeqPeaksRep1Skmc
-objType table
-cell SKMC
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-04-29
-dateUnrestricted 2010-01-29
-fileName wgEncodeUwDnaseSeqPeaksRep1Skmc.narrowPeak.gz
-grant Stam
-lab UW
-labVersion lmax-v1.0, FDR 0.5%
-project wgEncode
-rank 1st
-replicate 1
-subId 313
-tableName wgEncodeUwDnaseSeqPeaksRep1Skmc
 view Peaks
 
 metaObject wgEncodeUwDnaseSeqPeaksRep1SkmcV2
@@ -4370,25 +4203,6 @@ subId 754
 tableName wgEncodeUwDnaseSeqPeaksRep2Skmc
 view Peaks
 
-metaObject wgEncodeUwDnaseSeqPeaksRep2Sknshra
-objType table
-cell SK-N-SH_RA
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-02
-dateUnrestricted 2010-04-01
-fileName wgEncodeUwDnaseSeqPeaksRep2Sknshra.narrowPeak.gz
-grant Stam
-lab UW
-labVersion lmax-v1.0, FDR 0.5%
-project wgEncode
-rank 2nd
-replicate 2
-subId 402
-tableName wgEncodeUwDnaseSeqPeaksRep2Sknshra
-view Peaks
-
 metaObject wgEncodeUwDnaseSeqPeaksRep2SknshraV2
 objType table
 cell SK-N-SH_RA
@@ -4784,23 +4598,6 @@ replicate 1
 subId 925
 view RawData
 
-metaObject wgEncodeUwDnaseSeqRawDataRep1Hl60
-objType file
-cell HL-60
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-04-29
-dateUnrestricted 2010-01-29
-fileName wgEncodeUwDnaseSeqRawDataRep1Hl60.fastq.gz
-grant Stam
-lab UW
-project wgEncode
-rank 1st
-replicate 1
-subId 311
-view RawData
-
 metaObject wgEncodeUwDnaseSeqRawDataRep1Hl60V2
 objType file
 cell HL-60
@@ -4991,23 +4788,6 @@ replicate 1
 subId 592
 view RawData
 
-metaObject wgEncodeUwDnaseSeqRawDataRep1Nb4
-objType file
-cell NB4
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-19
-dateUnrestricted 2010-06-19
-fileName wgEncodeUwDnaseSeqRawDataRep1Nb4.fastq.gz
-grant Stam
-lab UW
-project wgEncode
-rank 1st
-replicate 1
-subId 509
-view RawData
-
 metaObject wgEncodeUwDnaseSeqRawDataRep1Nb4V2
 objType file
 cell NB4
@@ -5109,23 +4889,6 @@ project wgEncode
 rank 1st
 replicate 1
 subId 514
-view RawData
-
-metaObject wgEncodeUwDnaseSeqRawDataRep1Skmc
-objType file
-cell SKMC
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-04-29
-dateUnrestricted 2010-01-29
-fileName wgEncodeUwDnaseSeqRawDataRep1Skmc.fastq.gz
-grant Stam
-lab UW
-project wgEncode
-rank 1st
-replicate 1
-subId 313
 view RawData
 
 metaObject wgEncodeUwDnaseSeqRawDataRep1SkmcV2
@@ -5760,23 +5523,6 @@ replicate 2
 subId 754
 view RawData
 
-metaObject wgEncodeUwDnaseSeqRawDataRep2Sknshra
-objType file
-cell SK-N-SH_RA
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-02
-dateUnrestricted 2010-04-01
-fileName wgEncodeUwDnaseSeqRawDataRep2Sknshra.fastq.gz
-grant Stam
-lab UW
-project wgEncode
-rank 2nd
-replicate 2
-subId 402
-view RawData
-
 metaObject wgEncodeUwDnaseSeqRawDataRep2SknshraV2
 objType file
 cell SK-N-SH_RA
@@ -6194,25 +5940,6 @@ subId 735
 tableName wgEncodeUwDnaseSeqRawSignalRep1Hgf
 view RawSignal
 
-metaObject wgEncodeUwDnaseSeqRawSignalRep1Hl60
-objType table
-cell HL-60
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-04-29
-dateUnrestricted 2010-01-29
-fileName wgEncodeUwDnaseSeqRawSignalRep1Hl60.wig.gz
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-project wgEncode
-rank 1st
-replicate 1
-subId 311
-tableName wgEncodeUwDnaseSeqRawSignalRep1Hl60
-view RawSignal
-
 metaObject wgEncodeUwDnaseSeqRawSignalRep1Hl60V2
 objType table
 cell HL-60
@@ -6520,25 +6247,6 @@ rank 1st
 replicate 1
 subId 514
 tableName wgEncodeUwDnaseSeqRawSignalRep1Saec
-view RawSignal
-
-metaObject wgEncodeUwDnaseSeqRawSignalRep1Skmc
-objType table
-cell SKMC
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-04-29
-dateUnrestricted 2010-01-29
-fileName wgEncodeUwDnaseSeqRawSignalRep1Skmc.wig.gz
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-project wgEncode
-rank 1st
-replicate 1
-subId 313
-tableName wgEncodeUwDnaseSeqRawSignalRep1Skmc
 view RawSignal
 
 metaObject wgEncodeUwDnaseSeqRawSignalRep1SkmcV2
@@ -7228,25 +6936,6 @@ subId 754
 tableName wgEncodeUwDnaseSeqRawSignalRep2Skmc
 view RawSignal
 
-metaObject wgEncodeUwDnaseSeqRawSignalRep2Sknshra
-objType table
-cell SK-N-SH_RA
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-02
-dateUnrestricted 2010-04-01
-fileName wgEncodeUwDnaseSeqRawSignalRep2Sknshra.wig.gz
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-project wgEncode
-rank 2nd
-replicate 2
-subId 402
-tableName wgEncodeUwDnaseSeqRawSignalRep2Sknshra
-view RawSignal
-
 metaObject wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
 objType table
 cell SK-N-SH_RA
@@ -7268,4 +6957,4 @@ submittedDataVersion V2 - Improved DNA Library
 tableName wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
 view RawSignal
 
-# MAGIC: -88265301
+# MAGIC: -1229925678

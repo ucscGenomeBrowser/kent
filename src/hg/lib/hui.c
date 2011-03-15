@@ -182,10 +182,11 @@ if(showShortLabel)
     dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
 // Get the hash of mdb and cv term types
-struct hash *cvTermTypes = mdbCvTermTypeHash();
+struct hash *cvTermTypes = (struct hash *)mdbCvTermTypeHash();
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType dccInternalNotes"); // Don't bother showing these (suggest: "composite project dataType view tableName")
+mdbObjRemoveHiddenVars(mdbObj);
 mdbObjReorderVars(mdbObj,"grant lab dataType cell treatment antibody protocol replicate view setType inputType",FALSE); // Bring to front
 mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName fileIndex",TRUE); // Send to back
 struct mdbVar *mdbVar;
@@ -3518,9 +3519,8 @@ else
     printf("<B>Filter items by:</B> (select multiple categories and items - %s)<TABLE cellpadding=3><TR valign='top'>\n",FILTERBY_HELP_LINK);
 
 filterBy_t *filterBy = NULL;
-jsIncludeFile("ui.core.js",NULL);
-jsIncludeFile("ui.dropdownchecklist.js",NULL);
 webIncludeResourceFile("ui.dropdownchecklist.css");
+jsIncludeFile("ui.dropdownchecklist.js",NULL);
 
 int ix=0;
 for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)

@@ -8929,6 +8929,128 @@ TMPDIR=/scratch/tmp
          "hg19", "kgTargetAli", "", "", \
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
+#######################################################################
+# ENCODE Regulation track  (In progress March 2010, very rough instructions
+# as am still defining how to build track...)
+
+      #make root dir
+      mkdir -p /cluster/data/hg19/bed/wgEncodeReg
+      cd /cluster/data/hg19/bed/wgEncodeReg
+
+      # Create the DNAse peak clusters subtrack.
+      # Get all of the narrowPeak format files for the wgEncodeUwDnaseSeq
+      # linked into directory /hive/users/kent/regulate/dnase/peaks
+      mkdir dnase
+      cd dnase
+      mkdir peaks
+      cd peaks
+      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeUwDnase/*.narrowPeak.gz .
+
+      # Process these into clusters in a bed file and load clusters into
+      # table.
+      /bin/ls -1 peaks/*.narrowPeak.gz > peak.lst
+      regClusterMakeTableOfTables uw02 peak.lst peak.table
+      regCluster peak.table /dev/null peak.bed
+      awk '$4 > 1 || $5 >= 100' peak.bed > wgEncodeRegDnaseClustered.bed
+      hgLoadBed hg19 wgEncodeRegDnaseClustered wgEncodeRegDnaseClustered.bed
+
+      # Make transcription factor binding site clusters.  Start with Anshul's
+      # nice uniform peak calls, downloaded from 
+      #   ftp://ftp-private.ebi.ac.uk/byDataType/peaks/jan2011/spp/optimal
+      # using the user name and password in the ENCODE wiki at:
+      #    http://genomewiki.ucsc.edu/EncodeDCC/index.php/Locations_of_ENCODE_Data
+      # Put all of the ones that actually are based on two replicates into
+      #    /cluster/data/hg19/bed/wgEncodeReg/tfbs/peaks
+      # Once that is done do a little work towards making the cluster input.
+      cd /cluster/data/hg19/bed/wgEncodeReg/tfbs
+      /bin/ls peaks/*.narrowPeak.gz > peak.lst
+      regClusterMakeTableOfTables ans01 peak.lst partial.table
+
+      # Unfortunately at this point only about 90% of the peak files actually
+      # have metaDb data associated with them in metaDb, so run C program that
+      # takes it from metaDb if possible, otherwise tries to get it from file
+      # names.
+      regClusterAttachMetadataToTableOfTables hg19 partial.table peak.table
+
+      # Make three column file: fileName, cell+treatment, antibody
+      awk -F '\t' '{printf ( "%s\t%s\t%s\n", $1, ($10 == "None" ? $8 : $8 "+" $10), $9 ) ; }' peak.table > fileCellAb.tab
+
+
+      # Create config file out for clustering job, using a table assigning
+      # cell lines+treatments to single letter codes edited by hand.  In
+      # the future may be able to automate this by having fixed upper case codes for
+      # tier1&2 cell lines, and then just use first letter lower case codes
+      # for rest. That is the pattern cellLetter2.tab follows anyway.
+      cp ~/kent/src/hg/regulate/regClusterBedExpCfg/cellLetter2.tab .
+      regClusterBedExpCfg -tabList fileCellAb.tab cluster.cfg -cellLetter=cellLetter2.tab
+
+      # Do the actual clustering 
+      hgBedsToBedExps -dupeLetterOk cluster.cfg peak.bed peak.exps
+
+      # Load database
+      hgLoadBed hg19 wgEncodeRegTfbsClustered peak.bed
+      hgLoadSqlTab hg19 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
+
+      # Create inputTrackTable - four columns: <table> <source> <factor> <treatment>
+      awk '{printf("%s\t%s\t%s\t%s\n", $7, $8, $9, $10);}' peak.table > wgEncodeRegTfbsClusteredInputs.tab
+      hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable2.sql wgEncodeRegTfbsClusteredInputs.tab
+
+      # Do work to figure out how to color cells.  This is based on
+      # hierarchical clustering of wbEncodeUwAffyAllExon.
+      mkdir -p /hive/data/genomes/hg19/bed/wgEncodeReg/cellColors
+      cd /hive/data/genomes/hg19/bed/wgEncodeReg
+
+      # Start with some alas time consuming data cleanup to get rid of
+      # overlaps - losing about 10% of the data in the process which is
+      # totally ok.
+      mkdir allExon
+      cd allExon
+      mkdir inLinks noOverlap onlyCommon
+      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeUwAffyExonArray/*.gz inLinks
+      cd inLinks
+      foreach i (*.gz)
+          bedRemoveOverlap $i ../noOverlap/$i:r
+      end
+      cd ..
+      
+      # Now make up a file of regions present in all inputs for further data
+      # cleanup
+      bedCommonRegions noOverlap/*.* > commonExons.bed
+      cd noOverlap
+      foreach i (*.broadPeak)
+	  echo processing $i
+          bedRestrictToPositions $i ../commonExons.bed ../onlyCommon/$i
+      end
+      rm -r noOverlap
+
+      # Now pool replicates where possible
+      mdbQuery "select fileName,cell,replicate from hg19 where composite='wgEncodeUwAffyExonArray' and view='SimpleSignal'" -out=ra \
+         | sed 's/\.gz//g' > replicate.ra
+      encodeMergeReplicatesBatch replicate.ra onlyCommon merge.sh merged.ra merged
+      mkdir merged
+      chmod a+x merge.sh
+      merge.sh
+
+      # Resort merged output - somehow gets slightly messed by
+      # encodeMergeReplicates.
+      cd merged
+      foreach i (*.broadPeak)
+          echo sorting $i
+          sort -k 1,1 -k 2,2n $i > tmp
+	  mv tmp $i
+      end
+
+      # Make file that converts fileName to cell
+      raToTab merged.ra -cols=fileName,cell stdout \
+         | sed 's/wgEncode/merged\/wgEncode/' > fileToCell.tab
+
+      # Now build the tree. Took 2.5 minutes
+      ls -1 merged/*.broadPeak > clusterInput.lst
+      regClusterTreeCells rename=fileToCell.tab clusterInput.lst cluster.tree cluster.distances
+
+
+
+
 ########################################################################
 # DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie - color change 2/22/11 #2917)
     ssh hgwdev
@@ -14635,3 +14757,75 @@ hgsql hg19 -N -e \
 'delete from omimLocation where name  in (select name from omimGene2) '
 
 ##############################################################
+# BUILD THE TRACK OF IKMC MAPPED TO HUMAN GENOME. (DONE, Fan, 3/15/11)
+
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/hg19/bed/ikmc/110314
+    cd /hive/data/genomes/hg19/bed/ikmc/110314
+
+# recieve  20110301_human.gff.gz from Carol Bult [Carol.Bult@jax.org] and place it under this subdirectory.
+    gzip -d 20110301_human.gff.gz
+
+# build hgIkmc table from raw data file ucschuman.gff (substitue some
+# troublesome chroms in raw data file and remove some records mapped to 'chrUn')
+
+    cat 20110301_human.gff |sort -u \
+    |sed -e 's/chr9|NT_113911.1/chr9/' \
+    |grep -v 'chrUn' \
+    | perl -we \
+      'while (<>) { \
+         s/\r?\n$//; \
+         ($chr, undef, $ctr, $s, $e, undef, undef, undef, $id, $col, $n) = split("\t"); \
+         if ($s eq "") { warn "$_\n";  s/^.*//; next; } # Some lines have no coords. \
+         $col = ($col eq "Yellow") ? "255,215,0" : \
+                ($col eq "Green")  ? "0,240,0" : \
+                ($col eq "Blue")   ? "0,0,200" : "0,0,0"; \
+         $s--; \
+         $id =~ s/^MGI:\d+; (\w+); .*/$1/ || die "Cant parse id \"$id\""; \
+         my $geneId = join("|", $chr, $ctr, "${n}_$id"); \
+         push @{$geneBlks{$geneId}}, [$s, $e, $col] unless $e <= 0; \
+      } \
+      warn "Got " . scalar(keys %geneBlks) . " genes.\n"; \
+      foreach my $geneId (keys %geneBlks) { \
+         my @blks = @{$geneBlks{$geneId}}; \
+         my ($chrom, $center, $name) = split(/\|/, $geneId); \
+         my $blkCount = @blks; \
+         @blks = sort {$a->[0] <=> $b->[0]} @blks; \
+         my $chromStart = $blks[0]->[0]; \
+         my $chromEnd = $blks[$blkCount-1]->[1]; \
+         my $color = $blks[0]->[2]; \
+         my $blkStarts = ""; \
+         my $blkSizes = ""; \
+         foreach my $blk (@blks) { \
+           my ($start, $end, $col) = @{$blk}; \
+           $blkStarts .= ($start - $chromStart) . ","; \
+           $blkSizes  .= ($end - $start) . ","; \
+           if ($col ne $color) { die "Blocks of $geneId of colors $color and $col"; } \
+         } \
+        print join("\t", $chrom, $chromStart, $chromEnd, $name, 0, ".", $chromStart, \
+                   $chromStart, $color, $blkCount, $blkSizes, $blkStarts) . "\n"; \
+      }' \
+    | sort -k 1,1 -k 2n,2n > hgIkmc.bed
+# Got 41936 genes.
+
+# build hgIkmcExtra table
+
+    cat 20110301_human.gff \
+    | grep -v 'chrUn' \
+    | perl -wpe 's/\r?\n$//; @w = split("\t"); \
+      if ($w[3] eq "") { s/^.*//; next; } # Some lines have no coords. \
+      if ($w[4] <= 0) { s/^.*//; next; } # A few lines have end=0. \
+      $w[8] =~ m/^(MGI:\d+); (\w+); (\w.*)/ || die; \
+      ($mgi, $designId, $status) = ($1, $2, $3); \
+      $_ = "$w[10]_$designId\t$mgi,$designId,$w[2],$status\n";' \
+    | sort -u > hgIkmcExtra.tab
+    wc -l hgIkmcExtra.tab
+# 41936 hgIkmcExtra.tab
+
+# load tables
+    hgLoadBed hg19 hgIkmc hgIkmc.bed
+    checkTableCoords -verbose=2 hg19 hgIkmc
+
+    hgLoadSqlTab hg19 hgIkmcExtra $HOME/kent/src/hg/lib/genericAlias.sql hgIkmcExtra.tab
+
+#############################################################################

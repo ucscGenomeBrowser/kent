@@ -1,0 +1,6 @@
+metaObject wgEncodeUwChIPSeq
+objType composite
+composite wgEncodeUwChIPSeq
+expVars lab,dataType,cell,antibody
+
+# MAGIC: 607719052

@@ -1330,7 +1330,11 @@ if(!fileExists(dyStringContents(realFileName)))
 
 // build and verify link path including timestamp in the form of dir/baseName-timeStamp.ext
 long mtime = fileModTime(dyStringContents(realFileName));   // We add mtime to create a pseudo-version; this forces browsers to reload css/js file when it changes
-struct dyString *linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), baseName, mtime, extension);
+struct dyString *linkWithTimestamp;
+if(hIsPreviewHost() || hIsPrivateHost())
+    linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), baseName, mtime, extension);
+else
+    linkWithTimestamp = dyStringCreate("%s/%s-v%s%s", dyStringContents(fullDirName), baseName, CGI_VERSION, extension);
 
 // If link does not exist, then create it !!
 if(!fileExists(dyStringContents(linkWithTimestamp)))
@@ -1358,8 +1362,8 @@ if(!fileExists(dyStringContents(linkWithTimestamp)))
     if(symlink(dyStringContents(realFileName), dyStringContents(linkWithTimestamp)))
         {
         int err = errno;
-        errAbort("webTimeStampedLinkToResource: symlink failed: errno: %d (%s); the directory '%s' must be writeable by user '%s'; alternatively, the installation process must create the versioned files\n",
-                    err, strerror(err), dyStringContents(fullDirName), getUser());
+        errAbort("webTimeStampedLinkToResource: symlink of %s failed: errno: %d (%s); the directory '%s' must be writeable by user '%s'; alternatively, the installation process must create the versioned files\n",
+                 dyStringContents(linkWithTimestamp), err, strerror(err), dyStringContents(fullDirName), getUser());
         }
     }
 // Free up all that extra memory

@@ -504,7 +504,7 @@ for(c = commits; c; c = c->next)
 		"context: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>, "
 		"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>%s</li></ul>\n"
 		, f->path, f->linesChanged
-		, cHtml, cDiff, fHtml, fDiff, f->linesChanged == 0 ? " (whitespace-only change shows no diff)" : "");
+		, cHtml, cDiff, fHtml, fDiff, f->linesChanged == 0 ? " (a binary file or whitespace-only change shows no diff)" : "");
 
 	    freeMem(relativePath);
 	    freeMem(commonPath);

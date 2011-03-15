@@ -751,6 +751,18 @@ slReverse(&list);
 return list;
 }
 
+struct slName *slNameListOfUniqueWords(char *text)
+// Return list of unique words found by parsing string delimited by whitespace.
+{
+struct slName *list = NULL;
+char *word = NULL;
+while ((word = nextWord(&text)) != NULL)
+    slNameStore(&list, word);
+
+slReverse(&list);
+return list;
+}
+
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize)
 /* Return list of slNames from an array of strings of length arraySize.
  * If a string in the array is NULL, the array will be treated as
@@ -2992,9 +3004,9 @@ return cloneString(skipToNumeric(db));
 
 
 time_t mktimeFromUtc (struct tm *t)
-/* Return time_t for tm in UTC (GMT) 
+/* Return time_t for tm in UTC (GMT)
  * Useful for stuff like converting to time_t the
- * last-modified HTTP response header 
+ * last-modified HTTP response header
  * which is always GMT. Returns -1 on failure of mktime */
 {
     time_t time;

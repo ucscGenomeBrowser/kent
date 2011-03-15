@@ -1,3 +1,8 @@
+metaObject wgEncodeSunySwitchgear
+objType composite
+composite wgEncodeSunySwitchgear
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeSunySwitchgearHt1080Elavl1RbpAssocRna
 objType table
 cell HT-1080
@@ -32,4 +37,4 @@ subId 3086
 tableName wgEncodeSunySwitchgearHt1080Igf2bp1RbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 1625919248
+# MAGIC: 1391846988

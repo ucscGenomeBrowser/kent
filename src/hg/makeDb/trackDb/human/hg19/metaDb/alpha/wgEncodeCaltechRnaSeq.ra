@@ -1,3 +1,8 @@
+metaObject wgEncodeCaltechRnaSeq
+objType composite
+composite wgEncodeCaltechRnaSeq
+expVars lab,dataType,cell,localization,readType,insertLength,rnaExtract
+
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep1V2
 objType table
 cell GM12878
@@ -61,6 +66,28 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep1V2
 view MinusSignal
 
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep1V3
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 274b28e7c78fd36d50ae235b0cdabf84
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3514
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep1V3
+view MinusSignal
+
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep2V2
 objType table
 cell GM12878
@@ -80,6 +107,28 @@ replicate 2
 subId 3449
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep2V2
+view MinusSignal
+
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep2V3
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep2V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 9fe2006c7b68c99f0754b416c011b0b8
+project wgEncode
+readType 1x75D
+replicate 2
+subId 3515
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep2V3
 view MinusSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep1V2
@@ -103,6 +152,28 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep1V2
 view PlusSignal
 
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep1V3
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 796ea64e608aa0595d2ebbe8c29c6c40
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3514
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep1V3
+view PlusSignal
+
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep2V2
 objType table
 cell GM12878
@@ -122,6 +193,28 @@ replicate 2
 subId 3449
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep2V2
+view PlusSignal
+
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep2V3
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep2V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 931c4a6cf89825cef98e6715d0ce31f0
+project wgEncode
+readType 1x75D
+replicate 2
+subId 3515
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep2V3
 view PlusSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep1V2
@@ -3185,6 +3278,28 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep1V2
 view MinusSignal
 
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep1V3
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 1972c29a1ea829cadbde34409a9054e6
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3516
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep1V3
+view MinusSignal
+
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep2V2
 objType table
 cell H1-hESC
@@ -3204,6 +3319,28 @@ replicate 2
 subId 3451
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep2V2
+view MinusSignal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep2V3
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep2V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 6c001d66964b67f4a4e9a227de3a84a2
+project wgEncode
+readType 1x75D
+replicate 2
+subId 3520
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep2V3
 view MinusSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep1V2
@@ -3227,6 +3364,28 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep1V2
 view PlusSignal
 
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep1V3
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 02ed40a6a7e0b72ffbc8f8c439edd1fd
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3516
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep1V3
+view PlusSignal
+
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep2V2
 objType table
 cell H1-hESC
@@ -3246,6 +3405,28 @@ replicate 2
 subId 3451
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep2V2
+view PlusSignal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep2V3
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep2V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 99f78462d0c1c7cf0c165f3ba05dd3ec
+project wgEncode
+readType 1x75D
+replicate 2
+subId 3520
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep2V3
 view PlusSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep1V2
@@ -5592,6 +5773,28 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep1V2
 view MinusSignal
 
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep1V3
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum d35c6a6014b9881bfe5e7d4bd584bad6
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3518
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep1V3
+view MinusSignal
+
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep2V2
 objType table
 cell HeLa-S3
@@ -5611,6 +5814,28 @@ replicate 2
 subId 3453
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep2V2
+view MinusSignal
+
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep2V3
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep2V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 00a530d87d7b234d7140f3e7d947b8c5
+project wgEncode
+readType 1x75D
+replicate 2
+subId 3519
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep2V3
 view MinusSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep1V2
@@ -5634,6 +5859,28 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep1V2
 view PlusSignal
 
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep1V3
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 93586c9a5eee279751814b2ce4ce6523
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3518
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep1V3
+view PlusSignal
+
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep2V2
 objType table
 cell HeLa-S3
@@ -5653,6 +5900,28 @@ replicate 2
 subId 3453
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep2V2
+view PlusSignal
+
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep2V3
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep2V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 12fa4856564ab778bbc609cb9fee3b6d
+project wgEncode
+readType 1x75D
+replicate 2
+subId 3519
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep2V3
 view PlusSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep1V2
@@ -6652,6 +6921,28 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep1V2
 view MinusSignal
 
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep1V3
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 52ffadb74cd1f91d06e64030ac014f52
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3521
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep1V3
+view MinusSignal
+
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep2V2
 objType table
 cell HepG2
@@ -6671,6 +6962,28 @@ replicate 2
 subId 3455
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep2V2
+view MinusSignal
+
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep2V3
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep2V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 52ffadb74cd1f91d06e64030ac014f52
+project wgEncode
+readType 1x75D
+replicate 2
+subId 3522
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep2V3
 view MinusSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep1V2
@@ -6694,6 +7007,28 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep1V2
 view PlusSignal
 
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep1V3
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum c59c0065156e624f25e678debf5519dd
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3521
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep1V3
+view PlusSignal
+
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep2V2
 objType table
 cell HepG2
@@ -6713,6 +7048,28 @@ replicate 2
 subId 3455
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep2V2
+view PlusSignal
+
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep2V3
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep2V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum c59c0065156e624f25e678debf5519dd
+project wgEncode
+readType 1x75D
+replicate 2
+subId 3522
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep2V3
 view PlusSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep1V2
@@ -8462,6 +8819,28 @@ submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep1V2
 view MinusSignal
 
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep1V3
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 73ba941c3fdbde6165fb5c30a5544309
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3517
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep1V3
+view MinusSignal
+
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep2V2
 objType table
 cell HUVEC
@@ -8481,6 +8860,28 @@ replicate 2
 subId 3457
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep2V2
+view MinusSignal
+
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep2V3
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep2V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum c78b4ae4c72220140d2f5142fcc0c7f0
+project wgEncode
+readType 1x75D
+replicate 2
+subId 3513
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep2V3
 view MinusSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep1V2
@@ -8504,6 +8905,28 @@ submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep1V2
 view PlusSignal
 
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep1V3
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum ca26ee3657cf78405c62db7ab68ae0c8
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3517
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep1V3
+view PlusSignal
+
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep2V2
 objType table
 cell HUVEC
@@ -8523,6 +8946,28 @@ replicate 2
 subId 3457
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep2V2
+view PlusSignal
+
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep2V3
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep2V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 270fbe452be9af18347e8968ae1395f8
+project wgEncode
+readType 1x75D
+replicate 2
+subId 3513
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep2V3
 view PlusSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep1V2
@@ -9522,6 +9967,28 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep1V2
 view MinusSignal
 
+metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep1V3
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum fdb819265e284825df5cff86de0ed7e7
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3523
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep1V3
+view MinusSignal
+
 metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep2V2
 objType table
 cell K562
@@ -9541,6 +10008,28 @@ replicate 2
 subId 3459
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep2V2
+view MinusSignal
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep2V3
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep2V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum fdb48ca7d5939f7424c66379a6b81ebe
+project wgEncode
+readType 1x75D
+replicate 2
+subId 3524
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep2V3
 view MinusSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep1V2
@@ -9564,6 +10053,28 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep1V2
 view PlusSignal
 
+metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep1V3
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 0d2b0934c588b1bc9a12f034edb5a25c
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3523
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep1V3
+view PlusSignal
+
 metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep2V2
 objType table
 cell K562
@@ -9583,6 +10094,28 @@ replicate 2
 subId 3459
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep2V2
+view PlusSignal
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep2V3
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep2V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 0739f36a41f598b55ba3bd9b88fd20a0
+project wgEncode
+readType 1x75D
+replicate 2
+subId 3524
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep2V3
 view PlusSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep1V2
@@ -11296,6 +11829,28 @@ submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqNhekR1x75dIlnaMinusSignalRep1V2
 view MinusSignal
 
+metaObject wgEncodeCaltechRnaSeqNhekR1x75dIlnaMinusSignalRep1V3
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-15
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqNhekR1x75dIlnaMinusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 82d92f5f5cbaa6eab722700cd7696b8e
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3525
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqNhekR1x75dIlnaMinusSignalRep1V3
+view MinusSignal
+
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dIlnaPlusSignalRep1V2
 objType table
 cell NHEK
@@ -11315,6 +11870,28 @@ replicate 1
 subId 3460
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqNhekR1x75dIlnaPlusSignalRep1V2
+view PlusSignal
+
+metaObject wgEncodeCaltechRnaSeqNhekR1x75dIlnaPlusSignalRep1V3
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-15
+dateUnrestricted 2011-11-14
+fileName wgEncodeCaltechRnaSeqNhekR1x75dIlnaPlusSignalRep1V3.bigWig
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 436e6ce59d1134369466d67c2a75a304
+project wgEncode
+readType 1x75D
+replicate 1
+subId 3525
+submittedDataVersion V3 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqNhekR1x75dIlnaPlusSignalRep1V3
 view PlusSignal
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dIlnaSplicesRep1V2
@@ -12909,4 +13486,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: -18045065
+# MAGIC: 554595585

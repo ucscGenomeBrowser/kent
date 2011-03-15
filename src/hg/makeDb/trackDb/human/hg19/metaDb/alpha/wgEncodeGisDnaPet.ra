@@ -1,3 +1,8 @@
+metaObject wgEncodeGisDnaPet
+objType composite
+composite wgEncodeGisDnaPet
+expVars lab,dataType,cell,fragSize
+
 metaObject wgEncodeGisDnaPetGm1287810kFasta3p
 objType file
 cell GM12878
@@ -594,4 +599,4 @@ project wgEncode
 subId 761
 view FastqRd2
 
-# MAGIC: 1116762533
+# MAGIC: 1722605736

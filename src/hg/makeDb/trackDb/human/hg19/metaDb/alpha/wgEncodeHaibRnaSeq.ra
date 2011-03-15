@@ -1,3 +1,8 @@
+metaObject wgEncodeHaibRnaSeq
+objType composite
+composite wgEncodeHaibRnaSeq
+expVars lab,dataType,cell,treatment,rnaExtract
+
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1
 objType table
 cell A549
@@ -2818,4 +2823,4 @@ subId 2975
 treatment Genistein_100nM_4hr
 view TranscriptGencV3
 
-# MAGIC: 478709308
+# MAGIC: -1985631445
