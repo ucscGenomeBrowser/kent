@@ -47,6 +47,14 @@ else if (tdb->parent) //Print link for parent track
     printf(LINK_TO_PARENT,"&nbsp;&nbsp;", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chrom, encodedTrackName, tdb->parent->shortLabel, tdb->parent->shortLabel);
     freeMem(encodedTrackName);
     }
+
+// NAVLINKS - Link to Description down below
+if (tdb->html != NULL && tdb->html[0] != 0)
+    {
+    printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
+    printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>Description&dArr;</A>");
+    printf("&nbsp;</span>");
+    }
 puts("<BR><BR>");
 
 filesDownloadUi(db,cart,tdb);
