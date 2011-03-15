@@ -3422,26 +3422,6 @@ wgEncode 1
         color 46,0,184
         # subId=3056 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsK562NfyaStdSig
-        release alpha
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel K562 NF-YA Sig
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NF-YA in K562 cells)
-        subGroups view=Signal factor=NFYA cellType=K562 control=std treatment=aNone
-        type bigWig 0.000000 10476.400391
-        color 46,0,184
-        # subId=3056 dateSubmitted=2010-12-02
-
-        track wgEncodeSydhTfbsK562NfybStdSig
-        release alpha
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel K562 NF-YB Sig
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NF-YB in K562 cells)
-        subGroups view=Signal factor=NFYB cellType=K562 control=std treatment=aNone
-        type bigWig 0.000000 12378.799805
-        color 46,0,184
-        # subId=3056 dateSubmitted=2010-12-02
-
         track wgEncodeSydhTfbsK562Pol2Ifna30StdSig
         release alpha
         parent wgEncodeSydhTfbsViewSignal off
