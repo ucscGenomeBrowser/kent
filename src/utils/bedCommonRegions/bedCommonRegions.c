@@ -19,14 +19,10 @@ errAbort(
   "Each region must be in each input at most once. Output is stdout.\n"
   "usage:\n"
   "   bedCommonRegions file1 file2 file3 ... fileN\n"
-  "options:\n"
-  "   -removeOverlap - instead of treating overlap within a file as error, remove it\n"
-  "                    Files must be sorted for this one\n"
   );
 }
 
 static struct optionSpec options[] = {
-   {"removeOverlap", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -39,22 +35,6 @@ safef(result, BED_STRING_SIZE, "%s\t%s\t%s", chrom, start, end);
 return result;
 }
 
-struct lineFile *openNonoverlapBed(char *fileName)
-/* Wrap deduplication pipeline around file and return it. 
- * Careful - can not close this, so will leak file handles.
- * If you need to run this on lots of files then you'll have
- * to fix.*/
-{
-if (optionExists("removeOverlap"))
-    {
-    static char *cmd[4] = {"bedRemoveOverlap", "stdin", "stdout", NULL};
-    struct pipeline *pl = pipelineOpen1(cmd, pipelineRead, fileName, NULL);
-    return pipelineLineFile(pl);
-    }
-else
-    return lineFileOpen(fileName, TRUE);
-}
-
 struct hash *readFileIntoHashCountOfOne(char *fileName, struct slRef **pRetList)
 /* Read in a bed file.  Return a integer hash keyed by bedString. 
  * The returned list is the hashEls of the hash, but in the same order
@@ -62,7 +42,7 @@ struct hash *readFileIntoHashCountOfOne(char *fileName, struct slRef **pRetList)
 {
 /* Add each bed item to hash, and list, checking uniqueness */
 struct hash *hash = hashNew(21);
-struct lineFile *lf = openNonoverlapBed(fileName);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct slRef *refList = NULL;
 char *row[3];
 while (lineFileRow(lf, row))
@@ -77,7 +57,7 @@ while (lineFileRow(lf, row))
     }
 
 /* Clean up and go home. */
-// lineFileClose(&lf); Actually really don't want to close because of pipeline shortcut
+lineFileClose(&lf);
 slReverse(&refList);
 *pRetList = refList;
 return hash;
@@ -87,7 +67,7 @@ void addFileToCountHash(char *fileName, struct hash *countHash)
 /* Add bedStrings from file to countHash, just ignoring the ones
  * that don't appear. */
 {
-struct lineFile *lf = openNonoverlapBed(fileName);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[3];
 while (lineFileRow(lf, row))
     {
@@ -97,7 +77,7 @@ while (lineFileRow(lf, row))
     if (hel != NULL)
         hel->val = ((char *)hel->val)+1;
     }
-// lineFileClose(&lf); Actually really don't want to close because of pipeline shortcut
+lineFileClose(&lf);
 }
 
 void bedCommonRegions(int fileCount, char *files[])
