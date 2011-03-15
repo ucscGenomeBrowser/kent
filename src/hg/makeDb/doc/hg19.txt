@@ -14757,3 +14757,75 @@ hgsql hg19 -N -e \
 'delete from omimLocation where name  in (select name from omimGene2) '
 
 ##############################################################
+# BUILD THE TRACK OF IKMC MAPPED TO HUMAN GENOME. (DONE, Fan, 3/15/11)
+
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/hg19/bed/ikmc/110314
+    cd /hive/data/genomes/hg19/bed/ikmc/110314
+
+# recieve  20110301_human.gff.gz from Carol Bult [Carol.Bult@jax.org] and place it under this subdirectory.
+    gzip -d 20110301_human.gff.gz
+
+# build hgIkmc table from raw data file ucschuman.gff (substitue some
+# troublesome chroms in raw data file and remove some records mapped to 'chrUn')
+
+    cat 20110301_human.gff |sort -u \
+    |sed -e 's/chr9|NT_113911.1/chr9/' \
+    |grep -v 'chrUn' \
+    | perl -we \
+      'while (<>) { \
+         s/\r?\n$//; \
+         ($chr, undef, $ctr, $s, $e, undef, undef, undef, $id, $col, $n) = split("\t"); \
+         if ($s eq "") { warn "$_\n";  s/^.*//; next; } # Some lines have no coords. \
+         $col = ($col eq "Yellow") ? "255,215,0" : \
+                ($col eq "Green")  ? "0,240,0" : \
+                ($col eq "Blue")   ? "0,0,200" : "0,0,0"; \
+         $s--; \
+         $id =~ s/^MGI:\d+; (\w+); .*/$1/ || die "Cant parse id \"$id\""; \
+         my $geneId = join("|", $chr, $ctr, "${n}_$id"); \
+         push @{$geneBlks{$geneId}}, [$s, $e, $col] unless $e <= 0; \
+      } \
+      warn "Got " . scalar(keys %geneBlks) . " genes.\n"; \
+      foreach my $geneId (keys %geneBlks) { \
+         my @blks = @{$geneBlks{$geneId}}; \
+         my ($chrom, $center, $name) = split(/\|/, $geneId); \
+         my $blkCount = @blks; \
+         @blks = sort {$a->[0] <=> $b->[0]} @blks; \
+         my $chromStart = $blks[0]->[0]; \
+         my $chromEnd = $blks[$blkCount-1]->[1]; \
+         my $color = $blks[0]->[2]; \
+         my $blkStarts = ""; \
+         my $blkSizes = ""; \
+         foreach my $blk (@blks) { \
+           my ($start, $end, $col) = @{$blk}; \
+           $blkStarts .= ($start - $chromStart) . ","; \
+           $blkSizes  .= ($end - $start) . ","; \
+           if ($col ne $color) { die "Blocks of $geneId of colors $color and $col"; } \
+         } \
+        print join("\t", $chrom, $chromStart, $chromEnd, $name, 0, ".", $chromStart, \
+                   $chromStart, $color, $blkCount, $blkSizes, $blkStarts) . "\n"; \
+      }' \
+    | sort -k 1,1 -k 2n,2n > hgIkmc.bed
+# Got 41936 genes.
+
+# build hgIkmcExtra table
+
+    cat 20110301_human.gff \
+    | grep -v 'chrUn' \
+    | perl -wpe 's/\r?\n$//; @w = split("\t"); \
+      if ($w[3] eq "") { s/^.*//; next; } # Some lines have no coords. \
+      if ($w[4] <= 0) { s/^.*//; next; } # A few lines have end=0. \
+      $w[8] =~ m/^(MGI:\d+); (\w+); (\w.*)/ || die; \
+      ($mgi, $designId, $status) = ($1, $2, $3); \
+      $_ = "$w[10]_$designId\t$mgi,$designId,$w[2],$status\n";' \
+    | sort -u > hgIkmcExtra.tab
+    wc -l hgIkmcExtra.tab
+# 41936 hgIkmcExtra.tab
+
+# load tables
+    hgLoadBed hg19 hgIkmc hgIkmc.bed
+    checkTableCoords -verbose=2 hg19 hgIkmc
+
+    hgLoadSqlTab hg19 hgIkmcExtra $HOME/kent/src/hg/lib/genericAlias.sql hgIkmcExtra.tab
+
+#############################################################################
