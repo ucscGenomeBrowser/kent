@@ -3222,3 +3222,19 @@ if (composite == NULL || sameOk(composite, mdbObjFindValue(mdb, "composite")))
 return FALSE;
 }
 
+struct mdbObj *mdbObjNew(char *name, struct mdbVar *vars)
+/* Create an mdbObj from a name and var list */
+{
+struct mdbObj *mdb;
+struct mdbVar *var;
+
+AllocVar(mdb);
+mdb->obj = name;
+mdb->vars = vars;
+mdb->varHash = hashNew(0);
+for (var = mdb->vars; var != NULL; var = var->next)
+    hashAdd(mdb->varHash, var->var, var);
+return mdb;
+}
+
+//NOTE:  Need mdbObjFree

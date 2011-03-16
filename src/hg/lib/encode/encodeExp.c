@@ -6,6 +6,8 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "mdb.h"
+#include "hdb.h"
 #include "encode/encodeExp.h"
 
 void encodeExpStaticLoad(char **row, struct encodeExp *ret)
@@ -447,7 +449,7 @@ for (i = 0; expFactors[i] != NULL; i++)
     }
 exp->vars = dyStringCannibalize(&factors);
 
-/* strip trailing space, or + */
+/* strip trailing space */
 int len = strlen(exp->vars);
 if (exp->vars[len-1] == ' ')
     exp->vars[len-1] = 0;
@@ -503,7 +505,7 @@ struct hash *encodeExpToRa(struct encodeExp *exp)
 return encodeExpToRaFile(exp, NULL);
 }
 
-static char *encodeExpAccession(struct encodeExp *exp)
+static char *encodeExpMakeAccession(struct encodeExp *exp)
 /* Make accession string from prefix + organism + id */
 {
 #define BUF_SIZE 64 
@@ -520,7 +522,7 @@ safef(accession, BUF_SIZE, "%s%c%06d", ENCODE_EXP_ACC_PREFIX, org, exp->ix);
 return cloneString(accession);
 }
 
-void encodeExpSave(struct sqlConnection *conn, struct encodeExp *exp, char *tableName)
+void encodeExpSave(struct sqlConnection *conn, char *tableName, struct encodeExp *exp)
 /* Save encodeExp as a row to the table specified by tableName. 
    Update accession using index assigned with autoincrement
 */
@@ -534,7 +536,7 @@ dyStringPrintf(query, "select max(ix) from %s", tableName);
 exp->ix = sqlQuickNum(conn, query->string);
 freeDyString(&query);
 query = newDyString(0);
-char *accession = encodeExpAccession(exp);
+char *accession = encodeExpMakeAccession(exp);
 dyStringPrintf(query, "update %s set accession=\'%s\' where ix=%d", 
                         tableName, accession, exp->ix);
 sqlUpdate(conn, query->string);
@@ -553,3 +555,98 @@ if (exp->vars != NULL)
 return dyStringCannibalize(&dy);
 }
 
+struct encodeExp *encodeExpGetFromTable(char *organism, char *lab, char *dataType, char *cell,
+                                struct slPair *factorPairs, char *table)
+/* Return experiments matching args in named experiment table.
+ * Organism, Lab and DataType must be non-null */
+{
+char *factors;
+struct slPair *pair;
+struct encodeExp *exps = NULL;
+
+if (organism == NULL || lab == NULL || dataType == NULL)
+    errAbort("Need organism, lab, and dataType to query experiment table");
+
+if (cell == NULL)
+    cell = ENCODE_EXP_NO_CELL;
+
+struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
+
+/* construct factor string var=val from pairs */
+struct dyString *dy = dyStringNew(0);
+for (pair = factorPairs; pair != NULL; pair = pair->next)
+    dyStringPrintf(dy, "%s=%s ", pair->name, (char *)pair->val);
+factors = dyStringCannibalize(&dy);
+
+// whack trailing space
+if (factors[0] != 0)
+    factors[strlen(factors)-1] = 0;
+
+dy = dyStringCreate(
+        "select * from %s where organism=\'%s\' and lab=\'%s\' and dataType=\'%s\' and cellType=\'%s\' and vars=\'%s\'",
+                table, organism, lab, dataType, cell, factors);
+exps = encodeExpLoadByQuery(conn, dyStringCannibalize(&dy));
+sqlDisconnect(&conn);
+return exps;
+}
+
+struct encodeExp *encodeExpGet(char *organism, char *lab, char *dataType, char *cell, struct slPair *factorPairs)
+/* Return experiments matching args in default experiment table.
+ * Organism, Lab and DataType must be non-null */
+{
+return encodeExpGetFromTable(organism, lab, dataType, cell, factorPairs, ENCODE_EXP_TABLE);
+}
+
+struct encodeExp *encodeExpGetByMdbVarsFromTable(char *db, struct mdbVar *vars, char *table)
+/* Return experiments by looking up mdb var list from the named experiment table */
+{
+struct mdbObj *mdb;
+int i;
+char *var, *val;
+struct slPair *factorPairs;
+
+// FIXME: centralize treatment of organism/lower-casing
+char *organism = hOrganism(db);
+strLower(organism);
+
+mdb = mdbObjNew(NULL, vars);
+
+/* extract factor vars into an slPair list */
+for (i = 0; expFactors[i] != NULL; i++)
+    {
+    var = expFactors[i];
+    val = mdbObjFindValue(mdb, var);
+    if (val == NULL || sameString(val, ENCODE_EXP_NO_VAR))
+        continue;
+    slPairAdd(&factorPairs, var, val);
+    }
+slPairSortCase(&factorPairs);
+/* TODO: free up mdbObj */
+return encodeExpGetFromTable(organism, 
+                                mdbObjFindValue(mdb, "lab"), mdbObjFindValue(mdb, "dataType"), 
+                                mdbObjFindValue(mdb, "cell"), factorPairs, table);
+}
+
+struct encodeExp *encodeExpGetByMdbVars(char *db, struct mdbVar *vars)
+/* Return experiments by looking up mdb var list from the default experiment table */
+{
+return encodeExpGetByMdbVarsFromTable(db, vars, ENCODE_EXP_TABLE);
+}
+
+int encodeExpExists(char *db, struct mdbVar *vars)
+/* Return TRUE if at least one experiment exists for these vars */
+{
+struct encodeExp *exp = encodeExpGetByMdbVars(db, vars);
+int found = (exp != NULL);
+freez(&exp);
+return found;
+}
+
+char *encodeGetAccessionByMdbVars(char *db, struct mdbVar *vars)
+/* Return accession of (first) experiment matching vars, or NULL if not found */
+{
+struct encodeExp *exp = encodeExpGetByMdbVars(db, vars);
+char *acc = encodeExpGetAccession(exp);
+freez(&exp);
+return acc;
+}

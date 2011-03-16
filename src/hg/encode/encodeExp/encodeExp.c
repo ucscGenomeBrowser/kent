@@ -22,14 +22,14 @@ errAbort(
   "   encodeExp <action> [arg]\n"
   "actions:\n"
   "   create 			create table (default \'%s\')\n"
-  "   fileAdd <exp.ra>		add experiments to table from file\n"
-  "   fileDump <exp.ra>		output experiment table to file\n"
-  "   metaFind <db> <exp.ra>	find unassigned experiments in metaDb and create .ra to file\n"
-  "   metaCheck <db>		find objects in metaDb incorrect or missing expId\n"
-  "   id human|mouse <lab> <dataType> <cellType> <vars>\n"
-  "				return ID for experiment (vars as 'var1:val1 var2:val2' or 'none')\n"
+  "   add <exp.ra>		add experiments to table from file\n"
+  "   dump <exp.ra>		output experiment table to file\n"
+  "   find <db> <exp.ra>	find unassigned experiments in metaDb and create .ra to file\n"
+  "   check <db>		find objects in metaDb incorrect or missing accession\n"
+  "   acc human|mouse <lab> <dataType> <cellType> [<factors>]\n"
+  "				return accession for experiment (factors as 'factor1:val1 factor2:val2')\n"
   "options:\n"
-  "   -composite	limit to specified composite track (affects metaFind and metaCheck)"
+  "   -composite	limit to specified composite track (affects find and check)"
   "   -mdb	specify metaDb table name (default \'%s\') - for test use \n"
   "   -table	specify experiment table name (default \'%s\')\n",
   encodeExpTableNew, MDB_DEFAULT_NAME, ENCODE_EXP_TABLE
@@ -43,9 +43,24 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-char *composite = NULL, *mdb = NULL, *table = NULL;
-char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *vars = NULL;
 struct sqlConnection *connExp = NULL;
+char *composite = NULL, *mdb = NULL, *table = NULL;
+char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *factors = NULL;
+
+static struct hash *expKeyHashFromTable(struct sqlConnection *conn, char *table)
+/* create hash of keys for existing experiments so we can distinguish new ones */
+{
+struct hash *hash = hashNew(0);
+struct encodeExp *exp = NULL, *exps = NULL;
+
+exps = encodeExpLoadAllFromTable(conn, table);
+while ((exp = slPopHead(&exps)) != NULL)
+    {
+    hashAdd(hash, encodeExpKey(exp), NULL);
+    freez(&exp);
+    }
+return hash;
+}
 
 void expCreate()
 /* Create table */
@@ -54,7 +69,7 @@ verbose(2, "Creating table \'%s\'\n", table);
 encodeExpTableCreate(connExp, table);
 }
 
-void expFileAdd(char *file)
+void expAdd(char *file)
 /* Add rows from .ra file. Exit on err -- bad format or not unique */
 {
 struct hash *ra = NULL;
@@ -66,11 +81,11 @@ verbose(2, "Adding experiments from file \'%s\' to table \'%s\'\n", file, table)
 while ((ra = raNextRecord(lf)) != NULL)
     {
     exp = encodeExpFromRa(ra);
-    encodeExpSave(connExp, exp, table);
+    encodeExpSave(connExp, table, exp);
     }
 }
 
-void expFileDump(char *file)
+void expDump(char *file)
 /* Output rows to .ra file */
 {
 struct encodeExp *exp = NULL, *exps = NULL;
@@ -79,34 +94,27 @@ verbose(2, "Dumping table %s to %s\n", table, file);
 FILE *f  = mustOpen(file, "w");
 exps = encodeExpLoadAllFromTable(connExp, table);
 while ((exp = slPopHead(&exps)) != NULL)
-    {
     encodeExpToRaFile(exp, f);
-    }
 carefulClose(&f);
 }
 
-void expMetaFind(char *assembly, char *file)
+void expFind(char *assembly, char *file)
 /* Find experiments in metaDb and output .ra file */
-/* TODO: Experiment-defining variable support -> lib */
 {
 verbose(2, "Finding experiments in %s:%s\n", assembly, mdb);
 
 struct sqlConnection *connMeta;
 struct mdbObj *meta = NULL, *metas = NULL;
 struct encodeExp *exp = NULL, *exps = NULL;
-struct hash *newExps = hashNew(0), *oldExps = hashNew(0);
+struct hash *oldExps, *newExps;
 char *key;
 int expNum = 0;
 
 FILE *f  = mustOpen(file, "w");
 
 /* create hash of keys for existing experiments so we can distinguish new ones */
-exps = encodeExpLoadAllFromTable(connExp, table);
-while ((exp = slPopHead(&exps)) != NULL)
-    {
-    hashAdd(oldExps, encodeExpKey(exp), NULL);
-    freez(&exp);
-    }
+oldExps = expKeyHashFromTable(connExp, table);
+newExps = hashNew(0);
 
 /* read mdb objects from database */
 connMeta = sqlConnect(assembly);
@@ -137,8 +145,6 @@ while ((meta = slPopHead(&metas)) != NULL)
         }
     }
 /* write out experiments in .ra format */
-organism = hOrganism(assembly);
-strLower(organism);
 slReverse(&exps);
 while ((exp = slPopHead(&exps)) != NULL)
     {
@@ -149,51 +155,52 @@ carefulClose(&f);
 sqlDisconnect(&connMeta);
 }
 
-void expMetaCheck(char *assembly)
+void expCheck(char *assembly)
 /* Check metaDb for objs with missing or inconsistent experimentId */
 {
-verbose(2, "Checking experiments %s:%s\n", assembly, mdb);
-errAbort("metaCheck not implemented");
+verbose(2, "Checking experiments in %s:%s\n", assembly, mdb);
+errAbort("check not implemented");
 }
 
-void expId()
-/* Return ID */
+void expAccession()
+/* Return accession */
 {
-struct dyString *queryDs = newDyString(0);
-//TODO: -> lib
+struct encodeExp *exps = NULL;
+int count;
+struct slPair *factorPairs = NULL;
+
 /* transform var:val to var=val. Can't use var=val on command-line as it conflicts with standard options processing */
-memSwapChar(vars, strlen(vars), ':', '=');
-if (sameString(vars, "none"))
-    vars = "";
-dyStringPrintf(queryDs, "select * from %s where organism=\'%s\' and lab=\'%s\' and dataType=\'%s\' and cellType=\'%s\' and vars=\'%s\'", 
-                        table, organism, lab, dataType, cellType, vars); 
-verbose(2, "QUERY: %s\n", queryDs->string);
-struct encodeExp *exps = encodeExpLoadByQuery(connExp, dyStringCannibalize(&queryDs));
-int count = slCount(exps);
+memSwapChar(factors, strlen(factors), ':', '=');
+factorPairs = slPairFromString(factors);
+exps = encodeExpGetFromTable(organism, lab, dataType, cellType, factorPairs, table);
+count = slCount(exps);
 verbose(2, "Results: %d\n", count);
 if (count == 0)
-    errAbort("Not found");
+    errAbort("Experiment not found");
 if (count > 1)
-    errAbort("Found more than 1 match");
-printf("%d\n", exps->ix);
+    errAbort("Found more than 1 match for experiment");
+printf("%s\n", exps->accession);
 }
 
 int encodeExp(char *command, char *file, char *assembly)
 /* manage ENCODE experiments table */
 {
 connExp = sqlConnect(ENCODE_EXP_DATABASE);
+organism = hOrganism(assembly);
+strLower(organism);
+
 if (sameString(command, "create"))
     expCreate();
-else if (sameString(command, "fileAdd"))
-    expFileAdd(file);
-else if (sameString(command, "fileDump"))
-    expFileDump(file);
-else if (sameString(command, "metaFind"))
-    expMetaFind(assembly, file);
-else if (sameString(command, "metaCheck"))
-    expMetaCheck(assembly);
-else if (sameString(command, "id"))
-    expId();
+else if (sameString(command, "add"))
+    expAdd(file);
+else if (sameString(command, "dump"))
+    expDump(file);
+else if (sameString(command, "find"))
+    expFind(assembly, file);
+else if (sameString(command, "check"))
+    expCheck(assembly);
+else if (sameString(command, "acc"))
+    expAccession();
 else
     {
     fprintf(stderr, "ERROR: Unknown command %s\n\n", command);
@@ -205,7 +212,6 @@ return(0);
 
 int main(int argc, char *argv[])
 /* Process command line. */
-/* TODO: Clean up arg handling */
 {
 optionInit(&argc, argv, options);
 if (argc < 2)
@@ -222,7 +228,7 @@ composite = optionVal("composite", NULL);
 
 verboseSetLevel(2);
 verbose(3, "Experiment table name: %s\n", table);
-if (startsWith("meta", command))
+if (sameString("find", command) || sameString("check", command))
     {
     if (argc < 3)
         {
@@ -231,7 +237,7 @@ if (startsWith("meta", command))
         }
     else
         assembly = argv[2];
-    if (sameString("metaFind", command))
+    if (sameString("find", command))
         {
         if (argc < 4)
             {
@@ -242,7 +248,7 @@ if (startsWith("meta", command))
             file = argv[3];
         }
     }
-if (startsWith("file", command))
+if (sameString("add", command) || sameString("dump", command))
     {
     if (argc < 3)
         {
@@ -252,9 +258,9 @@ if (startsWith("file", command))
     else
         file = argv[2];
     }
-else if (sameString("id", command))
+else if (sameString("acc", command))
     {
-    if (argc < 7)
+    if (argc < 6)
         usage();
     else
         {
@@ -262,7 +268,8 @@ else if (sameString("id", command))
         lab = argv[3];
         dataType = argv[4];
         cellType = argv[5];
-        vars = argv[6];
+        if (argc > 6)
+            factors = argv[6];
         }
     }
 encodeExp(command, file, assembly);

@@ -421,3 +421,6 @@ int mdbObjIsEncode(struct mdbObj *mdb);
 int mdbObjInComposite(struct mdbObj *mdb, char *composite);
 /* Return true if metaDb object is in specified composite.
    If composite is NULL, always return true */
+
+struct mdbObj *mdbObjNew(char *name, struct mdbVar *vars);
+/* Create an mdbObj */

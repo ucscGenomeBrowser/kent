@@ -134,13 +134,34 @@ struct hash *encodeExpToRaFile(struct encodeExp *exp, FILE *f);
 struct hash *encodeExpToRa(struct encodeExp *exp);
 /* Create a Ra hash from an encodeExp */
 
-void encodeExpSave(struct sqlConnection *conn, struct encodeExp *exp, 
-                                         char *tableName);
+void encodeExpSave(struct sqlConnection *conn, char *tableName, struct encodeExp *exp);
 /* Save encodeExp as a row to the table specified by tableName. Update accession using
  * index assigned with autoincrement */
 
 char *encodeExpKey(struct encodeExp *exp);
 /* Create a hash key from an encodeExp */
+
+struct encodeExp *encodeExpGetFromTable(char *organism, char *lab, char *dataType, char *cell,
+                                struct slPair *factorPairs, char *table);
+/* Return experiments matching args in named experiment table.
+ * Organism, Lab and DataType must be non-null */
+
+struct encodeExp *encodeExpGet(char *organism, char *lab, char *dataType, char *cell,
+                                struct slPair *factorPairs);
+/* Return experiments matching args in default experiment table.
+ * Organism, Lab and DataType must be non-null */
+
+struct encodeExp *encodeExpGetByMdbVarsFromTable(char *db, struct mdbVar *vars, char *table);
+/* Return experiments by looking up mdb var list from the named experiment table */
+
+struct encodeExp *encodeExpGetByMdbVars(char *db, struct mdbVar *vars);
+/* Return experiments by looking up mdb var list from the default experiment table */
+
+int encodeExpExists(char *db, struct mdbVar *vars);
+/* Return TRUE if at least one experiment exists for these vars */
+
+char *encodeGetAccessionByMdbVars(char *db, struct mdbVar *vars);
+/* Return accession of (first) experiment matching vars, or NULL if not found */
 
 
 #endif /* ENCODEEXP_H */
