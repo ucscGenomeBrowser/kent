@@ -9,6 +9,9 @@ include wgEncodeGencodeV5.ra alpha
 # UNC/BSU Proteogenomics (wrangler: cline)
 include wgEncodeUncBsuProt.ra alpha
 
+# Integrated Regulation (wrangler: kent)
+include wgEncodeReg.ra alpha
+
 # Nucleosome (wrangler: venkat)
 include wgEncodeSydhNsome.ra
 
