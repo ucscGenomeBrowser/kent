@@ -6,7 +6,7 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmGm12878.bed9.gz
+fileName wgEncodeBroadHmmGm12878.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
@@ -24,7 +24,7 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmH1hesc.bed9.gz
+fileName wgEncodeBroadHmmH1hesc.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
@@ -42,7 +42,7 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmHepg2.bed9.gz
+fileName wgEncodeBroadHmmHepg2.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
@@ -60,7 +60,7 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmHmec.bed9.gz
+fileName wgEncodeBroadHmmHmec.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
@@ -78,7 +78,7 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmHsmm.bed9.gz
+fileName wgEncodeBroadHmmHsmm.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
@@ -96,7 +96,7 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmHuvec.bed9.gz
+fileName wgEncodeBroadHmmHuvec.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
@@ -114,7 +114,7 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmK562.bed9.gz
+fileName wgEncodeBroadHmmK562.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
@@ -132,7 +132,7 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmNhek.bed9.gz
+fileName wgEncodeBroadHmmNhek.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
@@ -150,7 +150,7 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmNhlf.bed9.gz
+fileName wgEncodeBroadHmmNhlf.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
@@ -160,4 +160,4 @@ subId 3823
 tableName wgEncodeBroadHmmNhlf
 view HMM
 
-# MAGIC: -1486793699
+# MAGIC: -545435684
