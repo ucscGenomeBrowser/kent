@@ -802,7 +802,7 @@ TMPDIR=/scratch/tmp
     #	1994778494 bases of 2752505800 (72.471%) in intersection
 
 ############################################################################
-# GENBANK ALIGNMENTS (WORKING - 2011-02-22 - Hiram)
+# GENBANK ALIGNMENTS (DONE - 2011-02-22 - Hiram)
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
@@ -1072,7 +1072,7 @@ TMPDIR=/scratch/tmp
     #	1599680730 bases of 2428790173 (65.863%) in intersection
 
 ############################################################################
-# LASTZ Opossum MonDom5 (DONE - 2011-02-23 - Hiram)
+# LASTZ Opossum MonDom5 (DONE - 2011-02-23,03-15 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzMonDom5.2011-02-23
     cd /hive/data/genomes/panTro3/bed/lastzMonDom5.2011-02-23
 
@@ -1122,10 +1122,9 @@ TMPDIR=/scratch/tmp
 	-swap -syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-XXX - running - Tue Mar 15 12:20:12 PDT 2011
-    #	real    188m0.163s
+    #	real    85m21.917s
     cat fb.monDom5.chainPanTro3Link.txt 
-    #	947862300 bases of 2571531505 (36.860%) in intersection
+    #	396979982 bases of 3501660299 (11.337%) in intersection
 
 ############################################################################
 # LASTZ Chicken GalGal3 (DONE - 2011-02-23,03-03 - Hiram)
