@@ -3049,6 +3049,7 @@ if (!tg->mapsSelf)
             }
         }
     }
+    withIndividualLabels = TRUE; /* reset in case done with pgSnp */
 }
 
 static void genericDrawItemsPackSquish(struct track *tg,
@@ -9547,9 +9548,20 @@ if (name == NULL)
 return name;
 }
 
-void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, int height, Color color, MgFont *font, char *allele)
-/* put text on right, doing separate colors if needed */
+void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, int height, Color color, MgFont *font, char *allele, int trackY, int trackHeight)
+/* put text anchored on right upper corner, doing separate colors if needed */
 {
+boolean snapLeft = FALSE;
+int textX = x1 - width; 
+snapLeft = (textX < insideX);
+if (snapLeft)        /* Snap label to the left. */
+    {
+    hvGfxUnclip(hvg);
+    hvGfxSetClip(hvg, leftLabelX, trackY, insideWidth, trackHeight);
+    x1 = leftLabelX;
+    width = leftLabelWidth-1;
+    }
+
 if (sameString(display, "freq"))
     {
     Color allC = MG_BLACK;
@@ -9566,6 +9578,11 @@ if (sameString(display, "freq"))
 else
     {
     hvGfxTextRight(hvg, x1, y, width, height, color, font, allele);
+    }
+if (snapLeft) 
+    {
+    hvGfxUnclip(hvg);
+    hvGfxSetClip(hvg, insideX, trackY, insideWidth, trackHeight);
     }
 }
 
@@ -9653,17 +9670,21 @@ int allHeight = trunc(tg->heightPer / 2);
 int allWidth = mgFontStringWidth(font, allele[0]);
 int all2Width = 0;
 if (cnt > 1)
+    {
     all2Width = mgFontStringWidth(font, allele[1]);
+    if (all2Width > allWidth) 
+         allWidth = all2Width; /* use max */
+    }
 int yCopy = y + 1;
 
 /* allele 1, should be insertion if doesn't fit */
-if (allWidth >= w || all2Width >= w || sameString(display, "freq"))
+if (sameString(display, "freq"))
     {
     if (cmpl)
         complement(allele[0], strlen(allele[0]));
     if (revCmplDisp)
         reverseComplement(allele[0], strlen(allele[0]));
-    pgSnpTextRight(display, hvg, x1-allWidth-2, yCopy, allWidth, allHeight, color, font, allele[0]);
+    pgSnpTextRight(display, hvg, x1-allWidth-2, yCopy, allWidth, allHeight, color, font, allele[0], y, tg->height);
     }
 else
     {
@@ -9677,13 +9698,13 @@ if (cnt > 1)
     { /* allele 2 */
     yCopy += allHeight;
 
-    if (allWidth >= w || all2Width >= w || sameString(display, "freq"))
+    if (sameString(display, "freq"))
         {
         if (cmpl)
             complement(allele[1], strlen(allele[1]));
         if (revCmplDisp)
             reverseComplement(allele[1], strlen(allele[1]));
-        pgSnpTextRight(display, hvg, x1-all2Width-2, yCopy, all2Width, allHeight, color, font, allele[1]);
+        pgSnpTextRight(display, hvg, x1-allWidth-2, yCopy, allWidth, allHeight, color, font, allele[1], y, tg->height);
         }
     else
         {
@@ -9693,7 +9714,7 @@ if (cnt > 1)
         }
     }
 /* map box for link, when text outside box */
-if (allWidth >= w || all2Width >= w || sameString(display, "freq"))
+if (allWidth >= w || sameString(display, "freq"))
     {
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item),
                 tg->mapItemName(tg, item), myItem->chromStart, myItem->chromEnd,
