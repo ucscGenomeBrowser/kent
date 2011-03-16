@@ -19,7 +19,6 @@ wgEncode 1
 filterBy name:State="1 Active Promoter","2 Weak Promoter","3 Poised Promoter","4 Strong Enhancer","5 Strong Enhancer","6 Weak Enhancer","7 Weak Enhancer","8 Insulator","9 Txn Transition","10 Txn Elongation","11 Weak Txn","12 Repressed","13 Heterochrom/lo","14 Repetitive/CNV","15 Repetitive/CNV"
 ###configurable on
 ### configurable on would be nice but doesn't work without view (which column/cell gets the link?)
-wgEncode 1
 dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeBroadHmmGm12878HMM
