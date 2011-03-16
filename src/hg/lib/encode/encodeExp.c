@@ -367,6 +367,21 @@ static char *sqlCreate =
 
 /* END schema-dependent section */
 
+static char *expFactors[] = {
+    /* alpha sorted list, includes all exp-defining variables */
+    // TODO: -> whitelist from cv.ra
+    "antibody",
+    "insertLength",
+    "localization",
+    "protocol",
+    "readType",
+    "restrictionEnzyme",
+    "ripTgtProtein",
+    "rnaExtract",
+    "treatment",
+    0,
+};
+
 void encodeExpTableCreate(struct sqlConnection *conn, char *tableName)
 /* Create an encodeExp table */
 {
@@ -376,14 +391,78 @@ sqlRemakeTable(conn, tableName, dyStringContents(dy));
 dyStringFree(&dy);
 }
 
+struct encodeExp *encodeExpLoadAllFromTable(struct sqlConnection *conn, char *tableName)
+/* Load all encodeExp in table */
+{
+struct encodeExp *exps;
+
+struct dyString *dy = newDyString(0);
+dyStringPrintf(dy, "select * from %s", tableName);
+exps = encodeExpLoadByQuery(conn, dyStringContents(dy));
+dyStringFree(&dy);
+return exps;
+}
+
+struct encodeExp *encodeExpFromMdb(struct mdbObj *mdb)
+/* Create an encodeExp from an ENCODE metaDb object */
+{
+struct encodeExp *exp;
+
+if (!mdbObjIsEncode(mdb))
+    errAbort("Metadata object is not from ENCODE");
+
+AllocVar(exp);
+
+/* extract lab */
+exp->lab = mdbObjFindValue(mdb, ENCODE_EXP_FIELD_LAB);
+if (exp->lab == NULL)
+    errAbort("ENCODE metadata object \'%s\' missing lab\n", mdb->obj);
+
+// TODO: -> lib (stripPiFromLab)
+/* Strip off trailing parenthesized PI name if present */
+chopSuffixAt(exp->lab, '(');
+
+/* extract data type */
+exp->dataType = mdbObjFindValue(mdb, ENCODE_EXP_FIELD_DATA_TYPE);
+if (exp->dataType == NULL)
+    errAbort("ENCODE metadata object \'%s\' missing dataType\n", mdb->obj);
+
+exp->cellType = mdbObjFindValue(mdb, ENCODE_EXP_FIELD_CELL_TYPE);
+if (exp->cellType == NULL)
+    {
+    exp->cellType = ENCODE_EXP_NO_CELL;
+    }
+
+/* experimental factors (variables) */
+int i;
+char *var, *val;
+struct dyString *factors = newDyString(0);
+for (i = 0; expFactors[i] != NULL; i++)
+    {
+    var = expFactors[i];
+    val = mdbObjFindValue(mdb, var);
+    if (val == NULL || sameString(val, ENCODE_EXP_NO_VAR))
+        continue;
+    dyStringPrintf(factors, "%s=%s ", var, val);
+    }
+exp->vars = dyStringCannibalize(&factors);
+
+/* strip trailing space, or + */
+int len = strlen(exp->vars);
+if (exp->vars[len-1] == ' ')
+    exp->vars[len-1] = 0;
+
+return exp;
+}
+
 struct encodeExp *encodeExpFromRa(struct hash *ra)
 /* Load an encodeExp from a Ra hash. */
 {
 char *rows[ENCODEEXP_NUM_COLS];
-struct encodeExp *ret;
+struct encodeExp *exp;
 int i;
 
-AllocVar(ret);
+AllocVar(exp);
 for (i = 0; i < ENCODEEXP_NUM_COLS; i++)
     {
     struct encodeExpField *fp = &encodeExpFields[i];
@@ -393,8 +472,8 @@ for (i = 0; i < ENCODEEXP_NUM_COLS; i++)
         errAbort("Required field \'%s\' not found in .ra", fp->name);
     rows[i] = cloneString(val);
     }
-encodeExpStaticLoad(rows, ret);
-return ret;
+encodeExpStaticLoad(rows, exp);
+return exp;
 }
 
 struct hash *encodeExpToRaFile(struct encodeExp *exp, FILE *f)
@@ -463,3 +542,14 @@ sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
 freez(&accession);
 freeDyString(&query);
 }
+
+char *encodeExpKey(struct encodeExp *exp)
+/* Create a hash key from an encodeExp */
+{
+struct dyString *dy = newDyString(0);
+dyStringPrintf(dy, "lab:%s dataType:%s cellType:%s", exp->lab, exp->dataType, exp->cellType);
+if (exp->vars != NULL)
+    dyStringPrintf(dy, " vars:%s", exp->vars);
+return dyStringCannibalize(&dy);
+}
+

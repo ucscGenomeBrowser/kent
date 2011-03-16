@@ -6,6 +6,7 @@
 #define ENCODEEXP_H
 
 #include "jksql.h"
+
 #define ENCODEEXP_NUM_COLS 7
 
 struct encodeExp
@@ -92,6 +93,8 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+#include "mdb.h"
+
 /* WARNING:  When schema is changed, encodeExp.c will need changes as well */
 
 #define ENCODE_EXP_FIELD_IX             "ix"
@@ -102,6 +105,9 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 #define ENCODE_EXP_FIELD_CELL_TYPE      "cellType"
 #define ENCODE_EXP_FIELD_VARS           "vars"
 
+#define ENCODE_EXP_NO_CELL              "None"
+#define ENCODE_EXP_NO_VAR               "None"
+
 #define ENCODE_EXP_TABLE        "encodeExp"
 #define ENCODE_EXP_DATABASE     "hgFixed"
 #define ENCODE_EXP_ACC_PREFIX   "wgEncodeE"
@@ -110,8 +116,14 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 void encodeExpFieldIndex(char *fieldName);
 /* Get column number of named field in EncodeExp schema */
 
-void encodeExpTableCreate(struct sqlConnection *conn, char *tableName);
+void encodeExpTableCreate(struct sqlConnection *conn, char *table);
 /* Create an encodeExp table */
+
+struct encodeExp *encodeExpLoadAllFromTable(struct sqlConnection *conn, char *table);
+/* Load all encodeExp in table */
+
+struct encodeExp *encodeExpFromMdb(struct mdbObj *mdb);
+/* Create an encodeExp from an ENCODE metaDb object */
 
 struct encodeExp *encodeExpFromRa(struct hash *ra);
 /* Load an encodeExp from a Ra hash */
@@ -126,6 +138,10 @@ void encodeExpSave(struct sqlConnection *conn, struct encodeExp *exp,
                                          char *tableName);
 /* Save encodeExp as a row to the table specified by tableName. Update accession using
  * index assigned with autoincrement */
+
+char *encodeExpKey(struct encodeExp *exp);
+/* Create a hash key from an encodeExp */
+
 
 #endif /* ENCODEEXP_H */
 

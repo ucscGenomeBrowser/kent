@@ -3204,3 +3204,21 @@ if (termHash != NULL)
 return term;
 }
 
+int mdbObjIsEncode(struct mdbObj *mdb)
+/* Return true if this metaDb object is for ENCODE */
+{
+char *project = mdbObjFindValue(mdb, "project");
+if (sameOk(project, ENCODE_MDB_PROJECT))
+    return TRUE;
+return FALSE;
+}
+
+int mdbObjInComposite(struct mdbObj *mdb, char *composite)
+/* Return true if metaDb object is in specified composite.
+   If composite is NULL, always return true */
+{
+if (composite == NULL || sameOk(composite, mdbObjFindValue(mdb, "composite")))
+    return TRUE;
+return FALSE;
+}
+

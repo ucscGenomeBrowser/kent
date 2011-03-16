@@ -29,37 +29,23 @@ errAbort(
   "   id human|mouse <lab> <dataType> <cellType> <vars>\n"
   "				return ID for experiment (vars as 'var1:val1 var2:val2' or 'none')\n"
   "options:\n"
-  "   -table	specify experiment table name (default \'%s\')\n"
-  "   -composite	limit to specified composite track (affects metaFind and metaCheck)",
-  encodeExpTableNew, ENCODE_EXP_TABLE
+  "   -composite	limit to specified composite track (affects metaFind and metaCheck)"
+  "   -mdb	specify metaDb table name (default \'%s\') - for test use \n"
+  "   -table	specify experiment table name (default \'%s\')\n",
+  encodeExpTableNew, MDB_DEFAULT_NAME, ENCODE_EXP_TABLE
   );
 }
 
 static struct optionSpec options[] = {
-   {"table", OPTION_STRING},
    {"composite", OPTION_STRING},
+   {"mdb", OPTION_STRING},
+   {"table", OPTION_STRING},
    {NULL, 0},
 };
 
+char *composite = NULL, *mdb = NULL, *table = NULL;
 char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *vars = NULL;
-char *table = NULL;
-char *composite = NULL;
-struct sqlConnection *connExp = NULL, *connMeta = NULL;
-
-// TODO: -> whitelist from cv.ra
-char *expFactors[] = {
-    /* alpha sorted list, includes all exp-defining variables */
-    "antibody",
-    "insertLength",
-    "localization",
-    "protocol",
-    "readType",
-    "restrictionEnzyme",
-    "ripTgtProtein",
-    "rnaExtract",
-    "treatment",
-    0,
-};
+struct sqlConnection *connExp = NULL;
 
 void expCreate()
 /* Create table */
@@ -89,11 +75,9 @@ void expFileDump(char *file)
 {
 struct encodeExp *exp = NULL, *exps = NULL;
 
-verbose(2, "Dumping table to %s\n", file);
+verbose(2, "Dumping table %s to %s\n", table, file);
 FILE *f  = mustOpen(file, "w");
-struct dyString *query = newDyString(0);
-dyStringPrintf(query, "select * from %s order by ix", table);
-exps = encodeExpLoadByQuery(connExp, dyStringCannibalize(&query));
+exps = encodeExpLoadAllFromTable(connExp, table);
 while ((exp = slPopHead(&exps)) != NULL)
     {
     encodeExpToRaFile(exp, f);
@@ -105,20 +89,28 @@ void expMetaFind(char *assembly, char *file)
 /* Find experiments in metaDb and output .ra file */
 /* TODO: Experiment-defining variable support -> lib */
 {
-verbose(2, "Finding experiments in %s metaDb\n", assembly);
+verbose(2, "Finding experiments in %s:%s\n", assembly, mdb);
 
+struct sqlConnection *connMeta;
 struct mdbObj *meta = NULL, *metas = NULL;
 struct encodeExp *exp = NULL, *exps = NULL;
-struct hash *expHash = hashNew(0);
-AllocVar(exp);
+struct hash *newExps = hashNew(0), *oldExps = hashNew(0);
+char *key;
+int expNum = 0;
 
 FILE *f  = mustOpen(file, "w");
 
-int expNum = 0;
+/* create hash of keys for existing experiments so we can distinguish new ones */
+exps = encodeExpLoadAllFromTable(connExp, table);
+while ((exp = slPopHead(&exps)) != NULL)
+    {
+    hashAdd(oldExps, encodeExpKey(exp), NULL);
+    freez(&exp);
+    }
 
 /* read mdb objects from database */
 connMeta = sqlConnect(assembly);
-metas = mdbObjsQueryAll(connMeta, MDB_DEFAULT_NAME);
+metas = mdbObjsQueryAll(connMeta, mdb);
 verbose(2, "Found %d objects\n", slCount(metas));
 
 /* order so that oldest have lowest ids */
@@ -127,77 +119,27 @@ mdbObjsSortOnVars(&metas, "dateSubmitted lab dataType cell");
 /* create new experiments */
 while ((meta = slPopHead(&metas)) != NULL)
     {
-    /* TODO: suppress creating new experiments if already in encodeExp table */
-    /* TODO: ->lib creation of experiments from mdb objs */
-
-    if (mdbObjFindValue(meta, "dateSubmitted") == NULL)
-        {
-        fprintf(stderr, "Metadata object \'%s\' missing dateSubmitted\n", meta->obj);
+    if (!mdbObjIsEncode(meta))
         continue;
-        }
-
-    exp->lab = mdbObjFindValue(meta, "lab");
-    if (exp->lab == NULL)
-        {
-        fprintf(stderr, "Metadata object \'%s\' missing lab\n", meta->obj);
+    if (composite != NULL && !mdbObjInComposite(meta, composite))
         continue;
-        }
-    // TODO: -> lib (stripPiFromLab)
-    /* Strip off trailing parenthesized PI name if present */
-    chopSuffixAt(exp->lab, '(');
 
-    exp->dataType = mdbObjFindValue(meta, "dataType");
-    if (exp->dataType == NULL)
-        {
-        fprintf(stderr, "Metadata object \'%s\' missing dataType\n", meta->obj);
-        continue;
-        }
-    exp->cellType = mdbObjFindValue(meta, "cell");
-    if (exp->cellType == NULL)
-        {
-        exp->cellType = "None";
-        }
+    exp = encodeExpFromMdb(meta);
+    key = encodeExpKey(exp);
 
-    /* experimental factors (variables) */
-    int i;
-    char *var, *val;
-    struct dyString *factors = newDyString(0);
-    for (i = 0; expFactors[i] != NULL; i++)
-        {
-        var = expFactors[i];
-        val = mdbObjFindValue(meta, var);
-        if (val == NULL || sameString(val, "None"))
-            continue;
-        dyStringPrintf(factors, "%s=%s ", var, val);
-        }
-    exp->vars = dyStringCannibalize(&factors);
-
-    /* strip trailing space, or + */
-    int len = strlen(exp->vars);
-    if (exp->vars[len-1] == ' ')
-        exp->vars[len-1] = 0;
-
-    struct dyString *keyDs = newDyString(0);
-    dyStringPrintf(keyDs, "lab:%s dataType:%s cellType:%s", exp->lab, exp->dataType, exp->cellType);
-    if (exp->vars != NULL)
-        dyStringPrintf(keyDs, " vars:%s", exp->vars);
-    char *key = dyStringCannibalize(&keyDs);
-
-    /* save experiment */
-    if (hashLookup(expHash, key) == NULL)
+    if (hashLookup(newExps, key) == NULL)
         {
         verbose(2, "Date: %s	Experiment %d: %s\n", 
                 mdbObjFindValue(meta, "dateSubmitted"), ++expNum, key);
-        hashAdd(expHash, key, NULL);
+        /* save new experiment */
+        hashAdd(newExps, key, NULL);
         slAddHead(&exps, exp);
-        slReverse(&exps);
-        AllocVar(exp);
         }
     }
-
 /* write out experiments in .ra format */
 organism = hOrganism(assembly);
 strLower(organism);
+slReverse(&exps);
 while ((exp = slPopHead(&exps)) != NULL)
     {
     exp->organism = organism;
@@ -210,7 +152,8 @@ sqlDisconnect(&connMeta);
 void expMetaCheck(char *assembly)
 /* Check metaDb for objs with missing or inconsistent experimentId */
 {
-verbose(2, "Checking experiments %s metaDb\n", assembly);
+verbose(2, "Checking experiments %s:%s\n", assembly, mdb);
+errAbort("metaCheck not implemented");
 }
 
 void expId()
@@ -274,6 +217,9 @@ char *file = NULL;
 table = optionVal("table", sameString(command, "create") ?
                         encodeExpTableNew: 
                         ENCODE_EXP_TABLE);
+mdb = optionVal("mdb", MDB_DEFAULT_NAME);
+composite = optionVal("composite", NULL);
+
 verboseSetLevel(2);
 verbose(3, "Experiment table name: %s\n", table);
 if (startsWith("meta", command))
