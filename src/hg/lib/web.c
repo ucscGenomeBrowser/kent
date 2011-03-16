@@ -297,29 +297,29 @@ else if (dbIsFound)
        "<table bgcolor=\"#000000\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%%\" height=\"27\">" "\n"
        "<tr bgcolor=\"#"HG_COL_HOTLINKS"\"><td valign=\"middle\">" "\n"
        "	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor=\"#"HG_COL_HOTLINKS"\" height=\"24\" class=\"topbar\"><TR>" "\n"
-       " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">&nbsp;" "\n"
+       " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">" "\n"
        );
 
 if (isEncode)
     {
-    printf("&nbsp;<A HREF=\"../encode/\" class=\"topbar\">" "\n");
+    printf("<A HREF=\"../encode/\" class=\"topbar\">" "\n");
     puts("           Home</A>");
     }
 else
     {
-    printf("&nbsp;<A HREF=\"../index.html%s\" class=\"topbar\">" "\n", uiState);
-    puts("           Home</A> &nbsp;&nbsp;&nbsp;");
+    printf("<A HREF=\"../index.html%s\" class=\"topbar\">" "\n", uiState);
+    puts("           Home</A> ");
     if (isGsid)
 	{
     	printf("       <A HREF=\"../cgi-bin/gsidSubj%s\" class=\"topbar\">\n",
 	       uiState);
-	puts("           Subject View</A> &nbsp;&nbsp;&nbsp;");
+	puts("           Subject View</A> ");
 	}
     if (!isGsid)
 	{
 	printf("       <A HREF=\"../cgi-bin/hgGateway%s\" class=\"topbar\">\n",
 	       uiState);
-    	puts("           Genomes</A> &nbsp;&nbsp;&nbsp;");
+    	puts("           Genomes</A> ");
     	}
     if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
 	endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgTrackUi") ||
@@ -328,13 +328,13 @@ else
 	{
         printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>\n",
 	       uiState,TRACK_SEARCH);
-	puts("           Genome Browser</A> &nbsp;&nbsp;&nbsp;");
+	puts("           Genome Browser</A> ");
 	}
     if (haveBlat && !endsWith(scriptName, "hgBlat"))
 	{
     	printf("       <A HREF=\"../cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">",
 		theCart ? "&" : "", uiState+1 );
-    	puts("           Blat</A> &nbsp;&nbsp;&nbsp;");
+    	puts("           Blat</A> ");
 	}
 }
     {
@@ -364,7 +364,7 @@ else
 	       uiState, theCart ? "&" : "?" );
     }
     /* disable TB for both GSID and CGB servers */
-    if (!isGsid && !hIsCgbServer()) puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
+    if (!isGsid && !hIsCgbServer()) puts("           Tables</A> ");
     if (!endsWith(scriptName, "hgNear"))
     /*  possible to make this conditional: if (db != NULL && hgNearOk(db))	*/
         if (db != NULL && hgNearOk(db))
@@ -373,32 +373,32 @@ else
 	    {
 	    printf("       <A HREF=\"../cgi-bin/gsidTable%s\" class=\"topbar\">\n",
 	           uiState);
-	    puts("           Table View</A> &nbsp;&nbsp;&nbsp;");
+	    puts("           Table View</A> ");
 	    }
 	else
 	    {
 	    printf("       <A HREF=\"../cgi-bin/hgNear%s\" class=\"topbar\">\n",
 	           uiState);
-	    puts("           Gene Sorter</A> &nbsp;&nbsp;&nbsp;");
+	    puts("           Gene Sorter</A> ");
 	    }
 	}
     if ((!endsWith(scriptName, "hgPcr")) && (db == NULL || hgPcrOk(db)))
 	{
 	printf("       <A HREF=\"../cgi-bin/hgPcr%s\" class=\"topbar\">\n",
 	       uiState);
-	puts("           PCR</A> &nbsp;&nbsp;&nbsp;");
+	puts("           PCR</A> ");
 	}
     if (endsWith(scriptName, "hgGenome"))
 	{
 	printf("       <A HREF=\"../cgi-bin/hgGenome%s&hgGenome_doPsOutput=on\" class=\"topbar\">\n",
 	       uiState);
-	puts("           PDF/PS</A> &nbsp;&nbsp;&nbsp;");
+	puts("           PDF/PS</A> ");
 	}
     if (endsWith(scriptName, "hgHeatmap"))
 	{
 	printf("       <A HREF=\"../cgi-bin/hgHeatmap%s&hgHeatmap_doPsOutput=on\" class=\"topbar\">\n",
 	       uiState);
-	puts("           PDF/PS</A> &nbsp;&nbsp;&nbsp;");
+	puts("           PDF/PS</A> ");
 	}
 #ifndef GBROWSE
     if (wikiLinkEnabled() && !endsWith(scriptName, "hgSession"))
@@ -406,11 +406,11 @@ else
 	printf("<A HREF=\"../cgi-bin/hgSession%s%shgS_doMainPage=1\" "
 	       "class=\"topbar\">Session</A>",
 	       uiState, theCart ? "&" : "?" );
-	puts("&nbsp;&nbsp;&nbsp;");
+	puts("");
 	}
 #endif /* GBROWSE */
     if (!isGsid) puts("       <A HREF=\"../FAQ/\" class=\"topbar\">" "\n"
-	 "           FAQ</A> &nbsp;&nbsp;&nbsp;" "\n"
+	 "           FAQ</A> " "\n"
 	 );
     if (!isGsid)
 	{
@@ -436,7 +436,7 @@ else
     	puts("           Help</A> ");
     	}
     }
-puts("&nbsp;</font></TD>" "\n"
+puts("</font></TD>" "\n"
      "       </TR></TABLE>" "\n"
      "</TD></TR></TABLE>" "\n"
      "</TD></TR>	" "\n"

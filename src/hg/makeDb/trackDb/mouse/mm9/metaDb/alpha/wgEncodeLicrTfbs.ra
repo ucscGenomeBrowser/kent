@@ -606,6 +606,162 @@ subId 3275
 tableName wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig
 view Signal
 
+metaObject wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody Pol2
+cell Cerebellum
+composite wgEncodeLicrTfbs
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-07
+dateUnrestricted 2011-12-07
+fileName wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdAlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 05/26/09 Lane 7
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3811
+view Alignments
+
+metaObject wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody Pol2
+cell Cerebellum
+composite wgEncodeLicrTfbs
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-07
+dateUnrestricted 2011-12-07
+fileName wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdAlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 12/23/09 Lane 1
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3811
+view Alignments
+
+metaObject wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody Pol2
+cell Cerebellum
+composite wgEncodeLicrTfbs
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-07
+dateUnrestricted 2011-12-07
+fileName wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3811
+tableName wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdPk
+view Peaks
+
+metaObject wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody Pol2
+cell Cerebellum
+composite wgEncodeLicrTfbs
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-07
+dateUnrestricted 2011-12-07
+fileName wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 05/26/09 Lane 7
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3811
+view RawData
+
+metaObject wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody Pol2
+cell Cerebellum
+composite wgEncodeLicrTfbs
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-07
+dateUnrestricted 2011-12-07
+fileName wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 12/23/09 Lane 1
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3811
+view RawData
+
+metaObject wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody Pol2
+cell Cerebellum
+composite wgEncodeLicrTfbs
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-07
+dateUnrestricted 2011-12-07
+fileName wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3811
+tableName wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdSig
+view Signal
+
 metaObject wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -1474,4 +1630,4 @@ strain C57BL/6
 subId 3005
 view RawData
 
-# MAGIC: 14783078
+# MAGIC: 159414582

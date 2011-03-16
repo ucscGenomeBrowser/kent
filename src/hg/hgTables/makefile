@@ -16,7 +16,7 @@ O = $A.o asFilter.o asObj.o bam.o bedList.o bigBed.o bigWig.o \
 
 include ../../inc/cgi_build_rules.mk
 
-rsyncDataOpts = --times --recursive --executability --omit-dir-times --cvs-exclude --delete
+rsyncDataOpts = --times --recursive --omit-dir-times --cvs-exclude --delete
 
 my::
 	rm -f ${CGI_BIN}-${USER}/all.joiner
