@@ -147,17 +147,6 @@ data to a gamma distribution to calculate p-values. Contiguous regions
 data to a gamma distribution to calculate p-values. Contiguous regions
 where p-values were below a 0.05/0.01 threshold were considered significant.
 </P>
-<P>A second method to identify discrete peak sites was also used. Enriched regions
-for FAIRE data were called using ZINBA (Zero Inflated Negative Binomial
-Algorithm). ZINBA is a flexible statistical method that uses a generalized
-linear model to select genomic windows with enriched sequence counts after
-adjusting for relevant confounding factors such as mapability, GC content,
-and copy number alterations. Significant regions are selected using the set
-of standardized residuals below a false discovery rate (qvalue) threshold.
-Peaks were further refined using a shape detection algorithm to identify
-local maxima and boundaries of the Signal (Base Overlap) within each
-significant region.
-</P>
 <P>Data from the high-resolution 1% ENCODE tiled microarrays supplied by
 NimbleGen were normalized using the Tukey biweight normalization, and peaks
 were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple levels
