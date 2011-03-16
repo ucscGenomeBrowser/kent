@@ -381,6 +381,9 @@ void doEncodePeak(struct trackDb *tdb, struct customTrack *ct);
 void doEncodeFiveC(struct sqlConnection *conn, struct trackDb *tdb);
 /* Print details for 5C track */
 
+void doPeptideMapping(struct sqlConnection *conn, struct trackDb *tdb, char *item);
+/* Print details for a peptideMapping track.  */
+
 void doHgdpGeo(struct trackDb *tdb, char *item);
 /* Show details page for HGDP SNP with population allele frequencies
  * plotted on a world map. */

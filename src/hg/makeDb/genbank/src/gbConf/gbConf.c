@@ -92,6 +92,9 @@ struct slName *dbs = NULL;
 cookie = hashFirst(dbSet);
 while ((hel = hashNext(&cookie)) != NULL)
     slSafeAddHead(&dbs, slNameNew(hel->name));
+#ifdef DUMP_HASH_STATS
+hashPrintStats(dbSet, "gbConfDbSet", stderr);
+#endif
 hashFree(&dbSet);
 slSort(&dbs, slNameCmp);
 return dbs;

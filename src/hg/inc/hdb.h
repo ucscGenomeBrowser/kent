@@ -418,9 +418,13 @@ boolean hHostHasPrefix(char *prefix);
 /* Return TRUE if this is running on web-server with host name prefix */
 
 boolean hIsPrivateHost(void);
-/* Return TRUE if this is running on private (development) web-server. 
+/* Return TRUE if this is running on private (development) web-server.
  * This was originally genome-test as well as hgwdev, however genome-test
  * may be repurposed to direct users to the preview site instead of development site. */
+
+boolean hIsBetaHost(void);
+/* Return TRUE if this is running on beta (QA) web-server.
+ * Use sparingly as behavior on beta should be as close to RR as possible. */
 
 boolean hIsPreviewHost(void);
 /* Return TRUE if this is running on preview web-server.  The preview
@@ -856,12 +860,5 @@ boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct cu
 
 char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table);
 /* Return file name from bigDataUrl or little table. */
-
-void printUpdateTime(char *database, struct trackDb *tdb,
-    struct customTrack *ct);
-/* display table update time, or in case of bbi file, file stat time */
-
-void printBbiUpdateTime(time_t *timep);
-/* for bbi files, print out the timep value */
 
 #endif /* HDB_H */

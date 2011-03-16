@@ -5,7 +5,8 @@ MYLIBS = ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
-    mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test
+    mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
+    tabixTest vcfTest
 	rm -r output fetchUrlTest
 	@echo tested all
 
@@ -166,7 +167,7 @@ base64Decode: ${BIN_DIR}/testBase64 mkdirs
 quotedPTests: quotedPEncode quotedPDecode
 
 ${BIN_DIR}/testQuotedP:  mkdirs testQuotedP.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/testQuotedP testQuotedP.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/testQuotedP testQuotedP.o ${MYLIBS} ${L}
 
 quotedPEncode: ${BIN_DIR}/testQuotedP mkdirs
 	${BIN_DIR}/testQuotedP 'taxes are quite high ' > output/$@.out
@@ -177,14 +178,14 @@ quotedPDecode: ${BIN_DIR}/testQuotedP mkdirs
 	diff expected/$@.out output/$@.out
 
 ${BIN_DIR}/mimeDecodeTest:  mkdirs mimeDecodeTest.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/mimeDecodeTest mimeDecodeTest.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/mimeDecodeTest mimeDecodeTest.o ${MYLIBS} ${L}
 
 mimeDecodeTest: ${BIN_DIR}/mimeDecodeTest mkdirs
 	${BIN_DIR}/mimeDecodeTest -cid -autoBoundary output < input/$@.txt
 	diff expected/noName1.html output/noName1.html
 
 ${BIN_DIR}/safeTester:  mkdirs safeTester.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/safeTester safeTester.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/safeTester safeTester.o ${MYLIBS} ${L}
 
 safeTest: ${BIN_DIR}/safeTester mkdirs
 	${BIN_DIR}/safeTester
@@ -234,7 +235,42 @@ gff3DiscontiousTest: ${gff3Tester} mkdirs
 
 ${BIN_DIR}/gff3Tester: gff3Tester.o ${MYLIBS}
 	${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} -o ${BIN_DIR}/gff3Tester gff3Tester.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/gff3Tester gff3Tester.o ${MYLIBS} ${L}
+
+
+# lineFile's tabix support:
+tabixTester=${BIN_DIR}/tabixFetch
+tabixTest: tabixFetch1kGNoGenotypes tabixFetch1kGWithGenotypes
+
+tabixFetch1kGNoGenotypes: ${tabixTester} mkdirs
+	${tabixTester} input/YRI.trio.2010_06.novelsequences.sites.vcf.gz 2:26790860-194631353 > output/$@.out
+	diff expected/$@.out output/$@.out
+
+tabixFetch1kGWithGenotypes: ${tabixTester} mkdirs
+	${tabixTester} input/YRI.low_coverage.2010_07_excerpt.genotypes.vcf.gz 2:26793738-26794385 > output/$@.out
+	diff expected/$@.out output/$@.out
+
+${BIN_DIR}/tabixFetch: tabixFetch.o ${MYLIBS}
+	${MKDIR} ${BIN_DIR}
+	${CC} ${COPT} -o ${BIN_DIR}/tabixFetch tabixFetch.o ${MYLIBS} ${L}
+
+
+# vcf:
+vcfTester=${BIN_DIR}/vcfParseTest
+vcfTest: vcfParse1kGNoGenotypes vcfParse1kGWithGenotypes
+
+vcfParse1kGNoGenotypes: ${vcfTester} mkdirs
+	${vcfTester} input/YRI.trio.2010_06.novelsequences.sites.vcf.gz 2 26790859 194631353 > output/$@.out
+	diff expected/$@.out output/$@.out
+
+vcfParse1kGWithGenotypes: ${vcfTester} mkdirs
+	${vcfTester} input/YRI.low_coverage.2010_07_excerpt.genotypes.vcf.gz 2 26793737 26794385 > output/$@.out
+	diff expected/$@.out output/$@.out
+
+${BIN_DIR}/vcfParseTest: vcfParseTest.o ${MYLIBS}
+	${MKDIR} ${BIN_DIR}
+	${CC} ${COPT} -o ${BIN_DIR}/vcfParseTest vcfParseTest.o ${MYLIBS} ${L}
+
 
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out fetchUrlTest

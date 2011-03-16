@@ -31,9 +31,10 @@ errAbort(
   "              separate lines and objects as a stanzas (-byVar prints pseudo-RA).\n"
   "    -line      Print each obj and all var=val pairs on a single line.\n"
   "    -count      Just print count of objects, variables and values selected.\n"
-  "    -validate    Validate mdb objects against cv.ra.  (Incompatible with -byVars; supercedes -ra, -line.)\n"
+  "    -validate    Validate mdb objects against cv.ra. (Incompatible with -byVars, -ra, -line.)\n"
   "    -validateFull like validate but considers vars not defined in cv as invalid.\n"
-  "    -specialHelp   Prints help for some special case features.\n"
+  "    -encodeExp     Validates groups of objs as experiments defined in hgFixed.encodeExp table.\n"
+  "    -specialHelp    Prints help for some special case features.\n"
   "  Four alternate ways to select metadata:\n"
   "    -all       Will print entire table (this could be huge).\n"
   "    -vars={var=val...}  Request a combination of var=val pairs.\n\n"
@@ -76,6 +77,7 @@ static struct optionSpec optionSpecs[] = {
     {"val",      OPTION_STRING}, // value
     {"validate", OPTION_BOOLEAN},// Validate vars and vals against cv.ra terms
     {"validateFull", OPTION_BOOLEAN},// Like validate but considers vars not defined in cv as invalid
+    {"encodeExp",OPTION_BOOLEAN},// Validate Experiments as defined in the hgFixed.encodeExp table
     {"vars",     OPTION_STRING},// var1=val1 var2=val2...
     {"updDb",    OPTION_STRING},// DB to update
     {"updMdb",   OPTION_STRING},// MDB table to update
@@ -348,6 +350,13 @@ if(optionExists("line") && !optionExists("ra"))
 boolean justCounts = (optionExists("count") || optionExists("counts"));
 boolean byVar      = optionExists("byVar");
 boolean validate   = (optionExists("validate") || optionExists("validateFull"));
+boolean encodeExp = optionExists("encodeExp");
+
+if ((validate || encodeExp) && (byVar || optionExists("line") || optionExists("ra")))
+    {
+    verbose(1, "Incompatible to combine validate or encodeExp option with 'byVar', 'line' or 'ra':\n");
+    usage();
+    }
 
 boolean all = optionExists("all");
 if(all)
@@ -358,23 +367,27 @@ if(all)
     }
 else if(optionExists("obj"))
     {
-    mdbObjs = mdbObjCreate(optionVal("obj",  NULL),optionVal("var", NULL), NULL,optionVal("val", NULL));
-    }
-else if(optionExists("var"))
-    {
-    mdbByVars = mdbByVarCreate(optionVal("var", NULL),NULL,optionVal("val", NULL));
-    if (optionExists("composite"))
-        mdbByVarAppend(mdbByVars,"composite", NULL,optionVal("composite", NULL),FALSE);
+    mdbObjs = mdbObjCreate(optionVal("obj",  NULL),optionVal("var", NULL), optionVal("val", NULL));
     }
 else if(optionExists("vars"))
     {
     mdbByVars = mdbByVarsLineParse(optionVal("vars", NULL));
     if (optionExists("composite"))
-        mdbByVarAppend(mdbByVars,"composite", NULL,optionVal("composite", NULL),FALSE);
+        mdbByVarAppend(mdbByVars,"composite", optionVal("composite", NULL),FALSE);
+    if (optionExists("var"))
+        mdbByVarAppend(mdbByVars,optionVal("var", NULL), optionVal("val", NULL),FALSE);
     }
 else if(optionExists("composite"))
     {
-    mdbByVars = mdbByVarCreate("composite", NULL,optionVal("composite", NULL));
+    mdbByVars = mdbByVarCreate("composite", optionVal("composite", NULL));
+    if (optionExists("var"))
+        mdbByVarAppend(mdbByVars,optionVal("var", NULL), optionVal("val", NULL),FALSE);
+    }
+else if(optionExists("var"))
+    {
+    mdbByVars = mdbByVarCreate(optionVal("var", NULL),optionVal("val", NULL));
+    if (optionExists("composite"))
+        mdbByVarAppend(mdbByVars,"composite", optionVal("composite", NULL),FALSE);
     }
 else
     usage();
@@ -446,6 +459,12 @@ else
                     errAbort("To print insert SQL statements, both 'expTbl' and 'expVars' must be defined.\n");
 
                 mdbObjPrintInsertToExperimentsTable(&queryResults,optionVal("expTbl",NULL),optionVal("expVars",NULL));
+                }
+            else if (encodeExp) // Organizes vars as experiments and validates expId values
+                {
+                struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,&queryResults,2); // 2=full experiments described
+                printf("%d of %d obj%s can have their experiment IDs updated now.\n",slCount(updatable),objsCnt,(objsCnt==1?"":"s"));
+                mdbObjsFree(&updatable);
                 }
             else if (validate) // Validate vars and vals against cv.ra
                 {

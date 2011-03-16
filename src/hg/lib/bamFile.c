@@ -12,8 +12,8 @@
 
 char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName)
 /* Return file name from table.  If table has a seqName column, then grab the 
- * row associated with bamSeqName (which is not nec. in chromInfo, e.g. 
- * bam file might have '1' not 'chr1'). */
+ * row associated with bamSeqName (which can be e.g. '1' not 'chr1' if that is the
+ * case in the bam file). */
 {
 boolean checkSeqName = (sqlFieldIndex(conn, table, "seqName") >= 0);
 if (checkSeqName && bamSeqName == NULL)
@@ -218,8 +218,7 @@ if (fh == NULL)
 		       ". If you are able to access the URL with your web browser, "
 		       "please try reloading this page.");
 	}
-    warn("failed to open %s%s", fileOrUrl, urlWarning->string);
-    return NULL;
+    errAbort("Failed to open %s%s", fileOrUrl, urlWarning->string);
     }
 return fh;
 }
@@ -811,7 +810,7 @@ warn(COMPILE_WITH_SAMTOOLS, "bamFileExists");
 return FALSE;
 }
 
-samfile_t *bamOpen(char *bamFileName)
+samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName)
 /* Return an open bam file, dealing with some FUSE caching if need be. */
 {
 errAbort(COMPILE_WITH_SAMTOOLS, "bamOpen");
@@ -844,7 +843,7 @@ errAbort(COMPILE_WITH_SAMTOOLS, "bamFetchSamAlignment");
 return NULL;
 }
 
-struct samAlignment *bamReadNextSamAlignments(struct samfile_t *fh, int count, struct lm *lm)
+struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, int count, struct lm *lm)
 /* Read next count alignments in SAM format, allocated in lm.  May return less than
  * count at end of file. */
 {

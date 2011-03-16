@@ -13,11 +13,11 @@ struct gbSelect;
 struct gbRelease
 /* Object that represents a single release.  These are created in an empty
  * state for every release directory found.  Most of the object is
- * uninitialized until data is load into it.  There are two pools of memory,
- * one for metadata, such as update and genome, and the other associated with
- * entries, which can be load and release to minimize the required memory.
- * The gbIgnore table is not strictly associated with a release, only a source
- * database.  However we manage it associated with a release object.
+ * uninitialized until data is load into it.  There is a memory pool of
+ * associated with entries, which can be load and released for each partition
+ * to minimize the required memory.  A pool of organism name is shared by
+ * entries.  The gbIgnore file is not strictly associated with a release, only
+ * a source database.  However we load entries on for one release.
  */
 {
     struct gbRelease* next;    /* next oldest release */
@@ -25,11 +25,10 @@ struct gbRelease
     char* name;                /* release/version: genbank.130.0 */
     char version[9];           /* version: 130.0 */
     struct gbIndex* index;     /* index we are associated with */
-    struct lm* metaMem;        /* memory for non-entry objects */
     struct gbUpdate* updates;  /* list of updates, oldest first */
     struct gbGenome* genome;   /* genome this release was loaded for */
     struct gbIgnore* ignore;   /* entries to ignore */
-    struct hash* entryStrs;    /* hashed string pool for entry objects */
+    struct hash* orgNames;     /* hashed string pool of organism names */
     struct hash* entryTbl;     /* table of gbEntry objects, indexed by acc,
                                 * local mem used for entry date */
     int numMRnas;              /* Number of mRNA entries. */
@@ -45,16 +44,12 @@ void gbReleaseUnload(struct gbRelease* release);
 void gbReleaseFree(struct gbRelease** relPtr);
 /* Free a gbRelease object */
 
-#define gbReleaseAllocMetaVar(release, ptrVar) \
-/* allocate and zero a struct associated with metadata. */ \
-    lmAllocVar(release->metaMem, ptrVar)
-
 #define gbReleaseAllocEntryVar(release, ptrVar) \
 /* allocate and zero a struct associated with entries. */ \
-    lmAllocVar(release->entryStrs->lm, ptrVar)
+    lmAllocVar(release->entryTbl->lm, ptrVar)
 
-char* gbReleaseAllocEntryStr(struct gbRelease* release, char* str);
-/* allocate a string for entry data from hashed memory pool */
+char* gbReleaseObtainOrgName(struct gbRelease* release, char* orgName);
+/* obtain an organism name from the string pool */
 
 struct gbUpdate* gbReleaseGetUpdate(struct gbRelease* release,
                                     char* updateName);

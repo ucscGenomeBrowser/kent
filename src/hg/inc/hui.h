@@ -5,6 +5,7 @@
 
 #include "cart.h"
 #include "trackDb.h"
+#include "customTrack.h"
 struct lineFile;
 
 void setUdcCacheDir();
@@ -1194,5 +1195,12 @@ boolean printPennantIconNote(struct trackDb *tdb);
 
 void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed);
 // Methods for putting up type specific cfgs used by composites/subtracks in hui.c and exported for common use
+
+void printUpdateTime(char *database, struct trackDb *tdb,
+    struct customTrack *ct);
+/* display table update time, or in case of bbi file, file stat time */
+
+void printBbiUpdateTime(time_t *timep);
+/* for bbi files, print out the timep value */
 
 #endif /* HUI_H */

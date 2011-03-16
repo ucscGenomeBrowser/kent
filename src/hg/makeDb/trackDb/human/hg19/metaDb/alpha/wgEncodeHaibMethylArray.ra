@@ -1,0 +1,1466 @@
+metaObject wgEncodeHaibMethylArray
+objType composite
+composite wgEncodeHaibMethylArray
+expVars lab,dataType,cell,treatment,obtainedBy
+
+metaObject wgEncodeHaibMethylArrayAg04449UwSitesRep2
+objType table
+cell AG04449
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayAg04449UwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayAg04449UwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayAg04450UwSitesRep2
+objType table
+cell AG04450
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayAg04450UwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayAg04450UwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayAg09309UwSitesRep2
+objType table
+cell AG09309
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayAg09309UwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayAg09309UwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayAg09319UwSitesRep2
+objType table
+cell AG09319
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayAg09319UwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayAg09319UwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayAg10803UwSitesRep2
+objType table
+cell AG10803
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayAg10803UwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayAg10803UwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcadiposeuhn00001BiochainSitesRep1
+objType table
+cell BC_Adipose_UHN00001
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcadiposeuhn00001BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcadiposeuhn00001BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcadrenalglandh12803nBiochainSitesRep1
+objType table
+cell BC_Adrenal_Gland_H12803N
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcadrenalglandh12803nBiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcadrenalglandh12803nBiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcbladder0111002BiochainSitesRep1
+objType table
+cell BC_Bladder_01-11002
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcbladder0111002BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcbladder0111002BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcbrainh11058nBiochainSitesRep1
+objType table
+cell BC_Brain_H11058N
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcbrainh11058nBiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcbrainh11058nBiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcbreast0203015BiochainSitesRep1
+objType table
+cell BC_Breast_02-03015
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcbreast0203015BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcbreast0203015BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBccolon0111002BiochainSitesRep1
+objType table
+cell BC_Colon_01-11002
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBccolon0111002BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBccolon0111002BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBccolonh12817nBiochainSitesRep1
+objType table
+cell BC_Colon_H12817N
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBccolonh12817nBiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBccolonh12817nBiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcesophagus0111002BiochainSitesRep1
+objType table
+cell BC_Esophagus_01-11002
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcesophagus0111002BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcesophagus0111002BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcesophagush12817nBiochainSitesRep1
+objType table
+cell BC_Esophagus_H12817N
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcesophagush12817nBiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcesophagush12817nBiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcjejunumh12817nBiochainSitesRep1
+objType table
+cell BC_Jejunum_H12817N
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcjejunumh12817nBiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcjejunumh12817nBiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBckidney0111002BiochainSitesRep1
+objType table
+cell BC_Kidney_01-11002
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBckidney0111002BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBckidney0111002BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBckidneyh12817nBiochainSitesRep1
+objType table
+cell BC_Kidney_H12817N
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBckidneyh12817nBiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBckidneyh12817nBiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcleftventriclen41BiochainSitesRep1
+objType table
+cell BC_Left_Ventricle_N41
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcleftventriclen41BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcleftventriclen41BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcleukocyteuhn00204BiochainSitesRep1
+objType table
+cell BC_Leukocyte_UHN00204
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcleukocyteuhn00204BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcleukocyteuhn00204BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcliver0111002BiochainSitesRep1
+objType table
+cell BC_Liver_01-11002
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcliver0111002BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcliver0111002BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBclung0111002BiochainSitesRep1
+objType table
+cell BC_Lung_01-11002
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBclung0111002BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBclung0111002BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBclungh12817nBiochainSitesRep1
+objType table
+cell BC_Lung_H12817N
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBclungh12817nBiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBclungh12817nBiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcpancreash12817nBiochainSitesRep1
+objType table
+cell BC_Pancreas_H12817N
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcpancreash12817nBiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcpancreash12817nBiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcpenish12817nBiochainSitesRep1
+objType table
+cell BC_Penis_H12817N
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcpenish12817nBiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcpenish12817nBiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcpericardiumh12529nBiochainSitesRep1
+objType table
+cell BC_Pericardium_H12529N
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcpericardiumh12529nBiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcpericardiumh12529nBiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcplacentauhn00189BiochainSitesRep1
+objType table
+cell BC_Placenta_UHN00189
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcplacentauhn00189BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcplacentauhn00189BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcprostateglandh12817nBiochainSitesRep1
+objType table
+cell BC_Prostate_Gland_H12817N
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcprostateglandh12817nBiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcprostateglandh12817nBiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcrectumn29BiochainSitesRep1
+objType table
+cell BC_Rectum_N29
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcrectumn29BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcrectumn29BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcskeletalmuscle0111002BiochainSitesRep1
+objType table
+cell BC_Skeletal_Muscle_01-11002
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcskeletalmuscle0111002BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcskeletalmuscle0111002BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcskeletalmuscleh12817nBiochainSitesRep1
+objType table
+cell BC_Skeletal_Muscle_H12817N
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcskeletalmuscleh12817nBiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcskeletalmuscleh12817nBiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcskin0111002BiochainSitesRep1
+objType table
+cell BC_Skin_01-11002
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcskin0111002BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcskin0111002BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayBcsmallintestine0111002BiochainSitesRep1
+objType table
+cell BC_Small_Intestine_01-11002
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayBcsmallintestine0111002BiochainSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy BioChain
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayBcsmallintestine0111002BiochainSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayCmkUwSitesRep2
+objType table
+cell CMK
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayCmkUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayCmkUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayGm12878SitesRep1
+objType table
+cell GM12878
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeHaibMethylArrayGm12878SitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3526
+tableName wgEncodeHaibMethylArrayGm12878SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayGm12878SitesRep2
+objType table
+cell GM12878
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeHaibMethylArrayGm12878SitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3526
+tableName wgEncodeHaibMethylArrayGm12878SitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayGm12891HaibSitesRep1
+objType table
+cell GM12891
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayGm12891HaibSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayGm12891HaibSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayGm12891HaibSitesRep2
+objType table
+cell GM12891
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayGm12891HaibSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayGm12891HaibSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayGm12892HaibSitesRep1
+objType table
+cell GM12892
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayGm12892HaibSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayGm12892HaibSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayGm12892HaibSitesRep2
+objType table
+cell GM12892
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayGm12892HaibSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayGm12892HaibSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayH1hescHaibSitesRep1
+objType table
+cell H1-hESC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayH1hescHaibSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3337
+tableName wgEncodeHaibMethylArrayH1hescHaibSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayH1hescHaibSitesRep2
+objType table
+cell H1-hESC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayH1hescHaibSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayH1hescHaibSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHaeUwSitesRep2
+objType table
+cell HAEpiC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHaeUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayHaeUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHcfUwSitesRep2
+objType table
+cell HCF
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHcfUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayHcfUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHcmUwSitesRep2
+objType table
+cell HCM
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHcmUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayHcmUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHcpeUwSitesRep2
+objType table
+cell HCPEpiC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHcpeUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayHcpeUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHeeUwSitesRep2
+objType table
+cell HEEpiC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHeeUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayHeeUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHek293YaleSitesRep2
+objType table
+cell HEK293
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHek293YaleSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy Yale
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayHek293YaleSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHepg2HaibSitesRep3
+objType table
+cell HepG2
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHepg2HaibSitesRep3.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 3
+subId 3337
+tableName wgEncodeHaibMethylArrayHepg2HaibSitesRep3
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHepg2HaibSitesRep4
+objType table
+cell HepG2
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHepg2HaibSitesRep4.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 4
+subId 3337
+tableName wgEncodeHaibMethylArrayHepg2HaibSitesRep4
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHepg2SitesRep1
+objType table
+cell HepG2
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeHaibMethylArrayHepg2SitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3526
+tableName wgEncodeHaibMethylArrayHepg2SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHepg2SitesRep2
+objType table
+cell HepG2
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeHaibMethylArrayHepg2SitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3526
+tableName wgEncodeHaibMethylArrayHepg2SitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHipeUwSitesRep2
+objType table
+cell HIPEpiC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHipeUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayHipeUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHmecUwSitesRep2
+objType table
+cell HMEC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHmecUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayHmecUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHnpceUwSitesRep2
+objType table
+cell HNPCEpiC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHnpceUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayHnpceUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHpaeUwSitesRep2
+objType table
+cell HPAEpiC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHpaeUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayHpaeUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHrceUwSitesRep2
+objType table
+cell HRCEpiC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHrceUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayHrceUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHreUwSitesRep2
+objType table
+cell HRE
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHreUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayHreUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayHrpeUwSitesRep2
+objType table
+cell HRPEpiC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayHrpeUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayHrpeUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayImr90UwSitesRep2
+objType table
+cell IMR90
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayImr90UwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayImr90UwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayJurkatUwSitesRep2
+objType table
+cell Jurkat
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayJurkatUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayJurkatUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayK562HaibSitesRep3
+objType table
+cell K562
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeHaibMethylArrayK562HaibSitesRep3.bed9.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 3
+subId 3189
+tableName wgEncodeHaibMethylArrayK562HaibSitesRep3
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayK562HaibSitesRep4
+objType table
+cell K562
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayK562HaibSitesRep4.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 4
+subId 3337
+tableName wgEncodeHaibMethylArrayK562HaibSitesRep4
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayK562SitesRep1
+objType table
+cell K562
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeHaibMethylArrayK562SitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3526
+tableName wgEncodeHaibMethylArrayK562SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayK562SitesRep2
+objType table
+cell K562
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-14
+dateUnrestricted 2011-11-14
+fileName wgEncodeHaibMethylArrayK562SitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3526
+tableName wgEncodeHaibMethylArrayK562SitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayMcf7DukeSitesRep2
+objType table
+cell MCF-7
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayMcf7DukeSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayMcf7DukeSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayNb4UwSitesRep2
+objType table
+cell NB4
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayNb4UwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayNb4UwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayNhaUwSitesRep2
+objType table
+cell NH-A
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayNhaUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayNhaUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayNhbeUwSitesRep2
+objType table
+cell NHBE
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayNhbeUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayNhbeUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayNhdfneoUwSitesRep2
+objType table
+cell NHDF-neo
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayNhdfneoUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayNhdfneoUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArrayRptecUwSitesRep2
+objType table
+cell RPTEC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArrayRptecUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArrayRptecUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArraySaecUwSitesRep2
+objType table
+cell SAEC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArraySaecUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArraySaecUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArraySkmcUwSitesRep2
+objType table
+cell SKMC
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArraySkmcUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArraySkmcUwSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylArraySknshraUwSitesRep2
+objType table
+cell SK-N-SH_RA
+composite wgEncodeHaibMethylArray
+dataType Methyl27
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeHaibMethylArraySknshraUwSitesRep2.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3337
+tableName wgEncodeHaibMethylArraySknshraUwSitesRep2
+treatment None
+view Sites
+
+# MAGIC: 109946813

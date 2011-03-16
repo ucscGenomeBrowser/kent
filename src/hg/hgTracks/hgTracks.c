@@ -38,6 +38,7 @@
 #include "bigBed.h"
 #include "bigWig.h"
 #include "bedCart.h"
+#include "udc.h"
 #include "customTrack.h"
 #include "trackHub.h"
 #include "hubConnect.h"
@@ -102,6 +103,7 @@ boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug
 int imagePixelHeight = 0;
 boolean dragZooming = TRUE;
 struct hash *oldVars = NULL;
+// #define NEW_JQUERY 1          // temporary define turn on to test new jQuery (1.5) and jQuery UI (1.8)
 
 boolean hideControls = FALSE;		/* Hide all controls? */
 boolean trackImgOnly = FALSE;           /* caller wants just the track image and track table html */
@@ -3500,7 +3502,7 @@ if (hgPcrOk(database))
 if (!psOutput)
     {
     hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\" class=\"topbar\">"
-        " %s </A>&nbsp;&nbsp;</TD>",  hgcNameAndSettings(),
+        "%s</A>&nbsp;&nbsp;</TD>",  hgcNameAndSettings(),
         winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
     }
 
@@ -4370,6 +4372,9 @@ if (psOutput != NULL)
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
 hPrintf("<input type='hidden' id='hgt.insideX' name='insideX' value='%d'>\n", insideX);
 hPrintf("<input type='hidden' id='hgt.revCmplDisp' name='revCmplDisp' value='%d'>\n", revCmplDisp);
+#ifdef NEW_JQUERY
+hPrintf("<input type='hidden' id='hgt.newJQuery' name='hgt.newJQuery' value='1'>\n");
+#endif
 if (!psOutput) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
@@ -5560,6 +5565,9 @@ if (hIsGisaidServer())
     }
 
 setUdcCacheDir();
+int timeout = cartUsualInt(cart, "udcTimeout", 300);
+if (udcCacheTimeout() < timeout)
+    udcSetCacheTimeout(timeout);
 
 initTl();
 measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
@@ -5586,8 +5594,12 @@ if(dragZooming)
     {
     jsIncludeFile("jquery.imgareaselect.js", NULL);
     jsIncludeFile("ajax.js", NULL);
+#ifdef NEW_JQUERY
+    webIncludeResourceFile("jquery.ui.autocomplete.css");
+#else
     webIncludeResourceFile("autocomplete.css");
     jsIncludeFile("jquery.autocomplete.js", NULL);
+#endif
     jsIncludeFile("autocomplete.js", NULL);
     }
 jsIncludeFile("hgTracks.js", NULL);
@@ -5604,7 +5616,9 @@ if(advancedJavascriptFeaturesEnabled(cart))
         webIncludeResourceFile("jquery.contextmenu.css");
         jsIncludeFile("jquery.contextmenu.js", NULL);
         webIncludeResourceFile("ui.dropdownchecklist.css");
+#ifndef NEW_JQUERY
         jsIncludeFile("ui.core.js", NULL);
+#endif
         jsIncludeFile("ui.dropdownchecklist.js", NULL);
         }
     }

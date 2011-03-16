@@ -33,6 +33,13 @@ shortLabel ENC DNA Methyl
 longLabel ENCODE DNA Methylation
 wgEncode 1
 
+track wgEncodeRbpSuper
+superTrack on
+group regulation
+shortLabel ENC RNA Binding
+longLabel ENCODE RNA Binding Proteins
+wgEncode 1
+
 track wgEncodeRnaSeqSuper
 superTrack on
 group expression

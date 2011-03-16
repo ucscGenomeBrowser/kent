@@ -9,7 +9,11 @@ ifdef LOWELAB
 endif
 
 user:
-	${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}
+	if test -d ${DOCUMENTROOT}-${USER}; then \
+	    ${MAKE} doInstall DEST=${DOCUMENTROOT}-${USER}/js/${USER}; \
+	else \
+	    ${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}; \
+	fi
 
 alpha:
 	${GITUP}
@@ -28,4 +32,4 @@ install:
 
 doInstall:
 	@mkdir -p ${DEST}/
-	./cpJsFiles.pl -exclude='makefile' -destDir=${DEST} ${JS_FILES}
+	../utils/cpAndLinkToResourceFiles.pl -exclude='makefile' -versionFile=../inc/versionInfo.h -destDir=${DEST} ${JS_FILES}

@@ -17,6 +17,7 @@
 #include "cheapcgi.h"
 #include "https.h"
 #include "sqlNum.h"
+#include <utime.h>
 
 static char const rcsid[] = "$Id: net.c,v 1.80 2010/04/14 07:42:06 galt Exp $";
 
@@ -933,13 +934,13 @@ static int netGetOpenHttp(char *url)
 return netOpenHttpExt(url, "GET", NULL);
 }
 
-int netUrlHead(char *url, struct hash *hash)
+int netUrlHeadExt(char *url, char *method, struct hash *hash)
 /* Go get head and return status.  Return negative number if
  * can't get head. If hash is non-null, fill it with header
  * lines with upper cased keywords for case-insensitive lookup, 
  * including hopefully CONTENT-TYPE: . */
 {
-int sd = netOpenHttpExt(url, "HEAD", NULL);
+int sd = netOpenHttpExt(url, method, NULL);
 int status = EIO;
 if (sd >= 0)
     {
@@ -974,6 +975,44 @@ else
     status = errno;
 return status;
 }
+
+
+int netUrlHead(char *url, struct hash *hash)
+/* Go get head and return status.  Return negative number if
+ * can't get head. If hash is non-null, fill it with header
+ * lines with upper cased keywords for case-insensitive lookup, 
+ * including hopefully CONTENT-TYPE: . */
+{
+return netUrlHeadExt(url, "HEAD", hash);
+}
+
+
+long long netUrlSizeByRangeResponse(char *url)
+/* Use byteRange as a work-around alternate method to get file size (content-length).  
+ * Return negative number if can't get. */
+{
+long long retVal = -1;
+char rangeUrl[2048];
+safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=0-0", url);
+struct hash *hash = newHash(0);
+int status = netUrlHeadExt(rangeUrl, "GET", hash);
+if (status == 206)
+    { 
+    char *rangeString = hashFindValUpperCase(hash, "Content-Range:");
+    if (rangeString)
+	{
+ 	/* input pattern: Content-Range: bytes 0-99/2738262 */
+	char *slash = strchr(rangeString,'/');
+	if (slash)
+	    {
+	    retVal = atoll(slash+1);
+	    }
+	}
+    }
+hashFree(&hash);
+return retVal;
+}
+
 
 int netUrlOpenSockets(char *url, int *retCtrlSocket)
 /* Return socket descriptor (low-level file handle) for read()ing url data,
@@ -1659,7 +1698,7 @@ while (TRUE)
 		int newSd = 0;
 		if (startsWith("http://",url) || startsWith("https://",url))
 		    {
-		    if (!netSkipHttpHeaderLinesHandlingRedirect(pc->sd, url, &newSd, &newUrl))
+		    if (!netSkipHttpHeaderLinesHandlingRedirect(pc->sd, urlExt, &newSd, &newUrl))
 			{
 			warn("Error processing http response for %s", url);
 			return FALSE;
@@ -1818,6 +1857,43 @@ close(out);
 
 /* delete the status file - by passing TRUE */
 writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, TRUE);  // DEBUG RESTORE!!
+
+/* restore original file datestamp mtime from last-modified header */
+struct tm tm;
+// Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
+// These strings are always GMT
+if (strptime(dateString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
+    {
+    warn("unable to parse last-modified string [%s]", dateString);
+    }
+else
+    {
+    time_t t;
+    // convert to UTC (GMT) time
+    t = mktimeFromUtc(&tm);
+    if (t == -1)
+	{
+	warn("mktimeFromUtc failed while converting last-modified string to UTC [%s]", dateString);
+	}
+    else
+	{
+	// update the file mtime
+	struct utimbuf ut;
+	struct stat mystat;
+	ZeroVar(&mystat);
+	if (stat(outTemp,&mystat)==0)
+	    {
+	    ut.actime = mystat.st_atime;
+	    ut.modtime = t;
+	    if (utime(outTemp, &ut)==-1)
+		{
+		char errMsg[256];
+                safef(errMsg, sizeof(errMsg), "paraFetch: error setting modification time of %s to %s\n", outTemp, dateString);
+		perror(errMsg);
+		}
+	    }
+	}
+    }
 
 /* rename the successful download to the original name */
 rename(outTemp, origPath);

@@ -1,3 +1,8 @@
+metaObject wgEncodeOpenChromDnase
+objType composite
+composite wgEncodeOpenChromDnase
+expVars lab,dataType,cell,treatment
+
 metaObject wgEncodeOpenChromDnase8988tAlnRep1
 objType file
 cell 8988T
@@ -12,6 +17,7 @@ fileName wgEncodeOpenChromDnase8988tAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromDnase8988tAlnRep1
 project wgEncode
 replicate 1
@@ -32,6 +38,7 @@ fileName wgEncodeOpenChromDnase8988tAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromDnase8988tAlnRep2
 project wgEncode
 replicate 2
@@ -51,6 +58,7 @@ fileName wgEncodeOpenChromDnase8988tBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2786
 tableName wgEncodeOpenChromDnase8988tBaseOverlapSignal
@@ -69,6 +77,7 @@ fileName wgEncodeOpenChromDnase8988tPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 2786
 tableName wgEncodeOpenChromDnase8988tPk
@@ -86,6 +95,7 @@ dateUnrestricted 2011-08-01
 fileName wgEncodeOpenChromDnase8988tRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 parentTable wgEncodeOpenChromDnase8988tRawSignalRep1
 project wgEncode
 replicate 1
@@ -104,6 +114,7 @@ dateUnrestricted 2011-08-01
 fileName wgEncodeOpenChromDnase8988tRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 parentTable wgEncodeOpenChromDnase8988tRawSignalRep2
 project wgEncode
 replicate 2
@@ -123,6 +134,7 @@ fileName wgEncodeOpenChromDnase8988tSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 project wgEncode
 subId 2786
 tableName wgEncodeOpenChromDnase8988tSig
@@ -142,6 +154,7 @@ fileName wgEncodeOpenChromDnaseA549AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2493
@@ -161,6 +174,7 @@ fileName wgEncodeOpenChromDnaseA549AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2493
@@ -179,6 +193,7 @@ fileName wgEncodeOpenChromDnaseA549BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2493
 tableName wgEncodeOpenChromDnaseA549BaseOverlapSignal
@@ -197,6 +212,7 @@ fileName wgEncodeOpenChromDnaseA549Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 2493
 tableName wgEncodeOpenChromDnaseA549Pk
@@ -214,6 +230,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseA549RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2493
@@ -231,6 +248,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseA549RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2493
@@ -249,6 +267,7 @@ fileName wgEncodeOpenChromDnaseA549Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+origAssembly hg19
 project wgEncode
 subId 2493
 tableName wgEncodeOpenChromDnaseA549Sig
@@ -523,6 +542,7 @@ fileName wgEncodeOpenChromDnaseCllAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromDnaseCllAlnRep1
 privacy noSequence
 project wgEncode
@@ -544,6 +564,7 @@ fileName wgEncodeOpenChromDnaseCllAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromDnaseCllAlnRep2
 privacy noSequence
 project wgEncode
@@ -565,6 +586,7 @@ fileName wgEncodeOpenChromDnaseCllAlnRep3.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromDnaseCllAlnRep3
 privacy noSequence
 project wgEncode
@@ -585,6 +607,7 @@ fileName wgEncodeOpenChromDnaseCllBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 privacy noSequence
 project wgEncode
 subId 2787
@@ -604,6 +627,7 @@ fileName wgEncodeOpenChromDnaseCllPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 privacy noSequence
 project wgEncode
 subId 2787
@@ -623,6 +647,7 @@ fileName wgEncodeOpenChromDnaseCllSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 privacy noSequence
 project wgEncode
 subId 2787
@@ -890,6 +915,7 @@ fileName wgEncodeOpenChromDnaseGlioblaAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromDnaseGlioblaAlnRep1
 project wgEncode
 replicate 1
@@ -910,6 +936,7 @@ fileName wgEncodeOpenChromDnaseGlioblaAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromDnaseGlioblaAlnRep2
 project wgEncode
 replicate 2
@@ -929,6 +956,7 @@ fileName wgEncodeOpenChromDnaseGlioblaBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2514
 tableName wgEncodeOpenChromDnaseGlioblaBaseOverlapSignal
@@ -947,6 +975,7 @@ fileName wgEncodeOpenChromDnaseGlioblaPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 2514
 tableName wgEncodeOpenChromDnaseGlioblaPk
@@ -964,6 +993,7 @@ dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromDnaseGlioblaRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 parentTable wgEncodeOpenChromDnaseGlioblaRawSignalRep1
 project wgEncode
 replicate 1
@@ -982,6 +1012,7 @@ dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromDnaseGlioblaRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 parentTable wgEncodeOpenChromDnaseGlioblaRawSignalRep2
 project wgEncode
 replicate 2
@@ -1001,6 +1032,7 @@ fileName wgEncodeOpenChromDnaseGlioblaSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_H54
+origAssembly hg19
 project wgEncode
 subId 2514
 tableName wgEncodeOpenChromDnaseGlioblaSig
@@ -2804,6 +2836,7 @@ fileName wgEncodeOpenChromDnaseHepatocytesAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1, input was generic_female (should have been male)
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3063
@@ -2823,6 +2856,7 @@ fileName wgEncodeOpenChromDnaseHepatocytesAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1, input was generic_female (should have been male)
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3063
@@ -2841,6 +2875,7 @@ fileName wgEncodeOpenChromDnaseHepatocytesBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1, input was generic_female (should have been male)
+origAssembly hg19
 project wgEncode
 subId 3063
 tableName wgEncodeOpenChromDnaseHepatocytesBaseOverlapSignal
@@ -2859,6 +2894,7 @@ fileName wgEncodeOpenChromDnaseHepatocytesPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05, input was generic_female (should have been male)
+origAssembly hg19
 project wgEncode
 subId 3063
 tableName wgEncodeOpenChromDnaseHepatocytesPk
@@ -2877,6 +2913,7 @@ fileName wgEncodeOpenChromDnaseHepatocytesRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
 labVersion aligned to female and input was generic_female (should have been male)
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3063
@@ -2895,6 +2932,7 @@ fileName wgEncodeOpenChromDnaseHepatocytesRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
 labVersion aligned to female and input was generic_female (should have been male)
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3063
@@ -2913,6 +2951,7 @@ fileName wgEncodeOpenChromDnaseHepatocytesSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female (should have been male)
+origAssembly hg19
 project wgEncode
 subId 3063
 tableName wgEncodeOpenChromDnaseHepatocytesSig
@@ -3118,6 +3157,7 @@ fileName wgEncodeOpenChromDnaseHmecAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromDnaseHmecAlnRep1
 privacy noSequence
 project wgEncode
@@ -3139,6 +3179,7 @@ fileName wgEncodeOpenChromDnaseHmecAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromDnaseHmecAlnRep2
 privacy noSequence
 project wgEncode
@@ -3159,6 +3200,7 @@ fileName wgEncodeOpenChromDnaseHmecBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 privacy noSequence
 project wgEncode
 subId 2764
@@ -3178,6 +3220,7 @@ fileName wgEncodeOpenChromDnaseHmecPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 privacy noSequence
 project wgEncode
 subId 2764
@@ -3197,6 +3240,7 @@ fileName wgEncodeOpenChromDnaseHmecSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 privacy noSequence
 project wgEncode
 subId 2764
@@ -3217,6 +3261,7 @@ fileName wgEncodeOpenChromDnaseHpde6e6e7AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3064
@@ -3236,6 +3281,7 @@ fileName wgEncodeOpenChromDnaseHpde6e6e7AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3064
@@ -3254,6 +3300,7 @@ fileName wgEncodeOpenChromDnaseHpde6e6e7BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 3064
 tableName wgEncodeOpenChromDnaseHpde6e6e7BaseOverlapSignal
@@ -3272,6 +3319,7 @@ fileName wgEncodeOpenChromDnaseHpde6e6e7Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 3064
 tableName wgEncodeOpenChromDnaseHpde6e6e7Pk
@@ -3289,6 +3337,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseHpde6e6e7RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3064
@@ -3306,6 +3355,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseHpde6e6e7RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3064
@@ -3324,6 +3374,7 @@ fileName wgEncodeOpenChromDnaseHpde6e6e7Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 project wgEncode
 subId 3064
 tableName wgEncodeOpenChromDnaseHpde6e6e7Sig
@@ -3613,6 +3664,7 @@ fileName wgEncodeOpenChromDnaseHtr8AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromDnaseHtr8AlnRep1
 project wgEncode
 replicate 1
@@ -3633,6 +3685,7 @@ fileName wgEncodeOpenChromDnaseHtr8AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromDnaseHtr8AlnRep2
 project wgEncode
 replicate 2
@@ -3652,6 +3705,7 @@ fileName wgEncodeOpenChromDnaseHtr8BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2793
 tableName wgEncodeOpenChromDnaseHtr8BaseOverlapSignal
@@ -3670,6 +3724,7 @@ fileName wgEncodeOpenChromDnaseHtr8Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 2793
 tableName wgEncodeOpenChromDnaseHtr8Pk
@@ -3687,6 +3742,7 @@ dateUnrestricted 2011-08-02
 fileName wgEncodeOpenChromDnaseHtr8RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 parentTable wgEncodeOpenChromDnaseHtr8RawSignalRep1
 project wgEncode
 replicate 1
@@ -3705,6 +3761,7 @@ dateUnrestricted 2011-08-02
 fileName wgEncodeOpenChromDnaseHtr8RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 parentTable wgEncodeOpenChromDnaseHtr8RawSignalRep2
 project wgEncode
 replicate 2
@@ -3724,6 +3781,7 @@ fileName wgEncodeOpenChromDnaseHtr8Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 project wgEncode
 subId 2793
 tableName wgEncodeOpenChromDnaseHtr8Sig
@@ -3743,6 +3801,7 @@ fileName wgEncodeOpenChromDnaseHuh75AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3076
@@ -3762,6 +3821,7 @@ fileName wgEncodeOpenChromDnaseHuh75AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3076
@@ -3780,6 +3840,7 @@ fileName wgEncodeOpenChromDnaseHuh75BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 3076
 tableName wgEncodeOpenChromDnaseHuh75BaseOverlapSignal
@@ -3798,6 +3859,7 @@ fileName wgEncodeOpenChromDnaseHuh75Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 3076
 tableName wgEncodeOpenChromDnaseHuh75Pk
@@ -3815,6 +3877,7 @@ dateUnrestricted 2011-09-07
 fileName wgEncodeOpenChromDnaseHuh75RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3076
@@ -3832,6 +3895,7 @@ dateUnrestricted 2011-09-07
 fileName wgEncodeOpenChromDnaseHuh75RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3076
@@ -3850,6 +3914,7 @@ fileName wgEncodeOpenChromDnaseHuh75Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+origAssembly hg19
 project wgEncode
 subId 3076
 tableName wgEncodeOpenChromDnaseHuh75Sig
@@ -3869,6 +3934,7 @@ fileName wgEncodeOpenChromDnaseHuh7AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3075
@@ -3888,6 +3954,7 @@ fileName wgEncodeOpenChromDnaseHuh7AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3075
@@ -3906,6 +3973,7 @@ fileName wgEncodeOpenChromDnaseHuh7BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 3075
 tableName wgEncodeOpenChromDnaseHuh7BaseOverlapSignal
@@ -3924,6 +3992,7 @@ fileName wgEncodeOpenChromDnaseHuh7Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 3075
 tableName wgEncodeOpenChromDnaseHuh7Pk
@@ -3941,6 +4010,7 @@ dateUnrestricted 2011-09-07
 fileName wgEncodeOpenChromDnaseHuh7RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3075
@@ -3958,6 +4028,7 @@ dateUnrestricted 2011-09-07
 fileName wgEncodeOpenChromDnaseHuh7RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3075
@@ -3976,6 +4047,7 @@ fileName wgEncodeOpenChromDnaseHuh7Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+origAssembly hg19
 project wgEncode
 subId 3075
 tableName wgEncodeOpenChromDnaseHuh7Sig
@@ -4138,6 +4210,7 @@ fileName wgEncodeOpenChromDnaseIpsAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 privacy noSequence
 project wgEncode
 replicate 1
@@ -4158,6 +4231,7 @@ fileName wgEncodeOpenChromDnaseIpsAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 privacy noSequence
 project wgEncode
 replicate 2
@@ -4178,6 +4252,7 @@ fileName wgEncodeOpenChromDnaseIpsAlnRep3.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 privacy noSequence
 project wgEncode
 replicate 3
@@ -4197,6 +4272,7 @@ fileName wgEncodeOpenChromDnaseIpsBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 privacy noSequence
 project wgEncode
 subId 3065
@@ -4216,6 +4292,7 @@ fileName wgEncodeOpenChromDnaseIpsPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 privacy noSequence
 project wgEncode
 subId 3065
@@ -4235,6 +4312,7 @@ fileName wgEncodeOpenChromDnaseIpsSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+origAssembly hg19
 privacy noSequence
 project wgEncode
 subId 3065
@@ -4400,6 +4478,7 @@ fileName wgEncodeOpenChromDnaseLncapAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2482
@@ -4419,6 +4498,7 @@ fileName wgEncodeOpenChromDnaseLncapAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2482
@@ -4438,6 +4518,7 @@ fileName wgEncodeOpenChromDnaseLncapAlnRep3.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 2482
@@ -4457,6 +4538,7 @@ fileName wgEncodeOpenChromDnaseLncapAndroAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2492
@@ -4477,6 +4559,7 @@ fileName wgEncodeOpenChromDnaseLncapAndroAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2492
@@ -4496,6 +4579,7 @@ fileName wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2492
 tableName wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal
@@ -4515,6 +4599,7 @@ fileName wgEncodeOpenChromDnaseLncapAndroPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 2492
 tableName wgEncodeOpenChromDnaseLncapAndroPk
@@ -4533,6 +4618,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapAndroRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2492
@@ -4551,6 +4637,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapAndroRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2492
@@ -4570,6 +4657,7 @@ fileName wgEncodeOpenChromDnaseLncapAndroSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+origAssembly hg19
 project wgEncode
 subId 2492
 tableName wgEncodeOpenChromDnaseLncapAndroSig
@@ -4589,6 +4677,7 @@ fileName wgEncodeOpenChromDnaseLncapBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2482
 tableName wgEncodeOpenChromDnaseLncapBaseOverlapSignal
@@ -4607,6 +4696,7 @@ fileName wgEncodeOpenChromDnaseLncapPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 2482
 tableName wgEncodeOpenChromDnaseLncapPk
@@ -4624,6 +4714,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2482
@@ -4641,6 +4732,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2482
@@ -4658,6 +4750,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 2482
@@ -4676,6 +4769,7 @@ fileName wgEncodeOpenChromDnaseLncapSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+origAssembly hg19
 project wgEncode
 subId 2482
 tableName wgEncodeOpenChromDnaseLncapSig
@@ -5376,6 +5470,7 @@ fileName wgEncodeOpenChromDnaseOsteoblAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2506
@@ -5395,6 +5490,7 @@ fileName wgEncodeOpenChromDnaseOsteoblAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2506
@@ -5414,6 +5510,7 @@ fileName wgEncodeOpenChromDnaseOsteoblAlnRep3.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 2506
@@ -5432,6 +5529,7 @@ fileName wgEncodeOpenChromDnaseOsteoblBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2506
 tableName wgEncodeOpenChromDnaseOsteoblBaseOverlapSignal
@@ -5450,6 +5548,7 @@ fileName wgEncodeOpenChromDnaseOsteoblPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 2506
 tableName wgEncodeOpenChromDnaseOsteoblPk
@@ -5467,6 +5566,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromDnaseOsteoblRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2506
@@ -5484,6 +5584,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromDnaseOsteoblRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2506
@@ -5501,6 +5602,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromDnaseOsteoblRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 2506
@@ -5519,6 +5621,7 @@ fileName wgEncodeOpenChromDnaseOsteoblSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 project wgEncode
 subId 2506
 tableName wgEncodeOpenChromDnaseOsteoblSig
@@ -5799,6 +5902,7 @@ fileName wgEncodeOpenChromDnasePhteAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 privacy noSequence
 project wgEncode
 replicate 1
@@ -5819,6 +5923,7 @@ fileName wgEncodeOpenChromDnasePhteAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 privacy noSequence
 project wgEncode
 replicate 2
@@ -5838,6 +5943,7 @@ fileName wgEncodeOpenChromDnasePhteBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 privacy noSequence
 project wgEncode
 subId 2513
@@ -5857,6 +5963,7 @@ fileName wgEncodeOpenChromDnasePhtePk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 privacy noSequence
 project wgEncode
 subId 2513
@@ -5876,6 +5983,7 @@ fileName wgEncodeOpenChromDnasePhteSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+origAssembly hg19
 privacy noSequence
 project wgEncode
 subId 2513
@@ -6008,6 +6116,7 @@ fileName wgEncodeOpenChromDnaseStellateAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3077
@@ -6027,6 +6136,7 @@ fileName wgEncodeOpenChromDnaseStellateAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3077
@@ -6045,6 +6155,7 @@ fileName wgEncodeOpenChromDnaseStellateBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 3077
 tableName wgEncodeOpenChromDnaseStellateBaseOverlapSignal
@@ -6063,6 +6174,7 @@ fileName wgEncodeOpenChromDnaseStellatePk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 3077
 tableName wgEncodeOpenChromDnaseStellatePk
@@ -6080,6 +6192,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseStellateRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3077
@@ -6097,6 +6210,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseStellateRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3077
@@ -6115,6 +6229,7 @@ fileName wgEncodeOpenChromDnaseStellateSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 project wgEncode
 subId 3077
 tableName wgEncodeOpenChromDnaseStellateSig
@@ -6134,6 +6249,7 @@ fileName wgEncodeOpenChromDnaseT47dAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3078
@@ -6153,6 +6269,7 @@ fileName wgEncodeOpenChromDnaseT47dAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3078
@@ -6171,6 +6288,7 @@ fileName wgEncodeOpenChromDnaseT47dBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 3078
 tableName wgEncodeOpenChromDnaseT47dBaseOverlapSignal
@@ -6189,6 +6307,7 @@ fileName wgEncodeOpenChromDnaseT47dPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 3078
 tableName wgEncodeOpenChromDnaseT47dPk
@@ -6206,6 +6325,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseT47dRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3078
@@ -6223,6 +6343,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseT47dRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3078
@@ -6241,6 +6362,7 @@ fileName wgEncodeOpenChromDnaseT47dSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 project wgEncode
 subId 3078
 tableName wgEncodeOpenChromDnaseT47dSig
@@ -6260,6 +6382,7 @@ fileName wgEncodeOpenChromDnaseUrotsaAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3217
@@ -6279,6 +6402,7 @@ fileName wgEncodeOpenChromDnaseUrotsaAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3217
@@ -6297,6 +6421,7 @@ fileName wgEncodeOpenChromDnaseUrotsaBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 3217
 tableName wgEncodeOpenChromDnaseUrotsaBaseOverlapSignal
@@ -6315,6 +6440,7 @@ fileName wgEncodeOpenChromDnaseUrotsaPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 3217
 tableName wgEncodeOpenChromDnaseUrotsaPk
@@ -6332,6 +6458,7 @@ dateUnrestricted 2011-10-11
 fileName wgEncodeOpenChromDnaseUrotsaRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3217
@@ -6349,6 +6476,7 @@ dateUnrestricted 2011-10-11
 fileName wgEncodeOpenChromDnaseUrotsaRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3217
@@ -6367,6 +6495,7 @@ fileName wgEncodeOpenChromDnaseUrotsaSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 project wgEncode
 subId 3217
 tableName wgEncodeOpenChromDnaseUrotsaSig
@@ -6386,6 +6515,7 @@ fileName wgEncodeOpenChromDnaseUrotsaUt189AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3218
@@ -6406,6 +6536,7 @@ fileName wgEncodeOpenChromDnaseUrotsaUt189AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3218
@@ -6425,6 +6556,7 @@ fileName wgEncodeOpenChromDnaseUrotsaUt189BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 3218
 tableName wgEncodeOpenChromDnaseUrotsaUt189BaseOverlapSignal
@@ -6444,6 +6576,7 @@ fileName wgEncodeOpenChromDnaseUrotsaUt189Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 subId 3218
 tableName wgEncodeOpenChromDnaseUrotsaUt189Pk
@@ -6462,6 +6595,7 @@ dateUnrestricted 2011-10-11
 fileName wgEncodeOpenChromDnaseUrotsaUt189RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3218
@@ -6480,6 +6614,7 @@ dateUnrestricted 2011-10-11
 fileName wgEncodeOpenChromDnaseUrotsaUt189RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3218
@@ -6499,10 +6634,11 @@ fileName wgEncodeOpenChromDnaseUrotsaUt189Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 project wgEncode
 subId 3218
 tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 338833007
+# MAGIC: 1448392362

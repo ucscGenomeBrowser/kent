@@ -17,13 +17,10 @@
 static char const rcsid[] = "$Id: gbRelease.c,v 1.5 2007/11/16 18:19:50 markd Exp $";
 
 /* size power of hash tables for shared strings */
-#define STR_MEM_HASH_SIZE   24
+#define ORG_NAMES_HASH_SIZE   19
 
 /* size power of hash for entries */
-#define ACC_HASH_SIZE       24
-
-/* Size for unhash local memory block */
-#define LM_BLOCK_SIZE       1048576
+#define ACC_HASH_SIZE       22
 
 static void getUpdates(struct gbRelease* release, char* updateGlob, struct slName** head)
 /* Search for update directories, adding to list. If a update is not
@@ -53,9 +50,8 @@ struct gbRelease* release;
 char *dot;
 struct slName* updates = NULL, *upd;
 AllocVar(release); /* zeros struct */
-release->metaMem = lmInit(LM_BLOCK_SIZE);
 release->srcDb = srcDb;
-release->name = lmCloneString(release->metaMem, name);
+release->name = cloneString(name);
 release->index = index;
 release->genome = index->genome;
 
@@ -80,7 +76,7 @@ return release;
 static void entryInit(struct gbRelease* release)
 /* initialized entry memory in an object */
 {
-release->entryStrs = hashNew(STR_MEM_HASH_SIZE);
+release->orgNames = hashNew(ORG_NAMES_HASH_SIZE);
 release->entryTbl = hashNew(ACC_HASH_SIZE);
 release->ignore = gbIgnoreNew(release);
 }
@@ -107,8 +103,14 @@ void gbReleaseUnload(struct gbRelease* release)
 struct gbUpdate* update;
 for (update = release->updates; update != NULL; update = update->next)
     clearUpdate(update);
+#ifdef DUMP_HASH_STATS
+if (release->orgNames != NULL)
+    hashPrintStats(release->orgNames, "orgNames", stderr);
+if (release->entryTbl != NULL)
+    hashPrintStats(release->entryTbl, "releaseEntries", stderr);
+#endif
 gbIgnoreFree(&release->ignore);
-hashFree(&release->entryStrs);
+hashFree(&release->orgNames);
 hashFree(&release->entryTbl);
 }
 
@@ -118,20 +120,27 @@ void gbReleaseFree(struct gbRelease** relPtr)
 struct gbRelease* release = *relPtr;
 if (release != NULL)
     {
-    hashFree(&release->entryStrs);
+    struct gbUpdate *update;
+    while ((update = slPopHead(&release->updates)) != NULL)
+        gbUpdateFree(&update);
+#ifdef DUMP_HASH_STATS
+    if (release->orgNames != NULL)
+        hashPrintStats(release->orgNames, "orgNames", stderr);
+    if (release->entryTbl != NULL)
+        hashPrintStats(release->entryTbl, "releaseEntries", stderr);
+#endif
+    hashFree(&release->orgNames);
     hashFree(&release->entryTbl);
-    lmCleanup(&release->metaMem);
+    freeMem(release->name);
     free(release);
     *relPtr = NULL;
     }
 }
 
-char* gbReleaseAllocEntryStr(struct gbRelease* release, char* str)
-/* allocate a string for entry data from hashed memory pool */
+char* gbReleaseObtainOrgName(struct gbRelease* release, char* orgName)
+/* obtain an organism name from the string pool */
 {
-struct hashEl* hashEl = hashLookup(release->entryTbl, str);
-if (hashEl == NULL)
-    hashEl = hashAdd(release->entryStrs, str, NULL);
+struct hashEl* hashEl = hashStore(release->orgNames, orgName);
 return hashEl->name;
 }
 
@@ -337,6 +346,9 @@ while ((hel = hashNext(&cookie)) != NULL)
     slSafeAddHead(&prefixes, newSlName(hel->name));
 if (prefixes != NULL)
     slNameSort(&prefixes);
+#ifdef DUMP_HASH_STATS
+hashPrintStats(prefixHash, "prefix", stderr);
+#endif
 hashFree(&prefixHash);
 return prefixes;
 
@@ -365,7 +377,7 @@ void gbReleaseLoadIgnore(struct gbRelease* release)
  * methods is called.
  */
 {
-if (release->entryStrs == NULL)
+if (release->entryTbl == NULL)
     entryInit(release);
 assert(release->ignore != NULL);
 }
@@ -375,7 +387,7 @@ void gbReleaseLoadProcessed(struct gbSelect* select)
 {
 /* FIXME: maybe we can load just select index sometimes */
 struct gbUpdate* saveUpdate = select->update;
-if (select->release->entryStrs == NULL)
+if (select->release->entryTbl == NULL)
     entryInit(select->release);
 
 /* load indices for all updates, meeting other criteria */
@@ -389,7 +401,7 @@ void gbReleaseLoadAligned(struct gbSelect* select)
 /* load index files from an aligned directory. */
 {
 struct gbUpdate* saveUpdate = select->update;
-if (select->release->entryStrs == NULL)
+if (select->release->orgNames == NULL)
     entryInit(select->release);
 
 /* load indices for all updates, meeting other criteria */

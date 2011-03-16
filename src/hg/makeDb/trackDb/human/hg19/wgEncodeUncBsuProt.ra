@@ -28,10 +28,10 @@ wgEncode 1
         	track wgEncodeUncBsuProtGm12878NucleusSig
         	parent wgEncodeUncBsuProtSignal
         	shortLabel GM12878 nucleus
-        	longLabel ENCODE Proteogenomic Mapping Hits (in GM12878 cells)
+        	longLabel ENCODE Proteogenomic Mapping Hits (in GM12878 cells, nuclear fraction)
         	subGroups view=Signal cellType=GM12878 localization=nucleus
 		visibility full
-        	type bed 6
+        	type peptideMapping
         	origAssembly hg19
         	color 153,38,0
         	# subId=3160 dateSubmitted=2011-01-05
@@ -40,10 +40,10 @@ wgEncode 1
         	track wgEncodeUncBsuProtK562MembranefractionSig
         	parent wgEncodeUncBsuProtSignal
         	shortLabel K562 membrane
-        	longLabel ENCODE Proteogenomic Mapping Hits (in K562 cells)
+        	longLabel ENCODE Proteogenomic Mapping Hits (in K562 cells, membrane fraction)
         	subGroups view=Signal cellType=K562 localization=membraneFraction
 		visibility full
-        	type bed 6
+        	type peptideMapping
         	origAssembly hg19
         	color 46,0,184
         	# subId=3238 dateSubmitted=2011-01-12

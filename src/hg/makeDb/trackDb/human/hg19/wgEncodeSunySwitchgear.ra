@@ -1,13 +1,15 @@
 track wgEncodeSunySwitchgear
 compositeTrack on
 shortLabel SUNY SwitchGear
-longLabel ENCODE SUNY Albany Tenenbaum RBP Associated RNA by SwitchGear 
+longLabel RNA Binding Protein Associated RNA by SwitchGear from ENCODE/SUNY Albany
 group regulation
+superTrack wgEncodeRbpSuper dense
 subGroup1 view Views RbpAssocRna=RBP_Assoc_RNA
 subGroup2 cellType Cell_Line HT1080=HT-1080 
-subGroup3 factor Target_Protien ELAVL1=ELAVL1 PABPC1=PABPC1 T7Tag=T7Tag IGF2BP1=IGF2BP1 
+subGroup3 factor Target_Protein ELAVL1=ELAVL1 PABPC1=PABPC1 T7Tag=T7Tag IGF2BP1=IGF2BP1 
 dimensions dimensionX=factor dimensionY=cellType
 sortOrder cellType=+ factor=+
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
@@ -18,28 +20,25 @@ wgEncode 1
     shortLabel Suny Switchgear
     view RbpAssocRna
     visibility full
-    #viewUi on
+    viewUi on
     subTrack wgEncodeSunySwitchgear
     pValueFilter 0.0
     pValueFilterLimits 0:5
     scoreFilter 2
     scoreFilterLimits 1:800
-    minGrayLevel 100
 
         track wgEncodeSunySwitchgearHt1080Elavl1RbpAssocRna
-        release alpha
         parent wgEncodeSunySwitchgearView on
         shortLabel HT-1080 ELAVL1
-        longLabel ENCODE SUNY Albany RBP Associated RNA by Switchgear (ELAVL1 in HT-1080 cells)
+        longLabel HT10800 ELAV1 RBP Associated RNA by Switchgear from ENCODE/SUNY
         subGroups view=RbpAssocRna factor=ELAVL1 cellType=HT1080
         type broadPeak
         # subId=3086 dateSubmitted=2010-12-10
 
         track wgEncodeSunySwitchgearHt1080Igf2bp1RbpAssocRna
-        release alpha
         parent wgEncodeSunySwitchgearView on
         shortLabel HT-1080 IGF2BP1
-        longLabel ENCODE SUNY Albany RBP Associated RNA by Switchgear (IGF2BP1 in HT-1080 cells)
+        longLabel HT10800 IGF2BP1 RBP Associated RNA by Switchgear from ENCODE/SUNY
         subGroups view=RbpAssocRna factor=IGF2BP1 cellType=HT1080
         type broadPeak
         # subId=3086 dateSubmitted=2010-12-10

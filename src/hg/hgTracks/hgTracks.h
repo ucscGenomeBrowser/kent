@@ -240,6 +240,7 @@ struct track
                    /* Slow retrieval means image can be rendered via an AJAX callback. */
     boolean customTrack; /* Need to explicitly declare this is a custom track */
     boolean syncChildVisToSelf;	/* If TRUE sync visibility to of children to self. */
+    char *networkErrMsg;        /* Network layer error message */
     };
 
 
@@ -1012,6 +1013,10 @@ void lfDrawSpecialGaps(struct linkedFeatures *lf,
  * length is at least intronGap.
  * If chainLines, draw a double-line gap if both target and query have a gap
  * (mismatching sequence). */
+
+void bamWigMethods(struct track *track, struct trackDb *tdb, 
+	int wordCount, char *words[]);
+/* Set up bamWig methods. */
 
 void bamLinkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,

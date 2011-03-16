@@ -296,8 +296,8 @@ for (blockIx=0; blockIx<cds->cdsCount; ++blockIx)
     int rnaSize = cds->cdsSizes[blockIx];
     if (rnaSize%3 != 0)
         {
-	errAbort("size of block (%d) not multiple of 3 in %s",
-	    rnaSize, cds->name);
+	errAbort("size of block (%d) not multiple of 3 in %s (source %s %s)",
+		 rnaSize, cds->name, cds->source, cds->accession);
 	}
     int aaSize = rnaSize/3;
     int i;
@@ -326,11 +326,14 @@ if (dy->string[lastCharIx] == '*')
 char *prematureStop = strchr(dy->string, '*');
 if (prematureStop != NULL)
     {
-    errAbort("Stop codons in CDS at position %d for %s", 
-    	(int)(prematureStop - dy->string), cds->name);
+    warn("Stop codons in CDS at position %d for %s, (source %s %s)", 
+	 (int)(prematureStop - dy->string), cds->name, cds->source, cds->accession);
     }
-faWriteNext(f, cds->name, dy->string, dy->stringSize);
-dyStringFree(&dy);
+else
+    {
+    faWriteNext(f, cds->name, dy->string, dy->stringSize);
+    dyStringFree(&dy);
+    }
 }
 
 void txCdsToGene(char *txBed, char *txFa, char *txCds, char *outGtf, char *outFa)

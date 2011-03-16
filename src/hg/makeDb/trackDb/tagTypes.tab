@@ -143,6 +143,7 @@ gClass_Validated_pseudogene genePred
 gClass_Validated_unprocessed_pseudogene genePred
 gClass_main genePred
 gClass_putative genePred
+gClass_cDNA_supported genePred
 gainColor bed
 geneClasses bed genePred
 genome customTracks
@@ -209,6 +210,7 @@ minMax chromGraph
 minScore bed broadPeak narrowPeak
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
+nextExonText *
 nextItemButton *
 noColorTag bam
 noInherit *
@@ -241,6 +243,7 @@ pgDbLink bed
 pgPolyphenPredTab bed
 pgSiftPredTab bed
 pred psl
+prevExonText *
 priority *
 private bed
 pslSequence psl

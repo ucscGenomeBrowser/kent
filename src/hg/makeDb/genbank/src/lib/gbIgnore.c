@@ -17,6 +17,15 @@ static char const rcsid[] = "$Id: gbIgnore.c,v 1.6 2007/11/16 18:19:50 markd Exp
 #define IGIDX_COMMENT_COL   3
 #define IGIDX_NUM_COLS      4
 
+/* size power of ignore entry hash */
+#define IGNORE_HASH_SIZE   18
+
+struct gbIgnore
+/* table of accessions and moddates to ignore */
+{
+    struct hash* accHash;  /* hash by acc, NULL if none loaded */
+};
+
 static void parseRow(struct gbRelease* release, struct gbIgnore* ignore,
                      struct lineFile* lf, char **row)
 /* read and parse a gbidx file record */
@@ -33,19 +42,18 @@ else if (sameString(row[IGIDX_SRCDB_COL], "RefSeq"))
 else
     errAbort("ignored srcdb must be \"GenBank\" or \"RefSeq\", got \"%s\":"
              " %s:%u", row[IGIDX_SRCDB_COL], lf->fileName, lf->lineIx);
-if (srcDb != release->srcDb)
-    return; /* not for this srcDb */
-
-hel = hashLookup(ignore->accHash, row[IGIDX_ACC_COL]);
-if (hel == NULL)
+if (srcDb == release->srcDb)
     {
-    hel = hashAdd(ignore->accHash, row[IGIDX_ACC_COL], NULL);
+    if (ignore->accHash == NULL)
+        ignore->accHash = hashNew(IGNORE_HASH_SIZE);
+
+    hel = hashStore(ignore->accHash, row[IGIDX_ACC_COL]);
+    lmAllocVar(ignore->accHash->lm, igAcc);
+    igAcc->acc = hel->name;
+    igAcc->modDate = gbParseDate(lf, row[IGIDX_MODDATE_COL]);
+    igAcc->srcDb = srcDb;
+    slAddHead((struct gbIgnoreAcc**)&hel->val, igAcc);
     }
-lmAllocVar(ignore->accHash->lm, igAcc);
-igAcc->acc = hel->name;
-igAcc->modDate = gbParseDate(lf, row[IGIDX_MODDATE_COL]);
-igAcc->srcDb = srcDb;
-slAddHead((struct gbIgnoreAcc**)&hel->val, igAcc);
 }
 
 static void parseIndex(struct gbRelease* release, struct gbIgnore* ignore,
@@ -67,7 +75,6 @@ static char *IGNORE_IDX = "etc/ignore.idx";
 char ignoreIdx[PATH_LEN];
 struct gbIgnore* ignore;
 AllocVar(ignore);
-ignore->accHash = hashNew(23);
 
 safef(ignoreIdx, sizeof(ignoreIdx), "%s/%s", release->index->gbRoot,
       IGNORE_IDX);
@@ -82,6 +89,10 @@ void gbIgnoreFree(struct gbIgnore** ignorePtr)
 struct gbIgnore* ignore = *ignorePtr;
 if (ignore != NULL)
     {
+#ifdef DUMP_HASH_STATS
+    if (ignore->accHash != NULL)
+        hashPrintStats(ignore->accHash, "ignoreAcc", stderr);
+#endif
     hashFree(&ignore->accHash);
     freeMem(ignore);
     *ignorePtr = NULL;
@@ -92,12 +103,15 @@ struct gbIgnoreAcc* gbIgnoreGet(struct gbIgnore *ignore, char *acc,
                                 time_t modDate)
 /* Get he ignore entry for an accession and modedate, or NULL  */
 {
-struct gbIgnoreAcc *igAcc = hashFindVal(ignore->accHash, acc);
-while (igAcc != NULL)
+if (ignore->accHash != NULL)
     {
-    if (igAcc->modDate == modDate)
-        return igAcc;
-    igAcc = igAcc->next;
+    struct gbIgnoreAcc *igAcc = hashFindVal(ignore->accHash, acc);
+    while (igAcc != NULL)
+        {
+        if (igAcc->modDate == modDate)
+            return igAcc;
+        igAcc = igAcc->next;
+        }
     }
 return NULL;
 }
@@ -105,7 +119,22 @@ return NULL;
 struct gbIgnoreAcc* gbIgnoreFind(struct gbIgnore *ignore, char *acc)
 /* get the list of gbIgnore entries for an accession, or NULL */
 {
-return hashFindVal(ignore->accHash, acc);
+if (ignore->accHash == NULL)
+    return NULL;
+else
+    return hashFindVal(ignore->accHash, acc);
+}
+
+struct hashCookie gbIgnoreFirst(struct gbIgnore *ignore)
+/* get cookie to iterate over hash */
+{
+// a zero cookie will return NULL on hashNext() call 
+struct hashCookie cookie;
+if (ignore->accHash == NULL)
+    ZeroVar(&cookie);
+else
+    cookie = hashFirst(ignore->accHash);
+return cookie;
 }
 
 /*

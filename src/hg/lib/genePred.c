@@ -1804,10 +1804,10 @@ if (size > minSize)
     }
 }
 
-boolean codonToPos(struct genePred *gp, unsigned num, int *start, int *end)
+boolean codonToPos(struct genePred *gp, unsigned num, int *chromStart, int *chromEnd)
 {
 // map 1-based codon to genomic coordinates. If the codon crosses an exon junction, we return just the beginning (LHS) of the codon.
-// Returns true if we find the codon in given gene predition; start and end are set to appropriate three base region.
+// Returns true if we find the codon in given gene predition; chromStart and end are set to appropriate three base region.
 
 int pos = -1;
 int i;
@@ -1846,7 +1846,7 @@ else
     {
     for(i = gp->exonCount - 1; i >= 0; i--)
         {
-        if(gp->exonStarts[i] < gp->cdsEnd && gp->exonEnds[i] >= gp->cdsEnd)
+        if(gp->exonStarts[i] < gp->cdsEnd && gp->exonEnds[i] > gp->cdsStart)
             {
             int start, end; // start here is really the RHS, and end is the LHS
             if(offset == -1 && gp->cdsEnd >= gp->exonStarts[i])
@@ -1876,13 +1876,13 @@ if(pos == -1)
     return FALSE;
 else
     {
-    *start = pos;
-    *end = pos + 3;
+    *chromStart = pos;
+    *chromEnd = pos + 3;
     return TRUE;
     }
 }
 
-boolean exonToPos(struct genePred *gp, unsigned num, int *start, int *end)
+boolean exonToPos(struct genePred *gp, unsigned num, int *chromStart, int *chromEnd)
 {
 // map 1-based exon number to genomic coordinates.
 // Returns true if we find the exon in given gene predition; start and end are set to appropriate region.
@@ -1891,13 +1891,13 @@ if(num == 0 || num > gp->exonCount)
     return FALSE;
 else if(gp->strand[0] == '+')
     {
-    *start = gp->exonStarts[num - 1];
-    *end = gp->exonEnds[num - 1];
+    *chromStart = gp->exonStarts[num - 1];
+    *chromEnd = gp->exonEnds[num - 1];
     }
 else
     {
-    *start = gp->exonStarts[gp->exonCount - num];
-    *end = gp->exonEnds[gp->exonCount - num];
+    *chromStart = gp->exonStarts[gp->exonCount - num];
+    *chromEnd = gp->exonEnds[gp->exonCount - num];
     }
 return TRUE;
 }

@@ -44,8 +44,9 @@ priority 29.6
 visibility hide
 color 0,0,0
 type bed 4
-html decipherOld
 tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
+prevExonText Left edge
+nextExonText Right edge
 
 track caseControl
 compositeTrack on
@@ -258,9 +259,10 @@ type genePred acemblyPep acemblyMrna
 autoTranslate 0
 url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
 itemClassTbl acemblyClass
-geneClasses main putative
+geneClasses main putative cDNA_supported
 gClass_main 128,0,125
 gClass_putative 200,0,125
+gClass_cDNA_supported 200,0,125
 urlLabel AceView Gene Summary:
 
 track slamMouse
@@ -1223,7 +1225,6 @@ color 150,0,150
 type bed 4 +
 
 track dgv
-release alpha
 shortLabel DGV Struct Var
 longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
 group varRep
@@ -1237,22 +1238,6 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v10
-
-track dgv
-release beta,public
-shortLabel DGV Struct Var
-longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
-group varRep
-priority 144.8
-visibility hide
-color 0,100,0
-itemRgb on
-type bed 9 +
-noScoreFilter .
-exonArrows off
-urlLabel DGV Browser and Report:
-url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
-dataVersion v9
 
 track covMask1kGPilotLowCov
 compositeTrack on
@@ -2991,57 +2976,23 @@ type bed 4
 hgsid on
 url http://www.ncbi.nlm.nih.gov/omim/
 
-track omimComposite
-compositeTrack on
-shortLabel OMIM Comp
-group phenDis
-priority 29.8
-visibility hide
-type bed 4
-hgsid on
-
 track omimLocation
-parent omimComposite
-shortLabel OMIM Locations
-longLabel OMIM All Cytogenetic Locations
+shortLabel OMIM Loci
+longLabel OMIM Non-Gene Entry Cytogenetic Locations
 group phenDis
-priority 10
+priority 29.75
 visibility hide
 color 0, 100, 100
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
 
-track omimLocationClass2
-shortLabel OMIM Loc Class 2
-parent omimComposite
-longLabel OMIM-Associated Phenotype Class 2 Locations
-group phenDis
-priority 8
-visibility hide
-color 120, 100, 0
-type bed 4
-hgsid on
-url http://www.omim.org/entry/
-
-track omimGeneClass2
-shortLabel OMIM Class 2
-parent omimComposite
-longLabel OMIM-Associated Phenotype Class 2 Genes
-group phenDis
-priority 7
-visibility hide
-color 240, 100, 0
-type bed 4
-hgsid on
-url http://www.omim.org/entry/
-
-track omimGeneClass3
-shortLabel OMIM Genes (Class 3)
-longLabel OMIM Genes (Class 3, with Known Molecular Basis of Disorder)
+track omimGene2
+shortLabel OMIM Genes
+longLabel OMIM Genes
 group phenDis
 priority 29.73
-visibility pack
+visibility hide
 color 220, 0, 0
 type bed 4
 hgsid on
@@ -3052,7 +3003,7 @@ shortLabel OMIM AV SNPs
 longLabel OMIM Allelic Variant SNPs
 group phenDis
 priority 29.71
-visibility dense
+visibility hide
 color 220,0,0
 type bed 4
 hgsid on
@@ -3486,8 +3437,17 @@ xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
 termRegex AC[0-9]{6}
 searchPriority 52
 
-searchName omimGeneAcc
-searchTable omimGene
+searchName omimAvSnpAcc
+searchTable omimAvSnp
+searchMethod exact
+searchType bed
+shortCircuit 1
+semiShortCircuit 1
+termRegex ([0-9]{6})+\.+([0-9]{4})
+searchPriority 10
+
+searchName omimGene2Acc
+searchTable omimGene2
 searchMethod exact
 searchType bed
 shortCircuit 1
@@ -3496,10 +3456,9 @@ termRegex ([0-9]{6})
 searchPriority 10
 
 searchName omimGeneLocAcc
-searchTable omimGeneLocation
+searchTable omimLocation
 searchMethod exact
 searchType bed
-shortCircuit 1
 semiShortCircuit 1
 termRegex ([0-9]{6})
 searchPriority 10

@@ -2304,7 +2304,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 WHIP Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (WHIP in GM12878 cells)
-        subGroups view=Signal factor=XRCC4 cellType=GM12878 control=IGGmus treatment=aNone
+        subGroups view=Signal factor=WHIP cellType=GM12878 control=IGGmus treatment=aNone
         type bigWig 0.000000 6583.799805
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
@@ -3419,26 +3419,6 @@ wgEncode 1
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NF-E2 in K562 cells)
         subGroups view=Signal factor=NFE2 cellType=K562 control=std treatment=aNone
         type bigWig 0.000000 43274.101562
-        color 46,0,184
-        # subId=3056 dateSubmitted=2010-12-02
-
-        track wgEncodeSydhTfbsK562NfyaStdSig
-        release alpha
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel K562 NF-YA Sig
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NF-YA in K562 cells)
-        subGroups view=Signal factor=NFYA cellType=K562 control=std treatment=aNone
-        type bigWig 0.000000 10476.400391
-        color 46,0,184
-        # subId=3056 dateSubmitted=2010-12-02
-
-        track wgEncodeSydhTfbsK562NfybStdSig
-        release alpha
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel K562 NF-YB Sig
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NF-YB in K562 cells)
-        subGroups view=Signal factor=NFYB cellType=K562 control=std treatment=aNone
-        type bigWig 0.000000 12378.799805
         color 46,0,184
         # subId=3056 dateSubmitted=2010-12-02
 

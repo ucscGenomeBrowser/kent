@@ -41,12 +41,14 @@ else
     return trackIsType(database, table, curTrack, "bam", ctLookupName);
 }
 
-char *bamFileName(char *table, struct sqlConnection *conn)
+char *bamFileName(char *table, struct sqlConnection *conn, char *seqName)
 /* Return file name associated with BAM.  This handles differences whether it's
  * a custom or built-in track.  Do a freeMem on returned string when done. */
 {
-/* Implementation is same as bigWig. */
-return bigWigFileName(table, conn);
+char *fileName = bigFileNameFromCtOrHub(table, conn);
+if (fileName == NULL)
+    fileName = bamFileNameFromTable(conn, table, seqName);
+return fileName;
 }
 
 char *bamAsDef = 
@@ -129,6 +131,16 @@ assert(numPt < numBufEnd);
 void bamTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f)
 /* Print out selected fields from BAM.  If fields is NULL, then print out all fields. */
 {
+struct hTableInfo *hti = NULL;
+hti = getHti(db, table, conn);
+struct hash *idHash = NULL;
+char *idField = getIdField(db, curTrack, table, hti);
+int idFieldNum = 0;
+
+/* if we know what field to use for the identifiers, get the hash of names */
+if (idField != NULL)
+    idHash = identifierHash(db, table);
+
 if (f == NULL) 
     f = stdout;
 
@@ -144,7 +156,12 @@ struct hash *fieldHash = hashNew(0);
 struct slName *bb, *bbList = bamGetFields(table);
 int i;
 for (bb = bbList, i=0; bb != NULL; bb = bb->next, ++i)
+    {
+    /* if we know the field for identifiers, save it away */
+    if ((idField != NULL) && sameString(idField, bb->name))
+	idFieldNum = i;
     hashAddInt(fieldHash, bb->name, i);
+    }
 
 /* Create an array of column indexes corresponding to the selected field list. */
 int *columnArray;
@@ -160,7 +177,6 @@ for (i=1; i<fieldCount; ++i)
     fprintf(f, "\t%s", fieldArray[i]);
 fprintf(f, "\n");
 
-char *fileName = bamFileName(table, conn);
 struct asObject *as = bamAsObj();
 struct asFilter *filter = NULL;
 
@@ -175,25 +191,34 @@ if (anyFilter())
 
 /* Loop through outputting each region */
 struct region *region, *regionList = getRegions();
-for (region = regionList; region != NULL; region = region->next)
+
+int maxOut = bigFileMaxOutput();
+for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
     struct lm *lm = lmInit(0);
+    char *fileName = bamFileName(table, conn, region->chrom);
     struct samAlignment *sam, *samList = bamFetchSamAlignment(fileName, region->chrom,
     	region->start, region->end, lm);
     char *row[SAMALIGNMENT_NUM_COLS];
     char numBuf[BAM_NUM_BUF_SIZE];
-    for (sam = samList; sam != NULL; sam = sam->next)
+    for (sam = samList; sam != NULL && (maxOut > 0); sam = sam->next)
         {
 	samAlignmentToRow(sam, numBuf, row);
 	if (asFilterOnRow(filter, row))
 	    {
+	    /* if we're looking for identifiers, check if this matches */
+	    if ((idHash != NULL)&&(hashLookup(idHash, row[idFieldNum]) == NULL))
+		continue;
+
 	    int i;
 	    fprintf(f, "%s", row[columnArray[0]]);
 	    for (i=1; i<fieldCount; ++i)
 		fprintf(f, "\t%s", row[columnArray[i]]);
 	    fprintf(f, "\n");
+	    maxOut --;
 	    }
 	}
+    freeMem(fileName);
     lmCleanup(&lm);
     }
 
@@ -240,7 +265,7 @@ return tLength;
 }
 
 static void addFilteredBedsOnRegion(char *fileName, struct region *region, 
-	char *table, struct asFilter *filter, struct lm *bedLm, struct bed **pBedList)
+	char *table, struct asFilter *filter, struct lm *bedLm, struct bed **pBedList, struct hash *idHash)
 /* Add relevant beds in reverse order to pBedList */
 {
 struct lm *lm = lmInit(0);
@@ -253,6 +278,9 @@ for (sam = samList; sam != NULL; sam = sam->next)
     samAlignmentToRow(sam, numBuf, row);
     if (asFilterOnRow(filter, row))
         {
+	if ((idHash != NULL) && (hashLookup(idHash, sam->qName) == NULL))
+	    continue;
+
 	struct bed *bed;
 	lmAllocVar(bedLm, bed);
 	bed->chrom = lmCloneString(bedLm, sam->rName);
@@ -271,15 +299,19 @@ struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn,
 /* Get list of beds from BAM, in all regions, that pass filtering. */
 {
 /* Figure out bam file name get column info and filter. */
-char *fileName = bamFileName(table, conn);
 struct asObject *as = bamAsObj();
 struct asFilter *filter = asFilterFromCart(cart, db, table, as);
+struct hash *idHash = identifierHash(db, table);
 
 /* Get beds a region at a time. */
 struct bed *bedList = NULL;
 struct region *region;
 for (region = regionList; region != NULL; region = region->next)
-    addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList);
+    {
+    char *fileName = bamFileName(table, conn, region->chrom);
+    addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList, idHash);
+    freeMem(fileName);
+    }
 slReverse(&bedList);
 return bedList;
 }
@@ -288,7 +320,7 @@ struct slName *randomBamIds(char *table, struct sqlConnection *conn, int count)
 /* Return some semi-random qName based IDs from a BAM file. */
 {
 /* Read 10000 items from bam file,  or if they ask for a big list, then 4x what they ask for. */
-char *fileName = bamFileName(table, conn);
+char *fileName = bamFileName(table, conn, NULL);
 samfile_t *fh = bamOpen(fileName, NULL);
 struct lm *lm = lmInit(0);
 int orderedCount = count * 4;
@@ -314,7 +346,7 @@ void showSchemaBam(char *table)
 /* Show schema on bam. */
 {
 struct sqlConnection *conn = hAllocConn(database);
-char *fileName = bamFileName(table, conn);
+char *fileName = bamFileName(table, conn, NULL);
 
 struct asObject *as = bamAsObj();
 hPrintf("<B>Database:</B> %s", database);

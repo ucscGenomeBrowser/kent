@@ -211,7 +211,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
 		   sameString("bam", s) || sameString("bedDetail", s) ||
-		   sameString("bed8Attrs", s));
+		   sameString("bed8Attrs", s) || sameString("gvf", s));
 freeMem(t);
 return canPack;
 }
@@ -696,7 +696,7 @@ else if(sameWord("narrowPeak",type)
     cType = cfgPeak;
 else if(sameWord("genePred",type))
         cType = cfgGenePred;
-else if(sameWord("bedLogR",type))
+else if(sameWord("bedLogR",type) || sameWord("peptideMapping", type))
     cType = cfgBedScore;
 else if(startsWith("bed ", type))
     {
@@ -1028,8 +1028,6 @@ for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->
     sortOrderFree(&sortOrder);
     sortableTdbItemsFree(&itemsToSort);
     }
-if(countOfSortedContainers > 0)
-    verbose(1,"Sorted %d containers\n",countOfSortedContainers);
 }
 
 void trackDbAddTableField(struct trackDb *tdbList)
