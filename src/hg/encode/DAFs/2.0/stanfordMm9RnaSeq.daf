@@ -39,7 +39,7 @@ validationSettings validateFiles.bam:mismatches=3,nMatch,bamPercent=99.9;
 view             Peaks
 longLabelPrefix  Stanford/Yale RNA-seq Peaks
 type             narrowPeak
-hasReplicates    no
+hasReplicates    yes
 required         no
 
 view             Signal
