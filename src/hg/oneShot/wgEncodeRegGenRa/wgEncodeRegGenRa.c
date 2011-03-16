@@ -51,10 +51,10 @@ struct cellInfo
 struct cellInfo cells[] = {
     { "Gm12878", "GM12878", 255,128,128, },
     { "H1hesc", "H1-hESC", 255,212,128, },
-    { "Hmec", "HMEC", 120,235,120, },
     { "Hsmm", "HSMM", 120,235,204, },
     { "Huvec", "HUVEC", 128,212,255, },
     { "K562", "K562", 128,128,255, },
+    { "Nhek", "NHEK", 212,128,255, },
     { "Nhlf", "NHLF", 255,128,212, },
 };
 
@@ -66,19 +66,20 @@ int i;
 for (i=0; i<ArraySize(marks); ++i)
     {
     struct markInfo *mark = &marks[i];
-    printf("    track wgRegMark%s\n", mark->part);
+    printf("    track wgEncodeRegMark%s\n", mark->part);
     printf("    container multiWig\n");
     printf("    noInherit on\n");
     printf("    type bigWig 0 10000\n");
     printf("    superTrack wgEncodeReg full\n");
     printf("    shortLabel Overlayed %s\n", mark->name);
-    printf("    longLabel %s Mark (%s) from ENCODE\n", mark->name, mark->blurb);
+    printf("    longLabel %s Mark (%s) on 7 cell lines from ENCODE\n", mark->name, mark->blurb);
     printf("    configurable on\n");
     printf("    visibility %s\n", mark->vis);
     printf("    viewLimits 0:50\n");
     printf("    maxHeightPixels 100:30:11\n");
     printf("    aggregate transparentOverlay\n");
-    printf("    priority 1.%d\n", i+1);
+    printf("    showSubtrackColorOnUi on\n");
+    printf("    priority 1.%d\n", i+2);
     printf("    dragAndDrop subtracks\n");
     printf("\n");
 
@@ -103,14 +104,14 @@ for (i=0; i<ArraySize(marks); ++i)
 	    wigMax = sum.maxVal;
 	    bbiFileClose(&bbi);
 	    }
-	printf("\ttrack wgEncodeRegMark%s%s\n", marks->part, cell->part);
-	printf("\ttable wgEncodeBroadHistone%sStdSig%s\n", cell->part, mark->part);
+	printf("\ttrack wgEncodeRegMark%s%s\n", mark->part, cell->part);
+	printf("\ttable %s\n", table);
 	if (!tableExists)
 	    printf("\t#%s table doesn't exist\n", table);
 	printf("\tshortLabel %s\n", cell->name);
 	printf("\tlongLabel %s Mark (%s) on %s Cells from ENCODE\n",
 		mark->name, mark->blurb, cell->name);
-	printf("\tparent wgEncodeRegMark%s\n", marks->part);
+	printf("\tparent wgEncodeRegMark%s\n", mark->part);
 	printf("\tcolor %d,%d,%d\n", cell->r, cell->g, cell->b);
 	printf("\ttype bigWig 0 %d\n", wigMax);
 	printf("\n");
