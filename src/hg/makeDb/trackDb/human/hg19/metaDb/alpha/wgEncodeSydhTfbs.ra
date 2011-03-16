@@ -24032,6 +24032,134 @@ tableName wgEncodeSydhTfbsK562Bdp1StdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsK562Bhlhe40nb100IggrabAlnRep1
+objType file
+antibody BHLHE40_(NB100-1800)
+cell K562
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId K562/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+fileName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabAlnRep1.bam
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 3755
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562Bhlhe40nb100IggrabAlnRep2
+objType file
+antibody BHLHE40_(NB100-1800)
+cell K562
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId K562/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+fileName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabAlnRep2.bam
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+subId 3755
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562Bhlhe40nb100IggrabPk
+objType table
+antibody BHLHE40_(NB100-1800)
+cell K562
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId K562/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+fileName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 3755
+tableName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsK562Bhlhe40nb100IggrabRawDataRep1
+objType file
+antibody BHLHE40_(NB100-1800)
+cell K562
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId K562/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+fileName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 3755
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562Bhlhe40nb100IggrabRawDataRep2
+objType file
+antibody BHLHE40_(NB100-1800)
+cell K562
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId K562/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+fileName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+subId 3755
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562Bhlhe40nb100IggrabSig
+objType table
+antibody BHLHE40_(NB100-1800)
+cell K562
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId K562/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-25
+dateUnrestricted 2011-11-25
+fileName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 3755
+tableName wgEncodeSydhTfbsK562Bhlhe40nb100IggrabSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsK562Brf1RawDataRep1
 objType file
 antibody BRF1
@@ -36019,4 +36147,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -934729180
+# MAGIC: -1567991156
