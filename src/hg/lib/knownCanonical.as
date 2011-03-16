@@ -6,5 +6,5 @@ table knownCanonical
     int chromEnd;	"End position (non-inclusive). Corresponds to txEnd"
     int clusterId;	"Which cluster of transcripts this belongs to in knownIsoforms"
     string transcript;	"Corresponds to knownGene name field."
-    string protein;	"SwissProt ID of associated protein."
+    string protein;	"SwissProt ID or more recently UCSC ID of associated protein."
     )

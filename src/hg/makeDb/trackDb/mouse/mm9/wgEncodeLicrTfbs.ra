@@ -87,6 +87,16 @@ noInherit on
 		color 153,38,0
 		# subId=3406 dateSubmitted=2011-01-20
 
+        	track wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdPk
+        	release alpha
+        	parent wgEncodeLicrTfbsViewPeaks off
+        	shortLabel Cerebellum Pol2 Pk
+        	longLabel ENCODE LICR TFBS Peaks (Pol2 in Cerebellum cells)
+        	subGroups view=Peaks age=adult8wks factor=POL2 cellType=Cbellum control=std sex=M strain=C57BL6
+        	type broadPeak
+        	color 153,38,0
+        	# subId=3811 dateSubmitted=2011-03-07
+
 	#######	Signal Tracks###########
 	track wgEncodeLicrTfbsViewSignal
 	release alpha
@@ -171,4 +181,14 @@ noInherit on
 		type bigWig 0.110000 40.849998
 		color 153,38,0
 		# subId=3406 dateSubmitted=2011-01-20
+
+        	track wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdSig
+        	release alpha
+        	parent wgEncodeLicrTfbsViewSignal off
+        	shortLabel Cerebellum Pol2 Sig
+        	longLabel ENCODE LICR TFBS Signal (Pol2 in Cerebellum cells)
+        	subGroups view=Signal age=adult8wks factor=POL2 cellType=Cbellum control=std sex=M strain=C57BL6
+        	type bigWig 0.150000 52.380001
+        	color 153,38,0
+        	# subId=3811 dateSubmitted=2011-03-07
 

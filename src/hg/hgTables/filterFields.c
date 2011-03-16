@@ -456,16 +456,6 @@ char *table = cartString(cart, hgtaTable);
 doBigSelectPage(db, table);
 }
 
-#define filterLinkedTablePrefix hgtaFilterPrefix "linked."
-
-static void removeFilterVars()
-/* Remove filter variables from cart. */
-{
-cartRemovePrefix(cart, hgtaFilterPrefix);
-cartRemove(cart, hgtaFilterTable);
-cartRemove(cart, filterLinkedTablePrefix);
-}
-
 void doOutSelectedFields(char *table, struct sqlConnection *conn)
 /* Put up select fields (for tab-separated output) page. */
 {
@@ -484,7 +474,8 @@ else
     /* Remove cart state if table has been changed: */
     if (fsTable && ! sameString(fsTable, dbTable))
 	{
-	removeFilterVars();
+	cartRemovePrefix(cart, hgtaFieldSelectPrefix);
+	cartRemove(cart, hgtaFieldSelectTable);
 	}
     doBigSelectPage(database, table);
     }
@@ -596,6 +587,13 @@ static char *filterPatternVarName(char *db, char *table, char *field)
 /* Return variable name for a filter page text box. */
 {
 return filterFieldVarName(db, table, field, filterPatternVar);
+}
+
+static void removeFilterVars()
+/* Remove filter variables from cart. */
+{
+cartRemovePrefix(cart, hgtaFilterPrefix);
+cartRemove(cart, hgtaFilterTable);
 }
 
 boolean anyFilter()
@@ -1130,6 +1128,8 @@ for (dt = dtList; dt != NULL; dt = dt->next)
     }
 }
 
+
+#define filterLinkedTablePrefix hgtaFilterPrefix "linked."
 
 static void doBigFilterPage(struct sqlConnection *conn, char *db, char *table)
 /* Put up filter page on given db.table. */

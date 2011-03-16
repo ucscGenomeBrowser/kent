@@ -4,10 +4,10 @@ L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-A = vcfParseTest
-O = vcfParseTest.o
+A = bedRestrictToPositions
+O = bedRestrictToPositions.o
 
-vcfParseTest: ${O} ${MYLIBS}
+bedRestrictToPositions: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 

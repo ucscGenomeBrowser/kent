@@ -32,4 +32,4 @@ install:
 
 doInstall:
 	@mkdir -p ${DEST}/
-	./cpJsFiles.pl -exclude='makefile' -destDir=${DEST} ${JS_FILES}
+	../utils/cpAndLinkToResourceFiles.pl -exclude='makefile' -versionFile=../inc/versionInfo.h -destDir=${DEST} ${JS_FILES}

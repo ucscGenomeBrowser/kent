@@ -12,7 +12,7 @@ D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
     Tables: 253
-    Files: 603
+    Files: 601
     Gbdbs: 115
 
 A) Untouched Tables (0):
@@ -278,7 +278,7 @@ wgEncodeUwTfbsWerirb1CtcfStdRawRep1
 wgEncodeUwTfbsWerirb1CtcfStdRawRep2
 wgEncodeUwTfbsWerirb1InputStdRawRep1
 
-C') New files (600 downloadables, 115 gbdbs):
+C') New files (598 downloadables, 115 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwTfbs/release1/
     NOT on RR but must be placed in:
@@ -390,8 +390,6 @@ C') New files (600 downloadables, 115 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwTfbs/release1/wgEncodeUwTfbsBjInputStdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwTfbs/release1/wgEncodeUwTfbsBjInputStdRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwTfbs/release1/wgEncodeUwTfbsBjInputStdRawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwTfbs/release1/wgEncodeUwTfbsBjtertCtcfStdRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwTfbs/release1/wgEncodeUwTfbsBjtertCtcfStdRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwTfbs/release1/wgEncodeUwTfbsCaco2CtcfStdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwTfbs/release1/wgEncodeUwTfbsCaco2CtcfStdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwTfbs/release1/wgEncodeUwTfbsCaco2CtcfStdAlnRep2.bam

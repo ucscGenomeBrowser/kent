@@ -1,3 +1,8 @@
+metaObject wgEncodeDukeAffyExon
+objType composite
+composite wgEncodeDukeAffyExon
+expVars lab,dataType,cell,treatment
+
 metaObject wgEncodeDukeAffyExon8988tSimpleSignalRep1
 objType table
 cell 8988T
@@ -2151,4 +2156,4 @@ tableName wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1
 treatment UT189
 view SimpleSignal
 
-# MAGIC: 1752331246
+# MAGIC: -57629055

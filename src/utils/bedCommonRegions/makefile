@@ -4,10 +4,10 @@ L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-A = tabixFetch
-O = tabixFetch.o
+A = bedCommonRegions
+O = bedCommonRegions.o
 
-tabixFetch: ${O} ${MYLIBS}
+bedCommonRegions: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
@@ -16,3 +16,7 @@ compile:: ${O}
 
 clean::
 	rm -f ${A}${EXE} ${O}
+
+test:
+	bedCommonRegions tests/in/1.bed tests/in/2.bed tests/in/3.bed > tests/out.bed
+	diff tests/expected.bed tests/out.bed
