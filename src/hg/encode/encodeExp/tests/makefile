@@ -10,9 +10,9 @@ test: addTest
 addTest: mkdirs
 	${PROG} create
 	hgsql hgFixed -e "alter table encodeExpNew rename to encodeExpTest_${USER}"
-	${PROG} fileAdd input/addTest.in.ra -table=encodeExpTest_${USER}
-	${PROG} fileDump output/addTest.out.ra -table=encodeExpTest_${USER}
-	diff output/addTest.out.ra expected/
+	${PROG} add input/addTest.in.ra -table=encodeExpTest_${USER}
+	${PROG} dump output/addTest.out.ra -table=encodeExpTest_${USER}
+	grep -v lastUpdated output/addTest.out.ra | diff - expected/addTest.out.ra
 
 mkdirs:
 	@${MKDIR} output

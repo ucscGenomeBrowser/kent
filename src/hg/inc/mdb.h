@@ -92,6 +92,13 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 
 #define MDB_DEFAULT_NAME "metaDb"
 
+/* These are needed for experiment table to understand a few 
+ *      critical metaDb typeOfTerms.  Need someway to tie to cv.ra */
+
+#define MDB_FIELD_LAB          "lab"
+#define MDB_FIELD_DATA_TYPE   "dataType"
+#define MDB_FIELD_CELL_TYPE   "cell"
+
 /* metaDb project used for production ENCODE */
 // TODO:  move to ENCODE-specific mdb header file when it exists
 #define ENCODE_MDB_PROJECT       "wgEncode"

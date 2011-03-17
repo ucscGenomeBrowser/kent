@@ -6,8 +6,6 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "mdb.h"
-#include "hdb.h"
 #include "encode/encodeExp.h"
 
 void encodeExpStaticLoad(char **row, struct encodeExp *ret)
@@ -21,7 +19,8 @@ ret->accession = row[2];
 ret->lab = row[3];
 ret->dataType = row[4];
 ret->cellType = row[5];
-ret->vars = row[6];
+ret->factors = row[6];
+ret->lastUpdated = row[7];
 }
 
 struct encodeExp *encodeExpLoadByQuery(struct sqlConnection *conn, char *query)
@@ -56,8 +55,8 @@ void encodeExpSaveToDb(struct sqlConnection *conn, struct encodeExp *el, char *t
  * If worried about this use encodeExpSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s')", 
-	tableName,  el->ix,  el->organism,  el->accession,  el->lab,  el->dataType,  el->cellType,  el->vars);
+dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s','%s')", 
+	tableName,  el->ix,  el->organism,  el->accession,  el->lab,  el->dataType,  el->cellType,  el->factors,  el->lastUpdated);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -72,16 +71,17 @@ void encodeExpSaveToDbEscaped(struct sqlConnection *conn, struct encodeExp *el, 
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *organism, *accession, *lab, *dataType, *cellType, *vars;
+char  *organism, *accession, *lab, *dataType, *cellType, *factors, *lastUpdated;
 organism = sqlEscapeString(el->organism);
 accession = sqlEscapeString(el->accession);
 lab = sqlEscapeString(el->lab);
 dataType = sqlEscapeString(el->dataType);
 cellType = sqlEscapeString(el->cellType);
-vars = sqlEscapeString(el->vars);
+factors = sqlEscapeString(el->factors);
+lastUpdated = sqlEscapeString(el->lastUpdated);
 
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s')", 
-	tableName,  el->ix,  organism,  accession,  lab,  dataType,  cellType,  vars);
+dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s','%s')", 
+	tableName,  el->ix,  organism,  accession,  lab,  dataType,  cellType,  factors,  lastUpdated);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&organism);
@@ -89,7 +89,8 @@ freez(&accession);
 freez(&lab);
 freez(&dataType);
 freez(&cellType);
-freez(&vars);
+freez(&factors);
+freez(&lastUpdated);
 }
 
 struct encodeExp *encodeExpLoad(char **row)
@@ -105,7 +106,8 @@ ret->accession = cloneString(row[2]);
 ret->lab = cloneString(row[3]);
 ret->dataType = cloneString(row[4]);
 ret->cellType = cloneString(row[5]);
-ret->vars = cloneString(row[6]);
+ret->factors = cloneString(row[6]);
+ret->lastUpdated = cloneString(row[7]);
 return ret;
 }
 
@@ -115,7 +117,7 @@ struct encodeExp *encodeExpLoadAll(char *fileName)
 {
 struct encodeExp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -133,7 +135,7 @@ struct encodeExp *encodeExpLoadAllByChar(char *fileName, char chopper)
 {
 struct encodeExp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -160,7 +162,8 @@ ret->accession = sqlStringComma(&s);
 ret->lab = sqlStringComma(&s);
 ret->dataType = sqlStringComma(&s);
 ret->cellType = sqlStringComma(&s);
-ret->vars = sqlStringComma(&s);
+ret->factors = sqlStringComma(&s);
+ret->lastUpdated = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -177,7 +180,8 @@ freeMem(el->accession);
 freeMem(el->lab);
 freeMem(el->dataType);
 freeMem(el->cellType);
-freeMem(el->vars);
+freeMem(el->factors);
+freeMem(el->lastUpdated);
 freez(pEl);
 }
 
@@ -220,7 +224,11 @@ fprintf(f, "%s", el->cellType);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->vars);
+fprintf(f, "%s", el->factors);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->lastUpdated);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
@@ -276,16 +284,28 @@ fprintf(f, "%s", el->cellType);
 fputc('"',f);
 fputc(',',f);
 fputc('"',f);
-fprintf(f,"vars");
+fprintf(f,"factors");
 fputc('"',f);
 fputc(':',f);
 fputc('"',f);
-fprintf(f, "%s", el->vars);
+fprintf(f, "%s", el->factors);
+fputc('"',f);
+fputc(',',f);
+fputc('"',f);
+fprintf(f,"lastUpdated");
+fputc('"',f);
+fputc(':',f);
+fputc('"',f);
+fprintf(f, "%s", el->lastUpdated);
 fputc('"',f);
 fputc('}',f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+#include "hdb.h"
+#include "mdb.h"
+
 /* Schema in alternate format with additional properties.
    For each field, there is a 'get' function and an entry in the fields table.
    WARNING:  Must parallel .sql */
@@ -330,10 +350,16 @@ char *encodeExpGetCellType(struct encodeExp *exp)
 return cloneString(exp->cellType);
 }
 
-char *encodeExpGetVars(struct encodeExp *exp)
-/* Return vars field of encodeExp */
+char *encodeExpGetFactors(struct encodeExp *exp)
+/* Return factors field of encodeExp */
 {
-return cloneString(exp->vars);
+return cloneString(exp->factors);
+}
+
+char *encodeExpGetLastUpdated(struct encodeExp *exp)
+/* Return lastUpdated field of encodeExp */
+{
+return cloneString(exp->lastUpdated);
 }
 
 typedef char * (*encodeExpGetField)(struct encodeExp *exp);
@@ -351,18 +377,20 @@ struct encodeExpField encodeExpFields[] =
      {ENCODE_EXP_FIELD_LAB, &encodeExpGetLab, TRUE},                 //required
      {ENCODE_EXP_FIELD_DATA_TYPE, &encodeExpGetDataType, TRUE},      //required
      {ENCODE_EXP_FIELD_CELL_TYPE, &encodeExpGetCellType, TRUE},      //required
-     {ENCODE_EXP_FIELD_VARS, &encodeExpGetVars, FALSE},
+     {ENCODE_EXP_FIELD_FACTORS, &encodeExpGetFactors, FALSE},
+     {ENCODE_EXP_FIELD_LAST_UPDATED, &encodeExpGetLastUpdated, FALSE},
      {NULL, 0, 0} };
 
 static char *sqlCreate =
 "CREATE TABLE %s (\n"
 "    ix int not null AUTO_INCREMENT,     # auto-increment ID\n"
 "    organism varchar(255) not null,     # human | mouse\n"
-"    accession varchar(255) not null,    # wgEncodeE[H|M]00000N\n"
+"    accession varchar(255) not null,    # ENC[H|M]E00000N\n"
 "    lab varchar(255) not null,  # lab name from ENCODE cv.ra\n"
 "    dataType varchar(255) not null,     # dataType from ENCODE cv.ra\n"
 "    cellType varchar(255) not null,     # cellType from ENCODE cv.ra\n"
-"    vars text,                          # typeOfTerm=term list of experiment-defining variables\n"
+"    factors text,                       # var=val list of experiment-defining variables\n"
+"    lastUpdated timestamp default current_timestamp on update current_timestamp,  # last update date-time"
 "              #Indices\n"
 "    PRIMARY KEY(ix)\n"
 ")";
@@ -416,7 +444,7 @@ if (!mdbObjIsEncode(mdb))
 AllocVar(exp);
 
 /* extract lab */
-exp->lab = mdbObjFindValue(mdb, ENCODE_EXP_FIELD_LAB);
+exp->lab = mdbObjFindValue(mdb, MDB_FIELD_LAB);
 if (exp->lab == NULL)
     errAbort("ENCODE metadata object \'%s\' missing lab\n", mdb->obj);
 
@@ -425,11 +453,11 @@ if (exp->lab == NULL)
 chopSuffixAt(exp->lab, '(');
 
 /* extract data type */
-exp->dataType = mdbObjFindValue(mdb, ENCODE_EXP_FIELD_DATA_TYPE);
+exp->dataType = mdbObjFindValue(mdb, MDB_FIELD_DATA_TYPE);
 if (exp->dataType == NULL)
     errAbort("ENCODE metadata object \'%s\' missing dataType\n", mdb->obj);
 
-exp->cellType = mdbObjFindValue(mdb, ENCODE_EXP_FIELD_CELL_TYPE);
+exp->cellType = mdbObjFindValue(mdb, MDB_FIELD_CELL_TYPE);
 if (exp->cellType == NULL)
     {
     exp->cellType = ENCODE_EXP_NO_CELL;
@@ -447,12 +475,8 @@ for (i = 0; expFactors[i] != NULL; i++)
         continue;
     dyStringPrintf(factors, "%s=%s ", var, val);
     }
-exp->vars = dyStringCannibalize(&factors);
-
-/* strip trailing space */
-int len = strlen(exp->vars);
-if (exp->vars[len-1] == ' ')
-    exp->vars[len-1] = 0;
+exp->factors = dyStringCannibalize(&factors);
+eraseTrailingSpaces(exp->factors);
 
 return exp;
 }
@@ -522,27 +546,71 @@ safef(accession, BUF_SIZE, "%s%c%06d", ENCODE_EXP_ACC_PREFIX, org, exp->ix);
 return cloneString(accession);
 }
 
-void encodeExpSave(struct sqlConnection *conn, char *tableName, struct encodeExp *exp)
-/* Save encodeExp as a row to the table specified by tableName. 
+void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp *exp)
+/* Add encodeExp as a new row to the table specified by tableName. 
    Update accession using index assigned with autoincrement
 */
 {
-struct dyString *query;
+struct dyString *query = dyStringNew(0);
+char *accession = NULL;
 
-query = newDyString(0);
 sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
 encodeExpSaveToDb(conn, exp, tableName, 0);
+
 dyStringPrintf(query, "select max(ix) from %s", tableName);
-exp->ix = sqlQuickNum(conn, query->string);
+exp->ix = sqlQuickNum(conn, dyStringContents(query));
+accession = encodeExpMakeAccession(exp);
 freeDyString(&query);
+
 query = newDyString(0);
-char *accession = encodeExpMakeAccession(exp);
 dyStringPrintf(query, "update %s set accession=\'%s\' where ix=%d", 
                         tableName, accession, exp->ix);
-sqlUpdate(conn, query->string);
+sqlUpdate(conn, dyStringContents(query));
 sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
+
 freez(&accession);
 freeDyString(&query);
+}
+
+void encodeExpUpdateField(struct sqlConnection *conn, char *tableName, 
+                                char *accession, char *field, char *val)
+/* Update field in encodeExp identified by accession with value.
+   Only supported for a few non-interdependent fields */
+{
+struct dyString *query = NULL;
+
+if (field != ENCODE_EXP_FIELD_LAB &&
+    field != ENCODE_EXP_FIELD_DATA_TYPE &&
+    field != ENCODE_EXP_FIELD_CELL_TYPE)
+        errAbort("Unsupported encodeExp field update: %s", field);
+
+query = dyStringCreate("update %s set %s=\'%s\' where accession=\'%s\'", 
+                        tableName, field, val, accession);
+sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
+sqlUpdate(conn, dyStringContents(query));
+sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
+freeDyString(&query);
+}
+
+void encodeExpUpdateFactors(struct sqlConnection *conn, char *tableName, 
+                                char *accession, struct slPair *factorPairs)
+/* Update factors in encodeExp identified by accession */
+{
+struct dyString *dy = dyStringNew(0);
+char *factors;
+struct slPair *pair;
+
+slPairSortCase(&factorPairs);
+for (pair = factorPairs; pair != NULL; pair = pair->next)
+    dyStringPrintf(dy, "%s=%s ", pair->name, (char *)pair->val);
+factors = dyStringCannibalize(&dy);
+eraseTrailingSpaces(factors);
+dy = dyStringCreate("update %s set %s=\'%s\' where accession=\'%s\'", 
+                        tableName, ENCODE_EXP_FIELD_FACTORS, factors, accession);
+sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
+sqlUpdate(conn, dyStringContents(dy));
+sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
+freeDyString(&dy);
 }
 
 char *encodeExpKey(struct encodeExp *exp)
@@ -550,8 +618,8 @@ char *encodeExpKey(struct encodeExp *exp)
 {
 struct dyString *dy = newDyString(0);
 dyStringPrintf(dy, "lab:%s dataType:%s cellType:%s", exp->lab, exp->dataType, exp->cellType);
-if (exp->vars != NULL)
-    dyStringPrintf(dy, " vars:%s", exp->vars);
+if (exp->factors != NULL)
+    dyStringPrintf(dy, " factors:%s", exp->factors);
 return dyStringCannibalize(&dy);
 }
 
@@ -577,14 +645,15 @@ struct dyString *dy = dyStringNew(0);
 for (pair = factorPairs; pair != NULL; pair = pair->next)
     dyStringPrintf(dy, "%s=%s ", pair->name, (char *)pair->val);
 factors = dyStringCannibalize(&dy);
-
-// whack trailing space
-if (factors[0] != 0)
-    factors[strlen(factors)-1] = 0;
+eraseTrailingSpaces(factors);
 
 dy = dyStringCreate(
-        "select * from %s where organism=\'%s\' and lab=\'%s\' and dataType=\'%s\' and cellType=\'%s\' and vars=\'%s\'",
-                table, organism, lab, dataType, cell, factors);
+        "select * from %s where organism=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s=\'%s\'",
+                table, organism, 
+                ENCODE_EXP_FIELD_LAB, lab, 
+                ENCODE_EXP_FIELD_DATA_TYPE, dataType, 
+                ENCODE_EXP_FIELD_CELL_TYPE, cell, 
+                ENCODE_EXP_FIELD_FACTORS, factors);
 exps = encodeExpLoadByQuery(conn, dyStringCannibalize(&dy));
 sqlDisconnect(&conn);
 return exps;

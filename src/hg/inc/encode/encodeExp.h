@@ -7,7 +7,7 @@
 
 #include "jksql.h"
 
-#define ENCODEEXP_NUM_COLS 7
+#define ENCODEEXP_NUM_COLS 8
 
 struct encodeExp
 /* ENCODE experiments */
@@ -19,7 +19,8 @@ struct encodeExp
     char *lab;	/* lab name from ENCODE cv.ra */
     char *dataType;	/* dataType from ENCODE cv.ra */
     char *cellType;	/* cellType from ENCODE cv.ra */
-    char *vars;	/* typeOfTerm=term list of experiment-defining variables */
+    char *factors;	/* typeOfTerm=term list of experiment-defining variables */
+    char *lastUpdated;  /* auto-update timestamp */  // WARNING: hand-edit here
     };
 
 void encodeExpStaticLoad(char **row, struct encodeExp *ret);
@@ -103,14 +104,15 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 #define ENCODE_EXP_FIELD_LAB            "lab"
 #define ENCODE_EXP_FIELD_DATA_TYPE      "dataType"
 #define ENCODE_EXP_FIELD_CELL_TYPE      "cellType"
-#define ENCODE_EXP_FIELD_VARS           "vars"
+#define ENCODE_EXP_FIELD_FACTORS        "factors"
+#define ENCODE_EXP_FIELD_LAST_UPDATED   "lastUpdated"
 
 #define ENCODE_EXP_NO_CELL              "None"
 #define ENCODE_EXP_NO_VAR               "None"
 
 #define ENCODE_EXP_TABLE        "encodeExp"
 #define ENCODE_EXP_DATABASE     "hgFixed"
-#define ENCODE_EXP_ACC_PREFIX   "wgEncodeE"
+#define ENCODE_EXP_ACC_PREFIX   "encodeE"
 #define ENCODE_EXP_TABLE_LOCK   "lock_encodeExp"
 
 void encodeExpFieldIndex(char *fieldName);
@@ -134,9 +136,9 @@ struct hash *encodeExpToRaFile(struct encodeExp *exp, FILE *f);
 struct hash *encodeExpToRa(struct encodeExp *exp);
 /* Create a Ra hash from an encodeExp */
 
-void encodeExpSave(struct sqlConnection *conn, char *tableName, struct encodeExp *exp);
-/* Save encodeExp as a row to the table specified by tableName. Update accession using
- * index assigned with autoincrement */
+void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp *exp);
+/* Add encodeExp as a new row to the table specified by tableName. 
+   Update accession using index assigned with autoincrement */
 
 char *encodeExpKey(struct encodeExp *exp);
 /* Create a hash key from an encodeExp */
@@ -163,6 +165,14 @@ int encodeExpExists(char *db, struct mdbVar *vars);
 char *encodeGetAccessionByMdbVars(char *db, struct mdbVar *vars);
 /* Return accession of (first) experiment matching vars, or NULL if not found */
 
+void encodeExpUpdateField(struct sqlConnection *conn, char *tableName, 
+                                char *accession, char *field, char *val);
+/* Update field in encodeExp identified by accession with value.
+   Only supported for a few non-interdependent fields */
+
+void encodeExpUpdateFactors(struct sqlConnection *conn, char *tableName, 
+                                char *accession, struct slPair *factorPairs);
+/* Update factors in encodeExp identified by accession */
 
 #endif /* ENCODEEXP_H */
 

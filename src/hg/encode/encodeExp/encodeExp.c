@@ -21,16 +21,16 @@ errAbort(
   "usage:\n"
   "   encodeExp <action> [arg]\n"
   "actions:\n"
-  "   create 			create table (default \'%s\')\n"
+  "   create 		create table (default \'%s\')\n"
   "   add <exp.ra>		add experiments to table from file\n"
-  "   dump <exp.ra>		output experiment table to file\n"
+  "   dump <exp.ra>	output experiment table to file\n"
   "   find <db> <exp.ra>	find unassigned experiments in metaDb and create .ra to file\n"
   "   check <db>		find objects in metaDb incorrect or missing accession\n"
   "   acc human|mouse <lab> <dataType> <cellType> [<factors>]\n"
-  "				return accession for experiment (factors as 'factor1:val1 factor2:val2')\n"
+  "			return accession for experiment (factors as 'factor1:val1 factor2:val2')\n"
   "options:\n"
-  "   -composite	limit to specified composite track (affects find and check)"
-  "   -mdb	specify metaDb table name (default \'%s\') - for test use \n"
+  "   -composite	limit to specified composite track (affects find and check)\n"
+  "   -mdb		specify metaDb table name (default \'%s\') - for test use \n"
   "   -table	specify experiment table name (default \'%s\')\n",
   encodeExpTableNew, MDB_DEFAULT_NAME, ENCODE_EXP_TABLE
   );
@@ -70,18 +70,29 @@ encodeExpTableCreate(connExp, table);
 }
 
 void expAdd(char *file)
-/* Add rows from .ra file. Exit on err -- bad format or not unique */
+/* Add rows from .ra file */
 {
 struct hash *ra = NULL;
 struct lineFile *lf = lineFileOpen(file, TRUE);
 struct encodeExp *exp;
+struct hash *oldExps;
+char *key;
 
-/* TODO: Read in table to check for uniqueness */
+/* create hash of keys for existing experiments so we can distinguish new ones */
+oldExps = expKeyHashFromTable(connExp, table);
+
 verbose(2, "Adding experiments from file \'%s\' to table \'%s\'\n", file, table);
 while ((ra = raNextRecord(lf)) != NULL)
     {
     exp = encodeExpFromRa(ra);
-    encodeExpSave(connExp, table, exp);
+    key = encodeExpKey(exp);
+    if (hashLookup(oldExps, key) == NULL)
+        {
+        verbose(3, "Adding new experiment: %s\n", key);
+        encodeExpAdd(connExp, table, exp);
+        }
+    else
+        verbose(4, "Old experiment: %s\n", key);
     }
 }
 
@@ -135,9 +146,10 @@ while ((meta = slPopHead(&metas)) != NULL)
     exp = encodeExpFromMdb(meta);
     key = encodeExpKey(exp);
 
-    if (hashLookup(newExps, key) == NULL)
+    if (hashLookup(newExps, key) == NULL &&
+        hashLookup(oldExps, key) == NULL)
         {
-        verbose(2, "Date: %s	Experiment %d: %s\n", 
+        verbose(2, "Found new experiment - Date: %s	Experiment %d: %s\n", 
                 mdbObjFindValue(meta, "dateSubmitted"), ++expNum, key);
         /* save new experiment */
         hashAdd(newExps, key, NULL);
@@ -186,8 +198,11 @@ int encodeExp(char *command, char *file, char *assembly)
 /* manage ENCODE experiments table */
 {
 connExp = sqlConnect(ENCODE_EXP_DATABASE);
-organism = hOrganism(assembly);
-strLower(organism);
+if (assembly != NULL)
+    {
+    organism = hOrganism(assembly);
+    strLower(organism);
+    }
 
 if (sameString(command, "create"))
     expCreate();

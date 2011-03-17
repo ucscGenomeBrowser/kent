@@ -5,12 +5,12 @@ organism human
 lab Stanford
 dataType ChipSeq
 cellType GM12878
-vars Antibody=Pol2
+factors Antibody=Pol2
 
 ix 0
 organism mouse
 lab Stanford-m
 dataType ChipSeq
 cellType CH12
-vars Antibody=Pol2
+factors Antibody=Pol2
 

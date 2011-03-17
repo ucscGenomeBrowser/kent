@@ -7,5 +7,6 @@ table encodeExp
     string lab;        "lab name from ENCODE cv.ra"
     string dataType;   "dataType from ENCODE cv.ra"
     string cellType;   "cellType from ENCODE cv.ra"
-    string vars;       "typeOfTerm=term list of experiment-defining variables"
+    string factors;    "var=value list of experiment-defining variables"
+    string lastUpdated; "auto-update timestamp"
     )

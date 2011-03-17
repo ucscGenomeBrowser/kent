@@ -3,15 +3,16 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#ENCODE experiment
+#ENCODE experiments
 CREATE TABLE encodeExp (
-    ix int not null AUTO_INCREMENT,	# auto-increment ID
+    ix int not null,	# auto-increment ID
     organism varchar(255) not null,	# human | mouse
     accession varchar(255) not null,	# wgEncodeE[H|M]00000N
-    lab varchar(255) not null,	        # lab name from ENCODE cv.ra
+    lab varchar(255) not null,	# lab name from ENCODE cv.ra
     dataType varchar(255) not null,	# dataType from ENCODE cv.ra
     cellType varchar(255) not null,	# cellType from ENCODE cv.ra
-    vars text,	                        # typeOfTerm=term list of experiment-defining variables
+    factors varchar(255) not null,	# var=value list of experiment-defining variables
+    lastUpdated varchar(255) not null,	# auto-update timestamp
               #Indices
     PRIMARY KEY(ix)
 );
