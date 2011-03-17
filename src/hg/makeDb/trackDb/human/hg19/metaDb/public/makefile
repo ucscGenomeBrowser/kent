@@ -13,6 +13,7 @@ wgEncodeCaltechRnaSeq.ra \
 wgEncodeBroadHistone.ra \
 wgEncodeSunyAlbanyTiling.ra \
 wgEncodeUwHistone.ra \
+wgEncodeOpenChromChip.ra \
 
 include ../../../../makefile.metaDb
 

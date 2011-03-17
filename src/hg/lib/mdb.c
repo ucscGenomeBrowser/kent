@@ -3204,3 +3204,37 @@ if (termHash != NULL)
 return term;
 }
 
+int mdbObjIsEncode(struct mdbObj *mdb)
+/* Return true if this metaDb object is for ENCODE */
+{
+char *project = mdbObjFindValue(mdb, "project");
+if (sameOk(project, ENCODE_MDB_PROJECT))
+    return TRUE;
+return FALSE;
+}
+
+int mdbObjInComposite(struct mdbObj *mdb, char *composite)
+/* Return true if metaDb object is in specified composite.
+   If composite is NULL, always return true */
+{
+if (composite == NULL || sameOk(composite, mdbObjFindValue(mdb, "composite")))
+    return TRUE;
+return FALSE;
+}
+
+struct mdbObj *mdbObjNew(char *name, struct mdbVar *vars)
+/* Create an mdbObj from a name and var list */
+{
+struct mdbObj *mdb;
+struct mdbVar *var;
+
+AllocVar(mdb);
+mdb->obj = name;
+mdb->vars = vars;
+mdb->varHash = hashNew(0);
+for (var = mdb->vars; var != NULL; var = var->next)
+    hashAdd(mdb->varHash, var->var, var);
+return mdb;
+}
+
+//NOTE:  Need mdbObjFree

@@ -1014,7 +1014,7 @@ void lfDrawSpecialGaps(struct linkedFeatures *lf,
  * If chainLines, draw a double-line gap if both target and query have a gap
  * (mismatching sequence). */
 
-void bamWigMethods(struct track *track, struct trackDb *tdb, 
+void bamWigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 /* Set up bamWig methods. */
 
@@ -1293,6 +1293,11 @@ boolean trackShouldUseAjaxRetrieval(struct track *track);
 
 #endif//ndef REMOTE_TRACK_AJAX_CALLBACK
 
+int gCmpPriority(const void *va, const void *vb);
+/* Compare groups based on priority. */
+
+int tgCmpPriority(const void *va, const void *vb);
+/* Compare to sort based on priority; use shortLabel as secondary sort key. */
 
 #endif /* HGTRACKS_H */
 

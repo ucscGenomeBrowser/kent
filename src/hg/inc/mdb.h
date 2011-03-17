@@ -92,6 +92,17 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 
 #define MDB_DEFAULT_NAME "metaDb"
 
+/* These are needed for experiment table to understand a few 
+ *      critical metaDb typeOfTerms.  Need someway to tie to cv.ra */
+
+#define MDB_FIELD_LAB          "lab"
+#define MDB_FIELD_DATA_TYPE   "dataType"
+#define MDB_FIELD_CELL_TYPE   "cell"
+
+/* metaDb project used for production ENCODE */
+// TODO:  move to ENCODE-specific mdb header file when it exists
+#define ENCODE_MDB_PROJECT       "wgEncode"
+
 // The mdb holds metadata primarily for tables.
 //   Many types of objects could be supported, though currently files are the only other type.
 // It is easy to imagine using the current mdb to support hierarchical trees of metadata.
@@ -411,3 +422,12 @@ const char *cvLabel(char *term);
 // returns cv label if term found or else just term
 #endif /* MDB_H */
 
+int mdbObjIsEncode(struct mdbObj *mdb);
+/* Return true if this metaDb object is for ENCODE */
+
+int mdbObjInComposite(struct mdbObj *mdb, char *composite);
+/* Return true if metaDb object is in specified composite.
+   If composite is NULL, always return true */
+
+struct mdbObj *mdbObjNew(char *name, struct mdbVar *vars);
+/* Create an mdbObj */
