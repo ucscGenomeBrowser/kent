@@ -307,7 +307,7 @@ subId 1997
 tableName wgEncodeUwDnase416bC57bl6MAdult8wksRawRep2
 view RawSignal
 
-metaObject wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksAlnRep1
+metaObject wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksAlnRep2
 objType file
 age adult-8wks
 cell B-cell_(CD19+)
@@ -316,18 +316,18 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
-fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksAlnRep1.bam
+fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain C57BL/6
 subId 2002
 view Alignments
 
-metaObject wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep1
+metaObject wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep2
 objType table
 age adult-8wks
 cell B-cell_(CD19+)
@@ -336,19 +336,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
-fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
+fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain C57BL/6
 subId 2002
-tableName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep1
+tableName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep2
 view Hotspots
 
-metaObject wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep1
+metaObject wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep2
 objType table
 age adult-8wks
 cell B-cell_(CD19+)
@@ -357,19 +357,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
-fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep1.narrowPeak.gz
+fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep2.narrowPeak.gz
 grant Stam
 lab UW-m
 labVersion lmax-v1.0
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain C57BL/6
 subId 2002
-tableName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep1
+tableName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep2
 view Peaks
 
-metaObject wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawDataRep1
+metaObject wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawDataRep2
 objType file
 age adult-8wks
 cell B-cell_(CD19+)
@@ -378,10 +378,10 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
-fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawDataRep1.fastq.gz
+fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawDataRep2.fastq.gz
 grant Stam
 lab UW-m
-labVersion 1
+labVersion 2
 project wgEncode
 replicate 1
 sex M
@@ -389,7 +389,7 @@ strain C57BL/6
 subId 2002
 view RawData
 
-metaObject wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep1
+metaObject wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep2
 objType table
 age adult-8wks
 cell B-cell_(CD19+)
@@ -398,16 +398,16 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
-fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep1.bigWig
+fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep2.bigWig
 grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain C57BL/6
 subId 2002
-tableName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep1
+tableName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep2
 view RawSignal
 
 metaObject wgEncodeUwDnaseCerebellumC57bl6MAdult8wksAlnRep1
@@ -1356,7 +1356,7 @@ project wgEncode
 replicate 1
 sex M
 strain C57BL/6
-subId 2009
+subId 2008
 view Alignments
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep2
@@ -1398,10 +1398,10 @@ project wgEncode
 replicate 3
 sex M
 strain C57BL/6
-subId 2014
+subId 2011
 view Alignments
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep4
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep7
 objType file
 age adult-8wks
 cell Liver
@@ -1410,19 +1410,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep4.bam.bai
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep4.bam
+fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep7.bam.bai
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep7.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 project wgEncode
-replicate 4
+replicate 7
 sex M
 strain C57BL/6
-subId 2010
+subId 2009
 view Alignments
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep5
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep8
 objType file
 age adult-8wks
 cell Liver
@@ -1431,19 +1431,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep5.bam.bai
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep5.bam
+fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep8.bam.bai
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep8.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 project wgEncode
-replicate 5
+replicate 8
 sex M
 strain C57BL/6
-subId 2011
+subId 2014
 view Alignments
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep6
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep9
 objType file
 age adult-8wks
 cell Liver
@@ -1452,16 +1452,16 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep6.bam.bai
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep6.bam
+fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep9.bam.bai
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep9.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 project wgEncode
-replicate 6
+replicate 9
 sex M
 strain C57BL/6
-subId 2008
+subId 2010
 view Alignments
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep1
@@ -1481,7 +1481,7 @@ project wgEncode
 replicate 1
 sex M
 strain C57BL/6
-subId 2009
+subId 2008
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep1
 view Hotspots
 
@@ -1523,11 +1523,11 @@ project wgEncode
 replicate 3
 sex M
 strain C57BL/6
-subId 2014
+subId 2011
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep3
 view Hotspots
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep4
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep7
 objType table
 age adult-8wks
 cell Liver
@@ -1536,19 +1536,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep4.broadPeak.gz
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep7.broadPeak.gz
 grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
-replicate 4
+replicate 7
 sex M
 strain C57BL/6
-subId 2010
-tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep4
+subId 2009
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep7
 view Hotspots
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep5
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep8
 objType table
 age adult-8wks
 cell Liver
@@ -1557,19 +1557,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep5.broadPeak.gz
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep8.broadPeak.gz
 grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
-replicate 5
+replicate 8
 sex M
 strain C57BL/6
-subId 2011
-tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep5
+subId 2014
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep8
 view Hotspots
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep6
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep9
 objType table
 age adult-8wks
 cell Liver
@@ -1578,16 +1578,16 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep6.broadPeak.gz
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep9.broadPeak.gz
 grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
-replicate 6
+replicate 9
 sex M
 strain C57BL/6
-subId 2008
-tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep6
+subId 2010
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep9
 view Hotspots
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep1
@@ -1607,7 +1607,7 @@ project wgEncode
 replicate 1
 sex M
 strain C57BL/6
-subId 2009
+subId 2008
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep1
 view Peaks
 
@@ -1649,11 +1649,11 @@ project wgEncode
 replicate 3
 sex M
 strain C57BL/6
-subId 2014
+subId 2011
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep3
 view Peaks
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep4
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep7
 objType table
 age adult-8wks
 cell Liver
@@ -1662,19 +1662,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep4.narrowPeak.gz
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep7.narrowPeak.gz
 grant Stam
 lab UW-m
 labVersion lmax-v1.0
 project wgEncode
-replicate 4
+replicate 7
 sex M
 strain C57BL/6
-subId 2010
-tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep4
+subId 2009
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep7
 view Peaks
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep5
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep8
 objType table
 age adult-8wks
 cell Liver
@@ -1683,19 +1683,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep5.narrowPeak.gz
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep8.narrowPeak.gz
 grant Stam
 lab UW-m
 labVersion lmax-v1.0
 project wgEncode
-replicate 5
+replicate 8
 sex M
 strain C57BL/6
-subId 2011
-tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep5
+subId 2014
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep8
 view Peaks
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep6
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep9
 objType table
 age adult-8wks
 cell Liver
@@ -1704,16 +1704,16 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep6.narrowPeak.gz
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep9.narrowPeak.gz
 grant Stam
 lab UW-m
 labVersion lmax-v1.0
 project wgEncode
-replicate 6
+replicate 9
 sex M
 strain C57BL/6
-subId 2008
-tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep6
+subId 2010
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep9
 view Peaks
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep1
@@ -1733,7 +1733,7 @@ project wgEncode
 replicate 1
 sex M
 strain C57BL/6
-subId 2009
+subId 2008
 view RawData
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep2
@@ -1773,10 +1773,10 @@ project wgEncode
 replicate 3
 sex M
 strain C57BL/6
-subId 2014
+subId 2011
 view RawData
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep4
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep7
 objType file
 age adult-8wks
 cell Liver
@@ -1785,18 +1785,18 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep4.fastq.gz
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep7.fastq.gz
 grant Stam
 lab UW-m
 labVersion 1
 project wgEncode
-replicate 4
+replicate 7
 sex M
 strain C57BL/6
-subId 2010
+subId 2009
 view RawData
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep5
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep8
 objType file
 age adult-8wks
 cell Liver
@@ -1805,18 +1805,18 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep5.fastq.gz
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep8.fastq.gz
 grant Stam
 lab UW-m
 labVersion 1
 project wgEncode
-replicate 5
+replicate 8
 sex M
 strain C57BL/6
-subId 2011
+subId 2014
 view RawData
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep6
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep9
 objType file
 age adult-8wks
 cell Liver
@@ -1825,15 +1825,15 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep6.fastq.gz
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep9.fastq.gz
 grant Stam
 lab UW-m
 labVersion 1
 project wgEncode
-replicate 6
+replicate 9
 sex M
 strain C57BL/6
-subId 2008
+subId 2010
 view RawData
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep1
@@ -1853,7 +1853,7 @@ project wgEncode
 replicate 1
 sex M
 strain C57BL/6
-subId 2009
+subId 2008
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep1
 view RawSignal
 
@@ -1895,11 +1895,11 @@ project wgEncode
 replicate 3
 sex M
 strain C57BL/6
-subId 2014
+subId 2011
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep3
 view RawSignal
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep4
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep7
 objType table
 age adult-8wks
 cell Liver
@@ -1908,19 +1908,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep4.bigWig
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep7.bigWig
 grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
-replicate 4
+replicate 7
 sex M
 strain C57BL/6
-subId 2010
-tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep4
+subId 2009
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep7
 view RawSignal
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep5
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep8
 objType table
 age adult-8wks
 cell Liver
@@ -1929,19 +1929,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep5.bigWig
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep8.bigWig
 grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
-replicate 5
+replicate 8
 sex M
 strain C57BL/6
-subId 2011
-tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep5
+subId 2014
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep8
 view RawSignal
 
-metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep6
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep9
 objType table
 age adult-8wks
 cell Liver
@@ -1950,19 +1950,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep6.bigWig
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep9.bigWig
 grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
-replicate 6
+replicate 9
 sex M
 strain C57BL/6
-subId 2008
-tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep6
+subId 2010
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep9
 view RawSignal
 
-metaObject wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep1
+metaObject wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep2
 objType file
 age adult-8wks
 cell Lung
@@ -1971,19 +1971,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep1.bam.bai
-fileName wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep1.bam
+fileIndex wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep2.bam.bai
+fileName wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain C57BL/6
 subId 2015
 view Alignments
 
-metaObject wgEncodeUwDnaseLungC57bl6MAdult8wksHotspotsRep1
+metaObject wgEncodeUwDnaseLungC57bl6MAdult8wksHotspotsRep2
 objType table
 age adult-8wks
 cell Lung
@@ -1992,19 +1992,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLungC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
+fileName wgEncodeUwDnaseLungC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain C57BL/6
 subId 2015
-tableName wgEncodeUwDnaseLungC57bl6MAdult8wksHotspotsRep1
+tableName wgEncodeUwDnaseLungC57bl6MAdult8wksHotspotsRep2
 view Hotspots
 
-metaObject wgEncodeUwDnaseLungC57bl6MAdult8wksPkRep1
+metaObject wgEncodeUwDnaseLungC57bl6MAdult8wksPkRep2
 objType table
 age adult-8wks
 cell Lung
@@ -2013,19 +2013,19 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLungC57bl6MAdult8wksPkRep1.narrowPeak.gz
+fileName wgEncodeUwDnaseLungC57bl6MAdult8wksPkRep2.narrowPeak.gz
 grant Stam
 lab UW-m
 labVersion lmax-v1.0
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain C57BL/6
 subId 2015
-tableName wgEncodeUwDnaseLungC57bl6MAdult8wksPkRep1
+tableName wgEncodeUwDnaseLungC57bl6MAdult8wksPkRep2
 view Peaks
 
-metaObject wgEncodeUwDnaseLungC57bl6MAdult8wksRawDataRep1
+metaObject wgEncodeUwDnaseLungC57bl6MAdult8wksRawDataRep2
 objType file
 age adult-8wks
 cell Lung
@@ -2034,18 +2034,18 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLungC57bl6MAdult8wksRawDataRep1.fastq.gz
+fileName wgEncodeUwDnaseLungC57bl6MAdult8wksRawDataRep2.fastq.gz
 grant Stam
 lab UW-m
 labVersion 1
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain C57BL/6
 subId 2015
 view RawData
 
-metaObject wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep1
+metaObject wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep2
 objType table
 age adult-8wks
 cell Lung
@@ -2054,16 +2054,16 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep1.bigWig
+fileName wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep2.bigWig
 grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain C57BL/6
 subId 2015
-tableName wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep1
+tableName wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep2
 view RawSignal
 
 metaObject wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep1
@@ -3305,4 +3305,4 @@ subId 2028
 tableName wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep2
 view RawSignal
 
-# MAGIC: -1203082391
+# MAGIC: -1803339832
