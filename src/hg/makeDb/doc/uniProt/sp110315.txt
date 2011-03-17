@@ -1,0 +1,50 @@
+#!/bin/tcsh -efx
+# Script to create a relational version of UniProt database.  Should be run on
+# hgwdev.
+
+# Set up working directory
+mkdir -p /hive/data/outside/swissprot/110315/build
+
+# Download swissprot. This will take about 90 minutes.
+cd /hive/data/outside/swissprot/110315/build
+wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz
+wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.dat.gz
+wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot_varsplic.fasta.gz
+
+# Turn flat file into relational tab-separated files.  The -dupeOk flag was
+# needed this time for spToDb since their were things in swissProt that had
+# not been removed from trEMBL.   This step takes about 20 minutes.
+zcat *.dat.gz | spToDb stdin ../tabFiles
+
+# Create the database.  
+hgsql mysql <<end
+create database sp110315;
+end
+
+# Load it up with table definitions from source directory
+hgsql sp110315 < ~/kent/src/hg/protein/spToDb/spDb.sql
+
+# Load up the data from tab files.  This takes about an hour.
+cd /hive/data/outside/swissprot/110315/tabFiles
+foreach i (*.txt)
+    hgsqlimport --local sp110315 $i
+end
+
+# Add varsplice info 
+zcat ../build/uniprot_sprot_varsplic.fasta.gz | spDbAddVarSplice sp110315 stdin .
+hgLoadSqlTab sp110315 -append varProtein /dev/null varProtein.txt
+hgLoadSqlTab sp110315 -append protein /dev/null varProtein.txt
+hgLoadSqlTab sp110315 -append varAcc /dev/null varAcc.txt
+hgLoadSqlTab sp110315 -append displayId /dev/null varDisplayId.txt
+hgLoadSqlTab sp110315 -append accToTaxon /dev/null varAccToTaxon.txt
+hgLoadSqlTab sp110315 -append geneLogic /dev/null varGeneLogic.txt
+hgLoadSqlTab sp110315 -append gene /dev/null varGene.txt
+hgLoadSqlTab sp110315 -append description /dev/null varDescription.txt
+
+# Add table descriptions
+makeTableDescriptions sp110315 ~/kent/src/hg/protein/spToDb/spDbTables.as
+
+# Zip up tab files for people who prefer them to database.
+gzip *.txt
+
+
