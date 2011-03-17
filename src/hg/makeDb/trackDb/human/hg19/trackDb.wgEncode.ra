@@ -140,7 +140,7 @@ include wgEncodeSydhHistone.ra
 include wgEncodeUwTfbs.ra alpha,beta
 
 # UTA TFBS (wrangler: Tim)
-include wgEncodeOpenChromChip.ra alpha,beta
+include wgEncodeOpenChromChip.ra
 
 # HAIB TFBS (wrangler: Venkat)
 include wgEncodeHaibTfbs.ra
