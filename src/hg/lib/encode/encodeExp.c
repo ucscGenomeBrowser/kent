@@ -623,8 +623,8 @@ if (exp->factors != NULL)
 return dyStringCannibalize(&dy);
 }
 
-struct encodeExp *encodeExpGetFromTable(char *organism, char *lab, char *dataType, char *cell,
-                                struct slPair *factorPairs, char *table)
+struct encodeExp *encodeExpGetFromTable(char *organism, char *lab, char *dataType, 
+                                char *cell, struct slPair *factorPairs, char *table)
 /* Return experiments matching args in named experiment table.
  * Organism, Lab and DataType must be non-null */
 {
@@ -648,8 +648,9 @@ factors = dyStringCannibalize(&dy);
 eraseTrailingSpaces(factors);
 
 dy = dyStringCreate(
-        "select * from %s where organism=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s=\'%s\'",
-                table, organism, 
+        "select * from %s where %s=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s=\'%s\'",
+                table, 
+                ENCODE_EXP_FIELD_ORGANISM, organism, 
                 ENCODE_EXP_FIELD_LAB, lab, 
                 ENCODE_EXP_FIELD_DATA_TYPE, dataType, 
                 ENCODE_EXP_FIELD_CELL_TYPE, cell, 
@@ -659,7 +660,8 @@ sqlDisconnect(&conn);
 return exps;
 }
 
-struct encodeExp *encodeExpGet(char *organism, char *lab, char *dataType, char *cell, struct slPair *factorPairs)
+struct encodeExp *encodeExpGet(char *organism, char *lab, char *dataType, char *cell, 
+                                        struct slPair *factorPairs)
 /* Return experiments matching args in default experiment table.
  * Organism, Lab and DataType must be non-null */
 {
@@ -673,6 +675,9 @@ struct mdbObj *mdb;
 int i;
 char *var, *val;
 struct slPair *factorPairs;
+
+if (db == NULL)
+    errAbort("Missing assembly");
 
 // FIXME: centralize treatment of organism/lower-casing
 char *organism = hOrganism(db);
@@ -692,8 +697,8 @@ for (i = 0; expFactors[i] != NULL; i++)
 slPairSortCase(&factorPairs);
 /* TODO: free up mdbObj */
 return encodeExpGetFromTable(organism, 
-                                mdbObjFindValue(mdb, "lab"), mdbObjFindValue(mdb, "dataType"), 
-                                mdbObjFindValue(mdb, "cell"), factorPairs, table);
+            mdbObjFindValue(mdb, MDB_FIELD_LAB), mdbObjFindValue(mdb, MDB_FIELD_DATA_TYPE),
+            mdbObjFindValue(mdb, MDB_FIELD_CELL_TYPE), factorPairs, table);
 }
 
 struct encodeExp *encodeExpGetByMdbVars(char *db, struct mdbVar *vars)
