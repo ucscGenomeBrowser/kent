@@ -8954,6 +8954,13 @@ TMPDIR=/scratch/tmp
       awk '$4 > 1 || $5 >= 100' peak.bed > wgEncodeRegDnaseClustered.bed
       hgLoadBed hg19 wgEncodeRegDnaseClustered wgEncodeRegDnaseClustered.bed
 
+      # Make wgEncodeRegDnaseClusteredInput table.  Start with mdbQuery, and
+      # then do some massaging since not completely in sync with file list.
+      mdbQuery out=tab "select obj,cell,antibody,treatment from hg19 where obj like 'wgEncodeUwDnase%' and view='Peaks'" | sed 's/n\/a/None/' > inputMdb.tab
+      cut -f 1 peak.table | sed 's/\.narrowPeak\.gz//' | sed 's/peaks\///' > inputs.lst
+      weedLines inputs.lst inputMdb.tab inputs.tab -invert -weeded=weeded.tab
+      hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable2.sql inputs.tab
+
       # Make transcription factor binding site clusters.  Start with Anshul's
       # nice uniform peak calls, downloaded from 
       #   ftp://ftp-private.ebi.ac.uk/byDataType/peaks/jan2011/spp/optimal
@@ -8991,9 +8998,9 @@ TMPDIR=/scratch/tmp
       hgLoadBed hg19 wgEncodeRegTfbsClustered peak.bed
       hgLoadSqlTab hg19 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
 
-      # Create inputTrackTable - four columns: <table> <source> <factor> <treatment>
-      awk '{printf("%s\t%s\t%s\t%s\n", $7, $8, $9, $10);}' peak.table > wgEncodeRegTfbsClusteredInputs.tab
-      hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable2.sql wgEncodeRegTfbsClusteredInputs.tab
+      # Create inputTrackTable - six columns: <table> <source> <factor> <cell> <treatment> <lab>
+      awk '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $7, ($10 == "None" ? $8 : $8 "+" $10), $9, $8, $10, $11);}' peak.table > wgEncodeRegTfbsClusteredInputs.tab
+      hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable4.sql wgEncodeRegTfbsClusteredInputs.tab
 
       # Do work to figure out how to color cells.  This is based on
       # hierarchical clustering of wbEncodeUwAffyAllExon.
@@ -14827,5 +14834,112 @@ hgsql hg19 -N -e \
     checkTableCoords -verbose=2 hg19 hgIkmc
 
     hgLoadSqlTab hg19 hgIkmcExtra $HOME/kent/src/hg/lib/genericAlias.sql hgIkmcExtra.tab
+
+#########################################################################
+# LOAD ACEMBLY (DONE 2011-03-14 - Chin)
+    mkdir /hive/data/outside/acembly
+    cd /hive/data/outside/acembly
+    wget --timestamping \
+ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_37_Aug10.human.genes/AceView.ncbi_37.genes_gff.gff.gz
+    wget --timestamping \
+ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_37_Aug10.human.genes/AceView.ncbi_37.good_proteins_peptide.fasta.gz
+
+    mkdir /cluster/data/hg19/bed/acembly
+    cd /cluster/data/hg19/bed/acembly
+    cp -p /hive/data/outside/acembly/AceView.ncbi_37.genes_gff.gff.gz .
+    cp -p /hive/data/outside/acembly/AceView.ncbi_37.good_proteins_peptide.fasta.gz .
+    gzip -d AceView.ncbi_37.genes_gff.gff.gz
+    gzip -d AceView.ncbi_37.good_proteins_peptide.fasta.gz
+
+    # If the result of this command is > 0, then some lines have end <
+    # start
+    # and need to be fixed:
+    awk '$5 < $4 {print;}' AceView.ncbi_37.genes_gff.gff | wc -l
+    # 0
+
+    # Filter out empty lines, lines where the product_id has a stray
+    # newline before it, and $chr|Hs# IDs that don't appear liftable.
+    # (Note: the new gff does not have these two cases anymore.) 
+    # Add 'chr' prefix to chrom number at field 1
+    egrep -h -v '^(| ?product_id.*|..?\|Hs.*)$' AceView.ncbi_37.genes_gff.gff \
+    | sed -e 's/^/chr/;' \
+      > acembly.gff
+
+    # Extract annotation classes from original gff:
+    cat AceView.ncbi_37.genes_gff.gff | awk  '{print $12}' | sort | uniq
+    # cDNA_supported;
+    # Note: version 37 gff have only one gene type - cDNA_supported;
+    # Per Danielle and Jean request, use pink to display them. 	
+    # the following replace become no-op.
+    egrep -h -v '^(| ?product_id.*|..?\|Hs.*)$' AceView.ncbi_37.genes_gff.gff \
+    | perl -wpe 's/^.*Gene_type (\w+); transcript_id (\S+);.*/$2\t$1/; \
+                 s/Cloud$/cloud/ || s/Spliced_gene$/spliced_gene/ || \
+                   die "Unrecognized class/Gene_type:\n$_\n";' \
+    | sort -u \
+      > acemblyClass.tab
+    # Useless use of single ref constructor in void context at -e line 2.
+    # warning was issued, however it is harmless.
+
+
+    # Some gff transcript_id's end in -unspliced (no intron), but the
+    # corresponding protein fasta IDs to not have that suffix.  We need
+    # them to match, so add where necessary.
+    # Use perl to make a perl script to add -unspliced to protein IDs
+    # where necessary:
+    grep unspliced acemblyClass.tab | wc -l
+    # 54180
+    egrep -h -v '^(| ?product_id.*|..?\|Hs.*)$'  AceView.ncbi_37.genes_gff.gff \
+    | perl -wpe 's@^.*transcript_id (\S+)-unspliced;.*$@\$unsp{"$1"} = 1;@ || s/^.*\n$//;' \
+    | sort -u \
+      > addUnspliced.pl
+    wc -l addUnspliced.pl
+    # 54180 addUnspliced.pl
+    cat >> addUnspliced.pl <<'_EOF_'
+while (<>) {
+  if (/^>(\S+)$/) {
+    if ($unsp{$1}) {
+      s/^>(\S+)/>$1-unspliced/;
+    }
+  }
+  print;
+}
+'_EOF_'
+    # << emacs
+
+    # Add -unspliced suffix to protein IDs where necessary, and pare
+    # down
+    # proteins to just the ones that we have transcripts for:
+    awk '{print $1;}' acemblyClass.tab   > transcriptNames.txt
+    perl addUnspliced.pl AceView.ncbi_37.good_proteins_peptide.fasta \
+    | faSomeRecords stdin transcriptNames.txt acemblyPep.fa
+    grep unspliced acemblyPep.fa | wc -l
+    # 31956
+    # Danielle Thierry-Mieg explained that noncoding genes are included
+    # so
+    # the number of proteins can be smaller than the number of
+    # transcripts.
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/hg19/bed/acembly
+    ldHgGene -gtf hg19 acembly acembly.gff
+    # Reading acembly.gff
+    # Read 259440 transcripts in 3870073 lines in 1 files
+    #   259440 groups 25 seqs 1 sources 5 feature types
+    # 259440 gene predictions
+
+    hgLoadSqlTab hg19 acemblyClass ~/kent/src/hg/lib/acemblyClass.sql \
+      acemblyClass.tab
+    # Scanning through 1 files
+    hgPepPred hg19 generic acemblyPep acemblyPep.fa
+    # rm acemblyPep.tab
+    runJoiner.csh hg19 acembly
+    # found identifiers:
+    # acemblyName
+    # Checking keys on database hg19
+    #  hg19.acemblyPep.name - hits 187692 of 187692 ok
+    #  hg19.acemblyClass.name - hits 259440 of 259440 ok
+    # running -times flag
+
 
 #############################################################################

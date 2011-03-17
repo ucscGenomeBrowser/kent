@@ -614,9 +614,13 @@ Some settings used by various tracks:
       by clustering or aggregating data found in other tracks.  This names a table
       that is in three column format - first the input track name, then the source
       name (cell line etc) if any, then the factor name if any.
-    o inputTracksSubgroupDisplay - used with inputTrackTable.  This contains a list
-      of group types (just the left size of the var=val pairs in the subGroupN line of the parent)
-      to display as columns in the details display table.
+    o inputTableFieldDisplay - used with inputTrackTable.  Countains a list of the
+      fields from that table to display as columns in the details display table.
+    o inputTracksSubgroupDisplay - used with inputTrackTable.  One and only one of
+      inputTableFieldsDisplay or inputTracksSubgroupDisplay should be used. If present
+      this tag contains a list of group types (just the left size of the var=val pairs 
+      in the subGroupN line of the parent) to display as columns in the details 
+      display table.
     o showSubtrackColorOnUi - used with tracks that include other tracks.  When UI shows
       a table of tracks and this is set, a small patch of color indicating the track color
       is part of the table.
