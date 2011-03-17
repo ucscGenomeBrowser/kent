@@ -305,9 +305,7 @@ canPack On
     type bed 5 .
     superTrack wgEncodeReg dense
     inputTrackTable wgEncodeRegDnaseClusteredInputs
-    #inputTracks wgEncodeUwDnaseSeq
-    #inputTracksSubgroupSelect view=aPeaks
-    inputTracksSubgroupDisplay cellType rank
+    inputTracksSubgroupDisplay cellType treatment rep
     visibility dense
     useScore 1
     priority 1.6
@@ -319,9 +317,9 @@ canPack On
     superTrack wgEncodeReg dense
     sourceTable wgEncodeRegTfbsCells
     inputTrackTable wgEncodeRegTfbsClusteredInputs
-    #inputTracks wgEncodeYaleChIPseq wgEncodeHudsonalphaChipSeq
-    #inputTracksSubgroupSelect view=Peaks
-    inputTracksSubgroupDisplay cellType factor
+    inputTableFieldDisplay cellType treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    # inputTracksSubgroupDisplay cellType factor treatment
     visibility dense
     useScore 1
     priority 1.7
