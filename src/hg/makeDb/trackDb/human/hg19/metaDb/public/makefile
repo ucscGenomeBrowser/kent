@@ -14,6 +14,7 @@ wgEncodeBroadHistone.ra \
 wgEncodeSunyAlbanyTiling.ra \
 wgEncodeUwHistone.ra \
 wgEncodeOpenChromChip.ra \
+wgEncodeUwTfbs.ra \
 
 include ../../../../makefile.metaDb
 
