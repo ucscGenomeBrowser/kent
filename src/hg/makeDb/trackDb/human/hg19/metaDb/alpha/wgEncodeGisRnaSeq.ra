@@ -1,6 +1,7 @@
 metaObject wgEncodeGisRnaSeq
 objType composite
 composite wgEncodeGisRnaSeq
+expVars lab,dataType,cell,localization,rnaExtract
 geoSeriesAccession GSE27221
 
 metaObject wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1
@@ -397,4 +398,4 @@ rnaExtract longPolyA
 subId 2323
 view RawData
 
-# MAGIC: -744090212
+# MAGIC: -2025591104

@@ -32,7 +32,7 @@ noInherit on
     windowingFunction mean
     maxHeightPixels 100:24:16
 
-        track wgEncodeYaleRnaSeqK562PolyaSig
+        track wgEncodeYaleRnaSeqK562PolyaRaw
         release alpha
         parent wgEncodeYaleRnaSeqViewSignal on
         shortLabel K562 pA+ None
@@ -41,7 +41,7 @@ noInherit on
         type bigWig 1.000000 1655291.000000
         origAssembly hg19
         color 46,0,184
-        # subId=2085 dateSubmitted=2010-10-21
+        # subId=3113
 
         track wgEncodeYaleRnaSeqGm12878PolyaSig
         release alpha
@@ -57,7 +57,7 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyarrnaSig
         release alpha
         parent wgEncodeYaleRnaSeqViewSignal off
-        shortLabel K562 pA+ aAma 
+        shortLabel K562 pA- aAma 
         longLabel K562 polyA- rRNA- a-amanitin RNA-seq Signal from ENCODE/Yale/UCD/Harvard
         subGroups view=RawSignal cellType=K562 rnaExtract=nonPolyARRna treatment=AMA50ug9h
         type bigWig 1.000000 1941180.000000
@@ -98,7 +98,7 @@ noInherit on
         color 46,0,184
         # subId=3113 dateSubmitted=2010-12-17
 
-        track wgEncodeYaleRnaSeqK562NonpolyaRaw
+        track wgEncodeYaleRnaSeqK562NonpolyarrnaSig
         release alpha
         parent wgEncodeYaleRnaSeqViewSignal on
         shortLabel K562 pA- None
@@ -107,7 +107,7 @@ noInherit on
         type bigWig 0.000000 1144860.000000
         origAssembly hg18
         color 46,0,184
-        # subId=3113 dateSubmitted=2010-12-17
+        # subId=2085 
 
         track wgEncodeYaleRnaSeqK562Ifng30PolyaRaw
         release alpha
@@ -153,7 +153,7 @@ noInherit on
         color 153,38,0
         # subId=2007 dateSubmitted=2010-10-21
 
-        track wgEncodeYaleRnaSeqK562NonpolyaAln
+        track wgEncodeYaleRnaSeqK562NonpolyarrnaAln
         release alpha
         parent wgEncodeYaleRnaSeqViewAlignments off
         shortLabel K562 pA- None
@@ -162,7 +162,7 @@ noInherit on
         type bam
         origAssembly hg18
         color 46,0,184
-        # subId=2007 dateSubmitted=2010-10-21
+        # subId=2085 
 
         track wgEncodeYaleRnaSeqK562Ifna30PolyaAln
         release alpha
@@ -218,7 +218,7 @@ noInherit on
         type bam
         origAssembly hg19
         color 46,0,184
-        # subId=2085 dateSubmitted=2010-10-21
+        # subId=2007
 
         track wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyarrnaAln
         release alpha

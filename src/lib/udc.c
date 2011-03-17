@@ -388,20 +388,17 @@ if (lastModString == NULL)
 struct tm tm;
 time_t t;
 // Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
-// TODO: it's very likely that there are other date string patterns
-//  out there that might be encountered.
+// This will always be GMT
 if (strptime(lastModString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
     { /* Handle error */;
     hashFree(&hash);
     errAbort("unable to parse last-modified string [%s]", lastModString);
     }
-// Not set by strptime(); tells mktime() to determine whether daylight saving time is in effect:
-tm.tm_isdst = -1;
-t = mktime(&tm);
+t = mktimeFromUtc(&tm);
 if (t == -1)
     { /* Handle error */;
     hashFree(&hash);
-    errAbort("mktime failed while parsing last-modified string [%s]", lastModString);
+    errAbort("mktimeFromUtc failed while converting last-modified string [%s] to UTC time", lastModString);
     }
 retInfo->updateTime = t;
 

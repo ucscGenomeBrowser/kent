@@ -196,21 +196,21 @@ lf->buf = s;
 return lf;
 }
 
-struct lineFile *lineFileOnTabix(char *fileName, bool zTerm)
+struct lineFile *lineFileOnTabix(char *fileOrUrl, bool zTerm)
 /* Wrap a line file around a data file that has been compressed and indexed
- * by the tabix command line program.  The index file <fileName>.tbi must be
- * readable in addition to fileName. If there's a problem, warn & return NULL.
+ * by the tabix command line program.  The index file <fileOrUrl>.tbi must be
+ * readable in addition to fileOrUrl. If there's a problem, warn & return NULL.
  * This works only if kent/src has been compiled with USE_TABIX=1 and linked
  * with the tabix C library. */
 {
 #ifdef USE_TABIX
-int tbiNameSize = strlen(fileName) + strlen(".tbi") + 1;
+int tbiNameSize = strlen(fileOrUrl) + strlen(".tbi") + 1;
 char *tbiName = needMem(tbiNameSize);
-safef(tbiName, tbiNameSize, "%s.tbi", fileName);
-tabix_t *tabix = ti_open(fileName, tbiName);
+safef(tbiName, tbiNameSize, "%s.tbi", fileOrUrl);
+tabix_t *tabix = ti_open(fileOrUrl, tbiName);
 if (tabix == NULL)
     {
-    warn("Unable to open \"%s\"", fileName);
+    warn("Unable to open \"%s\"", fileOrUrl);
     freez(&tbiName);
     return NULL;
     }
@@ -221,7 +221,7 @@ if ((tabix->idx = ti_index_load(tbiName)) == NULL)
     return NULL;
     }
 struct lineFile *lf = needMem(sizeof(struct lineFile));
-lf->fileName = cloneString(fileName);
+lf->fileName = cloneString(fileOrUrl);
 lf->fd = -1;
 lf->bufSize = 64 * 1024;
 lf->buf = needMem(lf->bufSize);
@@ -237,7 +237,7 @@ return NULL;
 
 boolean lineFileSetTabixRegion(struct lineFile *lf, char *seqName, int start, int end)
 /* Assuming lf was created by lineFileOnTabix, tell tabix to seek to the specified region
- * and return TRUE (or if unable, return FALSE). */
+ * and return TRUE (or if there are no items in region, return FALSE). */
 {
 #ifdef USE_TABIX
 if (lf->tabix == NULL)

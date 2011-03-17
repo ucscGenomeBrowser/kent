@@ -1,0 +1,6 @@
+metaObject wgEncodeYaleChIPseq
+objType composite
+composite wgEncodeYaleChIPseq
+expVars lab,dataType,cell,treatment,antibody,control
+
+# MAGIC: 1567433030

@@ -1,5 +1,8 @@
 #	"$Id: trackDb.chainNet.ra,v 1.14 2010/03/19 18:22:09 antonio Exp $";
 
+track chainNetPanTro3 override
+priority 220.3
+
 track chainNetPanTro2 override
 priority 220.3
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91

@@ -1196,12 +1196,15 @@ function postToSaveSettings(obj)
 $(document).ready(function()
 {
     var db = getDb();
+    if(document.getElementById("hgt.newJQuery") != null) {
+        newJQuery = true;
+    }
     if(jQuery.fn.autocomplete && $('input#suggest') && db) {
         if(newJQuery) {
             $('input#suggest').autocomplete({
                                                 delay: 500,
                                                 minLength: 2,
-                                                source: ajaxGet(function () {return db;}, new Object),
+                                                source: ajaxGet(function () {return db;}, new Object, true),
                                                 select: function (event, ui) {
                                                         setPosition(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
                                                         // jQuery('body').css('cursor', 'wait');
@@ -1213,7 +1216,7 @@ $(document).ready(function()
             $('input#suggest').autocomplete({
                                                 delay: 500,
                                                 minchars: 2,
-                                                ajax_get: ajaxGet(function () {return db;}, new Object),
+                                                ajax_get: ajaxGet(function () {return db;}, new Object, false),
                                                 callback: function (obj) {
                                                     setPosition(obj.id, commify(getSizeFromCoordinates(obj.id)));
                                                     // jQuery('body').css('cursor', 'wait');
@@ -1697,30 +1700,6 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
             reloadFloatingItem();
             updateTrackImg(id, "hgt.transparentImage=0", "");
         }
-    } else if (cmd == 'locateItem') {
-        // currently experimental
-        // o["Locate item" ] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "locateItem"); return true; }};
-        $('#hgLookupDialog').dialog({
-                               resizable: false,
-                               height: 'auto',
-                               width: 'auto',
-                               modal: true,
-                               closeOnEscape: true,
-                               autoOpen: false,
-                               buttons: { "OK": function() {
-                                              $(this).dialog("close");
-                                          }},
-                                    });
-        // this doesn't work (not sure why).
-        $('input#itemLookupSuggest').autocomplete({
-            delay: 500,
-            minLength: 2,
-            source: ajaxGet(function () {return db;}, new Object),
-            select: function (event, ui) {
-                setPosition(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
-            }
-            });
-        $('#hgLookupDialog').dialog('open');
     } else {   // if( cmd in 'hide','dense','squish','pack','full','show' )
         // Change visibility settings:
         //
@@ -2118,10 +2097,12 @@ function hgTrackUiPopCfgOk(popObj, trackName)
                 updateVisibility(trackName, newVis);
             }
             var urlData = varHashToQueryString(changedVars);
-            if(mapIsUpdateable) {
-                updateTrackImg(trackName,urlData,"");
-            } else {
-                window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
+            if(urlData.length > 0) {
+                if(mapIsUpdateable) {
+                    updateTrackImg(trackName,urlData,"");
+                } else {
+                    window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
+                }
             }
         }
     }

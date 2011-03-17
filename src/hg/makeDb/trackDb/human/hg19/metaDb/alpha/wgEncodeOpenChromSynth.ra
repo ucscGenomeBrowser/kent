@@ -1,3 +1,8 @@
+metaObject wgEncodeOpenChromSynth
+objType composite
+composite wgEncodeOpenChromSynth
+expVars lab,dataType,cell
+
 metaObject wgEncodeOpenChromSynthGm12878Pk
 objType table
 cell GM12878
@@ -124,4 +129,4 @@ subId 3273
 tableName wgEncodeOpenChromSynthNhekPk
 view Peaks
 
-# MAGIC: 1442386317
+# MAGIC: 671947868

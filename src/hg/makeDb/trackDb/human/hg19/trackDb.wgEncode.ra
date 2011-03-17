@@ -9,11 +9,11 @@ include wgEncodeGencodeV5.ra alpha
 # UNC/BSU Proteogenomics (wrangler: cline)
 include wgEncodeUncBsuProt.ra alpha
 
-# GIS ChIA-pet (wrangler: braney)
-include wgEncodeGisChiaPet.ra alpha
+# Integrated Regulation (wrangler: kent)
+include wgEncodeReg.ra alpha
 
 # Nucleosome (wrangler: venkat)
-include wgEncodeSydhNsome.ra
+include wgEncodeSydhNsome.ra alpha
 
 # GIS RNA PET (wrangler: cricket)
 include wgEncodeGisRnaPet.ra
@@ -30,7 +30,16 @@ include wgEncodeBuOrchid.ra
 # Affy Rna Chip (wrangler: braney)
 include wgEncodeAffyRnaChip.ra
 
+# Chromatin Interactions ------
 
+# GIS ChIA-pet (wrangler: braney)
+include wgEncodeGisChiaPet.ra alpha
+
+# UMass-Dekker 5C (wrangler: kate)
+#include wgEncodeUmassDekker5C.ra alpha
+
+# UW 5C (wrangler: kate)
+include wgEncodeUw5C.ra alpha
 
 
 # Encode Affy Exon -------------------------------------------- 
@@ -42,13 +51,9 @@ include wgEncodeUwAffyExonArray.ra
 include wgEncodeDukeAffyExon.ra alpha
 
 
-
-
-
-
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 #UNC FAIRE (wrangler: tim)
-include wgEncodeOpenChromFaire.ra alpha
+include wgEncodeOpenChromFaire.ra alpha,beta
 
 #Open Chrom Synth (wrangler: tim)
 include wgEncodeOpenChromSynth.ra
@@ -153,8 +158,7 @@ include wgEncodeUchicagoTfbs.ra
 include wgEncodeSunyAlbanyGeneSt.ra alpha
 
 # SUNY Tiling Array (wrangler: cricket)
-include wgEncodeSunyAlbanyTiling.ra beta,public
-include wgEncodeSunyAlbanyTiling.new.ra alpha
+include wgEncodeSunyAlbanyTiling.ra
 
 # SUNY SwitchGear (wrangler: cricket)
 include wgEncodeSunySwitchgear.ra alpha

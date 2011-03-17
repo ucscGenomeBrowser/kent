@@ -698,6 +698,38 @@ if (tg->limitedVis == tvDense)
 return;
 }
 
+static void doMapBoxPerRow(struct track *tg,
+	int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+int fontHeight = mgFontLineHeight(font);
+int numRows = tg->height / fontHeight;
+struct customTrack *ct = tg->customPt;
+char itemBuffer[1024];
+
+if (ct)
+    // this should have the trash file name instead of spacer
+    // but the click handler doesn't use it anyway
+    safef(itemBuffer, sizeof itemBuffer, "%s %s","spacer","zoom in");
+else
+    safef(itemBuffer, sizeof itemBuffer, "zoom in");
+
+while(numRows--)
+    {
+    char buffer[1024];
+
+    safef(buffer, sizeof buffer, 
+	"Too many items in display.  Zoom in to click on items. (%d)",numRows);
+    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, fontHeight,
+	tg->track, itemBuffer,
+	buffer);
+    yOff += fontHeight;
+    }
+
+// just do this once
+tg->customInt = 0;
+}
 
 void bamLinkedFeaturesSeriesDraw(struct track *tg,
 	int seqStart, int seqEnd,
@@ -709,13 +741,8 @@ linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
         font, color, vis);
 
 if(tg->customInt)
-    {
-    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, 
-        tg->track, tg->track, 
-        "Too many items in display.  Zoom in to click on items");
-    // just do this once
-    tg->customInt = 0;
-    }
+    doMapBoxPerRow(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+            font, color, vis);
 }
 
 void bamLinkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
@@ -727,13 +754,8 @@ linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
         font, color, vis);
 
 if(tg->customInt)
-    {
-    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, 
-        tg->track, tg->track, 
-        "Too many items in display.  Zoom in to click on items");
-    // just do this once
-    tg->customInt = 0;
-    }
+    doMapBoxPerRow(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+            font, color, vis);
 }
 
 void bamMethods(struct track *track)

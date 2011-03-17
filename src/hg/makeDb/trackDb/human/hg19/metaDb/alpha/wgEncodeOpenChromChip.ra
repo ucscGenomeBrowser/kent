@@ -1,3 +1,8 @@
+metaObject wgEncodeOpenChromChip
+objType composite
+composite wgEncodeOpenChromChip
+expVars lab,dataType,cell,treatment,antibody
+
 metaObject wgEncodeOpenChromChipFibroblCtcfAlnRep1
 objType file
 antibody CTCF
@@ -5894,4 +5899,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -1573681498
+# MAGIC: 1634695452

@@ -45,6 +45,7 @@ subGroup4 rep Replicate 1=1 2=2
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rep
 dimensionZchecked 1,2
 sortOrder cellType=+ factor=+ rep=+ view=+
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target replicate=Rep view=View origAssembly=Assembly<BR>originally<BR>mapped<BR>to fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
@@ -1207,7 +1208,7 @@ noInherit on
     maxLimit 16000.0
     autoScale off
     maxHeightPixels 100:32:16
-    windowingFunction mean
+    windowingFunction mean+whiskers
 
         track wgEncodeUwTfbsBjCtcfStdRawRep1
         parent wgEncodeUwTfbsViewRawSig off

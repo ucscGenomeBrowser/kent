@@ -574,6 +574,9 @@ struct slName *slNameListFromString(char *s, char delimiter);
 #define slNameListFromComma(s) slNameListFromString(s, ',')
 /* Parse out comma-separated list. */
 
+struct slName *slNameListOfUniqueWords(char *text);
+// Return list of unique words found by parsing string delimited by whitespace.
+
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize);
 /* Return list of slNames from an array of strings of length arraySize.
  * If a string in the array is NULL, the array will be treated as
@@ -1368,6 +1371,13 @@ enum enumBool
 #define IS_KNOWN(ebool)   (IS_YES(ebool) || IS_NO(ebool))
 #define IS_TRUE           IS_YES
 #define IS_FALSE          IS_NO
+
+time_t mktimeFromUtc (struct tm *t);
+/* Return time_t for tm in UTC (GMT)
+ * Useful for stuff like converting to time_t the
+ * last-modified HTTP response header
+ * which is always GMT. Returns -1 on failure of mktime */
+
 
 time_t dateToSeconds(const char *date,const char*format);
 // Convert a string date to time_t
