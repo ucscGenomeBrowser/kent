@@ -8,7 +8,7 @@ CREATE TABLE clusterInputTrackTable3 (
     tableName varchar(255) not null,	# Name of table used as an input
     source varchar(255) not null,	# Name of source - linked to Exps table. Cell+treatment
     factor varchar(255) not null,	# Name of factor/antibody
-    cell varchar(255) not null,		# Name of cell type
+    cellType varchar(255) not null,		# Name of cell type
     treatment varchar(255) not null,	# Drug or other treatment given to cells while alive
     lab varchar(255) not null,		# Lab this was done in
               #Indices
