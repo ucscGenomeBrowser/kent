@@ -136,11 +136,11 @@ include wgEncodeSydhHistone.ra
 
 # ENCODE TFBS -------------------------------------------
 
-# UW TFBS (wrangler: Venkat)
-include wgEncodeUwTfbs.ra alpha,beta
+# UW CTCF Binding (wrangler: Venkat)
+include wgEncodeUwTfbs.ra
 
 # UTA TFBS (wrangler: Tim)
-include wgEncodeOpenChromChip.ra alpha,beta
+include wgEncodeOpenChromChip.ra
 
 # HAIB TFBS (wrangler: Venkat)
 include wgEncodeHaibTfbs.ra

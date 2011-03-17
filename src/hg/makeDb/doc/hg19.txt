@@ -14705,14 +14705,12 @@ hgLoadSqlTab -warn hg19 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omim
 parseOmimDisorder hg19 omimDisorderPhenotype.tab
 hgLoadSqlTab -warn hg19 omimDisorderPhenotype ~/kent/src/hg/lib/omimDisorderPhenotype.sql omimDisorderPhenotype.tab 
 
-hgsql hg19 -N -e \
-'select chrom, txStart, txEnd, m.omimId from mim2gene m, refLink l, refGene g where geneId <>"-" and m.omimId=l.omimId and l.mrnaAcc=g.name' |sort -u > omimGeneAll.tab
+doOmimGene2 hg19 j.tmp
+cat j.tmp |sort -u > omimGene2.tab
 
-hgLoadBed hg19 omimGene2 omimGeneAll.tab
+hgLoadBed hg19 omimGene2 omimGene2.tab
 
-# The following clean up could be done.
-rm j.out
-
+rm j.tmp
 ##############################################################
 # build the omimAvSnp track
 
