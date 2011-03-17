@@ -22,7 +22,7 @@ canPack On
     showSubtrackColorOnUi on
     aggregate transparentOverlay
     transformFunc LOG
-    viewLimits 0:4
+    viewLimits 0:8
     priority 1.1
     dragAndDrop subTracks
 
