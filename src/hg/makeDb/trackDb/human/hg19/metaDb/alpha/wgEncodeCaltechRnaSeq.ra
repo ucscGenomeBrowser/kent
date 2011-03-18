@@ -1497,26 +1497,25 @@ subId 3665
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
-metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep1
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep1V2
 objType table
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep1.bam
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep1V2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
-localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
-rnaExtract longPolyA
 subId 3436
-tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep1
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep1V2
 view Paired
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep2V2
@@ -1540,26 +1539,25 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep2V2
 view Paired
 
-metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2
 objType table
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1.bigWig
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
-localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
-rnaExtract longPolyA
 subId 3436
-tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep2V2
@@ -1583,15 +1581,15 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep2V2
 view Signal
 
-metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2
 objType table
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1.bam
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1600,7 +1598,8 @@ project wgEncode
 readType 2x75
 replicate 1
 subId 3436
-tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2
@@ -1785,6 +1784,27 @@ subId 3577
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
 
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep2V3
+objType file
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-17
+dateUnrestricted 2011-12-17
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep2V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 8a2e010f3fb6d55a10591406e4099962
+project wgEncode
+readType 2x75
+replicate 2
+subId 3666
+submittedDataVersion V3 - New Elements Formats
+view ExonsGencV3c
+
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep3V3
 objType file
 cell GM12892
@@ -1949,23 +1969,25 @@ subId 3577
 submittedDataVersion V3 - New Elements Formats
 view GeneDeNovo
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep2
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep2V3
 objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-14
-dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep2.fpkm.gz
+dateSubmitted 2011-03-17
+dateUnrestricted 2011-12-17
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+md5sum 678a6061100678b2667b5f7175880165
 project wgEncode
 readType 2x75
 replicate 2
-subId 3438
+subId 3666
+submittedDataVersion V3 - New Elements Formats
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep3V3
@@ -1991,25 +2013,6 @@ subId 3744
 submittedDataVersion V3 - New Elements Formats
 view GeneDeNovo
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGCV3cRep2
-objType file
-cell GM12892
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-14
-dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGCV3cRep2.fpkm.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-subId 3438
-view GeneGCV3c
-
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep1V3
 objType file
 cell GM12892
@@ -2030,6 +2033,27 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3577
+submittedDataVersion V3 - New Elements Formats
+view GeneGencV3c
+
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep2V3
+objType file
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-17
+dateUnrestricted 2011-12-17
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep2V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 96c122a527fade8355b4f19ed9c293c3
+project wgEncode
+readType 2x75
+replicate 2
+subId 3666
 submittedDataVersion V3 - New Elements Formats
 view GeneGencV3c
 
@@ -2079,6 +2103,27 @@ subId 3577
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep2V3
+objType file
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-17
+dateUnrestricted 2011-12-17
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep2V3.bed.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 4358694922be535f1f0772c07bee63d5
+project wgEncode
+readType 2x75
+replicate 2
+subId 3666
+submittedDataVersion V3 - New Elements Formats
+view Junctions
+
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3
 objType file
 cell GM12892
@@ -2100,15 +2145,15 @@ subId 3744
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep1
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep1V2
 objType table
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep1.bam
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep1V2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2117,18 +2162,19 @@ project wgEncode
 readType 2x75
 replicate 1
 subId 3441
-tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep1
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep1V2
 view Paired
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep2
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep2V2
 objType table
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-14
-dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep2.bam
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep2V2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2137,18 +2183,19 @@ project wgEncode
 readType 2x75
 replicate 2
 subId 3438
-tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep2
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep2V2
 view Paired
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep3
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep3V2
 objType table
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-14
-dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep3.bam
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep3V2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2157,40 +2204,40 @@ project wgEncode
 readType 2x75
 replicate 3
 subId 3439
-tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep3
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep3V2
 view Paired
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1V2
 objType table
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1.bigWig
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
-localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
-rnaExtract longPolyA
 subId 3441
-tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1V2
 view Signal
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2V2
 objType table
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-14
-dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2.bigWig
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2199,18 +2246,19 @@ project wgEncode
 readType 2x75
 replicate 2
 subId 3438
-tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2V2
 view Signal
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3V2
 objType table
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-14
-dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3.bigWig
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2219,18 +2267,19 @@ project wgEncode
 readType 2x75
 replicate 3
 subId 3439
-tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3V2
 view Signal
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2
 objType table
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1.bam
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2239,18 +2288,19 @@ project wgEncode
 readType 2x75
 replicate 1
 subId 3441
-tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2
 view Splices
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2
 objType table
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-14
-dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2.bam
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2259,18 +2309,19 @@ project wgEncode
 readType 2x75
 replicate 2
 subId 3438
-tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2
 view Splices
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2
 objType table
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-14
-dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3.bam
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2279,7 +2330,8 @@ project wgEncode
 readType 2x75
 replicate 3
 subId 3439
-tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep1V3
@@ -2302,6 +2354,27 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3577
+submittedDataVersion V3 - New Elements Formats
+view TSS
+
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep2V3
+objType file
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-17
+dateUnrestricted 2011-12-17
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep2V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+md5sum 533efb7d72dafb5b862a2888a05e7770
+project wgEncode
+readType 2x75
+replicate 2
+subId 3666
 submittedDataVersion V3 - New Elements Formats
 view TSS
 
@@ -2351,23 +2424,25 @@ subId 3577
 submittedDataVersion V3 - New Elements Formats
 view TranscriptDeNovo
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep2
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep2V3
 objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-14
-dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep2.fpkm.gz
+dateSubmitted 2011-03-17
+dateUnrestricted 2011-12-17
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+md5sum 5ef278eae89ff7d18592ca9c614165fd
 project wgEncode
 readType 2x75
 replicate 2
-subId 3438
+subId 3666
+submittedDataVersion V3 - New Elements Formats
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep3V3
@@ -2393,25 +2468,6 @@ subId 3744
 submittedDataVersion V3 - New Elements Formats
 view TranscriptDeNovo
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGCV3cRep2
-objType file
-cell GM12892
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-14
-dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGCV3cRep2.fpkm.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-subId 3438
-view TranscriptGCV3c
-
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep1V3
 objType file
 cell GM12892
@@ -2435,23 +2491,25 @@ subId 3577
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep2
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep2V3
 objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-14
-dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep2.gtf.gz
+dateSubmitted 2011-03-17
+dateUnrestricted 2011-12-17
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+md5sum b6d8ac969840d73e147c1f289624c732
 project wgEncode
 readType 2x75
 replicate 2
-subId 3438
+subId 3666
+submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep3V3
@@ -11390,4 +11448,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: -1126840996
+# MAGIC: 623153802
