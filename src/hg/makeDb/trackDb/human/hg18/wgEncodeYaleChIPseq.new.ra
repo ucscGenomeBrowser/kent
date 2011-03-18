@@ -22,6 +22,7 @@ controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
 dataVersion through the ENCODE Jan 2010 Freeze
 wgEncode 1
+html wgEncodeYaleChIPseq.new
 
     track wgEncodeYaleChIPseqViewPeaks
     shortLabel Peaks

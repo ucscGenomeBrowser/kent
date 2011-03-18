@@ -152,30 +152,6 @@ subId 862
 treatment None
 view Alignments
 
-metaObject wgEncodeYaleChIPseqAlignmentsRep1Gm12878CfosV2
-objType file
-antibody c-Fos
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2008-11-25
-dateUnrestricted 2009-08-25
-fileName wgEncodeYaleChIPseqAlignmentsRep1Gm12878CfosV2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab Yale
-project wgEncode
-replicate 1
-setType exp
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
 metaObject wgEncodeYaleChIPseqAlignmentsRep1Gm12878CfosV3
 objType file
 antibody c-Fos
@@ -310,30 +286,6 @@ submittedDataVersion V2 - corrected locations
 treatment None
 view Alignments
 
-metaObject wgEncodeYaleChIPseqAlignmentsRep1Gm12878MaxV2
-objType file
-antibody Max
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-01-09
-dateUnrestricted 2009-10-09
-fileName wgEncodeYaleChIPseqAlignmentsRep1Gm12878MaxV2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab Yale
-project wgEncode
-replicate 1
-setType exp
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
 metaObject wgEncodeYaleChIPseqAlignmentsRep1Gm12878MaxV3
 objType file
 antibody Max
@@ -440,30 +392,6 @@ project wgEncode
 replicate 1
 setType exp
 subId 957
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol2V2
-objType file
-antibody Pol2
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-02-24
-dateUnrestricted 2009-11-24
-fileName wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol2V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab Yale
-project wgEncode
-replicate 1
-setType exp
-subId 634
-submittedDataVersion V2 - corrected locations
 treatment None
 view Alignments
 
@@ -4038,30 +3966,6 @@ subId 862
 treatment None
 view Alignments
 
-metaObject wgEncodeYaleChIPseqAlignmentsRep2Gm12878CfosV2
-objType file
-antibody c-Fos
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2008-11-25
-dateUnrestricted 2009-08-25
-fileName wgEncodeYaleChIPseqAlignmentsRep2Gm12878CfosV2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab Yale
-project wgEncode
-replicate 2
-setType exp
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
 metaObject wgEncodeYaleChIPseqAlignmentsRep2Gm12878CfosV3
 objType file
 antibody c-Fos
@@ -4161,30 +4065,6 @@ dateResubmitted 2009-11-22
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeYaleChIPseqAlignmentsRep2Gm12878JundV2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab Yale
-project wgEncode
-replicate 2
-setType exp
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep2Gm12878MaxV2
-objType file
-antibody Max
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-01-09
-dateUnrestricted 2009-10-09
-fileName wgEncodeYaleChIPseqAlignmentsRep2Gm12878MaxV2.tagAlign.gz
 fragLength 200
 grant Snyder
 lab Yale
@@ -4302,30 +4182,6 @@ project wgEncode
 replicate 2
 setType exp
 subId 957
-treatment None
-view Alignments
-
-metaObject wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol2V2
-objType file
-antibody Pol2
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2009-02-24
-dateUnrestricted 2009-11-24
-fileName wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol2V2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab Yale
-project wgEncode
-replicate 2
-setType exp
-subId 634
-submittedDataVersion V2 - corrected locations
 treatment None
 view Alignments
 
@@ -7606,30 +7462,6 @@ subId 1050
 treatment None
 view Alignments
 
-metaObject wgEncodeYaleChIPseqAlignmentsRep3Gm12878CfosV2
-objType file
-antibody c-Fos
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateResubmitted 2009-11-22
-dateSubmitted 2008-11-25
-dateUnrestricted 2009-08-25
-fileName wgEncodeYaleChIPseqAlignmentsRep3Gm12878CfosV2.tagAlign.gz
-fragLength 200
-grant Snyder
-lab Yale
-project wgEncode
-replicate 3
-setType exp
-subId 634
-submittedDataVersion V2 - corrected locations
-treatment None
-view Alignments
-
 metaObject wgEncodeYaleChIPseqAlignmentsRep3Gm12878NfkbIggrab
 objType file
 antibody NFKB
@@ -8987,30 +8819,6 @@ tableName wgEncodeYaleChIPseqPeaksGm10847Pol2Musigg
 treatment None
 view Peaks
 
-metaObject wgEncodeYaleChIPseqPeaksGm12878CfosV2
-objType table
-antibody c-Fos
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-06-30
-dateSubmitted 2008-11-25
-dateUnrestricted 2009-08-25
-fileName wgEncodeYaleChIPseqPeaksGm12878CfosV2.narrowPeak.gz
-grant Snyder
-lab Yale
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0
-subId 404
-submittedDataVersion V2 - corrected start location, pValue and point peak
-tableName wgEncodeYaleChIPseqPeaksGm12878CfosV2
-treatment None
-view Peaks
-
 metaObject wgEncodeYaleChIPseqPeaksGm12878CfosV3
 objType table
 antibody c-Fos
@@ -9103,30 +8911,6 @@ tableName wgEncodeYaleChIPseqPeaksGm12878JundV2
 treatment None
 view Peaks
 
-metaObject wgEncodeYaleChIPseqPeaksGm12878MaxV2
-objType table
-antibody Max
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-06-30
-dateSubmitted 2009-01-09
-dateUnrestricted 2009-10-09
-fileName wgEncodeYaleChIPseqPeaksGm12878MaxV2.narrowPeak.gz
-grant Snyder
-lab Yale
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0
-subId 404
-submittedDataVersion V2 - corrected start location, pValue and point peak
-tableName wgEncodeYaleChIPseqPeaksGm12878MaxV2
-treatment None
-view Peaks
-
 metaObject wgEncodeYaleChIPseqPeaksGm12878MaxV3
 objType table
 antibody Max
@@ -9216,30 +9000,6 @@ setType exp
 softwareVersion PeakSeq1.0
 subId 957
 tableName wgEncodeYaleChIPseqPeaksGm12878Pol2Musigg
-treatment None
-view Peaks
-
-metaObject wgEncodeYaleChIPseqPeaksGm12878Pol2V2
-objType table
-antibody Pol2
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-06-30
-dateSubmitted 2009-02-24
-dateUnrestricted 2009-11-24
-fileName wgEncodeYaleChIPseqPeaksGm12878Pol2V2.narrowPeak.gz
-grant Snyder
-lab Yale
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0
-subId 404
-submittedDataVersion V2 - corrected start location, pValue and point peak
-tableName wgEncodeYaleChIPseqPeaksGm12878Pol2V2
 treatment None
 view Peaks
 
@@ -12310,27 +12070,6 @@ subId 862
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataRep1Gm12878Cfos
-objType file
-antibody c-Fos
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-11-25
-dateUnrestricted 2009-08-25
-fileName wgEncodeYaleChIPseqRawDataRep1Gm12878Cfos.fastq.gz
-grant Snyder
-lab Yale
-project wgEncode
-replicate 1
-setType exp
-subId 94
-treatment None
-view RawData
-
 metaObject wgEncodeYaleChIPseqRawDataRep1Gm12878CfosV3
 objType file
 antibody c-Fos
@@ -12438,27 +12177,6 @@ subId 239
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataRep1Gm12878Max
-objType file
-antibody Max
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-01-09
-dateUnrestricted 2009-10-09
-fileName wgEncodeYaleChIPseqRawDataRep1Gm12878Max.fastq.gz
-grant Snyder
-lab Yale
-project wgEncode
-replicate 1
-setType exp
-subId 190
-treatment None
-view RawData
-
 metaObject wgEncodeYaleChIPseqRawDataRep1Gm12878MaxV3
 objType file
 antibody Max
@@ -12546,27 +12264,6 @@ replicate 1
 setType exp
 subId 620
 treatment TNFa
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep1Gm12878Pol2
-objType file
-antibody Pol2
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2009-02-24
-dateUnrestricted 2009-11-24
-fileName wgEncodeYaleChIPseqRawDataRep1Gm12878Pol2.fastq.gz
-grant Snyder
-lab Yale
-project wgEncode
-replicate 1
-setType exp
-subId 92
-treatment None
 view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataRep1Gm12878Pol2Musigg
@@ -15827,27 +15524,6 @@ subId 862
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataRep2Gm12878Cfos
-objType file
-antibody c-Fos
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-11-25
-dateUnrestricted 2009-08-25
-fileName wgEncodeYaleChIPseqRawDataRep2Gm12878Cfos.fastq.gz
-grant Snyder
-lab Yale
-project wgEncode
-replicate 2
-setType exp
-subId 94
-treatment None
-view RawData
-
 metaObject wgEncodeYaleChIPseqRawDataRep2Gm12878CfosV3
 objType file
 antibody c-Fos
@@ -15955,27 +15631,6 @@ subId 239
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataRep2Gm12878Max
-objType file
-antibody Max
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-01-09
-dateUnrestricted 2009-10-09
-fileName wgEncodeYaleChIPseqRawDataRep2Gm12878Max.fastq.gz
-grant Snyder
-lab Yale
-project wgEncode
-replicate 2
-setType exp
-subId 190
-treatment None
-view RawData
-
 metaObject wgEncodeYaleChIPseqRawDataRep2Gm12878MaxV3
 objType file
 antibody Max
@@ -16063,27 +15718,6 @@ replicate 2
 setType exp
 subId 620
 treatment TNFa
-view RawData
-
-metaObject wgEncodeYaleChIPseqRawDataRep2Gm12878Pol2
-objType file
-antibody Pol2
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2009-02-24
-dateUnrestricted 2009-11-24
-fileName wgEncodeYaleChIPseqRawDataRep2Gm12878Pol2.fastq.gz
-grant Snyder
-lab Yale
-project wgEncode
-replicate 2
-setType exp
-subId 92
-treatment None
 view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataRep2Gm12878Pol2Musigg
@@ -19231,27 +18865,6 @@ subId 1050
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRawDataRep3Gm12878Cfos
-objType file
-antibody c-Fos
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-11-25
-dateUnrestricted 2009-08-25
-fileName wgEncodeYaleChIPseqRawDataRep3Gm12878Cfos.fastq.gz
-grant Snyder
-lab Yale
-project wgEncode
-replicate 3
-setType exp
-subId 94
-treatment None
-view RawData
-
 metaObject wgEncodeYaleChIPseqRawDataRep3Gm12878NfkbIggrab
 objType file
 antibody NFKB
@@ -20539,30 +20152,6 @@ subId 957
 treatment None
 view RawData
 
-metaObject wgEncodeYaleChIPseqRel2SignalGm12878Cfos
-objType table
-antibody c-Fos
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-05-02
-dateSubmitted 2008-11-24
-dateUnrestricted 2009-08-24
-fileName wgEncodeYaleChIPseqRel2SignalGm12878Cfos.bedGraph4.gz
-grant Snyder
-lab Yale
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0
-subId 324
-submittedDataVersion V2 - corrected sparse signals
-tableName wgEncodeYaleChIPseqRel2SignalGm12878Cfos
-treatment None
-view Signal
-
 metaObject wgEncodeYaleChIPseqRel2SignalGm12878Input
 objType table
 antibody Input
@@ -20608,54 +20197,6 @@ softwareVersion PeakSeq1.0
 subId 324
 submittedDataVersion V2 - corrected sparse signals
 tableName wgEncodeYaleChIPseqRel2SignalGm12878Jund
-treatment None
-view Signal
-
-metaObject wgEncodeYaleChIPseqRel2SignalGm12878Max
-objType table
-antibody Max
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-05-02
-dateSubmitted 2009-01-09
-dateUnrestricted 2009-10-09
-fileName wgEncodeYaleChIPseqRel2SignalGm12878Max.bedGraph4.gz
-grant Snyder
-lab Yale
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0
-subId 324
-submittedDataVersion V2 - corrected sparse signals
-tableName wgEncodeYaleChIPseqRel2SignalGm12878Max
-treatment None
-view Signal
-
-metaObject wgEncodeYaleChIPseqRel2SignalGm12878Pol2
-objType table
-antibody Pol2
-cell GM12878
-composite wgEncodeYaleChIPseq
-control std
-controlId GM12878/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-05-02
-dateSubmitted 2009-02-24
-dateUnrestricted 2009-11-24
-fileName wgEncodeYaleChIPseqRel2SignalGm12878Pol2.bedGraph4.gz
-grant Snyder
-lab Yale
-project wgEncode
-setType exp
-softwareVersion PeakSeq1.0
-subId 324
-submittedDataVersion V2 - corrected sparse signals
-tableName wgEncodeYaleChIPseqRel2SignalGm12878Pol2
 treatment None
 view Signal
 
@@ -24501,4 +24042,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: -1664367203
+# MAGIC: -400854049
