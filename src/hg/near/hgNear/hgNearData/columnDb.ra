@@ -31,8 +31,8 @@ longLabel UniProtKB Protein Display ID
 priority 2.1
 visibility off
 type association kgXref
-queryFull select kgID,spDisplayID from kgXref
-queryOne select spDisplayId,spID from kgXref where kgID = '%s'
+queryFull select kgID,spDisplayID from kgXref where spDisplayID <> "" 
+queryOne select spDisplayId,spID from kgXref where kgID = '%s' and spDisplayID <> "" 
 invQueryOne select kgID from kgXref where spDisplayId = '%s'
 search fuzzy
 itemUrl http://www.uniprot.org/uniprot/%s
@@ -42,7 +42,10 @@ shortLabel UniProtKB Acc
 longLabel UniProtKB Protein Accession
 priority 2.15
 visibility off
-type lookup kgXref kgID spID
+type association kgXref
+queryFull select kgID,spID from kgXref and spID <> " " 
+queryOne select spID,spDisplayId from kgXref where kgID = '%s' and spID <>""
+invQueryOne select kgID from kgXref where spID = '%s'
 search exact
 itemUrl http://www.uniprot.org/uniprot/%s
 

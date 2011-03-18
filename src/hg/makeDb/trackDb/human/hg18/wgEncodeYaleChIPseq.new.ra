@@ -22,6 +22,7 @@ controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
 dataVersion through the ENCODE Jan 2010 Freeze
 wgEncode 1
+html wgEncodeYaleChIPseq.new
 
     track wgEncodeYaleChIPseqViewPeaks
     shortLabel Peaks
@@ -44,13 +45,14 @@ wgEncode 1
         type narrowPeak
         color 153,38,0
 
-        track wgEncodeYaleChIPseqPeaksGm12878MaxV2
+        track wgEncodeYaleChIPseqPeaksGm12878MaxV3
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel GM12878 Max Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in GM12878 cells)
         subGroups view=Peaks factor=MAX cellType=t1GM12878
         type narrowPeak
         color 153,38,0
+        # subId=1182 dateSubmitted=2011-03-16 #track wgEncodeYaleChIPseqPeaksGm12878MaxV2
 
         track wgEncodeYaleChIPseqPeaksGm12878NfkbTnfa
         parent wgEncodeYaleChIPseqViewPeaks off
@@ -60,13 +62,14 @@ wgEncode 1
         type narrowPeak
         color 153,38,0
 
-        track wgEncodeYaleChIPseqPeaksGm12878Pol2V2
+        track wgEncodeYaleChIPseqPeaksGm12878Pol2V3
         parent wgEncodeYaleChIPseqViewPeaks off
         shortLabel GM12878 Pol2 Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in GM12878 cells)
         subGroups view=Peaks factor=POL2 cellType=t1GM12878
         type narrowPeak
         color 153,38,0
+        # subId=1183 dateSubmitted=2011-03-16 #track wgEncodeYaleChIPseqPeaksGm12878Pol2V2
 
         track wgEncodeYaleChIPseqPeaksGm12878Pol3
         parent wgEncodeYaleChIPseqViewPeaks
@@ -76,13 +79,14 @@ wgEncode 1
         type narrowPeak
         color 153,38,0
 
-        track wgEncodeYaleChIPseqPeaksGm12878CfosV2
+        track wgEncodeYaleChIPseqPeaksGm12878CfosV3
         parent wgEncodeYaleChIPseqViewPeaks
         shortLabel GM12878 c-Fos Pk
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in GM12878 cells)
         subGroups view=Peaks factor=CFOS cellType=t1GM12878
         type narrowPeak
         color 153,38,0
+        # subId=1184 dateSubmitted=2011-03-16  #track wgEncodeYaleChIPseqPeaksGm12878CfosV2
 
         track wgEncodeYaleChIPseqPeaksHct116Pol2
         parent wgEncodeYaleChIPseqViewPeaks off
@@ -1023,6 +1027,24 @@ wgEncode 1
         type narrowPeak
         color 0,119,158
 
+        track wgEncodeYaleChIPseqPeaksGm12878Cjun
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12878 c-Jun Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in GM12878 cells)
+        subGroups view=Peaks factor=CJUN cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+        # subId=1185 dateSubmitted=2011-03-16
+
+        track wgEncodeYaleChIPseqPeaksGm12878Cmyc
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12878 c-Myc Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in GM12878 cells)
+        subGroups view=Peaks factor=CMYC cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+        # subId=1186 dateSubmitted=2011-03-16
+
     track wgEncodeYaleChIPseqViewSignal
     shortLabel Signal
     view Signal
@@ -1043,13 +1065,14 @@ wgEncode 1
         type bedGraph 4
         color 153,38,0
 
-        track wgEncodeYaleChIPseqRel2SignalGm12878Max
+        track wgEncodeYaleChIPseqSignalGm12878MaxV3
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel GM12878 Max Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in GM12878 cells)
         subGroups view=Signal factor=MAX cellType=t1GM12878
         type bedGraph 4
         color 153,38,0
+        # subId=1182 dateSubmitted=2011-03-16 # track wgEncodeYaleChIPseqRel2SignalGm12878Max
 
         track wgEncodeYaleChIPseqSignalGm12878NfkbTnfa
         parent wgEncodeYaleChIPseqViewSignal off
@@ -1059,13 +1082,14 @@ wgEncode 1
         type bedGraph 4
         color 153,38,0
 
-        track wgEncodeYaleChIPseqRel2SignalGm12878Pol2
+        track wgEncodeYaleChIPseqSignalGm12878Pol2V3
         parent wgEncodeYaleChIPseqViewSignal off
         shortLabel GM12878 Pol2 Sig
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in GM12878 cells)
         subGroups view=Signal factor=POL2 cellType=t1GM12878
         type bedGraph 4
         color 153,38,0
+        # subId=1183 dateSubmitted=2011-03-16 # track wgEncodeYaleChIPseqRel2SignalGm12878Pol2
 
         track wgEncodeYaleChIPseqSignalGm12878Pol3
         parent wgEncodeYaleChIPseqViewSignal
@@ -1075,13 +1099,14 @@ wgEncode 1
         type bedGraph 4
         color 153,38,0
 
-        track wgEncodeYaleChIPseqRel2SignalGm12878Cfos
+        track wgEncodeYaleChIPseqSignalGm12878CfosV3
         parent wgEncodeYaleChIPseqViewSignal
         shortLabel GM12878 c-Fos Sg
         longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in GM12878 cells)
         subGroups view=Signal factor=CFOS cellType=t1GM12878
         type bedGraph 4
         color 153,38,0
+        # subId=1184 dateSubmitted=2011-03-16 # track wgEncodeYaleChIPseqRel2SignalGm12878Cfos
 
         track wgEncodeYaleChIPseqRel2SignalGm12878Input
         parent wgEncodeYaleChIPseqViewSignal off
@@ -2346,4 +2371,22 @@ wgEncode 1
         subGroups view=Signal factor=BRG1mig cellType=t2HeLa
         type bedGraph 4
         color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalGm12878Cjun
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12878 c-Jun Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in GM12878 cells)
+        subGroups view=Signal factor=CJUN cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+        # subId=1185 dateSubmitted=2011-03-16
+
+        track wgEncodeYaleChIPseqSignalGm12878Cmyc
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12878 c-Myc Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in GM12878 cells)
+        subGroups view=Signal factor=CMYC cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+        # subId=1186 dateSubmitted=2011-03-16
 

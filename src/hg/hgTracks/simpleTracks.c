@@ -3089,6 +3089,7 @@ if (!tg->mapsSelf)
             }
         }
     }
+    withIndividualLabels = TRUE; /* reset in case done with pgSnp */
 }
 
 static void genericDrawItemsPackSquish(struct track *tg,
@@ -9616,9 +9617,20 @@ if (name == NULL)
 return name;
 }
 
-void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, int height, Color color, MgFont *font, char *allele)
-/* put text on right, doing separate colors if needed */
+void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, int height, Color color, MgFont *font, char *allele, int trackY, int trackHeight)
+/* put text anchored on right upper corner, doing separate colors if needed */
 {
+boolean snapLeft = FALSE;
+int textX = x1 - width; 
+snapLeft = (textX < insideX);
+if (snapLeft)        /* Snap label to the left. */
+    {
+    hvGfxUnclip(hvg);
+    hvGfxSetClip(hvg, leftLabelX, trackY, insideWidth, trackHeight);
+    x1 = leftLabelX;
+    width = leftLabelWidth-1;
+    }
+
 if (sameString(display, "freq"))
     {
     Color allC = MG_BLACK;
@@ -9635,6 +9647,11 @@ if (sameString(display, "freq"))
 else
     {
     hvGfxTextRight(hvg, x1, y, width, height, color, font, allele);
+    }
+if (snapLeft) 
+    {
+    hvGfxUnclip(hvg);
+    hvGfxSetClip(hvg, insideX, trackY, insideWidth, trackHeight);
     }
 }
 
@@ -9722,17 +9739,21 @@ int allHeight = trunc(tg->heightPer / 2);
 int allWidth = mgFontStringWidth(font, allele[0]);
 int all2Width = 0;
 if (cnt > 1)
+    {
     all2Width = mgFontStringWidth(font, allele[1]);
+    if (all2Width > allWidth) 
+         allWidth = all2Width; /* use max */
+    }
 int yCopy = y + 1;
 
 /* allele 1, should be insertion if doesn't fit */
-if (allWidth >= w || all2Width >= w || sameString(display, "freq"))
+if (sameString(display, "freq"))
     {
     if (cmpl)
         complement(allele[0], strlen(allele[0]));
     if (revCmplDisp)
         reverseComplement(allele[0], strlen(allele[0]));
-    pgSnpTextRight(display, hvg, x1-allWidth-2, yCopy, allWidth, allHeight, color, font, allele[0]);
+    pgSnpTextRight(display, hvg, x1-allWidth-2, yCopy, allWidth, allHeight, color, font, allele[0], y, tg->height);
     }
 else
     {
@@ -9746,13 +9767,13 @@ if (cnt > 1)
     { /* allele 2 */
     yCopy += allHeight;
 
-    if (allWidth >= w || all2Width >= w || sameString(display, "freq"))
+    if (sameString(display, "freq"))
         {
         if (cmpl)
             complement(allele[1], strlen(allele[1]));
         if (revCmplDisp)
             reverseComplement(allele[1], strlen(allele[1]));
-        pgSnpTextRight(display, hvg, x1-all2Width-2, yCopy, all2Width, allHeight, color, font, allele[1]);
+        pgSnpTextRight(display, hvg, x1-allWidth-2, yCopy, allWidth, allHeight, color, font, allele[1], y, tg->height);
         }
     else
         {
@@ -9762,7 +9783,7 @@ if (cnt > 1)
         }
     }
 /* map box for link, when text outside box */
-if (allWidth >= w || all2Width >= w || sameString(display, "freq"))
+if (allWidth >= w || sameString(display, "freq"))
     {
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item),
                 tg->mapItemName(tg, item), myItem->chromStart, myItem->chromEnd,
@@ -11079,6 +11100,7 @@ return(answer);
 }
 
 boolean doThisOmimEntry(struct track *tg, char *omimId)
+/* check if the specific class of this OMIM entry is selected by the user */
 {
 char *disorderClass = NULL; 
 boolean doIt;
@@ -11135,30 +11157,6 @@ doIt = doIt || (doOthers && sameWord(disorderClass, "0")) ;
 return(doIt);
 }
 
-char *omimLocationName(struct track *tg, void *item)
-/* set name for omimLcation track */
-{
-struct bed *el = item;
-
-/* return empty string if this OMIM entry should not be presented */
-if (!doThisOmimEntry(tg, el->name)) 
-	return("");
-else
-	return(el->name);
-}
-
-char *omimGene2Name(struct track *tg, void *item)
-/* set name for omimGene2 track */
-{
-struct bed *el = item;
-
-/* return empty string if this OMIM entry should not be presented */
-if (!doThisOmimEntry(tg, el->name)) 
-	return("");
-else
-	return(el->name);
-}
-
 static void omimGene2DrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
@@ -11170,8 +11168,6 @@ int heightPer = tg->heightPer;
 int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
 int w;
-
-if (!doThisOmimEntry(tg, bed->name)) return;
 
 sPhenotypes = omimGene2DisorderList(tg, item);
 w = x2-x1;
@@ -11213,6 +11209,32 @@ if (tg->subType == lfWithBarbs)
 		dir, textColor, TRUE);
 	}
     }
+}
+
+void omimBedLoad(struct track *tg)
+/* Load the items in the gmimeGene2 or the omimLocation track */
+{
+struct bed *bed, *list = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+rowOffset, 4);
+    
+    /* check if user has selected the specific class for this OMIM entry */
+    if (doThisOmimEntry(tg, bed->name)) 
+	{
+	slAddHead(&list, bed);
+	}
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&list);
+tg->items = list;
 }
 
 Color omimGene2Color(struct track *tg, void *item, struct hvGfx *hvg)
@@ -11282,9 +11304,9 @@ else
 void omimGene2Methods (struct track *tg)
 {
 tg->itemColor 	  = omimGene2Color;
-tg->itemName      = omimGene2Name;
 tg->itemNameColor = omimGene2Color;
 tg->drawItemAt    = omimGene2DrawAt;
+tg->loadItems	  = omimBedLoad;
 }
 
 char omimAvSnpBuffer[OMIM_MAX_DESC_LEN];
@@ -11483,10 +11505,6 @@ int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
 int w;
 
-/* skip if the entry is not amount the class(es) selected */
-if (!doThisOmimEntry(tg, bed->name))
-    return;
-
 omimTitle = omimLocationDescription(tg, item);
 w = x2-x1;
 if (w < 1)
@@ -11511,8 +11529,8 @@ if (color)
 void omimLocationMethods (struct track *tg)
 {
 tg->drawItemAt    = omimLocationDrawAt;
-tg->itemName      = omimLocationName;
 tg->itemColor     = omimLocationColor;
+tg->loadItems	  = omimBedLoad;
 }
 
 char *omimGeneName(struct track *tg, void *item)
