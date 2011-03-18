@@ -11273,30 +11273,23 @@ else
 	sqlFreeResult(&sr);
 	return hvGfxFindColorIx(hvg, 220, 0, 0);
     	}	
-    else
+    else if (sameWord(phenClass, "2"))
     	{
-    	if (sameWord(phenClass, "2"))
-    	    {
-	    // set to green for class 2
-	    sqlFreeResult(&sr);
-	    return hvGfxFindColorIx(hvg, 0, 255, 0);
-    	    }	
-	else
-	    {
-    	    if (sameWord(phenClass, "1"))
-    	    	{
-		// set to orange for class 1
-	    	sqlFreeResult(&sr);
-	    	return hvGfxFindColorIx(hvg, 200, 0, 200);
-    	    	}
-	    else
-	    	{
-	    	// set to purplish color for phenClass 4
-            	sqlFreeResult(&sr);
-	    	return hvGfxFindColorIx(hvg, 200, 100, 100);
-            	}
-	    }
-
+	// set to green for class 2
+	sqlFreeResult(&sr);
+	return hvGfxFindColorIx(hvg, 0, 255, 0);
+    	}	
+    else if (sameWord(phenClass, "1"))
+    	{
+	// set to orange for class 1
+	sqlFreeResult(&sr);
+	return hvGfxFindColorIx(hvg, 200, 0, 200);
+    	}
+    else
+	{
+	// set to purplish color for phenClass 4
+        sqlFreeResult(&sr);
+	return hvGfxFindColorIx(hvg, 200, 100, 100);
 	}  
     }
 }
