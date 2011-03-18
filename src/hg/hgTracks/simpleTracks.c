@@ -11082,17 +11082,17 @@ char **row;
 char *answer;
 conn = hAllocConn(database);
 safef(query,sizeof(query),
-        "select phenotypeClass from omimDisorderPhenotype where omimId =%s", omimId);
-	sr = sqlMustGetResult(conn, query);
-	row = sqlNextRow(sr);
+      "select phenotypeClass from omimDisorderPhenotype where omimId =%s", omimId);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
 if (row != NULL)
-	{
-	answer = strdup(row[0]);
-	}
+    {
+    answer = strdup(row[0]);
+    }
 else
-	{
-	answer = strdup("0");
-	}
+    {
+    answer = strdup("0");
+    }
 
 hFreeConn(&conn);
 sqlFreeResult(&sr);
