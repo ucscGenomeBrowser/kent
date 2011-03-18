@@ -32,6 +32,9 @@ sub usage
 {
     print STDERR <<END;
     usage: doEncodeUnload.pl submission_type project_submission_dir
+           submission_type is currently ignored
+           project_submission_dir needs a full path 
+           OPTIONS: -verbose=i -configDir=s
 END
     exit(1);
 }
