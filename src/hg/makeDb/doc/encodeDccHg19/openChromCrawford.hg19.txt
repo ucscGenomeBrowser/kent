@@ -3884,3 +3884,54 @@ hashMustFindVal: 'chrMT' not found
 e chrM_35_freq.wig
 cat chr1_35_freq.wig chr2_35_freq.wig chr3_35_freq.wig chr4_35_freq.wig chr5_35_freq.wig chr6_35_freq.wig chr7_35_freq.wig chr8_35_freq.wig chr9_35_freq.wig chr10_35_freq.wig chr11_35_freq.wig chr12_35_freq.wig chr13_35_freq.wig chr14_35_freq.wig chr15_35_freq.wig chr16_35_freq.wig chr17_35_freq.wig chr18_35_freq.wig chr19_35_freq.wig chr20_35_freq.wig chr21_35_freq.wig chr22_35_freq.wig chrX_35_freq.wig chrY_35_freq.wig chrM_35_freq.wig > allChrs_35_freq.wig
 wigToBigWig allChrs_35_freq.wig /hive/data/genomes/hg19/chrom.sizes wgEncodeDukeUniqueness35.bw &
+
+2011-03-18 Late changing statuses
+=================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1229 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1478 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1490 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1491 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1499 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1500 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1501 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1504 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1505 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1516 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1517 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1518 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1525 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1526 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1527 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1536 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1537 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1538 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1539 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1540 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1541 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1542 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1543 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1580 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1606 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1607 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1608 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1609 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1652 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1657 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1832 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1833 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1834 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2449 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2480 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2487 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2495 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2499 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2502 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2503 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2504 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2505 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2516 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3141 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3241 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3242 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3271 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3272 released
