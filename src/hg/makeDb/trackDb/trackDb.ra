@@ -1599,7 +1599,6 @@ urlLabel dbSNP:
 snpSeq snp132Seq
 snpExceptionDesc snp132ExceptionDesc
 defaultGeneTracks knownGene
-maxWindowToDraw 10000000
 type bed 6 +
 
 track snp132NonUnique
