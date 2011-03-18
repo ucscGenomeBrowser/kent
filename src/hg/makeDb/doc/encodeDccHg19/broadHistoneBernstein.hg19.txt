@@ -4381,3 +4381,186 @@ Composite 'wgEncodeOpenChromFaire' has 26 experiments currently defined. Largest
 mdbUpdate hg19 -obj=wgEncodeOpenChromSynth -setVars="objType=composite composite=wgEncodeOpenChromSynth expVars=lab,dataType,cell"              
 ~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromSynth -encodeExp | tail
 Composite 'wgEncodeOpenChromSynth' has 7 experiments currently defined. Largest:1  average:1.000000
+
+
+2011-03-15 Liftover hg18 Broad HMM?
+===================================
+### Change color in bed files:
+rm   wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmGm12878HMM.bed
+wl   wgEncodeBroadHmmGm12878HMM.bed         570580
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | wl 570580
+
+rm   wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmH1hescHMM.bed
+wl   wgEncodeBroadHmmH1hescHMM.bed         618287
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | wl 618287
+
+rm   wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmHepg2HMM.bed
+wl   wgEncodeBroadHmmHepg2HMM.bed         545647
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | wl 545647
+
+rm   wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmHmecHMM.bed
+wl   wgEncodeBroadHmmHmecHMM.bed         608568
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | wl 608568
+
+rm   wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmHsmmHMM.bed
+wl   wgEncodeBroadHmmHsmmHMM.bed         638307
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | wl 638307
+
+rm   wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmHuvecHMM.bed
+wl   wgEncodeBroadHmmHuvecHMM.bed         549178
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | wl 549178
+
+rm   wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmK562HMM.bed
+wl   wgEncodeBroadHmmK562HMM.bed         621678
+zcat wgEncodeBroadHmmK562HMM.bed.gz | wl 621678
+
+rm   wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmNhekHMM.bed
+wl   wgEncodeBroadHmmNhekHMM.bed         627623
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | wl 627623
+
+rm   wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmNhlfHMM.bed
+wl   wgEncodeBroadHmmNhlfHMM.bed         640298
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | wl 640298
+
+sort < wgEncodeBroadHmmGm12878HMM.bed > s_wgEncodeBroadHmmGm12878HMM.bed
+sort < wgEncodeBroadHmmH1hescHMM.bed  > s_wgEncodeBroadHmmH1hescHMM.bed
+sort < wgEncodeBroadHmmHepg2HMM.bed   > s_wgEncodeBroadHmmHepg2HMM.bed
+sort < wgEncodeBroadHmmHmecHMM.bed    > s_wgEncodeBroadHmmHmecHMM.bed
+sort < wgEncodeBroadHmmHsmmHMM.bed    > s_wgEncodeBroadHmmHsmmHMM.bed
+sort < wgEncodeBroadHmmHuvecHMM.bed   > s_wgEncodeBroadHmmHuvecHMM.bed
+sort < wgEncodeBroadHmmK562HMM.bed    > s_wgEncodeBroadHmmK562HMM.bed
+sort < wgEncodeBroadHmmNhekHMM.bed    > s_wgEncodeBroadHmmNhekHMM.bed
+sort < wgEncodeBroadHmmNhlfHMM.bed    > s_wgEncodeBroadHmmNhlfHMM.bed
+
+mv s_wgEncodeBroadHmmGm12878HMM.bed wgEncodeBroadHmmGm12878HMM.bed
+mv s_wgEncodeBroadHmmH1hescHMM.bed  wgEncodeBroadHmmH1hescHMM.bed
+mv s_wgEncodeBroadHmmHepg2HMM.bed   wgEncodeBroadHmmHepg2HMM.bed
+mv s_wgEncodeBroadHmmHmecHMM.bed    wgEncodeBroadHmmHmecHMM.bed
+mv s_wgEncodeBroadHmmHsmmHMM.bed    wgEncodeBroadHmmHsmmHMM.bed
+mv s_wgEncodeBroadHmmHuvecHMM.bed   wgEncodeBroadHmmHuvecHMM.bed
+mv s_wgEncodeBroadHmmK562HMM.bed    wgEncodeBroadHmmK562HMM.bed
+mv s_wgEncodeBroadHmmNhekHMM.bed    wgEncodeBroadHmmNhekHMM.bed
+mv s_wgEncodeBroadHmmNhlfHMM.bed    wgEncodeBroadHmmNhlfHMM.bed
+
+mkdir obsolete/white
+mv wgEncodeBroadHmmGm12878HMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmH1hescHMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmHepg2HMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmHmecHMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmHsmmHMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmHuvecHMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmK562HMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmNhekHMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmNhlfHMM.bed.gz obsolete/white
+
+gzip wgEncodeBroadHmmGm12878HMM.bed
+gzip wgEncodeBroadHmmH1hescHMM.bed
+gzip wgEncodeBroadHmmHepg2HMM.bed
+gzip wgEncodeBroadHmmHmecHMM.bed
+gzip wgEncodeBroadHmmHsmmHMM.bed
+gzip wgEncodeBroadHmmHuvecHMM.bed
+gzip wgEncodeBroadHmmK562HMM.bed
+gzip wgEncodeBroadHmmNhekHMM.bed
+gzip wgEncodeBroadHmmNhlfHMM.bed
+
+encodeDownloadsPage.pl -checksum index.html
+cd release1/
+rm *.gz
+ln ../*.gz .
+cp ../index.html .
+cp ../files.txt .
+cp ../md5sum.txt .
+
+mkdir hg19
+liftOver wgEncodeBroadHmmGm12878HMM.bed.gz -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmGm12878HMM.bed hg19/wgEncodeBroadHmmGm12878HMM.unmpped.bed
+liftOver wgEncodeBroadHmmH1hescHMM.bed.gz  -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmH1hescHMM.bed  hg19/wgEncodeBroadHmmH1hescHMM.unmpped.bed
+liftOver wgEncodeBroadHmmHepg2HMM.bed.gz   -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmHepg2HMM.bed   hg19/wgEncodeBroadHmmHepg2HMM.unmpped.bed
+liftOver wgEncodeBroadHmmHmecHMM.bed.gz    -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmHmecHMM.bed    hg19/wgEncodeBroadHmmHmecHMM.unmpped.bed
+liftOver wgEncodeBroadHmmHsmmHMM.bed.gz    -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmHsmmHMM.bed    hg19/wgEncodeBroadHmmHsmmHMM.unmpped.bed
+liftOver wgEncodeBroadHmmHuvecHMM.bed.gz   -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmHuvecHMM.bed   hg19/wgEncodeBroadHmmHuvecHMM.unmpped.bed
+liftOver wgEncodeBroadHmmK562HMM.bed.gz    -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmK562HMM.bed    hg19/wgEncodeBroadHmmK562HMM.unmpped.bed
+liftOver wgEncodeBroadHmmNhekHMM.bed.gz    -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmNhekHMM.bed    hg19/wgEncodeBroadHmmNhekHMM.unmpped.bed
+liftOver wgEncodeBroadHmmNhlfHMM.bed.gz    -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmNhlfHMM.bed    hg19/wgEncodeBroadHmmNhlfHMM.unmpped.bed
+
+cd hg19
+cp {pip}/3446/broadHmm.d?f . # Use hg18 submission as template for hg19 submission
+e *.d?f # change to hg19 and set all the files
+tar -czf hg19BroadHmm.tgz *.bed *.d?f
+
+## Too bad tjhe load doesn't work, since it needs -tab
+Argument "Repetitive/CNV" isn't numeric in numeric gt (>) at /hive/groups/encode/dcc/pipeline/bin/doEncodeValida
+te.pl line 510, <GEN0> line 1.
+
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmGm12878 wgEncodeBroadHmmGm12878HMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmH1hesc  wgEncodeBroadHmmH1hescHMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmHepg2   wgEncodeBroadHmmHepg2HMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmHmec    wgEncodeBroadHmmHmecHMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmHsmm    wgEncodeBroadHmmHsmmHMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmHuvec   wgEncodeBroadHmmHuvecHMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmK562    wgEncodeBroadHmmK562HMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmNhek    wgEncodeBroadHmmNhekHMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmNhlf    wgEncodeBroadHmmNhlfHMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1
+# use hgsql to verify tables
+doEncodeValidate.pl -skipValidateFiles x ../3823 > validate_error
+cd out
+e mdb.txt trackDb.ra # edit names
+cp trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeBroadHmm.ra
+mdbUpdate hg19 mdb.txt -test
+0 invalids of 144 variables according to the cv.ra.
+mdbUpdate hg19 mdb.txt
+Read 9 metadata objects from hg19
+Affected 144 row(s) in hg19.metaDb_tdreszer
+cd {metaDb19}
+mdbPrint hg19 -composite=wgEncodeBroadHmm > wgEncodeBroadHmm.ra
+e makefile # add in wgEncodeBroadHmm.ra
+cd ../..
+e trackDb.wgEncode.ra # add in wgEncodeBroadHmm.ra alpha
+cp ../hg18/wgEncodeBroadHmm.html . 
+e wgEncodeBroadHmm.html  
+
+cd {down19}
+mkdir wgEncodeBroadHmm
+cd wgEncodeBroadHmm
+mv /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeBroadHmm/hg19 .
+mv *.bed ../
+mv mv unmapped/ ../liftOverFromHg18Unmapped
+cd ..
+mv wgEncodeBroadHmmGm12878HMM.bed wgEncodeBroadHmmGm12878.bed
+mv wgEncodeBroadHmmH1hescHMM.bed  wgEncodeBroadHmmH1hesc.bed
+mv wgEncodeBroadHmmHepg2HMM.bed   wgEncodeBroadHmmHepg2.bed
+mv wgEncodeBroadHmmHmecHMM.bed    wgEncodeBroadHmmHmec.bed
+mv wgEncodeBroadHmmHsmmHMM.bed    wgEncodeBroadHmmHsmm.bed
+mv wgEncodeBroadHmmHuvecHMM.bed   wgEncodeBroadHmmHuvec.bed
+mv wgEncodeBroadHmmK562HMM.bed    wgEncodeBroadHmmK562.bed
+mv wgEncodeBroadHmmNhekHMM.bed    wgEncodeBroadHmmNhek.bed
+mv wgEncodeBroadHmmNhlfHMM.bed    wgEncodeBroadHmmNhlf.bed
+
+gzip wgEncodeBroadHmmGm12878.bed
+gzip wgEncodeBroadHmmH1hesc.bed
+gzip wgEncodeBroadHmmHepg2.bed
+gzip wgEncodeBroadHmmHmec.bed
+gzip wgEncodeBroadHmmHsmm.bed
+gzip wgEncodeBroadHmmHuvec.bed
+gzip wgEncodeBroadHmmK562.bed
+gzip wgEncodeBroadHmmNhek.bed
+gzip wgEncodeBroadHmmNhlf.bed
+
+# Jason Ernst still intends to do his own liftOver.
