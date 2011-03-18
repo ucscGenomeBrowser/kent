@@ -1,4 +1,4 @@
-table clusterInputTrackTable3
+table clusterInputTrackTable4
 "Some information on tracks used as input for a clustering track"
     (
     string tableName;	"Name of table used as an input"
