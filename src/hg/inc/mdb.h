@@ -161,6 +161,10 @@ struct mdbByVar *mdbByVarsLineParse(char *line);
 struct mdbObj *mdbObjCreate(char *obj,char *var, char *val);
 /* Creates a singular mdbObj query object based on obj and all other optional params. */
 
+struct mdbObj *mdbObjNew(char *obj,struct mdbVar *mdbVars);
+// Returns a new mdbObj with whatever was passed in.
+// An mdbObj requires and obj, so if one is not supplied it will be "[unknown]"
+
 struct mdbByVar *mdbByVarCreate(char *var, char *val);
 /* Creates a singular var=val pair struct for metadata queries. */
 
@@ -332,11 +336,30 @@ int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full);
 // Validates vars and vals against cv.ra.  Returns count of errors found.
 // Full considers vars not defined in cv as invalids
 
-struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,int warn);
+struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,
+                                          int warn,boolean createExpIfNecessary);
 // Organizes objects into experiments and validates experiment IDs.  Will add/update the ids in the structures.
 // If warn=1, then prints to stdout all the experiments/obs with missing or wrong expIds;
 //    warn=2, then print line for each obj with expId or warning.
+// createExpIfNecessary means go ahead and add to the hgFixed.encodeExp table to get an ID
 // Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
+
+// -- Requested by Kate: --
+#define MDB_FIELD_LAB        "lab"
+#define MDB_FIELD_DATA_TYPE  "dataType"
+#define MDB_FIELD_CELL_TYPE  "cell"
+#define ENCODE_MDB_PROJECT   "wgEncode"
+
+boolean mdbObjIsEncode(struct mdbObj *mdbObj);
+// Returns TRUE if MDB object is an ENCODE object (project=wgEncode)
+
+boolean mdbObjInComposite(struct mdbObj *mdb, char *composite);
+// Returns TRUE if metaDb object is in specified composite.
+// If composite is NULL, always return true // FIXME: KATE Why return true if composite not defined???
+
+//struct encodeExp *encodeExps(char *composite,char *expTable);
+//struct mdbObjs *mdbObjsForDefinedExpId(int expId);
+// Returns the mdb objects belonging to a single encode experiment defined in the encodExp table
 
 
 // --------------- Free at last ----------------

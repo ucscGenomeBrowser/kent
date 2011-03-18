@@ -10,6 +10,7 @@
 #include "cheapcgi.h"
 #include "hui.h"
 #include "mdb.h"
+#include "encode/encodeExp.h"
 #include <regex.h>
 
 static char const rcsid[] = "$Id: mdb.c,v 1.8 2010/06/11 17:11:28 tdreszer Exp $";
@@ -245,6 +246,14 @@ static void mdbVarFree(struct mdbVar **mdbVarPtr)
     freez(mdbVarPtr);
 }
 
+static void mdbVarsFree(struct mdbVar **mdbVarPtr)
+// Frees an mdbVars list
+{
+struct mdbVar *mdbVar = NULL;
+while((mdbVar = slPopHead(mdbVarPtr)) != NULL)
+    mdbVarFree(&mdbVar);
+}
+
 static void mdbLeafObjFree(struct mdbLeafObj **leafObjPtr)
 // Frees a single mdbVar struct
 {
@@ -266,6 +275,24 @@ struct mdbLimbVal *limbVal = *limbValPtr;
 
     freeMem(limbVal->val);
     freez(limbValPtr);
+}
+
+static struct mdbVar *mdbVarNew(char *var, void *val)
+// Creates a new mdbVar and adds it onto the head of the list
+{
+struct mdbVar *mdbVar;
+AllocVar(mdbVar);
+mdbVar->var = cloneString(var);
+mdbVar->val = cloneString(val);
+return mdbVar;
+}
+
+static struct mdbVar *mdbVarAdd(struct mdbVar **pMdbVars, char *var, void *val)
+// Creates a new mdbVar and adds it onto the head of the list
+{
+struct mdbVar *mdbVar = mdbVarNew(var,val);
+slAddHead(pMdbVars, mdbVar);
+return mdbVar;
 }
 
 static struct mdbObj *mdbObjsLoadFromMemory(struct mdb **mdbPtr,boolean buildHashes)
@@ -745,6 +772,32 @@ struct mdbObj *mdbObj = NULL;
             mdbVar->val     = cloneString(val);
         mdbObj->vars = mdbVar; // Only one
         }
+return mdbObj;
+}
+
+struct mdbObj *mdbObjNew(char *obj,struct mdbVar *mdbVars)
+// Returns a new mdbObj with whatever was passed in.
+// An mdbObj requires and obj, so if one is not supplied it will be "[unknown]"
+{
+struct mdbObj *mdbObj = NULL;
+if (obj == NULL)
+    obj =  "[unknown]";
+if (mdbVars == NULL)
+    {
+    AllocVar(mdbObj);
+    mdbObj->obj = cloneString(obj);
+    return mdbObj;
+    }
+else
+    {
+    mdbObj = mdbObjCreate(obj,mdbVars->var,mdbVars->val);
+    mdbObj->varHash = hashNew(0);
+    hashAddUnique(mdbObj->varHash, mdbVars->var, mdbObj->vars); // pointer to struct to resolve type
+
+    struct mdbVar *var = mdbVars->next;
+    for(;var != NULL;var = var->next);
+        mdbObjSetVar(mdbObj, var->var,var->val);
+    }
 return mdbObj;
 }
 
@@ -2065,9 +2118,7 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     if(mdbObj->varHash != NULL)
         hashFree(&mdbObj->varHash);
 
-    struct mdbVar *mdbVar = NULL;
-    while((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
-        mdbVarFree(&mdbVar);
+    mdbVarsFree(&(mdbObj->vars));
 
     mdbObjAddVarPairs(mdbObj,vars);
     }
@@ -2220,12 +2271,11 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     if(mdbObj->varHash != NULL)
         hashFree(&mdbObj->varHash);
 
-    struct mdbVar *mdbVar = NULL;
-    while((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
-        mdbVarFree(&mdbVar);
+    mdbVarsFree(&(mdbObj->vars));
 
     if(var != NULL)
         {
+        struct mdbVar *mdbVar;
         AllocVar(mdbVar);
 
         mdbVar->var     = cloneString(var);
@@ -2460,16 +2510,17 @@ return invalids;
 }
 
 #define EXPERIMENTS_TABLE "hgFixed.encodeExp"
-#define EDV_VAR_NAME "expVars"
-#define EXP_ID_NAME "expId"
-#define COMPOSITE_VAR "composite"
-#define SPECIES_VAR  "species"
-#define DCC_ACCESSION "dccAccession"
+#define EDV_VAR_NAME         "expVars"
+#define EXP_ID_NAME          "expId"
+#define COMPOSITE_VAR        "composite"
+#define DCC_ACCESSION        "dccAccession"
 
-struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,int warn)
+struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,
+                                          int warn,boolean createExpIfNecessary)
 // Organizes objects into experiments and validates experiment IDs.  Will add/update the ids in the structures.
 // If warn=1, then prints to stdout all the experiments/obs with missing or wrong expIds;
 //    warn=2, then print line for each obj with expId or warning.
+// createExpIfNecessary means go ahead and add to the hgFixed.encodeExp table to get an ID
 // Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
 {
 if (pMdbObjs == NULL || *pMdbObjs == NULL)
@@ -2488,8 +2539,6 @@ struct mdbObj *mdbUpdateObjs = NULL;
         FIXME: Nice to add white-list to cv.ra typeOfTerms
     - Breaks up and walks through composite objects exp by exp (handle's "None"s gracefully)
     - Determines what expId should be.
-        FIXME: This needs APIs to get the id from the hgFixed.encodeExp table
-        FIXME: Could also use API to set the expId in the hgFixed.encodeExp table
     - Creates new mdbObjs list of updates needed to put expId and dccAccession into the mdb.
     - From "mdbPrint", this API warns of mismatches or missing expIds
     - From "mdbUpdate" (not -test) then that utility will update the mdb from this API's return structs.  If -test, will reveal what would be updated. */
@@ -2519,7 +2568,7 @@ while(mdbObjs != NULL)
 
     // Find the composite obj if it exists
     struct mdbObj *compObj = mdbObjsFilter(&mdbCompositeObjs, "objType", "composite",TRUE);
-    if (compObj == NULL)
+    if (compObj == NULL) // May be NULL if mdbObjs passed in was produced by too narrow of selection criteria
         {
         dyStringClear(dyVars);
         dyStringPrintf(dyVars,"composite=%s %s=", compName,EDV_VAR_NAME);
@@ -2538,7 +2587,7 @@ while(mdbObjs != NULL)
     if (dyStringLen(dyVars) == 0)
         {
         // figure them out?
-        // FIXME: White list of EDVs from the cv
+        // NOTE: Kate wants white list of EDVs from the cv.  Wranglers satisfied with defining them in an mdbObj of objType=composite
         // Walk through the mdbCompositeObjs looking for matching vars.
         verbose(1, "There are no experiment defining variables established for this composite.  Add them to obj %s => var:%s.\n",compName,EDV_VAR_NAME);
         mdbProcessedObs = slCat(mdbProcessedObs,mdbCompositeObjs);
@@ -2573,6 +2622,7 @@ while(mdbObjs != NULL)
         mdbObjsSortOnVars(&mdbCompositeObjs, edvSortOrder);
 
         // Construct the var=val string for the exp at the top of the stack
+        struct mdbVar *edvVars = NULL,*edvVar = NULL;
         dyStringClear(dyVars);
         struct dyString *filterVars = dyStringNew(256);
         struct slName *var = compositeEdvs;
@@ -2584,16 +2634,16 @@ while(mdbObjs != NULL)
                 {
                 valsFound++;
                 dyStringPrintf(filterVars,"%s=%s ",var->name,val);
-                dyStringPrintf(dyVars,"%s=%s ",var->name,val);
+                edvVar = mdbVarAdd(&edvVars, var->name,val);
+                dyStringPrintf(dyVars,"%s=%s ",edvVar->var,edvVar->val);
                 }
             else
                 {
-                if (sameWord(var->name,SPECIES_VAR))
-                    dyStringPrintf(dyVars,"%s=%s ",SPECIES_VAR,(startsWith("mm",db)?"Mouse":"Human")); // Can't go into mdbObj FilterVars
-                else
+                if (differentWord(var->name,ENCODE_EXP_FIELD_ORGANISM)) // Does not go into EDV's sent to encodeExp table
                     {
-                    dyStringPrintf(dyVars,"%s=None ",var->name);
                     dyStringPrintf(filterVars,"%s=None ",var->name);
+                    edvVar = mdbVarAdd(&edvVars, var->name,"None");
+                    dyStringPrintf(dyVars,"%s=%s ",edvVar->var,edvVar->val);
                     }
                 }
             }
@@ -2604,6 +2654,7 @@ while(mdbObjs != NULL)
             verbose(1, "There are no experiment defining variables for this object '%s'.\n",mdbCompositeObjs->obj);
             slAddHead(&mdbProcessedObs,slPopHead(&mdbCompositeObjs)); // We're done with this one
             dyStringFree(&filterVars);
+            mdbVarsFree(&edvVars);
             continue;
             }
 
@@ -2620,15 +2671,18 @@ while(mdbObjs != NULL)
         expObjsCount += objsInExp; // Total of all experimental object across the composite
 
         // Look up each exp in EXPERIMENTS_TABLE
-        // FIXME: Kate.  Need the encodeExp lib
-        // Further FIXME: dyStringContents(dyVars) could have species=hg18 when what would be desired is species=Human
-        // int expId = encodeExpGetExpId(dyStringContents(dyVars));
-        int expId = -1;
         char experimentId[128];
+        int expId = -1;
+        struct encodeExp *exp = encodeExpGetByMdbVars(db, edvVars);
+        if (exp == NULL && createExpIfNecessary)
+            exp = encodeExpGetOrCreateByMdbVars(db, edvVars);
+        mdbVarsFree(&edvVars); // No longer needed
+
+        if (exp != NULL)
+            expId = exp->ix;
 
         if (expId == -1)
             {
-            // FIXME: Kate should provide an API to create an experiment in the hgFixed.encodeExp table.  This will leave one algorithm for grouping experiments by EDVs
             safef(experimentId,sizeof(experimentId),"{missing}");
             if (warn > 0)
                 printf("Experiment %s EDV: [%s] is not defined in %s table.\n",experimentId,dyStringContents(dyVars),EXPERIMENTS_TABLE);
@@ -2638,6 +2692,7 @@ while(mdbObjs != NULL)
                 expMissing++;
                 mdbProcessedObs = slCat(mdbProcessedObs,mdbExpObjs);
                 mdbExpObjs = NULL;
+                encodeExpFree(&exp);
                 continue;
                 }
             }
@@ -2695,14 +2750,14 @@ while(mdbObjs != NULL)
                 {
                 mdbObjSetVarInt(obj,EXP_ID_NAME,expId);
                 struct mdbObj *newObj = mdbObjCreate(obj->obj,EXP_ID_NAME, experimentId);
-                char buf[128];
-                safef(buf,sizeof(buf),"wgEncode%c%06d",(startsWith("mm",db)?'M':'H'),expId);
-                mdbObjSetVar(newObj,DCC_ACCESSION,buf);
+                assert(exp != NULL);
+                mdbObjSetVar(newObj,DCC_ACCESSION,exp->accession);
                 slAddHead(&mdbUpdateObjs,newObj);
                 }
             slAddHead(&mdbProcessedObs,obj);
             }
         // Done with one experiment
+        encodeExpFree(&exp);
 
         if (!foundId && errors > 0)
             {
@@ -2730,6 +2785,26 @@ dyStringFree(&dyVars);
 return mdbUpdateObjs;
 }
 
+boolean mdbObjIsEncode(struct mdbObj *mdb)
+// Return true if this metaDb object is for ENCODE
+{
+char *project = mdbObjFindValue(mdb, "project");
+if (sameOk(project, ENCODE_MDB_PROJECT))
+    return TRUE;
+return FALSE;
+
+// Could be more stringent:
+//return (mdbObjFindValue(mdbObj, "lab") != NULL && mdbObjFindValue(mdbObj, "dataType") != NULL && mdbObjFindValue(mdbObj, "subId"));
+}
+
+boolean mdbObjInComposite(struct mdbObj *mdb, char *composite)
+// Return true if metaDb object is in specified composite.
+// If composite is NULL, always return true
+{
+if (composite == NULL || sameOk(composite, mdbObjFindValue(mdb, "composite")))
+    return TRUE;
+return FALSE;
+}
 
 // --------------- Free at last ----------------
 void mdbObjsFree(struct mdbObj **mdbObjsPtr)
@@ -2746,9 +2821,7 @@ if(mdbObjsPtr != NULL && *mdbObjsPtr != NULL)
         hashFree(&(mdbObj->varHash));
 
         // free all leaves
-        struct mdbVar *mdbVar = NULL;
-        while((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
-            mdbVarFree(&mdbVar);
+        mdbVarsFree(&(mdbObj->vars));
 
         // The rest of root
         freeMem(mdbObj->obj);
@@ -3203,4 +3276,3 @@ if (termHash != NULL)
     }
 return term;
 }
-

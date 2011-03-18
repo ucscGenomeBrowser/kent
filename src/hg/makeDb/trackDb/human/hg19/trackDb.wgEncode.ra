@@ -9,8 +9,11 @@ include wgEncodeGencodeV5.ra alpha
 # UNC/BSU Proteogenomics (wrangler: cline)
 include wgEncodeUncBsuProt.ra alpha
 
+# Integrated Regulation (wrangler: kent)
+include wgEncodeReg.ra alpha
+
 # Nucleosome (wrangler: venkat)
-include wgEncodeSydhNsome.ra
+include wgEncodeSydhNsome.ra alpha
 
 # GIS RNA PET (wrangler: cricket)
 include wgEncodeGisRnaPet.ra
@@ -133,11 +136,11 @@ include wgEncodeSydhHistone.ra
 
 # ENCODE TFBS -------------------------------------------
 
-# UW TFBS (wrangler: Venkat)
-include wgEncodeUwTfbs.ra alpha,beta
+# UW CTCF Binding (wrangler: Venkat)
+include wgEncodeUwTfbs.ra
 
 # UTA TFBS (wrangler: Tim)
-include wgEncodeOpenChromChip.ra alpha,beta
+include wgEncodeOpenChromChip.ra
 
 # HAIB TFBS (wrangler: Venkat)
 include wgEncodeHaibTfbs.ra
