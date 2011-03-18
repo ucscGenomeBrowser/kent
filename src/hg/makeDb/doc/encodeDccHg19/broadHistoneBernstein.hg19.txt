@@ -4274,477 +4274,110 @@ select id,name,status from projects where name like "Broad%" and status = "displ
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3073 reviewing
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3074 reviewing
 
-2011-01-21 Broad Chromatin Modelling by HMM for hg18 
-====================================================
-Submitted to 3446
-Changed Encode.pm to accept hg18
-Changed some DDF and failed on dataType=ChipSeq requiring an antibody.  Changed to dataTypeCombined
-doEncodeValidate worked so sent it through the pipeline.  Loaded!
-# verified tables exist in hg18 and downloadable files are in hg18  Tables are "bed 9"
-show tables like "wgEncodeBroadHmm%";
-+------------------------------------+
-| wgEncodeBroadHmmGm12878HMM         | 
-| wgEncodeBroadHmmH1hescHMM          | 
-| wgEncodeBroadHmmHepg2HMM           | 
-| wgEncodeBroadHmmHmecHMM            | 
-| wgEncodeBroadHmmHsmmHMM            | 
-| wgEncodeBroadHmmHuvecHMM           | 
-| wgEncodeBroadHmmK562HMM            | 
-| wgEncodeBroadHmmNhekHMM            | 
-| wgEncodeBroadHmmNhlfHMM            | 
-+------------------------------------+
-select min(score),max(score) from wgEncodeBroadHmmH1hescHMM;
-+------------+------------+
-| min(score) | max(score) |
-+------------+------------+
-|          0 |          0 | 
-+------------+------------+
-cd {downloadsHg18}/wgEncodeBroadHmm
-ll wgEncode*
--rw-rw-r--   1 encodeteam protein 5305015 Jan 21 09:39 wgEncodeBroadHmmGm12878HMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5717187 Jan 21 09:39 wgEncodeBroadHmmH1hescHMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5097678 Jan 21 09:39 wgEncodeBroadHmmHepg2HMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5653968 Jan 21 09:39 wgEncodeBroadHmmHmecHMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5956576 Jan 21 09:39 wgEncodeBroadHmmHsmmHMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5144281 Jan 21 09:39 wgEncodeBroadHmmHuvecHMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5785441 Jan 21 09:38 wgEncodeBroadHmmK562HMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5854057 Jan 21 09:38 wgEncodeBroadHmmNhekHMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5970587 Jan 21 09:38 wgEncodeBroadHmmNhlfHMM.bed.gz
+2011-02-16 Testing experimentify
+================================
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeBroadHistone -encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+There are no experiment defining variables defined for this composite.  Add them to obj wgEncodeBroadHistone => var:expVars.
+0 of 930 objs can have their experiment IDs updated now.
+objects:930  vars:19224
 
-edit trackDb.ra template and place it in trackDb/human/hg18/wgEncodeBroadHmm
-cd trackDb/
-make DBS=hg18
-# see them there
+# Currently dependent upon a "composite" type mdb obj wgEncodeBroadHistone => expVar:"grant,lab,dataType,cell,antibody"
+mdbPrint hg19 -vars="objType=composite"        
+Using table named 'hg19.metaDb_tdreszer'.
+metaObject wgEncodeCshlShortRnaSeq
+objType composite
+composite wgEncodeCshlShortRnaSeq
+geoSeriesAccession GSE24565
 
-# now metadata
-cd {pip}/3446
-mdbUpdate hg18 out/mdb.txt
+mdbUpdate hg19 -obj=wgEncodeBroadHistone -setVars="objType=composite composite=wgEncodeBroadHistone expVars=grant,lab,dataType,cell,antibody" -test        
+mdbUpdate hg19 -obj=wgEncodeBroadHistone -setVars="objType=composite composite=wgEncodeBroadHistone expVars=grant,lab,dataType,cell,antibody"              
+Using table named 'hg19.metaDb_tdreszer'.
+Affected 3 row(s) in hg19.metaDb_tdreszer
 
-# Check in changes:
-cd .. {hg18/metaDb/alpha}
-mdbPrint hg18 -vars="composite=wgEncodeBroadHmm" > wgEncodeBroadHmm.ra
-Using table named 'hg18.metaDb_tdreszer'.
-objects:9  vars:135
-gadd wgEncodeBroadHmm.ra
-cd ../../ (hg18)
-gadd wgEncodeBroadHmm.ra
-gadd trackDb.wgEncode.ra
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeBroadHistone -encodeExp
+Experiment [EDV='grant'] there is no experiment defined in hgFixed.encodeExp table.
 
-git: ci, up, push
-cd ../../ (trackDb)
-make DBS=hg18; make alpha DBS=hg18
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeBroadHistone -encodeExp
+Composite 'wgEncodeBroadHistone' has expVars:'grant lab dataType cell antibody' with 5 EDVs.
+Experiment 'grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 ' has 6 objects based upon 5 EDVs.
+Experiment 0 [EDV='grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
 
+~/bin/x86_64/mdbUpdate hg19 -composite=wgEncodeBroadHistone -encodeExp -test
+Object 'wgEncodeBroadHistone' has no composite defined.
+No Experiment ID updates were discovered in 931 object(s).
 
-git: up, add, ci, up, push
-cd ../../../../ (trackDb)
-make DBS=hg18; make alpha DBS=hg18
+mdbPrint hg19 -composite=wgEncodeBroadHistone -vars="objType=composite"
+Using table named 'hg19.metaDb_tdreszer'.
+metaObject wgEncodeBroadHistone
+objType composite
+composite wgEncodeBroadHistone
+expVars grant,lab,dataType,cell,antibody
 
-cd {downloadsHg18}/wgEncodeBroadHmm
-encodeDownloadsPage.pl -db=hg18 index.html
-# 9 files.  No metadata  # 9 found in hgFileUi
+~/bin/x86_64/mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone" -encodeExp -test
+Using table named 'hg19.metaDb_tdreszer'.
+Found 930 of 930 object(s) would have their experiment ID updated.
+Command would affected 1860 row(s) in hg19.metaDb_tdreszer
 
-#neglected to add mdb ra to make file
-cd .. {hg18/metaDb/alpha}
-e makefile
-git: up, add, ci, up, push
-cd ../../../../ (trackDb)
-make DBS=hg18; make alpha DBS=hg18
+# Agreed with Kate to drop grant from expVars
+mdbUpdate hg19 -obj=wgEncodeBroadHistone -setVars="objType=composite composite=wgEncodeBroadHistone expVars=lab,dataType,cell,antibody"
+Affected 3 row(s) in hg19.metaDb_tdreszer
 
-cd {downloadsHg18}/wgEncodeBroadHmm
-encodeDownloadsPage.pl -db=hg18 index.html
-# 9 files.  Full metadata  # 9 found in hgFileUi
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeBroadHistone -encodeExp > tmp.txt
+Composite 'wgEncodeBroadHistone' has expVars:'lab dataType cell antibody' with 4 EDVs.
+Experiment 'lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 ' has 6 objects based upon 4 EDVs.
+Experiment 0 [EDV='lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
 
-/cluster/data/encode/pipeline/bin/encodeStatus.pl 3446 displayed
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeBroadHistone -encodeExp > tmp.txt
+Found 930 of 930 object(s) would have their experiment ID updated.
+Command would affected 1860 row(s) in hg19.metaDb_tdreszer
 
-2011-01-24 Corrections to names
-===============================
-12345678901234567
-1 Active Promoter
-2 Weak Promoter
-3 Poised Promoter
-4 Strong Enhancer
-5 Strong Enhancer
-6 Weak Enhancer
-7 Weak Enhancer
-8 Insulator
-9 Txn Transition
-10 Txn Elongation
-11 Weak Txn
-12 Repressed
-13 Heterochrom/lo
-14 Repetitive/CNV
-15 Repetitive/CNV
+mdbUpdate hg19 -obj=wgEncodeBroadHistone -setVars="objType=composite composite=wgEncodeBroadHistone expVars=lab,dataType,cell,antibody"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeBroadHistone -encodeExp | tail
+Composite 'wgEncodeBroadHistone' has 151 experiments currently defined. Largest:8  average:6.158940
 
-1) Ideally lab resubmits proper beds
-2) hardest: possibly edit bed files, then reload
-3) Easiest: update tables
-show tables like "wgEncodeBroadHmm%";
-| wgEncodeBroadHmmGm12878HMM         | 
-| wgEncodeBroadHmmH1hescHMM          | 
-| wgEncodeBroadHmmHepg2HMM           | 
-| wgEncodeBroadHmmHmecHMM            | 
-| wgEncodeBroadHmmHsmmHMM            | 
-| wgEncodeBroadHmmHuvecHMM           | 
-| wgEncodeBroadHmmK562HMM            | 
-| wgEncodeBroadHmmNhekHMM            | 
-| wgEncodeBroadHmmNhlfHMM            | 
-select distinct name from wgEncodeBroadHmmGm12878HMM order by name;
-select distinct name from wgEncodeBroadHmmH1hescHMM order by name;
-select distinct name from wgEncodeBroadHmmHepg2HMM order by name;
-select distinct name from wgEncodeBroadHmmHmecHMM order by name;
-select distinct name from wgEncodeBroadHmmHsmmHMM order by name;
-select distinct name from wgEncodeBroadHmmHuvecHMM order by name;
-select distinct name from wgEncodeBroadHmmK562HMM order by name;
-select distinct name from wgEncodeBroadHmmNhekHMM order by name;
-select distinct name from wgEncodeBroadHmmNhlfHMM order by name;
-# All are 1-15 as expected
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | wl
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | wl
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | wl
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | wl
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | wl
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | wl
-zcat wgEncodeBroadHmmK562HMM.bed.gz | wl
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | wl
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | wl
+mdbUpdate hg18 -obj=wgEncodeBroadChipSeq -setVars="objType=composite composite=wgEncodeBroadChipSeq expVars=lab,dataType,cell,antibody"              
+~/bin/x86_64/mdbPrint hg18 -composite=wgEncodeBroadChipSeq -encodeExp | tail
+Composite 'wgEncodeBroadChipSeq' has 93 experiments currently defined. Largest:6  average:5.903226
 
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | wl 570580
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | wl 618287
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | wl 545647
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | wl 608568
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | wl 638307
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | wl 549178
-zcat wgEncodeBroadHmmK562HMM.bed.gz | wl 621678
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | wl 627623
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | wl 640298
+## Test Haib which has a mess of experiments
+mdbUpdate hg19 -obj=wgEncodeHaibTfbs -setVars="objType=composite composite=wgEncodeHaibTfbs expVars=lab,dataType,cell,treatment,antibody,protocol" -test        
+mdbUpdate hg19 -obj=wgEncodeHaibTfbs -setVars="objType=composite composite=wgEncodeHaibTfbs expVars=lab,dataType,cell,treatment,antibody,protocol"              
+Using table named 'hg19.metaDb_tdreszer'.
+Affected 3 row(s) in hg19.metaDb_tdreszer
 
-# Could zcat wgEncodeBroadHmmNhlfHMM.bed.gz | h | grep -P "\t10\t0\t\." > wgEncodeBroadHmmNhlfHMM.bed.1 
-# Could
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | h | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./' 
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeHaibTfbs -encodeExp | tail
+Composite 'wgEncodeHaibTfbs' has 252 experiments currently defined. Largest:14  average:6.257937
 
-rm   wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmGm12878HMM.bed
-
-rm   wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmH1hescHMM.bed
-
-rm   wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHepg2HMM.bed
-
-rm   wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHmecHMM.bed
-
-rm   wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHsmmHMM.bed
-
-rm   wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHuvecHMM.bed
-
-rm   wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmK562HMM.bed
-
-rm   wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmNhekHMM.bed
-
-rm wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmNhlfHMM.bed
+mdbUpdate hg19 -obj=wgEncodeSydhTfbs -setVars="objType=composite composite=wgEncodeSydhTfbs expVars=lab,dataType,cell,treatment,antibody"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeSydhTfbs -encodeExp | tail
+Composite 'wgEncodeSydhTfbs' has 375 experiments currently defined. Largest:19  average:4.272000
 
 
-wl *.bed
-   570580 wgEncodeBroadHmmGm12878HMM.bed
-   618287 wgEncodeBroadHmmH1hescHMM.bed
-   545647 wgEncodeBroadHmmHepg2HMM.bed
-   608568 wgEncodeBroadHmmHmecHMM.bed
-   638307 wgEncodeBroadHmmHsmmHMM.bed
-   549178 wgEncodeBroadHmmHuvecHMM.bed
-   621678 wgEncodeBroadHmmK562HMM.bed
-   627623 wgEncodeBroadHmmNhekHMM.bed
-   640298 wgEncodeBroadHmmNhlfHMM.bed
-All okay
+mdbUpdate hg19 -obj=wgEncodeOpenChromChip -setVars="objType=composite composite=wgEncodeOpenChromChip expVars=lab,dataType,cell,treatment,antibody"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromChip -encodeExp | tail
+Composite 'wgEncodeOpenChromChip' has 46 experiments currently defined. Largest:9  average:5.891304
 
-mkdir obsolete
-mv wgEncodeBroadHmmGm12878HMM.bed.gz obsolete
-mv wgEncodeBroadHmmH1hescHMM.bed.gz obsolete
-mv wgEncodeBroadHmmHepg2HMM.bed.gz obsolete
-mv wgEncodeBroadHmmHmecHMM.bed.gz obsolete
-mv wgEncodeBroadHmmHsmmHMM.bed.gz obsolete
-mv wgEncodeBroadHmmHuvecHMM.bed.gz obsolete
-mv wgEncodeBroadHmmK562HMM.bed.gz obsolete
-mv wgEncodeBroadHmmNhekHMM.bed.gz obsolete
-mv wgEncodeBroadHmmNhlfHMM.bed.gz obsolete
+mdbUpdate hg19 -obj=wgEncodeOpenChromDnase -setVars="objType=composite composite=wgEncodeOpenChromDnase expVars=lab,dataType,cell,treatment"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromDnase -encodeExp | tail
+Composite 'wgEncodeOpenChromDnase' has 47 experiments currently defined. Largest:13  average:6.936170
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromDnase -encodeExp
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromDnase -var=dataVersion -val="ENCODE Jan 2011%" -encodeExp
 
-sort < wgEncodeBroadHmmGm12878HMM.bed > s_wgEncodeBroadHmmGm12878HMM.bed
-sort < wgEncodeBroadHmmH1hescHMM.bed  > s_wgEncodeBroadHmmH1hescHMM.bed
-sort < wgEncodeBroadHmmHepg2HMM.bed   > s_wgEncodeBroadHmmHepg2HMM.bed
-sort < wgEncodeBroadHmmHmecHMM.bed    > s_wgEncodeBroadHmmHmecHMM.bed
-sort < wgEncodeBroadHmmHsmmHMM.bed    > s_wgEncodeBroadHmmHsmmHMM.bed
-sort < wgEncodeBroadHmmHuvecHMM.bed   > s_wgEncodeBroadHmmHuvecHMM.bed
-sort < wgEncodeBroadHmmK562HMM.bed    > s_wgEncodeBroadHmmK562HMM.bed
-sort < wgEncodeBroadHmmNhekHMM.bed    > s_wgEncodeBroadHmmNhekHMM.bed
-sort < wgEncodeBroadHmmNhlfHMM.bed    > s_wgEncodeBroadHmmNhlfHMM.bed
+mdbUpdate hg19 -obj=wgEncodeOpenChromFaire -setVars="objType=composite composite=wgEncodeOpenChromFaire expVars=lab,dataType,cell,treatment"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromFaire -encodeExp | tail
+Composite 'wgEncodeOpenChromFaire' has 26 experiments currently defined. Largest:9  average:6.884615
 
-mv s_wgEncodeBroadHmmGm12878HMM.bed wgEncodeBroadHmmGm12878HMM.bed
-mv s_wgEncodeBroadHmmH1hescHMM.bed  wgEncodeBroadHmmH1hescHMM.bed
-mv s_wgEncodeBroadHmmHepg2HMM.bed   wgEncodeBroadHmmHepg2HMM.bed
-mv s_wgEncodeBroadHmmHmecHMM.bed    wgEncodeBroadHmmHmecHMM.bed
-mv s_wgEncodeBroadHmmHsmmHMM.bed    wgEncodeBroadHmmHsmmHMM.bed
-mv s_wgEncodeBroadHmmHuvecHMM.bed   wgEncodeBroadHmmHuvecHMM.bed
-mv s_wgEncodeBroadHmmK562HMM.bed    wgEncodeBroadHmmK562HMM.bed
-mv s_wgEncodeBroadHmmNhekHMM.bed    wgEncodeBroadHmmNhekHMM.bed
-mv s_wgEncodeBroadHmmNhlfHMM.bed    wgEncodeBroadHmmNhlfHMM.bed
-
-wl *.bed
-   570580 wgEncodeBroadHmmGm12878HMM.bed
-   618287 wgEncodeBroadHmmH1hescHMM.bed
-   545647 wgEncodeBroadHmmHepg2HMM.bed
-   608568 wgEncodeBroadHmmHmecHMM.bed
-   638307 wgEncodeBroadHmmHsmmHMM.bed
-   549178 wgEncodeBroadHmmHuvecHMM.bed
-   621678 wgEncodeBroadHmmK562HMM.bed
-   627623 wgEncodeBroadHmmNhekHMM.bed
-   640298 wgEncodeBroadHmmNhlfHMM.bed
-All okay
-
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmGm12878HMM_tmp wgEncodeBroadHmmGm12878HMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmH1hescHMM_tmp  wgEncodeBroadHmmH1hescHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmHepg2HMM_tmp   wgEncodeBroadHmmHepg2HMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmHmecHMM_tmp    wgEncodeBroadHmmHmecHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmHsmmHMM_tmp    wgEncodeBroadHmmHsmmHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmHuvecHMM_tmp   wgEncodeBroadHmmHuvecHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmK562HMM_tmp    wgEncodeBroadHmmK562HMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmNhekHMM_tmp    wgEncodeBroadHmmNhekHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmNhlfHMM_tmp    wgEncodeBroadHmmNhlfHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1
-
-select count(*) from wgEncodeBroadHmmGm12878HMM_tmp;|   570580 |
-select count(*) from wgEncodeBroadHmmH1hescHMM_tmp; |   618287 |
-select count(*) from wgEncodeBroadHmmHepg2HMM_tmp;  |   545647 |
-select count(*) from wgEncodeBroadHmmHmecHMM_tmp;   |   608568 |
-select count(*) from wgEncodeBroadHmmHsmmHMM_tmp;   |   638307 |
-select count(*) from wgEncodeBroadHmmHuvecHMM_tmp;  |   549178 |
-select count(*) from wgEncodeBroadHmmK562HMM_tmp;   |   621678 |
-select count(*) from wgEncodeBroadHmmNhekHMM_tmp;   |   627623 |
-select count(*) from wgEncodeBroadHmmNhlfHMM_tmp;   |   640298 |
-
-select * from wgEncodeBroadHmmGm12878HMM_tmp limit 1;| 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmH1hescHMM_tmp limit 1; | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmHepg2HMM_tmp limit 1;  | 585 | chr1  |          0 |      400 | 15 Repetitive/CNV |     0 | .      |          0 |      400 | 16777215 |
-select * from wgEncodeBroadHmmHmecHMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmHsmmHMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmHuvecHMM_tmp limit 1;  | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmK562HMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmNhekHMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmNhlfHMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-
-drop table wgEncodeBroadHmmGm12878HMM;
-drop table wgEncodeBroadHmmH1hescHMM;
-drop table wgEncodeBroadHmmHepg2HMM;
-drop table wgEncodeBroadHmmHmecHMM;
-drop table wgEncodeBroadHmmHsmmHMM;
-drop table wgEncodeBroadHmmHuvecHMM;
-drop table wgEncodeBroadHmmK562HMM;
-drop table wgEncodeBroadHmmNhekHMM;
-drop table wgEncodeBroadHmmNhlfHMM;
-
-rename table wgEncodeBroadHmmGm12878HMM_tmp to wgEncodeBroadHmmGm12878HMM;
-rename table wgEncodeBroadHmmH1hescHMM_tmp  to wgEncodeBroadHmmH1hescHMM;
-rename table wgEncodeBroadHmmHepg2HMM_tmp   to wgEncodeBroadHmmHepg2HMM;
-rename table wgEncodeBroadHmmHmecHMM_tmp    to wgEncodeBroadHmmHmecHMM;
-rename table wgEncodeBroadHmmHsmmHMM_tmp    to wgEncodeBroadHmmHsmmHMM;
-rename table wgEncodeBroadHmmHuvecHMM_tmp   to wgEncodeBroadHmmHuvecHMM;
-rename table wgEncodeBroadHmmK562HMM_tmp    to wgEncodeBroadHmmK562HMM;
-rename table wgEncodeBroadHmmNhekHMM_tmp    to wgEncodeBroadHmmNhekHMM;
-rename table wgEncodeBroadHmmNhlfHMM_tmp    to wgEncodeBroadHmmNhlfHMM;
-show tables like "wgEncodeBroadHmm%";
-| wgEncodeBroadHmmGm12878HMM         | 
-| wgEncodeBroadHmmH1hescHMM          | 
-| wgEncodeBroadHmmHepg2HMM           | 
-| wgEncodeBroadHmmHmecHMM            | 
-| wgEncodeBroadHmmHsmmHMM            | 
-| wgEncodeBroadHmmHuvecHMM           | 
-| wgEncodeBroadHmmK562HMM            | 
-| wgEncodeBroadHmmNhekHMM            | 
-| wgEncodeBroadHmmNhlfHMM            | 
-select count(*) from wgEncodeBroadHmmGm12878HMM;|   570580 |
-select count(*) from wgEncodeBroadHmmH1hescHMM; |   618287 |
-select count(*) from wgEncodeBroadHmmHepg2HMM;  |   545647 |
-select count(*) from wgEncodeBroadHmmHmecHMM;   |   608568 |
-select count(*) from wgEncodeBroadHmmHsmmHMM;   |   638307 |
-select count(*) from wgEncodeBroadHmmHuvecHMM;  |   549178 |
-select count(*) from wgEncodeBroadHmmK562HMM;   |   621678 |
-select count(*) from wgEncodeBroadHmmNhekHMM;   |   627623 |
-select count(*) from wgEncodeBroadHmmNhlfHMM;   |   640298 |
-
-gzip wgEncodeBroadHmmGm12878HMM.bed
-gzip wgEncodeBroadHmmH1hescHMM.bed
-gzip wgEncodeBroadHmmHepg2HMM.bed
-gzip wgEncodeBroadHmmHmecHMM.bed
-gzip wgEncodeBroadHmmHsmmHMM.bed
-gzip wgEncodeBroadHmmHuvecHMM.bed
-gzip wgEncodeBroadHmmK562HMM.bed
-gzip wgEncodeBroadHmmNhekHMM.bed
-gzip wgEncodeBroadHmmNhlfHMM.bed
-
-# looks good in browser
-# files are okay
-
-2011-01-31 Swap out bigWigs that Brian update to version 4
-==========================================================
-cd /hive/users/braney/bigWigConvert.wgEncodeBroadHistone
-ls -1 *.bigWig | wl  151
-cd {downLoads}/wgEncodeBroadHistone
-ls -1 *.bigWig | wl  151
-mv *.bigWig ../obsolete/wgEncodeBroadHistone
-
-cd /hive/users/braney/bigWigConvert.wgEncodeBroadHistone
-mv wgEncodeBroadHistoneGm12878ControlStdSig.bigWig.new.bigWig      /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878ControlStdSig.bigWig
-mv wgEncodeBroadHistoneGm12878CtcfStdSig.bigWig.new.bigWig         /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878CtcfStdSig.bigWig
-mv wgEncodeBroadHistoneGm12878H2azStdSig.bigWig.new.bigWig         /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H2azStdSig.bigWig
-mv wgEncodeBroadHistoneGm12878H3k27acStdSig.bigWig.new.bigWig      /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H3k27acStdSig.bigWig
-mv wgEncodeBroadHistoneGm12878H3k27me3StdSig.bigWig.new.bigWig     /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H3k27me3StdSig.bigWig
-mv wgEncodeBroadHistoneGm12878H3k36me3StdSig.bigWig.new.bigWig     /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H3k36me3StdSig.bigWig
-...
-cd {downLoads}/wgEncodeBroadHistone
-ls -1 *.bigWig | wl  151
-cd release1/
-ls -1 *.bigWig | wl  151
-# These are links to obsolete bigWigs
-rm *.bigWig
-ls ../*.bigWig .
-ls -1 *.bigWig | wl  151
-
-# Check that bigWigs work in browser.  This will check that /gbdb/hg19/bbi link is okay too
-AOKAY
-
-# check metadata by building index.html
-../
-encodeDownloadsPage.pl -db=hg19 index.html
-1251 files all with metadata.  # 1251 file in hgFileUi too
-encodeDownloadsPage.pl -db=hg19 -checksum index.html &
-
-
+mdbUpdate hg19 -obj=wgEncodeOpenChromSynth -setVars="objType=composite composite=wgEncodeOpenChromSynth expVars=lab,dataType,cell"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromSynth -encodeExp | tail
+Composite 'wgEncodeOpenChromSynth' has 7 experiments currently defined. Largest:1  average:1.000000
