@@ -652,6 +652,11 @@ struct slPair *slPairFromString(char *s);
  * Returns NULL if parse error.  Free this up with
  * slPairFreeValsAndList. */
 
+char *slPairListToString(struct slPair *list);
+// Returns an allocated string of pairs in form of
+// name1=val1 name2=val2 ...
+// Will wrap vals in quotes if contain spaces: name3="val 3"
+
 int slPairCmpCase(const void *va, const void *vb);
 /* Compare two slPairs, ignore case. */
 

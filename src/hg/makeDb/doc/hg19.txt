@@ -8954,6 +8954,13 @@ TMPDIR=/scratch/tmp
       awk '$4 > 1 || $5 >= 100' peak.bed > wgEncodeRegDnaseClustered.bed
       hgLoadBed hg19 wgEncodeRegDnaseClustered wgEncodeRegDnaseClustered.bed
 
+      # Make wgEncodeRegDnaseClusteredInput table.  Start with mdbQuery, and
+      # then do some massaging since not completely in sync with file list.
+      mdbQuery out=tab "select obj,cell,antibody,treatment from hg19 where obj like 'wgEncodeUwDnase%' and view='Peaks'" | sed 's/n\/a/None/' > inputMdb.tab
+      cut -f 1 peak.table | sed 's/\.narrowPeak\.gz//' | sed 's/peaks\///' > inputs.lst
+      weedLines inputs.lst inputMdb.tab inputs.tab -invert -weeded=weeded.tab
+      hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable2.sql inputs.tab
+
       # Make transcription factor binding site clusters.  Start with Anshul's
       # nice uniform peak calls, downloaded from 
       #   ftp://ftp-private.ebi.ac.uk/byDataType/peaks/jan2011/spp/optimal
@@ -8991,9 +8998,9 @@ TMPDIR=/scratch/tmp
       hgLoadBed hg19 wgEncodeRegTfbsClustered peak.bed
       hgLoadSqlTab hg19 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
 
-      # Create inputTrackTable - four columns: <table> <source> <factor> <treatment>
-      awk '{printf("%s\t%s\t%s\t%s\n", $7, $8, $9, $10);}' peak.table > wgEncodeRegTfbsClusteredInputs.tab
-      hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable2.sql wgEncodeRegTfbsClusteredInputs.tab
+      # Create inputTrackTable - six columns: <table> <source> <factor> <cell> <treatment> <lab>
+      awk '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $7, ($10 == "None" ? $8 : $8 "+" $10), $9, $8, $10, $11);}' peak.table > wgEncodeRegTfbsClusteredInputs.tab
+      hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable4.sql wgEncodeRegTfbsClusteredInputs.tab
 
       # Do work to figure out how to color cells.  This is based on
       # hierarchical clustering of wbEncodeUwAffyAllExon.
@@ -14698,14 +14705,12 @@ hgLoadSqlTab -warn hg19 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omim
 parseOmimDisorder hg19 omimDisorderPhenotype.tab
 hgLoadSqlTab -warn hg19 omimDisorderPhenotype ~/kent/src/hg/lib/omimDisorderPhenotype.sql omimDisorderPhenotype.tab 
 
-hgsql hg19 -N -e \
-'select chrom, txStart, txEnd, m.omimId from mim2gene m, refLink l, refGene g where geneId <>"-" and m.omimId=l.omimId and l.mrnaAcc=g.name' |sort -u > omimGeneAll.tab
+doOmimGene2 hg19 j.tmp
+cat j.tmp |sort -u > omimGene2.tab
 
-hgLoadBed hg19 omimGene2 omimGeneAll.tab
+hgLoadBed hg19 omimGene2 omimGene2.tab
 
-# The following clean up could be done.
-rm j.out
-
+rm j.tmp
 ##############################################################
 # build the omimAvSnp track
 

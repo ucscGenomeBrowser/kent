@@ -1959,7 +1959,7 @@ foreach my $ddfLine (@ddfLines) {
             $pushQDescription = "$hash{'cell'}";
             $shortSuffix = "$hash{'cell'}";
             $longSuffix = "in $hash{'cell'} cells";
-            $tier1 = 1 if ($hash{'cell'} eq 'GM12878' || $hash{'cell'} eq 'K562');
+            $tier1 = 1 if ($hash{'cell'} eq 'GM12878' || $hash{'cell'} eq 'K562' || $hash{'cell'} eq 'H1hESC');
         } else {
 	    warn "Warning: variables undefined for pushQDescription,shortSuffix,longSuffix\n";
     	}
@@ -2151,7 +2151,6 @@ foreach my $ddfLine (@ddfLines) {
     }
     if(!$downloadOnly) {
         print TRACK_RA "        track $tableName\n";
-        print TRACK_RA "        release alpha\n";
         if ($tier1 eq 1) {
             # default to only Tier1 subtracks visible.  Wrangler should review if this is
             #   correct for the track

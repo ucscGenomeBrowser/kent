@@ -1293,9 +1293,22 @@ finishPartialTable(rowIx, itemPos, maxPerRow, webPrintLinkCellStart);
 }
 
 char *webTimeStampedLinkToResource(char *fileName, boolean wrapInHtml)
-// Returns full path of timestamped link to the requested resource file (js, or css).
-// If wrapInHtml, then returns link embedded in style or script html. Free after use.
+// If wrapInHtml
+//   returns versioned link embedded in style or script html (free after use).
+// else
+//   returns full path of a versioned path to the requested resource file (js, or css).
 // NOTE: png, jpg and gif should also be supported but are untested.
+//
+// In production sites we use a versioned softlink that includes the CGI version. This has the following benefits:
+// a) flushes user's web browser cache when the user visits a GB site whose version has changed since their last visit;
+// b) enforces the requirement that static files are the same version as the CGIs (something that often fails to happen in mirrors).
+// (see notes in redmine #3170).
+//
+// In dev trees we use mtime to create a pseudo-version; this forces web browsers to reload css/js file when it changes,
+// so we don't get odd behavior that can be caused by caching of mis-matched javascript and style files in dev trees.
+//
+// In either case, the actual file has to have been previously created by running make in the appropriate directory (kent/src/hg/js
+// or kent/src/hg/htdocs/style).
 {
 char baseName[PATH_LEN];
 char extension[FILEEXT_LEN];
@@ -1316,9 +1329,10 @@ else if (image)
     dirName = cfgOptionDefault("browser.styleImagesDir","style/images");
 struct dyString *fullDirName = NULL;
 char *docRoot = hDocumentRoot();
-if(docRoot != NULL) // tolerate missing docRoot (i.e. when running from command line)
+if(docRoot != NULL)
     fullDirName = dyStringCreate("%s/%s", docRoot, dirName);
 else
+    // tolerate missing docRoot (i.e. when running from command line)
     fullDirName = dyStringCreate("%s", dirName);
 if(!fileExists(dyStringContents(fullDirName)))
     errAbort("webTimeStampedLinkToResource: dir: %s doesn't exist.\n", dyStringContents(fullDirName));
@@ -1328,44 +1342,18 @@ struct dyString *realFileName = dyStringCreate("%s/%s", dyStringContents(fullDir
 if(!fileExists(dyStringContents(realFileName)))
     errAbort("webTimeStampedLinkToResource: file: %s doesn't exist.\n", dyStringContents(realFileName));
 
-// build and verify link path including timestamp in the form of dir/baseName-timeStamp.ext
-long mtime = fileModTime(dyStringContents(realFileName));   // We add mtime to create a pseudo-version; this forces browsers to reload css/js file when it changes
+// build and verify link path including timestamp in the form of dir/baseName + timeStamp or CGI Version + ext
+long mtime = fileModTime(dyStringContents(realFileName));
 struct dyString *linkWithTimestamp;
 if(hIsPreviewHost() || hIsPrivateHost())
     linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), baseName, mtime, extension);
 else
     linkWithTimestamp = dyStringCreate("%s/%s-v%s%s", dyStringContents(fullDirName), baseName, CGI_VERSION, extension);
 
-// If link does not exist, then create it !!
 if(!fileExists(dyStringContents(linkWithTimestamp)))
-    {
-    // The versioned copy should be created by the install process; however, mirrors may fail
-    // to preserve mtime's when copying over the javascript/css files, in which case the
-    // versioned softlinks won't match the real file; in that case, we try to create
-    // the versioned links on the fly (which requires write access to the javascript or style directory!).
+    errAbort("Cannot find correct version of file '%s'; this is due to an installation error\n\nError details: %s does not exist",
+             fileName, dyStringContents(linkWithTimestamp));
 
-    // Remove older links
-    struct dyString *pattern = dyStringCreate("%s-[0-9]+\\%s", baseName, extension);
-    struct slName *file, *files = listDirRegEx(dyStringContents(fullDirName), dyStringContents(pattern), REG_EXTENDED);
-    struct dyString *oldLink = dyStringNew(256);
-    for (file = files; file != NULL; file = file->next)
-        {
-        dyStringClear(oldLink);
-        dyStringPrintf(oldLink, "%s/%s", dyStringContents(fullDirName), file->name);
-        unlink(dyStringContents(oldLink));
-        }
-    dyStringFree(&oldLink);
-    slFreeList(&files);
-    dyStringFree(&pattern);
-
-    // Create new link
-    if(symlink(dyStringContents(realFileName), dyStringContents(linkWithTimestamp)))
-        {
-        int err = errno;
-        errAbort("webTimeStampedLinkToResource: symlink of %s failed: errno: %d (%s); the directory '%s' must be writeable by user '%s'; alternatively, the installation process must create the versioned files\n",
-                 dyStringContents(linkWithTimestamp), err, strerror(err), dyStringContents(fullDirName), getUser());
-        }
-    }
 // Free up all that extra memory
 dyStringFree(&realFileName);
 dyStringFree(&fullDirName);

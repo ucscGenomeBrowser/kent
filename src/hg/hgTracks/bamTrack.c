@@ -705,14 +705,24 @@ static void doMapBoxPerRow(struct track *tg,
 {
 int fontHeight = mgFontLineHeight(font);
 int numRows = tg->height / fontHeight;
+struct customTrack *ct = tg->customPt;
+char itemBuffer[1024];
+
+if (ct)
+    // this should have the trash file name instead of spacer
+    // but the click handler doesn't use it anyway
+    safef(itemBuffer, sizeof itemBuffer, "%s %s","spacer","zoom in");
+else
+    safef(itemBuffer, sizeof itemBuffer, "zoom in");
 
 while(numRows--)
     {
     char buffer[1024];
+
     safef(buffer, sizeof buffer, 
 	"Too many items in display.  Zoom in to click on items. (%d)",numRows);
     mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, fontHeight,
-	tg->track, "zoom in", 
+	tg->track, itemBuffer,
 	buffer);
     yOff += fontHeight;
     }
