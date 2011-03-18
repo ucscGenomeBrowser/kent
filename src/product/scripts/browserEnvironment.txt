@@ -59,6 +59,12 @@ export MYSQLINC="/usr/include/mysql"
 # If your mysql is SSL enabled, use the -lssl:
 # export MYSQLLIBS="/usr/lib64/mysql/libmysqlclient.a -lssl -lz"
 
+# You may need to specify the location of your png library if
+#	it is not in any of: /usr/lib/libpng.a /usr/lib64/libpng.a
+#	and your compiler can't find it when specified as: -lpng
+# export PNGLIB="/opt/local/lib/libpng.a"
+# export PNGINCL"-I/opt/local/include/libpng12"
+
 # Optional support of the BAM file format, see also:
 #	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
 #	You will need to install the samtools library from
