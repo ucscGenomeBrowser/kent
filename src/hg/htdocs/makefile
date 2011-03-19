@@ -12,12 +12,12 @@ FIND=gitFiles
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \
 	    ${MAKE} doInstall destDir=${DOCUMENTROOT}-${USER} extra=doSymLink && \
-	    cd style && echo style && ${MAKE} user; \
+#	    cd style && echo style && ${MAKE} user; \
 	fi
 
 alpha:
 	${MAKE} doInstall destDir=${DOCUMENTROOT} extra=doSymLink
-	cd style && echo style && ${MAKE} alpha
+#	cd style && echo style && ${MAKE} alpha
 
 beta:
 	${GITUP}

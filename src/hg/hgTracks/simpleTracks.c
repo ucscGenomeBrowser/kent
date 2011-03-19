@@ -7691,7 +7691,14 @@ Color colorNum = 0;
 if (!chromosomeColorsMade)
     makeChromosomeShades(hvg);
 if (atoi(name) != 0)
+    {
     chromNum =  atoi(name);
+    /* Tweaks for chimp and other apes with chrom names corresponding to fused human chr2
+     * giving them back a distinct color to distinguish chr2B from chr2A. 
+     * panTro2 uses chr2a chr2b. panTro3 uses chr2A chr2B. */
+    if (startsWith("2B", name) || startsWith("2b", name))
+	chromNum = 26;
+    }
 else if (startsWith("U", name))
     chromNum = 26;
 else if (startsWith("Y", name))
@@ -11082,17 +11089,17 @@ char **row;
 char *answer;
 conn = hAllocConn(database);
 safef(query,sizeof(query),
-        "select phenotypeClass from omimDisorderPhenotype where omimId =%s", omimId);
-	sr = sqlMustGetResult(conn, query);
-	row = sqlNextRow(sr);
+      "select phenotypeClass from omimDisorderPhenotype where omimId =%s", omimId);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
 if (row != NULL)
-	{
-	answer = strdup(row[0]);
-	}
+    {
+    answer = strdup(row[0]);
+    }
 else
-	{
-	answer = strdup("0");
-	}
+    {
+    answer = strdup("0");
+    }
 
 hFreeConn(&conn);
 sqlFreeResult(&sr);
@@ -11100,6 +11107,7 @@ return(answer);
 }
 
 boolean doThisOmimEntry(struct track *tg, char *omimId)
+/* check if the specific class of this OMIM entry is selected by the user */
 {
 char *disorderClass = NULL; 
 boolean doIt;
@@ -11156,30 +11164,6 @@ doIt = doIt || (doOthers && sameWord(disorderClass, "0")) ;
 return(doIt);
 }
 
-char *omimLocationName(struct track *tg, void *item)
-/* set name for omimLcation track */
-{
-struct bed *el = item;
-
-/* return empty string if this OMIM entry should not be presented */
-if (!doThisOmimEntry(tg, el->name)) 
-	return("");
-else
-	return(el->name);
-}
-
-char *omimGene2Name(struct track *tg, void *item)
-/* set name for omimGene2 track */
-{
-struct bed *el = item;
-
-/* return empty string if this OMIM entry should not be presented */
-if (!doThisOmimEntry(tg, el->name)) 
-	return("");
-else
-	return(el->name);
-}
-
 static void omimGene2DrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
@@ -11191,8 +11175,6 @@ int heightPer = tg->heightPer;
 int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
 int w;
-
-if (!doThisOmimEntry(tg, bed->name)) return;
 
 sPhenotypes = omimGene2DisorderList(tg, item);
 w = x2-x1;
@@ -11236,6 +11218,32 @@ if (tg->subType == lfWithBarbs)
     }
 }
 
+void omimBedLoad(struct track *tg)
+/* Load the items in the gmimeGene2 or the omimLocation track */
+{
+struct bed *bed, *list = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+rowOffset, 4);
+    
+    /* check if user has selected the specific class for this OMIM entry */
+    if (doThisOmimEntry(tg, bed->name)) 
+	{
+	slAddHead(&list, bed);
+	}
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&list);
+tg->items = list;
+}
+
 Color omimGene2Color(struct track *tg, void *item, struct hvGfx *hvg)
 /* set the color for omimLocation track items */
 {
@@ -11272,30 +11280,23 @@ else
 	sqlFreeResult(&sr);
 	return hvGfxFindColorIx(hvg, 220, 0, 0);
     	}	
-    else
+    else if (sameWord(phenClass, "2"))
     	{
-    	if (sameWord(phenClass, "2"))
-    	    {
-	    // set to green for class 2
-	    sqlFreeResult(&sr);
-	    return hvGfxFindColorIx(hvg, 0, 255, 0);
-    	    }	
-	else
-	    {
-    	    if (sameWord(phenClass, "1"))
-    	    	{
-		// set to orange for class 1
-	    	sqlFreeResult(&sr);
-	    	return hvGfxFindColorIx(hvg, 200, 0, 200);
-    	    	}
-	    else
-	    	{
-	    	// set to purplish color for phenClass 4
-            	sqlFreeResult(&sr);
-	    	return hvGfxFindColorIx(hvg, 200, 100, 100);
-            	}
-	    }
-
+	// set to green for class 2
+	sqlFreeResult(&sr);
+	return hvGfxFindColorIx(hvg, 0, 255, 0);
+    	}	
+    else if (sameWord(phenClass, "1"))
+    	{
+	// set to orange for class 1
+	sqlFreeResult(&sr);
+	return hvGfxFindColorIx(hvg, 200, 0, 200);
+    	}
+    else
+	{
+	// set to purplish color for phenClass 4
+        sqlFreeResult(&sr);
+	return hvGfxFindColorIx(hvg, 200, 100, 100);
 	}  
     }
 }
@@ -11303,9 +11304,9 @@ else
 void omimGene2Methods (struct track *tg)
 {
 tg->itemColor 	  = omimGene2Color;
-tg->itemName      = omimGene2Name;
 tg->itemNameColor = omimGene2Color;
 tg->drawItemAt    = omimGene2DrawAt;
+tg->loadItems	  = omimBedLoad;
 }
 
 char omimAvSnpBuffer[OMIM_MAX_DESC_LEN];
@@ -11504,10 +11505,6 @@ int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
 int w;
 
-/* skip if the entry is not amount the class(es) selected */
-if (!doThisOmimEntry(tg, bed->name))
-    return;
-
 omimTitle = omimLocationDescription(tg, item);
 w = x2-x1;
 if (w < 1)
@@ -11532,8 +11529,8 @@ if (color)
 void omimLocationMethods (struct track *tg)
 {
 tg->drawItemAt    = omimLocationDrawAt;
-tg->itemName      = omimLocationName;
 tg->itemColor     = omimLocationColor;
+tg->loadItems	  = omimBedLoad;
 }
 
 char *omimGeneName(struct track *tg, void *item)

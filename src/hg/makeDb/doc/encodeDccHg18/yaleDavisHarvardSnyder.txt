@@ -6592,3 +6592,247 @@ Empty set (0.00 sec)
 193 shows every sign of being released.  I have verified that the data is on RR (hg18) and see that the submission was moved to "released" on 2009-03-16. 
  I show no record of its status being changed since, either in the status logs or the makeDb/doc file.  I will change its status back to released.
 update projects set status = released where id = 193;
+
+2011-03-16 Load those ancient submissions into hg18
+===================================================
+Change Encode.pm to accept hg18
+1182,1183,1184,1185,1186
+select id,name,status from projects where id in (1182,1183,1184,1185,1186);
++------+--------------------+-----------+
+| id   | name               | status    |
++------+--------------------+-----------+
+| 1182 | SYDH_GM12878_Max   | hold hg18 | V3 - Includes previously missing sequence data
+| 1183 | SYDH_GM12878_Pol2  | hold hg18 | V3 - Includes previously missing sequence data
+| 1184 | SYDH_GM12878_c_Fos | hold hg18 | V3 - Includes previously missing sequence data
+| 1185 | SYDH_GM12878_c_Jun | hold hg18 | new 
+| 1186 | SYDH_GM12878_c_Myc | hold hg18 | new 
++------+--------------------+-----------+
+ update projects set status = "validate failed" where id in (1182,1183,1184,1185,1186);
+# "validate failed" will allow re-"validate" from the pipeline
+# edited all the DAFs to bring them to v2.0 standard.
+# With a little wrenching, all were loaded
+
+# Rename tables to hg18 standards
+rename table wgEncodeYaleChIPseqGm12878CfosStdSigV3 to wgEncodeYaleChIPseqSignalGm12878CfosV3;
+rename table wgEncodeYaleChIPseqGm12878CfosStdPkV3 to wgEncodeYaleChIPseqPeaksGm12878CfosV3;
+
+rename table wgEncodeYaleChIPseqGm12878CmycStdSig to wgEncodeYaleChIPseqSignalGm12878Cmyc;
+rename table wgEncodeYaleChIPseqGm12878CmycStdPk to wgEncodeYaleChIPseqPeaksGm12878Cmyc;
+
+rename table wgEncodeYaleChIPseqGm12878MaxStdSigV3 to wgEncodeYaleChIPseqSignalGm12878MaxV3;
+rename table wgEncodeYaleChIPseqGm12878MaxStdPkV3 to wgEncodeYaleChIPseqPeaksGm12878MaxV3;
+
+rename table wgEncodeYaleChIPseqGm12878Pol2StdSigV3 to wgEncodeYaleChIPseqSignalGm12878Pol2V3;
+rename table wgEncodeYaleChIPseqGm12878Pol2StdPkV3 to wgEncodeYaleChIPseqPeaksGm12878Pol2V3;
+
+rename table wgEncodeYaleChIPseqGm12878CjunStdSig to wgEncodeYaleChIPseqSignalGm12878Cjun;
+rename table wgEncodeYaleChIPseqGm12878CjunStdPk to wgEncodeYaleChIPseqPeaksGm12878Cjun;
+
+# rename files to hg18 standards
+cd {downloadsHg18}/wgEncodeYaleChIPseq
+mv wgEncodeYaleChIPseqGm12878CfosStdAlnRep1V3.tagAlign.gz  wgEncodeYaleChIPseqAlignmentsRep1Gm12878CfosV3.tagAlign.gz
+mv wgEncodeYaleChIPseqGm12878CfosStdAlnRep2V3.tagAlign.gz  wgEncodeYaleChIPseqAlignmentsRep2Gm12878CfosV3.tagAlign.gz
+mv wgEncodeYaleChIPseqGm12878CfosStdSigV3.bedGraph4.gz     wgEncodeYaleChIPseqSignalGm12878CfosV3.bedGraph4.gz
+mv wgEncodeYaleChIPseqGm12878CfosStdPkV3.narrowPeak.gz     wgEncodeYaleChIPseqPeaksGm12878CfosV3.narrowPeak.gz
+mv wgEncodeYaleChIPseqGm12878CfosStdRawDataRep1V3.fastq.gz wgEncodeYaleChIPseqRawDataRep1Gm12878CfosV3.fastq.gz
+mv wgEncodeYaleChIPseqGm12878CfosStdRawDataRep2V3.fastq.gz wgEncodeYaleChIPseqRawDataRep2Gm12878CfosV3.fastq.gz
+
+mv wgEncodeYaleChIPseqGm12878CmycStdAlnRep1.tagAlign.gz    wgEncodeYaleChIPseqAlignmentsRep1Gm12878Cmyc.tagAlign.gz
+mv wgEncodeYaleChIPseqGm12878CmycStdAlnRep2.tagAlign.gz    wgEncodeYaleChIPseqAlignmentsRep2Gm12878Cmyc.tagAlign.gz
+mv wgEncodeYaleChIPseqGm12878CmycStdSig.bedGraph4.gz       wgEncodeYaleChIPseqSignalGm12878Cmyc.bedGraph4.gz
+mv wgEncodeYaleChIPseqGm12878CmycStdPk.narrowPeak.gz       wgEncodeYaleChIPseqPeaksGm12878Cmyc.narrowPeak.gz
+mv wgEncodeYaleChIPseqGm12878CmycStdRawDataRep1.fastq.gz   wgEncodeYaleChIPseqRawDataRep1Gm12878Cmyc.fastq.gz
+mv wgEncodeYaleChIPseqGm12878CmycStdRawDataRep2.fastq.gz   wgEncodeYaleChIPseqRawDataRep2Gm12878Cmyc.fastq.gz
+
+mv wgEncodeYaleChIPseqGm12878MaxStdAlnRep1V3.tagAlign.gz   wgEncodeYaleChIPseqAlignmentsRep1Gm12878MaxV3.tagAlign.gz
+mv wgEncodeYaleChIPseqGm12878MaxStdAlnRep2V3.tagAlign.gz   wgEncodeYaleChIPseqAlignmentsRep2Gm12878MaxV3.tagAlign.gz
+mv wgEncodeYaleChIPseqGm12878MaxStdSigV3.bedGraph4.gz      wgEncodeYaleChIPseqSignalGm12878MaxV3.bedGraph4.gz
+mv wgEncodeYaleChIPseqGm12878MaxStdPkV3.narrowPeak.gz      wgEncodeYaleChIPseqPeaksGm12878MaxV3.narrowPeak.gz
+mv wgEncodeYaleChIPseqGm12878MaxStdRawDataRep1V3.fastq.gz  wgEncodeYaleChIPseqRawDataRep1Gm12878MaxV3.fastq.gz
+mv wgEncodeYaleChIPseqGm12878MaxStdRawDataRep2V3.fastq.gz  wgEncodeYaleChIPseqRawDataRep2Gm12878MaxV3.fastq.gz
+
+mv wgEncodeYaleChIPseqGm12878Pol2StdAlnRep1V3.tagAlign.gz  wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol2V3.tagAlign.gz
+mv wgEncodeYaleChIPseqGm12878Pol2StdAlnRep2V3.tagAlign.gz  wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol2V3.tagAlign.gz
+mv wgEncodeYaleChIPseqGm12878Pol2StdAlnRep3V3.tagAlign.gz  wgEncodeYaleChIPseqAlignmentsRep3Gm12878Pol2V3.tagAlign.gz
+mv wgEncodeYaleChIPseqGm12878Pol2StdSigV3.bedGraph4.gz     wgEncodeYaleChIPseqSignalGm12878Pol2V3.bedGraph4.gz
+mv wgEncodeYaleChIPseqGm12878Pol2StdPkV3.narrowPeak.gz     wgEncodeYaleChIPseqPeaksGm12878Pol2V3.narrowPeak.gz
+mv wgEncodeYaleChIPseqGm12878Pol2StdRawDataRep1V3.fastq.gz wgEncodeYaleChIPseqRawDataRep1Gm12878Pol2V3.fastq.gz
+mv wgEncodeYaleChIPseqGm12878Pol2StdRawDataRep2V3.fastq.gz wgEncodeYaleChIPseqRawDataRep2Gm12878Pol2V3.fastq.gz
+mv wgEncodeYaleChIPseqGm12878Pol2StdRawDataRep3V3.fastq.gz wgEncodeYaleChIPseqRawDataRep3Gm12878Pol2V3.fastq.gz
+
+mv wgEncodeYaleChIPseqGm12878CjunStdAlnRep1.tagAlign.gz  wgEncodeYaleChIPseqAlignmentsRep1Gm12878Cjun.tagAlign.gz
+mv wgEncodeYaleChIPseqGm12878CjunStdAlnRep2.tagAlign.gz  wgEncodeYaleChIPseqAlignmentsRep2Gm12878Cjun.tagAlign.gz
+mv wgEncodeYaleChIPseqGm12878CjunStdSig.bedGraph4.gz     wgEncodeYaleChIPseqSignalGm12878Cjun.bedGraph4.gz
+mv wgEncodeYaleChIPseqGm12878CjunStdPk.narrowPeak.gz     wgEncodeYaleChIPseqPeaksGm12878Cjun.narrowPeak.gz
+mv wgEncodeYaleChIPseqGm12878CjunStdRawDataRep1.fastq.gz wgEncodeYaleChIPseqRawDataRep1Gm12878Cjun.fastq.gz
+mv wgEncodeYaleChIPseqGm12878CjunStdRawDataRep2.fastq.gz wgEncodeYaleChIPseqRawDataRep2Gm12878Cjun.fastq.gz
+
+# edit mdb.txt for each and trackDb.ra for each
+
+# load the metadata
+mdbUpdate hg18 1182/out/mdb.txt
+Read 6 metadata objects from hg18
+Affected 128 row(s) in hg18.metaDb_tdreszer
+mdbUpdate hg18 1183/out/mdb.txt
+Read 8 metadata objects from hg18
+Affected 170 row(s) in hg18.metaDb_tdreszer
+mdbUpdate hg18 1184/out/mdb.txt
+Read 6 metadata objects from hg18
+Affected 128 row(s) in hg18.metaDb_tdreszer
+mdbUpdate hg18 1185/out/mdb.txt
+Read 6 metadata objects from hg18
+Affected 116 row(s) in hg18.metaDb_tdreszer
+mdbUpdate hg18 1186/out/mdb.txt
+Read 6 metadata objects from hg18
+Affected 116 row(s) in hg18.metaDb_tdreszer
+cd {mdb18}
+mdbPrint hg18 -composite=wgEncodeYaleChIPseq > wgEncodeYaleChIPseq.ra
+
+# set up trackDb
+cd ../../ {tdb/hg19}
+e wgEncodeYaleChIPseq.new.ra
+gold wgEncodeYaleChIPseq.new.ra # Minimum changes!
+git up, add, ci push
+make DBS=hg18
+
+# update download dir
+cd {downHg18}/wgEncodeYaleChIPseq
+encodeDownloadsPage.pl -db=hg18 index.html
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1182 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1183 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1184 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1185 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1186 displayed
+
+List of tables:
+wgEncodeYaleChIPseqSignalGm12878MaxV3  (replaces wgEncodeYaleChIPseqRel2SignalGm12878Max )
+wgEncodeYaleChIPseqPeaksGm12878MaxV3   (replaces wgEncodeYaleChIPseqPeaksGm12878MaxV2    )
+wgEncodeYaleChIPseqSignalGm12878Pol2V3 (replaces wgEncodeYaleChIPseqRel2SignalGm12878Pol2)
+wgEncodeYaleChIPseqPeaksGm12878Pol2V3  (replaces wgEncodeYaleChIPseqPeaksGm12878Pol2V2   )
+wgEncodeYaleChIPseqSignalGm12878CfosV3 (replaces wgEncodeYaleChIPseqRel2SignalGm12878Cfos)
+wgEncodeYaleChIPseqPeaksGm12878CfosV3  (replaces wgEncodeYaleChIPseqPeaksGm12878CfosV2   )
+wgEncodeYaleChIPseqSignalGm12878Cjun
+wgEncodeYaleChIPseqPeaksGm12878Cjun
+wgEncodeYaleChIPseqSignalGm12878Cmyc
+wgEncodeYaleChIPseqPeaksGm12878Cmyc
+
+List of files:
+wgEncodeYaleChIPseqAlignmentsRep1Gm12878MaxV3.tagAlign.gz  (replaces wgEncodeYaleChIPseqAlignmentsRep1Gm12878MaxV2.tagAlign.gz )
+wgEncodeYaleChIPseqAlignmentsRep2Gm12878MaxV3.tagAlign.gz  (replaces wgEncodeYaleChIPseqAlignmentsRep2Gm12878MaxV2.tagAlign.gz )
+wgEncodeYaleChIPseqSignalGm12878MaxV3.bedGraph4.gz         (replaces wgEncodeYaleChIPseqRel2SignalGm12878Max.bedGraph4.gz      )
+wgEncodeYaleChIPseqPeaksGm12878MaxV3.narrowPeak.gz         (replaces wgEncodeYaleChIPseqPeaksGm12878MaxV2.narrowPeak.gz        )
+wgEncodeYaleChIPseqRawDataRep1Gm12878MaxV3.fastq.gz        (replaces wgEncodeYaleChIPseqRawDataRep1Gm12878Max.fastq.gz         )
+wgEncodeYaleChIPseqRawDataRep2Gm12878MaxV3.fastq.gz        (replaces wgEncodeYaleChIPseqRawDataRep2Gm12878Max.fastq.gz         )
+wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol2V3.tagAlign.gz (replaces wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol2V2.tagAlign.gz)
+wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol2V3.tagAlign.gz (replaces wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol2V2.tagAlign.gz)
+wgEncodeYaleChIPseqAlignmentsRep3Gm12878Pol2V3.tagAlign.gz (replaces  - nothing -                                              )
+wgEncodeYaleChIPseqSignalGm12878Pol2V3.bedGraph4.gz        (replaces wgEncodeYaleChIPseqRel2SignalGm12878Pol2.bedGraph4.gz     )
+wgEncodeYaleChIPseqPeaksGm12878Pol2V3.narrowPeak.gz        (replaces wgEncodeYaleChIPseqPeaksGm12878Pol2V2.narrowPeak.gz       )
+wgEncodeYaleChIPseqRawDataRep1Gm12878Pol2V3.fastq.gz       (replaces wgEncodeYaleChIPseqRawDataRep1Gm12878Pol2.fastq.gz        )
+wgEncodeYaleChIPseqRawDataRep2Gm12878Pol2V3.fastq.gz       (replaces wgEncodeYaleChIPseqRawDataRep2Gm12878Pol2.fastq.gz        )
+wgEncodeYaleChIPseqRawDataRep3Gm12878Pol2V3.fastq.gz       (replaces  - nothing -                                              )
+wgEncodeYaleChIPseqAlignmentsRep1Gm12878CfosV3.tagAlign.gz (replaces wgEncodeYaleChIPseqAlignmentsRep1Gm12878CfosV2.tagAlign.gz)
+wgEncodeYaleChIPseqAlignmentsRep2Gm12878CfosV3.tagAlign.gz (replaces wgEncodeYaleChIPseqAlignmentsRep2Gm12878CfosV2.tagAlign.gz)
+ - nothing -                                               (replaces wgEncodeYaleChIPseqAlignmentsRep3Gm12878CfosV2.tagAlign.gz)
+wgEncodeYaleChIPseqSignalGm12878CfosV3.bedGraph4.gz        (replaces wgEncodeYaleChIPseqRel2SignalGm12878Cfos.bedGraph4.gz     )
+wgEncodeYaleChIPseqPeaksGm12878CfosV3.narrowPeak.gz        (replaces wgEncodeYaleChIPseqPeaksGm12878CfosV2.narrowPeak.gz       )
+wgEncodeYaleChIPseqRawDataRep1Gm12878CfosV3.fastq.gz       (replaces wgEncodeYaleChIPseqRawDataRep1Gm12878Cfos.fastq.gz        )
+wgEncodeYaleChIPseqRawDataRep2Gm12878CfosV3.fastq.gz       (replaces wgEncodeYaleChIPseqRawDataRep2Gm12878Cfos.fastq.gz        )
+ - nothing -                                               (replaces wgEncodeYaleChIPseqRawDataRep3Gm12878Cfos.fastq.gz        )
+wgEncodeYaleChIPseqAlignmentsRep1Gm12878Cjun.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2Gm12878Cjun.tagAlign.gz
+wgEncodeYaleChIPseqSignalGm12878Cjun.bedGraph4.gz
+wgEncodeYaleChIPseqPeaksGm12878Cjun.narrowPeak.gz
+wgEncodeYaleChIPseqRawDataRep1Gm12878Cjun.fastq.gz
+wgEncodeYaleChIPseqRawDataRep2Gm12878Cjun.fastq.gz
+wgEncodeYaleChIPseqAlignmentsRep1Gm12878Cmyc.tagAlign.gz
+wgEncodeYaleChIPseqAlignmentsRep2Gm12878Cmyc.tagAlign.gz
+wgEncodeYaleChIPseqSignalGm12878Cmyc.bedGraph4.gz
+wgEncodeYaleChIPseqPeaksGm12878Cmyc.narrowPeak.gz
+wgEncodeYaleChIPseqRawDataRep1Gm12878Cmyc.fastq.gz
+wgEncodeYaleChIPseqRawDataRep2Gm12878Cmyc.fastq.gz
+
+### Clean up sigs that overrun chrom:
+hg18.wgEncodeYaleChIPseqSignalGm12878CfosV3 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878CfosV3 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Cjun has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Cjun has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Cjun has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Cjun has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Cjun has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Cmyc has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Cmyc has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Cmyc has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Cmyc has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878MaxV3 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878MaxV3 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878MaxV3 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878MaxV3 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Pol2V3 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878Pol2V3 has 1 records with end > chromSize.
+
+
+select count(*) from wgEncodeYaleChIPseqSignalGm12878CfosV3 where chrom = "chr7"  and chromEnd > 158821424;
+select count(*) from wgEncodeYaleChIPseqSignalGm12878CfosV3 where chrom = "chr8"  and chromEnd > 146274826;
+select count(*) from wgEncodeYaleChIPseqSignalGm12878CfosV3 where chrom = "chr10" and chromEnd > 135374737;
+select count(*) from wgEncodeYaleChIPseqSignalGm12878CfosV3 where chrom = "chr15" and chromEnd > 100338915; #1
+select count(*) from wgEncodeYaleChIPseqSignalGm12878CfosV3 where chrom = "chr18" and chromEnd > 76117153;  #1
+select count(*) from wgEncodeYaleChIPseqSignalGm12878CfosV3 where chrom = "chr20" and chromEnd > 62435964;
+select count(*) from wgEncodeYaleChIPseqSignalGm12878CfosV3 where chrom = "chr21" and chromEnd > 46944323;
+
+update wgEncodeYaleChIPseqSignalGm12878CfosV3 set chromEnd = 100338915 where chrom = "chr15" and chromEnd > 100338915;
+update wgEncodeYaleChIPseqSignalGm12878CfosV3 set chromEnd = 76117153  where chrom = "chr18" and chromEnd > 76117153 ;
+
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cjun where chrom = "chr7"  and chromEnd > 158821424; #1
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cjun where chrom = "chr8"  and chromEnd > 146274826; #1
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cjun where chrom = "chr10" and chromEnd > 135374737; #1
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cjun where chrom = "chr15" and chromEnd > 100338915; #1
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cjun where chrom = "chr18" and chromEnd > 76117153;  
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cjun where chrom = "chr20" and chromEnd > 62435964;
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cjun where chrom = "chr21" and chromEnd > 46944323;  #1
+
+update wgEncodeYaleChIPseqSignalGm12878Cjun set chromEnd = 158821424 where chrom = "chr7"  and chromEnd > 158821424;
+update wgEncodeYaleChIPseqSignalGm12878Cjun set chromEnd = 146274826 where chrom = "chr8"  and chromEnd > 146274826;
+update wgEncodeYaleChIPseqSignalGm12878Cjun set chromEnd = 135374737 where chrom = "chr10" and chromEnd > 135374737;
+update wgEncodeYaleChIPseqSignalGm12878Cjun set chromEnd = 100338915 where chrom = "chr15" and chromEnd > 100338915;
+update wgEncodeYaleChIPseqSignalGm12878Cjun set chromEnd = 46944323  where chrom = "chr21" and chromEnd > 46944323 ;
+
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cmyc where chrom = "chr7"  and chromEnd > 158821424; #1
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cmyc where chrom = "chr8"  and chromEnd > 146274826;
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cmyc where chrom = "chr10" and chromEnd > 135374737; #1
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cmyc where chrom = "chr15" and chromEnd > 100338915; 
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cmyc where chrom = "chr18" and chromEnd > 76117153;  #1 
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cmyc where chrom = "chr20" and chromEnd > 62435964;
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Cmyc where chrom = "chr21" and chromEnd > 46944323;  #1
+
+update wgEncodeYaleChIPseqSignalGm12878Cmyc set chromEnd = 158821424 where chrom = "chr7"  and chromEnd > 158821424;
+update wgEncodeYaleChIPseqSignalGm12878Cmyc set chromEnd = 135374737 where chrom = "chr10" and chromEnd > 135374737;
+update wgEncodeYaleChIPseqSignalGm12878Cmyc set chromEnd = 76117153  where chrom = "chr18" and chromEnd > 76117153 ;
+update wgEncodeYaleChIPseqSignalGm12878Cmyc set chromEnd = 46944323  where chrom = "chr21" and chromEnd > 46944323 ;
+
+select count(*) from wgEncodeYaleChIPseqSignalGm12878MaxV3 where chrom = "chr7"  and chromEnd > 158821424; #1
+select count(*) from wgEncodeYaleChIPseqSignalGm12878MaxV3 where chrom = "chr8"  and chromEnd > 146274826;
+select count(*) from wgEncodeYaleChIPseqSignalGm12878MaxV3 where chrom = "chr10" and chromEnd > 135374737; #1
+select count(*) from wgEncodeYaleChIPseqSignalGm12878MaxV3 where chrom = "chr15" and chromEnd > 100338915; #1 
+select count(*) from wgEncodeYaleChIPseqSignalGm12878MaxV3 where chrom = "chr18" and chromEnd > 76117153;  
+select count(*) from wgEncodeYaleChIPseqSignalGm12878MaxV3 where chrom = "chr20" and chromEnd > 62435964;
+select count(*) from wgEncodeYaleChIPseqSignalGm12878MaxV3 where chrom = "chr21" and chromEnd > 46944323;  #1
+
+update wgEncodeYaleChIPseqSignalGm12878MaxV3 set chromEnd = 158821424 where chrom = "chr7"  and chromEnd > 158821424;
+update wgEncodeYaleChIPseqSignalGm12878MaxV3 set chromEnd = 135374737 where chrom = "chr10" and chromEnd > 135374737;
+update wgEncodeYaleChIPseqSignalGm12878MaxV3 set chromEnd = 100338915 where chrom = "chr15" and chromEnd > 100338915;
+update wgEncodeYaleChIPseqSignalGm12878MaxV3 set chromEnd = 46944323  where chrom = "chr21" and chromEnd > 46944323 ;
+
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Pol2V3 where chrom = "chr7"  and chromEnd > 158821424;
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Pol2V3 where chrom = "chr8"  and chromEnd > 146274826;
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Pol2V3 where chrom = "chr10" and chromEnd > 135374737;
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Pol2V3 where chrom = "chr15" and chromEnd > 100338915; 
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Pol2V3 where chrom = "chr18" and chromEnd > 76117153;  
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Pol2V3 where chrom = "chr20" and chromEnd > 62435964;
+select count(*) from wgEncodeYaleChIPseqSignalGm12878Pol2V3 where chrom = "chr21" and chromEnd > 46944323;
+
+update wgEncodeYaleChIPseqSignalGm12878Pol2V3 set chromEnd = 135374737 where chrom = "chr10" and chromEnd > 135374737;
+update wgEncodeYaleChIPseqSignalGm12878Pol2V3 set chromEnd = 46944323  where chrom = "chr21" and chromEnd > 46944323 ;
+
+

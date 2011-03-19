@@ -22,6 +22,7 @@ errAbort(
   "   -outMdb=file.ra     output cruft-free metaDb ra file\n"
   "   -onlyCompTdb        only check trackDb entries that start with composite\n"
   "   -release            set release state, default alpha\n"
+  "   -help               print out extended information about what metaCheck is doing\n"
   );
 }
 
@@ -31,6 +32,7 @@ char *release = "alpha";
 
 static struct optionSpec options[] = {
    {"outMdb", OPTION_STRING},
+   {"help", OPTION_BOOLEAN},
    {"onlyCompTdb", OPTION_BOOLEAN},
    {"release", OPTION_STRING},
    {NULL, 0},
@@ -347,10 +349,30 @@ if (outMdb)
     }
 }
 
+void printHelp()
+{
+fprintf(stderr,
+"Metacheck tries to report on inconsistencies between all the various data stores that ENCODE uses.\n"
+"\n"
+"The checks are divided into four passes:\n"
+"  - checking that metaDb objects of type \"table\" are tables in mySQL\n"
+"  - checking that metaDb objects of type \"file\" are files in download dir\n"
+"  - checking that metaDb objects of type \"table\" are found in trackDb.ra\n"
+"  - checking that all tables in assembly that start with \"composite\" appear in metaDb\n"
+"  - checking that all tables in assembly that start with \"composite\" and have a     field called \"fileName\" are links to a file that can be opened\n"
+
+"\n"
+);
+usage();
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+if (optionExists("help"))
+    printHelp();
+    
 if (argc != 6)
     usage();
 outMdb = optionVal("outMdb", outMdb);
