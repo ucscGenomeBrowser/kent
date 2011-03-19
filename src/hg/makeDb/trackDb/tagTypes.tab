@@ -143,6 +143,7 @@ gClass_Validated_pseudogene genePred
 gClass_Validated_unprocessed_pseudogene genePred
 gClass_main genePred
 gClass_putative genePred
+gClass_cDNA_supported genePred
 gainColor bed
 geneClasses bed genePred
 genome customTracks
@@ -171,6 +172,7 @@ interTableKind encodeFiveC
 #inputTracksSubgroupSelect bed factorSource
 inputTracksSubgroupDisplay bed factorSource
 inputTrackTable bed factorSource
+inputTableFieldDisplay bed factorSource
 intronGap psl genePred
 irows wigMaf
 itemAttrTbl genePred

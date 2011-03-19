@@ -494,12 +494,12 @@ sub runPipe($) {
       print STDERR "$command\n";
   }
   my $pid = fork();
+  if (!defined($pid)) {
+      die("can't fork");
+  }
   if ($pid == 0) {
       exec("/bin/csh", "-ef", "-c", $command);
       die("exec of /bin/csh failed");
-  }
-  if (($pid < 0) || !defined($pid)) {
-      die("can't fork");
   }
   my $retPid = waitpid($pid, 0);
   my $stat = $?;
@@ -691,7 +691,7 @@ sub backgroundStart($@) {
     }
     
     my $pid = fork();
-    if (($pid < 0) || !defined($pid)) {
+    if (!defined($pid)) {
         die("can't fork $desc");
     }
     if ($pid == 0) {

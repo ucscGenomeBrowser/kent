@@ -1,0 +1,60 @@
+# Data Agreement File for Stanford/Yale RNA-seq experiments for mm9  
+
+#$Revision: 1.1 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+
+# The header for the associated DDF should look like this:
+#files	view	cell	treatment 	replicate	rnaExtract	origAssembly	seqPlatform	labVersion       
+
+
+#Explanation of DDF terms
+#files: The name of the files to be associated with this data
+#view: The type of view that these files are. The options are listed in this DAF
+#cell: The cell or tissue name. The cell registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_cell_types
+#treatment: The treatment used to treat a specific cell.The treatment registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Treatments
+#replicate: The Replicate number. The replication number of a given experiment.
+#rnaExctract:   The RNA extract.  http://hgwdev.cse.ucsc.edu/ENCODE/otherTerms.html#rnaExtract
+#origAssembly:  The assembly that the data was originally released on (hg18 or hg19)
+#seqPlatform: The sequencing platform.The sequence platformregistered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sequence_Platforms
+#labVersion: Free text for the lab to keep track of any other data
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Snyder
+lab               Stanford
+#Alternative labs: lab Yale
+dataType          RnaSeq 
+compositeSuffix   SydhRnaSeq
+group             Expression
+variables         cell,treatment,rnaExtract
+assembly          mm9
+
+validationSettings validateFiles.bam:mismatches=3,nMatch,bamPercent=99.9;
+
+# Track/view definition
+view             Peaks
+longLabelPrefix  Stanford/Yale RNA-seq Peaks
+type             narrowPeak
+hasReplicates    yes
+required         no
+
+view             Signal
+longLabelPrefix  Stanford/Yale RNA-seq Signal
+type             bigWig
+hasReplicates    yes
+required         yes
+
+view             Alignments
+longLabelPrefix  Stanford/Yale RNA-seq Alignments
+type             bam
+hasReplicates    yes
+required         yes
+
+view             RawData
+type             fastq
+hasReplicates    yes
+required         yes

@@ -369,7 +369,7 @@ return NULL;
 
 #define FILTER_THE_FILES
 #ifdef FILTER_THE_FILES
-static char *labelWithVocabLink(char *var,char *title,struct slPair *valsAndLabels)
+static char *labelWithVocabLink(char *var,char *title,struct slPair *valsAndLabels,boolean tagsNotVals)
 /* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to all relevent terms.  Return string is cloned. */
 {
@@ -389,7 +389,7 @@ if (!cvDefined)
                    var,title,title);
 else
     {
-    dyStringPrintf(dyLink,"<A HREF='hgEncodeVocab?term=");
+    dyStringPrintf(dyLink,"<A HREF='hgEncodeVocab?%s=",tagsNotVals?"tag":"term");
     struct slPair *oneVal = valsAndLabels;
     for(;oneVal!=NULL;oneVal=oneVal->next)
         {
@@ -443,7 +443,7 @@ if (sortOrder != NULL)
             if (dropDownHtml)
                 {
                 dyStringPrintf(dyFilters,"<td align='left'>\n<B>%s</B>:<BR>\n%s</td><td width=10>&nbsp;</td>\n",
-                               labelWithVocabLink(var,sortOrder->title[sIx],relevantVals),dropDownHtml);
+                               labelWithVocabLink(var,sortOrder->title[sIx],relevantVals,TRUE),dropDownHtml);  // TRUE were sending tags, not values
                 freeMem(dropDownHtml);
                 count++;
                 }

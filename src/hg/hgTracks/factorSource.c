@@ -9,6 +9,7 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "expRecord.h"
+#include "dystring.h"
 #include "txCluster.h"
 
 static struct bed *loadOne(char **row)
@@ -26,7 +27,21 @@ bedLoadItem(track, track->table, (ItemLoader)loadOne);
 static int rightPixels(struct track *track, void *item)
 /* Return number of pixels we need to the right. */
 {
-return track->sourceRightPixels;
+struct bed *bed = item;
+struct dyString *dy = dyStringNew(0);
+int i;
+for (i=0; i<track->sourceCount; ++i)
+    {
+    char *label = track->sources[i]->name;
+    float score = bed->expScores[i];
+    if (score > 0.0)
+	{
+	dyStringAppend(dy, label);
+	}
+    }
+int result = mgFontStringWidth(tl.font, dy->string);
+dyStringFree(&dy);
+return result;
 }
 
 static void factorSourceDrawItemAt(struct track *track, void *item, 
@@ -106,7 +121,7 @@ if (vis == tvFull || vis == tvPack)
 	    int grayIx = grayInRange(score, 0, 1000);
 	    int color = shadesOfGray[grayIx];
 	    hvGfxTextCentered(hvg, x, y, w, heightPer, color, font, label);
-	    x += mgFontStringWidth(font, label);
+	    x += w;
 	    }
 	}
     }
