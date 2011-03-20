@@ -91,62 +91,6 @@ for (i=1; i<size; ++i)
 return sameCount;
 }
 
-#ifdef OLD
-void outputRangeAsBedGraph(FILE *f, char *chrom, struct range *range,
-	int *pBufAlloc, double **pBuf)
-/* Output range (who's val is a list of bbiIntervals) to a bedGraph file. */
-{
-struct bbiInterval *iv, *ivList = range->val;
-if (ivList->next == NULL)  /* Special case of just one. */
-    {
-    fprintf(f, "%s\t%d\t%d\t%g\n", chrom, ivList->start, ivList->end, ivList->val);
-    }
-else if (allStartEndSame(ivList))
-    {
-    double sum = 0;
-    for (iv = ivList; iv != NULL; iv = iv->next)
-        sum += ivList->val;
-    fprintf(f, "%s\t%d\t%d\t%g\n", chrom, ivList->start, ivList->end, sum);
-    }
-else
-    {
-    /* Make sure that merge buffer is big enough */
-    int start = range->start;
-    int size = range->end - start;
-    if (size > *pBufAlloc)
-        {
-	int newAlloc = *pBufAlloc * 2;
-	if (newAlloc < size)
-	    newAlloc = size;
-	*pBuf = needHugeMemResize(*pBuf, newAlloc);
-	}
-
-    /* Set bits of merge buffer we'll use to zero. */
-    int i;
-    double *buf = *pBuf;
-    for (i=0; i<size; ++i)
-        buf[i] = 0.0;
-        
-    /* Loop through ivList folding into mergeBuf. */
-    for (iv = ivList; iv != NULL; iv = iv->next)
-        {
-	double val = iv->val;
-	for (i=iv->start; i < iv->end; ++i)
-	    buf[i-start] += val;
-	}
-
-    /* Output each range of same values as a bedGraph item */
-    int sameCount;
-    for (i=0; i<size; i += sameCount)
-        {
-	sameCount = doublesTheSame(buf+i, size-i);
-	fprintf(f, "%s\t%d\t%d\t%g\n",
-		chrom, start + i, start + i + sameCount, buf[i]);
-	}
-    }
-}
-#endif /* OLD */
-
 void bigWigMerge(int inCount, char *inFiles[], char *outFile)
 /* bigWigMerge - Merge together multiple bigWigs into a single one.. */
 {
