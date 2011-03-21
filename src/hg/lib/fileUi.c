@@ -60,6 +60,8 @@ if (foundFiles == NULL
     char *server = hDownloadsServer();
 
     boolean useRsync = TRUE;
+//#define RSYNC_DONT_WORK_ON_HGWDEV
+#ifdef RSYNC_DONT_WORK_ON_HGWDEV
     if (hIsPrivateHost() || hIsPreviewHost())
         {
         // For hgwdev (which is the same machine as "hgdownload-test.cse.ucsc.edu") rsync does not work
@@ -77,9 +79,13 @@ if (foundFiles == NULL
         useRsync = FALSE;
         }
     else  // genome and hgwbeta can use rsync
+#endif///def RSYNC_DONT_WORK_ON_HGWDEV
         {
         // Works:         rsync -avn rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/
-        safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
+        if (hIsBetaHost())
+            safef(cmd,sizeof(cmd),"rsync -avn rsync://hgdownload-test.cse.ucsc.edu/goldenPath/%s/%s/%s/beta/",  db, dir, subDir); // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+        else
+            safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
         }
     //warn("cmd: %s",cmd);
     scriptOutput = popen(cmd, "r");

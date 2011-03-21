@@ -37,7 +37,7 @@ safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='anti
 safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='treatment'", obj);
 *retTreatment = sqlQuickString(conn, query);
 safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='lab'", obj);
-*retTreatment = sqlQuickString(conn, query);
+*retLab = sqlQuickString(conn, query);
 return *retCell != NULL || *retAntibody != NULL || *retTreatment != NULL;
 }
 

@@ -22,7 +22,7 @@ canPack On
     showSubtrackColorOnUi on
     aggregate transparentOverlay
     transformFunc LOG
-    viewLimits 0:4
+    viewLimits 0:8
     priority 1.1
     dragAndDrop subTracks
 
@@ -48,7 +48,7 @@ canPack On
 	longLabel Transcription of HSMM cells from ENCODE
 	parent wgEncodeRegTxn
         type bigWig 0 65503
-	color 212,255,128
+	color 120,235,204
 
 	track wgEncodeRegTxnHuvec
 	table wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2
