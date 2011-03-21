@@ -1,5 +1,4 @@
 # Stanford/Yale/UCD/Harvard Histone ChIP-seq (wrangler: vsmalladi)
-# UW Histone (wrangler: Venkat, assisted by Tim)
 # Notes:
 #       - Short Labels: 5 charactesr for cell type, 8 characters for antibody, 2 characters  for View
 #       - Views: For consistency sake view will be two letters
@@ -43,7 +42,6 @@ wgEncode 1
 #dataVersion through the ENCODE Jan 2010 Freeze
 
     #Peak Track SYDH Histone#
-    # Short Label for Peaks= Pk #
     track wgEncodeSydhHistoneViewPeaks
     release alpha
     shortLabel Peaks
@@ -58,35 +56,34 @@ wgEncode 1
     qValueFilter 0
     qValueFilterLimits 0:300
 
-	track wgEncodeSydhHistoneNt2d1H3k27me3StdPk
-	release alpha
-	subTrack wgEncodeSydhHistoneViewPeaks on
-	shortLabel NT2D1 H3K27me3 Pk 
-	longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K27me3 in NT2-D1 cells)
-	subGroups view=Peaks factor=H3K27me3 cellType=NT2D1 control=std treatment=None
-	type narrowPeak
-	metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=NT2-D1 antibody=H3K27me3 treatment=None control=std setType=exp inputType=NT2-D1/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1137 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1H3k27me3StdPk fileName=wgEncodeSydhHistoneNt2d1H3k27me3StdPk.narrowPeak.gz
+		track wgEncodeSydhHistoneNt2d1H3k27me3StdPk
+		release alpha
+		subTrack wgEncodeSydhHistoneViewPeaks on
+		shortLabel NT2D1 H3K27me3 Pk 
+		longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K27me3 in NT2-D1 cells)
+		subGroups view=Peaks factor=H3K27me3 cellType=NT2D1 control=std treatment=None
+		type narrowPeak
+		metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=NT2-D1 antibody=H3K27me3 treatment=None control=std setType=exp inputType=NT2-D1/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1137 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1H3k27me3StdPk fileName=wgEncodeSydhHistoneNt2d1H3k27me3StdPk.narrowPeak.gz
 
-	track wgEncodeSydhHistoneNt2d1H3k4me3bStdPk
-	release alpha
-	subTrack wgEncodeSydhHistoneViewPeaks on
-	shortLabel NT2D1 H3K4me3B  Pk
-	longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K4me3B in NT2-D1 cells)
-	subGroups view=Peaks factor=H3K4me3B cellType=NT2D1 control=std treatment=None
-	type narrowPeak
-	metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=NT2-D1 antibody=H3K4me3B treatment=None control=std setType=exp inputType=NT2-D1/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1122 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1H3k4me3StdPk fileName=wgEncodeSydhHistoneNt2d1H3k4me3StdPk.narrowPeak.gz
+		track wgEncodeSydhHistoneNt2d1H3k4me3bStdPk
+		release alpha
+		subTrack wgEncodeSydhHistoneViewPeaks on
+		shortLabel NT2D1 H3K4me3B  Pk
+		longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K4me3B in NT2-D1 cells)
+		subGroups view=Peaks factor=H3K4me3B cellType=NT2D1 control=std treatment=None
+		type narrowPeak
+		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=NT2-D1 antibody=H3K4me3B treatment=None control=std setType=exp inputType=NT2-D1/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1122 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1H3k4me3StdPk fileName=wgEncodeSydhHistoneNt2d1H3k4me3StdPk.narrowPeak.gz
 
-	track wgEncodeSydhHistoneNt2d1H3k9acStdPk
-	release alpha
-	subTrack wgEncodeSydhHistoneViewPeaks on
-	shortLabel NT2D1 H3K9ac   Pk
-	longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K9ac in NT2-D1 cells)
-	subGroups view=Peaks factor=H3K9ac cellType=NT2D1 control=std treatment=None
-	type narrowPeak
-	metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=NT2-D1 antibody=H3K9ac treatment=None control=std setType=exp inputType=NT2-D1/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1173 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1H3k9acStdPk fileName=wgEncodeSydhHistoneNt2d1H3k9acStdPk.narrowPeak.gz
+		track wgEncodeSydhHistoneNt2d1H3k9acStdPk
+		release alpha
+		subTrack wgEncodeSydhHistoneViewPeaks on
+		shortLabel NT2D1 H3K9ac   Pk
+		longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K9ac in NT2-D1 cells)
+		subGroups view=Peaks factor=H3K9ac cellType=NT2D1 control=std treatment=None
+		type narrowPeak
+		metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=NT2-D1 antibody=H3K9ac treatment=None control=std setType=exp inputType=NT2-D1/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1173 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1H3k9acStdPk fileName=wgEncodeSydhHistoneNt2d1H3k9acStdPk.narrowPeak.gz
 
-	# All Tier 1 cell lines turned on#
-	track wgEncodeSydhHistoneK562H3k4me1UcdPk
+		track wgEncodeSydhHistoneK562H3k4me1UcdPk
         release alpha
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel K562  H3K4me1  Pk
@@ -144,7 +141,7 @@ wgEncode 1
         type narrowPeak
     	# subId=1831 dateSubmitted=2010-06-22
 
-   	track wgEncodeSydhHistoneNt2d1H3k4me1UcdPk
+   		track wgEncodeSydhHistoneNt2d1H3k4me1UcdPk
         release alpha
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel NT2D1 H3K4me1  Pk
@@ -174,14 +171,12 @@ wgEncode 1
 
 
     #Signal Track SYDH Histone#
-    #Short Labels for signal =Sg #
     track wgEncodeSydhHistoneViewSignal
     release alpha
     shortLabel Signal
     view Signal
     visibility full
     subTrack wgEncodeSydhHistone
-    # For view limits: used an mean call and 2 std across all data- need to work on a better concept #
     viewLimits 3:20
     minLimit -1
     maxLimit 13293
@@ -189,43 +184,42 @@ wgEncode 1
     maxHeightPixels 100:32:16
     windowingFunction mean+whiskers
 
-	track wgEncodeSydhHistoneNt2d1H3k27me3StdSig
-	release alpha
-	subTrack wgEncodeSydhHistoneViewSignal on
-	shortLabel NT2D1 H3K27me3 Sg
-	longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K27me3 in NT2-D1 cells)
-	subGroups view=Signal factor=H3K27me3 cellType=NT2D1 control=std treatment=None
-	type bigWig 1.000000 17024.000000
-	metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=NT2-D1 antibody=H3K27me3 treatment=None control=std setType=exp inputType=NT2-D1/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1137 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1H3k27me3StdSig fileName=wgEncodeSydhHistoneNt2d1H3k27me3StdSig.bigWig.gz
+		track wgEncodeSydhHistoneNt2d1H3k27me3StdSig
+		release alpha
+		subTrack wgEncodeSydhHistoneViewSignal on
+		shortLabel NT2D1 H3K27me3 Sg
+		longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K27me3 in NT2-D1 cells)
+		subGroups view=Signal factor=H3K27me3 cellType=NT2D1 control=std treatment=None
+		type bigWig 1.000000 17024.000000
+		metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=NT2-D1 antibody=H3K27me3 treatment=None control=std setType=exp inputType=NT2-D1/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1137 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1H3k27me3StdSig fileName=wgEncodeSydhHistoneNt2d1H3k27me3StdSig.bigWig.gz
 
-	track wgEncodeSydhHistoneNt2d1InputStdSig
-	release alpha
-	subTrack wgEncodeSydhHistoneViewSignal off
-	shortLabel NT2D1 Input    Sg
-	longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in NT2-D1 cells)
-	subGroups view=Signal factor=Input cellType=NT2D1 control=std treatment=None
-	type bigWig 1.000000 13293.000000
-	 metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=NT2-D1 antibody=Input treatment=None control=std setType=input inputType=NT2-D1/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1123 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1InputStdSig fileName=wgEncodeSydhHistoneNt2d1InputStdSig.bigWig.gz
+		track wgEncodeSydhHistoneNt2d1InputStdSig
+		release alpha
+		subTrack wgEncodeSydhHistoneViewSignal off
+		shortLabel NT2D1 Input    Sg
+		longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in NT2-D1 cells)
+		subGroups view=Signal factor=Input cellType=NT2D1 control=std treatment=None
+		type bigWig 1.000000 13293.000000
+		 metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=NT2-D1 antibody=Input treatment=None control=std setType=input inputType=NT2-D1/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1123 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1InputStdSig fileName=wgEncodeSydhHistoneNt2d1InputStdSig.bigWig.gz
 
-	track wgEncodeSydhHistoneNt2d1H3k4me3bStdSig
-	release alpha
-	subTrack wgEncodeSydhHistoneViewSignal on
-	shortLabel NT2D1 H3K4me3B  Sg
-	longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K4me3B in NT2-D1 cells)
-	subGroups view=Signal factor=H3K4me3B cellType=NT2D1 control=std treatment=None
-	type bigWig 1.000000 8678.000000
-	metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=NT2-D1 antibody=H3K4me3B treatment=None control=std setType=exp inputType=NT2-D1/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1122 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1H3k4me3StdSig fileName=wgEncodeSydhHistoneNt2d1H3k4me3StdSig.bigWig.gz
+		track wgEncodeSydhHistoneNt2d1H3k4me3bStdSig
+		release alpha
+		subTrack wgEncodeSydhHistoneViewSignal on
+		shortLabel NT2D1 H3K4me3B  Sg
+		longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K4me3B in NT2-D1 cells)
+		subGroups view=Signal factor=H3K4me3B cellType=NT2D1 control=std treatment=None
+		type bigWig 1.000000 8678.000000
+		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=NT2-D1 antibody=H3K4me3B treatment=None control=std setType=exp inputType=NT2-D1/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1122 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1H3k4me3StdSig fileName=wgEncodeSydhHistoneNt2d1H3k4me3StdSig.bigWig.gz
+	
+		track wgEncodeSydhHistoneNt2d1H3k9acStdSig
+		release alpha
+		subTrack wgEncodeSydhHistoneViewSignal on
+		shortLabel NT2D1 H3K9ac   Sg
+		longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K9ac in NT2-D1 cells)
+		subGroups view=Signal factor=H3K9ac cellType=NT2D1 control=std treatment=None
+		type bigWig 1.000000 6350.000000
+		metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=NT2-D1 antibody=H3K9ac treatment=None control=std setType=exp inputType=NT2-D1/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1173 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1H3k9acStdSig fileName=wgEncodeSydhHistoneNt2d1H3k9acStdSig.bigWig.gz
 
-	track wgEncodeSydhHistoneNt2d1H3k9acStdSig
-	release alpha
-	subTrack wgEncodeSydhHistoneViewSignal on
-	shortLabel NT2D1 H3K9ac   Sg
-	longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K9ac in NT2-D1 cells)
-	subGroups view=Signal factor=H3K9ac cellType=NT2D1 control=std treatment=None
-	type bigWig 1.000000 6350.000000
-	metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=NT2-D1 antibody=H3K9ac treatment=None control=std setType=exp inputType=NT2-D1/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1173 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1H3k9acStdSig fileName=wgEncodeSydhHistoneNt2d1H3k9acStdSig.bigWig.gz
-
-	#All tier 1 cell lines turned on#
         track wgEncodeSydhHistoneK562H3k4me1UcdSig
         release alpha
         subTrack wgEncodeSydhHistoneViewSignal on
@@ -255,7 +249,6 @@ wgEncode 1
         type bigWig 1.000000 2288.000000
         color 46,0,184
     	# subId=1351 dateSubmitted=2010-06-11
-	# Need to investigate if I need to change the factor of H3K9acB-> H3K9acB
 
         track wgEncodeSydhHistoneK562H3k27me3UcdSig
         release alpha
@@ -275,7 +268,6 @@ wgEncode 1
         subGroups view=Signal factor=H3K36me3B cellType=NT2D1 control=UCD treatment=None
         type bigWig 1.000000 5119.000000
     	# subId=1354 dateSubmitted=2010-06-11
-	# Need to investigate if I need to change the factor of H3K36me3B-> H3K36me3
 
         track wgEncodeSydhHistoneNt2d1H3k9me3UcdSig
         release alpha
@@ -304,7 +296,7 @@ wgEncode 1
         type bigWig 1.000000 51513.000000
         # subId=2108 dateSubmitted=2010-08-16
 
-	track wgEncodeSydhHistoneU2osH3k36me3bUcdSig
+		track wgEncodeSydhHistoneU2osH3k36me3bUcdSig
         release alpha
         parent wgEncodeSydhHistoneViewSignal on
         shortLabel U2OS H3K36me3B Sig
