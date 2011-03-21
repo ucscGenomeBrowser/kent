@@ -68,5 +68,7 @@ void samAlignmentOutput(struct samAlignment *el, FILE *f, char sep, char lastSep
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+extern char *samAlignmentAutoSqlString;
+/* SQL for samAlignment */
 #endif /* SAMALIGNMENT_H */
 
