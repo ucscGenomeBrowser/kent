@@ -4,7 +4,7 @@ import sys, os
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
 sys.path.append(myBinDir + "/../lib/py")
 from optparse import OptionParser
-from genbank import procOps, fileOps, gbSetupPath
+from genbank import procOps, fileOps, gbSetupPath, gbSetupHgConf
 from genbank.Config import Config
 from genbank.Pipeline import Pipeline
 
@@ -44,6 +44,12 @@ class Databases(set):
         else:
             self.__addMgcOrfeomeDbs(conf, conf.dbs, False)
 
+    def dbExists(self, db):
+        return len(procOps.callProcLines(["hgsql", "-Ne", "show databases like \""+db+"\""])) > 0
+
+    def tableExists(self, db, tbl):
+        return len(procOps.callProcLines(["hgsql", "-Ne", "show tables like \""+tbl+"\"", db])) > 0
+
     def hasMgc(self, db):
         return db in self.mgcDbs
 
@@ -52,14 +58,15 @@ class Databases(set):
 
     def __addMgcOrfeomeDbs(self, conf, dbs, mustBeMgcOrfeome):
         for db in dbs:
-            self.__addMgcOrfeomeDb(conf, db, mustBeMgcOrfeome)
+            if self.dbExists(db):
+                self.__addMgcOrfeomeDb(conf, db, mustBeMgcOrfeome)
 
     def __addMgcOrfeomeDb(self, conf, db, mustBeMgcOrfeome):
         keep = False
-        if conf.getDbBoolNone(db, mgc):
+        if conf.getDbBoolNone(db, mgc) and self.tableExists(db, "mgcFullMrna"):
             self.mgcDbs.add(db)
             keep = True
-        if conf.getDbBoolNone(db, orfeome):
+        if conf.getDbBoolNone(db, orfeome) and self.tableExists(db, "orfeomeMrna"):
             self.orfeomeDbs.add(db)
             keep = True
         if mustBeMgcOrfeome and not keep:
@@ -136,6 +143,7 @@ def processMRnaSet(db, mrnaSet, fix):
         
 cmdOpts = CmdOpts()
 gbSetupPath()
+gbSetupHgConf()
 confFile = "etc/genbank.conf"
 if not os.path.exists(confFile):
     raise Exception(confFile + " not found, must be run from genbank root directory")
