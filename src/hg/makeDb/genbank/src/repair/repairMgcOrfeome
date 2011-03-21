@@ -4,7 +4,7 @@ import sys, os
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
 sys.path.append(myBinDir + "/../lib/py")
 from optparse import OptionParser
-from genbank import procOps, fileOps, gbSetupPath
+from genbank import procOps, fileOps, gbSetupPath, gbSetupHgConf
 from genbank.Config import Config
 from genbank.Pipeline import Pipeline
 
@@ -136,6 +136,7 @@ def processMRnaSet(db, mrnaSet, fix):
         
 cmdOpts = CmdOpts()
 gbSetupPath()
+gbSetupHgConf()
 confFile = "etc/genbank.conf"
 if not os.path.exists(confFile):
     raise Exception(confFile + " not found, must be run from genbank root directory")
