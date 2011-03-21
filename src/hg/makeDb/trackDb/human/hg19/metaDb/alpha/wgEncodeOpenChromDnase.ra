@@ -1314,8 +1314,8 @@ composite wgEncodeOpenChromDnase
 dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-21
-dateUnrestricted 2011-12-21
-fileName wgEncodeOpenChromDnaseGm12878Validation.doc.gz
+dateUnrestricted 2011-03-21
+fileName wgEncodeOpenChromDnaseGm12878Validation.tgz
 grant Crawford
 lab Duke
 labVersion 1% ENCODE array platform validation tests
@@ -4487,8 +4487,8 @@ composite wgEncodeOpenChromDnase
 dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-21
-dateUnrestricted 2011-12-21
-fileName wgEncodeOpenChromDnaseK562Validation.doc.gz
+dateUnrestricted 2011-03-21
+fileName wgEncodeOpenChromDnaseK562Validation.tgz
 grant Crawford
 lab Duke
 labVersion 1% ENCODE array platform validation tests
@@ -6673,4 +6673,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1907808104
+# MAGIC: -735065736
