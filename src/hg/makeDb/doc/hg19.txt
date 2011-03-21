@@ -8977,7 +8977,21 @@ TMPDIR=/scratch/tmp
       # have metaDb data associated with them in metaDb, so run C program that
       # takes it from metaDb if possible, otherwise tries to get it from file
       # names.
-      regClusterAttachMetadataToTableOfTables hg19 partial.table peak.table
+      regClusterAttachMetadataToTableOfTables hg19 partial.table withDupes.table
+
+      # One more complication - there are often several cases where there is
+      # more than one data set on the same cell+treatment+antibody combination. 
+      # For good reasons hgBedToBedExps only wants one.
+      # This next bit filters them out based on a picks file that was hand
+      # created - picksFromDupes.  This was based on the criteria that
+      # the Broad CTCF were used,  and that Snyd was used in preference
+      # to OpenChromatin, which in turn was used in preference over Haib.
+      # The rational for this is the Broad CTCF set has been in use for a 
+      # while with no complaints,  and when examing the Pol2 signals, which
+      # were with CTCF the main component of the Dupes, the Haib were the
+      # weakest and the Snyd the strongest.  
+      cp ~/src/hg/regulate/wgEncodeReg/picksFromDupes.tab .
+      wgEncodeRegTfbsDedupeHelp withDupes.table picksFromDupes.tab peak.table
 
       # Make three column file: fileName, cell+treatment, antibody
       awk -F '\t' '{printf ( "%s\t%s\t%s\n", $1, ($10 == "None" ? $8 : $8 "+" $10), $9 ) ; }' peak.table > fileCellAb.tab
@@ -9002,8 +9016,12 @@ TMPDIR=/scratch/tmp
       awk '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $7, ($10 == "None" ? $8 : $8 "+" $10), $9, $8, $10, $11);}' peak.table > wgEncodeRegTfbsClusteredInputs.tab
       hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable4.sql wgEncodeRegTfbsClusteredInputs.tab
 
+      # At this point actually are done with this track, except for
+      # all the trackDb work on the overlayed histone mod tracks.
+      # The rest is for some coloring stuff that is not yet actually used.
+
       # Do work to figure out how to color cells.  This is based on
-      # hierarchical clustering of wbEncodeUwAffyAllExon.
+      # hierarchical clustering of wbEncodeUwAffyAllExon. 
       mkdir -p /hive/data/genomes/hg19/bed/wgEncodeReg/cellColors
       cd /hive/data/genomes/hg19/bed/wgEncodeReg
 

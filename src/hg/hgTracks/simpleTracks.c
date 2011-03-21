@@ -7691,7 +7691,14 @@ Color colorNum = 0;
 if (!chromosomeColorsMade)
     makeChromosomeShades(hvg);
 if (atoi(name) != 0)
+    {
     chromNum =  atoi(name);
+    /* Tweaks for chimp and other apes with chrom names corresponding to fused human chr2
+     * giving them back a distinct color to distinguish chr2B from chr2A. 
+     * panTro2 uses chr2a chr2b. panTro3 uses chr2A chr2B. */
+    if (startsWith("2B", name) || startsWith("2b", name))
+	chromNum = 26;
+    }
 else if (startsWith("U", name))
     chromNum = 26;
 else if (startsWith("Y", name))

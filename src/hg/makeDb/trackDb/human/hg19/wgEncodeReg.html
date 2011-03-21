@@ -1,0 +1,63 @@
+<H2>Description</H2>
+<p>These tracks contain information relevant to the regulation of transcription from the 
+<A HREF=/ENCODE/>ENCODE project</A>. The <i>Transcription</i> track shows transcription 
+levels assayed by sequencing of polyadenylated RNA from a variety of cell types.  The <i>Overlayed
+H3K4Me1</i> and <i>Overlayed H3K27Ac</i> tracks show where modification of histone proteins
+is suggestive of enhancer and, to a lesser extent, other regulatory activity.  These histone 
+modifications, particularly H3K4Me1, are quite broad.  The actual enhancers are typically just a 
+small portion of the area marked by these histone modifications.  The <i>Overlay H3K4Me3</i> 
+track shows a histone mark associated with promoters.  The <i>DNase Clusters</i> track shows regions 
+where the chromatin is hypersensitive to cutting by the DNase enzyme, which has 
+been assayed in a large number of cell types. Regulatory regions, in general, tend to be 
+DNase sensitive, and promoters are particularly DNase sensitive.  The <i>Txn Factor ChIP</i>
+track shows DNA regions where transcription factors, proteins responsible for 
+modulating gene transcription, bind as assayed by chromatin immunoprecipitation with antibodies 
+specific to the transcription factor followed by sequencing of the precipitated DNA (ChIP-seq).
+</p><p>
+These tracks complement each other and together can shed much light on regulatory DNA. The histone
+marks are informative at a high level, but they have a resolution of just ~200 bases and do not
+provide much in the way of functional detail.  The DNase hypersensitive assay is higher in
+resolution at the DNA level and can be done on a large number of cell types since it's just 
+a single assay. At the functional level, DNase hypersensitivity suggests that a 
+region is very likely to be regulatory in nature, but provides little information beyond that.  The transcription 
+factor ChIP assay has a high resolution at the DNA level, and, due to the very specific nature 
+of the transcription factors, is often informative with respect to functional detail.  However, since each 
+transcription factor must be assayed separately, the information is
+only available for a limited number of transcription factors on a limited number of cell lines. 
+Though each assay has its strengths and weaknesses, the fact that all of these assays are 
+relatively independent of each other gives increased confidence when multiple tracks are 
+suggesting a regulatory function for a region.
+</p><p>
+For additional information please click on the hyperlinks for the individual tracks above.
+Also note that additional histone marks and transcription information is available in other
+ENCODE tracks.  This integrative Super-track just shows a selection of the most informative data of
+most general interest.
+<H2>Display conventions</H2>
+</p><p>
+By default, the transcription and histone mark displays use a transparent overlay method of 
+displaying data from a number of cell lines in a single track.  Each of the cell lines in this track is associated with a particular
+color, and these colors are relatively light and saturated so
+as to work best with the transparent overlay.  Unfortunately, outside the ENCODE Regulation tracks, older cell line
+color conventions are used that don't match the cell line colors used in
+the ENCODE Regulation tracks. The older colors were not used in the
+ENCODE Regulation tracks because they were too dark for the transparent
+overlay. The DNase and Transcription Factor ChIP tracks contain information on so many cell lines that a color convention
+is inadequate.  Instead, these tracks show gray boxes where the darkness of 
+the box is proportional to the maximum value seen in any cell line in that region. Clicking on
+the item takes you to a details page where the values for each cell line assayed are displayed.
+</p>
+<H2>Credits</H2>
+<p>
+The data in this super-track comes from the ENCODE grants led by Bradley Bernstein (Broad Institute),
+Richard Myers (HudsonAlpha Institute), Michael Snyder (Stanford) Gregory Crawford (Duke) 
+and John Stamatoyannopoulos (University of Washington).  Specific labs and contributors 
+for these datasets are listed in the Credits section of the individual tracks in this 
+super-track.  The integrative view was developed by Jim Kent at UCSC.
+</p>
+<H2> Data Release Policy </H2>
+<P>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column on the track configuration page and the download page. The full data release policy
+for ENCODE is available
+<A TARGET=_BLANK HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>

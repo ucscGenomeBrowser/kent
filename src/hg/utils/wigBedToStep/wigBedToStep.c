@@ -14,11 +14,13 @@ errAbort(
   "   wigBedToStep in.bed out.wiggle\n"
   "options:\n"
   "   -forceVarStep    force variable step output even if it can be fixed step.\n"
+  "   -forseSpanOne    force output of each base even if increases the number of datapoints.\n"
   );
 }
 
 static struct optionSpec options[] = {
     {"forceVarStep", OPTION_BOOLEAN},
+    {"forceSpanOne", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -78,6 +80,7 @@ return TRUE;
 
 void printDecLine(FILE *f, char *chrom, int chromStart, int span, int step, 
 		  boolean doFixed)
+/* print out a wiggle header line */
 {
 fprintf(f, "%s chrom=%s ", (doFixed) ? "fixedStep" : "variableStep", chrom);
 if (doFixed)
@@ -86,6 +89,7 @@ fprintf(f, "span=%d\n", span);
 }
 
 void printDataLine(FILE *f, int chromStart, char *data, boolean doFixed)
+/* print out a wiggle data line */
 {
 if (!doFixed)
     fprintf(f, "%d\t", chromStart+1);
@@ -93,28 +97,49 @@ fprintf(f, "%s\n", data);
 } 
 
 void wiggleOut(FILE *f, struct bed *bedList, int span, int step)
+/* the guts of the program.  go through the data line-by-line and output to a new file. */
 {
-struct bed *prev, *cur;
+struct bed *cur = bedList;
 boolean doFixed = (step != -1);
-prev = cur = bedList;
+boolean spanOne = FALSE;
+int theSpan = span;
+int theStep = step;
+boolean printHeader = TRUE;
+if (optionExists("forceSpanOne"))
+    /* forcing span=1 changes the step and span to be one... obviously */
+    {
+    spanOne = TRUE;
+    theSpan = 1;
+    theStep = 1;
+    doFixed = TRUE;
+    }
 if (optionExists("forceVarStep"))
     doFixed = FALSE;
-while (cur != NULL)
+for (; cur != NULL; cur = cur->next)
     {
-    if (prev == cur)
+    if (printHeader)
+	printDecLine(f, cur->chrom, cur->chromStart, theSpan, theStep, doFixed);
+    if (spanOne)
 	{
-	printDecLine(f, cur->chrom, cur->chromStart, span, step, doFixed);
-	printDataLine(f, cur->chromStart, cur->name, doFixed);
-	cur = cur->next;
+	int i;
+	for (i = cur->chromStart; i < cur->chromEnd; i++)
+	    printDataLine(f, i, cur->name, doFixed);
 	}
-    else if (sameString(prev->chrom, cur->chrom))
+    else
+	printDataLine(f, cur->chromStart, cur->name, doFixed);
+    if (cur->next)
+	/* check the various ways possible that the next line will need a header */
 	{
-	printDataLine(f, cur->chromStart, cur->name, doFixed);
-	prev = cur;
-	cur = cur->next;
+	struct bed *next = cur->next;
+	if (!sameString(cur->chrom, next->chrom))
+	    printHeader = TRUE;
+	else if (!spanOne && (cur->chromStart + theStep != next->chromStart))
+	    printHeader = TRUE;
+	else if (spanOne && (cur->chromEnd != next->chromStart))
+	    printHeader = TRUE;
+	else
+	    printHeader = FALSE;
 	}
-    else 
-	prev = cur;
     }
 }
 
@@ -122,13 +147,17 @@ void wigBedToStep(char *inFile, char *outFile)
 /* wigBedToStep - Convert bed-style wiggle into variable step or fixed step wiggle.. */
 {
 struct bed *bedList = bedLoadNAll(inFile, 4);
-int span = 0;
+int span = 1;
 int step = -1;
 FILE *out = mustOpen(outFile, "w");
 slSort(&bedList, bedCmp);
-if (!validVariableStep(bedList, &span))
-    errAbort("The inputted file is empty.");
-validFixedStep(bedList, &step);
+if (!optionExists("forceSpanOne"))
+    {
+    if (!validVariableStep(bedList, &span))
+	errAbort("The inputted file is empty.");
+    }
+if (!optionExists("forceVarStep") && !optionExists("forceSpanOne"))
+    validFixedStep(bedList, &step);
 wiggleOut(out, bedList, span, step);
 bedFreeList(&bedList);
 carefulClose(&out);
