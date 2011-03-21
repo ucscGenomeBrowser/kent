@@ -999,27 +999,6 @@ tableName wgEncodeHaibGenotypeHrpeRegionsRep2
 treatment None
 view CNV
 
-metaObject wgEncodeHaibGenotypeHsmmRegionsRep2
-objType table
-cell HSMM
-composite wgEncodeHaibGenotype
-dataType Cnv
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-20
-dateUnrestricted 2011-10-20
-fileName wgEncodeHaibGenotypeHsmmRegionsRep2.bedLogR.gz
-grant Myers
-lab HudsonAlpha
-labVersion Illumina 1MDuo
-obtainedBy Duke
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 3432
-tableName wgEncodeHaibGenotypeHsmmRegionsRep2
-treatment None
-view CNV
-
 metaObject wgEncodeHaibGenotypeHsmmRegionsRep3
 objType table
 cell HSMM
@@ -1061,6 +1040,28 @@ subId 3432
 tableName wgEncodeHaibGenotypeHsmmRegionsRep6
 treatment None
 view CNV
+
+metaObject wgEncodeHaibGenotypeHsmmtRegionsRep2
+objType table
+cell HSMMtube
+composite wgEncodeHaibGenotype
+dataType Cnv
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeHaibGenotypeHsmmtRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labExpId Duke
+labVersion Illumina 1MDuo
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3432
+tableName wgEncodeHaibGenotypeHsmmtRegionsRep2
+treatment None
+view Regions
 
 metaObject wgEncodeHaibGenotypeHtr8RegionsRep1
 objType table
@@ -1902,4 +1903,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: 2101977937
+# MAGIC: 822919665

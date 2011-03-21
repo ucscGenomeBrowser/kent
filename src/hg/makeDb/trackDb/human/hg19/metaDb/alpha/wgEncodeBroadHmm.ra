@@ -1,4 +1,4 @@
-metaObject wgEncodeBroadHmmGm12878
+metaObject wgEncodeBroadHmmGm12878HMM
 objType table
 cell GM12878
 composite wgEncodeBroadHmm
@@ -6,17 +6,17 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmGm12878.bed.gz
+fileName wgEncodeBroadHmmGm12878HMM.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
 subId 3823
-tableName wgEncodeBroadHmmGm12878
+tableName wgEncodeBroadHmmGm12878HMM
 view HMM
 
-metaObject wgEncodeBroadHmmH1hesc
+metaObject wgEncodeBroadHmmH1hescHMM
 objType table
 cell H1-hESC
 composite wgEncodeBroadHmm
@@ -24,17 +24,17 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmH1hesc.bed.gz
+fileName wgEncodeBroadHmmH1hescHMM.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
 subId 3823
-tableName wgEncodeBroadHmmH1hesc
+tableName wgEncodeBroadHmmH1hescHMM
 view HMM
 
-metaObject wgEncodeBroadHmmHepg2
+metaObject wgEncodeBroadHmmHepg2HMM
 objType table
 cell HepG2
 composite wgEncodeBroadHmm
@@ -42,17 +42,17 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmHepg2.bed.gz
+fileName wgEncodeBroadHmmHepg2HMM.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
 subId 3823
-tableName wgEncodeBroadHmmHepg2
+tableName wgEncodeBroadHmmHepg2HMM
 view HMM
 
-metaObject wgEncodeBroadHmmHmec
+metaObject wgEncodeBroadHmmHmecHMM
 objType table
 cell HMEC
 composite wgEncodeBroadHmm
@@ -60,17 +60,17 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmHmec.bed.gz
+fileName wgEncodeBroadHmmHmecHMM.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
 subId 3823
-tableName wgEncodeBroadHmmHmec
+tableName wgEncodeBroadHmmHmecHMM
 view HMM
 
-metaObject wgEncodeBroadHmmHsmm
+metaObject wgEncodeBroadHmmHsmmHMM
 objType table
 cell HSMM
 composite wgEncodeBroadHmm
@@ -78,17 +78,17 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmHsmm.bed.gz
+fileName wgEncodeBroadHmmHsmmHMM.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
 subId 3823
-tableName wgEncodeBroadHmmHsmm
+tableName wgEncodeBroadHmmHsmmHMM
 view HMM
 
-metaObject wgEncodeBroadHmmHuvec
+metaObject wgEncodeBroadHmmHuvecHMM
 objType table
 cell HUVEC
 composite wgEncodeBroadHmm
@@ -96,17 +96,17 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmHuvec.bed.gz
+fileName wgEncodeBroadHmmHuvecHMM.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
 subId 3823
-tableName wgEncodeBroadHmmHuvec
+tableName wgEncodeBroadHmmHuvecHMM
 view HMM
 
-metaObject wgEncodeBroadHmmK562
+metaObject wgEncodeBroadHmmK562HMM
 objType table
 cell K562
 composite wgEncodeBroadHmm
@@ -114,17 +114,17 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmK562.bed.gz
+fileName wgEncodeBroadHmmK562HMM.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
 subId 3823
-tableName wgEncodeBroadHmmK562
+tableName wgEncodeBroadHmmK562HMM
 view HMM
 
-metaObject wgEncodeBroadHmmNhek
+metaObject wgEncodeBroadHmmNhekHMM
 objType table
 cell NHEK
 composite wgEncodeBroadHmm
@@ -132,17 +132,17 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmNhek.bed.gz
+fileName wgEncodeBroadHmmNhekHMM.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
 subId 3823
-tableName wgEncodeBroadHmmNhek
+tableName wgEncodeBroadHmmNhekHMM
 view HMM
 
-metaObject wgEncodeBroadHmmNhlf
+metaObject wgEncodeBroadHmmNhlfHMM
 objType table
 cell NHLF
 composite wgEncodeBroadHmm
@@ -150,14 +150,14 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeBroadHmmNhlf.bed.gz
+fileName wgEncodeBroadHmmNhlfHMM.bed.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicPaper
 subId 3823
-tableName wgEncodeBroadHmmNhlf
+tableName wgEncodeBroadHmmNhlfHMM
 view HMM
 
 # MAGIC: -545435684

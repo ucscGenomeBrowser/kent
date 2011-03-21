@@ -42,7 +42,7 @@ include wgEncodeGisChiaPet.ra alpha
 include wgEncodeUw5C.ra alpha
 
 
-# Encode Affy Exon -------------------------------------------- 
+# Encode Affy Exon --------------------------------------------
 
 # UW Affy Exon (wrangler: cricket)
 include wgEncodeUwAffyExonArray.ra
@@ -108,11 +108,9 @@ include wgEncodeHaibRnaSeq.ra alpha
 
 #HAIB Methyl-Seq (wrangler: Vankat) most likely never leaving alpha
 include wgEncodeHaibMethylSeq.ra
-
 #HAIB Methyl Array (wrangler:Cricket)
 #include wgEncodeHaibMethylArray.ra
 include wgEncodeHaibMethyl27.ra alpha
-
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
 include wgEncodeHaibMethylRrbs.ra beta,public
 include wgEncodeHaibMethylRrbs.new.ra alpha
@@ -127,6 +125,9 @@ include wgEncodeHaibMethylRrbs.new.ra alpha
 #Broad Histone (wrangler: Tim)
 include wgEncodeBroadHistone.ra
 
+#Broad HMM (wrangler: Tim)
+include wgEncodeBroadHmm.ra
+
 #UW Histone (wrangler:Venkat)
 include wgEncodeUwHistone.ra
 
@@ -139,7 +140,7 @@ include wgEncodeSydhHistone.ra
 # UW CTCF Binding (wrangler: Venkat)
 include wgEncodeUwTfbs.ra
 
-# UTA TFBS (wrangler: Tim)
+#UTA TFBS (wrangler: Tim)
 include wgEncodeOpenChromChip.ra
 
 # HAIB TFBS (wrangler: Venkat)
@@ -164,7 +165,7 @@ include wgEncodeSunyAlbanyTiling.ra
 include wgEncodeSunySwitchgear.ra alpha
 
 # SUNY Rip-seq (wrangler: cricket)
-include wgEncodeSunyRipSeq.ra alpha 
+include wgEncodeSunyRipSeq.ra alpha
 
 
 track wgEncodeMapability
@@ -191,7 +192,7 @@ origAssembly hg19
     longLabel Mapability - CRG GEM Alignability of 24mers with no more than 2 mismatches
     color 0,100,0
     priority 1
-    
+
     track wgEncodeCrgMapabilityAlign36mer
     subTrack wgEncodeMapability
     shortLabel CRG Align 36
@@ -205,7 +206,7 @@ origAssembly hg19
     longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
     color 0,100,0
     priority 3
-    
+
     track wgEncodeCrgMapabilityAlign50mer
     subTrack wgEncodeMapability
     shortLabel CRG Align 50
