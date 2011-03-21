@@ -186,4 +186,20 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
-
+char *samAlignmentAutoSqlString = 
+"table samAlignment\n"
+"\"The fields of a SAM short read alignment, the text version of BAM.\"\n"
+    "(\n"
+    "string qName;	\"Query template name - name of a read\"\n"
+    "ushort flag;	\"Flags.  0x10 set for reverse complement.  See SAM docs for others.\"\n"
+    "string rName;	\"Reference sequence name (often a chromosome)\"\n"
+    "uint pos;		\"1 based position\"\n"
+    "ubyte mapQ;		\"Mapping quality 0-255, 255 is best\"\n"
+    "string cigar;	\"CIGAR encoded alignment string.\"\n"
+    "string rNext;	\"Ref sequence for next (mate) read. '=' if same as rName, '*' if no mate\"\n"
+    "int pNext;		\"Position (1-based) of next (mate) sequence. May be -1 or 0 if no mate\"\n"
+    "int tLen;	        \"Size of DNA template for mated pairs.  -size for one of mate pairs\"\n"
+    "string seq;		\"Query template sequence\"\n"
+    "string qual;	\"ASCII of Phred-scaled base QUALity+33.  Just '*' if no quality scores\"\n"
+    "string tagTypeVals; \"Tab-delimited list of tag:type:value optional extra fields\"\n"
+    ")\n";
