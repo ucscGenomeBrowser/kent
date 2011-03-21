@@ -604,17 +604,16 @@ return encodeExpToRaFile(exp, NULL);
 static char *encodeExpMakeAccession(struct encodeExp *exp)
 /* Make accession string from prefix + organism + id */
 {
-#define BUF_SIZE 64
-char accession[BUF_SIZE];
+char accession[64];
 
-char org = (char) NULL;
+char org = '\0';
 if (sameString(exp->organism, "human"))
     org = 'H';
 else if (sameString(exp->organism, "mouse"))
     org = 'M';
 else
     errAbort("Invalid organism %s", exp->organism);
-safef(accession, BUF_SIZE, "%s%c%06d", ENCODE_EXP_ACC_PREFIX, org, exp->ix);
+safef(accession, sizeof(accession), "%s%c%06d", ENCODE_EXP_ACC_PREFIX, org, exp->ix);
 return cloneString(accession);
 }
 
@@ -651,9 +650,9 @@ void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,
 {
 struct dyString *query = NULL;
 
-if (field != ENCODE_EXP_FIELD_LAB &&
-    field != ENCODE_EXP_FIELD_DATA_TYPE &&
-    field != ENCODE_EXP_FIELD_CELL_TYPE)
+if (differentString(field, ENCODE_EXP_FIELD_LAB) &&
+    differentString(field, ENCODE_EXP_FIELD_DATA_TYPE) &&
+    differentString(field, ENCODE_EXP_FIELD_CELL_TYPE))
         errAbort("Unsupported encodeExp field update: %s", field);
 
 query = dyStringCreate("update %s set %s=\'%s\' where accession=\'%s\'",
