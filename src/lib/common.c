@@ -751,6 +751,18 @@ slReverse(&list);
 return list;
 }
 
+struct slName *slNameListOfUniqueWords(char *text)
+// Return list of unique words found by parsing string delimited by whitespace.
+{
+struct slName *list = NULL;
+char *word = NULL;
+while ((word = nextWord(&text)) != NULL)
+    slNameStore(&list, word);
+
+slReverse(&list);
+return list;
+}
+
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize)
 /* Return list of slNames from an array of strings of length arraySize.
  * If a string in the array is NULL, the array will be treated as
@@ -982,6 +994,38 @@ slReverse(&list);
 return list;
 }
 
+char *slPairListToString(struct slPair *list)
+// Returns an allocated string of pairs in form of
+// name1=val1 name2=val2 ...
+// Will wrap vals in quotes if contain spaces: name3="val 3"
+{
+// Don't rely on dyString.  Do the accounting ourselves
+int count = 0;
+struct slPair *pair = list;
+for(;pair != NULL; pair = pair->next)
+    {
+    count += strlen(pair->name);
+    count += strlen((char *)(pair->val));
+    count += 2; // = and ' ' delimit
+    if (hasWhiteSpace((char *)(pair->val)))
+        count += 2; // " and "
+    }
+if (count == 0)
+    return NULL;
+char *str = needMem(count+5); // A bit of slop
+
+char *s = str;
+for(pair = list;pair != NULL; pair = pair->next)
+    {
+    if (hasWhiteSpace((char *)(pair->val)))
+        sprintf(s,"%s=\"%s\" ",pair->name,(char *)(pair->val));
+    else
+        sprintf(s,"%s=%s ",pair->name,(char *)(pair->val));
+    s += strlen(s);
+    }
+str[strlen(str) - 1] = '\0'; // For sweetness, remove the trailing space.
+return str;
+}
 
 int slPairCmpCase(const void *va, const void *vb)
 /* Compare two slPairs, ignore case. */
@@ -2992,9 +3036,9 @@ return cloneString(skipToNumeric(db));
 
 
 time_t mktimeFromUtc (struct tm *t)
-/* Return time_t for tm in UTC (GMT) 
+/* Return time_t for tm in UTC (GMT)
  * Useful for stuff like converting to time_t the
- * last-modified HTTP response header 
+ * last-modified HTTP response header
  * which is always GMT. Returns -1 on failure of mktime */
 {
     time_t time;

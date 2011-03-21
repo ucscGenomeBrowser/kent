@@ -462,7 +462,7 @@ else
                 }
             else if (encodeExp) // Organizes vars as experiments and validates expId values
                 {
-                struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,&queryResults,2); // 2=full experiments described
+                struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,&queryResults,2,FALSE); // 2=full experiments described
                 printf("%d of %d obj%s can have their experiment IDs updated now.\n",slCount(updatable),objsCnt,(objsCnt==1?"":"s"));
                 mdbObjsFree(&updatable);
                 }

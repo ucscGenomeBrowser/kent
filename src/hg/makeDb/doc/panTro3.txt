@@ -802,7 +802,7 @@ TMPDIR=/scratch/tmp
     #	1994778494 bases of 2752505800 (72.471%) in intersection
 
 ############################################################################
-# GENBANK ALIGNMENTS (WORKING - 2011-02-22 - Hiram)
+# GENBANK ALIGNMENTS (DONE - 2011-02-22 - Hiram)
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
@@ -857,7 +857,7 @@ panTro3.upstreamGeneTbl = refGene
     make etc-update
 
 ############################################################################
-# LASTZ Rat Rn4 (DONE - 2011-02-22 - Hiram)
+# LASTZ Rat Rn4 (DONE - 2011-02-22,03-17 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22
     cd /hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22
 
@@ -889,24 +889,35 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    #	real    314m18.227s
+# Completed: 334530 of 334530 jobs
+# CPU time in finished jobs:  117963946s 1966065.77m 32767.76h 1365.32d  3.741 y
+# IO & Wait Time:              21241835s  354030.58m  5900.51h  245.85d  0.674 y
+# Average job time:                 416s       6.94m     0.12h    0.00d
+# Longest finished job:            5954s      99.23m     1.65h    0.07d
+# Submission to last job:       1898683s   31644.72m   527.41h   21.98d
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=cat -syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > cat.log 2>&1 &
+    #	real    218m40.169s
     cat fb.panTro3.chainRn4Link.txt 
-    #	952605822 bases of 2897316137 (32.879%) in intersection
+    #	880312548 bases of 2900529764 (30.350%) in intersection
 
-    #	running the swap - DONE - 2009-06-02
+    #	running the swap - DONE - 2011-03-17
     mkdir /hive/data/genomes/rn4/bed/blastz.panTro3.swap
     cd /hive/data/genomes/rn4/bed/blastz.panTro3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22/DEF \
-	-swap -noLoadChainSplit \
+	-swap -syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    188m0.163s
+    #	real    82m45.556s
     cat fb.rn4.chainPanTro3Link.txt 
-    #	947862300 bases of 2571531505 (36.860%) in intersection
+    #	875298047 bases of 2571531505 (34.038%) in intersection
 
 ##############################################################################
-# LASTZ Mouse Mm9 (DONE - 2011-02-23 - Hiram)
+# LASTZ Mouse Mm9 (DONE - 2011-02-23,03-08 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzMm9.2011-02-23
     cd /hive/data/genomes/panTro3/bed/lastzMm9.2011-02-23
 
@@ -950,10 +961,9 @@ TMPDIR=/scratch/tmp
 	-swap -syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running - Tue Mar  8 09:44:45 PST 2011
-    #	real    188m0.163s
+    #	real    70m30.237s
     cat fb.mm9.chainPanTro3Link.txt 
-    #	947862300 bases of 2571531505 (36.860%) in intersection
+    #	921877558 bases of 2620346127 (35.182%) in intersection
 
 ##############################################################################
 # Swap Human lastz (DONE - 2011-02-23 - Hiram)
@@ -1073,7 +1083,7 @@ TMPDIR=/scratch/tmp
     #	1599680730 bases of 2428790173 (65.863%) in intersection
 
 ############################################################################
-# LASTZ Opossum MonDom5 (DONE - 2011-02-23 - Hiram)
+# LASTZ Opossum MonDom5 (DONE - 2011-02-23,03-15 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzMonDom5.2011-02-23
     cd /hive/data/genomes/panTro3/bed/lastzMonDom5.2011-02-23
 
@@ -1111,22 +1121,21 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
-XXX - running - Wed Feb 23 11:21:40 PST 2011
-    #	real    314m18.227s
+    #	Elapsed time: 22679m1s  (more than two weeks)
     cat fb.panTro3.chainMonDom5Link.txt 
-    #	952605822 bases of 2897316137 (32.879%) in intersection
+    #	398623849 bases of 2900529764 (13.743%) in intersection
 
-    #	running the swap - DONE - 2009-06-02
+    #	running the swap - DONE - 2011-03-15
     mkdir /hive/data/genomes/monDom5/bed/blastz.panTro3.swap
     cd /hive/data/genomes/monDom5/bed/blastz.panTro3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/panTro3/bed/lastzMonDom5.2011-02-23/DEF \
-	-swap -noLoadChainSplit \
+	-swap -syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    188m0.163s
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    85m21.917s
     cat fb.monDom5.chainPanTro3Link.txt 
-    #	947862300 bases of 2571531505 (36.860%) in intersection
+    #	396979982 bases of 3501660299 (11.337%) in intersection
 
 ############################################################################
 # LASTZ Chicken GalGal3 (DONE - 2011-02-23,03-03 - Hiram)
@@ -1348,5 +1357,231 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
     #	cleanup
     rm -fr hardMaskedFa
+
+############################################################################
+## 12-Way Multiz (WORKING - 2011-03-18 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panTro3/bed/multiz12way
+    cd /hive/data/genomes/panTro3/bed/multiz12way
+
+    wget -O 46way.nh \
+http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
+
+# ((Zebrafish,
+# (Stickleback,
+# Tetraodon)),
+# (X_tropicalis,
+# (Mouse,
+# Human))) 
+
+panTro3
+hg19
+ponAbe2
+rheMac2
+calJac3
+equCab2
+canFam2
+mm9
+rn4
+monDom5
+galGal3
+danRer7
+
+
+    #	All distances remain as specified in the 46way.nh
+    /cluster/bin/phast/tree_doctor --prune-all-but panTro2,hg19,ponAbe2,rheMac2,calJac1,equCab2,canFam2,mm9,rn4,monDom5,galGal3,danRer6 46way.nh | sed -e "s/danRer6/danRer7/; s/calJac1/calJac3/; s/panTro2/panTro3/" > 12way.nh
+    #	what that looks like:
+    cat 12way.nh
+# (((((((((hg19:0.006591,panTro3:0.006639):0.012126,ponAbe2:0.018342):0.014256,rheMac2:0.057695):0.010000,calJac3:0.066389):0.088210,(mm9:0.083220,rn4:0.090564):0.269385):0.020666,(equCab2:0.107726,canFam2:0.150374):0.043195):0.156024,monDom5:0.425899):0.182333,galGal3:0.474279):0.466546,danRer7:0.886380);
+
+    # simple switch of hg19 and panTro3 to get it on top:
+
+    cat << '_EOF_' > panTro3.12way.nh
+(((((((((panTro3:0.006639,hg19:0.006591):0.012126,ponAbe2:0.018342):0.014256,rheMac2:0.057695):0.010000,calJac3:0.066389):0.088210,(mm9:0.083220,rn4:0.090564):0.269385):0.020666,(equCab2:0.107726,canFam2:0.150374):0.043195):0.156024,monDom5:0.425899):0.182333,galGal3:0.474279):0.466546,danRer7:0.886380);
+'_EOF_'
+    # << happy emacs
+
+    # convert to species names
+    /cluster/bin/phast/tree_doctor --rename \
+"panTro3->Chimp; hg19->Human; ponAbe2->Orangutan; rheMac2->Rhesus; calJac3->Marmoset; mm9->Mouse; rn4->Rat; equCab2->Horse; canFam2->Dog; monDom5->Opossum; galGal3->Chicken; danRer7->Zebrafish" \
+panTro3.12way.nh > panTro3.commonNames.12way.nh
+
+# (((((((((Chimp:0.006639,Human:0.006591):0.012126,Orangutan:0.018342):0.014256,Rhesus:0.057695):0.010000,Marmoset:0.066389):0.088210,(Mouse:0.083220,Rat:0.090564):0.269385):0.020666,(Horse:0.107726,Dog:0.150374):0.043195):0.156024,Opossum:0.425899):0.182333,Chicken:0.474279):0.466546,Zebrafish:0.886380);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for src/hg/htdocs/images/phylo/panTro3_12way.png
+
+    /cluster/bin/phast/all_dists panTro3.12way.nh > 12way.distances.txt
+    #	Use this output to create the table below
+    grep -i panTro3 12way.distances.txt | sort -k3,3n
+# panTro3 hg19    0.013230
+# panTro3 ponAbe2 0.037107
+# panTro3 rheMac2 0.090716
+# panTro3 calJac3 0.109410
+# panTro3 equCab2 0.302818
+# panTro3 canFam2 0.345466
+# panTro3 mm9     0.483836
+# panTro3 rn4     0.491180
+# panTro3 monDom5 0.733820
+# panTro3 galGal3 0.964533
+# panTro3 danRer7 1.843180
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+
+#                         featureBits chainLink measures
+#                                          chainPanTro3Link  chain linearGap
+#    distance                    on panTro3  on other     minScore
+#  1  0.013 - human hg19          (% 95.60) (% 95.29)       5000     medium
+#  2  0.037 - orangutan ponAbe2   (% 89.59) (% 87.75)       5000     medium
+#  3  0.091 - rhesus rheMac2      (% 81.34) (% 85.68)       5000     medium
+#  4  0.109 - marmoset calJac3    (% 69.66) (% 72.47)       5000     medium
+#  5  0.302 - horse equCab2       (% 56.50) (% 65.86)       3000     medium
+#  6  0.345 - dog canFam2         (% 51.59) (% 60.32)       3000     medium
+#  7  0.484 - mouse mm9           (% 32.04) (% 35.18)       3000     medium
+#  8  0.491 - rat rn4             (% 30.35) (% 34.04)       3000     medium
+#  9  0.734 - opossum monDom5     (% 13.74) (% 11.34)       5000     loose
+# 10  0.965 - chicken galGal3     (%  4.56) (% 11.12)       5000     loose
+# 11  1.843 - zebrafish danRer7   (%  2.56) (%  5.82)       5000     loose
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	panTro3.12way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/panTro3/bed/multiz12way/mafSplit
+    cd /hive/data/genomes/panTro3/bed/multiz12way/mafSplit
+    for D in `sed -e "s/panTro3 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=10 /dev/null . ../../../lastz.${D}/axtChain/panTro3.${D}.synNet.maf.gz"
+    mafSplit -byTarget -useHashedName=10 /dev/null . \
+	../../../lastz.${D}/axtChain/panTro3.${D}.synNet.maf.gz
+    cd ..
+done
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 2792
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 484 maf.list
+
+    mkdir /hive/data/genomes/panTro3/bed/multiz12way/splitRun
+    cd /hive/data/genomes/panTro3/bed/multiz12way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = panTro3
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/panTro3/bed/multiz12way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+	if (! -s $out) then
+	    echo "##maf version=1 scoring=autoMZ" > $out
+	endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+	> /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/panTro3/bed/multiz12way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh swarm
+    cd /hive/data/genomes/panTro3/bed/multiz12way/splitRun/run
+    gensub2 maf.list single template jobList
+    tac jobList > smallJobsFirst
+    para -ram=8g create smallJobsFirst
+# Completed: 484 of 484 jobs
+# CPU time in finished jobs:     370423s    6173.72m   102.90h    4.29d  0.012 y
+# IO & Wait Time:                 27319s     455.32m     7.59h    0.32d  0.001 y
+# Average job time:                 822s      13.70m     0.23h    0.01d
+# Longest finished job:           31994s     533.23m     8.89h    0.37d
+# Submission to last job:         32007s     533.45m     8.89h    0.37d
+
+    # assemble into a single maf file
+    cd /hive/data/genomes/panTro3/bed/multiz12way
+    head -1 splitRun/maf/001.maf > multiz12way.maf
+    for F in splitRun/maf/*.maf
+do
+    egrep -v "^#" ${F}
+done >> multiz12way.maf
+    tail -1 splitRun/maf/001.maf >> multiz12way.maf
+
+# -rw-rw-r--  1 24598538713 Mar 21 11:02 panTro3.12way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/panTro3/bed/multiz12way
+    mkdir /gbdb/panTro3/multiz12way
+    ln -s `pwd`/multiz12way.maf /gbdb/panTro3/multiz12way
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf panTro3 multiz12way
+    #	Indexing and tabulating /gbdb/panTro3/multiz12way/multiz12way.maf
+    #	Loaded 15113841 mafs in 1 files from /gbdb/panTro3/multiz12way
+    #	real    9m38.121s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 panTro3 multiz12waySummary \
+	/gbdb/panTro3/multiz12way/multiz12way.maf
+    #	Created 1828535 summary blocks from 85036569 components
+    #	and 15113841 mafs from /gbdb/panTro3/multiz12way/multiz12way.maf
+    #	real    8m51.192s
+
+    wc -l multiz12way*.tab
+    #	15113841 multiz12way.tab
+    #	1828535 multiz12waySummary.tab
+    #	16942376 total
+
+    rm multiz12way*.tab
 
 ############################################################################

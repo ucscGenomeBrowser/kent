@@ -173,6 +173,9 @@ if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
 #endif//def USE_BAM && KNETFILE_HOOKS
 
+if (sameString(item, "zoom in"))
+    printf("Zoom in to a region with fewer items to enable 'detail page' links for individual items.<BR>");
+
 char varName[1024];
 safef(varName, sizeof(varName), "%s_pairEndsByName", tdb->track);
 boolean isPaired = cartUsualBoolean(cart, varName,

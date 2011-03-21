@@ -66,7 +66,7 @@ fi
 MAKE="make -j 4" make -j 4 cgi-alpha > daily.log 2>&1
 #	If there are any errors, they will come via separate email from cron
 egrep -y "erro|warn" daily.log | grep -v "\-Werror" | \
-	egrep -v "disabling jobserver mode|gbExtFile.o gbWarn.o gbMiscDiff.o"
+	egrep -v "disabling jobserver mode|-o hgTracks |gbExtFile.o gbWarn.o gbMiscDiff.o"
 make tags-all > /dev/null 2> /dev/null
 # assuming $HOME/bin/$MACHTYPE is a symlink to /genome/browser/bin/$MACHTYPE
 #	then all the utilities will end up there

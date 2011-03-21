@@ -787,7 +787,6 @@ wgEncode 1
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in SKMC cells)
     subGroups cellType=SKMC rep=rep2
     type broadPeak
-    accession GSM472911
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Bjtert
     subTrack wgEncodeUwAffyExonArray off
@@ -1117,7 +1116,7 @@ canPack On
     type wig 0 10000
     superTrack wgEncodeReg full
     shortLabel Enhanced H3K4Me1
-    longLabel ENCODE Enhancer and Promoter Associated Histone Mark (H3K4Me1) on 8 Cell Lines
+    longLabel ENCODE Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on 8 Cell Lines
     configurable on
     visibility full
     viewLimits 0:50
@@ -1129,7 +1128,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Gm12878
 	shortLabel Gm12878
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on Gm12878 cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on Gm12878 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	type wig 0.00 9323.50
 	color 255,128,128
@@ -1137,7 +1136,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1H1hesc
 	shortLabel H1 ES
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on H1 ES cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on H1 ES cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 255,212,128
 	table wgEncodeBroadChipSeqSignalH1hescH3k4me1
@@ -1145,7 +1144,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Hepg2
 	shortLabel HepG2
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on HepG2 cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on HepG2 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 212,255,128
 	table wgEncodeBroadChipSeqSignalHepg2H3k4me1
@@ -1153,7 +1152,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Hmec
 	shortLabel HMEC
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on HMEC cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on HMEC cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 120,235,120
 	table wgEncodeBroadChipSeqSignalHmecH3k4me1
@@ -1161,7 +1160,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Hsmm
 	shortLabel HSMM
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on HSMM cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on HSMM cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 120,235,204
 	table wgEncodeBroadChipSeqSignalHsmmH3k4me1
@@ -1169,7 +1168,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Huvec
 	shortLabel HUVEC
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on HUVEC cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on HUVEC cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 128,212,255
 	table wgEncodeBroadChipSeqSignalHuvecH3k4me1
@@ -1177,7 +1176,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1K562
 	shortLabel K562
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on K562 cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on K562 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 128,128,255
 	table wgEncodeBroadChipSeqSignalK562H3k4me1
@@ -1185,7 +1184,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Nhek
 	shortLabel NHEK
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on NHEK cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on NHEK cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 212,128,255
 	table wgEncodeBroadChipSeqSignalNhekH3k4me1
@@ -1193,7 +1192,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Nhlf
 	shortLabel NHLF
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on NHLF cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on NHLF cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 255,128,212
 	table wgEncodeBroadChipSeqSignalNhlfH3k4me1
@@ -1205,7 +1204,7 @@ canPack On
     type wig 0 10000
     superTrack wgEncodeReg hide
     shortLabel Enhanced H3K27Ac
-    longLabel ENCODE Enhancer and Promoter Associated Histone Mark (H3K27Ac) on 8 Cell Lines
+    longLabel ENCODE Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on 8 Cell Lines
     configurable on
     visibility full
     viewLimits 0:50
@@ -1217,7 +1216,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acGm12878
 	shortLabel Gm12878
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on Gm12878 cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on Gm12878 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	type wig 0.00 9323.50
 	color 255,128,128
@@ -1225,7 +1224,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acH1hesc
 	shortLabel H1 ES
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on H1 ES cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on H1 ES cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 255,212,128
 	table wgEncodeBroadChipSeqSignalH1hescH3k27ac
@@ -1233,7 +1232,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acHepg2
 	shortLabel HepG2
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on HepG2 cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on HepG2 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 212,255,128
         table wgEncodeBroadChipSeqSignalHepg2H3k27ac
@@ -1241,7 +1240,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acHmec
 	shortLabel HMEC
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on HMEC cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on HMEC cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 120,235,120
 	table wgEncodeBroadChipSeqSignalHmecH3k27ac
@@ -1249,7 +1248,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acHsmm
 	shortLabel HSMM
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on HSMM cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on HSMM cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 120,235,204
 	table wgEncodeBroadChipSeqSignalHsmmH3k27ac
@@ -1257,7 +1256,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acHuvec
 	shortLabel HUVEC
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on HUVEC cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on HUVEC cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 128,212,255
 	table wgEncodeBroadChipSeqSignalHuvecH3k27ac
@@ -1265,7 +1264,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acK562
 	shortLabel K562
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on K562 cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on K562 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 128,128,255
 	table wgEncodeBroadChipSeqSignalK562H3k27ac
@@ -1273,7 +1272,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acNhek
 	shortLabel NHEK
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on NHEK cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on NHEK cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 212,128,255
 	table wgEncodeBroadChipSeqSignalNhekH3k27ac
@@ -1281,7 +1280,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acNhlf
 	shortLabel NHLF
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on NHLF cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on NHLF cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 255,128,212
 	table wgEncodeBroadChipSeqSignalNhlfH3k27ac
@@ -1744,7 +1743,8 @@ include trackDb.wgEncodeYaleRnaSeq.ra
 
 
 # Yale TFBS (wrangler: Venkat, assisted by Tim)
-include wgEncodeYaleChIPseq.ra
+include wgEncodeYaleChIPseq.ra beta,public
+include wgEncodeYaleChIPseq.new.ra alpha
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
 include wgEncodeHudsonalphaChipSeq.ra

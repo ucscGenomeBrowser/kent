@@ -162,8 +162,12 @@ if(numMetadataSelects)
                         slNameFreeList(&vals);
                         }
                     }
-                else
+                else if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByFreeText)
                     val = cloneString(cartUsualString(cart, buf,ANYLABEL));
+                //else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
+                //    {
+                //    // TO BE IMPLEMENTED
+                //    }
 
                 if (val != NULL && sameString(val, ANYLABEL))
                     val = NULL;
@@ -234,7 +238,7 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
         {
         dyStringPrintf(output,"</td>\n<td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>is%s</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",
                 row,(searchBy == cvsSearchByMultiSelect?" among":""),buf);
-        struct slPair *pairs = mdbValLabelSearch(conn, mdbSelect->name, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
+        struct slPair *pairs = mdbValLabelSearch(conn, mdbSelect->name, MDB_VAL_STD_TRUNCATION, FALSE, TRUE, FALSE); // not tags, yes tables, not files
         if (slCount(pairs) > 0)
             {
             char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvsSearchByMultiSelect),
@@ -253,10 +257,10 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
         dyStringPrintf(output,"<input type='text' name='%s' value='%s' class='mdbVal freeText' style='max-width:310px; width:310px; font-size:.9em;' onchange='findTracksMdbVarChanged(true);'>\n",
                 buf,(mdbSelect->val ? (char *)mdbSelect->val: ""));
         }
-    else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
-        {
-        // TO BE IMPLEMENTED
-        }
+    //else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
+    //    {
+    //    // TO BE IMPLEMENTED
+    //    }
     dyStringPrintf(output,"<span id='helpLink%i'>&nbsp;</span></td>\n", row);
     dyStringPrintf(output,"</tr>\n");
     }

@@ -10,6 +10,8 @@
 #include "hui.h"
 #include "obscure.h"
 #include "mdb.h"
+#include "jsHelper.h"
+#include "web.h"
 
 // FIXME: Move to hui.h since hui.c also needs this
 #define ENCODE_DCC_DOWNLOADS "encodeDCC"
@@ -58,7 +60,9 @@ if (foundFiles == NULL
     char *server = hDownloadsServer();
 
     boolean useRsync = TRUE;
-    if (hIsPrivateHost())
+//#define RSYNC_DONT_WORK_ON_HGWDEV
+#ifdef RSYNC_DONT_WORK_ON_HGWDEV
+    if (hIsPrivateHost() || hIsPreviewHost())
         {
         // For hgwdev (which is the same machine as "hgdownload-test.cse.ucsc.edu") rsync does not work
         // Use ls -log --time=ctime --time-style=long-iso /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone
@@ -68,13 +72,20 @@ if (foundFiles == NULL
     else if (hIsBetaHost())
         {
         // For hgwbeta, the files are being looked for one test in a "beta/" subdir.  Have to rsync
-        server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
-        safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/beta/", server, db, dir, subDir);
+        //server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+        //safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/beta/", server, db, dir, subDir);
+        // FIXME: Need cluster-admins help to get rsync solution
+        safef(cmd,sizeof(cmd),"ls -log --time-style=long-iso /hive/groups/encode/dcc/pipeline/downloads/%s/%s/beta/", db,subDir);
+        useRsync = FALSE;
         }
     else  // genome and hgwbeta can use rsync
+#endif///def RSYNC_DONT_WORK_ON_HGWDEV
         {
         // Works:         rsync -avn rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/
-        safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
+        if (hIsBetaHost())
+            safef(cmd,sizeof(cmd),"rsync -avn rsync://hgdownload-test.cse.ucsc.edu/goldenPath/%s/%s/%s/beta/",  db, dir, subDir); // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+        else
+            safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
         }
     //warn("cmd: %s",cmd);
     scriptOutput = popen(cmd, "r");
@@ -362,6 +373,107 @@ if (sortOrder != NULL)
 return NULL;
 }
 
+#define FILTER_THE_FILES
+#ifdef FILTER_THE_FILES
+static char *labelWithVocabLink(char *var,char *title,struct slPair *valsAndLabels,boolean tagsNotVals)
+/* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
+   then label will be wrapped with the link to all relevent terms.  Return string is cloned. */
+{
+// Determine if the var is cvDefined.  If not, simple link
+boolean cvDefined = FALSE;
+struct hash *cvTypesOfTerms = (struct hash *)mdbCvTermTypeHash();
+if (cvTypesOfTerms != NULL)
+    {
+    struct hash *cvTermDef = hashFindVal(cvTypesOfTerms,var);
+    if (cvTermDef)
+        cvDefined = SETTING_IS_ON(hashFindVal(cvTermDef,"cvDefined"));
+    }
+
+struct dyString *dyLink = dyStringNew(256);
+if (!cvDefined)
+    dyStringPrintf(dyLink,"<A HREF='hgEncodeVocab?type=%s' title='Click for details of \"%s\"' TARGET=ucscVocab>%s</A>",
+                   var,title,title);
+else
+    {
+    dyStringPrintf(dyLink,"<A HREF='hgEncodeVocab?%s=",tagsNotVals?"tag":"term");
+    struct slPair *oneVal = valsAndLabels;
+    for(;oneVal!=NULL;oneVal=oneVal->next)
+        {
+        if (oneVal != valsAndLabels)
+            dyStringAppendC(dyLink,',');
+        dyStringAppend(dyLink,mdbPairVal(oneVal));
+        }
+    dyStringPrintf(dyLink,"' title='Click for details of each \"%s\"' TARGET=ucscVocab>%s</A>",title,title);
+    }
+return dyStringCannibalize(&dyLink);
+}
+
+static int filterBoxesForFilesList(char *db,struct mdbObj *mdbObjs,sortOrder_t *sortOrder)
+{  // Will create filterBoxes for each sortOrder field.  Returns count of filterBoxes made
+int count = 0;
+if (sortOrder != NULL)
+    {
+    struct dyString *dyFilters = dyStringNew(256);
+    int sIx=0;
+    for(sIx = 0;sIx<sortOrder->count;sIx++)
+        {
+        char *var = sortOrder->column[sIx];
+        enum mdbCvSearchable searchBy = mdbCvSearchMethod(var);
+        //if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange) // dates and numbers probably not good for filtering. FIXME: Should cvsNotSearchable be filterable??
+        if (searchBy != cvsSearchBySingleSelect && searchBy != cvsSearchByMultiSelect)
+            continue; // Only single selects and multi-select make good candidates for filtering
+
+        struct sqlConnection *conn = hAllocConn(db);
+        struct slPair *valsAndLabels = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, TRUE, TRUE); // tags, yes tables AND files
+        hFreeConn(&conn);
+        // Need to verify that each val exists in an object for these files
+        struct slPair *relevantVals = NULL;
+        while(valsAndLabels != NULL)
+            {
+            struct slPair *oneVal = slPopHead(&valsAndLabels);
+            if(mdbObjsContainAltleastOneMatchingVar(mdbObjs,var,mdbPairVal(oneVal)))
+                {
+                eraseNonAlphaNum(mdbPairVal(oneVal));   // Have to squeeze out uglies from val to ensure filter by class works
+                slAddHead(&relevantVals,oneVal);
+                }
+            else
+                slPairFreeValsAndList(&oneVal);
+            }
+        if (slCount(relevantVals) > 1)
+            {
+            slReverse(&relevantVals);
+            char extraClasses[256];
+            safef(extraClasses,sizeof extraClasses,"filterTable %s",var);
+            char *dropDownHtml = cgiMakeMultiSelectDropList(var,relevantVals,NULL,"All",extraClasses,"onchange='filterTable();' onclick='filterTableExclude(this);'");
+            // Note filterBox has classes: filterBy & {var}
+            if (dropDownHtml)
+                {
+                dyStringPrintf(dyFilters,"<td align='left'>\n<B>%s</B>:<BR>\n%s</td><td width=10>&nbsp;</td>\n",
+                               labelWithVocabLink(var,sortOrder->title[sIx],relevantVals,TRUE),dropDownHtml);  // TRUE were sending tags, not values
+                freeMem(dropDownHtml);
+                count++;
+                }
+            }
+        if (slCount(relevantVals) > 0)
+            slPairFreeValsAndList(&relevantVals);
+        }
+    if (count)
+        {
+        webIncludeResourceFile("ui.dropdownchecklist.css");
+        jsIncludeFile("ui.dropdownchecklist.js",NULL);
+        #define FILTERBY_HELP_LINK  "<A HREF=\"../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
+        printf("<B>Filter files by:</B> (select multiple %sitems - %s)\n<table><tr valign='bottom'>\n",
+               (count >= 1 ? "categories and ":""),FILTERBY_HELP_LINK);
+        printf("%s\n",dyStringContents(dyFilters));
+        printf("</tr></table>\n");
+        printf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
+        }
+    dyStringFree(&dyFilters);
+    }
+return count;
+}
+#endif///def FILTER_THE_FILES
+
 static void filesDownloadsPreamble(char *db, struct trackDb *tdb)
 {
 // Do not bother getting preamble.html
@@ -395,7 +507,7 @@ printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TAR
 puts("<P>");
 }
 
-static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder)
+static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder,boolean filterable)
 // Prints filesList as a sortable table. Returns count
 {
 // Table class=sortable
@@ -408,7 +520,8 @@ printf("<TR class='sortable' valign='bottom'>\n");
 printf("<TD align='center' valign='center'>&nbsp;");
 int filesCount = slCount(fileList);
 if (filesCount > 5)
-    printf("<i>%d files</i>",filesCount);    //puts("<FONT class='subCBcount'></font>"); // Use this style when filterboxes are up and running
+    printf("<em><span class='filesCount'></span>%d files</em>",filesCount);
+
 //if (sortOrder) // NOTE: This could be done to preserve sort order   FIXME: However hgFileUi would need form OR changes would need to be ajaxed over AND hgsid would be needed.
 //    printf("<INPUT TYPE=HIDDEN NAME='%s' class='sortOrder' VALUE=\"%s\">",sortOrder->htmlId, sortOrder->sortOrder);
 printf("</TD>\n");
@@ -467,8 +580,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
     oneFile->mdb->next = NULL; // mdbs were in list for generating sortOrder, but list no longer needed
     char *field = NULL;
 
-    printf("<TR valign='top'>");   // TODO: BUILD IN THE CLASSES TO ALLOW FILTERBOXES TO WORK!!!
-
+    printf("<TR valign='top'%s>",filterable?" class='filterable'":"");
     // Download button
     printf("<TD nowrap>");
     if (parentTdb)
@@ -476,10 +588,9 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
     else
         field = mdbObjFindValue(oneFile->mdb,"composite");
     assert(field != NULL);
-    printf("<A HREF='http://%s/goldenPath/%s/%s/%s%s/%s' title='Download %s ...' TARGET=ucscDownloads>",
-                server,db,ENCODE_DCC_DOWNLOADS, field, subDir, oneFile->fileName, oneFile->fileName);
-    printf("<input type='button' value='Download'>");
-    printf("</a>");
+
+    printf("<input type='button' value='Download' onclick=\"window.location='http://%s/goldenPath/%s/%s/%s%s/%s';\" title='Download %s ...'>",
+          server,db,ENCODE_DCC_DOWNLOADS, field, subDir, oneFile->fileName, oneFile->fileName);
 
 #define SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
 #ifdef SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
@@ -504,10 +615,23 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
             else
                 {
                 field = oneFile->sortFields[sortOrder->order[ix] - 1];
+                char class[128];
+                class[0] = '\0';
+                if (filterable)
+                    {
+                    enum mdbCvSearchable searchBy = mdbCvSearchMethod(sortOrder->column[ix]);
+                    if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByMultiSelect)
+                        {
+                        char *cleanClass = cloneString(field?field:"None");     // FIXME: Only none if none is a fliter choice.
+                        eraseNonAlphaNum(cleanClass);
+                        safef(class,sizeof class," class='%s %s'",sortOrder->column[ix],cleanClass);
+                        }
+                    }
+
                 if (sameString("dateUnrestricted",sortOrder->column[ix]) && field && dateIsOld(field,"%F"))
-                    printf("<TD%s nowrap style='color: #BBBBBB;'>%s</td>",align,field);
+                    printf("<TD%s nowrap style='color: #BBBBBB;'%s>%s</td>",align,class,field);
                 else
-                    printf("<TD%s nowrap>%s</td>",align,field?field:" &nbsp;");
+                    printf("<TD%s nowrap%s>%s</td>",align,class,field?field:" &nbsp;");
                 if (!sameString("fileType",sortOrder->column[ix]))
                     mdbObjRemoveVars(oneFile->mdb,sortOrder->column[ix]); // Remove this from mdb now so that it isn't displayed in "extras'
                 }
@@ -545,7 +669,7 @@ printf("<TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",(restrictedColumn > 1 ? (restri
 
 // Total
 if (filesCount > 5)
-    printf("<i>%d files</i>\n",filesCount);
+    printf("<em><span class='filesCount'></span>%d files</em>",filesCount);
 
 // Restriction policy link in later column?
 if (restrictedColumn > 1)
@@ -585,7 +709,7 @@ if (tdb->table != NULL)
 
 boolean debug = cartUsualBoolean(cart,"debug",FALSE);
 
-struct sqlConnection *conn = sqlConnect(db);
+struct sqlConnection *conn = hAllocConn(db);
 char *mdbTable = mdbTableName(conn,TRUE); // Look for sandBox name first
 if(mdbTable == NULL)
     errAbort("TABLE NOT FOUND: '%s.%s'.\n",db,MDB_DEFAULT_NAME);
@@ -600,7 +724,8 @@ struct mdbObj *mdbList = mdbObjsQueryByVars(conn,mdbTable,mdbVars);
 safef(buf,sizeof(buf),"composite=%s fileIndex= fileName!=",tdb->track);
 mdbVars = mdbByVarsLineParse(buf);
 mdbList = slCat(mdbList, mdbObjsQueryByVars(conn,mdbTable,mdbVars));
-sqlDisconnect(&conn);
+mdbObjRemoveHiddenVars(mdbList);
+hFreeConn(&conn);
 
 if (slCount(mdbList) == 0)
     {
@@ -673,8 +798,15 @@ if (debug)
     fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "listAll");
     }
 
+jsIncludeFile("hui.js",NULL);
+jsIncludeFile("ajax.js",NULL);
+
+// standard preamble
+filesDownloadsPreamble(db,tdb);
+
 // Now update all files with their sortable fields and sort the list
 sortOrder_t *sortOrder = fileSortOrderGet(cart,tdb,mdbFiles);
+boolean filterable = FALSE;
 if (sortOrder != NULL)
     {
     char *vars = removeCommonMdbVarsNotInSortOrder(mdbFiles,sortOrder);
@@ -687,22 +819,15 @@ if (sortOrder != NULL)
 
     // Fill in and sort fileList
     fileDbSortList(&fileList,sortOrder);
+    // FilterBoxes ?
+#ifdef FILTER_THE_FILES
+    filterable = (filterBoxesForFilesList(db,mdbFiles,sortOrder) > 0);
+#endif///def FILTER_THE_FILES
+
     }
 
-// FilterBoxes ?
-    // Dimensions
-    // cart contents
-    //boolean filterAble = dimensionsExist(tdb);
-    //membersForAll_t* membersForAll = membersForAllSubGroupsGet(tdb,cart);
-
-jsIncludeFile("hui.js",NULL);
-jsIncludeFile("ajax.js",NULL);
-
-// standard preamble
-filesDownloadsPreamble(db,tdb);
-
 // Print table
-filesPrintTable(db,tdb,fileList,sortOrder);
+filesPrintTable(db,tdb,fileList,sortOrder,filterable);
 
 //fileDbFree(&fileList); // Why bother on this very long running cgi?
 }
@@ -724,8 +849,9 @@ if (slCount(mdbList) == 0)
 
 // Now sort mdbObjs so that composites will stay together and lookup of files will be most efficient
 mdbObjsSortOnVars(&mdbList, "composite");
+mdbObjRemoveHiddenVars(mdbList);
 
-#define FOUND_FILE_LIMIT 1000
+#define FOUND_FILE_LIMIT 2000
 int fileCount = 0;
 // Verify file existance and make fileList of those found
 struct fileDb *fileList = NULL, *oneFile = NULL; // Will contain found files
@@ -753,7 +879,6 @@ while(mdbList && fileCount < FOUND_FILE_LIMIT)
                     slAddHead(&mdbFiles,mdbFile);
                     fileCount++;
                     found = TRUE;
-                    continue;
                     }
                 }
                 else
@@ -821,7 +946,7 @@ if (mdbList != NULL)
     mdbObjsFree(&mdbList);
     }
 
-fileCount = filesPrintTable(db,NULL,fileList,sortOrder);
+fileCount = filesPrintTable(db,NULL,fileList,sortOrder,FALSE); // FALSE=Don't offer more filtering on the file search page
 printf("</DIV><BR>\n");
 
 //fileDbFree(&fileList); // Why bother on this very long running cgi?

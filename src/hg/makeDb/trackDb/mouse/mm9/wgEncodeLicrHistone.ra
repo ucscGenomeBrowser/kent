@@ -87,6 +87,16 @@ noInherit on
 		color 153,38,0
 		# subId=3397 dateSubmitted=2011-01-19
 
+        	track wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdPk
+        	release alpha
+        	parent wgEncodeLicrHistoneViewPeaks off
+        	shortLabel Cerebellum H3K4me1 Pk
+        	longLabel ENCODE LICR Histone Peaks (H3K4me1 in Cerebellum cells)
+        	subGroups view=Peaks age=adult8wks factor=H3K4me1 cellType=Cbellum control=std sex=M strain=C57BL6
+        	type broadPeak
+        	color 153,38,0
+        	# subId=3812 dateSubmitted=2011-03-08
+
 	#######	Signal Tracks###########
 	track wgEncodeLicrHistoneViewSignal
 	release alpha
@@ -149,4 +159,14 @@ noInherit on
 		type bigWig 0.110000 44.410000
 		color 153,38,0
 		# subId=3397 dateSubmitted=2011-01-19
+
+        	track wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdSig
+        	release alpha
+        	parent wgEncodeLicrHistoneViewSignal off
+        	shortLabel Cerebellum H3K4me1 Sig
+        	longLabel ENCODE LICR Histone Signal (H3K4me1 in Cerebellum cells)
+        	subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=Cbellum control=std sex=M strain=C57BL6
+        	type bigWig 0.120000 18.879999
+        	color 153,38,0
+        	# subId=3812 dateSubmitted=2011-03-08
 

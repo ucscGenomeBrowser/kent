@@ -161,6 +161,10 @@ struct mdbByVar *mdbByVarsLineParse(char *line);
 struct mdbObj *mdbObjCreate(char *obj,char *var, char *val);
 /* Creates a singular mdbObj query object based on obj and all other optional params. */
 
+struct mdbObj *mdbObjNew(char *obj,struct mdbVar *mdbVars);
+// Returns a new mdbObj with whatever was passed in.
+// An mdbObj requires and obj, so if one is not supplied it will be "[unknown]"
+
 struct mdbByVar *mdbByVarCreate(char *var, char *val);
 /* Creates a singular var=val pair struct for metadata queries. */
 
@@ -254,8 +258,9 @@ char *mdbObjFindValue(struct mdbObj *mdbObj, char *var);
 boolean mdbObjContains(struct mdbObj *mdbObj, char *var, char *val);
 // Returns TRUE if object contains var, val or both
 
-boolean mdbObjsContainAtleastOne(struct mdbObj *mdbObjs, char *var);
+boolean mdbObjsContainAltleastOneMatchingVar(struct mdbObj *mdbObjs, char *var, char *val);
 // Returns TRUE if any object in set contains var
+#define mdbObjsContainAtleastOne(mdbObjs, var) mdbObjsContainAltleastOneMatchingVar((mdbObjs),(var),NULL)
 
 struct mdbObj *mdbObjsCommonVars(struct mdbObj *mdbObjs);
 // Returns a new mdbObj with all vars that are contained in every obj passed in.
@@ -277,6 +282,9 @@ void mdbObjsSortOnVarPairs(struct mdbObj **mdbObjs,struct slPair *varValPairs);
 
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars);
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
+
+void mdbObjRemoveHiddenVars(struct mdbObj *mdbObjs);
+// Prunes list of vars for mdb objs that have been declared as hidden in cv.ra typeOfTerms
 
 char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var);
 // Removes var from set of mdbObjs but only if all that hav it have a commmon val
@@ -328,11 +336,30 @@ int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full);
 // Validates vars and vals against cv.ra.  Returns count of errors found.
 // Full considers vars not defined in cv as invalids
 
-struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,int warn);
+struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,
+                                          int warn,boolean createExpIfNecessary);
 // Organizes objects into experiments and validates experiment IDs.  Will add/update the ids in the structures.
 // If warn=1, then prints to stdout all the experiments/obs with missing or wrong expIds;
 //    warn=2, then print line for each obj with expId or warning.
+// createExpIfNecessary means go ahead and add to the hgFixed.encodeExp table to get an ID
 // Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
+
+// -- Requested by Kate: --
+#define MDB_FIELD_LAB        "lab"
+#define MDB_FIELD_DATA_TYPE  "dataType"
+#define MDB_FIELD_CELL_TYPE  "cell"
+#define ENCODE_MDB_PROJECT   "wgEncode"
+
+boolean mdbObjIsEncode(struct mdbObj *mdbObj);
+// Returns TRUE if MDB object is an ENCODE object (project=wgEncode)
+
+boolean mdbObjInComposite(struct mdbObj *mdb, char *composite);
+// Returns TRUE if metaDb object is in specified composite.
+// If composite is NULL, always return true // FIXME: KATE Why return true if composite not defined???
+
+//struct encodeExp *encodeExps(char *composite,char *expTable);
+//struct mdbObjs *mdbObjsForDefinedExpId(int expId);
+// Returns the mdb objects belonging to a single encode experiment defined in the encodExp table
 
 
 // --------------- Free at last ----------------
@@ -369,19 +396,22 @@ struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, bo
 // Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
 
-struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files);
+struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags, boolean tables, boolean files);
 // Search the metaDb table for vals by var and returns val (as pair->name) and controlled vocabulary (cv) label
 // (if it exists) (as pair->val).  Can impose (non-zero) limit on returned string size of name.
+// if requested, return cv tag instead of mdb val.  If requested, limit to table objs or file objs
 // Return is case insensitive sorted on label (cv label or else val).
 #define mdbPairVal(pair) (pair)->name
 #define mdbPairLabel(pair) (pair)->val
 
-struct hash *mdbCvTermHash(char *term);
+const struct hash *mdbCvTermHash(char *term);
 // returns a hash of hashes of a term which should be defined in cv.ra
+// NOTE: in static memory: DO NOT FREE
 
-struct hash *mdbCvTermTypeHash();
+const struct hash *mdbCvTermTypeHash();
 // returns a hash of hashes of mdb and controlled vocabulary (cv) term types
 // Those terms should contain label,descrition,searchable,cvDefined,hidden
+// NOTE: in static memory: DO NOT FREE
 
 struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvLinks);
 // returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.

@@ -4274,330 +4274,171 @@ select id,name,status from projects where name like "Broad%" and status = "displ
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3073 reviewing
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3074 reviewing
 
-2011-01-21 Broad Chromatin Modelling by HMM for hg18 
-====================================================
-Submitted to 3446
-Changed Encode.pm to accept hg18
-Changed some DDF and failed on dataType=ChipSeq requiring an antibody.  Changed to dataTypeCombined
-doEncodeValidate worked so sent it through the pipeline.  Loaded!
-# verified tables exist in hg18 and downloadable files are in hg18  Tables are "bed 9"
-show tables like "wgEncodeBroadHmm%";
-+------------------------------------+
-| wgEncodeBroadHmmGm12878HMM         | 
-| wgEncodeBroadHmmH1hescHMM          | 
-| wgEncodeBroadHmmHepg2HMM           | 
-| wgEncodeBroadHmmHmecHMM            | 
-| wgEncodeBroadHmmHsmmHMM            | 
-| wgEncodeBroadHmmHuvecHMM           | 
-| wgEncodeBroadHmmK562HMM            | 
-| wgEncodeBroadHmmNhekHMM            | 
-| wgEncodeBroadHmmNhlfHMM            | 
-+------------------------------------+
-select min(score),max(score) from wgEncodeBroadHmmH1hescHMM;
-+------------+------------+
-| min(score) | max(score) |
-+------------+------------+
-|          0 |          0 | 
-+------------+------------+
-cd {downloadsHg18}/wgEncodeBroadHmm
-ll wgEncode*
--rw-rw-r--   1 encodeteam protein 5305015 Jan 21 09:39 wgEncodeBroadHmmGm12878HMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5717187 Jan 21 09:39 wgEncodeBroadHmmH1hescHMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5097678 Jan 21 09:39 wgEncodeBroadHmmHepg2HMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5653968 Jan 21 09:39 wgEncodeBroadHmmHmecHMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5956576 Jan 21 09:39 wgEncodeBroadHmmHsmmHMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5144281 Jan 21 09:39 wgEncodeBroadHmmHuvecHMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5785441 Jan 21 09:38 wgEncodeBroadHmmK562HMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5854057 Jan 21 09:38 wgEncodeBroadHmmNhekHMM.bed.gz
--rw-rw-r--   1 encodeteam protein 5970587 Jan 21 09:38 wgEncodeBroadHmmNhlfHMM.bed.gz
+2011-02-16 Testing experimentify
+================================
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeBroadHistone -encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+There are no experiment defining variables defined for this composite.  Add them to obj wgEncodeBroadHistone => var:expVars.
+0 of 930 objs can have their experiment IDs updated now.
+objects:930  vars:19224
 
-edit trackDb.ra template and place it in trackDb/human/hg18/wgEncodeBroadHmm
-cd trackDb/
-make DBS=hg18
-# see them there
+# Currently dependent upon a "composite" type mdb obj wgEncodeBroadHistone => expVar:"grant,lab,dataType,cell,antibody"
+mdbPrint hg19 -vars="objType=composite"        
+Using table named 'hg19.metaDb_tdreszer'.
+metaObject wgEncodeCshlShortRnaSeq
+objType composite
+composite wgEncodeCshlShortRnaSeq
+geoSeriesAccession GSE24565
 
-# now metadata
-cd {pip}/3446
-mdbUpdate hg18 out/mdb.txt
+mdbUpdate hg19 -obj=wgEncodeBroadHistone -setVars="objType=composite composite=wgEncodeBroadHistone expVars=grant,lab,dataType,cell,antibody" -test        
+mdbUpdate hg19 -obj=wgEncodeBroadHistone -setVars="objType=composite composite=wgEncodeBroadHistone expVars=grant,lab,dataType,cell,antibody"              
+Using table named 'hg19.metaDb_tdreszer'.
+Affected 3 row(s) in hg19.metaDb_tdreszer
 
-# Check in changes:
-cd .. {hg18/metaDb/alpha}
-mdbPrint hg18 -vars="composite=wgEncodeBroadHmm" > wgEncodeBroadHmm.ra
-Using table named 'hg18.metaDb_tdreszer'.
-objects:9  vars:135
-gadd wgEncodeBroadHmm.ra
-cd ../../ (hg18)
-gadd wgEncodeBroadHmm.ra
-gadd trackDb.wgEncode.ra
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeBroadHistone -encodeExp
+Experiment [EDV='grant'] there is no experiment defined in hgFixed.encodeExp table.
 
-git: ci, up, push
-cd ../../ (trackDb)
-make DBS=hg18; make alpha DBS=hg18
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeBroadHistone -encodeExp
+Composite 'wgEncodeBroadHistone' has expVars:'grant lab dataType cell antibody' with 5 EDVs.
+Experiment 'grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 ' has 6 objects based upon 5 EDVs.
+Experiment 0 [EDV='grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='grant=Bernstein lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+
+~/bin/x86_64/mdbUpdate hg19 -composite=wgEncodeBroadHistone -encodeExp -test
+Object 'wgEncodeBroadHistone' has no composite defined.
+No Experiment ID updates were discovered in 931 object(s).
+
+mdbPrint hg19 -composite=wgEncodeBroadHistone -vars="objType=composite"
+Using table named 'hg19.metaDb_tdreszer'.
+metaObject wgEncodeBroadHistone
+objType composite
+composite wgEncodeBroadHistone
+expVars grant,lab,dataType,cell,antibody
+
+~/bin/x86_64/mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone" -encodeExp -test
+Using table named 'hg19.metaDb_tdreszer'.
+Found 930 of 930 object(s) would have their experiment ID updated.
+Command would affected 1860 row(s) in hg19.metaDb_tdreszer
+
+# Agreed with Kate to drop grant from expVars
+mdbUpdate hg19 -obj=wgEncodeBroadHistone -setVars="objType=composite composite=wgEncodeBroadHistone expVars=lab,dataType,cell,antibody"
+Affected 3 row(s) in hg19.metaDb_tdreszer
+
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeBroadHistone -encodeExp > tmp.txt
+Composite 'wgEncodeBroadHistone' has expVars:'lab dataType cell antibody' with 4 EDVs.
+Experiment 'lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 ' has 6 objects based upon 4 EDVs.
+Experiment 0 [EDV='lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+Experiment 0 [EDV='lab=Broad dataType=ChipSeq cell=Osteobl antibody=H3K9me3 '] needs 'expId' to be set into the mdb.
+
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeBroadHistone -encodeExp > tmp.txt
+Found 930 of 930 object(s) would have their experiment ID updated.
+Command would affected 1860 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -obj=wgEncodeBroadHistone -setVars="objType=composite composite=wgEncodeBroadHistone expVars=lab,dataType,cell,antibody"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeBroadHistone -encodeExp | tail
+Composite 'wgEncodeBroadHistone' has 151 experiments currently defined. Largest:8  average:6.158940
+
+mdbUpdate hg18 -obj=wgEncodeBroadChipSeq -setVars="objType=composite composite=wgEncodeBroadChipSeq expVars=lab,dataType,cell,antibody"              
+~/bin/x86_64/mdbPrint hg18 -composite=wgEncodeBroadChipSeq -encodeExp | tail
+Composite 'wgEncodeBroadChipSeq' has 93 experiments currently defined. Largest:6  average:5.903226
+
+## Test Haib which has a mess of experiments
+mdbUpdate hg19 -obj=wgEncodeHaibTfbs -setVars="objType=composite composite=wgEncodeHaibTfbs expVars=lab,dataType,cell,treatment,antibody,protocol" -test        
+mdbUpdate hg19 -obj=wgEncodeHaibTfbs -setVars="objType=composite composite=wgEncodeHaibTfbs expVars=lab,dataType,cell,treatment,antibody,protocol"              
+Using table named 'hg19.metaDb_tdreszer'.
+Affected 3 row(s) in hg19.metaDb_tdreszer
+
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeHaibTfbs -encodeExp | tail
+Composite 'wgEncodeHaibTfbs' has 252 experiments currently defined. Largest:14  average:6.257937
+
+mdbUpdate hg19 -obj=wgEncodeSydhTfbs -setVars="objType=composite composite=wgEncodeSydhTfbs expVars=lab,dataType,cell,treatment,antibody"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeSydhTfbs -encodeExp | tail
+Composite 'wgEncodeSydhTfbs' has 375 experiments currently defined. Largest:19  average:4.272000
 
 
-git: up, add, ci, up, push
-cd ../../../../ (trackDb)
-make DBS=hg18; make alpha DBS=hg18
+mdbUpdate hg19 -obj=wgEncodeOpenChromChip -setVars="objType=composite composite=wgEncodeOpenChromChip expVars=lab,dataType,cell,treatment,antibody"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromChip -encodeExp | tail
+Composite 'wgEncodeOpenChromChip' has 46 experiments currently defined. Largest:9  average:5.891304
 
-cd {downloadsHg18}/wgEncodeBroadHmm
-encodeDownloadsPage.pl -db=hg18 index.html
-# 9 files.  No metadata  # 9 found in hgFileUi
+mdbUpdate hg19 -obj=wgEncodeOpenChromDnase -setVars="objType=composite composite=wgEncodeOpenChromDnase expVars=lab,dataType,cell,treatment"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromDnase -encodeExp | tail
+Composite 'wgEncodeOpenChromDnase' has 47 experiments currently defined. Largest:13  average:6.936170
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromDnase -encodeExp
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromDnase -var=dataVersion -val="ENCODE Jan 2011%" -encodeExp
 
-#neglected to add mdb ra to make file
-cd .. {hg18/metaDb/alpha}
-e makefile
-git: up, add, ci, up, push
-cd ../../../../ (trackDb)
-make DBS=hg18; make alpha DBS=hg18
+mdbUpdate hg19 -obj=wgEncodeOpenChromFaire -setVars="objType=composite composite=wgEncodeOpenChromFaire expVars=lab,dataType,cell,treatment"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromFaire -encodeExp | tail
+Composite 'wgEncodeOpenChromFaire' has 26 experiments currently defined. Largest:9  average:6.884615
 
-cd {downloadsHg18}/wgEncodeBroadHmm
-encodeDownloadsPage.pl -db=hg18 index.html
-# 9 files.  Full metadata  # 9 found in hgFileUi
+mdbUpdate hg19 -obj=wgEncodeOpenChromSynth -setVars="objType=composite composite=wgEncodeOpenChromSynth expVars=lab,dataType,cell"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromSynth -encodeExp | tail
+Composite 'wgEncodeOpenChromSynth' has 7 experiments currently defined. Largest:1  average:1.000000
 
-/cluster/data/encode/pipeline/bin/encodeStatus.pl 3446 displayed
 
-2011-01-24 Corrections to names
-===============================
-12345678901234567
-1 Active Promoter
-2 Weak Promoter
-3 Poised Promoter
-4 Strong Enhancer
-5 Strong Enhancer
-6 Weak Enhancer
-7 Weak Enhancer
-8 Insulator
-9 Txn Transition
-10 Txn Elongation
-11 Weak Txn
-12 Repressed
-13 Heterochrom/lo
-14 Repetitive/CNV
-15 Repetitive/CNV
-
-1) Ideally lab resubmits proper beds
-2) hardest: possibly edit bed files, then reload
-3) Easiest: update tables
-show tables like "wgEncodeBroadHmm%";
-| wgEncodeBroadHmmGm12878HMM         | 
-| wgEncodeBroadHmmH1hescHMM          | 
-| wgEncodeBroadHmmHepg2HMM           | 
-| wgEncodeBroadHmmHmecHMM            | 
-| wgEncodeBroadHmmHsmmHMM            | 
-| wgEncodeBroadHmmHuvecHMM           | 
-| wgEncodeBroadHmmK562HMM            | 
-| wgEncodeBroadHmmNhekHMM            | 
-| wgEncodeBroadHmmNhlfHMM            | 
-select distinct name from wgEncodeBroadHmmGm12878HMM order by name;
-select distinct name from wgEncodeBroadHmmH1hescHMM order by name;
-select distinct name from wgEncodeBroadHmmHepg2HMM order by name;
-select distinct name from wgEncodeBroadHmmHmecHMM order by name;
-select distinct name from wgEncodeBroadHmmHsmmHMM order by name;
-select distinct name from wgEncodeBroadHmmHuvecHMM order by name;
-select distinct name from wgEncodeBroadHmmK562HMM order by name;
-select distinct name from wgEncodeBroadHmmNhekHMM order by name;
-select distinct name from wgEncodeBroadHmmNhlfHMM order by name;
-# All are 1-15 as expected
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | wl
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | wl
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | wl
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | wl
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | wl
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | wl
-zcat wgEncodeBroadHmmK562HMM.bed.gz | wl
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | wl
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | wl
-
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | wl 570580
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | wl 618287
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | wl 545647
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | wl 608568
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | wl 638307
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | wl 549178
-zcat wgEncodeBroadHmmK562HMM.bed.gz | wl 621678
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | wl 627623
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | wl 640298
-
-# Could zcat wgEncodeBroadHmmNhlfHMM.bed.gz | h | grep -P "\t10\t0\t\." > wgEncodeBroadHmmNhlfHMM.bed.1 
-# Could
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | h | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./' 
-
+2011-03-15 Liftover hg18 Broad HMM?
+===================================
+### Change color in bed files:
 rm   wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmGm12878HMM.bed
-zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmGm12878HMM.bed
+wl   wgEncodeBroadHmmGm12878HMM.bed         570580
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | wl 570580
 
 rm   wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmH1hescHMM.bed
-zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmH1hescHMM.bed
+wl   wgEncodeBroadHmmH1hescHMM.bed         618287
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | wl 618287
 
 rm   wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHepg2HMM.bed
-zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmHepg2HMM.bed
+wl   wgEncodeBroadHmmHepg2HMM.bed         545647
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | wl 545647
 
 rm   wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHmecHMM.bed
-zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmHmecHMM.bed
+wl   wgEncodeBroadHmmHmecHMM.bed         608568
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | wl 608568
 
 rm   wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHsmmHMM.bed
-zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmHsmmHMM.bed
+wl   wgEncodeBroadHmmHsmmHMM.bed         638307
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | wl 638307
 
 rm   wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHuvecHMM.bed
-zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmHuvecHMM.bed
+wl   wgEncodeBroadHmmHuvecHMM.bed         549178
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | wl 549178
 
 rm   wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmK562HMM.bed
-zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmK562HMM.bed
+wl   wgEncodeBroadHmmK562HMM.bed         621678
+zcat wgEncodeBroadHmmK562HMM.bed.gz | wl 621678
 
 rm   wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmNhekHMM.bed
-zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmNhekHMM.bed
+wl   wgEncodeBroadHmmNhekHMM.bed         627623
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | wl 627623
 
-rm wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmNhlfHMM.bed
-zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmNhlfHMM.bed
-
-
-wl *.bed
-   570580 wgEncodeBroadHmmGm12878HMM.bed
-   618287 wgEncodeBroadHmmH1hescHMM.bed
-   545647 wgEncodeBroadHmmHepg2HMM.bed
-   608568 wgEncodeBroadHmmHmecHMM.bed
-   638307 wgEncodeBroadHmmHsmmHMM.bed
-   549178 wgEncodeBroadHmmHuvecHMM.bed
-   621678 wgEncodeBroadHmmK562HMM.bed
-   627623 wgEncodeBroadHmmNhekHMM.bed
-   640298 wgEncodeBroadHmmNhlfHMM.bed
-All okay
-
-mkdir obsolete
-mv wgEncodeBroadHmmGm12878HMM.bed.gz obsolete
-mv wgEncodeBroadHmmH1hescHMM.bed.gz obsolete
-mv wgEncodeBroadHmmHepg2HMM.bed.gz obsolete
-mv wgEncodeBroadHmmHmecHMM.bed.gz obsolete
-mv wgEncodeBroadHmmHsmmHMM.bed.gz obsolete
-mv wgEncodeBroadHmmHuvecHMM.bed.gz obsolete
-mv wgEncodeBroadHmmK562HMM.bed.gz obsolete
-mv wgEncodeBroadHmmNhekHMM.bed.gz obsolete
-mv wgEncodeBroadHmmNhlfHMM.bed.gz obsolete
+rm   wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep    255,255,255 | sed -e 's/\t255,255,255/\t245,245,245/' >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -v 255,255,255                                           >> wgEncodeBroadHmmNhlfHMM.bed
+wl   wgEncodeBroadHmmNhlfHMM.bed         640298
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | wl 640298
 
 sort < wgEncodeBroadHmmGm12878HMM.bed > s_wgEncodeBroadHmmGm12878HMM.bed
 sort < wgEncodeBroadHmmH1hescHMM.bed  > s_wgEncodeBroadHmmH1hescHMM.bed
@@ -4619,86 +4460,16 @@ mv s_wgEncodeBroadHmmK562HMM.bed    wgEncodeBroadHmmK562HMM.bed
 mv s_wgEncodeBroadHmmNhekHMM.bed    wgEncodeBroadHmmNhekHMM.bed
 mv s_wgEncodeBroadHmmNhlfHMM.bed    wgEncodeBroadHmmNhlfHMM.bed
 
-wl *.bed
-   570580 wgEncodeBroadHmmGm12878HMM.bed
-   618287 wgEncodeBroadHmmH1hescHMM.bed
-   545647 wgEncodeBroadHmmHepg2HMM.bed
-   608568 wgEncodeBroadHmmHmecHMM.bed
-   638307 wgEncodeBroadHmmHsmmHMM.bed
-   549178 wgEncodeBroadHmmHuvecHMM.bed
-   621678 wgEncodeBroadHmmK562HMM.bed
-   627623 wgEncodeBroadHmmNhekHMM.bed
-   640298 wgEncodeBroadHmmNhlfHMM.bed
-All okay
-
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmGm12878HMM_tmp wgEncodeBroadHmmGm12878HMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmH1hescHMM_tmp  wgEncodeBroadHmmH1hescHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmHepg2HMM_tmp   wgEncodeBroadHmmHepg2HMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmHmecHMM_tmp    wgEncodeBroadHmmHmecHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmHsmmHMM_tmp    wgEncodeBroadHmmHsmmHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmHuvecHMM_tmp   wgEncodeBroadHmmHuvecHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmK562HMM_tmp    wgEncodeBroadHmmK562HMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmNhekHMM_tmp    wgEncodeBroadHmmNhekHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
-/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmNhlfHMM_tmp    wgEncodeBroadHmmNhlfHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1
-
-select count(*) from wgEncodeBroadHmmGm12878HMM_tmp;|   570580 |
-select count(*) from wgEncodeBroadHmmH1hescHMM_tmp; |   618287 |
-select count(*) from wgEncodeBroadHmmHepg2HMM_tmp;  |   545647 |
-select count(*) from wgEncodeBroadHmmHmecHMM_tmp;   |   608568 |
-select count(*) from wgEncodeBroadHmmHsmmHMM_tmp;   |   638307 |
-select count(*) from wgEncodeBroadHmmHuvecHMM_tmp;  |   549178 |
-select count(*) from wgEncodeBroadHmmK562HMM_tmp;   |   621678 |
-select count(*) from wgEncodeBroadHmmNhekHMM_tmp;   |   627623 |
-select count(*) from wgEncodeBroadHmmNhlfHMM_tmp;   |   640298 |
-
-select * from wgEncodeBroadHmmGm12878HMM_tmp limit 1;| 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmH1hescHMM_tmp limit 1; | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmHepg2HMM_tmp limit 1;  | 585 | chr1  |          0 |      400 | 15 Repetitive/CNV |     0 | .      |          0 |      400 | 16777215 |
-select * from wgEncodeBroadHmmHmecHMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmHsmmHMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmHuvecHMM_tmp limit 1;  | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmK562HMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmNhekHMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-select * from wgEncodeBroadHmmNhlfHMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
-
-drop table wgEncodeBroadHmmGm12878HMM;
-drop table wgEncodeBroadHmmH1hescHMM;
-drop table wgEncodeBroadHmmHepg2HMM;
-drop table wgEncodeBroadHmmHmecHMM;
-drop table wgEncodeBroadHmmHsmmHMM;
-drop table wgEncodeBroadHmmHuvecHMM;
-drop table wgEncodeBroadHmmK562HMM;
-drop table wgEncodeBroadHmmNhekHMM;
-drop table wgEncodeBroadHmmNhlfHMM;
-
-rename table wgEncodeBroadHmmGm12878HMM_tmp to wgEncodeBroadHmmGm12878HMM;
-rename table wgEncodeBroadHmmH1hescHMM_tmp  to wgEncodeBroadHmmH1hescHMM;
-rename table wgEncodeBroadHmmHepg2HMM_tmp   to wgEncodeBroadHmmHepg2HMM;
-rename table wgEncodeBroadHmmHmecHMM_tmp    to wgEncodeBroadHmmHmecHMM;
-rename table wgEncodeBroadHmmHsmmHMM_tmp    to wgEncodeBroadHmmHsmmHMM;
-rename table wgEncodeBroadHmmHuvecHMM_tmp   to wgEncodeBroadHmmHuvecHMM;
-rename table wgEncodeBroadHmmK562HMM_tmp    to wgEncodeBroadHmmK562HMM;
-rename table wgEncodeBroadHmmNhekHMM_tmp    to wgEncodeBroadHmmNhekHMM;
-rename table wgEncodeBroadHmmNhlfHMM_tmp    to wgEncodeBroadHmmNhlfHMM;
-show tables like "wgEncodeBroadHmm%";
-| wgEncodeBroadHmmGm12878HMM         | 
-| wgEncodeBroadHmmH1hescHMM          | 
-| wgEncodeBroadHmmHepg2HMM           | 
-| wgEncodeBroadHmmHmecHMM            | 
-| wgEncodeBroadHmmHsmmHMM            | 
-| wgEncodeBroadHmmHuvecHMM           | 
-| wgEncodeBroadHmmK562HMM            | 
-| wgEncodeBroadHmmNhekHMM            | 
-| wgEncodeBroadHmmNhlfHMM            | 
-select count(*) from wgEncodeBroadHmmGm12878HMM;|   570580 |
-select count(*) from wgEncodeBroadHmmH1hescHMM; |   618287 |
-select count(*) from wgEncodeBroadHmmHepg2HMM;  |   545647 |
-select count(*) from wgEncodeBroadHmmHmecHMM;   |   608568 |
-select count(*) from wgEncodeBroadHmmHsmmHMM;   |   638307 |
-select count(*) from wgEncodeBroadHmmHuvecHMM;  |   549178 |
-select count(*) from wgEncodeBroadHmmK562HMM;   |   621678 |
-select count(*) from wgEncodeBroadHmmNhekHMM;   |   627623 |
-select count(*) from wgEncodeBroadHmmNhlfHMM;   |   640298 |
+mkdir obsolete/white
+mv wgEncodeBroadHmmGm12878HMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmH1hescHMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmHepg2HMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmHmecHMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmHsmmHMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmHuvecHMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmK562HMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmNhekHMM.bed.gz obsolete/white
+mv wgEncodeBroadHmmNhlfHMM.bed.gz obsolete/white
 
 gzip wgEncodeBroadHmmGm12878HMM.bed
 gzip wgEncodeBroadHmmH1hescHMM.bed
@@ -4710,41 +4481,451 @@ gzip wgEncodeBroadHmmK562HMM.bed
 gzip wgEncodeBroadHmmNhekHMM.bed
 gzip wgEncodeBroadHmmNhlfHMM.bed
 
-# looks good in browser
-# files are okay
-
-2011-01-31 Swap out bigWigs that Brian update to version 4
-==========================================================
-cd /hive/users/braney/bigWigConvert.wgEncodeBroadHistone
-ls -1 *.bigWig | wl  151
-cd {downLoads}/wgEncodeBroadHistone
-ls -1 *.bigWig | wl  151
-mv *.bigWig ../obsolete/wgEncodeBroadHistone
-
-cd /hive/users/braney/bigWigConvert.wgEncodeBroadHistone
-mv wgEncodeBroadHistoneGm12878ControlStdSig.bigWig.new.bigWig      /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878ControlStdSig.bigWig
-mv wgEncodeBroadHistoneGm12878CtcfStdSig.bigWig.new.bigWig         /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878CtcfStdSig.bigWig
-mv wgEncodeBroadHistoneGm12878H2azStdSig.bigWig.new.bigWig         /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H2azStdSig.bigWig
-mv wgEncodeBroadHistoneGm12878H3k27acStdSig.bigWig.new.bigWig      /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H3k27acStdSig.bigWig
-mv wgEncodeBroadHistoneGm12878H3k27me3StdSig.bigWig.new.bigWig     /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H3k27me3StdSig.bigWig
-mv wgEncodeBroadHistoneGm12878H3k36me3StdSig.bigWig.new.bigWig     /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H3k36me3StdSig.bigWig
-...
-cd {downLoads}/wgEncodeBroadHistone
-ls -1 *.bigWig | wl  151
+encodeDownloadsPage.pl -checksum index.html
 cd release1/
-ls -1 *.bigWig | wl  151
-# These are links to obsolete bigWigs
-rm *.bigWig
-ls ../*.bigWig .
-ls -1 *.bigWig | wl  151
+rm *.gz
+ln ../*.gz .
+cp ../index.html .
+cp ../files.txt .
+cp ../md5sum.txt .
 
-# Check that bigWigs work in browser.  This will check that /gbdb/hg19/bbi link is okay too
-AOKAY
+mkdir hg19
+liftOver wgEncodeBroadHmmGm12878HMM.bed.gz -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmGm12878HMM.bed hg19/wgEncodeBroadHmmGm12878HMM.unmpped.bed
+liftOver wgEncodeBroadHmmH1hescHMM.bed.gz  -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmH1hescHMM.bed  hg19/wgEncodeBroadHmmH1hescHMM.unmpped.bed
+liftOver wgEncodeBroadHmmHepg2HMM.bed.gz   -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmHepg2HMM.bed   hg19/wgEncodeBroadHmmHepg2HMM.unmpped.bed
+liftOver wgEncodeBroadHmmHmecHMM.bed.gz    -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmHmecHMM.bed    hg19/wgEncodeBroadHmmHmecHMM.unmpped.bed
+liftOver wgEncodeBroadHmmHsmmHMM.bed.gz    -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmHsmmHMM.bed    hg19/wgEncodeBroadHmmHsmmHMM.unmpped.bed
+liftOver wgEncodeBroadHmmHuvecHMM.bed.gz   -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmHuvecHMM.bed   hg19/wgEncodeBroadHmmHuvecHMM.unmpped.bed
+liftOver wgEncodeBroadHmmK562HMM.bed.gz    -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmK562HMM.bed    hg19/wgEncodeBroadHmmK562HMM.unmpped.bed
+liftOver wgEncodeBroadHmmNhekHMM.bed.gz    -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmNhekHMM.bed    hg19/wgEncodeBroadHmmNhekHMM.unmpped.bed
+liftOver wgEncodeBroadHmmNhlfHMM.bed.gz    -bedPlus=6 -tab /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz hg19/wgEncodeBroadHmmNhlfHMM.bed    hg19/wgEncodeBroadHmmNhlfHMM.unmpped.bed
 
-# check metadata by building index.html
-../
-encodeDownloadsPage.pl -db=hg19 index.html
-1251 files all with metadata.  # 1251 file in hgFileUi too
-encodeDownloadsPage.pl -db=hg19 -checksum index.html &
+cd hg19
+cp {pip}/3446/broadHmm.d?f . # Use hg18 submission as template for hg19 submission
+e *.d?f # change to hg19 and set all the files
+tar -czf hg19BroadHmm.tgz *.bed *.d?f
 
+## Too bad tjhe load doesn't work, since it needs -tab
+Argument "Repetitive/CNV" isn't numeric in numeric gt (>) at /hive/groups/encode/dcc/pipeline/bin/doEncodeValida
+te.pl line 510, <GEN0> line 1.
 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmGm12878 wgEncodeBroadHmmGm12878HMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmH1hesc  wgEncodeBroadHmmH1hescHMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmHepg2   wgEncodeBroadHmmHepg2HMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmHmec    wgEncodeBroadHmmHmecHMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmHsmm    wgEncodeBroadHmmHsmmHMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmHuvec   wgEncodeBroadHmmHuvecHMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmK562    wgEncodeBroadHmmK562HMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmNhek    wgEncodeBroadHmmNhekHMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeBroadHmmNhlf    wgEncodeBroadHmmNhlfHMM.bed -tmpDir=/data/tmp/ -noSort -tab >> tryLoad.txt 2>&1
+# use hgsql to verify tables
+doEncodeValidate.pl -skipValidateFiles x ../3823 > validate_error
+cd out
+e mdb.txt trackDb.ra # edit names
+cp trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeBroadHmm.ra
+mdbUpdate hg19 mdb.txt -test
+0 invalids of 144 variables according to the cv.ra.
+mdbUpdate hg19 mdb.txt
+Read 9 metadata objects from hg19
+Affected 144 row(s) in hg19.metaDb_tdreszer
+cd {metaDb19}
+mdbPrint hg19 -composite=wgEncodeBroadHmm > wgEncodeBroadHmm.ra
+e makefile # add in wgEncodeBroadHmm.ra
+cd ../..
+e trackDb.wgEncode.ra # add in wgEncodeBroadHmm.ra alpha
+cp ../hg18/wgEncodeBroadHmm.html . 
+e wgEncodeBroadHmm.html  
+
+cd {down19}
+mkdir wgEncodeBroadHmm
+cd wgEncodeBroadHmm
+mv /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeBroadHmm/hg19 .
+mv *.bed ../
+mv mv unmapped/ ../liftOverFromHg18Unmapped
+cd ..
+mv wgEncodeBroadHmmGm12878HMM.bed wgEncodeBroadHmmGm12878.bed
+mv wgEncodeBroadHmmH1hescHMM.bed  wgEncodeBroadHmmH1hesc.bed
+mv wgEncodeBroadHmmHepg2HMM.bed   wgEncodeBroadHmmHepg2.bed
+mv wgEncodeBroadHmmHmecHMM.bed    wgEncodeBroadHmmHmec.bed
+mv wgEncodeBroadHmmHsmmHMM.bed    wgEncodeBroadHmmHsmm.bed
+mv wgEncodeBroadHmmHuvecHMM.bed   wgEncodeBroadHmmHuvec.bed
+mv wgEncodeBroadHmmK562HMM.bed    wgEncodeBroadHmmK562.bed
+mv wgEncodeBroadHmmNhekHMM.bed    wgEncodeBroadHmmNhek.bed
+mv wgEncodeBroadHmmNhlfHMM.bed    wgEncodeBroadHmmNhlf.bed
+
+gzip wgEncodeBroadHmmGm12878.bed
+gzip wgEncodeBroadHmmH1hesc.bed
+gzip wgEncodeBroadHmmHepg2.bed
+gzip wgEncodeBroadHmmHmec.bed
+gzip wgEncodeBroadHmmHsmm.bed
+gzip wgEncodeBroadHmmHuvec.bed
+gzip wgEncodeBroadHmmK562.bed
+gzip wgEncodeBroadHmmNhek.bed
+gzip wgEncodeBroadHmmNhlf.bed
+
+# Jason Ernst still intends to do his own liftOver.
+
+2011-03-18 Late changing statuses
+=================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1680 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1683 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1684 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1685 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1686 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1687 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1688 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1689 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1690 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1691 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1692 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1693 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1694 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1695 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1696 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1697 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1698 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1699 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1700 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1701 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1702 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1703 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1704 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1705 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1706 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1707 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1708 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1709 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1710 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1711 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1712 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1713 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1714 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1715 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1716 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1717 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1718 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1719 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1720 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1721 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1722 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1723 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1724 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1725 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1726 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1727 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1728 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1729 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1730 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1731 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1732 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1733 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1734 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1735 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1737 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1738 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1739 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1741 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1742 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1743 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1744 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1745 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1746 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1747 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1748 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1749 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1750 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1751 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1752 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1753 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1754 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1755 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1756 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1757 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1758 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1759 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1760 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1761 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1762 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1763 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1764 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1765 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1766 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1767 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1769 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1770 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1771 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1772 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1773 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1774 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1775 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1776 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1777 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1778 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1779 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1780 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1781 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1782 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1783 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1784 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1785 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1786 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1787 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1788 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1789 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1790 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1791 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1792 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1793 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1794 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1877 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1878 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1879 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1880 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1881 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1882 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1883 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1884 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1885 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1886 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1887 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1888 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1889 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1890 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1891 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1892 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1893 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1894 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1895 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1896 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1897 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1898 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1899 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1900 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1901 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1902 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1903 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1922 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2551 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2560 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2561 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2562 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2563 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2564 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2565 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2566 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2567 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2568 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2569 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2570 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2571 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2572 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2573 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2574 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2575 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2576 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2577 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2578 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2579 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2580 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2581 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2582 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2583 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2584 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2585 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2586 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2587 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2588 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2589 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2590 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2723 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2724 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2725 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2726 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2727 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2728 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2729 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2730 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2731 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2732 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2733 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2734 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2735 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2736 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2737 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2738 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2739 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2740 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2741 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2742 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2743 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2744 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2745 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2746 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2747 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2748 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2749 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2750 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2751 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2752 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2753 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2754 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2755 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2756 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2757 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2758 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2759 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2760 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2761 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2762 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2796 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2800 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2801 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2802 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2803 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2804 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2805 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2806 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2807 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2808 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2809 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2810 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2811 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2812 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2813 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2814 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2815 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2816 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2817 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2818 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2819 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2820 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2821 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2822 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2823 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2824 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2825 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2826 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2827 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2828 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2829 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2830 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2831 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2832 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2833 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2834 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2835 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2836 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2837 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2838 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2839 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2840 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2841 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2842 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2843 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2844 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2845 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2846 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2847 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2848 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2849 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2850 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2851 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2852 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2853 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2854 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2855 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2856 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2857 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2858 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2859 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2860 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2861 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2862 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2863 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2864 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2865 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2866 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2867 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2868 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2869 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2870 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2871 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2872 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2873 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2874 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2875 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2876 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2877 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2878 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2879 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2880 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2881 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2882 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2883 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2884 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2885 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2886 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2887 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2888 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2889 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2890 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2891 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2892 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2893 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2894 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2895 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2896 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2897 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2898 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2899 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2900 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2901 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2902 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2903 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2904 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2905 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2906 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2907 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2908 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2909 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2910 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2911 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2912 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2913 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2914 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2915 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2916 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2917 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2918 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2919 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2920 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2921 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2922 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2923 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2924 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2969 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2970 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2978 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2979 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2980 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2981 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2982 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2983 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2984 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2985 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2986 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2987 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2988 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2989 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2990 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2991 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2992 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3006 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3007 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3008 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3009 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3010 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3011 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3012 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3073 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3074 released

@@ -1,3 +1,8 @@
+metaObject wgEncodeOpenChromChip
+objType composite
+composite wgEncodeOpenChromChip
+expVars lab,dataType,cell,treatment,antibody
+
 metaObject wgEncodeOpenChromChipFibroblCtcfAlnRep1
 objType file
 antibody CTCF
@@ -659,6 +664,25 @@ subId 1229
 tableName wgEncodeOpenChromChipGm12878CmycSig
 view Signal
 
+metaObject wgEncodeOpenChromChipGm12878CmycValidation
+objType file
+antibody c-Myc
+cell GM12878
+composite wgEncodeOpenChromChip
+controlId GM12878/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-03-21
+fileName wgEncodeOpenChromChipGm12878CmycValidation.tgz
+grant Crawford
+lab UT-A(Iyer)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+setType exp
+subId 3832
+view Validation
+
 metaObject wgEncodeOpenChromChipGm12878CtcfAlnRep1
 objType file
 antibody CTCF
@@ -850,6 +874,25 @@ setType exp
 subId 2449
 tableName wgEncodeOpenChromChipGm12878CtcfSig
 view Signal
+
+metaObject wgEncodeOpenChromChipGm12878CtcfValidation
+objType file
+antibody CTCF
+cell GM12878
+composite wgEncodeOpenChromChip
+controlId GM12878/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-03-21
+fileName wgEncodeOpenChromChipGm12878CtcfValidation.tgz
+grant Crawford
+lab UT-A(Iyer)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+setType exp
+subId 3832
+view Validation
 
 metaObject wgEncodeOpenChromChipGm12878InputAln
 objType file
@@ -1065,6 +1108,25 @@ setType exp
 subId 1478
 tableName wgEncodeOpenChromChipGm12878Pol2Sig
 view Signal
+
+metaObject wgEncodeOpenChromChipGm12878Pol2Validation
+objType file
+antibody Pol2
+cell GM12878
+composite wgEncodeOpenChromChip
+controlId GM12878/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-03-21
+fileName wgEncodeOpenChromChipGm12878Pol2Validation.tgz
+grant Crawford
+lab UT-A(Iyer)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+setType exp
+subId 3832
+view Validation
 
 metaObject wgEncodeOpenChromChipGm12891CtcfAlnRep1
 objType file
@@ -3961,6 +4023,25 @@ subId 1543
 tableName wgEncodeOpenChromChipK562CmycSig
 view Signal
 
+metaObject wgEncodeOpenChromChipK562CmycValidation
+objType file
+antibody c-Myc
+cell K562
+composite wgEncodeOpenChromChip
+controlId K562/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-03-21
+fileName wgEncodeOpenChromChipK562CmycValidation.tgz
+grant Crawford
+lab UT-A(Iyer)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+setType exp
+subId 3832
+view Validation
+
 metaObject wgEncodeOpenChromChipK562CtcfAlnRep1
 objType file
 antibody CTCF
@@ -4158,6 +4239,25 @@ setType exp
 subId 1538
 tableName wgEncodeOpenChromChipK562CtcfSig
 view Signal
+
+metaObject wgEncodeOpenChromChipK562CtcfValidation
+objType file
+antibody CTCF
+cell K562
+composite wgEncodeOpenChromChip
+controlId K562/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-03-21
+fileName wgEncodeOpenChromChipK562CtcfValidation.tgz
+grant Crawford
+lab UT-A(Iyer)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+setType exp
+subId 3832
+view Validation
 
 metaObject wgEncodeOpenChromChipK562InputAln
 objType file
@@ -4374,6 +4474,25 @@ setType exp
 subId 1541
 tableName wgEncodeOpenChromChipK562Pol2Sig
 view Signal
+
+metaObject wgEncodeOpenChromChipK562Pol2Validation
+objType file
+antibody Pol2
+cell K562
+composite wgEncodeOpenChromChip
+controlId K562/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-03-21
+fileName wgEncodeOpenChromChipK562Pol2Validation.tgz
+grant Crawford
+lab UT-A(Iyer)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+setType exp
+subId 3832
+view Validation
 
 metaObject wgEncodeOpenChromChipMcf7CmycEstroAlnRep1
 objType file
@@ -5894,4 +6013,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -1573681498
+# MAGIC: 1301041794

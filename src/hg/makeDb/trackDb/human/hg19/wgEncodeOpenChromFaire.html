@@ -22,18 +22,18 @@ highest confidence areas of open chromatin.  ChIP assays provide
 functional validation and preliminary annotation of a subset of
 open chromatin sites. Each method employed Illumina (formerly Solexa)
 sequencing by synthesis as the detection platform.
-The Tier 1 and Tier 2 cell types were additional verified by a
+The Tier 1 and Tier 2 cell types were additionally verified by a
 second platform, high-resolution 1% ENCODE tiled microarrays supplied by NimbleGen.
 </P>
 <P>Other <B><em>Open Chromatin</em></B> track sets:
 <UL>
-<LI>Data for the DNase experiments can be found in
-<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</a>.
+<LI>Data for the DNase experiments can be previewed in
+<A HREF="http://genome-preview.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</a>.
 <LI>Data for the ChIP experiments can be found in
 <A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromChip">UTA TFBS</A>.
 <LI>A syntheseis of all the open chromatin assays for select cell lines can
-be found in
-<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth">Open Chrom Synth</a>.
+be previewed in
+<A HREF="http://genome-preview.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth">Open Chrom Synth</a>.
 </UL>
 
 <H2> Display Conventions and Configuration </H2>
@@ -60,23 +60,12 @@ Contiguous regions where p-values were below a 0.05/0.01 threshold were
 considered significant.  The solid vertical line in the peak represents the
 point with highest signal.</DD>
 </P>
-<P><DT><I>Peaks (Zinba)</I></DT>
-<DD>Enriched regions for FAIRE data were called
-using ZINBA (Zero Inflated Negative Binomial Algorithm). ZINBA is a flexible
-statistical method that uses a generalized linear model to select genomic
-windows with enriched sequence counts after adjusting for relevant confounding
-factors such as mapability, GC content, and copy number alterations.
-Significant regions are selected using the set of standardized residuals
-below a false discovery rate (qvalue) threshold. Peaks were further refined
-using a shape detection algorithm to identify local maxima and boundaries of
-the Raw Base Overlap Signal data within each significant region.</DD>
-</P>
 <P><DT><I>F-Seq Density Signal</I></DT>
 <DD>Density graph (wiggle) of signal
 enrichment calculated using F-Seq for the combined set of sequences from all
 replicates. F-Seq employs Parzen kernel density estimation to create base pair
 scores (Boyle <em>et al.</em>, 2008b). This method does not look at fixed-length
-windows but rather weights contributions of nearby sequences in proportion to
+windows, but rather weights contributions of nearby sequences in proportion to
 their distance from that base.  It only considers sequences aligned 4 or less
 times in the genome, and uses an alignability background model to try to correct
 for regions where sequences cannot be aligned. For each cell type, especially
@@ -91,6 +80,11 @@ sequences from all replicates.  For each sequence, the aligned read is
 extended 5 bp in both directions from its 5' aligned end where DNase cut
 the DNA.  The score at each base pair represents the number of
 extended fragments that overlap the base pair.</DD>
+</P>
+<P>
+Tracks displayed in this track are the results of pooled replicates. The raw
+sequence and alignment files for each replicate are available for
+<A HREF="/cgi-bin/hgFileUi?g=wgEncodeOpenChromFaire">download</A>.
 </P>
 
 <H2>Methods</H2>
@@ -116,7 +110,7 @@ BWA (Li <em>et al.</em>, 2010) for the NCBI 36 (hg19) assembly.
 <DIV style='position:relative; left:25px;'><DT><DT>The command used for these alignments was:</DT>
 <DD><CODE>&gt; bwa aln -t 8 genome.fa s_1.sequence.txt.bfq &gt; s_1.sequence.txt.sai</CODE></DD>
 Where genome.fa is the whole genome sequence and s_1.sequence.txt.bfq is one lane
-of sequences convert into the required bfq format.</DIV>
+of sequences converted into the required bfq format.</DIV>
 </P>
 <P>Sequences from multiple lanes
 are combined for a single replicate using the bwa samse command, and converted
@@ -125,11 +119,10 @@ in the sam/bam format using samtools.
 <P>Only those that aligned to 4 or fewer locations were retained. Other sequences
 were also filtered based on their alignment to problematic regions
 (such as satellites and rRNA genes - see
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/supplemental/"
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/supplemental/"
  TARGET=ucscDownloads>supplemental materials</a>).
 The mappings of these short reads to the genome are available for
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/"
-TARGET=_BLANK>download</A>.
+<A HREF="/cgi-bin/hgFileUi?g=wgEncodeOpenChromFaire">download</A>.
 </P>
 <P>The resulting digital signal was converted to a continuous wiggle track using
 F-Seq that employs Parzen kernel density estimation to create base pair scores
@@ -154,23 +147,12 @@ data to a gamma distribution to calculate p-values. Contiguous regions
 data to a gamma distribution to calculate p-values. Contiguous regions
 where p-values were below a 0.05/0.01 threshold were considered significant.
 </P>
-<P>A second method to identify discrete peak sites was also used. Enriched regions
-for FAIRE data were called using ZINBA (Zero Inflated Negative Binomial
-Algorithm). ZINBA is a flexible statistical method that uses a generalized
-linear model to select genomic windows with enriched sequence counts after
-adjusting for relevant confounding factors such as mapability, GC content,
-and copy number alterations. Significant regions are selected using the set
-of standardized residuals below a false discovery rate (qvalue) threshold.
-Peaks were further refined using a shape detection algorithm to identify
-local maxima and boundaries of the Signal (Base Overlap) within each
-significant region.
-</P>
 <P>Data from the high-resolution 1% ENCODE tiled microarrays supplied by
 NimbleGen were normalized using the Tukey biweight normalization, and peaks
 were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple levels
 of significance. Regions matched on size to these peaks that were devoid of
-any significant signal were also created.  These data were used for additional
-verification of Tier 1 and Tier 2 cell lines by ROC analysis.
+any significant signal were also created as a null model.  These data were used
+for additional verification of Tier 1 and Tier 2 cell lines by ROC analysis.
 </P>
 
 <h2>Release Notes</h2>
@@ -186,14 +168,14 @@ Open Chromatin</a> track for information on the NCBI36/hg18 releases of the data
 <li>New to this release is a reconfiguration of how this track is displayed in
 relation to other tracks from the Duke/UNC/UT-Austin/EBI group.
 <li>A synthesis of open chromatin evidence from the three assay types was
-compiled for Tier 1 and 2 cell lines plus NHEK has also been added in this
-release:
-<a href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth">Open Chromatin Synthesis</a>.
+compiled for Tier 1 and 2 cell lines plus NHEK will also be added in this
+release and can be previewed in:
+<a href="http://genome-preview.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth">Open Chromatin Synthesis</a>.
 <li><B>Enhancer and Insulator Functional assays:</B>  A subset of DNase and FAIRE
 regions were cloned into functional tissue culture reporter assays to test for
 enhancer and insulator activity.  Coordinates and results from these
 experiments can be found
-<A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/supplemental/"
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/supplemental/"
  TARGET=ucscDownloads>here</a>.  <!-- WARNING: Change to hgdownload.cse.ucsc.edu on release -->
 </ul></P>
 
@@ -300,7 +282,8 @@ Li H, Ruan J, and Durbin R.
 <A HREF="http://genome.cshlp.org/content/early/2008/09/25/gr.078212.108.short"
 TARGET=_blank>Mapping short DNA sequencing reads and calling variants using
 mapping quality scores</A>. <EM>Genome Res.</EM> 2008 Nov;18(11):1851-8.
-
+</P>
+<P>
 Song L and Crawfor GE.
 <A HREF="http://cshprotocols.cshlp.org/cgi/content/full/2010/2/pdb.prot5384"
 TARGET=_BLANK>DNase-seq: a high-resolution technique for mapping active
