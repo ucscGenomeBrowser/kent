@@ -17,7 +17,7 @@ type bed 9 .
 itemRgb on
 wgEncode 1
 #filterBy name:State="1 Active Promoter"{#FF0000,"2 Weak Promoter"{#FF6969,"3 Poised Promoter"{#CF0BC6,"4 Strong Enhancer"{#FACA00,"5 Strong Enhancer"{#FACA00,"6 Weak Enhancer"{#FFFC04,"7 Weak Enhancer"{#FFFC04,"8 Insulator"{#0ABEFE,"9 Txn Transition"{#00B050,"10 Txn Elongation"{#00B050,"11 Weak Txn"{#99FF66,"12 Repressed"{#7F7F7F,"13 Heterochrom/lo"{#D3D3D3,"14 Repetitive/CNV"{#D3D3D3,"15 Repetitive/CNV"{#DCDCDC
-filterBy name:State="1 Active Promoter","2 Weak Promoter","3 Poised Promoter","4 Strong Enhancer","5 Strong Enhancer","6 Weak Enhancer","7 Weak Enhancer","8 Insulator","9 Txn Transition","10 Txn Elongation","11 Weak Txn","12 Repressed","13 Heterochrom/lo","14 Repetitive/CNV","15 Repetitive/CNV"
+filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong_Enhancer,5_Strong_Enhancer,6_Weak_Enhancer,7_Weak_Enhancer,8_Insulator,9_Txn_Transition,10_Txn_Elongation,11_Weak_Txn,12_Repressed,13_Heterochrom/lo,14_Repetitive/CNV,15_Repetitive/CNV
 
         track wgEncodeBroadHmmGm12878HMM
         release alpha
