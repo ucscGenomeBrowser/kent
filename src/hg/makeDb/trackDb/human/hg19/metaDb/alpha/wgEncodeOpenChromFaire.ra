@@ -618,6 +618,22 @@ subId 1480
 tableName wgEncodeOpenChromFaireGm12878Sig
 view Signal
 
+metaObject wgEncodeOpenChromFaireGm12878Validation
+objType file
+cell GM12878
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-03-21
+fileName wgEncodeOpenChromFaireGm12878Validation.tgz
+grant Crawford
+lab UNC(Lieb)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 3831
+view Validation
+
 metaObject wgEncodeOpenChromFaireGm12891AlnRep1
 objType file
 cell GM12891
@@ -2625,6 +2641,22 @@ subId 1531
 tableName wgEncodeOpenChromFaireK562Sig
 view Signal
 
+metaObject wgEncodeOpenChromFaireK562Validation
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-03-21
+fileName wgEncodeOpenChromFaireK562Validation.tgz
+grant Crawford
+lab UNC(Lieb)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 3831
+view Validation
+
 metaObject wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1
 objType file
 cell MCF-7
@@ -3545,4 +3577,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -956119105
+# MAGIC: 95994083
