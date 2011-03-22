@@ -8933,9 +8933,11 @@ TMPDIR=/scratch/tmp
 # ENCODE Regulation track  (In progress March 2010, very rough instructions
 # as am still defining how to build track...)
 
-      #make root dir
+      # make root dir and link in our bad.bed file for filtering out
+      # blacklisted and multiple mapping regions.
       mkdir -p /cluster/data/hg19/bed/wgEncodeReg
       cd /cluster/data/hg19/bed/wgEncodeReg
+      ln -s /hive/users/kent/regulate/companion/mapping/bad.bed badRegions.bed
 
       # Create the DNAse peak clusters subtrack.
       # Get all of the narrowPeak format files for the wgEncodeUwDnaseSeq
@@ -9016,9 +9018,96 @@ TMPDIR=/scratch/tmp
       awk '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $7, ($10 == "None" ? $8 : $8 "+" $10), $9, $8, $10, $11);}' peak.table > wgEncodeRegTfbsClusteredInputs.tab
       hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable4.sql wgEncodeRegTfbsClusteredInputs.tab
 
+
+      # Handle the RNA seq, starting by pooling it and filtering out multiple
+      # mapping and blacklisted regions.
+      mkdir -p /hive/data/genomes/hg19/bed/wgEncodeReg/txn/pooled
+      cd /hive/data/genomes/hg19/bed/wgEncodeReg/txn/pooled
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqGm12878R2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqH1hescR2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHct116R2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHelas3R2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHepg2R2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHsmmR2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHuvecR2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqK562R2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqMcf7R2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqNhekR2x75Il200SigPooled.bedGraph
+
+      # Now have to normalize.  This takes two passes.  The first just creates
+      # a tab-separated file with normalization values. A batch file is made
+      # by running awk on the tab file, and this batch file executes the
+      # second half, transforming the bedGraphs to normalized values. The
+      # normalization standardizes all files as if the total signal integrated to 10
+      # billion over the genome.
+      rm -f ../norm.tab
+      foreach i (*SigPooled.bedGraph)
+	  echo processing $i
+	  echo -n $i " " >> ../norm.tab
+	  awk '{sum += $4*($3-$2);} END {print 10000000000/sum}' $i >> ../norm.tab
+      end
+
+      awk '{printf("colTransform 4 %s 0 %g ../normalized/%s\n", $1, $2, $1);}' ../norm.tab > ../norm.csh
+      chmod a+x ../norm.csh
+      mkdir ../normalized
+      ../norm.csh
+
+      # Make bigWigs
+      cd ../normalized
+      foreach i (*.bedGraph)
+	  echo processing $i
+          bedGraphToBigWig $i /cluster/data/hg19/chrom.sizes $i:r.bw
+      end
+
+      # Link into /gbdb
+      ln -s `pwd`/*.bw /gbdb/hg19/bbi
+
+      # Tell database about it
+      foreach i (*.bw)
+          hgBbiDbLink hg19 $i:r /gbdb/hg19/bbi/$i
+      end
+
+      # Clean up
+      cd /hive/data/genomes/hg19/bed/wgEncodeReg/txn
+      rm pooled/*.bedGraph normalized/*.bedGraph
+
+
+
+
       # At this point actually are done with this track, except for
       # all the trackDb work on the overlayed histone mod tracks.
       # The rest is for some coloring stuff that is not yet actually used.
+
 
       # Do work to figure out how to color cells.  This is based on
       # hierarchical clustering of wbEncodeUwAffyAllExon. 
