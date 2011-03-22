@@ -18,6 +18,7 @@ errAbort(
   "(Eisen style) of expression data.\n"
   "usage:\n"
   "   regClusterTreeCells inFiles.lst output.tree output.distances\n"
+  "Where inFiles.lst is a list of bedGraph format files: <chrom><start><end><score>\n"
   "options:\n"
   "   -short - Abbreviate output by removing stuff shared by all.\n"
   "   -rename=twoCol.tab - Rename files according to file/name columns\n"
