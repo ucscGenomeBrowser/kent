@@ -266,7 +266,7 @@ tableName wgEncodeHaibMethylRrbsAosmcDukeSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsAstrocyUncSitesRep1
+metaObject wgEncodeHaibMethylRrbsAstrocyDukeSitesRep1
 objType table
 cell Astrocy
 composite wgEncodeHaibMethylRrbs
@@ -274,7 +274,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsAstrocyUncSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAstrocyDukeSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683765
 grant Myers
 lab HudsonAlpha
@@ -283,11 +283,11 @@ obtainedBy Duke
 project wgEncode
 replicate 1
 subId 3159
-tableName wgEncodeHaibMethylRrbsAstrocyUncSitesRep1
+tableName wgEncodeHaibMethylRrbsAstrocyDukeSitesRep1
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsAstrocyUncSitesRep2
+metaObject wgEncodeHaibMethylRrbsAstrocyDukeSitesRep2
 objType table
 cell Astrocy
 composite wgEncodeHaibMethylRrbs
@@ -295,7 +295,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
-fileName wgEncodeHaibMethylRrbsAstrocyUncSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsAstrocyDukeSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683882
 grant Myers
 lab HudsonAlpha
@@ -304,7 +304,7 @@ obtainedBy Duke
 project wgEncode
 replicate 2
 subId 3159
-tableName wgEncodeHaibMethylRrbsAstrocyUncSitesRep2
+tableName wgEncodeHaibMethylRrbsAstrocyDukeSitesRep2
 treatment None
 view Sites
 
@@ -1632,7 +1632,7 @@ tableName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1
+metaObject wgEncodeHaibMethylRrbsHcmUwSitesRep1
 objType table
 cell HCM
 composite wgEncodeHaibMethylRrbs
@@ -1640,7 +1640,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHcmUwSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683852
 grant Myers
 lab HudsonAlpha
@@ -1650,11 +1650,11 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
-tableName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1
+tableName wgEncodeHaibMethylRrbsHcmUwSitesRep1
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2
+metaObject wgEncodeHaibMethylRrbsHcmUwSitesRep2
 objType table
 cell HCM
 composite wgEncodeHaibMethylRrbs
@@ -1662,7 +1662,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHcmUwSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683922
 grant Myers
 lab HudsonAlpha
@@ -1672,7 +1672,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
-tableName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2
+tableName wgEncodeHaibMethylRrbsHcmUwSitesRep2
 treatment None
 view Sites
 
@@ -1764,7 +1764,7 @@ tableName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1
+metaObject wgEncodeHaibMethylRrbsHeeUwSitesRep1
 objType table
 cell HEEpiC
 composite wgEncodeHaibMethylRrbs
@@ -1772,7 +1772,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHeeUwSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683839
 grant Myers
 lab HudsonAlpha
@@ -1782,11 +1782,11 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
-tableName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1
+tableName wgEncodeHaibMethylRrbsHeeUwSitesRep1
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2
+metaObject wgEncodeHaibMethylRrbsHeeUwSitesRep2
 objType table
 cell HEEpiC
 composite wgEncodeHaibMethylRrbs
@@ -1794,7 +1794,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHeeUwSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683807
 grant Myers
 lab HudsonAlpha
@@ -1804,11 +1804,11 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
-tableName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2
+tableName wgEncodeHaibMethylRrbsHeeUwSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1
+metaObject wgEncodeHaibMethylRrbsHek293UwSitesRep1
 objType table
 cell HEK293
 composite wgEncodeHaibMethylRrbs
@@ -1816,7 +1816,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHek293UwSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683825
 grant Myers
 lab HudsonAlpha
@@ -1826,10 +1826,11 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
+tableName wgEncodeHaibMethylRrbsHek293UwSitesRep1
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2
+metaObject wgEncodeHaibMethylRrbsHek293UwSitesRep2
 objType table
 cell HEK293
 composite wgEncodeHaibMethylRrbs
@@ -1837,7 +1838,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsHek293UwSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683769
 grant Myers
 lab HudsonAlpha
@@ -1847,6 +1848,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
+tableName wgEncodeHaibMethylRrbsHek293UwSitesRep2
 treatment None
 view Sites
 
@@ -1980,6 +1982,50 @@ tableName wgEncodeHaibMethylRrbsHepatocytesDukeSitesRep2
 treatment None
 view Sites
 
+metaObject wgEncodeHaibMethylRrbsHepg2DukeSitesRep1
+objType table
+cell HepG2
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-13
+fileName wgEncodeHaibMethylRrbsHepg2DukeSitesRep1.bedRrbs.gz
+geoSampleAccession GSM683795
+grant Myers
+lab HudsonAlpha
+labExpId SL1815
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 1220
+tableName wgEncodeHaibMethylRrbsHepg2DukeSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHepg2DukeSitesRep2
+objType table
+cell HepG2
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-13
+fileName wgEncodeHaibMethylRrbsHepg2DukeSitesRep2.bedRrbs.gz
+geoSampleAccession GSM683855
+grant Myers
+lab HudsonAlpha
+labExpId SL1816
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 1220
+tableName wgEncodeHaibMethylRrbsHepg2DukeSitesRep2
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1
 objType table
 cell HepG2
@@ -1998,6 +2044,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
+tableName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1
 treatment None
 view Sites
 
@@ -2019,50 +2066,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1
-objType table
-cell HepG2
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1.bedRrbs.gz
-geoSampleAccession GSM683795
-grant Myers
-lab HudsonAlpha
-labExpId SL1815
-obtainedBy Duke
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 1220
-tableName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2
-objType table
-cell HepG2
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2.bedRrbs.gz
-geoSampleAccession GSM683855
-grant Myers
-lab HudsonAlpha
-labExpId SL1816
-obtainedBy Duke
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 1220
-tableName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2
+tableName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2
 treatment None
 view Sites
 
@@ -2974,7 +2978,7 @@ tableName wgEncodeHaibMethylRrbsLncapUwSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsMcf10aesTamYaleSitesRep3
+metaObject wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep3
 objType table
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
@@ -2982,7 +2986,28 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-08
-fileName wgEncodeHaibMethylRrbsMcf10aesTamYaleSitesRep3.bedRrbs.gz
+fileName wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep3.bedRrbs.gz
+geoSampleAccession GSM683812
+grant Myers
+lab HudsonAlpha
+labExpId SL731
+obtainedBy Stanford
+project wgEncode
+replicate 3
+subId 3190
+tableName wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep3
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3
+objType table
+cell MCF10A-Er-Src
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-08
+fileName wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3.bedRrbs.gz
 geoSampleAccession GSM683933
 grant Myers
 lab HudsonAlpha
@@ -2991,7 +3016,7 @@ obtainedBy Stanford
 project wgEncode
 replicate 3
 subId 3190
-tableName wgEncodeHaibMethylRrbsMcf10aesTamYaleSitesRep3
+tableName wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3
 treatment TAM_1uM_36hr
 view Sites
 
@@ -3037,27 +3062,6 @@ replicate 2
 subId 2395
 tableName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2
 treatment TAM_1uM_36hr
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsMcf10aesYaleSitesRep3
-objType table
-cell MCF10A-Er-Src
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-08
-dateUnrestricted 2011-10-08
-fileName wgEncodeHaibMethylRrbsMcf10aesYaleSitesRep3.bedRrbs.gz
-geoSampleAccession GSM683812
-grant Myers
-lab HudsonAlpha
-labExpId SL731
-obtainedBy Stanford
-project wgEncode
-replicate 3
-subId 3190
-tableName wgEncodeHaibMethylRrbsMcf10aesYaleSitesRep3
-treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1
@@ -3166,6 +3170,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
+tableName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1
 treatment None
 view Sites
 
@@ -3187,6 +3192,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
+tableName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2
 treatment None
 view Sites
 
@@ -3208,6 +3214,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
+tableName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
 treatment None
 view Sites
 
@@ -3229,6 +3236,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
+tableName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
 treatment None
 view Sites
 
@@ -3534,6 +3542,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
+tableName wgEncodeHaibMethylRrbsNt2d1UwSitesRep1
 treatment None
 view Sites
 
@@ -4270,4 +4279,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -219166438
+# MAGIC: 95484498
