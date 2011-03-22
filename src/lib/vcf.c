@@ -596,12 +596,13 @@ struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int
  * A maxErr less than zero does not stop and reports all errors. Write errors to errFh,
  * if NULL, use stderr. */
 {
-struct lineFile *lf = lineFileOnTabix(fileOrUrl, TRUE);
+struct lineFile *lf = lineFileTabixMayOpen(fileOrUrl, TRUE);
 struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr, errFh);
 if (vcff == NULL)
     return NULL;
 if (! lineFileSetTabixRegion(lf, chrom, start, end))
-    return NULL;
+    // No items in region
+    return vcff;
 vcfParseData(vcff);
 return vcff;
 }
