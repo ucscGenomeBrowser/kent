@@ -327,6 +327,7 @@ our %formatCheckers = (
     shortFrags => \&validateBed,
     bedLogR => \&validateBed,
     bedRnaElements => \&validateBed,
+    bedRrbs => \&validateBed,
     txt  => \&validateFreepass,
     );
 
