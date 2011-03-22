@@ -196,7 +196,7 @@ lf->buf = s;
 return lf;
 }
 
-struct lineFile *lineFileOnTabix(char *fileOrUrl, bool zTerm)
+struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm)
 /* Wrap a line file around a data file that has been compressed and indexed
  * by the tabix command line program.  The index file <fileOrUrl>.tbi must be
  * readable in addition to fileOrUrl. If there's a problem, warn & return NULL.
@@ -230,18 +230,18 @@ lf->tabix = tabix;
 freez(&tbiName);
 return lf;
 #else // no USE_TABIX
-warn(COMPILE_WITH_TABIX, "lineFileOnTabix");
+warn(COMPILE_WITH_TABIX, "lineFileTabixMayOpen");
 return NULL;
 #endif // no USE_TABIX
 }
 
 boolean lineFileSetTabixRegion(struct lineFile *lf, char *seqName, int start, int end)
-/* Assuming lf was created by lineFileOnTabix, tell tabix to seek to the specified region
+/* Assuming lf was created by lineFileTabixMayOpen, tell tabix to seek to the specified region
  * and return TRUE (or if there are no items in region, return FALSE). */
 {
 #ifdef USE_TABIX
 if (lf->tabix == NULL)
-    errAbort("lineFileSetTabixRegion: lf->tabix is NULL.  Did you open lf with lineFileOnTabix?");
+    errAbort("lineFileSetTabixRegion: lf->tabix is NULL.  Did you open lf with lineFileTabixMayOpen?");
 int tabixSeqId = ti_get_tid(lf->tabix->idx, seqName);
 if (tabixSeqId < 0 && startsWith("chr", seqName))
     // We will get some files that have chr-less Ensembl chromosome names:
@@ -318,7 +318,7 @@ INLINE void noTabixSupport(struct lineFile *lf, char *where)
 {
 #ifdef USE_TABIX
 if (lf->tabix != NULL)
-    lineFileAbort(lf, "%s: not implemented for lineFile opened with lineFileOnTabix.", where);
+    lineFileAbort(lf, "%s: not implemented for lineFile opened with lineFileTabixMayOpen.", where);
 #endif // USE_TABIX
 }
 
