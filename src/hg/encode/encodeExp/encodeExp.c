@@ -26,8 +26,8 @@ errAbort(
   "   dump <exp.ra>	output experiment table to file\n"
   "   find <db> <exp.ra>	find unassigned experiments in metaDb and create .ra to file\n"
   "   check <db>		find objects in metaDb incorrect or missing accession\n"
-  "   acc human|mouse <lab> <dataType> <cellType> [<factors>]\n"
-  "			return accession for experiment (factors as 'factor1:val1 factor2:val2')\n"
+  "   acc human|mouse <lab> <dataType> <cellType> [<vars>]\n"
+  "			return accession for experiment (vars as 'var1:val1 var2:val2')\n"
   "options:\n"
   "   -composite	limit to specified composite track (affects find and check)\n"
   "   -mdb		specify metaDb table name (default \'%s\') - for test use \n"
@@ -45,7 +45,7 @@ static struct optionSpec options[] = {
 
 struct sqlConnection *connExp = NULL;
 char *composite = NULL, *mdb = NULL, *table = NULL;
-char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *factors = NULL;
+char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *expVars = NULL;
 
 static struct hash *expKeyHashFromTable(struct sqlConnection *conn, char *table)
 /* create hash of keys for existing experiments so we can distinguish new ones */
@@ -179,12 +179,12 @@ void expAccession()
 {
 struct encodeExp *exps = NULL;
 int count;
-struct slPair *factorPairs = NULL;
+struct slPair *varPairs = NULL;
 
 /* transform var:val to var=val. Can't use var=val on command-line as it conflicts with standard options processing */
-memSwapChar(factors, strlen(factors), ':', '=');
-factorPairs = slPairFromString(factors);
-exps = encodeExpGetFromTable(organism, lab, dataType, cellType, factorPairs, table);
+memSwapChar(expVars, strlen(expVars), ':', '=');
+varPairs = slPairFromString(expVars);
+exps = encodeExpGetFromTable(organism, lab, dataType, cellType, varPairs, table);
 count = slCount(exps);
 verbose(2, "Results: %d\n", count);
 if (count == 0)
@@ -284,7 +284,7 @@ else if (sameString("acc", command))
         dataType = argv[4];
         cellType = argv[5];
         if (argc > 6)
-            factors = argv[6];
+            expVars = argv[6];
         }
     }
 encodeExp(command, file, assembly);

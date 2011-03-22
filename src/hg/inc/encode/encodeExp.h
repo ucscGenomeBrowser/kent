@@ -19,7 +19,7 @@ struct encodeExp
     char *lab;	/* lab name from ENCODE cv.ra */
     char *dataType;	/* dataType from ENCODE cv.ra */
     char *cellType;	/* cellType from ENCODE cv.ra */
-    char *factors;	/* typeOfTerm=term list of experiment-defining variables */
+    char *expVars;	/* typeOfTerm=term list of experiment-defining variables */
     char *lastUpdated;  /* auto-update timestamp */  // WARNING: hand-edit here
     };
 
@@ -104,7 +104,7 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 #define ENCODE_EXP_FIELD_LAB            "lab"
 #define ENCODE_EXP_FIELD_DATA_TYPE      "dataType"
 #define ENCODE_EXP_FIELD_CELL_TYPE      "cellType"
-#define ENCODE_EXP_FIELD_FACTORS        "factors"
+#define ENCODE_EXP_FIELD_FACTORS        "expVars"
 #define ENCODE_EXP_FIELD_LAST_UPDATED   "lastUpdated"
 
 #define ENCODE_EXP_NO_CELL              "None"
@@ -112,7 +112,7 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 
 #define ENCODE_EXP_TABLE        "encodeExp"
 #define ENCODE_EXP_DATABASE     "hgFixed"
-#define ENCODE_EXP_ACC_PREFIX   "encodeE"
+#define ENCODE_EXP_ACC_PREFIX   "wgEncodeE"
 #define ENCODE_EXP_TABLE_LOCK   "lock_encodeExp"
 
 void encodeExpFieldIndex(char *fieldName);
@@ -148,12 +148,12 @@ char *encodeExpKey(struct encodeExp *exp);
 /* Create a hash key from an encodeExp */
 
 struct encodeExp *encodeExpGetFromTable(char *organism, char *lab, char *dataType, char *cell,
-                                struct slPair *factorPairs, char *table);
+                                struct slPair *varPairs, char *table);
 /* Return experiments matching args in named experiment table.
  * Organism, Lab and DataType must be non-null */
 
 struct encodeExp *encodeExpGet(char *organism, char *lab, char *dataType, char *cell,
-                                struct slPair *factorPairs);
+                                struct slPair *varPairs);
 /* Return experiments matching args in default experiment table.
  * Organism, Lab and DataType must be non-null */
 
@@ -178,9 +178,9 @@ void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,
 /* Update field in encodeExp identified by accession with value.
    Only supported for a few non-interdependent fields */
 
-void encodeExpUpdateFactors(struct sqlConnection *conn, char *tableName,
-                                char *accession, struct slPair *factorPairs);
-/* Update factors in encodeExp identified by accession */
+void encodeExpUpdateExpVars(struct sqlConnection *conn, char *tableName,
+                                char *accession, struct slPair *varPairs);
+/* Update expVars in encodeExp identified by accession */
 
 #endif /* ENCODEEXP_H */
 

@@ -20,7 +20,7 @@ ret->accession = row[2];
 ret->lab = row[3];
 ret->dataType = row[4];
 ret->cellType = row[5];
-ret->factors = row[6];
+ret->expVars = row[6];
 ret->lastUpdated = row[7];
 }
 
@@ -57,7 +57,7 @@ void encodeExpSaveToDb(struct sqlConnection *conn, struct encodeExp *el, char *t
 {
 struct dyString *update = newDyString(updateSize);
 dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s','%s')",
-	tableName,  el->ix,  el->organism,  el->accession,  el->lab,  el->dataType,  el->cellType,  el->factors,  el->lastUpdated);
+	tableName,  el->ix,  el->organism,  el->accession,  el->lab,  el->dataType,  el->cellType,  el->expVars,  el->lastUpdated);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -72,17 +72,17 @@ void encodeExpSaveToDbEscaped(struct sqlConnection *conn, struct encodeExp *el, 
  * before inserting into database. */
 {
 struct dyString *update = newDyString(updateSize);
-char  *organism, *accession, *lab, *dataType, *cellType, *factors, *lastUpdated;
+char  *organism, *accession, *lab, *dataType, *cellType, *expVars, *lastUpdated;
 organism = sqlEscapeString(el->organism);
 accession = sqlEscapeString(el->accession);
 lab = sqlEscapeString(el->lab);
 dataType = sqlEscapeString(el->dataType);
 cellType = sqlEscapeString(el->cellType);
-factors = sqlEscapeString(el->factors);
+expVars = sqlEscapeString(el->expVars);
 lastUpdated = sqlEscapeString(el->lastUpdated);
 
 dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s','%s')",
-	tableName,  el->ix,  organism,  accession,  lab,  dataType,  cellType,  factors,  lastUpdated);
+	tableName,  el->ix,  organism,  accession,  lab,  dataType,  cellType,  expVars,  lastUpdated);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&organism);
@@ -90,7 +90,7 @@ freez(&accession);
 freez(&lab);
 freez(&dataType);
 freez(&cellType);
-freez(&factors);
+freez(&expVars);
 freez(&lastUpdated);
 }
 
@@ -107,7 +107,7 @@ ret->accession = cloneString(row[2]);
 ret->lab = cloneString(row[3]);
 ret->dataType = cloneString(row[4]);
 ret->cellType = cloneString(row[5]);
-ret->factors = cloneString(row[6]);
+ret->expVars = cloneString(row[6]);
 ret->lastUpdated = cloneString(row[7]);
 return ret;
 }
@@ -163,7 +163,7 @@ ret->accession = sqlStringComma(&s);
 ret->lab = sqlStringComma(&s);
 ret->dataType = sqlStringComma(&s);
 ret->cellType = sqlStringComma(&s);
-ret->factors = sqlStringComma(&s);
+ret->expVars = sqlStringComma(&s);
 ret->lastUpdated = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -181,7 +181,7 @@ freeMem(el->accession);
 freeMem(el->lab);
 freeMem(el->dataType);
 freeMem(el->cellType);
-freeMem(el->factors);
+freeMem(el->expVars);
 freeMem(el->lastUpdated);
 freez(pEl);
 }
@@ -225,7 +225,7 @@ fprintf(f, "%s", el->cellType);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->factors);
+fprintf(f, "%s", el->expVars);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -285,11 +285,11 @@ fprintf(f, "%s", el->cellType);
 fputc('"',f);
 fputc(',',f);
 fputc('"',f);
-fprintf(f,"factors");
+fprintf(f,"expVars");
 fputc('"',f);
 fputc(':',f);
 fputc('"',f);
-fprintf(f, "%s", el->factors);
+fprintf(f, "%s", el->expVars);
 fputc('"',f);
 fputc(',',f);
 fputc('"',f);
@@ -351,10 +351,10 @@ char *encodeExpGetCellType(struct encodeExp *exp)
 return cloneString(exp->cellType);
 }
 
-char *encodeExpGetFactors(struct encodeExp *exp)
-/* Return factors field of encodeExp */
+char *encodeExpGetExpVars(struct encodeExp *exp)
+/* Return expVars field of encodeExp */
 {
-return cloneString(exp->factors);
+return cloneString(exp->expVars);
 }
 
 char *encodeExpGetLastUpdated(struct encodeExp *exp)
@@ -378,7 +378,7 @@ struct encodeExpField encodeExpFields[] =
      {ENCODE_EXP_FIELD_LAB, &encodeExpGetLab, TRUE},                 //required
      {ENCODE_EXP_FIELD_DATA_TYPE, &encodeExpGetDataType, TRUE},      //required
      {ENCODE_EXP_FIELD_CELL_TYPE, &encodeExpGetCellType, TRUE},      //required
-     {ENCODE_EXP_FIELD_FACTORS, &encodeExpGetFactors, FALSE},
+     {ENCODE_EXP_FIELD_FACTORS, &encodeExpGetExpVars, FALSE},
      {ENCODE_EXP_FIELD_LAST_UPDATED, &encodeExpGetLastUpdated, FALSE},
      {NULL, 0, 0} };
 
@@ -390,7 +390,7 @@ static char *sqlCreate =
 "    lab varchar(255) not null,  # lab name from ENCODE cv.ra\n"
 "    dataType varchar(255) not null,     # dataType from ENCODE cv.ra\n"
 "    cellType varchar(255) not null,     # cellType from ENCODE cv.ra\n"
-"    factors text,                       # var=val list of experiment-defining variables\n"
+"    expVars text,                       # var=val list of experiment-defining variables\n"
 "    lastUpdated timestamp default current_timestamp on update current_timestamp,  # last update date-time"
 "              #Indices\n"
 "    PRIMARY KEY(ix)\n"
@@ -464,20 +464,20 @@ if (exp->cellType == NULL)
     exp->cellType = ENCODE_EXP_NO_CELL;
     }
 
-/* experimental factors (variables) */
+/* experimental expVars (variables) */
 int i;
 char *var, *val;
-struct dyString *factors = newDyString(0);
+struct dyString *dy = newDyString(0);
 for (i = 0; expFactors[i] != NULL; i++)
     {
     var = expFactors[i];
     val = mdbObjFindValue(mdb, var);
     if (val == NULL || sameString(val, ENCODE_EXP_NO_VAR))
         continue;
-    dyStringPrintf(factors, "%s=%s ", var, val);
+    dyStringPrintf(dy, "%s=%s ", var, val);
     }
-exp->factors = dyStringCannibalize(&factors);
-eraseTrailingSpaces(exp->factors);
+exp->expVars = dyStringCannibalize(&dy);
+eraseTrailingSpaces(exp->expVars);
 
 return exp;
 }
@@ -499,7 +499,7 @@ strLower(exp->organism);
 
 // KATE: This will not do.  There is not a white list defined yet and the call from mdb will be limited to EDVs
 //struct mdbObj *mdb = mdbObjNew(NULL, vars);
-//// extract factor vars into an slPair list
+//// extract exp vars into an slPair list
 //int i;
 //char *var, *val;
 //for (i = 0; expFactors[i] != NULL; i++)
@@ -508,10 +508,10 @@ strLower(exp->organism);
 //    val = mdbObjFindValue(mdb, var);
 //    if (val == NULL || sameString(val, ENCODE_EXP_NO_VAR))
 //        continue;
-//    slPairAdd(&factorPairs, var, val);
+//    slPairAdd(&varPairs, var, val);
 //    }
 
-struct slPair *factorPairs = NULL;
+struct slPair *varPairs = NULL;
 struct mdbVar *edv = vars;
 for(;edv != NULL; edv = edv->next)
     {
@@ -531,7 +531,7 @@ for(;edv != NULL; edv = edv->next)
         exp->cellType = cloneString((char *)(edv->val));
         }
     else
-        slPairAdd(&factorPairs, edv->var, edv->val); // No need to clone
+        slPairAdd(&varPairs, edv->var, edv->val); // No need to clone
     }
 
 // Be sure we have what we need
@@ -544,11 +544,11 @@ if (exp->lab == NULL || exp->dataType == NULL)
 if (exp->cellType == NULL)  // Okay if no cell
     exp->cellType = ENCODE_EXP_NO_CELL;
 
-if (factorPairs != NULL)
+if (varPairs != NULL)
     {
-    slPairSortCase(&factorPairs);
-    exp->factors = slPairListToString(factorPairs);
-    slPairFreeList(&factorPairs);
+    slPairSortCase(&varPairs);
+    exp->expVars = slPairListToString(varPairs);
+    slPairFreeList(&varPairs);
     }
 return exp;
 }
@@ -663,21 +663,21 @@ sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
 freeDyString(&query);
 }
 
-void encodeExpUpdateFactors(struct sqlConnection *conn, char *tableName,
-                                char *accession, struct slPair *factorPairs)
-/* Update factors in encodeExp identified by accession */
+void encodeExpUpdateExpVars(struct sqlConnection *conn, char *tableName,
+                                char *accession, struct slPair *varPairs)
+/* Update expVars in encodeExp identified by accession */
 {
 struct dyString *dy = dyStringNew(0);
-char *factors;
+char *expVars;
 struct slPair *pair;
 
-slPairSortCase(&factorPairs);
-for (pair = factorPairs; pair != NULL; pair = pair->next)
+slPairSortCase(&varPairs);
+for (pair = varPairs; pair != NULL; pair = pair->next)
     dyStringPrintf(dy, "%s=%s ", pair->name, (char *)pair->val);
-factors = dyStringCannibalize(&dy);
-eraseTrailingSpaces(factors);
+expVars = dyStringCannibalize(&dy);
+eraseTrailingSpaces(expVars);
 dy = dyStringCreate("update %s set %s=\'%s\' where accession=\'%s\'",
-                        tableName, ENCODE_EXP_FIELD_FACTORS, factors, accession);
+                        tableName, ENCODE_EXP_FIELD_FACTORS, expVars, accession);
 sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
 sqlUpdate(conn, dyStringContents(dy));
 sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
@@ -689,17 +689,17 @@ char *encodeExpKey(struct encodeExp *exp)
 {
 struct dyString *dy = newDyString(0);
 dyStringPrintf(dy, "lab:%s dataType:%s cellType:%s", exp->lab, exp->dataType, exp->cellType);
-if (exp->factors != NULL)
-    dyStringPrintf(dy, " factors:%s", exp->factors);
+if (exp->expVars != NULL)
+    dyStringPrintf(dy, " expVars:%s", exp->expVars);
 return dyStringCannibalize(&dy);
 }
 
 struct encodeExp *encodeExpGetFromTable(char *organism, char *lab, char *dataType,
-                                char *cell, struct slPair *factorPairs, char *table)
+                                char *cell, struct slPair *varPairs, char *table)
 /* Return experiments matching args in named experiment table.
  * Organism, Lab and DataType must be non-null */
 {
-char *factors;
+char *expVars;
 struct slPair *pair;
 struct encodeExp *exps = NULL;
 
@@ -711,12 +711,12 @@ if (cell == NULL)
 
 struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
 
-/* construct factor string var=val from pairs */
+/* construct expVars string var=val from pairs */
 struct dyString *dy = dyStringNew(0);
-for (pair = factorPairs; pair != NULL; pair = pair->next)
+for (pair = varPairs; pair != NULL; pair = pair->next)
     dyStringPrintf(dy, "%s=%s ", pair->name, (char *)pair->val);
-factors = dyStringCannibalize(&dy);
-eraseTrailingSpaces(factors);
+expVars = dyStringCannibalize(&dy);
+eraseTrailingSpaces(expVars);
 
 dy = dyStringCreate(
         "select * from %s where %s=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s=\'%s\'",
@@ -725,30 +725,30 @@ dy = dyStringCreate(
                 ENCODE_EXP_FIELD_LAB, lab,
                 ENCODE_EXP_FIELD_DATA_TYPE, dataType,
                 ENCODE_EXP_FIELD_CELL_TYPE, cell,
-                ENCODE_EXP_FIELD_FACTORS, factors);
+                ENCODE_EXP_FIELD_FACTORS, expVars);
 exps = encodeExpLoadByQuery(conn, dyStringCannibalize(&dy));
 sqlDisconnect(&conn);
 return exps;
 }
 
 struct encodeExp *encodeExpGet(char *organism, char *lab, char *dataType, char *cell,
-                                        struct slPair *factorPairs)
+                                        struct slPair *varPairs)
 /* Return experiments matching args in default experiment table.
  * Organism, Lab and DataType must be non-null */
 {
-return encodeExpGetFromTable(organism, lab, dataType, cell, factorPairs, ENCODE_EXP_TABLE);
+return encodeExpGetFromTable(organism, lab, dataType, cell, varPairs, ENCODE_EXP_TABLE);
 }
 
 struct encodeExp *encodeExpGetByMdbVarsFromTable(char *db, struct mdbVar *vars, char *table)
 /* Return experiments by looking up mdb var list from the named experiment table */
 {
 struct encodeExp *exp = encodeExpFromMdbVars(db,vars);
-struct slPair *edvFactors = slPairFromString(exp->factors);
+struct slPair *edvVars = slPairFromString(exp->expVars);
 
-struct encodeExp *expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvFactors,table);
+struct encodeExp *expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
 // No longer needed
 encodeExpFree(&exp);
-slPairFreeValsAndList(&edvFactors);
+slPairFreeValsAndList(&edvVars);
 return expFound;
 }
 
@@ -762,15 +762,15 @@ struct encodeExp *encodeExpGetOrCreateByMdbVarsFromTable(char *db, struct mdbVar
 // Return experiment looked up or created from the mdb var list from the named experiment table.
 {
 struct encodeExp *exp = encodeExpFromMdbVars(db,vars);
-struct slPair *edvFactors = slPairFromString(exp->factors);
+struct slPair *edvVars = slPairFromString(exp->expVars);
 
-struct encodeExp *expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvFactors,table);
-slPairFreeValsAndList(&edvFactors);
+struct encodeExp *expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
+slPairFreeValsAndList(&edvVars);
 if (expFound)
     {
     // No longer needed
     encodeExpFree(&exp);
-    slPairFreeValsAndList(&edvFactors);
+    slPairFreeValsAndList(&edvVars);
     return expFound;
     }
 
@@ -779,7 +779,7 @@ encodeExpAdd(conn, table, exp);
 sqlDisconnect(&conn);
 
 // No longer needed
-slPairFreeValsAndList(&edvFactors);
+slPairFreeValsAndList(&edvVars);
 
 return exp;
 }

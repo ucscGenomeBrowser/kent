@@ -18,3 +18,16 @@ def gbSetupPath():
     if mach != "i386":
         machBinPath += ":" + absBinDir + "/i386" # use on x86_64 for now
     os.environ["PATH"] = machBinPath + ":" + os.environ["PATH"]
+
+def gbSetupHgConf():
+    "setup the HGDB_CONF environment variable as needed"
+    # only set HGDB_CONF to one of the gbRoot/etc ones if we are user genbank
+    if os.environ["USER"] == "genbank":
+        host = os.uname()[1]
+        if host == "hgwbeta":
+            hgconf = "etc/.hg.mysqlbeta.conf"
+        elif host == "hgnfs1":
+            hgconf = "etc/.hg.mysqlrr.conf"
+        else:
+            hgconf = "etc/.hg.conf"
+        os.environ["HGDB_CONF"] = os.path.abspath(hgconf)
