@@ -16,3 +16,7 @@ compile:: ${O}
 
 clean::
 	rm -f ${A}${EXE} ${O}
+
+test:
+	regClusterTreeCells -short tests/in.lst tests/out.tree
+	diff tests/expected.tree tests/out.tree

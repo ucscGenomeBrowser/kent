@@ -574,6 +574,9 @@ struct slName *slNameListFromString(char *s, char delimiter);
 #define slNameListFromComma(s) slNameListFromString(s, ',')
 /* Parse out comma-separated list. */
 
+struct slName *slNameListOfUniqueWords(char *text);
+// Return list of unique words found by parsing string delimited by whitespace.
+
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize);
 /* Return list of slNames from an array of strings of length arraySize.
  * If a string in the array is NULL, the array will be treated as
@@ -648,6 +651,11 @@ struct slPair *slPairFromString(char *s);
  * name1=val1 name2=val2 ...
  * Returns NULL if parse error.  Free this up with
  * slPairFreeValsAndList. */
+
+char *slPairListToString(struct slPair *list);
+// Returns an allocated string of pairs in form of
+// name1=val1 name2=val2 ...
+// Will wrap vals in quotes if contain spaces: name3="val 3"
 
 int slPairCmpCase(const void *va, const void *vb);
 /* Compare two slPairs, ignore case. */

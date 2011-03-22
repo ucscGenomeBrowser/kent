@@ -55,20 +55,15 @@ score.</li>
 indicates the number of places in the genome that match the peptide
 sequence. This reflects the uniqueness of the peptide mapping in
 the genome. Any mappings to highly-duplicated regions will have
-high repeat counts. This track does not contain any mappings with
-repeat counts of greater than five, but such mappings can be downloaded
-via the Downloads page.<br>
+high repeat counts.<br>
   </li>
   <li>The <span style="font-style: italic;">Peptide Rank </span>reflects
-a source of uncertainty in mass spectrometry-based proteomics: any
-single peak in the spectrum can be chimeric, containing more than one
-peptide. Consequently, one peak can have more than one distinct,
-valid match to the genome, reflecting the contribution of the separate
-peptides. Each of these matches can be ranked (based on?).
-The <span style="font-style: italic;">Peptide Rank</span> indicates
-the rank of each match. This track does not contain any mappings
-with peptide ranks greater than 3, but such mappings can be downloaded
-via the Downloads page.</li>
+that any single peak in the spectrum can be mapped with confidence to two or 
+more distinct peptides.  The reasons for this include that the peak can be
+chimeric, containing more than one peptide, and that one peak can match two
+or more distinct peptides.  In the cases where a peak maps to multiple peptides,
+the <span style="font-style: italic;">Peptide Rank</span> indicates the rank 
+of each mapping.</li>
   <li>The <span style="font-style: italic;">spectrum ID</span> is a
 semi-unique identifier of the spectrum associated with the peptide
 mapping, and can be used to track the origins of the mapping.<br>

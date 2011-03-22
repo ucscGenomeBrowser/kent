@@ -16,6 +16,11 @@ class ConfigParser(object):
     # RE for splitting line around variable reference
     varRe = re.compile("^([^\$]*)(\$*\{([^\}]+)\}(.*))?$")
 
+    # RE for directing and parsing a database in a key, assumes if the
+    # first word starts with letters, then has numbers, and optionally
+    # more letters, it is a database.
+    dbRe = re.compile("^([a-zA-Z]+[0-9]+[a-zA-Z]*)\\.")
+
     def __init__(self, conf):
         self.conf = conf
         self.fh = None
@@ -52,10 +57,13 @@ class ConfigParser(object):
     def _parseLine(self, line):
         "parse a line from the conf file and key/value to object"
         if not ConfigParser.ignoreRe.match(line):
-            m = ConfigParser.keyValRe.match(line)
-            if m == None:
+            mvar = ConfigParser.keyValRe.match(line)
+            if mvar == None:
                 raise Exception(fh.name + ":" + "can't parse conf line: " + line)
-            self.conf[m.group(1)] = self._expandVars(m.group(2))
+            self.conf[mvar.group(1)] = self._expandVars(mvar.group(2))
+            mdb = ConfigParser.dbRe.match(mvar.group(1))
+            if mdb != None:
+                self.conf.dbs.add(mdb.group(1))
 
     def parse(self, confFile):
         "parse conf file"
@@ -72,6 +80,7 @@ class Config(dict):
     def __init__(self, confFile):
         "read conf file into object"
         self.confFile = confFile
+        self.dbs = set()
         parser= ConfigParser(self)
         parser.parse(confFile)
 

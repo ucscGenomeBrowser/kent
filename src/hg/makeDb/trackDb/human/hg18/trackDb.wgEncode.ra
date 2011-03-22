@@ -787,7 +787,6 @@ wgEncode 1
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in SKMC cells)
     subGroups cellType=SKMC rep=rep2
     type broadPeak
-    accession GSM472911
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Bjtert
     subTrack wgEncodeUwAffyExonArray off
@@ -1744,7 +1743,8 @@ include trackDb.wgEncodeYaleRnaSeq.ra
 
 
 # Yale TFBS (wrangler: Venkat, assisted by Tim)
-include wgEncodeYaleChIPseq.ra
+include wgEncodeYaleChIPseq.ra beta,public
+include wgEncodeYaleChIPseq.new.ra alpha
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
 include wgEncodeHudsonalphaChipSeq.ra

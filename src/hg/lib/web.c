@@ -297,29 +297,29 @@ else if (dbIsFound)
        "<table bgcolor=\"#000000\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%%\" height=\"27\">" "\n"
        "<tr bgcolor=\"#"HG_COL_HOTLINKS"\"><td valign=\"middle\">" "\n"
        "	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor=\"#"HG_COL_HOTLINKS"\" height=\"24\" class=\"topbar\"><TR>" "\n"
-       " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">&nbsp;" "\n"
+       " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">" "\n"
        );
 
 if (isEncode)
     {
-    printf("&nbsp;<A HREF=\"../encode/\" class=\"topbar\">" "\n");
+    printf("<A HREF=\"../encode/\" class=\"topbar\">" "\n");
     puts("           Home</A>");
     }
 else
     {
-    printf("&nbsp;<A HREF=\"../index.html%s\" class=\"topbar\">" "\n", uiState);
-    puts("           Home</A> &nbsp;&nbsp;&nbsp;");
+    printf("<A HREF=\"../index.html%s\" class=\"topbar\">" "\n", uiState);
+    puts("           Home</A> ");
     if (isGsid)
 	{
     	printf("       <A HREF=\"../cgi-bin/gsidSubj%s\" class=\"topbar\">\n",
 	       uiState);
-	puts("           Subject View</A> &nbsp;&nbsp;&nbsp;");
+	puts("           Subject View</A> ");
 	}
     if (!isGsid)
 	{
 	printf("       <A HREF=\"../cgi-bin/hgGateway%s\" class=\"topbar\">\n",
 	       uiState);
-    	puts("           Genomes</A> &nbsp;&nbsp;&nbsp;");
+    	puts("           Genomes</A> ");
     	}
     if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
 	endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgTrackUi") ||
@@ -328,13 +328,13 @@ else
 	{
         printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>\n",
 	       uiState,TRACK_SEARCH);
-	puts("           Genome Browser</A> &nbsp;&nbsp;&nbsp;");
+	puts("           Genome Browser</A> ");
 	}
     if (haveBlat && !endsWith(scriptName, "hgBlat"))
 	{
     	printf("       <A HREF=\"../cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">",
 		theCart ? "&" : "", uiState+1 );
-    	puts("           Blat</A> &nbsp;&nbsp;&nbsp;");
+    	puts("           Blat</A> ");
 	}
 }
     {
@@ -364,7 +364,7 @@ else
 	       uiState, theCart ? "&" : "?" );
     }
     /* disable TB for both GSID and CGB servers */
-    if (!isGsid && !hIsCgbServer()) puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
+    if (!isGsid && !hIsCgbServer()) puts("           Tables</A> ");
     if (!endsWith(scriptName, "hgNear"))
     /*  possible to make this conditional: if (db != NULL && hgNearOk(db))	*/
         if (db != NULL && hgNearOk(db))
@@ -373,32 +373,32 @@ else
 	    {
 	    printf("       <A HREF=\"../cgi-bin/gsidTable%s\" class=\"topbar\">\n",
 	           uiState);
-	    puts("           Table View</A> &nbsp;&nbsp;&nbsp;");
+	    puts("           Table View</A> ");
 	    }
 	else
 	    {
 	    printf("       <A HREF=\"../cgi-bin/hgNear%s\" class=\"topbar\">\n",
 	           uiState);
-	    puts("           Gene Sorter</A> &nbsp;&nbsp;&nbsp;");
+	    puts("           Gene Sorter</A> ");
 	    }
 	}
     if ((!endsWith(scriptName, "hgPcr")) && (db == NULL || hgPcrOk(db)))
 	{
 	printf("       <A HREF=\"../cgi-bin/hgPcr%s\" class=\"topbar\">\n",
 	       uiState);
-	puts("           PCR</A> &nbsp;&nbsp;&nbsp;");
+	puts("           PCR</A> ");
 	}
     if (endsWith(scriptName, "hgGenome"))
 	{
 	printf("       <A HREF=\"../cgi-bin/hgGenome%s&hgGenome_doPsOutput=on\" class=\"topbar\">\n",
 	       uiState);
-	puts("           PDF/PS</A> &nbsp;&nbsp;&nbsp;");
+	puts("           PDF/PS</A> ");
 	}
     if (endsWith(scriptName, "hgHeatmap"))
 	{
 	printf("       <A HREF=\"../cgi-bin/hgHeatmap%s&hgHeatmap_doPsOutput=on\" class=\"topbar\">\n",
 	       uiState);
-	puts("           PDF/PS</A> &nbsp;&nbsp;&nbsp;");
+	puts("           PDF/PS</A> ");
 	}
 #ifndef GBROWSE
     if (wikiLinkEnabled() && !endsWith(scriptName, "hgSession"))
@@ -406,11 +406,11 @@ else
 	printf("<A HREF=\"../cgi-bin/hgSession%s%shgS_doMainPage=1\" "
 	       "class=\"topbar\">Session</A>",
 	       uiState, theCart ? "&" : "?" );
-	puts("&nbsp;&nbsp;&nbsp;");
+	puts("");
 	}
 #endif /* GBROWSE */
     if (!isGsid) puts("       <A HREF=\"../FAQ/\" class=\"topbar\">" "\n"
-	 "           FAQ</A> &nbsp;&nbsp;&nbsp;" "\n"
+	 "           FAQ</A> " "\n"
 	 );
     if (!isGsid)
 	{
@@ -436,7 +436,7 @@ else
     	puts("           Help</A> ");
     	}
     }
-puts("&nbsp;</font></TD>" "\n"
+puts("</font></TD>" "\n"
      "       </TR></TABLE>" "\n"
      "</TD></TR></TABLE>" "\n"
      "</TD></TR>	" "\n"
@@ -1293,9 +1293,22 @@ finishPartialTable(rowIx, itemPos, maxPerRow, webPrintLinkCellStart);
 }
 
 char *webTimeStampedLinkToResource(char *fileName, boolean wrapInHtml)
-// Returns full path of timestamped link to the requested resource file (js, or css).
-// If wrapInHtml, then returns link embedded in style or script html. Free after use.
+// If wrapInHtml
+//   returns versioned link embedded in style or script html (free after use).
+// else
+//   returns full path of a versioned path to the requested resource file (js, or css).
 // NOTE: png, jpg and gif should also be supported but are untested.
+//
+// In production sites we use a versioned softlink that includes the CGI version. This has the following benefits:
+// a) flushes user's web browser cache when the user visits a GB site whose version has changed since their last visit;
+// b) enforces the requirement that static files are the same version as the CGIs (something that often fails to happen in mirrors).
+// (see notes in redmine #3170).
+//
+// In dev trees we use mtime to create a pseudo-version; this forces web browsers to reload css/js file when it changes,
+// so we don't get odd behavior that can be caused by caching of mis-matched javascript and style files in dev trees.
+//
+// In either case, the actual file has to have been previously created by running make in the appropriate directory (kent/src/hg/js
+// or kent/src/hg/htdocs/style).
 {
 char baseName[PATH_LEN];
 char extension[FILEEXT_LEN];
@@ -1316,9 +1329,10 @@ else if (image)
     dirName = cfgOptionDefault("browser.styleImagesDir","style/images");
 struct dyString *fullDirName = NULL;
 char *docRoot = hDocumentRoot();
-if(docRoot != NULL) // tolerate missing docRoot (i.e. when running from command line)
+if(docRoot != NULL)
     fullDirName = dyStringCreate("%s/%s", docRoot, dirName);
 else
+    // tolerate missing docRoot (i.e. when running from command line)
     fullDirName = dyStringCreate("%s", dirName);
 if(!fileExists(dyStringContents(fullDirName)))
     errAbort("webTimeStampedLinkToResource: dir: %s doesn't exist.\n", dyStringContents(fullDirName));
@@ -1328,44 +1342,18 @@ struct dyString *realFileName = dyStringCreate("%s/%s", dyStringContents(fullDir
 if(!fileExists(dyStringContents(realFileName)))
     errAbort("webTimeStampedLinkToResource: file: %s doesn't exist.\n", dyStringContents(realFileName));
 
-// build and verify link path including timestamp in the form of dir/baseName-timeStamp.ext
-long mtime = fileModTime(dyStringContents(realFileName));   // We add mtime to create a pseudo-version; this forces browsers to reload css/js file when it changes
+// build and verify link path including timestamp in the form of dir/baseName + timeStamp or CGI Version + ext
+long mtime = fileModTime(dyStringContents(realFileName));
 struct dyString *linkWithTimestamp;
 if(hIsPreviewHost() || hIsPrivateHost())
     linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), baseName, mtime, extension);
 else
     linkWithTimestamp = dyStringCreate("%s/%s-v%s%s", dyStringContents(fullDirName), baseName, CGI_VERSION, extension);
 
-// If link does not exist, then create it !!
 if(!fileExists(dyStringContents(linkWithTimestamp)))
-    {
-    // The versioned copy should be created by the install process; however, mirrors may fail
-    // to preserve mtime's when copying over the javascript/css files, in which case the
-    // versioned softlinks won't match the real file; in that case, we try to create
-    // the versioned links on the fly (which requires write access to the javascript or style directory!).
+    errAbort("Cannot find correct version of file '%s'; this is due to an installation error\n\nError details: %s does not exist",
+             fileName, dyStringContents(linkWithTimestamp));
 
-    // Remove older links
-    struct dyString *pattern = dyStringCreate("%s-[0-9]+\\%s", baseName, extension);
-    struct slName *file, *files = listDirRegEx(dyStringContents(fullDirName), dyStringContents(pattern), REG_EXTENDED);
-    struct dyString *oldLink = dyStringNew(256);
-    for (file = files; file != NULL; file = file->next)
-        {
-        dyStringClear(oldLink);
-        dyStringPrintf(oldLink, "%s/%s", dyStringContents(fullDirName), file->name);
-        unlink(dyStringContents(oldLink));
-        }
-    dyStringFree(&oldLink);
-    slFreeList(&files);
-    dyStringFree(&pattern);
-
-    // Create new link
-    if(symlink(dyStringContents(realFileName), dyStringContents(linkWithTimestamp)))
-        {
-        int err = errno;
-        errAbort("webTimeStampedLinkToResource: symlink of %s failed: errno: %d (%s); the directory '%s' must be writeable by user '%s'; alternatively, the installation process must create the versioned files\n",
-                 dyStringContents(linkWithTimestamp), err, strerror(err), dyStringContents(fullDirName), getUser());
-        }
-    }
 // Free up all that extra memory
 dyStringFree(&realFileName);
 dyStringFree(&fullDirName);

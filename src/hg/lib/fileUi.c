@@ -60,6 +60,8 @@ if (foundFiles == NULL
     char *server = hDownloadsServer();
 
     boolean useRsync = TRUE;
+//#define RSYNC_DONT_WORK_ON_HGWDEV
+#ifdef RSYNC_DONT_WORK_ON_HGWDEV
     if (hIsPrivateHost() || hIsPreviewHost())
         {
         // For hgwdev (which is the same machine as "hgdownload-test.cse.ucsc.edu") rsync does not work
@@ -70,13 +72,20 @@ if (foundFiles == NULL
     else if (hIsBetaHost())
         {
         // For hgwbeta, the files are being looked for one test in a "beta/" subdir.  Have to rsync
-        server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
-        safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/beta/", server, db, dir, subDir);
+        //server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+        //safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/beta/", server, db, dir, subDir);
+        // FIXME: Need cluster-admins help to get rsync solution
+        safef(cmd,sizeof(cmd),"ls -log --time-style=long-iso /hive/groups/encode/dcc/pipeline/downloads/%s/%s/beta/", db,subDir);
+        useRsync = FALSE;
         }
     else  // genome and hgwbeta can use rsync
+#endif///def RSYNC_DONT_WORK_ON_HGWDEV
         {
         // Works:         rsync -avn rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/
-        safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
+        if (hIsBetaHost())
+            safef(cmd,sizeof(cmd),"rsync -avn rsync://hgdownload-test.cse.ucsc.edu/goldenPath/%s/%s/%s/beta/",  db, dir, subDir); // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+        else
+            safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
         }
     //warn("cmd: %s",cmd);
     scriptOutput = popen(cmd, "r");
@@ -366,7 +375,7 @@ return NULL;
 
 #define FILTER_THE_FILES
 #ifdef FILTER_THE_FILES
-static char *labelWithVocabLink(char *var,char *title,struct slPair *valsAndLabels)
+static char *labelWithVocabLink(char *var,char *title,struct slPair *valsAndLabels,boolean tagsNotVals)
 /* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to all relevent terms.  Return string is cloned. */
 {
@@ -386,7 +395,7 @@ if (!cvDefined)
                    var,title,title);
 else
     {
-    dyStringPrintf(dyLink,"<A HREF='hgEncodeVocab?term=");
+    dyStringPrintf(dyLink,"<A HREF='hgEncodeVocab?%s=",tagsNotVals?"tag":"term");
     struct slPair *oneVal = valsAndLabels;
     for(;oneVal!=NULL;oneVal=oneVal->next)
         {
@@ -440,7 +449,7 @@ if (sortOrder != NULL)
             if (dropDownHtml)
                 {
                 dyStringPrintf(dyFilters,"<td align='left'>\n<B>%s</B>:<BR>\n%s</td><td width=10>&nbsp;</td>\n",
-                               labelWithVocabLink(var,sortOrder->title[sIx],relevantVals),dropDownHtml);
+                               labelWithVocabLink(var,sortOrder->title[sIx],relevantVals,TRUE),dropDownHtml);  // TRUE were sending tags, not values
                 freeMem(dropDownHtml);
                 count++;
                 }
@@ -842,7 +851,7 @@ if (slCount(mdbList) == 0)
 mdbObjsSortOnVars(&mdbList, "composite");
 mdbObjRemoveHiddenVars(mdbList);
 
-#define FOUND_FILE_LIMIT 1000
+#define FOUND_FILE_LIMIT 2000
 int fileCount = 0;
 // Verify file existance and make fileList of those found
 struct fileDb *fileList = NULL, *oneFile = NULL; // Will contain found files
@@ -870,7 +879,6 @@ while(mdbList && fileCount < FOUND_FILE_LIMIT)
                     slAddHead(&mdbFiles,mdbFile);
                     fileCount++;
                     found = TRUE;
-                    continue;
                     }
                 }
                 else

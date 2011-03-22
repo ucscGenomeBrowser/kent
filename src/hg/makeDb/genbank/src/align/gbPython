@@ -1,10 +1,14 @@
 #!/bin/sh -e
-# invoke version of python compiled for genbank use.  Needed until we
-# get 2.4 installed on systems.
+# Invoke version of python compiled for genbank use.  Needed since systems
+# have ancient python installed
 
 
 arch=`uname -m`
-rtdir="/cluster/data/genbank/runtime/$arch"
+# try both RR and other server locations
+rtdir="/genbank/runtime/$arch"
+if [ ! -e $rtdir ] ; then
+    rtdir="/cluster/data/genbank/runtime/$arch"
+fi
 LD_LIBRARY_PATH="$rtdir/lib:${LD_LIBRARY_PATH}"
 export LD_LIBRARY_PATH
 exec $rtdir/bin/python "$@"

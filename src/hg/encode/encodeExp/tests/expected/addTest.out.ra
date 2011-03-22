@@ -1,0 +1,16 @@
+ix 1
+organism human
+accession wgEncodeEH000001
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars Antibody=Pol2
+
+ix 2
+organism mouse
+accession wgEncodeEM000002
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars Antibody=Pol2
+
