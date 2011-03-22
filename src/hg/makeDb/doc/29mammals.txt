@@ -1,7 +1,9 @@
 # for emacs: -*- mode: sh; -*-
 
 # this file describes the procedure of loading the 29 mammals tracks
-# into the genome wiki
+# into the genome wiki.  You can also read a generic description of
+# this procdure at:
+# http://genomewiki.ucsc.edu/index.php/User_generated_custom_tracks
 
 # construct a file to use for loading all the tracks in one go:
     cat 29mammals_track.txt
