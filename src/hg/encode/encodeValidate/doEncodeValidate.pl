@@ -327,6 +327,7 @@ our %formatCheckers = (
     shortFrags => \&validateBed,
     bedLogR => \&validateBed,
     bedRnaElements => \&validateBed,
+    bedRrbs => \&validateBed,
     txt  => \&validateFreepass,
     );
 
@@ -2223,38 +2224,6 @@ if($submitPath =~ /(\d+)$/) {
              $daf->{assembly}, $daf->{lab}, $daf->{dataType}, $compositeTrack, $id);
     }
 }
-
-my @cmds;
-# push @cmds, "docIdSubmitDir encpipeline_beta $submitPath  /hive/groups/encode/dcc/pipeline/downloads/betaDocId";
-push @cmds, "docIdSubmitDir encpipeline_prod $submitPath  /hive/groups/encode/dcc/pipeline/downloads/docId";
-my $safe = SafePipe->new(CMDS => \@cmds,  DEBUG => $opt_verbose - 1);
-if(my $err = $safe->exec()) {
-    my $err = $safe->stderr();
-    printf "Could not submit to docId system: " . $err;
-    exit 1;
-}
-
-# commenting this out until we decide to roll-out name changes
-
-# undef(@cmds);
-# push @cmds, "mv $submitPath/out/trackDb.ra  $submitPath/out/trackDb.ra.preDocId; sed -f $submitPath/out/edit.sed $submitPath/out/trackDb.ra.preDocId" ;
-
-# $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "$submitPath/out/trackDb.ra",  DEBUG => $opt_verbose - 1);
-# if(my $err = $safe->exec()) {
-#    my $err = $safe->stderr();
-#    printf "Could not edit trackDb.ra " . $err;
-#    exit 1;
-#}
-
-#undef(@cmds);
-#push @cmds, "mv $submitPath/out/load.ra  $submitPath/out/load.ra.preDocId; sed -f $submitPath/out/edit.sed $submitPath/out/load.ra.preDocId";
-
-#$safe = SafePipe->new(CMDS => \@cmds, STDOUT => "$submitPath/out/load.ra",  DEBUG => $opt_verbose - 1);
-#if(my $err = $safe->exec()) {
-#    my $err = $safe->stderr();
-#    printf "Could not edit load.ra " . $err;
-#    exit 1;
-#}
 
 $time0=$timeStart;
 doTime("done. ") if $opt_timing;

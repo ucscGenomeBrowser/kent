@@ -16,6 +16,7 @@ fileName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683830
 grant Myers
 lab HudsonAlpha
+labExpId SL890
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -37,6 +38,7 @@ fileName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683897
 grant Myers
 lab HudsonAlpha
+labExpId SL1625
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -58,6 +60,7 @@ fileName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683817
 grant Myers
 lab HudsonAlpha
+labExpId SL893
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -79,6 +82,7 @@ fileName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683880
 grant Myers
 lab HudsonAlpha
+labExpId SL1417
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -100,6 +104,7 @@ fileName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683767
 grant Myers
 lab HudsonAlpha
+labExpId SL888
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -121,6 +126,7 @@ fileName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683886
 grant Myers
 lab HudsonAlpha
+labExpId SL1437
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -142,6 +148,7 @@ fileName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683915
 grant Myers
 lab HudsonAlpha
+labExpId SL894
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -163,6 +170,7 @@ fileName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683864
 grant Myers
 lab HudsonAlpha
+labExpId SL1418
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -184,6 +192,7 @@ fileName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683809
 grant Myers
 lab HudsonAlpha
+labExpId SL891
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -205,6 +214,7 @@ fileName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683912
 grant Myers
 lab HudsonAlpha
+labExpId SL1438
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -226,6 +236,7 @@ fileName wgEncodeHaibMethylRrbsAosmcDukeSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683814
 grant Myers
 lab HudsonAlpha
+labExpId SL766
 obtainedBy Duke
 project wgEncode
 replicate 1
@@ -246,6 +257,7 @@ fileName wgEncodeHaibMethylRrbsAosmcDukeSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683910
 grant Myers
 lab HudsonAlpha
+labExpId SL3546
 obtainedBy Duke
 project wgEncode
 replicate 2
@@ -266,7 +278,8 @@ fileName wgEncodeHaibMethylRrbsAstrocyUncSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683765
 grant Myers
 lab HudsonAlpha
-obtainedBy UNC
+labExpId SL763
+obtainedBy Duke
 project wgEncode
 replicate 1
 subId 3159
@@ -286,7 +299,8 @@ fileName wgEncodeHaibMethylRrbsAstrocyUncSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683882
 grant Myers
 lab HudsonAlpha
-obtainedBy UNC
+labExpId SL3544
+obtainedBy Duke
 project wgEncode
 replicate 2
 subId 3159
@@ -306,6 +320,7 @@ fileName wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683786
 grant Myers
 lab HudsonAlpha
+labExpId SL1676
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -326,6 +341,7 @@ fileName wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683883
 grant Myers
 lab HudsonAlpha
+labExpId SL3265
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -346,6 +362,7 @@ fileName wgEncodeHaibMethylRrbsBcbrainh11058nBiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683908
 grant Myers
 lab HudsonAlpha
+labExpId SL1672
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -366,6 +383,7 @@ fileName wgEncodeHaibMethylRrbsBcbrainh11058nBiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683798
 grant Myers
 lab HudsonAlpha
+labExpId SL3267
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -386,6 +404,7 @@ fileName wgEncodeHaibMethylRrbsBcbreast0203015BiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683834
 grant Myers
 lab HudsonAlpha
+labExpId SL1673
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -406,6 +425,7 @@ fileName wgEncodeHaibMethylRrbsBcbreast0203015BiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683761
 grant Myers
 lab HudsonAlpha
+labExpId SL3430
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -426,6 +446,7 @@ fileName wgEncodeHaibMethylRrbsBckidney0111002BiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683870
 grant Myers
 lab HudsonAlpha
+labExpId SL1751
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -446,6 +467,7 @@ fileName wgEncodeHaibMethylRrbsBckidney0111002BiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683878
 grant Myers
 lab HudsonAlpha
+labExpId SL3435
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -466,6 +488,7 @@ fileName wgEncodeHaibMethylRrbsBcleftventriclen41BiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683846
 grant Myers
 lab HudsonAlpha
+labExpId SL1722
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -486,6 +509,7 @@ fileName wgEncodeHaibMethylRrbsBcleftventriclen41BiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683895
 grant Myers
 lab HudsonAlpha
+labExpId SL3264
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -506,6 +530,7 @@ fileName wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683876
 grant Myers
 lab HudsonAlpha
+labExpId SL1755
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -526,6 +551,7 @@ fileName wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683759
 grant Myers
 lab HudsonAlpha
+labExpId SL3261
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -546,6 +572,7 @@ fileName wgEncodeHaibMethylRrbsBcliver0111002BiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683914
 grant Myers
 lab HudsonAlpha
+labExpId SL1996
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -566,6 +593,7 @@ fileName wgEncodeHaibMethylRrbsBcliver0111002BiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683782
 grant Myers
 lab HudsonAlpha
+labExpId SL3438
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -586,6 +614,7 @@ fileName wgEncodeHaibMethylRrbsBclung0111002BiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683821
 grant Myers
 lab HudsonAlpha
+labExpId SL1725
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -606,6 +635,7 @@ fileName wgEncodeHaibMethylRrbsBclung0111002BiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683940
 grant Myers
 lab HudsonAlpha
+labExpId SL3433
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -626,6 +656,7 @@ fileName wgEncodeHaibMethylRrbsBcpancreash12817nBiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683848
 grant Myers
 lab HudsonAlpha
+labExpId SL1726
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -646,6 +677,7 @@ fileName wgEncodeHaibMethylRrbsBcpancreash12817nBiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683819
 grant Myers
 lab HudsonAlpha
+labExpId SL3442
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -666,6 +698,7 @@ fileName wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683899
 grant Myers
 lab HudsonAlpha
+labExpId SL1674
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -686,6 +719,7 @@ fileName wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683820
 grant Myers
 lab HudsonAlpha
+labExpId SL3266
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -706,6 +740,7 @@ fileName wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683796
 grant Myers
 lab HudsonAlpha
+labExpId SL1675
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -726,6 +761,7 @@ fileName wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683893
 grant Myers
 lab HudsonAlpha
+labExpId SL3413
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -746,6 +782,7 @@ fileName wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainSitesRep1.bedRrbs.
 geoSampleAccession GSM683789
 grant Myers
 lab HudsonAlpha
+labExpId SL1752
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -766,6 +803,7 @@ fileName wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainSitesRep2.bedRrbs.
 geoSampleAccession GSM683811
 grant Myers
 lab HudsonAlpha
+labExpId SL3439
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -786,6 +824,7 @@ fileName wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep1.bedRrbs.
 geoSampleAccession GSM683931
 grant Myers
 lab HudsonAlpha
+labExpId SL1758
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -806,6 +845,7 @@ fileName wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep2.bedRrbs.
 geoSampleAccession GSM683868
 grant Myers
 lab HudsonAlpha
+labExpId SL3441
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -826,6 +866,7 @@ fileName wgEncodeHaibMethylRrbsBcskin0111002BiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683865
 grant Myers
 lab HudsonAlpha
+labExpId SL1727
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -846,6 +887,7 @@ fileName wgEncodeHaibMethylRrbsBcskin0111002BiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683892
 grant Myers
 lab HudsonAlpha
+labExpId SL3436
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -866,6 +908,7 @@ fileName wgEncodeHaibMethylRrbsBcstomach0111002BiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683947
 grant Myers
 lab HudsonAlpha
+labExpId SL1997
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -886,6 +929,7 @@ fileName wgEncodeHaibMethylRrbsBcstomach0111002BiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683877
 grant Myers
 lab HudsonAlpha
+labExpId SL3431
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -906,6 +950,7 @@ fileName wgEncodeHaibMethylRrbsBctestisn30BiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683781
 grant Myers
 lab HudsonAlpha
+labExpId SL1677
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -926,6 +971,7 @@ fileName wgEncodeHaibMethylRrbsBctestisn30BiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683850
 grant Myers
 lab HudsonAlpha
+labExpId SL3416
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -946,6 +992,7 @@ fileName wgEncodeHaibMethylRrbsBcuterusbn0765BiochainSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683803
 grant Myers
 lab HudsonAlpha
+labExpId SL1671
 obtainedBy BioChain
 project wgEncode
 replicate 1
@@ -966,6 +1013,7 @@ fileName wgEncodeHaibMethylRrbsBcuterusbn0765BiochainSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683911
 grant Myers
 lab HudsonAlpha
+labExpId SL3414
 obtainedBy BioChain
 project wgEncode
 replicate 2
@@ -986,6 +1034,7 @@ fileName wgEncodeHaibMethylRrbsBe2cHaibSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683885
 grant Myers
 lab HudsonAlpha
+labExpId SL3555
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
@@ -1006,6 +1055,7 @@ fileName wgEncodeHaibMethylRrbsBe2cHaibSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683869
 grant Myers
 lab HudsonAlpha
+labExpId SL3556
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
@@ -1026,6 +1076,7 @@ fileName wgEncodeHaibMethylRrbsBjUwSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683779
 grant Myers
 lab HudsonAlpha
+labExpId SL903
 obtainedBy UW
 project wgEncode
 replicate 1
@@ -1046,6 +1097,7 @@ fileName wgEncodeHaibMethylRrbsBjUwSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683763
 grant Myers
 lab HudsonAlpha
+labExpId SL3560
 obtainedBy UW
 project wgEncode
 replicate 2
@@ -1066,6 +1118,7 @@ fileName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683778
 grant Myers
 lab HudsonAlpha
+labExpId SL870
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1087,6 +1140,7 @@ fileName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683930
 grant Myers
 lab HudsonAlpha
+labExpId SL1341
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1108,6 +1162,7 @@ fileName wgEncodeHaibMethylRrbsEcc1HaibSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683845
 grant Myers
 lab HudsonAlpha
+labExpId SL3482
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
@@ -1128,6 +1183,7 @@ fileName wgEncodeHaibMethylRrbsEcc1HaibSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683925
 grant Myers
 lab HudsonAlpha
+labExpId SL3483
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
@@ -1148,6 +1204,7 @@ fileName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683766
 grant Myers
 lab HudsonAlpha
+labExpId SL765
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -1169,6 +1226,7 @@ fileName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683847
 grant Myers
 lab HudsonAlpha
+labExpId SL1818
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -1190,6 +1248,7 @@ fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683906
 grant Myers
 lab HudsonAlpha
+labExpId SL727
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1211,6 +1270,7 @@ fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683927
 grant Myers
 lab HudsonAlpha
+labExpId SL728
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1232,6 +1292,7 @@ fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1.bedRrbs.
 geoSampleAccession GSM683774
 grant Myers
 lab HudsonAlpha
+labExpId SL1615
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1253,6 +1314,7 @@ fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2.bedRrbs.
 geoSampleAccession GSM683841
 grant Myers
 lab HudsonAlpha
+labExpId SL1614
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1274,6 +1336,7 @@ fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683835
 grant Myers
 lab HudsonAlpha
+labExpId SL1232
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1295,6 +1358,7 @@ fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683921
 grant Myers
 lab HudsonAlpha
+labExpId SL1233
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1316,6 +1380,7 @@ fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683902
 grant Myers
 lab HudsonAlpha
+labExpId SL761
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1337,6 +1402,7 @@ fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683887
 grant Myers
 lab HudsonAlpha
+labExpId SL760
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1358,6 +1424,7 @@ fileName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683903
 grant Myers
 lab HudsonAlpha
+labExpId SL1804
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -1379,6 +1446,7 @@ fileName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683843
 grant Myers
 lab HudsonAlpha
+labExpId SL793
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -1400,6 +1468,7 @@ fileName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683777
 grant Myers
 lab HudsonAlpha
+labExpId SL943
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -1421,6 +1490,7 @@ fileName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683938
 grant Myers
 lab HudsonAlpha
+labExpId SL1803
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -1442,6 +1512,7 @@ fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683770
 grant Myers
 lab HudsonAlpha
+labExpId SL716
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1463,6 +1534,7 @@ fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683879
 grant Myers
 lab HudsonAlpha
+labExpId SL713
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1484,6 +1556,7 @@ fileName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683824
 grant Myers
 lab HudsonAlpha
+labExpId SL889
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1505,6 +1578,7 @@ fileName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683858
 grant Myers
 lab HudsonAlpha
+labExpId SL1618
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1526,6 +1600,7 @@ fileName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683837
 grant Myers
 lab HudsonAlpha
+labExpId SL898
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1547,6 +1622,7 @@ fileName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683829
 grant Myers
 lab HudsonAlpha
+labExpId SL1441
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1568,6 +1644,7 @@ fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683852
 grant Myers
 lab HudsonAlpha
+labExpId SL873
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1589,6 +1666,7 @@ fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683922
 grant Myers
 lab HudsonAlpha
+labExpId SL1626
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1610,6 +1688,7 @@ fileName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683936
 grant Myers
 lab HudsonAlpha
+labExpId SL892
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1631,6 +1710,7 @@ fileName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683849
 grant Myers
 lab HudsonAlpha
+labExpId SL1439
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1652,6 +1732,7 @@ fileName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683788
 grant Myers
 lab HudsonAlpha
+labExpId SL757
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -1673,6 +1754,7 @@ fileName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683898
 grant Myers
 lab HudsonAlpha
+labExpId SL1902
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -1694,6 +1776,7 @@ fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683839
 grant Myers
 lab HudsonAlpha
+labExpId SL896
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1715,6 +1798,7 @@ fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683807
 grant Myers
 lab HudsonAlpha
+labExpId SL1620
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -1736,7 +1820,8 @@ fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683825
 grant Myers
 lab HudsonAlpha
-obtainedBy Stanford
+labExpId SL860
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1756,7 +1841,8 @@ fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683769
 grant Myers
 lab HudsonAlpha
-obtainedBy Stanford
+labExpId SL1422
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1776,6 +1862,7 @@ fileName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683825
 grant Myers
 lab HudsonAlpha
+labExpId SL759
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -1797,6 +1884,7 @@ fileName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683769
 grant Myers
 lab HudsonAlpha
+labExpId SL1901
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -1818,6 +1906,7 @@ fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683926
 grant Myers
 lab HudsonAlpha
+labExpId SL657
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1839,6 +1928,7 @@ fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683828
 grant Myers
 lab HudsonAlpha
+labExpId SL712
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1860,6 +1950,7 @@ fileName wgEncodeHaibMethylRrbsHepatocytesDukeSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683764
 grant Myers
 lab HudsonAlpha
+labExpId SL1819
 obtainedBy Duke
 project wgEncode
 replicate 1
@@ -1880,6 +1971,7 @@ fileName wgEncodeHaibMethylRrbsHepatocytesDukeSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683872
 grant Myers
 lab HudsonAlpha
+labExpId SL1807
 obtainedBy Duke
 project wgEncode
 replicate 2
@@ -1900,6 +1992,7 @@ fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683795
 grant Myers
 lab HudsonAlpha
+labExpId SL715
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1920,6 +2013,7 @@ fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683855
 grant Myers
 lab HudsonAlpha
+labExpId SL714
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -1940,7 +2034,8 @@ fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683795
 grant Myers
 lab HudsonAlpha
-obtainedBy HudsonAlpha
+labExpId SL1815
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1961,7 +2056,8 @@ fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683855
 grant Myers
 lab HudsonAlpha
-obtainedBy HudsonAlpha
+labExpId SL1816
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1982,6 +2078,7 @@ fileName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683816
 grant Myers
 lab HudsonAlpha
+labExpId SL875
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2003,6 +2100,7 @@ fileName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683942
 grant Myers
 lab HudsonAlpha
+labExpId SL1619
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2024,6 +2122,7 @@ fileName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683944
 grant Myers
 lab HudsonAlpha
+labExpId SL867
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2045,6 +2144,7 @@ fileName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683854
 grant Myers
 lab HudsonAlpha
+labExpId SL1421
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2066,6 +2166,7 @@ fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683844
 grant Myers
 lab HudsonAlpha
+labExpId SL877
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2087,6 +2188,7 @@ fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683808
 grant Myers
 lab HudsonAlpha
+labExpId SL1440
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2108,6 +2210,7 @@ fileName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683794
 grant Myers
 lab HudsonAlpha
+labExpId SL897
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2129,6 +2232,7 @@ fileName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683913
 grant Myers
 lab HudsonAlpha
+labExpId SL1347
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2150,6 +2254,7 @@ fileName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683901
 grant Myers
 lab HudsonAlpha
+labExpId SL866
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2171,6 +2276,7 @@ fileName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683851
 grant Myers
 lab HudsonAlpha
+labExpId SL1344
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2192,6 +2298,7 @@ fileName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683831
 grant Myers
 lab HudsonAlpha
+labExpId SL865
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2213,6 +2320,7 @@ fileName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683943
 grant Myers
 lab HudsonAlpha
+labExpId SL1343
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2234,6 +2342,7 @@ fileName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683773
 grant Myers
 lab HudsonAlpha
+labExpId SL874
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2255,6 +2364,7 @@ fileName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683905
 grant Myers
 lab HudsonAlpha
+labExpId SL1443
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2276,6 +2386,7 @@ fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep3.bedRrbs.gz
 geoSampleAccession GSM683941
 grant Myers
 lab HudsonAlpha
+labExpId SL1914
 obtainedBy Duke
 project wgEncode
 replicate 3
@@ -2296,6 +2407,7 @@ fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep4.bedRrbs.gz
 geoSampleAccession GSM683836
 grant Myers
 lab HudsonAlpha
+labExpId SL1919
 obtainedBy Duke
 project wgEncode
 replicate 4
@@ -2316,6 +2428,7 @@ fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep5.bedRrbs.gz
 geoSampleAccession GSM683932
 grant Myers
 lab HudsonAlpha
+labExpId SL1917
 obtainedBy Duke
 project wgEncode
 replicate 5
@@ -2336,6 +2449,7 @@ fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep6.bedRrbs.gz
 geoSampleAccession GSM683826
 grant Myers
 lab HudsonAlpha
+labExpId SL1936
 obtainedBy Duke
 project wgEncode
 replicate 6
@@ -2356,6 +2470,7 @@ fileName wgEncodeHaibMethylRrbsHsmmSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683818
 grant Myers
 lab HudsonAlpha
+labExpId SL939
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -2377,6 +2492,7 @@ fileName wgEncodeHaibMethylRrbsHsmmSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683907
 grant Myers
 lab HudsonAlpha
+labExpId SL940
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -2398,6 +2514,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3.bedRrbs.gz
 geoSampleAccession GSM683801
 grant Myers
 lab HudsonAlpha
+labExpId SL1915
 obtainedBy Duke
 project wgEncode
 replicate 3
@@ -2418,6 +2535,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtDukeSitesRep4.bedRrbs.gz
 geoSampleAccession GSM683871
 grant Myers
 lab HudsonAlpha
+labExpId SL1920
 obtainedBy Duke
 project wgEncode
 replicate 4
@@ -2438,6 +2556,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtDukeSitesRep5.bedRrbs.gz
 geoSampleAccession GSM683813
 grant Myers
 lab HudsonAlpha
+labExpId SL1918
 obtainedBy Duke
 project wgEncode
 replicate 5
@@ -2458,6 +2577,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtDukeSitesRep6.bedRrbs.gz
 geoSampleAccession GSM683900
 grant Myers
 lab HudsonAlpha
+labExpId SL1921
 obtainedBy Duke
 project wgEncode
 replicate 6
@@ -2478,6 +2598,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683945
 grant Myers
 lab HudsonAlpha
+labExpId SL1916
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -2499,6 +2620,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683799
 grant Myers
 lab HudsonAlpha
+labExpId SL1935
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -2520,6 +2642,7 @@ fileName wgEncodeHaibMethylRrbsHtb11HaibSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683888
 grant Myers
 lab HudsonAlpha
+labExpId SL3549
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
@@ -2540,6 +2663,7 @@ fileName wgEncodeHaibMethylRrbsHtb11HaibSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683775
 grant Myers
 lab HudsonAlpha
+labExpId SL3550
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
@@ -2560,6 +2684,7 @@ fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683939
 grant Myers
 lab HudsonAlpha
+labExpId SL3474
 obtainedBy Duke
 project wgEncode
 replicate 1
@@ -2580,6 +2705,7 @@ fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep3.bedRrbs.gz
 geoSampleAccession GSM683867
 grant Myers
 lab HudsonAlpha
+labExpId SL1811
 obtainedBy Duke
 project wgEncode
 replicate 3
@@ -2600,6 +2726,7 @@ fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683823
 grant Myers
 lab HudsonAlpha
+labExpId SL900
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2621,6 +2748,7 @@ fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683815
 grant Myers
 lab HudsonAlpha
+labExpId SL1375
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2642,6 +2770,7 @@ fileName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683792
 grant Myers
 lab HudsonAlpha
+labExpId SL899
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2663,6 +2792,7 @@ fileName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683806
 grant Myers
 lab HudsonAlpha
+labExpId SL1345
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -2684,6 +2814,7 @@ fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683856
 grant Myers
 lab HudsonAlpha
+labExpId SL725
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -2705,6 +2836,7 @@ fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683780
 grant Myers
 lab HudsonAlpha
+labExpId SL726
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -2726,6 +2858,7 @@ fileName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683946
 grant Myers
 lab HudsonAlpha
+labExpId SL1903
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -2747,6 +2880,7 @@ fileName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683776
 grant Myers
 lab HudsonAlpha
+labExpId SL1805
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -2768,6 +2902,7 @@ fileName wgEncodeHaibMethylRrbsLncapDukeSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683862
 grant Myers
 lab HudsonAlpha
+labExpId SL787
 obtainedBy Duke
 project wgEncode
 replicate 1
@@ -2788,6 +2923,7 @@ fileName wgEncodeHaibMethylRrbsLncapDukeSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683924
 grant Myers
 lab HudsonAlpha
+labExpId SL3545
 obtainedBy Duke
 project wgEncode
 replicate 2
@@ -2808,6 +2944,7 @@ fileName wgEncodeHaibMethylRrbsLncapUwSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683863
 grant Myers
 lab HudsonAlpha
+labExpId SL907
 obtainedBy UW
 project wgEncode
 replicate 1
@@ -2828,6 +2965,7 @@ fileName wgEncodeHaibMethylRrbsLncapUwSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683768
 grant Myers
 lab HudsonAlpha
+labExpId SL3561
 obtainedBy UW
 project wgEncode
 replicate 2
@@ -2848,7 +2986,8 @@ fileName wgEncodeHaibMethylRrbsMcf10aesTamYaleSitesRep3.bedRrbs.gz
 geoSampleAccession GSM683933
 grant Myers
 lab HudsonAlpha
-obtainedBy Yale
+labExpId SL734
+obtainedBy Stanford
 project wgEncode
 replicate 3
 subId 3190
@@ -2868,6 +3007,7 @@ fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683853
 grant Myers
 lab HudsonAlpha
+labExpId SL732
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -2889,6 +3029,7 @@ fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683791
 grant Myers
 lab HudsonAlpha
+labExpId SL733
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -2910,7 +3051,8 @@ fileName wgEncodeHaibMethylRrbsMcf10aesYaleSitesRep3.bedRrbs.gz
 geoSampleAccession GSM683812
 grant Myers
 lab HudsonAlpha
-obtainedBy Yale
+labExpId SL731
+obtainedBy Stanford
 project wgEncode
 replicate 3
 subId 3190
@@ -2930,6 +3072,7 @@ fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683896
 grant Myers
 lab HudsonAlpha
+labExpId SL729
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -2951,6 +3094,7 @@ fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683822
 grant Myers
 lab HudsonAlpha
+labExpId SL730
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -2972,7 +3116,8 @@ fileName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683787
 grant Myers
 lab HudsonAlpha
-obtainedBy Stanford
+labExpId SL1812
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2993,7 +3138,8 @@ fileName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683793
 grant Myers
 lab HudsonAlpha
-obtainedBy Stanford
+labExpId SL1813
+obtainedBy Duke
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3014,7 +3160,8 @@ fileName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683787
 grant Myers
 lab HudsonAlpha
-obtainedBy Stanford
+labExpId SL905
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3034,7 +3181,8 @@ fileName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683793
 grant Myers
 lab HudsonAlpha
-obtainedBy Stanford
+labExpId SL1627
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3054,6 +3202,7 @@ fileName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683787
 grant Myers
 lab HudsonAlpha
+labExpId SL756
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -3074,6 +3223,7 @@ fileName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683793
 grant Myers
 lab HudsonAlpha
+labExpId SL1900
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -3094,6 +3244,7 @@ fileName wgEncodeHaibMethylRrbsMelanoSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683860
 grant Myers
 lab HudsonAlpha
+labExpId SL1820
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -3115,6 +3266,7 @@ fileName wgEncodeHaibMethylRrbsMelanoSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683840
 grant Myers
 lab HudsonAlpha
+labExpId SL1809
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -3136,6 +3288,7 @@ fileName wgEncodeHaibMethylRrbsMelanoSitesRep3.bedRrbs.gz
 geoSampleAccession GSM683935
 grant Myers
 lab HudsonAlpha
+labExpId SL1810
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -3157,6 +3310,7 @@ fileName wgEncodeHaibMethylRrbsMyometrDukeSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683889
 grant Myers
 lab HudsonAlpha
+labExpId SL3475
 obtainedBy Duke
 project wgEncode
 replicate 1
@@ -3177,6 +3331,7 @@ fileName wgEncodeHaibMethylRrbsMyometrDukeSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683762
 grant Myers
 lab HudsonAlpha
+labExpId SL3476
 obtainedBy Duke
 project wgEncode
 replicate 2
@@ -3197,6 +3352,7 @@ fileName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683857
 grant Myers
 lab HudsonAlpha
+labExpId SL872
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3218,6 +3374,7 @@ fileName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683827
 grant Myers
 lab HudsonAlpha
+labExpId SL1442
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3239,6 +3396,7 @@ fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683873
 grant Myers
 lab HudsonAlpha
+labExpId SL887
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3260,6 +3418,7 @@ fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683923
 grant Myers
 lab HudsonAlpha
+labExpId SL1621
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3281,6 +3440,7 @@ fileName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683859
 grant Myers
 lab HudsonAlpha
+labExpId SL871
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3302,6 +3462,7 @@ fileName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683785
 grant Myers
 lab HudsonAlpha
+labExpId SL1420
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3323,6 +3484,7 @@ fileName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683797
 grant Myers
 lab HudsonAlpha
+labExpId SL895
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3344,6 +3506,7 @@ fileName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683861
 grant Myers
 lab HudsonAlpha
+labExpId SL1376
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3365,7 +3528,8 @@ fileName wgEncodeHaibMethylRrbsNt2d1UwSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683832
 grant Myers
 lab HudsonAlpha
-obtainedBy Stanford
+labExpId SL906
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3385,6 +3549,7 @@ fileName wgEncodeHaibMethylRrbsNt2d1UwSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683804
 grant Myers
 lab HudsonAlpha
+labExpId SL3562
 obtainedBy UW
 project wgEncode
 replicate 2
@@ -3405,6 +3570,7 @@ fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683832
 grant Myers
 lab HudsonAlpha
+labExpId SL758
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -3426,6 +3592,7 @@ fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683929
 grant Myers
 lab HudsonAlpha
+labExpId SL1899
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -3447,6 +3614,7 @@ fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683928
 grant Myers
 lab HudsonAlpha
+labExpId SL1806
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -3468,6 +3636,7 @@ fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683881
 grant Myers
 lab HudsonAlpha
+labExpId SL767
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -3489,6 +3658,7 @@ fileName wgEncodeHaibMethylRrbsPanc1HaibSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683866
 grant Myers
 lab HudsonAlpha
+labExpId SL3551
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
@@ -3509,6 +3679,7 @@ fileName wgEncodeHaibMethylRrbsPanc1HaibSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683920
 grant Myers
 lab HudsonAlpha
+labExpId SL3552
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
@@ -3529,6 +3700,7 @@ fileName wgEncodeHaibMethylRrbsPanisletsSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683874
 grant Myers
 lab HudsonAlpha
+labExpId SL1937
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -3550,6 +3722,7 @@ fileName wgEncodeHaibMethylRrbsPanisletsSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683934
 grant Myers
 lab HudsonAlpha
+labExpId SL1941
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -3571,6 +3744,7 @@ fileName wgEncodeHaibMethylRrbsPanisletsSitesRep3.bedRrbs.gz
 geoSampleAccession GSM683790
 grant Myers
 lab HudsonAlpha
+labExpId SL1938
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -3592,6 +3766,7 @@ fileName wgEncodeHaibMethylRrbsPanisletsSitesRep4.bedRrbs.gz
 geoSampleAccession GSM683891
 grant Myers
 lab HudsonAlpha
+labExpId SL1939
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -3613,6 +3788,7 @@ fileName wgEncodeHaibMethylRrbsPanisletsSitesRep5.bedRrbs.gz
 geoSampleAccession GSM683805
 grant Myers
 lab HudsonAlpha
+labExpId SL1940
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -3634,6 +3810,7 @@ fileName wgEncodeHaibMethylRrbsPfsk1HaibSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683810
 grant Myers
 lab HudsonAlpha
+labExpId SL3547
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
@@ -3654,6 +3831,7 @@ fileName wgEncodeHaibMethylRrbsPfsk1HaibSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683909
 grant Myers
 lab HudsonAlpha
+labExpId SL3548
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
@@ -3674,6 +3852,7 @@ fileName wgEncodeHaibMethylRrbsPrecUwSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683838
 grant Myers
 lab HudsonAlpha
+labExpId SL868
 obtainedBy UW
 project wgEncode
 replicate 1
@@ -3694,6 +3873,7 @@ fileName wgEncodeHaibMethylRrbsPrecUwSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683760
 grant Myers
 lab HudsonAlpha
+labExpId SL869
 obtainedBy UW
 project wgEncode
 replicate 2
@@ -3714,6 +3894,7 @@ fileName wgEncodeHaibMethylRrbsProgfibSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683875
 grant Myers
 lab HudsonAlpha
+labExpId SL938
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -3735,6 +3916,7 @@ fileName wgEncodeHaibMethylRrbsProgfibSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683783
 grant Myers
 lab HudsonAlpha
+labExpId SL1802
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -3756,6 +3938,7 @@ fileName wgEncodeHaibMethylRrbsRptecSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683802
 grant Myers
 lab HudsonAlpha
+labExpId SL876
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3777,6 +3960,7 @@ fileName wgEncodeHaibMethylRrbsRptecSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683772
 grant Myers
 lab HudsonAlpha
+labExpId SL1346
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3798,6 +3982,7 @@ fileName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683916
 grant Myers
 lab HudsonAlpha
+labExpId SL864
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3819,6 +4004,7 @@ fileName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683833
 grant Myers
 lab HudsonAlpha
+labExpId SL1342
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3840,6 +4026,7 @@ fileName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683894
 grant Myers
 lab HudsonAlpha
+labExpId SL886
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3861,6 +4048,7 @@ fileName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683784
 grant Myers
 lab HudsonAlpha
+labExpId SL1419
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3882,6 +4070,7 @@ fileName wgEncodeHaibMethylRrbsSknmcHaibSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683884
 grant Myers
 lab HudsonAlpha
+labExpId SL3553
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
@@ -3902,6 +4091,7 @@ fileName wgEncodeHaibMethylRrbsSknmcHaibSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683918
 grant Myers
 lab HudsonAlpha
+labExpId SL3554
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
@@ -3922,6 +4112,7 @@ fileName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683800
 grant Myers
 lab HudsonAlpha
+labExpId SL863
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3943,6 +4134,7 @@ fileName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683919
 grant Myers
 lab HudsonAlpha
+labExpId SL1628
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -3964,6 +4156,7 @@ fileName wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683937
 grant Myers
 lab HudsonAlpha
+labExpId SL3485
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
@@ -3984,6 +4177,7 @@ fileName wgEncodeHaibMethylRrbsT47dDmso224hHaibSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683771
 grant Myers
 lab HudsonAlpha
+labExpId SL1436
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
@@ -4004,6 +4198,7 @@ fileName wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683904
 grant Myers
 lab HudsonAlpha
+labExpId SL3484
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
@@ -4024,6 +4219,7 @@ fileName wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683842
 grant Myers
 lab HudsonAlpha
+labExpId SL1435
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
@@ -4044,6 +4240,7 @@ fileName wgEncodeHaibMethylRrbsU87HaibSitesRep1.bedRrbs.gz
 geoSampleAccession GSM683917
 grant Myers
 lab HudsonAlpha
+labExpId SL3557
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
@@ -4064,6 +4261,7 @@ fileName wgEncodeHaibMethylRrbsU87HaibSitesRep2.bedRrbs.gz
 geoSampleAccession GSM683890
 grant Myers
 lab HudsonAlpha
+labExpId SL3558
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
@@ -4072,4 +4270,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -449569498
+# MAGIC: -219166438

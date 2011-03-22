@@ -14880,6 +14880,10 @@ ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_37_Aug10.human.genes/AceView.ncbi_3
     egrep -h -v '^(| ?product_id.*|..?\|Hs.*)$' AceView.ncbi_37.genes_gff.gff \
     | sed -e 's/^/chr/;' \
       > acembly.gff
+    # fixed the chrmito prefix to chrM
+    mv acembly.gff acembly.tmp
+    cat acembly.tmp | sed -e 's/^chrmito/chrM/;' > acembly.gff 
+    
 
     # Extract annotation classes from original gff:
     cat AceView.ncbi_37.genes_gff.gff | awk  '{print $12}' | sort | uniq
