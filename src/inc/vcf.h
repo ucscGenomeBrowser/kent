@@ -166,7 +166,7 @@ struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int
  * A maxErr less than zero does not stop and reports all errors. Write errors to errFh,
  * if NULL, use stderr. */
 
-void vcfFileFree(struct vcfFile **g3fPtr);
+void vcfFileFree(struct vcfFile **vcffPtr);
 /* Free a vcfFile object. */
 
 const struct vcfRecord *vcfFileFindVariant(struct vcfFile *vcff, char *variantId);
