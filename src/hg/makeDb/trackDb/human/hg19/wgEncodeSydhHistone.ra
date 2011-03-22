@@ -305,5 +305,24 @@ wgEncode 1
         type bigWig 1.000000 12731.000000
         # subId=2763 dateSubmitted=2010-11-02
 
+        track wgEncodeSydhHistoneK562bInputUcdSig
+        parent wgEncodeSydhHistoneViewSignal off
+        shortLabel K562b Input Sig
+        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in K562b cells)
+        subGroups view=Signal factor=Input cellType=K562b control=UCD treatment=None
+        type bigWig 0.000000 12876.099609
+        origAssembly hg18
+        color 46,0,184
+        # subId=3839 dateSubmitted=2011-03-22
+
+        track wgEncodeSydhHistoneU2osInputUcdSig
+        parent wgEncodeSydhHistoneViewSignal off
+        shortLabel U2OS Input Sig
+        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in U2OS cells)
+        subGroups view=Signal factor=Input cellType=U2OS control=UCD treatment=None
+        type bigWig 0.000000 11117.500000
+        origAssembly hg18
+        # subId=3839 dateSubmitted=2011-03-22
+
 
 
