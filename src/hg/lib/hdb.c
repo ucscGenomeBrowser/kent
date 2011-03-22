@@ -3045,6 +3045,9 @@ if (prefix == NULL)
     return FALSE;
 
 char *httpHost = getenv("HTTP_HOST");
+if (httpHost == NULL)
+    // make sure this works when CGIs are run from the command line.
+    httpHost = getenv("HOST");
 
 if (httpHost == NULL)
     return FALSE;
