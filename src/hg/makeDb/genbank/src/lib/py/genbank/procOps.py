@@ -34,7 +34,10 @@ def callProcLines(cmd, inheritStderr=False):
     """call a process and return stdout, split into a list of lines, exception
     with message or inherited from parent"""
     out = callProc(cmd, inheritStderr=inheritStderr)
-    return out.split("\n")
+    if len(out) == 0:
+        return []
+    else:
+        return out.split("\n")
 
 def _needsQuoted(w):
     "determine if a cmd word needs quoted"

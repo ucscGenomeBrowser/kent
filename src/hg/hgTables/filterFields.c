@@ -23,6 +23,7 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
+#include "samAlignment.h"
 
 static char const rcsid[] = "$Id: filterFields.c,v 1.82 2010/06/03 18:53:59 kent Exp $";
 
@@ -364,13 +365,13 @@ static void showTableFieldsCt(char *db, char *table, boolean withGetButton)
 struct customTrack *ct = ctLookupName(table);
 char *type = ct->dbTrackType;
 if (startsWithWord("makeItems", type))
-   {
-   struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-   struct slName *fieldList = sqlListFields(conn, ct->dbTableName);
-   struct asObject *asObj = asParseText(makeItemsItemAutoSqlString);
-   showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
-   hFreeConn(&conn);
-   }
+    {
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    struct slName *fieldList = sqlListFields(conn, ct->dbTableName);
+    struct asObject *asObj = asParseText(makeItemsItemAutoSqlString);
+    showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
+    hFreeConn(&conn);
+    }
 else if (sameWord("bedDetail", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
@@ -386,6 +387,12 @@ else if (sameWord("pgSnp", type))
     struct asObject *asObj = asParseText(pgSnpAutoSqlString);
     showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
     hFreeConn(&conn);
+    }
+else if (sameWord("bam", type))
+    {
+    struct slName *fieldList = bamGetFields(table);
+    struct asObject *asObj = asParseText(samAlignmentAutoSqlString);
+    showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
     }
 else
     showBedTableFields(db, table, ct->fieldCount, withGetButton);

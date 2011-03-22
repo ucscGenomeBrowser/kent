@@ -1448,3 +1448,140 @@ panTro3.12way.nh > panTro3.commonNames.12way.nh
 
 # None of this concern for distances matters in building the first step, the
 # maf files.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	panTro3.12way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/panTro3/bed/multiz12way/mafSplit
+    cd /hive/data/genomes/panTro3/bed/multiz12way/mafSplit
+    for D in `sed -e "s/panTro3 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=10 /dev/null . ../../../lastz.${D}/axtChain/panTro3.${D}.synNet.maf.gz"
+    mafSplit -byTarget -useHashedName=10 /dev/null . \
+	../../../lastz.${D}/axtChain/panTro3.${D}.synNet.maf.gz
+    cd ..
+done
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 2792
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 484 maf.list
+
+    mkdir /hive/data/genomes/panTro3/bed/multiz12way/splitRun
+    cd /hive/data/genomes/panTro3/bed/multiz12way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = panTro3
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/panTro3/bed/multiz12way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+	if (! -s $out) then
+	    echo "##maf version=1 scoring=autoMZ" > $out
+	endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+	> /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/panTro3/bed/multiz12way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh swarm
+    cd /hive/data/genomes/panTro3/bed/multiz12way/splitRun/run
+    gensub2 maf.list single template jobList
+    tac jobList > smallJobsFirst
+    para -ram=8g create smallJobsFirst
+# Completed: 484 of 484 jobs
+# CPU time in finished jobs:     370423s    6173.72m   102.90h    4.29d  0.012 y
+# IO & Wait Time:                 27319s     455.32m     7.59h    0.32d  0.001 y
+# Average job time:                 822s      13.70m     0.23h    0.01d
+# Longest finished job:           31994s     533.23m     8.89h    0.37d
+# Submission to last job:         32007s     533.45m     8.89h    0.37d
+
+    # assemble into a single maf file
+    cd /hive/data/genomes/panTro3/bed/multiz12way
+    head -1 splitRun/maf/001.maf > multiz12way.maf
+    for F in splitRun/maf/*.maf
+do
+    egrep -v "^#" ${F}
+done >> multiz12way.maf
+    tail -1 splitRun/maf/001.maf >> multiz12way.maf
+
+# -rw-rw-r--  1 24598538713 Mar 21 11:02 panTro3.12way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/panTro3/bed/multiz12way
+    mkdir /gbdb/panTro3/multiz12way
+    ln -s `pwd`/multiz12way.maf /gbdb/panTro3/multiz12way
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf panTro3 multiz12way
+    #	Indexing and tabulating /gbdb/panTro3/multiz12way/multiz12way.maf
+    #	Loaded 15113841 mafs in 1 files from /gbdb/panTro3/multiz12way
+    #	real    9m38.121s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 panTro3 multiz12waySummary \
+	/gbdb/panTro3/multiz12way/multiz12way.maf
+    #	Created 1828535 summary blocks from 85036569 components
+    #	and 15113841 mafs from /gbdb/panTro3/multiz12way/multiz12way.maf
+    #	real    8m51.192s
+
+    wc -l multiz12way*.tab
+    #	15113841 multiz12way.tab
+    #	1828535 multiz12waySummary.tab
+    #	16942376 total
+
+    rm multiz12way*.tab
+
+############################################################################

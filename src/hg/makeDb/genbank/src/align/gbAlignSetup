@@ -44,7 +44,7 @@ import sys, os, os.path, re
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
 sys.path.append(myBinDir + "/../lib/py")
 from optparse import OptionParser
-from genbank import procOps, fileOps
+from genbank import procOps, fileOps, gbAbsBinDir, gbSetupPath
 from genbank.Config import Config
 from genbank.GbIndex import GbIndex, GenBank, RefSeq, MRNA, EST, Native, Xeno
 from genbank.GenomeSeqs import GenomeSeqs
@@ -56,15 +56,8 @@ import glob
 collectGmonOut = False
 gmonOutDir = "profiles"
 
-absBinDir = os.path.abspath(myBinDir)
-mach = os.uname()[4]
-if mach == "i686":
-    mach = "i386"
-machBinPath = absBinDir + "/" + mach
-if mach != "i386":
-    machBinPath += ":" + absBinDir + "/i386" # use on x86_64 for now
-os.environ["PATH"] = machBinPath + ":" + os.environ["PATH"]
-gbBlatPath = absBinDir + "/gbBlat"
+gbSetupPath()
+gbBlatPath = gbAbsBinDir() + "/gbBlat"
 
 cmdOpts = None
 

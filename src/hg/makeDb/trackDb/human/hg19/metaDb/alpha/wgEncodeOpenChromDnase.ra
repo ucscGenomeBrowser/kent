@@ -1307,6 +1307,22 @@ tableName wgEncodeOpenChromDnaseGm12878Sig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromDnaseGm12878Validation
+objType file
+cell GM12878
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-03-21
+fileName wgEncodeOpenChromDnaseGm12878Validation.tgz
+grant Crawford
+lab Duke
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 3829
+view Validation
+
 metaObject wgEncodeOpenChromDnaseGm12891AlnRep1
 objType file
 cell GM12891
@@ -4464,6 +4480,22 @@ tableName wgEncodeOpenChromDnaseK562Sig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromDnaseK562Validation
+objType file
+cell K562
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-03-21
+fileName wgEncodeOpenChromDnaseK562Validation.tgz
+grant Crawford
+lab Duke
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 3829
+view Validation
+
 metaObject wgEncodeOpenChromDnaseLncapAlnRep1
 objType file
 cell LNCaP
@@ -6641,4 +6673,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1448392362
+# MAGIC: -735065736
