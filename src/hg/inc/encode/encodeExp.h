@@ -140,9 +140,23 @@ struct hash *encodeExpToRaFile(struct encodeExp *exp, FILE *f);
 struct hash *encodeExpToRa(struct encodeExp *exp);
 /* Create a Ra hash from an encodeExp */
 
+struct encodeExp *encodeExpGetByIdFromTable(struct sqlConnection *conn, char *tableName, int id);
+/* Return experiment specified by id from named table */
+
+struct encodeExp *encodeExpGetById(struct sqlConnection *conn, int id);
+/* Return experiment specified by id from default table */
+
 void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp *exp);
 /* Add encodeExp as a new row to the table specified by tableName.
    Update accession using index assigned with autoincrement */
+
+char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id);
+/* Add accession field to an existing "temp" experiment.  This is done
+ * after experiment is determined to be valid. 
+ * Return the accession. */
+
+void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int id);
+/* Revoke an experiment by removing the accession. */
 
 char *encodeExpKey(struct encodeExp *exp);
 /* Create a hash key from an encodeExp */
@@ -174,9 +188,10 @@ char *encodeGetAccessionByMdbVars(char *db, struct mdbVar *vars);
 /* Return accession of (first) experiment matching vars, or NULL if not found */
 
 void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,
-                                char *accession, char *field, char *val);
-/* Update field in encodeExp identified by accession with value.
-   Only supported for a few non-interdependent fields */
+                                int id, char *field, char *val);
+/* Update field in encodeExp identified by id with value.
+   Only supported for a few non-interdependent fields
+   and only for non-accessioned experiments */
 
 void encodeExpUpdateExpVars(struct sqlConnection *conn, char *tableName,
                                 char *accession, struct slPair *varPairs);
