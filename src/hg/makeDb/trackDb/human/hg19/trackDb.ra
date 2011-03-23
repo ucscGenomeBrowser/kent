@@ -1836,7 +1836,7 @@ type bed 12
     parent affyExonArray off
     subGroups type=Probeset level=Full
     shortLabel Full Probesets
-    longLabel Affymetrix $Organism Exon Array Free Probesets: ones supported by computational predictions only
+    longLabel Affymetrix $Organism Exon Array Full Probesets: ones supported by computational predictions only
     # deeppink
     color 205,96,144
     visibility hide
@@ -1885,7 +1885,7 @@ type bed 12
     parent affyExonArray off
     subGroups type=Probe level=Full
     shortLabel Full Probes
-    longLabel Affymetrix $Organism Exon Array Free Probes: ones supported by computational predictions only
+    longLabel Affymetrix $Organism Exon Array Full Probes: ones supported by computational predictions only
     # deep pink
     color 205,96,144
     visibility hide
