@@ -83,7 +83,11 @@ return getenv("SERVER_NAME");
 char *cgiServerPort()
 /* Return port number of server */
 {
-return getenv("SERVER_PORT");
+char *port = getenv("SERVER_PORT");
+if (port)
+    return port;
+else
+    return "80";
 }
 
 char *cgiRemoteAddr()
