@@ -212,7 +212,10 @@ for (parent = tdb; parent != NULL; parent = parent->parent)
     {
     char *simpleName = hubConnectSkipHubPrefix(tdb->track);
     char *url = trackHubRelativeUrl(hubGenome->trackDbFile, simpleName);
-    parent->html = netReadTextFileIfExists(url);
+    char buffer[10*1024];
+    safef(buffer, sizeof buffer, "%s.html", url);
+
+    parent->html = netReadTextFileIfExists(buffer);
     freez(&url);
     }
 trackHubClose(&hub);

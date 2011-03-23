@@ -851,7 +851,7 @@ if (slCount(mdbList) == 0)
 mdbObjsSortOnVars(&mdbList, "composite");
 mdbObjRemoveHiddenVars(mdbList);
 
-#define FOUND_FILE_LIMIT 2000
+#define FOUND_FILE_LIMIT 1000
 int fileCount = 0;
 // Verify file existance and make fileList of those found
 struct fileDb *fileList = NULL, *oneFile = NULL; // Will contain found files
@@ -879,6 +879,8 @@ while(mdbList && fileCount < FOUND_FILE_LIMIT)
                     slAddHead(&mdbFiles,mdbFile);
                     fileCount++;
                     found = TRUE;
+                    if (fileCount == FOUND_FILE_LIMIT)
+                        break;
                     }
                 }
                 else

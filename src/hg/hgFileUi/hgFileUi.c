@@ -51,12 +51,17 @@ else if (tdb->parent) //Print link for parent track
 // NAVLINKS - Link to Description down below
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
+    printf("<span id='navDown' style='float:right; display:none;'>");
+    // First put up a button to go to File Search
+    printf("<A HREF='hgFileSearch?db=%s' TITLE='Search for other downloadble files ...'>Downloads Search</A>&nbsp;&nbsp;&nbsp;",db);
+
+    // Now link to description
     char *downArrow = "&dArr;";
     enum browserType browser = cgiBrowser();
     if (browser == btIE || browser == btFF)
         downArrow = "&darr;";
-    printf("<span id='navDown' style='float:right; display:none;'>");
-    printf("<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>Description%s</A></span>",downArrow);
+    printf("<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>Description%s</A>",downArrow);
+    printf("</span>");
     }
 puts("<BR>");
 
