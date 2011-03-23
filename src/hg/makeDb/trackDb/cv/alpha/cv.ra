@@ -2308,7 +2308,7 @@ organism Human
 description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
 vendorName (See the protocol documents) 
-vendorId 
+vendorId
 orderUrl 
 karyotype normal
 termId BTO:0000256 (non-specific)
@@ -2324,7 +2324,7 @@ organism Human
 description Normal Human Skeletal Muscle Myotubes
 tissue Muscle
 vendorName (See the protocol documents)
-vendorId N/A
+vendorId
 orderUrl 
 karyotype normal
 termId BTO:0001760 (non-specific)
