@@ -317,7 +317,7 @@ char *encodeExpGetIx(struct encodeExp *exp)
 /* Return ix field of encodeExp */
 {
 char buf[64];
-safef(buf, 64, "%d", exp->ix);
+safef(buf, sizeof(buf), "%d", exp->ix);
 return cloneString(buf);
 }
 
@@ -386,7 +386,7 @@ static char *sqlCreate =
 "CREATE TABLE %s (\n"
 "    ix int not null AUTO_INCREMENT,     # auto-increment ID\n"
 "    organism varchar(255) not null,     # human | mouse\n"
-"    accession varchar(255) not null,    # ENC[H|M]E00000N\n"
+"    accession varchar(255),             # NULL or wgEncodeE[H|M]00000N\n"
 "    lab varchar(255) not null,  # lab name from ENCODE cv.ra\n"
 "    dataType varchar(255) not null,     # dataType from ENCODE cv.ra\n"
 "    cellType varchar(255) not null,     # cellType from ENCODE cv.ra\n"
@@ -497,7 +497,8 @@ if (db == NULL)
 exp->organism = hOrganism(db);
 strLower(exp->organism);
 
-// KATE: This will not do.  There is not a white list defined yet and the call from mdb will be limited to EDVs
+// NOTE:  Needs filtering with composite-level experiment-definition to 
+
 //struct mdbObj *mdb = mdbObjNew(NULL, vars);
 //// extract exp vars into an slPair list
 //int i;
@@ -601,6 +602,21 @@ struct hash *encodeExpToRa(struct encodeExp *exp)
 return encodeExpToRaFile(exp, NULL);
 }
 
+struct encodeExp *encodeExpGetByIdFromTable(struct sqlConnection *conn, char *tableName, int id)
+/* Return experiment specified by id from named table */
+{
+struct dyString *query = NULL;
+
+query = dyStringCreate("select * from %s where ix=\'%d\'", tableName, id);
+return encodeExpLoadByQuery(conn, dyStringCannibalize(&query));
+}
+
+struct encodeExp *encodeExpGetById(struct sqlConnection *conn, int id)
+/* Return experiment specified by id from default table */
+{
+return encodeExpGetByIdFromTable(conn, ENCODE_EXP_TABLE, id);
+}
+
 static char *encodeExpMakeAccession(struct encodeExp *exp)
 /* Make accession string from prefix + organism + id */
 {
@@ -619,34 +635,61 @@ return cloneString(accession);
 
 void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp *exp)
 /* Add encodeExp as a new row to the table specified by tableName.
-   Update accession using index assigned with autoincrement
 */
 {
-struct dyString *query = dyStringNew(0);
+encodeExpSaveToDb(conn, exp, tableName, 0);
+sqlUpdate(conn, dyStringContents(dy));
+}
+
+static char *encodeExpAccession(struct sqlConnection *conn, char *tableName, int id, boolean add)
+/* Add or remove an accession from an experiment.  
+   This is done after the experiment definition is checked for validity.
+*/
+{
+struct dyString *query = NULL;
 char *accession = NULL;
+struct encodeExp *exp = NULL;
+char queryAcc[64];
 
 sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
-encodeExpSaveToDb(conn, exp, tableName, 0);
+exp = encodeExpGetByIdFromTable(conn, tableName, id);
+if (exp == NULL)
+    errAbort("Experiment id %d not found in table %s", id, tableName);
+if (add)
+    {
+    accession = encodeExpMakeAccession(exp);
+    safef(queryAcc, sizeof(queryAcc), "\'%s\'", accession);
+    }
+else
+    safecpy(queryAcc, sizeof(queryAcc), "NULL");
 
-dyStringPrintf(query, "select max(ix) from %s", tableName);
-exp->ix = sqlQuickNum(conn, dyStringContents(query));
-accession = encodeExpMakeAccession(exp);
-freeDyString(&query);
-
-query = newDyString(0);
-dyStringPrintf(query, "update %s set accession=\'%s\' where ix=%d",
-                        tableName, accession, exp->ix);
-sqlUpdate(conn, dyStringContents(query));
+query = dyStringCreate("update %s set accession=%s where ix=%d",
+                        tableName, queryAcc, exp->ix);
+sqlUpdate(conn, dyStringCannibalize(&query));
 sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
+return accession;
+}
 
-freez(&accession);
-freeDyString(&query);
+char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id)
+/* Add accession field to an existing "temp" experiment.  This is done
+ * after experiment is determined to be valid. 
+ * Return the accession. */
+{
+return encodeExpAccession(conn, tableName, id, TRUE);
+}
+
+void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int id)
+/* Revoke an experiment by removing the accession.
+*/
+{
+encodeExpAccession(conn, tableName, id, FALSE);
 }
 
 void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,
-                                char *accession, char *field, char *val)
-/* Update field in encodeExp identified by accession with value.
-   Only supported for a few non-interdependent fields */
+                                int id, char *field, char *val)
+/* Update field in encodeExp identified by id with value.
+   Only supported for a few non-interdependent fields
+   and only for non-accessioned experiments */
 {
 struct dyString *query = NULL;
 
@@ -655,11 +698,9 @@ if (differentString(field, ENCODE_EXP_FIELD_LAB) &&
     differentString(field, ENCODE_EXP_FIELD_CELL_TYPE))
         errAbort("Unsupported encodeExp field update: %s", field);
 
-query = dyStringCreate("update %s set %s=\'%s\' where accession=\'%s\'",
-                        tableName, field, val, accession);
-sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
+query = dyStringCreate("update %s set %s=\'%s\' where ix=%d",
+                        tableName, field, val, id);
 sqlUpdate(conn, dyStringContents(query));
-sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
 freeDyString(&query);
 }
 
