@@ -19,7 +19,7 @@ struct encodeExp
     char *lab;	/* lab name from ENCODE cv.ra */
     char *dataType;	/* dataType from ENCODE cv.ra */
     char *cellType;	/* cellType from ENCODE cv.ra */
-    char *factors;	/* typeOfTerm=term list of experiment-defining variables */
+    char *expVars;	/* typeOfTerm=term list of experiment-defining variables */
     char *lastUpdated;  /* auto-update timestamp */  // WARNING: hand-edit here
     };
 
@@ -104,7 +104,7 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 #define ENCODE_EXP_FIELD_LAB            "lab"
 #define ENCODE_EXP_FIELD_DATA_TYPE      "dataType"
 #define ENCODE_EXP_FIELD_CELL_TYPE      "cellType"
-#define ENCODE_EXP_FIELD_FACTORS        "factors"
+#define ENCODE_EXP_FIELD_FACTORS        "expVars"
 #define ENCODE_EXP_FIELD_LAST_UPDATED   "lastUpdated"
 
 #define ENCODE_EXP_NO_CELL              "None"
@@ -112,7 +112,7 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 
 #define ENCODE_EXP_TABLE        "encodeExp"
 #define ENCODE_EXP_DATABASE     "hgFixed"
-#define ENCODE_EXP_ACC_PREFIX   "encodeE"
+#define ENCODE_EXP_ACC_PREFIX   "wgEncodeE"
 #define ENCODE_EXP_TABLE_LOCK   "lock_encodeExp"
 
 void encodeExpFieldIndex(char *fieldName);
@@ -140,20 +140,34 @@ struct hash *encodeExpToRaFile(struct encodeExp *exp, FILE *f);
 struct hash *encodeExpToRa(struct encodeExp *exp);
 /* Create a Ra hash from an encodeExp */
 
+struct encodeExp *encodeExpGetByIdFromTable(struct sqlConnection *conn, char *tableName, int id);
+/* Return experiment specified by id from named table */
+
+struct encodeExp *encodeExpGetById(struct sqlConnection *conn, int id);
+/* Return experiment specified by id from default table */
+
 void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp *exp);
 /* Add encodeExp as a new row to the table specified by tableName.
    Update accession using index assigned with autoincrement */
+
+char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id);
+/* Add accession field to an existing "temp" experiment.  This is done
+ * after experiment is determined to be valid. 
+ * Return the accession. */
+
+void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int id);
+/* Revoke an experiment by removing the accession. */
 
 char *encodeExpKey(struct encodeExp *exp);
 /* Create a hash key from an encodeExp */
 
 struct encodeExp *encodeExpGetFromTable(char *organism, char *lab, char *dataType, char *cell,
-                                struct slPair *factorPairs, char *table);
+                                struct slPair *varPairs, char *table);
 /* Return experiments matching args in named experiment table.
  * Organism, Lab and DataType must be non-null */
 
 struct encodeExp *encodeExpGet(char *organism, char *lab, char *dataType, char *cell,
-                                struct slPair *factorPairs);
+                                struct slPair *varPairs);
 /* Return experiments matching args in default experiment table.
  * Organism, Lab and DataType must be non-null */
 
@@ -174,13 +188,14 @@ char *encodeGetAccessionByMdbVars(char *db, struct mdbVar *vars);
 /* Return accession of (first) experiment matching vars, or NULL if not found */
 
 void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,
-                                char *accession, char *field, char *val);
-/* Update field in encodeExp identified by accession with value.
-   Only supported for a few non-interdependent fields */
+                                int id, char *field, char *val);
+/* Update field in encodeExp identified by id with value.
+   Only supported for a few non-interdependent fields
+   and only for non-accessioned experiments */
 
-void encodeExpUpdateFactors(struct sqlConnection *conn, char *tableName,
-                                char *accession, struct slPair *factorPairs);
-/* Update factors in encodeExp identified by accession */
+void encodeExpUpdateExpVars(struct sqlConnection *conn, char *tableName,
+                                char *accession, struct slPair *varPairs);
+/* Update expVars in encodeExp identified by accession */
 
 #endif /* ENCODEEXP_H */
 

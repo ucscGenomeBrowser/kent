@@ -23,13 +23,15 @@ errAbort(
   "actions:\n"
   "   create 		create table (default \'%s\')\n"
   "   add <exp.ra>		add experiments to table from file\n"
+  "   acc <id>		add accession to experiment (approve it)\n"
+  "   revoke <id>		remove accession to experiment (revoke it)\n"
+  "   show <id>		print experiment to stdout\n"
   "   dump <exp.ra>	output experiment table to file\n"
   "   find <db> <exp.ra>	find unassigned experiments in metaDb and create .ra to file\n"
-  "   check <db>		find objects in metaDb incorrect or missing accession\n"
-  "   acc human|mouse <lab> <dataType> <cellType> [<factors>]\n"
-  "			return accession for experiment (factors as 'factor1:val1 factor2:val2')\n"
+  "   id human|mouse <lab> <dataType> <cellType> [<vars>]\n"
+  "			return id for experiment (vars as 'var1:val1 var2:val2')\n"
   "options:\n"
-  "   -composite	limit to specified composite track (affects find and check)\n"
+  "   -composite	limit to specified composite track (affects find)\n"
   "   -mdb		specify metaDb table name (default \'%s\') - for test use \n"
   "   -table	specify experiment table name (default \'%s\')\n",
   encodeExpTableNew, MDB_DEFAULT_NAME, ENCODE_EXP_TABLE
@@ -45,7 +47,7 @@ static struct optionSpec options[] = {
 
 struct sqlConnection *connExp = NULL;
 char *composite = NULL, *mdb = NULL, *table = NULL;
-char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *factors = NULL;
+char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *expVars = NULL;
 
 static struct hash *expKeyHashFromTable(struct sqlConnection *conn, char *table)
 /* create hash of keys for existing experiments so we can distinguish new ones */
@@ -94,6 +96,27 @@ while ((ra = raNextRecord(lf)) != NULL)
     else
         verbose(4, "Old experiment: %s\n", key);
     }
+}
+
+void expAcc(int id)
+/* Add accession to an existing experiment (approve it)*/
+{
+encodeExpAddAccession(connExp, table, id);
+}
+
+void expRevoke(int id)
+/* Remove accession to an existing experiment (revoke it)*/
+{
+encodeExpRemoveAccession(connExp, table, id);
+}
+
+void expShow(int id)
+/* Print experiment in .ra format to stdout */
+{
+struct encodeExp *exp;
+
+exp = encodeExpGetByIdFromTable(connExp, table, id);
+encodeExpToRaFile(exp, stdout);
 }
 
 void expDump(char *file)
@@ -167,34 +190,27 @@ carefulClose(&f);
 sqlDisconnect(&connMeta);
 }
 
-void expCheck(char *assembly)
-/* Check metaDb for objs with missing or inconsistent experimentId */
-{
-verbose(2, "Checking experiments in %s:%s\n", assembly, mdb);
-errAbort("check not implemented");
-}
-
-void expAccession()
-/* Return accession */
+void expId()
+/* Print id */
 {
 struct encodeExp *exps = NULL;
 int count;
-struct slPair *factorPairs = NULL;
+struct slPair *varPairs = NULL;
 
 /* transform var:val to var=val. Can't use var=val on command-line as it conflicts with standard options processing */
-memSwapChar(factors, strlen(factors), ':', '=');
-factorPairs = slPairFromString(factors);
-exps = encodeExpGetFromTable(organism, lab, dataType, cellType, factorPairs, table);
+memSwapChar(expVars, strlen(expVars), ':', '=');
+varPairs = slPairFromString(expVars);
+exps = encodeExpGetFromTable(organism, lab, dataType, cellType, varPairs, table);
 count = slCount(exps);
 verbose(2, "Results: %d\n", count);
 if (count == 0)
     errAbort("Experiment not found");
 if (count > 1)
     errAbort("Found more than 1 match for experiment");
-printf("%s\n", exps->accession);
+printf("%d\n", exps->ix);
 }
 
-int encodeExp(char *command, char *file, char *assembly)
+int encodeExp(char *command, char *file, char *assembly, int id)
 /* manage ENCODE experiments table */
 {
 connExp = sqlConnect(ENCODE_EXP_DATABASE);
@@ -208,17 +224,21 @@ if (sameString(command, "create"))
     expCreate();
 else if (sameString(command, "add"))
     expAdd(file);
+else if (sameString(command, "acc"))
+    expAcc(id);
+else if (sameString(command, "revoke"))
+    expRevoke(id);
+else if (sameString(command, "show"))
+    expShow(id);
 else if (sameString(command, "dump"))
     expDump(file);
 else if (sameString(command, "find"))
     expFind(assembly, file);
-else if (sameString(command, "check"))
-    expCheck(assembly);
-else if (sameString(command, "acc"))
-    expAccession();
+else if (sameString(command, "id"))
+    expId();
 else
     {
-    fprintf(stderr, "ERROR: Unknown command %s\n\n", command);
+    errAbort("ERROR: Unknown command %s\n", command);
     usage();
     }
 sqlDisconnect(&connExp);
@@ -228,26 +248,28 @@ return(0);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+char *assembly = NULL;
+char *file = NULL;
+int id = 0;
+
 optionInit(&argc, argv, options);
 if (argc < 2)
     usage();
-char *command = argv[1];
-char *assembly = NULL;
-char *file = NULL;
+verboseSetLevel(2);
 
+char *command = argv[1];
 table = optionVal("table", sameString(command, "create") ?
                         encodeExpTableNew: 
                         ENCODE_EXP_TABLE);
 mdb = optionVal("mdb", MDB_DEFAULT_NAME);
 composite = optionVal("composite", NULL);
 
-verboseSetLevel(2);
 verbose(3, "Experiment table name: %s\n", table);
-if (sameString("find", command) || sameString("check", command))
+if (sameString("find", command))
     {
     if (argc < 3)
         {
-        fprintf(stderr, "ERROR: Missing assembly\n\n");
+        errAbort("ERROR: Missing assembly\n");
         usage();
         }
     else
@@ -256,24 +278,24 @@ if (sameString("find", command) || sameString("check", command))
         {
         if (argc < 4)
             {
-            fprintf(stderr, "ERROR: Missing file\n\n");
+            errAbort("ERROR: Missing file\n");
             usage();
             }
         else
             file = argv[3];
         }
     }
-if (sameString("add", command) || sameString("dump", command))
+else if (sameString("add", command) || sameString("dump", command))
     {
     if (argc < 3)
         {
-        fprintf(stderr, "ERROR: Missing .ra file\n\n");
+        errAbort("ERROR: Missing .ra file\n");
         usage();
         }
     else
         file = argv[2];
     }
-else if (sameString("acc", command))
+else if (sameString("id", command))
     {
     if (argc < 6)
         usage();
@@ -284,9 +306,23 @@ else if (sameString("acc", command))
         dataType = argv[4];
         cellType = argv[5];
         if (argc > 6)
-            factors = argv[6];
+            expVars = argv[6];
         }
     }
-encodeExp(command, file, assembly);
+else if (sameString("acc", command) || sameString("revoke", command) || sameString("show", command))
+    {
+    if (argc < 3)
+        {
+        errAbort("ERROR: Missing id\n");
+        usage();
+        }
+    else
+        {
+        id = atoi(argv[2]);
+        if (id < 1)
+            errAbort("ERROR: Bad id %d\n", id);
+        }
+    }
+encodeExp(command, file, assembly, id);
 return 0;
 }

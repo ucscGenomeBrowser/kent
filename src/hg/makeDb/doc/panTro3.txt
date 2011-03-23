@@ -1585,3 +1585,48 @@ done >> multiz12way.maf
     rm multiz12way*.tab
 
 ############################################################################
+# GAP ANNOTATE MULTIZ12WAY MAF AND LOAD TABLES (DONE - 2011-03-22 - Hiram)
+
+    ssh hgwdev
+    mkdir /hive/data/genomes/panTro3/bed/multiz12way/anno
+    cd /hive/data/genomes/panTro3/bed/multiz12way/anno
+
+    # only one of these does not yet have an N.bed file
+    cd /hive/data/genomes/danRer7
+    twoBitInfo -nBed danRer7.2bit danRer7.N.bed
+for DB in `sed -e "s/panTro3 //" ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    time nice -n +19 mafAddIRows -nBeds=nBeds ../multiz12way.maf \
+	/hive/data/genomes/panTro3/panTro3.2bit multiz12way.maf
+    #	real    29m50.018s
+
+    # Load into database
+    rm /gbdb/panTro3/multiz12way/multiz12way.maf   # remove old symlink
+    ln -s `pwd`/multiz12way.maf /gbdb/panTro3/multiz12way
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf panTro3 multiz12way
+    #	Loaded 15389179 mafs in 1 files from /gbdb/panTro3/multiz12way
+    #	real    19m35.084s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 panTro3 multiz12waySummary \
+	/gbdb/panTro3/multiz12way/multiz12way.maf
+    #	real    26m30.098s
+
+    wc -l multiz12way*.tab
+    #	15389179 multiz12way.tab
+    #	1828535 multiz12waySummary.tab
+    #	17217714 total
+
+    rm multiz12way*.tab
+
+#########################################################################

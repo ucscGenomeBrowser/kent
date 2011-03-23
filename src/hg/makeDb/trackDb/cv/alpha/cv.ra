@@ -3963,7 +3963,7 @@ orderUrl http://www.scbt.com/datasheet-101388-bclaf1-m33-p5b11-antibody.html
 lab Myers
 targetId GeneCard:BCLAF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCLAF1
-validation BCLAF1(Immunoblot):human_BCLAF1_SC-101388_validation_Myers.pdf
+validation BCLAF1(Immunoblot):human_BCLAF1_SC101388_validation_Myers.pdf
 
 term BDP1
 tag BDP1
@@ -4337,7 +4337,7 @@ lab White
 lots
 targetId GeneCards:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
-validation human_validation_White.pdf
+validation eGFP-FOS:human_validation_White.pdf
 
 term eGFP-GATA2
 tag eGATA2
@@ -4352,7 +4352,7 @@ lab White
 lots
 targetId GeneCards:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation human_validation_White.pdf
+validation eGFP-GATA2:human_validation_White.pdf
 
 term eGFP-HDAC8
 tag eHDAC8
@@ -4367,7 +4367,7 @@ lab White
 lots
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
-validation human_validation_White.pdf
+validation eGFP-HDACB:human_validation_White.pdf
 
 term eGFP-JunB
 tag eJunB
@@ -4382,7 +4382,7 @@ lab White
 lots
 targetId GeneCards:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
-validation human_validation_White.pdf
+validation eGFP-JunB:human_validation_White.pdf
 
 term eGFP-JunD
 tag eJunD
@@ -4397,7 +4397,7 @@ lab White
 lots
 targetId GeneCards:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
-validation human_validation_White.pdf
+validation eGFP-JunD:human_validation_White.pdf
 
 term eGFP-NR4A1
 tag eNR4A1
@@ -4412,7 +4412,7 @@ lab White
 lots
 targetId GeneCards:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
-validation human_validation_White.pdf
+validation eGFP-NR4A1:human_validation_White.pdf
 
 term  ELF1_(SC-631)
 tag  ELF1SC631
@@ -4613,7 +4613,7 @@ targetId
 targetUrl
 lab Myers / Wold
 lots F1804
-validation GABP(Immunoprecipitation-WesternBlot,MassSpec):human_GABP1_validation_Myers.pdf
+validation GABP(Immunoprecipitation-WesternBlot,MassSpec):human_GABP_validation_Myers.pdf
 
 term GATA-1
 tag GATA1
@@ -5000,7 +5000,7 @@ tag H3K79me2
 type Antibody
 target H3K79me2
 antibodyDescription Rabbit polyclonal antibody raised against a peptide containing K79 di-methylation
-targetDescription H3K79me2 is a mark of the transcriptional transition region - ie, the region between the initiation marks (K4me3, etc) and the elongation marks (K36me3). 
+targetDescription H3K79me2 is a mark of the transcriptional transition region - the region between the initiation marks (K4me3, etc) and the elongation marks (K36me3). 
 orderUrl http://www.activemotif.com/catalog/details/39143/histone-h3-dimethyl-lys79-antibody-pab.html
 vendorName Active Motif
 vendorId 39143
@@ -6317,7 +6317,7 @@ antibodyDescription Rabbit polyclonal
 targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel class of zinc finger proteins.
 vendorName Santa Cruz Biotech
 vendorId sc-1703X
-orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/product.php?datasheet=281
+orderUrl http://www.scbt.com/product.php?datasheet=1703
 lab Farnham
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
@@ -6331,7 +6331,7 @@ antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of 
 targetDescription YY1 is a ubiquitously distributed transcription factor belonging to the GLI-Kruppel class of zinc finger proteins.  The protein is involved in repressing and activating a diverse number of promoters.  YY1 may direct histone deacetylases and histone acetyltransferases to a promoter in order to activate or repress the promoter, thus implicating histone modification in the function of YY1
 vendorName Santa Cruz Biotech
 vendorId sc-281
-orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/product.php?datasheet=281
+orderUrl http://www.scbt.com/product.php?datasheet=281
 lab Myers
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
@@ -7684,7 +7684,7 @@ type treatment
 
 term pravastatin
 tag PRAVAST
-description For sterol deprivation, cells were cultured with pravastatin (2 M; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
+description For sterol deprivation, cells were cultured with pravastatin (2 uM; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
 type treatment
 
 term Prednisolone_100nM
