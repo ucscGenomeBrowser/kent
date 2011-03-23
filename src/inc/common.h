@@ -574,8 +574,9 @@ struct slName *slNameListFromString(char *s, char delimiter);
 #define slNameListFromComma(s) slNameListFromString(s, ',')
 /* Parse out comma-separated list. */
 
-struct slName *slNameListOfUniqueWords(char *text);
+struct slName *slNameListOfUniqueWords(char *text,boolean respectQuotes);
 // Return list of unique words found by parsing string delimited by whitespace.
+// If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] are 2 words
 
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize);
 /* Return list of slNames from an array of strings of length arraySize.
@@ -725,7 +726,7 @@ int differentStringNullOk(char *a, char *b);
 #define sameStringN(a,b,c) (strncmp(a,b,c)==0)
 /* Returns TRUE if two strings start with the same c characters. */
 
-#define isEmpty(string) (string == NULL || string[0] == 0)
+#define isEmpty(string) ((string) == NULL || (string)[0] == 0)
 #define isNotEmpty(string) (! isEmpty(string))
 
 int cmpStringsWithEmbeddedNumbers(const char *a, const char *b);
@@ -938,6 +939,9 @@ char *lastWordInLine(char *line);
 char *nextWord(char **pLine);
 /* Return next word in *pLine and advance *pLine to next
  * word. Returns NULL when no more words. */
+
+char *nextWordRespectingQuotes(char **pLine);
+// return next word but respects single or double quotes surrounding sets of words.
 
 char *cloneFirstWord(char *line);
 /* Clone first word in line */
