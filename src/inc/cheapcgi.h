@@ -77,6 +77,9 @@ char *cgiScriptName();
 char *cgiServerName();
 /* Return name of server */
 
+char *cgiServerPort();
+/* Return port number of server */
+
 char *cgiRemoteAddr();
 /* Return IP address of client (or "unknown"). */
 
