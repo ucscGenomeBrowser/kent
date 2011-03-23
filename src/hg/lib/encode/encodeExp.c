@@ -497,7 +497,7 @@ if (db == NULL)
 exp->organism = hOrganism(db);
 strLower(exp->organism);
 
-// NOTE:  Needs filtering with composite-level experiment-definition to 
+// NOTE:  Needs filtering with composite-level experiment-definition to
 
 //struct mdbObj *mdb = mdbObjNew(NULL, vars);
 //// extract exp vars into an slPair list
@@ -638,11 +638,10 @@ void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp 
 */
 {
 encodeExpSaveToDb(conn, exp, tableName, 0);
-sqlUpdate(conn, dyStringContents(dy));
 }
 
 static char *encodeExpAccession(struct sqlConnection *conn, char *tableName, int id, boolean add)
-/* Add or remove an accession from an experiment.  
+/* Add or remove an accession from an experiment.
    This is done after the experiment definition is checked for validity.
 */
 {
@@ -672,7 +671,7 @@ return accession;
 
 char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id)
 /* Add accession field to an existing "temp" experiment.  This is done
- * after experiment is determined to be valid. 
+ * after experiment is determined to be valid.
  * Return the accession. */
 {
 return encodeExpAccession(conn, tableName, id, TRUE);
