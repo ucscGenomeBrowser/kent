@@ -576,7 +576,7 @@ struct slName *slNameListFromString(char *s, char delimiter);
 
 struct slName *slNameListOfUniqueWords(char *text,boolean respectQuotes);
 // Return list of unique words found by parsing string delimited by whitespace.
-// If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] are 2 words
+// If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] will yield 2 slNames no quotes
 
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize);
 /* Return list of slNames from an array of strings of length arraySize.

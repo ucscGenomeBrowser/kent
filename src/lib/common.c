@@ -753,14 +753,20 @@ return list;
 
 struct slName *slNameListOfUniqueWords(char *text,boolean respectQuotes)
 // Return list of unique words found by parsing string delimited by whitespace.
-// If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] are 2 words
+// If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] will yield 2 slNames no quotes
 {
 struct slName *list = NULL;
 char *word = NULL;
 while (text != NULL)
     {
     if (respectQuotes)
+        {
         word = nextWordRespectingQuotes(&text);
+        if (word[0] == '"')
+            stripChar(word, '"');
+        else if (word[0] == '\'')
+            stripChar(word, '\'');
+        }
     else
         word = nextWord(&text);
     if (word)
