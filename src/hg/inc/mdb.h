@@ -90,7 +90,41 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 
 #include "trackDb.h"
 
-#define MDB_DEFAULT_NAME "metaDb"
+#define MDB_DEFAULT_NAME     "metaDb"
+
+// The three mdb tuples
+#define MDB_OBJ                 "obj"
+#define MDB_VAR                 "var"
+#define MDB_VAL                 "val"
+
+// OBJECT TYPES
+#define MDB_OBJ_TYPE            "objType"
+#define MDB_OBJ_TYPE_TABLE      "table"
+#define MDB_OBJ_TYPE_FILE       "file"
+#define MDB_OBJ_TYPE_COMPOSITE  "composite"
+
+// WELL KNOWN MDB VARS
+#define MDB_VAR_COMPOSITE       MDB_OBJ_TYPE_COMPOSITE
+#define MDB_VAR_ANTIBODY        "antibody"
+#define MDB_VAR_CELL            "cell"
+#define MDB_VAR_LAB             "lab"
+#define MDB_VAR_DATATYPE        "dataType"
+#define MDB_VAR_TABLENAME       "tableName"
+#define MDB_VAR_FILENAME        "fileName"
+#define MDB_VAR_FILEINDEX       "fileIndex"
+#define MDB_VAR_DCC_ACCESSION   "dccAccession"
+#define MDB_VAR_PROJECT         "project"
+
+// SPECIAL MDB VALS
+#define MDB_VAL_SURE_TO_NOT_MATCH "{nothing}"
+
+// ENCODE Specific (at least for now)
+#define MDB_VAL_ENCODE_PROJECT  "wgEncode"
+#define MDB_VAR_ENCODE_SUBID    "subId"
+#define MDB_VAR_ENCODE_EDVS     "expVars"
+#define MDB_VAR_ENCODE_EXP_ID   "expId"
+#define MDB_VAL_ENCODE_EDV_NONE "None"
+
 
 // The mdb holds metadata primarily for tables.
 //   Many types of objects could be supported, though currently files are the only other type.
@@ -345,10 +379,10 @@ struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,ch
 // Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
 
 // -- Requested by Kate: --
-#define MDB_FIELD_LAB        "lab"
-#define MDB_FIELD_DATA_TYPE  "dataType"
-#define MDB_FIELD_CELL_TYPE  "cell"
-#define ENCODE_MDB_PROJECT   "wgEncode"
+#define MDB_FIELD_LAB        MDB_VAR_LAB
+#define MDB_FIELD_DATA_TYPE  MDB_VAR_DATATYPE
+#define MDB_FIELD_CELL_TYPE  MDB_VAR_CELL
+#define ENCODE_MDB_PROJECT   MDB_VAL_ENCODE_PROJECT
 
 boolean mdbObjIsEncode(struct mdbObj *mdbObj);
 // Returns TRUE if MDB object is an ENCODE object (project=wgEncode)
@@ -403,6 +437,39 @@ struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limi
 // Return is case insensitive sorted on label (cv label or else val).
 #define mdbPairVal(pair) (pair)->name
 #define mdbPairLabel(pair) (pair)->val
+
+// ------------ CONTROLLED VOCABULARY APIs --------------
+
+#define CV_FILE_NAME            "cv.ra"
+
+// CV Common settings
+#define CV_TERM                 "term"
+#define CV_TYPE                 "type"
+#define CV_LABEL                "label"
+#define CV_TAG                  "tag"
+
+// Type of Terms defines
+#define CV_TOT                  "typeOfTerm"
+#define CV_TOT_HIDDEN           "hidden"
+#define CV_TOT_CV_DEFINED       "cvDefined"
+
+// Validation Rules
+#define CV_VALIDATE                 "validate"
+#define CV_VALIDATE_CV              "cv"
+#define CV_VALIDATE_CV_OR_NONE      "cv or None"
+#define CV_VALIDATE_CV_OR_CONTROL   "cv or control"
+#define CV_VALIDATE_DATE            "date"
+#define CV_VALIDATE_EXISTS          "exists"
+#define CV_VALIDATE_FLOAT           "float"
+#define CV_VALIDATE_INT             "integer"
+#define CV_VALIDATE_LIST            "list:"
+#define CV_VALIDATE_REGEX           "regex:"
+#define CV_VALIDATE_NONE            "none"
+
+// CV TERMS (NOTE: UGLY Terms in cv.ra are hidden inside cv.c APIS)
+#define CV_TERM_CELL            MDB_VAR_CELL
+#define CV_TERM_ANTIBODY        MDB_VAR_ANTIBODY
+#define CV_TERM_CONTROL         "control"
 
 const struct hash *mdbCvTermHash(char *term);
 // returns a hash of hashes of a term which should be defined in cv.ra
