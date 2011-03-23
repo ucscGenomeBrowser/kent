@@ -529,7 +529,7 @@ tableName wgEncodeSydhHistoneK562bH3k9acbUcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneK562bInputUcdAlnRep1
+metaObject wgEncodeSydhHistoneK562bInputUcdAln
 objType file
 antibody Input
 cell K562b
@@ -541,19 +541,19 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
-fileName wgEncodeSydhHistoneK562bInputUcdAlnRep1.bam
+fileIndex wgEncodeSydhHistoneK562bInputUcdAln.bam.bai
+fileName wgEncodeSydhHistoneK562bInputUcdAln.bam
 grant Snyder
 lab UCD
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
-replicate 1
 setType input
 subId 3839
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneK562bInputUcdRawDataRep1
+metaObject wgEncodeSydhHistoneK562bInputUcdRawData
 objType file
 antibody Input
 cell K562b
@@ -565,13 +565,12 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
-fileName wgEncodeSydhHistoneK562bInputUcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneK562bInputUcdRawData.fastq.gz
 grant Snyder
 lab UCD
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
-replicate 1
 setType input
 subId 3839
 treatment None
@@ -1716,7 +1715,7 @@ tableName wgEncodeSydhHistoneU2osH3k9me3UcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhHistoneU2osInputUcdAlnRep1
+metaObject wgEncodeSydhHistoneU2osInputUcdAln
 objType file
 antibody Input
 cell U2OS
@@ -1728,17 +1727,17 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneU2osInputUcdAlnRep1.bam
+fileIndex wgEncodeSydhHistoneU2osInputUcdAln.bam.bai
+fileName wgEncodeSydhHistoneU2osInputUcdAln.bam
 grant Snyder
 lab UCD
 project wgEncode
-replicate 1
 setType input
 subId 3839
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhHistoneU2osInputUcdRawDataRep1
+metaObject wgEncodeSydhHistoneU2osInputUcdRawData
 objType file
 antibody Input
 cell U2OS
@@ -1750,11 +1749,10 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneU2osInputUcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhHistoneU2osInputUcdRawData.fastq.gz
 grant Snyder
 lab UCD
 project wgEncode
-replicate 1
 setType input
 subId 3839
 treatment None
@@ -1784,4 +1782,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 264328055
+# MAGIC: 884039648
