@@ -6331,7 +6331,7 @@ antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of 
 targetDescription YY1 is a ubiquitously distributed transcription factor belonging to the GLI-Kruppel class of zinc finger proteins.  The protein is involved in repressing and activating a diverse number of promoters.  YY1 may direct histone deacetylases and histone acetyltransferases to a promoter in order to activate or repress the promoter, thus implicating histone modification in the function of YY1
 vendorName Santa Cruz Biotech
 vendorId sc-281
-orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/product.php?datasheet=281
+orderUrl http://www.scbt.com/product.php?datasheet=281
 lab Myers
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
