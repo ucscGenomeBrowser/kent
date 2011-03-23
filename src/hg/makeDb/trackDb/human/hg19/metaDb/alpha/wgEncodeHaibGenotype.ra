@@ -1101,7 +1101,6 @@ dccRep 1
 fileName wgEncodeHaibGenotypeHsmmtRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId Duke
 labVersion Illumina 1MDuo
 obtainedBy Duke
 origAssembly hg19
@@ -1110,7 +1109,7 @@ replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHsmmtRegionsRep2
 treatment None
-view Regions
+view CNV
 
 metaObject wgEncodeHaibGenotypeHtr8RegionsRep1
 objType table
@@ -1992,4 +1991,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: 835077028
+# MAGIC: 832300700
