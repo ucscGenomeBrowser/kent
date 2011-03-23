@@ -57,7 +57,12 @@ if (sameString(position, "genome") || sameString(position, "hgBatch"))
 
 webIncludeResourceFile("autocomplete.css");
 jsIncludeFile("jquery.js", NULL);
+#ifdef NEW_JQUERY
+webIncludeResourceFile("jquery-ui.css");
+jsIncludeFile("jquery-ui.js", NULL);
+#else
 jsIncludeFile("jquery.autocomplete.js", NULL);
+#endif
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("autocomplete.js", NULL);
 jsIncludeFile("hgGateway.js", NULL);
@@ -226,6 +231,9 @@ puts("</center>\n"
 "</td></tr></table>\n"
 );
 puts("</center>");
+#ifdef NEW_JQUERY
+hPrintf("<input type='hidden' id='hgt.newJQuery' name='hgt.newJQuery' value='1'>\n");
+#endif
 puts("</FORM>");
 if (hIsPreviewHost())
     {
