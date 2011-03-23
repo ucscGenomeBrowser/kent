@@ -1901,7 +1901,6 @@ type bed 12
         color 205,96,144
         visibility hide
         type bed 10
-
     
 searchTable haplotypeLocations
 searchMethod exact
