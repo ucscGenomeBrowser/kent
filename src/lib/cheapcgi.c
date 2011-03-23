@@ -80,6 +80,12 @@ char *cgiServerName()
 return getenv("SERVER_NAME");
 }
 
+char *cgiServerPort()
+/* Return port number of server */
+{
+return getenv("SERVER_PORT");
+}
+
 char *cgiRemoteAddr()
 /* Return IP address of client (or "unknown"). */
 {
