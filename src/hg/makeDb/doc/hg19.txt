@@ -15052,3 +15052,166 @@ while (<>) {
 
 
 #############################################################################
+# Affy Exon track (DONE 2011-03-08 - Melissa Cline)
+
+# scripts/splitAffyExonBeds.py (below)
+#!/usr/bin/env python
+
+import fileinput
+import re
+import string
+
+filehandle = None
+for line in fileinput.input():
+    if re.search("track\tname", line):
+        if filehandle != None:
+            filehandle.close()
+        filename = fileinput.filename()
+        filename = string.replace(filename, "hg19-bed", "hg19-split-bed")
+        if re.search("gene level exon", line):
+            filename = string.replace(filename, ".bed", ".exon.bed")
+        elif re.search("gene probeset", line):
+            filename = string.replace(filename, ".bed", ".geneProbeset.bed")
+        elif re.search("exon probeset", line):
+            filename = string.replace(filename, ".bed", ".probeset.bed")
+        elif re.search("probe", line):
+            filename = string.replace(filename, ".bed", ".probe.bed")
+        filehandle = open(filename, 'w')
+    filehandle.write(line)
+        
+
+# scripts/mergeAcrossChromosomes.bash (below)
+#!/usr/bin/env bash
+
+
+PATHNAME="/hive/users/cline/Affy/"
+tail -n +2 $PATHNAME/Affy-HuEx-hg19-split-bed/HuEx-1_0-st-v2.hg19.*.$1.bed \
+  |grep -v "==>" > $PATHNAME/mergedBeds/AffyHuEx.$1.bed 
+
+
+# scripts/splitByProbesetType.py (below)
+#!/usr/bin/env python
+from optparse import OptionParser
+import re
+
+parser = OptionParser()
+parser.add_option("-s", "--supplementalData", dest="supplementalData",
+                  default="supportingAnnotations/HuEx-1_0-st-v2.na31.hg19.probeset.csv")
+parser.add_option("-b", "--bedData", dest="bedData", default="noOverlaps/AffyHuEx.probeset.overlapsMerged.bed")
+(parameters, args) = parser.parse_args()
+coreProbesets = dict()
+extendedProbesets = dict()
+fullProbesets = dict()
+ambiguousProbesets = dict()
+freeProbesets = dict()
+supplementalFile = open(parameters.supplementalData)
+for line in supplementalFile:
+    tokens = line.split(",")
+    probesetId = re.sub("\"", "", tokens[0])
+    if re.search("core", line):
+        coreProbesets[probesetId] = 1
+    elif re.search("extended", line):
+        extendedProbesets[probesetId] = 1
+    elif re.search("full", line):
+        fullProbesets[probesetId] = 1
+    elif re.search("ambiguous", line):
+        ambiguousProbesets[probesetId] = 1
+    elif re.search("free", line):
+        freeProbesets[probesetId] = 1
+supplementalFile.close()
+coreProbesetsOutfile = re.sub("noOverlaps", "partitioned2",
+                              re.sub("overlapsMerged", "core.overlapsMerged",
+                                     parameters.bedData))
+coreProbesetsOut = open(coreProbesetsOutfile, 'w')
+extendedProbesetsOutfile = re.sub("noOverlaps", "partitioned2",
+                                  re.sub("overlapsMerged",
+                                         "extended.overlapsMerged",
+                                         parameters.bedData))
+extendedProbesetsOut = open(extendedProbesetsOutfile, 'w')
+fullProbesetsOutfile = re.sub("noOverlaps", "partitioned2",
+                              re.sub("overlapsMerged", "full.overlapsMerged",
+                                     parameters.bedData))
+fullProbesetsOut = open(fullProbesetsOutfile, 'w')
+ambiguousProbesetsOutfile = re.sub("noOverlaps", "partitioned2",
+                                   re.sub("overlapsMerged", "ambiguous.overlapsMerged",
+                                          parameters.bedData))
+ambiguousProbesetsOut = open(ambiguousProbesetsOutfile, 'w')
+freeProbesetsOutfile = re.sub("noOverlaps", "partitioned2",
+                                   re.sub("overlapsMerged", "free.overlapsMerged",
+                                          parameters.bedData))
+freeProbesetsOut = open(freeProbesetsOutfile, 'w')
+bedInput = open(parameters.bedData)
+for line in bedInput:
+    tokens = line.split()
+    if len(tokens) < 3:
+        print "error: misformed line", line
+    else:
+        name = line.split()[3]
+        (gene,probeset) = name.split("_")
+        if coreProbesets.has_key(probeset):
+            coreProbesetsOut.write(line)
+        elif extendedProbesets.has_key(probeset):
+            extendedProbesetsOut.write(line)
+        elif fullProbesets.has_key(probeset):
+            fullProbesetsOut.write(line)
+        elif ambiguousProbesets.has_key(probeset):
+            ambiguousProbesetsOut.write(line)
+        elif freeProbesets.has_key(probeset):
+            freeProbesetsOut.write(line)
+        else:
+            print "warning: orphan line", line
+
+
+# 1. Given data from the vendor, one file per chromosome with four types of
+# bed entries per file (one file per chromosome), split them into four bed 
+# files (yielding four bed files per chromosome).
+ls Affy-HuEx-hg19-bed/*bed \
+    | awk '{ print "scripts/splitAffyExonBeds.py", $1 }' |bash
+ 
+# 2. Given a subdirectory with four bed files per chromosome for probeset
+# and probe bed files, merge them into one bed file for probeset data
+# and one bed file per probe data.  From here, we are ignoring the exon
+# and gene probeset data.
+scripts/mergeAcrossChromosomes.bash probeset
+scripts/mergeAcrossChromosomes.bash probe
+
+# 3. There is an issue that the probeset data contains overlapping blocks.
+# Fix this with bedMergeOverlappingBlocks, written by Andy Pohl.  Note that
+# the probe data does not contain overlapping blocks.
+bedMergeOverlappingBlocks mergedBeds/affyHuEx.probeset.bed \
+    noOverlaps/AffyHuEx.probeset.overlapsMerged.bed
+cp mergedBeds/AffyHuEx.probe.bed noOverlaps/AffyHuEx.probe.overlapsMerged.bed
+
+# 4. There are five different types of probesets, each of which has a different
+# significance to the user.  These should best be represented as five different
+# subtracks of a parent track (one parent track for probesets, and one for probes).
+# Split the data by probeset type.  Note that the same process can be applied to
+# both the probeset and probe data, because the probe data is represented by the
+# probeset ID rather than by a distinct probe ID.
+scripts/splitByProbesetType.py \
+    -s supportingAnnotations/HuEx-1_0-st-v2.na31.hg19.probeset.csv \
+    -p noOverlaps/AffyHuEx.probe.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbeAmbiguous \
+    partitioned2/AffyHuEx.probe.ambiguous.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbeCore \
+    partitioned2/AffyHuEx.probe.core.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbeExtended \
+    partitioned2/AffyHuEx.probe.extended.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbeFree \
+    partitioned2/AffyHuEx.probe.free.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbeFull \
+    partitioned2/AffyHuEx.probe.full.overlapsMerged.bed
+
+scripts/splitByProbesetType.py \
+    -s supportingAnnotations/HuEx-1_0-st-v2.na31.hg19.probeset.csv \
+    -p noOverlaps/AffyHuEx.probeset.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbesetAmbiguous \
+    partitioned2/AffyHuEx.probeset.ambiguous.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbesetCore \
+    partitioned2/AffyHuEx.probeset.core.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbesetExtended \
+    partitioned2/AffyHuEx.probeset.extended.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbesetFree \
+    partitioned2/AffyHuEx.probeset.free.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbesetFull \
+    partitioned2/AffyHuEx.probeset.full.overlapsMerged.bed
