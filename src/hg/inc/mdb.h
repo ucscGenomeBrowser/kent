@@ -105,11 +105,12 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 #define MDB_OBJ_TYPE_COMPOSITE  "composite"
 
 // WELL KNOWN MDB VARS
+#define MDB_VAR_PI              CV_TERM_GRANT
+#define MDB_VAR_LAB             CV_TERM_LAB
 #define MDB_VAR_COMPOSITE       MDB_OBJ_TYPE_COMPOSITE
-#define MDB_VAR_ANTIBODY        "antibody"
-#define MDB_VAR_CELL            "cell"
-#define MDB_VAR_LAB             "lab"
-#define MDB_VAR_DATATYPE        "dataType"
+#define MDB_VAR_ANTIBODY        CV_TERM_ANTIBODY
+#define MDB_VAR_CELL            CV_TERM_CELL
+#define MDB_VAR_DATATYPE        CV_TERM_DATA_TYPE
 #define MDB_VAR_TABLENAME       "tableName"
 #define MDB_VAR_FILENAME        "fileName"
 #define MDB_VAR_FILEINDEX       "fileIndex"

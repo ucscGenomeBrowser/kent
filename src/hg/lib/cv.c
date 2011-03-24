@@ -23,6 +23,28 @@
 #define CV_SEARCHABLE_MULTI_SELECT  "multiSelect"
 #define CV_SEARCHABLE_FREE_TEXT     "freeText"
 
+char *cvTypeNormalized(char *sloppyTerm)
+// returns (on stack) the proper term to use when requesting a typeOfTerm
+{
+if (sameWord(sloppyTerm,CV_TERM_CELL) || sameWord(sloppyTerm,CV_UGLY_TERM_CELL_LINE))
+    return CV_UGLY_TOT_CELLTYPE;
+if (sameWord(sloppyTerm,CV_TERM_ANTIBODY))
+    return CV_UGLY_TERM_ANTIBODY;
+
+return sloppyTerm;
+}
+
+char *cvTermNormalized(char *sloppyTerm)
+// returns (on stack) the proper term to use when requesting a cvTerm hash
+{
+if (sameWord(sloppyTerm,CV_UGLY_TOT_CELLTYPE) || sameWord(sloppyTerm,CV_UGLY_TERM_CELL_LINE))
+    return CV_TERM_CELL;
+if (sameWord(sloppyTerm,CV_UGLY_TERM_ANTIBODY))
+    return CV_TERM_ANTIBODY;
+
+return sloppyTerm;
+}
+
 // TODO: decide to make this public or hide it away inside the one function so far that uses it.
 static char *cv_file()
 // return default location of cv.ra
@@ -43,9 +65,9 @@ const struct hash *cvTermHash(char *term)
 // NOTE: in static memory: DO NOT FREE
 {
 static struct hash *cvHashOfHashOfHashes = NULL;
-if (sameString(term,MDB_VAR_CELL))
+if (sameString(term,CV_TERM_CELL))
     term = CV_UGLY_TERM_CELL_LINE;
-else if (sameString(term,MDB_VAR_ANTIBODY))
+else if (sameString(term,CV_TERM_ANTIBODY))
     term = CV_UGLY_TERM_ANTIBODY;
 
 if (cvHashOfHashOfHashes == NULL)

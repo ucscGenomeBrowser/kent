@@ -12,6 +12,9 @@
 #define CV_TYPE                 "type"
 #define CV_LABEL                "label"
 #define CV_TAG                  "tag"
+#define CV_TARGET               "target"
+#define CV_TITLE                "title"
+#define CV_DESCRIPTION          "description"
 
 // Type of Terms defines
 #define CV_TOT                  "typeOfTerm"
@@ -32,9 +35,20 @@
 #define CV_VALIDATE_NONE            "none"
 
 // CV TERMS (NOTE: UGLY Terms in cv.ra are hidden inside cv.c APIS)
-#define CV_TERM_CELL            MDB_VAR_CELL
-#define CV_TERM_ANTIBODY        MDB_VAR_ANTIBODY
+#define CV_TERM_GRANT           "grant"
+#define CV_TERM_LAB             "lab"
+#define CV_TERM_CELL            "cell"
+#define CV_TERM_ANTIBODY        "antibody"
 #define CV_TERM_CONTROL         "control"
+#define CV_TERM_DATA_TYPE       "dataType"
+#define CV_TERM_LOCALIZATION    "localization"
+
+
+char *cvTypeNormalized(char *sloppyTerm);
+// returns (on stack) the proper term to use when requesting a typeOfTerm
+
+char *cvTermNormalized(char *sloppyTerm);
+// returns (on stack) the proper term to use when requesting a cvTerm hash
 
 const struct hash *cvTermHash(char *term);
 // returns a hash of hashes of a term which should be defined in cv.ra
