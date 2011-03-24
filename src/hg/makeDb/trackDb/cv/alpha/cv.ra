@@ -3300,7 +3300,7 @@ type Cell Line
 organism Mouse
 tissue Mammary
 category Cell Line
-description Mammary
+description Mammary (provisional)
 age immortalized
 strain RIII
 vendorName
@@ -3316,7 +3316,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description myeloid progenitor cells, CD34+
+description myeloid progenitor cells, CD34+ (provisional)
 age immortalized
 strain B6D2F1/J
 vendorName
@@ -3332,7 +3332,7 @@ type Cell Line
 organism Mouse
 tissue Cortex
 category Cell Line
-description Pituitary tumor LAF1
+description Pituitary tumor LAF1 (provisional)
 age immortalized
 strain Unknown
 vendorName ATCC
@@ -3348,7 +3348,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description B Cell , CD19+
+description B Cell , CD19+ (provisional)
 age immortalized
 strain C57BL/6
 vendorName
@@ -3406,7 +3406,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description B-cell lymphoma (GM12878 analog)
+description B-cell lymphoma (GM12878 analog) (provisional)
 age immortalized
 strain B10.H-2aH-4bp/Wts
 vendorName Weissman lab
@@ -3428,7 +3428,7 @@ tissue
 category Primary Cells
 description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a
 targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T.
-Genes Dev. 1993 Nov;7(11):2071-84.)
+Genes Dev. 1993 Nov;7(11):2071-84.) (provisional)
 age E0
 strain 129
 vendorName Uw lab
@@ -3490,7 +3490,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description Gata1- erythroid progenitor
+description Gata1- erythroid progenitor (provisional)
 age E0
 strain 129
 vendorName Mitch Weiss lab
@@ -3507,7 +3507,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)
+description Gata1 restored erythroid cells, differentiation induced by estradiol (E2) (provisional)
 age E0
 strain 129
 vendorName Mitch Weiss lab
@@ -3627,7 +3627,7 @@ tag MEL
 type Cell Line
 organism Mouse
 category Cell Line
-description Leukemia (K562 analog)
+description Leukemia (K562 analog) (provisional)
 age immortalized
 strain Unknown
 tissue Blood

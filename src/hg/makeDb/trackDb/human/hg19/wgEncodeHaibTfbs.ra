@@ -7120,3 +7120,23 @@ noInherit on
         type bigWig 0.318537 227.912994
         color 0,107,27
         # subId=3833 dateSubmitted=2011-03-23
+
+        track wgEncodeHaibTfbsHepg2Usf1Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel HepG2 USF-1 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (USF-1 in HepG2 cells)
+        subGroups view=RawSignal factor=USF1 cellType=HEPG2 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.218011 69.818199
+        color 189,0,157
+        # subId=3815 dateSubmitted=2011-03-21
+
+        track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 Pol2-4H8 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Pol2-4H8 in GM12878 cells)
+        subGroups view=RawSignal factor=POL24H8 cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.025339 193.464005
+        color 153,38,0
+        # subId=3815 dateSubmitted=2011-03-21
