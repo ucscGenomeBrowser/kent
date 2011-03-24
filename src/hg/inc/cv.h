@@ -36,31 +36,31 @@
 #define CV_TERM_ANTIBODY        MDB_VAR_ANTIBODY
 #define CV_TERM_CONTROL         "control"
 
-const struct hash *mdbCvTermHash(char *term);
+const struct hash *cvTermHash(char *term);
 // returns a hash of hashes of a term which should be defined in cv.ra
 // NOTE: in static memory: DO NOT FREE
 
-const struct hash *mdbCvTermTypeHash();
+const struct hash *cvTermTypeHash();
 // returns a hash of hashes of mdb and controlled vocabulary (cv) term types
 // Those terms should contain label,descrition,searchable,cvDefined,hidden
 // NOTE: in static memory: DO NOT FREE
 
-struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvLinks);
+struct slPair *cvWhiteList(boolean searchTracks, boolean cvLinks);
 // returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
 
-enum mdbCvSearchable
+enum cvSearchable
 // metadata Variavble are only certain declared types
     {
-    cvsNotSearchable        =0,  // Txt is default
-    cvsSearchByMultiSelect  =1,  // Search by drop down multi-select of supplied list (NOT YET IMPLEMENTED)
-    cvsSearchBySingleSelect =2,  // Search by drop down single-select of supplied list
-    cvsSearchByFreeText     =3,  // Search by free text field (NOT YET IMPLEMENTED)
-    cvsSearchByDateRange    =4,  // Search by discovered date range (NOT YET IMPLEMENTED)
-    cvsSearchByIntegerRange =5   // Search by discovered integer range (NOT YET IMPLEMENTED)
+    cvNotSearchable        =0,  // Txt is default
+    cvSearchByMultiSelect  =1,  // Search by drop down multi-select of supplied list (NOT YET IMPLEMENTED)
+    cvSearchBySingleSelect =2,  // Search by drop down single-select of supplied list
+    cvSearchByFreeText     =3,  // Search by free text field (NOT YET IMPLEMENTED)
+    cvSearchByDateRange    =4,  // Search by discovered date range (NOT YET IMPLEMENTED)
+    cvSearchByIntegerRange =5   // Search by discovered integer range (NOT YET IMPLEMENTED)
     };
 
-enum mdbCvSearchable mdbCvSearchMethod(char *term);
-// returns whether the term is searchable // TODO: replace with mdbCvWhiteList() returning struct
+enum cvSearchable cvSearchMethod(char *term);
+// returns whether the term is searchable
 
 const char *cvLabel(char *term);
 // returns cv label if term found or else just term

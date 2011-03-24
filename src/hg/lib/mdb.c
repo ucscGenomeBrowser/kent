@@ -2002,7 +2002,7 @@ void mdbObjRemoveHiddenVars(struct mdbObj *mdbObjs)
 // Prunes list of vars for mdb objs that have been declared as hidden in cv.ra typeOfTerms
 {
 // make comma delimited list of hidden vars
-struct hash *cvTermTypes = (struct hash *)mdbCvTermTypeHash();
+struct hash *cvTermTypes = (struct hash *)cvTermTypeHash();
 struct hashEl *el, *elList = hashElListHash(cvTermTypes);
 struct dyString *dyRemoveVars = dyStringNew(256);
 
@@ -2011,7 +2011,7 @@ for (el = elList; el != NULL; el = el->next)
     struct hash *varHash = el->val;
     if (SETTING_IS_ON(hashFindVal(varHash, CV_TOT_HIDDEN)))
         {
-        assert(mdbCvSearchMethod(el->name) == cvsNotSearchable);  // Good idea to assert but cv.ra is a user updatable file
+        assert(cvSearchMethod(el->name) == cvNotSearchable);  // Good idea to assert but cv.ra is a user updatable file
         dyStringPrintf(dyRemoveVars,"%s ",el->name);
         }
     }
@@ -2318,7 +2318,7 @@ int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full)
 // Validates vars and vals against cv.ra.  Returns count of errors found.
 // Full considers vars not defined in cv as invalids
 {
-struct hash *termTypeHash = (struct hash *)mdbCvTermTypeHash();
+struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
 struct mdbObj *mdbObj = NULL;
 int invalids = 0;
 for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
@@ -2361,25 +2361,25 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
                 }
 
            // cvDefined so every val should be in cv
-           struct hash *cvTermHash = (struct hash *)mdbCvTermHash(mdbVar->var);
-           if (cvTermHash == NULL)
+           struct hash *cvHashForTerm = (struct hash *)cvTermHash(mdbVar->var);
+           if (cvHashForTerm == NULL)
                 {
                 verbose(1,"ERROR in %s: Term '%s' says validate in cv but not found as a cv term.\n",CV_FILE_NAME,mdbVar->var);
                 continue;
                 }
-            if (hashFindVal(cvTermHash,mdbVar->val) == NULL) // No cv definition for term so no validation can be done
+            if (hashFindVal(cvHashForTerm,mdbVar->val) == NULL) // No cv definition for term so no validation can be done
                 {
                 if (sameString(validationRule,CV_VALIDATE_CV_OR_NONE) && sameString(mdbVar->val,MDB_VAL_ENCODE_EDV_NONE))
                     continue;
                 else if (sameString(validationRule,CV_VALIDATE_CV_OR_CONTROL))
                     {
-                    cvTermHash = (struct hash *)mdbCvTermHash(CV_TERM_CONTROL);
-                    if (cvTermHash == NULL)
+                    cvHashForTerm = (struct hash *)cvTermHash(CV_TERM_CONTROL);
+                    if (cvHashForTerm == NULL)
                         {
                         verbose(1,"ERROR in %s: Term '%s' says validate in cv but not found as a cv term.\n",CV_FILE_NAME,CV_TERM_CONTROL);
                         continue;
                         }
-                    if (hashFindVal(cvTermHash,mdbVar->val) != NULL)
+                    if (hashFindVal(cvHashForTerm,mdbVar->val) != NULL)
                         continue;
                     }
                 printf("INVALID cv lookup: %s -> %s = %s\n",mdbObj->obj,mdbVar->var,mdbVar->val);
@@ -2967,14 +2967,14 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
     {
     if (isEmpty(((char *)(onePair->val)))) // NOTE: All the parens are needed to get the macro to do the right thing
         continue;
-    enum mdbCvSearchable searchBy = mdbCvSearchMethod(onePair->name);
-    if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByMultiSelect)  // multiSelect val will be filled with a comma delimited list
+    enum cvSearchable searchBy = cvSearchMethod(onePair->name);
+    if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)  // multiSelect val will be filled with a comma delimited list
         dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
-    else if (searchBy == cvsSearchByFreeText)                                      // If select is by free text then like
+    else if (searchBy == cvSearchByFreeText)                                      // If select is by free text then like
         dyStringPrintf(dyTerms,"%s=%%%s%% ",onePair->name,(char *)onePair->val);
     else if (sameWord(onePair->name,MDB_VAR_COMPOSITE))  // special case.  Not directly searchable by UI but indirectly and will show up here.
         dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
-    else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
+    else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
         {
         // TO BE IMPLEMENTED
         // Requires new mdbObjSearch API and more than one (char *)onePair->val
