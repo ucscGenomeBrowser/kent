@@ -116,6 +116,7 @@ while ((fieldCount = lineFileChop(lf, row)) != 0)
     struct rbTree *rangeTree = hashFindVal(chromHash, bed->chrom);
     if (rangeTree == NULL || !bedOverlapsRangeTree(rangeTree, bed, maxOverlap))
 	bedTabOutN(bed, fieldCount, f);
+    bedFree(&bed);
     }
 carefulClose(&f);
 }
