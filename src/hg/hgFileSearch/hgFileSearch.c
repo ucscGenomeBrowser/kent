@@ -41,6 +41,8 @@ boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTim
 
 //    ((sameString(op, "is") && !strcasecmp(track->shortLabel, str)) ||
 
+#define DESCRIPTION_MATCH_ON_EACH_WORD
+#ifdef DESCRIPTION_MATCH_ON_EACH_WORD
 static boolean isDescriptionMatch(struct trackDb *tdb, struct slName *wordList)
 // We parse str and look for every word at the start of any word in track description (i.e. google style).
 {
@@ -50,32 +52,50 @@ if (tdb->html == NULL)
 struct slName *word = wordList;
 for(; word != NULL; word = word->next)
     {
-    if (!wildMatch(word->name, tdb->html))
+    char wordWild[256];
+    safef(wordWild,sizeof wordWild,"*%s*",word->name);
+    if (!wildMatch(wordWild, tdb->html))
         return FALSE;
     }
 return TRUE;
 }
+#endif///def DESCRIPTION_MATCH_ON_EACH_WORD
 
-static struct trackDb *tdbFilterOn(struct trackDb **pTdbList, char *name, char *description, char *group)
-// returns tdbs that pach supplied criterion, leaving unmatched in list passed in
+static struct trackDb *tdbFilterBy(struct trackDb **pTdbList, char *name, char *description, char *group)
+// returns tdbs that match supplied criterion, leaving unmatched in list passed in
 {
+#ifdef DESCRIPTION_MATCH_ON_EACH_WORD
 // Set the word list up once
 struct slName *wordList = NULL;
 if (description)
-    wordList = slNameListOfUniqueWords(cloneString(description));
+    wordList = slNameListOfUniqueWords(cloneString(description),TRUE); // TRUE means respect quotes
+#endif///def DESCRIPTION_MATCH_ON_EACH_WORD
 
 struct trackDb *tdbList = *pTdbList;
 struct trackDb *tdbRejects = NULL;
 struct trackDb *tdbMatched = NULL;
+char nameWild[256];
+if (name)
+    safef(nameWild,sizeof nameWild,"*%s*",name);
+#ifndef DESCRIPTION_MATCH_ON_EACH_WORD
+char descWild[512];
+if (description)
+    safef(descWild,sizeof descWild,"*%s*",description);
+#endif///ndef DESCRIPTION_MATCH_ON_EACH_WORD
+
 while (tdbList != NULL)
     {
     struct trackDb *tdb = slPopHead(&tdbList);
 
-    if (name && (!wildMatch(name,tdb->shortLabel) && !wildMatch(name,tdb->longLabel)))
+    if (name && (!wildMatch(nameWild,tdb->shortLabel) && !wildMatch(nameWild,tdb->longLabel)))
         slAddHead(&tdbRejects,tdb);
     else if (group && differentString(tdb->grp,group))
         slAddHead(&tdbRejects,tdb);
+#ifdef DESCRIPTION_MATCH_ON_EACH_WORD
     else if (description && !isDescriptionMatch(tdb, wordList))
+#else///ifndef DESCRIPTION_MATCH_ON_EACH_WORD
+    else if (description && (tdb->html == NULL || !wildMatch(descWild,tdb->html)))
+#endif///ndef DESCRIPTION_MATCH_ON_EACH_WORD
         slAddHead(&tdbRejects,tdb);
     else
         slAddHead(&tdbMatched,tdb);
@@ -85,11 +105,13 @@ while (tdbList != NULL)
 
 *pTdbList = tdbRejects;
 
+//warn("matched %d tracks",slCount(tdbMatched));
 return tdbMatched;
 }
 
 static boolean mdbSelectsAddFoundComposites(struct slPair **pMdbSelects,struct trackDb *tdbsFound)
 // Adds a composite mdbSelect (if found in tdbsFound) to the head of the pairs list.
+// If tdbsFound is NULL, then add dummy composite search criteria
 {
 // create comma separated list of composites
 struct dyString *dyComposites = dyStringNew(256);
@@ -108,10 +130,12 @@ if (dyStringLen(dyComposites) > 0)
     {
     char *composites = dyStringCannibalize(&dyComposites);
     composites[strlen(composites) - 1] = '\0';  // drop the last ','
-    slPairAdd(pMdbSelects,"composite",composites); // Composite should not already be in the list, because it is only indirectly sortable
+    //warn("Found composites: %s",composites);
+    slPairAdd(pMdbSelects,MDB_VAR_COMPOSITE,composites); // Composite should not already be in the list, because it is only indirectly sortable
     return TRUE;
     }
 
+//warn("No composites found");
 dyStringFree(&dyComposites);
 return FALSE;
 }
@@ -170,7 +194,7 @@ slReverse(grps);
 return *grps;
 }
 
-void doSearch(char *db,char *organism,struct cart *cart,struct trackDb *tdbList)
+static void doFileSearch(char *db,struct cart *cart,struct trackDb *tdbList)
 {
 if (!advancedJavascriptFeaturesEnabled(cart))
     {
@@ -211,8 +235,10 @@ enum searchTab selectedTab = filesTab;
 descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
 #endif///ndef USE_TABS
 
+#ifndef DESCRIPTION_MATCH_ON_EACH_WORD
 if(descSearch)
     stripChar(descSearch, '"');
+#endif///ndef DESCRIPTION_MATCH_ON_EACH_WORD
 
 #ifdef USE_TABS
 struct trix *trix;
@@ -416,15 +442,22 @@ if(doSearch)
         if (nameSearch || descSearch || groupSearch)
             {  // Use nameSearch, descSearch and groupSearch to narrow down the list of composites.
 
-            struct trackDb *tdbList = hTrackDb(db);
-            struct trackDb *tdbsMatch = tdbFilterOn(&tdbList, nameSearch, descSearch, groupSearch);
+            if (isNotEmpty(nameSearch) || isNotEmpty(descSearch) || isNotEmpty(groupSearch))
+                {
+                struct trackDb *tdbList = hTrackDb(db);
+                struct trackDb *tdbsMatch = tdbFilterBy(&tdbList, nameSearch, descSearch, groupSearch);
 
-            // Now we have a list of tracks, so we need a unique list of composites to add to mdbSelects
-            mdbSelectsAddFoundComposites(&mdbSelects,tdbsMatch);
+                // Now we have a list of tracks, so we need a unique list of composites to add to mdbSelects
+                doSearch = mdbSelectsAddFoundComposites(&mdbSelects,tdbsMatch);
+                }
             }
         #endif///def SUPPORT_COMPOSITE_SEARCH
 
-        fileSearchResults(db, conn, mdbSelects, fileTypeSearch);
+        if (doSearch && mdbSelects != NULL && isNotEmpty(fileTypeSearch))
+            fileSearchResults(db, conn, mdbSelects, fileTypeSearch);
+        else
+            printf("<DIV id='filesFound'><BR>No files found.<BR></DIV><BR>\n");
+
         if (measureTiming)
             uglyTime("Searched for files");
         }
@@ -474,7 +507,7 @@ jsIncludeFile("utils.js",NULL);
 //printf("<script type='text/javascript'>$(document).ready(function() { setTimeout('updateMetaDataHelpLinks(0);',50);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
 printf("<script type='text/javascript'>$(document).ready(function() { updateMetaDataHelpLinks(0);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
 
-doSearch(db,organism,cart,tdbList);
+doFileSearch(db,cart,tdbList);
 
 
 printf("<BR>\n");

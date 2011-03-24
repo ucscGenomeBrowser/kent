@@ -33,6 +33,7 @@
 #ifdef USE_BAM
 #include "bamFile.h"
 #endif//def USE_BAM
+#include "vcf.h"
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
@@ -1977,6 +1978,62 @@ static struct customFactory bamFactory =
     };
 #endif//def USE_BAM
 
+#ifdef USE_TABIX
+/*** VCF+tabix Factory - client-side Variant Call Format files compressed & indexed by tabix ***/
+
+static boolean vcfTabixRecognizer(struct customFactory *fac, struct customPp *cpp, char *type, 
+				  struct customTrack *track)
+/* Return TRUE if looks like we're handling a vcfTabix track */
+{
+return (sameType(type, "vcfTabix"));
+}
+
+static struct customTrack *vcfTabixLoader(struct customFactory *fac, struct hash *chromHash,
+					  struct customPp *cpp, struct customTrack *track,
+					  boolean dbRequested)
+/* Process the vcfTabix track line. */
+{
+struct hash *settings = track->tdb->settingsHash;
+char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+struct dyString *dyErr = dyStringNew(0);
+if (bigDataUrl == NULL)
+    errAbort("Missing bigDataUrl setting from track of type=vcfTabix (%s)",
+	     track->tdb->shortLabel);
+if (doExtraChecking)
+    {
+    /* protect against temporary network error */
+    int vcfMaxErr = 100;
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	struct vcfFile *vcff = vcfTabixFileMayOpen(bigDataUrl, NULL, 0, 0, vcfMaxErr);
+	if (vcff == NULL)
+	    {
+            dyStringPrintf(dyErr, "Unable to load and/or parse %s's bigDataUrl %s",
+			   track->tdb->shortLabel, bigDataUrl);
+	    }
+	vcfFileFree(&vcff);
+	}
+    errCatchEnd(errCatch);
+    if (isNotEmpty(errCatch->message->string))
+	dyStringPrintf(dyErr, ": %s", errCatch->message->string);
+    errCatchFree(&errCatch);
+    }
+if (isNotEmpty(dyErr->string))
+    track->networkErrMsg = dyStringCannibalize(&dyErr);
+return track;
+}
+
+static struct customFactory vcfTabixFactory = 
+/* Factory for vcfTabix tracks */
+    {
+    NULL,
+    "vcfTabix",
+    vcfTabixRecognizer,
+    vcfTabixLoader,
+    };
+#endif//def USE_TABIX
+
 /*** makeItems Factory - for track where user interactively creates items. ***/
 
 static boolean makeItemsRecognizer(struct customFactory *fac,	struct customPp *cpp, char *type, 
@@ -2148,6 +2205,9 @@ if (factoryList == NULL)
 #ifdef USE_BAM
     slAddTail(&factoryList, &bamFactory);
 #endif//def USE_BAM
+#ifdef USE_TABIX
+    slAddTail(&factoryList, &vcfTabixFactory);
+#endif//def USE_TABIX
     slAddTail(&factoryList, &makeItemsFactory);
     }
 }
