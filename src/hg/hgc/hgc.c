@@ -3887,6 +3887,10 @@ else if (wordCount > 0)
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
 #endif // USE_BAM
+#ifdef USE_TABIX
+    else if (sameString(type, "vcfTabix"))
+	doVcfTabixDetails(tdb, item);
+#endif // USE_TABIX
     }
 if (imagePath)
     {
@@ -19652,6 +19656,10 @@ else if (sameWord(type, "bigBed"))
 else if (sameWord(type, "bam"))
     doBamDetails(ct->tdb, itemName);
 #endif//def USE_BAM
+#ifdef USE_TABIX
+else if (sameWord(type, "vcfTabix"))
+    doVcfTabixDetails(ct->tdb, itemName);
+#endif//def USE_TABIX
 else if (sameWord(type, "makeItems"))
     doMakeItemsDetails(ct, fileName);	// fileName is first word, which is, go figure, id
 else if (ct->wiggle)

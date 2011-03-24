@@ -1,14 +1,21 @@
 include ../../inc/common.mk
 
+ifeq (${USE_TABIX},1)
+    TABIX_TESTS=tabixTest vcfTest
+else
+    TABIX_TESTS=
+endif
+
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS = ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
-    tabixTest vcfTest
+    ${TABIX_TESTS}
 	rm -r output fetchUrlTest
 	@echo tested all
+
 
 mkdirs:
 	${MKDIR} output ${BIN_DIR}
@@ -257,7 +264,7 @@ ${BIN_DIR}/tabixFetch: tabixFetch.o ${MYLIBS}
 
 # vcf:
 vcfTester=${BIN_DIR}/vcfParseTest
-vcfTest: vcfParse1kGNoGenotypes vcfParse1kGWithGenotypes
+vcfTest: vcfParse1kGNoGenotypes vcfParse1kGWithGenotypes vcfParseOldV3
 
 vcfParse1kGNoGenotypes: ${vcfTester} mkdirs
 	${vcfTester} input/YRI.trio.2010_06.novelsequences.sites.vcf.gz 2 26790859 194631353 > output/$@.out
@@ -265,6 +272,10 @@ vcfParse1kGNoGenotypes: ${vcfTester} mkdirs
 
 vcfParse1kGWithGenotypes: ${vcfTester} mkdirs
 	${vcfTester} input/YRI.low_coverage.2010_07_excerpt.genotypes.vcf.gz 2 26793737 26794385 > output/$@.out
+	diff expected/$@.out output/$@.out
+
+vcfParseOldV3:
+	${vcfTester} input/20091110_pilot1_vcf_merged_call_sets_YRI.2and3_way.vcf.gz 1 3000 50000 >& output/$@.out
 	diff expected/$@.out output/$@.out
 
 ${BIN_DIR}/vcfParseTest: vcfParseTest.o ${MYLIBS}

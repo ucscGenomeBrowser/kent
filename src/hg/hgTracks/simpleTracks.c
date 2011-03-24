@@ -9869,6 +9869,8 @@ freeDyString(&ds);
 }
 
 void pgSnpMethods (struct track *tg)
+/* Personal Genome SNPs: show two alleles with stacked color bars for base alleles and
+ * (if available) allele counts in mouseover. */
 {
 bedMethods(tg);
 tg->loadItems = loadPgSnp;
@@ -12196,6 +12198,52 @@ tg->itemEnd = tgItemNoEnd;
 tg->mapItemName = remoteName;
 }
 
+static void drawExampleMessageLine(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
+				   int xOff, int yOff, int width, MgFont *font, Color color,
+				   enum trackVisibility vis)
+/* Example, meant to be overloaded: draw a message in place of track items. */
+{
+char message[512];
+safef(message, sizeof(message), "drawExampleMessageLine: copy me and put your own message here.");
+Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
+hvGfxBox(hvg, xOff, yOff, width, tg->heightPer, yellow);
+hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message);
+}
+
+void messageLineMethods(struct track *track)
+/* Methods for drawing a single-height message line instead of track items,
+ * e.g. if source was compiled without a necessary library. */
+{
+linkedFeaturesMethods(track);
+track->loadItems = dontLoadItems;
+track->drawItems = drawExampleMessageLine;
+// Following few lines taken from hgTracks.c getTrackList, because this is called earlier
+// but needs to know track vis from tdb+cart:
+char *s = cartOptionalString(cart, track->track);
+if (cgiOptionalString("hideTracks"))
+    {
+    s = cgiOptionalString(track->track);
+    if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
+	{
+	cartSetString(cart, track->track, s);
+	}
+    }
+// end stuff copied from hgTracks.c
+enum trackVisibility trackVis = track->tdb->visibility;
+if (s != NULL)
+    trackVis = hTvFromString(s);
+if (trackVis != tvHide)
+    {
+    track->visibility = tvDense;
+    track->limitedVis = tvDense;
+    track->limitedVisSet = TRUE;
+    }
+track->nextItemButtonable = track->nextExonButtonable = FALSE;
+track->nextPrevItem = NULL;
+track->nextPrevExon = NULL;
+}
+
+
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
 {
@@ -12295,6 +12343,12 @@ else if (sameWord(type, "maf"))
 else if (sameWord(type, "bam"))
     {
     bamMethods(track);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
+else if (sameWord(type, "vcfTabix"))
+    {
+    vcfTabixMethods(track);
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }

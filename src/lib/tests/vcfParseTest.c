@@ -28,7 +28,7 @@ static struct optionSpec options[] = {
 void vcfParseTest(char *fileOrUrl, char *seqName, int start, int end)
 /* vcfParseTest - Parse VCF header and data lines in given position range.. */
 {
-struct vcfFile *vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, 100, stderr);
+struct vcfFile *vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, 100);
 if (vcff == NULL)
     errAbort("Failed to parse \"%s\" and/or its index file \"%s.tbi\"", fileOrUrl, fileOrUrl);
 int recCount = slCount(vcff->records);

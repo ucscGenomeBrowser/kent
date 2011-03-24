@@ -242,6 +242,8 @@ boolean lineFileSetTabixRegion(struct lineFile *lf, char *seqName, int start, in
 #ifdef USE_TABIX
 if (lf->tabix == NULL)
     errAbort("lineFileSetTabixRegion: lf->tabix is NULL.  Did you open lf with lineFileTabixMayOpen?");
+if (seqName == NULL)
+    return FALSE;
 int tabixSeqId = ti_get_tid(lf->tabix->idx, seqName);
 if (tabixSeqId < 0 && startsWith("chr", seqName))
     // We will get some files that have chr-less Ensembl chromosome names:
