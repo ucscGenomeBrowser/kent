@@ -1783,7 +1783,6 @@ maxLimit 100
 html gc5Base
 
 track affyExonArray
-release alpha
 compositeTrack on
 group expression
 shortLabel Affy Exon Array
