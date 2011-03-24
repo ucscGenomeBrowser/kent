@@ -186,6 +186,30 @@ hubConnectStatusFree(&status);
 return hub;
 }
 
+static struct trackDb *findSuperTrack(struct trackDb *tdbList, char *trackName)
+/*  discover any supertracks, and if there are some add them 
+ *  to the subtrack list of the supertrack */
+{
+struct trackDb *tdb;
+struct trackDb *p = NULL;
+struct trackDb *next;
+
+for(tdb = tdbList; tdb; tdb = next)
+    {
+    /* save away the next pointer becuase we may detach this node and
+     * add it to its supertrack parent */
+    next = tdb->next;
+    if (tdb->parent != NULL && sameString(trackName, tdb->parent->track))
+	{
+	/* found a supertrack with the right name, add this child */
+	p = tdb->parent;
+	slAddHead(&p->subtracks, tdb);
+	}
+    }
+
+return p;
+}
+
 struct trackDb *hubConnectAddHubForTrackAndFindTdb(char *database, 
 	char *trackName, struct trackDb **pTdbList, struct hash *trackHash)
 /* Go find hub for trackName (which will begin with hub_), and load the tracks
@@ -203,10 +227,15 @@ rAddTrackListToHash(trackHash, tdbList, NULL, FALSE);
 if (pTdbList != NULL)
     *pTdbList = slCat(*pTdbList, tdbList);
 struct trackDb *tdb = hashFindVal(trackHash, trackName);
-if (tdb == NULL)
+if (tdb == NULL) 
+    // superTracks aren't in the hash... look in tdbList
+    tdb = findSuperTrack(tdbList, trackName);
+
+if (tdb == NULL) 
     errAbort("Can't find track %s in %s", trackName, hub->url);
 
 /* Add html for track and parents. */
+/* Note: this does NOT add the HTML for supertrack kids */
 struct trackDb *parent;
 for (parent = tdb; parent != NULL; parent = parent->parent)
     {

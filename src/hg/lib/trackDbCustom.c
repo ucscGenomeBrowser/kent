@@ -599,6 +599,19 @@ if(tdb->parent)
 freeMem(stInfo);
 }
 
+char *maybeSkipHubPrefix(char *track)
+{
+if (!startsWith("hub_", track))
+    return track;
+
+char *nextUnderBar = strchr(track + sizeof "hub_", '_');
+
+if (nextUnderBar)
+    return nextUnderBar + 1;
+
+return track;
+}
+
 void trackDbSuperMarkup(struct trackDb *tdbList)
 /* Set trackDb from superTrack setting */
 {
@@ -617,7 +630,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         tdbMarkAsSuperTrack(tdb);
         tdb->isShow = stInfo->isShow;
         if (!hashLookup(superHash, tdb->track))
-            hashAdd(superHash, tdb->track, tdb);
+            hashAdd(superHash, maybeSkipHubPrefix(tdb->track), tdb);
         tdb->children = NULL; // assertable?
         }
     freeMem(stInfo);
