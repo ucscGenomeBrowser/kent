@@ -1712,3 +1712,96 @@ hgsql -e 'INSERT INTO trackVersion \
         "genes lifted from panTro2 ensGene v61", "current" );' hgFixed
 
 #########################################################################
+# MULTIZ12WAY MAF FRAMES (DONE - 2011-03-24 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panTro3/bed/multiz12way/frames
+    cd /hive/data/genomes/panTro3/bed/multiz12way/frames
+    mkdir genes
+
+    # looked at rn4 knownGene and only found 7,044 genes
+    #	the rn4 ensGene had 22,857 so use that instead
+# panTro3 ensGene
+# hg19 knownGene
+# ponAbe2 ensGene
+# rheMac2 ensGene
+# calJac3 ensGene
+# mm9	knownGene
+# rn4	ensGene
+# equCab2 ensGene
+# canFam2 ensGene
+# monDom5 ensGene
+# galGal3 ensGene
+# danRer7 ensGene
+
+panTro3 ponAbe2 rheMac2 calJac3 equCab2 canFam2 monDom5 galGal3 danRer7
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using ensGene for:
+# panTro3 ponAbe2 rheMac2 calJac3 equCab2 canFam2 monDom5 galGal3 danRer7
+for qDB in panTro3 ponAbe2 rheMac2 calJac3 rn4 equCab2 canFam2 monDom5 galGal3 danRer7
+do
+  echo hgsql -N -e \"'select * from 'ensGene\;\" ${qDB}
+      hgsql -N -e "select * from ensGene" ${qDB} | cut -f 2-11 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+done
+
+    # using knownGene for mm9 hg19
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    for qDB in mm9 hg19
+    do
+      echo hgsql -N -e \"'select * from 'knownGene\;\" ${qDB}
+      hgsql -N -e "select * from knownGene" ${qDB} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+    done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+
+# genes/calJac3.gp.gz: 20442
+# genes/canFam2.gp.gz: 19245
+# genes/danRer7.gp.gz: 25857
+# genes/equCab2.gp.gz: 20403
+# genes/galGal3.gp.gz: 16491
+# genes/hg19.gp.gz: 20597
+# genes/mm9.gp.gz: 20905
+# genes/monDom5.gp.gz: 19188
+# genes/panTro3.gp.gz: 18414
+# genes/ponAbe2.gp.gz: 19895
+# genes/rheMac2.gp.gz: 21049
+# genes/rn4.gp.gz: 22857
+
+    ssh hgwdev
+    cd /hive/data/genomes/panTro3/bed/multiz12way/frames
+    cat ../anno/multiz12way.maf \
+	| nice -n +19 genePredToMafFrames panTro3 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+		| gzip > multiz12way.mafFrames.gz
+    #	real    15m16.538s
+    # verify there are frames on everything:
+    zcat multiz12way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
+    #	213564 calJac3
+    #	237030 canFam2
+    #	48444 danRer7
+    #	219472 equCab2
+    #	180209 galGal3
+    #	196670 hg19
+    #	229023 mm9
+    #	214937 monDom5
+    #	170067 panTro3
+    #	203651 ponAbe2
+    #	202922 rheMac2
+    #	225811 rn4
+
+    ssh hgwdev
+    cd /hive/data/genomes/panTro3/bed/multiz12way/frames
+    time hgLoadMafFrames panTro3 multiz12wayFrames multiz12way.mafFrames.gz
+    #	real    0m23.641s
+
+#########################################################################
