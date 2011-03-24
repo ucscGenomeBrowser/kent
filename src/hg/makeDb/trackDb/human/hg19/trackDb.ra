@@ -1806,7 +1806,7 @@ type bed 12
         parent affyExonProbeset off
         subGroups view=Probeset level=Ambiguous
         shortLabel Ambiguous PS
-        longLabel Affymetrix $Organism Exon Array Ambiguous Probesets: ones that cannot be assigned to any single gene
+        longLabel Affymetrix $Organism Exon Array Ambiguous Probesets
         visibility hide
         # orchid 
         color 218,112,214	
@@ -1814,8 +1814,8 @@ type bed 12
         track affyExonProbesetCore
         parent affyExonProbeset
         subGroups view=Probeset level=Core
-        shortLabel Core Probesets
-        longLabel Affymetrix $Organism Exon Array Core Probesets: ones supported by the strongest design-time evidence
+        shortLabel Core PS
+        longLabel Affymetrix $Organism Exon Array Core Probesets
         # royalblue
         color 65,105,225
         visibility dense
@@ -1824,7 +1824,7 @@ type bed 12
         parent affyExonProbeset
         subGroups view=Probeset level=Extended
         shortLabel Extended PS
-        longLabel Affymetrix $Organism Exon Array Extended Probesets: ones supported by moderate design-time evidence
+        longLabel Affymetrix $Organism Exon Array Extended Probesets
         # chocolate 4
         color 139,69,19
         visibility dense
@@ -1832,8 +1832,8 @@ type bed 12
         track affyExonProbesetFree 
         parent affyExonProbeset off
         subGroups view=Probeset level=Free
-        shortLabel Free Probesets
-        longLabel Affymetrix $Organism Exon Array Free Probesets: ones supported by annotations since merged with other annotations
+        shortLabel Free PS
+        longLabel Affymetrix $Organism Exon Array Free Probesets
         # darkgreen
         color 0,100,0
         visibility hide
@@ -1841,8 +1841,8 @@ type bed 12
         track affyExonProbesetFull
         parent affyExonProbeset off
         subGroups view=Probeset level=Full
-        shortLabel Full Probesets
-        longLabel Affymetrix $Organism Exon Array Full Probesets: ones supported by computational predictions only
+        shortLabel Full PS
+        longLabel Affymetrix $Organism Exon Array Full Probesets
         # deeppink
         color 205,96,144
         visibility hide
@@ -1856,7 +1856,7 @@ type bed 12
         parent affyExonProbe off
         subGroups view=Probe level=Ambiguous
         shortLabel Ambiguous Probes
-        longLabel Affymetrix $Organism Exon Array Ambiguous Probes: ones that cannot be assigned to any single gene
+        longLabel Affymetrix $Organism Exon Array Ambiguous Probes
         # orchid
         color 218,112,214	
         visibility hide
@@ -1866,7 +1866,7 @@ type bed 12
         parent affyExonProbe off
         subGroups view=Probe level=Core
         shortLabel Core Probes
-        longLabel Affymetrix $Organism Exon Array Core Probes: ones supported by the strongest design-time evidence
+        longLabel Affymetrix $Organism Exon Array Core Probes
         # royalblue
         color 65,105,225
         visibility dense
@@ -1876,7 +1876,7 @@ type bed 12
         parent affyExonProbe off
         subGroups view=Probe level=Extended
         shortLabel Extended Probes
-        longLabel Affymetrix $Organism Exon Array Extended Probes: ones supported by moderate design-time evidence
+        longLabel Affymetrix $Organism Exon Array Extended Probes
         # chocolate 4
         color 139,69,19
         visibility dense
@@ -1886,7 +1886,7 @@ type bed 12
         parent affyExonProbe off
         subGroups view=Probe level=Free
         shortLabel Free Probes
-        longLabel Affymetrix $Organism Exon Array Free Probes: ones supported by annotations since merged with other annotations
+        longLabel Affymetrix $Organism Exon Array Free Probes
         # darkgreen
         color 0,100,0
         visibility hide
@@ -1896,7 +1896,7 @@ type bed 12
         parent affyExonProbe off
         subGroups view=Probe level=Full
         shortLabel Full Probes
-        longLabel Affymetrix $Organism Exon Array Full Probes: ones supported by computational predictions only
+        longLabel Affymetrix $Organism Exon Array Full Probes
         # deep pink
         color 205,96,144
         visibility hide
