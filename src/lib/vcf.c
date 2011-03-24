@@ -4,6 +4,7 @@
  */
 
 #include "common.h"
+#include "errabort.h"
 #include <limits.h>
 #include "localmem.h"
 #include "net.h"
@@ -163,25 +164,17 @@ __attribute__((format(printf, 2, 3)))
 #endif
 ;
 
-static void vaVcfFileErr(struct vcfFile *vcff, char *format, va_list args)
-/* Print error message to error file, abort if max errors have been reached */
-{
-if (vcff->lf != NULL)
-    fprintf(vcff->errFh, "%s:%d: ", vcff->lf->fileName, vcff->lf->lineIx);
-vfprintf(vcff->errFh, format, args);
-fprintf(vcff->errFh, "\n");
-vcff->errCnt++;
-if (vcfFileStopDueToErrors(vcff))
-    errAbort("VCF: %d parser errors", vcff->errCnt);
-}
-
 static void vcfFileErr(struct vcfFile *vcff, char *format, ...)
-/* Print error message and abort */
+/* Send error message to errabort stack's warn handler and abort */
 {
 va_list args;
 va_start(args, format);
-vaVcfFileErr(vcff, format, args);
+char formatPlus[1024];
+sprintf(formatPlus, "%s:%d: %s", vcff->lf->fileName, vcff->lf->lineIx, format);
+vaWarn(formatPlus, args);
 va_end(args);
+if (vcfFileStopDueToErrors(vcff))
+    errAbort("VCF: %d parser errors, quitting", vcff->errCnt);
 }
 
 static void *vcfFileAlloc(struct vcfFile *vcff, size_t size)
@@ -242,7 +235,7 @@ return vcfInfoNoType;
 }
 
 // Regular expressions to check format and extract information from header lines:
-static const char *fileformatRegex = "^##fileformat=VCFv([0-9]+)(\\.([0-9]+))?$";
+static const char *fileformatRegex = "^##(file)?format=VCFv([0-9]+)(\\.([0-9]+))?$";
 static const char *infoOrFormatRegex =
     "^##(INFO|FORMAT)="
     "<ID=([A-Za-z0-9]+),"
@@ -278,15 +271,15 @@ if (firstEq == NULL)
 hashAddN(vcff->metaDataHash, ptr, (firstEq - ptr), vcfFileCloneStr(vcff, firstEq+1));
 regmatch_t substrs[8];
 // Some of the metadata lines are crucial for parsing the rest of the file:
-if (startsWith("##fileformat=", line))
+if (startsWith("##fileformat=", line) || startsWith("##format", line))
     {
     if (regexMatchSubstr(line, fileformatRegex, substrs, ArraySize(substrs)))
 	{
-	// substrs[1] is major version #, substrs[2] is set only if there is a minor version,
-	// and substrs[3] is the minor version #.
-	vcff->majorVersion = atoi(line + substrs[1].rm_so);
-	if (substrs[2].rm_so != -1)
-	    vcff->minorVersion = atoi(line + substrs[3].rm_so);
+	// substrs[2] is major version #, substrs[3] is set only if there is a minor version,
+	// and substrs[4] is the minor version #.
+	vcff->majorVersion = atoi(line + substrs[2].rm_so);
+	if (substrs[3].rm_so != -1)
+	    vcff->minorVersion = atoi(line + substrs[4].rm_so);
 	}
     else
 	vcfFileErr(vcff, "##fileformat line does not match expected pattern /%s/: \"%s\"",
@@ -330,14 +323,22 @@ else if (startsWith("##FILTER=", line) || startsWith("##ALT=", line))
     }
 }
 
-static void expectColumnName(struct vcfFile *vcff, char *expected, char *words[], int ix)
+static void expectColumnName2(struct vcfFile *vcff, char *exp1, char *exp2, char *words[], int ix)
 /* Every file must include a header naming the columns, though most column names are
  * fixed; make sure the names of fixed columns are as expected. */
 {
-if (! sameString(expected, words[ix]))
-    vcfFileErr(vcff, "Expected column %d's name in header to be \"%s\" but got \"%s\"",
-	       ix+1, expected, words[ix]);
+if (! sameString(exp1, words[ix]))
+    {
+    if (exp2 == NULL)
+	vcfFileErr(vcff, "Expected column %d's name in header to be \"%s\" but got \"%s\"",
+		   ix+1, exp1, words[ix]);
+    else if (! sameString(exp2, words[ix]))
+	vcfFileErr(vcff, "Expected column %d's name in header to be \"%s\"  or \"%s\" "
+		   "but got \"%s\"", ix+1, exp1, exp2, words[ix]);
+    }
 }
+
+#define expectColumnName(vcff, exp, words, ix) expectColumnName2(vcff, exp, NULL, words, ix)
 
 // There might be a whole lot of genotype columns...
 #define VCF_MAX_COLUMNS 16 * 1024
@@ -362,7 +363,7 @@ expectColumnName(vcff, "POS", words, 1);
 expectColumnName(vcff, "ID", words, 2);
 expectColumnName(vcff, "REF", words, 3);
 expectColumnName(vcff, "ALT", words, 4);
-expectColumnName(vcff, "QUAL", words, 5);
+expectColumnName2(vcff, "QUAL", "PROB", words, 5);
 expectColumnName(vcff, "FILTER", words, 6);
 expectColumnName(vcff, "INFO", words, 7);
 if (wordCount > 8)
@@ -388,11 +389,10 @@ vcff->pool = hashNew(0);
 return vcff;
 }
 
-static struct vcfFile *vcfFileHeaderFromLineFile(struct lineFile *lf, int maxErr, FILE *errFh)
+static struct vcfFile *vcfFileHeaderFromLineFile(struct lineFile *lf, int maxErr)
 /* Parse a VCF file into a vcfFile object.  If maxErr not zero, then
  * continue to parse until this number of error have been reached.  A maxErr
- * less than zero does not stop and reports all errors. Write errors to errFh,
- * if NULL, use stderr. */
+ * less than zero does not stop and reports all errors. */
 {
 initVcfSpecInfoDefs();
 initVcfSpecGtFormatDefs();
@@ -401,7 +401,6 @@ if (lf == NULL)
 struct vcfFile *vcff = vcfFileNew();
 vcff->lf = lf;
 vcff->fileOrUrl = vcfFileCloneStr(vcff, lf->fileName);
-vcff->errFh = (errFh != NULL) ? errFh : stderr;
 vcff->maxErr = (maxErr < 0) ? INT_MAX : maxErr;
 
 char *line = NULL;
@@ -414,8 +413,9 @@ slReverse(&(vcff->gtFormatDefs));
 // Did we get the bare minimum VCF header with supported version?
 if (vcff->majorVersion == 0)
     vcfFileErr(vcff, "missing ##fileformat= header line?  Assuming 4.1.");
-if (vcff->majorVersion != 4 || (vcff->minorVersion != 0 && vcff->minorVersion != 1))
-    vcfFileErr(vcff, "VCFv%d.%d not supported -- only 4.0 or 4.1",
+if ((vcff->majorVersion != 4 || (vcff->minorVersion != 0 && vcff->minorVersion != 1)) &&
+    (vcff->majorVersion != 3))
+    vcfFileErr(vcff, "VCFv%d.%d not supported -- only v3.*, v4.0 or v4.1",
 	       vcff->majorVersion, vcff->minorVersion);
 // Next, one header line beginning with single "#" that names the columns:
 if (line == NULL)
@@ -426,26 +426,37 @@ return vcff;
 }
 
 
-static enum vcfInfoType typeForInfoKey(struct vcfFile *vcff, char *key)
-/* Look up the type of INFO component key, in the definitions from the header,
- * and failing that, from the keys reserved in the spec. */
- {
- struct vcfInfoDef *def;
- // I expect there to be fairly few definitions (less than a dozen) so
- // I'm just doing a linear search not hash:
- for (def = vcff->infoDefs;  def != NULL;  def = def->next)
-     {
+struct vcfInfoDef *vcfInfoDefForKey(struct vcfFile *vcff, const char *key)
+/* Return infoDef for key, or NULL if it wasn't specified in the header or VCF spec. */
+{
+struct vcfInfoDef *def;
+// I expect there to be fairly few definitions (less than a dozen) so
+// I'm just doing a linear search not hash:
+for (def = vcff->infoDefs;  def != NULL;  def = def->next)
+    {
     if (sameString(key, def->key))
-	return def->type;
+	return def;
     }
 for (def = vcfSpecInfoDefs;  def != NULL;  def = def->next)
     {
     if (sameString(key, def->key))
-	return def->type;
+	return def;
     }
-vcfFileErr(vcff, "There is no INFO header defining \"%s\"", key);
-// default to string so we can display value as-is:
-return vcfInfoString;
+return NULL;
+}
+
+static enum vcfInfoType typeForInfoKey(struct vcfFile *vcff, const char *key)
+/* Look up the type of INFO component key, in the definitions from the header,
+ * and failing that, from the keys reserved in the spec. */
+{
+struct vcfInfoDef *def = vcfInfoDefForKey(vcff, key);
+if (def == NULL)
+    {
+    vcfFileErr(vcff, "There is no INFO header defining \"%s\"", key);
+    // default to string so we can display value as-is:
+    return vcfInfoString;
+    }
+return def->type;
 }
 
 #define VCF_MAX_INFO 512
@@ -469,7 +480,8 @@ for (j = 0;  j < count;  j++)
 	    data[j].datFloat = atof(valWords[j]);
 	    break;
 	case vcfInfoFlag:
-	    // No data value
+	    // Flag key might have a value in older VCFs e.g. 3.2's DB=0, DB=1
+	    data[j].datString = vcfFilePooledStr(vcff, valWords[j]);
 	    break;
 	case vcfInfoCharacter:
 	    data[j].datChar = valWords[j][0];
@@ -570,11 +582,10 @@ slReverse(&(vcff->records));
 lineFileClose(&(vcff->lf));
 }
 
-struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, FILE *errFh)
+struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr)
 /* Parse a VCF file into a vcfFile object.  If maxErr not zero, then
  * continue to parse until this number of error have been reached.  A maxErr
- * less than zero does not stop and reports all errors. Write errors to errFh,
- * if NULL, use stderr. */
+ * less than zero does not stop and reports all errors. */
 {
 struct lineFile *lf = NULL;
 if (startsWith("http://", fileOrUrl) || startsWith("ftp://", fileOrUrl) ||
@@ -582,28 +593,28 @@ if (startsWith("http://", fileOrUrl) || startsWith("ftp://", fileOrUrl) ||
     lf = netLineFileOpen(fileOrUrl);
 else
     lf = lineFileMayOpen(fileOrUrl, TRUE);
-struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr, errFh);
+struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr);
 vcfParseData(vcff);
 return vcff;
 }
 
 struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
-				    int maxErr, FILE *errFh)
+				    int maxErr)
 /* Parse header and rows within the given position range from a VCF file that has been
  * compressed and indexed by tabix into a vcfFile object; return NULL if or if file has
  * no items in range.
  * If maxErr not zero, then continue to parse until this number of error have been reached.
- * A maxErr less than zero does not stop and reports all errors. Write errors to errFh,
- * if NULL, use stderr. */
+ * A maxErr less than zero does not stop and reports all errors. */
 {
 struct lineFile *lf = lineFileTabixMayOpen(fileOrUrl, TRUE);
-struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr, errFh);
+struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr);
 if (vcff == NULL)
     return NULL;
-if (! lineFileSetTabixRegion(lf, chrom, start, end))
-    // No items in region
-    return vcff;
-vcfParseData(vcff);
+if (isNotEmpty(chrom) && start != end)
+    {
+    if (lineFileSetTabixRegion(lf, chrom, start, end))
+	vcfParseData(vcff);
+    }
 return vcff;
 }
 
@@ -670,8 +681,8 @@ for (i = 0;  i < record->infoCount;  i++)
 return NULL;
 }
 
-static enum vcfInfoType typeForGtFormat(struct vcfFile *vcff, char *key)
-/* Look up the type of FORMAT component key, in the definitions from the header,
+struct vcfInfoDef *vcfInfoDefForGtKey(struct vcfFile *vcff, const char *key)
+/* Look up the type of genotype FORMAT component key, in the definitions from the header,
  * and failing that, from the keys reserved in the spec. */
 {
 struct vcfInfoDef *def;
@@ -680,25 +691,39 @@ struct vcfInfoDef *def;
 for (def = vcff->gtFormatDefs;  def != NULL;  def = def->next)
     {
     if (sameString(key, def->key))
-	return def->type;
+	return def;
     }
 for (def = vcfSpecGtFormatDefs;  def != NULL;  def = def->next)
     {
     if (sameString(key, def->key))
-	return def->type;
+	return def;
     }
-vcfFileErr(vcff, "There is no FORMAT header defining \"%s\"", key);
-// default to string so we can display value as-is:
-return vcfInfoString;
+return NULL;
+}
+
+static enum vcfInfoType typeForGtFormat(struct vcfFile *vcff, const char *key)
+/* Look up the type of FORMAT component key, in the definitions from the header,
+ * and failing that, from the keys reserved in the spec. */
+{
+struct vcfInfoDef *def = vcfInfoDefForGtKey(vcff, key);
+if (def == NULL)
+    {
+    vcfFileErr(vcff, "There is no FORMAT header defining \"%s\"", key);
+    // default to string so we can display value as-is:
+    return vcfInfoString;
+    }
+return def->type;
 }
 
 #define VCF_MAX_FORMAT VCF_MAX_INFO
 #define VCF_MAX_FORMAT_LEN (VCF_MAX_FORMAT * 4)
 
-static void parseGenotypes(struct vcfRecord *record)
+void vcfParseGenotypes(struct vcfRecord *record)
 /* Translate record->genotypesUnparsedStrings[] into proper struct vcfGenotype[].
  * This destroys genotypesUnparsedStrings. */
 {
+if (record->genotypeUnparsedStrings == NULL)
+    return;
 struct vcfFile *vcff = record->file;
 record->genotypes = vcfFileAlloc(vcff, vcff->genotypeCount * sizeof(struct vcfGenotype));
 char format[VCF_MAX_FORMAT_LEN];
@@ -746,7 +771,7 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 		gt->hapIxB = atoi(sep+1);
 	    }
 	struct vcfInfoElement *el = &(gt->infoElements[j]);
-	el->key = formatWords[j];
+	el->key = vcfFilePooledStr(vcff, formatWords[j]);
 	enum vcfInfoType type = typeForGtFormat(vcff, formatWords[j]);
 	el->count = parseInfoValue(record, formatWords[j], type, gtWords[j], &(el->values));
 	if (el->count >= VCF_MAX_INFO)
@@ -761,13 +786,13 @@ record->genotypeUnparsedStrings = NULL;
 }
 
 const struct vcfGenotype *vcfRecordFindGenotype(struct vcfRecord *record, char *sampleId)
-/* Find the genotype and associated info for the individual, or return NULL. */
+/* Find the genotype and associated info for the individual, or return NULL.
+ * This calls vcfParseGenotypes if it has not already been called. */
 {
-if (sampleId == NULL)
-    return NULL;
 struct vcfFile *vcff = record->file;
-if (record->genotypeUnparsedStrings != NULL && record->genotypes == NULL)
-    parseGenotypes(record);
+if (sampleId == NULL || vcff->genotypeCount == 0)
+    return NULL;
+vcfParseGenotypes(record);
 int ix = stringArrayIx(sampleId, vcff->genotypeIds, vcff->genotypeCount);
 if (ix >= 0)
     return &(record->genotypes[ix]);
