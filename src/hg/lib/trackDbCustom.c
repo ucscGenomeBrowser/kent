@@ -211,7 +211,8 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
 		   sameString("bam", s) || sameString("bedDetail", s) ||
-		   sameString("bed8Attrs", s) || sameString("gvf", s));
+		   sameString("bed8Attrs", s) || sameString("gvf", s) ||
+		   sameString("vcfTabix", s));
 freeMem(t);
 return canPack;
 }
