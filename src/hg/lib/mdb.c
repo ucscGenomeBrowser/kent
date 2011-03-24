@@ -2707,20 +2707,31 @@ while(mdbObjs != NULL)
                     {
                     errors--; // One less error
                     if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
-                        printf("           %s obj='%s' has %s set.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID);
+                        {
+                        char *acc = mdbObjFindValue(obj,MDB_VAR_DCC_ACCESSION);
+                        if (acc == NULL)
+                            printf("           %s %s\n",experimentId,obj->obj);
+                        else
+                            printf("           %s %s %s set, needs %s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION);
+                        }
                     }
                 else
                     {
                     updateObj = TRUE;
                     if (warn > 0)
-                        printf("           %s obj='%s' has bad %s=%s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,val);
+                        printf("           %s %s has bad %s=%s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,val);
                     }
                 }
             else
                 {
                 updateObj = (expId != -1);
                 if ((foundId && warn > 0) || warn > 1)
-                    printf("           %s obj='%s' has no %s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID);
+                    {
+                    if (updateObj)
+                        printf("           %s %s needs updating to mdb.\n",experimentId,obj->obj);
+                    else
+                        printf("           %s %s\n",experimentId,obj->obj); // missing
+                    }
                 }
 
             // This object needs to be updated.
