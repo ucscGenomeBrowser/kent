@@ -41,9 +41,27 @@ boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTim
 
 //    ((sameString(op, "is") && !strcasecmp(track->shortLabel, str)) ||
 
-#define DESCRIPTION_MATCH_ON_EACH_WORD
-#ifdef DESCRIPTION_MATCH_ON_EACH_WORD
-static boolean isDescriptionMatch(struct trackDb *tdb, struct slName *wordList)
+#define MATCH_ON_EACH_WORD
+#ifdef MATCH_ON_EACH_WORD
+static boolean doesNameMatch(struct trackDb *tdb, struct slName *wordList)
+// We parse str and look for every word at the start of any word in track description (i.e. google style).
+{
+if (tdb->html == NULL)
+    return (wordList != NULL);
+
+struct slName *word = wordList;
+for(; word != NULL; word = word->next)
+    {
+    char wordWild[256];
+    safef(wordWild,sizeof wordWild,"*%s*",word->name);
+    if (!wildMatch(wordWild, tdb->shortLabel)
+    &&  !wildMatch(wordWild, tdb->longLabel))
+        return FALSE;
+    }
+return TRUE;
+}
+
+static boolean doesDescriptionMatch(struct trackDb *tdb, struct slName *wordList)
 // We parse str and look for every word at the start of any word in track description (i.e. google style).
 {
 if (tdb->html == NULL)
@@ -59,44 +77,52 @@ for(; word != NULL; word = word->next)
     }
 return TRUE;
 }
-#endif///def DESCRIPTION_MATCH_ON_EACH_WORD
+#endif///def MATCH_ON_EACH_WORD
 
 static struct trackDb *tdbFilterBy(struct trackDb **pTdbList, char *name, char *description, char *group)
 // returns tdbs that match supplied criterion, leaving unmatched in list passed in
 {
-#ifdef DESCRIPTION_MATCH_ON_EACH_WORD
-// Set the word list up once
-struct slName *wordList = NULL;
+#ifdef MATCH_ON_EACH_WORD
+// Set the word lists up once
+struct slName *nameList = NULL;
+if (name)
+    nameList = slNameListOfUniqueWords(cloneString(name),TRUE); // TRUE means respect quotes
+struct slName *descList = NULL;
 if (description)
-    wordList = slNameListOfUniqueWords(cloneString(description),TRUE); // TRUE means respect quotes
-#endif///def DESCRIPTION_MATCH_ON_EACH_WORD
+    descList = slNameListOfUniqueWords(cloneString(description),TRUE);
+#endif///def MATCH_ON_EACH_WORD
 
 struct trackDb *tdbList = *pTdbList;
 struct trackDb *tdbRejects = NULL;
 struct trackDb *tdbMatched = NULL;
+#ifndef MATCH_ON_EACH_WORD
 char nameWild[256];
 if (name)
     safef(nameWild,sizeof nameWild,"*%s*",name);
-#ifndef DESCRIPTION_MATCH_ON_EACH_WORD
 char descWild[512];
 if (description)
     safef(descWild,sizeof descWild,"*%s*",description);
-#endif///ndef DESCRIPTION_MATCH_ON_EACH_WORD
+#endif///ndef MATCH_ON_EACH_WORD
 
 while (tdbList != NULL)
     {
     struct trackDb *tdb = slPopHead(&tdbList);
 
-    if (name && (!wildMatch(nameWild,tdb->shortLabel) && !wildMatch(nameWild,tdb->longLabel)))
+    if (!tdbIsComposite(tdb))
         slAddHead(&tdbRejects,tdb);
     else if (group && differentString(tdb->grp,group))
         slAddHead(&tdbRejects,tdb);
-#ifdef DESCRIPTION_MATCH_ON_EACH_WORD
-    else if (description && !isDescriptionMatch(tdb, wordList))
-#else///ifndef DESCRIPTION_MATCH_ON_EACH_WORD
-    else if (description && (tdb->html == NULL || !wildMatch(descWild,tdb->html)))
-#endif///ndef DESCRIPTION_MATCH_ON_EACH_WORD
+#ifdef MATCH_ON_EACH_WORD
+    else if (name && !doesNameMatch(tdb, nameList))
         slAddHead(&tdbRejects,tdb);
+    else if (description && !doesDescriptionMatch(tdb, descList))
+        slAddHead(&tdbRejects,tdb);
+#else///ifndef MATCH_ON_EACH_WORD
+    else if (name && (!wildMatch(nameWild,tdb->shortLabel) && !wildMatch(nameWild,tdb->longLabel)))
+        slAddHead(&tdbRejects,tdb);
+    else if (description && (tdb->html == NULL || !wildMatch(descWild,tdb->html)))
+        slAddHead(&tdbRejects,tdb);
+#endif///ndef MATCH_ON_EACH_WORD
     else
         slAddHead(&tdbMatched,tdb);
     }
@@ -235,10 +261,10 @@ enum searchTab selectedTab = filesTab;
 descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
 #endif///ndef USE_TABS
 
-#ifndef DESCRIPTION_MATCH_ON_EACH_WORD
+#ifndef MATCH_ON_EACH_WORD
 if(descSearch)
     stripChar(descSearch, '"');
-#endif///ndef DESCRIPTION_MATCH_ON_EACH_WORD
+#endif///ndef MATCH_ON_EACH_WORD
 
 #ifdef USE_TABS
 struct trix *trix;
