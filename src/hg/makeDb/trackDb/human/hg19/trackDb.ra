@@ -1201,14 +1201,14 @@ html hg19vertChainNet
         type chain fr2
         otherDb fr2
 
-        track chainDanRer6
+        track chainDanRer7
     #replaces record chainDanRer5 in parent dir missing/extra priority
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=Zebrafish clade=eTele
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain danRer6
-        otherDb danRer6
+        type chain danRer7
+        otherDb danRer7
 
         track chainTetNig2
         subTrack vertebrateChainNetViewchain off
