@@ -21,7 +21,6 @@ scripts:
 	rm -f ${SCRIPTS}/genePredToBed;
 	echo cp -p genePredToBed/genePredToBed ${SCRIPTS};
 	@cp -p genePredToBed/genePredToBed ${SCRIPTS};
-	cd cvsTools && ${MAKE} scripts
 
 alpha: scripts all
 
@@ -73,7 +72,6 @@ DIRS = \
 	chopFaLines \
 	countChars \
 	convolve \
-	cvsTools \
 	detab \
 	endsInLf \
 	fastqToFa \
