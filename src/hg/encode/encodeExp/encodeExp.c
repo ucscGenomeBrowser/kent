@@ -156,7 +156,7 @@ metas = mdbObjsQueryAll(connMeta, mdb);
 verbose(2, "Found %d objects\n", slCount(metas));
 
 /* order so that oldest have lowest ids */
-mdbObjsSortOnVars(&metas, "dateSubmitted lab dataType cell");
+mdbObjsSortOnVars(&metas, "dateSubmitted lab dataType cell");  // Kate: remember your lecture about this sort of thing?
 
 /* create new experiments */
 while ((meta = slPopHead(&metas)) != NULL)
@@ -166,18 +166,28 @@ while ((meta = slPopHead(&metas)) != NULL)
     if (composite != NULL && !mdbObjInComposite(meta, composite))
         continue;
 
-    exp = encodeExpFromMdb(meta);
+    exp = encodeExpFromMdb(connMeta,assembly,meta);
+    if (exp == NULL)
+        continue;
+
     key = encodeExpKey(exp);
 
     if (hashLookup(newExps, key) == NULL &&
         hashLookup(oldExps, key) == NULL)
         {
-        verbose(2, "Found new experiment - Date: %s	Experiment %d: %s\n", 
+        verbose(2, "Found new experiment - Date: %s	Experiment %d: %s\n",
                 mdbObjFindValue(meta, "dateSubmitted"), ++expNum, key);
         /* save new experiment */
         hashAdd(newExps, key, NULL);
         slAddHead(&exps, exp);
         }
+    // KATE: you are leaking exps when not found and metas always
+    /* KATE: you could skip other metas belonging to the same exp by:
+    struct mdbObj *mdbExpObjs = mdbObjsFilterByVars(&metas,exp->expVars,TRUE,TRUE);
+    mdbObjFree(&mdbExpObjs);
+    // Filtering destroyed sort order // NOTE: Given the re-sort, this may not prove much more efficient
+    mdbObjsSortOnVars(&metas, "dateSubmitted lab dataType cell");
+    */
     }
 /* write out experiments in .ra format */
 slReverse(&exps);
@@ -259,7 +269,7 @@ verboseSetLevel(2);
 
 char *command = argv[1];
 table = optionVal("table", sameString(command, "create") ?
-                        encodeExpTableNew: 
+                        encodeExpTableNew:
                         ENCODE_EXP_TABLE);
 mdb = optionVal("mdb", MDB_DEFAULT_NAME);
 composite = optionVal("composite", NULL);

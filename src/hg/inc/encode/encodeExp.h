@@ -124,7 +124,7 @@ void encodeExpTableCreate(struct sqlConnection *conn, char *table);
 struct encodeExp *encodeExpLoadAllFromTable(struct sqlConnection *conn, char *table);
 /* Load all encodeExp in table */
 
-struct encodeExp *encodeExpFromMdb(struct mdbObj *mdb);
+struct encodeExp *encodeExpFromMdb(struct sqlConnection *conn,char *db, struct mdbObj *mdb);
 /* Create an encodeExp from an ENCODE metaDb object */
 
 struct encodeExp *encodeExpFromMdbVars(char *db, struct mdbVar *vars);
@@ -152,7 +152,7 @@ void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp 
 
 char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id);
 /* Add accession field to an existing "temp" experiment.  This is done
- * after experiment is determined to be valid. 
+ * after experiment is determined to be valid.
  * Return the accession. */
 
 void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int id);

@@ -398,21 +398,6 @@ static char *sqlCreate =
 
 /* END schema-dependent section */
 
-static char *expFactors[] = {
-    /* alpha sorted list, includes all exp-defining variables */
-    // TODO: -> whitelist from cv.ra
-    "antibody",
-    "insertLength",
-    "localization",
-    "protocol",
-    "readType",
-    "restrictionEnzyme",
-    "ripTgtProtein",
-    "rnaExtract",
-    "treatment",
-    0,
-};
-
 void encodeExpTableCreate(struct sqlConnection *conn, char *tableName)
 /* Create an encodeExp table */
 {
@@ -434,52 +419,23 @@ dyStringFree(&dy);
 return exps;
 }
 
-struct encodeExp *encodeExpFromMdb(struct mdbObj *mdb)
+struct encodeExp *encodeExpFromMdb(struct sqlConnection *conn, char *db, struct mdbObj *mdb)
 /* Create an encodeExp from an ENCODE metaDb object */
 {
-struct encodeExp *exp;
-
 if (!mdbObjIsEncode(mdb))
     errAbort("Metadata object is not from ENCODE");
 
-AllocVar(exp);
-
-/* extract lab */
-exp->lab = mdbObjFindValue(mdb, MDB_FIELD_LAB);
-if (exp->lab == NULL)
-    errAbort("ENCODE metadata object \'%s\' missing lab\n", mdb->obj);
-
-// TODO: -> lib (stripPiFromLab)
-/* Strip off trailing parenthesized PI name if present */
-chopSuffixAt(exp->lab, '(');  // FIXME: This should be removed when mdb is sanitized.
-
-/* extract data type */
-exp->dataType = mdbObjFindValue(mdb, MDB_FIELD_DATA_TYPE);
-if (exp->dataType == NULL)
-    errAbort("ENCODE metadata object \'%s\' missing dataType\n", mdb->obj);
-
-exp->cellType = mdbObjFindValue(mdb, MDB_FIELD_CELL_TYPE);
-if (exp->cellType == NULL)
-    {
-    exp->cellType = ENCODE_EXP_NO_CELL;
+struct mdbVar *edVars = mdbObjFindEncodeEdvs(conn,mdb,TRUE); // includes "None"
+if (edVars == NULL)
+    {  // Not willing to make these erraborts at this time.
+    char *composite = mdbObjFindValue(mdb,MDB_VAR_COMPOSITE);
+    if (composite == NULL)
+        verbose(1,"MDB object '%s' does not have a composite defined\n",mdb->obj);
+    else
+        verbose(1,"Experiment Defining Variables not defined for composite '%s'\n",composite);
+    return NULL;
     }
-
-/* experimental expVars (variables) */
-int i;
-char *var, *val;
-struct dyString *dy = newDyString(0);
-for (i = 0; expFactors[i] != NULL; i++)
-    {
-    var = expFactors[i];
-    val = mdbObjFindValue(mdb, var);
-    if (val == NULL || sameString(val, ENCODE_EXP_NO_VAR))
-        continue;
-    dyStringPrintf(dy, "%s=%s ", var, val);
-    }
-exp->expVars = dyStringCannibalize(&dy);
-eraseTrailingSpaces(exp->expVars);
-
-return exp;
+return encodeExpFromMdbVars(db, edVars);
 }
 
 struct encodeExp *encodeExpFromMdbVars(char *db, struct mdbVar *vars)
@@ -497,36 +453,21 @@ if (db == NULL)
 exp->organism = hOrganism(db);
 strLower(exp->organism);
 
-// NOTE:  Needs filtering with composite-level experiment-definition to
-
-//struct mdbObj *mdb = mdbObjNew(NULL, vars);
-//// extract exp vars into an slPair list
-//int i;
-//char *var, *val;
-//for (i = 0; expFactors[i] != NULL; i++)
-//    {
-//    var = expFactors[i];
-//    val = mdbObjFindValue(mdb, var);
-//    if (val == NULL || sameString(val, ENCODE_EXP_NO_VAR))
-//        continue;
-//    slPairAdd(&varPairs, var, val);
-//    }
-
 struct slPair *varPairs = NULL;
 struct mdbVar *edv = vars;
 for(;edv != NULL; edv = edv->next)
     {
-    if (sameWord(edv->var,MDB_FIELD_LAB))
+    if (sameWord(edv->var,MDB_VAR_LAB))
         {
         assert(exp->lab == NULL);
         exp->lab = cloneString((char *)(edv->val));
         }
-    else if (sameWord(edv->var,MDB_FIELD_DATA_TYPE))
+    else if (sameWord(edv->var,MDB_VAR_DATATYPE))
         {
         assert(exp->dataType == NULL);
         exp->dataType = cloneString((char *)(edv->val));
         }
-    else if (sameWord(edv->var,MDB_FIELD_CELL_TYPE))
+    else if (sameWord(edv->var,MDB_VAR_CELL))
         {
         assert(exp->cellType == NULL);
         exp->cellType = cloneString((char *)(edv->val));
@@ -539,7 +480,7 @@ for(;edv != NULL; edv = edv->next)
 if (exp->lab == NULL || exp->dataType == NULL)
     {
     verbose(1,"Experiment Defining Variables must contain '%s' and '%s'\n",
-            MDB_FIELD_LAB,MDB_FIELD_DATA_TYPE); // Not willing to make this an errabort at this time.
+            MDB_VAR_LAB,MDB_VAR_DATATYPE); // Not willing to make this an errabort at this time.
     return NULL;
     }
 if (exp->cellType == NULL)  // Okay if no cell
