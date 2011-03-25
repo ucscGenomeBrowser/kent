@@ -259,9 +259,10 @@ type genePred acemblyPep acemblyMrna
 autoTranslate 0
 url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
 itemClassTbl acemblyClass
-geneClasses main putative
+geneClasses main putative cDNA_supported
 gClass_main 128,0,125
 gClass_putative 200,0,125
+gClass_cDNA_supported 200,0,125
 urlLabel AceView Gene Summary:
 
 track slamMouse

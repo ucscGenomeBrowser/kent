@@ -399,6 +399,7 @@ extern Color shadesOfGray[10+1];  /* 10 shades of gray from white to black
 extern Color shadesOfBrown[10+1]; /* 10 shades of brown from tan to tar. */
 extern struct rgbColor guidelineColor;
 extern struct rgbColor undefinedYellowColor;
+extern Color darkGreenColor;
 
 extern Color shadesOfSea[10+1];       /* Ten sea shades. */
 
@@ -796,6 +797,9 @@ void mafMethods(struct track *tg);
 void bamMethods(struct track *track);
 /* Methods for BAM alignment files. */
 
+void vcfTabixMethods(struct track *track);
+/* Methods for Variant Call Format compressed & indexed by tabix. */
+
 void altGraphXMethods(struct track *tg);
 /* setup special methods for altGraphX track */
 
@@ -1014,7 +1018,7 @@ void lfDrawSpecialGaps(struct linkedFeatures *lf,
  * If chainLines, draw a double-line gap if both target and query have a gap
  * (mismatching sequence). */
 
-void bamWigMethods(struct track *track, struct trackDb *tdb, 
+void bamWigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 /* Set up bamWig methods. */
 
@@ -1257,20 +1261,25 @@ char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColu
 
 #define SMALLBUF 128
 
-char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table);
-/* Return file name from little table. */
-
 char *trackUrl(char *mapName, char *chromName);
 /* Return hgTrackUi url; chromName is optional. */
 
 void bedDetailCtMethods (struct track *tg, struct customTrack *ct);
 /* Load bedDetail track from custom tracks as bed or linked features */
 
+void pgSnpMethods (struct track *tg);
+/* Personal Genome SNPs: show two alleles with stacked color bars for base alleles and
+ * (if available) allele counts in mouseover. */
+
 void pgSnpCtMethods (struct track *tg);
 /* Load pgSnp track from custom tracks */
 
 void gvfMethods(struct track *tg);
 /* Load GVF variant data. */
+
+void messageLineMethods(struct track *track);
+/* Methods for drawing a single-height message line instead of track items,
+ * e.g. if source was compiled without a necessary library. */
 
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
@@ -1293,6 +1302,11 @@ boolean trackShouldUseAjaxRetrieval(struct track *track);
 
 #endif//ndef REMOTE_TRACK_AJAX_CALLBACK
 
+int gCmpPriority(const void *va, const void *vb);
+/* Compare groups based on priority. */
+
+int tgCmpPriority(const void *va, const void *vb);
+/* Compare to sort based on priority; use shortLabel as secondary sort key. */
 
 #endif /* HGTRACKS_H */
 

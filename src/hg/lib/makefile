@@ -20,7 +20,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     cnpSharp2.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o \
     bedDetail.o \
-    customFactory.o customPp.o customTrack.o cutter.o cytoBand.o \
+    customFactory.o customPp.o customTrack.o cutter.o cv.o cytoBand.o \
     dbDb.o dbRIP.o dbSnpRs.o defaultDb.o delConrad2.o delHinds2.o \
     dgv.o dless.o dnaMotifSql.o dnaMarkovSql.o dnaProbe.o \
     dv.o dvBed.o dvXref2.o \
@@ -34,6 +34,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     encode/wgEncodeGencodePdb.o encode/wgEncodeGencodePubmed.o \
     encode/wgEncodeGencodeRefSeq.o encode/wgEncodeGencodeSource.o \
     encode/wgEncodeGencodeTranscriptSupport.o encode/wgEncodeGencodeUniProt.o \
+    encode/encodeExp.o \
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
     est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \

@@ -286,7 +286,7 @@ The format of the type fields:
     The database loading procedure for the table can be:
 	hgBbiDbLink hg18 itemRgbBbTest /gbdb/hg18/bbi/itemRgb.hg18.bb
     The file name given should be a full path name that can be accessed
-	by the Apache WEB server.  Or, the fileName can also be a
+	by the Apache WEB server.  Or, the file name can also be a
 	valid URL to the bb file.
     This loader is equivalent to:
     hgsql hg18 -e 'drop table if exists itemRgbBbTest;
@@ -298,9 +298,9 @@ The format of the type fields:
     This uses a binary indexed file rather than a database table.  It is, other
     than substituting "bigWig" for "wig" in the type line, the same as the
     "type wig" explained above.  The database loading procedure is
-        hgBbiDbLink hg19 myLocalBigWig /gbdb/hg18/bbi/myLocalBigWig.bw
+        hgBbiDbLink hg19 myLocalBigWig /gbdb/hg19/bbi/myLocalBigWig.bw
     The file name given should be a full path name that can be accessed
-	by the Apache WEB server.  Or, the fileName can also be a
+	by the Apache WEB server.  Or, the file name can also be a
 	valid URL to the bw file.
     This loader is equivalent to:
     hgsql hg19 -e 'drop table if exists myLocalBigWig; \
@@ -326,8 +326,19 @@ The format of the type fields:
 						#   default: 0:99
     baseQualRange   <min:max>			# shade base qualities within this range
 						#   default: 0:40
-    Additional general settings that may be useful to speed up display for extremely
-    dense data e.g. next-gen sequencing reads: maxWindowToDraw, chromosomes (see below)
+    Additional general settings that may be useful to speed up display for
+    extremely dense data e.g. next-gen sequencing reads: maxWindowToDraw,
+    chromosomes (see below)
+
+    Load your database table with the command:
+        hgBbiDbLink hg19 myLocalBamTrack /gbdb/hg19/bbi/myLocalFile.bam
+    Your index file is also there:  /gbdb/hg19/bbi/myLocalFile.bai
+    These path names can also be URLs to an external .bam file (and .bai)
+    use that table name: myLocalBamTrack as the name on your track line:
+    track myLocalBamTrack
+    type bam
+
+    See also, an example trackDb entry: chimp/trackDb.denisova.ra
 
 20. type factorSource
     This type is used for transcription factors on multiple cell lines.  It displays
@@ -614,9 +625,13 @@ Some settings used by various tracks:
       by clustering or aggregating data found in other tracks.  This names a table
       that is in three column format - first the input track name, then the source
       name (cell line etc) if any, then the factor name if any.
-    o inputTracksSubgroupDisplay - used with inputTrackTable.  This contains a list
-      of group types (just the left size of the var=val pairs in the subGroupN line of the parent)
-      to display as columns in the details display table.
+    o inputTableFieldDisplay - used with inputTrackTable.  Countains a list of the
+      fields from that table to display as columns in the details display table.
+    o inputTracksSubgroupDisplay - used with inputTrackTable.  One and only one of
+      inputTableFieldsDisplay or inputTracksSubgroupDisplay should be used. If present
+      this tag contains a list of group types (just the left size of the var=val pairs 
+      in the subGroupN line of the parent) to display as columns in the details 
+      display table.
     o showSubtrackColorOnUi - used with tracks that include other tracks.  When UI shows
       a table of tracks and this is set, a small patch of color indicating the track color
       is part of the table.

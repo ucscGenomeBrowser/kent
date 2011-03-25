@@ -137,15 +137,15 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
         if(ix == 0) //
             fail("Unsupported 'cmd' parameter");
 
-        enum mdbCvSearchable searchBy = mdbCvSearchMethod(var);
+        enum cvSearchable searchBy = cvSearchMethod(var);
         char name[128];
         safef(name,sizeof name,"%s%i",METADATA_VALUE_PREFIX,ix);
-        if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByMultiSelect)
+        if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)
             {
             struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, TRUE, FALSE); // not tags, yes tables, not files
             if (slCount(pairs) > 0)
                 {
-                char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvsSearchByMultiSelect),
+                char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvSearchByMultiSelect),
                         name, pairs,NULL, ANYLABEL,"mdbVal", "style='min-width: 200px; font-size: .9em;' onchange='findTracksMdbValChanged(this);'");
                 if (dropDownHtml)
                     {
@@ -155,12 +155,12 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
                 slPairFreeList(&pairs);
                 }
             }
-        else if (searchBy == cvsSearchByFreeText)
+        else if (searchBy == cvSearchByFreeText)
             {
             dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal freeText' onchange='findTracksMdbValChanged(this);' style='max-width:310px; width:310px; font-size:.9em;'>",
                             name);
             }
-        else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
+        else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
             {
             // TO BE IMPLEMENTED
             }

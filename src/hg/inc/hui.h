@@ -900,6 +900,9 @@ char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct tra
 /* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
 
+char *controlledVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix);
+// returns allocated string of HTML link to controlled vocabulary term
+
 char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean
         showLongLabel,boolean showShortLabel, struct hash *trackHash);
 /* If metadata from metaDb exists, return string of html with table definition */

@@ -1016,29 +1016,30 @@ function navigationLinksSetup()
   // If they exist, then they need to be well placed to fit window dimensions
 
     // Put navigation links in top corner
-    var navDown = $("span#navDown");
-    if(navDown != undefined) {
+    var navDown = $("#navDown");
+    if(navDown != undefined && navDown.length > 0) {
+        navDown = navDown[0];
         var winWidth = ($(window).width() - 30) + "px"; // Room for borders
         $('.windowSize').css({maxWidth: winWidth,width: winWidth});
-        var sectTtl = $("#sectTtl").parents("td");
-        if(sectTtl != undefined) {
+        var sectTtl = $("#sectTtl").parent("td");
+        if(sectTtl != undefined && sectTtl.length > 0) {
+            sectTtl = sectTtl[0];
             $(sectTtl).css({clear: 'none'});
             if($.browser.msie)
                 $(sectTtl).prepend($(navDown));
             else
                 $(sectTtl).append($(navDown));
         }
-        $(navDown).css({display:''});
+        $(navDown).css({float:'right'})
         $(navDown).show();
     }
 
     // Decide if top links are needed
     var navUp = $('span.navUp');
-    if($(navUp) != undefined && $(navUp).length > 0) {
+    if(navUp != undefined && navUp.length > 0) {
         $(navUp).each(function(i) {
             var offset = $(this).parent().offset();
             if(offset.top  > $(window).height()) {
-                $(this).css({display:''});
                 $(this).show();
             }
         });

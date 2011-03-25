@@ -60,6 +60,8 @@ if (foundFiles == NULL
     char *server = hDownloadsServer();
 
     boolean useRsync = TRUE;
+//#define RSYNC_DONT_WORK_ON_HGWDEV
+#ifdef RSYNC_DONT_WORK_ON_HGWDEV
     if (hIsPrivateHost() || hIsPreviewHost())
         {
         // For hgwdev (which is the same machine as "hgdownload-test.cse.ucsc.edu") rsync does not work
@@ -77,9 +79,13 @@ if (foundFiles == NULL
         useRsync = FALSE;
         }
     else  // genome and hgwbeta can use rsync
+#endif///def RSYNC_DONT_WORK_ON_HGWDEV
         {
         // Works:         rsync -avn rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/
-        safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
+        if (hIsBetaHost())
+            safef(cmd,sizeof(cmd),"rsync -avn rsync://hgdownload-test.cse.ucsc.edu/goldenPath/%s/%s/%s/beta/",  db, dir, subDir); // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+        else
+            safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
         }
     //warn("cmd: %s",cmd);
     scriptOutput = popen(cmd, "r");
@@ -369,13 +375,13 @@ return NULL;
 
 #define FILTER_THE_FILES
 #ifdef FILTER_THE_FILES
-static char *labelWithVocabLink(char *var,char *title,struct slPair *valsAndLabels)
+static char *labelWithVocabLink(char *var,char *title,struct slPair *valsAndLabels,boolean tagsNotVals)
 /* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to all relevent terms.  Return string is cloned. */
 {
 // Determine if the var is cvDefined.  If not, simple link
 boolean cvDefined = FALSE;
-struct hash *cvTypesOfTerms = (struct hash *)mdbCvTermTypeHash();
+struct hash *cvTypesOfTerms = (struct hash *)cvTermTypeHash();
 if (cvTypesOfTerms != NULL)
     {
     struct hash *cvTermDef = hashFindVal(cvTypesOfTerms,var);
@@ -389,7 +395,7 @@ if (!cvDefined)
                    var,title,title);
 else
     {
-    dyStringPrintf(dyLink,"<A HREF='hgEncodeVocab?term=");
+    dyStringPrintf(dyLink,"<A HREF='hgEncodeVocab?%s=",tagsNotVals?"tag":"term");
     struct slPair *oneVal = valsAndLabels;
     for(;oneVal!=NULL;oneVal=oneVal->next)
         {
@@ -412,9 +418,9 @@ if (sortOrder != NULL)
     for(sIx = 0;sIx<sortOrder->count;sIx++)
         {
         char *var = sortOrder->column[sIx];
-        enum mdbCvSearchable searchBy = mdbCvSearchMethod(var);
-        //if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange) // dates and numbers probably not good for filtering. FIXME: Should cvsNotSearchable be filterable??
-        if (searchBy != cvsSearchBySingleSelect && searchBy != cvsSearchByMultiSelect)
+        enum cvSearchable searchBy = cvSearchMethod(var);
+        //if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange) // dates and numbers probably not good for filtering. FIXME: Should cvsNotSearchable be filterable??
+        if (searchBy != cvSearchBySingleSelect && searchBy != cvSearchByMultiSelect)
             continue; // Only single selects and multi-select make good candidates for filtering
 
         struct sqlConnection *conn = hAllocConn(db);
@@ -443,7 +449,7 @@ if (sortOrder != NULL)
             if (dropDownHtml)
                 {
                 dyStringPrintf(dyFilters,"<td align='left'>\n<B>%s</B>:<BR>\n%s</td><td width=10>&nbsp;</td>\n",
-                               labelWithVocabLink(var,sortOrder->title[sIx],relevantVals),dropDownHtml);
+                               labelWithVocabLink(var,sortOrder->title[sIx],relevantVals,TRUE),dropDownHtml);  // TRUE were sending tags, not values
                 freeMem(dropDownHtml);
                 count++;
                 }
@@ -613,8 +619,8 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                 class[0] = '\0';
                 if (filterable)
                     {
-                    enum mdbCvSearchable searchBy = mdbCvSearchMethod(sortOrder->column[ix]);
-                    if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByMultiSelect)
+                    enum cvSearchable searchBy = cvSearchMethod(sortOrder->column[ix]);
+                    if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)
                         {
                         char *cleanClass = cloneString(field?field:"None");     // FIXME: Only none if none is a fliter choice.
                         eraseNonAlphaNum(cleanClass);
@@ -845,7 +851,7 @@ if (slCount(mdbList) == 0)
 mdbObjsSortOnVars(&mdbList, "composite");
 mdbObjRemoveHiddenVars(mdbList);
 
-#define FOUND_FILE_LIMIT 2000
+#define FOUND_FILE_LIMIT 1000
 int fileCount = 0;
 // Verify file existance and make fileList of those found
 struct fileDb *fileList = NULL, *oneFile = NULL; // Will contain found files
@@ -873,6 +879,8 @@ while(mdbList && fileCount < FOUND_FILE_LIMIT)
                     slAddHead(&mdbFiles,mdbFile);
                     fileCount++;
                     found = TRUE;
+                    if (fileCount == FOUND_FILE_LIMIT)
+                        break;
                     }
                 }
                 else

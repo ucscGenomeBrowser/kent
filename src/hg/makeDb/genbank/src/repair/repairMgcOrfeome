@@ -1,0 +1,160 @@
+#!/usr/bin/env /cluster/data/genbank/bin/gbPython
+import sys, os
+
+myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
+sys.path.append(myBinDir + "/../lib/py")
+from optparse import OptionParser
+from genbank import procOps, fileOps, gbSetupPath, gbSetupHgConf
+from genbank.Config import Config
+from genbank.Pipeline import Pipeline
+
+# names used in tables, etc for mgc and orfeome
+mgc = "mgc"
+orfeome = "orfeome"
+
+class CmdOpts(object):
+    usage = """%prog [options] [db ...]
+
+Repair MGC and ORFeome tables.  These are derived from the genbank mRNA
+alignment tables.  There some problem where PSLs being replaced in the derived
+tables are not deleted.  The reason this is happening has not been found.
+Most likely relates to no using transactiopns.  This removes PSL not
+in all_mrna table and rebuilds the gene tables.
+
+It must be run from the genbank root directory.  If no database are specified,
+all database with MGC or ORFeome tables are check.  Must specify --fix
+to actually fix.
+"""
+    def __init__(self):
+        parser = OptionParser(usage=CmdOpts.usage)
+        parser.add_option("--fix", dest="fix", action="store_true", default=False,
+                          help="fix database instead of just reporting")
+
+        (opts, args) = parser.parse_args()
+        self.dbs = set(args)
+        self.__dict__.update(opts.__dict__)
+
+class Databases(set):
+    """Database to process"""
+    def __init__(self, conf, dbRestrict):
+        self.mgcDbs = set()
+        self.orfeomeDbs = set()
+        if len(dbRestrict) > 0:
+            self.__addMgcOrfeomeDbs(conf, dbRestrict, True)
+        else:
+            self.__addMgcOrfeomeDbs(conf, conf.dbs, False)
+
+    def dbExists(self, db):
+        return len(procOps.callProcLines(["hgsql", "-Ne", "show databases like \""+db+"\""])) > 0
+
+    def tableExists(self, db, tbl):
+        return len(procOps.callProcLines(["hgsql", "-Ne", "show tables like \""+tbl+"\"", db])) > 0
+
+    def hasMgc(self, db):
+        return db in self.mgcDbs
+
+    def hasOrfeome(self, db):
+        return db in self.orfeomeDbs
+
+    def __addMgcOrfeomeDbs(self, conf, dbs, mustBeMgcOrfeome):
+        for db in dbs:
+            if self.dbExists(db):
+                self.__addMgcOrfeomeDb(conf, db, mustBeMgcOrfeome)
+
+    def __addMgcOrfeomeDb(self, conf, db, mustBeMgcOrfeome):
+        keep = False
+        if conf.getDbBoolNone(db, mgc) and self.tableExists(db, "mgcFullMrna"):
+            self.mgcDbs.add(db)
+            keep = True
+        if conf.getDbBoolNone(db, orfeome) and self.tableExists(db, "orfeomeMrna"):
+            self.orfeomeDbs.add(db)
+            keep = True
+        if mustBeMgcOrfeome and not keep:
+            raise Exception("not an MGC or ORFeome database: " + db)
+        if keep:
+            self.add(db)
+
+class Fixer(object):
+    """report on or update MGC or ORFeome problem rows"""
+    pslCols = ("matches", "misMatches", "repMatches", "nCount", "qNumInsert", "qBaseInsert", "tNumInsert", "tBaseInsert", "strand", "qName", "qSize", "qStart", "qEnd", "tName", "tSize", "tStart", "tEnd", "blockCount", "blockSizes", "qStarts", "tStarts")
+    def __init__(self, db, mrnaSet):
+        self.db = db
+        self.mrnaSet = mrnaSet
+        if mrnaSet == mgc:
+            self.mrnaTbl = "mgcFullMrna"
+            self.geneTbl = "mgcGenes"
+        elif mrnaSet == orfeome:
+            self.mrnaTbl = "orfeomeMrna"
+            self.geneTbl = "orfeomeGenes"
+
+    def __buildSubSelect(self):
+        """build subselect for where exists statement for a psl in a derived
+        table being in all_mrna. """
+        # would like to make this a constant using table abbreviations, but
+        # this doesn't work for delete:  delete from mgcFullMrna mfr where ...
+        return "(select " + self.mrnaTbl + ".* from all_mrna am where " + \
+            " and ".join(["(" + self.mrnaTbl + "." + col + " = am." + col + ")" for col in self.pslCols]) + ")"
+
+    def __callHgSql(self, sql):
+        "return rows of output from hgsql"
+        return procOps.callProcLines(["hgsql", "-Ne", sql, self.db])
+
+    def __getStrayPsls(self):
+        "gets stray PSLs, less bin columns"
+        sql = "select " + ",".join(self.pslCols) + " from " + self.mrnaTbl + " where not exists " + self.__buildSubSelect()
+        return self.__callHgSql(sql)
+
+    def __prNumStrays(self, fh, numStrays):
+        fileOps.prRowv(fh, "strays", self.db, self.mrnaSet, numStrays)
+
+    def report(self, fh):
+        psls = self.__getStrayPsls()
+        self.__prNumStrays(fh, len(psls))
+        sql = "select " + ",".join(self.pslCols) + " from " + self.mrnaTbl + " where not exists " + self.__buildSubSelect()
+        for psl in psls:
+            fileOps.prRowv(fh, psl)
+
+    def __deleteStrayPsls(self):
+        sql = "delete from " + self.mrnaTbl + " where not exists " + self.__buildSubSelect()
+        self.__callHgSql(sql)
+
+    def __rebuildGenePreds(self):
+        """rebuild the associated genePred track.  Since it would really difficult to
+        get find the genePreds associated with the stray entries, due to the
+        gap closing, we just rebuild the whole table"""
+        pl = Pipeline((["mrnaToGene", "-genePredExt", "-db="+self.db, self.mrnaTbl, "stdout"],
+                       ["hgLoadGenePred", "-genePredExt", self.db, self.geneTbl, "stdin"]))
+        pl.wait()
+
+    def fixStrays(self, fh):
+        numStrays = len(self.__getStrayPsls())
+        self.__prNumStrays(fh, numStrays)
+        if numStrays > 0:
+            self.__deleteStrayPsls()
+            self.__rebuildGenePreds()
+
+def processMRnaSet(db, mrnaSet, fix):
+    fixer = Fixer(db, mrnaSet)
+    if fix:
+        fixer.fixStrays(sys.stdout)
+    else:
+        fixer.report(sys.stdout)
+
+        
+cmdOpts = CmdOpts()
+gbSetupPath()
+gbSetupHgConf()
+confFile = "etc/genbank.conf"
+if not os.path.exists(confFile):
+    raise Exception(confFile + " not found, must be run from genbank root directory")
+conf = Config(confFile)
+dbs = Databases(conf, cmdOpts.dbs)
+for db in dbs:
+    if dbs.hasMgc(db):
+        processMRnaSet(db, mgc, cmdOpts.fix)
+    if dbs.hasOrfeome(db):
+        processMRnaSet(db, orfeome, cmdOpts.fix)
+
+# Local Variables:
+# mode: python
+# End:

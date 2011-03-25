@@ -318,13 +318,20 @@ if(mdbObjs != NULL)
         {
         if (encodeExp)
             {
-            struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,&mdbObjs,(verboseLevel() > 1? 1:0)); // 1=warnings
+            if (!testIt)
+                {
+                verbose(1, "NOTE: -encodeExp will only run in -test mode until the utilities are fully functional.\n");
+                testIt = TRUE;  // FIXME: No actual updates until we are ready to pull the trigger!  // FIXME: Also when will update to EXP table be turned on?
+                }
+            boolean createExpIfNecessary = FALSE; // testIt ? FALSE : TRUE; // FIXME: When we are ready, this should allow creating an experiment in the hgFixed.encodeExp table
+
+            struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,&mdbObjs,(verboseLevel() > 1? 1:0),createExpIfNecessary); // 1=warnings
             if (updatable == NULL)
                 verbose(1, "No Experiment ID updates were discovered in %d object(s).\n", slCount(mdbObjs));
             else
                 {
                 if (testIt)
-                verbose(1, "Found %d of %d object(s) would have their experiment ID updated.\n", slCount(updatable), slCount(mdbObjs));
+                    verbose(1, "Found %d of %d object(s) would have their experiment ID updated.\n", slCount(updatable), slCount(mdbObjs));
                 mdbObjsFree(&mdbObjs);
                 mdbObjs = updatable;
                 }

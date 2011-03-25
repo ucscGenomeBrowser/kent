@@ -6,7 +6,7 @@
 #define MDB_H
 
 #include "jksql.h"
-#define MDB_NUM_COLS 4
+#define MDB_NUM_COLS 3
 
 struct mdb
 /* This contains metadata for a table, file or other predeclared object type. */
@@ -88,9 +88,42 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+#include "cv.h"
 #include "trackDb.h"
 
-#define MDB_DEFAULT_NAME "metaDb"
+#define MDB_DEFAULT_NAME     "metaDb"
+
+// The three mdb tuples
+#define MDB_OBJ                 "obj"
+#define MDB_VAR                 "var"
+#define MDB_VAL                 "val"
+
+// OBJECT TYPES
+#define MDB_OBJ_TYPE            "objType"
+#define MDB_OBJ_TYPE_TABLE      "table"
+#define MDB_OBJ_TYPE_FILE       "file"
+#define MDB_OBJ_TYPE_COMPOSITE  "composite"
+
+// WELL KNOWN MDB VARS
+#define MDB_VAR_PI              CV_TERM_GRANT
+#define MDB_VAR_LAB             CV_TERM_LAB
+#define MDB_VAR_COMPOSITE       MDB_OBJ_TYPE_COMPOSITE
+#define MDB_VAR_ANTIBODY        CV_TERM_ANTIBODY
+#define MDB_VAR_CELL            CV_TERM_CELL
+#define MDB_VAR_DATATYPE        CV_TERM_DATA_TYPE
+#define MDB_VAR_TABLENAME       "tableName"
+#define MDB_VAR_FILENAME        "fileName"
+#define MDB_VAR_FILEINDEX       "fileIndex"
+#define MDB_VAR_DCC_ACCESSION   "dccAccession"
+#define MDB_VAR_PROJECT         "project"
+
+// ENCODE Specific (at least for now)
+#define MDB_VAL_ENCODE_PROJECT  "wgEncode"
+#define MDB_VAR_ENCODE_SUBID    "subId"
+#define MDB_VAR_ENCODE_EDVS     "expVars"
+#define MDB_VAR_ENCODE_EXP_ID   "expId"
+#define MDB_VAL_ENCODE_EDV_NONE "None"
+
 
 // The mdb holds metadata primarily for tables.
 //   Many types of objects could be supported, though currently files are the only other type.
@@ -160,6 +193,10 @@ struct mdbByVar *mdbByVarsLineParse(char *line);
 // ------ Loading from args, hashes ------
 struct mdbObj *mdbObjCreate(char *obj,char *var, char *val);
 /* Creates a singular mdbObj query object based on obj and all other optional params. */
+
+struct mdbObj *mdbObjNew(char *obj,struct mdbVar *mdbVars);
+// Returns a new mdbObj with whatever was passed in.
+// An mdbObj requires and obj, so if one is not supplied it will be "[unknown]"
 
 struct mdbByVar *mdbByVarCreate(char *var, char *val);
 /* Creates a singular var=val pair struct for metadata queries. */
@@ -332,11 +369,30 @@ int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full);
 // Validates vars and vals against cv.ra.  Returns count of errors found.
 // Full considers vars not defined in cv as invalids
 
-struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,int warn);
+struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,
+                                          int warn,boolean createExpIfNecessary);
 // Organizes objects into experiments and validates experiment IDs.  Will add/update the ids in the structures.
 // If warn=1, then prints to stdout all the experiments/obs with missing or wrong expIds;
 //    warn=2, then print line for each obj with expId or warning.
+// createExpIfNecessary means go ahead and add to the hgFixed.encodeExp table to get an ID
 // Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
+
+// -- Requested by Kate: --
+#define MDB_FIELD_LAB        MDB_VAR_LAB
+#define MDB_FIELD_DATA_TYPE  MDB_VAR_DATATYPE
+#define MDB_FIELD_CELL_TYPE  MDB_VAR_CELL
+#define ENCODE_MDB_PROJECT   MDB_VAL_ENCODE_PROJECT
+
+boolean mdbObjIsEncode(struct mdbObj *mdbObj);
+// Returns TRUE if MDB object is an ENCODE object (project=wgEncode)
+
+boolean mdbObjInComposite(struct mdbObj *mdb, char *composite);
+// Returns TRUE if metaDb object is in specified composite.
+// If composite is NULL, always return true // FIXME: KATE Why return true if composite not defined???
+
+//struct encodeExp *encodeExps(char *composite,char *expTable);
+//struct mdbObjs *mdbObjsForDefinedExpId(int expId);
+// Returns the mdb objects belonging to a single encode experiment defined in the encodExp table
 
 
 // --------------- Free at last ----------------
@@ -381,33 +437,4 @@ struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limi
 #define mdbPairVal(pair) (pair)->name
 #define mdbPairLabel(pair) (pair)->val
 
-const struct hash *mdbCvTermHash(char *term);
-// returns a hash of hashes of a term which should be defined in cv.ra
-// NOTE: in static memory: DO NOT FREE
-
-const struct hash *mdbCvTermTypeHash();
-// returns a hash of hashes of mdb and controlled vocabulary (cv) term types
-// Those terms should contain label,descrition,searchable,cvDefined,hidden
-// NOTE: in static memory: DO NOT FREE
-
-struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvLinks);
-// returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
-
-enum mdbCvSearchable
-// metadata Variavble are only certain declared types
-    {
-    cvsNotSearchable        =0,  // Txt is default
-    cvsSearchByMultiSelect  =1,  // Search by drop down multi-select of supplied list (NOT YET IMPLEMENTED)
-    cvsSearchBySingleSelect =2,  // Search by drop down single-select of supplied list
-    cvsSearchByFreeText     =3,  // Search by free text field (NOT YET IMPLEMENTED)
-    cvsSearchByDateRange    =4,  // Search by discovered date range (NOT YET IMPLEMENTED)
-    cvsSearchByIntegerRange =5   // Search by discovered integer range (NOT YET IMPLEMENTED)
-    };
-
-enum mdbCvSearchable mdbCvSearchMethod(char *term);
-// returns whether the term is searchable // TODO: replace with mdbCvWhiteList() returning struct
-
-const char *cvLabel(char *term);
-// returns cv label if term found or else just term
 #endif /* MDB_H */
-

@@ -35,12 +35,17 @@ if (sd < 0)
 return sd;
 }
 
-
-int netConnect(char *hostName, int port)
-/* Start connection with a server. */
+static int netConnectWithTimeout(char *hostName, int port, long msTimeout)
+/* In order to avoid a very long default timeout (several minutes) for hosts that will
+ * not answer the port, we are forced to connect non-blocking.
+ * After the connection has been established, we return to blocking mode. */
 {
-int sd, err;
+int sd;
 struct sockaddr_in sai;		/* Some system socket info. */
+int res;
+fd_set mySet;
+struct timeval lTime;
+long fcntlFlags;
 
 if (hostName == NULL)
     {
@@ -51,13 +56,97 @@ if (!internetFillInAddress(hostName, port, &sai))
     return -1;
 if ((sd = netStreamSocket()) < 0)
     return sd;
-if ((err = connect(sd, (struct sockaddr*)&sai, sizeof(sai))) < 0)
-   {
-   errnoWarn("Couldn't connect to %s %d", hostName, port);
-   close(sd);
-   return err;
-   }
+
+// Set non-blocking
+if ((fcntlFlags = fcntl(sd, F_GETFL, NULL)) < 0) 
+    {
+    warn("Error fcntl(..., F_GETFL) (%s)\n", strerror(errno));
+    close(sd);
+    return -1;
+    }
+fcntlFlags |= O_NONBLOCK;
+if (fcntl(sd, F_SETFL, fcntlFlags) < 0) 
+    {
+    warn("Error fcntl(..., F_SETFL) (%s)\n", strerror(errno));
+    close(sd);
+    return -1;
+    }
+
+// Trying to connect with timeout
+res = connect(sd, (struct sockaddr*) &sai, sizeof(sai));
+if (res < 0)
+    {
+    if (errno == EINPROGRESS)
+	{
+	while (1) 
+	    {
+	    lTime.tv_sec = (long) (msTimeout/1000);
+	    lTime.tv_usec = (long) (((msTimeout/1000)-lTime.tv_sec)*1000000);
+	    FD_ZERO(&mySet);
+	    FD_SET(sd, &mySet);
+	    res = select(sd+1, NULL, &mySet, &mySet, &lTime);
+	    if (res < 0) 
+		{
+		if (errno != EINTR) 
+		    {
+		    warn("Error in select() during TCP non-blocking connect %d - %s\n", errno, strerror(errno));
+		    close(sd);
+		    return -1;
+		    }
+		}
+	    else if (res > 0)
+		{
+		// Socket selected for write when it is ready
+		// We simply re-do the connect call and get the result
+		res = connect(sd, (struct sockaddr*) &sai, sizeof(sai));
+		if (res < 0)
+		    {
+		    warn("Error in TCP non-blocking connect() %d - %s\n", errno, strerror(errno));
+		    close(sd);
+		    return -1;
+		    }
+		break;
+		}
+	    else
+		{
+		warn("TCP non-blocking connect() timed-out in select() after %ld milliseconds - Cancelling!\n", msTimeout);
+		close(sd);
+		return -1;
+		}
+	    }
+	}
+    else
+	{
+	warn("TCP non-blocking connect() error %d - %s\n", errno, strerror(errno));
+	close(sd);
+	return -1;
+	}
+    }
+
+// Set to blocking mode again
+if ((fcntlFlags = fcntl(sd, F_GETFL, NULL)) < 0)
+    {
+    warn("Error fcntl(..., F_GETFL) (%s)\n", strerror(errno));
+    close(sd);
+    return -1;
+    }
+fcntlFlags &= (~O_NONBLOCK);
+if (fcntl(sd, F_SETFL, fcntlFlags) < 0)
+    {
+    warn("Error fcntl(..., F_SETFL) (%s)\n", strerror(errno));
+    close(sd);
+    return -1;
+    }
+
 return sd;
+
+}
+
+
+int netConnect(char *hostName, int port)
+/* Start connection with a server. */
+{
+return netConnectWithTimeout(hostName, port, 10000); // 10 seconds connect timeout
 }
 
 int netMustConnect(char *hostName, int port)

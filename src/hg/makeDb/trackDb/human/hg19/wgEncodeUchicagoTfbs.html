@@ -1,256 +1,158 @@
 <H2>Description:</H2>
 
-<P>Our ARRA ENCODE project aims to map the genome wide binding of
-human transcription factors (TFs) using second generation massively
-parallel sequencing by expressing TFs as GFP tagged fusion proteins
-after BAC (Bacterial artificial chromosomes) recombineering. 
+<P>This ENCODE track maps
+human transcription factor binding sites, 
+genome-wide using second generation 
+massively parallel sequencing.  
+This mapping uses expressed transcription factors 
+as GFP tagged fusion proteins after BAC 
+(Bacterial artificial chromosomes) recombineering. 
 
-<P>With the help of our collaborators in the Max Planck Institute
-(Dresden), we have adopted a pipeline that simplifies the generation
-of recombineered BACs for the production of cell lines or animals that
+<P>The U. of Chicago and Max Planck Institute
+(Dresden) pipeline generates
+recombineered (recombination-mediated genetic engineering) 
+BACs for the production of cell lines or animals that
 express fusion proteins from epitope tagged transgenes.  
 </P>
 
 <H3>Recombineering strategy:</H3>
 <P>To facilitate high-throughput production of the transgenic
-constructs, we utilize a program (BACFinder) that automatically
+constructs, the program BACFinder (Crowe, Rana et al. 2002) automatically
 selects the most suitable BAC clone for any given human gene and
 generates the sets of PCR primers required for tagging and
-verification (Poser, Sarov et al. 2008). We then use recombineering
-cassettes for tagging at either the N or C terminus of the
+verification (Poser, Sarov et al. 2008). Recombineering
+is used for tagging cassettes at either the N or C terminus of the
 protein. The N-terminal cassette has a dual eukaryotic-prokaryotic
-promoter (PGK-gb2)20 driving a neomycin-kanamycin resistance gene
+promoter (PGK-gb2) driving a neomycin-kanamycin resistance gene
 within an artificial intron inside the tag coding sequence. The
 selection cassette is flanked by two loxP sites and can be permanently
 removed by Cre recombinase-mediated excision. The C-terminal cassette
 contains the sequence encoding the tag followed by an internal
 ribosome entry site (IRES) in front of the neomycin resistance
-gene. In addition, a short bacterial promoter (gb3) drives the
-expression of the neomycin-kanamycin resistance gene in E. coli. 
+gene. In addition, a short bacterial promoter (Gb3) drives the
+expression of the neomycin-kanamycin resistance gene in <i>E. coli</i>. 
 </P>
 
-<P>We insert the tagging cassettes, containing 50 nucleotides of
-PCR-introduced homology arms, into the BAC by recombineering, either
+<P>The tagging cassettes, containing 50 nucleotides of
+PCR-introduced homology arms are inserted into the BAC by recombineering, either
 behind the start codon (for the N-terminal tag) or in front of the
-stop codon (for the C-terminal tag) of the gene. All steps of
-transgene production can be carried out in multi-well-plate format,
-making it possible to readily generate the 120 constructs per year
-that we propose to produce for this project. E. coli cells that have
+stop codon (for the C-terminal tag) of the gene. <i>E. coli</i> cells that have
 successfully recombined the cassette are selected for kanamycin
-resistance in liquid culture. In our preliminary studies (Poser, Sarov
-et al. 2008), about 90% of the reactions (88 of 96) survived the
-selection. In the control experiments, in which the transformation
-order was shifted so that the cassette and the BAC did not match, none
-of the clones grew under selection, indicating that the resistant
-cells are derived only from the specific recombineering reaction. By
-plating on selective agar, we determined that each saturated culture
-was derived from 10-200 independent recombination events.  
+resistance in liquid culture.  Each saturated culture from a specific 
+recombineering reaction derived 10-200 independent recombination events.  
 </P>
 
-<P>We check two independent clones for each reaction by PCR through
-the tag insertion point. Of the 88 BACs that grew in selective media
-in pilot experiments, 85 (97%) yielded a PCR product of the expected
-size. A PCR check of the original, unmodified BACs showed that in most
-of the clones that failed to grow in selection, the targeted genomic
-region was missing. This correlates well with the estimated 10% of
-chimeric, rearranged or wrongly mapped clones in the BACs used. Thus,
+<P>Checking two independent clones for each PCR through
+the tag insertion point, 97% (85/88) yielded a PCR product of the expected
+size. Most of the clones that failed to grow were missing the targeted genomic
+region. An estimated 10% of the BACs used are
+chimeric, rearranged or wrongly mapped. Thus,
 initial results indicate that the necessary recombineering steps can
-be carried out with extremely high fidelity. 
+be carried out with high fidelity. 
 </P>
 
-<P>A more detailed description of the recombineering details can be
-found in Poser et al. 2008, where the White lab produced all epitope
+<P>The White lab produced all epitope
 tagged transcription and chromatin factor BACs, as well as the genome
-wide ChIP data and analysis.  Subsequently, we showed an application
-of this approach to analysis of closely related paralogs (RARa and
-RARg) (Hua, Kittler et al. Cell 2009). It is notable that such
-paralogs often cannot otherwise be distinguished by antibodies against
-endogenous factors In total, we have already processed several dozens
-of transcription factors and chromatin factors through this
-recombineering pipeline, as well as producing cell lines and ChIP chip
-and ChIP-seq data as described below. A diagram of the detailed
-workflow in our lab is shown in Figure 1, including PCR and DNA
-sequence verification of each cloning step.
-</P>
-
-<P>Figure 1.  BAC recombineering workflow.  Reagent costs associated
-with each step of the workflow are shown to the right. 
-</P>
-
-<H2>Methods:</H2>
-
-<H3>Brief background information: </H3>
-
-<DL>
-<DT><STRONG>Cell type: K562(Tier-1)</STRONG>
-<DD>K562 is an immortalized cell line produced from a female patient
-  with chronic myelogenous leukemia (CML). It is a widely used model
-  for cell biology, biochemistry, and erythropoiesis. It grows well,
-  is transfectable, and represents the mesoderm linage. 
-
-<DD>Cells are  obtained from the America Type Culture Collection
-  (ATCC) (ATCC Number CCL-243). 
-</DL>
-
-
-<STRONG>Preparation of chromatin:</STRONG>
-<OL>
-<LI>Grow K562 cells upto the required confluency ( 0.5-0.75 Millions per ml).
-<LI>Collect cells by spinning at 2500 rpm X 10 mins at room temperature in one 50 mL falcon tube.
-<LI>Wash once with 1X PBS
-<LI>Add 1.4 ml of 37% formaldehyde(final concentration 1%) in serum-free medium(medium prewarmed at 37 centigrade).
-<LI> Incubate 10min at room temperature 
-<LI>Stop cross linking with 0.125 M  glycine for 5mins at RT. Add Glycine to the media containing formaldehyde. Prepare fresh Glycine everytime.
-<LI>Rinse 2 times with ice-cold PBS. Centrifuge each time at 1400rpm for 5mins. The centrifuge should be set at 4degree Celsius, before starting the spin.
-<LI>Collect the pellet and throw the supernatant.  If not proceed for the next step, the pellet should be kept on ice and immediately snap frozen with liquid nitrogen and stored at -80degree Celsius. 
-<LI>Thaw the pellet on ice, if stored at -80degree celcius. Add 10ml of Hypotonic buffer containing protease inhibitor and phosphatase inhibitor cocktail. 
-<LI>Agitate at 4 centigrade for 15 mins. 
-<LI>Dounce for 30 times with dounce homogenizer  on ice.
-<LI>Transfer to a 15ml POLYSTYRENE tube and centrifuge at 4000rpm for 10min at 4 centigrade. 
-<LI>Remove the supernatant, and resuspend the pellet using 1000&micro;L (1ml) sonication buffer.
-<LI>Agitate at 4 centigrade for 15mins. 
-<LI>Sonicate ( using Bioruptor, Diagenode cat # UCD300) in  1000&micro;L sonication buffer) for 10mins at “high” with 30secs on and 30secs off. Repeat this process for 30 times. Always check that the water in the sonicator should be chilled. Change water after every cycle with pre-chilled ice water. When the changing water, the tubes containing chromatin should be kept on ice.
-<LI>Spin lysate at 4000rpm for 20mins at 4 centigrade, and freeze the supernatant in 450&micro;L aliquot at -80 centigrade .
-<LI>For checking the sonication efficiency, aliqout 600&micro;L of the chromatin and add another 100&micro;L of PBS, then 12&micro;L of 5M NaCl, incubate at 65 centigrade overnight. Next day incubate with proteinase K at 200&micro;g/ml final concentration at 50 centigrade for 2hr, , then incubate with RNaseA at 50&micro;g/ml final concentration at 37 centigrade for 2hr. At last, use qiagen column/perform phenol chloroform separation to extract the DNA, and run on 1% gel to dertermine the size of DNA. Most of the DNA should be in the range of 200 to 500 bp, that’s the indication of good sonication.
-</OL>
-
-<STRONG>Immunoprecipitation:</STRONG>
-<OL>
-<LI> Wash Gamma bind protein G sepharose beads with ChIP dilution buffer two times.
-<LI> Add beads to 1ml with ChIP dilution buffer and block the beads using  1.5 mg/mL of BSA.
-<LI> Agitate at 4 centigrade for 1hr.
-<LI> Wash beads with ChIP dilution buffer 2 times. These beads are BSA-blocked and could be stored at 4 centigrade, but are used up in 2 days.
-<LI> Thaw the chromatin on ice until it is totally thawed.
-<LI> Dilute the chromatin in 1:5 using ChIP dilution buffer.
-<LI> Agitate at 4 centigrade for 3hr to preclear the chromatin.
-<LI> Centrifuge at 2000rpm for 2min at 4 centigrade to collect the supernatant.
-<LI> Save 1 aliquot for INPUT.
-<LI> For IP samples, add 6&micro;g of goat anti-GFP antibody to the diluted pre-cleared chromatin, and agitate at 4 centigrade overnight. 
-<LI> Add 50&micro;L pre-blocked beads to the chromatin and agitate at 4 centigrade for 4hrs. 
-<LI> Centrifuge at 2000rpm in 4 centigrade for 2min. 
-<LI> Discard the supernatant, and wash the beads with 1ml TSEI(1 tablet PI in 10ml ) by agitating at 4 centigrade for 5 min. 
-<LI> Spin at 2000rpm 4 centigrade spin down for 2min.
-<LI> Discard the supernatant, and wash the beads with 1ml TSEII (1 tablet PI in 10ml ) by agitating at 4 centigrade for 5 min. 
-<LI> Spin for 2000rpm 4 centigrade spin down for 2min.
-<LI> Discard the supernatant, and wash the beads with 1ml TSEIII (No PI) by agitating at 4 centigrade for 5 min. 
-<LI> Spin for 2000rpm 4 centigrade spin down for 2min.
-<LI> Discard the supernatant, and wash the beads with 1ml  1XTE and change the slurry into a new tube, then agitate at 4 centigrade for 5 min. 
-<LI> Spin for 2000rpm at 4 centigrade spin down for 2min.
-<LI> Add 200&micro;L of elution buffer and incubate at 65 centigrade for 15min, tapping the tube intermittently.
-<LI> Repeat twice.
-<LI> Collect all eluted DNA and incubate overnight at 65 degrees.
-<LI> Add RNAse A and incubate for 30 mins followed by incubating for 2 hours at 55 degrees with Protenase K (20 &micro;g/mL).
-</OL>
-  
-<OL>
-<LI>Perform  phenol:chloroform. Add equal volume of phenol:chloroform to ChIP sample, mix well, and put the mix into a heavy phase lock gel, spin at full speed at RT for 5min.
-<LI>Get the supernatant and precipate DNA adding 1.5 volumes of ethanol and 0.1 volumes of 5M sodium acetate at -80 degrees for 2 hours.
-<LI>Use Qubit with HS DNA reagents to measure DNA concentrations (The total amount I get is in the range of 5-10ng).  
-</OL>
-
-
-<H3>Buffers:</H3>
-<DL>
-<DT><STRONG>Nuclear releasing buffer(Hypotonic buffer):</STRONG>
-  <DD>0.1M Tris.HCl(pH8.0),EDTA(10 mM) NaCl(50 mM).
-
-<DT><STRONG>Sonication buffer:</STRONG>
-  <DD>1% SDS， 10mM EDTA, 50mM Tris HCl ph 8.0, protease Inhibitors.</BR>
-Base reagent concentrations to make 50ml:
-    <UL>
-      <LI>5mL 10% SDS
-      <LI>1mL 0.5M EDTA
-      <LI>2.5mL 1M tris-HCL (ph 8.0)
-      <LI>5 Pellets PI cocktail
-      <LI>Raise to 50ml with water
-    </UL>
-  
-<DT><STRONG>ChIP dilution buffer:</STRONG>
-  <DD>0.01 %SDS, 1.1% Triton-X 100, 167mM NaCl, 16.7mM Tris-HCl, ph 8.0 (store at RT).</BR>
-Base reagent concentrations to make 50mL:
-    <UL>
-      <LI>25&micro;L 20% SDS
-      <LI>5.5mL 10% Triton
-      <LI>835&micro;L 1M tris-HCL (pH 8.1)
-      <LI>1.67mL 5M NaCl
-      <LI>5 Pellets PI cocktail
-      <LI>Raise to 50ml with water
-    </UL>
-
-<DT><STRONG>TSE I:</STRONG>
-  <DD>0.1% SDS, 1% Triton X-100, 2mM EDTA, 20mM Tris-HCL, ph 8.1, 150mM NaCl (store at RT).</BR>
-Base reagent concentrations to make 50mL:
-    <UL>
-      <LI>250&micro;L 20% SDS
-      <LI>55ml 10% Triton
-      <LI>200&micro;L 0.5M EDTA
-      <LI>1ml 1M tris-HCl (pH 8.1)
-      <LI>1.5ml 5M NaCl
-      <LI>5 Pellets PI cocktail
-      <LI>Raise to 50ml with water
-    </UL>
-
-<DT><STRONG>TSE II:</STRONG>
-  <DD>0.1% SDS, 1% Triton X-100, 2mM EDTA, 20mM Tris-HCl, pH 8.1, 500mM NaCl (store at RT).</BR>
-Base reagent concentration to make 50 mL:
-    <UL>
-      <LI>250&micro;L 20% SDS
-      <LI>5mL 10% Triton X 100
-      <LI>200&micro;L 0.5M EDTA
-      <LI>1mL 1M Tris-HCl (pH 8.1)
-      <LI>5mL 5M NaCl
-      <LI>5 Pellets PI cocktail
-      <LI>Raise to 50mL with water
-    </UL>
-
-<DT><STRONG>TSE III:</STRONG>
-  <DD>0.25M LiCl, 1% NP-40, 1% deoxycholate, 1mM EDTA, 10mM Tris-HCl, ph 8.1 (store at 4 centigrade).</BR>
-Base reagent concentration to make 50mL:
-    <UL>
-      <LI>2.5mL 5M LiCl
-      <LI>5ml 10% NP-40
-      <LI>500mg Deoxycholic sodium
-      <LI>100&micro;L 0.5M EDTA
-      <LI>500&micro;L 1M Tris-HCl (pH 8.1)
-      <LI>Raise to 50ml with water
-
-<DT><STRONG>Elution buffer:</STRONG>
-  <DD>Freshly made 1% SDS in 1X TE.
-</DL>
-
-<H3>Sequencing system used, parameters and run-time settings</H3>
-<P>We use Illumina GAIIx and HySeq next-generation sequencing to produce all ChIP-seq data for this project.
-</P>
-
-<H3>Processing and analysis software used</H3>
-<P>Raw sequencing reads are aligned using Bowtie version 0.12.5.  The &quot;-m 1&quot; parameter is applied to suppress alignments mapping more than once in the genome.  Reads are aligned to the UCSC hg19 assembly. Wiggle format signal files are generated with SPP 2.7.1 for R 2.7.1.  Macs 1.3.7 is used to call peaks.  Macs parameters used vary by experiment.
+wide ChIP data and analysis.  An application
+of this approach to the analysis of closely related paralogs (RARa and
+RARg) yielded transcription factors, chromatin factors, cell lines, 
+ChIP chip data and ChIP-seq data
+(Hua, Kittler et al. Cell 2009). 
+Such paralogous transcription factors often can not otherwise 
+be distinguished by antibodies.  
 </P>
     
-<H3>Sample-preparation:</H3>
+<H3>Sample Preparation</H3>
 
-<P>ChIP DNA from sample of interest is sheared to appropriate size (average &#126;800bp) using a nebulizer. The ends of the DNA are polished, and two unique adapters are ligated to the fragments. Ligated fragments of the size range of 150-200bp are isolated via gel extraction and amplified using limited cycles of PCR.
+<P>ChIP DNA from samples are sheared to &#126;800bp using a nebulizer. 
+The ends of the DNA are polished, and two unique adapters are ligated to the fragments. 
+Ligated fragments of 150-200bp are isolated by gel extraction 
+and amplified using limited cycles of PCR.
 </P>
 
-<H3>Cluster Generation:</H3>
-<P>The flow cell surface is coated with single stranded oligonucleotides corresponding to the sequences of the adapters ligated during the sample preparation stage. Single-stranded, adapter-ligated fragments that are bound to the surface of the flow cell are now subjected to polyermase-chain reaction generating polonies(colonies from PCR). Priming occurs as the distal end of a ligated fragment bridges to a complementary oligo on the surface. 
-</P>Repeated cycle of denaturation and extension results in localized amplification of single molecules in millions of unique locations across the flow cell surface. This process occurs in Illumina's cluster station, an automated flow cell processor.
-A flow cell containing millions of unique clusters is now loaded into the 1G sequencer for automated cycles of extension and imaging. 
-The first cycle of sequencing consists of incorporation of a single fluorescent nucleotide, followed by high resolution imaging of the entire flow cell. These images represent the data collected for the first base. Any signal above background identifies the physical location of a cluster (or polony), and the fluorescent emission identifies which of the four bases was incorporated at that position.
-This cycle is repeated, one base at a time, generating a series of images each representing a single base extension at a specific cluster. Base calls are derived with an algorithm that identifies the emission color over time. 
+<H3>Sequencing System</H3>
+
+<P>Illumina GAIIx and HySeq next-generation sequencing produced all ChIP-seq data.
 </P>
 
-<H2>Credits:</H2>
-Kevin White (PI)</BR>
-Subhradip Karmakar (project in charge) </BR>
-Nick Bild(Data analysis) </BR>
-Alina Choudhury(Lab Tech) </BR>
-Marc Domanus(Sequencing Incharge at Argonne National Lab) </BR>
+<H3>Processing and Analysis Software</H3>
 
+<P>Raw sequencing reads are aligned using Bowtie version 0.12.5
+(Langmead et al. 2009).  The &quot;-m 1&quot; parameter is applied to suppress alignments mapping more than once in the genome.  
+Reads are aligned to the UCSC hg19 assembly. 
+Wiggle format signal files are generated with SPP 2.7.1 for R 2.7.1.  
+Macs 1.3.7 is used to call peaks.  
+The Macs parameters used vary by experiment.
+</P>
 
-<H2>Data Sets:</H2>
+<H2>Data Sets</H2>
 ChIP Seq data are available for JunB, JunD, Fos, GATA2 and HDAC8.
 
-<H2>References:</H2>
+<H2>Credits</H2>
+Kevin White (PI), <A HREF="mailto:&#107;p&#119;h&#105;&#116;&#101;&#64;&#117;c&#104;&#105;&#99;a&#103;&#111;.
+e&#100;&#117;">
+&#107;p&#119;h&#105;&#116;&#101;&#64;&#117;c&#104;&#105;&#99;a&#103;&#111;.
+e&#100;&#117;</A>
+<!-- above address is kpwhite at uchicago.edu -->
+ </BR>
+Subhradip Karmakar (project in charge), <A HREF="mailto:&#115;&#117;&#98;&#104;ra&#100;&#105;&#112;&#64;&#117;&#99;h&#105;&#99;&#97;g&#111;.
+&#101;&#100;&#117;">
+&#115;&#117;&#98;&#104;ra&#100;&#105;&#112;&#64;&#117;&#99;h&#105;&#99;&#97;g&#111;.
+&#101;&#100;&#117;</A>
+<!-- above address is subhradip at uchicago.edu -->
+ </BR>
+Nick Bild(Data analysis), <A HREF="mailto:&#110;&#98;&#105;l&#100;&#64;&#98;&#115;&#100;.
+u&#99;h&#105;&#99;&#97;&#103;&#111;.
+&#101;&#100;&#117;">
+&#110;&#98;&#105;l&#100;&#64;&#98;&#115;&#100;.
+u&#99;h&#105;&#99;&#97;&#103;&#111;.
+&#101;&#100;&#117;</A>
+<!-- above address is nbild at bsd.uchicago.edu -->
+ </BR>
+Alina Choudhury(Lab Tech), <A HREF="mailto:&#97;&#99;ho&#117;&#100;&#104;&#117;&#114;&#121;&#64;&#117;&#99;&#104;&#105;&#99;&#97;go.
+&#101;&#100;u">
+&#97;&#99;ho&#117;&#100;&#104;&#117;&#114;&#121;&#64;&#117;&#99;&#104;&#105;&#99;&#97;go.
+&#101;&#100;u</A>
+<!-- above address is achoudhury at uchicago.edu -->
+  </BR>
+Marc Domanus(Sequencing Incharge at Argonne National Lab), <A HREF="mailto:&#109;&#100;&#111;&#109;&#97;n&#117;s&#64;&#97;&#110;&#108;.
+&#103;&#111;v">
+&#109;&#100;&#111;&#109;&#97;n&#117;s&#64;&#97;&#110;&#108;.
+&#103;&#111;v</A>
+<!-- above address is mdomanus at anl.gov -->
+</BR>
+
+
+<H2>References</H2>
+
+Poser I, Sarov M, Hutchins JR, H&eacute;rich&eacute; JK, Toyoda Y, Pozniakovsky A, Weigl D, Nitzsche A, Hegemann B, Bird AW, Pelletier L, Kittler R, Hua S, Naumann R, Augsburg M et al. 
+<A HREF="http://www.nature.com/nmeth/journal/v5/n5/full/nmeth.1199.html">
+BAC TransgeneOmics: a high-throughput method for exploration of protein function in mammals.  </A>
+Nature Methods. 2008 Aug;5(8):748.
+</br>
+</br>
+
+Hua S, Kittler R, and White K.  
+<A HREF="http://www.sciencedirect.com/science?_ob=MImg&_imagekey=B6WSN-4WM10D8-K-9&_cdi=7051&_user=4428&_pii=S0092867409005042&_origin=browse&_zone=rslt_list_item&_coverDate=06%2F26%2F2009&_sk=998629992&wchp=dGLbVlb-zSkWb&md5=fb64e508af85a0a26177a091fd113eb5&ie=/sdarticle.pdf">
+Genomic antagonism between retinoic acid and estrogen signaling in breast cancer. </A>
+Cell. Volume 137, Issue 7, 26 June 2009, Pages 1259-1271
+</br>
+</br>
+
+Langmead B, Trapnell C, Pop M and Salzberg S.  
+<A HREF="http://www.biomedcentral.com/content/pdf/gb-2009-10-3-r25.pdf">
+Ultrafast and memory-efficient alignment of short DNA sequences to the human
+genome.</A> 
+Genome Biology 2009, 10:R25.
+</br>
+</br>
+
+Crowe, M.L., Rana D., Fraser F., Bancroft I. and Trick M. 
+<A HREF="http://nar.oxfordjournals.org/content/30/21/e118.full?ijkey=KM3MpUg6KSVBo&keytype=ref&siteid=nar">
+BACFinder - genomic localisation of large insert genomic clones based on 
+restriction fingerprinting </A>
+(2002) Nucleic Acids Research 30(21), e118
+</br>
+</br>
+
 Illumina ChIP Seq proocols.
-
-
