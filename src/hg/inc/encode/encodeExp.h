@@ -161,6 +161,10 @@ void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int i
 char *encodeExpKey(struct encodeExp *exp);
 /* Create a hash key from an encodeExp */
 
+char *encodeExpVars(struct encodeExp *exp);
+// Create a string of all experiment defining vars and vals as "lab=UW dataType=ChipSeq ..."
+// WARNING: May be missing var=None if the var was added after composite had exps.
+
 struct encodeExp *encodeExpGetFromTable(char *organism, char *lab, char *dataType, char *cell,
                                 struct slPair *varPairs, char *table);
 /* Return experiments matching args in named experiment table.

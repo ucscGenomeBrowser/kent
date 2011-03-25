@@ -56,8 +56,14 @@ void encodeExpSaveToDb(struct sqlConnection *conn, struct encodeExp *el, char *t
  * If worried about this use encodeExpSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s','%s')",
-	tableName,  el->ix,  el->organism,  el->accession,  el->lab,  el->dataType,  el->cellType,  el->expVars,  el->lastUpdated);
+dyStringPrintf(update, "insert into %s set ix=%d, organism='%s', lab='%s', dataType='%s', cellType='%s', lastUpdated='%s'",
+               tableName, el->ix, el->organism, el->lab, el->dataType, el->cellType, el->lastUpdated);
+
+if (el->accession != NULL) // accession may be null
+    dyStringPrintf(update, ", accession='%s'", el->accession); // order doesn't matter
+if (el->expVars != NULL)   // expVars may be null
+    dyStringPrintf(update, ", expVars='%s'", el->expVars);
+
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -74,23 +80,33 @@ void encodeExpSaveToDbEscaped(struct sqlConnection *conn, struct encodeExp *el, 
 struct dyString *update = newDyString(updateSize);
 char  *organism, *accession, *lab, *dataType, *cellType, *expVars, *lastUpdated;
 organism = sqlEscapeString(el->organism);
-accession = sqlEscapeString(el->accession);
 lab = sqlEscapeString(el->lab);
 dataType = sqlEscapeString(el->dataType);
 cellType = sqlEscapeString(el->cellType);
-expVars = sqlEscapeString(el->expVars);
 lastUpdated = sqlEscapeString(el->lastUpdated);
 
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s','%s')",
-	tableName,  el->ix,  organism,  accession,  lab,  dataType,  cellType,  expVars,  lastUpdated);
+dyStringPrintf(update, "insert into %s set ix=%d, organism='%s', lab='%s', dataType='%s', cellType='%s', lastUpdated='%s'",
+               tableName, el->ix, organism, lab, dataType, cellType, lastUpdated);
+
+if (el->accession != NULL) // accession may be null
+    {
+    accession = sqlEscapeString(el->accession);
+    dyStringPrintf(update, ", accession='%s'", accession);
+    freez(&accession);
+    }
+if (el->expVars != NULL)   // expVars may be null
+    {
+    expVars = sqlEscapeString(el->expVars);
+    dyStringPrintf(update, ", expVars='%s'", expVars);
+    freez(&expVars);
+    }
+
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&organism);
-freez(&accession);
 freez(&lab);
 freez(&dataType);
 freez(&cellType);
-freez(&expVars);
 freez(&lastUpdated);
 }
 
@@ -435,7 +451,9 @@ if (edVars == NULL)
         verbose(1,"Experiment Defining Variables not defined for composite '%s'\n",composite);
     return NULL;
     }
-return encodeExpFromMdbVars(db, edVars);
+struct encodeExp *exp = encodeExpFromMdbVars(db, edVars);
+mdbVarsFree(&edVars);
+return exp;
 }
 
 struct encodeExp *encodeExpFromMdbVars(char *db, struct mdbVar *vars)
@@ -672,6 +690,19 @@ struct dyString *dy = newDyString(0);
 dyStringPrintf(dy, "lab:%s dataType:%s cellType:%s", exp->lab, exp->dataType, exp->cellType);
 if (exp->expVars != NULL)
     dyStringPrintf(dy, " expVars:%s", exp->expVars);
+return dyStringCannibalize(&dy);
+}
+
+char *encodeExpVars(struct encodeExp *exp)
+// Create a string of all experiment defining vars and vals as "lab=UW dataType=ChipSeq ..."
+// WARNING: May be missing var=None if the var was added after composite had defined exps.
+{
+struct dyString *dy = newDyString(0);
+dyStringPrintf(dy, "%s=%s %s=%s", MDB_VAR_LAB, exp->lab, MDB_VAR_DATATYPE, exp->dataType );
+if (exp->cellType != NULL)
+    dyStringPrintf(dy, " %s=%s", MDB_VAR_CELL, exp->cellType);
+if (exp->expVars != NULL)
+    dyStringPrintf(dy, " %s", exp->expVars);
 return dyStringCannibalize(&dy);
 }
 
