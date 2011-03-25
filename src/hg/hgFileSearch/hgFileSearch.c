@@ -220,11 +220,19 @@ slReverse(grps);
 return *grps;
 }
 
-static void doFileSearch(char *db,struct cart *cart,struct trackDb *tdbList)
+static void doFileSearch(char *db,char *organism,struct cart *cart,struct trackDb *tdbList)
 {
 if (!advancedJavascriptFeaturesEnabled(cart))
     {
     warn("Requires advanced javascript features.");
+    return;
+    }
+struct sqlConnection *conn = hAllocConn(db);
+boolean metaDbExists = sqlTableExists(conn, "metaDb");
+if (!sqlTableExists(conn, "metaDb"))
+    {
+    warn("Assembly %s %s does not support Downloadable Files search.", organism, hFreezeFromDb(db));
+    hFreeConn(&conn);
     return;
     }
 #ifdef SUPPORT_COMPOSITE_SEARCH
@@ -233,8 +241,6 @@ char *descSearch=NULL;
 #endif///def SUPPORT_COMPOSITE_SEARCH
 char *fileTypeSearch = cartOptionalString(cart, FILE_SEARCH_ON_FILETYPE);
 boolean doSearch = sameWord(cartUsualString(cart, FILE_SEARCH,"no"), "search");
-struct sqlConnection *conn = hAllocConn(db);
-boolean metaDbExists = sqlTableExists(conn, "metaDb");
 #ifdef ONE_FUNC
 struct hash *parents = newHash(4);
 #endif///def ONE_FUNC
@@ -493,15 +499,11 @@ if(doSearch)
 hFreeConn(&conn);
 
 webNewSection("About Downloadable Files Search");
-if(metaDbExists)
-    printf("<p>Search for terms in track names, descriptions, groups, and ENCODE "
-            "metadata.  If multiple terms are entered, only tracks with all terms "
-            "will be part of the results.");
-else
-    printf("<p>Search for terms in track descriptions, groups, and names. "
-            "If multiple terms are entered, only tracks with all terms "
-            "will be part of the results.");
-printf("<BR><a target='_blank' href='../goldenPath/help/trackSearch.html'>more help</a></p>\n");
+printf("<p>Search for downloadable ENCODE files by entering search terms in "
+        "the Track name or Description fields and/or by making selections with "
+        "the group, data format, and/or ENCODE metadata drop-downs. For exact "
+        "matches, use quotes around your search terms.");
+printf("<BR><a target='_blank' href='../goldenPath/help/fileSearch.html'>more help</a></p>\n");
 webEndSectionTables();
 }
 
@@ -533,7 +535,7 @@ jsIncludeFile("utils.js",NULL);
 //printf("<script type='text/javascript'>$(document).ready(function() { setTimeout('updateMetaDataHelpLinks(0);',50);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
 printf("<script type='text/javascript'>$(document).ready(function() { updateMetaDataHelpLinks(0);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
 
-doFileSearch(db,cart,tdbList);
+doFileSearch(db,organism,cart,tdbList);
 
 
 printf("<BR>\n");
