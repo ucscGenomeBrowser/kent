@@ -12,7 +12,9 @@
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
-int fetchBefore = 10000, fetchAfter = 10000;
+int fetchBefore = 50000, fetchAfter = 50000;
+boolean missingZero = FALSE;
+double maxVal = BIGDOUBLE;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,11 +25,19 @@ errAbort(
   "usage:\n"
   "   regCompanionGraphVsFixedPoints in.bed inBigWigs.lst out.tab\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -fetchBefore=N (default %d)\n"
+  "   -fetchAfter=N (default %d)\n"
+  "   -missingZero - if set treat missing data in bigWigs as zero values\n"
+  "   -maxVal=N.N - if set clamp values in wig files above this value to this value\n"
+  , fetchBefore, fetchAfter
   );
 }
 
 static struct optionSpec options[] = {
+   {"fetchBefore", OPTION_INT},
+   {"fetchAfter", OPTION_INT},
+   {"missingZero", OPTION_BOOLEAN},
+   {"maxVal", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -119,45 +129,47 @@ for (inFile = inFileList; inFile != NULL; inFile = inFile->next, ++inIx)
 	    for (bed = startChrom; bed != endChrom; bed = bed->next)
 	        {
 		char strand = bed->strand[0];
+		int bufIx, bufIxInc;
+		int start, end, pos;
 		if (strand == '+')
 		    {
-		    int pos = bed->chromStart;
-		    int start = pos - fetchBefore;
-		    int end = pos + fetchAfter;
-		    if (rangeIntersection(start, end, 0, chromSize) == sumBufSize)
-		        {
-			int bufIx = 0;
-			for (i=start; i<end; ++i, ++bufIx)
-			    {
-			    if (bitReadOne(covBuf, i))
-			        {
-				sumBuf[bufIx] += valBuf[i];
-				nBuf[bufIx] += 1;
-				}
-			    }
-			}
+		    pos = bed->chromStart;
+		    start = pos - fetchBefore;
+		    end = pos + fetchAfter;
+		    bufIx = 0;
+		    bufIxInc = 1;
 		    }
 		else if (strand == '-')
 		    {
-		    int pos = bed->chromEnd;
-		    int start = pos - fetchAfter;
-		    int end = pos + fetchBefore;
-		    if (rangeIntersection(start, end, 0, chromSize) == sumBufSize)
-		        {
-			int bufIx = sumBufSize-1;
-			for (i=start; i<end; ++i, --bufIx)
+		    pos = bed->chromEnd;
+		    start = pos - fetchAfter;
+		    end = pos + fetchBefore;
+		    bufIx = sumBufSize - 1;
+		    bufIxInc = -1;
+		    }
+		else
+		    {
+		    // Keep compiler happy about uninitialized vars then abort.
+		    bufIx = bufIxInc = start = end = pos = 0;  
+		    errAbort("Expecting input bed to be stranded\n");
+		    }
+		if (rangeIntersection(start, end, 0, chromSize) == sumBufSize)
+		    {
+		    for (i=start; i<end; ++i)
+			{
+			if (bitReadOne(covBuf, i))
 			    {
-			    if (bitReadOne(covBuf, i))
-			        {
-				sumBuf[bufIx] += valBuf[i];
-				nBuf[bufIx] += 1;
-				}
+			    double val = valBuf[i];
+			    if (val > maxVal)
+			        val = maxVal;
+			    sumBuf[bufIx] += val;
+			    nBuf[bufIx] += 1;
 			    }
+			else if (missingZero)
+			    nBuf[bufIx] += 1;
+			bufIx += bufIxInc;
 			}
 		    }
-
-		else
-		    errAbort("Expecting input bed to be stranded\n");
 		}
 	    lmCleanup(&lm);
 	    }
@@ -182,6 +194,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+fetchBefore = optionInt("fetchBefore", fetchBefore);
+fetchAfter = optionInt("fetchAfter", fetchAfter);
+missingZero = optionExists("missingZero");
+maxVal = optionDouble("maxVal", maxVal);
 if (argc != 4)
     usage();
 regCompanionGraphVsFixedPoints(argv[1], argv[2], argv[3]);
