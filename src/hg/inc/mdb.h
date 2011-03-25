@@ -430,6 +430,10 @@ void mdbObjsFree(struct mdbObj **mdbObjsPtr);
 // Frees one or more metadata objects and any contained mdbVars.  Will free any hashes as well.
 #define mdbObjFree(mdbObjPtr) mdbObjsFree(mdbObjPtr)
 
+void mdbVarsFree(struct mdbVar **mdbVarsPtr);
+// Frees one or more metadata vars and any val as well
+#define mdbVarFree(mdbVarPtr) mdbVarsFree(mdbVarPtr)
+
 void mdbByVarsFree(struct mdbByVar **mdbByVarsPtr);
 // Frees one or more metadata vars and any contained vals and objs.  Will free any hashes as well.
 #define mdbByVarFree(mdbByVarPtr) mdbByVarsFree(mdbByVarPtr)

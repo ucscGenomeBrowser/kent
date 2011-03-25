@@ -236,22 +236,6 @@ fputc('}',f);
 #define MDB_METAVAR_RAKEY "metaVariable"
 
 // ------- (static) convert from autoSql -------
-static void mdbVarFree(struct mdbVar **mdbVarPtr)
-// Frees a single mdbVar struct
-{
-    freeMem((*mdbVarPtr)->val);
-    freeMem((*mdbVarPtr)->var);
-    freez(mdbVarPtr);
-}
-
-static void mdbVarsFree(struct mdbVar **mdbVarPtr)
-// Frees an mdbVars list
-{
-struct mdbVar *mdbVar = NULL;
-while((mdbVar = slPopHead(mdbVarPtr)) != NULL)
-    mdbVarFree(&mdbVar);
-}
-
 static void mdbLeafObjFree(struct mdbLeafObj **leafObjPtr)
 // Frees a single mdbVar struct
 {
@@ -2918,6 +2902,18 @@ if(mdbObjsPtr != NULL && *mdbObjsPtr != NULL)
         freeMem(mdbObj);
         }
     freez(mdbObjsPtr);
+    }
+}
+
+void mdbVarsFree(struct mdbVar **mdbVarsPtr)
+// Frees one or more metadata vars and any val as well
+{
+struct mdbVar *mdbVar = NULL;
+while((mdbVar = slPopHead(mdbVarsPtr)) != NULL)
+    {
+    freeMem(mdbVar->val);
+    freeMem(mdbVar->var);
+    freez(&mdbVar);
     }
 }
 
