@@ -136,7 +136,8 @@ for (el = list; el != NULL; el = el->next)
 return el;
 }
 
-struct encodePeak *filterOutTranscribed(struct encodePeak *inList, struct bbiFile *bbi)
+struct encodePeak *filterOutTranscribed(struct encodePeak *inList, struct bbiFile *bbi, 
+	struct bigWigValsOnChrom *chromVals)
 /* Return sublist of inList that has low average transcription for self and 100 bases on
  * either side. Assumes inList is sorted by chromosome.  This is more to get rid of promoters
  * that didn't make it into gene set than anything. */
@@ -144,15 +145,12 @@ struct encodePeak *filterOutTranscribed(struct encodePeak *inList, struct bbiFil
 struct encodePeak *outList = NULL;
 struct encodePeak *peak, *next, *chromStart, *chromEnd;
 
-double *valBuf = NULL;
-Bits *covBuf = NULL;
-int bufSize = 0;
-
 for (chromStart = inList; chromStart != NULL; chromStart = chromEnd)
     {
     char *chrom = chromStart->chrom;
     chromEnd = nextPeakOutOfChrom(chromStart->next, chrom);
-    int chromSize = bbiChromSize(bbi, chrom);
+    bigWigValsOnChromFetchData(chromVals, chrom, bbi);
+    int chromSize = chromVals->chromSize;
 
     if (chromSize == 0)	/* No transcription on this chromosome, so add all peaks. */
         {
@@ -164,37 +162,8 @@ for (chromStart = inList; chromStart != NULL; chromStart = chromEnd)
 	continue;
 	}
 
-    /* Make sure merge buffers are big enough. */
-    if (chromSize > bufSize)
-	{
-	bufSize = chromSize;
-	freeMem(covBuf);
-	freeMem(valBuf);
-	valBuf = needHugeMem(bufSize * sizeof(double));
-	covBuf = bitAlloc(bufSize);
-	}
-
-    /* Zero out buffers */
-    bitClear(covBuf, chromSize);
-    int i;
-    for (i=0; i<chromSize; ++i)
-	valBuf[i] = 0.0;
-
-    /* Fetch intervals for this chromosome and fold into buffers. */
-    struct lm *lm = lmInit(0);
-    struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bbi, chrom, 0, chromSize, lm);
-    for (iv = ivList; iv != NULL; iv = iv->next)
-	{
-	double val = iv->val;
-	int end = iv->end;
-	for (i=iv->start; i<end; ++i)
-	    valBuf[i] = val;
-	bitSetRange(covBuf, iv->start, iv->end - iv->start);
-	}
-    lmCleanup(&lm);
-
-
     struct encodePeak *peak;
+    double *valBuf = chromVals->valBuf;
     for (peak = chromStart; peak != chromEnd; peak = next)
         {
 	next = peak->next;
@@ -225,16 +194,12 @@ return outList;
 }
 
 struct encodePeak *filterOutUnderInNeighborhood(struct encodePeak *inList, struct bbiFile *bbi,
-	int neighborhoodSize, double stdDevAboveMean)
+	struct bigWigValsOnChrom *chromVals, int neighborhoodSize, double stdDevAboveMean)
 /* Return sublist of inList that has low average transcription for self and 100 bases on
  * either side. Assumes inList is sorted by chromosome. */
 {
 struct encodePeak *outList = NULL;
 struct encodePeak *peak, *next, *chromStart, *chromEnd;
-
-double *valBuf = NULL;
-Bits *covBuf = NULL;
-int bufSize = 0;
 
 /* Figure out threshold based on stdDevAboveMean */
 struct bbiSummaryElement summary = bbiTotalSummary(bbi);
@@ -246,7 +211,10 @@ for (chromStart = inList; chromStart != NULL; chromStart = chromEnd)
     {
     char *chrom = chromStart->chrom;
     chromEnd = nextPeakOutOfChrom(chromStart->next, chrom);
-    int chromSize = bbiChromSize(bbi, chrom);
+    bigWigValsOnChromFetchData(chromVals, chrom, bbi);
+    int chromSize = chromVals->chromSize;
+    Bits *covBuf = chromVals->covBuf;
+    double *valBuf = chromVals->valBuf;
 
     if (chromSize == 0)	/* No transcription on this chromosome, so add all peaks. */
         {
@@ -257,36 +225,6 @@ for (chromStart = inList; chromStart != NULL; chromStart = chromEnd)
 	    }
 	continue;
 	}
-
-    /* Make sure merge buffers are big enough. */
-    if (chromSize > bufSize)
-	{
-	bufSize = chromSize;
-	freeMem(covBuf);
-	freeMem(valBuf);
-	valBuf = needHugeMem(bufSize * sizeof(double));
-	covBuf = bitAlloc(bufSize);
-	}
-
-    /* Zero out buffers */
-    bitClear(covBuf, chromSize);
-    int i;
-    for (i=0; i<chromSize; ++i)
-	valBuf[i] = 0.0;
-
-    /* Fetch intervals for this chromosome and fold into buffers. */
-    struct lm *lm = lmInit(0);
-    struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bbi, chrom, 0, chromSize, lm);
-    for (iv = ivList; iv != NULL; iv = iv->next)
-	{
-	double val = iv->val;
-	int end = iv->end;
-	for (i=iv->start; i<end; ++i)
-	    valBuf[i] = val;
-	bitSetRange(covBuf, iv->start, iv->end - iv->start);
-	}
-    lmCleanup(&lm);
-
 
     struct encodePeak *peak;
     int fullSize = neighborhoodSize;
@@ -319,8 +257,6 @@ for (chromStart = inList; chromStart != NULL; chromStart = chromEnd)
 	    }
 	}
     }
-freez(&valBuf);
-freez(&covBuf);
 slReverse(&outList);
 return outList;
 }
@@ -365,6 +301,7 @@ for (ctcf = ctcfList; ctcf != NULL; ctcf = ctcf->next)
 
 struct bbiFile *txnBbi = bigWigFileOpen(txnWig);
 struct bbiFile *h3k4me1Bbi = bigWigFileOpen(h3k4me1Wig);
+struct bigWigValsOnChrom *chromVals = bigWigValsOnChromNew();
 
 uglyf("Initial: %d\n", slCount(dnaseList));
 slSort(&dnaseList, encodePeakCmpSignalVal);
@@ -376,9 +313,9 @@ dnaseList = filterOutOverlapping(dnaseList, ctcfRanges);
 uglyf("nonCtcf: %d\n", slCount(dnaseList));
 dnaseList = filterOutOverlapping(dnaseList, promoterRanges);
 uglyf("nonPromoter: %d\n", slCount(dnaseList));
-dnaseList = filterOutTranscribed(dnaseList, txnBbi);
+dnaseList = filterOutTranscribed(dnaseList, txnBbi, chromVals);
 uglyf("nonTranscribed: %d\n", slCount(dnaseList));
-dnaseList = filterOutUnderInNeighborhood(dnaseList, h3k4me1Bbi, 1000, 2.5);
+dnaseList = filterOutUnderInNeighborhood(dnaseList, h3k4me1Bbi, chromVals, 1000, 2.5);
 uglyf("gotH3k4me1: %d\n", slCount(dnaseList));
 
 FILE *f = mustOpen(outputTab, "w");
