@@ -14,6 +14,7 @@
 #include "genomeRangeTree.h"
 #include "bigWig.h"
 #include "basicBed.h"
+#include "hmmstats.h"
 #include "encode/encodePeak.h"
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
@@ -35,7 +36,7 @@ errAbort(
   "   txn.bigWig is a RNA-seq derived file for this cell line\n"
   "   ctcf.peak is a narrow peak format file with CTCF called peaks\n"
   "   h3k4me1.bigWig is a histone H3K4Me1 derived chip seq signal file\n"
-  "   output.tab is the output in a bed 5 format\n"
+  "   output.peak is the subset of dnase.peak that passes all the filters\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -45,7 +46,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-int encodePeakCmp(const void *va, const void *vb)
+int encodePeakCmpChrom(const void *va, const void *vb)
 /* Compare to sort based on chrom,chromStart. */
 {
 const struct encodePeak *a = *((struct encodePeak **)va);
@@ -56,6 +57,21 @@ if (dif == 0)
     dif = a->chromStart - b->chromStart;
 return dif;
 }
+
+int encodePeakCmpSignalVal(const void *va, const void *vb)
+/* Compare to sort based on signalValue */
+{
+const struct encodePeak *a = *((struct encodePeak **)va);
+const struct encodePeak *b = *((struct encodePeak **)vb);
+double dif = b->signalValue - a->signalValue;
+if (dif < 0)
+    return -1;
+else if (dif == 0)
+    return 0;
+else
+    return 1;
+}
+
 
 struct encodePeak *narrowPeakLoadAll(char *fileName)
 /* Load all narrowPeaks in file. */
@@ -73,14 +89,23 @@ slReverse(&list);
 return list;
 }
 
-struct encodePeak *filterOnSignal(struct encodePeak *inList, double minSignal)
-/* Return sublist of inList that has signal >= minSignal */
+struct encodePeak *filterOnListSize(struct encodePeak *inList, int maxRetSize)
+/* Return sublist of inList that has at most maxRetSize items. */
+{
+struct encodePeak *lastEl = slElementFromIx(inList, maxRetSize-1);
+if (lastEl != NULL)
+     lastEl->next = NULL;
+return inList;
+}
+
+struct encodePeak *filterOnSignal(struct encodePeak *inList, double minValue)
+/* Return sublist of inList that has at most maxRetSize items. */
 {
 struct encodePeak *outList = NULL, *el, *next;
 for (el = inList; el != NULL; el = next)
     {
     next = el->next;
-    if (el->signalValue >= minSignal)
+    if (el->signalValue >= minValue)
         slAddHead(&outList, el);
     }
 slReverse(&outList);
@@ -101,18 +126,214 @@ slReverse(&outList);
 return outList;
 }
 
+struct encodePeak *nextPeakOutOfChrom(struct encodePeak *list, char *chrom)
+/* Return next peak in list that is not in the same chromosome.  May return NULL at end. */
+{
+struct encodePeak *el;
+for (el = list; el != NULL; el = el->next)
+    if (!sameString(chrom, el->chrom))
+        break;
+return el;
+}
+
+struct encodePeak *filterOutTranscribed(struct encodePeak *inList, struct bbiFile *bbi)
+/* Return sublist of inList that has low average transcription for self and 100 bases on
+ * either side. Assumes inList is sorted by chromosome.  This is more to get rid of promoters
+ * that didn't make it into gene set than anything. */
+{
+struct encodePeak *outList = NULL;
+struct encodePeak *peak, *next, *chromStart, *chromEnd;
+
+double *valBuf = NULL;
+Bits *covBuf = NULL;
+int bufSize = 0;
+
+for (chromStart = inList; chromStart != NULL; chromStart = chromEnd)
+    {
+    char *chrom = chromStart->chrom;
+    chromEnd = nextPeakOutOfChrom(chromStart->next, chrom);
+    int chromSize = bbiChromSize(bbi, chrom);
+
+    if (chromSize == 0)	/* No transcription on this chromosome, so add all peaks. */
+        {
+	for (peak = chromStart; peak != chromEnd; peak = next)
+	    {
+	    next = peak->next;
+	    slAddHead(&outList, peak);
+	    }
+	continue;
+	}
+
+    /* Make sure merge buffers are big enough. */
+    if (chromSize > bufSize)
+	{
+	bufSize = chromSize;
+	freeMem(covBuf);
+	freeMem(valBuf);
+	valBuf = needHugeMem(bufSize * sizeof(double));
+	covBuf = bitAlloc(bufSize);
+	}
+
+    /* Zero out buffers */
+    bitClear(covBuf, chromSize);
+    int i;
+    for (i=0; i<chromSize; ++i)
+	valBuf[i] = 0.0;
+
+    /* Fetch intervals for this chromosome and fold into buffers. */
+    struct lm *lm = lmInit(0);
+    struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bbi, chrom, 0, chromSize, lm);
+    for (iv = ivList; iv != NULL; iv = iv->next)
+	{
+	double val = iv->val;
+	int end = iv->end;
+	for (i=iv->start; i<end; ++i)
+	    valBuf[i] = val;
+	bitSetRange(covBuf, iv->start, iv->end - iv->start);
+	}
+    lmCleanup(&lm);
+
+
+    struct encodePeak *peak;
+    for (peak = chromStart; peak != chromEnd; peak = next)
+        {
+	next = peak->next;
+	int start = peak->chromStart - 100;
+	if (start < 0) start = 0;
+	int end = peak->chromEnd + 100;
+	if (end >chromSize) end = chromSize;
+
+	double ave = 0;
+	int size = end - start;
+	if (size > 0)
+	    {
+	    double sum = 0;
+	    int i;
+	    for (i=start; i<end; ++i)
+		sum += valBuf[i];
+	    ave = sum/size;
+	    }
+
+	if (ave < 10)
+	    {
+	    slAddHead(&outList, peak);
+	    }
+	}
+    }
+slReverse(&outList);
+return outList;
+}
+
+struct encodePeak *filterOutUnderInNeighborhood(struct encodePeak *inList, struct bbiFile *bbi,
+	int neighborhoodSize, double stdDevAboveMean)
+/* Return sublist of inList that has low average transcription for self and 100 bases on
+ * either side. Assumes inList is sorted by chromosome. */
+{
+struct encodePeak *outList = NULL;
+struct encodePeak *peak, *next, *chromStart, *chromEnd;
+
+double *valBuf = NULL;
+Bits *covBuf = NULL;
+int bufSize = 0;
+
+/* Figure out threshold based on stdDevAboveMean */
+struct bbiSummaryElement summary = bbiTotalSummary(bbi);
+double mean = summary.sumData / summary.validCount;
+double std = calcStdFromSums(summary.sumData, summary.sumSquares, summary.validCount);
+double minSignal = mean + stdDevAboveMean * std;
+
+for (chromStart = inList; chromStart != NULL; chromStart = chromEnd)
+    {
+    char *chrom = chromStart->chrom;
+    chromEnd = nextPeakOutOfChrom(chromStart->next, chrom);
+    int chromSize = bbiChromSize(bbi, chrom);
+
+    if (chromSize == 0)	/* No transcription on this chromosome, so add all peaks. */
+        {
+	for (peak = chromStart; peak != chromEnd; peak = next)
+	    {
+	    next = peak->next;
+	    slAddHead(&outList, peak);
+	    }
+	continue;
+	}
+
+    /* Make sure merge buffers are big enough. */
+    if (chromSize > bufSize)
+	{
+	bufSize = chromSize;
+	freeMem(covBuf);
+	freeMem(valBuf);
+	valBuf = needHugeMem(bufSize * sizeof(double));
+	covBuf = bitAlloc(bufSize);
+	}
+
+    /* Zero out buffers */
+    bitClear(covBuf, chromSize);
+    int i;
+    for (i=0; i<chromSize; ++i)
+	valBuf[i] = 0.0;
+
+    /* Fetch intervals for this chromosome and fold into buffers. */
+    struct lm *lm = lmInit(0);
+    struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bbi, chrom, 0, chromSize, lm);
+    for (iv = ivList; iv != NULL; iv = iv->next)
+	{
+	double val = iv->val;
+	int end = iv->end;
+	for (i=iv->start; i<end; ++i)
+	    valBuf[i] = val;
+	bitSetRange(covBuf, iv->start, iv->end - iv->start);
+	}
+    lmCleanup(&lm);
+
+
+    struct encodePeak *peak;
+    int fullSize = neighborhoodSize;
+    int halfSize = fullSize/2;
+    for (peak = chromStart; peak != chromEnd; peak = next)
+        {
+	next = peak->next;
+	int center = (peak->chromStart + peak->chromEnd)/2;
+	int start = center - halfSize;
+	int end = start + fullSize;
+	if (start < 0) start = 0;
+	if (end >chromSize) end = chromSize;
+	int size = end - start;
+	double ave = 0;
+	if (size > 0)
+	    {
+	    int n = bitCountRange(covBuf, start, size);
+	    if (n > 0)
+		{
+		double sum = 0;
+		int i;
+		for (i=start; i<end; ++i)
+		    sum += valBuf[i];
+		ave = sum/n;
+		}
+	    }
+	if (ave >= minSignal)
+	    {
+	    slAddHead(&outList, peak);
+	    }
+	}
+    }
+freez(&valBuf);
+freez(&covBuf);
+slReverse(&outList);
+return outList;
+}
+
 
 void regCompanionPickEnhancers(char *dnasePeaks, char *genesBed, char *txnWig, char *ctcfPeaks,
 	char *h3k4me1Wig, char *outputTab)
 /* regCompanionPickEnhancers - Pick enhancer regions by a number of criteria. */
 {
 struct encodePeak *dnaseList = narrowPeakLoadAll(dnasePeaks);
-slSort(&dnaseList, encodePeakCmp);
-uglyf("Loaded %d peaks in %s\n", slCount(dnaseList), dnasePeaks);
 
 /* Load up genes and fill up genome range tree with promoters from them. */
 struct bed *geneList = bedLoadAll(genesBed);
-uglyf("Loaded %d genes in %s\n", slCount(geneList), genesBed);
 struct genomeRangeTree *promoterRanges = genomeRangeTreeNew();
 struct bed *gene;
 int start=0, end=0;
@@ -133,30 +354,40 @@ for (gene = geneList; gene != NULL; gene = gene->next)
        errAbort("Gene %s has strand '%c' - has to be '+' or '-'", gene->name, strand);
     genomeRangeTreeAdd(promoterRanges, gene->chrom, start, end);
     }
-uglyf("Loaded genomeRangeTree\n");
 
 struct encodePeak *ctcfList = narrowPeakLoadAll(ctcfPeaks);
-uglyf("Loaded %d peaks in %s\n", slCount(ctcfList), ctcfPeaks);
 struct genomeRangeTree *ctcfRanges = genomeRangeTreeNew();
 struct encodePeak *ctcf;
 for (ctcf = ctcfList; ctcf != NULL; ctcf = ctcf->next)
     {
     genomeRangeTreeAdd(ctcfRanges, ctcf->chrom, ctcf->chromStart, ctcf->chromEnd);
     }
-uglyf("Loaded ctcfRanges\n");
 
 struct bbiFile *txnBbi = bigWigFileOpen(txnWig);
-uglyf("%s version is %d\n", txnWig, txnBbi->version);
 struct bbiFile *h3k4me1Bbi = bigWigFileOpen(h3k4me1Wig);
-uglyf("%s version is %d\n", h3k4me1Wig, h3k4me1Bbi->version);
 
 uglyf("Initial: %d\n", slCount(dnaseList));
-dnaseList = filterOnSignal(dnaseList, 40);
-uglyf("Signal>40: %d\n", slCount(dnaseList));
-dnaseList = filterOutOverlapping(dnaseList, promoterRanges);
-uglyf("nonPromoter: %d\n", slCount(dnaseList));
+slSort(&dnaseList, encodePeakCmpSignalVal);
+// dnaseList = filterOnSignal(dnaseList, 40);
+dnaseList = filterOnListSize(dnaseList, 50000);
+uglyf("top50k: %d\n", slCount(dnaseList));
+slSort(&dnaseList, encodePeakCmpChrom);
 dnaseList = filterOutOverlapping(dnaseList, ctcfRanges);
 uglyf("nonCtcf: %d\n", slCount(dnaseList));
+dnaseList = filterOutOverlapping(dnaseList, promoterRanges);
+uglyf("nonPromoter: %d\n", slCount(dnaseList));
+dnaseList = filterOutTranscribed(dnaseList, txnBbi);
+uglyf("nonTranscribed: %d\n", slCount(dnaseList));
+dnaseList = filterOutUnderInNeighborhood(dnaseList, h3k4me1Bbi, 1000, 2.5);
+uglyf("gotH3k4me1: %d\n", slCount(dnaseList));
+
+FILE *f = mustOpen(outputTab, "w");
+struct encodePeak *peak;
+for (peak = dnaseList; peak != NULL; peak = peak->next)
+    {
+    encodePeakOutputWithType(peak, narrowPeak, f);
+    }
+carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
