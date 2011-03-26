@@ -424,7 +424,7 @@ boolean ok = netGetFtpInfo(url, &size, &tUtc);
 if (!ok)
     return FALSE;
 // Convert UTC to localtime
-tm = gmtime(&tUtc);
+tm = localtime(&tUtc);
 t = mktimeFromUtc(tm);
 if (t == -1)
     { /* Handle error */;
