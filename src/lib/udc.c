@@ -398,7 +398,7 @@ t = mktimeFromUtc(&tm);
 if (t == -1)
     { /* Handle error */;
     hashFree(&hash);
-    errAbort("mktimeFromUtc failed while converting last-modified string [%s] to UTC time", lastModString);
+    errAbort("mktimeFromUtc failed while converting last-modified string [%s] from UTC time", lastModString);
     }
 retInfo->updateTime = t;
 
@@ -416,12 +416,20 @@ boolean udcInfoViaFtp(char *url, struct udcRemoteFileInfo *retInfo)
 {
 verbose(2, "checking ftp remote info on %s\n", url);
 long long size = 0;
-time_t t;
+time_t t, tUtc;
+struct tm *tm = NULL;
 // TODO: would be nice to add int *retCtrlSocket to netGetFtpInfo so we can stash 
 // in retInfo->connInfo and keep socket open.
-boolean ok = netGetFtpInfo(url, &size, &t);
+boolean ok = netGetFtpInfo(url, &size, &tUtc);
 if (!ok)
     return FALSE;
+// Convert UTC to localtime
+tm = gmtime(&tUtc);
+t = mktimeFromUtc(tm);
+if (t == -1)
+    { /* Handle error */;
+    errAbort("mktimeFromUtc failed while converting FTP UTC last-modified time %ld to local time", (long) tUtc);
+    }
 retInfo->size = size;
 retInfo->updateTime = t;
 return TRUE;
