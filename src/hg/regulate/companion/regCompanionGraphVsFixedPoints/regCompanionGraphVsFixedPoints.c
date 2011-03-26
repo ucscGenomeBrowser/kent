@@ -62,9 +62,7 @@ struct slName *inFileList = readAllLines(inBigWigFileList);
 FILE *f = mustOpen(outTab, "w");
 
 /* Set up some buffers and variables to hold unpacked double-per-base representation. */
-double *valBuf = NULL;
-Bits *covBuf = NULL;
-int bufSize = 0;
+struct bigWigValsOnChrom *chromVals = bigWigValsOnChromNew();
 
 int sumBufSize = fetchBefore + fetchAfter;
 double *sumBuf;
@@ -91,43 +89,17 @@ for (inFile = inFileList; inFile != NULL; inFile = inFile->next, ++inIx)
 	{
 	/* Figure out end condition. */
 	endChrom = nextChromDifferent(startChrom);
-
-	/* Fetch intervals and use them to paint array of doubles. */
 	char *chrom = startChrom->chrom;
-	int chromSize = bbiChromSize(bbi, chrom);
-	if (chromSize > 0)   /* It's legit for it to be zero - just no data for that chrom */
+
+	if (bigWigValsOnChromFetchData(chromVals, chrom, bbi))
 	    {
-	    /* Make sure  buffers are big enough. */
-	    if (chromSize > bufSize)
-		{
-		bufSize = chromSize;
-		freeMem(covBuf);
-		freeMem(valBuf);
-		valBuf = needHugeMem(bufSize * sizeof(double));
-		covBuf = bitAlloc(bufSize);
-		}
-
-	    /* Zero out buffers */
-	    bitClear(covBuf, chromSize);
-	    for (i=0; i<chromSize; ++i)
-		valBuf[i] = 0.0;
-
-	    /* Fetch intervals for this chromosome and fold into buffers. */
-	    struct lm *lm = lmInit(0);
-	    struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bbi, chrom, 0, chromSize, lm);
-	    for (iv = ivList; iv != NULL; iv = iv->next)
-		{
-		double val = iv->val;
-		int end = iv->end;
-		for (i=iv->start; i<end; ++i)
-		    valBuf[i] = val;
-		bitSetRange(covBuf, iv->start, iv->end - iv->start);
-		}
+	    /* Fetch intervals and use them to paint array of doubles. */
+	    int chromSize = chromVals->chromSize;
 
 	    /* Now loop through beds for this chromosome, adding to sums. */
 	    struct bed *bed;
 	    for (bed = startChrom; bed != endChrom; bed = bed->next)
-	        {
+		{
 		char strand = bed->strand[0];
 		int bufIx, bufIxInc;
 		int start, end, pos;
@@ -155,13 +127,15 @@ for (inFile = inFileList; inFile != NULL; inFile = inFile->next, ++inIx)
 		    }
 		if (rangeIntersection(start, end, 0, chromSize) == sumBufSize)
 		    {
+		    Bits *covBuf = chromVals->covBuf;
+		    double *valBuf = chromVals->valBuf;
 		    for (i=start; i<end; ++i)
 			{
 			if (bitReadOne(covBuf, i))
 			    {
 			    double val = valBuf[i];
 			    if (val > maxVal)
-			        val = maxVal;
+				val = maxVal;
 			    sumBuf[bufIx] += val;
 			    nBuf[bufIx] += 1;
 			    }
@@ -171,7 +145,6 @@ for (inFile = inFileList; inFile != NULL; inFile = inFile->next, ++inIx)
 			}
 		    }
 		}
-	    lmCleanup(&lm);
 	    }
 	}
     bigWigFileClose(&bbi);

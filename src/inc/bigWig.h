@@ -23,6 +23,9 @@
 #include "bbiFile.h"
 #endif
 
+#ifndef BITS_H
+#include "bits.h"
+#endif
 
 void bigWigFileCreate(
 	char *inName, 		/* Input file in ascii wiggle format. */
@@ -71,5 +74,29 @@ boolean isBigWig(char *fileName);
 
 boolean bigWigFileCheckSigs(char *fileName);
 /* check file signatures at beginning and end of file */
+
+
+struct bigWigValsOnChrom
+/* Object for bulk access a chromosome at a time.  This is faster than
+ * doing bigWigInterval queries when you have ~5000 or more queries. */
+     {
+     struct bigWigValsOnChrom *next;
+     char *chrom;	/* Current chromosome. */
+     long chromSize;	/* Size of current chromosome. */
+     long bufSize;	/* Size of allocated buffer */
+     double *valBuf;	/* A value for each base on chrom. Zero where no data. */
+     Bits *covBuf;	/* A bit for each base with data. */
+     };
+
+struct bigWigValsOnChrom *bigWigValsOnChromNew();
+/* Allocate new empty bigWigValsOnChromStructure. */
+
+void bigWigValsOnChromFree(struct bigWigValsOnChrom **pChromVals);
+/* Free up bigWigValsOnChrom */
+
+boolean bigWigValsOnChromFetchData(struct bigWigValsOnChrom *chromVals, char *chrom, 
+	struct bbiFile *bigWig);
+/* Fetch data for chromosome from bigWig. Returns FALSE if not data on that chrom. */
+
 #endif /* BIGWIG_H */
 
