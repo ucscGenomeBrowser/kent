@@ -24,6 +24,7 @@ wgEncodeReg.ra\
 wgEncodeRikenCage.ra\
 wgEncodeSangerGencode.ra\
 wgEncodeSunyalbanyRnaGeneChip.ra\
+wgEncodeUmasshaTfbsValid.ra\
 wgEncodeUwAffyExonArray.ra\
 wgEncodeUwChIPSeq.ra\
 wgEncodeUwDGF.ra\
