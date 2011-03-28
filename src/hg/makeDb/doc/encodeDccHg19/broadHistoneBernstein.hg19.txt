@@ -4929,3 +4929,28 @@ gzip wgEncodeBroadHmmNhlf.bed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3012 released
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3073 released
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3074 released
+
+2011-03-28 Broad HMM (lift over from hg18)
+==========================================
+Jason submitted
+3823
+After manipulating the DAF, got this loaded.
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3823 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3823 approved
+cd {downhg19}/wgEncodeBroadHmm
+mkdir release1
+ln -sf release1/ releaseLatest
+ln -sf release1/ beta
+cp index.html release1/
+cp files.txt release1/
+cp md5sum.txt release1/
+cd release1/
+ln ../*.gz .
+cd ..
+~/bin/scripts/encodeMkChangeNotes hg19 release1 - > release1/wgEncodeBroadHmm.release1.notes
+mv release1/wgEncodeBroadHmm.release1.notes ~/kent/src/hg/makeDb/doc/encodeDccHg19/
+cd ~/kent/src/hg/makeDb/doc/encodeDccHg19/
+e wgEncodeBroadHmm.release1.notes # make sure it looks okay
+
+# standardized liftOver message in description.
+# added to pushQ
