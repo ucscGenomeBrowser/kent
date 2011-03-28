@@ -251,7 +251,6 @@ wgEncode 1
         subGroups view=ALN win=w036
         type wig 0.00 1.00
         color 133,0,173
-        metadata project=wgEncode grant=Bernstein lab=Broad dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE July 2009 Freeze" subId=344 composite=wgEncodeMapability tableName=wgEncodeBroadMapabilityAlign36mer fileName=wgEncodeBroadMapabilityAlign36mer.wig.gz
 
     track wgEncodeMapabilityViewDUNIQ
     shortLabel Duke Uniqueness
@@ -272,7 +271,6 @@ wgEncode 1
         subGroups view=DUNIQ win=w020
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=20bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness20bp fileName=wgEncodeDukeUniqueness20bp.wig.gz
 
         track wgEncodeDukeUniqueness24bp
         subTrack wgEncodeMapabilityViewDUNIQ off
@@ -282,7 +280,6 @@ wgEncode 1
         subGroups view=DUNIQ win=w024
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=24bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
 
         track wgEncodeDukeUniqueness35bp
         subTrack wgEncodeMapabilityViewDUNIQ
@@ -292,7 +289,6 @@ wgEncode 1
         subGroups view=DUNIQ win=w035
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=35bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
 
     track wgEncodeMapabilityViewRUNIQ
     shortLabel Rosetta Uniqueness
@@ -336,7 +332,6 @@ wgEncode 1
         subGroups view=UUNIQ win=w015
         type wig 0.00 1.00
         color 46,0,184
-        metadata project=wgEncode grant=Dekker lab=UMass-Dekker dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
 
     track wgEncodeMapabilityViewXR
     shortLabel Duke Excluded Regions
@@ -350,7 +345,6 @@ wgEncode 1
         subGroups view=XR win=zNA
         type bed 6
         noScoreFilter on
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Excludable labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
 
     track wgEncodeMapabilityViewCRGMAP
     shortLabel CRG GEM Alignability
@@ -369,7 +363,6 @@ wgEncode 1
         subGroups view=CRGMAP win=w036
         type bigWig 0.00 1.00
         color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign36mer fileName=wgEncodeMapabilityAlign36mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign40mer
         subTrack wgEncodeMapabilityViewCRGMAP
@@ -378,7 +371,6 @@ wgEncode 1
         subGroups view=CRGMAP win=w040
         type bigWig 0.00 1.00
         color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=40mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign40mer fileName=wgEncodeMapabilityAlign40mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign50mer
         subTrack wgEncodeMapabilityViewCRGMAP
@@ -387,7 +379,6 @@ wgEncode 1
         subGroups view=CRGMAP win=w050
         type bigWig 0.00 1.00
         color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=50mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign50mer fileName=wgEncodeMapabilityAlign50mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign75mer
         subTrack wgEncodeMapabilityViewCRGMAP
@@ -396,7 +387,6 @@ wgEncode 1
         subGroups view=CRGMAP win=w075
         type bigWig 0.00 1.00
         color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=75mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign75mer fileName=wgEncodeMapabilityAlign75mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign100mer
         subTrack wgEncodeMapabilityViewCRGMAP
@@ -405,7 +395,6 @@ wgEncode 1
         subGroups view=CRGMAP win=w100
         type bigWig 0.00 1.00
         color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=100mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign100mer fileName=wgEncodeMapabilityAlign100mer.bw.gz
 
         
 # NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
@@ -422,7 +411,6 @@ priority 0
 compareGenomeLinks panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
 wgEncode 1
 filterBy score:Annotation=800|A)_UCSC_genes,600|B)_GenBank_mRNA_annotations,400|C)_spliced_ESTs
-metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=hg18 dataVersion="ENCODE July 2009 Freeze" subId=294 dateSubmitted=2009-04-27 dateUnrestricted=2010-01-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.hg18.bed8.gz
 
 # NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
 
@@ -458,7 +446,6 @@ wgEncode 1
         subGroups view=SI cellType=K562 promoter=Ggam
         type bed 6
         color 46,0,184
-        metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=G-gamma view=Silencers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNRESilencersK562Ggamma fileName=wgEncodeNhgriNRESilencersK562Ggamma.bed6.gz
 
         track wgEncodeNhgriNRESilencersK562Sv40
         subTrack wgEncodeNhgriNreViewSI
@@ -467,7 +454,6 @@ wgEncode 1
         subGroups view=SI cellType=K562 promoter=SV40
         type bed 6
         color 46,0,184
-        metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=SV40 view=Silencers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNRESilencersK562Sv40 fileName=wgEncodeNhgriNRESilencersK562Sv40.bed6.gz
 
     track wgEncodeNhgriNreViewEB
     shortLabel Enhancer Blockers
@@ -483,7 +469,6 @@ wgEncode 1
         subGroups view=EB cellType=K562 promoter=Ggam
         type bed 6
         color 46,0,184
-        metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=G-gamma view=Enhancer_Blockers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNREEnhancerBlockersK562Ggamma fileName=wgEncodeNhgriNREEnhancerBlockersK562Ggamma.bed6.gz
 
         track wgEncodeNhgriNREEnhancerBlockersK562Sv40
         subTrack wgEncodeNhgriNreViewEB
@@ -492,7 +477,6 @@ wgEncode 1
         subGroups view=EB cellType=K562 promoter=SV40
         type bed 6
         color 46,0,184
-        metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=SV40 view=Enhancer_Blockers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNREEnhancerBlockersK562Sv40 fileName=wgEncodeNhgriNREEnhancerBlockersK562Sv40.bed6.gz
 
 # Riken CAGE (wrangler: braney)
 include wgEncodeRikenCage.ra
