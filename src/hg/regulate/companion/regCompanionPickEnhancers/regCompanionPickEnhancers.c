@@ -1,5 +1,5 @@
 /* regCompanionPickEnhancers - Pick enhancer regions by a number of criteria. 
- *  o Start with DNAse called peak at least 40 strong.
+ *  o Start with the top 50,000 DNAse peaks for the cell line.
  *  o No overlap with CTCF peak.
  *  o No overlap with promoter (+-400 bytes from txStart)
  *  o Minimal transcription within 100 bases on either side(< 10 average)
