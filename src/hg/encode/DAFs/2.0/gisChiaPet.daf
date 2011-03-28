@@ -35,6 +35,13 @@ type             bed 12
 hasReplicates    yes
 required         yes
 
+view             Signal
+longLabelPrefix  ChIA-PET Signal
+type             bigWig
+hasReplicates    yes
+required         yes
+downloadOnly     no 
+
 view             Alignments
 longLabelPrefix  ChIA-PET Alignments
 type             bam
