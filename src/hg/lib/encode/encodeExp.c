@@ -805,7 +805,7 @@ freez(&exp);
 return found;
 }
 
-char *encodeGetAccessionByMdbVars(char *db, struct mdbVar *vars)
+char *encodeExpGetAccessionByMdbVars(char *db, struct mdbVar *vars)
 /* Return accession of (first) experiment matching vars, or NULL if not found */
 {
 struct encodeExp *exp = encodeExpGetByMdbVars(db, vars);
