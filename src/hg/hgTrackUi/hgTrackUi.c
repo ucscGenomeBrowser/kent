@@ -2709,7 +2709,9 @@ if (!tdbIsDownloadsOnly(tdb))
         if (tdbIsSuper(tdb))
             {
             /* This is a supertrack -- load its members and show hide/show dropdown */
-            hTrackDbLoadSuper(database, tdb);
+	    // hub tracks already have their subtracks loaded
+	    if (!isHubTrack(tdb->track))
+		hTrackDbLoadSuper(database, tdb);
             superTrackDropDown(cart, tdb, 1);
             }
         else

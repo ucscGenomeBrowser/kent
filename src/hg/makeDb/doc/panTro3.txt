@@ -1630,3 +1630,178 @@ done
     rm multiz12way*.tab
 
 #########################################################################
+# lifting ensGene from panTro2 (DONE - 2011-03-23 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/ensGene.61
+    cd /hive/data/genomes/panTro3/bed/ensGene.61
+
+    # start with panTro2 ensGene (it is v61 identical to v60)
+    hgsql -N -e "select * from ensGene;" panTro2 | cut -f2- > panTro2.ensGene.gp
+    # lift over to panTro3
+    liftOver -genePred  panTro2.ensGene.gp \
+/usr/local/apache/htdocs-hgdownload/goldenPath/panTro2/liftOver/panTro2ToPanTro3.over.chain.gz \
+panTro3.ensGene.gp unMapped.txt
+    # check to see which genes have gone bad
+    genePredCheck -db=panTro3 panTro3.ensGene.gp > badOnes.txt 2>&1
+    #	checked: 38471 failed: 62
+    awk '{print $3}' badOnes.txt | sort -u | grep -v failed > toRemove.txt
+    # remove the bad ones
+    cp -p panTro3.ensGene.gp panTro3.unfiltered.ensGene.gp
+for N in `cat toRemove.txt`
+do
+    rm -f t.gp
+    grep -v "${N}" panTro3.ensGene.gp > t.gp
+    rm -f panTro3.ensGene.gp
+    mv t.gp panTro3.ensGene.gp
+done
+    genePredCheck -db=panTro3 panTro3.ensGene.gp
+    #	checked: 38446 failed: 0
+    # OK to load this since all are OK now
+    hgLoadGenePred  -genePredExt panTro3 ensGene panTro3.ensGene.gp
+    genePredCheck -db=panTro3 ensGene
+    #	checked: 38446 failed: 0
+    # use the ensPep and ensGtp from panTro2, but remove the bad ones
+    cat /hive/data/genomes/panTro2/bed/ensGene.60/download/Pan_troglodytes.CHIMP2.1.60.pep.all.fa.gz \
+        | sed -e 's/^>.* transcript:/>/; s/ CCDS.*$//;' | gzip > ensPep.txt.gz
+zcat ensPep.txt.gz \
+    | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \
+         | sed -e '/^$/d; s/*$//' | sort > ensPep.panTro2.fa.tab
+
+    cp -p ensPep.panTro2.fa.tab ensPep.panTro3.fa.tab
+    for N in `cat toRemove.txt` 
+do
+    rm -f t.fa.tab
+    grep -v "${N}" ensPep.panTro3.fa.tab > t.fa.tab
+    rm -f panTro3.ensGene.fa.tab
+    mv t.fa.tab panTro3.ensGene.fa.tab
+    echo "${N}" 
+done
+
+    wc -l ensPep.panTro2.fa.tab ensPep.panTro3.fa.tab
+    awk '{print $1}' panTro2.ensGene.gp | sort -u > panTro2.name.list
+    awk '{print $1}' panTro3.ensGene.gp | sort -u > panTro3.name.list
+    cp -p /hive/data/genomes/panTro2/bed/ensGene.60/process/ensGtp.tab \
+        ./panTro2.ensGtp.tab
+
+    cp -p panTro2.ensGtp.tab panTro3.ensGtp.tab
+    comm -23 panTro2.name.list panTro3.name.list | while read N
+do
+    rm -f t.gtp.tab
+    grep -v "${N}" panTro3.ensGtp.tab > t.gtp.tab
+    rm -f panTro3.ensGtp.tab
+    mv t.gtp.tab panTro3.ensGtp.tab
+    echo "${N}"
+done
+    cp -p ensPep.panTro2.fa.tab ensPep.panTro3.fa.tab
+    comm -23 panTro2.name.list panTro3.name.list | while read N
+do
+    rm -f t.fa.tab
+    grep -v "${N}" ensPep.panTro3.fa.tab > t.fa.tab
+    rm -f ensPep.panTro3.fa.tab
+    mv t.fa.tab ensPep.panTro3.fa.tab
+    echo "${N}" 
+done
+
+    # now that those are clean, load them up
+    hgPepPred panTro3 tab ensPep ensPep.panTro3.fa.tab
+    hgLoadSqlTab panTro3 ensGtp ~/kent/src/hg/lib/ensGtp.sql panTro3.ensGtp.tab
+    # and record version in trackVersion
+hgsql -e 'INSERT INTO trackVersion \
+    (db, name, who, version, updateTime, comment, source, dateReference) \
+    VALUES("panTro3", "ensGene", "hiram", "61", now(), \
+        "peptides lifted from panTro2", \
+        "genes lifted from panTro2 ensGene v61", "current" );' hgFixed
+
+#########################################################################
+# MULTIZ12WAY MAF FRAMES (DONE - 2011-03-24 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panTro3/bed/multiz12way/frames
+    cd /hive/data/genomes/panTro3/bed/multiz12way/frames
+    mkdir genes
+
+    # looked at rn4 knownGene and only found 7,044 genes
+    #	the rn4 ensGene had 22,857 so use that instead
+# panTro3 ensGene
+# hg19 knownGene
+# ponAbe2 ensGene
+# rheMac2 ensGene
+# calJac3 ensGene
+# mm9	knownGene
+# rn4	ensGene
+# equCab2 ensGene
+# canFam2 ensGene
+# monDom5 ensGene
+# galGal3 ensGene
+# danRer7 ensGene
+
+panTro3 ponAbe2 rheMac2 calJac3 equCab2 canFam2 monDom5 galGal3 danRer7
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using ensGene for:
+# panTro3 ponAbe2 rheMac2 calJac3 equCab2 canFam2 monDom5 galGal3 danRer7
+for qDB in panTro3 ponAbe2 rheMac2 calJac3 rn4 equCab2 canFam2 monDom5 galGal3 danRer7
+do
+  echo hgsql -N -e \"'select * from 'ensGene\;\" ${qDB}
+      hgsql -N -e "select * from ensGene" ${qDB} | cut -f 2-11 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+done
+
+    # using knownGene for mm9 hg19
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    for qDB in mm9 hg19
+    do
+      echo hgsql -N -e \"'select * from 'knownGene\;\" ${qDB}
+      hgsql -N -e "select * from knownGene" ${qDB} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+    done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+
+# genes/calJac3.gp.gz: 20442
+# genes/canFam2.gp.gz: 19245
+# genes/danRer7.gp.gz: 25857
+# genes/equCab2.gp.gz: 20403
+# genes/galGal3.gp.gz: 16491
+# genes/hg19.gp.gz: 20597
+# genes/mm9.gp.gz: 20905
+# genes/monDom5.gp.gz: 19188
+# genes/panTro3.gp.gz: 18414
+# genes/ponAbe2.gp.gz: 19895
+# genes/rheMac2.gp.gz: 21049
+# genes/rn4.gp.gz: 22857
+
+    ssh hgwdev
+    cd /hive/data/genomes/panTro3/bed/multiz12way/frames
+    cat ../anno/multiz12way.maf \
+	| nice -n +19 genePredToMafFrames panTro3 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+		| gzip > multiz12way.mafFrames.gz
+    #	real    15m16.538s
+    # verify there are frames on everything:
+    zcat multiz12way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
+    #	213564 calJac3
+    #	237030 canFam2
+    #	48444 danRer7
+    #	219472 equCab2
+    #	180209 galGal3
+    #	196670 hg19
+    #	229023 mm9
+    #	214937 monDom5
+    #	170067 panTro3
+    #	203651 ponAbe2
+    #	202922 rheMac2
+    #	225811 rn4
+
+    ssh hgwdev
+    cd /hive/data/genomes/panTro3/bed/multiz12way/frames
+    time hgLoadMafFrames panTro3 multiz12wayFrames multiz12way.mafFrames.gz
+    #	real    0m23.641s
+
+#########################################################################
