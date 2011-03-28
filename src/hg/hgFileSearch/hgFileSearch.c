@@ -43,6 +43,41 @@ boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTim
 
 #define MATCH_ON_EACH_WORD
 #ifdef MATCH_ON_EACH_WORD
+#define MATCH_ON_WILDS
+static boolean matchToken(char *string, char *token)
+{
+if (string == NULL)
+    return (token == NULL);
+if (token == NULL)
+    return TRUE;
+
+if (!strchr(token,'*') && !strchr(token,'?'))
+    return (strcasestr(string,token) != NULL);
+
+#ifdef MATCH_ON_WILDS
+char wordWild[1024];
+safef(wordWild,sizeof wordWild,"*%s*",token);
+return wildMatch(wordWild, string);
+
+// do this with regex ? Would require all sorts of careful parsing for ()., etc.
+//safef(wordWild,sizeof wordWild,"^*%s*$",token);
+//regex_t regEx;
+//int err = regcomp(&regEx, token, REG_NOSUB | REG_ICASE);
+//if(err != 0)  // Compile the regular expression so that it can be used.  Use: REG_EXTENDED ?
+//    {
+//    char buffer[128];
+//    regerror(err, &regEx, buffer, sizeof buffer);
+//    warn("ERROR: Invalid regular expression: [%s] %s\n",token,buffer);
+//    regfree(&regEx);
+//    return FALSE;
+//    }
+//err = regexec(&regEx, mdbVar->val, 0, NULL, 0);
+//regfree(&regEx);
+//return (err == 0);
+
+#endif//def MATCH_ON_WILDS
+}
+
 static boolean doesNameMatch(struct trackDb *tdb, struct slName *wordList)
 // We parse str and look for every word at the start of any word in track description (i.e. google style).
 {
@@ -52,10 +87,8 @@ if (tdb->html == NULL)
 struct slName *word = wordList;
 for(; word != NULL; word = word->next)
     {
-    char wordWild[256];
-    safef(wordWild,sizeof wordWild,"*%s*",word->name);
-    if (!wildMatch(wordWild, tdb->shortLabel)
-    &&  !wildMatch(wordWild, tdb->longLabel))
+    if (!matchToken(tdb->shortLabel,word->name)
+    &&  !matchToken(tdb->longLabel, word->name))
         return FALSE;
     }
 return TRUE;
@@ -64,15 +97,17 @@ return TRUE;
 static boolean doesDescriptionMatch(struct trackDb *tdb, struct slName *wordList)
 // We parse str and look for every word at the start of any word in track description (i.e. google style).
 {
+//static boolean tryitOneCycle=TRUE;
 if (tdb->html == NULL)
     return (wordList != NULL);
+
+if (strchr(tdb->html,'\n'))
+    strSwapChar(tdb->html,'\n',' ');   // DANGER: don't own memory.  However, this CGI will use html for no other purpose
 
 struct slName *word = wordList;
 for(; word != NULL; word = word->next)
     {
-    char wordWild[256];
-    safef(wordWild,sizeof wordWild,"*%s*",word->name);
-    if (!wildMatch(wordWild, tdb->html))
+    if (!matchToken(tdb->html,word->name))
         return FALSE;
     }
 return TRUE;
@@ -128,7 +163,6 @@ while (tdbList != NULL)
     }
 //slReverse(&tdbRejects); // Needed?
 //slReverse(&tdbMatched); // Needed?
-
 *pTdbList = tdbRejects;
 
 //warn("matched %d tracks",slCount(tdbMatched));
