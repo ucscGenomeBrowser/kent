@@ -66,7 +66,7 @@ if ( $debug == "true" ) then
   echo "\ncontacts $contacts"
     set contacts=`echo $contacts | sed "s/,/ /" | sed "s/ /\n/g" \
     | perl -wpe '$_ = lcfirst($_);' | sort -u`
-  set contacts="larrym kate fan ting ann Hiram rachel Andy andy bob larry kayla"
+  set contacts="larrym kate fan ann Hiram rachel Andy andy bob larry "
   echo "contacts $contacts"
 endif
 
