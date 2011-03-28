@@ -698,7 +698,7 @@ return sd;
 }
 
 boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime)
-/* Return date and size of ftp url file */
+/* Return date in UTC and size of ftp url file */
 {
 /* Parse the URL and connect. */
 struct netParsedUrl npu;
@@ -1945,7 +1945,7 @@ while (TRUE)
 close(out);
 
 /* delete the status file - by passing TRUE */
-writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, TRUE);  // DEBUG RESTORE!!
+writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, TRUE); 
 
 /* restore original file datestamp mtime from last-modified header */
 struct tm tm;

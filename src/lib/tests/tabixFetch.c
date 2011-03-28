@@ -1,4 +1,4 @@
-/* tabixFetch - Test lineFileOnTabix and lineFileSetTabixRegion (compare with cmd line tabix output). */
+/* tabixFetch - Test lineFileTabixMayOpen and lineFileSetTabixRegion (compare with cmd line tabix output). */
 #include "common.h"
 #include "linefile.h"
 #include "options.h"
@@ -14,7 +14,7 @@ void usage()
 {
 errAbort(
 
-  "tabixFetch - Test lineFileOnTabix and lineFileSetTabixRegion (compare\n"
+  "tabixFetch - Test lineFileTabixMayOpen and lineFileSetTabixRegion (compare\n"
   "             with command-line tabix output)\n"
 
   "usage:\n"
@@ -52,12 +52,12 @@ if (wordCount != 2)
 }
 
 void tabixFetch(char *fileOrUrl, char *position)
-/* tabixFetch - Test lineFileOnTabix and lineFileSetTabixRegion
+/* tabixFetch - Test lineFileTabixMayOpen and lineFileSetTabixRegion
  * (compare with cmd line tabix output). */
 {
 udcSetDefaultDir("/data/tmp/angie/udcCache");
 knetUdcInstall();
-struct lineFile *lf = lineFileOnTabix(fileOrUrl, TRUE);
+struct lineFile *lf = lineFileTabixMayOpen(fileOrUrl, TRUE);
 if (lf == NULL)
     exit(1);
 int lineSize;

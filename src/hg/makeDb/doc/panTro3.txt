@@ -1712,3 +1712,287 @@ hgsql -e 'INSERT INTO trackVersion \
         "genes lifted from panTro2 ensGene v61", "current" );' hgFixed
 
 #########################################################################
+# MULTIZ12WAY MAF FRAMES (DONE - 2011-03-24 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panTro3/bed/multiz12way/frames
+    cd /hive/data/genomes/panTro3/bed/multiz12way/frames
+    mkdir genes
+
+    # looked at rn4 knownGene and only found 7,044 genes
+    #	the rn4 ensGene had 22,857 so use that instead
+# panTro3 ensGene
+# hg19 knownGene
+# ponAbe2 ensGene
+# rheMac2 ensGene
+# calJac3 ensGene
+# mm9	knownGene
+# rn4	ensGene
+# equCab2 ensGene
+# canFam2 ensGene
+# monDom5 ensGene
+# galGal3 ensGene
+# danRer7 ensGene
+
+panTro3 ponAbe2 rheMac2 calJac3 equCab2 canFam2 monDom5 galGal3 danRer7
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using ensGene for:
+# panTro3 ponAbe2 rheMac2 calJac3 equCab2 canFam2 monDom5 galGal3 danRer7
+for qDB in panTro3 ponAbe2 rheMac2 calJac3 rn4 equCab2 canFam2 monDom5 galGal3 danRer7
+do
+  echo hgsql -N -e \"'select * from 'ensGene\;\" ${qDB}
+      hgsql -N -e "select * from ensGene" ${qDB} | cut -f 2-11 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+done
+
+    # using knownGene for mm9 hg19
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    for qDB in mm9 hg19
+    do
+      echo hgsql -N -e \"'select * from 'knownGene\;\" ${qDB}
+      hgsql -N -e "select * from knownGene" ${qDB} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+    done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+
+# genes/calJac3.gp.gz: 20442
+# genes/canFam2.gp.gz: 19245
+# genes/danRer7.gp.gz: 25857
+# genes/equCab2.gp.gz: 20403
+# genes/galGal3.gp.gz: 16491
+# genes/hg19.gp.gz: 20597
+# genes/mm9.gp.gz: 20905
+# genes/monDom5.gp.gz: 19188
+# genes/panTro3.gp.gz: 18414
+# genes/ponAbe2.gp.gz: 19895
+# genes/rheMac2.gp.gz: 21049
+# genes/rn4.gp.gz: 22857
+
+    ssh hgwdev
+    cd /hive/data/genomes/panTro3/bed/multiz12way/frames
+    cat ../anno/multiz12way.maf \
+	| nice -n +19 genePredToMafFrames panTro3 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+		| gzip > multiz12way.mafFrames.gz
+    #	real    15m16.538s
+    # verify there are frames on everything:
+    zcat multiz12way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
+    #	213564 calJac3
+    #	237030 canFam2
+    #	48444 danRer7
+    #	219472 equCab2
+    #	180209 galGal3
+    #	196670 hg19
+    #	229023 mm9
+    #	214937 monDom5
+    #	170067 panTro3
+    #	203651 ponAbe2
+    #	202922 rheMac2
+    #	225811 rn4
+
+    ssh hgwdev
+    cd /hive/data/genomes/panTro3/bed/multiz12way/frames
+    time hgLoadMafFrames panTro3 multiz12wayFrames multiz12way.mafFrames.gz
+    #	real    0m23.641s
+
+#########################################################################
+# Phylogenetic tree from 12-way (WORKING - 2011-03-24 - Hiram)
+
+    mkdir /hive/data/genomes/panTro3/bed/multiz12way/4d
+    cd /hive/data/genomes/panTro3/bed/multiz12way/4d
+    mkdir mafSplit
+    cd mafSplit
+    time mafSplit -byTarget -useFullSequenceName \
+	/dev/null . ../../anno/multiz12way.maf
+    #	real    16m57.919s
+
+
+    # got 3488 mafs named after their chrom/scaff .maf
+
+    # there are 20644 scaffolds missing that
+    # are too small or have nothing aligning.
+
+    cd /hive/data/genomes/panTro3/bed/multiz12way/4d
+
+    # using ensGene for panTro3, only transcribed genes and nothing
+    #	from the randoms and other misc.
+    hgsql panTro3 -Ne \
+    "select * from ensGene WHERE cdsEnd > cdsStart;" | cut -f 2-20 | egrep -E -v "chrM|random|chrUn" \
+	> ensGene.gp
+    #	verify chromosome selection, should just be the ordinary chroms:
+    cut -f2 ensGene.gp | sort | uniq -c
+    wc -l *.gp
+    #	30483 ensGene.gp
+
+    genePredSingleCover ensGene.gp stdout | sort > ensGeneNR.gp
+    wc -l ensGeneNR.gp
+    #	17915 ensGeneNR.gp
+
+    ssh encodek
+    mkdir /hive/data/genomes/panTro3/bed/multiz12way/4d/run
+    cd /hive/data/genomes/panTro3/bed/multiz12way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/panTro3/bed/multiz12way/4d"
+set c = $1
+set infile = $r/mafSplit/$2
+set outfile = $3
+cd /scratch/tmp
+# 'clean' maf
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+awk -v C=$c '$2 == C {print}' $r/ensGeneNR.gp | sed -e "s/\t$c\t/\tpanTro3.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/run/$outfile
+else
+    echo "" > $r/run/$outfile
+endif
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    ls -1S /hive/data/genomes/panTro3/bed/multiz12way/4d/mafSplit/*.maf | \
+	egrep -E -v "chrM|random|chrUn" \
+	| sed -e "s#.*multiz12way/4d/mafSplit/##" \
+	> maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template stdout | tac > jobList
+    para create jobList
+    para try ... check
+    para -maxJob=5 push
+    para time
+# Completed: 25 of 25 jobs
+# CPU time in finished jobs:       2040s      34.00m     0.57h    0.02d  0.000 y
+# IO & Wait Time:                   171s       2.85m     0.05h    0.00d  0.000 y
+# Average job time:                  88s       1.47m     0.02h    0.00d
+# Longest finished job:             166s       2.77m     0.05h    0.00d
+# Submission to last job:           513s       8.55m     0.14h    0.01d
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/panTro3/bed/multiz12way/4d
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+    #	>panTro3
+    #	>hg19
+    #	>ponAbe2
+    #	>rheMac2
+    #	>calJac3
+    #	>mm9
+    #	>rn4
+    #	>equCab2
+    #	>canFam2
+    #	>monDom5
+    #	>galGal3
+    #	>danRer7
+
+    # tree-commas.nh:
+    # (((((((((panTro3,hg19),ponAbe2),rheMac2),calJac3),(mm9,rn4)),(equCab2,canFam2)),monDom5),galGal3),danRer7)
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree ../tree-commas.nh 4d.all.mfa
+    #	real    5m31.106s
+    #	real    1m21.248s
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+    #	(((((((((panTro3:0.00645513,hg19:0.00635619):0.0112004,ponAbe2:0.0179412):0.013987,rheMac2:0.0351289):0.0223948,calJac3:0.0639981):0.0739019,(mm9:0.0814807,rn4:0.0880817):0.249359):0.0153477,(equCab2:0.107349,canFam2:0.14282):0.0303434):0.257345,monDom5:0.328619):0.22173,galGal3:0.402012):0.635124,danRer7:0.635124);
+
+    # create subset of primates-only
+    echo "hg19 ponAbe2 rheMac2 calJac3 panTro3" > primate.lst
+    # in this panTro3 case, all these mfa files should have all species:
+    grep -h "^>" mfa/*.mfa | sort | uniq -c
+    #	25 > calJac3
+    #	25 > canFam2
+    #	25 > danRer7
+    #	25 > equCab2
+    #	25 > galGal3
+    #	25 > hg19
+    #	25 > mm9
+    #	25 > monDom5
+    #	25 > panTro3
+    #	25 > ponAbe2
+    #	25 > rheMac2
+    #	25 > rn4
+
+    # on organisms that do not have all species in all files, the file names
+    #	need to be filtered
+    mkdir primateMfa
+
+for FILE in mfa/*.mfa
+do
+    B=`basename ${FILE}`
+    awk '
+BEGIN { primate = 0 }
+{
+    if (match($0, "^>")) {
+	primate = 1
+	if (match($0, "^> danRer7")) { primate = 0 }
+	if (match($0, "^> galGal3")) { primate = 0 }
+	if (match($0, "^> monDom5")) { primate = 0 }
+	if (match($0, "^> canFam2")) { primate = 0 }
+	if (match($0, "^> equCab2")) { primate = 0 }
+	if (match($0, "^> rn4")) { primate = 0 }
+	if (match($0, "^> mm9")) { primate = 0 }
+    }
+    if (primate) {print}
+}
+' "${FILE}" > primateMfa/${B}
+done
+    # verify only fish are present
+    grep -h "^>" primateMfa/*.mfa | sort | uniq -c
+    #	25 > calJac3
+    #	25 > hg19
+    #	25 > panTro3
+    #	25 > ponAbe2
+    #	25 > rheMac2
+
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat primate.lst`" primateMfa/*.mfa | sed s/"> "/">"/ \
+	> 4d.primate.mfa
+
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/tree_doctor \
+        --no-branchlen --prune-all-but="`cat primate.lst`" ../tree-commas.nh \
+                > tree-commas.primate.nh
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree ./tree-commas.primate.nh 4d.primate.mfa
+    mv phyloFit.mod primate.mod
+    #	real    0m0.871s
+    grep TREE primate.mod | sed 's/TREE\:\ //' > primate.12way.nh
+
+    # ((((panTro3:0.00644922,hg19:0.00636812):0.01112,ponAbe2:0.0180594):0.014155,rheMac2:0.0351191):0.0431786,calJac3:0.0431786);
+
+#########################################################################

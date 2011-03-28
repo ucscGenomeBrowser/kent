@@ -80,7 +80,7 @@ return NULL;
 struct slPair *mdbVarsRelevant(struct sqlConnection *conn)
 // returns a white list of mdb vars that are relevant to the currect DB
 {
-struct slPair *cvApproved = mdbCvWhiteList(TRUE,FALSE);
+struct slPair *cvApproved = cvWhiteList(TRUE,FALSE);
 struct slPair *relevant = NULL;
 while(cvApproved != NULL)
     {
@@ -151,8 +151,8 @@ if(numMetadataSelects)
             else
                 {
                 safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, ix + offset);
-                enum mdbCvSearchable searchBy = mdbCvSearchMethod(var);
-                if (searchBy == cvsSearchByMultiSelect)
+                enum cvSearchable searchBy = cvSearchMethod(var);
+                if (searchBy == cvSearchByMultiSelect)
                     {
                     // Multi-selects as comma delimited list of values
                     struct slName *vals = cartOptionalSlNameList(cart,buf);
@@ -162,9 +162,9 @@ if(numMetadataSelects)
                         slNameFreeList(&vals);
                         }
                     }
-                else if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByFreeText)
+                else if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByFreeText)
                     val = cloneString(cartUsualString(cart, buf,ANYLABEL));
-                //else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
+                //else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
                 //    {
                 //    // TO BE IMPLEMENTED
                 //    }
@@ -233,15 +233,15 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
 
     // Right side select of vals
     safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, row);
-    enum mdbCvSearchable searchBy = mdbCvSearchMethod(mdbSelect->name);
-    if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByMultiSelect)
+    enum cvSearchable searchBy = cvSearchMethod(mdbSelect->name);
+    if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)
         {
         dyStringPrintf(output,"</td>\n<td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>is%s</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",
-                row,(searchBy == cvsSearchByMultiSelect?" among":""),buf);
+                row,(searchBy == cvSearchByMultiSelect?" among":""),buf);
         struct slPair *pairs = mdbValLabelSearch(conn, mdbSelect->name, MDB_VAL_STD_TRUNCATION, FALSE, TRUE, FALSE); // not tags, yes tables, not files
         if (slCount(pairs) > 0)
             {
-            char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvsSearchByMultiSelect),
+            char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvSearchByMultiSelect),
                     buf, pairs,mdbSelect->val, ANYLABEL,"mdbVal","style='min-width:200px; font-size:.9em;' onchange='findTracksMdbValChanged(this);'");
             if (dropDownHtml)
                 {
@@ -251,13 +251,13 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
             slPairFreeList(&pairs);
             }
         }
-    else if (searchBy == cvsSearchByFreeText)
+    else if (searchBy == cvSearchByFreeText)
         {
         dyStringPrintf(output,"</td><td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>contains</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",row,buf);
         dyStringPrintf(output,"<input type='text' name='%s' value='%s' class='mdbVal freeText' style='max-width:310px; width:310px; font-size:.9em;' onchange='findTracksMdbVarChanged(true);'>\n",
                 buf,(mdbSelect->val ? (char *)mdbSelect->val: ""));
         }
-    //else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
+    //else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
     //    {
     //    // TO BE IMPLEMENTED
     //    }

@@ -76,8 +76,9 @@ struct vcfRecord
     int infoCount;		// Number of components of INFO column
     struct vcfInfoElement *infoElements;	// Array of INFO column components
     char *format;		// Optional column containing ordered list of genotype components
-    char **genotypeUnparsedStrings;	// Array of unparsed optional genotype columns
-    struct vcfGenotype *genotypes;	// If built, array of parsed genotype components
+    char **genotypeUnparsedStrings;	// Temporary array of unparsed optional genotype columns
+    struct vcfGenotype *genotypes;	// If built, array of parsed genotype components;
+					// call vcfParseGenotypes(record) to build.
     struct vcfFile *file;	// Pointer back to parent vcfFile
 };
 
@@ -101,7 +102,6 @@ struct vcfFile
 				// be repeated in the files.  hash's localMem is also 
 				// use to allocated memory for all other objects.
     struct lineFile *lf;	// Used only during parsing
-    FILE *errFh;		// Write errors to this file
     int maxErr;			// Maximum number of errors before aborting
     int errCnt;			// Error count
 };
@@ -133,7 +133,7 @@ extern const char *vcfInfoIsSomatic;		// indicates that the record is a somatic 
 extern const char *vcfInfoIsValidated;		// validated by follow-up experiment
 
 /* Reserved but optional per-genotype keys: */
-extern const char *vcfGtGenotypes;	// numeric allele values separated by "/" (unphased)
+extern const char *vcfGtGenotype;	// numeric allele values separated by "/" (unphased)
 					// or "|" (phased). Allele values are 0 for
 					// reference allele, 1 for the first allele in ALT,
 					// 2 for the second allele in ALT and so on.
@@ -151,22 +151,46 @@ extern const char *vcfGtPhaseSet;	// Set of phased genotypes to which this genot
 extern const char *vcfGtPhasingQuality;	// Phred-scaled P(alleles ordered wrongly in heterozygote)
 extern const char *vcfGtExpectedAltAlleleCount;	// Typically used in association analyses
 
-struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, FILE *errFh);
+INLINE void vcfPrintDatum(FILE *f, const union vcfDatum datum, const enum vcfInfoType type)
+/* Print datum to f in the format determined by type. */
+{
+switch (type)
+    {
+    case vcfInfoInteger:
+	fprintf(f, "%d", datum.datInt);
+	break;
+    case vcfInfoFloat:
+	fprintf(f, "%f", datum.datFloat);
+	break;
+    case vcfInfoFlag:
+	fprintf(f, "%s", datum.datString); // Flags could have values in older VCF
+	break;
+    case vcfInfoCharacter:
+	fprintf(f, "%c", datum.datChar);
+	break;
+    case vcfInfoString:
+	fprintf(f, "%s", datum.datString);
+	break;
+    default:
+	errAbort("vcfPrintDatum: Unrecognized type %d", type);
+	break;
+    }
+}
+
+struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr);
 /* Parse a VCF file into a vcfFile object; return NULL if unable.
  * If maxErr not zero, then continue to parse until this number of error have been reached.
- * A maxErr less than zero does not stop and reports all errors. Write errors to errFh,
- * if NULL, use stderr. */
+ * A maxErr less than zero does not stop and reports all errors. */
 
 struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
-				    int maxErr, FILE *errFh);
+				    int maxErr);
 /* Parse header and rows within the given position range from a VCF file that has been
  * compressed and indexed by tabix into a vcfFile object; return NULL if or if file has
  * no items in range.
  * If maxErr not zero, then continue to parse until this number of error have been reached.
- * A maxErr less than zero does not stop and reports all errors. Write errors to errFh,
- * if NULL, use stderr. */
+ * A maxErr less than zero does not stop and reports all errors. */
 
-void vcfFileFree(struct vcfFile **g3fPtr);
+void vcfFileFree(struct vcfFile **vcffPtr);
 /* Free a vcfFile object. */
 
 const struct vcfRecord *vcfFileFindVariant(struct vcfFile *vcff, char *variantId);
@@ -175,7 +199,19 @@ const struct vcfRecord *vcfFileFindVariant(struct vcfFile *vcff, char *variantId
 const struct vcfInfoElement *vcfRecordFindInfo(const struct vcfRecord *record, char *key);
 /* Find an INFO element, or NULL. */
 
+struct vcfInfoDef *vcfInfoDefForKey(struct vcfFile *vcff, const char *key);
+/* Return infoDef for key, or NULL if it wasn't specified in the header or VCF spec. */
+
+void vcfParseGenotypes(struct vcfRecord *record);
+/* Translate record->genotypesUnparsedStrings[] into proper struct vcfGenotype[].
+ * This destroys genotypesUnparsedStrings. */
+
 const struct vcfGenotype *vcfRecordFindGenotype(struct vcfRecord *record, char *sampleId);
-/* Find the genotype and associated info for the individual, or return NULL. */
+/* Find the genotype and associated info for the individual, or return NULL.
+ * This calls vcfParseGenotypes if it has not already been called. */
+
+struct vcfInfoDef *vcfInfoDefForGtKey(struct vcfFile *vcff, const char *key);
+/* Look up the type of genotype FORMAT component key, in the definitions from the header,
+ * and failing that, from the keys reserved in the spec. */
 
 #endif // vcf_h

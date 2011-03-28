@@ -1662,7 +1662,7 @@ struct bed* loadBigBedAsBed (struct track *tg, char *chr, int start, int end)
 extern struct bbiFile *fetchBbiForTrack(struct track *track);
 struct bbiFile *bbiFile = fetchBbiForTrack(tg);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *intervals = bigBedIntervalQuery(bbiFile, chr, 
+struct bigBedInterval *intervals = bigBedIntervalQuery(bbiFile, chr,
 	start, end, 1, lm);
 
 
@@ -1765,7 +1765,7 @@ if (startsWith("chain", tg->tdb->type))
     nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Block");
     prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Block");
     }
-else 
+else
     {
     nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Exon");
     prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Exon");
@@ -7694,7 +7694,7 @@ if (atoi(name) != 0)
     {
     chromNum =  atoi(name);
     /* Tweaks for chimp and other apes with chrom names corresponding to fused human chr2
-     * giving them back a distinct color to distinguish chr2B from chr2A. 
+     * giving them back a distinct color to distinguish chr2B from chr2A.
      * panTro2 uses chr2a chr2b. panTro3 uses chr2A chr2B. */
     if (startsWith("2B", name) || startsWith("2b", name))
 	chromNum = 26;
@@ -9375,7 +9375,7 @@ enum trackVisibility limitVisibility(struct track *tg)
 {
 if (!tg->limitedVisSet)
     {
-    tg->limitedVisSet = TRUE;
+    tg->limitedVisSet = TRUE;  // Prevents recursive loop!
     if (trackShouldUseAjaxRetrieval(tg))
         {
         tg->limitedVis = tg->visibility;
@@ -9397,7 +9397,9 @@ if (!tg->limitedVisSet)
             {
             struct track *subtrack;
             int subCnt = subtrackCount(tg->subtracks);
-            maxHeight = maxHeight * max(subCnt,1);
+            maxHeight = maxHeight * max(subCnt,1);  // Without further restruction does this ever accomplish anything?
+            //if (subCnt > 4)
+            //    maxHeight *= 2; // NOTE: Large composites should suffer an additional restriction.
 	    if (!tg->syncChildVisToSelf)
 		{
 		for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
@@ -9412,10 +9414,17 @@ if (!tg->limitedVisSet)
                 vis = tvSquish;
             else
                 vis = tvDense;
+            //if (tg->visibility != vis)
+            //    warn("DEMOTION: %s -> %s %s  maxHeight:%d  totHeight:%d",
+            //         hStringFromTv(tg->visibility),hStringFromTv(vis),tg->track,maxHeight,tg->height);
             }
         tg->height = h;
-        tg->limitedVis = vis;
+        if (tg->limitedVis == tvHide)
+            tg->limitedVis = vis;
+        else
+            tg->limitedVis = tvMin(vis,tg->limitedVis);
         }
+
     if (tg->syncChildVisToSelf)
         {
 	struct track *subtrack;
@@ -9426,6 +9435,18 @@ if (!tg->limitedVisSet)
 	    subtrack->limitedVisSet = tg->limitedVisSet;
 	    }
 	}
+    else if (tdbIsComposite(tg->tdb)) // If a composite is restricted, it's children should be atleast as restricted.
+        {
+        struct track *subtrack;
+        for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
+            {
+            subtrack->limitedVis = tvMin(subtrack->limitedVis, tg->limitedVis);
+            //subtrack->limitedVisSet = tg->limitedVisSet; // But don't prevent subtracks from being further restricted!
+            }
+        }
+
+    if (tg->height == 0 && tg->limitedVis != tvHide)
+        tg->limitedVisSet = FALSE;  // Items may not be loaded yet, so going to need to check again
     }
 return tg->limitedVis;
 }
@@ -9628,7 +9649,7 @@ void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, 
 /* put text anchored on right upper corner, doing separate colors if needed */
 {
 boolean snapLeft = FALSE;
-int textX = x1 - width; 
+int textX = x1 - width;
 snapLeft = (textX < insideX);
 if (snapLeft)        /* Snap label to the left. */
     {
@@ -9655,7 +9676,7 @@ else
     {
     hvGfxTextRight(hvg, x1, y, width, height, color, font, allele);
     }
-if (snapLeft) 
+if (snapLeft)
     {
     hvGfxUnclip(hvg);
     hvGfxSetClip(hvg, insideX, trackY, insideWidth, trackHeight);
@@ -9748,7 +9769,7 @@ int all2Width = 0;
 if (cnt > 1)
     {
     all2Width = mgFontStringWidth(font, allele[1]);
-    if (all2Width > allWidth) 
+    if (all2Width > allWidth)
          allWidth = all2Width; /* use max */
     }
 int yCopy = y + 1;
@@ -9869,6 +9890,8 @@ freeDyString(&ds);
 }
 
 void pgSnpMethods (struct track *tg)
+/* Personal Genome SNPs: show two alleles with stacked color bars for base alleles and
+ * (if available) allele counts in mouseover. */
 {
 bedMethods(tg);
 tg->loadItems = loadPgSnp;
@@ -11029,7 +11052,7 @@ safef(query,sizeof(query),
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
-if (row != NULL) 
+if (row != NULL)
     {
     safecat(omimGene2Buffer, sizeof(omimGene2Buffer), row[0]);
     }
@@ -11041,8 +11064,8 @@ safef(query,sizeof(query),
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
-if (row == NULL) 
-    { 
+if (row == NULL)
+    {
     hFreeConn(&conn);
     sqlFreeResult(&sr);
     return(omimGene2Buffer);
@@ -11063,7 +11086,7 @@ while ((row != NULL) && i<20)
         safecat(omimGene2Buffer, sizeof(omimGene2Buffer), "; ");
 	}
     safecat(omimGene2Buffer, sizeof(omimGene2Buffer), row[0]);
-    
+
     row = sqlNextRow(sr);
     i++;
     }
@@ -11109,7 +11132,7 @@ return(answer);
 boolean doThisOmimEntry(struct track *tg, char *omimId)
 /* check if the specific class of this OMIM entry is selected by the user */
 {
-char *disorderClass = NULL; 
+char *disorderClass = NULL;
 boolean doIt;
 
 char labelName[255];
@@ -11195,7 +11218,7 @@ if (color)
    	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
 	         tg->track, tg->mapItemName(tg, bed), sPhenotypes);
    	/* enable display of disorder info when user mouse over item name */
-	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1-mgFontStringWidth(font, bed->name)-2, y, 
+	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1-mgFontStringWidth(font, bed->name)-2, y,
 		 mgFontStringWidth(font, bed->name), heightPer,
 	         tg->track, tg->mapItemName(tg, bed), sPhenotypes);
     	}
@@ -11231,9 +11254,9 @@ sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset)
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 4);
-    
+
     /* check if user has selected the specific class for this OMIM entry */
-    if (doThisOmimEntry(tg, bed->name)) 
+    if (doThisOmimEntry(tg, bed->name))
 	{
 	slAddHead(&list, bed);
 	}
@@ -11256,7 +11279,7 @@ char **row;
 
 struct sqlConnection *conn = hAllocConn(database);
 
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
       "select omimId, phenotypeClass from omimDisorderPhenotype where omimId=%s", el->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -11279,13 +11302,13 @@ else
 	// set to dark red, the same color as omimGene2 track
 	sqlFreeResult(&sr);
 	return hvGfxFindColorIx(hvg, 220, 0, 0);
-    	}	
+    	}
     else if (sameWord(phenClass, "2"))
     	{
 	// set to green for class 2
 	sqlFreeResult(&sr);
 	return hvGfxFindColorIx(hvg, 0, 255, 0);
-    	}	
+    	}
     else if (sameWord(phenClass, "1"))
     	{
 	// set to orange for class 1
@@ -11297,7 +11320,7 @@ else
 	// set to purplish color for phenClass 4
         sqlFreeResult(&sr);
 	return hvGfxFindColorIx(hvg, 200, 100, 100);
-	}  
+	}
     }
 }
 
@@ -11329,7 +11352,7 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
 chp = omimAvSnpBuffer;
-if (row != NULL) 
+if (row != NULL)
     {
     safef(omimAvSnpBuffer, sizeof(omimAvSnpBuffer), "%s, %s: %s", row[0], row[1], row[2]);
     }
@@ -11371,7 +11394,7 @@ if (color)
 	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
 	         tg->track, tg->mapItemName(tg, bed), itemDesc);
    	/* enable display of disorder info when user mouse over item name */
-	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1-mgFontStringWidth(font, bed->name)-2, y, 
+	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1-mgFontStringWidth(font, bed->name)-2, y,
 		 mgFontStringWidth(font, bed->name), heightPer,
 	         tg->track, tg->mapItemName(tg, bed), itemDesc);
     	}
@@ -11419,7 +11442,7 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
 chp = omimLocationBuffer;
-if (row != NULL) 
+if (row != NULL)
     {
     safef(omimLocationBuffer, sizeof(omimLocationBuffer), "%s", row[0]);
     }
@@ -11441,7 +11464,7 @@ char **row;
 
 struct sqlConnection *conn = hAllocConn(database);
 
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
       "select omimId, phenotypeClass from omimDisorderPhenotype where omimId=%s", el->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -11464,7 +11487,7 @@ else
 	// set to dark red, the same color as omimGene2 track
 	sqlFreeResult(&sr);
 	return hvGfxFindColorIx(hvg, 220, 0, 0);
-    	}	
+    	}
     else
     	{
     	if (sameWord(phenClass, "2"))
@@ -11472,7 +11495,7 @@ else
 	    // set to green for class 2
 	    sqlFreeResult(&sr);
 	    return hvGfxFindColorIx(hvg, 0, 255, 0);
-    	    }	
+    	    }
 	else
 	    {
     	    if (sameWord(phenClass, "1"))
@@ -11489,7 +11512,7 @@ else
             	}
 	    }
 
-	}  
+	}
     }
 }
 
@@ -12196,6 +12219,52 @@ tg->itemEnd = tgItemNoEnd;
 tg->mapItemName = remoteName;
 }
 
+static void drawExampleMessageLine(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
+				   int xOff, int yOff, int width, MgFont *font, Color color,
+				   enum trackVisibility vis)
+/* Example, meant to be overloaded: draw a message in place of track items. */
+{
+char message[512];
+safef(message, sizeof(message), "drawExampleMessageLine: copy me and put your own message here.");
+Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
+hvGfxBox(hvg, xOff, yOff, width, tg->heightPer, yellow);
+hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message);
+}
+
+void messageLineMethods(struct track *track)
+/* Methods for drawing a single-height message line instead of track items,
+ * e.g. if source was compiled without a necessary library. */
+{
+linkedFeaturesMethods(track);
+track->loadItems = dontLoadItems;
+track->drawItems = drawExampleMessageLine;
+// Following few lines taken from hgTracks.c getTrackList, because this is called earlier
+// but needs to know track vis from tdb+cart:
+char *s = cartOptionalString(cart, track->track);
+if (cgiOptionalString("hideTracks"))
+    {
+    s = cgiOptionalString(track->track);
+    if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
+	{
+	cartSetString(cart, track->track, s);
+	}
+    }
+// end stuff copied from hgTracks.c
+enum trackVisibility trackVis = track->tdb->visibility;
+if (s != NULL)
+    trackVis = hTvFromString(s);
+if (trackVis != tvHide)
+    {
+    track->visibility = tvDense;
+    track->limitedVis = tvDense;
+    track->limitedVisSet = TRUE;
+    }
+track->nextItemButtonable = track->nextExonButtonable = FALSE;
+track->nextPrevItem = NULL;
+track->nextPrevExon = NULL;
+}
+
+
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
 {
@@ -12295,6 +12364,12 @@ else if (sameWord(type, "maf"))
 else if (sameWord(type, "bam"))
     {
     bamMethods(track);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
+else if (sameWord(type, "vcfTabix"))
+    {
+    vcfTabixMethods(track);
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }

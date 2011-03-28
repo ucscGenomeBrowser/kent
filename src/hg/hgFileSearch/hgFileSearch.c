@@ -41,9 +41,27 @@ boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTim
 
 //    ((sameString(op, "is") && !strcasecmp(track->shortLabel, str)) ||
 
-#define DESCRIPTION_MATCH_ON_EACH_WORD
-#ifdef DESCRIPTION_MATCH_ON_EACH_WORD
-static boolean isDescriptionMatch(struct trackDb *tdb, struct slName *wordList)
+#define MATCH_ON_EACH_WORD
+#ifdef MATCH_ON_EACH_WORD
+static boolean doesNameMatch(struct trackDb *tdb, struct slName *wordList)
+// We parse str and look for every word at the start of any word in track description (i.e. google style).
+{
+if (tdb->html == NULL)
+    return (wordList != NULL);
+
+struct slName *word = wordList;
+for(; word != NULL; word = word->next)
+    {
+    char wordWild[256];
+    safef(wordWild,sizeof wordWild,"*%s*",word->name);
+    if (!wildMatch(wordWild, tdb->shortLabel)
+    &&  !wildMatch(wordWild, tdb->longLabel))
+        return FALSE;
+    }
+return TRUE;
+}
+
+static boolean doesDescriptionMatch(struct trackDb *tdb, struct slName *wordList)
 // We parse str and look for every word at the start of any word in track description (i.e. google style).
 {
 if (tdb->html == NULL)
@@ -59,44 +77,52 @@ for(; word != NULL; word = word->next)
     }
 return TRUE;
 }
-#endif///def DESCRIPTION_MATCH_ON_EACH_WORD
+#endif///def MATCH_ON_EACH_WORD
 
 static struct trackDb *tdbFilterBy(struct trackDb **pTdbList, char *name, char *description, char *group)
 // returns tdbs that match supplied criterion, leaving unmatched in list passed in
 {
-#ifdef DESCRIPTION_MATCH_ON_EACH_WORD
-// Set the word list up once
-struct slName *wordList = NULL;
+#ifdef MATCH_ON_EACH_WORD
+// Set the word lists up once
+struct slName *nameList = NULL;
+if (name)
+    nameList = slNameListOfUniqueWords(cloneString(name),TRUE); // TRUE means respect quotes
+struct slName *descList = NULL;
 if (description)
-    wordList = slNameListOfUniqueWords(cloneString(description),TRUE); // TRUE means respect quotes
-#endif///def DESCRIPTION_MATCH_ON_EACH_WORD
+    descList = slNameListOfUniqueWords(cloneString(description),TRUE);
+#endif///def MATCH_ON_EACH_WORD
 
 struct trackDb *tdbList = *pTdbList;
 struct trackDb *tdbRejects = NULL;
 struct trackDb *tdbMatched = NULL;
+#ifndef MATCH_ON_EACH_WORD
 char nameWild[256];
 if (name)
     safef(nameWild,sizeof nameWild,"*%s*",name);
-#ifndef DESCRIPTION_MATCH_ON_EACH_WORD
 char descWild[512];
 if (description)
     safef(descWild,sizeof descWild,"*%s*",description);
-#endif///ndef DESCRIPTION_MATCH_ON_EACH_WORD
+#endif///ndef MATCH_ON_EACH_WORD
 
 while (tdbList != NULL)
     {
     struct trackDb *tdb = slPopHead(&tdbList);
 
-    if (name && (!wildMatch(nameWild,tdb->shortLabel) && !wildMatch(nameWild,tdb->longLabel)))
+    if (!tdbIsComposite(tdb))
         slAddHead(&tdbRejects,tdb);
     else if (group && differentString(tdb->grp,group))
         slAddHead(&tdbRejects,tdb);
-#ifdef DESCRIPTION_MATCH_ON_EACH_WORD
-    else if (description && !isDescriptionMatch(tdb, wordList))
-#else///ifndef DESCRIPTION_MATCH_ON_EACH_WORD
-    else if (description && (tdb->html == NULL || !wildMatch(descWild,tdb->html)))
-#endif///ndef DESCRIPTION_MATCH_ON_EACH_WORD
+#ifdef MATCH_ON_EACH_WORD
+    else if (name && !doesNameMatch(tdb, nameList))
         slAddHead(&tdbRejects,tdb);
+    else if (description && !doesDescriptionMatch(tdb, descList))
+        slAddHead(&tdbRejects,tdb);
+#else///ifndef MATCH_ON_EACH_WORD
+    else if (name && (!wildMatch(nameWild,tdb->shortLabel) && !wildMatch(nameWild,tdb->longLabel)))
+        slAddHead(&tdbRejects,tdb);
+    else if (description && (tdb->html == NULL || !wildMatch(descWild,tdb->html)))
+        slAddHead(&tdbRejects,tdb);
+#endif///ndef MATCH_ON_EACH_WORD
     else
         slAddHead(&tdbMatched,tdb);
     }
@@ -194,11 +220,19 @@ slReverse(grps);
 return *grps;
 }
 
-static void doFileSearch(char *db,struct cart *cart,struct trackDb *tdbList)
+static void doFileSearch(char *db,char *organism,struct cart *cart,struct trackDb *tdbList)
 {
 if (!advancedJavascriptFeaturesEnabled(cart))
     {
     warn("Requires advanced javascript features.");
+    return;
+    }
+struct sqlConnection *conn = hAllocConn(db);
+boolean metaDbExists = sqlTableExists(conn, "metaDb");
+if (!sqlTableExists(conn, "metaDb"))
+    {
+    warn("Assembly %s %s does not support Downloadable Files search.", organism, hFreezeFromDb(db));
+    hFreeConn(&conn);
     return;
     }
 #ifdef SUPPORT_COMPOSITE_SEARCH
@@ -207,8 +241,6 @@ char *descSearch=NULL;
 #endif///def SUPPORT_COMPOSITE_SEARCH
 char *fileTypeSearch = cartOptionalString(cart, FILE_SEARCH_ON_FILETYPE);
 boolean doSearch = sameWord(cartUsualString(cart, FILE_SEARCH,"no"), "search");
-struct sqlConnection *conn = hAllocConn(db);
-boolean metaDbExists = sqlTableExists(conn, "metaDb");
 #ifdef ONE_FUNC
 struct hash *parents = newHash(4);
 #endif///def ONE_FUNC
@@ -235,10 +267,10 @@ enum searchTab selectedTab = filesTab;
 descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
 #endif///ndef USE_TABS
 
-#ifndef DESCRIPTION_MATCH_ON_EACH_WORD
+#ifndef MATCH_ON_EACH_WORD
 if(descSearch)
     stripChar(descSearch, '"');
-#endif///ndef DESCRIPTION_MATCH_ON_EACH_WORD
+#endif///ndef MATCH_ON_EACH_WORD
 
 #ifdef USE_TABS
 struct trix *trix;
@@ -467,15 +499,11 @@ if(doSearch)
 hFreeConn(&conn);
 
 webNewSection("About Downloadable Files Search");
-if(metaDbExists)
-    printf("<p>Search for terms in track names, descriptions, groups, and ENCODE "
-            "metadata.  If multiple terms are entered, only tracks with all terms "
-            "will be part of the results.");
-else
-    printf("<p>Search for terms in track descriptions, groups, and names. "
-            "If multiple terms are entered, only tracks with all terms "
-            "will be part of the results.");
-printf("<BR><a target='_blank' href='../goldenPath/help/trackSearch.html'>more help</a></p>\n");
+printf("<p>Search for downloadable ENCODE files by entering search terms in "
+        "the Track name or Description fields and/or by making selections with "
+        "the group, data format, and/or ENCODE metadata drop-downs. For exact "
+        "matches, use quotes around your search terms.");
+printf("<BR><a target='_blank' href='../goldenPath/help/fileSearch.html'>more help</a></p>\n");
 webEndSectionTables();
 }
 
@@ -507,7 +535,7 @@ jsIncludeFile("utils.js",NULL);
 //printf("<script type='text/javascript'>$(document).ready(function() { setTimeout('updateMetaDataHelpLinks(0);',50);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
 printf("<script type='text/javascript'>$(document).ready(function() { updateMetaDataHelpLinks(0);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
 
-doFileSearch(db,cart,tdbList);
+doFileSearch(db,organism,cart,tdbList);
 
 
 printf("<BR>\n");

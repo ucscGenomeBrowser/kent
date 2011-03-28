@@ -1067,28 +1067,6 @@ tableName wgEncodeHaibGenotypeHsmmRegionsRep3
 treatment None
 view CNV
 
-metaObject wgEncodeHaibGenotypeHsmmRegionsRep6
-objType table
-cell HSMM
-composite wgEncodeHaibGenotype
-dataType Cnv
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-20
-dateUnrestricted 2011-10-20
-dccRep 2
-fileName wgEncodeHaibGenotypeHsmmRegionsRep6.bedLogR.gz
-grant Myers
-lab HudsonAlpha
-labVersion Illumina 1MDuo
-obtainedBy Duke
-origAssembly hg19
-project wgEncode
-replicate 6
-subId 3432
-tableName wgEncodeHaibGenotypeHsmmRegionsRep6
-treatment None
-view CNV
-
 metaObject wgEncodeHaibGenotypeHsmmtRegionsRep2
 objType table
 cell HSMMtube
@@ -1991,4 +1969,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: 832300700
+# MAGIC: -876164802

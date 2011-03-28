@@ -402,11 +402,8 @@ if (!IS_KNOWN(track->remoteDataSource))
     //    if (!startsWith("/gbdb/",track->bbiFile->fileName))
     //        SET_TO_YES(track->remoteDataSource);
     //    }
-    if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type))
-        {
-        SET_TO_YES(track->remoteDataSource);
-        }
-    else if (startsWithWord("bam",track->tdb->type))
+    if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type) ||
+	startsWithWord("bam",track->tdb->type) || startsWithWord("vcfTabix", track->tdb->type))
         {
         SET_TO_YES(track->remoteDataSource);
         }
@@ -2960,11 +2957,11 @@ char *ctMapItemName(struct track *tg, void *item)
 /* Return composite item name for custom tracks. */
 {
 char *itemName = tg->itemName(tg, item);
-static char buf[256];
+static char buf[512];
 if (strlen(itemName) > 0)
-  sprintf(buf, "%s %s", ctFileName, itemName);
+    safef(buf, sizeof(buf), "%s %s", ctFileName, itemName);
 else
-  sprintf(buf, "%s NoItemName", ctFileName);
+    safef(buf, sizeof(buf), "%s NoItemName", ctFileName);
 return buf;
 }
 
@@ -3141,6 +3138,15 @@ else if (sameString(type, "bam"))
     hashAdd(tdb->settingsHash, INDEL_QUERY_INSERT, cloneString("on"));
     hashAdd(tdb->settingsHash, INDEL_POLY_A, cloneString("on"));
     hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
+    }
+else if (sameString(type, "vcfTabix"))
+    {
+    tg = trackFromTrackDb(tdb);
+    tg->customPt = ct;
+    vcfTabixMethods(tg);
+    if (trackShouldUseAjaxRetrieval(tg))
+        tg->loadItems = dontLoadItems;
+    tg->mapItemName = ctMapItemName;
     }
 else if (sameString(type, "makeItems"))
     {
