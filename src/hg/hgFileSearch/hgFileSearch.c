@@ -535,8 +535,7 @@ hFreeConn(&conn);
 webNewSection("About Downloadable Files Search");
 printf("<p>Search for downloadable ENCODE files by entering search terms in "
         "the Track name or Description fields and/or by making selections with "
-        "the group, data format, and/or ENCODE metadata drop-downs. For exact "
-        "matches, use quotes around your search terms.");
+        "the group, data format, and/or ENCODE metadata drop-downs.");
 printf("<BR><a target='_blank' href='../goldenPath/help/fileSearch.html'>more help</a></p>\n");
 webEndSectionTables();
 }
@@ -554,7 +553,7 @@ measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 // QUESTION: Do We need track list ???  trackHash ??? Can't we just get one track and no children
 trackHash = trackHashMakeWithComposites(db,chrom,&tdbList,FALSE);
 
-cartWebStart(cart, db, "Search for Downloadable Files in the %s %s Assembly", organism, hFreezeFromDb(db));
+cartWebStart(cart, db, "Search for Downloadable ENCODE Files in the %s %s Assembly", organism, hFreezeFromDb(db));
 
 webIncludeResourceFile("HGStyle.css");
 webIncludeResourceFile("jquery-ui.css");
