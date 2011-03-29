@@ -22,7 +22,7 @@ errAbort(
   "regCompanionCorrelateEnhancerAndExpression - Correlate files with info on enhancer activity\n"
   "and gene transcription levels.\n"
   "usage:\n"
-  "   regCompanionCorrelateEnhancerAndExpression enh.bed enh.levels gene.bed gene.levels out.tab out.bed\n"
+  "   regCompanionCorrelateEnhancerAndExpression enh.bed enh.levels gene.bed gene.levels out.tab\n"
   "The out.tab has the following columns\n"
   "   <enhId> <geneId> <distance from promoter to enhancer> <average expn> <level correlation>\n"
   "The out.bed is a non-stranded, multi-block bed file with the thick block being the\n"
@@ -30,6 +30,11 @@ errAbort(
   "options:\n"
   "   -minR=0.N (default %g) Minimum threshold of correlation to output in bed file\n"
   "   -minExp=N (default %g) Minimum expression level in some cell to output in bed file\n"
+  "   -outPairBed=outPair.bed - output bed file with a record for each enhancer->promoter\n"
+  "   -outEnhBed=outEnh.bed - output bed file with a record for each enhancer, possibly including\n"
+  "              multiple promoters per enhancer\n"
+  "   -outProBed=outPro.bed - output bed file with a record for each promoter, possibly including\n"
+  "              multiple enhancers per promoter\n"
   , minR, minExp
   );
 }
@@ -37,11 +42,15 @@ errAbort(
 static struct optionSpec options[] = {
    {"minR", OPTION_DOUBLE},
    {"minExp", OPTION_DOUBLE},
+   {"outPairBed", OPTION_STRING},
+   {"outEnhBed", OPTION_STRING},
+   {"outProBed", OPTION_STRING},
    {NULL, 0},
 };
 
-int cellCount = 7;
-int maxDist = 50000;
+int cellCount = 7;	/* Number of cell lines in our data. */
+int maxDist = 50000;	/* Max distance we allow between enhancer and promoter. */
+int proPad = 50;	/* Define promoter as this much on either side of txStart. */
 
 struct hash *readLevelsIntoHash(char *fileName)
 /* Read file and return hash keyed by the first column (gene name) and
@@ -136,11 +145,67 @@ for (range = rangeList; range != NULL; range = range->next)
 return bed;
 }
 
+void printLinkingBed(FILE *f, struct bed *enh, struct bed *gene, double r)
+/* Print out a two-block bed that links a thin enhancer to a fat promoter at
+ * score proportional to the correlation, r. */
+{
+int promoPos = (gene->strand[0] == '-' ? gene->chromEnd : gene->chromStart);
+int promoStart = promoPos - proPad, promoEnd = promoPos + proPad;
+struct bed link;
+ZeroVar(&link);
+char nameBuf[256];
+char *geneNoVersion = cloneStringZ(gene->name, 8);
+safef(nameBuf, sizeof(nameBuf), "e%s->%8s", enh->name+3, geneNoVersion);
+freez(&geneNoVersion);
+link.chrom = gene->chrom;
+link.name = nameBuf;
+int chromStarts[2], blockSizes[2];
+link.chromStarts = chromStarts;
+link.blockSizes = blockSizes;
+link.blockCount = 2;
+link.score = 1000 * r;
+link.thickStart = promoStart;
+link.thickEnd = promoEnd;
+chromStarts[0] = 0;
+if (enh->chromStart < promoPos)
+    {
+    link.strand[0] = '+';
+    link.chromStart = enh->chromStart;
+    link.chromEnd = promoEnd;
+    chromStarts[1] = promoStart - link.chromStart;
+    blockSizes[0] = enh->chromEnd - enh->chromStart;
+    blockSizes[1] = promoEnd - promoStart;
+    }
+else
+    {
+    link.strand[0] = '-';
+    link.chromStart = promoStart;
+    link.chromEnd = enh->chromEnd;
+    chromStarts[1] = enh->chromStart - link.chromStart;
+    blockSizes[0] = promoEnd - promoStart;
+    blockSizes[1] = enh->chromEnd - enh->chromStart;
+    }
+bedTabOutN(&link, 12, f);
+}
+
+struct enhForGene
+/* For a given gene, a list of enhancers. */
+    {
+    struct enhForGene *next;
+    struct bed *gene;		/*  gene record. */
+    struct slRef *enhList;	/* List of references to enhancer beds. */
+    };
+
 void regCompanionCorrelateEnhancerAndExpression(char *enhBed, char *enhLevels, 
-	char *geneBed, char *geneLevels, char *outTab, char *outBed)
+	char *geneBed, char *geneLevels, char *outTab)
 /* regCompanionCorrelateEnhancerAndExpression - Correlate files with info on enhancer activity 
  * and gene txn levels. */
 {
+/* Figure out what additional outputs may be needed. */
+char *outProBed = optionVal("outProBed", NULL);
+char *outEnhBed = optionVal("outEnhBed", NULL);
+char *outPairBed = optionVal("outPairBed", NULL);
+
 /* Read genes into a chromBin object to be able to find quickly. Just store the promoter */
 struct bed *gene, *geneList = bedLoadAll(geneBed);
 struct chromBins *chromBins = chromBinsNew(NULL);
@@ -154,10 +219,20 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 struct hash *geneLevelHash = readLevelsIntoHash(geneLevels);
 struct hash *enhLevelHash = readLevelsIntoHash(enhLevels);
 
-/* Stream through enhBed, finding genes within 50kb, and doing correlations. */
+/* Load enhancer bed. */
 struct bed *enh, *enhList = bedLoadAll(enhBed);
+
+/* Open up outputs. */
 FILE *fTab = mustOpen(outTab, "w");
-FILE *fBed = mustOpen(outBed, "w");
+FILE *fPair = (outPairBed == NULL ? NULL : mustOpen(outPairBed, "w"));
+FILE *fEnh = (outEnhBed == NULL ? NULL : mustOpen(outEnhBed, "w"));
+FILE *fPro = (outProBed == NULL ? NULL : mustOpen(outProBed, "w"));
+
+/* Set up additional stuff for promoter-centered output. */
+struct hash *proHash = hashNew(16);
+struct enhForGene *enhGeneList = NULL, *enhGene;
+
+/* Stream through input enhancers, finding genes within 50kb, and doing correlations. */
 for (enh = enhList; enh != NULL; enh = enh->next)
     {
     /* Get region to query */
@@ -180,11 +255,28 @@ for (enh = enhList; enh != NULL; enh = enh->next)
 	int distance;
 	if (r >= minR && maxExp >= minExp)
 	    {
-	    int promoPos = (gene->strand[0] == '-' ? gene->chromEnd : gene->chromStart);
-	    AllocVar(range);
-	    range->start = promoPos - 100;
-	    range->end = promoPos + 100;
-	    slAddHead(&correlatingPromoterList, range);
+	    if (fPair)
+		printLinkingBed(fPair, enh, gene, r);
+	    if (fEnh)
+		{
+		int promoPos = (gene->strand[0] == '-' ? gene->chromEnd : gene->chromStart);
+		AllocVar(range);
+		range->start = promoPos - proPad;
+		range->end = promoPos + proPad;
+		slAddHead(&correlatingPromoterList, range);
+		}
+	    if (fPro)
+	        {
+		enhGene = hashFindVal(proHash, gene->name);
+		if (enhGene == NULL)
+		    {
+		    AllocVar(enhGene);
+		    enhGene->gene = gene;
+		    slAddHead(&enhGeneList, enhGene);
+		    hashAdd(proHash, gene->name, enhGene);
+		    }
+		refAdd(&enhGene->enhList, enh);
+		}
 	    }
 	if (gene->strand[0] == '-')
 	    distance = gene->chromEnd - center;
@@ -211,24 +303,57 @@ for (enh = enhList; enh != NULL; enh = enh->next)
 	enhBed->thickEnd = enh->chromEnd;
 
 	/* Save it. */
-	bedTabOutN(enhBed, 12, fBed);
+	bedTabOutN(enhBed, 12, fEnh);
 
 	/* Clean up a little. */
 	slFreeList(&correlatingPromoterList);
+	rangeTreeFree(&rt);
 	}
     }
+
+/* Finally put out the promoter centered file. The enhGeneList will be empty if no output. */
+slReverse(&enhGeneList);
+for (enhGene = enhGeneList; enhGene != NULL; enhGene = enhGene->next)
+    {
+    /* Make range tree with the promoter and all the enhancers. */
+    struct bed *gene = enhGene->gene;
+    int proCenter = (gene->strand[0] == '-' ? gene->chromEnd : gene->chromStart);
+    struct rbTree *rt = rangeTreeNew();
+    rangeTreeAdd(rt, proCenter-proPad, proCenter+proPad);
+    struct slRef *ref;
+    for (ref = enhGene->enhList; ref != NULL; ref = ref->next)
+        {
+	struct bed *enh = ref->val;
+	rangeTreeAdd(rt, enh->chromStart, enh->chromEnd);
+	}
+
+    /* Convert to bed and set thick start/end to the promoter. */
+    struct range *rangeList = rangeTreeList(rt);
+    struct bed *bed = rangeListToBed(rangeList, gene->name, gene->chrom, '.', 0);
+    bed->thickStart = proCenter - proPad;
+    bed->thickEnd = proCenter + proPad;
+
+    /* Save it. */
+    bedTabOutN(bed, 12, fPro);
+
+    /* Clean up. */
+    rangeTreeFree(&rt);
+    }
+
 carefulClose(&fTab);
-carefulClose(&fBed);
+carefulClose(&fPair);
+carefulClose(&fEnh);
+carefulClose(&fPro);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 7)
+if (argc != 6)
     usage();
 minR = optionDouble("minR", minR);
 minExp = optionDouble("minExp", minExp);
-regCompanionCorrelateEnhancerAndExpression(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
+regCompanionCorrelateEnhancerAndExpression(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
