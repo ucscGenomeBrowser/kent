@@ -1787,8 +1787,9 @@ compositeTrack on
 group expression
 shortLabel Affy Exon Array
 longLabel Affymetrix $Organism Exon Array Probes and Probesets
-subGroup1 type Type Probeset=Probeset Probe=Probe
-subGroup2 level Level Ambiguous=Ambiguous Core=Core Extended=Extended Free=Free Full=Full
+subGroup1 type Type aProbeset=Probeset bProbe=Probe
+subGroup2 level Level aCore=Core bExtended=Extended cFull=Full dFree=Free eAmbiguous=Ambiguous 
+sortOrder level=+ type=+ 
 dimensions dimensionX=level dimensionY=type
 dragAndDrop subTracks
 color 0,0,0
@@ -1798,8 +1799,8 @@ type bed 12
 
     track affyExonProbesetCore
     parent affyExonArray
-    subGroups type=Probeset level=Core
-    shortLabel Core Probesets
+    subGroups type=aProbeset level=aCore
+    shortLabel Core PS
     longLabel Affymetrix $Organism Exon Array Core Probesets
     # royalblue
     color 65,105,225
@@ -1807,7 +1808,7 @@ type bed 12
 
     track affyExonProbesetExtended
     parent affyExonArray
-    subGroups type=Probeset level=Extended
+    subGroups type=aProbeset level=bExtended
     shortLabel Extended PS
     longLabel Affymetrix $Organism Exon Array Extended Probesets
     # chocolate 4
@@ -1816,8 +1817,8 @@ type bed 12
 
     track affyExonProbesetFull
     parent affyExonArray off
-    subGroups type=Probeset level=Full
-    shortLabel Full Probesets
+    subGroups type=aProbeset level=cFull
+    shortLabel Full PS
     longLabel Affymetrix $Organism Exon Array Free Probesets
     # deeppink
     color 205,96,144
@@ -1825,8 +1826,8 @@ type bed 12
 
     track affyExonProbesetFree 
     parent affyExonArray off
-    subGroups type=Probeset level=Free
-    shortLabel Free Probesets
+    subGroups type=aProbeset level=dFree
+    shortLabel Free PS
     longLabel Affymetrix $Organism Exon Array Free Probesets
     # darkgreen
     color 0,100,0
@@ -1834,7 +1835,7 @@ type bed 12
 
     track affyExonProbesetAmbiguous 
     parent affyExonArray off
-    subGroups type=Probeset level=Ambiguous
+    subGroups type=aProbeset level=eAmbiguous
     shortLabel Ambiguous PS
     longLabel Affymetrix $Organism Exon Array Ambiguous Probesets
     visibility hide
@@ -1843,7 +1844,7 @@ type bed 12
     
     track affyExonProbeCore 
     parent affyExonArray off
-    subGroups type=Probe level=Core
+    subGroups type=bProbe level=aCore
     shortLabel Core Probes
     longLabel Affymetrix $Organism Exon Array Core Probes
     # royalblue
@@ -1853,7 +1854,7 @@ type bed 12
 
     track affyExonProbeExtended 
     parent affyExonArray off
-    subGroups type=Probe level=Extended
+    subGroups type=bProbe level=bExtended
     shortLabel Extended Probes
     longLabel Affymetrix $Organism Exon Array Extended Probes
     # chocolate 4
@@ -1863,7 +1864,7 @@ type bed 12
 
     track affyExonProbeFull 
     parent affyExonArray off
-    subGroups type=Probe level=Full
+    subGroups type=bProbe level=cFull
     shortLabel Full Probes
     longLabel Affymetrix $Organism Exon Array Full Probes
     # deep pink
@@ -1873,7 +1874,7 @@ type bed 12
 
     track affyExonProbeFree 
     parent affyExonArray off
-    subGroups type=Probe level=Free
+    subGroups type=bProbe level=dFree
     shortLabel Free Probes
     longLabel Affymetrix $Organism Exon Array Free Probes
     # darkgreen
@@ -1883,7 +1884,7 @@ type bed 12
 
     track affyExonProbeAmbiguous 
     parent affyExonArray off
-    subGroups type=Probe level=Ambiguous
+    subGroups type=bProbe level=eAmbiguous
     shortLabel Ambiguous Probes
     longLabel Affymetrix $Organism Exon Array Ambiguous Probes
     # orchid
