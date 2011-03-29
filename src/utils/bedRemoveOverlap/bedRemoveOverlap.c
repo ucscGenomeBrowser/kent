@@ -68,7 +68,7 @@ while (lineFileNext(lf, &line, &lineSize))
     /* Parse current line. */
     wordCount = chopLine(line, row);
     if (wordCount == ArraySize(row))
-         errAbort("Too many fields (%d max is %lu) line %d of %s", wordCount, ArraySize(row),
+         errAbort("Too many fields (%d max is %lu) line %d of %s", wordCount, (unsigned long)ArraySize(row),
 	     lf->lineIx, lf->fileName);
     char *chrom = row[0];
     unsigned int start = lineFileNeedNum(lf, row, 1);
