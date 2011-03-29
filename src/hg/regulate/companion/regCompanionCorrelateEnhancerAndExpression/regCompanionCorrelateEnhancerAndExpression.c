@@ -24,7 +24,7 @@ errAbort(
   "usage:\n"
   "   regCompanionCorrelateEnhancerAndExpression enh.bed enh.levels gene.bed gene.levels out.tab\n"
   "The out.tab has the following columns\n"
-  "   <enhId> <geneId> <distance from promoter to enhancer> <average expn> <level correlation>\n"
+  "   <enhId> <geneId> <promoter to enhancer distance> <average expn> <max expn> <level correlation>\n"
   "The out.bed is a non-stranded, multi-block bed file with the thick block being the\n"
   "enhancer and the thin blocks being the promoters correlated with it\n"
   "options:\n"
@@ -35,6 +35,7 @@ errAbort(
   "              multiple promoters per enhancer\n"
   "   -outProBed=outPro.bed - output bed file with a record for each promoter, possibly including\n"
   "              multiple enhancers per promoter\n"
+  "   -outOverBed=outOver.bed -output bed file with enhancers that are over thresholds\n"
   , minR, minExp
   );
 }
@@ -45,6 +46,7 @@ static struct optionSpec options[] = {
    {"outPairBed", OPTION_STRING},
    {"outEnhBed", OPTION_STRING},
    {"outProBed", OPTION_STRING},
+   {"outOverBed", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -205,6 +207,7 @@ void regCompanionCorrelateEnhancerAndExpression(char *enhBed, char *enhLevels,
 char *outProBed = optionVal("outProBed", NULL);
 char *outEnhBed = optionVal("outEnhBed", NULL);
 char *outPairBed = optionVal("outPairBed", NULL);
+char *outOverBed = optionVal("outOverBed", NULL);
 
 /* Read genes into a chromBin object to be able to find quickly. Just store the promoter */
 struct bed *gene, *geneList = bedLoadAll(geneBed);
@@ -227,6 +230,7 @@ FILE *fTab = mustOpen(outTab, "w");
 FILE *fPair = (outPairBed == NULL ? NULL : mustOpen(outPairBed, "w"));
 FILE *fEnh = (outEnhBed == NULL ? NULL : mustOpen(outEnhBed, "w"));
 FILE *fPro = (outProBed == NULL ? NULL : mustOpen(outProBed, "w"));
+FILE *fOver = (outOverBed == NULL ? NULL : mustOpen(outOverBed, "w"));
 
 /* Set up additional stuff for promoter-centered output. */
 struct hash *proHash = hashNew(16);
@@ -235,6 +239,8 @@ struct enhForGene *enhGeneList = NULL, *enhGene;
 /* Stream through input enhancers, finding genes within 50kb, and doing correlations. */
 for (enh = enhList; enh != NULL; enh = enh->next)
     {
+    boolean outputOver = FALSE;	/* Keep track if have output this one in fOver. */
+
     /* Get region to query */
     char *chrom = enh->chrom;
     int center = (enh->chromStart + enh->chromEnd)/2;
@@ -255,6 +261,15 @@ for (enh = enhList; enh != NULL; enh = enh->next)
 	int distance;
 	if (r >= minR && maxExp >= minExp)
 	    {
+	    if (fOver)
+		{
+		if (!outputOver)
+		    {
+		    fprintf(fOver, "%s\t%d\t%d\t%s\t%d\t%s\n", enh->chrom, 
+		    	enh->chromStart, enh->chromEnd, enh->name, round(r*1000), gene->strand);
+		    outputOver = TRUE;
+		    }
+		}
 	    if (fPair)
 		printLinkingBed(fPair, enh, gene, r);
 	    if (fEnh)
@@ -282,7 +297,8 @@ for (enh = enhList; enh != NULL; enh = enh->next)
 	    distance = gene->chromEnd - center;
 	else
 	    distance = center - gene->chromStart;
-	fprintf(fTab, "%s\t%s\t%d\t%g\t%g\n", enh->name, gene->name, distance, aveExp, r);
+	fprintf(fTab, "%s\t%s\t%d\t%g\t%g\t%g\n", 
+		enh->name, gene->name, distance, aveExp, maxExp, r);
 	}
 
     if (correlatingPromoterList != NULL)
@@ -344,6 +360,7 @@ carefulClose(&fTab);
 carefulClose(&fPair);
 carefulClose(&fEnh);
 carefulClose(&fPro);
+carefulClose(&fOver);
 }
 
 int main(int argc, char *argv[])
