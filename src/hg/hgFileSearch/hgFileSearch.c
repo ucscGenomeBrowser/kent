@@ -19,6 +19,9 @@
 struct hash *trackHash = NULL;	// Is this needed?
 boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTiming=." . */
 
+#define FILE_SEARCH_WHAT "Downloadable ENCODE Files"
+#define FILE_SEARCH_NAME FILE_SEARCH_WHAT " Search"
+
 #define FILE_SEARCH              "hgfs_Search"
 #define FILE_SEARCH_FORM         "fileSearch"
 #define FILE_SEARCH_CURRENT_TAB  "fsCurTab"
@@ -532,7 +535,7 @@ if(doSearch)
     }
 hFreeConn(&conn);
 
-webNewSection("About Downloadable Files Search");
+webNewSection("About " FILE_SEARCH_NAME);
 printf("<p>Search for downloadable ENCODE files by entering search terms in "
         "the Track name or Description fields and/or by making selections with "
         "the group, data format, and/or ENCODE metadata drop-downs.");
@@ -553,7 +556,10 @@ measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 // QUESTION: Do We need track list ???  trackHash ??? Can't we just get one track and no children
 trackHash = trackHashMakeWithComposites(db,chrom,&tdbList,FALSE);
 
-cartWebStart(cart, db, "Search for Downloadable ENCODE Files in the %s %s Assembly", organism, hFreezeFromDb(db));
+cartWebStart(cart, db, "Search for " FILE_SEARCH_WHAT " in the %s %s Assembly", organism, hFreezeFromDb(db));
+
+// This cleverness allows us to have the background image like "Track Search" does, without all the hgTracks overhead
+printf("<style type='text/css'>body {background-image:url('%s');}</style>",hBackgroundImage());
 
 webIncludeResourceFile("HGStyle.css");
 webIncludeResourceFile("jquery-ui.css");
@@ -588,8 +594,6 @@ return 0;
 
 // TODO:
 // 1) Done: Limit to first 1000
-// 2) SORT OF: Work out strangeness with dropdownchecklist and use in hgTracks (By some miracle multiselect is working in my hgTracks)
-// 3) Work out support for selecting composites and limiting search to those
-// 4) Work out simple verses advanced tabs
-// 5) work out support for non-encode downloads
-// 6) Make an hgTrackSearch to replces hgTracks track search ??   Silpler code, but may not be good idea.
+// 2) Work out simple verses advanced tabs
+// 3) work out support for non-encode downloads
+// 4) Make an hgTrackSearch to replces hgTracks track search ??   Silpler code, but may not be good idea.

@@ -1013,11 +1013,13 @@ char *slPairListToString(struct slPair *list)
 // name1=val1 name2=val2 ...
 // Will wrap vals in quotes if contain spaces: name3="val 3"
 {
-// Don't rely on dyString.  Do the accounting ourselves
+// Don't rely on dyString.  We can do the accounting ourselves.
 int count = 0;
 struct slPair *pair = list;
 for(;pair != NULL; pair = pair->next)
     {
+    if (pair->name == NULL || pair->val == NULL)
+        continue;
     count += strlen(pair->name);
     count += strlen((char *)(pair->val));
     count += 2; // = and ' ' delimit
@@ -1031,6 +1033,8 @@ char *str = needMem(count+5); // A bit of slop
 char *s = str;
 for(pair = list;pair != NULL; pair = pair->next)
     {
+    if (pair->name == NULL || pair->val == NULL)
+        continue;
     if (hasWhiteSpace((char *)(pair->val)))
         sprintf(s,"%s=\"%s\" ",pair->name,(char *)(pair->val));
     else

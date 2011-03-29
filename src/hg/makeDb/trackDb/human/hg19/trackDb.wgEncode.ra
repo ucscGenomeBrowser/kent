@@ -11,6 +11,7 @@ include wgEncodeUncBsuProt.ra alpha
 
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.ra alpha
+#include wgEncodeRegNorm.ra alpha
 
 # Nucleosome (wrangler: venkat)
 include wgEncodeSydhNsome.ra alpha
