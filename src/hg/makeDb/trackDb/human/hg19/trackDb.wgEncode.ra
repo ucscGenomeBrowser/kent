@@ -54,7 +54,7 @@ include wgEncodeDukeAffyExon.ra alpha
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 #UNC FAIRE (wrangler: tim)
-include wgEncodeOpenChromFaire.ra 
+include wgEncodeOpenChromFaire.ra
 
 #Open Chrom Synth (wrangler: tim)
 include wgEncodeOpenChromSynth.ra
@@ -133,7 +133,7 @@ include wgEncodeBroadHmm.ra
 include wgEncodeUwHistone.ra
 
 # SYDH Histone (wrangler: Venkat)
-include wgEncodeSydhHistone.ra
+include wgEncodeSydhHistone.ra alpha
 
 
 # ENCODE TFBS -------------------------------------------
@@ -145,7 +145,7 @@ include wgEncodeUwTfbs.ra
 include wgEncodeOpenChromChip.ra
 
 # HAIB TFBS (wrangler: Venkat)
-include wgEncodeHaibTfbs.ra
+include wgEncodeHaibTfbs.ra alpha
 
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra
@@ -169,65 +169,12 @@ include wgEncodeSunySwitchgear.ra alpha
 include wgEncodeSunyRipSeq.ra alpha
 
 
-track wgEncodeMapability
-compositeTrack on
-shortLabel Mapability
-longLabel Mapability or Uniqueness of Reference Genome
-group map
-#dimensions dimensionX=win
-dragAndDrop subTracks
-priority 0
-type bigWig 0.00 1.00
-viewLimits 0:1
-autoScale off
-canPack  On
-windowingFunction mean
-maxHeightPixels 100:32:16
-visibility hide
-wgEncode 1
-origAssembly hg19
+# Other miscellany ------------------------------------
 
-    track wgEncodeCrgMapabilityAlign24mer
-    subTrack wgEncodeMapability
-    shortLabel CRG Align 24
-    longLabel Mapability - CRG GEM Alignability of 24mers with no more than 2 mismatches
-    color 0,100,0
-    priority 1
+# Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and whever else wants to help)
+include wgEncodeMapability.ra beta,public
+include wgEncodeMapability.new.ra alpha
 
-    track wgEncodeCrgMapabilityAlign36mer
-    subTrack wgEncodeMapability
-    shortLabel CRG Align 36
-    longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
-    color 0,100,0
-    priority 2
-
-    track wgEncodeCrgMapabilityAlign40mer
-    subTrack wgEncodeMapability
-    shortLabel CRG Align 40
-    longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
-    color 0,100,0
-    priority 3
-
-    track wgEncodeCrgMapabilityAlign50mer
-    subTrack wgEncodeMapability
-    shortLabel CRG Align 50
-    longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
-    color 0,100,0
-    priority 4
-
-    track wgEncodeCrgMapabilityAlign75mer
-    subTrack wgEncodeMapability
-    shortLabel CRG Align 75
-    longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
-    color 0,100,0
-    priority 5
-
-    track wgEncodeCrgMapabilityAlign100mer
-    subTrack wgEncodeMapability
-    shortLabel CRG Align 100
-    longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
-    color 0,100,0
-    priority 6
 
 #  GENCODE genes (wrangler: braney )
 
