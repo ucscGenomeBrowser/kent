@@ -381,7 +381,7 @@ static char *labelWithVocabLink(char *var,char *title,struct slPair *valsAndLabe
 {
 // Determine if the var is cvDefined.  If not, simple link
 boolean cvDefined = FALSE;
-struct hash *cvTypesOfTerms = (struct hash *)mdbCvTermTypeHash();
+struct hash *cvTypesOfTerms = (struct hash *)cvTermTypeHash();
 if (cvTypesOfTerms != NULL)
     {
     struct hash *cvTermDef = hashFindVal(cvTypesOfTerms,var);
@@ -418,9 +418,9 @@ if (sortOrder != NULL)
     for(sIx = 0;sIx<sortOrder->count;sIx++)
         {
         char *var = sortOrder->column[sIx];
-        enum mdbCvSearchable searchBy = mdbCvSearchMethod(var);
-        //if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange) // dates and numbers probably not good for filtering. FIXME: Should cvsNotSearchable be filterable??
-        if (searchBy != cvsSearchBySingleSelect && searchBy != cvsSearchByMultiSelect)
+        enum cvSearchable searchBy = cvSearchMethod(var);
+        //if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange) // dates and numbers probably not good for filtering. FIXME: Should cvsNotSearchable be filterable??
+        if (searchBy != cvSearchBySingleSelect && searchBy != cvSearchByMultiSelect)
             continue; // Only single selects and multi-select make good candidates for filtering
 
         struct sqlConnection *conn = hAllocConn(db);
@@ -619,8 +619,8 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                 class[0] = '\0';
                 if (filterable)
                     {
-                    enum mdbCvSearchable searchBy = mdbCvSearchMethod(sortOrder->column[ix]);
-                    if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByMultiSelect)
+                    enum cvSearchable searchBy = cvSearchMethod(sortOrder->column[ix]);
+                    if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)
                         {
                         char *cleanClass = cloneString(field?field:"None");     // FIXME: Only none if none is a fliter choice.
                         eraseNonAlphaNum(cleanClass);
@@ -851,7 +851,7 @@ if (slCount(mdbList) == 0)
 mdbObjsSortOnVars(&mdbList, "composite");
 mdbObjRemoveHiddenVars(mdbList);
 
-#define FOUND_FILE_LIMIT 2000
+#define FOUND_FILE_LIMIT 1000
 int fileCount = 0;
 // Verify file existance and make fileList of those found
 struct fileDb *fileList = NULL, *oneFile = NULL; // Will contain found files
@@ -879,6 +879,8 @@ while(mdbList && fileCount < FOUND_FILE_LIMIT)
                     slAddHead(&mdbFiles,mdbFile);
                     fileCount++;
                     found = TRUE;
+                    if (fileCount == FOUND_FILE_LIMIT)
+                        break;
                     }
                 }
                 else

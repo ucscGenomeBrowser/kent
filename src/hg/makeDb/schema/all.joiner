@@ -3248,6 +3248,7 @@ tablesIgnored hg18
     numtSMitochondrionChrPlacement
 
 tablesIgnored hg19
+    affyExonProbe%
     altSeqHaplotypes
     altSeqLiftOverPsl
     altSeqPatches

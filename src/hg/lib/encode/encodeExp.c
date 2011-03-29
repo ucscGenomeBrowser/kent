@@ -56,8 +56,14 @@ void encodeExpSaveToDb(struct sqlConnection *conn, struct encodeExp *el, char *t
  * If worried about this use encodeExpSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s','%s')",
-	tableName,  el->ix,  el->organism,  el->accession,  el->lab,  el->dataType,  el->cellType,  el->expVars,  el->lastUpdated);
+dyStringPrintf(update, "insert into %s set ix=%d, organism='%s', lab='%s', dataType='%s', cellType='%s', lastUpdated='%s'",
+               tableName, el->ix, el->organism, el->lab, el->dataType, el->cellType, el->lastUpdated);
+
+if (el->accession != NULL) // accession may be null
+    dyStringPrintf(update, ", accession='%s'", el->accession); // order doesn't matter
+if (el->expVars != NULL)   // expVars may be null
+    dyStringPrintf(update, ", expVars='%s'", el->expVars);
+
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -74,23 +80,33 @@ void encodeExpSaveToDbEscaped(struct sqlConnection *conn, struct encodeExp *el, 
 struct dyString *update = newDyString(updateSize);
 char  *organism, *accession, *lab, *dataType, *cellType, *expVars, *lastUpdated;
 organism = sqlEscapeString(el->organism);
-accession = sqlEscapeString(el->accession);
 lab = sqlEscapeString(el->lab);
 dataType = sqlEscapeString(el->dataType);
 cellType = sqlEscapeString(el->cellType);
-expVars = sqlEscapeString(el->expVars);
 lastUpdated = sqlEscapeString(el->lastUpdated);
 
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s','%s')",
-	tableName,  el->ix,  organism,  accession,  lab,  dataType,  cellType,  expVars,  lastUpdated);
+dyStringPrintf(update, "insert into %s set ix=%d, organism='%s', lab='%s', dataType='%s', cellType='%s', lastUpdated='%s'",
+               tableName, el->ix, organism, lab, dataType, cellType, lastUpdated);
+
+if (el->accession != NULL) // accession may be null
+    {
+    accession = sqlEscapeString(el->accession);
+    dyStringPrintf(update, ", accession='%s'", accession);
+    freez(&accession);
+    }
+if (el->expVars != NULL)   // expVars may be null
+    {
+    expVars = sqlEscapeString(el->expVars);
+    dyStringPrintf(update, ", expVars='%s'", expVars);
+    freez(&expVars);
+    }
+
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&organism);
-freez(&accession);
 freez(&lab);
 freez(&dataType);
 freez(&cellType);
-freez(&expVars);
 freez(&lastUpdated);
 }
 
@@ -317,7 +333,7 @@ char *encodeExpGetIx(struct encodeExp *exp)
 /* Return ix field of encodeExp */
 {
 char buf[64];
-safef(buf, 64, "%d", exp->ix);
+safef(buf, sizeof(buf), "%d", exp->ix);
 return cloneString(buf);
 }
 
@@ -386,7 +402,7 @@ static char *sqlCreate =
 "CREATE TABLE %s (\n"
 "    ix int not null AUTO_INCREMENT,     # auto-increment ID\n"
 "    organism varchar(255) not null,     # human | mouse\n"
-"    accession varchar(255) not null,    # ENC[H|M]E00000N\n"
+"    accession varchar(255),             # NULL or wgEncodeE[H|M]00000N\n"
 "    lab varchar(255) not null,  # lab name from ENCODE cv.ra\n"
 "    dataType varchar(255) not null,     # dataType from ENCODE cv.ra\n"
 "    cellType varchar(255) not null,     # cellType from ENCODE cv.ra\n"
@@ -397,21 +413,6 @@ static char *sqlCreate =
 ")";
 
 /* END schema-dependent section */
-
-static char *expFactors[] = {
-    /* alpha sorted list, includes all exp-defining variables */
-    // TODO: -> whitelist from cv.ra
-    "antibody",
-    "insertLength",
-    "localization",
-    "protocol",
-    "readType",
-    "restrictionEnzyme",
-    "ripTgtProtein",
-    "rnaExtract",
-    "treatment",
-    0,
-};
 
 void encodeExpTableCreate(struct sqlConnection *conn, char *tableName)
 /* Create an encodeExp table */
@@ -434,51 +435,24 @@ dyStringFree(&dy);
 return exps;
 }
 
-struct encodeExp *encodeExpFromMdb(struct mdbObj *mdb)
+struct encodeExp *encodeExpFromMdb(struct sqlConnection *conn, char *db, struct mdbObj *mdb)
 /* Create an encodeExp from an ENCODE metaDb object */
 {
-struct encodeExp *exp;
-
 if (!mdbObjIsEncode(mdb))
     errAbort("Metadata object is not from ENCODE");
 
-AllocVar(exp);
-
-/* extract lab */
-exp->lab = mdbObjFindValue(mdb, MDB_FIELD_LAB);
-if (exp->lab == NULL)
-    errAbort("ENCODE metadata object \'%s\' missing lab\n", mdb->obj);
-
-// TODO: -> lib (stripPiFromLab)
-/* Strip off trailing parenthesized PI name if present */
-chopSuffixAt(exp->lab, '(');  // FIXME: This should be removed when mdb is sanitized.
-
-/* extract data type */
-exp->dataType = mdbObjFindValue(mdb, MDB_FIELD_DATA_TYPE);
-if (exp->dataType == NULL)
-    errAbort("ENCODE metadata object \'%s\' missing dataType\n", mdb->obj);
-
-exp->cellType = mdbObjFindValue(mdb, MDB_FIELD_CELL_TYPE);
-if (exp->cellType == NULL)
-    {
-    exp->cellType = ENCODE_EXP_NO_CELL;
+struct mdbVar *edVars = mdbObjFindEncodeEdvs(conn,mdb,TRUE); // includes "None"
+if (edVars == NULL)
+    {  // Not willing to make these erraborts at this time.
+    char *composite = mdbObjFindValue(mdb,MDB_VAR_COMPOSITE);
+    if (composite == NULL)
+        verbose(1,"MDB object '%s' does not have a composite defined\n",mdb->obj);
+    else
+        verbose(1,"Experiment Defining Variables not defined for composite '%s'\n",composite);
+    return NULL;
     }
-
-/* experimental expVars (variables) */
-int i;
-char *var, *val;
-struct dyString *dy = newDyString(0);
-for (i = 0; expFactors[i] != NULL; i++)
-    {
-    var = expFactors[i];
-    val = mdbObjFindValue(mdb, var);
-    if (val == NULL || sameString(val, ENCODE_EXP_NO_VAR))
-        continue;
-    dyStringPrintf(dy, "%s=%s ", var, val);
-    }
-exp->expVars = dyStringCannibalize(&dy);
-eraseTrailingSpaces(exp->expVars);
-
+struct encodeExp *exp = encodeExpFromMdbVars(db, edVars);
+mdbVarsFree(&edVars);
 return exp;
 }
 
@@ -497,35 +471,21 @@ if (db == NULL)
 exp->organism = hOrganism(db);
 strLower(exp->organism);
 
-// KATE: This will not do.  There is not a white list defined yet and the call from mdb will be limited to EDVs
-//struct mdbObj *mdb = mdbObjNew(NULL, vars);
-//// extract exp vars into an slPair list
-//int i;
-//char *var, *val;
-//for (i = 0; expFactors[i] != NULL; i++)
-//    {
-//    var = expFactors[i];
-//    val = mdbObjFindValue(mdb, var);
-//    if (val == NULL || sameString(val, ENCODE_EXP_NO_VAR))
-//        continue;
-//    slPairAdd(&varPairs, var, val);
-//    }
-
 struct slPair *varPairs = NULL;
 struct mdbVar *edv = vars;
 for(;edv != NULL; edv = edv->next)
     {
-    if (sameWord(edv->var,MDB_FIELD_LAB))
+    if (sameWord(edv->var,MDB_VAR_LAB))
         {
         assert(exp->lab == NULL);
         exp->lab = cloneString((char *)(edv->val));
         }
-    else if (sameWord(edv->var,MDB_FIELD_DATA_TYPE))
+    else if (sameWord(edv->var,MDB_VAR_DATATYPE))
         {
         assert(exp->dataType == NULL);
         exp->dataType = cloneString((char *)(edv->val));
         }
-    else if (sameWord(edv->var,MDB_FIELD_CELL_TYPE))
+    else if (sameWord(edv->var,MDB_VAR_CELL))
         {
         assert(exp->cellType == NULL);
         exp->cellType = cloneString((char *)(edv->val));
@@ -538,7 +498,7 @@ for(;edv != NULL; edv = edv->next)
 if (exp->lab == NULL || exp->dataType == NULL)
     {
     verbose(1,"Experiment Defining Variables must contain '%s' and '%s'\n",
-            MDB_FIELD_LAB,MDB_FIELD_DATA_TYPE); // Not willing to make this an errabort at this time.
+            MDB_VAR_LAB,MDB_VAR_DATATYPE); // Not willing to make this an errabort at this time.
     return NULL;
     }
 if (exp->cellType == NULL)  // Okay if no cell
@@ -601,6 +561,21 @@ struct hash *encodeExpToRa(struct encodeExp *exp)
 return encodeExpToRaFile(exp, NULL);
 }
 
+struct encodeExp *encodeExpGetByIdFromTable(struct sqlConnection *conn, char *tableName, int id)
+/* Return experiment specified by id from named table */
+{
+struct dyString *query = NULL;
+
+query = dyStringCreate("select * from %s where ix=\'%d\'", tableName, id);
+return encodeExpLoadByQuery(conn, dyStringCannibalize(&query));
+}
+
+struct encodeExp *encodeExpGetById(struct sqlConnection *conn, int id)
+/* Return experiment specified by id from default table */
+{
+return encodeExpGetByIdFromTable(conn, ENCODE_EXP_TABLE, id);
+}
+
 static char *encodeExpMakeAccession(struct encodeExp *exp)
 /* Make accession string from prefix + organism + id */
 {
@@ -619,34 +594,60 @@ return cloneString(accession);
 
 void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp *exp)
 /* Add encodeExp as a new row to the table specified by tableName.
-   Update accession using index assigned with autoincrement
 */
 {
-struct dyString *query = dyStringNew(0);
+encodeExpSaveToDb(conn, exp, tableName, 0);
+}
+
+static char *encodeExpAccession(struct sqlConnection *conn, char *tableName, int id, boolean add)
+/* Add or remove an accession from an experiment.
+   This is done after the experiment definition is checked for validity.
+*/
+{
+struct dyString *query = NULL;
 char *accession = NULL;
+struct encodeExp *exp = NULL;
+char queryAcc[64];
 
 sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
-encodeExpSaveToDb(conn, exp, tableName, 0);
+exp = encodeExpGetByIdFromTable(conn, tableName, id);
+if (exp == NULL)
+    errAbort("Experiment id %d not found in table %s", id, tableName);
+if (add)
+    {
+    accession = encodeExpMakeAccession(exp);
+    safef(queryAcc, sizeof(queryAcc), "\'%s\'", accession);
+    }
+else
+    safecpy(queryAcc, sizeof(queryAcc), "NULL");
 
-dyStringPrintf(query, "select max(ix) from %s", tableName);
-exp->ix = sqlQuickNum(conn, dyStringContents(query));
-accession = encodeExpMakeAccession(exp);
-freeDyString(&query);
-
-query = newDyString(0);
-dyStringPrintf(query, "update %s set accession=\'%s\' where ix=%d",
-                        tableName, accession, exp->ix);
-sqlUpdate(conn, dyStringContents(query));
+query = dyStringCreate("update %s set accession=%s where ix=%d",
+                        tableName, queryAcc, exp->ix);
+sqlUpdate(conn, dyStringCannibalize(&query));
 sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
+return accession;
+}
 
-freez(&accession);
-freeDyString(&query);
+char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id)
+/* Add accession field to an existing "temp" experiment.  This is done
+ * after experiment is determined to be valid.
+ * Return the accession. */
+{
+return encodeExpAccession(conn, tableName, id, TRUE);
+}
+
+void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int id)
+/* Revoke an experiment by removing the accession.
+*/
+{
+encodeExpAccession(conn, tableName, id, FALSE);
 }
 
 void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,
-                                char *accession, char *field, char *val)
-/* Update field in encodeExp identified by accession with value.
-   Only supported for a few non-interdependent fields */
+                                int id, char *field, char *val)
+/* Update field in encodeExp identified by id with value.
+   Only supported for a few non-interdependent fields
+   and only for non-accessioned experiments */
 {
 struct dyString *query = NULL;
 
@@ -655,11 +656,9 @@ if (differentString(field, ENCODE_EXP_FIELD_LAB) &&
     differentString(field, ENCODE_EXP_FIELD_CELL_TYPE))
         errAbort("Unsupported encodeExp field update: %s", field);
 
-query = dyStringCreate("update %s set %s=\'%s\' where accession=\'%s\'",
-                        tableName, field, val, accession);
-sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
+query = dyStringCreate("update %s set %s=\'%s\' where ix=%d",
+                        tableName, field, val, id);
 sqlUpdate(conn, dyStringContents(query));
-sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
 freeDyString(&query);
 }
 
@@ -691,6 +690,19 @@ struct dyString *dy = newDyString(0);
 dyStringPrintf(dy, "lab:%s dataType:%s cellType:%s", exp->lab, exp->dataType, exp->cellType);
 if (exp->expVars != NULL)
     dyStringPrintf(dy, " expVars:%s", exp->expVars);
+return dyStringCannibalize(&dy);
+}
+
+char *encodeExpVars(struct encodeExp *exp)
+// Create a string of all experiment defining vars and vals as "lab=UW dataType=ChipSeq ..."
+// WARNING: May be missing var=None if the var was added after composite had defined exps.
+{
+struct dyString *dy = newDyString(0);
+dyStringPrintf(dy, "%s=%s %s=%s", MDB_VAR_LAB, exp->lab, MDB_VAR_DATATYPE, exp->dataType );
+if (exp->cellType != NULL)
+    dyStringPrintf(dy, " %s=%s", MDB_VAR_CELL, exp->cellType);
+if (exp->expVars != NULL)
+    dyStringPrintf(dy, " %s", exp->expVars);
 return dyStringCannibalize(&dy);
 }
 
@@ -793,7 +805,7 @@ freez(&exp);
 return found;
 }
 
-char *encodeGetAccessionByMdbVars(char *db, struct mdbVar *vars)
+char *encodeExpGetAccessionByMdbVars(char *db, struct mdbVar *vars)
 /* Return accession of (first) experiment matching vars, or NULL if not found */
 {
 struct encodeExp *exp = encodeExpGetByMdbVars(db, vars);
