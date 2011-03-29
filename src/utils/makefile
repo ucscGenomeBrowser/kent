@@ -56,13 +56,18 @@ DIRS = \
 	ave \
 	aveCols \
 	bedClip \
+	bedCommonRegions \
+	bedGeneParts \
 	bedGraphToBigWig \
 	bedRemoveOverlap \
+	bedRestrictToPositions \
 	bedToBigBed \
 	bigBedInfo \
 	bigBedSummary \
 	bigBedToBed \
+	bigWigAverageOverBed \
 	bigWigInfo \
+	bigWigMerge \
 	bigWigSummary \
 	bigWigToBedGraph \
 	bigWigToWig \
@@ -71,6 +76,7 @@ DIRS = \
 	catUncomment \
 	ccCp \
 	chopFaLines \
+	colTransform \
 	countChars \
 	convolve \
 	cvsTools \
