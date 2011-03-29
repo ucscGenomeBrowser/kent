@@ -188,7 +188,7 @@ struct encodeExp *encodeExpGetOrCreateByMdbVarsFromTable(char *db, struct mdbVar
 int encodeExpExists(char *db, struct mdbVar *vars);
 /* Return TRUE if at least one experiment exists for these vars */
 
-char *encodeGetAccessionByMdbVars(char *db, struct mdbVar *vars);
+char *encodeGetExpAccessionByMdbVars(char *db, struct mdbVar *vars);
 /* Return accession of (first) experiment matching vars, or NULL if not found */
 
 void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,

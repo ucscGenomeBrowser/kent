@@ -1566,7 +1566,7 @@ return TRUE;
 }
 
 
-boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries)
+boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries, boolean newer)
 /* Open multiple parallel connections to URL to speed downloading */
 {
 char *origPath = outPath;
@@ -1690,6 +1690,44 @@ if (restartable
     }
 else
     {
+
+    if (newer) // only download it if it is newer than what we already have
+	{
+	/* datestamp mtime from last-modified header */
+	struct tm tm;
+	// Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
+	// These strings are always GMT
+	if (strptime(dateString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
+	    {
+	    warn("unable to parse last-modified string [%s]", dateString);
+	    }
+	else
+	    {
+	    time_t t;
+	    // convert to UTC (GMT) time
+	    t = mktimeFromUtc(&tm);
+	    if (t == -1)
+		{
+		warn("mktimeFromUtc failed while converting last-modified string to UTC [%s]", dateString);
+		}
+	    else
+		{
+		// get the file mtime
+		struct stat mystat;
+		ZeroVar(&mystat);
+		if (stat(origPath,&mystat)==0)
+		    {
+		    if (t <= mystat.st_mtime)
+			{
+			verbose(2,"Since nothing newer was found, skipping %s\n", origPath);
+			verbose(3,"t from last-modified = %ld; st_mtime = %ld\n", (long) t, (long)mystat.st_mtime);
+			return TRUE;
+			}
+		    }
+		}
+	    }
+	}
+
     /* make a list of connections */
     for (c = 0; c < numConnections; ++c)
 	{
