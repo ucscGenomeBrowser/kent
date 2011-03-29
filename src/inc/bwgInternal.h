@@ -76,6 +76,22 @@ struct bwgSection
     bits64 fileOffset;			/* Offset of section in file. */
     };
 
+struct bwgSectionHead
+/* A header from a bigWig file section - similar to above bug what is on disk. */
+    {
+    bits32 chromId;	/* Chromosome short identifier. */
+    bits32 start,end;	/* Range covered. */
+    bits32 itemStep;	/* For some section types, the # of bases between items. */
+    bits32 itemSpan;	/* For some section types, the # of bases in each item. */
+    UBYTE type;		/* Type byte. */
+    UBYTE reserved;	/* Always zero for now. */
+    bits16 itemCount;	/* Number of items in block. */
+    };
+
+void bwgSectionHeadFromMem(char **pPt, struct bwgSectionHead *head, boolean isSwapped);
+/* Read section header. */
+
+
 int bwgSectionCmp(const void *va, const void *vb);
 /* Compare to sort based on chrom,start,end.  */
 
