@@ -75,10 +75,20 @@ boolean isBigWig(char *fileName);
 boolean bigWigFileCheckSigs(char *fileName);
 /* check file signatures at beginning and end of file */
 
+/* bigWigValsOnChrom - a little system for optimizing bigWig use when doing a pass over the
+ * whole chromosome.   How it is used typically is:
+ *      struct bigWigValsOnChrom *chromVals = bigWigValsOnChromNew();
+ *      for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+ *          {
+ *          if (bigWigValsOnChromFetchData(chromVals, chrom->name, bigWig))
+ *              // do stuff using the valBuf, or covBuf fields which have
+ *              // the big wig data unpacked into them. Can use chromSize and chrom too 
+ *          }
+ *       bigWigValsOnChromFree(&chromVals);  */
 
 struct bigWigValsOnChrom
 /* Object for bulk access a chromosome at a time.  This is faster than
- * doing bigWigInterval queries when you have ~5000 or more queries. */
+ * doing bigWigInterval queries when you have ~3000 or more queries. */
      {
      struct bigWigValsOnChrom *next;
      char *chrom;	/* Current chromosome. */
