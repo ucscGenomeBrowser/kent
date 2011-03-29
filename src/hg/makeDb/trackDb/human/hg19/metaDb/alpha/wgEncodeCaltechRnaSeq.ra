@@ -24,7 +24,7 @@ rnaExtract longPolyA
 subId 3448
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep1V2
-view Aligns
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep2V2
 objType table
@@ -47,7 +47,7 @@ rnaExtract longPolyA
 subId 3449
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep2V2
-view Aligns
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaFastqRep1
 objType file
@@ -165,7 +165,7 @@ rnaExtract longPolyA
 subId 3514
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep1V3
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep2V3
 objType table
@@ -189,7 +189,7 @@ rnaExtract longPolyA
 subId 3515
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep2V3
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep1V2
 objType table
@@ -307,7 +307,7 @@ replicate 1
 rnaExtract longPolyA
 subId 2926
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2
 objType table
@@ -331,7 +331,7 @@ replicate 2
 rnaExtract longPolyA
 subId 2930
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -2556,7 +2556,7 @@ rnaExtract longPolyA
 subId 3450
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep1V2
-view Aligns
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep2V2
 objType table
@@ -2579,7 +2579,7 @@ rnaExtract longPolyA
 subId 3451
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep2V2
-view Aligns
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaFastqRep1
 objType file
@@ -2697,7 +2697,7 @@ rnaExtract longPolyA
 subId 3516
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep1V3
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep2V3
 objType table
@@ -2721,7 +2721,7 @@ rnaExtract longPolyA
 subId 3520
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep2V3
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep1V2
 objType table
@@ -2839,7 +2839,7 @@ replicate 1
 rnaExtract longPolyA
 subId 2931
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2
 objType table
@@ -2863,7 +2863,7 @@ replicate 2
 rnaExtract longPolyA
 subId 2932
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -4943,7 +4943,7 @@ rnaExtract longPolyA
 subId 3452
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep1V2
-view Aligns
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep2V2
 objType table
@@ -4966,7 +4966,7 @@ rnaExtract longPolyA
 subId 3453
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep2V2
-view Aligns
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaFastqRep1
 objType file
@@ -5084,7 +5084,7 @@ rnaExtract longPolyA
 subId 3518
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep1V3
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep2V3
 objType table
@@ -5108,7 +5108,7 @@ rnaExtract longPolyA
 subId 3519
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep2V3
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep1V2
 objType table
@@ -5226,7 +5226,7 @@ replicate 1
 rnaExtract longPolyA
 subId 2935
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2
 objType table
@@ -5250,7 +5250,7 @@ replicate 2
 rnaExtract longPolyA
 subId 2936
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -5873,7 +5873,7 @@ rnaExtract longPolyA
 subId 3454
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep1V2
-view Aligns
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep2V2
 objType table
@@ -5896,7 +5896,7 @@ rnaExtract longPolyA
 subId 3455
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep2V2
-view Aligns
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaFastqRep1
 objType file
@@ -6014,7 +6014,7 @@ rnaExtract longPolyA
 subId 3521
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep1V3
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep2V3
 objType table
@@ -6038,7 +6038,7 @@ rnaExtract longPolyA
 subId 3522
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep2V3
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep1V2
 objType table
@@ -6156,7 +6156,7 @@ replicate 1
 rnaExtract longPolyA
 subId 2937
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2
 objType table
@@ -6180,7 +6180,7 @@ replicate 2
 rnaExtract longPolyA
 subId 2938
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -7397,7 +7397,7 @@ rnaExtract longPolyA
 subId 3456
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep1V2
-view Aligns
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep2V2
 objType table
@@ -7420,7 +7420,7 @@ rnaExtract longPolyA
 subId 3457
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep2V2
-view Aligns
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaFastqRep1
 objType file
@@ -7538,7 +7538,7 @@ rnaExtract longPolyA
 subId 3517
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep1V3
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep2V3
 objType table
@@ -7562,7 +7562,7 @@ rnaExtract longPolyA
 subId 3513
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep2V3
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep1V2
 objType table
@@ -7680,7 +7680,7 @@ replicate 1
 rnaExtract longPolyA
 subId 2933
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2
 objType table
@@ -7704,7 +7704,7 @@ replicate 2
 rnaExtract longPolyA
 subId 2934
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -8327,7 +8327,7 @@ rnaExtract longPolyA
 subId 3458
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep1V2
-view Aligns
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep2V2
 objType table
@@ -8350,7 +8350,7 @@ rnaExtract longPolyA
 subId 3459
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep2V2
-view Aligns
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaFastqRep1
 objType file
@@ -8468,7 +8468,7 @@ rnaExtract longPolyA
 subId 3523
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep1V3
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep2V3
 objType table
@@ -8492,7 +8492,7 @@ rnaExtract longPolyA
 subId 3524
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep2V3
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep1V2
 objType table
@@ -8610,7 +8610,7 @@ replicate 1
 rnaExtract longPolyA
 subId 2939
 tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2
 objType table
@@ -8634,7 +8634,7 @@ replicate 2
 rnaExtract longPolyA
 subId 2940
 tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -10113,7 +10113,7 @@ rnaExtract longPolyA
 subId 3460
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqNhekR1x75dIlnaAlignsRep1V2
-view Aligns
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dIlnaFastqRep1
 objType file
@@ -10184,7 +10184,7 @@ rnaExtract longPolyA
 subId 3525
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhekR1x75dIlnaPlusSignalRep1V3
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dIlnaSplicesRep1V2
 objType table
@@ -10255,7 +10255,7 @@ replicate 1
 rnaExtract longPolyA
 subId 2941
 tableName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1
-view PlusiRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -11448,4 +11448,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: -1804591274
+# MAGIC: 497173944
