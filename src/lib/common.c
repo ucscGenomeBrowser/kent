@@ -751,13 +751,27 @@ slReverse(&list);
 return list;
 }
 
-struct slName *slNameListOfUniqueWords(char *text)
+struct slName *slNameListOfUniqueWords(char *text,boolean respectQuotes)
 // Return list of unique words found by parsing string delimited by whitespace.
+// If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] will yield 2 slNames no quotes
 {
 struct slName *list = NULL;
 char *word = NULL;
-while ((word = nextWord(&text)) != NULL)
-    slNameStore(&list, word);
+while (text != NULL)
+    {
+    if (respectQuotes)
+        {
+        word = nextWordRespectingQuotes(&text);
+        if (word[0] == '"')
+            stripChar(word, '"');
+        else if (word[0] == '\'')
+            stripChar(word, '\'');
+        }
+    else
+        word = nextWord(&text);
+    if (word)
+        slNameStore(&list, word);
+    }
 
 slReverse(&list);
 return list;
@@ -999,11 +1013,13 @@ char *slPairListToString(struct slPair *list)
 // name1=val1 name2=val2 ...
 // Will wrap vals in quotes if contain spaces: name3="val 3"
 {
-// Don't rely on dyString.  Do the accounting ourselves
+// Don't rely on dyString.  We can do the accounting ourselves.
 int count = 0;
 struct slPair *pair = list;
 for(;pair != NULL; pair = pair->next)
     {
+    if (pair->name == NULL || pair->val == NULL)
+        continue;
     count += strlen(pair->name);
     count += strlen((char *)(pair->val));
     count += 2; // = and ' ' delimit
@@ -1017,6 +1033,8 @@ char *str = needMem(count+5); // A bit of slop
 char *s = str;
 for(pair = list;pair != NULL; pair = pair->next)
     {
+    if (pair->name == NULL || pair->val == NULL)
+        continue;
     if (hasWhiteSpace((char *)(pair->val)))
         sprintf(s,"%s=\"%s\" ",pair->name,(char *)(pair->val));
     else
@@ -1973,6 +1991,35 @@ s = skipLeadingSpaces(s);
 if (s[0] == 0)
     return NULL;
 e = skipToSpaces(s);
+if (e != NULL)
+    *e++ = 0;
+*pLine = e;
+return s;
+}
+
+char *nextWordRespectingQuotes(char **pLine)
+// return next word but respects single or double quotes surrounding sets of words.
+{
+char *s = *pLine, *e;
+if (s == NULL || s[0] == 0)
+    return NULL;
+s = skipLeadingSpaces(s);
+if (s[0] == 0)
+    return NULL;
+if (s[0] == '"')
+    {
+    e = skipBeyondDelimit(s+1,'"');
+    if (e != NULL && !isspace(e[0]))
+        e = skipToSpaces(s);
+    }
+else if (s[0] == '\'')
+    {
+    e = skipBeyondDelimit(s+1,'\'');
+    if (e != NULL && !isspace(e[0]))
+        e = skipToSpaces(s);
+    }
+else
+    e = skipToSpaces(s);
 if (e != NULL)
     *e++ = 0;
 *pLine = e;

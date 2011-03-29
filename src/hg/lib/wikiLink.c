@@ -61,8 +61,15 @@ return NULL;
 static char *encodedHgSessionReturnUrl(int hgsid)
 /* Return a CGI-encoded hgSession URL with hgsid.  Free when done. */
 {
+char *port = NULL;
+port = cgiServerPort();
+
 char retBuf[1024];
-safef(retBuf, sizeof(retBuf), "http://%s/cgi-bin/hgSession?hgsid=%d",
+if (differentString(port, "80"))
+    safef(retBuf, sizeof(retBuf), "http://%s:%s/cgi-bin/hgSession?hgsid=%d",
+      cgiServerName(), port, hgsid);
+else
+    safef(retBuf, sizeof(retBuf), "http://%s/cgi-bin/hgSession?hgsid=%d",
       cgiServerName(), hgsid);
 return cgiEncode(retBuf);
 }

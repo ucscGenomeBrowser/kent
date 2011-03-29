@@ -235,7 +235,7 @@ boolean netSkipHttpHeaderLinesHandlingRedirect(int sd, char *url, int *redirecte
  * can't attach a lineFile since filling the lineFile buffer reads in more than just the http header. */
 
 boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime);
-/* Return date and size of ftp url file */
+/* Return date in UTC and size of ftp url file */
 
 
 boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries);
