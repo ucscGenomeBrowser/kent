@@ -49,6 +49,52 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep2V2
 view Aligns
 
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaFastqRep1
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
+dateSubmitted 2010-02-10
+dateUnrestricted 2010-11-09
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaFastqRep1.fastq.gz
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1874
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaFastqRep2
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
+dateSubmitted 2010-02-10
+dateUnrestricted 2010-11-09
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaFastqRep2.fastq.gz
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1874
+view Fastq
+
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep1V3
 objType table
 cell GM12878
@@ -191,52 +237,6 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep2V2
 view Splices
 
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep1
-objType file
-cell GM12878
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-02-10
-dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep1.fastq.gz
-grant Myers
-insertLength ilNA
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 1
-rnaExtract longPolyA
-subId 1874
-view Fastq
-
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2
-objType file
-cell GM12878
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-02-10
-dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2.fastq.gz
-grant Myers
-insertLength ilNA
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 2
-rnaExtract longPolyA
-subId 1874
-view Fastq
-
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1
 objType table
 cell GM12878
@@ -378,6 +378,98 @@ rnaExtract longPolyA
 subId 3575
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep1
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
+dateSubmitted 2010-06-21
+dateUnrestricted 2011-03-21
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1874
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1874
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep1
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
+dateSubmitted 2010-06-21
+dateUnrestricted 2011-03-21
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1874
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1874
+view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep1V3
 objType file
@@ -816,6 +908,52 @@ subId 3532
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
 
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 400
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1874
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 400
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1874
+view FastqRd2
+
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneDeNovoRep2V3
 objType file
 cell GM12878
@@ -1022,144 +1160,6 @@ rnaExtract longPolyA
 subId 3532
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
-
-metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1
-objType file
-cell GM12878
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1874
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2
-objType file
-cell GM12878
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-07-07
-dateUnrestricted 2011-04-07
-fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1874
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1
-objType file
-cell GM12878
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1874
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2
-objType file
-cell GM12878
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-07-07
-dateUnrestricted 2011-04-07
-fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1874
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2
-objType file
-cell GM12878
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2.fastq.gz
-grant Myers
-insertLength 400
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1874
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2
-objType file
-cell GM12878
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2.fastq.gz
-grant Myers
-insertLength 400
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1874
-view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1
 objType table
@@ -2581,6 +2581,52 @@ submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep2V2
 view Aligns
 
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaFastqRep1
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaFastqRep1.fastq.gz
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1633
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaFastqRep2
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaFastqRep2.fastq.gz
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1874
+view Fastq
+
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep1V3
 objType table
 cell H1-hESC
@@ -2722,52 +2768,6 @@ subId 3451
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep2V2
 view Splices
-
-metaObject wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep1
-objType file
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep1.fastq.gz
-grant Myers
-insertLength ilNA
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 1
-rnaExtract longPolyA
-subId 1633
-view Fastq
-
-metaObject wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep2
-objType file
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep2.fastq.gz
-grant Myers
-insertLength ilNA
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 2
-rnaExtract longPolyA
-subId 1874
-view Fastq
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1
 objType table
@@ -2956,6 +2956,190 @@ rnaExtract longPolyA
 subId 3581
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep1
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1670
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep2
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1668
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep3
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep3.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 3
+rnaExtract longPolyA
+subId 1667
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep4
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep4.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 4
+rnaExtract longPolyA
+subId 1666
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep1
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1670
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep2
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1668
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep3
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep3.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 3
+rnaExtract longPolyA
+subId 1667
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep4
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep4.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 4
+rnaExtract longPolyA
+subId 1666
+view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep1V3
 objType file
@@ -3808,6 +3992,52 @@ subId 3571
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
 
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd1Rep1
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd1Rep1.fastq.gz
+grant Myers
+insertLength 400
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1669
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd2Rep1
+objType file
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd2Rep1.fastq.gz
+grant Myers
+insertLength 400
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1669
+view FastqRd2
+
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneDeNovoRep1V3
 objType file
 cell H1-hESC
@@ -4008,236 +4238,6 @@ rnaExtract longPolyA
 subId 3571
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
-
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep1
-objType file
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1670
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep2
-objType file
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1668
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep3
-objType file
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep3.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 3
-rnaExtract longPolyA
-subId 1667
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep4
-objType file
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep4.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 4
-rnaExtract longPolyA
-subId 1666
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep1
-objType file
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1670
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep2
-objType file
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1668
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep3
-objType file
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep3.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 3
-rnaExtract longPolyA
-subId 1667
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep4
-objType file
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep4.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 4
-rnaExtract longPolyA
-subId 1666
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd1Rep1
-objType file
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd1Rep1.fastq.gz
-grant Myers
-insertLength 400
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1669
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd2Rep1
-objType file
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd2Rep1.fastq.gz
-grant Myers
-insertLength 400
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1669
-view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1
 objType table
@@ -4968,6 +4968,52 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep2V2
 view Aligns
 
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaFastqRep1
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaFastqRep1.fastq.gz
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1634
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaFastqRep2
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaFastqRep2.fastq.gz
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1635
+view Fastq
+
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep1V3
 objType table
 cell HeLa-S3
@@ -5110,52 +5156,6 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep2V2
 view Splices
 
-metaObject wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep1
-objType file
-cell HeLa-S3
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep1.fastq.gz
-grant Myers
-insertLength ilNA
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 1
-rnaExtract longPolyA
-subId 1634
-view Fastq
-
-metaObject wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep2
-objType file
-cell HeLa-S3
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep2.fastq.gz
-grant Myers
-insertLength ilNA
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 2
-rnaExtract longPolyA
-subId 1635
-view Fastq
-
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1
 objType table
 cell HeLa-S3
@@ -5297,6 +5297,98 @@ rnaExtract longPolyA
 subId 3589
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
+
+metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep1
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1663
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep2
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1662
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep1
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1663
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep2
+objType file
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1662
+view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep1V3
 objType file
@@ -5712,98 +5804,6 @@ subId 3589
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep1
-objType file
-cell HeLa-S3
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1663
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep2
-objType file
-cell HeLa-S3
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1662
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep1
-objType file
-cell HeLa-S3
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1663
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep2
-objType file
-cell HeLa-S3
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1662
-view FastqRd2
-
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1
 objType table
 cell HeLa-S3
@@ -5897,6 +5897,52 @@ subId 3455
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep2V2
 view Aligns
+
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaFastqRep1
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaFastqRep1.fastq.gz
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1636
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaFastqRep2
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaFastqRep2.fastq.gz
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1638
+view Fastq
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep1V3
 objType table
@@ -6040,52 +6086,6 @@ submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep2V2
 view Splices
 
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep1
-objType file
-cell HepG2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep1.fastq.gz
-grant Myers
-insertLength ilNA
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 1
-rnaExtract longPolyA
-subId 1636
-view Fastq
-
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep2
-objType file
-cell HepG2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep2.fastq.gz
-grant Myers
-insertLength ilNA
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 2
-rnaExtract longPolyA
-subId 1638
-view Fastq
-
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1
 objType table
 cell HepG2
@@ -6227,6 +6227,98 @@ rnaExtract longPolyA
 subId 3591
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
+
+metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep1
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-11
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1661
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep2
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1660
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep1
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-11
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1661
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep2
+objType file
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-22
+dateUnrestricted 2010-10-22
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1660
+view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep1V3
 objType file
@@ -6642,98 +6734,6 @@ subId 3591
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep1
-objType file
-cell HepG2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-11
-fileName wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1661
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep2
-objType file
-cell HepG2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-22
-dateUnrestricted 2010-10-22
-fileName wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1660
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep1
-objType file
-cell HepG2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-11
-fileName wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1661
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep2
-objType file
-cell HepG2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-22
-dateUnrestricted 2010-10-22
-fileName wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1660
-view FastqRd2
-
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1
 objType table
 cell HepG2
@@ -6827,6 +6827,94 @@ rnaExtract longPolyA
 subId 3585
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep1
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1907
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep2
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1908
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep1
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1907
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep2
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1908
+view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneDeNovoRep1V3
 objType file
@@ -7242,94 +7330,6 @@ subId 3585
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep1
-objType file
-cell HSMM
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1907
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep2
-objType file
-cell HSMM
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1908
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep1
-objType file
-cell HSMM
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1907
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep2
-objType file
-cell HSMM
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1908
-view FastqRd2
-
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1
 objType table
 cell HSMM
@@ -7421,6 +7421,52 @@ subId 3457
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep2V2
 view Aligns
+
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaFastqRep1
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaFastqRep1.fastq.gz
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1639
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaFastqRep2
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaFastqRep2.fastq.gz
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1645
+view Fastq
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep1V3
 objType table
@@ -7564,52 +7610,6 @@ submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep2V2
 view Splices
 
-metaObject wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep1
-objType file
-cell HUVEC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep1.fastq.gz
-grant Myers
-insertLength ilNA
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 1
-rnaExtract longPolyA
-subId 1639
-view Fastq
-
-metaObject wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep2
-objType file
-cell HUVEC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep2.fastq.gz
-grant Myers
-insertLength ilNA
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 2
-rnaExtract longPolyA
-subId 1645
-view Fastq
-
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1
 objType table
 cell HUVEC
@@ -7751,6 +7751,98 @@ rnaExtract longPolyA
 subId 3587
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
+
+metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep1
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1665
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep2
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1664
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep1
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1665
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep2
+objType file
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1664
+view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep1V3
 objType file
@@ -8166,98 +8258,6 @@ subId 3587
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep1
-objType file
-cell HUVEC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1665
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep2
-objType file
-cell HUVEC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1664
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep1
-objType file
-cell HUVEC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1665
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep2
-objType file
-cell HUVEC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1664
-view FastqRd2
-
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1
 objType table
 cell HUVEC
@@ -8351,6 +8351,52 @@ subId 3459
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep2V2
 view Aligns
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaFastqRep1
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
+dateSubmitted 2010-02-10
+dateUnrestricted 2010-11-09
+fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaFastqRep1.fastq.gz
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1874
+view Fastq
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaFastqRep2
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-02-10
+dateUnrestricted 2010-11-09
+fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaFastqRep2.fastq.gz
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 1646
+view Fastq
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep1V3
 objType table
@@ -8494,52 +8540,6 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep2V2
 view Splices
 
-metaObject wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep1
-objType file
-cell K562
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-02-10
-dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep1.fastq.gz
-grant Myers
-insertLength ilNA
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 1
-rnaExtract longPolyA
-subId 1874
-view Fastq
-
-metaObject wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep2
-objType file
-cell K562
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
-dateSubmitted 2010-02-10
-dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep2.fastq.gz
-grant Myers
-insertLength ilNA
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 2
-rnaExtract longPolyA
-subId 1646
-view Fastq
-
 metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1
 objType table
 cell K562
@@ -8681,6 +8681,96 @@ rnaExtract longPolyA
 subId 3593
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
+dateSubmitted 2010-06-22
+dateUnrestricted 2011-03-21
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1874
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-22
+dateUnrestricted 2011-03-21
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1658
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
+dateSubmitted 2010-06-22
+dateUnrestricted 2011-03-21
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1874
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-22
+dateUnrestricted 2011-03-21
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1658
+view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep1V3
 objType file
@@ -9096,96 +9186,6 @@ subId 3593
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1
-objType file
-cell K562
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1874
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep2
-objType file
-cell K562
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1658
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep1
-objType file
-cell K562
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1874
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep2
-objType file
-cell K562
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1658
-view FastqRd2
-
 metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1
 objType table
 cell K562
@@ -9302,6 +9302,94 @@ rnaExtract longPolyA
 subId 3598
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep1
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
+dateSubmitted 2010-11-18
+dateUnrestricted 2011-08-18
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3025
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep2
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1904
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep1
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
+dateSubmitted 2010-11-18
+dateUnrestricted 2011-08-18
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3025
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep2
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1904
+view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRep3V2
 objType file
@@ -9957,94 +10045,6 @@ subId 3598
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep1
-objType file
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-11-24
-dateSubmitted 2010-11-18
-dateUnrestricted 2011-08-18
-fileName wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3025
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep2
-objType file
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1904
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep1
-objType file
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-11-24
-dateSubmitted 2010-11-18
-dateUnrestricted 2011-08-18
-fileName wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3025
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep2
-objType file
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1904
-view FastqRd2
-
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1
 objType table
 cell MCF-7
@@ -10114,6 +10114,29 @@ subId 3460
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqNhekR1x75dIlnaAlignsRep1V2
 view Aligns
+
+metaObject wgEncodeCaltechRnaSeqNhekR1x75dIlnaFastqRep1
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeCaltechRnaSeqNhekR1x75dIlnaFastqRep1.fastq.gz
+grant Myers
+insertLength ilNA
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 1
+rnaExtract longPolyA
+subId 1483
+view Fastq
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dIlnaMinusSignalRep1V3
 objType table
@@ -10185,29 +10208,6 @@ subId 3460
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqNhekR1x75dIlnaSplicesRep1V2
 view Splices
-
-metaObject wgEncodeCaltechRnaSeqNhekR1x75dNaIlnaFastqRep1
-objType file
-cell NHEK
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqNhekR1x75dNaIlnaFastqRep1.fastq.gz
-grant Myers
-insertLength ilNA
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 1
-rnaExtract longPolyA
-subId 1483
-view Fastq
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1
 objType table
@@ -10302,6 +10302,96 @@ rnaExtract longPolyA
 subId 3600
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
+
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep1
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1493
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep2
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1909
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep1
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1493
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep2
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1909
+view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep1V3
 objType file
@@ -10717,96 +10807,6 @@ subId 3600
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep1
-objType file
-cell NHEK
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1493
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep2
-objType file
-cell NHEK
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1909
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep1
-objType file
-cell NHEK
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg18
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1493
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep2
-objType file
-cell NHEK
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1909
-view FastqRd2
-
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1
 objType table
 cell NHEK
@@ -10899,6 +10899,94 @@ rnaExtract longPolyA
 subId 3574
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep1
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1906
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep2
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1905
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep1
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 1906
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep2
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+localization cell
+mapAlgorithm NA
+origAssembly hg19
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 1905
+view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneDeNovoRep1V3
 objType file
@@ -11314,94 +11402,6 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep1
-objType file
-cell NHLF
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1906
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep2
-objType file
-cell NHLF
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1905
-view FastqRd1
-
-metaObject wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep1
-objType file
-cell NHLF
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 1906
-view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep2
-objType file
-cell NHLF
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep2.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-origAssembly hg19
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 1905
-view FastqRd2
-
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1
 objType table
 cell NHLF
@@ -11448,4 +11448,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: 623153802
+# MAGIC: 824459044
