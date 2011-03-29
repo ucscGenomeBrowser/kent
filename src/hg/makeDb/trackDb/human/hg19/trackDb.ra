@@ -1787,8 +1787,9 @@ compositeTrack on
 group expression
 shortLabel Affy Exon Array
 longLabel Affymetrix $Organism Exon Array Probes and Probesets
-subGroup1 type Type Probeset=Probeset Probe=Probe
-subGroup2 level Level Ambiguous=Ambiguous Core=Core Extended=Extended Free=Free Full=Full
+subGroup1 type Type aProbeset=Probeset bProbe=Probe
+subGroup2 level Level aCore=Core bExtended=Extended cFull=Full dFree=Free eAmbiguous=Ambiguous 
+sortOrder level=+ type=+ 
 dimensions dimensionX=level dimensionY=type
 dragAndDrop subTracks
 color 0,0,0
@@ -1796,66 +1797,56 @@ visibility hide
 noInherit on
 type bed 12
 
-    track affyExonProbesetAmbiguous 
-    parent affyExonArray off
-    subGroups type=Probeset level=Ambiguous
-    shortLabel Ambiguous PS
-    longLabel Affymetrix $Organism Exon Array Ambiguous Probesets: ones that cannot be assigned to any single gene
-    visibility hide
-    # orchid 
-    color 218,112,214	
-    
     track affyExonProbesetCore
     parent affyExonArray
-    subGroups type=Probeset level=Core
-    shortLabel Core Probesets
-    longLabel Affymetrix $Organism Exon Array Core Probesets: ones supported by the strongest design-time evidence
+    subGroups type=aProbeset level=aCore
+    shortLabel Core PS
+    longLabel Affymetrix $Organism Exon Array Core Probesets
     # royalblue
     color 65,105,225
     visibility dense
 
     track affyExonProbesetExtended
     parent affyExonArray
-    subGroups type=Probeset level=Extended
+    subGroups type=aProbeset level=bExtended
     shortLabel Extended PS
-    longLabel Affymetrix $Organism Exon Array Extended Probesets: ones supported by moderate design-time evidence
+    longLabel Affymetrix $Organism Exon Array Extended Probesets
     # chocolate 4
     color 139,69,19
     visibility dense
 
-    track affyExonProbesetFree 
-    parent affyExonArray off
-    subGroups type=Probeset level=Free
-    shortLabel Free Probesets
-    longLabel Affymetrix $Organism Exon Array Free Probesets: ones supported by annotations since merged with other annotations
-    # darkgreen
-    color 0,100,0
-    visibility hide
-
     track affyExonProbesetFull
     parent affyExonArray off
-    subGroups type=Probeset level=Full
-    shortLabel Full Probesets
-    longLabel Affymetrix $Organism Exon Array Free Probesets: ones supported by computational predictions only
+    subGroups type=aProbeset level=cFull
+    shortLabel Full PS
+    longLabel Affymetrix $Organism Exon Array Free Probesets
     # deeppink
     color 205,96,144
     visibility hide
 
-    track affyExonProbeAmbiguous 
+    track affyExonProbesetFree 
     parent affyExonArray off
-    subGroups type=Probe level=Ambiguous
-    shortLabel Ambiguous Probes
-    longLabel Affymetrix $Organism Exon Array Ambiguous Probes: ones that cannot be assigned to any single gene
-    # orchid
-    color 218,112,214	
+    subGroups type=aProbeset level=dFree
+    shortLabel Free PS
+    longLabel Affymetrix $Organism Exon Array Free Probesets
+    # darkgreen
+    color 0,100,0
     visibility hide
-    type bed 10
 
+    track affyExonProbesetAmbiguous 
+    parent affyExonArray off
+    subGroups type=aProbeset level=eAmbiguous
+    shortLabel Ambiguous PS
+    longLabel Affymetrix $Organism Exon Array Ambiguous Probesets
+    visibility hide
+    # orchid 
+    color 218,112,214	
+    
     track affyExonProbeCore 
     parent affyExonArray off
-    subGroups type=Probe level=Core
+    subGroups type=bProbe level=aCore
     shortLabel Core Probes
-    longLabel Affymetrix $Organism Exon Array Core Probes: ones supported by the strongest design-time evidence
+    longLabel Affymetrix $Organism Exon Array Core Probes
     # royalblue
     color 65,105,225
     visibility dense
@@ -1863,33 +1854,44 @@ type bed 12
 
     track affyExonProbeExtended 
     parent affyExonArray off
-    subGroups type=Probe level=Extended
+    subGroups type=bProbe level=bExtended
     shortLabel Extended Probes
-    longLabel Affymetrix $Organism Exon Array Extended Probes: ones supported by moderate design-time evidence
+    longLabel Affymetrix $Organism Exon Array Extended Probes
     # chocolate 4
     color 139,69,19
     visibility dense
     type bed 10
 
+    track affyExonProbeFull 
+    parent affyExonArray off
+    subGroups type=bProbe level=cFull
+    shortLabel Full Probes
+    longLabel Affymetrix $Organism Exon Array Full Probes
+    # deep pink
+    color 205,96,144
+    visibility hide
+    type bed 10
+
     track affyExonProbeFree 
     parent affyExonArray off
-    subGroups type=Probe level=Free
+    subGroups type=bProbe level=dFree
     shortLabel Free Probes
-    longLabel Affymetrix $Organism Exon Array Free Probes: ones supported by annotations since merged with other annotations
+    longLabel Affymetrix $Organism Exon Array Free Probes
     # darkgreen
     color 0,100,0
     visibility hide
     type bed 10
 
-    track affyExonProbeFull 
+    track affyExonProbeAmbiguous 
     parent affyExonArray off
-    subGroups type=Probe level=Full
-    shortLabel Full Probes
-    longLabel Affymetrix $Organism Exon Array Free Probes: ones supported by computational predictions only
-    # deep pink
-    color 205,96,144
+    subGroups type=bProbe level=eAmbiguous
+    shortLabel Ambiguous Probes
+    longLabel Affymetrix $Organism Exon Array Ambiguous Probes
+    # orchid
+    color 218,112,214	
     visibility hide
     type bed 10
+
 
     
 searchTable haplotypeLocations
