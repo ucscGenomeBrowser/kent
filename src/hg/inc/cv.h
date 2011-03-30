@@ -43,6 +43,7 @@
 #define CV_TERM_CONTROL         "control"
 #define CV_TERM_DATA_TYPE       "dataType"
 #define CV_TERM_LOCALIZATION    "localization"
+#define CV_TERM_VIEW            "view"
 
 
 char *cvTypeNormalized(char *sloppyTerm);
