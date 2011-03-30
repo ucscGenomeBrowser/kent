@@ -4365,7 +4365,7 @@ lab White
 lots
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
-validation eGFP-HDACB:human_validation_White.pdf
+validation eGFP-HDAC8:human_validation_White.pdf
 
 term eGFP-JunB
 tag eJunB
@@ -6314,7 +6314,7 @@ target YY1
 antibodyDescription Rabbit polyclonal
 targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel class of zinc finger proteins.
 vendorName Santa Cruz Biotech
-vendorId sc-1703X
+vendorId sc-1703
 orderUrl http://www.scbt.com/product.php?datasheet=1703
 lab Farnham
 targetId GeneCard:YY1
