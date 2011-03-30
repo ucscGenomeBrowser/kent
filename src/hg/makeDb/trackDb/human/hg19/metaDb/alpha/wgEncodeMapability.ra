@@ -88,7 +88,6 @@ composite wgEncodeMapability
 dataType Mapability
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-28
-dateUnrestricted 2011-03-28
 fileName wgEncodeMapabilityDukeRegionsExcluded.bed.gz
 grant Crawford
 lab Duke
@@ -104,7 +103,6 @@ composite wgEncodeMapability
 dataType Mapability
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-28
-dateUnrestricted 2011-03-28
 fileName wgEncodeMapabilityDukeUniqueness20bp.bigWig
 grant Crawford
 lab Duke
@@ -121,7 +119,6 @@ composite wgEncodeMapability
 dataType Mapability
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-28
-dateUnrestricted 2011-03-28
 fileName wgEncodeMapabilityDukeUniqueness35bp.bigWig
 grant Crawford
 lab Duke
