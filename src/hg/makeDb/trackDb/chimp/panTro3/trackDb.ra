@@ -59,8 +59,6 @@ priority 103.29
     view phyloP
     visibility full
     subTrack cons12way
-#    viewLimits -2.15:2.57
-#    viewLimitsMax -2.143:2.572
 
         # PhyloP conservation
         track phyloP12wayPrimate
@@ -70,9 +68,9 @@ priority 103.29
         longLabel Primate Basewise Conservation by PhyloP (5 species)
         noInherit on
         configurable on
-        type wig -1.499 1.587
+        type wig -5.712 0.286
         maxHeightPixels 100:50:11
-        viewLimits -1.5:1.58
+        viewLimits -0.5:0.286
         autoScale off
         spanList 1
         windowingFunction mean
@@ -87,9 +85,9 @@ priority 103.29
         longLabel Vertebrate Basewise Conservation by PhyloP (12 species)
         noInherit on
         configurable on
-        type wig -2.143 2.572
+        type wig -7.192 2.0
         maxHeightPixels 100:50:11
-        viewLimits -2.15:2.57
+        viewLimits -0.5:0.5
         autoScale off
         spanList 1
         windowingFunction mean
