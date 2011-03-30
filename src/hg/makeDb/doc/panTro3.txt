@@ -2275,8 +2275,8 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # load into database
     time nice -n +19 hgLoadBed panTro3 \
 	phastConsElements12wayPrimate mostConserved.bed
-    #	Loaded 842567 elements of size 5
-    #	real    0m5.941s
+    #	Loaded 316935 elements of size 5
+    #	real    0m1.845s
 
     # on human we often try for 5% overall cov, and 70% CDS cov 
     featureBits panTro3 -enrichment refGene:cds phastConsElements12wayPrimate
