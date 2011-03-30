@@ -3300,7 +3300,7 @@ type Cell Line
 organism Mouse
 tissue Mammary
 category Cell Line
-description Mammary (provisional)
+description Mammary 
 age immortalized
 strain RIII
 vendorName
@@ -3316,7 +3316,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description myeloid progenitor cells, CD34+ (provisional)
+description myeloid progenitor cells, CD34+ 
 age immortalized
 strain B6D2F1/J
 vendorName
@@ -3332,7 +3332,7 @@ type Cell Line
 organism Mouse
 tissue Cortex
 category Cell Line
-description Pituitary tumor LAF1 (provisional)
+description Pituitary tumor LAF1 
 age immortalized
 strain Unknown
 vendorName ATCC
@@ -3348,7 +3348,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description B Cell , CD19+ (provisional)
+description B Cell , CD19+ 
 age immortalized
 strain C57BL/6
 vendorName
@@ -3406,7 +3406,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description B-cell lymphoma (GM12878 analog) (provisional)
+description B-cell lymphoma (GM12878 analog)
 age immortalized
 strain B10.H-2aH-4bp/Wts
 vendorName Weissman lab
@@ -3426,9 +3426,7 @@ type Cell Line
 organism Mouse
 tissue
 category Primary Cells
-description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a
-targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T.
-Genes Dev. 1993 Nov;7(11):2071-84.) (provisional)
+description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov;7(11):2071-84.) 
 age E0
 strain 129
 vendorName Uw lab
@@ -3490,7 +3488,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description Gata1- erythroid progenitor (provisional)
+description Gata1- erythroid progenitor 
 age E0
 strain 129
 vendorName Mitch Weiss lab
@@ -3507,7 +3505,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description Gata1 restored erythroid cells, differentiation induced by estradiol (E2) (provisional)
+description Gata1 restored erythroid cells, differentiation induced by estradiol (E2) 
 age E0
 strain 129
 vendorName Mitch Weiss lab
@@ -3627,7 +3625,7 @@ tag MEL
 type Cell Line
 organism Mouse
 category Cell Line
-description Leukemia (K562 analog) (provisional)
+description Leukemia (K562 analog)
 age immortalized
 strain Unknown
 tissue Blood
@@ -4367,7 +4365,7 @@ lab White
 lots
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
-validation eGFP-HDACB:human_validation_White.pdf
+validation eGFP-HDAC8:human_validation_White.pdf
 
 term eGFP-JunB
 tag eJunB
@@ -6316,7 +6314,7 @@ target YY1
 antibodyDescription Rabbit polyclonal
 targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel class of zinc finger proteins.
 vendorName Santa Cruz Biotech
-vendorId sc-1703X
+vendorId sc-1703
 orderUrl http://www.scbt.com/product.php?datasheet=1703
 lab Farnham
 targetId GeneCard:YY1
