@@ -196,27 +196,17 @@ else
         {
         struct dyString *dySortFields = dyStringNew(512);
         struct mdbObj *commonVars = mdbObjsCommonVars(mdbObjs);
-        // Problem with making common fieds as sorable is that it REQUIRES a fixed sort order
-        char *sortables[] = {"grant","lab","dataType","cell","strain","age","obtainedBy", "rnaExtract","localization","phase","treatment","antibody","protocol",
-                      "labProtocolId","restrictionEnzyme","control","replicate","expId","labExpId","setType","view","submittedDataVersion","subId",
-                      "dateSubmitted","dateResubmitted","dateUnrestricted","dataVersion","origAssembly"};//"labVersion","softwareVersion",
-        // Not included:    no:not searchable
-        // accession no, annotation no,   bioRep no,     composite no, controlId no, dccInternalNotes no, fileIndex no,  fileName no,
-        // fragSize no,  fragLength no,   freezeDate no, geoSample,    geoSeries,    insertLength no,     labVersion,    level no,
-        // mapAlgorithm, privacy no,      rank no,       readType,     seqPlatform,  sex,                 size no,       softwareVersion,
-        // tableName no, uniqueness no
-
-        int ix = 0, count = sizeof(sortables)/sizeof(char *);
-        for (ix=0;ix<count;ix++)
+        // common vars are already in cv defined order, searchable is also sortable
+        struct mdbVar *var = commonVars->vars;
+        for( ;var != NULL; var = var->next)
             {
-            // If sortables[ix] is in common vars then then add it to the settings field
-            if (mdbObjContains(commonVars,sortables[ix],NULL))
+            if (differentWord(var->var,MDB_VAR_LAB_VERSION)     // Exclude certain vars
+            &&  differentWord(var->var,MDB_VAR_SOFTWARE_VERSION)
+            &&  cvSearchMethod(var->var) != cvNotSearchable)   // searchable is also sortable
                 {
-                // TODO: This would be good, but valuable information slips away.  This is especially true in fileSearch
-                //       Maybe another whiteList?
-                //if (mdbRemoveCommonVar(mdbObjs, sortables[ix])) // Don't bother if all the vals are the same
-                //    continue;
-                dyStringPrintf(dySortFields,"%s=%s ",sortables[ix],strSwapChar(cloneString(cvLabel(sortables[ix])),' ','_'));
+                if (mdbObjsHasCommonVar(mdbObjs, var->var,TRUE)) // Don't bother if all the vals are the same (missing okay)
+                    continue;
+                dyStringPrintf(dySortFields,"%s=%s ",var->var,strSwapChar(cloneString(cvLabel(var->var)),' ','_'));
                 }
             }
         if (dyStringLen(dySortFields))
@@ -649,9 +639,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
         }
 
     // Extras  grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
-    mdbObjRemoveVars(oneFile->mdb,"fileName fileIndex composite project dccInternalNotes"); // Remove this from mdb now so that it isn't displayed in "extras'
-    mdbObjReorderVars(oneFile->mdb,"grant lab dataType cell treatment antibody protocol replicate view",FALSE); // Bring to front
-    mdbObjReorderVars(oneFile->mdb,"subId submittedDataVersion dateResubmitted dataVersion setType inputType controlId tableName",TRUE); // Send to back
+    mdbObjRemoveVars(oneFile->mdb,MDB_VAR_FILENAME " " MDB_VAR_FILEINDEX " " MDB_VAR_COMPOSITE " " MDB_VAR_PROJECT); // Remove this from mdb now so that it isn't displayed in "extras'
     field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE);
     printf("<TD nowrap>%s</td>",field?field:" &nbsp;");
 
@@ -716,12 +704,12 @@ if(mdbTable == NULL)
 
 // Get an mdbObj list of all that belong to this track and have a fileName
 char buf[256];
-safef(buf,sizeof(buf),"composite=%s fileName=?",tdb->track);
+safef(buf,sizeof(buf),"%s=%s %s=?",MDB_VAR_COMPOSITE,tdb->track,MDB_VAR_FILENAME);
 struct mdbByVar *mdbVars = mdbByVarsLineParse(buf);
 struct mdbObj *mdbList = mdbObjsQueryByVars(conn,mdbTable,mdbVars);
 
 // Now get Indexes  But be sure not to duplicate entries in the list!!!
-safef(buf,sizeof(buf),"composite=%s fileIndex= fileName!=",tdb->track);
+safef(buf,sizeof(buf),"%s=%s %s= %s!=",MDB_VAR_COMPOSITE,tdb->track,MDB_VAR_FILEINDEX,MDB_VAR_FILENAME);
 mdbVars = mdbByVarsLineParse(buf);
 mdbList = slCat(mdbList, mdbObjsQueryByVars(conn,mdbTable,mdbVars));
 mdbObjRemoveHiddenVars(mdbList);
@@ -742,7 +730,7 @@ while(mdbList)
     boolean found = FALSE;
     struct mdbObj *mdbFile = slPopHead(&mdbList);
     // First for FileName
-    char *fileName = mdbObjFindValue(mdbFile,"fileName");
+    char *fileName = mdbObjFindValue(mdbFile,MDB_VAR_FILENAME);
     if (fileName != NULL)
         {
         oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, fileName);
@@ -750,7 +738,7 @@ while(mdbList)
             {
             slAddHead(&fileList,oneFile);
             oneFile->mdb = mdbFile;
-            slAddHead(&mdbFiles,mdbFile);
+            slAddHead(&mdbFiles,oneFile->mdb);
             found = TRUE;
             }
         else if (debug)
@@ -763,7 +751,7 @@ while(mdbList)
         fileName = buf;
         }
     else
-        fileName = mdbObjFindValue(mdbFile,"fileIndex");
+        fileName = mdbObjFindValue(mdbFile,MDB_VAR_FILEINDEX);
     if (fileName != NULL)
         {
         // Verify existance first
@@ -774,10 +762,8 @@ while(mdbList)
             if (found) // if already found then need two mdbObjs (assertable but then this is metadata)
                 oneFile->mdb = mdbObjClone(mdbFile);  // Do we really need to clone this?
             else
-                {
                 oneFile->mdb = mdbFile;
-                slAddHead(&mdbFiles,mdbFile);
-                }
+            slAddHead(&mdbFiles,oneFile->mdb);
             found = TRUE;
             }
         else if (debug)
@@ -805,6 +791,7 @@ jsIncludeFile("ajax.js",NULL);
 filesDownloadsPreamble(db,tdb);
 
 // Now update all files with their sortable fields and sort the list
+mdbObjReorderByCv(mdbFiles,FALSE);// Start with cv defined order for visible vars. NOTE: will not need to reorder during print!
 sortOrder_t *sortOrder = fileSortOrderGet(cart,tdb,mdbFiles);
 boolean filterable = FALSE;
 if (sortOrder != NULL)
@@ -848,7 +835,7 @@ if (slCount(mdbList) == 0)
     }
 
 // Now sort mdbObjs so that composites will stay together and lookup of files will be most efficient
-mdbObjsSortOnVars(&mdbList, "composite");
+mdbObjsSortOnVars(&mdbList, MDB_VAR_COMPOSITE);
 mdbObjRemoveHiddenVars(mdbList);
 
 #define FOUND_FILE_LIMIT 1000
@@ -860,11 +847,11 @@ while(mdbList && fileCount < FOUND_FILE_LIMIT)
     {
     boolean found = FALSE;
     struct mdbObj *mdbFile = slPopHead(&mdbList);
-    char *composite = mdbObjFindValue(mdbFile,"composite");
+    char *composite = mdbObjFindValue(mdbFile,MDB_VAR_COMPOSITE);
     if (composite != NULL)
         {
         // First for FileName
-        char *fileName = mdbObjFindValue(mdbFile,"fileName");
+        char *fileName = mdbObjFindValue(mdbFile,MDB_VAR_FILENAME);
         if (fileName != NULL)
             {
             oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, composite, fileName);
@@ -876,7 +863,7 @@ while(mdbList && fileCount < FOUND_FILE_LIMIT)
                     {
                     slAddHead(&fileList,oneFile);
                     oneFile->mdb = mdbFile;
-                    slAddHead(&mdbFiles,mdbFile);
+                    slAddHead(&mdbFiles,oneFile->mdb);
                     fileCount++;
                     found = TRUE;
                     if (fileCount == FOUND_FILE_LIMIT)
@@ -887,7 +874,7 @@ while(mdbList && fileCount < FOUND_FILE_LIMIT)
                     fileDbFree(&oneFile);
             }
         // Now for FileIndexes
-        fileName = mdbObjFindValue(mdbFile,"fileIndex");
+        fileName = mdbObjFindValue(mdbFile,MDB_VAR_FILEINDEX);
         if (fileName != NULL)
             {
            // Verify existance first
@@ -902,10 +889,8 @@ while(mdbList && fileCount < FOUND_FILE_LIMIT)
                     if (found) // if already found then need two mdbObjs (assertable but then this is metadata)
                         oneFile->mdb = mdbObjClone(mdbFile);  // Do we really need to clone this?
                     else
-                        {
                         oneFile->mdb = mdbFile;
-                        slAddHead(&mdbFiles,mdbFile);
-                        }
+                    slAddHead(&mdbFiles,oneFile->mdb);
                     fileCount++;
                     found = TRUE;
                     continue;
@@ -926,6 +911,7 @@ if (slCount(fileList) == 0)
 
 // TODO Could sort on varValPairs by creating a sortOrder struct of them
 //// Now update all files with their sortable fields and sort the list
+mdbObjReorderByCv(mdbFiles,FALSE);// Start with cv defined order for visible vars. NOTE: will not need to reorder during print!
 sortOrder_t *sortOrder = fileSortOrderGet(NULL,NULL,mdbFiles); // No cart, no tdb
 if (sortOrder != NULL)
     {

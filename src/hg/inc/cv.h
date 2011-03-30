@@ -20,6 +20,7 @@
 #define CV_TOT                  "typeOfTerm"
 #define CV_TOT_HIDDEN           "hidden"
 #define CV_TOT_CV_DEFINED       "cvDefined"
+#define CV_TOT_PRIORITY         "priority"
 
 // Validation Rules
 #define CV_VALIDATE                 "validate"
@@ -42,6 +43,7 @@
 #define CV_TERM_CONTROL         "control"
 #define CV_TERM_DATA_TYPE       "dataType"
 #define CV_TERM_LOCALIZATION    "localization"
+#define CV_TERM_VIEW            "view"
 
 
 char *cvTypeNormalized(char *sloppyTerm);

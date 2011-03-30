@@ -82,4 +82,54 @@ tableName wgEncodeCrgMapabilityAlign75mer
 uniqueness no more than 2 mismatches
 view Alignability
 
-# MAGIC: 1275319966
+metaObject wgEncodeMapabilityDukeRegionsExcluded
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-28
+dateUnrestricted 2011-03-28
+fileName wgEncodeMapabilityDukeRegionsExcluded.bed.gz
+grant Crawford
+lab Duke
+labVersion satellite_rna_chrM_500.bed.20080925
+project wgEncode
+subId 3840
+tableName wgEncodeMapabilityDukeRegionsExcluded
+view Excludable
+
+metaObject wgEncodeMapabilityDukeUniqueness20bp
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-28
+dateUnrestricted 2011-03-28
+fileName wgEncodeMapabilityDukeUniqueness20bp.bigWig
+grant Crawford
+lab Duke
+labVersion 1.0 - 4 or less
+project wgEncode
+size 20mer
+subId 3840
+tableName wgEncodeMapabilityDukeUniqueness20bp
+view Uniqueness
+
+metaObject wgEncodeMapabilityDukeUniqueness35bp
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-28
+dateUnrestricted 2011-03-28
+fileName wgEncodeMapabilityDukeUniqueness35bp.bigWig
+grant Crawford
+lab Duke
+labVersion 1.0 - 4 or less
+project wgEncode
+size 35mer
+subId 3840
+tableName wgEncodeMapabilityDukeUniqueness35bp
+view Uniqueness
+
+# MAGIC: -62410028

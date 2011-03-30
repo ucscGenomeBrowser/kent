@@ -647,16 +647,20 @@ struct slPair *slPairFind(struct slPair *list, char *name);
 void *slPairFindVal(struct slPair *list, char *name);
 /* Return value associated with name in list, or NULL if not found. */
 
-struct slPair *slPairFromString(char *s);
-/* Return slPair list parsed from list in string s
- * name1=val1 name2=val2 ...
- * Returns NULL if parse error.  Free this up with
- * slPairFreeValsAndList. */
+struct slPair *slPairListFromString(char *str,boolean respectQuotes);
+// Return slPair list parsed from list in string like:  [name1=val1 name2=val2 ...]
+// if respectQuotes then string can have double quotes: [name1="val 1" "name 2"=val2 ...]
+//    resulting pair strips quotes: {name1}={val 1},{name 2}={val2}
+// Returns NULL if parse error.  Free this up with slPairFreeValsAndList.
+#define slPairFromString(s) slPairListFromString(s,FALSE)
 
-char *slPairListToString(struct slPair *list);
-// Returns an allocated string of pairs in form of
-// name1=val1 name2=val2 ...
-// Will wrap vals in quotes if contain spaces: name3="val 3"
+char *slPairListToString(struct slPair *list,boolean quoteIfSpaces);
+// Returns an allocated string of pairs in form of [name1=val1 name2=val2 ...]
+// If requested, will wrap name or val in quotes if contain spaces: [name1="val 1" "name 2"=val2]
+
+char *slPairNameToString(struct slPair *list, char delimiter,boolean quoteIfSpaces);
+// Return string created by joining all names (ignoring vals) with the delimiter.
+// If requested, will wrap name in quotes if contain spaces: [name1,"name 2" ...]
 
 int slPairCmpCase(const void *va, const void *vb);
 /* Compare two slPairs, ignore case. */
@@ -678,6 +682,12 @@ void slPairValSortCase(struct slPair **pList);
 
 void slPairValSort(struct slPair **pList);
 /* Sort slPair list on values (must be string). */
+
+int slPairIntCmp(const void *va, const void *vb);
+// Compare two slPairs on their integer values.
+
+void slPairIntSort(struct slPair **pList);
+// Sort slPair list on integer values.
 
 void gentleFree(void *pt);
 /* check pointer for NULL before freeing.
