@@ -1789,7 +1789,7 @@ shortLabel Affy Exon Array
 longLabel Affymetrix $Organism Exon Array Probes and Probesets
 subGroup1 view Views 1-Probeset=Probeset 2-Probe=Probe
 subGroup2 level Level 1-Core=Core 2-Extended=Extended 3-Full=Full 4-Free=Free 5-Ambiguous=Ambiguous 
-sortOrder level=+ view=+ 
+sortOrder view=+ level=- 
 dimensions dimensionX=level dimensionY=view
 dragAndDrop subTracks
 color 0,0,0
