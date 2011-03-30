@@ -1849,6 +1849,7 @@ type bed 12
 
         track affyExonProbeCore 
         parent affyExonProbe off
+
         subGroups view=2-Probe level=1-Core
         shortLabel Core Probes
         longLabel Affymetrix $Organism Exon Array Core Probes
