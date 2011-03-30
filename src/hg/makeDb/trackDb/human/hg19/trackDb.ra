@@ -1106,7 +1106,7 @@ compositeTrack on
 shortLabel Vertebrate Chain/Net
 longLabel Non-placental Vertebrate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species Wallaby=Wallaby Opossum=Opossum Platypus=Platypus Chicken=Chicken Zebra_Finch=Zebra_Finch Lizard=Lizard X_Tro=X._tropicalis Fugu=Fugu Tetraodon=Tetraodon Stickleback=Stickleback Medaka=Medaka Zebrafish=Zebrafish Lamprey=Lamprey
+subGroup2 species Species Wallaby=Wallaby Opossum=Opossum Platypus=Platypus Chicken=Chicken Turkey=Turkey Zebra_Finch=Zebra_Finch Lizard=Lizard X_Tro=X._tropicalis Fugu=Fugu Tetraodon=Tetraodon Stickleback=Stickleback Medaka=Medaka Zebrafish=Zebrafish Lamprey=Lamprey
 subGroup3 clade Clade aMammal=Mammalia bDino=Dinosauria cLepi=Lepidosauria dAmph=Amphibia eTele=Teleostei fHyper=Hyperoartia
 dragAndDrop subTracks
 visibility hide
@@ -1159,6 +1159,14 @@ html hg19vertChainNet
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain galGal3
         otherDb galGal3
+
+        track chainMelGal1
+        subTrack vertebrateChainNetViewchain on
+        subGroups view=chain species=Turkey clade=bDino
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain melGal1
+        otherDb melGal1
 
         track chainTaeGut1
         subTrack vertebrateChainNetViewchain off
@@ -1269,6 +1277,14 @@ html hg19vertChainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign galGal3 chainGalGal3
         otherDb galGal3
+
+        track netMelGal1
+        subTrack vertebrateChainNetViewnet on
+        subGroups view=net species=Turkey clade=bDino
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign melGal1 chainMelGal1
+        otherDb melGal1
 
         track netTaeGut1
         subTrack vertebrateChainNetViewnet off
@@ -1389,7 +1405,7 @@ priority 103.29
         speciesGroups Primate Placental_Mammal Vertebrate
         sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 papHam1 calJac1 tarSyr1 micMur1 otoGar1
         sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 vicPac1 turTru1 bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 loxAfr3 proCap1 echTel1 dasNov2 choHof1 
-        sGroup_Vertebrate macEug1 monDom5 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig2 fr2 gasAcu1 oryLat2 danRer6 petMar1 
+        sGroup_Vertebrate macEug1 monDom5 ornAna1 galGal3 melGal1 taeGut1 anoCar1 xenTro2 tetNig2 fr2 gasAcu1 oryLat2 danRer6 petMar1 
         speciesDefaultOff panTro2 gorGor1 ponAbe2 papHam1 calJac1 tarSyr1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 macEug1 ornAna1 taeGut1 anoCar1 proCap1 tetNig2 fr2 gasAcu1 oryLat2 petMar1
         itemFirstCharCase noChange
         treeImage phylo/hg19_46way.gif

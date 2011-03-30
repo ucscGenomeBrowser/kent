@@ -4,6 +4,10 @@ track chainNetGalGal3 override
 priority 210.3
 chainMinScore 2000
 
+track chainNetMelGal1 override
+priority 220.3
+chainMinScore 5000
+
 track chainNetHg19 override
 priority 580.3
 chainMinScore 5000
