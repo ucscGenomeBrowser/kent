@@ -2479,34 +2479,35 @@ rmdir --ignore-fail-on-non-empty $cons/tmp
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phyloP12way.wigFix.gz \
-	| wigToBigWig stdin /hive/data/genomes/panTro3/chrom.sizes \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/panTro3/chrom.sizes \
 	phyloP12way.bw) > bigWig.log 2>&1 &
-XXX - running - Tue Mar 29 16:10:25 PDT 2011
+    #	real    40m59.146s
 
     bigWigInfo phyloP12way.bw 
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 463,742,565
-# primaryIndexSize: 16,520,056
+# primaryDataSize: 4,513,393,592
+# primaryIndexSize: 91,595,324
 # zoomLevels: 10
-# chromCount: 959
-# basesCovered: 264,308,757
-# mean: 0.475521
-# min: -2.143000
-# max: 2.572000
-# std: 0.752223
+# chromCount: 3488
+# basesCovered: 2,768,188,151
+# mean: 0.083685
+# min: -7.192000
+# max: 2.000000
+# std: 0.595180
 
     #	encode those files into wiggle data
     time (zcat downloads/phyloP12way.wigFix.gz \
 	| wigEncode stdin phyloP12way.wig phyloP12way.wib) &
+    #	Converted stdin, upper limit 2.00, lower limit -7.19
+    #	real    21m41.518s
 
-XXX - running - Tue Mar 29 16:10:25 PDT 2011
     #	Converted stdin, upper limit 2.57, lower limit -2.14
     du -hsc *.wi?
-    #	253M    phyloP12way.wib
-    #	49M     phyloP12way.wig
-    #	301M    total
+    #	2.6G    phyloP12way.wib
+    #	283M    phyloP12way.wig
+    #	2.9G    total
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP12way.wib /gbdb/panTro3/multiz12way/phyloP12way.wib
@@ -2517,14 +2518,23 @@ XXX - running - Tue Mar 29 16:10:25 PDT 2011
 
     wigTableStats.sh panTro3 phyloP12way
 # db.table      min max mean count sumData stdDev viewLimits
-# panTro3.phyloP12way      -2.143 2.572 0.475521 264308757 1.25684e+08 0.752223
-# viewLimits=-2.143:2.572
+# panTro3.phyloP12way      -7.192 2 0.0836853 2768188151 2.31657e+08 0.59518
+# viewLimits=-2.89221:2
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram -db=panTro3 \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    phyloP12way > histogram.data 2>&1
-    #	real    0m22.461s
+    #	real    7m23.514s
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000189
+# median 0.000548
+# Q3 0.001120
+# average 0.001000
+# min 0.000016
+# max 0.025490
 
     #	create plot of histogram:
 
@@ -2540,7 +2550,7 @@ set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
-set yrange [0:0.002]
+set yrange [0:0.005]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
@@ -2580,36 +2590,38 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phyloP12wayPrimate.wigFix.gz \
-	| wigToBigWig stdin /hive/data/genomes/panTro3/chrom.sizes \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/panTro3/chrom.sizes \
 	    phyloP12wayPrimate.bw) > bigWig.log 2>&1 &
-XXX - running - Tue Mar 29 16:05:48 PDT 2011
+    #	real    38m19.818s
 
     bigWigInfo phyloP12wayPrimate.bw 
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 351,513,155
-# primaryIndexSize: 16,520,056
+# primaryDataSize: 2,630,310,902
+# primaryIndexSize: 91,595,324
 # zoomLevels: 10
-# chromCount: 959
-# basesCovered: 264,308,757
-# mean: 0.340395
-# min: -1.499000
-# max: 1.587000
-# std: 0.617638
+# chromCount: 3488
+# basesCovered: 2,768,188,151
+# mean: 0.050104
+# min: -5.712000
+# max: 0.286000
+# std: 0.475422
 
     #	encode those files into wiggle data
     time (zcat downloads/phyloP12wayPrimate.wigFix.gz \
 	| wigEncode stdin phyloP12wayPrimate.wig phyloP12wayPrimate.wib) &
-XXX - running - Tue Mar 29 16:05:48 PDT 2011
-    #	Converted stdin, upper limit 1.59, lower limit -1.50
+    #	Converted stdin, upper limit 0.29, lower limit -5.71
+    #	real    17m15.848s
+
     du -hsc *.wi?
-    #	253M    phyloP12wayPrimate.wib
-    #	50M     phyloP12wayPrimate.wig
-    #	302M    total
+    #	2.6G    phyloP12wayPrimate.wib
+    #	302M    phyloP12wayPrimate.wig
+    #	2.9G    total
 
     # Load gbdb and database with wiggle.
-    ln -s `pwd`/phyloP12wayPrimate.wib /gbdb/panTro3/multiz12way/phyloP12wayPrimate.wib
+    ln -s `pwd`/phyloP12wayPrimate.wib \
+	/gbdb/panTro3/multiz12way/phyloP12wayPrimate.wib
     nice hgLoadWiggle -pathPrefix=/gbdb/panTro3/multiz12way panTro3 \
 	phyloP12wayPrimate phyloP12wayPrimate.wig
 
@@ -2617,14 +2629,24 @@ XXX - running - Tue Mar 29 16:05:48 PDT 2011
 
     wigTableStats.sh panTro3 phyloP12wayPrimate
 # db.table      min max mean count sumData stdDev viewLimits
-# panTro3.phyloP12wayPrimate      -1.499 1.587 0.340395 264308757 8.99693e+07 0.617638 viewLimits=-1.499:1.587
+# panTro3.phyloP12wayPrimate      -5.712 0.286 0.0501044 2768188151
+# 1.38698e+08 0.475422 viewLimits=-2.32701:0.286
 
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram -db=panTro3 \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    phyloP12wayPrimate > histogram.data 2>&1
-    #	real    0m18.184s
+    #	real    7m37.778s
+
+    # find out the range for the 2:5 graph
+    #	grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000499
+# median 0.001620
+# Q3 0.003616
+# average 0.003650
+# min 0.000000
+# max 0.184629
 
     #	create plot of histogram:
 
@@ -2640,7 +2662,7 @@ set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
-set yrange [0:0.002]
+set yrange [0:0.005]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
