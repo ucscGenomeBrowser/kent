@@ -15215,3 +15215,55 @@ hgLoadBed hg19 affyExonProbesetFree \
     partitioned2/AffyHuEx.probeset.free.overlapsMerged.bed
 hgLoadBed hg19 affyExonProbesetFull \
     partitioned2/AffyHuEx.probeset.full.overlapsMerged.bed
+
+
+#########################################################################
+# LASTZ Turkey MelGal1 (DONE - 2011-03-28 - Chin)
+    mkdir /hive/data/genomes/hg19/bed/lastzMelGal1.2011-03-28
+    cd /hive/data/genomes/hg19/bed/lastzMelGal1.2011-03-28
+
+    cat << '_EOF_' > DEF
+# Turkey vs Human
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Turkey melGal1 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzMelGal1.2011-03-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+    # real    100m33.646s
+    cat fb.hg19.chainMelGal1Link.txt
+    #   76647912 bases of 2897316137 (2.645%) in intersection
+
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzMelGal1.2011-03-28/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    6m51.280s
+    cat fb.melGal1.chainHg19Link.txt
+    #   62120143 bases of 935922386 (6.637%) in intersection
+
+#############################################################################
+

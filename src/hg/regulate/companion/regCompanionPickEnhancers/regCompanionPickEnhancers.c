@@ -261,12 +261,27 @@ slReverse(&outList);
 return outList;
 }
 
+boolean uglyCheckStillThere(struct encodePeak *list, char *message)
+{
+struct encodePeak *el;
+for (el = list; el != NULL; el = el->next)
+    {
+    if (el->chromStart == 157333420 && el->chromEnd == 157333570 && sameString(el->chrom, "chr2"))
+       {
+       uglyf("Got %s:%d-%d %s\n", el->chrom, el->chromStart, el->chromEnd, message);
+       return TRUE;
+       }
+    }
+uglyf("no chr2:157333421-157333570 %s\n", message);
+return FALSE;
+}
 
 void regCompanionPickEnhancers(char *dnasePeaks, char *genesBed, char *txnWig, char *ctcfPeaks,
 	char *h3k4me1Wig, char *outputTab)
 /* regCompanionPickEnhancers - Pick enhancer regions by a number of criteria. */
 {
 struct encodePeak *dnaseList = narrowPeakLoadAll(dnasePeaks);
+uglyCheckStillThere(dnaseList, "after initial load");
 
 /* Load up genes and fill up genome range tree with promoters from them. */
 struct bed *geneList = bedLoadAll(genesBed);
@@ -307,15 +322,20 @@ uglyf("Initial: %d\n", slCount(dnaseList));
 slSort(&dnaseList, encodePeakCmpSignalVal);
 // dnaseList = filterOnSignal(dnaseList, 40);
 dnaseList = filterOnListSize(dnaseList, 50000);
+uglyCheckStillThere(dnaseList, "after top50k");
 uglyf("top50k: %d\n", slCount(dnaseList));
 slSort(&dnaseList, encodePeakCmpChrom);
 dnaseList = filterOutOverlapping(dnaseList, ctcfRanges);
+uglyCheckStillThere(dnaseList, "after nonCtcf");
 uglyf("nonCtcf: %d\n", slCount(dnaseList));
 dnaseList = filterOutOverlapping(dnaseList, promoterRanges);
+uglyCheckStillThere(dnaseList, "after nonPromoter");
 uglyf("nonPromoter: %d\n", slCount(dnaseList));
 dnaseList = filterOutTranscribed(dnaseList, txnBbi, chromVals);
+uglyCheckStillThere(dnaseList, "after nonTranscribed");
 uglyf("nonTranscribed: %d\n", slCount(dnaseList));
 dnaseList = filterOutUnderInNeighborhood(dnaseList, h3k4me1Bbi, chromVals, 1000, 2.5);
+uglyCheckStillThere(dnaseList, "after gotH3k4me1");
 uglyf("gotH3k4me1: %d\n", slCount(dnaseList));
 
 FILE *f = mustOpen(outputTab, "w");
