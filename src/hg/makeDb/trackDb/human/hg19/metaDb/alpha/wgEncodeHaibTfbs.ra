@@ -70,31 +70,6 @@ subId 3091
 treatment DEX_100nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsA549ControlPcr1xDexaAlnRep2
-objType file
-antibody Control
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL474
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
-dateSubmitted 2010-01-06
-dateUnrestricted 2011-03-17
-fileIndex wgEncodeHaibTfbsA549ControlPcr1xDexaAlnRep2.bam.bai
-fileName wgEncodeHaibTfbsA549ControlPcr1xDexaAlnRep2.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL474
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 2
-setType input
-subId 1453
-treatment DEX_100nM
-view Alignments
-
 metaObject wgEncodeHaibTfbsA549ControlPcr1xEtoh02AlnRep1
 objType file
 antibody Control
@@ -2500,96 +2475,6 @@ setType exp
 subId 3021
 tableName wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02RawRep2
 treatment EtOH_0.02pct
-view RawSignal
-
-metaObject wgEncodeHaibTfbsBe2cControlPcr2xRawDataRep1
-objType file
-antibody Control
-cell BE2_C
-composite wgEncodeHaibTfbs
-controlId SL148
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
-fileName wgEncodeHaibTfbsBe2cControlPcr2xRawDataRep1.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL148
-project wgEncode
-protocol PCR2x
-replicate 1
-setType input
-subId 3019
-treatment None
-view RawData
-
-metaObject wgEncodeHaibTfbsBe2cControlPcr2xRawRep2
-objType table
-antibody Control
-cell BE2_C
-composite wgEncodeHaibTfbs
-controlId SL408
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-20
-dateUnrestricted 2011-10-20
-fileName wgEncodeHaibTfbsBe2cControlPcr2xRawRep2.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL408
-project wgEncode
-protocol PCR2x
-replicate 2
-setType input
-subId 3035
-tableName wgEncodeHaibTfbsBe2cControlPcr2xRawRep2
-treatment None
-view RawSignal
-
-metaObject wgEncodeHaibTfbsBe2cNrsfPcr2xRawDataRep1
-objType file
-antibody NRSF
-cell BE2_C
-composite wgEncodeHaibTfbs
-controlId SL148
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-17
-dateUnrestricted 2011-09-17
-fileName wgEncodeHaibTfbsBe2cNrsfPcr2xRawDataRep1.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL147
-project wgEncode
-protocol PCR2x
-replicate 1
-setType exp
-subId 3106
-treatment None
-view RawData
-
-metaObject wgEncodeHaibTfbsBe2cNrsfPcr2xRawRep2
-objType table
-antibody NRSF
-cell BE2_C
-composite wgEncodeHaibTfbs
-controlId SL408
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-20
-dateUnrestricted 2011-10-20
-fileName wgEncodeHaibTfbsBe2cNrsfPcr2xRawRep2.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL407
-project wgEncode
-protocol PCR2x
-replicate 2
-setType exp
-subId 3035
-tableName wgEncodeHaibTfbsBe2cNrsfPcr2xRawRep2
-treatment None
 view RawSignal
 
 metaObject wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep2
@@ -5582,31 +5467,6 @@ setType exp
 subId 768
 treatment None
 view RawData
-
-metaObject wgEncodeHaibTfbsGm12878Egr1Pcr2xAlnRep2
-objType file
-antibody Egr-1
-cell GM12878
-composite wgEncodeHaibTfbs
-controlId SL218
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-12-14
-dateUnrestricted 2011-09-14
-fileIndex wgEncodeHaibTfbsGm12878Egr1Pcr2xAlnRep2.bam.bai
-fileName wgEncodeHaibTfbsGm12878Egr1Pcr2xAlnRep2.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL482
-origAssembly hg18
-project wgEncode
-protocol PCR2x
-replicate 2
-setType exp
-subId 3098
-treatment None
-view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878Egr1V0416101AlnRep1
 objType file
@@ -13988,52 +13848,6 @@ replicate 1
 setType input
 subId 3038
 tableName wgEncodeHaibTfbsH1hescControlV0416102RawRep1
-treatment None
-view RawSignal
-
-metaObject wgEncodeHaibTfbsH1hescCtcfV0416102RawRep1
-objType table
-antibody CTCF
-cell H1-hESC
-composite wgEncodeHaibTfbs
-controlId SL1398
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-11-29
-dateUnrestricted 2011-08-28
-fileName wgEncodeHaibTfbsH1hescCtcfV0416102RawRep1.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL2688
-project wgEncode
-protocol v041610.2
-replicate 1
-setType exp
-subId 3028
-tableName wgEncodeHaibTfbsH1hescCtcfV0416102RawRep1
-treatment None
-view RawSignal
-
-metaObject wgEncodeHaibTfbsH1hescCtcfV0416102RawRep2
-objType table
-antibody CTCF
-cell H1-hESC
-composite wgEncodeHaibTfbs
-controlId SL1398
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-11-29
-dateUnrestricted 2011-08-28
-fileName wgEncodeHaibTfbsH1hescCtcfV0416102RawRep2.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL3067
-project wgEncode
-protocol v041610.2
-replicate 2
-setType exp
-subId 3029
-tableName wgEncodeHaibTfbsH1hescCtcfV0416102RawRep2
 treatment None
 view RawSignal
 
@@ -22839,52 +22653,6 @@ tableName wgEncodeHaibTfbsHepg2P300V0416101RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsHepg2Pol24h8Pcr1xRawRep1
-objType table
-antibody Pol2-4H8
-cell HepG2
-composite wgEncodeHaibTfbs
-controlId SL1400
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-11-30
-dateUnrestricted 2011-08-30
-fileName wgEncodeHaibTfbsHepg2Pol24h8Pcr1xRawRep1.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL982
-project wgEncode
-protocol PCR1x
-replicate 1
-setType exp
-subId 3038
-tableName wgEncodeHaibTfbsHepg2Pol24h8Pcr1xRawRep1
-treatment None
-view RawSignal
-
-metaObject wgEncodeHaibTfbsHepg2Pol24h8Pcr1xRawRep2
-objType table
-antibody Pol2-4H8
-cell HepG2
-composite wgEncodeHaibTfbs
-controlId SL1781
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-11-29
-dateUnrestricted 2011-08-28
-fileName wgEncodeHaibTfbsHepg2Pol24h8Pcr1xRawRep2.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL1363
-project wgEncode
-protocol PCR1x
-replicate 2
-setType exp
-subId 3021
-tableName wgEncodeHaibTfbsHepg2Pol24h8Pcr1xRawRep2
-treatment None
-view RawSignal
-
 metaObject wgEncodeHaibTfbsHepg2Pol2Pcr2xAlnRep1
 objType file
 antibody Pol2
@@ -26710,30 +26478,6 @@ subId 3029
 tableName wgEncodeHaibTfbsK562E2f6h50V0416102RawRep2
 treatment None
 view RawSignal
-
-metaObject wgEncodeHaibTfbsK562Egr1Pcr2xRawDataRep2
-objType file
-antibody Egr-1
-cell K562
-composite wgEncodeHaibTfbs
-controlId SL234
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-06
-dateUnrestricted 2010-04-06
-fileName wgEncodeHaibTfbsK562Egr1Pcr2xRawDataRep2.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL484
-labVersion PCR2x
-origAssembly hg18
-project wgEncode
-protocol PCR2x
-replicate 2
-setType exp
-subId 268
-treatment None
-view RawData
 
 metaObject wgEncodeHaibTfbsK562Egr1V0416101AlnRep1
 objType file
@@ -33841,28 +33585,6 @@ subId 3108
 treatment DMSO_0.02pct
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dControlV0416102Dmso2RawDataRep2
-objType file
-antibody Control
-cell T-47D
-composite wgEncodeHaibTfbs
-controlId SL1881
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-11
-dateUnrestricted 2011-09-11
-fileName wgEncodeHaibTfbsT47dControlV0416102Dmso2RawDataRep2.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL1881
-project wgEncode
-protocol v041610.2
-replicate 2
-setType input
-subId 3083
-treatment DMSO_0.02pct
-view RawData
-
 metaObject wgEncodeHaibTfbsT47dControlV0416102Dmso2RawRep1
 objType table
 antibody Control
@@ -33884,29 +33606,6 @@ replicate 1
 setType input
 subId 3754
 tableName wgEncodeHaibTfbsT47dControlV0416102Dmso2RawRep1
-treatment DMSO_0.02pct
-view RawSignal
-
-metaObject wgEncodeHaibTfbsT47dCtcfV0416102Dmso2RawRep1
-objType table
-antibody CTCF
-cell T-47D
-composite wgEncodeHaibTfbs
-controlId SL1881
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-11-29
-dateUnrestricted 2011-08-28
-fileName wgEncodeHaibTfbsT47dCtcfV0416102Dmso2RawRep1.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL2634
-project wgEncode
-protocol v041610.2
-replicate 1
-setType exp
-subId 3028
-tableName wgEncodeHaibTfbsT47dCtcfV0416102Dmso2RawRep1
 treatment DMSO_0.02pct
 view RawSignal
 
@@ -35449,4 +35148,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 2107014558
+# MAGIC: -1543698095
