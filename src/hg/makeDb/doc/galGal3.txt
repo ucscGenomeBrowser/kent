@@ -2783,4 +2783,24 @@ see doc/builds.txt for specific details.
      hgLoadPsl galGal3 -table=caCondor454 results/nscanPasaUnmappedRealign/combined.psl.gz
      ln -s /hive/data/genomes/galGal3/bed/caCondor454/data/wugsc-454-cdna.fa  /gbdb/galGal3/caCondor454.fa
      hgLoadSeq galGal3 /gbdb/galGal3/caCondor454.fa
+
+#########################################################################
+#  SWAP melGal1 lastz (DONE - 2011-03-24 - Chin)
+    #   original alignment
+    cat fb.galGal3.chainMelGal1Link.txt
+    # 924755061 bases of 1042591351 (88.698%) in intersection
+
+    #   and the swap
+    mkdir /hive/data/genomes/melGal1/bed/blastz.galGal3.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.galGal3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/galGal3/bed/lastzMelGal1.2011-03-24/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    # real    38m4.406s
+    cat fb.melGal1.chainGalGal3Link.txt
+    # 874579772 bases of 935922386 (93.446%) in intersection
+
+
 ############################################################################

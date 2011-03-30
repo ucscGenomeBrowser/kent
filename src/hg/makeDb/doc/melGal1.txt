@@ -513,4 +513,145 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #	in that pushQ entry walk through each entry and see if the
     #	sizes will set properly
 
+##########################################################################
+#  BLATSERVERS ENTRY (DONE 2011-03-23 - Chin)
+#       After getting a blat server assigned by the Blat Server Gods,
+#   
+# blat13
+# trans port 17828
+# untrans port 17829
+
+    
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("melGal1", "blat13", "17828", "1", "0"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("melGal1", "blat13", "17829", "0", "1");' \
+            hgcentraltest
+    #   test it with some sequence
+
+#######################################################################
+# melGal1 Turkey BLASTZ/CHAIN/NET (DONE - 2011-03-24 - Chin)
+# use a screen to manage this multi-day job
+
+    mkdir /hive/data/genomes/galGal3/bed/lastzMelGal1.2011-03-24
+    cd /hive/data/genomes/galGal3/bed/lastzMelGal1.2011-03-24
+
+    cat << '_EOF_' > DEF
+# Chicken vs. Turkey
+BLASTZ_M=50
+
+# TARGET: Chicken GalGal3
+SEQ1_DIR=/scratch/data/galGal3/galGal3.2bit
+SEQ1_LEN=/scratch/data/galGal3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: Turkey MelGal1
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal3/bed/lastzMelGal1.2011-03-24
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    # real    120m58.775s
+    #  *** All done !  Elapsed time: 120m59s
+    #  *** Make sure that goldenPath/galGal3/vsMelGal1/README.txt is accurate.
+    #  *** Add {chain,net}MelGal1 tracks to trackDb.ra if necessary.
+
+    cat fb.galGal3.chainMelGal1Link.txt
+    # 924755061 bases of 1042591351 (88.698%) in intersection
+    cd /hive/data/genomes/galGal3/bed
+    ln -s lastzMelGal1.2011-03-24 lastz.melGal3
+
+    #   and then swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.galGal3.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.galGal3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/galGal3/bed/lastzMelGal1.2011-03-24/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    # real    38m4.406s
+    cat fb.melGal1.chainGalGal3Link.txt
+    # 874579772 bases of 935922386 (93.446%) in intersection
+
+
+#########################################################################
+# LASTZ Turkey TaeGut1 (DONE - 2011-03-28 - Chin)
+    mkdir /hive/data/genomes/melGal1/bed/lastzTaeGut1.2011-03-28
+    cd /hive/data/genomes/melGal1/bed/lastzTaeGut1.2011-03-28
+
+    cat << '_EOF_' > DEF
+# Zebra Finch vs Turkey
+
+# TARGET: Turkey melGal1
+SEQ1_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ1_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Turkey taeGut1 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/taeGut1/taeGut1.2bit
+SEQ2_LEN=/scratch/data/taeGut1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melGal1/bed/lastzTaeGut1.2011-03-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+    # Elapsed time: 400m22s
+    cat fb.melGal1.chainTaeGut1Link.txt
+    # 671105409 bases of 935922386 (71.705%) in intersection
+
+    #   running the swap 
+    mkdir /hive/data/genomes/taeGut1/bed/blastz.melGal1.swap
+    cd /hive/data/genomes/taeGut1/bed/blastz.melGal1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/melGal1/bed/lastzTaeGut1.2011-03-28/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real   36m7.017s 
+    cat fb.taeGut1.chainMelGal1Link.txt
+    #   795001886 bases of 1222864691 (65.011%) in intersection
+
+#########################################################################
+#  SWAP hg19 lastz (DONE - 201i1-03-28 - Chin)
+    #   original alignment
+    cat fb.hg19.chainMelGal1Link.txt
+    #   76647912 bases of 2897316137 (2.645%) in intersection
+
+    #   and the swap
+    mkdir /hive/data/genomes/melGal1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzMelGal1.2011-03-28/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    6m51.280s
+    cat fb.melGal1.chainHg19Link.txt
+    #   62120143 bases of 935922386 (6.637%) in intersection
+
 ############################################################################
