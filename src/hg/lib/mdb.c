@@ -739,7 +739,7 @@ struct mdbObj *mdbObjCreate(char *obj,char *var, char *val)
 struct mdbObj *mdbObj = NULL;
 
     if(obj == NULL)
-        errAbort("Need obj to create mdbObj query object.\n");
+        errAbort("Need obj to create mdbObj object.\n");
 
     AllocVar(mdbObj);
     mdbObj->obj     = cloneString(obj);
@@ -763,7 +763,8 @@ struct mdbObj *mdbObjNew(char *obj,struct mdbVar *mdbVars)
 {
 struct mdbObj *mdbObj = NULL;
 if (obj == NULL)
-    obj =  "[unknown]";
+    errAbort("Need obj to create mdbObj object.\n");
+
 if (mdbVars == NULL)
     {
     AllocVar(mdbObj);
@@ -1424,7 +1425,7 @@ struct mdbObj *mdbObjsQueryByVarPairs(struct sqlConnection *conn,char *tableName
 //   as val may be NULL, a comma delimited list, double quoted string, containing wilds: % and ?
 {
 // Note: there is a bit of inefficiency creating a string then tearing it down, but it streamlines code
-char *varValString = slPairListToString(varValPairs);
+char *varValString = slPairListToString(varValPairs,TRUE); // quotes added when spaces found
 struct mdbObj *mdbObjs = mdbObjsQueryByVarValString(conn,tableName,varValString);
 freeMem(varValString);
 return mdbObjs;
@@ -1772,6 +1773,7 @@ for(;mdbObj!=NULL; mdbObj=mdbObj->next)
 return FALSE;
 }
 
+#define MDB_COMMON_VARS_OBJ_SEARCH_LIMIT 10
 struct mdbObj *mdbObjsCommonVars(struct mdbObj *mdbObjs)
 // Returns a new mdbObj with all vars that are contained in every obj passed in.
 // Note that the returnd mdbObj has a meaningles obj name and vals.
@@ -1787,7 +1789,7 @@ if (mdbObj != NULL)
     int count = 1;
     // NOTE: This should not loop through all, as the list could be huge.  Just compare the first 10 for now
     struct dyString *dyPruneVars = dyStringNew(512);
-    for(;mdbObj != NULL && count < 10;mdbObj=mdbObj->next, count++)
+    for(;mdbObj != NULL && count < MDB_COMMON_VARS_OBJ_SEARCH_LIMIT;mdbObj=mdbObj->next, count++)
         {
         struct mdbVar *mdbVar = commonVars->vars;            // Will walk through the first obj's vars
         for(; mdbVar != NULL; mdbVar = mdbVar->next )
@@ -1907,6 +1909,40 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     freeMem(words);
 }
 
+void mdbObjReorderByCv(struct mdbObj *mdbObjs, boolean includeHidden)
+// Reorders vars list based upon cv.ra typeOfTerms priority
+{
+struct hash *cvTermTypes = (struct hash *)cvTermTypeHash();
+struct hashEl *el, *elList = hashElListHash(cvTermTypes);
+
+struct slPair *cvVars = NULL;
+for (el = elList; el != NULL; el = el->next)
+    {
+    struct hash *varHash = el->val;
+    if (includeHidden || SETTING_NOT_ON(hashFindVal(varHash, CV_TOT_HIDDEN))) // Skip the hidden ones
+        {
+        char *priority = hashFindVal(varHash, CV_TOT_PRIORITY);
+        if (priority != NULL) // If there is no priority it will randomly fall to the back of the list
+            slPairAdd(&cvVars,el->name,(char *)sqlUnsignedLong(priority));
+        }
+    }
+hashElFreeList(&elList);
+
+if (cvVars)
+    {
+    slPairIntSort(&cvVars);  // sorts on the integer val
+
+    // Now convert this to a string of names
+    char *orderedVars = slPairNameToString(cvVars,' ',FALSE);
+    slPairFreeList(&cvVars);
+    if (orderedVars != NULL)
+        {
+        mdbObjReorderVars(mdbObjs, orderedVars,FALSE); // Finally we can reorder the vars in the mdbObjs
+        freeMem(orderedVars);
+        }
+    }
+}
+
 int mdbObjVarCmp(const void *va, const void *vb)
 /* Compare to sort on full list of vars and vals. */
 {
@@ -1972,6 +2008,14 @@ for(; onePair != NULL; onePair = onePair->next)
     dyStringPrintf(dyTerms,",%s",onePair->name);
 mdbObjsSortOnVars(mdbObjs,dyStringContents(dyTerms));
 dyStringFree(&dyTerms);
+}
+
+void mdbObjsSortOnCv(struct mdbObj **mdbObjs, boolean includeHidden)
+// Puts obj->vars in order based upon cv.ra typeOfTerms priority,
+//  then case-sensitively sorts all objs in list based upon that var order.
+{  // NOTE: assumes all var pairs match (e.g. every obj has cell,treatment,antibody,... and missing treatment messes up sort)
+mdbObjReorderByCv(*mdbObjs, includeHidden);
+slSort(mdbObjs, mdbObjVarCmp);  // While sort will not be perfect (given missing values) it does a good job none the less.
 }
 
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars)
@@ -2047,30 +2091,50 @@ if (dyStringLen(dyRemoveVars))
 dyStringFree(&dyRemoveVars);
 }
 
-char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var)
-// Removes var from set of mdbObjs but only if all that have it have a commmon val
-// Returns the val if removed, else NULL
+boolean mdbObjsHasCommonVar(struct mdbObj *mdbList, char *var, boolean missingOk)
+// Returns TRUE if all mbObjs passed in have the var with the same value
 {
 char *val = NULL;
 struct mdbObj *mdb = NULL;
 for(mdb = mdbList; mdb; mdb=mdb->next)
     {
     char *thisVal = mdbObjFindValue(mdb,var);
-    if (thisVal == NULL) // If var isn't found in some, that is okay
-        continue;
+    if (thisVal == NULL)
+        {
+        if (missingOk)
+            continue;
+        else
+            return FALSE;
+        }
     if (val == NULL)
         val = thisVal;
     else if(differentWord(val,thisVal))
-        return NULL;
+        return FALSE;
     }
+return TRUE;
+}
 
-if (val)
+char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var)
+// Removes var from set of mdbObjs but only if all that have it have a commmon val
+// Returns the val if removed, else NULL
+{
+if (mdbObjsHasCommonVar(mdbList,var,TRUE))  // If var isn't found in some, that is okay
     {
-    val = cloneString(val);
-    for(mdb = mdbList;mdb;mdb=mdb->next)
+    char *val = NULL;
+    struct mdbObj *mdb = mdbList;
+    for( ; mdb; mdb=mdb->next)
+        {
+        if (val == NULL)
+            {
+            char *thisVal = mdbObjFindValue(mdb,var);
+            if (thisVal != NULL)
+                val = cloneString(thisVal);
+            }
         mdbObjRemoveVars(mdb,var);
+        }
+    return val;
     }
-return val;
+return NULL;
 }
 
 boolean mdbObjSetVar(struct mdbObj *mdbObj, char *var,char *val)
@@ -2680,7 +2744,7 @@ while(mdbObjs != NULL)
                slCount(compositeEdvs),MDB_VAR_ENCODE_EDVS,dyStringContents(dyVars)); // Set the stage
 
     // Organize composite objs by EDVs
-    dyStringPrintf(dyVars, " view replicate "); // Allows for nicer sorted list
+    dyStringPrintf(dyVars, " %s %s ",MDB_VAR_VIEW,MDB_VAR_REPLICATE); // Allows for nicer sorted list
     char *edvSortOrder = cloneString(dyStringContents(dyVars));
 
     // Walk through objs for an exp as defined by EDVs
@@ -3085,8 +3149,6 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
     else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
         {
         // TO BE IMPLEMENTED
-        // Requires new mdbObjSearch API and more than one (char *)onePair->val
-        warn("mdb search by date or number is not yet implemented.");
         }
     }
 // Be sure to include table or file in selections

@@ -185,7 +185,7 @@ while ((meta = slPopHead(&metas)) != NULL)
     /* KATE: you could skip other metas belonging to the same exp by:
     struct mdbVar *edvs = mdbObjFindEncodeEdvs(connMeta,meta); // Can't use encodeExpVars(exp) because of "None" issues
     assert(edvs != NULL);
-    char *expVars = slPairListToString(edvs);
+    char *expVars = slPairListToString(edvs,FALSE); // don't bother with quoting since edvs should not have spaces
     struct mdbObj *mdbExpObjs = mdbObjsFilterByVars(&metas,expVars,TRUE,TRUE);
     freeMem(expVars);
     mdbVarsFree(&edvs); // If you want to do this, then encodeExpFromMdb() above should be replaced with encodeExpFromMdbVars()
@@ -215,7 +215,7 @@ struct slPair *varPairs = NULL;
 
 /* transform var:val to var=val. Can't use var=val on command-line as it conflicts with standard options processing */
 memSwapChar(expVars, strlen(expVars), ':', '=');
-varPairs = slPairFromString(expVars);
+varPairs = slPairListFromString(expVars,FALSE); // don't expect quoted EDVs which should always be simple tokens.
 exps = encodeExpGetFromTable(organism, lab, dataType, cellType, varPairs, table);
 count = slCount(exps);
 verbose(2, "Results: %d\n", count);
