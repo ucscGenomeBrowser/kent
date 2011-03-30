@@ -111,6 +111,7 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 #define MDB_VAR_ANTIBODY        CV_TERM_ANTIBODY
 #define MDB_VAR_CELL            CV_TERM_CELL
 #define MDB_VAR_DATATYPE        CV_TERM_DATA_TYPE
+#define MDB_VAR_CONTROL         CV_TERM_CONTROL
 #define MDB_VAR_TABLENAME       "tableName"
 #define MDB_VAR_FILENAME        "fileName"
 #define MDB_VAR_FILEINDEX       "fileIndex"
@@ -324,6 +325,9 @@ boolean mdbByVarContains(struct mdbByVar *mdbByVar, char *val, char *obj);
 void mdbObjReorderVars(struct mdbObj *mdbObjs, char *vars,boolean back);
 // Reorders vars list based upon list of vars "cell antibody treatment".  Send to front or back.
 
+void mdbObjReorderByCv(struct mdbObj *mdbObjs, boolean includeHidden);
+// Reorders vars list based upon cv.ra typeOfTerms priority
+
 void mdbObjsSortOnVars(struct mdbObj **mdbObjs, char *vars);
 // Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes all objs' vars are in identical order.
 // Optionally give list of vars "cell antibody treatment" to sort on (bringing to front of vars lists).
@@ -331,6 +335,10 @@ void mdbObjsSortOnVars(struct mdbObj **mdbObjs, char *vars);
 void mdbObjsSortOnVarPairs(struct mdbObj **mdbObjs,struct slPair *varValPairs);
 // Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes all objs' vars are in identical order.
 // This method will use mdbObjsSortOnVars()
+
+void mdbObjsSortOnCv(struct mdbObj **mdbObjs, boolean includeHidden);
+// Puts obj->vars in order based upon cv.ra typeOfTerms priority,
+//  then case-sensitively sorts all objs in list based upon that var order.
 
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars);
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.

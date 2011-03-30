@@ -20,6 +20,7 @@
 #define CV_TOT                  "typeOfTerm"
 #define CV_TOT_HIDDEN           "hidden"
 #define CV_TOT_CV_DEFINED       "cvDefined"
+#define CV_TOT_PRIORITY         "priority"
 
 // Validation Rules
 #define CV_VALIDATE                 "validate"

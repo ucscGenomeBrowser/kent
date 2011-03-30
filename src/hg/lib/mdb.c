@@ -739,7 +739,7 @@ struct mdbObj *mdbObjCreate(char *obj,char *var, char *val)
 struct mdbObj *mdbObj = NULL;
 
     if(obj == NULL)
-        errAbort("Need obj to create mdbObj query object.\n");
+        errAbort("Need obj to create mdbObj object.\n");
 
     AllocVar(mdbObj);
     mdbObj->obj     = cloneString(obj);
@@ -763,7 +763,8 @@ struct mdbObj *mdbObjNew(char *obj,struct mdbVar *mdbVars)
 {
 struct mdbObj *mdbObj = NULL;
 if (obj == NULL)
-    obj =  "[unknown]";
+    errAbort("Need obj to create mdbObj object.\n");
+
 if (mdbVars == NULL)
     {
     AllocVar(mdbObj);
@@ -1424,7 +1425,7 @@ struct mdbObj *mdbObjsQueryByVarPairs(struct sqlConnection *conn,char *tableName
 //   as val may be NULL, a comma delimited list, double quoted string, containing wilds: % and ?
 {
 // Note: there is a bit of inefficiency creating a string then tearing it down, but it streamlines code
-char *varValString = slPairListToString(varValPairs);
+char *varValString = slPairListToString(varValPairs,TRUE); // quotes added when spaces found
 struct mdbObj *mdbObjs = mdbObjsQueryByVarValString(conn,tableName,varValString);
 freeMem(varValString);
 return mdbObjs;
@@ -1907,6 +1908,40 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     freeMem(words);
 }
 
+void mdbObjReorderByCv(struct mdbObj *mdbObjs, boolean includeHidden)
+// Reorders vars list based upon cv.ra typeOfTerms priority
+{
+struct hash *cvTermTypes = (struct hash *)cvTermTypeHash();
+struct hashEl *el, *elList = hashElListHash(cvTermTypes);
+
+struct slPair *cvVars = NULL;
+for (el = elList; el != NULL; el = el->next)
+    {
+    struct hash *varHash = el->val;
+    if (includeHidden || SETTING_NOT_ON(hashFindVal(varHash, CV_TOT_HIDDEN))) // Skip the hidden ones
+        {
+        char *priority = hashFindVal(varHash, CV_TOT_PRIORITY);
+        if (priority != NULL) // If there is no priority it will randomly fall to the back of the list
+            slPairAdd(&cvVars,el->name,(char *)sqlUnsignedLong(priority));
+        }
+    }
+hashElFreeList(&elList);
+
+if (cvVars)
+    {
+    slPairIntSort(&cvVars);  // sorts on the integer val
+
+    // Now convert this to a string of names
+    char *orderedVars = slPairNameToString(cvVars,' ',FALSE);
+    slPairFreeList(&cvVars);
+    if (orderedVars != NULL)
+        {
+        mdbObjReorderVars(mdbObjs, orderedVars,FALSE); // Finally we can reorder the vars in the mdbObjs
+        freeMem(orderedVars);
+        }
+    }
+}
+
 int mdbObjVarCmp(const void *va, const void *vb)
 /* Compare to sort on full list of vars and vals. */
 {
@@ -1972,6 +2007,14 @@ for(; onePair != NULL; onePair = onePair->next)
     dyStringPrintf(dyTerms,",%s",onePair->name);
 mdbObjsSortOnVars(mdbObjs,dyStringContents(dyTerms));
 dyStringFree(&dyTerms);
+}
+
+void mdbObjsSortOnCv(struct mdbObj **mdbObjs, boolean includeHidden)
+// Puts obj->vars in order based upon cv.ra typeOfTerms priority,
+//  then case-sensitively sorts all objs in list based upon that var order.
+{  // NOTE: assumes all var pairs match (e.g. every obj has cell,treatment,antibody,... and missing treatment messes up sort)
+mdbObjReorderByCv(*mdbObjs, includeHidden);
+slSort(mdbObjs, mdbObjVarCmp);  // While sort will not be perfect (given missing values) it does a good job none the less.
 }
 
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars)
