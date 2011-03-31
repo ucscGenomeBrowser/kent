@@ -1,11 +1,14 @@
 /* regCompanionPickEnhancers - Pick enhancer regions by a number of criteria. 
  *  o Start with the top 50,000 DNAse peaks for the cell line.
  *  o No overlap with CTCF peak.
- *  o No overlap with promoter (+-400 bytes from txStart)
+ *  o No overlap with promoter (+-100 bytes from txStart)
  *  o Minimal transcription within 100 bases on either side(< 10 average)
  *  o h3k4me1 average 1000 bases centered on DNAse site is > 30
  * This program will pick enhancers based on just one cell line at a time.  
- * Up to regCompanionFindConcordant to pair up with genes and go for the more refined set. */
+ * Up to regCompanionFindConcordant to pair up with genes and go for the more refined set. 
+ *
+ * If the loose parameters are used, instead start with top 100,000 dnase peaks,
+ * extend h3k4me1 area to 1200, and reduce average to 20. */
 
 #include "common.h"
 #include "linefile.h"
@@ -19,6 +22,13 @@
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
+// Some vars that are command line parameters:
+int histoneBoxSize = 1000;
+double histoneMinBoxStds = 2.5;
+int maxDnasePeaks = 50000;
+double maxTxn = 10;
+
+// Some other vars it might be good to make command line parameters some day.
 int promoBefore = 100;
 int promoAfter = 100;
 
@@ -38,11 +48,20 @@ errAbort(
   "   h3k4me1.bigWig is a histone H3K4Me1 derived chip seq signal file\n"
   "   output.peak is the subset of dnase.peak that passes all the filters\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "    histoneBoxSize=N - Size of box around DNAse peak to look for H3K4Me1 levels. Default %d\n"
+  "    histoneMinBoxStds=N.N - Minimum average H3K4Me1 level in box must be over background in\n"
+  "                            units of standard deviations. Default %g\n"
+  "    maxDnasePeaks=N - After score sorting take this many DNAse peaks to next level. Default %d\n"
+  "    maxTxn=N.N - Maximum average transcription level.  Default %g\n"
+  , histoneBoxSize, histoneMinBoxStds, maxDnasePeaks, maxTxn
   );
 }
 
 static struct optionSpec options[] = {
+   {"histoneBoxSize", OPTION_INT},
+   {"histoneMinBoxStds", OPTION_DOUBLE},
+   {"maxDnasePeaks", OPTION_INT},
+   {"maxTxn", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -183,7 +202,7 @@ for (chromStart = inList; chromStart != NULL; chromStart = chromEnd)
 	    ave = sum/size;
 	    }
 
-	if (ave < 10)
+	if (ave < maxTxn)
 	    {
 	    slAddHead(&outList, peak);
 	    }
@@ -195,8 +214,8 @@ return outList;
 
 struct encodePeak *filterOutUnderInNeighborhood(struct encodePeak *inList, struct bbiFile *bbi,
 	struct bigWigValsOnChrom *chromVals, int neighborhoodSize, double stdDevAboveMean)
-/* Return sublist of inList that has low average transcription for self and 100 bases on
- * either side. Assumes inList is sorted by chromosome. */
+/* Return sublist of inList that has levels in bbi averaging at least stdDevAboveMean
+ * in window of neighborhoodSize centered around peak. */
 {
 struct encodePeak *outList = NULL;
 struct encodePeak *peak, *next, *chromStart, *chromEnd;
@@ -261,7 +280,9 @@ slReverse(&outList);
 return outList;
 }
 
+#ifdef DEBUG
 boolean uglyCheckStillThere(struct encodePeak *list, char *message)
+/* Check that a particular peak is still there - just for debugging. */
 {
 struct encodePeak *el;
 for (el = list; el != NULL; el = el->next)
@@ -275,13 +296,13 @@ for (el = list; el != NULL; el = el->next)
 uglyf("no chr2:157333421-157333570 %s\n", message);
 return FALSE;
 }
+#endif /* DEBUG */
 
 void regCompanionPickEnhancers(char *dnasePeaks, char *genesBed, char *txnWig, char *ctcfPeaks,
 	char *h3k4me1Wig, char *outputTab)
 /* regCompanionPickEnhancers - Pick enhancer regions by a number of criteria. */
 {
 struct encodePeak *dnaseList = narrowPeakLoadAll(dnasePeaks);
-uglyCheckStillThere(dnaseList, "after initial load");
 
 /* Load up genes and fill up genome range tree with promoters from them. */
 struct bed *geneList = bedLoadAll(genesBed);
@@ -318,25 +339,20 @@ struct bbiFile *txnBbi = bigWigFileOpen(txnWig);
 struct bbiFile *h3k4me1Bbi = bigWigFileOpen(h3k4me1Wig);
 struct bigWigValsOnChrom *chromVals = bigWigValsOnChromNew();
 
-uglyf("Initial: %d\n", slCount(dnaseList));
+verbose(1, "Initial: %d\n", slCount(dnaseList));
 slSort(&dnaseList, encodePeakCmpSignalVal);
-// dnaseList = filterOnSignal(dnaseList, 40);
-dnaseList = filterOnListSize(dnaseList, 50000);
-uglyCheckStillThere(dnaseList, "after top50k");
-uglyf("top50k: %d\n", slCount(dnaseList));
+dnaseList = filterOnListSize(dnaseList, maxDnasePeaks);
+verbose(1, "top%d: %d\n", maxDnasePeaks, slCount(dnaseList));
 slSort(&dnaseList, encodePeakCmpChrom);
 dnaseList = filterOutOverlapping(dnaseList, ctcfRanges);
-uglyCheckStillThere(dnaseList, "after nonCtcf");
-uglyf("nonCtcf: %d\n", slCount(dnaseList));
+verbose(1, "nonCtcf: %d\n", slCount(dnaseList));
 dnaseList = filterOutOverlapping(dnaseList, promoterRanges);
-uglyCheckStillThere(dnaseList, "after nonPromoter");
-uglyf("nonPromoter: %d\n", slCount(dnaseList));
+verbose(1, "nonPromoter: %d\n", slCount(dnaseList));
 dnaseList = filterOutTranscribed(dnaseList, txnBbi, chromVals);
-uglyCheckStillThere(dnaseList, "after nonTranscribed");
-uglyf("nonTranscribed: %d\n", slCount(dnaseList));
-dnaseList = filterOutUnderInNeighborhood(dnaseList, h3k4me1Bbi, chromVals, 1000, 2.5);
-uglyCheckStillThere(dnaseList, "after gotH3k4me1");
-uglyf("gotH3k4me1: %d\n", slCount(dnaseList));
+verbose(1, "nonTranscribed: %d\n", slCount(dnaseList));
+dnaseList = filterOutUnderInNeighborhood(dnaseList, h3k4me1Bbi, chromVals, 
+	histoneBoxSize, histoneMinBoxStds);
+verbose(1, "gotH3k4me1: %d\n", slCount(dnaseList));
 
 FILE *f = mustOpen(outputTab, "w");
 struct encodePeak *peak;
@@ -353,6 +369,10 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 7)
     usage();
+histoneBoxSize = optionInt("histoneBoxSize", histoneBoxSize);
+histoneMinBoxStds = optionDouble("histoneMinBoxStds", histoneMinBoxStds);
+maxDnasePeaks = optionInt("maxDnasePeaks", maxDnasePeaks);
+maxTxn = optionDouble("maxTxn", maxTxn);
 regCompanionPickEnhancers(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }
