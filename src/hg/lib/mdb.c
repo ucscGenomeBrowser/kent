@@ -236,22 +236,6 @@ fputc('}',f);
 #define MDB_METAVAR_RAKEY "metaVariable"
 
 // ------- (static) convert from autoSql -------
-static void mdbVarFree(struct mdbVar **mdbVarPtr)
-// Frees a single mdbVar struct
-{
-    freeMem((*mdbVarPtr)->val);
-    freeMem((*mdbVarPtr)->var);
-    freez(mdbVarPtr);
-}
-
-static void mdbVarsFree(struct mdbVar **mdbVarPtr)
-// Frees an mdbVars list
-{
-struct mdbVar *mdbVar = NULL;
-while((mdbVar = slPopHead(mdbVarPtr)) != NULL)
-    mdbVarFree(&mdbVar);
-}
-
 static void mdbLeafObjFree(struct mdbLeafObj **leafObjPtr)
 // Frees a single mdbVar struct
 {
@@ -755,7 +739,7 @@ struct mdbObj *mdbObjCreate(char *obj,char *var, char *val)
 struct mdbObj *mdbObj = NULL;
 
     if(obj == NULL)
-        errAbort("Need obj to create mdbObj query object.\n");
+        errAbort("Need obj to create mdbObj object.\n");
 
     AllocVar(mdbObj);
     mdbObj->obj     = cloneString(obj);
@@ -779,7 +763,8 @@ struct mdbObj *mdbObjNew(char *obj,struct mdbVar *mdbVars)
 {
 struct mdbObj *mdbObj = NULL;
 if (obj == NULL)
-    obj =  "[unknown]";
+    errAbort("Need obj to create mdbObj object.\n");
+
 if (mdbVars == NULL)
     {
     AllocVar(mdbObj);
@@ -1420,6 +1405,46 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
     return mdbObjs;
 }
 
+struct mdbObj *mdbObjsQueryByVarValString(struct sqlConnection *conn,char *tableName,char *varVals)
+// returns mdbObjs matching varVals in form of: [var1=val1 var2=val2a,val2b var3=v%3 var4="val 4" var5!=val5 var6=]
+//   var2=val2a,val2b: matches asny of comma separated list
+//   var3=v%3        : matches '%' and '?' wild cards.
+//   var4="val 4"    : matches simple double quoted strings.
+//   var5!=val5      : matches not equal.
+//   var6=           : matches that var exists (same as var6=%). var6!= also works.
+{
+struct mdbByVar *mdbByVars = mdbByVarsLineParse(varVals);
+if (mdbByVars == NULL)
+    return NULL;
+return mdbObjsQueryByVars(conn,tableName,mdbByVars);
+}
+
+struct mdbObj *mdbObjsQueryByVarPairs(struct sqlConnection *conn,char *tableName,struct slPair *varValPairs)
+// returns mdbObjs matching varValPairs provided.
+//   The != logic of mdbObjsQueryByVarValString() is not possible, but other cases are supported:
+//   as val may be NULL, a comma delimited list, double quoted string, containing wilds: % and ?
+{
+// Note: there is a bit of inefficiency creating a string then tearing it down, but it streamlines code
+char *varValString = slPairListToString(varValPairs,TRUE); // quotes added when spaces found
+struct mdbObj *mdbObjs = mdbObjsQueryByVarValString(conn,tableName,varValString);
+freeMem(varValString);
+return mdbObjs;
+}
+
+struct mdbObj *mdbObjQueryCompositeObj(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj)
+// returns NULL or the composite mdbObj associated with the object passed in.
+{
+char *objType = mdbObjFindValue(mdbObj,MDB_OBJ_TYPE);
+assert(objType != NULL);
+if (sameWord(objType,MDB_VAR_COMPOSITE))
+    return mdbObjClone(mdbObj);
+char *compName = mdbObjFindValue(mdbObj,MDB_VAR_COMPOSITE);
+if (compName == NULL)
+    return NULL;
+
+return mdbObjQuery(conn,tableName,mdbObjCreate(compName,NULL,NULL));
+}
+
 
 // ----------- Printing and Counting -----------
 static void mdbVarValPrint(struct mdbVar *mdbVar,boolean raStyle, FILE *outF)
@@ -1748,6 +1773,7 @@ for(;mdbObj!=NULL; mdbObj=mdbObj->next)
 return FALSE;
 }
 
+#define MDB_COMMON_VARS_OBJ_SEARCH_LIMIT 10
 struct mdbObj *mdbObjsCommonVars(struct mdbObj *mdbObjs)
 // Returns a new mdbObj with all vars that are contained in every obj passed in.
 // Note that the returnd mdbObj has a meaningles obj name and vals.
@@ -1763,7 +1789,7 @@ if (mdbObj != NULL)
     int count = 1;
     // NOTE: This should not loop through all, as the list could be huge.  Just compare the first 10 for now
     struct dyString *dyPruneVars = dyStringNew(512);
-    for(;mdbObj != NULL && count < 10;mdbObj=mdbObj->next, count++)
+    for(;mdbObj != NULL && count < MDB_COMMON_VARS_OBJ_SEARCH_LIMIT;mdbObj=mdbObj->next, count++)
         {
         struct mdbVar *mdbVar = commonVars->vars;            // Will walk through the first obj's vars
         for(; mdbVar != NULL; mdbVar = mdbVar->next )
@@ -1883,6 +1909,40 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     freeMem(words);
 }
 
+void mdbObjReorderByCv(struct mdbObj *mdbObjs, boolean includeHidden)
+// Reorders vars list based upon cv.ra typeOfTerms priority
+{
+struct hash *cvTermTypes = (struct hash *)cvTermTypeHash();
+struct hashEl *el, *elList = hashElListHash(cvTermTypes);
+
+struct slPair *cvVars = NULL;
+for (el = elList; el != NULL; el = el->next)
+    {
+    struct hash *varHash = el->val;
+    if (includeHidden || SETTING_NOT_ON(hashFindVal(varHash, CV_TOT_HIDDEN))) // Skip the hidden ones
+        {
+        char *priority = hashFindVal(varHash, CV_TOT_PRIORITY);
+        if (priority != NULL) // If there is no priority it will randomly fall to the back of the list
+            slPairAdd(&cvVars,el->name,(char *)sqlUnsignedLong(priority));
+        }
+    }
+hashElFreeList(&elList);
+
+if (cvVars)
+    {
+    slPairIntSort(&cvVars);  // sorts on the integer val
+
+    // Now convert this to a string of names
+    char *orderedVars = slPairNameToString(cvVars,' ',FALSE);
+    slPairFreeList(&cvVars);
+    if (orderedVars != NULL)
+        {
+        mdbObjReorderVars(mdbObjs, orderedVars,FALSE); // Finally we can reorder the vars in the mdbObjs
+        freeMem(orderedVars);
+        }
+    }
+}
+
 int mdbObjVarCmp(const void *va, const void *vb)
 /* Compare to sort on full list of vars and vals. */
 {
@@ -1948,6 +2008,14 @@ for(; onePair != NULL; onePair = onePair->next)
     dyStringPrintf(dyTerms,",%s",onePair->name);
 mdbObjsSortOnVars(mdbObjs,dyStringContents(dyTerms));
 dyStringFree(&dyTerms);
+}
+
+void mdbObjsSortOnCv(struct mdbObj **mdbObjs, boolean includeHidden)
+// Puts obj->vars in order based upon cv.ra typeOfTerms priority,
+//  then case-sensitively sorts all objs in list based upon that var order.
+{  // NOTE: assumes all var pairs match (e.g. every obj has cell,treatment,antibody,... and missing treatment messes up sort)
+mdbObjReorderByCv(*mdbObjs, includeHidden);
+slSort(mdbObjs, mdbObjVarCmp);  // While sort will not be perfect (given missing values) it does a good job none the less.
 }
 
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars)
@@ -2023,30 +2091,50 @@ if (dyStringLen(dyRemoveVars))
 dyStringFree(&dyRemoveVars);
 }
 
-char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var)
-// Removes var from set of mdbObjs but only if all that have it have a commmon val
-// Returns the val if removed, else NULL
+boolean mdbObjsHasCommonVar(struct mdbObj *mdbList, char *var, boolean missingOk)
+// Returns TRUE if all mbObjs passed in have the var with the same value
 {
 char *val = NULL;
 struct mdbObj *mdb = NULL;
 for(mdb = mdbList; mdb; mdb=mdb->next)
     {
     char *thisVal = mdbObjFindValue(mdb,var);
-    if (thisVal == NULL) // If var isn't found in some, that is okay
-        continue;
+    if (thisVal == NULL)
+        {
+        if (missingOk)
+            continue;
+        else
+            return FALSE;
+        }
     if (val == NULL)
         val = thisVal;
     else if(differentWord(val,thisVal))
-        return NULL;
+        return FALSE;
     }
+return TRUE;
+}
 
-if (val)
+char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var)
+// Removes var from set of mdbObjs but only if all that have it have a commmon val
+// Returns the val if removed, else NULL
+{
+if (mdbObjsHasCommonVar(mdbList,var,TRUE))  // If var isn't found in some, that is okay
     {
-    val = cloneString(val);
-    for(mdb = mdbList;mdb;mdb=mdb->next)
+    char *val = NULL;
+    struct mdbObj *mdb = mdbList;
+    for( ; mdb; mdb=mdb->next)
+        {
+        if (val == NULL)
+            {
+            char *thisVal = mdbObjFindValue(mdb,var);
+            if (thisVal != NULL)
+                val = cloneString(thisVal);
+            }
         mdbObjRemoveVars(mdb,var);
+        }
+    return val;
     }
-return val;
+return NULL;
 }
 
 boolean mdbObjSetVar(struct mdbObj *mdbObj, char *var,char *val)
@@ -2313,7 +2401,26 @@ slReverse(&mdbNames);
 return mdbNames;
 }
 
-// ----------------- Validateion and specialty APIs -----------------
+// ----------------- Validation and specialty APIs -----------------
+
+boolean mdbObjIsComposite(struct mdbObj *mdbObj)
+// returns TRUE if this is a valid composite object
+{
+char *objType = mdbObjFindValue(mdbObj,MDB_OBJ_TYPE);
+assert(objType != NULL);
+return sameWord(objType,MDB_OBJ_TYPE_COMPOSITE);
+}
+
+boolean mdbObjIsCompositeMember(struct mdbObj *mdbObj)
+// returns TRUE if this is a valid member of a composite.  DOES not confirm that composite obj exists
+{
+char *objType = mdbObjFindValue(mdbObj,MDB_OBJ_TYPE);
+assert(objType != NULL);
+if (differentWord(objType,MDB_OBJ_TYPE_TABLE) && differentWord(objType,MDB_OBJ_TYPE_FILE))
+    return FALSE;
+return mdbObjContains(mdbObj,MDB_VAR_COMPOSITE,NULL);
+}
+
 int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full)
 // Validates vars and vals against cv.ra.  Returns count of errors found.
 // Full considers vars not defined in cv as invalids
@@ -2489,6 +2596,71 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
 return invalids;
 }
 
+static struct slName *mdbCompositeFindEncodeEdvs(struct mdbObj *compObj)
+// returns NULL or the list of EDVs defined for this composite
+{
+char *edvs = mdbObjFindValue(compObj,MDB_VAR_ENCODE_EDVS);
+if (edvs == NULL)
+    return NULL;
+
+edvs = cloneString(edvs);
+if (strchr(     edvs,',') != NULL) // Tolerate delimit by commas
+    strSwapChar(edvs,',',' ');
+else if (strchr(edvs,';') != NULL) // Tolerate delimit by semicolons
+    strSwapChar(edvs,';',' ');
+
+struct slName *compositeEdvs = slNameListFromString(edvs,' ');
+freeMem(edvs);
+return compositeEdvs;
+}
+
+static struct mdbVar *mdbObjEncodeEdvsAsMdbVars(struct mdbObj *mdbObj,struct slName *compositeEdvs,boolean includeNone)
+// returns the EDVs and values for the composite member object
+// If includeNone, then defined variables not found in obj will be included as {var}="None".
+{
+struct mdbVar *edvVars = NULL;
+struct slName *var = compositeEdvs;
+for(;var!=NULL;var=var->next)
+    {
+    char *val = mdbObjFindValue(mdbObj,var->name);
+    if (val)
+        mdbVarAdd(&edvVars, var->name,val);
+    else if (includeNone)
+        {
+        if (differentWord(var->name,ENCODE_EXP_FIELD_ORGANISM)) // Does not go into EDV's sent to encodeExp table
+            mdbVarAdd(&edvVars, var->name,MDB_VAL_ENCODE_EDV_NONE);
+        }
+    }
+slReverse(&edvVars);
+return edvVars;
+}
+
+struct slName *mdbObjFindCompositeEncodeEdvNames(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj)
+// returns NULL or the Experiment Defining Variable names for this composite
+{
+if (!mdbObjIsCompositeMember(mdbObj))
+    return NULL; // This should be a valid composite memeber
+
+struct mdbObj *compObj = mdbObjQueryCompositeObj(conn,tableName,mdbObj);
+if (compObj == NULL)
+    return NULL;
+
+struct slName *edvs = mdbCompositeFindEncodeEdvs(compObj);
+mdbObjFree(&compObj);
+return edvs;
+}
+
+struct mdbVar *mdbObjFindEncodeEdvPairs(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj,boolean includeNone)
+// returns NULL or the Experiment Defining Variables and values for this composite member object
+// If includeNone, then defined variables not found in obj will be included as {var}="None".
+{
+struct slName *compositeEdvs = mdbObjFindCompositeEncodeEdvNames(conn,tableName,mdbObj);
+if (compositeEdvs == NULL)
+    return NULL;
+
+return mdbObjEncodeEdvsAsMdbVars(mdbObj,compositeEdvs,includeNone);
+}
+
 #define EXPERIMENTS_TABLE "hgFixed.encodeExp"
 
 struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,
@@ -2499,25 +2671,24 @@ struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,ch
 // createExpIfNecessary means go ahead and add to the hgFixed.encodeExp table to get an ID
 // Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
 {
+// Here is what "experimentify" does from "mdbPrint -encodeExp" and "mdbUpdate -encodeExp":
+//    - Uses normal selection methods to get a set of objects (e.g. one composite worth) or all objs. (in mdbPrint and mdbUpdate)
+//    - This API:
+//    - Breaks up and walks through set of objects composite by composite
+//    - Looks up EDVs (Experiment Defining Variables) for composite.
+//        These are defined in the mdb under objType=composite expVars=
+//    - Breaks up and walks through composite objects exp by exp as defined by EDVs
+//    - Uses encodeExp API to determine what expId should be.
+//    - Creates new mdbObjs list of updates needed to put expId and dccAccession into the mdb.
+//    - From "mdbPrint", this API warns of mismatches or missing expIds
+//    - From "mdbUpdate" (not -test) then that utility will update the mdb from this API's return structs.  If -test, will reveal what would be updated.
+//    - FIXME: Need to extend this to update dccAccession separately from expId.
+
 if (pMdbObjs == NULL || *pMdbObjs == NULL)
     return 0;
 struct mdbObj *mdbObjs = *pMdbObjs;
 struct mdbObj *mdbProcessedObs = NULL;
 struct mdbObj *mdbUpdateObjs = NULL;
-
-/* Here is what "experimentify" does from "mdbPrint -encodeExp" and "mdbUpdate -encodeExp":
-    - Uses normal selection methods to get a set of objects (e.g. one composite worth) or all objs. (in mdbPrint and mdbUpdate)
-    - This API:
-    - Breaks up and walks through set of objects composite by composite
-    - Looks up EDVs (expiment defining vars) for composite.
-        Currently these are defined in the mdb under objType=composite expVars=
-        (e.g. obj=wgEncodeBroadHistone objType=composite expVars=lab,dataType,cell,antibody)
-        FIXME: Nice to add white-list to cv.ra typeOfTerms
-    - Breaks up and walks through composite objects exp by exp (handle's "None"s gracefully)
-    - Determines what expId should be.
-    - Creates new mdbObjs list of updates needed to put expId and dccAccession into the mdb.
-    - From "mdbPrint", this API warns of mismatches or missing expIds
-    - From "mdbUpdate" (not -test) then that utility will update the mdb from this API's return structs.  If -test, will reveal what would be updated. */
 
 // Sort all objects by composite, so that we handle composite by composite
 mdbObjsSortOnVars(&mdbObjs, MDB_VAR_COMPOSITE);
@@ -2541,51 +2712,39 @@ while(mdbObjs != NULL)
     struct mdbObj *mdbCompositeObjs = mdbObjsFilter(&mdbObjs, MDB_VAR_COMPOSITE, compName,TRUE);
     // --- At this point we have nibbled off a composite worth of objects from the full set of objects
 
-
     // Find the composite obj if it exists
     struct mdbObj *compObj = mdbObjsFilter(&mdbCompositeObjs, MDB_OBJ_TYPE, MDB_OBJ_TYPE_COMPOSITE,TRUE);
     if (compObj == NULL) // May be NULL if mdbObjs passed in was produced by too narrow of selection criteria
+        compObj = mdbObjQueryCompositeObj(conn,tableName,mdbCompositeObjs);  // First obj on list will do
+    else
+        slAddHead(&mdbProcessedObs,compObj); // We can still use the pointer, but will not "process" it.  NOTE: leak the queried one
+    if(compObj == NULL)
         {
-        dyStringClear(dyVars);
-        dyStringPrintf(dyVars,"%s=%s %s=", MDB_VAR_COMPOSITE, compName,MDB_VAR_ENCODE_EDVS);
-        struct mdbByVar *mdbByVars = mdbByVarsLineParse(dyStringContents(dyVars));
-        compObj = mdbObjsQueryByVars(conn,tableName,mdbByVars);
+        verbose(1, "Composite '%s' has not been defined.\n",compName);
+        mdbProcessedObs = slCat(mdbProcessedObs,mdbCompositeObjs);
+        mdbCompositeObjs = NULL;
+        continue;
         }
 
     // Obtain experiment defining variables for the composite
-    dyStringClear(dyVars);
-    if (compObj != NULL)
+    struct slName *compositeEdvs = mdbCompositeFindEncodeEdvs(compObj);
+    if (compositeEdvs == NULL)
         {
-        char *expVars = mdbObjFindValue(compObj,MDB_VAR_ENCODE_EDVS);
-        if (expVars)
-            dyStringAppend(dyVars, expVars); // expVars in form of "var1 var2 var3"
-        }
-    if (dyStringLen(dyVars) == 0)
-        {
-        // figure them out?
-        // NOTE: Kate wants white list of EDVs from the cv.  Wranglers satisfied with defining them in an mdbObj of objType=composite
-        // Walk through the mdbCompositeObjs looking for matching vars.
         verbose(1, "There are no experiment defining variables established for this %s.  Add them to obj %s => var:%s.\n",
                 MDB_VAR_COMPOSITE, compName,MDB_VAR_ENCODE_EDVS);
         mdbProcessedObs = slCat(mdbProcessedObs,mdbCompositeObjs);
         mdbCompositeObjs = NULL;
         continue;
         }
-
-    // Parse into individual Experiment Defining Variables (no vals at the composite level)
-    if (strchr(dyStringContents(dyVars), ',') != NULL) // Tolerate delimit by commas
-        strSwapChar(dyStringContents(dyVars),',',' ');
-    else if (strchr(dyStringContents(dyVars), ';') != NULL) // Tolerate delimit by semicolons
-        strSwapChar(dyStringContents(dyVars),';',' ');
-    struct slName *compositeEdvs = slNameListFromString(dyStringContents(dyVars), ' ');
-    assert(slCount(compositeEdvs) > 0);
+    dyStringClear(dyVars);
+    dyStringAppend(dyVars,slNameListToString(compositeEdvs, ' '));
 
     if (warn > 0)
         printf("Composite '%s' with %d objects has %d EDVs(%s): [%s].\n",compName,slCount(mdbCompositeObjs),
                slCount(compositeEdvs),MDB_VAR_ENCODE_EDVS,dyStringContents(dyVars)); // Set the stage
 
     // Organize composite objs by EDVs
-    dyStringPrintf(dyVars, " view replicate "); // Allows for nicer sorted list
+    dyStringPrintf(dyVars, " %s %s ",MDB_VAR_VIEW,MDB_VAR_REPLICATE); // Allows for nicer sorted list
     char *edvSortOrder = cloneString(dyStringContents(dyVars));
 
     // Walk through objs for an exp as defined by EDVs
@@ -2599,31 +2758,24 @@ while(mdbObjs != NULL)
         // Must sort each cycle, because sort order is lost during mdbObjs FilterByVars();
         mdbObjsSortOnVars(&mdbCompositeObjs, edvSortOrder);
 
-        // Construct the var=val string for the exp at the top of the stack
-        struct mdbVar *edvVars = NULL,*edvVar = NULL;
-        dyStringClear(dyVars);
-        struct dyString *filterVars = dyStringNew(256);
-        struct slName *var = compositeEdvs;
-        int valsFound = 0;
-        for(;var!=NULL;var=var->next)
+        // Get the EDVs for the first obj
+        struct mdbVar *edvVarVals = mdbObjEncodeEdvsAsMdbVars(mdbCompositeObjs,compositeEdvs,TRUE); // use first obj on list and include Nones
+        if (edvVarVals == NULL)
             {
-            char *val = mdbObjFindValue(mdbCompositeObjs,var->name);  // Looking at first obj in queue
-            if (val)
-                {
+            verbose(1, "There are no experiment defining variables for this object '%s'.\n",mdbCompositeObjs->obj);
+            slAddHead(&mdbProcessedObs,slPopHead(&mdbCompositeObjs)); // We're done with this one
+            continue;
+            }
+
+        // Construct the var=val string for filtering a single exp (set of objs) from composite worth of objs
+        dyStringClear(dyVars);
+        struct mdbVar *edvVar = edvVarVals;
+        int valsFound = 0;
+        for(;edvVar!=NULL;edvVar=edvVar->next)
+            {
+            dyStringPrintf(dyVars,"%s=%s ",edvVar->var,edvVar->val);
+            if (differentString(edvVar->val,MDB_VAL_ENCODE_EDV_NONE))
                 valsFound++;
-                dyStringPrintf(filterVars,"%s=%s ",var->name,val);
-                edvVar = mdbVarAdd(&edvVars, var->name,val);
-                dyStringPrintf(dyVars,"%s=%s ",edvVar->var,edvVar->val);
-                }
-            else
-                {
-                if (differentWord(var->name,ENCODE_EXP_FIELD_ORGANISM)) // Does not go into EDV's sent to encodeExp table
-                    {
-                    dyStringPrintf(filterVars,"%s=%s ",var->name,MDB_VAL_ENCODE_EDV_NONE);
-                    edvVar = mdbVarAdd(&edvVars, var->name,MDB_VAL_ENCODE_EDV_NONE);
-                    dyStringPrintf(dyVars,"%s=%s ",edvVar->var,edvVar->val);
-                    }
-                }
             }
         dyStringContents(dyVars)[dyStringLen(dyVars) -1] = '\0'; // Nicer printing is all
 
@@ -2631,30 +2783,27 @@ while(mdbObjs != NULL)
             {
             verbose(1, "There are no experiment defining variables for this object '%s'.\n",mdbCompositeObjs->obj);
             slAddHead(&mdbProcessedObs,slPopHead(&mdbCompositeObjs)); // We're done with this one
-            dyStringFree(&filterVars);
-            mdbVarsFree(&edvVars);
+            mdbVarsFree(&edvVarVals);
             continue;
             }
 
-
         // Work on one experiment at a time
-        struct mdbObj *mdbExpObjs = mdbObjsFilterByVars(&mdbCompositeObjs,dyStringContents(filterVars),TRUE,TRUE);
-        dyStringFree(&filterVars);
-        // --- At this point we have nibbled off an experiment worth of objects from the composite set of objects
+        struct mdbObj *mdbExpObjs = mdbObjsFilterByVars(&mdbCompositeObjs,dyStringContents(dyVars),TRUE,TRUE); // None={notFound}
 
+        // --- At this point we have nibbled off an experiment worth of objects from the composite set of objects
 
         int objsInExp = slCount(mdbExpObjs);
         assert(objsInExp > 0);
         expCount++;
-        expObjsCount += objsInExp; // Total of all experimental object across the composite
+        expObjsCount += objsInExp; // Total of all experimental objects across the composite
 
         // Look up each exp in EXPERIMENTS_TABLE
         char experimentId[128];
         int expId = -1;
-        struct encodeExp *exp = encodeExpGetByMdbVars(db, edvVars);
+        struct encodeExp *exp = encodeExpGetByMdbVars(db, edvVarVals);
         if (exp == NULL && createExpIfNecessary)
-            exp = encodeExpGetOrCreateByMdbVars(db, edvVars);
-        mdbVarsFree(&edvVars); // No longer needed
+            exp = encodeExpGetOrCreateByMdbVars(db, edvVarVals);
+        mdbVarsFree(&edvVarVals); // No longer needed
 
         if (exp != NULL)
             expId = exp->ix;
@@ -2681,7 +2830,7 @@ while(mdbObjs != NULL)
                 printf("Experiment %s has %d objects based upon %d EDVs: [%s].\n",experimentId,slCount(mdbExpObjs),valsFound,dyStringContents(dyVars)); // Set the stage
             }
 
-        // Now we can walk through each obj in experiment and determine if it has the coorect expId
+        // Now we can walk through each obj in experiment and determine if it has the correct expId
         int foundId = FALSE;
         int errors = objsInExp;
         if (expMax < objsInExp)
@@ -2708,7 +2857,7 @@ while(mdbObjs != NULL)
                     errors--; // One less error
                     if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
                         {
-                        char *acc = mdbObjFindValue(obj,MDB_VAR_DCC_ACCESSION);
+                        char *acc = mdbObjFindValue(obj,MDB_VAR_DCC_ACCESSION); // FIXME: Add code to update accession to encodeExp
                         if (acc == NULL)
                             printf("           %s %s\n",experimentId,obj->obj);
                         else
@@ -2817,6 +2966,18 @@ if(mdbObjsPtr != NULL && *mdbObjsPtr != NULL)
         freeMem(mdbObj);
         }
     freez(mdbObjsPtr);
+    }
+}
+
+void mdbVarsFree(struct mdbVar **mdbVarsPtr)
+// Frees one or more metadata vars and any val as well
+{
+struct mdbVar *mdbVar = NULL;
+while((mdbVar = slPopHead(mdbVarsPtr)) != NULL)
+    {
+    freeMem(mdbVar->val);
+    freeMem(mdbVar->var);
+    freez(&mdbVar);
     }
 }
 
@@ -2988,8 +3149,6 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
     else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
         {
         // TO BE IMPLEMENTED
-        // Requires new mdbObjSearch API and more than one (char *)onePair->val
-        warn("mdb search by date or number is not yet implemented.");
         }
     }
 // Be sure to include table or file in selections
@@ -2999,11 +3158,8 @@ if (files)
     dyStringPrintf(dyTerms,"%s=? ",MDB_VAR_FILENAME);
 
 // Build the mdbByVals struct and then select all mdbObjs in one query
-struct mdbByVar *mdbByVars = mdbByVarsLineParse(dyStringContents(dyTerms));
-dyStringClear(dyTerms);
-char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
-struct mdbObj *mdbObjs = mdbObjsQueryByVars(conn,tableName,mdbByVars);
-
+struct mdbObj *mdbObjs = mdbObjsQueryByVarVals(conn,dyStringContents(dyTerms));
+dyStringFree(&dyTerms);
 return mdbObjs;
 }
 

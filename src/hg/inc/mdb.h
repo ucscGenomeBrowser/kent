@@ -111,11 +111,17 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 #define MDB_VAR_ANTIBODY        CV_TERM_ANTIBODY
 #define MDB_VAR_CELL            CV_TERM_CELL
 #define MDB_VAR_DATATYPE        CV_TERM_DATA_TYPE
+#define MDB_VAR_VIEW            CV_TERM_VIEW
+#define MDB_VAR_CONTROL         CV_TERM_CONTROL
 #define MDB_VAR_TABLENAME       "tableName"
 #define MDB_VAR_FILENAME        "fileName"
 #define MDB_VAR_FILEINDEX       "fileIndex"
 #define MDB_VAR_DCC_ACCESSION   "dccAccession"
 #define MDB_VAR_PROJECT         "project"
+#define MDB_VAR_REPLICATE       "replicate"
+#define MDB_VAR_LAB_VERSION     "labVersion"
+#define MDB_VAR_SOFTWARE_VERSION "softwareVersion"
+#define MDB_VAR_SUBMIT_VERSION  "submittedDataVersion"
 
 // ENCODE Specific (at least for now)
 #define MDB_VAL_ENCODE_PROJECT  "wgEncode"
@@ -255,6 +261,25 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 // Query the metadata table by one or more var=val pairs to find the distinct set of objs that satisfy ALL conditions.
 // Returns new mdbObj struct fully populated and sorted in obj,var order.
 
+struct mdbObj *mdbObjsQueryByVarValString(struct sqlConnection *conn,char *tableName,char *varVals);
+// returns mdbObjs matching varVals in form of: [var1=val1 var2=val2a,val2b var3=v%3 var4="val 4" var5!=val5 var6=]
+//   var2=val2a,val2b: matches asny of comma separated list
+//   var3=v%3        : matches '%' and '?' wild cards.
+//   var4="val 4"    : matches simple double quoted strings.
+//   var5!=val5      : matches not equal.
+//   var6=           : matches that var exists (same as var6=%). var6!= also works.
+#define mdbObjsQueryByVarVals(conn,varVals) mdbObjsQueryByVarValString((conn),NULL,(varVals))
+
+struct mdbObj *mdbObjsQueryByVarPairs(struct sqlConnection *conn,char *tableName,struct slPair *varValPairs);
+// returns mdbObjs matching varValPairs provided.
+//   The != logic of mdbObjsQueryByVarValString() is not possible, but other cases are supported:
+//   as val may be NULL, a comma delimited list, double quoted string, containing wilds: % and ?
+#define mdbObjsQueryByVarValPairs(conn,varValPairs) mdbObjsQueryByVarPairs((conn),NULL,(varValPairs))
+
+struct mdbObj *mdbObjQueryCompositeObj(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj);
+// returns NULL or the composite mdbObj associated with the object passed in.
+#define mdbObjQueryComposite(conn,mdbObj) mdbObjQueryCompositeObj((conn),NULL,(mdbObj))
+
 
 // ----------- Printing and Counting -----------
 void mdbObjPrint(struct mdbObj *mdbObjs,boolean raStyle);
@@ -305,6 +330,9 @@ boolean mdbByVarContains(struct mdbByVar *mdbByVar, char *val, char *obj);
 void mdbObjReorderVars(struct mdbObj *mdbObjs, char *vars,boolean back);
 // Reorders vars list based upon list of vars "cell antibody treatment".  Send to front or back.
 
+void mdbObjReorderByCv(struct mdbObj *mdbObjs, boolean includeHidden);
+// Reorders vars list based upon cv.ra typeOfTerms priority
+
 void mdbObjsSortOnVars(struct mdbObj **mdbObjs, char *vars);
 // Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes all objs' vars are in identical order.
 // Optionally give list of vars "cell antibody treatment" to sort on (bringing to front of vars lists).
@@ -313,11 +341,18 @@ void mdbObjsSortOnVarPairs(struct mdbObj **mdbObjs,struct slPair *varValPairs);
 // Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes all objs' vars are in identical order.
 // This method will use mdbObjsSortOnVars()
 
+void mdbObjsSortOnCv(struct mdbObj **mdbObjs, boolean includeHidden);
+// Puts obj->vars in order based upon cv.ra typeOfTerms priority,
+//  then case-sensitively sorts all objs in list based upon that var order.
+
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars);
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
 
 void mdbObjRemoveHiddenVars(struct mdbObj *mdbObjs);
 // Prunes list of vars for mdb objs that have been declared as hidden in cv.ra typeOfTerms
+
+boolean mdbObjsHasCommonVar(struct mdbObj *mdbList, char *var, boolean missingOk);
+// Returns TRUE if all mbObjs passed in have the var with the same value
 
 char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var);
 // Removes var from set of mdbObjs but only if all that hav it have a commmon val
@@ -364,10 +399,26 @@ int mdbVarCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
 
 
-// ----------------- Validateion and specialty APIs -----------------
+// ----------------- Validation and specialty APIs -----------------
+
+boolean mdbObjIsComposite(struct mdbObj *mdbObj);
+// returns TRUE if this is a valid composite object
+
+boolean mdbObjIsCompositeMember(struct mdbObj *mdbObj);
+// returns TRUE if this is a valid member of a composite.  DOES not confirm that composite obj exists
+
 int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full);
 // Validates vars and vals against cv.ra.  Returns count of errors found.
 // Full considers vars not defined in cv as invalids
+
+struct slName *mdbObjFindCompositeEncodeEdvNames(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj);
+// returns NULL or the Experiment Defining Variable names for this composite
+#define mdbObjFindCompositeEncodeEdvs(conn,mdbObj) mdbObjFindCompositeEncodeEdvNames((conn),NULL,(mdbObj))
+
+struct mdbVar *mdbObjFindEncodeEdvPairs(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj,boolean includeNone);
+// returns NULL or the Experiment Defining Variables and values for this composite member object
+// If includeNone, then defined variables not found in obj will be included as {var}="None".
+#define mdbObjFindEncodeEdvs(conn,mdbObj,includeNone) mdbObjFindEncodeEdvPairs((conn),NULL,(mdbObj),(includeNone))
 
 struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,
                                           int warn,boolean createExpIfNecessary);
@@ -377,12 +428,6 @@ struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,ch
 // createExpIfNecessary means go ahead and add to the hgFixed.encodeExp table to get an ID
 // Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
 
-// -- Requested by Kate: --
-#define MDB_FIELD_LAB        MDB_VAR_LAB
-#define MDB_FIELD_DATA_TYPE  MDB_VAR_DATATYPE
-#define MDB_FIELD_CELL_TYPE  MDB_VAR_CELL
-#define ENCODE_MDB_PROJECT   MDB_VAL_ENCODE_PROJECT
-
 boolean mdbObjIsEncode(struct mdbObj *mdbObj);
 // Returns TRUE if MDB object is an ENCODE object (project=wgEncode)
 
@@ -390,6 +435,7 @@ boolean mdbObjInComposite(struct mdbObj *mdb, char *composite);
 // Returns TRUE if metaDb object is in specified composite.
 // If composite is NULL, always return true // FIXME: KATE Why return true if composite not defined???
 
+// -- Requested by Kate? --
 //struct encodeExp *encodeExps(char *composite,char *expTable);
 //struct mdbObjs *mdbObjsForDefinedExpId(int expId);
 // Returns the mdb objects belonging to a single encode experiment defined in the encodExp table
@@ -398,9 +444,15 @@ boolean mdbObjInComposite(struct mdbObj *mdb, char *composite);
 // --------------- Free at last ----------------
 void mdbObjsFree(struct mdbObj **mdbObjsPtr);
 // Frees one or more metadata objects and any contained mdbVars.  Will free any hashes as well.
+#define mdbObjFree(mdbObjPtr) mdbObjsFree(mdbObjPtr)
+
+void mdbVarsFree(struct mdbVar **mdbVarsPtr);
+// Frees one or more metadata vars and any val as well
+#define mdbVarFree(mdbVarPtr) mdbVarsFree(mdbVarPtr)
 
 void mdbByVarsFree(struct mdbByVar **mdbByVarsPtr);
 // Frees one or more metadata vars and any contained vals and objs.  Will free any hashes as well.
+#define mdbByVarFree(mdbByVarPtr) mdbByVarsFree(mdbByVarPtr)
 
 
 // ----------------- CGI specific routines for use with tdb -----------------

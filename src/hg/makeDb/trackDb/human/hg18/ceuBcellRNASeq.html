@@ -1,0 +1,45 @@
+<H2>Description</H2>
+This track represents RNA-Seq data of cultured human B-cells from 20 unrelated individuals from the Centre d'Etude du Polymorphisme Humain (CEPH) collection (Dausset et al. 1990). RNA-Seq is a high-throughput sequencing-based method for characterizing and quantifying transcriptomes. Briefly, we isolated the mRNA population of RNA by poly(A)+ selection, converted it to a library of cDNA fragments with adaptors attached, and sequenced the cDNA library using Illumina 1G Genome Analyzer to a depth of approximately 40 million 50 base-pair reads per sample. To characterize the overall gene expression landscape, we pooled all sequences to create an 879 million read dataset. 
+<P>
+Reads were mapped to the human genome using Bowtie (Langmead 2009) and splice junctions were detected using Tophat (Trapnell 2009). The coverage or number of reads aligning to each base in the genome is displayed on one track. Splice junctions are also denoted on a separate track. 
+<H2>Display Conventions and Configuration</H2>
+This track is a multi-view composite track that contains multiple data types (views). For each view, there are multiple subtracks that display individually on the browser. Instructions for configuring multi-view tracks are here. The following views are in this track:
+<P>
+<I>Coverage</I>
+<UL>
+<LI>
+Density graph (wiggle) of coverage or reads per base.
+</UL>
+<I>Junction Reads</I>
+<UL>
+<LI>Alignment positions of junction sites.
+</UL>
+
+<H2>Methods</H2>
+Immortalized B cell lines for 20 European-derived individuals from the Utah pedigrees of the Center d'Étude du Polymorphisme Humain collection (CEPH) were obtained from Coriell Cell Repositories. No individuals were known to be blood relatives, and there is no known history of major medical illness. Specifically, the individuals are GM06985, GM07000, GM07034, GM07055, GM07056, GM07345, GM11832, GM11839, GM11992, GM11993, GM11994, GM12056, GM12145, GM12155, GM12716, GM12717, GM12750, GM12813, GM12872 and GM12891. The dataset consists of 10 men and 10 women. 
+<P>
+Cells were grown to a density of 5x105 cells/mL in RPMI 1640 supplemented with 15% fetal bovine serum, 100 units/mL penicillin-streptomycin, and 2 mM L-glutamine.  Cells were harvested 24 hours after addition of fresh medium. Total RNA was extracted from cell pellets using the RNeasy Mini-Kit with DNase treatment (Qiagen). 
+<P>
+RNA-Seq was performed as recommended by the manufacturer (Illumina). Briefly, polyA mRNA was fragmented and first strand cDNA prepared using random hexamers. Following second strand cDNA synthesis, end repair, addition of a single A base, adaptor ligation, agarose gel isolation of ~200 base-pair cDNA and PCR amplification of the ~200 base-pair cDNA, the samples were sequenced using the Illumina 1G Genome Analyzer to a coverage of approximately 40 million reads per sample. 
+<P>
+Across the 20 samples, 43,819,745 + 8,194,875 (mean + standard deviation) reads were obtained. All reads from each sample were pooled to form a dataset consisting of 878,668,290 random reads. Sequence reads were mapped to the reference human genome sequence (NCB1 36.1 (hg18) assembly) using Bowtie (Langmead et al. 2009) and Tophat (Trapnell et al. 2009). 
+<H2>Verification</H2>
+Correlation to microarray data R = 0.59
+
+
+
+
+
+
+
+
+
+
+<H2> Credits </H2>
+Cheung Lab: Jonathan M. Toung, Michael Morley, Mingyao Li, Vivian G. Cheung, Alan Bruzel, Denis Smirnov. 
+<P>
+Contacts: Jonathan M. Toung
+<H2>References</H2>
+Dausset J, Cann H, Cohen D, Lathrop M, Lalouel JM, White R. 1990. Centre d'etude du polymorphisme humain (CEPH): collaborative genetic mapping of the human genome. Genomics 6(3): 575-577.
+<P>Langmead B, Trapnell C, Pop M, Salzberg SL. 2009. Ultrafast and memory-efficient alignment of short DNA sequences to the human genome. Genome Biol 10(3): R25.
+<P>Trapnell C, Pachter L, Salzberg SL. 2009. TopHat: discovering splice junctions with RNA-Seq. Bioinformatics 25(9): 1105-1111.

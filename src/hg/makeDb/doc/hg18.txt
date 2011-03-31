@@ -31239,3 +31239,25 @@ TMPDIR=/scratch/tmp
 
 
 #############################################################################
+# BUILD B CELL RNA-SEQ TRACKS (DONE, 3/29/11, Fan)
+
+ssh hgwdev
+mkdir -p /hive/data/genomes/gs.19/build36/bed/Bcell
+cd /hive/data/genomes/gs.19/build36/bed/Bcell
+
+# Get data from custom track site
+
+wget --timestamping http://genomicsweb1.med.upenn.edu/ucsc/bcelltranscriptometracks.txt
+wget --timestamping http://genomicsweb1.med.upenn.edu/ucsc/800m_junctions.bed
+wget --timestamping http://genomicsweb1.med.upenn.edu/ucsc/800m.bw
+
+ln -s `pwd`/800m.bw /gbdb/hg18/bbi/ceuBcellRNASeqBW.bw
+
+hgsql hg18 -e 'drop table if exists ceuBcellRNASeqBW; \
+               create table ceuBcellRNASeqBW (fileName varchar(255) not null); \
+	       insert into ceuBcellRNASeqBW values ("/gbdb/hg18/bbi/ceuBcellRNASeqBW.bw");'
+
+fgrep -v track 800m_junctions.bed >ceuBcellRNASeq.bed
+hgLoadBed hg18 ceuBcellRNASeq ceuBcellRNASeq.bed
+#############################################################################
+

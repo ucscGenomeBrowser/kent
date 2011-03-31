@@ -124,7 +124,7 @@ void encodeExpTableCreate(struct sqlConnection *conn, char *table);
 struct encodeExp *encodeExpLoadAllFromTable(struct sqlConnection *conn, char *table);
 /* Load all encodeExp in table */
 
-struct encodeExp *encodeExpFromMdb(struct mdbObj *mdb);
+struct encodeExp *encodeExpFromMdb(struct sqlConnection *conn,char *db, struct mdbObj *mdb);
 /* Create an encodeExp from an ENCODE metaDb object */
 
 struct encodeExp *encodeExpFromMdbVars(char *db, struct mdbVar *vars);
@@ -152,7 +152,7 @@ void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp 
 
 char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id);
 /* Add accession field to an existing "temp" experiment.  This is done
- * after experiment is determined to be valid. 
+ * after experiment is determined to be valid.
  * Return the accession. */
 
 void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int id);
@@ -160,6 +160,10 @@ void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int i
 
 char *encodeExpKey(struct encodeExp *exp);
 /* Create a hash key from an encodeExp */
+
+char *encodeExpVars(struct encodeExp *exp);
+// Create a string of all experiment defining vars and vals as "lab=UW dataType=ChipSeq ..."
+// WARNING: May be missing var=None if the var was added after composite had exps.
 
 struct encodeExp *encodeExpGetFromTable(char *organism, char *lab, char *dataType, char *cell,
                                 struct slPair *varPairs, char *table);
@@ -184,7 +188,7 @@ struct encodeExp *encodeExpGetOrCreateByMdbVarsFromTable(char *db, struct mdbVar
 int encodeExpExists(char *db, struct mdbVar *vars);
 /* Return TRUE if at least one experiment exists for these vars */
 
-char *encodeGetAccessionByMdbVars(char *db, struct mdbVar *vars);
+char *encodeGetExpAccessionByMdbVars(char *db, struct mdbVar *vars);
 /* Return accession of (first) experiment matching vars, or NULL if not found */
 
 void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,

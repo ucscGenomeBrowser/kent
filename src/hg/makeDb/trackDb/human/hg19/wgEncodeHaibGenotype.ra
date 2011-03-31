@@ -49,9 +49,9 @@ maxWindowToQuery 10000000
 
         track wgEncodeHaibGenotypeAg04450RegionsRep2
         parent wgEncodeHaibGenotype off
-        shortLabel AG04450 2
-        longLabel AG04450 Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=AG04450 treatment=None rep=rep2
+        shortLabel AG04450 1
+        longLabel AG04450 Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
+        subGroups cellType=AG04450 treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -65,9 +65,9 @@ maxWindowToQuery 10000000
 
         track wgEncodeHaibGenotypeAg09319RegionsRep2
         parent wgEncodeHaibGenotype off
-        shortLabel AG09319 2
-        longLabel AG09319 Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=AG09319 treatment=None rep=rep2
+        shortLabel AG09319 1
+        longLabel AG09319 Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
+        subGroups cellType=AG09319 treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -121,35 +121,35 @@ maxWindowToQuery 10000000
 
         track wgEncodeHaibGenotypeHsmmRegionsRep3
         parent wgEncodeHaibGenotype off
-        shortLabel HSMM 3
-        longLabel HSMM Copy number variants Replicate 3 from ENCODE/HAIB
-        subGroups cellType=HSMM treatment=None rep=rep3
+        shortLabel HSMM 1
+        longLabel HSMM Copy number variants Replicate 1 (Lab Rep 3) from ENCODE/HAIB
+        subGroups cellType=HSMM treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHsmmtRegionsRep2
         parent wgEncodeHaibGenotype off
-        shortLabel HSMMtube 2
-        longLabel HSMM tube Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HSMMt treatment=None rep=rep2
+        shortLabel HSMMtube 1
+        longLabel HSMM tube Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
+        subGroups cellType=HSMMt treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-03-21
 
         track wgEncodeHaibGenotypeCmkRegionsRep2
         parent wgEncodeHaibGenotype off
-        shortLabel CMK 2
-        longLabel CMK Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=CMK treatment=None rep=rep2
+        shortLabel CMK 1
+        longLabel CMK Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
+        subGroups cellType=CMK treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
-        track wgEncodeHaibGenotypeHsmmRegionsRep6
-        parent wgEncodeHaibGenotype off
-        shortLabel HSMM 6
-        longLabel HSMM Copy number variants Replicate 6 from ENCODE/HAIB
-        subGroups cellType=HSMM treatment=None rep=rep6
-        type bed 9 +
-        # subId=3432 dateSubmitted=2011-01-20
+        #track wgEncodeHaibGenotypeHsmmRegionsRep6
+        #parent wgEncodeHaibGenotype off
+        #shortLabel HSMM 6
+        #longLabel HSMM Copy number variants Replicate 6 from ENCODE/HAIB
+        #subGroups cellType=HSMM treatment=None rep=rep6
+        #type bed 9 +
+        # subId=3432 dateSubmitted=2011-01-20 REVOKED
 
         track wgEncodeHaibGenotypeGm06990RegionsRep1
         parent wgEncodeHaibGenotype off
@@ -161,17 +161,17 @@ maxWindowToQuery 10000000
 
         track wgEncodeHaibGenotypeGm12891RegionsRep2
         parent wgEncodeHaibGenotype off
-        shortLabel GM12891 2
-        longLabel GM12891 Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=GM12891 treatment=None rep=rep2
+        shortLabel GM12891 1
+        longLabel GM12891 Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
+        subGroups cellType=GM12891 treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeGm12892RegionsRep2
         parent wgEncodeHaibGenotype off
-        shortLabel GM12892 2
-        longLabel GM12892 Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=GM12892 treatment=None rep=rep2
+        shortLabel GM12892 1
+        longLabel GM12892 Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
+        subGroups cellType=GM12892 treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -185,9 +185,9 @@ maxWindowToQuery 10000000
 
         track wgEncodeHaibGenotypeH1hescRegionsRep2
         parent wgEncodeHaibGenotype on 
-        shortLabel H1-hESC 2
-        longLabel H1-hESC Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=1H1hESC treatment=None rep=rep2
+        shortLabel H1-hESC 1
+        longLabel H1-hESC Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
+        subGroups cellType=1H1hESC treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -257,25 +257,25 @@ maxWindowToQuery 10000000
 
         track wgEncodeHaibGenotypeHeeRegionsRep2
         parent wgEncodeHaibGenotype off
-        shortLabel HEEpiC 2
-        longLabel HEEpiC Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HEE treatment=None rep=rep2
+        shortLabel HEEpiC 1
+        longLabel HEEpiC Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
+        subGroups cellType=HEE treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHek293RegionsRep2
         parent wgEncodeHaibGenotype off
-        shortLabel HEK293 2
-        longLabel HEK293 Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HEK293 treatment=None rep=rep2
+        shortLabel HEK293 1
+        longLabel HEK293 Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
+        subGroups cellType=HEK293 treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHelas3RegionsRep2
         parent wgEncodeHaibGenotype on  
-        shortLabel HeLa-S3 2
-        longLabel HeLa-S3 Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=2HeLaS3 treatment=None rep=rep2
+        shortLabel HeLa-S3 1
+        longLabel HeLa-S3 Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
+        subGroups cellType=2HeLaS3 treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -305,9 +305,9 @@ maxWindowToQuery 10000000
 
         track wgEncodeHaibGenotypeHmecRegionsRep2
         parent wgEncodeHaibGenotype off
-        shortLabel HMEC 2
-        longLabel HMEC Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HMEC treatment=None rep=rep2
+        shortLabel HMEC 1
+        longLabel HMEC Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
+        subGroups cellType=HMEC treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -337,9 +337,9 @@ maxWindowToQuery 10000000
 
         track wgEncodeHaibGenotypeHuvecRegionsRep2
         parent wgEncodeHaibGenotype off
-        shortLabel HUVEC 2
-        longLabel HUVEC Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HUVEC treatment=None rep=rep2
+        shortLabel HUVEC 1
+        longLabel HUVEC Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
+        subGroups cellType=HUVEC treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -409,9 +409,9 @@ maxWindowToQuery 10000000
 
         track wgEncodeHaibGenotypeT47dRegionsRep2
         parent wgEncodeHaibGenotype off
-        shortLabel T-47D 2
-        longLabel T-47D Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=T47D treatment=None rep=rep2
+        shortLabel T-47D 1
+        longLabel T-47D Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
+        subGroups cellType=T47D treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
