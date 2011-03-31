@@ -18,8 +18,9 @@ priority 0
 type bed 3
 visibility hide
 wgEncode 1
+html wgEncodeMapability.new
 
-    track wgEncodeMapabilityViewDUNIQ
+    track wgEncodeMapabilityViewDuniq
     shortLabel Duke Uniqueness
     view DUNIQ
     visibility full
@@ -31,7 +32,7 @@ wgEncode 1
     maxHeightPixels 100:32:16
 
         track wgEncodeMapabilityDukeUniqueness20bp
-        parent wgEncodeMapabilityViewDUNIQ off
+        parent wgEncodeMapabilityViewDuniq off
         shortLabel Duke Uniq 20
         longLabel ENCODE Chromatin Map Uniqueness of 20bp Windows
         subGroups view=DUNIQ win=w020 lab=DUKE
@@ -39,7 +40,7 @@ wgEncode 1
         # subId=3840 dateSubmitted=2011-03-28
 
         track wgEncodeMapabilityDukeUniqueness35bp
-        parent wgEncodeMapabilityViewDUNIQ off
+        parent wgEncodeMapabilityViewDuniq
         shortLabel Duke Uniq 35
         longLabel ENCODE Chromatin Map Uniqueness of 35bp Windows
         subGroups view=DUNIQ win=w035 lab=DUKE
@@ -49,6 +50,7 @@ wgEncode 1
     track wgEncodeMapabilityViewXR
     shortLabel Duke Excluded Regions
     view XR
+    visibility hide
     subTrack wgEncodeMapability
 
         track wgEncodeMapabilityDukeRegionsExcluded
@@ -57,6 +59,7 @@ wgEncode 1
         longLabel ENCODE Chromatin Map Regions Excluded
         subGroups view=XR win=zNA lab=DUKE
         type bed 6
+        noScoreFilter on
         # subId=3840 dateSubmitted=2011-03-28
 
     track wgEncodeMapabilityViewCRGMAP
