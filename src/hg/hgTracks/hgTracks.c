@@ -2019,7 +2019,7 @@ for (track = trackList; track != NULL; track = track->next)
 
             // subtrack vis can be explicit or inherited from composite/view.  Then it could be limited because of pixel height
             limitedVisFromComposite(subtrack);
-            assert(subtrack->limitedVisSet);
+            //assert(subtrack->limitedVisSet); // This is no longer a valid assertion, since visible track with no items items will not have limitedVisSet
 
             if (subtrack->limitedVis != tvHide)
                 {

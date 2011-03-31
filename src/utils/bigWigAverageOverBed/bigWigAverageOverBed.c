@@ -153,9 +153,7 @@ void averageFetchingEachChrom(struct bbiFile *bbi, struct bed **pBedList, int fi
 /* Sort by chromosome. */
 slSort(pBedList, bedCmpChrom);
 
-double *valBuf = NULL;
-Bits *covBuf = NULL;
-int bufSize = 0;
+struct bigWigValsOnChrom *chromVals = bigWigValsOnChromNew();
 
 struct bed *bed, *bedList, *nextChrom;
 verbose(1, "processing chromosomes");
@@ -164,47 +162,12 @@ for (bedList = *pBedList; bedList != NULL; bedList = nextChrom)
     /* Figure out which chromosome we're working on, and the last bed using it. */
     char *chrom = bedList->chrom;
     nextChrom = nextChromInList(bedList);
+    verbose(2, "Processing %s\n", chrom);
 
-    /* Check that bigWig file actually has data on this chromosome.  If not
-     * just output as if coverage is 0 */
-    int chromSize = bbiChromSize(bbi, chrom);
-    if (chromSize <= 0)
-        {
-	for (bed = bedList; bed != nextChrom; bed = bed->next)
-	    fprintf(f, "%s\t%d\t0\t0\t0\t0\n", bed->name, bedTotalBlockSize(bed));
-	}
-    else
+    if (bigWigValsOnChromFetchData(chromVals, chrom, bbi))
 	{
-	verbose(2, "Processing %s (%d bases)\n", chrom, chromSize);
-
-	/* Make sure merge buffers are big enough. */
-	if (chromSize > bufSize)
-	    {
-	    bufSize = chromSize;
-	    freeMem(covBuf);
-	    freeMem(valBuf);
-	    valBuf = needHugeMem(bufSize * sizeof(double));
-	    covBuf = bitAlloc(bufSize);
-	    }
-
-	/* Zero out buffers */
-	bitClear(covBuf, chromSize);
-	int i;
-	for (i=0; i<chromSize; ++i)
-	    valBuf[i] = 0.0;
-
-	/* Fetch intervals for this chromosome and fold into buffers. */
-	struct lm *lm = lmInit(0);
-	struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bbi, chrom, 0, chromSize, lm);
-	for (iv = ivList; iv != NULL; iv = iv->next)
-	    {
-	    double val = iv->val;
-	    int end = iv->end;
-	    for (i=iv->start; i<end; ++i)
-		valBuf[i] = val;
-	    bitSetRange(covBuf, iv->start, iv->end - iv->start);
-	    }
-	lmCleanup(&lm);
+	double *valBuf = chromVals->valBuf;
+	Bits *covBuf = chromVals->covBuf;
 
 	/* Loop through beds doing sums and outputting. */
 	for (bed = bedList; bed != nextChrom; bed = bed->next)
@@ -234,6 +197,12 @@ for (bedList = *pBedList; bedList != NULL; bedList = nextChrom)
 	    fprintf(f, "%s\t%d\t%d\t%g\t%g\t%g\n", bed->name, size, coverage, sum, sum/size, mean);
 	    }
 	verboseDot();
+	}
+    else
+        {
+	/* If no bigWig data on this chromosome, just output as if coverage is 0 */
+	for (bed = bedList; bed != nextChrom; bed = bed->next)
+	    fprintf(f, "%s\t%d\t0\t0\t0\t0\n", bed->name, bedTotalBlockSize(bed));
 	}
     }
 verbose(1, "\n");

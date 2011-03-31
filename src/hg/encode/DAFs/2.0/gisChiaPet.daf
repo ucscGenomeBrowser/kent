@@ -52,12 +52,12 @@ downloadOnly     yes
 view             FastqRd1
 type             fastq
 hasReplicates    yes
-required         no
+required         yes
 downloadOnly     yes
 
 view             FastqRd2
 type             fastq
 hasReplicates    yes
-required         no
+required         yes 
 downloadOnly     yes
 

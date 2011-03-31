@@ -419,8 +419,6 @@ void vcfTabixMethods(struct track *track)
 {
 #if (defined USE_TABIX && defined KNETFILE_HOOKS)
 knetUdcInstall();
-if (udcCacheTimeout() < 300)
-    udcSetCacheTimeout(300);
 #endif//def USE_TABIX && KNETFILE_HOOKS
 messageLineMethods(track);
 track->drawItems = drawUseVcfTabixWarning;

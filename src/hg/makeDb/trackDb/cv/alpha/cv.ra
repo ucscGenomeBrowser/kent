@@ -3300,7 +3300,7 @@ type Cell Line
 organism Mouse
 tissue Mammary
 category Cell Line
-description Mammary (provisional)
+description Mammary 
 age immortalized
 strain RIII
 vendorName
@@ -3316,7 +3316,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description myeloid progenitor cells, CD34+ (provisional)
+description myeloid progenitor cells, CD34+ 
 age immortalized
 strain B6D2F1/J
 vendorName
@@ -3332,7 +3332,7 @@ type Cell Line
 organism Mouse
 tissue Cortex
 category Cell Line
-description Pituitary tumor LAF1 (provisional)
+description Pituitary tumor LAF1 
 age immortalized
 strain Unknown
 vendorName ATCC
@@ -3348,7 +3348,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description B Cell , CD19+ (provisional)
+description B Cell , CD19+ 
 age immortalized
 strain C57BL/6
 vendorName
@@ -3406,7 +3406,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description B-cell lymphoma (GM12878 analog) (provisional)
+description B-cell lymphoma (GM12878 analog)
 age immortalized
 strain B10.H-2aH-4bp/Wts
 vendorName Weissman lab
@@ -3426,9 +3426,7 @@ type Cell Line
 organism Mouse
 tissue
 category Primary Cells
-description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a
-targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T.
-Genes Dev. 1993 Nov;7(11):2071-84.) (provisional)
+description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov;7(11):2071-84.) 
 age E0
 strain 129
 vendorName Uw lab
@@ -3490,7 +3488,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description Gata1- erythroid progenitor (provisional)
+description Gata1- erythroid progenitor 
 age E0
 strain 129
 vendorName Mitch Weiss lab
@@ -3507,7 +3505,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description Gata1 restored erythroid cells, differentiation induced by estradiol (E2) (provisional)
+description Gata1 restored erythroid cells, differentiation induced by estradiol (E2) 
 age E0
 strain 129
 vendorName Mitch Weiss lab
@@ -3627,7 +3625,7 @@ tag MEL
 type Cell Line
 organism Mouse
 category Cell Line
-description Leukemia (K562 analog) (provisional)
+description Leukemia (K562 analog)
 age immortalized
 strain Unknown
 tissue Blood
@@ -4367,7 +4365,7 @@ lab White
 lots
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
-validation eGFP-HDACB:human_validation_White.pdf
+validation eGFP-HDAC8:human_validation_White.pdf
 
 term eGFP-JunB
 tag eJunB
@@ -6316,7 +6314,7 @@ target YY1
 antibodyDescription Rabbit polyclonal
 targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel class of zinc finger proteins.
 vendorName Santa Cruz Biotech
-vendorId sc-1703X
+vendorId sc-1703
 orderUrl http://www.scbt.com/product.php?datasheet=1703
 lab Farnham
 targetId GeneCard:YY1
@@ -7798,6 +7796,263 @@ tag hpa
 description HPA Restriction Enzyme
 type restrictionEnzyme
 
+
+### view     THIS WHOLE SECTION IS A PROVISIONAL ATTEMPT AT CONTROLLING VIEWS
+### term:  
+### tag:   This is the camel case convention that we use in our file names
+### label: This will be used for human display
+
+term Alignability 
+tag Alignabi
+type view
+label Alignability 
+description Provisional Alignability 
+
+term Alignments 
+tag Alignmen
+type view
+label Alignments 
+description Provisional Alignments 
+
+term Base_Overlap_Signal 
+tag  ????
+type view
+label Base_Overlap_Signal 
+description Provisional Base_Overlap_Signal 
+
+term Clusters 
+tag Clusters
+type view
+label Clusters 
+description Provisional Clusters 
+
+term CNV 
+tag CNV 
+type view
+label CNV 
+description Provisional CNV 
+
+term Contigs 
+tag Contigs 
+type view
+label Contigs 
+description Provisional Contigs 
+
+term ExonsGencV3c 
+tag ExonsGencV3c
+type view
+label Exons Gencode V3c 
+description Provisional ExonsGencV3c 
+
+term Fasta3p 
+tag Fasta3p 
+type view
+label Fasta3p 
+description Provisional Fasta3p 
+
+term Fasta5p 
+tag Fasta5p 
+type view
+label Fasta5p 
+description Provisional Fasta5p 
+
+term FastaRd1 
+tag FastaRd1
+type view
+label FastaRd1 
+description Provisional FastaRd1 
+
+term FastaRd2 
+tag FastaRd2
+type view
+label FastaRd2 
+description Provisional FastaRd2 
+
+term Fastq 
+tag Fastq 
+type view
+label Fastq 
+description Provisional Fastq 
+
+term FastqRd1 
+tag FastqRd1
+type view
+label FastqRd1 
+description Provisional FastqRd1 
+
+term FastqRd2 
+tag FastqRd2
+type view
+label FastqRd2 
+description Provisional FastqRd2 
+
+term FiltTransfrags 
+tag FiltTransfrags
+type view
+label Filtered Transfrags 
+description Provisional FiltTransfrags 
+
+term GeneDeNovo 
+tag GeneDeNo
+type view
+label Genes DeNovo 
+description Provisional GeneDeNovo 
+
+term GeneGencV3c 
+tag GeneGencV3c
+type view
+label Genes Gencode V3c 
+description Provisional GeneGencV3c 
+
+term HMM 
+tag HMM 
+type view
+label HMM 
+description Provisional HMM 
+
+term Hotspots 
+tag Hotspots
+type view
+label Hotspots 
+description Provisional Hotspots 
+
+term Interactions 
+tag Interactions
+type view
+label Interactions 
+description Provisional Interactions 
+
+term Junctions 
+tag Junctions
+type view
+label Junctions 
+description Provisional Junctions 
+
+term Matrix 
+tag Matrix 
+type view
+label Matrix 
+description Provisional Matrix 
+
+term MinusRawSignal 
+tag MinusRawSig
+type view
+label Minus Raw Signal 
+description Provisional MinusRawSignal 
+
+term Peaks 
+tag Peaks 
+type view
+label Peaks 
+description Provisional Peaks 
+
+term PlusRawSignal 
+tag PlusRawSig
+type view
+label Plus Raw Signal 
+description Provisional PlusRawSignal 
+
+term Qual3p 
+tag Qual3p 
+type view
+label Qual3p 
+description Provisional Qual3p 
+
+term Qual5p 
+tag Qual5p 
+type view
+label Qual5p 
+description Provisional Qual5p 
+
+term RawData 
+tag RawData 
+type view
+label RawData 
+description Provisional RawData 
+
+term RawData2 
+tag RawData2
+type view
+label Raw Data2 
+description Provisional Raw Data2 
+
+term RawSignal 
+tag RawSig
+type view
+label Raw Signal 
+description Provisional RawSignal 
+
+term RbpAssocRna 
+tag RbpAssocRna
+type view
+label Rbp Associated RNA 
+description Provisional RbpAssocRna 
+
+term Regions 
+tag Regions 
+type view
+label Regions 
+description Provisional Regions 
+
+term Signal 
+tag Signal 
+type view
+label Signal 
+description Provisional Signal 
+
+term SimpleSignal 
+tag SimpleSig
+type view
+label SimpleSignal 
+description Provisional SimpleSignal 
+
+term Sites 
+tag Sites 
+type view
+label Sites 
+description Provisional Sites 
+
+term SNP 
+tag SNP 
+type view
+label SNP 
+description Provisional SNP 
+
+term Splices 
+tag Splices 
+type view
+label Splices 
+description Provisional Splices 
+
+term TranscriptDeNovo 
+tag TranscriptDeNovo
+type view
+label TranscriptDeNovo 
+description Provisional TranscriptDeNovo 
+
+term TranscriptGencV3c 
+tag TranscriptGencV3c
+type view
+label Transcript Gencode V3c 
+description Provisional TranscriptGencV3c 
+
+term Transfrags 
+tag Transfrags
+type view
+label Transfrags 
+description Provisional Transfrags 
+
+term TSS 
+tag TSS 
+type view
+label TSS 
+description Provisional TSS 
+
+term Validation
+tag Validation
+type view
+label Validation
+description Provisional Validation
 
 ### dataType
 ### term:  Ideally this should be the term used by NHGRI for the data type

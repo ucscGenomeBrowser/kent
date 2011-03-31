@@ -14954,7 +14954,7 @@ replicate 1
 setType input
 subId 1308
 tableName wgEncodeUwHistoneK562InputStdRawRep1
-view RawSigna
+view RawSignal
 
 metaObject wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1
 objType file
@@ -18026,4 +18026,4 @@ subId 1319
 tableName wgEncodeUwHistoneSknshraInputStdRawRep1
 view RawSignal
 
-# MAGIC: 783491710
+# MAGIC: 789170353

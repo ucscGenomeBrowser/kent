@@ -2307,9 +2307,9 @@ type Cell Line
 organism Human
 description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
-vendorName Lonza
-vendorId CC-2580
-orderUrl http://www.lonza.com/
+vendorName (See the protocol documents) 
+vendorId
+orderUrl 
 karyotype normal
 termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256
@@ -2323,9 +2323,9 @@ type Cell Line
 organism Human
 description Normal Human Skeletal Muscle Myotubes
 tissue Muscle
-vendorName Lonza
-vendorId CC-2580
-orderUrl http://www.lonza.com/
+vendorName (See the protocol documents)
+vendorId
+orderUrl 
 karyotype normal
 termId BTO:0001760 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760
@@ -3300,7 +3300,9 @@ type Cell Line
 organism Mouse
 tissue Mammary
 category Cell Line
-description Mammary
+description Mammary 
+age immortalized
+strain RIII
 vendorName
 termId 7035
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
@@ -3314,7 +3316,9 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description myeloid progenitor cells, CD34+
+description myeloid progenitor cells, CD34+ 
+age immortalized
+strain B6D2F1/J
 vendorName
 termId 7043
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
@@ -3328,7 +3332,9 @@ type Cell Line
 organism Mouse
 tissue Cortex
 category Cell Line
-description Pituitary tumor LAF1
+description Pituitary tumor LAF1 
+age immortalized
+strain Unknown
 vendorName ATCC
 termId 7087
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
@@ -3342,7 +3348,9 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description B Cell , CD19+
+description B Cell , CD19+ 
+age immortalized
+strain C57BL/6
 vendorName
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
@@ -3399,6 +3407,8 @@ organism Mouse
 tissue Blood
 category Cell Line
 description B-cell lymphoma (GM12878 analog)
+age immortalized
+strain B10.H-2aH-4bp/Wts
 vendorName Weissman lab
 vendorId
 orderUrl
@@ -3416,9 +3426,9 @@ type Cell Line
 organism Mouse
 tissue
 category Primary Cells
-description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a
-targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T.
-Genes Dev. 1993 Nov;7(11):2071-84.)
+description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov;7(11):2071-84.) 
+age E0
+strain 129
 vendorName Uw lab
 vendorId
 orderUrl
@@ -3478,7 +3488,9 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description Gata1- erythroid progenitor
+description Gata1- erythroid progenitor 
+age E0
+strain 129
 vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
@@ -3493,7 +3505,9 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)
+description Gata1 restored erythroid cells, differentiation induced by estradiol (E2) 
+age E0
+strain 129
 vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
@@ -3612,6 +3626,8 @@ type Cell Line
 organism Mouse
 category Cell Line
 description Leukemia (K562 analog)
+age immortalized
+strain Unknown
 tissue Blood
 color 46,0,184
 sex M
@@ -3945,7 +3961,7 @@ orderUrl http://www.scbt.com/datasheet-101388-bclaf1-m33-p5b11-antibody.html
 lab Myers
 targetId GeneCard:BCLAF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCLAF1
-validation BCLAF1(Immunoblot):human_BCLAF1_SC-101388_validation_Myers.pdf
+validation BCLAF1(Immunoblot):human_BCLAF1_SC101388_validation_Myers.pdf
 
 term BDP1
 tag BDP1
@@ -4319,7 +4335,7 @@ lab White
 lots
 targetId GeneCards:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
-validation human_validation_White.pdf
+validation eGFP-FOS:human_validation_White.pdf
 
 term eGFP-GATA2
 tag eGATA2
@@ -4334,7 +4350,7 @@ lab White
 lots
 targetId GeneCards:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation human_validation_White.pdf
+validation eGFP-GATA2:human_validation_White.pdf
 
 term eGFP-HDAC8
 tag eHDAC8
@@ -4349,7 +4365,7 @@ lab White
 lots
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
-validation human_validation_White.pdf
+validation eGFP-HDAC8:human_validation_White.pdf
 
 term eGFP-JunB
 tag eJunB
@@ -4364,7 +4380,7 @@ lab White
 lots
 targetId GeneCards:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
-validation human_validation_White.pdf
+validation eGFP-JunB:human_validation_White.pdf
 
 term eGFP-JunD
 tag eJunD
@@ -4379,7 +4395,7 @@ lab White
 lots
 targetId GeneCards:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
-validation human_validation_White.pdf
+validation eGFP-JunD:human_validation_White.pdf
 
 term eGFP-NR4A1
 tag eNR4A1
@@ -4394,7 +4410,7 @@ lab White
 lots
 targetId GeneCards:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
-validation human_validation_White.pdf
+validation eGFP-NR4A1:human_validation_White.pdf
 
 term  ELF1_(SC-631)
 tag  ELF1SC631
@@ -4595,7 +4611,7 @@ targetId
 targetUrl
 lab Myers / Wold
 lots F1804
-validation GABP(Immunoprecipitation-WesternBlot,MassSpec):human_GABP1_validation_Myers.pdf
+validation GABP(Immunoprecipitation-WesternBlot,MassSpec):human_GABP_validation_Myers.pdf
 
 term GATA-1
 tag GATA1
@@ -4982,7 +4998,7 @@ tag H3K79me2
 type Antibody
 target H3K79me2
 antibodyDescription Rabbit polyclonal antibody raised against a peptide containing K79 di-methylation
-targetDescription H3K79me2 is a mark of the transcriptional transition region - ie, the region between the initiation marks (K4me3, etc) and the elongation marks (K36me3). 
+targetDescription H3K79me2 is a mark of the transcriptional transition region - the region between the initiation marks (K4me3, etc) and the elongation marks (K36me3). 
 orderUrl http://www.activemotif.com/catalog/details/39143/histone-h3-dimethyl-lys79-antibody-pab.html
 vendorName Active Motif
 vendorId 39143
@@ -6298,8 +6314,8 @@ target YY1
 antibodyDescription Rabbit polyclonal
 targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel class of zinc finger proteins.
 vendorName Santa Cruz Biotech
-vendorId sc-1703X
-orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/product.php?datasheet=281
+vendorId sc-1703
+orderUrl http://www.scbt.com/product.php?datasheet=1703
 lab Farnham
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
@@ -6313,7 +6329,7 @@ antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of 
 targetDescription YY1 is a ubiquitously distributed transcription factor belonging to the GLI-Kruppel class of zinc finger proteins.  The protein is involved in repressing and activating a diverse number of promoters.  YY1 may direct histone deacetylases and histone acetyltransferases to a promoter in order to activate or repress the promoter, thus implicating histone modification in the function of YY1
 vendorName Santa Cruz Biotech
 vendorId sc-281
-orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/product.php?datasheet=281
+orderUrl http://www.scbt.com/product.php?datasheet=281
 lab Myers
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
@@ -7666,7 +7682,7 @@ type treatment
 
 term pravastatin
 tag PRAVAST
-description For sterol deprivation, cells were cultured with pravastatin (2 M; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
+description For sterol deprivation, cells were cultured with pravastatin (2 uM; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
 type treatment
 
 term Prednisolone_100nM
