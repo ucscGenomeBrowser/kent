@@ -10,7 +10,7 @@ O = asmCoder.o backEnd.o builtIn.o cCaseCode.o \
     recodedType.o refCount.o tokInto.o util.o
 
 paraFlow: $(O)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/paraFlow $O ../../../lib/$(MACHTYPE)/jkweb.a -lm
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/paraFlow $O ../../../lib/$(MACHTYPE)/jkweb.a ${L} -lm
 
 
 test:

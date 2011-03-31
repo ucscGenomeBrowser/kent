@@ -21380,7 +21380,7 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 
 
 ############################################################################
-# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie)
+# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie - color change 2/22/11 #2917)
 # DGV V9 done 3/26/10
 # DGV V8 done 8/12/09 (changed color of inverted 11/05/09 kuhn)
 # DGV V7 done 3/11/09
@@ -21395,7 +21395,11 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
       http://projects.tcag.ca/variation/downloads/variation.hg18.v10.nov.2010.txt
     wget --timestamping \
       http://projects.tcag.ca/variation/downloads/indel.hg18.v10.nov.2010.txt
-    # shuffle fields into bed8+
+    # shuffle fields into bed9+ w/itemRgb
+    set purple = "200,0,200"
+    set red = "200,0,0"
+    set blue = "0,0,200"
+    set brown = "139,69,19"
     foreach f (*.v10.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
@@ -21405,11 +21409,11 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
         $id =~ s/^Variation_//; \
         $start-- unless ($start == 0); \
         $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
-        $rgb = ($varType =~ /^Inv/) ? "200,0,200" : "0,200,0"; \
+        $rgb = ($varType =~ /^Inv/) ? "'$purple'" : "'$brown'"; \
         if ($gain ne "" || $loss ne "") { \
           $gain =~ s/^(NA)? ?$/0/;  $loss =~ s/^(NA)? ?$/0/; \
-          $rgb = "200,0,0" if ($gain > 0 && $loss == 0); \
-          $rgb = "0,0,200" if ($loss > 0 && $gain == 0); \
+          $rgb = "'$blue'" if ($gain > 0 && $loss == 0); \
+          $rgb = "'$red'" if ($loss > 0 && $gain == 0); \
         } \
         $_ = join("\t", $chr, $start, $end, $id, 0, "+", \
                   $start, $start, $rgb, $landmark, $varType, \
@@ -21427,6 +21431,9 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 # 6553700	Inversion  (100,0,100)
 # new:
 # 13107400	Inversion  (200,0,200)
+
+# 2/22/11 color change (Bug #2917): swap blue and red; green -> brown
+
 
 ############################################################################
 # AGILENT CGH PROBES (AND MM8, RN4) (Done 2008-05-13, Andy)
@@ -29783,7 +29790,9 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 12/7/10)
+# NHGRI GWAS CATALOG (DONE 3/1/11)
+# Updated 2/1/11
+# Updated 12/7/10
 # Updated 11/1/10
 # Updated 10/6/10
 # Updated 9/1/10
@@ -29862,7 +29871,7 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 4562 elements of size 22
+#Loaded 5019 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
@@ -29876,7 +29885,7 @@ see doc/builds.txt for specific details.
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#250 ambigStrand.txt
+#273 ambigStrand.txt
 
 
 #############################################################################
@@ -30591,7 +30600,19 @@ done | sort -k4,4 > hg18.gold.bed
     hgLoadBed hg18 numtS numtS.bed
     hgLoadBed hg18 numtSMitochondrion numtSMitochondrion.bed
     hgLoadBed hg18 numtSMitochondrionChrPlacement numtSMitochondrionChrPlacement.bed
-
+    # reload the tracks with data with updated ID (DONE 2011-01-26 Chin)
+    mkdir /cluster/data/hg18/bed/NumtS/2011-01-26
+    # cp over all new data
+    cd /cluster/data/hg18/bed/NumtS/2011-01-26
+    # load the bed files to hg18
+    hgLoadBed hg18  numtSAssembled  numtSAssembled.bed
+    hgLoadBed hg18 numtS numtS.bed
+    hgLoadBed hg18 numtSMitochondrion numtSMitochondrion.bed
+    hgLoadBed hg18 numtSMitochondrionChrPlacement numtSMitochondrionChrPlacement.bed
+    # update the ~/kent/src/hg/makeDb/trackDb/human/numtSeq.html with
+    # description_revisedMC ( numtSeq-20110126.html)
+    cp  numtSeq-20110126.html \
+       /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/human/numtSeq.html
 
 ##############################################################################
 # hg18 <-> hg19 difference tracks (WORKING - 2010-09-03 - Hiram)
@@ -31118,5 +31139,125 @@ hgsql hg18 -N -e 'select chrom, chromStart-1, chromEnd, gene from rdmrRaw'
 
 hgLoadBed hg18 rdmr rdmr.tab
 
+#####################################################################
+# Create liftOver files to and from: calJac3 <-> hg18 (DONE 2011-01-10 - Chin)
+
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/hg18/bed/lastzCalJac3.2010-12-20
+    cd /hive/data/genomes/hg18/bed/lastzCalJac3.2010-12-20
+
+    cat << '_EOF_' > DEF
+# human vs. marmoset
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg18/hg18.2bit
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Marmoset (calJac3)
+SEQ2_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ2_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ2_LIMIT=50
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg18/bed/lastzCalJac3.2010-12-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=swarm -bigClusterHub=swarm \
+        -stop net \
+        > do.log 2>&1 &
+    #   real    101m10.634s
+
+    cd /hive/data/genomes/hg18/bed
+    ln -s lastzCalJac3.2010-12-20 lastz.calJac
+    cd /hive/data/genomes/hg18/bed/lastz.calJac3/axtChain
+    cp hg18.calJac3.over.chain.gz ../../liftOver/.
+    cd /hive/data/genomes/hg18/bed/liftOver
+    mv hg18.calJac3.over.chain.gz  hg18ToCalJac3.over.chain.gz
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/liftOver
+    ln -s /hive/data/genomes/hg18/bed/liftOver/hg18ToCalJac3.over.chain.gz .
+    md5sum *.gz > md5sum.txt
+
 #########################################################################
+# ISCA RETROSPECTIVE FROM DBVAR (DONE 1/31/11 angie)
+    # Redmine: Track #34 (dbVar for human)
+    mkdir -p /hive/data/genomes/hg18/bed/isca/2011_01_31
+    cd /hive/data/genomes/hg18/bed/isca/2011_01_31
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_-_Retrospective/gvf/nstd37_ISCA_-_Retrospective.NCBI36.submitted.all.germline.ucsc.gvf.gz
+    # See notes on data contents: http://redmine.soe.ucsc.edu/issues/34#note-34
+    # and notes on data format plan: http://redmine.soe.ucsc.edu/issues/34#note-36
+    zcat nstd37_ISCA_-_Retrospective.NCBI36.submitted.all.germline.ucsc.gvf.gz \
+    | perl -wne 'next if (/^(#|browser|track)/); chomp; \
+        ($c, undef, undef, $s, $e, $score, $strand, undef, $attrs) = split("\t"); \
+        ($thickS, $thickE) = ($s, $e); \
+        ($attrCount, $attrTags, $attrVals) = (0, "", ""); \
+        foreach my $tagVal (split(";", $attrs)) { \
+          ($tag, $val) = split("=", $tagVal); \
+          if ($tag eq "ID") {$name = $val;} \
+          elsif ($tag eq "Start_range") { \
+            ($outerStart, $innerStart) = split(",", $val); \
+            $s = $outerStart if ($outerStart =~ /^\d+$/ && $outerStart < $s); \
+            $thickS = $innerStart if ($innerStart =~ /^\d+$/ && $innerStart > $thickS); \
+          } elsif ($tag eq "End_range") { \
+            ($innerEnd, $outerEnd) = split(",", $val); \
+            $thickE = $innerEnd if ($innerEnd =~ /^\d+$/ && $innerEnd < $thickE); \
+            $e = $outerEnd if ($outerEnd =~ /^\d+$/ && $outerEnd > $e); \
+          } \
+          # Escape commas so the val list parses correctly in autoSql: \
+          $val =~ s/%/%25/g;   $val =~ s/,/%2C/g; \
+          $attrTags .= "$tag,";  $attrVals .= "$val,";  $attrCount++; \
+        } \
+        %attrs = map { ($key, $val) = split("="); $key => $val } split(";", $attrs); \
+        @bed8Attrs = ($c, $s-1, $e, $name, $score, $strand, $thickS-1, $thickE, \
+                      $attrCount, $attrTags, $attrVals); \
+        print join("\t", @bed8Attrs) . "\n";' \
+      > iscaRetrospective.bed
+    hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+      -allowStartEqualEnd hg18 iscaRetrospective iscaRetrospective.bed
+#Loaded 11312 elements of size 11
+
+
+#############################################################################
+# BUILD B CELL RNA-SEQ TRACKS (DONE, 3/29/11, Fan)
+
+ssh hgwdev
+mkdir -p /hive/data/genomes/gs.19/build36/bed/Bcell
+cd /hive/data/genomes/gs.19/build36/bed/Bcell
+
+# Get data from custom track site
+
+wget --timestamping http://genomicsweb1.med.upenn.edu/ucsc/bcelltranscriptometracks.txt
+wget --timestamping http://genomicsweb1.med.upenn.edu/ucsc/800m_junctions.bed
+wget --timestamping http://genomicsweb1.med.upenn.edu/ucsc/800m.bw
+
+ln -s `pwd`/800m.bw /gbdb/hg18/bbi/ceuBcellRNASeqBW.bw
+
+hgsql hg18 -e 'drop table if exists ceuBcellRNASeqBW; \
+               create table ceuBcellRNASeqBW (fileName varchar(255) not null); \
+	       insert into ceuBcellRNASeqBW values ("/gbdb/hg18/bbi/ceuBcellRNASeqBW.bw");'
+
+fgrep -v track 800m_junctions.bed >ceuBcellRNASeq.bed
+hgLoadBed hg18 ceuBcellRNASeq ceuBcellRNASeq.bed
+#############################################################################
 

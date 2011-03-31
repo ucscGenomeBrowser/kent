@@ -4,6 +4,7 @@
 #ifndef SNP125UI_H
 #define SNP125UI_H
 
+#include "cart.h"
 #include "trackDb.h"
 
 char *snp125OrthoTable(struct trackDb *tdb, int *retSpeciesCount);
@@ -11,143 +12,125 @@ char *snp125OrthoTable(struct trackDb *tdb, int *retSpeciesCount);
  * If retSpeciesCount is not null, set it to the number of other species
  * whose alleles are in the table. Do not free the returned string. */
 
+struct slName *snp125FilterFromCart(struct cart *cart, char *track, char *attribute,
+				    boolean *retFoundInCart);
+/* Look up snp125 filter settings in the cart, keeping backwards compatibility with old
+ * cart variable names. */
+
+char *snp125OldColorVarToNew(char *oldVar, char *attribute);
+/* Abbreviate an old cart var name -- new name is based on track plus this. Don't free result. */
+
+#define SNP125_DEFAULT_MAX_WEIGHT 1
+#define SNP125_DEFAULT_MIN_AVHET 0.0
+#define SNP132_DEFAULT_MIN_SUBMITTERS 0
+#define SNP132_DEFAULT_MIN_MINOR_AL_FREQ 0.0
+#define SNP132_DEFAULT_MAX_MINOR_AL_FREQ 0.5
+#define SNP132_DEFAULT_MIN_AL_FREQ_2N 0
+
 extern boolean snp125ExtendedNames;
 
-enum snp125ColorEnum {
+enum snp125Color {
     snp125ColorRed,
     snp125ColorGreen,
     snp125ColorBlue,
     snp125ColorGray,
     snp125ColorBlack,
-    snp125ColorExclude
 };
 
 extern char *snp125ColorLabel[];
-
-extern int snp125ColorLabelSize;
+extern int snp125ColorArraySize;
 
 /****** Color source related controls *******/
 /* Molecule Type, Class, Validation, Function */
 
-enum snp125ColorSourceEnum {
+enum snp125ColorSource {
     snp125ColorSourceLocType,
     snp125ColorSourceClass,
     snp125ColorSourceValid,
     snp125ColorSourceFunc,
     snp125ColorSourceMolType,
+    snp125ColorSourceExceptions,
+    snp125ColorSourceBitfields,
+    snp125ColorSourceAlleleFreq,
 };
 
-extern char *snp125ColorSourceLabels[];
-extern char *snp125ColorSourceDataName[];
-extern char *snp125ColorSourceDefault[];
-extern char *snp125ColorSourceCart[];
+#define SNP125_DEFAULT_COLOR_SOURCE snp125ColorSourceFunc
 
-extern int snp125ColorSourceLabelsSize;
-extern int snp125ColorSourceDataNameSize;
-extern int snp125ColorSourceDefaultSize;
-extern int snp125ColorSourceCartSize;
+enum snp125ColorSource snp125ColorSourceFromCart(struct cart *cart, struct trackDb *tdb);
+/* Look up color source in cart, keeping backwards compatibility with old cart var names. */
+
+char *snp125ColorSourceToLabel(struct trackDb *tdb, enum snp125ColorSource cs);
+/* Due to availability of different color sources in several different versions,
+ * this is not just an array lookup, hence the encapsulation. Don't modify return value. */
+
+extern char *snp125ColorSourceLabels[];
+extern char *snp125ColorSourceOldVar;
+extern int snp125ColorSourceArraySize;
 
 extern char *snp128ColorSourceLabels[];
-extern int snp128ColorSourceLabelsSize;
+extern int snp128ColorSourceArraySize;
+
+extern char *snp132ColorSourceLabels[];
+extern int snp132ColorSourceArraySize;
 
 /****** MolType related controls *******/
 /* unknown, genomic, cDNA */
 
 extern char *snp125MolTypeLabels[];
-extern char *snp125MolTypeStrings[];
+extern char *snp125MolTypeOldColorVars[];
 extern char *snp125MolTypeDataName[];
 extern char *snp125MolTypeDefault[];
-extern char *snp125MolTypeCart[];
-extern char *snp125MolTypeIncludeStrings[];
-extern boolean snp125MolTypeIncludeDefault[];
-extern boolean snp125MolTypeIncludeCart[];
-
-extern int snp125MolTypeLabelsSize;
-extern int snp125MolTypeStringsSize;
-extern int snp125MolTypeDataNameSize;
-extern int snp125MolTypeDefaultSize;
-extern int snp125MolTypeCartSize;
-extern int snp125MolTypeIncludeStringsSize;
+extern int snp125MolTypeArraySize;
 
 /****** Class related controls *******/
 
 extern char *snp125ClassLabels[];
-extern char *snp125ClassStrings[];
+extern char *snp125ClassOldColorVars[];
 extern char *snp125ClassDataName[];
 extern char *snp125ClassDefault[];
-extern char *snp125ClassCart[];
-extern char *snp125ClassIncludeStrings[];
-extern boolean snp125ClassIncludeDefault[];
-extern boolean snp125ClassIncludeCart[];
-
-extern int snp125ClassLabelsSize;
-extern int snp125ClassStringsSize;
-extern int snp125ClassDataNameSize;
-extern int snp125ClassDefaultSize;
-extern int snp125ClassCartSize;
-extern int snp125ClassIncludeStringsSize;
+extern int snp125ClassArraySize;
 
 /****** Valid related controls *******/
 
 extern char *snp125ValidLabels[];
-extern char *snp125ValidStrings[];
+extern char *snp125ValidOldColorVars[];
 extern char *snp125ValidDataName[];
 extern char *snp125ValidDefault[];
-extern char *snp125ValidCart[];
-extern char *snp125ValidIncludeStrings[];
-extern boolean snp125ValidIncludeDefault[];
-extern boolean snp125ValidIncludeCart[];
-
-extern int snp125ValidLabelsSize;
-extern int snp125ValidStringsSize;
-extern int snp125ValidDataNameSize;
-extern int snp125ValidDefaultSize;
-extern int snp125ValidCartSize;
-extern int snp125ValidIncludeStringsSize;
+extern int snp125ValidArraySize;
 
 /****** Func related controls *******/
 
 extern char *snp125FuncLabels[];
-extern char *snp125FuncStrings[];
+extern char *snp125FuncOldColorVars[];
 extern char *snp125FuncDataName[];
 extern char *snp125FuncDefault[];
-extern char *snp125FuncCart[];
 extern char **snp125FuncDataSynonyms[];
-extern char *snp125FuncIncludeStrings[];
-extern boolean snp125FuncIncludeDefault[];
-extern boolean snp125FuncIncludeCart[];
-
-extern int snp125FuncLabelsSize;
-extern int snp125FuncStringsSize;
-extern int snp125FuncDataNameSize;
-extern int snp125FuncDefaultSize;
-extern int snp125FuncCartSize;
-extern int snp125FuncIncludeStringsSize;
+extern int snp125FuncArraySize;
 
 /****** LocType related controls *******/
 /* unknown, range, exact, between,
    rangeInsertion, rangeSubstitution, rangeDeletion */
 
 extern char *snp125LocTypeLabels[];
-extern char *snp125LocTypeStrings[];
+extern char *snp125LocTypeOldColorVars[];
 extern char *snp125LocTypeDataName[];
 extern char *snp125LocTypeDefault[];
-extern char *snp125LocTypeCart[];
-extern char *snp125LocTypeIncludeStrings[];
-extern boolean snp125LocTypeIncludeDefault[];
-extern boolean snp125LocTypeIncludeCart[];
+extern int snp125LocTypeArraySize;
 
-extern int snp125LocTypeLabelsSize;
-extern int snp125LocTypeStringsSize;
-extern int snp125LocTypeDataNameSize;
-extern int snp125LocTypeDefaultSize;
-extern int snp125LocTypeCartSize;
-extern int snp125LocTypeIncludeStringsSize;
+/****** Exception related controls *******/
 
-/* minimum Average Heterozygosity cutoff  */
+extern char *snp132ExceptionLabels[];
+extern char *snp132ExceptionVarName[];
+extern char *snp132ExceptionDefault[];
+extern int snp132ExceptionArraySize;
 
-extern float snp125AvHetCutoff;
-extern int snp125WeightCutoff;
+/****** Miscellaneous attributes (bitfields) related controls *******/
+
+extern char *snp132BitfieldLabels[];
+extern char *snp132BitfieldVarName[];
+extern char *snp132BitfieldDataName[];
+extern char *snp132BitfieldDefault[];
+extern int snp132BitfieldArraySize;
 
 #endif /* SNP125UI_H */
 

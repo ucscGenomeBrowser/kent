@@ -13,7 +13,7 @@ shortLabel 8-Way Conservation
 longLabel 8-Way Multiz Alignment & Conservation 
 group compGeno
 priority 103.4
-visibility pack
+visibility hide
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
@@ -109,7 +109,7 @@ priority 103.29
         track multiz13way
         subTrack cons13wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz Alignments of 13 Vertebrates
+        longLabel Multiz Alignments of 13 Species
         subGroups view=align
         noInherit on
         irows on
@@ -123,7 +123,8 @@ priority 103.29
         speciesGroups Primates Vertebrate
         sGroup_Primates ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1
         sGroup_Vertebrate mm9 canFam2 monDom5
-        speciesDefaultOff ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1 mm9 canFam2 monDom5
+        speciesDefaultOff  rheMac2 papHam1 tarSyr1 micMur1 otoGar1 canFam2 
+        #speciesDefaultOff ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1 mm9 canFam2 monDom5
         itemFirstCharCase noChange
         treeImage phylo/calJac3_13way.gif
         priority 100
@@ -140,13 +141,13 @@ priority 103.29
         track phyloP13wayAll
         subTrack cons13wayViewphyloP on
         subGroups view=phyloP 
-        shortLabel Vertebrate PhyloP Cons
-        longLabel  Vertebrate Basewise Conservation by PhyloP
+        shortLabel PhyloP Cons
+        longLabel  Basewise Conservation by PhyloP
         noInherit on
         #configurable on
-        type wig -9.32 1.34
+        type wig -3.12 1.34
         maxHeightPixels 100:50:11
-        viewLimits -3:1
+        viewLimits -3.12:1.34
         autoScale off
         spanList 1
         windowingFunction mean
@@ -155,24 +156,6 @@ priority 103.29
         priority 1
 
 
-
-         track phyloP13wayAllVert
-         subTrack cons13wayViewphyloP on
-         subGroups view=phyloP 
-         shortLabel Vertebrate Cons
-         longLabel Vertebrate Basewise Conservation by PhyloP
-         noInherit on
-         #configurable on
-         type wig -14.08 6.42
-         maxHeightPixels 100:50:11
-         viewLimits -4:4
-         autoScale off
-         spanList 1
-         windowingFunction mean
-         color 40,40,120
-         altColor 120,40,40
-         priority 2
- 
 
     track cons13wayViewphastcons
     shortLabel Element Conservation (phastCons)
@@ -183,8 +166,8 @@ priority 103.29
         track phastCons13way
         subTrack cons13wayViewphastcons on
         subGroups view=phastcons 
-        shortLabel Vertebrate Cons
-        longLabel Vertebrate Conservation by PhastCons
+        shortLabel PhastCons Cons
+        longLabel Conservation by PhastCons
         noInherit on
         #configurable on
         type wig 0 1
@@ -204,10 +187,10 @@ priority 103.29
 
         # Conserved Elements (Most Conserved)
         track phastConsElements13way
-        subTrack cons13wayViewelements off
+        subTrack cons13wayViewelements on
         subGroups view=elements 
-        shortLabel Vertebrate El
-        longLabel Vertebrate Conserved Elements
+        shortLabel Most Conserved
+        longLabel Conserved Elements
         noInherit on
         color 170,100,50
         type bed 5 .

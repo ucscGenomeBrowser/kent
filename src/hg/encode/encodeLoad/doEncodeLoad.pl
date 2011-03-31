@@ -184,7 +184,11 @@ sub loadBedFromSchema
 	    $fillInArg .= "-minScore=500 " if $tableName =~ /^wgEncodeUwDnaseSeq/;
         }
         my $catCmd = makeCatCmd("loadBedFromSchema", $fileList);
-        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed -noNameIx $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
+	my $dotCouldBeNull = "";
+	if ($sqlTable =~ /bedRnaElements/) {
+	    $dotCouldBeNull = "-dotIsNull=7";
+	}
+        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $dotCouldBeNull -noNameIx $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
         HgAutomate::verbose(2, "loadBedFromSchema cmds [".join(" ; ",@cmds)."]\n");
         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
 
@@ -451,7 +455,9 @@ for my $key (keys %ra) {
             $target = "$downloadDir/$tablename.$type";
         }
         else {
-            $target = "$downloadDir/$tablename.$type.gz";
+            my $fileType = $type;
+            $fileType = "bed" if ($type =~ /^bed /);
+            $target = "$downloadDir/$tablename.$fileType.gz";
         }
         $target =~ s/ //g;  # removes space in ".bed 5.gz" for example
         #if(-e $target) {     # The validator is supposed to protect us from overwrites and allow them if -allowReloads
@@ -492,7 +498,9 @@ for my $key (keys %ra) {
             }
 
             # make a concatenated copy of multiple files
-            my $zippedTarget = "$downloadDir/$tablename.$type.gz";
+            my $fileType = $type;
+            $fileType = "bed" if ($type =~ /^bed /);
+            my $zippedTarget = "$downloadDir/$tablename.$fileType.gz";
             unlink($zippedTarget);
             !system("cat /dev/null > $zippedTarget") || die "gzip failed: $?\n";
             HgAutomate::verbose(2, "Zero or multiple files: files=[@files] unlink($zippedTarget)\n");

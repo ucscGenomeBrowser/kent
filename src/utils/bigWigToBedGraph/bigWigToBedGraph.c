@@ -6,6 +6,7 @@
 #include "localmem.h"
 #include "udc.h"
 #include "bigWig.h"
+#include "obscure.h"
 
 static char const rcsid[] = "$Id: bigWigToBedGraph.c,v 1.5 2009/09/08 19:50:25 kent Exp $";
 
@@ -44,6 +45,10 @@ FILE *f = mustOpen(outFile, "w");
 struct bbiChromInfo *chrom, *chromList = bbiChromList(bwf);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
+    boolean firstTime = TRUE;
+    int saveStart = -1, prevEnd = -1;
+    double saveVal = -1.0;
+
     if (clChrom != NULL && !sameString(clChrom, chrom->name))
         continue;
     char *chromName = chrom->name;
@@ -56,7 +61,28 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     struct bbiInterval *interval, *intervalList = bigWigIntervalQuery(bwf, chromName, 
     	start, end, lm);
     for (interval = intervalList; interval != NULL; interval = interval->next)
-        fprintf(f, "%s\t%u\t%u\t%g\n", chromName, interval->start, interval->end, interval->val);
+	{
+	if (firstTime)
+	    {
+	    saveStart = interval->start;
+	    saveVal = interval->val;
+	    firstTime = FALSE;
+	    }
+	else
+	    {
+	    if (!((prevEnd == interval->start) && (saveVal == interval->val)))
+		{
+		fprintf(f, "%s\t%u\t%u\t%g\n", chromName, saveStart, prevEnd, saveVal);
+		saveStart = interval->start;
+		saveVal = interval->val;
+		}
+
+	    }
+	prevEnd = interval->end;
+	}
+    if (!firstTime)
+	fprintf(f, "%s\t%u\t%u\t%g\n", chromName, saveStart, prevEnd, saveVal);
+
     lmCleanup(&lm);
     }
 bbiChromInfoFreeList(&chromList);
@@ -75,5 +101,7 @@ udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 if (argc != 3)
     usage();
 bigWigToBedGraph(argv[1], argv[2]);
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }

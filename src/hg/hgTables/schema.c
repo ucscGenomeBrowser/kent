@@ -23,6 +23,7 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
+#include "hubConnect.h"
 
 static char const rcsid[] = "$Id: schema.c,v 1.66 2010/06/07 16:53:10 angie Exp $";
 
@@ -119,7 +120,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 	     hPrintf("n/a");
 	hPrintf("</TD>");
 	}
-    hPrintf("<TD><TT>%s</TT></TD>", row[1]);
+    // enums/sets with many items can make for painfully wide rows in the table --
+    // add spaces between quoted list values:
+    if (stringIn("','", row[1]))
+	{
+	struct dyString *spaced = dyStringSub(row[1], "','", "', '");
+	hPrintf("<TD><TT>%s</TT></TD>", spaced->string);
+	}
+    else
+	hPrintf("<TD><TT>%s</TT></TD>", row[1]);
     if (!tooBig)
 	{
 	hPrintf(" <TD>");
@@ -579,6 +588,18 @@ else
     errAbort("Unrecognized customTrack type %s", type);
 }
 
+static void showSchemaHub(char *db, char *table)
+/* Show schema on a hub track. */
+{
+struct trackDb *tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
+char *type = cloneFirstWord(tdb->type);
+hPrintf("Binary file of type %s stored at %s<BR>\n",
+	type, trackDbSetting(tdb, "bigDataUrl"));
+if (sameString(type, "bigBed"))
+    showSchemaBigBed(table);
+else if (sameString(type, "bam"))
+    showSchemaBam(table);
+}
 
 static void showSchemaWiki(struct trackDb *tdb, char *table)
 /* Show schema for the wikiTrack. */
@@ -590,10 +611,14 @@ showSchemaDb(wikiDbName(), tdb, table);
 static void showSchema(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
 {
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     showSchemaBigBed(table);
+else if (isBamTable(table))
+    showSchemaBam(table);
 else if (isCustomTrack(table))
     showSchemaCt(db, table);
+else if (isHubTrack(table))
+    showSchemaHub(db, table);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     showSchemaWiki(tdb, table);
 else

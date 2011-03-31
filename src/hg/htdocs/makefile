@@ -11,18 +11,15 @@ FIND=gitFiles
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \
-	    ${MAKE} doInstall destDir=${DOCUMENTROOT}-${USER} extra=doSymLink && \
-	    cd style && echo style && ${MAKE} user; \
+	    ${MAKE} doInstall destDir=${DOCUMENTROOT}-${USER} extra=doSymLink; \
 	fi
 
 alpha:
 	${MAKE} doInstall destDir=${DOCUMENTROOT} extra=doSymLink
-	cd style && echo style && ${MAKE} alpha
 
 beta:
 	${GITUP}
 	${MAKE} doInstall destDir=${DOCUMENTROOT} extra=doSymLink
-	cd style && echo style && ${MAKE} beta
 
 alphaCancerPublic:
 	${MAKE} doInstallCancerPublic destDir=${DOCUMENTROOT} extra=doSymLink
@@ -59,7 +56,7 @@ doInstallCancerTCGA: doRsync ${extra}
 # permissions maybe modified.  However, problems happen when a directory
 # is not owned by the current users.  These options attemp to work around it.
 # use care in changing
-rsyncOpts = --times --recursive --executability --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='cpAndLinkToResourceFiles.pl'
+rsyncOpts = --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='cpAndLinkToResourceFiles.pl' --exclude='style/*'
 doRsync:
 	umask 002; rsync ${rsyncOpts} ${excl} ${incl} `$(FIND)` ${destDir}
 

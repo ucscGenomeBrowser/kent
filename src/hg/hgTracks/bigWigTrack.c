@@ -10,91 +10,115 @@
 #include "wigCommon.h"
 #include "bbiFile.h"
 #include "bigWig.h"
-
-static char const rcsid[] = "$Id: bigWigTrack.c,v 1.11 2010/05/11 01:43:26 kent Exp $";
+#include "errCatch.h"
+#include "container.h"
+#include "bigWarn.h"
 
 static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
 {
-/* Allocate predraw area. */
-int preDrawZero, preDrawSize;
-struct preDrawContainer *preDrawList = NULL;
-
-/* Get summary info from bigWig */
-int summarySize = width;
-struct bbiSummaryElement *summary;
-AllocArray(summary, summarySize);
-
-struct bbiFile *bbiFile ;
-for(bbiFile = tg->bbiFile; bbiFile ; bbiFile = bbiFile->next)
+/* protect against temporary network error */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
     {
-    struct preDrawContainer *preDrawContainer;
-    struct preDrawElement *preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
-    AllocVar(preDrawContainer);
-    preDrawContainer->preDraw = preDraw;
-    slAddHead(&preDrawList, preDrawContainer);
+    /* Allocate predraw area. */
+    int preDrawZero, preDrawSize;
+    struct preDrawContainer *preDrawList = NULL;
 
-    if (bigWigSummaryArrayExtended(bbiFile, chromName, winStart, winEnd, summarySize, summary))
+    /* Get summary info from bigWig */
+    int summarySize = width;
+    struct bbiSummaryElement *summary;
+    AllocArray(summary, summarySize);
+
+    struct bbiFile *bbiFile ;
+    for(bbiFile = tg->bbiFile; bbiFile ; bbiFile = bbiFile->next)
 	{
-	/* Convert format to predraw */
-	int i;
-	for (i=0; i<summarySize; ++i)
+	struct preDrawContainer *preDrawContainer;
+	struct preDrawElement *preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
+	AllocVar(preDrawContainer);
+	preDrawContainer->preDraw = preDraw;
+	slAddHead(&preDrawList, preDrawContainer);
+
+	if (bigWigSummaryArrayExtended(bbiFile, chromName, winStart, winEnd, summarySize, summary))
 	    {
-	    struct preDrawElement *pe = &preDraw[i + preDrawZero];
-	    struct bbiSummaryElement *be = &summary[i];
-	    pe->count = be->validCount;
-	    pe->min = be->minVal;
-	    pe->max = be->maxVal;
-	    pe->sumData = be->sumData;
-	    pe->sumSquares = be->sumSquares;
+	    /* Convert format to predraw */
+	    int i;
+	    for (i=0; i<summarySize; ++i)
+		{
+		struct preDrawElement *pe = &preDraw[i + preDrawZero];
+		struct bbiSummaryElement *be = &summary[i];
+		pe->count = be->validCount;
+		pe->min = be->minVal;
+		pe->max = be->maxVal;
+		pe->sumData = be->sumData;
+		pe->sumSquares = be->sumSquares;
+		}
 	    }
 	}
+
+    /* Call actual graphing routine. */
+    wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+		   preDrawList, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+
+    struct preDrawContainer *nextContain;
+    for(; preDrawList ; preDrawList = nextContain)
+	{
+	nextContain = preDrawList->next;
+	freeMem(preDrawList->preDraw);
+	freeMem(preDrawList);
+	}
+    freeMem(summary);
     }
-
-/* Call actual graphing routine. */
-wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	       preDrawList, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
-
-struct preDrawContainer *nextContain;
-for(; preDrawList ; preDrawList = nextContain)
+errCatchEnd(errCatch);
+if (errCatch->gotError)
     {
-    nextContain = preDrawList->next;
-    freeMem(preDrawList->preDraw);
-    freeMem(preDrawList);
+    tg->networkErrMsg = cloneString(errCatch->message->string);
+    bigDrawWarning(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
     }
-freeMem(summary);
+errCatchFree(&errCatch);
 }
+
+static void bigWigOpenCatch(struct track *tg, char *fileName)
+/* Try to open big wig file, store error in track struct */
+{
+/* protect against temporary network error */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    struct bbiFile *bbiFile = bigWigFileOpen(fileName);
+    slAddHead(&tg->bbiFile, bbiFile);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    tg->networkErrMsg = cloneString(errCatch->message->string);
+    tg->drawItems = bigDrawWarning;
+    if (!sameOk(parentContainerType(tg), "multiWig"))
+	tg->totalHeight = bigWarnTotalHeight;
+    }
+errCatchFree(&errCatch);
+}
+
 
 static void bigWigLoadItems(struct track *tg)
 /* Fill up tg->items with bedGraphItems derived from a bigWig file */
 {
 char *extTableString = trackDbSetting(tg->tdb, "extTable");
 
-if (extTableString != NULL)
+if (tg->bbiFile == NULL)
     {
-    // if there's an extra table, read this one in too
+    /* Figure out bigWig file name. */
     struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-    char *fileName = bbiNameFromTable(conn, tg->table);
-    struct bbiFile *bbiFile = bigWigFileOpen(fileName);
-    slAddHead(&tg->bbiFile, bbiFile);
-
-    fileName = bbiNameFromTable(conn, extTableString);
-    bbiFile = bigWigFileOpen(fileName);
-    slAddHead(&tg->bbiFile, bbiFile);
-
-    hFreeConn(&conn);
-    }
-else
-    {
-    if (tg->bbiFile == NULL)
+    char *fileName = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
+    bigWigOpenCatch(tg, fileName);
+    // if there's an extra table, read this one in too
+    if (extTableString != NULL)
 	{
-	/* Figure out bigWig file name. */
-	struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-	char *fileName = bbiNameFromTable(conn, tg->table);
-	tg->bbiFile = bigWigFileOpen(fileName);
-	hFreeConn(&conn);
+	fileName = bbiNameFromSettingOrTable(tg->tdb, conn, extTableString);
+        bigWigOpenCatch(tg, fileName);
 	}
+    hFreeConn(&conn);
     }
 }
 

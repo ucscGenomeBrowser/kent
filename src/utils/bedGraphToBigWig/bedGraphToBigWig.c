@@ -1,5 +1,6 @@
 /* bedGraphToBigWig - Convert a bedGraph program to bigWig.. */
 #include "common.h"
+#include "obscure.h"
 #include "linefile.h"
 #include "localmem.h"
 #include "hash.h"
@@ -553,5 +554,7 @@ doCompress = !optionExists("unc");
 if (argc != 4)
     usage();
 bedGraphToBigWig(argv[1], argv[2], argv[3]);
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }

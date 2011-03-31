@@ -132,11 +132,21 @@ int netUrlOpenSockets(char *url, int *retCtrlSocket);
 
 struct hash;
 
+int netUrlHeadExt(char *url, char *method, struct hash *hash);
+/* Go get head and return status.  Return negative number if
+ * can't get head. If hash is non-null, fill it with header
+ * lines with upper cased keywords for case-insensitive lookup,
+ * including hopefully CONTENT-TYPE: . */
+
 int netUrlHead(char *url, struct hash *hash);
 /* Go get head and return status.  Return negative number if
  * can't get head. If hash is non-null, fill it with header
  * lines with upper cased keywords for case-insensitive lookup, 
  * including hopefully CONTENT-TYPE: . */
+
+long long netUrlSizeByRangeResponse(char *url);
+/* Use byteRange as a work-around alternate method to get file size (content-length).  
+ * Return negative number if can't get. */
 
 struct lineFile *netLineFileOpen(char *url);
 /* Return a lineFile attached to url.  This one
@@ -147,11 +157,22 @@ struct lineFile *netLineFileMayOpen(char *url);
 /* Same as netLineFileOpen, but warns and returns
  * null rather than aborting on problems. */
 
+struct lineFile *netLineFileSilentOpen(char *url);
+/* Open a lineFile on a URL.  Just return NULL without any user
+ * visible warning message if there's a problem. */
+
 struct dyString *netSlurpFile(int sd);
-/* Slurp file into dynamic string and return. */
+/* Slurp file into dynamic string and return.  Result will include http headers and
+ * the like. */
 
 struct dyString *netSlurpUrl(char *url);
-/* Go grab all of URL and return it as dynamic string. */
+/* Go grab all of URL and return it as dynamic string.  Result will include http headers
+ * and the like. This will errAbort if there's a problem. */
+
+char *netReadTextFileIfExists(char *url);
+/* Read entire URL and return it as a string.  URL should be text (embedded zeros will be
+ * interpreted as end of string).  If the url doesn't exist or has other problems,
+ * returns NULL. Does *not* include http headers. */
 
 struct lineFile *netHttpLineFileMayOpen(char *url, struct netParsedUrl **npu);
 /* Parse URL and open an HTTP socket for it but don't send a request yet. */
@@ -214,10 +235,10 @@ boolean netSkipHttpHeaderLinesHandlingRedirect(int sd, char *url, int *redirecte
  * can't attach a lineFile since filling the lineFile buffer reads in more than just the http header. */
 
 boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime);
-/* Return date and size of ftp url file */
+/* Return date in UTC and size of ftp url file */
 
 
-boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries);
+boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries, boolean newer, boolean progress);
 /* Open multiple parallel connections to URL to speed downloading */
 
 #endif /* NET_H */

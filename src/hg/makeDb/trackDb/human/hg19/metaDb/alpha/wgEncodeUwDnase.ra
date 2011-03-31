@@ -1,3 +1,202 @@
+metaObject wgEncodeUwDnase
+objType composite
+composite wgEncodeUwDnase
+expVars lab,dataType,cell
+
+metaObject wgEncodeUwDnaseA549AlnRep1
+objType file
+cell A549
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-04
+dateUnrestricted 2011-10-04
+fileName wgEncodeUwDnaseA549AlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3156
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseA549AlnRep2
+objType file
+cell A549
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2011-10-04
+fileName wgEncodeUwDnaseA549AlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3158
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseA549HotspotsRep1
+objType table
+cell A549
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-04
+dateUnrestricted 2011-10-04
+fileName wgEncodeUwDnaseA549HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3156
+tableName wgEncodeUwDnaseA549HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseA549HotspotsRep2
+objType table
+cell A549
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2011-10-04
+fileName wgEncodeUwDnaseA549HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3158
+tableName wgEncodeUwDnaseA549HotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseA549PkRep1
+objType table
+cell A549
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-04
+dateUnrestricted 2011-10-04
+fileName wgEncodeUwDnaseA549PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3156
+tableName wgEncodeUwDnaseA549PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseA549PkRep2
+objType table
+cell A549
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2011-10-04
+fileName wgEncodeUwDnaseA549PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3158
+tableName wgEncodeUwDnaseA549PkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseA549RawDataRep1
+objType file
+cell A549
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-04
+dateUnrestricted 2011-10-04
+fileName wgEncodeUwDnaseA549RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3156
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseA549RawDataRep2
+objType file
+cell A549
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2011-10-04
+fileName wgEncodeUwDnaseA549RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3158
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseA549RawRep1
+objType table
+cell A549
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-04
+dateUnrestricted 2011-10-04
+fileName wgEncodeUwDnaseA549RawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3156
+tableName wgEncodeUwDnaseA549RawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseA549RawRep2
+objType table
+cell A549
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2011-10-04
+fileName wgEncodeUwDnaseA549RawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3158
+tableName wgEncodeUwDnaseA549RawRep2
+treatment None
+view RawSignal
+
 metaObject wgEncodeUwDnaseAg04449AlnRep1
 objType file
 cell AG04449
@@ -16,6 +215,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1257
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseAg04449AlnRep2
@@ -36,6 +236,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1548
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseAg04449HotspotsRep1
@@ -56,6 +257,7 @@ project wgEncode
 replicate 1
 subId 1257
 tableName wgEncodeUwDnaseAg04449HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseAg04449HotspotsRep2
@@ -76,6 +278,7 @@ project wgEncode
 replicate 2
 subId 1548
 tableName wgEncodeUwDnaseAg04449HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseAg04449PkRep1
@@ -96,6 +299,7 @@ project wgEncode
 replicate 1
 subId 1257
 tableName wgEncodeUwDnaseAg04449PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseAg04449PkRep2
@@ -116,6 +320,7 @@ project wgEncode
 replicate 2
 subId 1548
 tableName wgEncodeUwDnaseAg04449PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseAg04449RawDataRep1
@@ -133,6 +338,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 896
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseAg04449RawDataRep2
@@ -150,6 +356,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 906
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseAg04449RawRep1
@@ -170,6 +377,7 @@ project wgEncode
 replicate 1
 subId 1257
 tableName wgEncodeUwDnaseAg04449RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseAg04449RawRep2
@@ -190,6 +398,7 @@ project wgEncode
 replicate 2
 subId 1548
 tableName wgEncodeUwDnaseAg04449RawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseAg04450AlnRep1
@@ -210,6 +419,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1550
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseAg04450AlnRep2
@@ -230,6 +440,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1549
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseAg04450HotspotsRep1
@@ -250,6 +461,7 @@ project wgEncode
 replicate 1
 subId 1550
 tableName wgEncodeUwDnaseAg04450HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseAg04450HotspotsRep2
@@ -270,6 +482,7 @@ project wgEncode
 replicate 2
 subId 1549
 tableName wgEncodeUwDnaseAg04450HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseAg04450PkRep1
@@ -290,6 +503,7 @@ project wgEncode
 replicate 1
 subId 1550
 tableName wgEncodeUwDnaseAg04450PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseAg04450PkRep2
@@ -310,6 +524,7 @@ project wgEncode
 replicate 2
 subId 1549
 tableName wgEncodeUwDnaseAg04450PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseAg04450RawDataRep1
@@ -327,6 +542,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 908
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseAg04450RawDataRep2
@@ -344,6 +560,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 907
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseAg04450RawRep1
@@ -364,6 +581,7 @@ project wgEncode
 replicate 1
 subId 1550
 tableName wgEncodeUwDnaseAg04450RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseAg04450RawRep2
@@ -384,6 +602,7 @@ project wgEncode
 replicate 2
 subId 1549
 tableName wgEncodeUwDnaseAg04450RawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseAg09309AlnRep1
@@ -404,6 +623,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1551
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseAg09309AlnRep2
@@ -424,6 +644,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1552
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseAg09309HotspotsRep1
@@ -444,6 +665,7 @@ project wgEncode
 replicate 1
 subId 1551
 tableName wgEncodeUwDnaseAg09309HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseAg09309HotspotsRep2
@@ -464,6 +686,7 @@ project wgEncode
 replicate 2
 subId 1552
 tableName wgEncodeUwDnaseAg09309HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseAg09309PkRep1
@@ -484,6 +707,7 @@ project wgEncode
 replicate 1
 subId 1551
 tableName wgEncodeUwDnaseAg09309PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseAg09309PkRep2
@@ -504,6 +728,7 @@ project wgEncode
 replicate 2
 subId 1552
 tableName wgEncodeUwDnaseAg09309PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseAg09309RawDataRep1
@@ -521,6 +746,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 909
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseAg09309RawDataRep2
@@ -538,6 +764,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 910
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseAg09309RawRep1
@@ -558,6 +785,7 @@ project wgEncode
 replicate 1
 subId 1551
 tableName wgEncodeUwDnaseAg09309RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseAg09309RawRep2
@@ -578,6 +806,7 @@ project wgEncode
 replicate 2
 subId 1552
 tableName wgEncodeUwDnaseAg09309RawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseAg09319AlnRep1
@@ -598,6 +827,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1554
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseAg09319AlnRep2
@@ -618,6 +848,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1553
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseAg09319HotspotsRep1
@@ -638,6 +869,7 @@ project wgEncode
 replicate 1
 subId 1554
 tableName wgEncodeUwDnaseAg09319HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseAg09319HotspotsRep2
@@ -658,6 +890,7 @@ project wgEncode
 replicate 2
 subId 1553
 tableName wgEncodeUwDnaseAg09319HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseAg09319PkRep1
@@ -678,6 +911,28 @@ project wgEncode
 replicate 1
 subId 1554
 tableName wgEncodeUwDnaseAg09319PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseAg09319PkRep1V2
+objType table
+cell AG09319
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseAg09319PkRep1V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseAg09319PkRep1V2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseAg09319PkRep2
@@ -698,6 +953,7 @@ project wgEncode
 replicate 2
 subId 1553
 tableName wgEncodeUwDnaseAg09319PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseAg09319RawDataRep1
@@ -715,6 +971,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 912
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseAg09319RawDataRep2
@@ -732,6 +989,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 911
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseAg09319RawRep1
@@ -752,6 +1010,7 @@ project wgEncode
 replicate 1
 subId 1554
 tableName wgEncodeUwDnaseAg09319RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseAg09319RawRep2
@@ -772,6 +1031,7 @@ project wgEncode
 replicate 2
 subId 1553
 tableName wgEncodeUwDnaseAg09319RawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseAg10803AlnRep1
@@ -792,6 +1052,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1576
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseAg10803AlnRep2
@@ -812,6 +1073,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1555
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseAg10803HotspotsRep1
@@ -832,6 +1094,7 @@ project wgEncode
 replicate 1
 subId 1576
 tableName wgEncodeUwDnaseAg10803HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseAg10803HotspotsRep2
@@ -852,6 +1115,7 @@ project wgEncode
 replicate 2
 subId 1555
 tableName wgEncodeUwDnaseAg10803HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseAg10803PkRep1
@@ -872,6 +1136,7 @@ project wgEncode
 replicate 1
 subId 1576
 tableName wgEncodeUwDnaseAg10803PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseAg10803PkRep2
@@ -892,6 +1157,7 @@ project wgEncode
 replicate 2
 subId 1555
 tableName wgEncodeUwDnaseAg10803PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseAg10803RawDataRep1
@@ -909,6 +1175,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 935
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseAg10803RawDataRep2
@@ -926,6 +1193,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 915
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseAg10803RawRep1
@@ -946,6 +1214,7 @@ project wgEncode
 replicate 1
 subId 1576
 tableName wgEncodeUwDnaseAg10803RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseAg10803RawRep2
@@ -966,6 +1235,7 @@ project wgEncode
 replicate 2
 subId 1555
 tableName wgEncodeUwDnaseAg10803RawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseAoafAlnRep1
@@ -984,6 +1254,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2052
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseAoafAlnRep2
@@ -1002,6 +1273,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2038
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseAoafHotspotsRep1
@@ -1021,6 +1293,7 @@ project wgEncode
 replicate 1
 subId 2052
 tableName wgEncodeUwDnaseAoafHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseAoafHotspotsRep2
@@ -1040,6 +1313,7 @@ project wgEncode
 replicate 2
 subId 2038
 tableName wgEncodeUwDnaseAoafHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseAoafPkRep1
@@ -1059,6 +1333,7 @@ project wgEncode
 replicate 1
 subId 2052
 tableName wgEncodeUwDnaseAoafPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseAoafPkRep2
@@ -1078,6 +1353,7 @@ project wgEncode
 replicate 2
 subId 2038
 tableName wgEncodeUwDnaseAoafPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseAoafRawDataRep1
@@ -1095,6 +1371,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2052
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseAoafRawDataRep2
@@ -1112,6 +1389,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2038
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseAoafRawRep1
@@ -1131,6 +1409,7 @@ project wgEncode
 replicate 1
 subId 2052
 tableName wgEncodeUwDnaseAoafRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseAoafRawRep2
@@ -1150,6 +1429,201 @@ project wgEncode
 replicate 2
 subId 2038
 tableName wgEncodeUwDnaseAoafRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseBe2cAlnRep1
+objType file
+cell BE2_C
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseBe2cAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3166
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseBe2cAlnRep2
+objType file
+cell BE2_C
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseBe2cAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3167
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseBe2cHotspotsRep1
+objType table
+cell BE2_C
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseBe2cHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3166
+tableName wgEncodeUwDnaseBe2cHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseBe2cHotspotsRep2
+objType table
+cell BE2_C
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseBe2cHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3167
+tableName wgEncodeUwDnaseBe2cHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseBe2cPkRep1
+objType table
+cell BE2_C
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseBe2cPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3166
+tableName wgEncodeUwDnaseBe2cPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseBe2cPkRep2
+objType table
+cell BE2_C
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseBe2cPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3167
+tableName wgEncodeUwDnaseBe2cPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseBe2cRawDataRep1
+objType file
+cell BE2_C
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseBe2cRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3166
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseBe2cRawDataRep2
+objType file
+cell BE2_C
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseBe2cRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3167
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseBe2cRawRep1
+objType table
+cell BE2_C
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseBe2cRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3166
+tableName wgEncodeUwDnaseBe2cRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseBe2cRawRep2
+objType table
+cell BE2_C
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseBe2cRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3167
+tableName wgEncodeUwDnaseBe2cRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseBjAlnRep1
@@ -1170,6 +1644,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1648
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseBjAlnRep2
@@ -1190,6 +1665,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1249
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseBjHotspotsRep1
@@ -1210,6 +1686,7 @@ project wgEncode
 replicate 1
 subId 1648
 tableName wgEncodeUwDnaseBjHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseBjHotspotsRep2
@@ -1230,6 +1707,7 @@ project wgEncode
 replicate 2
 subId 1249
 tableName wgEncodeUwDnaseBjHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseBjPkRep1
@@ -1250,6 +1728,7 @@ project wgEncode
 replicate 1
 subId 1648
 tableName wgEncodeUwDnaseBjPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseBjPkRep2
@@ -1270,7 +1749,26 @@ project wgEncode
 replicate 2
 subId 1249
 tableName wgEncodeUwDnaseBjPkRep2
+treatment None
 view Peaks
+
+metaObject wgEncodeUwDnaseBjRawDataRep1
+objType file
+cell BJ
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-04-27
+dateUnrestricted 2010-01-27
+fileName wgEncodeUwDnaseBjRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 295
+treatment None
+view RawData
 
 metaObject wgEncodeUwDnaseBjRawDataRep2
 objType file
@@ -1288,6 +1786,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1249
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseBjRawRep1
@@ -1308,6 +1807,7 @@ project wgEncode
 replicate 1
 subId 1648
 tableName wgEncodeUwDnaseBjRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseBjRawRep2
@@ -1328,6 +1828,7 @@ project wgEncode
 replicate 2
 subId 1249
 tableName wgEncodeUwDnaseBjRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseBjtertRawDataRep1
@@ -1345,6 +1846,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 295
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseBjtertRawDataRep2
@@ -1362,6 +1864,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 393
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseCaco2AlnRep1
@@ -1382,6 +1885,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1644
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseCaco2AlnRep2
@@ -1402,6 +1906,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1590
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseCaco2HotspotsRep1
@@ -1422,6 +1927,7 @@ project wgEncode
 replicate 1
 subId 1644
 tableName wgEncodeUwDnaseCaco2HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseCaco2HotspotsRep2
@@ -1442,6 +1948,7 @@ project wgEncode
 replicate 2
 subId 1590
 tableName wgEncodeUwDnaseCaco2HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseCaco2PkRep1
@@ -1462,6 +1969,7 @@ project wgEncode
 replicate 1
 subId 1644
 tableName wgEncodeUwDnaseCaco2PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseCaco2PkRep2
@@ -1482,6 +1990,7 @@ project wgEncode
 replicate 2
 subId 1590
 tableName wgEncodeUwDnaseCaco2PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseCaco2RawDataRep1
@@ -1499,6 +2008,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 288
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseCaco2RawDataRep2
@@ -1516,6 +2026,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 394
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseCaco2RawRep1
@@ -1536,6 +2047,7 @@ project wgEncode
 replicate 1
 subId 1644
 tableName wgEncodeUwDnaseCaco2RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseCaco2RawRep2
@@ -1556,6 +2068,7 @@ project wgEncode
 replicate 2
 subId 1590
 tableName wgEncodeUwDnaseCaco2RawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseCmkAlnRep1
@@ -1576,6 +2089,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1586
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseCmkHotspotsRep1
@@ -1596,6 +2110,7 @@ project wgEncode
 replicate 1
 subId 1586
 tableName wgEncodeUwDnaseCmkHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseCmkPkRep1
@@ -1616,6 +2131,7 @@ project wgEncode
 replicate 1
 subId 1586
 tableName wgEncodeUwDnaseCmkPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseCmkRawDataRep1
@@ -1633,6 +2149,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 916
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseCmkRawRep1
@@ -1653,6 +2170,7 @@ project wgEncode
 replicate 1
 subId 1586
 tableName wgEncodeUwDnaseCmkRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseGm06990AlnRep1
@@ -1673,6 +2191,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1616
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseGm06990AlnRep2
@@ -1693,6 +2212,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1614
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseGm06990HotspotsRep1
@@ -1713,6 +2233,7 @@ project wgEncode
 replicate 1
 subId 1616
 tableName wgEncodeUwDnaseGm06990HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseGm06990HotspotsRep2
@@ -1733,6 +2254,7 @@ project wgEncode
 replicate 2
 subId 1614
 tableName wgEncodeUwDnaseGm06990HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseGm06990PkRep1
@@ -1753,6 +2275,7 @@ project wgEncode
 replicate 1
 subId 1616
 tableName wgEncodeUwDnaseGm06990PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseGm06990PkRep2
@@ -1773,6 +2296,7 @@ project wgEncode
 replicate 2
 subId 1614
 tableName wgEncodeUwDnaseGm06990PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseGm06990RawDataRep1
@@ -1790,6 +2314,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 46
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseGm06990RawDataRep2
@@ -1807,6 +2332,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 110
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseGm06990RawRep1
@@ -1827,6 +2353,7 @@ project wgEncode
 replicate 1
 subId 1616
 tableName wgEncodeUwDnaseGm06990RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseGm06990RawRep2
@@ -1847,6 +2374,104 @@ project wgEncode
 replicate 2
 subId 1614
 tableName wgEncodeUwDnaseGm06990RawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseGm12864AlnRep1
+objType file
+cell GM12864
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseGm12864AlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3168
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseGm12864HotspotsRep1
+objType table
+cell GM12864
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseGm12864HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3168
+tableName wgEncodeUwDnaseGm12864HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseGm12864PkRep1
+objType table
+cell GM12864
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseGm12864PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3168
+tableName wgEncodeUwDnaseGm12864PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseGm12864RawDataRep1
+objType file
+cell GM12864
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseGm12864RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3168
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseGm12864RawRep1
+objType table
+cell GM12864
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseGm12864RawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3168
+tableName wgEncodeUwDnaseGm12864RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseGm12865AlnRep1
@@ -1867,6 +2492,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1564
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseGm12865AlnRep2
@@ -1887,6 +2513,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1589
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseGm12865HotspotsRep1
@@ -1907,6 +2534,7 @@ project wgEncode
 replicate 1
 subId 1564
 tableName wgEncodeUwDnaseGm12865HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseGm12865HotspotsRep2
@@ -1927,6 +2555,7 @@ project wgEncode
 replicate 2
 subId 1589
 tableName wgEncodeUwDnaseGm12865HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseGm12865PkRep1
@@ -1947,6 +2576,7 @@ project wgEncode
 replicate 1
 subId 1564
 tableName wgEncodeUwDnaseGm12865PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseGm12865PkRep2
@@ -1967,6 +2597,7 @@ project wgEncode
 replicate 2
 subId 1589
 tableName wgEncodeUwDnaseGm12865PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseGm12865RawDataRep1
@@ -1984,6 +2615,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 961
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseGm12865RawDataRep2
@@ -2001,6 +2633,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 962
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseGm12865RawRep1
@@ -2021,6 +2654,7 @@ project wgEncode
 replicate 1
 subId 1564
 tableName wgEncodeUwDnaseGm12865RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseGm12865RawRep2
@@ -2041,6 +2675,7 @@ project wgEncode
 replicate 2
 subId 1589
 tableName wgEncodeUwDnaseGm12865RawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseGm12878AlnRep1
@@ -2061,6 +2696,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1587
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseGm12878AlnRep2
@@ -2081,6 +2717,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1649
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseGm12878HotspotsRep1
@@ -2101,6 +2738,7 @@ project wgEncode
 replicate 1
 subId 1587
 tableName wgEncodeUwDnaseGm12878HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseGm12878HotspotsRep2
@@ -2121,6 +2759,7 @@ project wgEncode
 replicate 2
 subId 1649
 tableName wgEncodeUwDnaseGm12878HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseGm12878PkRep1
@@ -2141,6 +2780,7 @@ project wgEncode
 replicate 1
 subId 1587
 tableName wgEncodeUwDnaseGm12878PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseGm12878PkRep2
@@ -2161,6 +2801,7 @@ project wgEncode
 replicate 2
 subId 1649
 tableName wgEncodeUwDnaseGm12878PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseGm12878RawDataRep1
@@ -2178,6 +2819,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 395
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseGm12878RawDataRep2
@@ -2195,6 +2837,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 296
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseGm12878RawRep1
@@ -2215,6 +2858,7 @@ project wgEncode
 replicate 1
 subId 1587
 tableName wgEncodeUwDnaseGm12878RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseGm12878RawRep2
@@ -2235,24 +2879,8 @@ project wgEncode
 replicate 2
 subId 1649
 tableName wgEncodeUwDnaseGm12878RawRep2
+treatment None
 view RawSignal
-
-metaObject wgEncodeUwDnaseH1esRawDataRep1
-objType file
-cell H1-hESC
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-19
-dateUnrestricted 2010-06-18
-fileName wgEncodeUwDnaseH1esRawDataRep1.fastq.gz
-grant Stam
-lab UW
-origAssembly hg18
-project wgEncode
-replicate 1
-subId 506
-view RawData
 
 metaObject wgEncodeUwDnaseH1hescAlnRep1
 objType file
@@ -2272,6 +2900,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1588
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseH1hescHotspotsRep1
@@ -2292,6 +2921,7 @@ project wgEncode
 replicate 1
 subId 1588
 tableName wgEncodeUwDnaseH1hescHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseH1hescPkRep1
@@ -2312,7 +2942,26 @@ project wgEncode
 replicate 1
 subId 1588
 tableName wgEncodeUwDnaseH1hescPkRep1
+treatment None
 view Peaks
+
+metaObject wgEncodeUwDnaseH1hescRawDataRep1
+objType file
+cell H1-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-18
+fileName wgEncodeUwDnaseH1hescRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 506
+treatment None
+view RawData
 
 metaObject wgEncodeUwDnaseH1hescRawRep1
 objType table
@@ -2332,6 +2981,7 @@ project wgEncode
 replicate 1
 subId 1588
 tableName wgEncodeUwDnaseH1hescRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseH7esAlnRep1
@@ -2352,6 +3002,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1592
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseH7esAlnRep2
@@ -2371,6 +3022,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2037
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseH7esHotspotsRep1
@@ -2391,6 +3043,7 @@ project wgEncode
 replicate 1
 subId 1592
 tableName wgEncodeUwDnaseH7esHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseH7esHotspotsRep2
@@ -2410,6 +3063,7 @@ project wgEncode
 replicate 2
 subId 2037
 tableName wgEncodeUwDnaseH7esHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseH7esPkRep1
@@ -2430,6 +3084,28 @@ project wgEncode
 replicate 1
 subId 1592
 tableName wgEncodeUwDnaseH7esPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseH7esPkRep1V2
+objType table
+cell H7-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseH7esPkRep1V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseH7esPkRep1V2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseH7esPkRep2
@@ -2449,6 +3125,7 @@ project wgEncode
 replicate 2
 subId 2037
 tableName wgEncodeUwDnaseH7esPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseH7esRawDataRep1
@@ -2466,6 +3143,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 917
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseH7esRawDataRep2
@@ -2483,6 +3161,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2037
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseH7esRawRep1
@@ -2503,6 +3182,7 @@ project wgEncode
 replicate 1
 subId 1592
 tableName wgEncodeUwDnaseH7esRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseH7esRawRep2
@@ -2522,6 +3202,201 @@ project wgEncode
 replicate 2
 subId 2037
 tableName wgEncodeUwDnaseH7esRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHacAlnRep1
+objType file
+cell HAc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHacAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3201
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHacAlnRep2
+objType file
+cell HAc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHacAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3202
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHacHotspotsRep1
+objType table
+cell HAc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHacHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3201
+tableName wgEncodeUwDnaseHacHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHacHotspotsRep2
+objType table
+cell HAc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHacHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3202
+tableName wgEncodeUwDnaseHacHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHacPkRep1
+objType table
+cell HAc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHacPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3201
+tableName wgEncodeUwDnaseHacPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHacPkRep2
+objType table
+cell HAc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHacPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3202
+tableName wgEncodeUwDnaseHacPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHacRawDataRep1
+objType file
+cell HAc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHacRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3201
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHacRawDataRep2
+objType file
+cell HAc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHacRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3202
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHacRawRep1
+objType table
+cell HAc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHacRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3201
+tableName wgEncodeUwDnaseHacRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHacRawRep2
+objType table
+cell HAc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHacRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3202
+tableName wgEncodeUwDnaseHacRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHaeAlnRep1
@@ -2542,6 +3417,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1565
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHaeAlnRep2
@@ -2562,6 +3438,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1579
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHaeHotspotsRep1
@@ -2582,6 +3459,7 @@ project wgEncode
 replicate 1
 subId 1565
 tableName wgEncodeUwDnaseHaeHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHaeHotspotsRep2
@@ -2602,6 +3480,7 @@ project wgEncode
 replicate 2
 subId 1579
 tableName wgEncodeUwDnaseHaeHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHaePkRep1
@@ -2622,6 +3501,7 @@ project wgEncode
 replicate 1
 subId 1565
 tableName wgEncodeUwDnaseHaePkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHaePkRep2
@@ -2642,6 +3522,7 @@ project wgEncode
 replicate 2
 subId 1579
 tableName wgEncodeUwDnaseHaePkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHaeRawDataRep1
@@ -2659,6 +3540,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 918
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHaeRawDataRep2
@@ -2676,6 +3558,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 919
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHaeRawRep1
@@ -2696,6 +3579,7 @@ project wgEncode
 replicate 1
 subId 1565
 tableName wgEncodeUwDnaseHaeRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHaeRawRep2
@@ -2716,6 +3600,395 @@ project wgEncode
 replicate 2
 subId 1579
 tableName wgEncodeUwDnaseHaeRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHahAlnRep1
+objType file
+cell HA-h
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHahAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3203
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHahAlnRep2
+objType file
+cell HA-h
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHahAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3204
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHahHotspotsRep1
+objType table
+cell HA-h
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHahHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3203
+tableName wgEncodeUwDnaseHahHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHahHotspotsRep2
+objType table
+cell HA-h
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHahHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3204
+tableName wgEncodeUwDnaseHahHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHahPkRep1
+objType table
+cell HA-h
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHahPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3203
+tableName wgEncodeUwDnaseHahPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHahPkRep2
+objType table
+cell HA-h
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHahPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3204
+tableName wgEncodeUwDnaseHahPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHahRawDataRep1
+objType file
+cell HA-h
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHahRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3203
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHahRawDataRep2
+objType file
+cell HA-h
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHahRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3204
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHahRawRep1
+objType table
+cell HA-h
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHahRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3203
+tableName wgEncodeUwDnaseHahRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHahRawRep2
+objType table
+cell HA-h
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHahRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3204
+tableName wgEncodeUwDnaseHahRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHaspAlnRep1
+objType file
+cell HA-sp
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHaspAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3169
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHaspAlnRep2
+objType file
+cell HA-sp
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHaspAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3170
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHaspHotspotsRep1
+objType table
+cell HA-sp
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHaspHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3169
+tableName wgEncodeUwDnaseHaspHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHaspHotspotsRep2
+objType table
+cell HA-sp
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHaspHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3170
+tableName wgEncodeUwDnaseHaspHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHaspPkRep1
+objType table
+cell HA-sp
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHaspPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3169
+tableName wgEncodeUwDnaseHaspPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHaspPkRep2
+objType table
+cell HA-sp
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHaspPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3170
+tableName wgEncodeUwDnaseHaspPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHaspRawDataRep1
+objType file
+cell HA-sp
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHaspRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3169
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHaspRawDataRep2
+objType file
+cell HA-sp
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHaspRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3170
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHaspRawRep1
+objType table
+cell HA-sp
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHaspRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3169
+tableName wgEncodeUwDnaseHaspRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHaspRawRep2
+objType table
+cell HA-sp
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHaspRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3170
+tableName wgEncodeUwDnaseHaspRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHbmecAlnRep1
@@ -2734,6 +4007,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2090
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHbmecAlnRep2
@@ -2752,6 +4026,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2087
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHbmecHotspotsRep1
@@ -2771,6 +4046,7 @@ project wgEncode
 replicate 1
 subId 2090
 tableName wgEncodeUwDnaseHbmecHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHbmecHotspotsRep2
@@ -2790,6 +4066,7 @@ project wgEncode
 replicate 2
 subId 2087
 tableName wgEncodeUwDnaseHbmecHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHbmecPkRep1
@@ -2809,6 +4086,7 @@ project wgEncode
 replicate 1
 subId 2090
 tableName wgEncodeUwDnaseHbmecPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHbmecPkRep2
@@ -2828,6 +4106,7 @@ project wgEncode
 replicate 2
 subId 2087
 tableName wgEncodeUwDnaseHbmecPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHbmecRawDataRep1
@@ -2845,6 +4124,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2090
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHbmecRawDataRep2
@@ -2862,6 +4142,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2087
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHbmecRawRep1
@@ -2881,6 +4162,7 @@ project wgEncode
 replicate 1
 subId 2090
 tableName wgEncodeUwDnaseHbmecRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHbmecRawRep2
@@ -2900,190 +4182,7 @@ project wgEncode
 replicate 2
 subId 2087
 tableName wgEncodeUwDnaseHbmecRawRep2
-view RawSignal
-
-metaObject wgEncodeUwDnaseHcfaaAlnRep1
-objType file
-cell HCFaa
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-26
-dateUnrestricted 2011-04-26
-fileName wgEncodeUwDnaseHcfaaAlnRep1.bam
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 2053
-view Alignments
-
-metaObject wgEncodeUwDnaseHcfaaAlnRep2
-objType file
-cell HCFaa
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-26
-dateUnrestricted 2011-04-26
-fileName wgEncodeUwDnaseHcfaaAlnRep2.bam
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 2054
-view Alignments
-
-metaObject wgEncodeUwDnaseHcfaaHotspotsRep1
-objType table
-cell HCFaa
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-26
-dateUnrestricted 2011-04-26
-fileName wgEncodeUwDnaseHcfaaHotspotsRep1.broadPeak.gz
-grant Stam
-lab UW
-labVersion Hotspot-v5.1
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 2053
-tableName wgEncodeUwDnaseHcfaaHotspotsRep1
-view Hotspots
-
-metaObject wgEncodeUwDnaseHcfaaHotspotsRep2
-objType table
-cell HCFaa
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-26
-dateUnrestricted 2011-04-26
-fileName wgEncodeUwDnaseHcfaaHotspotsRep2.broadPeak.gz
-grant Stam
-lab UW
-labVersion Hotspot-v5.1
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 2054
-tableName wgEncodeUwDnaseHcfaaHotspotsRep2
-view Hotspots
-
-metaObject wgEncodeUwDnaseHcfaaPkRep1
-objType table
-cell HCFaa
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-26
-dateUnrestricted 2011-04-26
-fileName wgEncodeUwDnaseHcfaaPkRep1.narrowPeak.gz
-grant Stam
-lab UW
-labVersion lmax-v1.0
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 2053
-tableName wgEncodeUwDnaseHcfaaPkRep1
-view Peaks
-
-metaObject wgEncodeUwDnaseHcfaaPkRep2
-objType table
-cell HCFaa
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-26
-dateUnrestricted 2011-04-26
-fileName wgEncodeUwDnaseHcfaaPkRep2.narrowPeak.gz
-grant Stam
-lab UW
-labVersion lmax-v1.0
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 2054
-tableName wgEncodeUwDnaseHcfaaPkRep2
-view Peaks
-
-metaObject wgEncodeUwDnaseHcfaaRawDataRep1
-objType file
-cell HCFaa
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-26
-dateUnrestricted 2011-04-26
-fileName wgEncodeUwDnaseHcfaaRawDataRep1.fastq.gz
-grant Stam
-lab UW
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 2053
-view RawData
-
-metaObject wgEncodeUwDnaseHcfaaRawDataRep2
-objType file
-cell HCFaa
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-26
-dateUnrestricted 2011-04-26
-fileName wgEncodeUwDnaseHcfaaRawDataRep2.fastq.gz
-grant Stam
-lab UW
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 2054
-view RawData
-
-metaObject wgEncodeUwDnaseHcfaaRawRep1
-objType table
-cell HCFaa
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-26
-dateUnrestricted 2011-04-26
-fileName wgEncodeUwDnaseHcfaaRawRep1.bigWig
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 2053
-tableName wgEncodeUwDnaseHcfaaRawRep1
-view RawSignal
-
-metaObject wgEncodeUwDnaseHcfaaRawRep2
-objType table
-cell HCFaa
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-26
-dateUnrestricted 2011-04-26
-fileName wgEncodeUwDnaseHcfaaRawRep2.bigWig
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 2054
-tableName wgEncodeUwDnaseHcfaaRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHcfAlnRep1
@@ -3104,6 +4203,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1591
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHcfAlnRep2
@@ -3124,6 +4224,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1593
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHcfHotspotsRep1
@@ -3144,6 +4245,7 @@ project wgEncode
 replicate 1
 subId 1591
 tableName wgEncodeUwDnaseHcfHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHcfHotspotsRep2
@@ -3164,6 +4266,7 @@ project wgEncode
 replicate 2
 subId 1593
 tableName wgEncodeUwDnaseHcfHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHcfPkRep1
@@ -3184,6 +4287,7 @@ project wgEncode
 replicate 1
 subId 1591
 tableName wgEncodeUwDnaseHcfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHcfPkRep2
@@ -3204,6 +4308,7 @@ project wgEncode
 replicate 2
 subId 1593
 tableName wgEncodeUwDnaseHcfPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHcfRawDataRep1
@@ -3221,6 +4326,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 944
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHcfRawDataRep2
@@ -3238,6 +4344,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 921
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHcfRawRep1
@@ -3258,6 +4365,7 @@ project wgEncode
 replicate 1
 subId 1591
 tableName wgEncodeUwDnaseHcfRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHcfRawRep2
@@ -3278,6 +4386,201 @@ project wgEncode
 replicate 2
 subId 1593
 tableName wgEncodeUwDnaseHcfRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHcfaaAlnRep1
+objType file
+cell HCFaa
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-26
+dateUnrestricted 2011-04-26
+fileName wgEncodeUwDnaseHcfaaAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 2053
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHcfaaAlnRep2
+objType file
+cell HCFaa
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-26
+dateUnrestricted 2011-04-26
+fileName wgEncodeUwDnaseHcfaaAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 2054
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHcfaaHotspotsRep1
+objType table
+cell HCFaa
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-26
+dateUnrestricted 2011-04-26
+fileName wgEncodeUwDnaseHcfaaHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 2053
+tableName wgEncodeUwDnaseHcfaaHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHcfaaHotspotsRep2
+objType table
+cell HCFaa
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-26
+dateUnrestricted 2011-04-26
+fileName wgEncodeUwDnaseHcfaaHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 2054
+tableName wgEncodeUwDnaseHcfaaHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHcfaaPkRep1
+objType table
+cell HCFaa
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-26
+dateUnrestricted 2011-04-26
+fileName wgEncodeUwDnaseHcfaaPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 2053
+tableName wgEncodeUwDnaseHcfaaPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHcfaaPkRep2
+objType table
+cell HCFaa
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-26
+dateUnrestricted 2011-04-26
+fileName wgEncodeUwDnaseHcfaaPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 2054
+tableName wgEncodeUwDnaseHcfaaPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHcfaaRawDataRep1
+objType file
+cell HCFaa
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-26
+dateUnrestricted 2011-04-26
+fileName wgEncodeUwDnaseHcfaaRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 2053
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHcfaaRawDataRep2
+objType file
+cell HCFaa
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-26
+dateUnrestricted 2011-04-26
+fileName wgEncodeUwDnaseHcfaaRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 2054
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHcfaaRawRep1
+objType table
+cell HCFaa
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-26
+dateUnrestricted 2011-04-26
+fileName wgEncodeUwDnaseHcfaaRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 2053
+tableName wgEncodeUwDnaseHcfaaRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHcfaaRawRep2
+objType table
+cell HCFaa
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-26
+dateUnrestricted 2011-04-26
+fileName wgEncodeUwDnaseHcfaaRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 2054
+tableName wgEncodeUwDnaseHcfaaRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHcmAlnRep1
@@ -3298,6 +4601,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1600
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHcmAlnRep2
@@ -3318,6 +4622,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1595
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHcmHotspotsRep1
@@ -3338,6 +4643,7 @@ project wgEncode
 replicate 1
 subId 1600
 tableName wgEncodeUwDnaseHcmHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHcmHotspotsRep2
@@ -3358,6 +4664,7 @@ project wgEncode
 replicate 2
 subId 1595
 tableName wgEncodeUwDnaseHcmHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHcmPkRep1
@@ -3378,6 +4685,7 @@ project wgEncode
 replicate 1
 subId 1600
 tableName wgEncodeUwDnaseHcmPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHcmPkRep2
@@ -3398,6 +4706,7 @@ project wgEncode
 replicate 2
 subId 1595
 tableName wgEncodeUwDnaseHcmPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHcmRawDataRep1
@@ -3415,6 +4724,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 949
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHcmRawDataRep2
@@ -3432,6 +4742,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 948
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHcmRawRep1
@@ -3452,6 +4763,7 @@ project wgEncode
 replicate 1
 subId 1600
 tableName wgEncodeUwDnaseHcmRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHcmRawRep2
@@ -3472,6 +4784,7 @@ project wgEncode
 replicate 2
 subId 1595
 tableName wgEncodeUwDnaseHcmRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHconfAlnRep1
@@ -3490,6 +4803,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2056
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHconfAlnRep2
@@ -3508,6 +4822,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2055
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHconfHotspotsRep1
@@ -3527,6 +4842,7 @@ project wgEncode
 replicate 1
 subId 2056
 tableName wgEncodeUwDnaseHconfHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHconfHotspotsRep2
@@ -3546,6 +4862,7 @@ project wgEncode
 replicate 2
 subId 2055
 tableName wgEncodeUwDnaseHconfHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHconfPkRep1
@@ -3565,6 +4882,7 @@ project wgEncode
 replicate 1
 subId 2056
 tableName wgEncodeUwDnaseHconfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHconfPkRep2
@@ -3584,6 +4902,7 @@ project wgEncode
 replicate 2
 subId 2055
 tableName wgEncodeUwDnaseHconfPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHconfRawDataRep1
@@ -3601,6 +4920,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2056
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHconfRawDataRep2
@@ -3618,6 +4938,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2055
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHconfRawRep1
@@ -3637,6 +4958,7 @@ project wgEncode
 replicate 1
 subId 2056
 tableName wgEncodeUwDnaseHconfRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHconfRawRep2
@@ -3656,6 +4978,7 @@ project wgEncode
 replicate 2
 subId 2055
 tableName wgEncodeUwDnaseHconfRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHcpeAlnRep1
@@ -3676,6 +4999,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1598
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHcpeAlnRep2
@@ -3696,6 +5020,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1599
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHcpeHotspotsRep1
@@ -3716,6 +5041,7 @@ project wgEncode
 replicate 1
 subId 1598
 tableName wgEncodeUwDnaseHcpeHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHcpeHotspotsRep2
@@ -3736,6 +5062,7 @@ project wgEncode
 replicate 2
 subId 1599
 tableName wgEncodeUwDnaseHcpeHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHcpePkRep1
@@ -3756,6 +5083,7 @@ project wgEncode
 replicate 1
 subId 1598
 tableName wgEncodeUwDnaseHcpePkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHcpePkRep2
@@ -3776,6 +5104,7 @@ project wgEncode
 replicate 2
 subId 1599
 tableName wgEncodeUwDnaseHcpePkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHcpeRawDataRep1
@@ -3793,6 +5122,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 922
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHcpeRawDataRep2
@@ -3810,6 +5140,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 923
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHcpeRawRep1
@@ -3830,6 +5161,7 @@ project wgEncode
 replicate 1
 subId 1598
 tableName wgEncodeUwDnaseHcpeRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHcpeRawRep2
@@ -3850,6 +5182,7 @@ project wgEncode
 replicate 2
 subId 1599
 tableName wgEncodeUwDnaseHcpeRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHct116AlnRep1
@@ -3869,6 +5202,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2043
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHct116AlnRep2
@@ -3888,6 +5222,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2040
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHct116HotspotsRep1
@@ -3907,6 +5242,7 @@ project wgEncode
 replicate 1
 subId 2043
 tableName wgEncodeUwDnaseHct116HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHct116HotspotsRep2
@@ -3926,6 +5262,7 @@ project wgEncode
 replicate 2
 subId 2040
 tableName wgEncodeUwDnaseHct116HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHct116PkRep1
@@ -3945,6 +5282,7 @@ project wgEncode
 replicate 1
 subId 2043
 tableName wgEncodeUwDnaseHct116PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHct116PkRep2
@@ -3964,6 +5302,7 @@ project wgEncode
 replicate 2
 subId 2040
 tableName wgEncodeUwDnaseHct116PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHct116RawDataRep1
@@ -3981,6 +5320,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2043
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHct116RawDataRep2
@@ -3998,6 +5338,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2040
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHct116RawRep1
@@ -4017,6 +5358,7 @@ project wgEncode
 replicate 1
 subId 2043
 tableName wgEncodeUwDnaseHct116RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHct116RawRep2
@@ -4036,6 +5378,7 @@ project wgEncode
 replicate 2
 subId 2040
 tableName wgEncodeUwDnaseHct116RawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHeeAlnRep1
@@ -4056,6 +5399,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1601
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHeeAlnRep2
@@ -4076,6 +5420,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1602
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHeeHotspotsRep1
@@ -4096,6 +5441,7 @@ project wgEncode
 replicate 1
 subId 1601
 tableName wgEncodeUwDnaseHeeHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHeeHotspotsRep2
@@ -4116,6 +5462,7 @@ project wgEncode
 replicate 2
 subId 1602
 tableName wgEncodeUwDnaseHeeHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHeePkRep1
@@ -4136,6 +5483,7 @@ project wgEncode
 replicate 1
 subId 1601
 tableName wgEncodeUwDnaseHeePkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHeePkRep2
@@ -4156,6 +5504,7 @@ project wgEncode
 replicate 2
 subId 1602
 tableName wgEncodeUwDnaseHeePkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHeeRawDataRep1
@@ -4173,6 +5522,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 963
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHeeRawDataRep2
@@ -4190,6 +5540,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 924
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHeeRawRep1
@@ -4210,6 +5561,7 @@ project wgEncode
 replicate 1
 subId 1601
 tableName wgEncodeUwDnaseHeeRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHeeRawRep2
@@ -4230,6 +5582,7 @@ project wgEncode
 replicate 2
 subId 1602
 tableName wgEncodeUwDnaseHeeRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHelas3AlnRep1
@@ -4250,6 +5603,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1605
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHelas3AlnRep2
@@ -4270,6 +5624,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1604
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHelas3HotspotsRep1
@@ -4290,6 +5645,7 @@ project wgEncode
 replicate 1
 subId 1605
 tableName wgEncodeUwDnaseHelas3HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHelas3HotspotsRep2
@@ -4310,6 +5666,7 @@ project wgEncode
 replicate 2
 subId 1604
 tableName wgEncodeUwDnaseHelas3HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHelas3PkRep1
@@ -4330,6 +5687,7 @@ project wgEncode
 replicate 1
 subId 1605
 tableName wgEncodeUwDnaseHelas3PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHelas3PkRep2
@@ -4350,6 +5708,7 @@ project wgEncode
 replicate 2
 subId 1604
 tableName wgEncodeUwDnaseHelas3PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHelas3RawDataRep1
@@ -4367,6 +5726,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 396
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHelas3RawDataRep2
@@ -4384,6 +5744,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 397
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHelas3RawRep1
@@ -4404,6 +5765,7 @@ project wgEncode
 replicate 1
 subId 1605
 tableName wgEncodeUwDnaseHelas3RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHelas3RawRep2
@@ -4424,6 +5786,7 @@ project wgEncode
 replicate 2
 subId 1604
 tableName wgEncodeUwDnaseHelas3RawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHepg2AlnRep1
@@ -4444,6 +5807,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1617
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHepg2AlnRep2
@@ -4464,6 +5828,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1615
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHepg2HotspotsRep1
@@ -4484,6 +5849,7 @@ project wgEncode
 replicate 1
 subId 1617
 tableName wgEncodeUwDnaseHepg2HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHepg2HotspotsRep2
@@ -4504,6 +5870,7 @@ project wgEncode
 replicate 2
 subId 1615
 tableName wgEncodeUwDnaseHepg2HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHepg2PkRep1
@@ -4524,6 +5891,7 @@ project wgEncode
 replicate 1
 subId 1617
 tableName wgEncodeUwDnaseHepg2PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHepg2PkRep2
@@ -4544,6 +5912,7 @@ project wgEncode
 replicate 2
 subId 1615
 tableName wgEncodeUwDnaseHepg2PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHepg2RawDataRep1
@@ -4561,6 +5930,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 48
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHepg2RawDataRep2
@@ -4578,6 +5948,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 111
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHepg2RawRep1
@@ -4598,6 +5969,7 @@ project wgEncode
 replicate 1
 subId 1617
 tableName wgEncodeUwDnaseHepg2RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHepg2RawRep2
@@ -4618,6 +5990,395 @@ project wgEncode
 replicate 2
 subId 1615
 tableName wgEncodeUwDnaseHepg2RawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHffAlnRep1
+objType file
+cell HFF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3205
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHffAlnRep2
+objType file
+cell HFF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3206
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHffHotspotsRep1
+objType table
+cell HFF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3205
+tableName wgEncodeUwDnaseHffHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHffHotspotsRep2
+objType table
+cell HFF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3206
+tableName wgEncodeUwDnaseHffHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHffPkRep1
+objType table
+cell HFF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3205
+tableName wgEncodeUwDnaseHffPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHffPkRep2
+objType table
+cell HFF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3206
+tableName wgEncodeUwDnaseHffPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHffRawDataRep1
+objType file
+cell HFF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3205
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHffRawDataRep2
+objType file
+cell HFF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3206
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHffRawRep1
+objType table
+cell HFF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3205
+tableName wgEncodeUwDnaseHffRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHffRawRep2
+objType table
+cell HFF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3206
+tableName wgEncodeUwDnaseHffRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHffmycAlnRep1
+objType file
+cell HFF-Myc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffmycAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3208
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHffmycAlnRep2
+objType file
+cell HFF-Myc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffmycAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3207
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHffmycHotspotsRep1
+objType table
+cell HFF-Myc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffmycHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3208
+tableName wgEncodeUwDnaseHffmycHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHffmycHotspotsRep2
+objType table
+cell HFF-Myc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffmycHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3207
+tableName wgEncodeUwDnaseHffmycHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHffmycPkRep1
+objType table
+cell HFF-Myc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffmycPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3208
+tableName wgEncodeUwDnaseHffmycPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHffmycPkRep2
+objType table
+cell HFF-Myc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffmycPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3207
+tableName wgEncodeUwDnaseHffmycPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHffmycRawDataRep1
+objType file
+cell HFF-Myc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffmycRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3208
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHffmycRawDataRep2
+objType file
+cell HFF-Myc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffmycRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3207
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHffmycRawRep1
+objType table
+cell HFF-Myc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffmycRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3208
+tableName wgEncodeUwDnaseHffmycRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHffmycRawRep2
+objType table
+cell HFF-Myc
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHffmycRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3207
+tableName wgEncodeUwDnaseHffmycRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHgfAlnRep1
@@ -4638,6 +6399,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1563
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHgfAlnRep2
@@ -4658,6 +6420,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1603
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHgfHotspotsRep1
@@ -4678,6 +6441,7 @@ project wgEncode
 replicate 1
 subId 1563
 tableName wgEncodeUwDnaseHgfHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHgfHotspotsRep2
@@ -4698,6 +6462,7 @@ project wgEncode
 replicate 2
 subId 1603
 tableName wgEncodeUwDnaseHgfHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHgfPkRep1
@@ -4718,6 +6483,7 @@ project wgEncode
 replicate 1
 subId 1563
 tableName wgEncodeUwDnaseHgfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHgfPkRep2
@@ -4738,6 +6504,7 @@ project wgEncode
 replicate 2
 subId 1603
 tableName wgEncodeUwDnaseHgfPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHgfRawDataRep1
@@ -4755,6 +6522,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 735
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHgfRawDataRep2
@@ -4772,6 +6540,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 736
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHgfRawRep1
@@ -4792,6 +6561,7 @@ project wgEncode
 replicate 1
 subId 1563
 tableName wgEncodeUwDnaseHgfRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHgfRawRep2
@@ -4812,23 +6582,143 @@ project wgEncode
 replicate 2
 subId 1603
 tableName wgEncodeUwDnaseHgfRawRep2
+treatment None
 view RawSignal
+
+metaObject wgEncodeUwDnaseHipeAlnRep1
+objType file
+cell HIPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHipeAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3171
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHipeAlnRep2
+objType file
+cell HIPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHipeAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3172
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHipeHotspotsRep1
+objType table
+cell HIPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHipeHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3171
+tableName wgEncodeUwDnaseHipeHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHipeHotspotsRep2
+objType table
+cell HIPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHipeHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3172
+tableName wgEncodeUwDnaseHipeHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHipePkRep1
+objType table
+cell HIPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHipePkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3171
+tableName wgEncodeUwDnaseHipePkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHipePkRep2
+objType table
+cell HIPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHipePkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3172
+tableName wgEncodeUwDnaseHipePkRep2
+treatment None
+view Peaks
 
 metaObject wgEncodeUwDnaseHipeRawDataRep1
 objType file
 cell HIPEpiC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-08
-dateUnrestricted 2010-10-07
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
 fileName wgEncodeUwDnaseHipeRawDataRep1.fastq.gz
 grant Stam
 lab UW
-origAssembly hg18
+origAssembly hg19
 project wgEncode
 replicate 1
-subId 925
+subId 3171
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHipeRawDataRep2
@@ -4836,17 +6726,58 @@ objType file
 cell HIPEpiC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-10
-dateUnrestricted 2010-10-09
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
 fileName wgEncodeUwDnaseHipeRawDataRep2.fastq.gz
 grant Stam
 lab UW
-origAssembly hg18
+origAssembly hg19
 project wgEncode
 replicate 2
-subId 964
+subId 3172
+treatment None
 view RawData
+
+metaObject wgEncodeUwDnaseHipeRawRep1
+objType table
+cell HIPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHipeRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3171
+tableName wgEncodeUwDnaseHipeRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHipeRawRep2
+objType table
+cell HIPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHipeRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3172
+tableName wgEncodeUwDnaseHipeRawRep2
+treatment None
+view RawSignal
 
 metaObject wgEncodeUwDnaseHl60AlnRep1
 objType file
@@ -4866,6 +6797,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1571
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHl60AlnRep2
@@ -4886,6 +6818,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1570
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHl60HotspotsRep1
@@ -4906,6 +6839,7 @@ project wgEncode
 replicate 1
 subId 1571
 tableName wgEncodeUwDnaseHl60HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHl60HotspotsRep2
@@ -4926,6 +6860,7 @@ project wgEncode
 replicate 2
 subId 1570
 tableName wgEncodeUwDnaseHl60HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHl60PkRep1
@@ -4946,6 +6881,7 @@ project wgEncode
 replicate 1
 subId 1571
 tableName wgEncodeUwDnaseHl60PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHl60PkRep2
@@ -4966,6 +6902,7 @@ project wgEncode
 replicate 2
 subId 1570
 tableName wgEncodeUwDnaseHl60PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHl60RawDataRep1V2
@@ -4984,6 +6921,7 @@ project wgEncode
 replicate 1
 subId 625
 submittedDataVersion V2 - Improved DNA library
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHl60RawDataRep2
@@ -5001,6 +6939,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 507
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHl60RawRep1
@@ -5021,6 +6960,7 @@ project wgEncode
 replicate 1
 subId 1571
 tableName wgEncodeUwDnaseHl60RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHl60RawRep2
@@ -5041,6 +6981,7 @@ project wgEncode
 replicate 2
 subId 1570
 tableName wgEncodeUwDnaseHl60RawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmecAlnRep1
@@ -5061,6 +7002,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1572
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmecAlnRep2
@@ -5080,6 +7022,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2044
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmecHotspotsRep1
@@ -5100,6 +7043,7 @@ project wgEncode
 replicate 1
 subId 1572
 tableName wgEncodeUwDnaseHmecHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmecHotspotsRep2
@@ -5119,6 +7063,7 @@ project wgEncode
 replicate 2
 subId 2044
 tableName wgEncodeUwDnaseHmecHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmecPkRep1
@@ -5139,6 +7084,7 @@ project wgEncode
 replicate 1
 subId 1572
 tableName wgEncodeUwDnaseHmecPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmecPkRep2
@@ -5158,6 +7104,7 @@ project wgEncode
 replicate 2
 subId 2044
 tableName wgEncodeUwDnaseHmecPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmecRawDataRep1
@@ -5175,6 +7122,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 627
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmecRawDataRep2
@@ -5192,6 +7140,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2044
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmecRawRep1
@@ -5212,6 +7161,7 @@ project wgEncode
 replicate 1
 subId 1572
 tableName wgEncodeUwDnaseHmecRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmecRawRep2
@@ -5231,6 +7181,7 @@ project wgEncode
 replicate 2
 subId 2044
 tableName wgEncodeUwDnaseHmecRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmfAlnRep1
@@ -5249,6 +7200,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2057
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmfAlnRep2
@@ -5267,6 +7219,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2058
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmfHotspotsRep1
@@ -5286,6 +7239,7 @@ project wgEncode
 replicate 1
 subId 2057
 tableName wgEncodeUwDnaseHmfHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmfHotspotsRep2
@@ -5305,6 +7259,7 @@ project wgEncode
 replicate 2
 subId 2058
 tableName wgEncodeUwDnaseHmfHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmfPkRep1
@@ -5324,6 +7279,7 @@ project wgEncode
 replicate 1
 subId 2057
 tableName wgEncodeUwDnaseHmfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmfPkRep2
@@ -5343,6 +7299,7 @@ project wgEncode
 replicate 2
 subId 2058
 tableName wgEncodeUwDnaseHmfPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmfRawDataRep1
@@ -5360,6 +7317,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2057
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmfRawDataRep2
@@ -5377,6 +7335,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2058
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmfRawRep1
@@ -5396,6 +7355,7 @@ project wgEncode
 replicate 1
 subId 2057
 tableName wgEncodeUwDnaseHmfRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmfRawRep2
@@ -5415,6 +7375,7 @@ project wgEncode
 replicate 2
 subId 2058
 tableName wgEncodeUwDnaseHmfRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmvecdbladAlnRep1
@@ -5433,6 +7394,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2063
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmvecdbladAlnRep2
@@ -5451,6 +7413,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2062
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmvecdbladHotspotsRep1
@@ -5470,6 +7433,7 @@ project wgEncode
 replicate 1
 subId 2063
 tableName wgEncodeUwDnaseHmvecdbladHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmvecdbladHotspotsRep2
@@ -5489,6 +7453,7 @@ project wgEncode
 replicate 2
 subId 2062
 tableName wgEncodeUwDnaseHmvecdbladHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmvecdbladPkRep1
@@ -5508,6 +7473,7 @@ project wgEncode
 replicate 1
 subId 2063
 tableName wgEncodeUwDnaseHmvecdbladPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmvecdbladPkRep2
@@ -5527,6 +7493,7 @@ project wgEncode
 replicate 2
 subId 2062
 tableName wgEncodeUwDnaseHmvecdbladPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmvecdbladRawDataRep1
@@ -5544,6 +7511,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2063
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmvecdbladRawDataRep2
@@ -5561,6 +7529,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2062
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmvecdbladRawRep1
@@ -5580,6 +7549,7 @@ project wgEncode
 replicate 1
 subId 2063
 tableName wgEncodeUwDnaseHmvecdbladRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmvecdbladRawRep2
@@ -5599,6 +7569,7 @@ project wgEncode
 replicate 2
 subId 2062
 tableName wgEncodeUwDnaseHmvecdbladRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmvecdblneoAlnRep1
@@ -5617,6 +7588,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2065
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmvecdblneoAlnRep2
@@ -5635,6 +7607,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2064
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmvecdblneoHotspotsRep1
@@ -5654,6 +7627,7 @@ project wgEncode
 replicate 1
 subId 2065
 tableName wgEncodeUwDnaseHmvecdblneoHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmvecdblneoHotspotsRep2
@@ -5673,6 +7647,7 @@ project wgEncode
 replicate 2
 subId 2064
 tableName wgEncodeUwDnaseHmvecdblneoHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmvecdblneoPkRep1
@@ -5692,6 +7667,7 @@ project wgEncode
 replicate 1
 subId 2065
 tableName wgEncodeUwDnaseHmvecdblneoPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmvecdblneoPkRep2
@@ -5711,6 +7687,7 @@ project wgEncode
 replicate 2
 subId 2064
 tableName wgEncodeUwDnaseHmvecdblneoPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmvecdblneoRawDataRep1
@@ -5728,6 +7705,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2065
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmvecdblneoRawDataRep2
@@ -5745,6 +7723,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2064
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmvecdblneoRawRep1
@@ -5764,6 +7743,7 @@ project wgEncode
 replicate 1
 subId 2065
 tableName wgEncodeUwDnaseHmvecdblneoRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmvecdblneoRawRep2
@@ -5783,6 +7763,7 @@ project wgEncode
 replicate 2
 subId 2064
 tableName wgEncodeUwDnaseHmvecdblneoRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmvecdlyadAlnRep1
@@ -5801,6 +7782,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2067
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmvecdlyadAlnRep2
@@ -5819,6 +7801,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2066
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmvecdlyadHotspotsRep1
@@ -5838,6 +7821,7 @@ project wgEncode
 replicate 1
 subId 2067
 tableName wgEncodeUwDnaseHmvecdlyadHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmvecdlyadHotspotsRep2
@@ -5857,6 +7841,7 @@ project wgEncode
 replicate 2
 subId 2066
 tableName wgEncodeUwDnaseHmvecdlyadHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmvecdlyadPkRep1
@@ -5876,6 +7861,7 @@ project wgEncode
 replicate 1
 subId 2067
 tableName wgEncodeUwDnaseHmvecdlyadPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmvecdlyadPkRep2
@@ -5895,6 +7881,7 @@ project wgEncode
 replicate 2
 subId 2066
 tableName wgEncodeUwDnaseHmvecdlyadPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmvecdlyadRawDataRep1
@@ -5912,6 +7899,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2067
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmvecdlyadRawDataRep2
@@ -5929,6 +7917,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2066
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmvecdlyadRawRep1
@@ -5948,6 +7937,7 @@ project wgEncode
 replicate 1
 subId 2067
 tableName wgEncodeUwDnaseHmvecdlyadRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmvecdlyadRawRep2
@@ -5967,6 +7957,7 @@ project wgEncode
 replicate 2
 subId 2066
 tableName wgEncodeUwDnaseHmvecdlyadRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmvecdlyneoAlnRep1
@@ -5985,6 +7976,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2069
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmvecdlyneoAlnRep2
@@ -6003,6 +7995,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2068
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmvecdlyneoHotspotsRep1
@@ -6022,6 +8015,7 @@ project wgEncode
 replicate 1
 subId 2069
 tableName wgEncodeUwDnaseHmvecdlyneoHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmvecdlyneoHotspotsRep2
@@ -6041,6 +8035,7 @@ project wgEncode
 replicate 2
 subId 2068
 tableName wgEncodeUwDnaseHmvecdlyneoHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmvecdlyneoPkRep1
@@ -6060,6 +8055,7 @@ project wgEncode
 replicate 1
 subId 2069
 tableName wgEncodeUwDnaseHmvecdlyneoPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmvecdlyneoPkRep2
@@ -6079,6 +8075,7 @@ project wgEncode
 replicate 2
 subId 2068
 tableName wgEncodeUwDnaseHmvecdlyneoPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmvecdlyneoRawDataRep1
@@ -6096,6 +8093,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2069
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmvecdlyneoRawDataRep2
@@ -6113,6 +8111,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2068
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmvecdlyneoRawRep1
@@ -6132,6 +8131,7 @@ project wgEncode
 replicate 1
 subId 2069
 tableName wgEncodeUwDnaseHmvecdlyneoRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmvecdlyneoRawRep2
@@ -6151,6 +8151,7 @@ project wgEncode
 replicate 2
 subId 2068
 tableName wgEncodeUwDnaseHmvecdlyneoRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmvecdneoAlnRep1
@@ -6169,6 +8170,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2071
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmvecdneoAlnRep2
@@ -6187,6 +8189,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2070
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmvecdneoHotspotsRep1
@@ -6206,6 +8209,7 @@ project wgEncode
 replicate 1
 subId 2071
 tableName wgEncodeUwDnaseHmvecdneoHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmvecdneoHotspotsRep2
@@ -6225,6 +8229,7 @@ project wgEncode
 replicate 2
 subId 2070
 tableName wgEncodeUwDnaseHmvecdneoHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmvecdneoPkRep1
@@ -6244,6 +8249,7 @@ project wgEncode
 replicate 1
 subId 2071
 tableName wgEncodeUwDnaseHmvecdneoPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmvecdneoPkRep2
@@ -6263,6 +8269,7 @@ project wgEncode
 replicate 2
 subId 2070
 tableName wgEncodeUwDnaseHmvecdneoPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmvecdneoRawDataRep1
@@ -6280,6 +8287,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2071
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmvecdneoRawDataRep2
@@ -6297,6 +8305,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2070
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmvecdneoRawRep1
@@ -6316,6 +8325,7 @@ project wgEncode
 replicate 1
 subId 2071
 tableName wgEncodeUwDnaseHmvecdneoRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmvecdneoRawRep2
@@ -6335,6 +8345,7 @@ project wgEncode
 replicate 2
 subId 2070
 tableName wgEncodeUwDnaseHmvecdneoRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmveclblAlnRep1
@@ -6353,6 +8364,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2039
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmveclblAlnRep2
@@ -6371,6 +8383,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2059
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmveclblHotspotsRep1
@@ -6390,6 +8403,7 @@ project wgEncode
 replicate 1
 subId 2039
 tableName wgEncodeUwDnaseHmveclblHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmveclblHotspotsRep2
@@ -6409,6 +8423,7 @@ project wgEncode
 replicate 2
 subId 2059
 tableName wgEncodeUwDnaseHmveclblHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmveclblPkRep1
@@ -6428,6 +8443,7 @@ project wgEncode
 replicate 1
 subId 2039
 tableName wgEncodeUwDnaseHmveclblPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmveclblPkRep2
@@ -6447,6 +8463,7 @@ project wgEncode
 replicate 2
 subId 2059
 tableName wgEncodeUwDnaseHmveclblPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmveclblRawDataRep1
@@ -6464,6 +8481,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2039
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmveclblRawDataRep2
@@ -6481,6 +8499,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2059
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmveclblRawRep1
@@ -6500,6 +8519,7 @@ project wgEncode
 replicate 1
 subId 2039
 tableName wgEncodeUwDnaseHmveclblRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmveclblRawRep2
@@ -6519,6 +8539,7 @@ project wgEncode
 replicate 2
 subId 2059
 tableName wgEncodeUwDnaseHmveclblRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmvecllyAlnRep1
@@ -6537,6 +8558,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2060
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmvecllyAlnRep2
@@ -6555,6 +8577,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2061
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHmvecllyHotspotsRep1
@@ -6574,6 +8597,7 @@ project wgEncode
 replicate 1
 subId 2060
 tableName wgEncodeUwDnaseHmvecllyHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmvecllyHotspotsRep2
@@ -6593,6 +8617,7 @@ project wgEncode
 replicate 2
 subId 2061
 tableName wgEncodeUwDnaseHmvecllyHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHmvecllyPkRep1
@@ -6612,6 +8637,7 @@ project wgEncode
 replicate 1
 subId 2060
 tableName wgEncodeUwDnaseHmvecllyPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmvecllyPkRep2
@@ -6631,6 +8657,7 @@ project wgEncode
 replicate 2
 subId 2061
 tableName wgEncodeUwDnaseHmvecllyPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHmvecllyRawDataRep1
@@ -6648,6 +8675,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2060
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmvecllyRawDataRep2
@@ -6665,6 +8693,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2061
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHmvecllyRawRep1
@@ -6684,6 +8713,7 @@ project wgEncode
 replicate 1
 subId 2060
 tableName wgEncodeUwDnaseHmvecllyRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHmvecllyRawRep2
@@ -6703,6 +8733,7 @@ project wgEncode
 replicate 2
 subId 2061
 tableName wgEncodeUwDnaseHmvecllyRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHnpceAlnRep1
@@ -6723,6 +8754,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1619
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHnpceAlnRep2
@@ -6743,6 +8775,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1620
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHnpceHotspotsRep1
@@ -6763,6 +8796,7 @@ project wgEncode
 replicate 1
 subId 1619
 tableName wgEncodeUwDnaseHnpceHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHnpceHotspotsRep2
@@ -6783,6 +8817,7 @@ project wgEncode
 replicate 2
 subId 1620
 tableName wgEncodeUwDnaseHnpceHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHnpcePkRep1
@@ -6803,6 +8838,7 @@ project wgEncode
 replicate 1
 subId 1619
 tableName wgEncodeUwDnaseHnpcePkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHnpcePkRep2
@@ -6823,6 +8859,28 @@ project wgEncode
 replicate 2
 subId 1620
 tableName wgEncodeUwDnaseHnpcePkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHnpcePkRep2V2
+objType table
+cell HNPCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseHnpcePkRep2V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseHnpcePkRep2V2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHnpceRawDataRep1
@@ -6840,6 +8898,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 926
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHnpceRawDataRep2
@@ -6857,6 +8916,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 927
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHnpceRawRep1
@@ -6877,6 +8937,7 @@ project wgEncode
 replicate 1
 subId 1619
 tableName wgEncodeUwDnaseHnpceRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHnpceRawRep2
@@ -6897,6 +8958,7 @@ project wgEncode
 replicate 2
 subId 1620
 tableName wgEncodeUwDnaseHnpceRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHpafAlnRep1
@@ -6915,6 +8977,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2072
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHpafAlnRep2
@@ -6933,6 +8996,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2073
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHpafHotspotsRep1
@@ -6952,6 +9016,7 @@ project wgEncode
 replicate 1
 subId 2072
 tableName wgEncodeUwDnaseHpafHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHpafHotspotsRep2
@@ -6971,6 +9036,7 @@ project wgEncode
 replicate 2
 subId 2073
 tableName wgEncodeUwDnaseHpafHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHpafPkRep1
@@ -6990,6 +9056,7 @@ project wgEncode
 replicate 1
 subId 2072
 tableName wgEncodeUwDnaseHpafPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHpafPkRep2
@@ -7009,6 +9076,7 @@ project wgEncode
 replicate 2
 subId 2073
 tableName wgEncodeUwDnaseHpafPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHpafRawDataRep1
@@ -7026,6 +9094,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2072
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHpafRawDataRep2
@@ -7043,6 +9112,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2073
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHpafRawRep1
@@ -7062,6 +9132,7 @@ project wgEncode
 replicate 1
 subId 2072
 tableName wgEncodeUwDnaseHpafRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHpafRawRep2
@@ -7081,6 +9152,7 @@ project wgEncode
 replicate 2
 subId 2073
 tableName wgEncodeUwDnaseHpafRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHpdlfAlnRep1
@@ -7099,6 +9171,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2077
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHpdlfAlnRep2
@@ -7117,6 +9190,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2076
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHpdlfHotspotsRep1
@@ -7136,6 +9210,7 @@ project wgEncode
 replicate 1
 subId 2077
 tableName wgEncodeUwDnaseHpdlfHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHpdlfHotspotsRep2
@@ -7155,6 +9230,7 @@ project wgEncode
 replicate 2
 subId 2076
 tableName wgEncodeUwDnaseHpdlfHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHpdlfPkRep1
@@ -7174,6 +9250,7 @@ project wgEncode
 replicate 1
 subId 2077
 tableName wgEncodeUwDnaseHpdlfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHpdlfPkRep2
@@ -7193,6 +9270,7 @@ project wgEncode
 replicate 2
 subId 2076
 tableName wgEncodeUwDnaseHpdlfPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHpdlfRawDataRep1
@@ -7210,6 +9288,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2077
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHpdlfRawDataRep2
@@ -7227,6 +9306,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2076
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHpdlfRawRep1
@@ -7246,6 +9326,7 @@ project wgEncode
 replicate 1
 subId 2077
 tableName wgEncodeUwDnaseHpdlfRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHpdlfRawRep2
@@ -7265,6 +9346,7 @@ project wgEncode
 replicate 2
 subId 2076
 tableName wgEncodeUwDnaseHpdlfRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHpfAlnRep1
@@ -7283,6 +9365,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2075
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHpfAlnRep2
@@ -7301,6 +9384,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2074
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHpfHotspotsRep1
@@ -7320,6 +9404,7 @@ project wgEncode
 replicate 1
 subId 2075
 tableName wgEncodeUwDnaseHpfHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHpfHotspotsRep2
@@ -7339,6 +9424,7 @@ project wgEncode
 replicate 2
 subId 2074
 tableName wgEncodeUwDnaseHpfHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHpfPkRep1
@@ -7358,6 +9444,7 @@ project wgEncode
 replicate 1
 subId 2075
 tableName wgEncodeUwDnaseHpfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHpfPkRep2
@@ -7377,6 +9464,7 @@ project wgEncode
 replicate 2
 subId 2074
 tableName wgEncodeUwDnaseHpfPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHpfRawDataRep1
@@ -7394,6 +9482,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2075
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHpfRawDataRep2
@@ -7411,6 +9500,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2074
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHpfRawRep1
@@ -7430,6 +9520,7 @@ project wgEncode
 replicate 1
 subId 2075
 tableName wgEncodeUwDnaseHpfRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHpfRawRep2
@@ -7449,6 +9540,7 @@ project wgEncode
 replicate 2
 subId 2074
 tableName wgEncodeUwDnaseHpfRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHrceAlnRep1
@@ -7469,6 +9561,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1577
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHrceAlnRep2
@@ -7489,6 +9582,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1566
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHrceHotspotsRep1
@@ -7509,6 +9603,7 @@ project wgEncode
 replicate 1
 subId 1577
 tableName wgEncodeUwDnaseHrceHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHrceHotspotsRep2
@@ -7529,41 +9624,8 @@ project wgEncode
 replicate 2
 subId 1566
 tableName wgEncodeUwDnaseHrceHotspotsRep2
+treatment None
 view Hotspots
-
-metaObject wgEncodeUwDnaseHrcepicRawDataRep1
-objType file
-cell HRCEpiC
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-02
-dateUnrestricted 2010-04-01
-fileName wgEncodeUwDnaseHrcepicRawDataRep1.fastq.gz
-grant Stam
-lab UW
-origAssembly hg18
-project wgEncode
-replicate 1
-subId 398
-view RawData
-
-metaObject wgEncodeUwDnaseHrcepicRawDataRep2
-objType file
-cell HRCEpiC
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-02
-dateUnrestricted 2010-04-01
-fileName wgEncodeUwDnaseHrcepicRawDataRep2.fastq.gz
-grant Stam
-lab UW
-origAssembly hg18
-project wgEncode
-replicate 2
-subId 399
-view RawData
 
 metaObject wgEncodeUwDnaseHrcePkRep1
 objType table
@@ -7583,6 +9645,7 @@ project wgEncode
 replicate 1
 subId 1577
 tableName wgEncodeUwDnaseHrcePkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHrcePkRep2
@@ -7603,7 +9666,44 @@ project wgEncode
 replicate 2
 subId 1566
 tableName wgEncodeUwDnaseHrcePkRep2
+treatment None
 view Peaks
+
+metaObject wgEncodeUwDnaseHrceRawDataRep1
+objType file
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrceRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 398
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHrceRawDataRep2
+objType file
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrceRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 399
+treatment None
+view RawData
 
 metaObject wgEncodeUwDnaseHrceRawRep1
 objType table
@@ -7623,6 +9723,7 @@ project wgEncode
 replicate 1
 subId 1577
 tableName wgEncodeUwDnaseHrceRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHrceRawRep2
@@ -7643,6 +9744,7 @@ project wgEncode
 replicate 2
 subId 1566
 tableName wgEncodeUwDnaseHrceRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHreAlnRep1
@@ -7663,6 +9765,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1578
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHreAlnRep2
@@ -7683,6 +9786,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1567
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHreHotspotsRep1
@@ -7703,6 +9807,7 @@ project wgEncode
 replicate 1
 subId 1578
 tableName wgEncodeUwDnaseHreHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHreHotspotsRep2
@@ -7723,6 +9828,7 @@ project wgEncode
 replicate 2
 subId 1567
 tableName wgEncodeUwDnaseHreHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHrePkRep1
@@ -7743,6 +9849,28 @@ project wgEncode
 replicate 1
 subId 1578
 tableName wgEncodeUwDnaseHrePkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHrePkRep1V2
+objType table
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseHrePkRep1V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseHrePkRep1V2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHrePkRep2
@@ -7763,6 +9891,28 @@ project wgEncode
 replicate 2
 subId 1567
 tableName wgEncodeUwDnaseHrePkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHrePkRep2V2
+objType table
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseHrePkRep2V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseHrePkRep2V2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHreRawDataRep1
@@ -7780,6 +9930,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 400
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHreRawDataRep2
@@ -7797,6 +9948,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 401
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHreRawRep1
@@ -7817,6 +9969,7 @@ project wgEncode
 replicate 1
 subId 1578
 tableName wgEncodeUwDnaseHreRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHreRawRep2
@@ -7837,6 +9990,201 @@ project wgEncode
 replicate 2
 subId 1567
 tableName wgEncodeUwDnaseHreRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHrgecAlnRep1
+objType file
+cell HRGEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHrgecAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3209
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHrgecAlnRep2
+objType file
+cell HRGEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHrgecAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3210
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHrgecHotspotsRep1
+objType table
+cell HRGEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHrgecHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3209
+tableName wgEncodeUwDnaseHrgecHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHrgecHotspotsRep2
+objType table
+cell HRGEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHrgecHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3210
+tableName wgEncodeUwDnaseHrgecHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHrgecPkRep1
+objType table
+cell HRGEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHrgecPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3209
+tableName wgEncodeUwDnaseHrgecPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHrgecPkRep2
+objType table
+cell HRGEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHrgecPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3210
+tableName wgEncodeUwDnaseHrgecPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHrgecRawDataRep1
+objType file
+cell HRGEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHrgecRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3209
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHrgecRawDataRep2
+objType file
+cell HRGEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHrgecRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3210
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHrgecRawRep1
+objType table
+cell HRGEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHrgecRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3209
+tableName wgEncodeUwDnaseHrgecRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHrgecRawRep2
+objType table
+cell HRGEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseHrgecRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3210
+tableName wgEncodeUwDnaseHrgecRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHrpeAlnRep1
@@ -7857,6 +10205,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1622
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHrpeAlnRep2
@@ -7877,6 +10226,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1621
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHrpeHotspotsRep1
@@ -7897,6 +10247,7 @@ project wgEncode
 replicate 1
 subId 1622
 tableName wgEncodeUwDnaseHrpeHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHrpeHotspotsRep2
@@ -7917,6 +10268,7 @@ project wgEncode
 replicate 2
 subId 1621
 tableName wgEncodeUwDnaseHrpeHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHrpePkRep1
@@ -7937,6 +10289,28 @@ project wgEncode
 replicate 1
 subId 1622
 tableName wgEncodeUwDnaseHrpePkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHrpePkRep1V2
+objType table
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseHrpePkRep1V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseHrpePkRep1V2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHrpePkRep2
@@ -7957,6 +10331,28 @@ project wgEncode
 replicate 2
 subId 1621
 tableName wgEncodeUwDnaseHrpePkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHrpePkRep2V2
+objType table
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseHrpePkRep2V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseHrpePkRep2V2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHrpeRawDataRep1
@@ -7974,6 +10370,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 930
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHrpeRawDataRep2
@@ -7991,6 +10388,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 929
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHrpeRawRep1
@@ -8011,6 +10409,7 @@ project wgEncode
 replicate 1
 subId 1622
 tableName wgEncodeUwDnaseHrpeRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHrpeRawRep2
@@ -8031,6 +10430,298 @@ project wgEncode
 replicate 2
 subId 1621
 tableName wgEncodeUwDnaseHrpeRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHsmmAlnRep1
+objType file
+cell HSMM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3173
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHsmmAlnRep2
+objType file
+cell HSMM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3174
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHsmmHotspotsRep1
+objType table
+cell HSMM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3173
+tableName wgEncodeUwDnaseHsmmHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHsmmHotspotsRep2
+objType table
+cell HSMM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3174
+tableName wgEncodeUwDnaseHsmmHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHsmmPkRep1
+objType table
+cell HSMM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3173
+tableName wgEncodeUwDnaseHsmmPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHsmmPkRep2
+objType table
+cell HSMM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3174
+tableName wgEncodeUwDnaseHsmmPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHsmmRawDataRep1
+objType file
+cell HSMM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3173
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHsmmRawDataRep2
+objType file
+cell HSMM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3174
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHsmmRawRep1
+objType table
+cell HSMM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3173
+tableName wgEncodeUwDnaseHsmmRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHsmmRawRep2
+objType table
+cell HSMM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3174
+tableName wgEncodeUwDnaseHsmmRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHsmmtAlnRep1
+objType file
+cell HSMMtube
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmtAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3175
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHsmmtHotspotsRep1
+objType table
+cell HSMMtube
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmtHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3175
+tableName wgEncodeUwDnaseHsmmtHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHsmmtPkRep1
+objType table
+cell HSMMtube
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmtPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3175
+tableName wgEncodeUwDnaseHsmmtPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHsmmtRawDataRep1
+objType file
+cell HSMMtube
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmtRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3175
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHsmmtRawRep1
+objType table
+cell HSMMtube
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHsmmtRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3175
+tableName wgEncodeUwDnaseHsmmtRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHuvecAlnRep1
@@ -8051,6 +10742,26 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1624
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHuvecAlnRep2
+objType file
+cell HUVEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHuvecAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3176
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHuvecHotspotsRep1
@@ -8071,6 +10782,27 @@ project wgEncode
 replicate 1
 subId 1624
 tableName wgEncodeUwDnaseHuvecHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHuvecHotspotsRep2
+objType table
+cell HUVEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHuvecHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3176
+tableName wgEncodeUwDnaseHuvecHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHuvecPkRep1
@@ -8091,6 +10823,48 @@ project wgEncode
 replicate 1
 subId 1624
 tableName wgEncodeUwDnaseHuvecPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHuvecPkRep1V2
+objType table
+cell HUVEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseHuvecPkRep1V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseHuvecPkRep1V2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHuvecPkRep2
+objType table
+cell HUVEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHuvecPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3176
+tableName wgEncodeUwDnaseHuvecPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHuvecRawDataRep1
@@ -8108,6 +10882,25 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 297
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHuvecRawDataRep2
+objType file
+cell HUVEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHuvecRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3176
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHuvecRawRep1
@@ -8128,6 +10921,27 @@ project wgEncode
 replicate 1
 subId 1624
 tableName wgEncodeUwDnaseHuvecRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHuvecRawRep2
+objType table
+cell HUVEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseHuvecRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3176
+tableName wgEncodeUwDnaseHuvecRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHvmfAlnRep1
@@ -8146,6 +10960,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2079
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHvmfAlnRep2
@@ -8164,6 +10979,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2078
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseHvmfHotspotsRep1
@@ -8183,6 +10999,7 @@ project wgEncode
 replicate 1
 subId 2079
 tableName wgEncodeUwDnaseHvmfHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHvmfHotspotsRep2
@@ -8202,6 +11019,7 @@ project wgEncode
 replicate 2
 subId 2078
 tableName wgEncodeUwDnaseHvmfHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseHvmfPkRep1
@@ -8221,6 +11039,7 @@ project wgEncode
 replicate 1
 subId 2079
 tableName wgEncodeUwDnaseHvmfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHvmfPkRep2
@@ -8240,6 +11059,7 @@ project wgEncode
 replicate 2
 subId 2078
 tableName wgEncodeUwDnaseHvmfPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseHvmfRawDataRep1
@@ -8257,6 +11077,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2079
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHvmfRawDataRep2
@@ -8274,6 +11095,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2078
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseHvmfRawRep1
@@ -8293,6 +11115,7 @@ project wgEncode
 replicate 1
 subId 2079
 tableName wgEncodeUwDnaseHvmfRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseHvmfRawRep2
@@ -8312,42 +11135,144 @@ project wgEncode
 replicate 2
 subId 2078
 tableName wgEncodeUwDnaseHvmfRawRep2
+treatment None
 view RawSignal
+
+metaObject wgEncodeUwDnaseJurkatAlnRep1
+objType file
+cell Jurkat
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseJurkatAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3178
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseJurkatAlnRep2
+objType file
+cell Jurkat
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseJurkatAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3177
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseJurkatHotspotsRep1
+objType table
+cell Jurkat
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseJurkatHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3178
+tableName wgEncodeUwDnaseJurkatHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseJurkatHotspotsRep2
+objType table
+cell Jurkat
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseJurkatHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3177
+tableName wgEncodeUwDnaseJurkatHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseJurkatPkRep1
+objType table
+cell Jurkat
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseJurkatPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3178
+tableName wgEncodeUwDnaseJurkatPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseJurkatPkRep2
+objType table
+cell Jurkat
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseJurkatPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3177
+tableName wgEncodeUwDnaseJurkatPkRep2
+treatment None
+view Peaks
 
 metaObject wgEncodeUwDnaseJurkatRawDataRep1
 objType file
 cell Jurkat
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-01-13
-dateSubmitted 2009-09-19
-dateUnrestricted 2010-06-19
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
 fileName wgEncodeUwDnaseJurkatRawDataRep1.fastq.gz
 grant Stam
 lab UW
-origAssembly hg18
+origAssembly hg19
 project wgEncode
 replicate 1
-subId 965
-view RawData
-
-metaObject wgEncodeUwDnaseJurkatRawDataRep1G1
-objType file
-cell Jurkat
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeUwDnaseJurkatRawDataRep1G1.fastq.gz
-grant Stam
-lab UW
-origAssembly hg18
-phase G1
-project wgEncode
-replicate 1
-subId 931
+subId 3178
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseJurkatRawDataRep2
@@ -8355,18 +11280,59 @@ objType file
 cell Jurkat
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-01-13
-dateSubmitted 2009-09-19
-dateUnrestricted 2010-06-19
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
 fileName wgEncodeUwDnaseJurkatRawDataRep2.fastq.gz
 grant Stam
 lab UW
-origAssembly hg18
+origAssembly hg19
 project wgEncode
 replicate 2
-subId 515
+subId 3177
+treatment None
 view RawData
+
+metaObject wgEncodeUwDnaseJurkatRawRep1
+objType table
+cell Jurkat
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseJurkatRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3178
+tableName wgEncodeUwDnaseJurkatRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseJurkatRawRep2
+objType table
+cell Jurkat
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseJurkatRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3177
+tableName wgEncodeUwDnaseJurkatRawRep2
+treatment None
+view RawSignal
 
 metaObject wgEncodeUwDnaseK562AlnRep1
 objType file
@@ -8386,6 +11352,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1676
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseK562AlnRep2
@@ -8406,6 +11373,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1675
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseK562HotspotsRep1
@@ -8426,6 +11394,7 @@ project wgEncode
 replicate 1
 subId 1676
 tableName wgEncodeUwDnaseK562HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseK562HotspotsRep2
@@ -8446,6 +11415,7 @@ project wgEncode
 replicate 2
 subId 1675
 tableName wgEncodeUwDnaseK562HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseK562PkRep1
@@ -8466,6 +11436,7 @@ project wgEncode
 replicate 1
 subId 1676
 tableName wgEncodeUwDnaseK562PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseK562PkRep2
@@ -8486,6 +11457,7 @@ project wgEncode
 replicate 2
 subId 1675
 tableName wgEncodeUwDnaseK562PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseK562RawDataRep1
@@ -8503,6 +11475,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 106
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseK562RawDataRep2
@@ -8520,6 +11493,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 106
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseK562RawRep1
@@ -8540,6 +11514,7 @@ project wgEncode
 replicate 1
 subId 1676
 tableName wgEncodeUwDnaseK562RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseK562RawRep2
@@ -8560,6 +11535,201 @@ project wgEncode
 replicate 2
 subId 1675
 tableName wgEncodeUwDnaseK562RawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseLncapAlnRep1
+objType file
+cell LNCaP
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseLncapAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3180
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseLncapAlnRep2
+objType file
+cell LNCaP
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseLncapAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3179
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseLncapHotspotsRep1
+objType table
+cell LNCaP
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseLncapHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3180
+tableName wgEncodeUwDnaseLncapHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseLncapHotspotsRep2
+objType table
+cell LNCaP
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseLncapHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3179
+tableName wgEncodeUwDnaseLncapHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseLncapPkRep1
+objType table
+cell LNCaP
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseLncapPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3180
+tableName wgEncodeUwDnaseLncapPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseLncapPkRep2
+objType table
+cell LNCaP
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseLncapPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3179
+tableName wgEncodeUwDnaseLncapPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseLncapRawDataRep1
+objType file
+cell LNCaP
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseLncapRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3180
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseLncapRawDataRep2
+objType file
+cell LNCaP
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseLncapRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3179
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseLncapRawRep1
+objType table
+cell LNCaP
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseLncapRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3180
+tableName wgEncodeUwDnaseLncapRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseLncapRawRep2
+objType table
+cell LNCaP
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseLncapRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3179
+tableName wgEncodeUwDnaseLncapRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseMcf7AlnRep1
@@ -8580,6 +11750,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1628
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseMcf7AlnRep2
@@ -8600,6 +11771,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1562
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseMcf7HotspotsRep1
@@ -8620,6 +11792,7 @@ project wgEncode
 replicate 1
 subId 1628
 tableName wgEncodeUwDnaseMcf7HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseMcf7HotspotsRep2
@@ -8640,6 +11813,7 @@ project wgEncode
 replicate 2
 subId 1562
 tableName wgEncodeUwDnaseMcf7HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseMcf7PkRep1
@@ -8660,6 +11834,7 @@ project wgEncode
 replicate 1
 subId 1628
 tableName wgEncodeUwDnaseMcf7PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseMcf7PkRep2
@@ -8680,6 +11855,7 @@ project wgEncode
 replicate 2
 subId 1562
 tableName wgEncodeUwDnaseMcf7PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseMcf7RawDataRep1
@@ -8697,6 +11873,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 592
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseMcf7RawDataRep2
@@ -8714,6 +11891,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 966
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseMcf7RawRep1
@@ -8734,6 +11912,7 @@ project wgEncode
 replicate 1
 subId 1628
 tableName wgEncodeUwDnaseMcf7RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseMcf7RawRep2
@@ -8754,6 +11933,104 @@ project wgEncode
 replicate 2
 subId 1562
 tableName wgEncodeUwDnaseMcf7RawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseMonocd14AlnRep1
+objType file
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14AlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3211
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseMonocd14HotspotsRep1
+objType table
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3211
+tableName wgEncodeUwDnaseMonocd14HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseMonocd14PkRep1
+objType table
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3211
+tableName wgEncodeUwDnaseMonocd14PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseMonocd14RawDataRep1
+objType file
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3211
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseMonocd14RawRep1
+objType table
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14RawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3211
+tableName wgEncodeUwDnaseMonocd14RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseNb4AlnRep1
@@ -8774,6 +12051,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1559
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseNb4AlnRep2
@@ -8794,6 +12072,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1558
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseNb4HotspotsRep1
@@ -8814,6 +12093,7 @@ project wgEncode
 replicate 1
 subId 1559
 tableName wgEncodeUwDnaseNb4HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseNb4HotspotsRep2
@@ -8834,6 +12114,7 @@ project wgEncode
 replicate 2
 subId 1558
 tableName wgEncodeUwDnaseNb4HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseNb4PkRep1
@@ -8854,6 +12135,7 @@ project wgEncode
 replicate 1
 subId 1559
 tableName wgEncodeUwDnaseNb4PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseNb4PkRep2
@@ -8874,6 +12156,7 @@ project wgEncode
 replicate 2
 subId 1558
 tableName wgEncodeUwDnaseNb4PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseNb4RawDataRep1V2
@@ -8892,6 +12175,7 @@ project wgEncode
 replicate 1
 subId 936
 submittedDataVersion V2 - promoted replicate to 1st rank
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseNb4RawDataRep2
@@ -8909,6 +12193,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 932
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseNb4RawRep1
@@ -8929,6 +12214,7 @@ project wgEncode
 replicate 1
 subId 1559
 tableName wgEncodeUwDnaseNb4RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseNb4RawRep2
@@ -8949,6 +12235,7 @@ project wgEncode
 replicate 2
 subId 1558
 tableName wgEncodeUwDnaseNb4RawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseNhaAlnRep1
@@ -8967,6 +12254,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2088
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseNhaAlnRep2
@@ -8985,6 +12273,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2089
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseNhaHotspotsRep1
@@ -9004,6 +12293,7 @@ project wgEncode
 replicate 1
 subId 2088
 tableName wgEncodeUwDnaseNhaHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseNhaHotspotsRep2
@@ -9023,6 +12313,7 @@ project wgEncode
 replicate 2
 subId 2089
 tableName wgEncodeUwDnaseNhaHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseNhaPkRep1
@@ -9042,6 +12333,7 @@ project wgEncode
 replicate 1
 subId 2088
 tableName wgEncodeUwDnaseNhaPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseNhaPkRep2
@@ -9061,6 +12353,7 @@ project wgEncode
 replicate 2
 subId 2089
 tableName wgEncodeUwDnaseNhaPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseNhaRawDataRep1
@@ -9078,6 +12371,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2088
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseNhaRawDataRep2
@@ -9095,6 +12389,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2089
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseNhaRawRep1
@@ -9114,6 +12409,7 @@ project wgEncode
 replicate 1
 subId 2088
 tableName wgEncodeUwDnaseNhaRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseNhaRawRep2
@@ -9133,6 +12429,7 @@ project wgEncode
 replicate 2
 subId 2089
 tableName wgEncodeUwDnaseNhaRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseNhdfadAlnRep1
@@ -9151,6 +12448,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2081
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseNhdfadAlnRep2
@@ -9169,6 +12467,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2080
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseNhdfadHotspotsRep1
@@ -9188,6 +12487,7 @@ project wgEncode
 replicate 1
 subId 2081
 tableName wgEncodeUwDnaseNhdfadHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseNhdfadHotspotsRep2
@@ -9207,6 +12507,7 @@ project wgEncode
 replicate 2
 subId 2080
 tableName wgEncodeUwDnaseNhdfadHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseNhdfadPkRep1
@@ -9226,6 +12527,7 @@ project wgEncode
 replicate 1
 subId 2081
 tableName wgEncodeUwDnaseNhdfadPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseNhdfadPkRep2
@@ -9245,6 +12547,7 @@ project wgEncode
 replicate 2
 subId 2080
 tableName wgEncodeUwDnaseNhdfadPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseNhdfadRawDataRep1
@@ -9262,6 +12565,7 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2081
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseNhdfadRawDataRep2
@@ -9279,6 +12583,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2080
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseNhdfadRawRep1
@@ -9298,6 +12603,7 @@ project wgEncode
 replicate 1
 subId 2081
 tableName wgEncodeUwDnaseNhdfadRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseNhdfadRawRep2
@@ -9317,6 +12623,7 @@ project wgEncode
 replicate 2
 subId 2080
 tableName wgEncodeUwDnaseNhdfadRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseNhdfneoAlnRep1
@@ -9337,6 +12644,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1629
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseNhdfneoAlnRep2
@@ -9357,6 +12665,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1568
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseNhdfneoHotspotsRep1
@@ -9377,6 +12686,7 @@ project wgEncode
 replicate 1
 subId 1629
 tableName wgEncodeUwDnaseNhdfneoHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseNhdfneoHotspotsRep2
@@ -9397,6 +12707,7 @@ project wgEncode
 replicate 2
 subId 1568
 tableName wgEncodeUwDnaseNhdfneoHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseNhdfneoPkRep1
@@ -9417,6 +12728,7 @@ project wgEncode
 replicate 1
 subId 1629
 tableName wgEncodeUwDnaseNhdfneoPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseNhdfneoPkRep2
@@ -9437,6 +12749,7 @@ project wgEncode
 replicate 2
 subId 1568
 tableName wgEncodeUwDnaseNhdfneoPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseNhdfneoRawDataRep1
@@ -9454,6 +12767,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 937
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseNhdfneoRawDataRep2
@@ -9471,6 +12785,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 938
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseNhdfneoRawRep1
@@ -9491,6 +12806,7 @@ project wgEncode
 replicate 1
 subId 1629
 tableName wgEncodeUwDnaseNhdfneoRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseNhdfneoRawRep2
@@ -9511,6 +12827,7 @@ project wgEncode
 replicate 2
 subId 1568
 tableName wgEncodeUwDnaseNhdfneoRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseNhekAlnRep1
@@ -9531,6 +12848,26 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1630
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseNhekAlnRep2
+objType file
+cell NHEK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseNhekAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3181
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseNhekHotspotsRep1
@@ -9551,6 +12888,27 @@ project wgEncode
 replicate 1
 subId 1630
 tableName wgEncodeUwDnaseNhekHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseNhekHotspotsRep2
+objType table
+cell NHEK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseNhekHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3181
+tableName wgEncodeUwDnaseNhekHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseNhekPkRep1
@@ -9571,6 +12929,27 @@ project wgEncode
 replicate 1
 subId 1630
 tableName wgEncodeUwDnaseNhekPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseNhekPkRep2
+objType table
+cell NHEK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseNhekPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3181
+tableName wgEncodeUwDnaseNhekPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseNhekRawDataRep1
@@ -9588,6 +12967,25 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 510
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseNhekRawDataRep2
+objType file
+cell NHEK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseNhekRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3181
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseNhekRawRep1
@@ -9608,6 +13006,27 @@ project wgEncode
 replicate 1
 subId 1630
 tableName wgEncodeUwDnaseNhekRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseNhekRawRep2
+objType table
+cell NHEK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseNhekRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3181
+tableName wgEncodeUwDnaseNhekRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseNhlfAlnRep1
@@ -9628,6 +13047,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1560
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseNhlfAlnRep2
@@ -9648,6 +13068,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1561
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseNhlfHotspotsRep1
@@ -9668,6 +13089,7 @@ project wgEncode
 replicate 1
 subId 1560
 tableName wgEncodeUwDnaseNhlfHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseNhlfHotspotsRep2
@@ -9688,6 +13110,7 @@ project wgEncode
 replicate 2
 subId 1561
 tableName wgEncodeUwDnaseNhlfHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseNhlfPkRep1
@@ -9708,6 +13131,7 @@ project wgEncode
 replicate 1
 subId 1560
 tableName wgEncodeUwDnaseNhlfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseNhlfPkRep2
@@ -9728,6 +13152,7 @@ project wgEncode
 replicate 2
 subId 1561
 tableName wgEncodeUwDnaseNhlfPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseNhlfRawDataRep1
@@ -9745,6 +13170,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 967
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseNhlfRawDataRep2
@@ -9762,6 +13188,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 968
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseNhlfRawRep1
@@ -9782,6 +13209,7 @@ project wgEncode
 replicate 1
 subId 1560
 tableName wgEncodeUwDnaseNhlfRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseNhlfRawRep2
@@ -9802,6 +13230,7 @@ project wgEncode
 replicate 2
 subId 1561
 tableName wgEncodeUwDnaseNhlfRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnasePanc1AlnRep1
@@ -9822,6 +13251,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1627
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnasePanc1AlnRep2
@@ -9842,6 +13272,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1569
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnasePanc1HotspotsRep1
@@ -9862,6 +13293,7 @@ project wgEncode
 replicate 1
 subId 1627
 tableName wgEncodeUwDnasePanc1HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnasePanc1HotspotsRep2
@@ -9882,6 +13314,7 @@ project wgEncode
 replicate 2
 subId 1569
 tableName wgEncodeUwDnasePanc1HotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnasePanc1PkRep1
@@ -9902,6 +13335,7 @@ project wgEncode
 replicate 1
 subId 1627
 tableName wgEncodeUwDnasePanc1PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnasePanc1PkRep2
@@ -9922,6 +13356,7 @@ project wgEncode
 replicate 2
 subId 1569
 tableName wgEncodeUwDnasePanc1PkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnasePanc1RawDataRep1
@@ -9939,6 +13374,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 512
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnasePanc1RawDataRep2
@@ -9956,6 +13392,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 511
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnasePanc1RawRep1
@@ -9976,6 +13413,7 @@ project wgEncode
 replicate 1
 subId 1627
 tableName wgEncodeUwDnasePanc1RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnasePanc1RawRep2
@@ -9996,6 +13434,201 @@ project wgEncode
 replicate 2
 subId 1569
 tableName wgEncodeUwDnasePanc1RawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseRptecAlnRep1
+objType file
+cell RPTEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseRptecAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3182
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseRptecAlnRep2
+objType file
+cell RPTEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseRptecAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3183
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseRptecHotspotsRep1
+objType table
+cell RPTEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseRptecHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3182
+tableName wgEncodeUwDnaseRptecHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseRptecHotspotsRep2
+objType table
+cell RPTEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseRptecHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3183
+tableName wgEncodeUwDnaseRptecHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseRptecPkRep1
+objType table
+cell RPTEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseRptecPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3182
+tableName wgEncodeUwDnaseRptecPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseRptecPkRep2
+objType table
+cell RPTEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseRptecPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3183
+tableName wgEncodeUwDnaseRptecPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseRptecRawDataRep1
+objType file
+cell RPTEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseRptecRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3182
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseRptecRawDataRep2
+objType file
+cell RPTEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseRptecRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3183
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseRptecRawRep1
+objType table
+cell RPTEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseRptecRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3182
+tableName wgEncodeUwDnaseRptecRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseRptecRawRep2
+objType table
+cell RPTEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseRptecRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3183
+tableName wgEncodeUwDnaseRptecRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseSaecAlnRep1
@@ -10016,6 +13649,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1557
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseSaecAlnRep2
@@ -10036,6 +13670,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1556
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseSaecHotspotsRep1
@@ -10056,6 +13691,7 @@ project wgEncode
 replicate 1
 subId 1557
 tableName wgEncodeUwDnaseSaecHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseSaecHotspotsRep2
@@ -10076,6 +13712,7 @@ project wgEncode
 replicate 2
 subId 1556
 tableName wgEncodeUwDnaseSaecHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseSaecPkRep1
@@ -10096,6 +13733,7 @@ project wgEncode
 replicate 1
 subId 1557
 tableName wgEncodeUwDnaseSaecPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseSaecPkRep2
@@ -10116,6 +13754,7 @@ project wgEncode
 replicate 2
 subId 1556
 tableName wgEncodeUwDnaseSaecPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseSaecRawDataRep1
@@ -10133,6 +13772,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 514
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseSaecRawDataRep2
@@ -10150,6 +13790,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 513
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseSaecRawRep1
@@ -10170,6 +13811,7 @@ project wgEncode
 replicate 1
 subId 1557
 tableName wgEncodeUwDnaseSaecRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseSaecRawRep2
@@ -10190,6 +13832,7 @@ project wgEncode
 replicate 2
 subId 1556
 tableName wgEncodeUwDnaseSaecRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseSkmcAlnRep1
@@ -10210,6 +13853,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1573
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseSkmcAlnRep2
@@ -10230,6 +13874,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1642
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseSkmcHotspotsRep1
@@ -10250,6 +13895,7 @@ project wgEncode
 replicate 1
 subId 1573
 tableName wgEncodeUwDnaseSkmcHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseSkmcHotspotsRep2
@@ -10270,6 +13916,7 @@ project wgEncode
 replicate 2
 subId 1642
 tableName wgEncodeUwDnaseSkmcHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseSkmcPkRep1
@@ -10290,6 +13937,7 @@ project wgEncode
 replicate 1
 subId 1573
 tableName wgEncodeUwDnaseSkmcPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseSkmcPkRep2
@@ -10310,6 +13958,7 @@ project wgEncode
 replicate 2
 subId 1642
 tableName wgEncodeUwDnaseSkmcPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseSkmcRawDataRep1V2
@@ -10329,6 +13978,7 @@ project wgEncode
 replicate 1
 subId 755
 submittedDataVersion V2 - Improved DNA library
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseSkmcRawDataRep2
@@ -10346,6 +13996,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 754
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseSkmcRawRep1
@@ -10366,6 +14017,7 @@ project wgEncode
 replicate 1
 subId 1573
 tableName wgEncodeUwDnaseSkmcRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseSkmcRawRep2
@@ -10386,6 +14038,201 @@ project wgEncode
 replicate 2
 subId 1642
 tableName wgEncodeUwDnaseSkmcRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseSknmcAlnRep1
+objType file
+cell SK-N-MC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseSknmcAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3184
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseSknmcAlnRep2
+objType file
+cell SK-N-MC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseSknmcAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3185
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseSknmcHotspotsRep1
+objType table
+cell SK-N-MC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseSknmcHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3184
+tableName wgEncodeUwDnaseSknmcHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseSknmcHotspotsRep2
+objType table
+cell SK-N-MC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseSknmcHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3185
+tableName wgEncodeUwDnaseSknmcHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseSknmcPkRep1
+objType table
+cell SK-N-MC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseSknmcPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3184
+tableName wgEncodeUwDnaseSknmcPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseSknmcPkRep2
+objType table
+cell SK-N-MC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseSknmcPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3185
+tableName wgEncodeUwDnaseSknmcPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseSknmcRawDataRep1
+objType file
+cell SK-N-MC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseSknmcRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3184
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseSknmcRawDataRep2
+objType file
+cell SK-N-MC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseSknmcRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3185
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseSknmcRawRep1
+objType table
+cell SK-N-MC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseSknmcRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3184
+tableName wgEncodeUwDnaseSknmcRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseSknmcRawRep2
+objType table
+cell SK-N-MC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseSknmcRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3185
+tableName wgEncodeUwDnaseSknmcRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseSknshraAlnRep1
@@ -10406,6 +14253,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1640
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseSknshraAlnRep2
@@ -10426,6 +14274,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 1643
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseSknshraHotspotsRep1
@@ -10446,6 +14295,7 @@ project wgEncode
 replicate 1
 subId 1640
 tableName wgEncodeUwDnaseSknshraHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseSknshraHotspotsRep2
@@ -10466,6 +14316,7 @@ project wgEncode
 replicate 2
 subId 1643
 tableName wgEncodeUwDnaseSknshraHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseSknshraPkRep1
@@ -10486,6 +14337,7 @@ project wgEncode
 replicate 1
 subId 1640
 tableName wgEncodeUwDnaseSknshraPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseSknshraPkRep2
@@ -10506,6 +14358,7 @@ project wgEncode
 replicate 2
 subId 1643
 tableName wgEncodeUwDnaseSknshraPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseSknshraRawDataRep1
@@ -10523,6 +14376,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 50
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseSknshraRawDataRep2V2
@@ -10541,6 +14395,7 @@ project wgEncode
 replicate 2
 subId 737
 submittedDataVersion V2 - Improved DNA library
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseSknshraRawRep1
@@ -10561,6 +14416,7 @@ project wgEncode
 replicate 1
 subId 1640
 tableName wgEncodeUwDnaseSknshraRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseSknshraRawRep2
@@ -10581,6 +14437,7 @@ project wgEncode
 replicate 2
 subId 1643
 tableName wgEncodeUwDnaseSknshraRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseTh1AlnRep1
@@ -10601,6 +14458,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1641
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseTh1HotspotsRep1
@@ -10621,6 +14479,7 @@ project wgEncode
 replicate 1
 subId 1641
 tableName wgEncodeUwDnaseTh1HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseTh1PkRep1
@@ -10641,6 +14500,7 @@ project wgEncode
 replicate 1
 subId 1641
 tableName wgEncodeUwDnaseTh1PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseTh1RawDataRep1
@@ -10658,6 +14518,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 49
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseTh1RawRep1
@@ -10678,6 +14539,7 @@ project wgEncode
 replicate 1
 subId 1641
 tableName wgEncodeUwDnaseTh1RawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwDnaseTh2AlnRep1
@@ -10698,6 +14560,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1677
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseTh2HotspotsRep1
@@ -10718,6 +14581,7 @@ project wgEncode
 replicate 1
 subId 1677
 tableName wgEncodeUwDnaseTh2HotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseTh2PkRep1
@@ -10738,6 +14602,7 @@ project wgEncode
 replicate 1
 subId 1677
 tableName wgEncodeUwDnaseTh2PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseTh2RawDataRep1
@@ -10755,6 +14620,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 312
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseTh2RawRep1
@@ -10775,6 +14641,589 @@ project wgEncode
 replicate 1
 subId 1677
 tableName wgEncodeUwDnaseTh2RawRep1
+treatment None
 view RawSignal
 
-# MAGIC: -1342548911
+metaObject wgEncodeUwDnaseWerirb1AlnRep1
+objType file
+cell WERI-Rb-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseWerirb1AlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3187
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseWerirb1AlnRep2
+objType file
+cell WERI-Rb-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseWerirb1AlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3186
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseWerirb1HotspotsRep1
+objType table
+cell WERI-Rb-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseWerirb1HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3187
+tableName wgEncodeUwDnaseWerirb1HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseWerirb1HotspotsRep2
+objType table
+cell WERI-Rb-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseWerirb1HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3186
+tableName wgEncodeUwDnaseWerirb1HotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseWerirb1PkRep1
+objType table
+cell WERI-Rb-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseWerirb1PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3187
+tableName wgEncodeUwDnaseWerirb1PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseWerirb1PkRep2
+objType table
+cell WERI-Rb-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseWerirb1PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3186
+tableName wgEncodeUwDnaseWerirb1PkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseWerirb1RawDataRep1
+objType file
+cell WERI-Rb-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseWerirb1RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3187
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseWerirb1RawDataRep2
+objType file
+cell WERI-Rb-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseWerirb1RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3186
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseWerirb1RawRep1
+objType table
+cell WERI-Rb-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseWerirb1RawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3187
+tableName wgEncodeUwDnaseWerirb1RawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseWerirb1RawRep2
+objType table
+cell WERI-Rb-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-06
+dateUnrestricted 2011-10-06
+fileName wgEncodeUwDnaseWerirb1RawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3186
+tableName wgEncodeUwDnaseWerirb1RawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseWi38AlnRep1
+objType file
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38AlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3212
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseWi38AlnRep2
+objType file
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38AlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3213
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseWi38HotspotsRep1
+objType table
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3212
+tableName wgEncodeUwDnaseWi38HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseWi38HotspotsRep2
+objType table
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3213
+tableName wgEncodeUwDnaseWi38HotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseWi38OhtamAlnRep1
+objType file
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38OhtamAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3214
+treatment 4OHTAM_20nM_72hr
+view Alignments
+
+metaObject wgEncodeUwDnaseWi38OhtamAlnRep2
+objType file
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38OhtamAlnRep2.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3215
+treatment 4OHTAM_20nM_72hr
+view Alignments
+
+metaObject wgEncodeUwDnaseWi38OhtamHotspotsRep1
+objType table
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38OhtamHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3214
+tableName wgEncodeUwDnaseWi38OhtamHotspotsRep1
+treatment 4OHTAM_20nM_72hr
+view Hotspots
+
+metaObject wgEncodeUwDnaseWi38OhtamHotspotsRep2
+objType table
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38OhtamHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3215
+tableName wgEncodeUwDnaseWi38OhtamHotspotsRep2
+treatment 4OHTAM_20nM_72hr
+view Hotspots
+
+metaObject wgEncodeUwDnaseWi38OhtamPkRep1
+objType table
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38OhtamPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3214
+tableName wgEncodeUwDnaseWi38OhtamPkRep1
+treatment 4OHTAM_20nM_72hr
+view Peaks
+
+metaObject wgEncodeUwDnaseWi38OhtamPkRep2
+objType table
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38OhtamPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3215
+tableName wgEncodeUwDnaseWi38OhtamPkRep2
+treatment 4OHTAM_20nM_72hr
+view Peaks
+
+metaObject wgEncodeUwDnaseWi38OhtamRawDataRep1
+objType file
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38OhtamRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3214
+treatment 4OHTAM_20nM_72hr
+view RawData
+
+metaObject wgEncodeUwDnaseWi38OhtamRawDataRep2
+objType file
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38OhtamRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3215
+treatment 4OHTAM_20nM_72hr
+view RawData
+
+metaObject wgEncodeUwDnaseWi38OhtamRawRep1
+objType table
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38OhtamRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3214
+tableName wgEncodeUwDnaseWi38OhtamRawRep1
+treatment 4OHTAM_20nM_72hr
+view RawSignal
+
+metaObject wgEncodeUwDnaseWi38OhtamRawRep2
+objType table
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38OhtamRawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3215
+tableName wgEncodeUwDnaseWi38OhtamRawRep2
+treatment 4OHTAM_20nM_72hr
+view RawSignal
+
+metaObject wgEncodeUwDnaseWi38PkRep1
+objType table
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3212
+tableName wgEncodeUwDnaseWi38PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseWi38PkRep2
+objType table
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3213
+tableName wgEncodeUwDnaseWi38PkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseWi38RawDataRep1
+objType file
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3212
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseWi38RawDataRep2
+objType file
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3213
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseWi38RawRep1
+objType table
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38RawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3212
+tableName wgEncodeUwDnaseWi38RawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseWi38RawRep2
+objType table
+cell WI-38
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseWi38RawRep2.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 3213
+tableName wgEncodeUwDnaseWi38RawRep2
+treatment None
+view RawSignal
+
+# MAGIC: -1532240322

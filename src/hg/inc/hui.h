@@ -5,6 +5,7 @@
 
 #include "cart.h"
 #include "trackDb.h"
+#include "customTrack.h"
 struct lineFile;
 
 void setUdcCacheDir();
@@ -849,6 +850,10 @@ struct trackNameAndLabel
 int trackNameAndLabelCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
 
+void rAddTrackListToHash(struct hash *trackHash, struct trackDb *tdbList, char *chrom,
+	boolean leafOnly);
+/* Recursively add trackList to trackHash */
+
 struct hash *trackHashMakeWithComposites(char *db,char *chrom,struct trackDb **tdbList,bool withComposites);
 // Make hash of trackDb items for this chromosome, including composites, not just the subtracks.
 // May pass in prepopulated trackDb list, or may receive the trackDb list as an inout.
@@ -894,6 +899,9 @@ char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct tra
 	char *vocabType, char *label);
 /* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
+
+char *controlledVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix);
+// returns allocated string of HTML link to controlled vocabulary term
 
 char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean
         showLongLabel,boolean showShortLabel, struct hash *trackHash);
@@ -1031,6 +1039,19 @@ struct dyString *dyAddFilterAsDouble(struct cart *cart, struct trackDb *tdb,
             uses:  defaultLimits: function param if no tdb limits settings found)
    The 'and' param allows stringing multiple where clauses together */
 
+#define ALL_SCORE_FILTERS_LOGIC
+#ifdef ALL_SCORE_FILTERS_LOGIC
+struct dyString *dyAddAllScoreFilters(struct cart *cart, struct trackDb *tdb, struct dyString *extraWhere,boolean *and);
+/* creates the where clause condition to gather together all random double filters
+   Filters are expected to follow
+        {fiterName}: trackDb min or min:max - default value(s);
+        {filterName}Min or {filterName}: min (user supplied) cart variable;
+        {filterName}Max: max (user supplied) cart variable;
+        {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
+            uses:  defaultLimits: function param if no tdb limits settings found)
+   The 'and' param and dyString in/out allows stringing multiple where clauses together */
+#endif///def ALL_SCORE_FILTERS_LOGIC
+
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
 
@@ -1109,6 +1130,7 @@ typedef struct _filterBy {
     char*htmlName;            // Name used in HTML/CGI
     boolean useIndex;         // The returned values should be indexes
     boolean valueAndLabel;    // If values list is value|label, then label is shown to the user
+    boolean colorFollows;     // If values list is value|label{#color, then bg color follows value and label
     struct slName *slValues;  // Values that can be filtered on (All is always implied)
     struct slName *slChoices; // Values that have been chosen
 } filterBy_t;
@@ -1122,7 +1144,7 @@ void filterBySetFree(filterBy_t **filterBySet);
 char *filterBySetClause(filterBy_t *filterBySet);
 /* returns the "column1 in (...) and column2 in (...)" clause for a set of filterBy structs */
 
-void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet);
+void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet, boolean onOneLine);
 /* Does the UI for a list of filterBy structure */
 
 struct dyString *dyAddFilterByClause(struct cart *cart, struct trackDb *tdb,
@@ -1173,5 +1195,15 @@ boolean hPrintPennantIcon(struct trackDb *tdb);
 boolean printPennantIconNote(struct trackDb *tdb);
 // Returns TRUE and prints out the "pennantIcon" and note when found.
 //This is used by hgTrackUi and hgc before printing out trackDb "html"
+
+void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed);
+// Methods for putting up type specific cfgs used by composites/subtracks in hui.c and exported for common use
+
+void printUpdateTime(char *database, struct trackDb *tdb,
+    struct customTrack *ct);
+/* display table update time, or in case of bbi file, file stat time */
+
+void printBbiUpdateTime(time_t *timep);
+/* for bbi files, print out the timep value */
 
 #endif /* HUI_H */

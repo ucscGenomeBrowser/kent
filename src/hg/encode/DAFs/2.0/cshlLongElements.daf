@@ -1,0 +1,76 @@
+# Data Agreement File for CSHL Long RNA-seq Elements  $Revision: 1.5 $
+
+# This file specifies the data agreement between your lab and
+# the DCC.  It should not be changed unilaterally.
+
+# The header for the related .ddf should look like this:
+# files view    cell    localization    rnaExtract      labProtocolId   labExpId        bioRep  origAssembly    replicate
+#
+#files          a list of files that will be concatenated together
+#view           the view of the data as described below
+#cell           the cell line (http://genome-test.cse.ucsc.edu/ENCODE/cellTypes.html)
+#localization   the cellular compartment (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#localization)
+#rnaExtract     the features of rnaExtract (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#rnaExtract )
+#labProtocolId  Transcriptome specific lab protocol ID, can be comma separated list for pooled
+#bioRep         Transcriptome specific bioRep ID, can be comma separated list for pooled
+#labExpId       optional lab internal identifiers, can be comma sepated list for pooled
+#origAssembly   optional Specifies if this is new data (hg19) or remapped data (hg18)
+#replicate      the replicate number, note that it will only work if the view has (hasReplicates yes)
+#
+#NOTE:  The optional columns do not have to be in the DDF for validation
+
+
+# Lab and general info
+dafVersion        2.0
+grant             Gingeras
+lab               CSHL
+dataType          RnaSeq
+compositeSuffix   CshlLongRnaSeq
+group             expression
+variables         cell, localization, rnaExtract
+assembly          hg19
+validationSettings none
+
+# Track/view definition
+view             Contigs     
+longLabelPrefix  CSHL Long Contigs
+type             bed6 +
+hasReplicates    no 
+required         yes
+downloadOnly     no 
+
+view             Junctions   
+type             bed6 +
+hasReplicates    no 
+required         yes
+downloadOnly     yes
+
+view             Exons       
+type             bed6 +
+hasReplicates    no 
+required         yes
+downloadOnly     yes
+
+view             GeneGencV3c
+type             gtf 
+hasReplicates    no 
+required         yes
+downloadOnly     yes
+
+view             TranscriptGencV3c
+type             gtf 
+hasReplicates    no 
+required         yes
+downloadOnly     yes
+
+view             GeneDeNovo
+type             gtf 
+hasReplicates    no 
+required         yes
+downloadOnly     yes
+
+view             TranscriptDeNovo
+type             gtf 
+hasReplicates    no 
+required         yes
+downloadOnly     yes

@@ -41,8 +41,11 @@ extern char *database;		/* Current database, often but not always dbDatabase. */
 extern char *freezeName;	/* Date of assembly. */
 extern struct trackDb *fullTrackList;	/* List of all tracks in database. */
 extern struct hash *fullTrackHash;     /* Hash of tracks in fullTrackList keyed by ->track field. */
+extern struct hash *fullTrackAndSubtrackHash;  /* All tracks and subtracks keyed by track field. */
 extern struct trackDb *forbiddenTrackList; /* List of tracks with 'tableBrowser off' setting. */
 extern struct trackDb *curTrack;	/* Currently selected track. */
+extern struct grp *fullGroupList;	/* List of all groups. */
+extern struct grp *curGroup;	/* Currently selected group. */
 extern struct customTrack *theCtList;	/* List of custom tracks. */
 extern char *curTable;	/* Current selected table. */
 struct joiner *allJoiner;	/* Info on how to join tables. */
@@ -139,9 +142,6 @@ void dbOverrideFromTable(char buf[256], char **pDb, char **pTable);
 /* If *pTable includes database, overrider *pDb with it, using
  * buf to hold string. */
 
-struct grp *makeGroupList(struct trackDb *trackList, boolean allTablesOk);
-/* Get list of groups that actually have something in them. */
-
 struct grp *findSelectedGroup(struct grp *groupList, char *cgiVar);
 /* Find user-selected group if possible.  If not then
  * go to various levels of defaults. */
@@ -165,6 +165,12 @@ struct asObject *asForTable(struct sqlConnection *conn, char *table);
 
 struct asColumn *asColumnFind(struct asObject *asObj, char *name);
 /* Return named column. */
+
+struct slName *asColNames(struct asObject *as);
+/* Get list of column names. */
+
+struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as);
+/* Convert asObject to list of sqlFieldTypes */
 
 char *connectingTableForTrack(char *rawTable);
 /* Return table name to use with all.joiner for track.
@@ -733,6 +739,10 @@ void wigShowFilter(struct sqlConnection *conn);
 boolean isBigWigTable(char *table);
 /* Return TRUE if table is bedGraph in current database's trackDb. */
 
+char *bigFileNameFromCtOrHub(char *table, struct sqlConnection *conn);
+/* If table is a custom track or hub track, return the bigDataUrl setting;
+ * otherwise return NULL.  Do a freeMem on returned string when done. */
+
 char *bigWigFileName(char *table, struct sqlConnection *conn);
 /* Return file name associated with bigWig.  This handles differences whether it's
  * a custom or built-in track.  Do a freeMem on returned string when done. */
@@ -747,10 +757,13 @@ void doSummaryStatsBigWig(struct sqlConnection *conn);
 /* Put up page showing summary stats for bigWig track. */
 
 /* ----------- BigBed business in bigBed.c -------------------- */
+boolean isBigBed(char *database, char *table, struct trackDb *parent, 
+	struct customTrack *(*ctLookupName)(char *table));
+/* Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed. */
 
 char *bigBedFileName(char *table, struct sqlConnection *conn);
 /* Return file name associated with bigBed.  This handles differences whether it's
- * a custom or built-in track.  Do a freeMem on returned string when done. */
+ * a custom or built-in track or hub.  Do a freeMem on returned string when done. */
 
 struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn);
 /* Get fields of bigBed into hti structure. */
@@ -774,6 +787,45 @@ void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *field
 
 void showSchemaBigBed(char *table);
 /* Show schema on bigBed. */
+
+/* More stuff in bigBed.c that makes use of autoSql files. */
+
+struct slName *asColNames(struct asObject *as);
+/* Get list of column names. */
+
+struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as);
+/* Convert asObject to list of sqlFieldTypes */
+
+/* BAM stuff from bam.c */
+
+struct asObject *bamAsObj();
+/* Return asObject describing fields of BAM */
+
+boolean isBamTable(char *table);
+/* Return TRUE if table corresponds to a BAM file. */
+
+struct slName *bamGetFields(char *table);
+/* Get fields of bam as simple name list. */
+
+struct sqlFieldType *bamListFieldsAndTypes();
+/* Get fields of bigBed as list of sqlFieldType. */
+
+struct hTableInfo *bamToHti(char *table);
+/* Get standard fields of BAM into hti structure. */
+
+void showSchemaBam(char *table);
+/* Show schema on bam. */
+
+void bamTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
+/* Print out selected fields from BAM.  If fields is NULL, then print out all fields. */
+
+struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn, 
+	char *db, char *table, struct region *regionList, struct lm *lm, 
+	int *retFieldCount);
+/* Get list of beds from BAM, in all regions, that pass filtering. */
+
+struct slName *randomBamIds(char *table, struct sqlConnection *conn, int count);
+/* Return some semi-random qName based IDs from a BAM file. */
 
 /* ----------- Custom track stuff. -------------- */
 struct customTrack *getCustomTracks();
@@ -1063,5 +1115,8 @@ void doOutMicroarrayNames(struct trackDb *tdb);
 /* Show the microarray names from .ra file */
 
 #define uglyw warn	/* Warn for debugging purposes. */
+
+int bigFileMaxOutput();
+/*	return maxOut value (cart variable defined on curTable)	*/
 
 #endif /* HGTABLES_H */

@@ -13,10 +13,13 @@
 #include "hgTracks.h"
 #include "cds.h"
 #include "bamFile.h"
+#include "wigCommon.h"
 #if (defined USE_BAM && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
 #endif//def USE_BAM && KNETFILE_HOOKS
+#include "bigWarn.h"
+#include "errCatch.h"
 
 static char const rcsid[] = "$Id: bamTrack.c,v 1.32 2010/05/27 21:13:24 angie Exp $";
 
@@ -33,6 +36,7 @@ struct bamTrackData
     int baseQualShadeMin;
     int baseQualShadeMax;
     };
+
 
 struct psl *pslFromBam(const bam1_t *bam)
 /* Translate BAM's numeric CIGAR encoding into PSL sufficient for cds.c (just coords,
@@ -454,71 +458,86 @@ void bamLoadItemsCore(struct track *tg, boolean isPaired)
 /* Load BAM data into tg->items item list, unless zoomed out so far
  * that the data would just end up in dense mode and be super-slow. */
 {
-struct hash *pairHash = isPaired ? hashNew(18) : NULL;
-int minAliQual = atoi(cartOrTdbString(cart, tg->tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT));
-char *colorMode = cartOrTdbString(cart, tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
-char *grayMode = cartOrTdbString(cart, tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
-char *userTag = cartOrTdbString(cart, tg->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
-int aliQualShadeMin = 0, aliQualShadeMax = 99, baseQualShadeMin = 0, baseQualShadeMax = 40;
-parseIntRangeSetting(tg->tdb, "aliQualRange", &aliQualShadeMin, &aliQualShadeMax);
-parseIntRangeSetting(tg->tdb, "baseQualRange", &baseQualShadeMin, &baseQualShadeMax);
-struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, userTag,
-			   aliQualShadeMin, aliQualShadeMax, baseQualShadeMin, baseQualShadeMax};
-char *fileName;
-if (tg->customPt)
+/* protect against temporary network error */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
     {
-    fileName = trackDbSetting(tg->tdb, "bigDataUrl");
+    struct hash *pairHash = isPaired ? hashNew(18) : NULL;
+    int minAliQual = atoi(cartOrTdbString(cart, tg->tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT));
+    char *colorMode = cartOrTdbString(cart, tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
+    char *grayMode = cartOrTdbString(cart, tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
+    char *userTag = cartOrTdbString(cart, tg->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
+    int aliQualShadeMin = 0, aliQualShadeMax = 99, baseQualShadeMin = 0, baseQualShadeMax = 40;
+    parseIntRangeSetting(tg->tdb, "aliQualRange", &aliQualShadeMin, &aliQualShadeMax);
+    parseIntRangeSetting(tg->tdb, "baseQualRange", &baseQualShadeMin, &baseQualShadeMax);
+    struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, userTag,
+			       aliQualShadeMin, aliQualShadeMax, baseQualShadeMin, baseQualShadeMax};
+    char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     if (fileName == NULL)
-	errAbort("bamLoadItemsCore: can't find bigDataUrl for custom track %s", tg->track);
-    }
-else
-    {
-    struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-    fileName = bamFileNameFromTable(conn, tg->table, chromName);
-    hFreeConn(&conn);
-    }
-
-char posForBam[512];
-safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
-if (!isPaired)
-    bamFetch(fileName, posForBam, addBam, &btd);
-else
-    {
-    char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
-    int pairSearchRange = atoi(setting);
-    if (pairSearchRange > 0)
-	safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName,
-	      max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-    bamFetch(fileName, posForBam, addBamPaired, &btd);
-    struct hashEl *hel;
-    struct hashCookie cookie = hashFirst(btd.pairHash);
-    while ((hel = hashNext(&cookie)) != NULL)
 	{
-	struct linkedFeatures *lf = hel->val;
-	if (lf->start < winEnd && lf->end > winStart)
-	    slAddHead(&(tg->items), lfsFromLf(lf));
+	if (tg->customPt)
+	    {
+	    errAbort("bamLoadItemsCore: can't find bigDataUrl for custom track %s", tg->track);
+	    }
+	else
+	    {
+	    struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
+	    fileName = bamFileNameFromTable(conn, tg->table, chromName);
+	    hFreeConn(&conn);
+	    }
+	}
+
+    char posForBam[512];
+    safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
+    if (!isPaired)
+	bamFetch(fileName, posForBam, addBam, &btd, NULL);
+    else
+	{
+	char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
+	int pairSearchRange = atoi(setting);
+	if (pairSearchRange > 0)
+	    safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName,
+		  max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
+	bamFetch(fileName, posForBam, addBamPaired, &btd, NULL);
+	struct hashEl *hel;
+	struct hashCookie cookie = hashFirst(btd.pairHash);
+	while ((hel = hashNext(&cookie)) != NULL)
+	    {
+	    struct linkedFeatures *lf = hel->val;
+	    if (lf->start < winEnd && lf->end > winStart)
+		slAddHead(&(tg->items), lfsFromLf(lf));
+	    }
+	}
+    if (tg->visibility != tvDense)
+	{
+	slReverse(&(tg->items));
+	if (isPaired)
+	    slSort(&(tg->items), linkedFeaturesSeriesCmp);
+	else if (sameString(colorMode, BAM_COLOR_MODE_STRAND))
+	    slSort(&(tg->items), linkedFeaturesCmpOri);
+	else if (sameString(colorMode, BAM_COLOR_MODE_GRAY) &&
+		 sameString(grayMode, BAM_GRAY_MODE_ALI_QUAL))
+	    slSort(&(tg->items), linkedFeaturesCmpScore);
+	else
+	    slSort(&(tg->items), linkedFeaturesCmpStart);
+	if (slCount(tg->items) > MAX_ITEMS_FOR_MAPBOX)
+	    {
+	    // flag drawItems to make a mapBox for the whole track
+	    tg->customInt = 1;
+	    tg->mapItem = dontMapItem;
+	    }
 	}
     }
-if (tg->visibility != tvDense)
+errCatchEnd(errCatch);
+if (errCatch->gotError)
     {
-    slReverse(&(tg->items));
-    if (isPaired)
-	slSort(&(tg->items), linkedFeaturesSeriesCmp);
-    else if (sameString(colorMode, BAM_COLOR_MODE_STRAND))
-	slSort(&(tg->items), linkedFeaturesCmpOri);
-    else if (sameString(colorMode, BAM_COLOR_MODE_GRAY) &&
-	     sameString(grayMode, BAM_GRAY_MODE_ALI_QUAL))
-	slSort(&(tg->items), linkedFeaturesCmpScore);
-    else
-	slSort(&(tg->items), linkedFeaturesCmpStart);
-    if (slCount(tg->items) > MAX_ITEMS_FOR_MAPBOX)
-        {
-        // flag drawItems to make a mapBox for the whole track
-        tg->customInt = 1;
-	tg->mapItem = dontMapItem;
-        }
+    tg->networkErrMsg = cloneString(errCatch->message->string);
+    tg->drawItems = bigDrawWarning;
+    tg->totalHeight = bigWarnTotalHeight;
     }
+errCatchFree(&errCatch);
 }
+
 
 void bamLoadItems(struct track *tg)
 /* Load single-ended-only BAM data into tg->items item list, unless zoomed out so far
@@ -526,6 +545,7 @@ void bamLoadItems(struct track *tg)
 {
 bamLoadItemsCore(tg, FALSE);
 }
+
 
 void bamPairedLoadItems(struct track *tg)
 /* Load possibly paired BAM data into tg->items item list, unless zoomed out so far
@@ -678,6 +698,38 @@ if (tg->limitedVis == tvDense)
 return;
 }
 
+static void doMapBoxPerRow(struct track *tg,
+	int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+int fontHeight = mgFontLineHeight(font);
+int numRows = tg->height / fontHeight;
+struct customTrack *ct = tg->customPt;
+char itemBuffer[1024];
+
+if (ct)
+    // this should have the trash file name instead of spacer
+    // but the click handler doesn't use it anyway
+    safef(itemBuffer, sizeof itemBuffer, "%s %s","spacer","zoom in");
+else
+    safef(itemBuffer, sizeof itemBuffer, "zoom in");
+
+while(numRows--)
+    {
+    char buffer[1024];
+
+    safef(buffer, sizeof buffer, 
+	"Too many items in display.  Zoom in to click on items. (%d)",numRows);
+    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, fontHeight,
+	tg->track, itemBuffer,
+	buffer);
+    yOff += fontHeight;
+    }
+
+// just do this once
+tg->customInt = 0;
+}
 
 void bamLinkedFeaturesSeriesDraw(struct track *tg,
 	int seqStart, int seqEnd,
@@ -689,13 +741,8 @@ linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
         font, color, vis);
 
 if(tg->customInt)
-    {
-    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, 
-        tg->track, tg->track, 
-        "Too many items in display.  Zoom in to click on items");
-    // just do this once
-    tg->customInt = 0;
-    }
+    doMapBoxPerRow(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+            font, color, vis);
 }
 
 void bamLinkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
@@ -707,13 +754,8 @@ linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
         font, color, vis);
 
 if(tg->customInt)
-    {
-    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, 
-        tg->track, tg->track, 
-        "Too many items in display.  Zoom in to click on items");
-    // just do this once
-    tg->customInt = 0;
-    }
+    doMapBoxPerRow(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+            font, color, vis);
 }
 
 void bamMethods(struct track *track)
@@ -721,8 +763,6 @@ void bamMethods(struct track *track)
 {
 #if (defined USE_BAM && defined KNETFILE_HOOKS)
 knetUdcInstall();
-if (udcCacheTimeout() < 300)
-    udcSetCacheTimeout(300);
 #endif//def USE_BAM && KNETFILE_HOOKS
 
 track->canPack = TRUE;
@@ -773,6 +813,126 @@ if (differentString(colorMode, "off"))
     track->colorShades = shadesOfGray;
 }
 
+struct bamWigTrackData
+{
+struct preDrawElement *preDraw;
+double scale;
+int width;
+int preDrawZero;
+};
+
+static void bamWigLoadItems(struct track *tg)
+{
+/* Figure out bigWig file name. */
+struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
+/* this should call bamFileNameFromTable with logic from bamLoadItemsCore to 
+ * check the bigDataUrl setting.  Fix this if bamWigs end up being
+ * a supported type.   It may be that this code gets rolled into
+ * normal BAM display... since that's the plan ;-).
+ */
+char *fileName = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
+tg->customPt = fileName;
+hFreeConn(&conn);
+}
+
+static int countBam(const bam1_t *bam, void *data)
+/* bam_fetch() calls this on each bam alignment retrieved.  */
+{
+struct bamWigTrackData *btd = (struct bamWigTrackData *)data;
+const bam1_core_t *core = &bam->core;
+
+int tLength=0, tPos = core->pos, qPos = 0;
+unsigned int *cigar = bam1_cigar(bam);
+int i;
+double scale = btd->scale;
+for (i = 0;  i < core->n_cigar;  i++)
+    {
+    char op;
+    int n = bamUnpackCigarElement(cigar[i], &op);
+    switch (op)
+	{
+	case 'M': // match or mismatch (gapless aligned block)
+	    {
+	    int start = (int)(scale * (tPos - winStart));
+	    int end = (int)(scale * ((tPos + n) - winStart));
+	    for(i=start; i < end; i++)
+		btd->preDraw[i + btd->preDrawZero].count++;
+	    tPos =  tPos + n;
+	    qPos =  qPos + n;
+	    tLength += n;
+	    break;
+	    }
+	case 'I': // inserted in query
+	    qPos += n;
+	    break;
+	case 'D': // deleted from query
+	case 'N': // long deletion from query (intron as opposed to small del)
+	    tPos += n;
+	    tLength += n;
+	    break;
+	case 'S': // skipped query bases at beginning or end ("soft clipping")
+	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
+	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
+	    break;
+	default:
+	    errAbort("countBam: unrecognized CIGAR op %c -- update me", op);
+	}
+
+    }
+return 0;
+}
+
+static void bamWigDrawItems(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis)
+{
+/* Allocate predraw area. */
+int preDrawZero, preDrawSize;
+struct preDrawContainer *preDrawList = NULL;
+struct bamWigTrackData *bwData;
+double scale = (double)width/(winEnd - winStart);
+
+AllocVar(bwData);
+bwData->preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
+bwData->scale = scale;
+bwData->width = width;
+bwData->preDrawZero = preDrawZero;
+
+char posForBam[512];
+safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
+
+char *fileName = tg->customPt;
+tg->customPt = NULL;
+
+bamFetch(fileName, posForBam, countBam, bwData, NULL);
+
+/* fill in rest of predraw */
+int i;
+for (i=0; i<width; ++i)
+    {
+    struct preDrawElement *pe = &bwData->preDraw[i + preDrawZero];
+    pe->min = pe->count;
+    pe->max = pe->count;
+    pe->sumData = pe->count / scale;
+    pe->sumSquares = (pe->count * pe->count)/scale;
+    }
+
+AllocVar(preDrawList);
+preDrawList->preDraw = bwData->preDraw;
+/* Call actual graphing routine. */
+wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+	       preDrawList, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+
+}
+
+void bamWigMethods(struct track *track, struct trackDb *tdb, 
+	int wordCount, char *words[])
+/* Set up bamWig methods. */
+{
+bedGraphMethods(track, tdb, wordCount, words);
+track->loadItems = bamWigLoadItems;
+track->drawItems = bamWigDrawItems;
+}
 #else /* no USE_BAM */
 
 #include "common.h"
@@ -794,35 +954,17 @@ hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message
 }
 
 void bamMethods(struct track *track)
-/* Methods for BAM alignment files. */
+/* Methods for BAM alignment files, in absence of USE_BAM (samtools lib). */
 {
-linkedFeaturesMethods(track);
-track->loadItems = dontLoadItems;
+messageLineMethods(track);
 track->drawItems = drawUseBamWarning;
-// Following few lines taken from hgTracks.c getTrackList, because this is called earlier
-// but needs to know track vis from tdb+cart:
-char *s = cartOptionalString(cart, track->track);
-if (cgiOptionalString("hideTracks"))
-    {
-    s = cgiOptionalString(track->track);
-    if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
-	{
-	cartSetString(cart, track->track, s);
-	}
-    }
-// end stuff copied from hgTracks.c
-enum trackVisibility trackVis = track->tdb->visibility;
-if (s != NULL)
-    trackVis = hTvFromString(s);
-if (trackVis != tvHide)
-    {
-    track->visibility = tvDense;
-    track->limitedVis = tvDense;
-    track->limitedVisSet = TRUE;
-    }
-track->nextItemButtonable = track->nextExonButtonable = FALSE;
-track->nextPrevItem = NULL;
-track->nextPrevExon = NULL;
+}
+
+void bamWigMethods(struct track *track, struct trackDb *tdb, 
+	int wordCount, char *words[])
+/* Same stub when compiled without USE_BAM. */
+{
+bamMethods(track);
 }
 
 #endif /* no USE_BAM */

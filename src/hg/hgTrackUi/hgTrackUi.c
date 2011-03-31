@@ -22,6 +22,7 @@
 #include "chainCart.h"
 #include "chainDb.h"
 #include "gvUi.h"
+#include "grp.h"
 #include "oregannoUi.h"
 #include "chromGraph.h"
 #include "hgConfig.h"
@@ -32,9 +33,12 @@
 #include "nonCodingUi.h"
 #include "expRecord.h"
 #include "wikiTrack.h"
+#include "hubConnect.h"
+#include "trackHub.h"
 #include "pcrResult.h"
 #include "dgv.h"
 #include "transMapStuff.h"
+#include "bbiFile.h"
 
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
@@ -143,9 +147,9 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
     }
 }
 
-/* A comment for the purposes of brancht-tag-move demo. */
-
 void snp125OfferGeneTracksForFunction(struct trackDb *tdb)
+/* Get a list of genePred tracks and make checkboxes to enable hgc's functional
+ * annotations. */
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct slName *genePredTables = hTrackTablesOfType(conn, "genePred%%"), *gt;
@@ -154,22 +158,27 @@ if (genePredTables != NULL)
     struct trackDb *geneTdbList = NULL, *gTdb;
     for (gt = genePredTables;  gt != NULL;  gt = gt->next)
 	{
-	gTdb = hTrackDbForTrack(database, gt->name);
+	gTdb = hashFindVal(trackHash, gt->name);
 	if (gTdb && sameString(gTdb->grp, "genes"))
 	    {
+	    // We are going to overwrite gTdb's next pointer and possibly its priority,
+	    // so make a shallow copy:
+	    gTdb = CloneVar(gTdb);
 	    if (gTdb->parent)
 		gTdb->priority = (gTdb->parent->priority + gTdb->priority/1000);
 	    slAddHead(&geneTdbList, gTdb);
 	    }
 	}
     slSort(&geneTdbList, trackDbCmp);
+    jsBeginCollapsibleSection(cart, tdb->track, "geneTracks",
+			      "Use Gene Tracks for Functional Annotation", FALSE);
     printf("<BR><B>On details page, show function and coding differences relative to: </B> ");
     char cartVar[256];
     safef(cartVar, sizeof(cartVar), "%s_geneTrack", tdb->track);
     jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
     jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
     struct slName *selectedGeneTracks = cartOptionalSlNameList(cart, cartVar);
-    if (selectedGeneTracks == NULL)
+    if (!cartListVarExists(cart, cartVar))
 	{
 	char *defaultGeneTracks = trackDbSetting(tdb, "defaultGeneTracks");
 	if (isNotEmpty(defaultGeneTracks))
@@ -185,70 +194,135 @@ if (genePredTables != NULL)
 	labels[i] = gTdb->shortLabel;
 	}
     cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedGeneTracks, numCols);
-    cgiMakeHiddenVar(cartVar, "persistentShadow");
+    jsEndCollapsibleSection();
     }
 hFreeConn(&conn);
 }
 
 #define SNP125_FILTER_COLUMNS 4
-#define SNP125_SET_ALL "snp125SetAll"
-#define SNP125_CLEAR_ALL "snp125ClearAll"
 #define SNP125_DEFAULTS "snp125Defaults"
 
-void snp125PrintFilterColGroup()
-/* Print the fancy COLGROUP for the table enclosing all filter checkbox
- * groups. */
-{
-int i;
-/* Each colgroup has a skinny column for checkboxes followed by a proportional
- * column for labels. */
-for (i = 0;  i < SNP125_FILTER_COLUMNS;  i++)
-    printf("<COLGROUP><COL><COL width=\"%d%%\"></COLGROUP>\n",
-	   round(100 / SNP125_FILTER_COLUMNS));
-}
-
-void snp125PrintFilterControls(char *attributeName,
-			       char *vars[], char *labels[], boolean checked[],
-			       boolean defaults[], int varCount)
+void snp125PrintFilterControls(char *track, char *attributeLabel, char *attributeVar,
+			       char *labels[], char *values[], int menuSize)
 /* Print two or more rows (attribute name header and row(s) of checkboxes)
  * of a table displaying snp125 attribute filter checkboxes. */
 {
-struct slName *varList = slNameListFromStringArray(vars, varCount);
-char buttonVar[1024];
-int i;
-printf("<TR><TD colspan=%d><B>%s:</B>&nbsp;\n",
-       SNP125_FILTER_COLUMNS*2, attributeName);
-safef(buttonVar, sizeof(buttonVar), "%s_%s", SNP125_SET_ALL, attributeName);
-stripChar(buttonVar, ' ');
-jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_SET_ALL_BUTTON_LABEL, "",
-		     varList, NULL, TRUE, TRUE);
-printf("&nbsp;\n");
-safef(buttonVar, sizeof(buttonVar), "%s_%s", SNP125_CLEAR_ALL, attributeName);
-stripChar(buttonVar, ' ');
-jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_CLEAR_ALL_BUTTON_LABEL, "",
-		     varList, NULL, TRUE, FALSE);
+char anchor[256];
+safecpy(anchor, sizeof(anchor), attributeVar);
+anchor[0] = toupper(anchor[0]);
+printf("<TR><TD><B><A HREF=\"#%s\">%s</A>:</B>&nbsp;\n", anchor, attributeLabel);
+char cartVar[256];
+safef(cartVar, sizeof(cartVar), "%s.include_%s", track, attributeVar);
+jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
+puts("&nbsp;");
+jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
+printf("</TD></TR>\n<TR><TD>\n");
+boolean foundInCart = FALSE;
+struct slName *selectedAttributes = snp125FilterFromCart(cart, track, attributeVar, &foundInCart);
+// Include all by default:
+if (! foundInCart)
+    selectedAttributes = slNameListFromStringArray(values, menuSize);
+cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedAttributes,
+			     SNP125_FILTER_COLUMNS);
 printf("</TD></TR>\n");
-for (i=0; i < varCount; i++)
-    {
-    checked[i] = cartUsualBoolean(cart, vars[i], defaults[i]);
-    if (i % SNP125_FILTER_COLUMNS == 0)
-	{
-	if (i > 0)
-	    printf("</TR>\n");
-	printf("<TR>");
-	}
-    printf("<TD>");
-    cgiMakeCheckBox(vars[i], checked[i]);
-    printf("</TD><TD>%s</TD>\n", labels[i]);
-    }
-printf("</TR>\n");
 }
 
-void snp125PrintColorSpec(char *vars[], char *labels[], char *selected[],
-			  char *defaults[], int varCount)
+static void snp125PrintFilterControlSection(struct trackDb *tdb, int version)
+/* Print a collapsible section of filtering controls on SNP properties, first numeric
+ * and then enum/set. */
+{
+char cartVar[512];
+printf("<TR><TD colspan=2><A name=\"filterControls\"></TD></TR>\n");
+jsBeginCollapsibleSection(cart, tdb->track, "filterByAttribute", "Filtering Options", FALSE);
+
+printf("<BR>\n");
+safef(cartVar, sizeof(cartVar), "%s.minAvHet", tdb->track);
+double minAvHet = cartUsualDouble(cart, cartVar,
+			     // Check old cart var name:
+			     cartUsualDouble(cart, "snp125AvHetCutoff", SNP125_DEFAULT_MIN_AVHET));
+printf("<B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
+cgiMakeDoubleVar(cartVar, minAvHet, 6);
+printf("<BR>\n");
+
+safef(cartVar, sizeof(cartVar), "%s.maxWeight", tdb->track);
+int defaultMaxWeight = SNP125_DEFAULT_MAX_WEIGHT;
+char *setting = trackDbSetting(tdb, "defaultMaxWeight");
+if (isNotEmpty(setting))
+    defaultMaxWeight = atoi(setting);
+int maxWeight = cartUsualInt(cart, cartVar,
+			     // Check old cart var name:
+			     cartUsualInt(cart, "snp125WeightCutoff", defaultMaxWeight));
+printf("<B>Maximum <A HREF=\"#Weight\">Weight</A>:</B>&nbsp;");
+cgiMakeIntVar(cartVar, maxWeight, 4);
+printf("&nbsp;<EM>Range: 1, 2 or 3; SNPs with higher weights are less reliable</EM><BR>\n");
+
+if (version >= 132)
+    {
+    printf("<B>Minimum number of distinct "
+	   "<A HREF=\"#Submitters\">Submitters</A>:</B>&nbsp;");
+    safef(cartVar, sizeof(cartVar), "%s.minSubmitters", tdb->track);
+    cgiMakeIntVar(cartVar, cartUsualInt(cart, cartVar, SNP132_DEFAULT_MIN_SUBMITTERS), 4);
+    printf("<BR>\n");
+    printf("<B><A HREF=\"#AlleleFreq\">Minor Allele Frequency</A> range:</B>&nbsp;");
+    safef(cartVar, sizeof(cartVar), "%s.minMinorAlFreq", tdb->track);
+    float maf = cartUsualDouble(cart, cartVar, SNP132_DEFAULT_MIN_MINOR_AL_FREQ);
+    cgiMakeDoubleVarInRange(cartVar, maf, NULL, 4, "0.0", "0.5");
+    printf(" to ");
+    safef(cartVar, sizeof(cartVar), "%s.maxMinorAlFreq", tdb->track);
+    maf = cartUsualDouble(cart, cartVar, SNP132_DEFAULT_MAX_MINOR_AL_FREQ);
+    cgiMakeDoubleVarInRange(cartVar, maf, NULL, 4, "0.0", "0.5");
+    printf(" <em>Range: 0.0 - 0.5</em>\n");
+    printf("<BR>\n");
+    printf("<B>Minimum chromosome sample count (2N) for "
+	   "<A HREF=\"#AlleleFreq\">Allele Frequency</A> data:</B>&nbsp;");
+    safef(cartVar, sizeof(cartVar), "%s.minAlFreq2N", tdb->track);
+    cgiMakeIntVar(cartVar, cartUsualInt(cart, cartVar, SNP132_DEFAULT_MIN_AL_FREQ_2N), 4);
+    printf("<BR>\n");
+    }
+
+printf("<BR>\n");
+
+printf("<B>Filter by attribute:</B><BR>\n");
+printf("Check the boxes below to include SNPs with those attributes.  "
+       "In order to be displayed, a SNP must pass the filter for each "
+       "category.  \n"
+       "Some assemblies may not contain any SNPs that have some of the "
+       "listed attributes.\n"
+       "<BR><BR>\n");
+
+printf("<TABLE border=0 cellspacing=0 cellpadding=0>\n");
+if (version <= 127)
+    snp125PrintFilterControls(tdb->track, "Location Type", "locType", snp125LocTypeLabels,
+			 snp125LocTypeDataName, snp125LocTypeArraySize);
+snp125PrintFilterControls(tdb->track, "Class", "class", snp125ClassLabels,
+			  snp125ClassDataName, snp125ClassArraySize);
+snp125PrintFilterControls(tdb->track, "Validation", "valid", snp125ValidLabels,
+			  snp125ValidDataName, snp125ValidArraySize);
+int funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
+snp125PrintFilterControls(tdb->track, "Function", "func", snp125FuncLabels,
+			  snp125FuncDataName, funcArraySize);
+snp125PrintFilterControls(tdb->track, "Molecule Type", "molType", snp125MolTypeLabels,
+			  snp125MolTypeDataName, snp125MolTypeArraySize);
+if (version >= 132)
+    {
+    snp125PrintFilterControls(tdb->track, "Unusual Conditions (UCSC)", "exceptions",
+		      snp132ExceptionLabels, snp132ExceptionVarName, snp132ExceptionArraySize);
+    snp125PrintFilterControls(tdb->track, "Miscellaneous Attributes (dbSNP)", "bitfields",
+		      snp132BitfieldLabels, snp132BitfieldDataName, snp132BitfieldArraySize);
+    }
+printf("</TABLE>\n");
+jsEndCollapsibleSection();
+}
+
+static void snp125PrintColorSpec(char *track, char *attribute, char *vars[], boolean varsAreOld,
+				 char *labels[], char *defaults[], int varCount)
 /* Print a table displaying snp125 attribute color selects. */
 {
 int i;
+printf("If a SNP has more than one of these attributes, the stronger color will override the\n"
+       "weaker color. The order of colors, from strongest to weakest, is red,\n"
+       "green, blue, gray, and black.\n"
+       "<BR><BR>\n");
 printf("<TABLE border=0 cellspacing=0 cellpadding=1>\n");
 for (i=0; i < varCount; i++)
     {
@@ -259,94 +333,95 @@ for (i=0; i < varCount; i++)
 	printf("<TR>");
 	}
     printf("<TD align=right>%s</TD><TD>", labels[i]);
-    selected[i] = cartUsualString(cart, vars[i], defaults[i]);
-    cgiMakeDropListWithVals(vars[i], snp125ColorLabel, snp125ColorLabel,
-			    snp125ColorLabelSize, selected[i]);
+    char cartVar[512];
+    safef(cartVar, sizeof(cartVar), "%s.%s%s", track, attribute,
+	  (varsAreOld ? snp125OldColorVarToNew(vars[i], attribute) : vars[i]));
+    char *defaultCol = defaults[i];
+    if (varsAreOld)
+	defaultCol = cartUsualString(cart, vars[i], defaultCol);
+    char *selected = cartUsualString(cart, cartVar, defaultCol);
+    cgiMakeDropListWithVals(cartVar, snp125ColorLabel, snp125ColorLabel,
+			    snp125ColorArraySize, selected);
     printf("</TD><TD>&nbsp;&nbsp;&nbsp;</TD>");
     }
 printf("</TABLE>\n");
 }
 
-void cartSetStringArray(struct cart *cart, char *vars[], char *defaults[],
-			int varCount)
-/* Given parallel arrays of variable names and default values, set those
- * cart variables to the default values.  If a NULL is encountered in
- * vars[], assume vars[] is NULL-terminated even if varCount has not
- * been reached. */
+static void snp125RemoveColorVars(struct cart *cart, char *vars[], boolean varsAreOld,
+				  int varCount, char *track, char *attribute)
+/* Remove each cart variable in vars[], as well as the new cart vars that begin with
+ * the track name if varsAreOld. */
 {
-if (vars == NULL)
-    return;
 int i;
 for (i = 0;  i < varCount;  i++)
     {
-    if (vars[i] == NULL)
-	break;
-    cartSetString(cart, vars[i], defaults[i]);
+    if (varsAreOld)
+	cartRemove(cart, vars[i]);
+    char cartVar[512];
+    safef(cartVar, sizeof(cartVar), "%s.%s%s", track, attribute,
+	  (varsAreOld ? snp125OldColorVarToNew(vars[i], attribute) : vars[i]));
+    cartRemove(cart, cartVar);
     }
 }
 
-void snp125Ui(struct trackDb *tdb)
-/* UI for dbSNP version 125 and later. */
+static void snp125ResetColorVarsIfNecessary(struct trackDb *tdb, char *buttonVar, int version)
+/* If the 'Set defaults' button has been clicked, remove all color-control cart variables. */
 {
-char autoSubmit[2048];
-char *orthoTable = snp125OrthoTable(tdb, NULL);
-int version = snpVersion(tdb->track);
-
-if (version < 130)
-    snp125ValidLabelsSize--; // no by-1000genomes
-
-if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
+// Note we use CGI, not cart, to detect a click:
+if (isNotEmpty(cgiOptionalString(buttonVar)))
     {
-    snp125ExtendedNames = cartUsualBoolean(cart, "snp125ExtendedNames", FALSE);
-    printf("<BR><B>Include Chimp state and observed human alleles in name: </B>&nbsp;");
-    cgiMakeCheckBox("snp125ExtendedNames",snp125ExtendedNames);
-    printf("<BR>(If enabled, chimp allele is displayed first, then '>', then human alleles). </B>&nbsp;");
-    printf("<BR>\n");
+    char cartVar[512];
+    safef(cartVar, sizeof(cartVar), "%s.colorSource", tdb->track);
+    cartRemove(cart, cartVar);
+    cartRemove(cart, snp125ColorSourceOldVar);
+    snp125RemoveColorVars(cart, snp125LocTypeOldColorVars,  TRUE, snp125LocTypeArraySize,
+			  tdb->track, "locType");
+    snp125RemoveColorVars(cart, snp125ClassOldColorVars, TRUE, snp125ClassArraySize,
+			  tdb->track, "class");
+    snp125RemoveColorVars(cart, snp125ValidOldColorVars, TRUE, snp125ValidArraySize,
+			  tdb->track, "valid");
+    int funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
+    snp125RemoveColorVars(cart, snp125FuncOldColorVars, TRUE, funcArraySize,
+			  tdb->track, "func");
+    snp125RemoveColorVars(cart, snp125MolTypeOldColorVars, TRUE, snp125MolTypeArraySize,
+			  tdb->track, "molType");
+    snp125RemoveColorVars(cart, snp132ExceptionVarName, FALSE, snp132ExceptionArraySize,
+			  tdb->track, "exceptions");
+    snp125RemoveColorVars(cart, snp132BitfieldVarName, FALSE, snp132BitfieldArraySize,
+			  tdb->track, "bitfields");
+    }
+}
+
+void snp125PrintColorControlSection(struct trackDb *tdb, int version)
+/* Print a collapsible section of color controls: user selects an attribute to color by,
+ * and then a color for each possible value of the selected attribute. */
+{
+printf("<TR><TD colspan=2><A name=\"colorSpec\"></TD></TR>\n");
+jsBeginCollapsibleSection(cart, tdb->track, "colorByAttribute", "Coloring Options", FALSE);
+
+char defaultButtonVar[512];
+safef(defaultButtonVar, sizeof(defaultButtonVar), "%s_coloring", SNP125_DEFAULTS);
+stripChar(defaultButtonVar, ' ');
+snp125ResetColorVarsIfNecessary(tdb, defaultButtonVar, version);
+
+printf("<BR><B>SNP Feature for Color Specification:</B>\n");
+char **labels = snp132ColorSourceLabels;
+int arraySize = snp132ColorSourceArraySize;
+if (version <= 127)
+    {
+    labels = snp125ColorSourceLabels;
+    arraySize = snp125ColorSourceArraySize;
+    }
+else if (version <= 131)
+    {
+    labels = snp128ColorSourceLabels;
+    arraySize = snp128ColorSourceArraySize;
     }
 
-snp125OfferGeneTracksForFunction(tdb);
-
-snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0"));
-printf("<BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
-cgiMakeDoubleVar("snp125AvHetCutoff",snp125AvHetCutoff,6);
-
-snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "3"));
-printf("<BR><B>Maximum <A HREF=\"#Weight\">Weight</A>:</B>&nbsp;");
-cgiMakeIntVar("snp125WeightCutoff",snp125WeightCutoff,4);
-printf("&nbsp;<I>SNPs with higher weights are less reliable</I><BR><BR>\n");
-
-printf("<A name=\"filterControls\"><HR>\n"
-       "<B>Filter by Attribute</B><BR>\n"
-       "Check the boxes below to include SNPs with those attributes.  "
-       "In order to be displayed, a SNP must pass the filter for each "
-       "category.  \n"
-       "Some assemblies may not contain any SNPs that have some of the "
-       "listed attributes.\n"
-       "<BR><BR>\n");
-
-printf("<TABLE border=0 cellspacing=0 cellpadding=0>\n");
-snp125PrintFilterColGroup();
-if (version <= 127)
-    snp125PrintFilterControls("Location Type", snp125LocTypeIncludeStrings,
-			 snp125LocTypeLabels, snp125LocTypeIncludeCart,
-			 snp125LocTypeIncludeDefault, snp125LocTypeLabelsSize);
-snp125PrintFilterControls("Class", snp125ClassIncludeStrings,
-			  snp125ClassLabels, snp125ClassIncludeCart,
-			  snp125ClassIncludeDefault, snp125ClassLabelsSize);
-snp125PrintFilterControls("Validation", snp125ValidIncludeStrings,
-			  snp125ValidLabels, snp125ValidIncludeCart,
-			  snp125ValidIncludeDefault, snp125ValidLabelsSize);
-int funcLabelsSize = (version < 130) ? snp125FuncLabelsSize : (snp125FuncLabelsSize - 1);
-snp125PrintFilterControls("Function", snp125FuncIncludeStrings,
-			  snp125FuncLabels, snp125FuncIncludeCart,
-			  snp125FuncIncludeDefault, funcLabelsSize);
-snp125PrintFilterControls("Molecule Type", snp125MolTypeIncludeStrings,
-			  snp125MolTypeLabels, snp125MolTypeIncludeCart,
-			  snp125MolTypeIncludeDefault, snp125MolTypeLabelsSize);
-printf("</TABLE><BR>\n");
-
-
-jsInit();
+// It would be preferable for Javascript to handle changing the color selection
+// menus when the color source selection changes, but for now we do a submit that
+// returns to the current vertical position:
+char autoSubmit[2048];
 safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
       "document."MAIN_FORM".action = '%s'; %s"
       "document."MAIN_FORM".submit();\"",
@@ -354,83 +429,105 @@ safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("c");
 
-/* The actual set defaults button is below, but we need to handle it here: */
-char defaultButton[1024];
-safef(defaultButton, sizeof(defaultButton), "%s_coloring", SNP125_DEFAULTS);
-stripChar(defaultButton, ' ');
-boolean defaultColoring = isNotEmpty(cgiOptionalString(defaultButton));
-if (defaultColoring)
-    {
-    cartSetString(cart,
-		  snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
-    cartSetStringArray(cart, snp125LocTypeStrings, snp125LocTypeDefault,
-		       snp125LocTypeLabelsSize);
-    cartSetStringArray(cart, snp125ClassStrings, snp125ClassDefault,
-		       snp125ClassLabelsSize);
-    cartSetStringArray(cart, snp125ValidStrings, snp125ValidDefault,
-		       snp125ValidLabelsSize);
-    cartSetStringArray(cart, snp125FuncStrings, snp125FuncDefault,
-		       funcLabelsSize);
-    cartSetStringArray(cart, snp125MolTypeStrings, snp125MolTypeDefault,
-		       snp125MolTypeLabelsSize);
-    }
-printf("<A name=\"colorSpec\"><HR>\n");
-printf("<B>SNP Feature for Color Specification:</B>\n");
-snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0],
-					   snp125ColorSourceDefault[0]);
-if (version <= 127)
-    cgiMakeDropListFull(snp125ColorSourceDataName[0], snp125ColorSourceLabels,
-			snp125ColorSourceLabels, snp125ColorSourceLabelsSize,
-			snp125ColorSourceCart[0], autoSubmit);
-else
-    {
-    if (stringArrayIx(snp125ColorSourceCart[0], snp128ColorSourceLabels,
-		      snp128ColorSourceLabelsSize) < 0)
-	snp125ColorSourceCart[0] = snp125ColorSourceDefault[0];
-    cgiMakeDropListFull(snp125ColorSourceDataName[0], snp128ColorSourceLabels,
-			snp128ColorSourceLabels, snp128ColorSourceLabelsSize,
-			snp125ColorSourceCart[0], autoSubmit);
-    }
+char cartVar[512];
+safef(cartVar, sizeof(cartVar), "%s.colorSource", tdb->track);
+enum snp125ColorSource colorSourceCart = snp125ColorSourceFromCart(cart, tdb);
+char *colorSourceSelected = snp125ColorSourceToLabel(tdb, colorSourceCart);
+cgiMakeDropListFull(cartVar, labels, labels, arraySize, colorSourceSelected, autoSubmit);
 printf("&nbsp;\n");
 char javascript[2048];
 safef(javascript, sizeof(javascript),
       "document."MAIN_FORM".action='%s'; %s document."MAIN_FORM".submit();",
       cgiScriptName(), jsSetVerticalPosition(MAIN_FORM));
-cgiMakeOnClickSubmitButton(javascript, defaultButton, JS_DEFAULTS_BUTTON_LABEL);
+cgiMakeOnClickSubmitButton(javascript, defaultButtonVar, JS_DEFAULTS_BUTTON_LABEL);
 printf("<BR><BR>\n"
        "The selected &quot;Feature for Color Specification&quot; above has the\n"
        "selection of colors below for each attribute. Only the color\n"
        "options for the feature selected above will be used to color items;\n"
-       "color options for other features will not be shown. If a SNP has more\n"
-       "than one of these attributes, the stronger color will override the\n"
-       "weaker color. The order of colors, from strongest to weakest, is red,\n"
-       "green, blue, gray, and black.\n"
-       "<BR><BR>\n");
+       "color options for other features will not be shown.\n");
 
-if (sameString(snp125ColorSourceCart[0], "Location Type"))
+if (version > 127 && colorSourceCart == snp125ColorSourceLocType)
+    colorSourceCart = SNP125_DEFAULT_COLOR_SOURCE;
+switch (colorSourceCart)
     {
-    if (version <= 127)
-	snp125PrintColorSpec(snp125LocTypeStrings, snp125LocTypeLabels,
-			     snp125LocTypeCart, snp125LocTypeDefault,
-			     snp125LocTypeLabelsSize);
+    int funcArraySize;
+    case snp125ColorSourceLocType:
+	snp125PrintColorSpec(tdb->track, "locType", snp125LocTypeOldColorVars, TRUE,
+			     snp125LocTypeLabels, snp125LocTypeDefault, snp125LocTypeArraySize);
+	break;
+    case snp125ColorSourceClass:
+    snp125PrintColorSpec(tdb->track, "class", snp125ClassOldColorVars, TRUE,
+			 snp125ClassLabels, snp125ClassDefault, snp125ClassArraySize);
+	break;
+    case snp125ColorSourceValid:
+    snp125PrintColorSpec(tdb->track, "valid", snp125ValidOldColorVars, TRUE,
+			 snp125ValidLabels, snp125ValidDefault, snp125ValidArraySize);
+	break;
+    case snp125ColorSourceFunc:
+	funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
+    snp125PrintColorSpec(tdb->track, "func", snp125FuncOldColorVars, TRUE,
+			 snp125FuncLabels, snp125FuncDefault, funcArraySize);
+	break;
+    case snp125ColorSourceMolType:
+    snp125PrintColorSpec(tdb->track, "molType", snp125MolTypeOldColorVars, TRUE,
+			 snp125MolTypeLabels, snp125MolTypeDefault, snp125MolTypeArraySize);
+	break;
+    case snp125ColorSourceExceptions:
+    snp125PrintColorSpec(tdb->track, "exceptions", snp132ExceptionVarName, FALSE,
+			 snp132ExceptionLabels, snp132ExceptionDefault, snp132ExceptionArraySize);
+	break;
+    case snp125ColorSourceBitfields:
+    snp125PrintColorSpec(tdb->track, "bitfields", snp132BitfieldVarName, FALSE,
+			 snp132BitfieldLabels, snp132BitfieldDefault, snp132BitfieldArraySize);
+	break;
+    case snp125ColorSourceAlleleFreq:
+	printf("<P>Items are be colored by allele frequency on a red-blue spectrum, "
+	       "with red representing rare alleles and blue representing common alleles. "
+	       "Items with no allele frequency data are colored black.</P>");
+	break;
+    default:
+	errAbort("Unrecognized value of enum snp125ColorSource (%d)", colorSourceCart);
     }
-else if (sameString(snp125ColorSourceCart[0], "Class"))
-    snp125PrintColorSpec(snp125ClassStrings, snp125ClassLabels,
-			 snp125ClassCart, snp125ClassDefault,
-			 snp125ClassLabelsSize);
-else if (sameString(snp125ColorSourceCart[0], "Validation"))
-    snp125PrintColorSpec(snp125ValidStrings, snp125ValidLabels,
-			 snp125ValidCart, snp125ValidDefault,
-			 snp125ValidLabelsSize);
-else if (sameString(snp125ColorSourceCart[0], "Function"))
-    snp125PrintColorSpec(snp125FuncStrings, snp125FuncLabels,
-			 snp125FuncCart, snp125FuncDefault,
-			 funcLabelsSize);
-else if (sameString(snp125ColorSourceCart[0], "Molecule Type"))
-    snp125PrintColorSpec(snp125MolTypeStrings, snp125MolTypeLabels,
-			 snp125MolTypeCart, snp125MolTypeDefault,
-			 snp125MolTypeLabelsSize);
-printf("<HR>\n");
+jsEndCollapsibleSection();
+}
+
+void snp125Ui(struct trackDb *tdb)
+/* UI for dbSNP version 125 and later. */
+{
+char *orthoTable = snp125OrthoTable(tdb, NULL);
+int version = snpVersion(tdb->track);
+char cartVar[512];
+jsInit();
+
+if (version < 130)
+    snp125ValidArraySize--; // no by-1000genomes
+
+if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
+    {
+    printf("<BR><B>Include Chimp state and observed human alleles in name: </B>&nbsp;");
+    safef(cartVar, sizeof(cartVar), "%s.extendedNames", tdb->track);
+    snp125ExtendedNames = cartUsualBoolean(cart, cartVar,
+			  // Check old cart var name for backwards compatibility w/ old sessions:
+					   cartUsualBoolean(cart, "snp125ExtendedNames", FALSE));
+    cgiMakeCheckBox(cartVar, snp125ExtendedNames);
+    printf("<BR>(If enabled, chimp allele is displayed first, then '>', then human alleles).");
+    printf("<BR><BR>\n");
+    }
+else
+    puts("<BR>");
+
+// Make wrapper table for collapsible sections:
+puts("<TABLE border=0 cellspacing=0 cellpadding=0>");
+
+snp125OfferGeneTracksForFunction(tdb);
+
+puts("<TR><TD colspan=2><BR></TD></TR>");
+snp125PrintFilterControlSection(tdb, version);
+puts("<TR><TD colspan=2><BR></TD></TR>");
+
+snp125PrintColorControlSection(tdb, version);
+// End wrapper table for collapsible sections:
+puts("</TABLE>");
 }
 
 void snpUi(struct trackDb *tdb)
@@ -1285,6 +1382,50 @@ hg17KgIdConfig(tdb);
 baseColorDrawOptDropDown(cart, tdb);
 }
 
+void omimLocationConfig(struct trackDb *tdb)
+/* Put up OMIM Location track controls */
+{
+char varName[64];
+char *geneLabel;
+safef(varName, sizeof(varName), "%s.label", tdb->track);
+geneLabel = cartUsualString(cart, varName, "OMIM ID");
+printf("<BR><B>Include Entries of:</B> ");
+printf("<UL>\n");
+printf("<LI>");
+labelMakeCheckBox(tdb, "class1", "class 1: disorder positioned by mapping of the wildtype gene", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "class2", "class 2: disease phenotype mapped", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "class3", "class 3: molecular basis of the disorder is known", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "class4", "class 4: chromosome deletion or duplication syndrome", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "others", "others", TRUE);
+printf("</UL>");
+}
+
+void omimGene2Config(struct trackDb *tdb)
+/* Put up OMIM Genes track controls */
+{
+char varName[64];
+char *geneLabel;
+safef(varName, sizeof(varName), "%s.label", tdb->track);
+geneLabel = cartUsualString(cart, varName, "OMIM ID");
+printf("<BR><B>Include Entries of:</B> ");
+printf("<UL>\n");
+printf("<LI>");
+labelMakeCheckBox(tdb, "class1", "class 1: disorder positioned by mapping of the wildtype gene", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "class2", "class 2: disease phenotype mapped", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "class3", "class 3: molecular basis of the disorder is known", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "class4", "class 4: chromosome deletion or duplication syndrome", TRUE);
+printf("<LI>");
+labelMakeCheckBox(tdb, "others", "others", TRUE);
+printf("</UL>");
+}
+
 void omimGeneIdConfig(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
@@ -1345,6 +1486,18 @@ void knownGeneUI(struct trackDb *tdb)
 knownGeneIdConfig(tdb);
 knownGeneShowWhatUi(tdb);
 baseColorDrawOptDropDown(cart, tdb);
+}
+
+void omimLocationUI(struct trackDb *tdb)
+/* Put up omimLcation-specific controls */
+{
+omimLocationConfig(tdb);
+}
+
+void omimGene2UI(struct trackDb *tdb)
+/* Put up omimGene2-specific controls */
+{
+omimGene2Config(tdb);
 }
 
 void omimGeneUI(struct trackDb *tdb)
@@ -2128,7 +2281,10 @@ printf("include\n");
 cgiMakeRadioButton(cartVarName, "exclude", !isInclude);
 printf("exclude<BR>\n");
 safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterPmId", tdb->track);
-struct slName *checked = cartOptionalSlNameList(cart, cartVarName);
+boolean filterPmIdInCart = cartListVarExists(cart, cartVarName);
+struct slName *checked = NULL;
+if (filterPmIdInCart)
+    checked = cartOptionalSlNameList(cart, cartVarName);
 #define MAX_DGV_REFS 128
 char *labelArr[MAX_DGV_REFS], *valueArr[MAX_DGV_REFS];
 int refCount = 0;
@@ -2142,6 +2298,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	  "&list_uids=%s&dopt=Abstract&tool=genome.ucsc.edu\" TARGET=_BLANK>%s</A>", pmId, ref);
     labelArr[refCount] = cloneString(label);
     valueArr[refCount++] = cloneString(pmId);
+    if (! filterPmIdInCart)
+	slNameAddHead(&checked, pmId);
     if (refCount >= MAX_DGV_REFS)
 	errAbort("dgvUi: %s has too many references (max %d)", tdb->track, MAX_DGV_REFS);
     }
@@ -2165,22 +2323,29 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     && !tdbIsDownloadsOnly(tdb))
 	// NOTE: tdb if composite, is not yet populated with it's own subtracks!
         continue;
-    printf("<TR>");
-    printf("<TD NOWRAP><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>",
-                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
-    printf("<TD>");
+    printf("<TR><TD NOWRAP>");
     if (tdbIsDownloadsOnly(tdb))
-        printf("&nbsp;");
+        printf("%s&nbsp;",tdb->shortLabel);
     else
-    {
+        printf("<A HREF='%s?%s=%u&c=%s&g=%s'>%s</A>&nbsp;",
+                (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
+                cartSessionVarName(), cartSessionId(cart),
+                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
+    printf("</TD><TD>");
+    if (tdbIsDownloadsOnly(tdb))
+        {
+        printf("<A HREF='%s?%s=%u&g=%s'>Downloads</A>",
+                hgFileUiName(),cartSessionVarName(), cartSessionId(cart), cgiEncode(tdb->track));
+        }
+    else
+        {
         enum trackVisibility tv =
                         hTvFromString(cartUsualString(cart, tdb->track,
                                                 hStringFromTv(tdb->visibility)));
         hTvDropDownClassVisOnly(tdb->track, tv, tdb->canPack,
                                 tv == tvHide ?  "hiddenText" : "normalText",
                                 trackDbSetting(tdb, "onlyVisibility"));
-    }
+        }
     printf("<TD>%s", tdb->longLabel);
     char *dataVersion = trackDbSetting(tdb, "dataVersion");
     if (dataVersion)
@@ -2237,6 +2402,10 @@ else if (sameString(track, "rgdGene2"))
         rgdGene2UI(tdb);
 else if (sameString(track, "knownGene"))
         knownGeneUI(tdb);
+else if (sameString(track, "omimLocation"))
+        omimLocationUI(tdb);
+else if (sameString(track, "omimGene2"))
+        omimGene2UI(tdb);
 else if (sameString(track, "omimGene"))
         omimGeneUI(tdb);
 else if (sameString(track, "hg17Kg"))
@@ -2283,6 +2452,8 @@ else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG")
 else if (sameString(track, "hgPcrResult"))
     pcrResultUi(tdb);
 else if (startsWith("bedGraph", tdb->type) || startsWith("bigWig", tdb->type))
+    wigCfgUi(cart,tdb,tdb->track,NULL, FALSE);
+else if (startsWith("bamWig", tdb->type))
     wigCfgUi(cart,tdb,tdb->track,NULL, FALSE);
 else if (startsWith("wig", tdb->type))
         {
@@ -2398,11 +2569,7 @@ else if (tdb->type != NULL)
             &&  !sameString(track, "jaxQTL3") && !sameString(track, "wgRna")
             &&  !startsWith("encodeGencodeIntron", track))
                 {
-                if (trackDbSetting(tdb, "scoreFilterMax"))
-                    scoreCfgUi(database, cart,tdb,tdb->track,NULL,
-                        sqlUnsigned(trackDbSetting(tdb, "scoreFilterMax")),FALSE);
-                else
-                    scoreCfgUi(database, cart,tdb,tdb->track,NULL,1000,FALSE);
+                cfgByCfgType(cfgBedScore,database, cart, tdb,tdb->track, NULL, trackDbSettingClosestToHomeOn(tdb, "boxedCfg"));
                 }
             }
         else if (sameWord(words[0], "bed5FloatScore") || sameWord(words[0], "bed5FloatScoreWithFdr"))
@@ -2498,18 +2665,37 @@ cartSaveSession(cart);
 printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
 /* Print link for parent track */
-struct trackDb *parentTdb = tdb->parent;
-if (parentTdb && !ajax)
+if (!ajax)
     {
-    char *encodedMapName = cgiEncode(parentTdb->track);
-    printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
-		hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-		chromosome, encodedMapName, parentTdb->shortLabel);
-    freeMem(encodedMapName);
+    if (tdb->parent)
+        {
+        char *encodedMapName = cgiEncode(tdb->parent->track);
+        printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
+                    hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+                    chromosome, encodedMapName, tdb->parent->shortLabel);
+        freeMem(encodedMapName);
+        }
+    else
+        {
+        struct grp *grp, *grps = hLoadGrps(database);
+        for (grp = grps; grp != NULL; grp = grp->next)
+            {
+            if (sameString(grp->name,tdb->grp))
+                {
+                printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&hgTracksConfigPage=configure&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",
+                        hgTracksName(), cartSessionVarName(), cartSessionId(cart),chromosome,tdb->grp,tdb->grp,grp->label,grp->label,endsWith(grp->label," Tracks")?"":" tracks");
+                break;
+                }
+            }
+        grpFreeList(&grps);
+        }
     }
     puts("<BR><BR>");
 
 if (ct && sameString(tdb->type, "maf"))
+    tdb->canPack = TRUE;
+else if (sameString(tdb->track, WIKI_TRACK_TABLE))
+    // special case wikiTrack (there's no trackDb entry); fixes redmine 2395
     tdb->canPack = TRUE;
 
 // Don't bother with vis controls for downloadsOnly
@@ -2523,7 +2709,9 @@ if (!tdbIsDownloadsOnly(tdb))
         if (tdbIsSuper(tdb))
             {
             /* This is a supertrack -- load its members and show hide/show dropdown */
-            hTrackDbLoadSuper(database, tdb);
+	    // hub tracks already have their subtracks loaded
+	    if (!isHubTrack(tdb->track))
+		hTrackDbLoadSuper(database, tdb);
             superTrackDropDown(cart, tdb, 1);
             }
         else
@@ -2574,7 +2762,7 @@ if (!tdbIsDownloadsOnly(tdb))
 if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb))
     {
     // NAVLINKS - For pages w/ matrix, add Description, Subtracks and Downloads links
-    if (trackDbSetting(tdb, "dimensions"))
+    if (trackDbSetting(tdb, "dimensions") || (trackDbSetting(tdb, "wgEncode") && tdbIsComposite(tdb)))
         {
         printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
         if (trackDbSetting(tdb, "wgEncode"))
@@ -2609,6 +2797,13 @@ if (ct)
     cartSaveSession(cart);
     cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
     puts("</FORM>\n");
+    if (ct->bbiFile)
+	{
+	time_t timep = bbiUpdateTime(ct->bbiFile);
+	printBbiUpdateTime(&timep);
+	}
+    else
+	printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
     }
 
 if (!ct)
@@ -2621,17 +2816,7 @@ if (!ct)
    /* Print lift information from trackDb, if any */
    trackDbPrintOrigAssembly(tdb, database);
 
-   if (hTableOrSplitExists(database, tdb->table))
-        {
-        /* Print update time of the table (or one of the components if split) */
-        char *tableName = hTableForTrack(database, tdb->table);
-	struct sqlConnection *conn = hAllocConnProfile(getTrackProfileName(tdb), database);
-
-	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
-	if (date != NULL && !startsWith("wigMaf", tdb->type))
-	    printf("<B>Data last updated:</B> %s<BR>\n", date);
-	hFreeConn(&conn);
-	}
+    printUpdateTime(database, tdb, NULL);
     }
 
 if (tdb->html != NULL && tdb->html[0] != 0)
@@ -2732,6 +2917,10 @@ else if (isCustomTrack(track))
             }
         }
     }
+else if (isHubTrack(track))
+    {
+    tdb = hubConnectAddHubForTrackAndFindTdb(database, track, &tdbList, trackHash);
+    }
 else if (sameString(track, "hgPcrResult"))
     tdb = pcrResultFakeTdb();
 else
@@ -2780,6 +2969,7 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
+setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

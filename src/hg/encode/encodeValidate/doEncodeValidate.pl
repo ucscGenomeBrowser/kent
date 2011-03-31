@@ -177,6 +177,9 @@ our %validators = (
     protocol => \&validateControlledVocabOrControl,
     phase => \&validateControlledVocabOrControl,
     restrictionEnzyme => \&validateControlledVocabOrControl,
+    obtainedBy => \&validateObtainedBy,
+    md5sum => \&validateNoValidation,
+    bioRep => \&validateNoValidation,
     default => \&validateControlledVocab,
     );
 
@@ -256,6 +259,7 @@ sub validateSetType {
     return ();
 }
 
+
 # project-specific validators
 
 sub validateControlledVocabOrControl {
@@ -272,6 +276,12 @@ sub validateControlledVocab {
     my ($val, $type) = @_;
     return defined($terms{$type}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
+
+sub validateObtainedBy {
+    my ($val,$type) = @_;
+    return defined($terms{'lab'}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
+}
+
 
 ############################################################################
 # Format checkers - check file format for given types; extend when adding new
@@ -315,6 +325,10 @@ our %formatCheckers = (
     bigWig => \&validateBigWig,
     bam => \&validateBam,
     shortFrags => \&validateBed,
+    bedLogR => \&validateBed,
+    bedRnaElements => \&validateBed,
+    bedRrbs => \&validateBed,
+    txt  => \&validateFreepass,
     );
 
 my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
@@ -577,7 +591,7 @@ sub validateGtf {
     }
     HgAutomate::verbose(2, "validateGtf(path=$path,file=$file,type=$type)\n");
     # XXXX Add support for $opt_quick
-    my $err = system ( "gtfToGenePred $filePath $outFile >$errFile 2>&1");
+    my $err = system ( "gtfToGenePred -simple $filePath $outFile >$errFile 2>&1");
     if ($err) {
         print STDERR  "File \'$file\' failed GTF validation\n";
         open(ERR, "$errFile") || die "ERROR: Can't open gtfToGenePred error file \'$errFile\': $!\n";
@@ -750,7 +764,7 @@ sub validateFastQ
     # - The 2 urls above show how to convert between both
     my ($path, $file, $type) = @_;
     my $paramList = validationSettings("validateFiles","fastq");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=fastq $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=fastq \"$file\""]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateFastQ : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -1190,7 +1204,10 @@ sub printCompositeTdbSettings {
                             } else {
                                 if (defined($terms{"control"}->{$term})) {
                                     $tag=$terms{"control"}->{$term}->{"tag"};
-                                } else {
+                                }
+			       	elsif (defined($terms{"lab"}->{$term})) {
+			    	    $tag=$terms{"lab"}->{$term}->{"tag"};
+				}	    else {
                                     die "'$term' is not a registered '$cvTypeVar' term\n";
                                 }
                             }
@@ -1895,7 +1912,9 @@ foreach my $ddfLine (@ddfLines) {
                 $cvTypeVar = "Antibody";
             } elsif ($var eq "cell") {
                 $cvTypeVar = "Cell Line";
-            }
+            } elsif ($var eq "obtainedBy") {
+		$cvTypeVar = "lab";
+	     }
             if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
                 $cvTypeVar = "control";
             }
@@ -1941,7 +1960,7 @@ foreach my $ddfLine (@ddfLines) {
             $pushQDescription = "$hash{'cell'}";
             $shortSuffix = "$hash{'cell'}";
             $longSuffix = "in $hash{'cell'} cells";
-            $tier1 = 1 if ($hash{'cell'} eq 'GM12878' || $hash{'cell'} eq 'K562');
+            $tier1 = 1 if ($hash{'cell'} eq 'GM12878' || $hash{'cell'} eq 'K562' || $hash{'cell'} eq 'H1hESC');
         } else {
 	    warn "Warning: variables undefined for pushQDescription,shortSuffix,longSuffix\n";
     	}
@@ -1970,7 +1989,13 @@ foreach my $ddfLine (@ddfLines) {
             } elsif ($var eq "cell") {
                 $groupVar = "cellType";
                 $cvTypeVar = "Cell Line";
-            }
+            } elsif ($var eq "obtainedBy") {
+              #Not sure why when we check for obtainedBy subGroups prints out and when when this is
+	      # not pressent the subGroups provides error of unitialized.
+	      # The behavior is odd since there is no $var of obtainedBy in the cv.ra
+     		$cvTypeVar = "lab";
+	    }
+
             if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
                 $cvTypeVar = "control";
             }
@@ -2107,6 +2132,7 @@ foreach my $ddfLine (@ddfLines) {
         my $metaextra = " fileName=$tableName.$fileType";
         print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
     } else {
+        $fileType = "bed" if ($type =~ /^bed /);
         my $metaextra = " fileName=$tableName.$fileType.gz";
         print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
     }
@@ -2126,7 +2152,6 @@ foreach my $ddfLine (@ddfLines) {
     }
     if(!$downloadOnly) {
         print TRACK_RA "        track $tableName\n";
-        print TRACK_RA "        release alpha\n";
         if ($tier1 eq 1) {
             # default to only Tier1 subtracks visible.  Wrangler should review if this is
             #   correct for the track
@@ -2199,38 +2224,6 @@ if($submitPath =~ /(\d+)$/) {
              $daf->{assembly}, $daf->{lab}, $daf->{dataType}, $compositeTrack, $id);
     }
 }
-
-my @cmds;
-# push @cmds, "docIdSubmitDir encpipeline_beta $submitPath  /hive/groups/encode/dcc/pipeline/downloads/betaDocId";
-push @cmds, "docIdSubmitDir encpipeline_prod $submitPath  /hive/groups/encode/dcc/pipeline/downloads/docId";
-my $safe = SafePipe->new(CMDS => \@cmds,  DEBUG => $opt_verbose - 1);
-if(my $err = $safe->exec()) {
-    my $err = $safe->stderr();
-    printf "Could not submit to docId system: " . $err;
-    exit 1;
-}
-
-# commenting this out until we decide to roll-out name changes
-
-# undef(@cmds);
-# push @cmds, "mv $submitPath/out/trackDb.ra  $submitPath/out/trackDb.ra.preDocId; sed -f $submitPath/out/edit.sed $submitPath/out/trackDb.ra.preDocId" ;
-
-# $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "$submitPath/out/trackDb.ra",  DEBUG => $opt_verbose - 1);
-# if(my $err = $safe->exec()) {
-#    my $err = $safe->stderr();
-#    printf "Could not edit trackDb.ra " . $err;
-#    exit 1;
-#}
-
-#undef(@cmds);
-#push @cmds, "mv $submitPath/out/load.ra  $submitPath/out/load.ra.preDocId; sed -f $submitPath/out/edit.sed $submitPath/out/load.ra.preDocId";
-
-#$safe = SafePipe->new(CMDS => \@cmds, STDOUT => "$submitPath/out/load.ra",  DEBUG => $opt_verbose - 1);
-#if(my $err = $safe->exec()) {
-#    my $err = $safe->stderr();
-#    printf "Could not edit load.ra " . $err;
-#    exit 1;
-#}
 
 $time0=$timeStart;
 doTime("done. ") if $opt_timing;

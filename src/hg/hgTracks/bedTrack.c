@@ -605,6 +605,33 @@ void freeSimpleBed(struct track *tg)
 bedFreeList(((struct bed **)(&tg->items)));
 }
 
+static void simpleBedNextPrevEdge(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next)
+/* Like linkedFeaturesNextPrevItem, but for simple bed which has no block structure so
+ * this simply zaps us to the right/left edge of the feature.  Arrows have already been
+ * drawn; here we figure out coords and draw a mapBox. */
+{
+struct bed4 *bed = item;
+char *mouseOverText = NULL;
+if (next)
+    mouseOverText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Right Edge");
+else
+    mouseOverText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Left Edge");
+int winSize = winEnd - winStart;
+int bufferToEdge = 0.05 * winSize;
+int newWinStart, newWinEnd;
+if (next)
+    {
+    newWinEnd = bed->chromEnd + bufferToEdge;
+    newWinStart = newWinEnd - winSize;
+    }
+else
+    {
+    newWinStart = bed->chromStart - bufferToEdge;
+    newWinEnd = newWinStart + winSize;
+    }
+mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
+}
+
 void bedMethods(struct track *tg)
 /* Fill in methods for (simple) bed tracks. */
 {
@@ -616,6 +643,7 @@ tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
+tg->nextPrevExon = simpleBedNextPrevEdge;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->freeItems = freeSimpleBed;
 }
@@ -791,8 +819,8 @@ if (wordCount > 1)
 track->bedSize = fieldCount;
 track->isBigBed = isBigBed;
 
-if (track->isBigBed)
-    track->nextItemButtonable = FALSE;
+//if (track->isBigBed)
+    //track->nextItemButtonable = FALSE;
 
 if (fieldCount < 8)
     {

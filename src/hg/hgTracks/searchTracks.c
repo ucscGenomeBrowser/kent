@@ -16,15 +16,14 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "mdb.h"
+#include "fileUi.h"
 #include "trix.h"
 #include "jsHelper.h"
 #include "imageV2.h"
 
-#define ANYLABEL                 "Any"
+
 #define TRACK_SEARCH_FORM        "trackSearch"
 #define SEARCH_RESULTS_FORM      "searchResults"
-#define METADATA_NAME_PREFIX     "hgt_mdbVar"
-#define METADATA_VALUE_PREFIX    "hgt_mdbVal"
 #define TRACK_SEARCH_CURRENT_TAB "tsCurTab"
 #define TRACK_SEARCH_SIMPLE      "tsSimple"
 #define TRACK_SEARCH_ON_NAME     "tsName"
@@ -32,6 +31,11 @@
 #define TRACK_SEARCH_ON_GROUP    "tsGroup"
 #define TRACK_SEARCH_ON_DESCR    "tsDescr"
 #define TRACK_SEARCH_SORT        "tsSort"
+
+//#define FILES_SEARCH
+#ifdef FILES_SEARCH
+    #define FILE_SEARCH_ON_FILETYPE "tsFileType"
+#endif///def FILES_SEARCH
 
 static int gCmpGroup(const void *va, const void *vb)
 /* Compare groups based on label. */
@@ -80,7 +84,7 @@ const struct track *b = ((struct track *) bb->val);
 return strcasecmp(a->longLabel, b->longLabel);
 }
 
-static void findTracksSort(struct slRef **pTrack, boolean simpleSearch, enum sortBy sortBy)
+static void findTracksSort(struct slRef **pTrack, enum sortBy sortBy)
 {
 if (sortBy == sbHierarchy)
     slSort(pTrack, gCmpTrackHierarchy);
@@ -144,33 +148,6 @@ if(words)
 return FALSE;
 }
 
-static int getTermArray(struct sqlConnection *conn, char ***pLabels, char ***pTerms, char *type)
-// Pull out all term fields from ra entries with given type
-// Returns count of items found and items via the terms argument.
-{
-int ix = 0, count = 0;
-char **labels;
-char **values;
-struct slPair *pairs = mdbValLabelSearch(conn, type, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
-count = slCount(pairs) + 1; // make room for "Any"
-AllocArray(labels, count);
-AllocArray(values, count);
-labels[ix] = cloneString(ANYLABEL);
-values[ix] = cloneString(ANYLABEL);
-struct slPair *pair = NULL;
-while((pair = slPopHead(&pairs)) != NULL)
-    {
-    ix++;
-    labels[ix] = pair->name;
-    values[ix] = pair->val;
-    freeMem(pair);
-    }
-*pLabels = labels;
-*pTerms = values;
-return count;
-}
-
-#ifdef TRACK_SEARCH_ON_TYPE
 static int getFormatTypes(char ***pLabels, char ***pTypes)
 {
 char *crudeTypes[] = {
@@ -229,7 +206,6 @@ char *nicerTypes[] = {
     "Signal (wig) - wiggle format",
     "Signal (wigMaf) - multiple alignment wiggle"
 };
-#endif///def TRACK_SEARCH_ON_TYPE
 
 int ix = 0, count = sizeof(crudeTypes)/sizeof(char *);
 char **labels;
@@ -244,190 +220,6 @@ for(ix=0;ix<count;ix++)
 *pLabels = labels;
 *pTypes = values;
 return count;
-}
-
-static int metaDbVars(struct sqlConnection *conn, char *** metaVars, char *** metaLabels)
-// Search the assemblies metaDb table; If name == NULL, we search every metadata field.
-{
-char query[256];
-struct slPair *oneTerm,*whiteList = mdbCvWhiteList(TRUE,FALSE);
-int count =0, whiteCount = slCount(whiteList);
-char **retVar = needMem(sizeof(char *) * whiteCount);
-char **retLab = needMem(sizeof(char *) * whiteCount);
-
-for(oneTerm=whiteList;oneTerm!=NULL;oneTerm=oneTerm->next)
-    {
-    safef(query, sizeof(query), "select count(*) from metaDb where var = '%s'",oneTerm->name);
-    if(sqlQuickNum(conn,query) > 0)
-        {
-        retVar[count] = oneTerm->name;
-        retLab[count] = oneTerm->val;
-        count++;
-        }
-    }
-// Don't do it, unless you clone strings above:  slPairFreeValsAndList(&whileList);
-
-*metaVars = retVar;
-*metaLabels = retLab;
-return count;
-}
-
-static int printMdbSelects(struct sqlConnection *conn,struct cart *cart,boolean simpleSearch,char ***pMdbVar,char ***pMdbVal,int *numMetadataNonEmpty,int cols)
-// Prints a table of mdb selects if appropriate and returns number of them
-{
-// figure out how many metadata selects are visible.
-int delSearchSelect = cartUsualInt(cart, TRACK_SEARCH_DEL_ROW, 0);   // 1-based row to delete
-int addSearchSelect = cartUsualInt(cart, TRACK_SEARCH_ADD_ROW, 0);   // 1-based row to insert after
-int numMetadataSelects = 0;
-char **mdbVar = NULL;
-char **mdbVal = NULL;
-char **mdbVars = NULL;
-char **mdbVarLabels = NULL;
-int i, count = metaDbVars(conn, &mdbVars, &mdbVarLabels);
-
-for(;;)
-    {
-    char buf[256];
-    safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, numMetadataSelects + 1);
-    char *str = cartOptionalString(cart, buf);
-    if(isEmpty(str))
-        break;
-    else
-        numMetadataSelects++;
-    }
-
-if(delSearchSelect)
-    numMetadataSelects--;
-if(addSearchSelect)
-    numMetadataSelects++;
-
-if(numMetadataSelects)
-    {
-    mdbVar = needMem(sizeof(char *) * numMetadataSelects);
-    mdbVal = needMem(sizeof(char *) * numMetadataSelects);
-    *pMdbVar = mdbVar;
-    *pMdbVal = mdbVal;
-    int i;
-    for(i = 0; i < numMetadataSelects; i++)
-        {
-        char buf[256];
-        int offset;   // used to handle additions/deletions
-        if(addSearchSelect > 0 && i >= addSearchSelect)
-            offset = 0; // do nothing to offset (i.e. copy data from previous row)
-        else if(delSearchSelect > 0 && i + 1 >= delSearchSelect)
-            offset = 2;
-        else
-            offset = 1;
-        safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + offset);
-        mdbVar[i] = cloneString(cartOptionalString(cart, buf));
-        if(!simpleSearch)
-            {
-            int j;
-            boolean found = FALSE;
-            // We need to make sure mdbVar[i] is valid in this assembly; if it isn't, reset it to "cell".
-            for(j = 0; j < count && !found; j++)
-                if(sameString(mdbVars[j], mdbVar[i]))
-                    found = TRUE;
-            if(found)
-                {
-            safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
-            mdbVal[i] = cloneString(cartOptionalString(cart, buf));
-            if(sameString(mdbVal[i], ANYLABEL))
-                mdbVal[i] = NULL;
-                }
-            else
-                {
-                mdbVar[i] = cloneString("cell");
-                mdbVal[i] = NULL;
-                }
-            if(!isEmpty(mdbVal[i]))
-                (*numMetadataNonEmpty)++;
-            }
-        }
-    if(delSearchSelect > 0)
-        {
-        char buf[255];
-        safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, numMetadataSelects + 1);
-        cartRemove(cart, buf);
-        safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, numMetadataSelects + 1);
-        cartRemove(cart, buf);
-        }
-    }
-else
-    {
-    // create defaults
-    numMetadataSelects = 2;
-    mdbVar = needMem(sizeof(char *) * numMetadataSelects);
-    mdbVal = needMem(sizeof(char *) * numMetadataSelects);
-    mdbVar[0] = "cell";
-    mdbVar[1] = "antibody";
-    mdbVal[0] = ANYLABEL;
-    mdbVal[1] = ANYLABEL;
-    }
-
-    hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'><em style='color:%s; width:200px;'>ENCODE terms</em></td></tr>", cols,COLOR_DARKGREY);
-    for(i = 0; i < numMetadataSelects; i++)
-        {
-        char **terms = NULL, **labels = NULL;
-        char buf[256];
-        int len;
-
-    #define PRINT_BUTTON(name,value,msg,js) printf("<input type='submit' name='%s' value='%s' style='font-size:.7em;' title='%s' onclick='%s'>", (name), (value), (msg), (js));
-        hPrintf("<tr><td>\n");
-        if(numMetadataSelects > 2 || i >= 2)
-            {
-            safef(buf, sizeof(buf), "return delSearchSelect(this, %d);", i + 1);
-            PRINT_BUTTON(TRACK_SEARCH, "-", "delete this row", buf);
-            }
-        else
-            hPrintf("&nbsp;");
-        hPrintf("</td><td>\n");
-        safef(buf, sizeof(buf), "return addSearchSelect(this, %d);", i + 1);
-        PRINT_BUTTON(TRACK_SEARCH, "+", "add another row after this row", buf);
-
-        hPrintf("</td><td>and&nbsp;</td><td colspan=3 nowrap>\n");
-        safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
-    #ifdef CV_SEARCH_SUPPORTS_FREETEXT
-        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' style='font-size:.9em;' onchange='findTracksMdbVarChanged2(this);'");
-        // TODO: move to lib since hgTracks and hgApi share
-        enum mdbCvSearchable searchBy = mdbCvSearchMethod(mdbVar[i]);
-        if (searchBy == cvsSearchByMultiSelect)
-            {
-            // TO BE IMPLEMENTED
-            }
-        else if (searchBy == cvsSearchBySingleSelect)
-            {
-            safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-            hPrintf("</td><td align='right' id='isLike%d' style='width:10px;'>is</td><td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
-            len = getTermArray(conn, &labels, &terms, mdbVar[i]);
-            cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal single' style='min-width:200px; font-size:.9em;' onchange='findTracksSearchButtonsEnable(true);'");
-            }
-        else if (searchBy == cvsSearchByFreeText)
-            {
-            safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-            hPrintf("</td><td align='right' id='isLike%d' style='width:10px;'>contains</td><td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
-            hPrintf("<input type='text' name='%s' value='%s' class='mdbVal freeText' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:310px; width:310px; font-size:.9em;'>",
-                    buf,(mdbVal[i] ? mdbVal[i]: ""));
-            }
-        else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
-            {
-            // TO BE IMPLEMENTED
-            }
-    #else//ifndef CV_SEARCH_SUPPORTS_FREETEXT
-        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
-        hPrintf("</td><td align='right' style='width:10px;'>is</td><td nowrap style='max-width:600px;'>is\n");
-        len = getTermArray(conn, &labels, &terms, mdbVar[i]);
-        safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-        cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px; font-size:.9em;' onchange='findTracksSearchButtonsEnable(true);'");
-    #endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
-        hPrintf("<span id='helpLink%d'>help</span></td>\n", i + 1);
-        hPrintf("</tr>\n");
-        }
-
-    hPrintf("<tr><td colspan='%d' align='right' style='height:10px; max-height:10px;'>&nbsp;</td></tr>", cols);
-    //hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'>&nbsp;</td></tr>", cols);
-
-return numMetadataSelects;
 }
 
 static struct slRef *simpleSearchForTracksstruct(struct trix *trix,char **descWords,int descWordCount)
@@ -447,80 +239,30 @@ for(tsList = trixSearch(trix, descWordCount, descWords, TRUE); tsList != NULL; t
 return tracks;
 }
 
-static struct slRef *advancedSearchForTracks(struct sqlConnection *conn,struct group *groupList, char **descWords,int descWordCount, char *nameSearch, char *typeSearch, char *descSearch, char *groupSearch,
-                                             int numMetadataNonEmpty,int numMetadataSelects,char **mdbVar,char **mdbVal)
+static struct slRef *advancedSearchForTracks(struct sqlConnection *conn,struct group *groupList, char **descWords,int descWordCount,
+                                             char *nameSearch, char *typeSearch, char *descSearch, char *groupSearch, struct slPair *mdbPairs)
 // Performs the advanced search and returns the found tracks.
 {
 int tracksFound = 0;
 struct slRef *tracks = NULL;
+int numMetadataNonEmpty = slCount(mdbPairs);
 
     if(!isEmpty(nameSearch) || typeSearch != NULL || descSearch != NULL || groupSearch != NULL || numMetadataNonEmpty)
         {
         // First do the metaDb searches, which can be done quickly for all tracks with db queries.
         struct hash *matchingTracks = newHash(0);
-        struct slName *el, *metaTracks = NULL;
-        int i;
 
-        for(i = 0; i < numMetadataSelects; i++)
+        if (numMetadataNonEmpty)
             {
-            if(!isEmpty(mdbVal[i]))
+
+            struct mdbObj *mdbObj, *mdbObjs = mdbObjRepeatedSearch(conn,mdbPairs,TRUE,FALSE);
+            if (mdbObjs)
                 {
-            #ifdef CV_SEARCH_SUPPORTS_FREETEXT
-                enum mdbCvSearchable searchBy = mdbCvSearchMethod(mdbVar[i]);
-                struct slName *tmp = NULL;
-                // If select is by free text then like
-                if (searchBy == cvsSearchByMultiSelect)
-                    {
-                    // TO BE IMPLEMENTED
-                    // The mdbVal[1] will hve to be filled cartOptionalSlNameList(cart,???)
-                    struct slName *choices = (struct slName *)mdbVal[i];
-                    if (slCount(choices) == 1)
-                        {
-                        tmp = mdbObjSearch(conn, mdbVar[i], choices->name, "is", MDB_VAL_STD_TRUNCATION, TRUE, FALSE);
-                        }
-                    else if(choices != NULL)
-                        {
-                        // Then slNames will need to be assembled into a string in the form of 'a','b','c'
-                        struct dyString *dyList = dyStringNew(256);
-                        dyStringPrintf(dyList,"'%s'",choices->name);
-                        struct slName *choice = choices->next;
-                        for(;choice!=NULL;choice=choice->next)
-                            dyStringPrintf(dyList,",'%s'",choice->name);
-                        tmp = mdbObjSearch(conn, mdbVar[i], dyStringContents(dyList), "in", MDB_VAL_STD_TRUNCATION, TRUE, FALSE);
-                        dyStringFree(&dyList);
-                        }
-                    }
-                else if (searchBy == cvsSearchBySingleSelect)
-                    {
-                    tmp = mdbObjSearch(conn, mdbVar[i], mdbVal[i], "is", MDB_VAL_STD_TRUNCATION, TRUE, FALSE);
-                    }
-                else if (searchBy == cvsSearchByFreeText)
-                    {
-                    tmp = mdbObjSearch(conn, mdbVar[i], mdbVal[i], "like", MDB_VAL_STD_TRUNCATION, TRUE, FALSE);
-                    }
-                else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
-                    {
-                    // TO BE IMPLEMENTED
-                    // Requires new mdbObjSearch API and more than one mdbVal[i]
-                    }
-                if (tmp != NULL)
-                    {
-                    if(metaTracks == NULL)
-                        metaTracks = tmp;
-                    else
-                        metaTracks = slNameIntersection(metaTracks, tmp);
-                    }
-            #else///ifndif CV_SEARCH_SUPPORTS_FREETEXT
-                struct slName *tmp = mdbObjSearch(conn, mdbVar[i], mdbVal[i], "is", MDB_VAL_STD_TRUNCATION, TRUE, FALSE);
-                if(metaTracks == NULL)
-                    metaTracks = tmp;
-                else
-                    metaTracks = slNameIntersection(metaTracks, tmp);
-            #endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
+                for (mdbObj = mdbObjs; mdbObj != NULL; mdbObj = mdbObj->next)
+                    hashAddInt(matchingTracks, mdbObj->obj, 1);
+                mdbObjsFree(&mdbObjs);
                 }
             }
-        for (el = metaTracks; el != NULL; el = el->next)
-            hashAddInt(matchingTracks, el->name, 1);
 
         struct group *group;
         for (group = groupList; group != NULL; group = group->next)
@@ -533,13 +275,9 @@ struct slRef *tracks = NULL;
                     for (tr = group->trackList; tr != NULL; tr = tr->next)
                         {
                         struct track *track = tr->track;
-                    #ifdef TRACK_SEARCH_ON_TYPE
                         char *trackType = cloneFirstWord(track->tdb->type); // will be spilled
-                    #endif///def TRACK_SEARCH_ON_TYPE
                         if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, "contains")) &&
-                    #ifdef TRACK_SEARCH_ON_TYPE
                            (isEmpty(typeSearch) || (sameWord(typeSearch, trackType) && !tdbIsComposite(track->tdb))) &&
-                    #endif///def TRACK_SEARCH_ON_TYPE
                            (isEmpty(descSearch) || isDescriptionMatch(track, descWords, descWordCount)) &&
                           (!numMetadataNonEmpty || hashLookup(matchingTracks, track->track) != NULL))
                             {
@@ -556,13 +294,9 @@ struct slRef *tracks = NULL;
                             struct track *subTrack;
                             for (subTrack = track->subtracks; subTrack != NULL; subTrack = subTrack->next)
                                 {
-                            #ifdef TRACK_SEARCH_ON_TYPE
                                 trackType = cloneFirstWord(subTrack->tdb->type); // will be spilled
-                            #endif///def TRACK_SEARCH_ON_TYPE
                                 if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, "contains")) &&
-                            #ifdef TRACK_SEARCH_ON_TYPE
                                    (isEmpty(typeSearch) || sameWord(typeSearch, trackType)) &&
-                            #endif///def TRACK_SEARCH_ON_TYPE
                                    (isEmpty(descSearch) || isDescriptionMatch(subTrack, descWords, descWordCount)) &&
                                    (!numMetadataNonEmpty || hashLookup(matchingTracks, subTrack->track) != NULL))
                                     {
@@ -702,11 +436,11 @@ else
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
         hPrintf("<span style='float:right;'>Sort:");
-        cgiMakeOnClickRadioButton(TRACK_SEARCH_SORT, "0", (sortBy == sbRelevance),"onchange=\"findTracksSortNow(this);\"");
+        cgiMakeOnClickRadioButton(TRACK_SEARCH_SORT, "0", (sortBy == sbRelevance),"onclick=\"findTracksSortNow(this);\"");
         hPrintf("by Relevance");
-        cgiMakeOnClickRadioButton(TRACK_SEARCH_SORT, "1", (sortBy == sbAbc),      "onchange=\"findTracksSortNow(this);\"");
+        cgiMakeOnClickRadioButton(TRACK_SEARCH_SORT, "1", (sortBy == sbAbc),      "onclick=\"findTracksSortNow(this);\"");
         hPrintf("Alphabetically");
-        cgiMakeOnClickRadioButton(TRACK_SEARCH_SORT, "2",(sortBy == sbHierarchy), "onchange=\"findTracksSortNow(this);\"");
+        cgiMakeOnClickRadioButton(TRACK_SEARCH_SORT, "2",(sortBy == sbHierarchy), "onclick=\"findTracksSortNow(this);\"");
         hPrintf("by Hierarchy&nbsp;&nbsp;</span>\n");
         }
     hPrintf("</td></tr>\n");
@@ -769,9 +503,18 @@ else
         // If this is a container track, allow configuring...
         if (tdbIsContainer(track->tdb) || tdbIsFolder(track->tdb))
             {
-            containerTrackCount++;
-            hPrintf("&nbsp;<IMG SRC='../images/folderWrench.png' style='cursor:pointer;' onclick='findTracksConfigureSet(\"%s\");'>&nbsp;", track->track);
+            containerTrackCount++; // Using onclick ensures return to search tracks on submit
+            hPrintf("&nbsp;<IMG SRC='../images/folderWrench.png' style='cursor:pointer;' title='Configure this track container...' onclick='findTracksConfigureSet(\"%s\");'>&nbsp;", track->track);
             }
+//#define SHOW_PARENT_FOLDER
+#ifdef SHOW_PARENT_FOLDER
+        else if (tdbIsContainerChild(track->tdb) || tdbIsFolderContent(track->tdb))
+            {
+            struct trackDb *parentTdb = tdbIsContainerChild(track->tdb) ? tdbGetContainer(track->tdb) : tdbGetImmediateFolder(track->tdb);
+            if (parentTdb != NULL) // Using href will not return to search tracks on submit
+                hPrintf("&nbsp;<A HREF='../cgi-bin/hgTrackUi?g=%s'><IMG SRC='../images/folderC.png' title='Navigate to parent container...'></A>&nbsp;", parentTdb->track);
+            }
+#endif///def SHOW_PARENT_FOLDER
         hPrintf("</td>\n");
 
         // shortLabel has description popup and longLabel has "..." metadata
@@ -831,32 +574,33 @@ if (!advancedJavascriptFeaturesEnabled(cart))
     warn("Requires advanced javascript features.");
     return;
     }
+
+webIncludeResourceFile("ui.dropdownchecklist.css");
+//jsIncludeFile("ui.core.js",NULL);   // NOTE: This appears to be not needed as long as jquery-ui.js comes before ui.dropdownchecklist.js
+jsIncludeFile("ui.dropdownchecklist.js",NULL);
+// This line is needed to get the multi-selects initialized
+hPrintf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
+
 struct group *group;
 char *groups[128];
 char *labels[128];
 int numGroups = 1;
 groups[0] = ANYLABEL;
 labels[0] = ANYLABEL;
-char *currentTab = cartUsualString(cart, TRACK_SEARCH_CURRENT_TAB, "simpleTab");
 char *nameSearch = cartOptionalString(cart, TRACK_SEARCH_ON_NAME);
-#ifdef TRACK_SEARCH_ON_TYPE
 char *typeSearch = cartOptionalString(cart, TRACK_SEARCH_ON_TYPE);
-#else///ifndef TRACK_SEARCH_ON_TYPE
-char *typeSearch = NULL;
-#endif///def TRACK_SEARCH_ON_TYPE
-char *descSearch;
+#ifdef FILES_SEARCH
+char *fileTypeSearch = cartOptionalString(cart, FILE_SEARCH_ON_FILETYPE);
+#endif///def FILES_SEARCH
+char *descSearch=FALSE;
 char *groupSearch = cartOptionalString(cart, TRACK_SEARCH_ON_GROUP);
 boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search") || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
-int numMetadataSelects, tracksFound = 0;
-int numMetadataNonEmpty = 0;
-char **mdbVar = NULL;
-char **mdbVal = NULL;
+int tracksFound = 0;
 #ifdef ONE_FUNC
 struct hash *parents = newHash(4);
 #endif///def ONE_FUNC
-boolean simpleSearch;
 struct trix *trix;
 char trixFile[HDB_MAX_PATH_STRING];
 char **descWords = NULL;
@@ -865,21 +609,26 @@ boolean searchTermsExist = FALSE;
 int cols;
 char buf[512];
 
+enum searchTab selectedTab = simpleTab;
+char *currentTab = cartUsualString(cart, TRACK_SEARCH_CURRENT_TAB, "simpleTab");
 if(sameString(currentTab, "simpleTab"))
     {
+    selectedTab = simpleTab;
     descSearch = cartOptionalString(cart, TRACK_SEARCH_SIMPLE);
-    simpleSearch = TRUE;
     freez(&nameSearch);
-#ifdef TRACK_SEARCH_ON_TYPE
-    freez(&typeSearch);
-#endif///def TRACK_SEARCH_ON_TYPE
-    freez(&groupSearch);
     }
-else
+else if(sameString(currentTab, "advancedTab"))
     {
+    selectedTab = advancedTab;
     descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
-    simpleSearch = FALSE;
     }
+#ifdef FILES_SEARCH
+else if(sameString(currentTab, "filesTab"))
+    {
+    selectedTab = filesTab;
+    descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
+    }
+#endif///def FILES_SEARCH
 
 if(descSearch)
     stripChar(descSearch, '"');
@@ -926,13 +675,16 @@ hPrintf("<div id='tabs' style='display:none; %s'>\n"
         "<ul>\n"
         "<li><a href='#simpleTab'><B style='font-size:.9em;font-family: arial, Geneva, Helvetica, san-serif;'>Search</B></a></li>\n"
         "<li><a href='#advancedTab'><B style='font-size:.9em;font-family: arial, Geneva, Helvetica, san-serif;'>Advanced</B></a></li>\n"
+#ifdef FILES_SEARCH
+        "<li><a href='#filesTab'><B style='font-size:.9em;font-family: arial, Geneva, Helvetica, san-serif;'>Files</B></a></li>\n"
+#endif///def FILES_SEARCH
         "</ul>\n"
         "<div id='simpleTab' style='max-width:inherit;'>\n",cgiBrowser()==btIE?"width:1060px;":"max-width:inherit;");
 
-hPrintf("<table style='width:100%%; font-size:.9em;'><tr><td colspan='2'>");
+hPrintf("<table id='simpleTable' style='width:100%%; font-size:.9em;'><tr><td colspan='2'>");
 hPrintf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' style='max-width:1000px; width:100%%;' onkeyup='findTracksSearchButtonsEnable(true);'>\n",
         TRACK_SEARCH_SIMPLE,descSearch == NULL ? "" : descSearch);
-if (simpleSearch && descSearch)
+if (selectedTab==simpleTab && descSearch)
     searchTermsExist = TRUE;
 
 hPrintf("</td></tr><td style='max-height:4px;'></td></tr></table>");
@@ -944,7 +696,7 @@ hPrintf("</div>\n");
 
 // Advanced tab
 hPrintf("<div id='advancedTab' style='width:inherit;'>\n"
-        "<table cellSpacing=0 style='width:inherit; font-size:.9em;'>\n");
+        "<table id='advancedTable' cellSpacing=0 style='width:inherit; font-size:.9em;'>\n");
 cols = 8;
 
 // Track Name contains
@@ -964,7 +716,7 @@ hPrintf("<td colspan='%d'>", cols - 4);
 hPrintf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:536px; width:536px; font-size:.9em;'>",
         TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
 hPrintf("</td></tr>\n");
-if (!simpleSearch && descSearch)
+if (selectedTab==advancedTab && descSearch)
     searchTermsExist = TRUE;
 
 hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
@@ -973,10 +725,9 @@ hPrintf("<td align='right'>is</td>\n");
 hPrintf("<td colspan='%d'>", cols - 4);
 cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch, "class='groupSearch' style='min-width:40%; font-size:.9em;'");
 hPrintf("</td></tr>\n");
-if (!simpleSearch && groupSearch)
+if (selectedTab==advancedTab && groupSearch)
     searchTermsExist = TRUE;
 
-#ifdef TRACK_SEARCH_ON_TYPE
 // Track Type is (drop down)
 hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
 hPrintf("<td nowrap><b style='max-width:100px;'>Data Format:</b></td>");
@@ -987,25 +738,111 @@ char **formatLabels = NULL;
 int formatCount = getFormatTypes(&formatLabels, &formatTypes);
 cgiMakeDropListFull(TRACK_SEARCH_ON_TYPE, formatLabels, formatTypes, formatCount, typeSearch, "class='typeSearch' style='min-width:40%; font-size:.9em;'");
 hPrintf("</td></tr>\n");
-if (!simpleSearch && typeSearch)
+if (selectedTab==advancedTab && typeSearch)
     searchTermsExist = TRUE;
-#endif///def TRACK_SEARCH_ON_TYPE
 
-// Metadata selects require careful accounting
+// mdb selects
+struct slPair *mdbSelects = NULL;
 if(metaDbExists)
-    numMetadataSelects = printMdbSelects(conn, cart, simpleSearch, &mdbVar, &mdbVal, &numMetadataNonEmpty, cols);
-else
-    numMetadataSelects = 0;
+    {
+    struct slPair *mdbVars = mdbVarsRelevant(conn);
+    mdbSelects = mdbSelectPairs(cart,selectedTab, mdbVars);
+    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols);
+    if (output)
+        {
+        puts(output);
+        freeMem(output);
+        }
+    slPairFreeList(&mdbVars);
+    }
 
 hPrintf("</table>\n");
 hPrintf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", TRACK_SEARCH);
 hPrintf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
 hPrintf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
 //hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
-hPrintf("</div>\n</div>\n");
+hPrintf("</div>\n");
+
+#ifdef FILES_SEARCH
+// Files tab
+hPrintf("<div id='filesTab' style='width:inherit;'>\n"
+        "<table id='filesTable' cellSpacing=0 style='width:inherit; font-size:.9em;'>\n");
+cols = 8;
+
+//// Track Name contains
+//hPrintf("<tr><td colspan=3></td>");
+//hPrintf("<td nowrap><b style='max-width:100px;'>Track&nbsp;Name:</b></td>");
+//hPrintf("<td align='right'>contains</td>\n");
+//hPrintf("<td colspan='%d'>", cols - 4);
+//hPrintf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:326px; font-size:.9em;'>",
+//        TRACK_SEARCH_ON_NAME, nameSearch == NULL ? "" : nameSearch);
+//hPrintf("</td></tr>\n");
+//
+//// Description contains
+//hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>");
+//hPrintf("<td><b style='max-width:100px;'>Description:</b></td>");
+//hPrintf("<td align='right'>contains</td>\n");
+//hPrintf("<td colspan='%d'>", cols - 4);
+//hPrintf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:536px; width:536px; font-size:.9em;'>",
+//        TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
+//hPrintf("</td></tr>\n");
+//if (selectedTab==fileTab && descSearch)
+//    searchTermsExist = TRUE;
+//
+//hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
+//hPrintf("<td><b style='max-width:100px;'>Group:</b></td>");
+//hPrintf("<td align='right'>is</td>\n");
+//hPrintf("<td colspan='%d'>", cols - 4);
+//cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch, "class='groupSearch' style='min-width:40%; font-size:.9em;'");
+//hPrintf("</td></tr>\n");
+//if (selectedTab==fileTab && groupSearch)
+//    searchTermsExist = TRUE;
+
+// Track Type is (drop down)
+hPrintf("<tr><td colspan=2></td><td align='right'>&nbsp;</td>\n");
+//hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n"); // Bring back "and" if using "Track Name,Description or Group
+hPrintf("<td nowrap><b style='max-width:100px;'>Data Format:</b></td>");
+hPrintf("<td align='right'>is</td>\n");
+hPrintf("<td colspan='%d'>", cols - 4);
+char *dropDownHtml = fileFormatSelectHtml(FILE_SEARCH_ON_FILETYPE,fileTypeSearch,"style='min-width:40%; font-size:.9em;'");
+if (dropDownHtml)
+    {
+    puts(dropDownHtml);
+    freeMem(dropDownHtml);
+    }
+hPrintf("</td></tr>\n");
+if (selectedTab==filesTab && fileTypeSearch)
+    searchTermsExist = TRUE;
+
+// mdb selects
+if(metaDbExists)
+    {
+    struct slPair *mdbVars = mdbVarsRelevant(conn);
+    mdbSelects = mdbSelectPairs(cart,selectedTab, mdbVars);
+    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols);
+    if (output)
+        {
+        puts(output);
+        freeMem(output);
+        }
+    slPairFreeList(&mdbVars);
+    }
+
+hPrintf("</table>\n");
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", TRACK_SEARCH);
+hPrintf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
+hPrintf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
+//hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
+hPrintf("</div>\n");
+
+#endif///def FILES_SEARCH
+hPrintf("</div>\n");
 
 hPrintf("</form>\n");
 hPrintf("</div>"); // Restricts to max-width:1000px;
+
+if (measureTiming)
+    uglyTime("Rendered tabs");
 
 if(descSearch != NULL && !strlen(descSearch))
     descSearch = NULL;
@@ -1030,28 +867,42 @@ if(!isEmpty(descSearch))
     for(i = 0, el = descList; el != NULL; i++, el = el->next)
         descWords[i] = strLower(el->name);
     }
-if (doSearch && simpleSearch && descWordCount <= 0)
+if (doSearch && selectedTab==simpleTab && descWordCount <= 0)
     doSearch = FALSE;
 
 if(doSearch)
     {
     // Now search
     struct slRef *tracks = NULL;
-    if(simpleSearch)
+    if(selectedTab==simpleTab)
         tracks = simpleSearchForTracksstruct(trix,descWords,descWordCount);
-    else
-        tracks = advancedSearchForTracks(conn,groupList,descWords,descWordCount,nameSearch,typeSearch,descSearch,groupSearch,numMetadataNonEmpty,numMetadataSelects,mdbVar,mdbVal);
+    else if(selectedTab==advancedTab)
+        tracks = advancedSearchForTracks(conn,groupList,descWords,descWordCount,nameSearch,typeSearch,descSearch,groupSearch,mdbSelects);
+#ifdef FILES_SEARCH
+    else if(selectedTab==filesTab && mdbSelects != NULL)
+        fileSearchResults(database, conn, mdbSelects, fileTypeSearch);
+#endif///def FILES_SEARCH
+
+    if (measureTiming)
+        uglyTime("Searched for tracks");
 
     // Sort and Print results
-    enum sortBy sortBy = cartUsualInt(cart,TRACK_SEARCH_SORT,sbRelevance);
-    tracksFound = slCount(tracks);
-    if(tracksFound > 1)
-        findTracksSort(&tracks,simpleSearch,sortBy);
+    if(selectedTab!=filesTab)
+        {
+        enum sortBy sortBy = cartUsualInt(cart,TRACK_SEARCH_SORT,sbRelevance);
+        tracksFound = slCount(tracks);
+        if(tracksFound > 1)
+            findTracksSort(&tracks,sortBy);
 
-    displayFoundTracks(cart,tracks,tracksFound,sortBy);
+        displayFoundTracks(cart,tracks,tracksFound,sortBy);
+
+        if (measureTiming)
+            uglyTime("Displayed found tracks");
+        }
+    slPairFreeList(&mdbSelects);
     }
-
 hFreeConn(&conn);
+
 webNewSection("About Track Search");
 if(metaDbExists)
     hPrintf("<p>Search for terms in track names, descriptions, groups, and ENCODE "
@@ -1062,6 +913,5 @@ else
             "If multiple terms are entered, only tracks with all terms "
             "will be part of the results.");
 hPrintf("<BR><a target='_blank' href='../goldenPath/help/trackSearch.html'>more help</a></p>\n");
-
 webEndSectionTables();
 }

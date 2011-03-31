@@ -1,7 +1,7 @@
 include ../../../inc/common.mk
 
 L += -lm $(MYSQLLIBS)
-MYLIBDIR = $(HOME)/kent/src/lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 A = testTableExists

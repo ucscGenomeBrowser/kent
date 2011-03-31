@@ -1,5 +1,6 @@
 /* snpNcbiToUcsc - Reformat NCBI SNP field values into UCSC, and flag exceptions.. */
 #include "common.h"
+#include "basicBed.h"
 #include "dnaseq.h"
 #include "dnautil.h"
 #include "dystring.h"
@@ -33,6 +34,10 @@ errAbort(
 "                               bitfields\n"
 "                               Since exceptions are now in a column in snpNNN,\n"
 "                               there is no separate snpNNNExceptions table.\n"
+"  -par=file                    Read Pseudo-Autosomal Region (PAR) coordinates\n"
+"                               from bed4 columns in file, and don't count single\n"
+"                               mappings to different chromosomes' PARs as\n"
+"                               multiple mappings to the reference genome.\n"
 "\n"
 "Converts NCBI's representation of SNP data into UCSC's, and checks for\n"
 "consistency.  Typically NNN is the dbSNP release number; snpNNN is the\n"
@@ -65,11 +70,13 @@ errAbort(
 static struct optionSpec options[] = {
     {"1000GenomesRsIds", OPTION_STRING},
     {"snp132Ext", OPTION_BOOLEAN},
+    {"par", OPTION_STRING},
     {NULL, 0},
 };
 
 char *oneKGenomesRsIds = NULL;
 boolean snp132Ext = FALSE;
+char *parFile = NULL;
 
 #define UPDATE_CODE "update this program and possibly hgTracks/hgc/hgTrackUi."
 
@@ -429,7 +436,8 @@ int rsId = 0;
 unsigned int exceptionBits = 0;
 
 // Fudge factor for checking allele frequency properties:
-#define ALLELE_FREQ_ROUNDING_ERROR 0.001
+#define ALLELE_FREQ_ROUNDING_ERROR 0.01
+#define ALLELE_N_ROUNDING_ERROR 0.01
 
 
 /******************* Reporting of errors and exceptions *********************/
@@ -507,9 +515,6 @@ enum exceptionType
     /* processAlleleFreqs() */
     NonIntegerChromCount,
     AlleleFreqSumNot1,
-    /* processBitfields() */
-    GenotypeConflict,
-    ClusterNonOverlappingAlleles,
     /* Keep this one last as a count of enum values: */
     exceptionTypeCount
     };
@@ -570,9 +575,6 @@ exceptionNames[MultipleAlignments] = "MultipleAlignments";
 /* processAlleleFreqs() */
 exceptionNames[NonIntegerChromCount] = "NonIntegerChromCount";
 exceptionNames[AlleleFreqSumNot1] = "AlleleFreqSumNot1";
-/* processBitfields() */
-exceptionNames[GenotypeConflict] = "GenotypeConflict";
-exceptionNames[ClusterNonOverlappingAlleles] = "ClusterNonOverlappingAlleles";
 
 
 /* Many of these conditions imply a problem with NCBI's alignment and/or the
@@ -647,18 +649,13 @@ safef(buf, sizeof(buf),
     "At least one allele frequency corresponds to a non-integer (+-%f) "
     "count of chromosomes on which the allele was observed."
     "  The reported total sample count for this SNP is probably incorrect.",
-      ALLELE_FREQ_ROUNDING_ERROR);
+      ALLELE_N_ROUNDING_ERROR);
 exceptionDescs[NonIntegerChromCount] = cloneString(buf);
 safef(buf, sizeof(buf),
     "Allele frequencies do not sum to 1.0 (+-%f)."
     "  This SNP's allele frequency data are probably incomplete.",
       ALLELE_FREQ_ROUNDING_ERROR);
 exceptionDescs[AlleleFreqSumNot1] = cloneString(buf);
-/* processBitfields() */
-exceptionDescs[GenotypeConflict] =
-    "Different genotypes have been submitted for the same individual.";
-exceptionDescs[ClusterNonOverlappingAlleles] =
-    "The reference SNP cluster contains submitted SNPs with non-overlapping alleles.";
 
 AllocArray(exceptionCounts, exceptionTypeCount);
 
@@ -1720,7 +1717,7 @@ double total = 0.0;
 for (i=0;  i < *pAlleleFreqCount;  i++)
     {
     double leftover = alleleNs[i] - trunc(alleleNs[i]);
-    if (leftover > ALLELE_FREQ_ROUNDING_ERROR && leftover < 1.0-ALLELE_FREQ_ROUNDING_ERROR)
+    if (leftover > ALLELE_N_ROUNDING_ERROR && leftover < 1.0-ALLELE_N_ROUNDING_ERROR)
 	writeException(NonIntegerChromCount);
     total += alleleFreqs[i];
     }
@@ -1739,22 +1736,24 @@ if (bytes[0] < 0)
     }
 else
     {
-    safecpy(bitfieldsStr, size, "");
+    static struct dyString *dy = NULL;
+    if (dy == NULL)
+	dy = dyStringNew(0);
+    dyStringClear(dy);
     int i;
     for (i = 1;  i < MAX_BITFIELDS+1;  i++)
 	{
 	struct byteBitOffsets off = bitfieldsOffsets[i];
 	if (bytes[off.byte] & (1 << off.bit))
 	    {
-	    safecpy(bitfieldsStr, size, bitfieldsStrings[i]);
+	    if (dy->stringSize > 0)
+		dyStringAppend(dy, ",");
+	    dyStringAppend(dy, bitfieldsStrings[i]);
 	    bitfieldsStringsUsed[i] = TRUE;
 	    }
 	}
+    safecpy(bitfieldsStr, size, dy->string);
     int qualCheck = bytes[BITFIELDS_QUAL_CHECK_BYTE];
-    if (qualCheck & (1 << BITFIELDS_GENOTYPE_CONFLICT))
-	writeException(GenotypeConflict);
-    if (qualCheck & (1 << BITFIELDS_NON_OV_ALLELES))
-	writeException(ClusterNonOverlappingAlleles);
     // This should be redundant w/ObservedMismatch:
     if ((qualCheck & (1 << BITFIELDS_REF_MISMATCH)) &&
 	!(exceptionBits & (1 << ObservedMismatch)))
@@ -1777,6 +1776,33 @@ else
     }
 }
 
+
+// Pseudo-Autosomal Regions:
+struct bed4 *parList = NULL;
+
+void initPar()
+/* If -par=file is given, parse it to get pseudoautosomal region coords. */
+{
+if (parFile == NULL)
+    return;
+struct lineFile *lf = lineFileOpen(parFile, TRUE);
+char *words[5];
+int wordCount;
+while ((wordCount = lineFileChop(lf, words)) > 0)
+    {
+    if (wordCount < 4)
+	lineFileAbort(lf, "Expecting BED with at least 4 columns; line has %d columns.",
+		      wordCount);
+    struct bed4 *bed = NULL;
+    AllocVar(bed);
+    bed->chrom = cloneString(words[0]);
+    bed->chromStart = lineFileNeedNum(lf, words, 1);
+    bed->chromEnd = lineFileNeedNum(lf, words, 2);
+    bed->name = cloneString(words[3]);
+    slAddHead(&parList, bed);
+    }
+lineFileClose(&lf);
+}
 
 /* Use an array[MAX_SNPID] of coord lists to detect multiply-mapped SNPs and to store 
  * exceptions. */
@@ -1849,36 +1875,81 @@ mapping->exceptions = exceptionBits;
 slAddHead(&mappings[rsId], mapping);
 }
 
-void reportMultipleMappings()
-/* Print exceptions for SNPs that have multiple mappings to the genome. */
+void stripHapSuffix(struct coords *map, char chromBase[], size_t size)
+/* Translate map->chrId into a string, store in pre-allocated chromBase, strip any _hap suffix. */
 {
+safecpy(chromBase, size, idChrs[map->chrId]);
+if (strstr(chromBase, "_hap"))
+    {
+    char *p = strchr(chromBase, '_');
+    *p = '\0';
+    }
+}
+
+boolean sameChromDiffHaplotype(struct coords *firstMap, struct coords *newMap)
+/* Return TRUE if the two maps' chroms are different haplotype versions of the same
+ * physical chromosome, e.g. chr6 and chr6_mcf_hap5, as opposed to mapping to
+ * different chromosomes or the same chrom and same haplotype. */
+{
+if (firstMap->chrId == newMap->chrId)
+    return FALSE;
+char firstChromBase[256];
+char newChromBase[256];
+stripHapSuffix(firstMap, firstChromBase, sizeof(firstChromBase));
+stripHapSuffix(newMap, newChromBase, sizeof(newChromBase));
+return sameString(firstChromBase, newChromBase);
+}
+
+const char *parName(struct coords *map)
+/* If map falls within a Pseudo-Autosomal Region (PAR), return the name (usu. "PAR1" or "PAR2"). */
+{
+char *chrom = idChrs[map->chrId];
+struct bed4 *par;
+for (par = parList;  par != NULL;  par = par->next)
+    if (sameString(chrom, par->chrom) && map->start < par->chromEnd && map->end > par->chromStart)
+	return par->name;
+return NULL;
+}
+
+boolean diffChromSamePAR(struct coords *firstMap, struct coords *newMap)
+/* Return TRUE if both maps are in the same PAR but not on the same chromosome. */
+{
+if (parList == NULL)
+    // not applicable to this genome
+    return FALSE;
+if (firstMap->chrId == newMap->chrId)
+    return FALSE;
+const char *firstParName = parName(firstMap);
+if (firstParName == NULL)
+    return FALSE;
+const char *newParName = parName(newMap);
+return (newParName != NULL && sameString(firstParName, newParName));
+}
+
+
+void reportMultipleMappings()
+/* Print exceptions for SNPs that have multiple mappings to the genome; single mappings to
+ * different haplotype versions of the same chrom are OK, and single mappings to both
+ * chrX's and chrY's PAR are OK. */
+{
+if (mappings == NULL)
+    // don't SEGV on empty input
+    return;
 int chromCounts[nextChrId];
 int id, i;
 for (id = 0;  id <= lastRsId;  id++)
-    if (mappings && slCount(mappings[id]) > 1)
+    if (mappings[id] && mappings[id]->next)
 	{
 	boolean gotMult = FALSE;
-	char chromBase[256];
-	chromBase[0] = '\0';
 	for (i = 0;  i < nextChrId;  i++)
 	    chromCounts[i] = 0;
-	struct coords *map;
-	for (map = mappings[id];  map != NULL;  map = map->next)
+	struct coords *firstMap = mappings[id], *map;
+	chromCounts[firstMap->chrId]++;
+	for (map = firstMap->next;  map != NULL;  map = map->next)
 	    {
-	    // Is it mapped to multiple chroms, *not* including _hap's?
-	    char *chrom = idChrs[map->chrId];
-	    if (isEmpty(chromBase))
-		{
-		safecpy(chromBase, sizeof(chromBase), chrom);
-		if (strstr(chromBase, "_hap"))
-		    {
-		    char *p = strchr(chromBase, '_');
-		    *p = '\0';
-		    }
-		}
-	    // Is it mapped more than one time to the same chrom?
 	    chromCounts[map->chrId]++;
-	    if (!startsWith(chromBase, chrom) || chromCounts[map->chrId] > 1)
+	    if ((!sameChromDiffHaplotype(firstMap, map) && !diffChromSamePAR(firstMap, map)) ||
+		chromCounts[map->chrId] > 1)
 		{
 		gotMult = TRUE;
 		break;
@@ -1886,7 +1957,7 @@ for (id = 0;  id <= lastRsId;  id++)
 	    }
 	if (gotMult)
 	    {
-	    for (map = mappings[id];  map != NULL;  map = map->next)
+	    for (map = firstMap;  map != NULL;  map = map->next)
 		writeExceptionRetro(idChrs[map->chrId], map->start, map->end,
 				    id, MultipleAlignments);
 	    }
@@ -1980,6 +2051,7 @@ if (snp132Ext)
 
 initErrException(outRoot);
 initStringsUsed();
+initPar();
 memset(weightHisto, 0, sizeof(weightHisto));
 
 int expectedCols = snp132Ext ? 26 : 16;
@@ -2177,6 +2249,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 oneKGenomesRsIds = optionVal("1000GenomesRsIds", oneKGenomesRsIds);
 snp132Ext = optionExists("snp132Ext");
+parFile = optionVal("par", parFile);
 if (argc != 4)
     usage();
 #ifdef DEBUG

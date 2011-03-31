@@ -46,22 +46,19 @@
     #   17968
 
    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
-2936035333 bases (179443556 N's 2756591777 real 2756591777 upper 0 lower) in 17968 sequences in 1 files
-
-   # 2034575300 bases (68155432 N's 1966419868 real 1966419868 upper
-   #   0 lower) in 11654 sequences in 1 files
+   # 2936035333 bases (179443556 N's 2756591777 real 2756591777 upper 0 lower)
+   #  in 17968 sequences in 1 files
 
    # N50
    mkdir N50
    zcat  nomLeu1.fa.gz | faCount stdin | awk '/^(GL|ADFV)/ {print $1, $2}' > N50/chrom.sizes
    n50.pl N50/chrom.sizes
-#       reading: N50/chrom.sizes
-#       contig count: 17968, total size: 2936035333, one half size: 1468017666
-# cumulative    N50 count       contig  contig size
-1461968777      40      GL397300        22842388
-1468017666 one half size
-1484660812      41      GL397301        22692035
-
+    # reading: N50/chrom.sizes
+    # contig count: 17968, total size: 2936035333, one half size: 1468017666
+    # cumulative    N50 count       contig  contig size
+    # 1461968777      40      GL397300        22842388
+    # 1468017666 one half size
+    # 1484660812      41      GL397301        22692035
 
 #########################################################################
 # Initial makeGenomeDb.pl (DONE - 2010-10-29 - Chin)
@@ -206,14 +203,17 @@ nomLeu1.serverGenome = /hive/data/genomes/nomLeu1/nomLeu1.2bit
 nomLeu1.clusterGenome = /scratch/data/nomLeu1/nomLeu1.2bit
 nomLeu1.ooc = /scratch/data/nomLeu1/nomLeu1.11.ooc
 nomLeu1.lift = no
+nomLeu1.perChromTables = no
 nomLeu1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
-nomLeu1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}  
+nomLeu1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
 nomLeu1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
 nomLeu1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
 nomLeu1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+nomLeu1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
 nomLeu1.downloadDir = nomLeu1
-nomLeu1.genbank.mrna.xeno.loadDesc = yes
-nomLeu1.refseq.mrna.native.load = no
+nomLeu1.refseq.mrna.native.load  = yes
+nomLeu1.refseq.mrna.xeno.load = yes
+nomLeu1.refseq.mrna.xeno.loadDesc  = yes
 
     git add etc/genbank.conf
     git commit -m "Added nomLeu1" etc/genbank.conf
@@ -251,13 +251,12 @@ nomLeu1.refseq.mrna.native.load = no
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad nomLeu1 &
-    #    logFile: var/dbload/hgwdev/logs/2010.11.02-14:50:29.dbload.log
-    #   real   24m49.454s
-
+    # logFile: var/dbload/hgwdev/logs/2011.02.07-18:36:56.dbload.log
+    #  real    19m51.159s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
-    cvsup
+    git pull
     # add nomLeu1 to:
         etc/align.dbs
         etc/hgwdev.dbs

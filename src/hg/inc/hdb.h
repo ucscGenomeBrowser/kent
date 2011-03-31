@@ -414,11 +414,32 @@ struct sqlConnection *hMaybeConnectArchiveCentral(void);
 /* Connect to central database for archives.
  * Free this up with hDisconnectCentralArchive(). */
 
+boolean hHostHasPrefix(char *prefix);
+/* Return TRUE if this is running on web-server with host name prefix */
+
 boolean hIsPrivateHost(void);
-/* Return TRUE if this is running on private web-server. */
+/* Return TRUE if this is running on private (development) web-server.
+ * This was originally genome-test as well as hgwdev, however genome-test
+ * may be repurposed to direct users to the preview site instead of development site. */
+
+boolean hIsBetaHost(void);
+/* Return TRUE if this is running on beta (QA) web-server.
+ * Use sparingly as behavior on beta should be as close to RR as possible. */
+
+boolean hIsPreviewHost(void);
+/* Return TRUE if this is running on preview web-server.  The preview
+ * server is a mirror of the development server provided for public
+ * early access. */
+
+char *hBrowserName();
+/* Return browser name based on host name */
 
 boolean hTrackOnChrom(struct trackDb *tdb, char *chrom);
 /* Return TRUE if track exists on this chromosome. */
+
+struct trackDb *trackDbPolishAfterLinkup(struct trackDb *tdbList, char *db);
+/* Do various massaging that can only be done after parent/child
+ * relationships are established. */
 
 struct trackDb *hTrackDb(char *db);
 /* Load tracks associated with current db.
@@ -836,5 +857,8 @@ boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct cu
  * If this is a custom track, pass in function ctLookupName(table) which looks up a
  * custom track by name, otherwise pass NULL
  */
+
+char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table);
+/* Return file name from bigDataUrl or little table. */
 
 #endif /* HDB_H */

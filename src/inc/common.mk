@@ -50,7 +50,7 @@ ifneq (${COLOR32},0)
     HG_DEFS+=-DCOLOR32
 endif
 
-# autodetect if bam is installed
+# autodetect local installation of samtools:
 ifeq (${SAMDIR},)
   SAMDIR = /hive/data/outside/samtools/svn_${MACHTYPE}/samtools
   ifneq ($(wildcard ${SAMDIR}),)
@@ -79,12 +79,44 @@ ifeq (${USE_BAM},1)
     endif
 endif
 
+# As we do for bam/samtools, so do for tabix.  autodetect local installation:
+ifeq (${TABIXDIR},)
+  TABIXDIR = /hive/data/outside/tabix/tabix-0.2.3/${MACHTYPE}
+  ifneq ($(wildcard ${TABIXDIR}),)
+     KNETFILE_HOOKS=1
+  endif
+endif
+ifeq (${USE_TABIX},)
+  ifneq ($(wildcard ${TABIXDIR}),)
+     USE_TABIX=1
+  endif
+endif
+
+# libtabix and Angie's KNETFILE_HOOKS extension to it: disabled by default
+ifeq (${USE_TABIX},1)
+    ifeq (${TABIXINC},)
+        TABIXINC = ${TABIXDIR}
+    endif
+    ifeq (${TABIXLIB},)
+        TABIXLIB = ${TABIXDIR}/libtabix.a
+    endif
+    HG_INC += -I${TABIXINC}
+    L+=${TABIXLIB} -lz
+    HG_DEFS+=-DUSE_TABIX
+    ifeq (${KNETFILE_HOOKS},1)
+	HG_DEFS+=-DKNETFILE_HOOKS
+    endif
+endif
+
+
+SYS = $(shell uname -s)
+
 ifeq (${HG_WARN},)
-  ifeq (darwin,$(findstring darwin,${OSTYPE}))
+  ifeq (${SYS},Darwin)
       HG_WARN = -Wall -Wno-unused-variable
       HG_WARN_UNINIT=
   else
-    ifeq (solaris,$(findstring solaris,${OSTYPE}))
+    ifeq (${SYS},SunOS)
       HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
       HG_WARN_UNINIT=-Wuninitialized
     else

@@ -12,18 +12,29 @@ errAbort(
   "metaCheck - a program to validate that tables, files, and trackDb entries exist\n"
   "usage:\n"
   "   metaCheck database composite metaDb.ra trackDb.ra downloadDir\n"
+  "arguments:\n"
+  "   database            assembly database\n"
+  "   composite           name of track composite\n"
+  "   metaDb.ra           RA file with composite metaDb information\n"
+  "   trackDb.ra          RA file with composite trackDb information\n"
+  "   downloadDir         download directory for composite\n"
   "options:\n"
   "   -outMdb=file.ra     output cruft-free metaDb ra file\n"
   "   -onlyCompTdb        only check trackDb entries that start with composite\n"
+  "   -release            set release state, default alpha\n"
+  "   -help               print out extended information about what metaCheck is doing\n"
   );
 }
 
 char *outMdb = NULL;
 boolean onlyCompTdb = FALSE;
+char *release = "alpha";
 
 static struct optionSpec options[] = {
    {"outMdb", OPTION_STRING},
+   {"help", OPTION_BOOLEAN},
    {"onlyCompTdb", OPTION_BOOLEAN},
+   {"release", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -129,9 +140,9 @@ for(mdbObj = mdbObjs; mdbObj; mdbObj = mdbObj->next)
 return hash;
 }
 
-struct hash *getTrackDbHash(char *trackDb, struct trackDb **head)
+struct hash *getTrackDbHash(char *trackDb, struct trackDb **head, char *release)
 {
-struct trackDb *trackObjs = trackDbFromRa(trackDb), *trackObj;
+struct trackDb *trackObjs = trackDbFromRa(trackDb, release), *trackObj;
 struct hash *hash = newHash(10);
 
 for(trackObj = trackObjs; trackObj; trackObj = trackObj->next)
@@ -166,6 +177,11 @@ for(; mdbObj != NULL; mdbObj=mdbObj->next)
         continue;
 
     mdbVar = hashFindVal(mdbObj->varHash, "tableName");
+    if (mdbVar == NULL)
+        {
+        warn("tableName not found in object %s", mdbObj->obj);
+        continue;
+        }
 
     char *tableName = mdbVar->val;
 
@@ -316,7 +332,7 @@ void metaCheck(char *database, char *composite, char *metaDb, char *trackDb,
 struct mdbObj *mdbObjs = NULL;
 struct hash *mdbHash = getMetaDbHash(metaDb, &mdbObjs);
 struct trackDb *trackDbObjs = NULL;
-struct hash *trackHash = getTrackDbHash(trackDb, &trackDbObjs);
+struct hash *trackHash = getTrackDbHash(trackDb, &trackDbObjs, release);
 
 checkMetaTables(mdbObjs, database);
 checkMetaFiles(mdbObjs, downDir);
@@ -333,14 +349,35 @@ if (outMdb)
     }
 }
 
+void printHelp()
+{
+fprintf(stderr,
+"Metacheck tries to report on inconsistencies between all the various data stores that ENCODE uses.\n"
+"\n"
+"The checks are divided into four passes:\n"
+"  - checking that metaDb objects of type \"table\" are tables in mySQL\n"
+"  - checking that metaDb objects of type \"file\" are files in download dir\n"
+"  - checking that metaDb objects of type \"table\" are found in trackDb.ra\n"
+"  - checking that all tables in assembly that start with \"composite\" appear in metaDb\n"
+"  - checking that all tables in assembly that start with \"composite\" and have a     field called \"fileName\" are links to a file that can be opened\n"
+
+"\n"
+);
+usage();
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+if (optionExists("help"))
+    printHelp();
+    
 if (argc != 6)
     usage();
 outMdb = optionVal("outMdb", outMdb);
 onlyCompTdb = optionExists("onlyCompTdb");
+release = optionVal("release", release);
 
 metaCheck(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;

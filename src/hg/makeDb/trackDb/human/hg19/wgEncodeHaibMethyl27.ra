@@ -1,0 +1,626 @@
+track wgEncodeHaibMethylArray
+compositeTrack on
+superTrack wgEncodeDnaMethylSuper dense
+shortLabel HAIB Methyl27
+longLabel CpG Methylation by Illumina Methyl27 Bead Arrays from ENCODE/HAIB
+group regulation
+subGroup1 view Views Sites=Sites
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC Astrocy=Astrocy BE2C=BE2C BJ=BJ CMK=CMK ECC1=ECC-1 Fibrobl=Fibrobl GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 GM19240=GM19240 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HIPE=HIPEpiC HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiCi HSMM=HSMM  HSMMt=HSMMtube HTB11=HTB-11 Hepatocytes=Hepatocytes HTR8=HTR-8 IMR90=IMR90  Jurkat=Jurkat LNCaP=LNCaP  MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MELANO=Melano MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 Osteobl=Osteoblast PANC1=PANC-1 PanIslets=PanIslets PFSK1=PFSK-1 PrEC=PrEC ProgFib=ProgFib RPTEC=RPTEC SAEC=SAEC SKNSHRA=SK-N-SH_RA SKMC=SKMC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCAdiposeUHN00001=BC_Adipose_UHN00001 BCAdrenalGlandH12803N=BC_Adrenal_Gland_H12803N BCBladder0111002=BC_Bladder_01-11002 BCBrainH11058N=BC_Brain_H11058N BCBreast0203015=BC_Breast_02-03015 BCColon0111002=BC_Colon_01-11002 BCColonH12817N=BC_Colon_H12817N BCEsophagus0111002=BC_Esophagus_01-11002 BCEsophagusH12817N=BC_Esophagus_H12817N BCJejunumH12817N=BC_Jejunum_H12817N BCKidney0111002=BC_Kidney_01-11002 BCKidneyH12817N=BC_Kidney_H12817N BCLeftVentricleN41=BC_Left_Ventricle_N41 BCLeukocyteUHN00204=BC_Leukocyte_UHN00204 BCLiver0111002=BC_Liver_01-11002 BCLung0111002=BC_Lung_01-11002 BCLungH12817N=BC_Lung_H12817N BCPancreasH12817N=BC_Pancreas_H12817N BCPenisH12817N=BC_Penis_H12817N BCPericardiumH12529N=BC_Pericardium_H12529N BCPlacentaUHN00189=BC_Placenta_UHN00189 BCProstateGlandH12817N=BC_Prostate_Gland_H12817N BCRectumN29=BC_Rectum_N29 BCSkeletalMuscle0111002=BC_Skeletal_Muscle_01-11002 BCSkeletalMuscleH12817N=BC_Skeletal_Muscle_H12817N BCSkin0111002=BC_Skin_01-11002 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 
+subGroup3 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
+subGroup4 obtainedBy ObtainedBy UW=UW HAIB=HudsonAlpha BioChain=BioChain Yale=Yale Duke=Duke
+subGroup5 treatment Treatment None=None
+dimensions dimY=cellType dimZ=rep dimX=obtainedBy
+dimensionZchecked rep1
+fileSortOrder cell=Cell_Line obtainedBy=Obtained_By replicate=Rep labVersion=Data_Type fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+sortOrder cellType=+ rep=+ obtainedBy=+
+controlledVocabulary encode/cv.ra cellType=cell obtainedBy=obtainedBy treatment=treatment
+dragAndDrop subTracks
+priority 0
+type bed 9
+wgEncode 1
+itemRgb on
+#visibility dense
+#canPack On
+scoreFilter 0
+scoreFilterLimits 0:1000
+maxWindowToQuery 10000000
+#maxWindowToDraw 1000000
+html wgEncodeHaibMethyl27
+
+        track wgEncodeHaibMethylArrayViewSites
+        parent wgEncodeHaibMethylArray
+        shortLabel Sites
+        view Sites
+        type bed 9
+        visibility full
+        viewUi on
+
+        track wgEncodeHaibMethylArrayAg04449UwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel AG04449 2
+        longLabel AG04449 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=AG04449 obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayAg04450UwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel AG04450 2
+        longLabel AG04450 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=AG04450 obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayAg09309UwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel AG09309 2
+        longLabel AG09309 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=AG09309 obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayAg09319UwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel AG09319 2
+        longLabel AG09319 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=AG09319 obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayAg10803UwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel AG10803 2
+        longLabel AG10803 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=AG10803 obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcadiposeuhn00001BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Adipose 1
+        longLabel BC_Adipose_UHN00001 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCAdiposeUHN00001 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcadrenalglandh12803nBiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Adrenal_Gland 1
+        longLabel BC_Adrenal_Gland_H12803N Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCAdrenalGlandH12803N obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcbladder0111002BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Bladder 1
+        longLabel BC_Bladder_01-11002 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCBladder0111002 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcbrainh11058nBiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Brain 1
+        longLabel BC_Brain_H11058N Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCBrainH11058N obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcbreast0203015BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Breast 1
+        longLabel BC_Breast_02-03015 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCBreast0203015 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBccolon0111002BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Colon_011 1
+        longLabel BC_Colon_01-11002 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCColon0111002 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBccolonh12817nBiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Colon_H12 1
+        longLabel BC_Colon_H12817N Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCColonH12817N obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcesophagus0111002BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Esophagus_011 1
+        longLabel BC_Esophagus_01-11002 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCEsophagus0111002 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcesophagush12817nBiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Esophagus_H12 1
+        longLabel BC_Esophagus_H12817N Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCEsophagusH12817N obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcjejunumh12817nBiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Jejunum 1
+        longLabel BC_Jejunum_H12817N Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCJejunumH12817N obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBckidney0111002BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Kidney_011 1
+        longLabel BC_Kidney_01-11002 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCKidney0111002 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBckidneyh12817nBiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Kidney_H12 1
+        longLabel BC_Kidney_H12817N Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCKidneyH12817N obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcleftventriclen41BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Left_Ventricle 1
+        longLabel BC_Left_Ventricle_N41 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCLeftVentricleN41 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcleukocyteuhn00204BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Leukocyte 1
+        longLabel BC_Leukocyte_UHN00204 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCLeukocyteUHN00204 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcliver0111002BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Liver 1
+        longLabel BC_Liver_01-11002 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCLiver0111002 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBclung0111002BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Lung_011 1
+        longLabel BC_Lung_01-11002 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCLung0111002 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBclungh12817nBiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Lung_H12 1
+        longLabel BC_Lung_H12817N Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCLungH12817N obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcpancreash12817nBiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Pancreas 1
+        longLabel BC_Pancreas_H12817N Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCPancreasH12817N obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcpenish12817nBiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Penis 1
+        longLabel BC_Penis_H12817N Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCPenisH12817N obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcpericardiumh12529nBiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Pericardium 1
+        longLabel BC_Pericardium_H12529N Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCPericardiumH12529N obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcplacentauhn00189BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Placenta 1
+        longLabel BC_Placenta_UHN00189 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCPlacentaUHN00189 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcprostateglandh12817nBiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Prostate 1
+        longLabel BC_Prostate_Gland_H12817N Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCProstateGlandH12817N obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcrectumn29BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Rectum 1
+        longLabel BC_Rectum_N29 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCRectumN29 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcskeletalmuscle0111002BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Skel_Muscle_011 1
+        longLabel BC_Skeletal_Muscle_01-11002 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCSkeletalMuscle0111002 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcskeletalmuscleh12817nBiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Skel_Muscle_H12 1
+        longLabel BC_Skeletal_Muscle_H12817N Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCSkeletalMuscleH12817N obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcskin0111002BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Skin 1
+        longLabel BC_Skin_01-11002 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCSkin0111002 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayBcsmallintestine0111002BiochainSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Small_Intest 1
+        longLabel BC_Small_Intestine_01-11002 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=BCSmallIntestine0111002 obtainedBy=BioChain treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayCmkUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel CMK 2
+        longLabel CMK Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=CMK obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayGm12891HaibSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel GM12891 1
+        longLabel GM12891 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=GM12891 obtainedBy=HAIB treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayGm12891HaibSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel GM12891 2
+        longLabel GM12891 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=GM12891 obtainedBy=HAIB treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayGm12892HaibSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel GM12892 1
+        longLabel GM12892 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=GM12892 obtainedBy=HAIB treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayGm12892HaibSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel GM12892 2
+        longLabel GM12892 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=GM12892 obtainedBy=HAIB treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayH1hescHaibSitesRep1
+        parent wgEncodeHaibMethylArrayViewSites on
+        shortLabel H1-hESC 1
+        longLabel H1-hESC Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=1H1hESC obtainedBy=HAIB treatment=None rep=rep1
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayH1hescHaibSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel H1-hESC 2
+        longLabel H1-hESC Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=1H1hESC obtainedBy=HAIB treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHaeUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HAEpiC 2
+        longLabel HAEpiC Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HAE obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHcfUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HCF 2
+        longLabel HCF Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HCF obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHcmUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HCM 2
+        longLabel HCM Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HCM obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHcpeUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HCPEpiC 2
+        longLabel HCPEpiC Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HCPE obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHeeUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HEEpiC 2
+        longLabel HEEpiC Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HEE obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHek293YaleSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HEK293 2
+        longLabel HEK293 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HEK293 obtainedBy=Yale treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHepg2HaibSitesRep3
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HepG2 3
+        longLabel HepG2 Methylation (27K) by Illumina Bead Arrays Rep 3 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=2HepG2 obtainedBy=HAIB treatment=None rep=rep3
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHepg2HaibSitesRep4
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HepG2 4
+        longLabel HepG2 Methylation (27K) by Illumina Bead Arrays Rep 4 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=2HepG2 obtainedBy=HAIB treatment=None rep=rep4
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHipeUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HIPEpiC 2
+        longLabel HIPEpiC Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HIPE obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHmecUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HMEC 2
+        longLabel HMEC Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HMEC obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHnpceUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HNPCEpiC 2
+        longLabel HNPCEpiC Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HNPCE obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHpaeUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HPAEpiC 2
+        longLabel HPAEpiC Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HPAE obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHrceUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HRCEpiC 2
+        longLabel HRCEpiC Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HRCE obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHreUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HRE 2
+        longLabel HRE Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HRE obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayHrpeUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HRPEpiC 2
+        longLabel HRPEpiC Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HRPE obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayImr90UwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel IMR90 2
+        longLabel IMR90 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=IMR90 obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayJurkatUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel Jurkat 2
+        longLabel Jurkat Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=Jurkat obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayK562HaibSitesRep4
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel K562 4
+        longLabel K562 Methylation (27K) by Illumina Bead Arrays Rep 4 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep4
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayMcf7DukeSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel MCF-7 2
+        longLabel MCF-7 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=MCF7 obtainedBy=Duke treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayNb4UwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel NB4 2
+        longLabel NB4 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=NB4 obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayNhaUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel NH-A 2
+        longLabel NH-A Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=NHA obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayNhbeUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel NHBE 2
+        longLabel NHBE Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=NHBE obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayNhdfneoUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel NHDF-neo 2
+        longLabel NHDF-neo Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=NHDF-neo obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayRptecUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel RPTEC 2
+        longLabel RPTEC Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=RPTEC obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArraySaecUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel SAEC 2
+        longLabel SAEC Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=SAEC obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArraySknshraUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel SK-N-SH_RA 2
+        longLabel SK-N-SH_RA Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=SKNSHRA obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArraySkmcUwSitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel SKMC 2
+        longLabel SKMC Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=SKMC obtainedBy=UW treatment=None rep=rep2
+        type bed 9
+        # subId=3337 dateSubmitted=2011-01-19
+
+        track wgEncodeHaibMethylArrayK562HaibSitesRep3
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel K562 3
+        longLabel K562 Methylation (27K) by Illumina Bead Arrays Rep 3 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep3
+        type bed 9
+        # subId=3189 dateSubmitted=2011-01-07
+
+        track wgEncodeHaibMethylArrayGm12878SitesRep1
+        parent wgEncodeHaibMethylArrayViewSites
+        shortLabel GM12878 1
+        longLabel GM12878 Methylation (27K) by Illumina Bead Arrays Rep 1 ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=1GM12878 obtainedBy=HAIB treatment=None rep=rep1
+        type bed 9
+        origAssembly hg18
+        # subId=3526 dateSubmitted=2011-02-14
+
+        track wgEncodeHaibMethylArrayGm12878SitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel GM12878 2
+        longLabel GM12878 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=1GM12878 obtainedBy=HAIB treatment=None rep=rep2
+        type bed 9
+        origAssembly hg18
+        # subId=3526 dateSubmitted=2011-02-14
+
+        track wgEncodeHaibMethylArrayHepg2SitesRep1
+        parent wgEncodeHaibMethylArrayViewSites on 
+        shortLabel HepG2 1
+        longLabel HepG2 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=2HepG2 obtainedBy=HAIB treatment=None rep=rep1
+        type bed 9
+        origAssembly hg18
+        # subId=3526 dateSubmitted=2011-02-14
+
+        track wgEncodeHaibMethylArrayHepg2SitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HepG2 2
+        longLabel HepG2 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=2HepG2 obtainedBy=HAIB treatment=None rep=rep2
+        type bed 9
+        origAssembly hg18
+        # subId=3526 dateSubmitted=2011-02-14
+
+        track wgEncodeHaibMethylArrayK562SitesRep1
+        parent wgEncodeHaibMethylArrayViewSites
+        shortLabel K562 1
+        longLabel K562 Methylation (27K) by Illumina Bead Arrays Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep1
+        type bed 9
+        origAssembly hg18
+        # subId=3526 dateSubmitted=2011-02-14
+
+        track wgEncodeHaibMethylArrayK562SitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel K562 2
+        longLabel K562 Methylation (27K) by Illumina Bead Arrays Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep2
+        type bed 9
+        origAssembly hg18
+        # subId=3526 dateSubmitted=2011-02-14

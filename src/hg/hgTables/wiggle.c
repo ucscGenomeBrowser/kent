@@ -596,7 +596,7 @@ wiggleDataStreamFree(&wds);
 return linesOut;
 }	/*	static int wigOutRegion()	*/
 
-static int wigMaxOutput()
+int bigFileMaxOutput()
 /*	return maxOut value (cart variable defined on curTable)	*/
 {
 char *maxOutputStr = NULL;
@@ -637,7 +637,7 @@ if (track == NULL)
 	     "track group if possible.",
 	     table);
 
-maxOut = wigMaxOutput();
+maxOut = bigFileMaxOutput();
 
 if (cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
     fputs("#", stdout);
@@ -831,7 +831,7 @@ WIG_INIT;  /* ct, isCustom, hasConstraint, wds and table2 are set here */
 if (hasConstraint)
     freeMem(dataConstraint);	/* been cloned into wds */
 
-maxOut = wigMaxOutput();
+maxOut = bigFileMaxOutput();
 
 wds->setMaxOutput(wds, maxOut);
 
@@ -908,7 +908,7 @@ int maxOut = 0;
 struct wigAsciiData *data = NULL;
 int outCount;
 
-maxOut = wigMaxOutput();
+maxOut = bigFileMaxOutput();
 outCount = wigOutRegion(table, conn, region, maxOut, wigDataNoPrint, &data, 0);
 
 return data;

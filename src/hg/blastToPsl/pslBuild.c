@@ -290,7 +290,7 @@ finishPsl(psl, flags);
 return psl;
 }
 
-FILE *pslBuildScoresOpen(char *scoreFile, bool inclDefs)
+FILE *pslBuildScoresOpen(char *scoreFile, boolean inclDefs)
 /* open score file and write headers */
 {
 FILE *fh = mustOpen(scoreFile, "w");

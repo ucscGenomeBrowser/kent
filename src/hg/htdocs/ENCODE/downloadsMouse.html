@@ -6,63 +6,66 @@
     <META name="keywords" content="ENCODE, project, ENCODE project, genome, genome browser, human genome, Blat, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA, NHGRI, NISC">
     <TITLE>ENCODE Project at UCSC: Data Release Policy</TITLE>
     <LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
+
+    <style type="text/css">
+        .hd0 { font-size: 120%; text-align: left; font-weight:bold; text-indent:.6em; height:2em;  }
+        .hd1 { font-size: 115%; text-align: left; font-weight:bold; text-indent:.18em; height:1.5em; }
+        .hd2 { font-size: 100%; text-align: left; font-weight:bold; text-indent:.1em; }
+        .virtual { height: 2.1em; }
+        .contentTbl { border: 1px solid #888888; background-color: #fffee8; width: 100%; }
+        .content { background-color: #fffee8; padding:0em .9em 1.2em; margin: 0; }
+        .itemTbl { border: 1px solid #000088; background-color: #FFFEE8; }
+        .ltBlue { background-color: #D9E4F8; }
+        .buttonLink { width:100px; }
+        .right { position:absolute; right:0px; }
+    </style>
   </HEAD>
 
   <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF">
   <A NAME="TOP"></A>
 
-  <!-- Header Images and links -->
-    <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-      <TR><TH COLSPAN=2 ALIGN="left">&nbsp;&nbsp;
+    <!-- Header Images and links -->
+    <div class='hd0'>
         <A HREF="http://www.genome.gov/10005107" TARGET=_BLANK><IMG SRC="../images/ENCODE_scaleup_logo.png" height=50 ALT="ENCODE Project at NHGRI"></A>
-        &nbsp;&nbsp;
-          <A HREF="/encode/"><IMG SRC="../images/encodeDcc.jpg" ALT="ENCODE Data Coordination Center at UCSC"></A>
-      </TH></TR>
+        &nbsp;
+        <A HREF="/encode/"><IMG SRC="../images/encodeDcc.jpg" ALT="ENCODE Data Coordination Center at UCSC"></A>
+        <div class='virtual'><!--#include virtual="../inc/encode.terms.topbar.html"--></div>
+    <div>
 
-      <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../inc/encode.terms.topbar.html"--></TD></TR>
-      </TABLE>
+    <!-- Content table -->
+    <TABLE class='contentTbl' BORDER="0" CELLSPACING="0" CELLPADDING="0">
+        <TR>
+            <TD class='ltBlue hd1'>&nbsp; Mouse ENCODE Downloads</TD></TR>
+        <TR><TD class='content'>
+            <P>This page contains links to directories containing raw and processed
+            data for mouse ENCODE data produced as part of the ENCODE production phase
+            (September 2007-present).  For bulk download, retrieval by
+            <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/mm9/encodeDCC/" TARGET=_blank>FTP</A>
+            is recommended. All files here are covered by the
+            <A HREF="/ENCODE/terms.html" TARGET=_BLANK>ENCODE data release policy</A>.</P>
 
-<!--outer table is for border purposes-->
-<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1" >
-  <TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-      <TR><TD>	
-        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
-		  <TR><TD>
-                <A NAME="Existing"></A><FONT SIZE="4"><B>&nbsp; Mouse ENCODE Downloads</B></FONT>
-          </TD></TR>
-		</TABLE>
-        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0 style="padding-left:12px; padding-bottom:3px; padding-right:12px; margin: 0;">
-            <TR>
-		        <TD>
-		            <P>This page contains links to directories containing raw and processed
-		            data for mouse ENCODE data produced as part of the ENCODE production phase
-		            (September 2007-present).  For bulk download, retrieval by 
-		            <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/mm9/encodeDCC/" TARGET=_blank>FTP</A>
-		            is recommended. All files here are covered by the
-		            <A HREF="/ENCODE/terms.html" TARGET=_BLANK>ENCODE data release policy</A>.</P>
-		            
-		            <A NAME="hg18"><FONT SIZE ="5"><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/encodeDCC/"TARGET=_BLANK>Mouse Genome Build NCBI37/mm9</A></FONT></A>  
-                </TD>
-            </TR>
-	        <TR>      
-	            <TD>
-	                <TABLE BGCOLOR="fffee8" BORDER=1 CELLSPACING=0>
-	                           <TR><TH COLSPAN=2 ALIGN=LEFT BGCOLOR="D9E4F8">Bidirectional Promoters</TH></TR>
-	                           <TR>
-	                               <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeNhgriBip/"
-	                               TARGET=_BLANK>NHGRI BiP</A>&nbsp;</TD>
-	                               <TD>NHGRI Elnitski Bidirectional Promoters</TD>
-	                           </TR>
-                               </TR>   
-                        </TABLE>
-		 	<BR>     
-	            </TD></TR>
+            <!-- Item tables -->
+            <div style='position:relative; width:36.8em; height:1.8em;'>
+            <A NAME="mm9"><A class='hd1' HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/encodeDCC/" TARGET=_BLANK>Mouse Genome Build NCBI37/mm9</A></A>
+            <input type='button' class='buttonLink right' value='File search' onclick="window.location='../cgi-bin/hgFileSearch?db=mm9';" title='Search for downloadable files ...'>
+            </div>
+            <TABLE class='itemTbl' BORDER=1 CELLSPACING=0>
+
+                <TR>
+                    <td class='ltBlue hd2' colspan=2>Bidirectional Promoters</td>
+                </TR><TR>
+                    <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeNhgriBip/" TARGET=_BLANK>NHGRI BiP</A>&nbsp;</TD>
+                    <TD>NHGRI Elnitski Bidirectional Promoters</TD>
+                </TR><TR>
+                    <td class='ltBlue hd2' colspan=2>Transcription Factor Binding Sites</td>
+                </TR><TR>
+                    <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/encodeDCC/wgEncodeSydhTfbs/" TARGET=_BLANK>Stan/Yale TFBS</A>&nbsp;</TD>
+                    <TD>Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale</TD>
+                </TR>
             </TABLE>
-       </TD></TR>
+        </TD></TR>
     </TABLE>
- </TD></TR>
-</TABLE>
 
-</BODY></HTML>
+  </BODY>
+</HTML>
 

@@ -80,6 +80,16 @@ char *cgiServerName()
 return getenv("SERVER_NAME");
 }
 
+char *cgiServerPort()
+/* Return port number of server */
+{
+char *port = getenv("SERVER_PORT");
+if (port)
+    return port;
+else
+    return "80";
+}
+
 char *cgiRemoteAddr()
 /* Return IP address of client (or "unknown"). */
 {
@@ -1603,7 +1613,6 @@ void cgiMakeCheckboxGroupWithVals(char *name, char *menu[], char *values[], int 
  * values (same behavior as a multi-select input), with nice labels in menu[]. */
 {
 int i;
-if (checked == NULL) checked = slNameNew(menu[0]);
 if (values == NULL) values = menu;
 if (menu == NULL) menu = values;
 puts("<TABLE BORDERWIDTH=0><TR>");
@@ -1657,6 +1666,80 @@ for (i=0; i<menuSize; ++i)
     printf("<OPTION%s VALUE=\"%s\">%s</OPTION>\n", selString, values[i], menu[i]);
     }
 printf("</SELECT>\n");
+}
+
+char *cgiMakeSelectDropList(boolean multiple, char *name, struct slPair *valsAndLabels,char *selected, char *anyAll,char *extraClasses, char *extraHtml)
+// Returns allocated string of HTML defining a drop-down select (if multiple, REQUIRES ui-dropdownchecklist.js)
+// In valsAndLabels, val (pair->name) must be filled in but label (pair->val) may be NULL.
+// selected, if not NULL is a val found in the valsAndLabels (multiple then comma delimited list).  If null and anyAll not NULL, that will be selected
+// anyAll, if not NULL is the string for an initial option.  It can contain val and label, delimited by a comma
+// extraHtml, if not NULL contains id, javascript calls and style.  It does NOT contain class definitions
+{
+struct dyString *output = dyStringNew(1024);
+boolean checked = FALSE;
+
+dyStringPrintf(output,"<SELECT name='%s'",name);
+if (multiple)
+    dyStringAppend(output," MULTIPLE");
+if (extraClasses != NULL)
+    dyStringPrintf(output," class='%s%s'",extraClasses,(multiple?" filterBy":""));
+else if (multiple)
+    dyStringAppend(output," class='filterBy'");
+
+if (extraHtml != NULL)
+    dyStringPrintf(output," %s",extraHtml);
+dyStringAppend(output,">\n");
+
+// Handle initial option "Any" or "All"
+if (anyAll != NULL)
+    {
+    char *val = anyAll;  // Could contain a label after the value
+    char *label = strchr(val,',');  // Could contain a label after the value
+    if (label != NULL)
+        {
+        val = cloneString(anyAll);
+        label = strchr(val,',');  // again because this is new mem
+        *label = '\0';
+        label = label+1;
+        }
+    else
+        label = val;
+    checked = TRUE; // The default case
+    if (selected != NULL)
+        {
+        if (multiple)
+            checked = (findWordByDelimiter(val,',', selected) != NULL);
+        else
+            checked = sameString(val,selected);
+        }
+    dyStringPrintf(output, "<OPTION%s VALUE='%s'>%s</OPTION>\n",(checked?" SELECTED":""),
+                   val, javaScriptLiteralEncode(label));
+    if (label != val)
+        freeMem(val);
+    }
+
+// All other options
+struct slPair *valPair = valsAndLabels;
+for (; valPair != NULL; valPair = valPair->next)
+    {
+    checked = FALSE;
+    if (selected != NULL)
+        {
+        if (multiple)
+            checked = (findWordByDelimiter(valPair->name,',', selected) != NULL);
+        else
+            checked = sameString(valPair->name,selected);
+        }
+    char *label = valPair->name;
+    if (valPair->val != NULL)
+        label = valPair->val;
+    dyStringPrintf(output, "<OPTION%s VALUE='%s'>%s</OPTION>\n",(checked?" SELECTED":""),
+                   (char *)valPair->name, javaScriptLiteralEncode(label));
+    }
+
+dyStringPrintf(output,"</SELECT>\n");
+
+return dyStringCannibalize(&output);
 }
 
 void cgiMakeDropListWithVals(char *name, char *menu[], char *values[],

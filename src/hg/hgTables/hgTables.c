@@ -27,6 +27,8 @@
 #include "hgMaf.h"
 #include "gvUi.h"
 #include "wikiTrack.h"
+#include "trackHub.h"
+#include "hubConnect.h"
 #include "hgConfig.h"
 
 static char const rcsid[] = "$Id: hgTables.c,v 1.198 2010/05/19 01:37:13 kent Exp $";
@@ -53,6 +55,7 @@ struct grp *fullGroupList;	/* List of all groups. */
 struct grp *curGroup;	/* Currently selected group. */
 struct trackDb *fullTrackList;	/* List of all tracks in database. */
 struct hash *fullTrackHash;     /* Hash of all tracks in fullTrackList keyed by ->track field. */
+struct hash *fullTrackAndSubtrackHash;  /* All tracks and subtracks keyed by track field. */
 struct trackDb *forbiddenTrackList; /* List of tracks with 'tableBrowser off' setting. */
 struct trackDb *curTrack;	/* Currently selected track. */
 char *curTable;		/* Currently selected table. */
@@ -116,26 +119,21 @@ void writeHtmlCell(char *text)
  * and stripping html tags and breaking spaces.... */
 {
 int maxLen = 128;
-if (strlen(text) > maxLen)
+int len = strlen(text);
+char *extra = "";
+if (len > maxLen)
     {
-    char *s = cloneStringZ(text,maxLen);
-    char *r;
-    stripHtmlTags(s);
-    eraseTrailingSpaces(s);
-    r = replaceChars(s, " ", "&nbsp;");
-    hPrintf("<TD>%s&nbsp;...</TD>", r);
-    freeMem(s);
-    freeMem(r);
+    len = maxLen;
+    extra = "&nbsp;...";
     }
-else
-    {
-    char *r;
-    stripHtmlTags(text);
-    eraseTrailingSpaces(text);
-    r = replaceChars(text, " ", "&nbsp;");
-    hPrintf("<TD>%s</TD>", r);
-    freeMem(r);
-    }
+char *s = cloneStringZ(text,len);
+char *r;
+stripHtmlTags(s);
+eraseTrailingSpaces(s);
+r = replaceChars(s, " ", "&nbsp;");
+hPrintf("<TD>%s%s</TD>", r, extra);
+freeMem(s);
+freeMem(r);
 }
 
 static void vaHtmlOpen(char *format, va_list args)
@@ -225,8 +223,19 @@ if (s != NULL)
     }
 }
 
+struct grp *grpFromHub(struct hubConnectStatus *hub)
+/* Make up a grp structur from hub */
+{
+struct grp *grp;
+AllocVar(grp);
+char name[16];
+safef(name, sizeof(name), "hub_%d", hub->id);
+grp->name = cloneString(name);
+grp->label = cloneString(hub->shortLabel);
+return grp;
+}
 
-static struct trackDb *getFullTrackList()
+static struct trackDb *getFullTrackList(struct hubConnectStatus *hubList, struct grp **pHubGroups)
 /* Get all tracks including custom tracks if any. */
 {
 struct trackDb *list = hTrackDb(database);
@@ -249,6 +258,34 @@ list = newList;
 /* add wikiTrack if enabled */
 if (wikiTrackEnabled(database, NULL))
     wikiTrackDb(&list);
+
+/* Add hub tracks. */
+struct hubConnectStatus *hubStatus;
+for (hubStatus = hubList; hubStatus != NULL; hubStatus = hubStatus->next)
+    {
+    /* Load trackDb.ra file and make it into proper trackDb tree */
+    char hubName[8];
+    safef(hubName, sizeof(hubName), "hub_%d", hubStatus->id);
+    struct trackHub *hub = trackHubOpen(hubStatus->hubUrl, hubName);
+    if (hub != NULL)
+	{
+	struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
+	if (hubGenome != NULL)
+	    {
+	    struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
+	    tdbList = trackDbLinkUpGenerations(tdbList);
+	    tdbList = trackDbPolishAfterLinkup(tdbList, database);
+	    trackDbPrioritizeContainerItems(tdbList);
+	    if (tdbList != NULL)
+		{
+		list = slCat(list, tdbList);
+		struct grp *grp = grpFromHub(hubStatus);
+		slAddHead(pHubGroups, grp);
+		}
+	    }
+	}
+    }
+slReverse(pHubGroups);
 
 /* Create dummy group for custom tracks if any */
 ctList = getCustomTracks();
@@ -491,42 +528,31 @@ else
     }
 }
 
-#ifdef UNUSED
-char *trackTable(char *rawTable)
-/* Return table name for track, substituting all_mrna
- * for mRNA if need be. */
-{
-char *table = rawTable;
-return table;
-}
-#endif /* UNUSED */
 
 char *connectingTableForTrack(char *rawTable)
 /* Return table name to use with all.joiner for track.
  * You can freeMem this when done. */
 {
-#ifdef UNUSED
-if (sameString(rawTable, "mrna"))
-    return cloneString("all_mrna");
-else if (sameString(rawTable, "est"))
-    return cloneString("all_est");
-else
-#endif /* UNUSED */
-    return cloneString(rawTable);
+return cloneString(rawTable);
 }
 
 char *chromTable(struct sqlConnection *conn, char *table)
 /* Get chr1_table if it exists, otherwise table.
  * You can freeMem this when done. */
 {
-char *chrom = hDefaultChrom(database);
-if (sqlTableExists(conn, table))
+if (isHubTrack(table))
     return cloneString(table);
 else
     {
-    char buf[256];
-    safef(buf, sizeof(buf), "%s_%s", chrom, table);
-    return cloneString(buf);
+    char *chrom = hDefaultChrom(database);
+    if (sqlTableExists(conn, table))
+	return cloneString(table);
+    else
+	{
+	char buf[256];
+	safef(buf, sizeof(buf), "%s_%s", chrom, table);
+	return cloneString(buf);
+	}
     }
 }
 
@@ -555,14 +581,45 @@ if (!sqlTableExists(conn, table))
 freeMem(splitTable);
 }
 
+struct hTableInfo *hubTrackTableInfo(struct trackDb *tdb)
+/* Given trackDb entry for a hub track, wrap table info around it. */
+{
+struct hTableInfo *hti;
+if (startsWithWord("bigBed", tdb->type))
+    {
+    hti = bigBedToHti(tdb->track, NULL);
+    }
+else if (startsWithWord("bam", tdb->type))
+    {
+    hti = bamToHti(tdb->table);
+    }
+else
+    {
+    AllocVar(hti);
+    hti->rootName = cloneString(tdb->track);
+    hti->isPos = TRUE;
+    hti->type = cloneString(tdb->type);
+    }
+return hti;
+}
+
 struct hTableInfo *maybeGetHti(char *db, char *table, struct sqlConnection *conn)
 /* Return primary table info, but don't abort if table not there. Conn should be open to db. */
 {
 struct hTableInfo *hti = NULL;
 
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isHubTrack(table))
+    {
+    struct trackDb *tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
+    hti = hubTrackTableInfo(tdb);
+    }
+else if (isBigBed(database, table, curTrack, ctLookupName))
     {
     hti = bigBedToHti(table, conn);
+    }
+else if (isBamTable(table))
+    {
+    hti = bamToHti(table);
     }
 else if (isCustomTrack(table))
     {
@@ -801,7 +858,7 @@ if (track == NULL)
 return track;
 }
 
-struct grp *makeGroupList(struct trackDb *trackList, boolean allTablesOk)
+struct grp *makeGroupList(struct trackDb *trackList, struct grp **pHubGrpList, boolean allTablesOk)
 /* Get list of groups that actually have something in them. */
 {
 struct grp *groupsAll, *groupList = NULL, *group;
@@ -827,6 +884,13 @@ for (group = slPopHead(&groupsAll); group != NULL; group = slPopHead(&groupsAll)
 	}
     else
         grpFree(&group);
+    }
+
+/* Add in groups from hubs. */
+for (group = slPopHead(pHubGrpList); group != NULL; group = slPopHead(pHubGrpList))
+    {
+    slAddTail(&groupList, group);
+    hashAdd(groupsInDatabase, group->name, group);
     }
 
 /* Do some error checking for tracks with group names that are
@@ -1021,9 +1085,11 @@ else
 boolean htiIsPositional(struct hTableInfo *hti)
 /* Return TRUE if hti looks like it's from a positional table. */
 {
-return isCustomTrack(hti->rootName) ||
+return isCustomTrack(hti->rootName) || hti->isPos;
+#ifdef OLD
     ((hti->startField[0] && hti->endField[0]) &&
 	(hti->chromField[0] || sameString(hti->rootName, "gl")));
+#endif /* OLD */
 }
 
 char *getIdField(char *db, struct trackDb *track, char *table,
@@ -1282,8 +1348,10 @@ hashFree(&idHash);
 void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     bigBedTabOut(db, table, conn, fields, f);
+else if (isBamTable(table))
+    bamTabOut(db, table, conn, fields, f);
 else if (isCustomTrack(table))
     {
     doTabOutCustomTracks(db, table, conn, fields, f);
@@ -1298,11 +1366,15 @@ struct slName *fullTableFields(char *db, char *table)
 char dtBuf[256];
 struct sqlConnection *conn;
 struct slName *fieldList = NULL, *dtfList = NULL, *field, *dtf;
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     {
     conn = hAllocConn(db);
     fieldList = bigBedGetFields(table, conn);
     hFreeConn(&conn);
+    }
+else if (isBamTable(table))
+    {
+    fieldList = bamGetFields(table);
     }
 else if (isCustomTrack(table))
     {
@@ -1740,23 +1812,41 @@ cartRemovePrefix(cart, hgtaDo);
 
 char *excludeVars[] = {"Submit", "submit", NULL};
 
+static void rAddTracksToHash(struct trackDb *tdbList, struct hash *hash)
+/* Add tracks in list to hash */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    hashAdd(hash, tdb->track, tdb);
+    if (tdb->subtracks)
+        rAddTracksToHash(tdb->subtracks, hash);
+    }
+}
+
 static struct hash *hashTrackList(struct trackDb *tdbList)
 /* Return hash full of trackDb's from list, keyed by tdb->track */
 {
 struct hash *hash = hashNew(0);
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
     hashAdd(hash, tdb->track, tdb);
+    }
 return hash;
 }
 
 void initGroupsTracksTables()
 /* Get list of groups that actually have something in them. */
 {
-fullTrackList = getFullTrackList();
+struct hubConnectStatus *hubList = hubConnectStatusListFromCart(cart);
+struct grp *hubGrpList = NULL;
+fullTrackList = getFullTrackList(hubList, &hubGrpList);
 fullTrackHash = hashTrackList(fullTrackList);
+fullTrackAndSubtrackHash = hashNew(0);
+rAddTracksToHash(fullTrackList, fullTrackAndSubtrackHash);
 curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
-fullGroupList = makeGroupList(fullTrackList, allowAllTables());
+fullGroupList = makeGroupList(fullTrackList, &hubGrpList, allowAllTables());
 curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
 if (sameString(curGroup->name, "allTables"))
     curTrack = NULL;

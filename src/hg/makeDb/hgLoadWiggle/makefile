@@ -11,24 +11,24 @@ A = hgLoadWiggle
 all::	${A} hgWiggle wigEncode
 
 hgLoadWiggle: $O ${MYLIBS}
-	${CC} -o ${BINDIR}/${A} $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/${A}${EXE}
+	${CC} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 hgDumpWiggle:	hgDumpWiggle.o ${MYLIBS}
-	${CC} -o ${BINDIR}/hgDumpWiggle hgDumpWiggle.o \
+	${CC} -o ${DESTDIR}${BINDIR}/hgDumpWiggle${EXE} hgDumpWiggle.o \
 		${MYLIBS} $L
-	${STRIP} ${BINDIR}/hgDumpWiggle${EXE}
+	${STRIP} ${DESTDIR}${BINDIR}/hgDumpWiggle${EXE}
 
 hgWiggle:	hgWiggle.o ${MYLIBS}
-	${CC} -o ${BINDIR}/hgWiggle hgWiggle.o \
+	${CC} -o ${DESTDIR}${BINDIR}/hgWiggle${EXE} hgWiggle.o \
 		${MYLIBS} $L
-	${STRIP} ${BINDIR}/hgWiggle${EXE}
+	${STRIP} ${DESTDIR}${BINDIR}/hgWiggle${EXE}
 
 hgWiggle.o:	../../inc/wiggle.h hgWiggle.c
 
 wigEncode:	wigEncode.o ${MYLIBS}
-	${CC} -o ${BINDIR}/wigEncode wigEncode.o ${MYLIBS} $L
-	${STRIP} ${BINDIR}/wigEncode${EXE}
+	${CC} -o ${DESTDIR}${BINDIR}/wigEncode${EXE} wigEncode.o ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/wigEncode${EXE}
 
 wigEncode.o:	../../inc/wiggle.h wigEncode.c
 
@@ -61,7 +61,7 @@ clean:
 
 cgi:: compile
 	@if [ ! -d "${CGI_BIN}-${USER}/loader" ]; then \
-		${MKDIR} ${CGI_BIN}-${USER}/loader; \
+		${MKDIR} "${CGI_BIN}-${USER}/loader"; \
 	fi
 	rm -f ${CGI_BIN}-${USER}/loader/$A
 	rm -f ${CGI_BIN}-${USER}/loader/wigEncode
@@ -70,13 +70,13 @@ cgi:: compile
 	rm -f hgWiggle
 
 alpha:: strip
-	@if [ ! -d "${CGI_BIN}/loader" ]; then \
-		${MKDIR} ${CGI_BIN}/loader; \
+	@if [ ! -d "${DESTDIR}${CGI_BIN}/loader" ]; then \
+		${MKDIR} "${DESTDIR}${CGI_BIN}/loader"; \
 	fi
-	rm -f ${CGI_BIN}/loader/$A
-	rm -f ${CGI_BIN}/loader/wigEncode
-	mv $A${EXE} ${CGI_BIN}/loader/$A
-	mv wigEncode ${CGI_BIN}/loader/wigEncode
+	rm -f ${DESTDIR}${CGI_BIN}/loader/$A
+	rm -f ${DESTDIR}${CGI_BIN}/loader/wigEncode
+	mv $A${EXE} ${DESTDIR}${CGI_BIN}/loader/$A
+	mv wigEncode ${DESTDIR}${CGI_BIN}/loader/wigEncode
 
 beta:: strip
 	@if [ ! -d "${CGI_BIN}-beta/loader" ]; then \

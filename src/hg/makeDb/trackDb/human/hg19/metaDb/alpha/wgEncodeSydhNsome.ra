@@ -1,0 +1,402 @@
+metaObject wgEncodeSydhNsome
+objType composite
+composite wgEncodeSydhNsome
+expVars lab,dataType,cell
+
+metaObject wgEncodeSydhNsomeGm12878AlnRep1
+objType file
+cell GM12878
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-24
+dateUnrestricted 2011-10-24
+fileName wgEncodeSydhNsomeGm12878AlnRep1.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 1
+seqPlatform AB_SOLiD_3.5
+subId 3329
+view Alignments
+
+metaObject wgEncodeSydhNsomeGm12878AlnRep2
+objType file
+cell GM12878
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-24
+dateUnrestricted 2011-10-24
+fileName wgEncodeSydhNsomeGm12878AlnRep2.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 2
+seqPlatform AB_SOLiD_3.5
+subId 3329
+view Alignments
+
+metaObject wgEncodeSydhNsomeGm12878AlnRep3
+objType file
+cell GM12878
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-24
+dateUnrestricted 2011-10-24
+fileName wgEncodeSydhNsomeGm12878AlnRep3.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 3
+seqPlatform AB_SOLiD_3.5
+subId 3329
+view Alignments
+
+metaObject wgEncodeSydhNsomeGm12878AlnRep4
+objType file
+cell GM12878
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-24
+dateUnrestricted 2011-10-24
+fileName wgEncodeSydhNsomeGm12878AlnRep4.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 4
+seqPlatform AB_SOLiD_3.5
+subId 3329
+view Alignments
+
+metaObject wgEncodeSydhNsomeGm12878AlnRep5
+objType file
+cell GM12878
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-24
+dateUnrestricted 2011-10-24
+fileName wgEncodeSydhNsomeGm12878AlnRep5.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 5
+seqPlatform AB_SOLiD_3.5
+subId 3329
+view Alignments
+
+metaObject wgEncodeSydhNsomeGm12878AlnRep6
+objType file
+cell GM12878
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-24
+dateUnrestricted 2011-10-24
+fileName wgEncodeSydhNsomeGm12878AlnRep6.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 6
+seqPlatform AB_SOLiD_3.5
+subId 3329
+view Alignments
+
+metaObject wgEncodeSydhNsomeGm12878AlnRep7
+objType file
+cell GM12878
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-24
+dateUnrestricted 2011-10-24
+fileName wgEncodeSydhNsomeGm12878AlnRep7.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 7
+seqPlatform AB_SOLiD_3.5
+subId 3329
+view Alignments
+
+metaObject wgEncodeSydhNsomeGm12878AlnRep8
+objType file
+cell GM12878
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-24
+dateUnrestricted 2011-10-24
+fileName wgEncodeSydhNsomeGm12878AlnRep8.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 8
+seqPlatform AB_SOLiD_3.5
+subId 3329
+view Alignments
+
+metaObject wgEncodeSydhNsomeGm12878AlnRep9
+objType file
+cell GM12878
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-24
+dateUnrestricted 2011-10-24
+fileName wgEncodeSydhNsomeGm12878AlnRep9.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 9
+seqPlatform AB_SOLiD_3.5
+subId 3329
+view Alignments
+
+metaObject wgEncodeSydhNsomeGm12878Sig
+objType table
+cell GM12878
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-24
+dateUnrestricted 2011-10-24
+fileName wgEncodeSydhNsomeGm12878Sig.bigWig
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+seqPlatform AB_SOLiD_3.5
+subId 3329
+tableName wgEncodeSydhNsomeGm12878Sig
+view Signal
+
+metaObject wgEncodeSydhNsomeK562AlnRep1
+objType file
+cell K562
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeSydhNsomeK562AlnRep1.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 1
+seqPlatform AB_SOLiD_3.5
+subId 3431
+view Alignments
+
+metaObject wgEncodeSydhNsomeK562AlnRep10
+objType file
+cell K562
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeSydhNsomeK562AlnRep10.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 10
+seqPlatform AB_SOLiD_3.5
+subId 3431
+view Alignments
+
+metaObject wgEncodeSydhNsomeK562AlnRep11
+objType file
+cell K562
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeSydhNsomeK562AlnRep11.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 11
+seqPlatform AB_SOLiD_3.5
+subId 3431
+view Alignments
+
+metaObject wgEncodeSydhNsomeK562AlnRep2
+objType file
+cell K562
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeSydhNsomeK562AlnRep2.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 2
+seqPlatform AB_SOLiD_3.5
+subId 3431
+view Alignments
+
+metaObject wgEncodeSydhNsomeK562AlnRep3
+objType file
+cell K562
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeSydhNsomeK562AlnRep3.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 3
+seqPlatform AB_SOLiD_3.5
+subId 3431
+view Alignments
+
+metaObject wgEncodeSydhNsomeK562AlnRep4
+objType file
+cell K562
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeSydhNsomeK562AlnRep4.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 4
+seqPlatform AB_SOLiD_3.5
+subId 3431
+view Alignments
+
+metaObject wgEncodeSydhNsomeK562AlnRep5
+objType file
+cell K562
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeSydhNsomeK562AlnRep5.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 5
+seqPlatform AB_SOLiD_3.5
+subId 3431
+view Alignments
+
+metaObject wgEncodeSydhNsomeK562AlnRep6
+objType file
+cell K562
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeSydhNsomeK562AlnRep6.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 6
+seqPlatform AB_SOLiD_3.5
+subId 3431
+view Alignments
+
+metaObject wgEncodeSydhNsomeK562AlnRep7
+objType file
+cell K562
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeSydhNsomeK562AlnRep7.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 7
+seqPlatform AB_SOLiD_3.5
+subId 3431
+view Alignments
+
+metaObject wgEncodeSydhNsomeK562AlnRep8
+objType file
+cell K562
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeSydhNsomeK562AlnRep8.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 8
+seqPlatform AB_SOLiD_3.5
+subId 3431
+view Alignments
+
+metaObject wgEncodeSydhNsomeK562AlnRep9
+objType file
+cell K562
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeSydhNsomeK562AlnRep9.bam
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+replicate 9
+seqPlatform AB_SOLiD_3.5
+subId 3431
+view Alignments
+
+metaObject wgEncodeSydhNsomeK562Sig
+objType table
+cell K562
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeSydhNsomeK562Sig.bigWig
+grant Snyder
+lab Stanford
+origAssembly hg19
+project wgEncode
+seqPlatform AB_SOLiD_3.5
+subId 3431
+tableName wgEncodeSydhNsomeK562Sig
+view Signal
+
+# MAGIC: 798681280

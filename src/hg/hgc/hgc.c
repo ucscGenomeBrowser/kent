@@ -72,6 +72,7 @@
 #include "knownMore.h"
 #include "snp125.h"
 #include "snp125Ui.h"
+#include "snp132Ext.h"
 #include "snp.h"
 #include "snpMap.h"
 #include "snpExceptions.h"
@@ -96,6 +97,8 @@
 #include "estPair.h"
 #include "softPromoter.h"
 #include "customTrack.h"
+#include "trackHub.h"
+#include "hubConnect.h"
 #include "sage.h"
 #include "sageExp.h"
 #include "pslWScore.h"
@@ -256,8 +259,8 @@ char mousedb[] = "mm3";
 char *onChangeAssemblyText = "onchange=\"document.orgForm.submit();\"";
 
 #define NUMTRACKS 9
-int prevColor[NUMTRACKS]; /* used to opetimize color change html commands */
-int currentColor[NUMTRACKS]; /* used to opetimize color change html commands */
+int prevColor[NUMTRACKS]; /* used to optimize color change html commands */
+int currentColor[NUMTRACKS]; /* used to optimize color change html commands */
 int maxShade = 9;	/* Highest shade in a color gradient. */
 Color shadesOfGray[10+1];	/* 10 shades of gray from white to black */
 
@@ -266,6 +269,7 @@ boolean exprBedColorsMade = FALSE; /* Have the shades of red been made? */
 int maxRGBShade = 16;
 
 struct bed *sageExpList = NULL;
+char ncbiOmimUrl[255] = {"http://www.ncbi.nlm.nih.gov/omim/"};
 
 struct palInfo
 {
@@ -688,7 +692,7 @@ if (featDna && end > start)
     char *tbl = cgiUsualString("table", cgiString("g"));
     strand = cgiEncode(strand);
     printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
-	   "View DNA for this feature</A> (%s/%s)<BR>\n",  hgcPathAndSettings(),
+	   "View DNA for this feature</A>  (%s/%s)<BR>\n",  hgcPathAndSettings(),
 	   start, (item != NULL ? cgiEncode(item) : ""),
 	   chrom, start, end, strand, tbl, database, hGenome(database));
     }
@@ -765,6 +769,95 @@ if (bedSize >= 6)
    strand = bed->strand;
    }
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
+
+}
+
+void interactionPrintPos( struct bed *bed, int bedSize, struct trackDb *tdb)
+/* Print first bedSize fields of a bed type structure in
+ * standard format. */
+{
+
+if (bed->blockCount == 2)
+    {
+    printf("<B>Intrachromosomal interaction:</B> <br>\n");
+    printf("<B>Positions:</B><br> ");
+    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, bed->chrom,
+	   bed->chromStarts[0]+bed->chromStart,
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
+    printf("%s:%d-%d</A>    \n",
+	   bed->chrom,
+	   bed->chromStarts[0]+bed->chromStart,
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
+    printf("Size: %d   \n", bed->blockSizes[0]);
+    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart,
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0], FALSE);
+
+    //printf("<BR>\n");
+    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, bed->chrom,
+	   bed->chromStarts[1]+bed->chromStart,
+	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1]);
+    printf("%s:%d-%d</A>     \n",
+	   bed->chrom,
+	   bed->chromStarts[1]+bed->chromStart,
+	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1]);
+    printf("Size: %d   \n", bed->blockSizes[0]);
+    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart,
+	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1], FALSE);
+
+    printf("<BR>\n");
+    printf("<B>Distance apart:</B>\n");
+    printLongWithCommas(stdout,
+	bed->chromStarts[1] - bed->chromStarts[0] + bed->blockSizes[0]);
+
+    printf("bp<BR>\n");
+    }
+else
+    {
+    printf("<B>Interchromosomal interaction:</B> <br>\n");
+    printf("<B>Positions:</B><br> ");
+    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, bed->chrom,
+	   bed->chromStarts[0]+bed->chromStart,
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
+    printf("%s:%d-%d</A>    \n",
+	   bed->chrom,
+	   bed->chromStarts[0]+bed->chromStart,
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
+    printf("Size: %d   \n", bed->blockSizes[0]);
+    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart,
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0], FALSE);
+
+    char buffer[10 * 1024], *otherChrom = buffer;
+    safef(buffer, sizeof buffer, "%s", bed->name);
+    char *ptr;
+    int otherStart, otherEnd;
+
+    if (startsWith(bed->chrom, buffer))
+	{
+	otherChrom = strchr(buffer,'-');
+	otherChrom++;
+	}
+
+    ptr = strchr(otherChrom,':');
+    *ptr++ = 0;
+    otherStart = atoi(ptr);
+    ptr = strchr(ptr,'.');
+    ptr++;
+    ptr++;
+    otherEnd = atoi(ptr);
+    //printf("<BR>\n");
+    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, otherChrom,
+	   otherStart, otherEnd);
+    printf("%s:%d-%d</A>     \n",
+	   otherChrom, otherStart, otherEnd);
+    printf("Size: %d   \n", otherEnd - otherStart);
+    printBand( otherChrom, otherStart, otherEnd, FALSE);
+
+    printf("<BR>\n");
+    }
 }
 
 
@@ -1294,6 +1387,77 @@ if (mf != NULL)
     }
 }
 
+int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **row)
+// Any extra fields defined in trackDb.  Retruns number of extra fields actually printed
+{
+// Additional fields requested in trackDb?
+char *fields = trackDbSetting(tdb, "extraFields"); // showFileds pValue=P_Value qValue=qValue
+if (fields == NULL)
+    return 0;
+
+char *historicalRecord = fields;
+int count = 0;
+char *field = cloneNextWord(&fields); // fields not harmed but pointer advanced
+while(field != NULL)
+    {
+    // parse field as "pValue=[f]P_Value" inot field="pValue" and label="[f]P_Value"
+    char *label = field;
+    char *equal = strchr(field,'=');
+    if (equal != NULL)
+        {
+        *equal = '\0';
+        label = equal + 1;
+        assert(*label!='\0');
+        }
+
+    // We have a field requested but is it in the table?
+    int ix = sqlFieldColumn(sr, field);
+    if (ix == -1)
+        warn("trackDb setting [extraFields %s] could not find %s in %s.\n", historicalRecord, field,tdb->table);
+    else
+        {
+        // parse label "[f]P_Value" into label="P Value" and type=float
+        char *type  = "string";
+        if (*label == '[')
+            {
+            if (startsWith("[i",label))
+                type = "integer";
+            else if (startsWith("[f",label))
+                type = "float";
+            label = strchr(label,']');
+            assert(label != NULL);
+            label += 1;
+            }
+
+        // Print as table rows
+        if(count == 0)
+            printf("<br><table>");
+        printf("<tr><td><B>%s:</B></td>", strSwapChar(label,'_',' ')); // No '_' in label
+        if (sameString(type,"integer"))
+            {
+            long long val = sqlLongLong(row[ix]);
+            printf("<td>%lld</td></tr>\n", val);
+            }
+        else if (sameString(type,"float"))
+            {
+            double val = sqlDouble(row[ix]);
+            printf("<td>%g</td></tr>\n", val);
+            }
+        else
+            printf("<td>%s</td></tr>\n", row[ix]);
+        count++;
+        }
+
+    // free mem and move to next field
+    freeMem(field);
+    field = cloneNextWord(&fields); // around we go
+    }
+if(count > 0)
+    printf("</table>\n");
+
+return count;
+}
+
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb,
 		     char *item, int start, int bedSize)
 /* Handle click in generic BED track. */
@@ -1328,7 +1492,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, bedSize);
-    bedPrintPos(bed, bedSize, tdb);
+    if ((tdb->type != NULL) && sameString(tdb->type, "interaction"))
+	{
+	interactionPrintPos( bed, bedSize, tdb);
+	}
+    else
+	bedPrintPos(bed, bedSize, tdb);
+
+    extraFieldsPrint(tdb,sr,row);
     // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
     char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
     if (bedSize == 6 && setting && sameString(setting, "seq1Seq2"))
@@ -2621,7 +2792,7 @@ printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s&%s\">"
        trackName, cartSidUrlString(cart), parentTdb->shortLabel);
 }
 
-void printDataVersion(struct trackDb *tdb)
+static void printDataVersion(struct trackDb *tdb)
 /* If this annotation has a dataVersion trackDb setting, print it */
 {
 metadataForTable(database,tdb,NULL);
@@ -2648,11 +2819,10 @@ if (restrictionDate != NULL)
     }
 }
 
-void printOrigAssembly(struct trackDb *tdb)
+static void printOrigAssembly(struct trackDb *tdb)
 /* If this annotation has been lifted, print the original
  * freeze, as indicated by the "origAssembly" trackDb setting */
 {
-trackDbOrigAssembly(tdb);
 trackDbPrintOrigAssembly(tdb, database);
 }
 
@@ -2672,23 +2842,13 @@ void printTrackHtml(struct trackDb *tdb)
  * last update time for data table and make a link
  * to the TB table schema page for this table. */
 {
-char *tableName;
-
 if (!isCustomTrack(tdb->track))
     {
     extraUiLinks(database,tdb,trackHash);
     printTrackUiLink(tdb);
     printDataVersion(tdb);
     printOrigAssembly(tdb);
-    if ((tableName = hTableForTrack(database, tdb->table)) != NULL)
-	{
-	struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-
-	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
-	if (date != NULL)
-	    printf("<B>Data last updated:</B> %s<BR>\n", date);
-	hFreeConn(&conn);
-	}
+    printUpdateTime(database, tdb, NULL);
     printDataRestrictionDate(tdb);
     }
 char *html = getHtmlFromSelfOrParent(tdb);
@@ -3676,6 +3836,10 @@ else if (wordCount > 0)
 	{
 	doEncodeFiveC(conn, tdb);
 	}
+    else if (sameString(type, "peptideMapping"))
+	{
+	doPeptideMapping(conn, tdb, item);
+	}
     else if (sameString(type, "chromGraph"))
 	{
 	doChromGraph(tdb);
@@ -3710,10 +3874,23 @@ else if (wordCount > 0)
         {
         doBedDetail(tdb, NULL, item);
         }
+    else if (sameString(type, "interaction") )
+	{
+	int num = 12;
+        genericBedClick(conn, tdb, item, start, num);
+	}
+    else if (startsWith("gvf", type))
+        {
+        doGvf(tdb, item);
+        }
 #ifdef USE_BAM
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
 #endif // USE_BAM
+#ifdef USE_TABIX
+    else if (sameString(type, "vcfTabix"))
+	doVcfTabixDetails(tdb, item);
+#endif // USE_TABIX
     }
 if (imagePath)
     {
@@ -6761,7 +6938,6 @@ if (startsWith("user", aliTable))
 else
     {
     /* Look up alignments in database */
-    // struct trackDb *tdb = hashMustFindVal(trackHash, aliTable);	// ugly
     hFindSplitTable(database, seqName, aliTable, table, &hasBin);
     safef(query, sizeof(query),
 	  "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d",
@@ -8326,6 +8502,9 @@ char headerTitle[512];
 
 /* see if hgFixed.trackVersion exists */
 boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
+/* assume nothing found */
+versionString[0] = 0;
+dateReference[0] = 0;
 
 if (trackVersionExists)
     {
@@ -8345,12 +8524,6 @@ if (trackVersionExists)
 	}
     sqlFreeResult(&sr);
     }
-else
-    {
-    versionString[0] = 0;
-    dateReference[0] = 0;
-    }
-
 
 if (itemForUrl == NULL)
     itemForUrl = item;
@@ -8947,7 +9120,7 @@ safef(query, sizeof(query),
       "select distinct phenotype from decipherRaw where id ='%s' order by phenotype", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-if (row != NULL)
+if ((row != NULL) && strlen(row[0]) >= 1)
     {
     printf("<B>Phenotype: </B><UL>");
     while (row != NULL)
@@ -9197,6 +9370,558 @@ if (url != NULL && url[0] != 0)
 
 printf("<HR>");
 printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
+}
+
+void printOmimGene2Details(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print details of an OMIM Class 3 Gene entry. */
+{
+struct sqlConnection *conn  = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *url = tdb->url;
+char *kgId= NULL;
+char *title1 = NULL;
+char *title2 = NULL;
+char *geneSymbol = NULL;
+char *chrom, *chromStart, *chromEnd;
+char *kgDescription = NULL;
+char *refSeq;
+
+chrom      = cartOptionalString(cart, "c");
+chromStart = cartOptionalString(cart, "o");
+chromEnd   = cartOptionalString(cart, "t");
+
+if (url != NULL && url[0] != 0)
+    {
+    printf("<B>OMIM Gene: ");fflush(stdout);
+    printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
+    printf("%s</A></B>", itemName);
+    safef(query, sizeof(query),
+    	  "select title1, title2 from omimGeneMap where omimId=%s;", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	if (row[0] != NULL)
+	    {
+	    title1 = cloneString(row[0]);
+    	    printf(" %s", title1);
+	    }
+	if (row[1] != NULL)
+	    {
+	    title2 = cloneString(row[1]);
+    	    printf(" %s ", title2);
+	    }
+	}
+    sqlFreeResult(&sr);
+
+    printf("<BR>\n");
+    printf("<B>OMIM page at NCBI: ");
+    printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
+    printf("%s</A></B><BR>", itemName);
+    
+    safef(query, sizeof(query),
+    	  "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	geneSymbol = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
+
+    /* get corresponding KG ID */
+    safef(query, sizeof(query),
+	  "select k.transcript from knownCanonical k where k.chrom='%s' and k.chromStart=%s and k.chromEnd=%s",
+	  chrom, chromStart, chromEnd);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	kgId = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
+
+    /* use geneSymbol from omimMorbidMap if available */
+    if (geneSymbol!= NULL)
+    	{
+	boolean disorderShown;
+	char *phenotypeClass, *questionable, *hasBracket, *hasBrace, *phenotypeId, *disorder;
+	
+	printf("<B>Gene symbol(s):</B> %s", geneSymbol);
+	printf("<BR>\n");
+
+	/* display disorder for genes in morbidmap */
+    	safef(query, sizeof(query), 
+	 "select disorder, phenotypeClass, questionable, hasBracket, hasBrace, phenotypeId from omimDisorderPhenotype where omimId=%s order by disorder",
+	 itemName);
+    	sr = sqlMustGetResult(conn, query);
+	disorderShown = FALSE;
+        while ((row = sqlNextRow(sr)) != NULL)
+    	    {
+	    if (!disorderShown)
+	    	{
+ 		printf("<B>Disorder(s):</B><UL>\n"); 
+		disorderShown = TRUE;
+		}
+	    disorder       = row[0];
+	    phenotypeClass = row[1];
+	    questionable   = row[2];
+	    hasBracket     = row[3];
+	    hasBrace	   = row[4];
+	    phenotypeId    = row[5];
+	    printf("<LI>%s", disorder);
+ 	    if (phenotypeId != NULL)
+	    	{
+		if (!sameWord(phenotypeId, "-1"))
+		    {
+                    printf(" (phenotype <A HREF=\"%s%s\" target=_blank>", url, phenotypeId);
+                    printf("%s</A></B>)", phenotypeId);
+		    }
+		}
+	    printf("<BR>\n");
+	    }
+	if (disorderShown) printf("</UL>\n");
+    	sqlFreeResult(&sr);
+	}
+    else
+	{
+	/* display gene symbol(s) from omimGenemap  */
+    	safef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
+    	sr = sqlMustGetResult(conn, query);
+    	row = sqlNextRow(sr);
+        if (row != NULL)
+    	    {
+ 	    printf("<B>OMIM Gene Symbol:</B> %s", row[0]);
+	    printf("<BR>\n");
+    	    sqlFreeResult(&sr);
+	    }
+	else
+    	    {
+	    /* get gene symbol from kgXref if the entry is not in morbidmap and omim genemap */
+    	    safef(query, sizeof(query), "select geneSymbol from kgXref where kgId='%s';", kgId);
+
+            sr = sqlMustGetResult(conn, query);
+    	    row = sqlNextRow(sr);
+    	    if (row != NULL)
+    	    	{
+ 	    	printf("<B>UCSC Gene Symbol:</B> %s", row[0]);
+	    	printf("<BR>\n");
+	    	}
+    	    sqlFreeResult(&sr);
+    	    }
+	}
+
+    if (kgId != NULL)
+    	{
+    	printf("<B>UCSC Canonical Gene: ");
+    	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
+	       "../cgi-bin/hgGene?hgg_gene=", kgId);
+    	printf("%s</A></B> ", kgId);
+
+	safef(query, sizeof(query), "select refseq from kgXref where kgId='%s';", kgId);
+    	sr = sqlMustGetResult(conn, query);
+    	row = sqlNextRow(sr);
+    	if (row != NULL)
+	    {
+	    refSeq = strdup(row[0]);
+	    kgDescription = gbCdnaGetDescription(conn2, refSeq);
+	    }
+	sqlFreeResult(&sr);
+        hFreeConn(&conn2);
+
+	if (kgDescription == NULL)
+	    {
+    	    safef(query, sizeof(query), "select description from kgXref where kgId='%s';", kgId);
+    	    sr = sqlMustGetResult(conn, query);
+    	    row = sqlNextRow(sr);
+    	    if (row != NULL)
+    	    	{
+	    	printf("%s", row[0]);
+	    	}
+
+	    sqlFreeResult(&sr);
+	    }
+	else
+    	    {
+	    printf("%s", kgDescription);
+	    }
+        printf("<BR>\n");
+
+	safef(query, sizeof(query),
+	      "select i.transcript from knownIsoforms i, knownCanonical c where c.transcript='%s' and i.clusterId=c.clusterId and i.transcript <>'%s'",
+	      kgId, kgId);
+    	sr = sqlMustGetResult(conn, query);
+	if (sr != NULL)
+	    {
+	    int printedCnt;
+	    printedCnt = 0;
+	    while ((row = sqlNextRow(sr)) != NULL)
+	    	{
+	        if (printedCnt < 1)
+		    printf("<B>Other UCSC Gene(s) in the same cluster: </B>");
+		else
+		    printf(", ");
+    	    	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>", "../cgi-bin/hgGene?hgg_gene=", row[0]);
+    	    	printf("%s</A></B>", row[0]);
+	    	printedCnt++;
+		}
+            if (printedCnt >= 1) printf("<BR>\n");
+	    }
+	sqlFreeResult(&sr);
+	}
+    }
+
+printf("<HR>");
+printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
+}
+
+void printOmimLocationDetails(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print details of an OMIM Class 3 Gene entry. */
+{
+struct sqlConnection *conn  = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *url = tdb->url;
+char *kgId= NULL;
+char *title1 = NULL;
+char *title2 = NULL;
+char *geneSymbol = NULL;
+char *chrom, *chromStart, *chromEnd;
+char *kgDescription = NULL;
+char *refSeq;
+char *omimId;
+
+chrom      = cartOptionalString(cart, "c");
+chromStart = cartOptionalString(cart, "o");
+chromEnd   = cartOptionalString(cart, "t");
+
+omimId = itemName;
+
+if (url != NULL && url[0] != 0)
+    {
+    printf("<B>OMIM Entry ");fflush(stdout);
+    printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
+    printf("%s</A></B>", itemName);
+    safef(query, sizeof(query),
+    	  "select title1, title2 from omimGeneMap where omimId=%s;", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	if (row[0] != NULL)
+	    {
+	    title1 = cloneString(row[0]);
+    	    printf(": %s", title1);
+	    }
+	if (row[1] != NULL)
+	    {
+	    title2 = cloneString(row[1]);
+    	    printf(" %s ", title2);
+	    }
+	}
+    sqlFreeResult(&sr);
+
+    printf("<BR>\n");
+    printf("<B>OMIM page at NCBI: ");
+    printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
+    printf("%s</A></B><BR>", itemName);
+
+    printf("<B>Location: </B>");
+    safef(query, sizeof(query),
+    	  "select location from omimGeneMap where omimId=%s;", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	if (row[0] != NULL)
+	    {
+	    char *locStr;
+	    locStr= cloneString(row[0]);
+    	    printf("%s\n", locStr);
+	    }
+	}
+    sqlFreeResult(&sr);
+
+    printf("<BR>\n");
+    safef(query, sizeof(query),
+    	  "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	geneSymbol = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
+
+    safef(query, sizeof(query),"select omimId from omimDisorderPhenotype where omimId=%s\n", omimId);
+    if (sqlQuickNum(conn, query) > 0)
+    	{
+	char *phenotypeClass, *questionable, *hasBracket, *hasBrace, *phenotypeId, *disorder;
+	
+	printf("<B>Gene symbol(s):</B> %s", geneSymbol);
+	printf("<BR>\n");
+
+	/* display disorder for genes in morbidmap */
+    	safef(query, sizeof(query), 
+	 "select disorder, phenotypeClass, questionable, hasBracket, hasBrace, phenotypeId from omimDisorderPhenotype where omimId=%s order by disorder",
+	 itemName);
+    	sr = sqlMustGetResult(conn, query);
+ 	printf("<B>Disorder(s):</B><UL>\n"); 
+        while ((row = sqlNextRow(sr)) != NULL)
+    	    {
+	    disorder       = row[0];
+	    phenotypeClass = row[1];
+	    questionable   = row[2];
+	    hasBracket     = row[3];
+	    hasBrace	   = row[4];
+	    phenotypeId    = row[5];
+	    printf("<LI>%s", disorder);
+ 	    if (phenotypeId != NULL)
+	    	{
+		if (!sameWord(phenotypeId, "-1"))
+		    {
+                    printf(" (phenotype <A HREF=\"%s%s\" target=_blank>", url, phenotypeId);
+                    printf("%s</A></B>)", phenotypeId);
+		    }
+		}
+	    printf("<BR>\n");
+	    }
+	printf("</UL>\n");
+    	sqlFreeResult(&sr);
+	}
+    else
+	{
+	/* display gene symbol(s) from omimGenemap  */
+    	safef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
+    	sr = sqlMustGetResult(conn, query);
+    	row = sqlNextRow(sr);
+        if (row != NULL)
+    	    {
+ 	    printf("<B>OMIM Gene Symbol:</B> %s", row[0]);
+	    printf("<BR>\n");
+    	    sqlFreeResult(&sr);
+	    }
+	else
+    	    {
+	    /* get gene symbol from kgXref if the entry is not in morbidmap and omim genemap */
+    	    safef(query, sizeof(query), "select geneSymbol from kgXref where kgId='%s';", kgId);
+
+            sr = sqlMustGetResult(conn, query);
+    	    row = sqlNextRow(sr);
+    	    if (row != NULL)
+    	    	{
+ 	    	printf("<B>UCSC Gene Symbol:</B> %s", row[0]);
+	    	printf("<BR>\n");
+	    	}
+    	    sqlFreeResult(&sr);
+    	    }
+	}
+
+    if (kgId != NULL)
+    	{
+    	printf("<B>UCSC Canonical Gene ");
+    	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
+	       "../cgi-bin/hgGene?hgg_gene=", kgId);
+    	printf("%s</A></B>: ", kgId);
+
+	safef(query, sizeof(query), "select refseq from kgXref where kgId='%s';", kgId);
+    	sr = sqlMustGetResult(conn, query);
+    	row = sqlNextRow(sr);
+    	if (row != NULL)
+	    {
+	    refSeq = strdup(row[0]);
+	    kgDescription = gbCdnaGetDescription(conn2, refSeq);
+	    }
+	sqlFreeResult(&sr);
+        hFreeConn(&conn2);
+
+	if (kgDescription == NULL)
+	    {
+    	    safef(query, sizeof(query), "select description from kgXref where kgId='%s';", kgId);
+    	    sr = sqlMustGetResult(conn, query);
+    	    row = sqlNextRow(sr);
+    	    if (row != NULL)
+    	    	{
+	    	printf("%s", row[0]);
+	    	}
+
+	    sqlFreeResult(&sr);
+	    }
+	else
+    	    {
+	    printf("%s", kgDescription);
+	    }
+        printf("<BR>\n");
+
+	safef(query, sizeof(query),
+	      "select i.transcript from knownIsoforms i, knownCanonical c where c.transcript='%s' and i.clusterId=c.clusterId and i.transcript <>'%s'",
+	      kgId, kgId);
+    	sr = sqlMustGetResult(conn, query);
+	if (sr != NULL)
+	    {
+	    int printedCnt;
+	    printedCnt = 0;
+	    while ((row = sqlNextRow(sr)) != NULL)
+	    	{
+	        if (printedCnt < 1)
+		    printf("<B>Other UCSC Gene(s) in the same cluster: </B>");
+		else
+		    printf(", ");
+    	    	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>", "../cgi-bin/hgGene?hgg_gene=", row[0]);
+    	    	printf("%s</A></B>", row[0]);
+	    	printedCnt++;
+		}
+            if (printedCnt >= 1) printf("<BR>\n");
+	    }
+	sqlFreeResult(&sr);
+	}
+    }
+
+printf("<HR>");
+printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
+}
+
+void doOmimLocation(struct trackDb *tdb, char *item)
+/* Put up OmimGene track info. */
+{
+genericHeader(tdb, item);
+printOmimLocationDetails(tdb, item, FALSE);
+printTrackHtml(tdb);
+}
+
+void printOmimAvSnpDetails(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print details of an OMIM AvSnp entry. */
+{
+struct sqlConnection *conn  = hAllocConn(database);
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *url = tdb->url;
+char *title1 = NULL;
+char *title2 = NULL;
+char *chrom, *chromStart, *chromEnd;
+char *omimId;
+char *avId;
+char *dbSnpId;
+char *chp;
+char *seqId = NULL;
+char avString[255];
+char *avDesc = NULL;
+
+chrom      = cartOptionalString(cart, "c");
+chromStart = cartOptionalString(cart, "o");
+chromEnd   = cartOptionalString(cart, "t");
+
+avId       = strdup(itemName);
+safef(avString, sizeof(avString), "%s", itemName);
+
+chp = strstr(itemName, ".");
+*chp = '\0';
+omimId = strdup(itemName);
+
+chp = avString;
+chp = strstr(avString, ".");
+*chp = '#';
+
+if (url != NULL && url[0] != 0)
+    {
+    safef(query, sizeof(query),
+    	  "select title1, title2,  format(seqNo/10000,4), v.description from omimGeneMap m, omimAv v where m.omimId=%s and m.omimId=v.omimId and v.avId='%s';", itemName, avId);
+
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	seqId = strdup(row[2]);
+	if (row[0] != NULL)
+	    {
+	    title1 = cloneString(row[0]);
+	    }
+	if (row[1] != NULL)
+	    {
+	    title2 = cloneString(row[1]);
+	    }
+	avDesc = cloneString(row[3]);
+	}
+    sqlFreeResult(&sr);
+    
+    printf("<B>OMIM Allelic Variant: ");
+    printf("<A HREF=\"%s%s\" target=_blank>", url, avString);
+    printf("%s</A></B>", avId);
+    printf(" %s", avDesc);
+
+    printf("<BR><B>OMIM Entry ");
+    printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
+    printf("%s</A></B>", itemName);
+    if (title1 != NULL) printf(": %s", title1);
+    if (title2 != NULL) printf(" %s ", title2);
+    
+    printf("<BR>\n");
+    printf("<B>OMIM page at NCBI: ");
+    printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
+    printf("%s</A></B><BR>", itemName);
+
+    safef(query, sizeof(query),
+    	  "select replStr from omimAvRepl where avId=%s;", avId);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	if (row[0] != NULL)
+	    {
+	    char *replStr;
+	    replStr= cloneString(row[0]);
+    	    printf("<BR><B>Amino Acid Replacement:</B> %s\n", replStr);
+	    }
+	}
+    sqlFreeResult(&sr);
+
+    dbSnpId = cloneString("-");
+    printf("<BR>\n");
+    safef(query, sizeof(query),
+    	  "select dbSnpId from omimAvRepl where avId='%s'", avId);
+    
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	dbSnpId = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
+
+    if (!sameWord(dbSnpId, "-"))
+    	{
+    	printf("<B>dbSNP:</B> \n");
+    	printf("<A HREF=\"%s%s\" target=_blank>",
+	       "../cgi-bin/hgc?g=snp132&i=", dbSnpId);
+    	printf("%s</A></B>", dbSnpId);
+	fflush(stdout);
+	}
+    }
+
+printf("<HR>");
+printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
+}
+
+void doOmimAvSnp(struct trackDb *tdb, char *item)
+/* Put up OmimGene track info. */
+{
+genericHeader(tdb, item);
+printOmimAvSnpDetails(tdb, item, FALSE);
+printTrackHtml(tdb);
+}
+
+void doOmimGene2(struct trackDb *tdb, char *item)
+/* Put up OmimGene track info. */
+{
+genericHeader(tdb, item);
+printOmimGene2Details(tdb, item, FALSE);
+printTrackHtml(tdb);
 }
 
 void doOmimGene(struct trackDb *tdb, char *item)
@@ -10962,6 +11687,9 @@ char headerTitle[512];
 
 /* see if hgFixed.trackVersion exists */
 boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
+/* assume nothing found */
+versionString[0] = 0;
+dateReference[0] = 0;
 
 if (trackVersionExists)
     {
@@ -10982,11 +11710,6 @@ if (trackVersionExists)
 	}
     sqlFreeResult(&sr);
     hFreeConn(&conn);
-    }
-else
-    {
-    versionString[0] = 0;
-    dateReference[0] = 0;
     }
 
 if (itemForUrl == NULL)
@@ -14350,9 +15073,10 @@ safef(betterName, sizeof(betterName), "%s %s:%d-%d",
       database, seqName, start+1, end);
 seqNib->name = cloneString(betterName);
 
-printf("\n<H3>Re-alignment of the SNP's flanking sequences to the "
-       "genomic sequence</H3>\n"
-       "Note: this alignment was computed by UCSC and may not be identical to "
+jsBeginCollapsibleSection(cart, tdb->track, "realignment",
+			  "Re-alignment of the SNP's flanking sequences to the genomic sequence",
+			  FALSE);
+printf("Note: this alignment was computed by UCSC and may not be identical to "
        "NCBI's alignment used to map the SNP.\n");
 
 printf("<PRE><B>Genomic sequence around %s (%s:%d-%d, %s strand):</B>\n",
@@ -14405,6 +15129,7 @@ seqDbSnp->size = strlen(seqDbSnp->dna);
 
 generateAlignment(seqNib, seqDbSnp, lineWidth, start, skipCount,
 		  genoLen5, genoLen5 + snpWidth, isRc);
+jsEndCollapsibleSection();
 }
 
 void doSnp(struct trackDb *tdb, char *itemName)
@@ -15194,7 +15919,7 @@ if (!sameString(orthoAllele, "?"))
 	linkToOtherBrowser(orthoDb, orthoChrom,
 			   orthoStart-TINYPADDING, orthoEnd+TINYPADDING);
     printf("%s:%d-%d\n", orthoChrom, orthoStart+1, orthoEnd);
-    printf("%s&nbsp;&nbsp;&nbsp;</TD>\n",
+    printf("%s</TD>\n",
 	   isNotEmpty(orthoDb) ? "</A>" : "");
     }
 else
@@ -15373,7 +16098,7 @@ else
 return dyStringCannibalize(&dy);
 }
 
-#define firstTwoColumnsPctS "<TR><TD>%s</TD><TD>%s</TD><TD>"
+#define firstTwoColumnsPctS "<TR><TD>%s&nbsp;&nbsp;</TD><TD>%s&nbsp;</TD><TD>"
 
 void getSnp125RefCodonAndSnpPos(struct snp125 *snp, struct genePred *gene, int exonIx,
 				int *pSnpCodonPos, char refCodon[4], char *pRefAA)
@@ -15563,10 +16288,11 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
+    char *geneName = getSymbolForGeneName(geneTable, gene);
     int end = sqlUnsigned(row[1]);
     char *strand = row[2];
     printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTable, gene, (snpStart - end + 1),
+	   geneTrack, geneName, (snpStart - end + 1),
 	   (strand[0] == '-' ? "up" : "down"));
     nearCount++;
     }
@@ -15579,16 +16305,17 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
+    char *geneName = getSymbolForGeneName(geneTable, gene);
     int start = sqlUnsigned(row[1]);
     char *strand = row[2];
     printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTable, gene, (start - snpEnd + 1),
+	   geneTrack, geneName, (start - snpEnd + 1),
 	   (strand[0] == '-' ? "down" : "up"));
     nearCount++;
     }
 sqlFreeResult(&sr);
 if (nearCount == 0)
-    printf("<TR><TD>%s</TD><TD></TD><TD>intergenic</TD></TR>", geneTrack);
+    printf("<TR><TD>%s&nbsp;&nbsp;</TD><TD></TD><TD>intergenic</TD></TR>", geneTrack);
 }
 
 static struct genePred *getGPsWithFrames(struct sqlConnection *conn, char *geneTable,
@@ -15627,7 +16354,7 @@ void printSnp125Function(struct trackDb *tdb, struct snp125 *snp)
 char varName[512];
 safef(varName, sizeof(varName), "%s_geneTrack", tdb->track);
 struct slName *geneTracks = cartOptionalSlNameList(cart, varName);
-if (geneTracks == NULL)
+if (geneTracks == NULL && !cartListVarExists(cart, varName))
     {
     char *defaultGeneTracks = trackDbSetting(tdb, "defaultGeneTracks");
     if (isNotEmpty(defaultGeneTracks))
@@ -15639,12 +16366,12 @@ struct sqlConnection *conn = hAllocConn(database);
 struct slName *gt;
 boolean first = TRUE;
 for (gt = geneTracks;  gt != NULL;  gt = gt->next)
-    if (!sameString(gt->name, "persistentShadow") && sqlTableExists(conn, gt->name))
+    if (sqlTableExists(conn, gt->name))
 	{
 	if (first)
 	    {
 	    printf("<BR><B>UCSC's predicted function relative to selected gene tracks:</B>\n");
-	    printf("<TABLE BORDERWIDTH=0>\n");
+	    printf("<TABLE border=0 cellspacing=0 cellpadding=0>\n");
 	    }
 	struct genePred *geneList = getGPsWithFrames(conn, gt->name, snp->chrom,
 						     snp->chromStart, snp->chromEnd);
@@ -15755,30 +16482,153 @@ for (tbl = tableList;  tbl != NULL;  tbl = tbl->next)
 hFreeConn(&conn);
 }
 
-void printSnp125Info(struct trackDb *tdb, struct snp125 snp, int version)
-/* print info on a snp125 */
+void printSnp132ExtraColumns(struct trackDb *tdb, struct snp132Ext *snp)
+/* Print columns new in snp132 */
 {
-printSnpOrthoSummary(tdb, snp.name, snp.observed);
-if (differentString(snp.strand,"?"))
-    printf("<B>Strand: </B>%s<BR>\n", snp.strand);
-printf("<B>Observed: </B>%s<BR>\n", snp.observed);
-printSnpAlleleAndOrthos(tdb, &snp, version);
-if (version <= 127)
-    printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",
-	   snp.locType);
-printf("<BR><B><A HREF=\"#Class\">Class</A>: </B>%s\n",     snp.class);
-printf("<BR><B><A HREF=\"#Valid\">Validation</A>: </B>%s\n", snp.valid);
-printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",         snp.func);
-printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n", snp.molType);
-if (snp.avHet>0)
-    printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
-printf("<BR><B><A HREF=\"#Weight\">Weight</A>: </B>%d",           snp.weight);
-printf("<BR>\n");
-printSnp125CodingAnnotations(tdb, &snp);
-printSnp125Function(tdb, &snp);
+// Skip exceptions column; handled below in writeSnpExceptionWithVersion
+printf("<TR><TD><B><A HREF=\"#Submitters\">Submitter Handles</A>&nbsp;&nbsp;</TD><TD></B>");
+int i;
+for (i=0;  i < snp->submitterCount;  i++)
+    printf("%s<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_viewTable.cgi?h=%s\" TARGET=_BLANK>"
+	   "%s</A>", (i > 0 ? ", " : ""), snp->submitters[i], snp->submitters[i]);
+printf("</TD></TR>\n");
+if (snp->alleleFreqCount > 0)
+    {
+    boolean gotNonIntN = FALSE;
+    int total2N = 0;
+    printf("<TR><TD><B><A HREF=\"#AlleleFreq\">Allele Frequencies</A>&nbsp;&nbsp;</B></TD><TD>");
+    for (i = 0;  i < snp->alleleFreqCount;  i++)
+	{
+	printf("%s%s: %.3f%% ", (i > 0 ? "; " : ""), snp->alleles[i], (snp->alleleFreqs[i]*100.0));
+	// alleleNs should be integers (counts of chromosomes in which allele was observed)
+	// but dbSNP extrapolates them from reported frequency and reported sample count,
+	// so sometimes they are not integers.  Present them as integers when we can, warn
+	// when we can't.
+	double f = snp->alleleFreqs[i], n = snp->alleleNs[i];
+	if (f > 0)
+	    {
+	    total2N = round(n / f);
+	    int roundedN = round(n);
+	    if (fabs(n - roundedN) < 0.01)
+		printf("(%d / %d)", roundedN, total2N);
+	    else
+		{
+		gotNonIntN = TRUE;
+		printf("(%.3f / %d)", n, total2N);
+		}
+	    }
+	}
+    printf("</TR></TABLE>\n");
+    if (gotNonIntN)
+	printf(" <em>Note: dbSNP extrapolates allele counts from reported frequencies and "
+	       "reported 2N sample sizes (total %d); non-integer allele count may imply "
+	       "an inaccuracy in one of the reported numbers.</em><BR>\n", total2N);
+    }
+else
+    puts("</TABLE>");
+if (isNotEmpty(snp->bitfields) && differentString(snp->bitfields, "unknown"))
+    {
+    printf("<BR><B><A HREF=\"#Bitfields\">Miscellaneous properties annotated by dbSNP</A>:"
+	   "</B>\n\n");
+    struct slName *bitfields = slNameListFromComma(snp->bitfields);
+    if (slNameInList(bitfields, "clinically-assoc"))
+	printf("<BR> <B>***clinically associated***</B> "
+	       "(SNP is in OMIM/OMIA and/or "
+	       "at least one submitter is a Locus-Specific Database)\n");
+    if (slNameInList(bitfields, "has-omim-omia"))
+	printf("<BR> SNP is in OMIM/OMIA\n");
+    if (slNameInList(bitfields, "microattr-tpa"))
+	printf("<BR> SNP has a microattribution or third-party annotation\n");
+    if (slNameInList(bitfields, "submitted-by-lsdb"))
+	printf("<BR> SNP was submitted by LSDB\n");
+    if (slNameInList(bitfields, "maf-5-all-pops"))
+	printf("<BR> Minor Allele Frequency is at least 5%% in all "
+	       "populations assayed\n");
+    else if (slNameInList(bitfields, "maf-5-some-pop"))
+	printf("<BR> Minor Allele Frequency is at least 5%% in at least one "
+	       "population assayed\n");
+    if (slNameInList(bitfields, "genotype-conflict"))
+	printf("<BR> Quality check: Different genotypes have been submitted "
+	       "for the same individual\n");
+    if (slNameInList(bitfields, "rs-cluster-nonoverlapping-alleles"))
+	printf("<BR> Quality check: The reference SNP cluster contains "
+	       "submitted SNPs with non-overlapping alleles\n");
+    if (slNameInList(bitfields, "observed-mismatch"))
+	printf("<BR> Quality check: The reference sequence allele at the "
+	       "mapped position is not present in the SNP allele list\n");
+    puts("<BR>");
+    }
 }
 
-void writeSnpExceptionWithVersion(struct trackDb *tdb, char *itemName, int version)
+// Defined below -- call has since moved up from doSnpWithVersion to printSnp125Info
+// so exceptions appear before our coding annotations.
+void writeSnpExceptionWithVersion(struct trackDb *tdb, struct snp132Ext *snp, int version);
+/* Print out descriptions of exceptions, if any, for this snp. */
+
+void printSnp125Info(struct trackDb *tdb, struct snp132Ext *snp, int version)
+/* print info on a snp125 */
+{
+struct snp125 *snp125 = (struct snp125 *)snp;
+printSnpOrthoSummary(tdb, snp->name, snp->observed);
+if (differentString(snp->strand,"?"))
+    printf("<B>Strand: </B>%s<BR>\n", snp->strand);
+printf("<B>Observed: </B>%s<BR>\n", snp->observed);
+printSnpAlleleAndOrthos(tdb, snp125, version);
+puts("<BR><TABLE border=0 cellspacing=0 cellpadding=0>");
+if (version <= 127)
+    printf("<TR><TD><B><A HREF=\"#LocType\">Location Type</A></B></TD><TD>%s</TD></TR>\n",
+	   snp->locType);
+printf("<TR><TD><B><A HREF=\"#Class\">Class</A></B></TD><TD>%s</TD></TR>\n", snp->class);
+printf("<TR><TD><B><A HREF=\"#Valid\">Validation</A></B></TD><TD>%s</TD></TR>\n", snp->valid);
+printf("<TR><TD><B><A HREF=\"#Func\">Function</A></B></TD><TD>%s</TD></TR>\n", snp->func);
+printf("<TR><TD><B><A HREF=\"#MolType\">Molecule Type</A>&nbsp;&nbsp;</B></TD><TD>%s</TD></TR>\n",
+       snp->molType);
+if (snp->avHet>0)
+    printf("<TR><TD><B><A HREF=\"#AvHet\">Average Heterozygosity</A>&nbsp;&nbsp;</TD>"
+	   "<TD></B>%.3f +/- %.3f</TD></TR>\n", snp->avHet, snp->avHetSE);
+printf("<TR><TD><B><A HREF=\"#Weight\">Weight</A></B></TD><TD>%d</TD></TR>\n", snp->weight);
+if (version >= 132)
+    printSnp132ExtraColumns(tdb, snp);
+else
+    printf("</TABLE>\n");
+printSnp125CodingAnnotations(tdb, snp125);
+writeSnpExceptionWithVersion(tdb, snp, version);
+printSnp125Function(tdb, snp125);
+}
+
+static char *getExcDescTable(struct trackDb *tdb)
+/* Look up snpExceptionDesc in tdb and provide default if not found.  Don't free return value! */
+{
+static char excDescTable[128];
+char *excDescTableSetting = trackDbSetting(tdb, "snpExceptionDesc");
+if (excDescTableSetting)
+    safecpy(excDescTable, sizeof(excDescTable), excDescTableSetting);
+else
+    safef(excDescTable, sizeof(excDescTable), "%sExceptionDesc", tdb->table);
+return excDescTable;
+}
+
+static boolean writeOneSnpException(char *exc, char *desc, boolean alreadyFound)
+/* Print out the description of exc, unless exc is already displayed elsewhere. */
+{
+// Don't bother reporting MultipleAlignments here -- right after this,
+// we have a whole section about the other mappings.
+if (differentString(exc, "MultipleAlignments") &&
+    // Also exclude a couple that are from dbSNP not UCSC, and noted above (bitfields).
+    differentString(exc, "GenotypeConflict") &&
+    differentString(exc, "ClusterNonOverlappingAlleles"))
+    {
+    if (isEmpty(desc))
+	desc = exc;
+    if (!alreadyFound)
+	printf("<BR><B>UCSC Annotations:</B><BR>\n");
+    printf("%s<BR>\n", desc);
+    return TRUE;
+    }
+return FALSE;
+}
+
+void writeSnpExceptionFromTable(struct trackDb *tdb, char *itemName)
 /* Print out exceptions, if any, for this snp. */
 {
 char *exceptionsTableSetting = trackDbSetting(tdb, "snpExceptions");
@@ -15787,12 +16637,7 @@ if (exceptionsTableSetting)
     safecpy(exceptionsTable, sizeof(exceptionsTable), exceptionsTableSetting);
 else
     safef(exceptionsTable, sizeof(exceptionsTable), "%sExceptions", tdb->table);
-char *excDescTableSetting = trackDbSetting(tdb, "snpExceptionDesc");
-char excDescTable[128];
-if (excDescTableSetting)
-    safecpy(excDescTable, sizeof(excDescTable), excDescTableSetting);
-else
-    safef(excDescTable, sizeof(excDescTable), "%sExceptionDesc", tdb->table);
+char *excDescTable = getExcDescTable(tdb);
 if (hTableExists(database, exceptionsTable) && hTableExists(database, excDescTable))
     {
     struct sqlConnection *conn = hAllocConn(database);
@@ -15800,7 +16645,6 @@ if (hTableExists(database, exceptionsTable) && hTableExists(database, excDescTab
     char **row;
     char   query[1024];
     int    start = cartInt(cart, "o");
-    int count = 0;
     safef(query, sizeof(query),
 	  "select description, %s.exception from %s, %s "
 	  "where chrom = \"%s\" and chromStart = %d and name = \"%s\" "
@@ -15808,20 +16652,52 @@ if (hTableExists(database, exceptionsTable) && hTableExists(database, excDescTab
 	  excDescTable, excDescTable, exceptionsTable,
 	  seqName, start, itemName, excDescTable, exceptionsTable);
     sr = sqlGetResult(conn, query);
+    boolean gotExc = FALSE;
     while ((row = sqlNextRow(sr))!=NULL)
-	{
-	/* Don't bother reporting MultipleAlignments here -- right after
-	 * this, we have a whole section about the other mappings. */
-	if (sameString(row[1], "MultipleAlignments"))
-	    continue;
-	if (count == 0)
-	    printf("<BR><B>Annotations:</B><BR>\n");
-	printf("%s<BR>\n", row[0]);
-	count++;
-	}
+	gotExc |= writeOneSnpException(row[1], row[0], gotExc);
     sqlFreeResult(&sr);
     hFreeConn(&conn);
     }
+}
+
+static void writeSnpExceptionFromColumn(struct trackDb *tdb, struct snp132Ext *snp)
+/* Hash the contents of exception description table, and for each exception listed
+ * in snp->exceptions, print out its description. */
+{
+char *excDescTable = getExcDescTable(tdb);
+if (hTableExists(database, excDescTable))
+    {
+    static struct hash *excDesc = NULL;
+    if (excDesc == NULL)
+	{
+	excDesc = hashNew(0);
+	struct sqlConnection *conn = hAllocConn(database);
+	char query[512];
+	safef(query, sizeof(query), "select exception,description from %s", excDescTable);
+	struct sqlResult *sr = sqlGetResult(conn, query);
+	char **row;
+	while ((row = sqlNextRow(sr))!=NULL)
+	    hashAdd(excDesc, row[0], cloneString(row[1]));
+	sqlFreeResult(&sr);
+	hFreeConn(&conn);
+	}
+    struct slName *excList = slNameListFromComma(snp->exceptions), *exc;
+    boolean gotExc = FALSE;
+    for (exc = excList;  exc != NULL;  exc = exc->next)
+	{
+	char *desc = hashFindVal(excDesc, exc->name);
+	gotExc |= writeOneSnpException(exc->name, desc, gotExc);
+	}
+    }
+}
+
+void writeSnpExceptionWithVersion(struct trackDb *tdb, struct snp132Ext *snp, int version)
+/* Print out descriptions of exceptions, if any, for this snp. */
+{
+if (version >= 132)
+    writeSnpExceptionFromColumn(tdb, snp);
+else
+    writeSnpExceptionFromTable(tdb, snp->name);
 }
 
 struct snp *snp125ToSnp(struct snp125 *snp125)
@@ -15861,7 +16737,11 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     struct hgdpGeo geo;
     hgdpGeoStaticLoad(row+1, &geo);
-    printf("<BR><B>Human Genome Diversity Project SNP</B><BR>\n");
+    char title[1024];
+    safef(title, sizeof(title), "Human Genome Diversity Project SNP"
+	  "<IMG name=\"hgdpImgIcon\" height=40 width=55 class='bigBlue' src=\"%s\">",
+	  hgdpPngFilePath(itemName));
+    jsBeginCollapsibleSection(cart, tdb->track, "hgdpGeo", title, FALSE);
     printf("Note: These annotations are taken directly from the "
 	   "<A HREF=\"http://hgdp.uchicago.edu/\" TARGET=_BLANK>HGDP Selection Browser</A>, "
 	   "and may indicate the allele on the opposite strand from that given above.<BR>\n");
@@ -15872,6 +16752,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     printf("</TD><TD valign=top>\n");
     hgdpGeoImg(&geo);
     printf("</TD></TR></TABLE>\n");
+    jsEndCollapsibleSection();
     }
 sqlFreeResult(&sr);
 }
@@ -15910,12 +16791,12 @@ else
 struct trackDb *hsTdb = hashFindVal(trackHash, "hapmapSnps");
 if (gotHapMap && hsTdb != NULL)
     {
-    printf("<BR><B><A HREF=\"%s", hgTracksPathAndSettings());
+    printf("<TR><TD colspan=2><B><A HREF=\"%s", hgTracksPathAndSettings());
     // If hapmapSnps is hidden, make it dense; if it's pack etc., leave it alone.
     if (sameString("hide", cartUsualString(cart, "hapmapSnps",
 					   trackDbSettingOrDefault(hsTdb, "visibility", "hide"))))
 	printf("&hapmapSnps=dense");
-    printf("\"> HapMap SNP</A> </B><BR>\n");
+    printf("\"> HapMap SNP</A> </B></TD></TR>\n");
     }
 }
 
@@ -15932,13 +16813,13 @@ if (sqlTableExists(conn, gcTable))
 	struct trackDb *gcTdb = hashFindVal(trackHash, gcTable);
 	if (gcTdb != NULL)
 	    {
-	    printf("<B><A HREF=\"%s", hgTracksPathAndSettings());
+	    printf("<TR><TD colspan=2>><B><A HREF=\"%s", hgTracksPathAndSettings());
 	    // If gcTable is hidden, make it dense; otherwise, leave it alone.
 	    if (sameString("hide",
 			   cartUsualString(cart, gcTable,
 					   trackDbSettingOrDefault(gcTdb, "visibility", "hide"))))
 		printf("&%s=dense", gcTable);
-	    printf("\">%s SNP</A> </B><BR>\n", gcTdb->shortLabel);
+	    printf("\">%s SNP</A> </B></TD></TR>\n", gcTdb->shortLabel);
 	    }
 	}
     }
@@ -15956,10 +16837,11 @@ printf("<TD>%s<TD>%s<TD><A HREF=\"%s\" target=_blank>LS-SNP</A><td class=\"hgcLs
 freeMem(lsSnpUrl);
 }
 
-static void printLsSnpMappings(struct sqlConnection *conn, struct slName *pdbIds, char *snpId)
+static void printLsSnpMappings(struct sqlConnection *conn, struct slName *pdbIds,
+			       char *snpTrack, char *snpId)
 /* Print lsSnp mappings. */
 {
-printf("<H3>Mappings to PDB protein structures</H3>\n");
+jsBeginCollapsibleSection(cart, snpTrack, "lsSnp", "Mappings to PDB protein structures", FALSE);
 printf("<TABLE class=\"hgcLsSnp\">\n");
 printf("<TBODY>\n");
 int numPdbs = slCount(pdbIds);
@@ -15989,25 +16871,51 @@ if (iCol != 0)
 printf("</TBODY>\n");
 printf("</TABLE>\n");
 printf("<A href=\"../goldenPath/help/chimera.html\" TARGET=_blank>Chimera help</A>\n");
+jsEndCollapsibleSection();
 }
 
-static void checkForLsSnpMappings(struct sqlConnection *conn, char *snpId)
+static void checkForLsSnpMappings(struct sqlConnection *conn, char *snpTrack, char *snpId)
 /* check if this SNP is mapped to any protein by LS-SNP, and if so print
 * the information. */
 {
 struct slName *pdbIds = lsSnpPdbChimeraGetSnpPdbs(conn, snpId);
 if (pdbIds != NULL)
     {
-    printLsSnpMappings(conn, pdbIds, snpId);
+    printLsSnpMappings(conn, pdbIds, snpTrack, snpId);
     slFreeList(&pdbIds);
     }
+}
+
+void printOtherSnpMappings(char *table, char *name, int start,
+			   struct sqlConnection *conn, int rowOffset)
+/* If this SNP (from any bed4+ table) is not uniquely mapped, print the other mappings. */
+{
+char query[512];
+safef(query, sizeof(query), "select * from %s where name='%s'",
+      table, name);
+struct sqlResult *sr = sqlGetResult(conn, query);
+int snpCount = 0;
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct bed *snp = bedLoad3(row + rowOffset);
+    if (snp->chromStart != start || differentString(snp->chrom, seqName))
+	{
+	printf("<BR>\n");
+	if (snpCount == 0)
+	    printf("<B>This SNP maps to these additional locations:</B><BR><BR>\n");
+	snpCount++;
+	bedPrintPos((struct bed *)snp, 3, tdb);
+	}
+    }
+sqlFreeResult(&sr);
 }
 
 void doSnpWithVersion(struct trackDb *tdb, char *itemName, int version)
 /* Process SNP details. */
 {
 char   *table = tdb->table;
-struct snp125 snp;
+struct snp132Ext *snp;
 struct snp *snpAlign = NULL;
 int    start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
@@ -16015,7 +16923,6 @@ struct sqlResult *sr;
 char **row;
 char   query[512];
 int    rowOffset=hOffsetPastBin(database, seqName, table);
-int    snpCount=0;
 
 genericHeader(tdb, NULL);
 printf("<H2>dbSNP build %d %s</H2>\n", version, itemName);
@@ -16024,10 +16931,13 @@ safef(query, sizeof(query), "select * from %s where chrom='%s' and "
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    snp125StaticLoad(row+rowOffset, &snp);
+    if (version >= 132)
+	snp = snp132ExtLoad(row+rowOffset);
+    else
+	snp = (struct snp132Ext *)snp125Load(row+rowOffset);
     printCustomUrl(tdb, itemName, FALSE);
-    bedPrintPos((struct bed *)&snp, 3, tdb);
-    snpAlign = snp125ToSnp(&snp);
+    bedPrintPos((struct bed *)snp, 3, tdb);
+    snpAlign = snp125ToSnp((struct snp125 *)snp);
     printf("<BR>\n");
     printSnp125Info(tdb, snp, version);
     doSnpEntrezGeneLink(tdb, itemName);
@@ -16036,30 +16946,16 @@ else
     errAbort("SNP %s not found at %s base %d", itemName, seqName, start);
 sqlFreeResult(&sr);
 
-writeSnpExceptionWithVersion(tdb, itemName, version);
-
-safef(query, sizeof(query), "select * from %s where name='%s'",
-      table, itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    snp125StaticLoad(row+rowOffset, &snp);
-    if (snp.chromStart != start || differentString(snp.chrom, seqName))
-	{
-	if (snpCount==0)
-	    printf("<BR><B>This SNP maps to these additional locations:"
-		   "</B><BR><BR>");
-	snpCount++;
-	bedPrintPos((struct bed *)&snp, 3, tdb);
-	printf("<BR>");
-	}
-    }
-sqlFreeResult(&sr);
+printOtherSnpMappings(table, itemName, start, conn, rowOffset);
+puts("<BR>");
+// Make table for collapsible sections:
+puts("<TABLE>");
 checkForGwasCatalog(conn, tdb, itemName);
 checkForHgdpGeo(conn, tdb, itemName, start);
 checkForHapmap(conn, tdb, itemName);
-checkForLsSnpMappings(conn, itemName);
+checkForLsSnpMappings(conn, tdb->track, itemName);
 printSnpAlignment(tdb, snpAlign);
+puts("</TABLE>");
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -18766,6 +19662,10 @@ else if (sameWord(type, "bigBed"))
 else if (sameWord(type, "bam"))
     doBamDetails(ct->tdb, itemName);
 #endif//def USE_BAM
+#ifdef USE_TABIX
+else if (sameWord(type, "vcfTabix"))
+    doVcfTabixDetails(ct->tdb, itemName);
+#endif//def USE_TABIX
 else if (sameWord(type, "makeItems"))
     doMakeItemsDetails(ct, fileName);	// fileName is first word, which is, go figure, id
 else if (ct->wiggle)
@@ -18854,13 +19754,7 @@ else
 	    printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL,
 		TRUE, NULL);
 	if (ct->dbTrack)
-	    {
-	    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-	    char *date = firstWordInLine(sqlTableUpdate(conn, ct->dbTableName));
-	    if (date != NULL)
-		printf("<B>Data last updated:</B> %s<BR>\n", date);
-	    hFreeConn(&conn);
-	    }
+	    printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
 	printTrackHtml(ct->tdb);
 	return;
 	}
@@ -18881,14 +19775,7 @@ else
     bedPrintPos(bed, ct->fieldCount, NULL);
     }
 printTrackUiLink(ct->tdb);
-if (ct->dbTrack)
-    {
-    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    char *date = firstWordInLine(sqlTableUpdate(conn, ct->dbTableName));
-    if (date != NULL)
-	printf("<B>Data last updated:</B> %s<BR>\n", date);
-    hFreeConn(&conn);
-    }
+printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
 printTrackHtml(ct->tdb);
 }
 
@@ -21592,7 +22479,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *escName = NULL, *tableName;
+char *escName = NULL;
 int hasAttr = 0;
 int i;
 int start = cartInt(cart, "o");
@@ -21689,14 +22576,7 @@ printf("</DL>\n");
 printTBSchemaLink(tdb);
 printDataVersion(tdb);
 printOrigAssembly(tdb);
-if ((tableName = hTableForTrack(database, tdb->table)) != NULL)
-    {
-    struct sqlConnection *conn = hAllocConn(database);
-    char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
-    if (date != NULL)
-        printf("<B>Data last updated:</B> %s<BR>\n", date);
-    hFreeConn(&conn);
-    }
+printUpdateTime(database, tdb, NULL);
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();
@@ -22663,14 +23543,9 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
 
             }
         bed = bedLoad6(row);
-
-        if (sameString("numtSAssembled", table) || sameString("numtS", table))
-            printf("<A HREF=\"%s&db=%s&position=%s\">browser</A> | ",
-                   hgTracksPathAndSettings(), database, bed->name);
-        else
-            printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
-                   hgTracksPathAndSettings(), database,
-                    bed->chrom, bed->chromStart+1, bed->chromEnd);
+        printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
+               hgTracksPathAndSettings(), database,
+               bed->chrom, bed->chromStart+1, bed->chromEnd);
 
         printf("%-20s %-10s %9d  %9d    %5d    %5d    %1s",
             bed->name, bed->chrom, bed->chromStart+1, bed->chromEnd,
@@ -22743,6 +23618,10 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
 	    sameString(ct->dbTrackType, "maf")))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
+    if (isHubTrack(track))
+	{
+	hubConnectAddHubForTrackAndFindTdb(database, track, NULL, trackHash);
+	}
     if (parentWigMaf)
         {
         int wordCount, i;
@@ -22954,6 +23833,22 @@ else if (sameWord(table, "htcIlluminaProbesAlign"))
 else if (sameWord(table, "switchDbTss"))
     {
     doSwitchDbTss(tdb, item);
+    }
+else if (sameWord(table, "omimLocation"))
+    {
+    doOmimLocation(tdb, item);
+    }
+else if (sameWord(table, "omimAvSnp"))
+    {
+    doOmimAvSnp(tdb, item);
+    }
+else if (sameWord(table, "omimGeneClass2"))
+    {
+    doOmimGene2(tdb, item);
+    }
+else if (sameWord(table, "omimGene2"))
+    {
+    doOmimGene2(tdb, item);
     }
 else if (sameWord(table, "omimAv"))
     {
@@ -23509,7 +24404,8 @@ else if (sameWord(table, "transRegCodeProbe"))
     doTransRegCodeProbe(tdb, item, "transRegCode", "transRegCodeMotif",
     	"transRegCodeCondition", "growthCondition");
     }
-else if (sameWord(table, "wgEncodeRegDnaseClustered"))
+else if (sameWord(table, "wgEncodeRegDnaseClustered") || 
+	sameWord(table, "wgEncodeRegDnaseClusteredOn7"))
     {
     doPeakClusters(tdb, item);
     }

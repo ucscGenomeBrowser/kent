@@ -212,7 +212,7 @@ for (;;)
 		comp->rightStatus = *row[4];
 		comp->rightLen = atoi(row[5]);
 		}
-		if (sameString(word, "q"))
+            if (sameString(word, "q"))
 		{
 		struct mafComp *comp;
 		int wordCount;
@@ -845,4 +845,45 @@ boolean isContigOrTandem(char status)
 {
 return ((status == MAF_CONTIG_STATUS) ||
 	(status == MAF_TANDEM_STATUS));
+}
+
+struct mafComp *mafCompClone(struct mafComp *srcComp)
+/* clone a mafComp */
+{
+struct mafComp *comp;
+AllocVar(comp);
+comp->src = cloneString(srcComp->src);
+comp->srcSize = srcComp->srcSize;
+comp->strand = srcComp->strand;
+comp->start = srcComp->start;
+comp->size = srcComp->size;
+comp->text = cloneString(srcComp->text);
+comp->quality = cloneString(srcComp->quality);
+comp->leftStatus = srcComp->leftStatus;
+comp->leftLen = srcComp->leftLen;
+comp->rightStatus = srcComp->rightStatus;
+comp->rightLen = srcComp->rightLen;
+return comp;
+}
+
+static struct mafRegDef *mafRegDefClone(struct mafRegDef *srcRegDef)
+/* clone a srcRegDef */
+{
+return mafRegDefNew(srcRegDef->type, srcRegDef->size, srcRegDef->id);
+}
+
+struct mafAli *mafAliClone(struct mafAli *srcAli)
+/* clone a mafAli */
+{
+struct mafAli *ali;
+AllocVar(ali);
+ali->score = srcAli->score;
+struct mafComp *srcComp;
+for (srcComp = srcAli->components; srcComp != NULL; srcComp = srcComp->next)
+    slAddHead(&ali->components, mafCompClone(srcComp));
+slReverse(&ali->components);
+ali->textSize = srcAli->textSize;
+if (srcAli->regDef != NULL)
+    ali->regDef = mafRegDefClone(srcAli->regDef);
+return ali;
 }

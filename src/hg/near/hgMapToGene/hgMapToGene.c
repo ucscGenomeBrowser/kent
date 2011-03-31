@@ -11,7 +11,6 @@
 #include "hdb.h"
 #include "hgConfig.h"
 
-
 static char const rcsid[] = "$Id: hgMapToGene.c,v 1.16 2009/11/23 23:39:44 kent Exp $";
 
 void usage()
@@ -72,6 +71,9 @@ static struct optionSpec options[] = {
    {"tempDb", OPTION_STRING},
    {NULL, 0},
 };
+
+
+
 
 
 int bedIntersectRange(struct bed *bed, int rStart, int rEnd)
@@ -145,28 +147,40 @@ struct bed *mostOverlappingBed(struct binKeeper *bk, struct genePred *gp)
 {
 struct bed *bed, *bestBed = NULL;
 int overlap, bestOverlap = 0;
+
 struct binElement *el, *elList = binKeeperFind(bk, gp->txStart, gp->txEnd);
 
 for (el = elList; el != NULL; el = el->next)
     {
     bed = el->val;
     overlap = gpBedOverlap(gp, cdsOnly, intronsToo, bed);
+    /* If the gene prediction is a compatible extension of the bed (meaning that
+     * the bed and the gene prediction have a compatible transcript structure for
+     * the length of the bed), then add an overlap bonus of the length of the 
+     * gene prediction.  This effectively ensures that if there is a bed with a
+     * compatible extension, it will be chosen.  But, if no bed has a compatible
+     * extension, then some bed will be chosen, and that bed will be the one with
+     * the greatest number of overlapping bases. */
+    if (bedCompatibleExtension(bedFromGenePred(gp), bed))
+	{
+	overlap += bedTotalBlockSize(bedFromGenePred(gp));
+	}
     if (overlap > bestOverlap)
-        {
-        bestOverlap = overlap;
-        bestBed = bed;
-        }
+	{
+	bestOverlap = overlap;
+	bestBed = bed;
+	}
     else if (overlap == bestOverlap)
-        {
-        // If two beds have the same number of overlapping bases to
-        // the gene prediction, then take the bed with the greatest proportion of
-        // overlapping bases, i.e. the shorter one.
-        if (bedTotalBlockSize(bed) < bedTotalBlockSize(bestBed))
-            {
-            bestOverlap = overlap;
-            bestBed = bed;
-            }
-        }
+	{
+	/* If two beds have the same number of overlapping bases to
+	 * the gene prediction, then take the bed with the greatest proportion of
+	 * overlapping bases, i.e. the shorter one. */
+	if (bestBed == NULL || (bedTotalBlockSize(bed) < bedTotalBlockSize(bestBed)))
+	    {
+	    bestOverlap = overlap;
+	    bestBed = bed;
+	    }
+	}
     }
 return bestBed;
 }

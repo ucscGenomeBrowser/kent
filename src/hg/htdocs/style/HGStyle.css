@@ -5,6 +5,7 @@
 .normalText {background-color: white}
 
 /* CLASS DECLARATIONS FOR THE REST OF THE BROWSERS */
+.topbar { white-space: nowrap; padding: 0px 10px;}
 A:link.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #E0F0F0; font-size: 15px; }
 A:visited.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #E0F0F0; font-size: 15px; }
 A:active.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #E0F0F0; font-size: 15px; }
@@ -26,6 +27,7 @@ A:visited.bigBlue { text-decoration: none; font-family: arial, san-serif; color:
 A:active.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #A000A0; font-size: 16pt; font-weight: 600; }
 A:hover.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #0000A0; font-size: 16pt; font-weight: 600; }
 IMG.bigBlue {vertical-align: middle;}
+TD.bigBlue {vertical-align: middle;}
 
 A:link.toc { text-decoration: none; color: #0000CC;  }
 A:visited.toc { text-decoration: none; color: #0000CC;  }
@@ -206,10 +208,13 @@ div.sliceDiv { overflow:hidden; }
 table.subtracks { overflow: visible; white-space: nowrap; border: 1px solid #FFFEE8; }
 tr.sortable { background-color: #FCECC0; }
 th.sortable { color: #0000FF; }
-th:hover.sortable { background-color: #CCFFCC; cursor: pointer; }
+/* Older IE calls pointer "hand".  Defining them both should work */
+th:hover.sortable { background-color: #CCFFCC; cursor: pointer; cursor: hand; }
 tbody.sorting { color: #DDDDDD; cursor: wait;  }
 
 /* tr:hover.found { color: #000088; } */
+
+.filterBy { display: none; } /* All filterBy's should be converted to dropdownchecklists by document.ready(). */
 
 .noscript {
         background: none repeat scroll 0 0 #FFFF90;

@@ -8816,7 +8816,8 @@ rm bed.tab
 
 
 #########################################################################
-# KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 3/12/10 angie)
+# KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 3/22/11 Fan)
+# done 3/22/11 w/files emailed from Carol
 # renamed to ikmc 3/25/10 at Carol's request
 # done 3/12/10 w/files emailed from Carol 3/12
 # done 12/8/09 w/files emailed from Carol 12/7
@@ -8825,13 +8826,12 @@ rm bed.tab
 # done 2/12/09 w/files emailed from Carol Bult 2/12
 # done 10/21/08 w/files emailed from Carol Bult 10/18
     ssh hgwdev
-    mkdir -p /hive/data/genomes/mm9/bed/komp/2010_03
-    cd /hive/data/genomes/mm9/bed/komp/2010_03
-#*** NOTE FOR NEXT TIME: load as ikmc, ikmcExtra
-    # Save files emailed from Carol Bult 3/12 as 
-    # 20100312_ikmc.gff.gz
+    mkdir -p /hive/data/genomes/mm9/bed/ikmc/2011_03
+    cd /hive/data/genomes/mm9/bed/ikmc/2011_03
+    # Save files emailed from Carol Bult as 
+    # 20110221_ikmc.gff.gz
     # Make bed12 with itemRgb:
-    zcat 20100312_ikmc.gff.gz \
+    zcat 20110221_ikmc.gff.gz \
     | perl -we \
       'while (<>) { \
          s/\r?\n$//; \
@@ -8865,60 +8865,54 @@ rm bed.tab
         print join("\t", $chrom, $chromStart, $chromEnd, $name, 0, ".", $chromStart, \
                    $chromStart, $color, $blkCount, $blkSizes, $blkStarts) . "\n"; \
       }' \
-    | sort -k 1,1 -k 2n,2n > komp.bed
-#Got 40093 genes.
+    | sort -k 1,1 -k 2n,2n > ikmc.bed
+#Got 46125 genes.
     # No stderr empty-coord warnings this time (no unmapped items).
     # Make an alias-style table with associated info (MGI ID and status):
-    zcat 20100312_ikmc.gff.gz \
+    zcat 20110221_ikmc.gff.gz \
     | perl -wpe 's/\r?\n$//; @w = split("\t"); \
       if ($w[3] eq "") { s/^.*//; next; } # Some lines have no coords. \
       if ($w[4] <= 0) { s/^.*//; next; } # A few lines have end=0. \
       $w[8] =~ m/^(MGI:\d+); (\w+); (\w.*)/ || die; \
       ($mgi, $designId, $status) = ($1, $2, $3); \
       $_ = "$w[10]_$designId\t$mgi,$w[2],$status\n";' \
-    | sort -u > kompExtra.tab
-    wc -l kompExtra.tab
-#40093 kompExtra.tab
+    | sort -u > ikmcExtra.tab
+    wc -l ikmcExtra.tab
+#46125 ikmcExtra.tab
     # Load 'em up:
-    hgLoadBed mm9 komp komp.bed
-#Loaded 32185 elements of size 12
-    hgLoadSqlTab mm9 kompExtra $HOME/kent/src/hg/lib/genericAlias.sql kompExtra.tab
-    checkTableCoords -verbose=2 mm9 komp
-#mm9.komp item Eif2s1_42274 chr12:79973648-79983000: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41479 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41478 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41477 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41476 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Cntn5_44827 chr9:10008998-10019351: blocks 1 and 2 overlap.
+    hgLoadBed mm9 ikmc ikmc.bed
+#Loaded 46125 elements of size 12
+    hgLoadSqlTab mm9 ikmcExtra $HOME/kent/src/hg/lib/genericAlias.sql ikmcExtra.tab
+    checkTableCoords -verbose=2 mm9 ikmc
+#mm9.ikmc item Tekt3_41479 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41478 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41477 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41476 chr11:62887195-62896116: blocks 3 and 4 overlap.
     # Carol talked to the Sanger folks about those... pls waive.
 
     # Note from July '09: Carol noticed some very long items and is asking
     # Sanger about them.  Here's how to check it ourselves next time:
-    hgsql mm9 -e 'select name, (chromEnd-chromStart) as length from komp \
+    hgsql mm9 -e 'select name, (chromEnd-chromStart) as length from ikmc \
                   where chromEnd - chromStart > 1000000 order by length desc;'
-#+----------------------+-----------+
-#| name                 | length    |
-#+----------------------+-----------+
-#| Chrac1_77013         | 100321422 | 
-#| Ankrd22_67616        |  51920750 | 
-#| Sp140_77012          |   2457682 | 
-#| Ptprd_VG12763        |   2270723 | 
-#| A430089I19Rik_71812  |   1814706 | 
-#| 1700049E17Rik2_68957 |   1596021 | 
-#| Pcdh15_VG15967       |   1550393 | 
-#| Gpc5_VG15750         |   1431812 | 
-#| Agbl4_VG16439        |   1266664 | 
-#| Prkg1_VG15918        |   1197272 | 
-#| Rnaset2b_77193       |   1153790 | 
-#| Ptprt_VG10147        |   1139158 | 
-#| Nrxn1_VG16178        |   1056424 | 
-#| Ccl21b_67667         |   1019106 | 
-#+----------------------+-----------+
+#+----------------+-----------+
+#| name           | length    |
+#+----------------+-----------+
+#| Wdr63_92626    | 152775366 | 
+#| H2-Gs10_68977  |  86354720 | 
+#| Ptprd_VG12763  |   2270723 | 
+#| Pcdh15_VG15967 |   1550393 | 
+#| Gpc5_VG15750   |   1431812 | 
+#| Agbl4_VG16439  |   1266664 | 
+#| Lingo2_VG18888 |   1244126 | 
+#| Prkg1_VG15918  |   1197272 | 
+#| Ptprt_VG10147  |   1139158 | 
+#| Anks1b_VG16505 |   1099796 | 
+#| Erbb4_VG18672  |   1075874 | 
+#| Nrxn1_VG16178  |   1056424 | 
+#+----------------+-----------+
 
-    runJoiner.csh mm9 komp
-# mm9.kompExtra.name - hits 40093 of 40093 ok
-
-
+    runJoiner.csh mm9 ikmc
+# mm9.ikmcExtra.name - hits 46125 of 46125 ok
 #########################################################################
 ### Affy MOE430 version 2 (DONE - 2008-09-25,10-02 - Hiram)
     # Align probes from MOE430v2 chip.
@@ -9272,11 +9266,11 @@ mm9.upstreamMaf = multiz30way /hive/data/genomes/mm9/bed/multiz30way/species.lis
 
 
 #############################################################################
-# MAKE PCR TARGET FOR UCSC GENES (DONE 11/4/08)
+# MAKE PCR TARGET FOR UCSC GENES (DONE 11/4/08) (REDONE 2/24/11)
     ssh hgwdev
     mkdir /cluster/data/mm9/bed/mrnaPcr
     cd /cluster/data/mm9/bed/mrnaPcr
-    genePredToBed /cluster/data/mm9/bed/ucsc.10/ucscGenes.gp > ucscGenes.bed
+    genePredToBed /cluster/data/mm9/bed/ucsc.12/ucscGenes.gp > ucscGenes.bed
     hgsql mm9 -NBe 'select kgId,geneSymbol from kgXref' \
     | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \
       > idSub.txt
@@ -9284,17 +9278,17 @@ mm9.upstreamMaf = multiz30way /hive/data/genomes/mm9/bed/multiz30way/species.lis
     sequenceForBed -keepName -db=mm9 -bedIn=ucscGenesIdSubbed.bed \
       -fastaOut=stdout \
     | faToTwoBit stdin kgTargetSeq.2bit
-    cut -f 1-10 /cluster/data/mm9/bed/ucsc.10/ucscGenes.gp \
+    cut -f 1-10 /cluster/data/mm9/bed/ucsc.12/ucscGenes.gp \
     | genePredToFakePsl mm9 stdin kgTargetAli.psl /dev/null
 
     # Load up the UCSC Genes target PSL table and put 2bit in /gbdb::
     cd /cluster/data/mm9/bed/mrnaPcr
     hgLoadPsl mm9 kgTargetAli.psl
     mkdir /gbdb/mm9/targetDb
-    ln -s /cluster/data/mm9/bed/mrnaPcr/kgTargetSeq.2bit /gbdb/mm9/targetDb/
+    ln -s /cluster/data/mm9/bed/mrnaPcr/kgTargetSeq.2bit /gbdb/mm9/targetDb/kgTargetSeq12.2bit
 
     # Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on
-    # /gbdb/mm9/targetDb/kgTargetSeq.2bit .
+    # /gbdb/mm9/targetDb/kgTargetSeq12.2bit .
 
     ssh hgwdev
     # Add records to hgcentraltest blatServers and targetDb:
@@ -11541,3 +11535,155 @@ hgsql -e 'select distinct(class) from pseudoYale60Class;' mm9
 # Added the classes to:
 # ~/kentJuly2010/kent/src/hg/makeDb/trackDb/tagTypes.tab
 # e.g. gClass_Processed genePred
+
+#########################################################################
+# Refresh mm9.knownToVisiGene
+#
+# After we fixed another issue on hgwdev and rebuilt knownToVisiGene
+# it picked up the new mm9 ucsc genes.  Because that has not
+# yet been released to RR, I remade it on hgwbeta.
+ssh hgwbeta
+knownToVisiGene mm9
+
+#########################################################################
+# SEGMENTAL DUPLICATIONS (DONE 1/11/2011 Fan)
+    # File indicated by email from T. Louie <tinlouie@u.washington.edu>
+    mkdir /cluster/data/mm9/bed/genomicSuperDups
+    cd /cluster/data/mm9/bed/genomicSuperDups
+    wget --timestamping 'http://staff.washington.edu/tinlouie/mm9genomicSuperDups.tab.gz'
+    
+    awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' mm9genomicSuperDups.tab \
+    | hgLoadBed mm9 genomicSuperDups stdin \
+      -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+    # 8/29/07 Gak!  Kayla found that the strand values were "+" and "_" -- fix:
+    hgsql mm9 -e 'update genomicSuperDups set strand = "-" where strand = "_";'
+
+#####################################################################
+# NCBI Incident database (DONE - 2011-02-10 - Hiram)
+    # this procedure is run as a cron job in Hiram's account:
+
+    #	43 09 * * * /hive/data/outside/ncbi/incidentDb/runUpdate.sh makeItSo
+
+    # using the two scrips there: runUpdate.sh and update.sh
+    # which are checked into the source tree as files:
+    #	src/hg/utils/automation/ncbiIncidentUpdate.sh
+    #	src/hg/utils/automation/ncbiRunIncidentUpdate.sh
+
+    # they fetch the XML files from NCBI, convert them to SQL text
+    # files, construct a bigBed file, and pushes it to genomewiki if
+    # it is an update from previous
+
+    # the table in the dataBase is: ncbiIncidentDb
+    # which is the URL to the bb file, a single row:
+    # http://genomewiki.ucsc.edu/images/8/85/Hg19.ncbiIncidentDb.bb
+
+#############################################################################
+# KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 3/22/11 Fan)
+# done 3/22/11 w/files emailed from Carol
+# renamed to ikmc 3/25/10 at Carol's request
+# done 3/12/10 w/files emailed from Carol 3/12
+# done 12/8/09 w/files emailed from Carol 12/7
+# done 7/24/09 w/files emailed from Carol 7/24
+# done 5/7/09 w/files emailed from Carol Bult 5/7
+# done 2/12/09 w/files emailed from Carol Bult 2/12
+# done 10/21/08 w/files emailed from Carol Bult 10/18
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/mm9/bed/ikmc/2011_03
+    cd /hive/data/genomes/mm9/bed/ikmc/2011_03
+    # Save files emailed from Carol Bult as 
+    # 20110221_ikmc.gff.gz
+    # Make bed12 with itemRgb:
+    zcat 20110221_ikmc.gff.gz \
+    | perl -we \
+      'while (<>) { \
+         s/\r?\n$//; \
+         ($chr, undef, $ctr, $s, $e, undef, undef, undef, $id, $col, $n) = split("\t"); \
+         if ($s eq "") { warn "$_\n";  s/^.*//; next; } # Some lines have no coords. \
+         $col = ($col eq "Yellow") ? "255,215,0" : \
+                ($col eq "Green")  ? "0,240,0" : \
+                ($col eq "Blue")   ? "0,0,200" : "0,0,0"; \
+         $s--; \
+         $id =~ s/^MGI:\d+; (\w+); .*/$1/ || die "Cant parse id \"$id\""; \
+         my $geneId = join("|", $chr, $ctr, "${n}_$id"); \
+         push @{$geneBlks{$geneId}}, [$s, $e, $col] unless $e <= 0; \
+      } \
+      warn "Got " . scalar(keys %geneBlks) . " genes.\n"; \
+      foreach my $geneId (keys %geneBlks) { \
+         my @blks = @{$geneBlks{$geneId}}; \
+         my ($chrom, $center, $name) = split(/\|/, $geneId); \
+         my $blkCount = @blks; \
+         @blks = sort {$a->[0] <=> $b->[0]} @blks; \
+         my $chromStart = $blks[0]->[0]; \
+         my $chromEnd = $blks[$blkCount-1]->[1]; \
+         my $color = $blks[0]->[2]; \
+         my $blkStarts = ""; \
+         my $blkSizes = ""; \
+         foreach my $blk (@blks) { \
+           my ($start, $end, $col) = @{$blk}; \
+           $blkStarts .= ($start - $chromStart) . ","; \
+           $blkSizes  .= ($end - $start) . ","; \
+           if ($col ne $color) { die "Blocks of $geneId of colors $color and $col"; } \
+         } \
+        print join("\t", $chrom, $chromStart, $chromEnd, $name, 0, ".", $chromStart, \
+                   $chromStart, $color, $blkCount, $blkSizes, $blkStarts) . "\n"; \
+      }' \
+    | sort -k 1,1 -k 2n,2n > ikmc.bed
+#Got 46125 genes.
+    # No stderr empty-coord warnings this time (no unmapped items).
+    # Make an alias-style table with associated info (MGI ID and status):
+    zcat 20110221_ikmc.gff.gz \
+    | perl -wpe 's/\r?\n$//; @w = split("\t"); \
+      if ($w[3] eq "") { s/^.*//; next; } # Some lines have no coords. \
+      if ($w[4] <= 0) { s/^.*//; next; } # A few lines have end=0. \
+      $w[8] =~ m/^(MGI:\d+); (\w+); (\w.*)/ || die; \
+      ($mgi, $designId, $status) = ($1, $2, $3); \
+      $_ = "$w[10]_$designId\t$mgi,$w[2],$status\n";' \
+    | sort -u > ikmcExtra.tab
+    wc -l ikmcExtra.tab
+#46125 ikmcExtra.tab
+    # Load 'em up:
+    hgLoadBed mm9 ikmc ikmc.bed
+#Loaded 46125 elements of size 12
+    hgLoadSqlTab mm9 ikmcExtra $HOME/kent/src/hg/lib/genericAlias.sql ikmcExtra.tab
+    checkTableCoords -verbose=2 mm9 ikmc
+#mm9.ikmc item Tekt3_41479 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41478 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41477 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41476 chr11:62887195-62896116: blocks 3 and 4 overlap.
+
+#Remove those records having the overlapping block problem.
+
+hgsql mm9 -e 'delete from ikmc where name="Tekt3_41479"'
+hgsql mm9 -e 'delete from ikmc where name="Tekt3_41478"'
+hgsql mm9 -e 'delete from ikmc where name="Tekt3_41477"'
+hgsql mm9 -e 'delete from ikmc where name="Tekt3_41476"'
+
+hgsql mm9 -e 'delete from ikmcExtra where name="Tekt3_41479"'
+hgsql mm9 -e 'delete from ikmcExtra where name="Tekt3_41478"'
+hgsql mm9 -e 'delete from ikmcExtra where name="Tekt3_41477"'
+hgsql mm9 -e 'delete from ikmcExtra where name="Tekt3_41476"'
+
+    # Note from July '09: Carol noticed some very long items and is asking
+    # Sanger about them.  Here's how to check it ourselves next time:
+    hgsql mm9 -e 'select name, (chromEnd-chromStart) as length from ikmc \
+                  where chromEnd - chromStart > 1000000 order by length desc;'
+#+----------------+-----------+
+#| name           | length    |
+#+----------------+-----------+
+#| Wdr63_92626    | 152775366 | 
+#| H2-Gs10_68977  |  86354720 | 
+#| Ptprd_VG12763  |   2270723 | 
+#| Pcdh15_VG15967 |   1550393 | 
+#| Gpc5_VG15750   |   1431812 | 
+#| Agbl4_VG16439  |   1266664 | 
+#| Lingo2_VG18888 |   1244126 | 
+#| Prkg1_VG15918  |   1197272 | 
+#| Ptprt_VG10147  |   1139158 | 
+#| Anks1b_VG16505 |   1099796 | 
+#| Erbb4_VG18672  |   1075874 | 
+#| Nrxn1_VG16178  |   1056424 | 
+#+----------------+-----------+
+
+    runJoiner.csh mm9 ikmc
+# mm9.ikmcExtra.name - hits 46121 of 46121 ok
+#########################################################################

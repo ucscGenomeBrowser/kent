@@ -26,6 +26,8 @@
 #include "web.h"
 #include "hPrint.h"
 #include "fileUi.h"
+#include "bigBed.h"
+#include "bigWig.h"
 
 static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
 
@@ -55,7 +57,7 @@ struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct 
 /* Look up through self and parents, looking for someone responsible for handling
  * where the downloads are. */
 {
-if (!sameWord(tdb->type,"downloadsOnly") && !sameString(tdb->table, tdb->track))
+if (!sameWord(tdb->type,"downloadsOnly") && !sameString(tdb->table, tdb->track) && trackHash)
     {
     tdb = hashFindVal(trackHash, tdb->table);
     if (tdb == NULL)
@@ -69,7 +71,7 @@ static char *htmlStringForDownloadsLink(char *database, struct trackDb *tdb,char
 // Returns an HTML string for a downloads link
 {
 // If has fileSortOrder, then link to new hgFileUi
-if (trackDbSetting(tdb, FILE_SORT_ORDER) != NULL)
+if (!nameIsFile && trackDbSetting(tdb, FILE_SORT_ORDER) != NULL)
     {
     char * link = needMem(PATH_LEN); // 512 should be enough
     safef(link,PATH_LEN,"<A HREF='%s?g=%s' title='Downloadable Files...'>%s</A>", //  NOTE: TARGET=ucscDownloads   ??
@@ -79,11 +81,11 @@ if (trackDbSetting(tdb, FILE_SORT_ORDER) != NULL)
 else if(trackDbSetting(tdb, "wgEncode") != NULL)  // Downloads directory if this is ENCODE
     {
     struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
-    char *actualName = (sameWord(dirKeeper->type,"downloadsOnly")?dirKeeper->track:tdb->table);
+    char *compositeDir = (sameWord(dirKeeper->type,"downloadsOnly")?dirKeeper->track:dirKeeper->table);
     struct dyString *dyLink = dyStringCreate("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download %s' TARGET=ucscDownloads>%s</A>",
             hDownloadsServer(),
-            trackDbSettingOrDefault(dirKeeper, "origAssembly",database),
-            ENCODE_DCC_DOWNLOADS, actualName, (nameIsFile?name:""), nameIsFile?"file":"files",name);
+            trackDbSettingOrDefault(dirKeeper, "origAssembly",database),  // This may not be wise!!!
+            ENCODE_DCC_DOWNLOADS, compositeDir, (nameIsFile?name:""), nameIsFile?"file":"files",name);
     return dyStringCannibalize(&dyLink);
     }
 return NULL;
@@ -93,7 +95,7 @@ static boolean makeNamedDownloadsLink(char *database, struct trackDb *tdb,char *
 	struct hash *trackHash)
 // Make a downloads link (if appropriate and then returns TRUE)
 {
-char *htmlString = htmlStringForDownloadsLink(database,tdb,name,FALSE,trackHash);
+char *htmlString = htmlStringForDownloadsLink(database,trackDbTopLevelSelfOrParent(tdb),name,FALSE,trackHash);
 if (htmlString == NULL)
     return FALSE;
 
@@ -180,17 +182,17 @@ if(showShortLabel)
     dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
 // Get the hash of mdb and cv term types
-struct hash *cvTermTypes = mdbCvTermTypeHash();
+struct hash *cvTermTypes = (struct hash *)cvTermTypeHash();
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
-mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
-mdbObjReorderVars(mdbObj,"grant lab dataType cell treatment antibody protocol replicate view setType inputType",FALSE); // Bring to front
-mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName fileIndex",TRUE); // Send to back
+mdbObjRemoveVars(mdbObj,MDB_OBJ_TYPE_COMPOSITE " " MDB_VAR_PROJECT " " MDB_OBJ_TYPE); // Don't bother showing these (NOTE: composite,objType should be added to cv.ra typeOfTerms as hidden)
+mdbObjRemoveHiddenVars(mdbObj);
+mdbObjReorderByCv(mdbObj,FALSE);// Use cv defined order for visible vars
 struct mdbVar *mdbVar;
 for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     {
-    if ((sameString(mdbVar->var,"fileName") || sameString(mdbVar->var,"fileIndex") )
-    && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
+    if ((sameString(mdbVar->var,MDB_VAR_FILENAME) || sameString(mdbVar->var,MDB_VAR_FILEINDEX) )
+    && trackDbSettingClosestToHome(tdb,MDB_VAL_ENCODE_PROJECT) != NULL)
         {
         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>",mdbVar->var);
 
@@ -199,25 +201,21 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         }
     else
         {
-        // If antibody and metadata contains input={sameValue} then just print input
-        if(sameString(mdbVar->var,"antibody") && mdbObjContains(mdbObj,"input",mdbVar->val))
-            continue;
-
-        if (cvTermTypes && differentString(mdbVar->var,"tableName")) // Don't bother with tableName
+        if (cvTermTypes && differentString(mdbVar->var,MDB_VAR_TABLENAME)) // Don't bother with tableName
             {
             struct hash *cvTerm = hashFindVal(cvTermTypes,mdbVar->var);
             if (cvTerm != NULL)
                 {
-                if(SETTING_NOT_ON(hashFindVal(cvTerm,"hidden")))  // NULL is not on
+                if(SETTING_NOT_ON(hashFindVal(cvTerm,CV_TOT_HIDDEN)))  // NULL is not on
                     {
-                    char *label=hashFindVal(cvTerm,"label");
+                    char *label=hashFindVal(cvTerm,CV_LABEL);
                     if (label == NULL)
                         label = mdbVar->var;
-                    char *linkOfType = controlledVocabLink(NULL,"type",mdbVar->var,label,label,NULL);
-                    char *cvDefined=hashFindVal(cvTerm,"cvDefined");
+                    char *linkOfType = controlledVocabLink(NULL,CV_TYPE,mdbVar->var,label,label,NULL);
+                    char *cvDefined=hashFindVal(cvTerm,CV_TOT_CV_DEFINED);
                     if (cvDefined != NULL && !SETTING_IS_OFF(cvDefined)) // assume setting is ON
                         {
-                        char *linkOfTerm = controlledVocabLink(NULL,"term",mdbVar->val,mdbVar->val,mdbVar->val,NULL);
+                        char *linkOfTerm = controlledVocabLink(NULL,CV_TERM,mdbVar->val,mdbVar->val,mdbVar->val,NULL);
                         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
                         freeMem(linkOfTerm);
                         }
@@ -1972,7 +1970,7 @@ slFreeList(&trackList);
 return trackName;
 }
 
-static void rAddTrackListToHash(struct hash *trackHash, struct trackDb *tdbList, char *chrom,
+void rAddTrackListToHash(struct hash *trackHash, struct trackDb *tdbList, char *chrom,
 	boolean leafOnly)
 /* Recursively add trackList to trackHash */
 {
@@ -2562,10 +2560,10 @@ enum
 
 typedef struct _membersForAll {
     int abcCount;
-    int dimMax;
-    boolean filters;
-    dimensions_t *dimensions;
-    members_t* members[27];
+    int dimMax;               // Arrays of "members" structs will be ordered as [view][dimX][dimY][dimA]... with first 3 in fixed spots and rest as found (and non-empty)
+    boolean filters;          // ABCs use filterComp boxes (as upposed to check boxes
+    dimensions_t *dimensions; // One struct describing "deimensions" setting"  (e.g. dimX:cell dimY:antibody dimA:treatment)
+    members_t* members[27];   // One struct for each dimension describing groups in dimension (e.g. cell: GM12878,K562)
     char* checkedTags[27];  // FIXME: Should move checkedTags into membersForAll->members[ix]->selected;
     char letters[27];
 } membersForAll_t;
@@ -2581,6 +2579,12 @@ safef(settingName, sizeof(settingName), "%s.filterComp.%s",parentTdb->track,memb
 struct slName *options = cartOptionalSlNameList(cart,settingName);
 if(options != NULL)
     {
+    if (sameWord(options->name,"All")) // filterComp returns "All" which means every option selected
+        {
+        slNameFreeList(&options);
+        options = slNameListFromStringArray(members->tags, members->count);
+        assert(options != NULL);
+        }
     struct slName *option;
     for(option=options;option!=NULL;option=option->next)
         {
@@ -3290,7 +3294,7 @@ if( name == NULL )
 
 setting = cloneString(setting);
 char *filters[10];
-int filterCount = chopLine(setting, filters);
+int filterCount = chopByWhiteRespectDoubleQuotes(setting, filters, ArraySize(filters));
 int ix;
 for(ix=0;ix<filterCount;ix++)
     {
@@ -3309,23 +3313,51 @@ for(ix=0;ix<filterCount;ix++)
         filterBy->useIndex = TRUE;
         }
     filterBy->valueAndLabel = (strchr(filter,'|') != NULL);
+    filterBy->colorFollows  = FALSE; // A color could be declared at the end of a filter value like "Level_2{#FF0099}"
+    char *color = strchr(filter,'{');
+    if (color != NULL)
+        filterBy->colorFollows = (*(color + 1) == '#');
+    // Remove any double quotes now and rely upon commmas for delimiting
+    stripString(filter, "\"");
     filterBy->slValues = slNameListFromComma(filter);
-    if(filterBy->valueAndLabel)
+    if (filterBy->valueAndLabel || filterBy->colorFollows)
         {
         struct slName *val = filterBy->slValues;
         for(;val!=NULL;val=val->next)
             {
+            // chip the color off the end of value name
+            color = strchr(val->name,'{');
+            if (color == NULL && filterBy->colorFollows)
+                {
+                warn("Using filterBy but only some values contain colors in form of value{#color} or value|label{#color}.");
+                filterBy->colorFollows = FALSE;
+                break;
+                }
+            else if (color != NULL && filterBy->colorFollows)
+                {
+                assert(*(color + 1) == '#');
+                *color++ = 0;  // The color is found inside the filters->svValues as the next string beyond value or label
+                color = strchr(color,'}'); // There could be a closing '}'
+                if (color != NULL)
+                    *color = 0;
+                }
+
+            // now chip the label off the end of value name
             char * lab =strchr(val->name,'|');
-            if(lab == NULL)
+            if (lab == NULL && filterBy->valueAndLabel)
                 {
                 warn("Using filterBy but only some values contain labels in form of value|label.");
                 filterBy->valueAndLabel = FALSE;
                 break;
                 }
-            *lab++ = 0;
-            strSwapChar(lab,'_',' '); // Title does not have underscores
+            if (lab != NULL && filterBy->valueAndLabel)
+                {
+                *lab++ = 0;  // The label is found inside the filters->svValues as the next string
+                strSwapChar(lab,'_',' '); // Title does not have underscores
+                }
             }
         }
+
     slAddTail(&filterBySet,filterBy); // Keep them in order (only a few)
 
     if(cart != NULL)
@@ -3468,7 +3500,7 @@ if(dyStringLen(dyClause) == 0)
 return dyStringCannibalize(&dyClause);
 }
 
-void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet)
+void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet, boolean onOneLine)
 /* Does the UI for a list of filterBy structure */
 {
 if(filterBySet == NULL)
@@ -3477,31 +3509,34 @@ if(filterBySet == NULL)
 #define FILTERBY_HELP_LINK  "<A HREF=\"../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
 int count = slCount(filterBySet);
 if(count == 1)
-    puts("<BR><TABLE cellpadding=3><TR valign='top'>");
+    puts("<TABLE cellpadding=3><TR valign='top'>");
 else
-    printf("<BR><B>Filter items by:</B> (select multiple categories and items - %s)<TABLE cellpadding=3><TR valign='top'>\n",FILTERBY_HELP_LINK);
+    printf("<B>Filter items by:</B> (select multiple categories and items - %s)<TABLE cellpadding=3><TR valign='top'>\n",FILTERBY_HELP_LINK);
 
 filterBy_t *filterBy = NULL;
-jsIncludeFile("ui.core.js",NULL);
-jsIncludeFile("ui.dropdownchecklist.js",NULL);
 webIncludeResourceFile("ui.dropdownchecklist.css");
+jsIncludeFile("ui.dropdownchecklist.js",NULL);
 
 int ix=0;
 for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     {
     puts("<TD>");
     if(count == 1)
-        printf("<B>Filter by %s</B> (select multiple items - %s)<BR>\n",filterBy->title,FILTERBY_HELP_LINK);
+        printf("<B>Filter by %s</B> (select multiple items - %s)",filterBy->title,FILTERBY_HELP_LINK);
     else
-        printf("<B>%s</B><BR>\n",filterBy->title);
+        printf("<B>%s</B>",filterBy->title);
 
+    //if (onOneLine && count > 1) // NOTE: onOneLine doesn't work because filterBy with multiple selected will align above title!
+        printf("<BR>\n");
+    //else
+    //    printf(":\n");
     // TODO: Scroll long lists
     //#define FILTER_COMPOSITE_OPEN_SIZE 16
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
     #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none;' class='filterComp filterBy'><BR>\n"
     printf(FILTER_BY_FORMAT,ix,tdb->track,filterBy->column);
     ix++;
-    printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":"") );
+    printf("<OPTION%s%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":""),(filterBy->colorFollows?" style='color: #000000;'":"") );
     struct slName *slValue;
     if(filterBy->useIndex)
         {
@@ -3511,19 +3546,30 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
             char varName[32];
             safef(varName, sizeof(varName), "%d",ix);
             char *name = strSwapChar(cloneString(slValue->name),'_',' ');
-                printf("<OPTION%s value=%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,varName)?" SELECTED":""),varName,name);
+            printf("<OPTION");
+            if (filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,varName))
+                printf(" SELECTED");
+            printf(" value='%s'",varName);
+            if (filterBy->colorFollows)
+                printf(" style='color: %s;'",slValue->name + strlen(slValue->name)+1);
+            printf(">%s</OPTION>\n",name);
             freeMem(name);
             }
-        }
-    else if(filterBy->valueAndLabel)
-        {
-        for(slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next)
-            printf("<OPTION%s value=%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,slValue->name)?" SELECTED":""),slValue->name,slValue->name+strlen(slValue->name)+1);
         }
     else
         {
         for(slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next)
-            printf("<OPTION%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,slValue->name)?" SELECTED":""),slValue->name);
+            {
+            char *label = (filterBy->valueAndLabel? slValue->name + strlen(slValue->name)+1: slValue->name);
+            printf("<OPTION");
+            if (filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,slValue->name))
+                printf(" SELECTED");
+            if (filterBy->valueAndLabel)
+                printf(" value='%s'",slValue->name);
+            if (filterBy->colorFollows)
+                printf(" style='color: %s;'",label + strlen(label)+1);
+            printf(">%s</OPTION>\n",label);
+            }
         }
     }
     printf("</SELECT>\n");
@@ -3625,77 +3671,6 @@ for(;indent>0;indent--)
     puts ("&nbsp;&nbsp;&nbsp;");
 }
 
-static int daysOfMonth(struct tm *tp)
-{
-int days=0;
-switch(tp->tm_mon)
-    {
-    case 3:
-    case 5:
-    case 8:
-    case 10:    days = 30;   break;
-    case 1:     days = 28;
-                if( (tp->tm_year % 4) == 0
-                && ((tp->tm_year % 20) != 0 || (tp->tm_year % 100) == 0) )
-                    days = 29;
-                break;
-    default:    days = 31;   break;
-    }
-return days;
-}
-
-static void dateAdd(struct tm *tp,int addYears,int addMonths,int addDays)
-/* Add years,months,days to a date */
-{
-tp->tm_mday  += addDays;
-tp->tm_mon   += addMonths;
-tp->tm_year  += addYears;
-int dom=28;
-while( (tp->tm_mon >11  || tp->tm_mon <0)
-    || (tp->tm_mday>dom || tp->tm_mday<1) )
-    {
-    if(tp->tm_mon>11)   // First month: tm.tm_mon is 0-11 range
-        {
-        tp->tm_year += (tp->tm_mon / 12);
-        tp->tm_mon  = (tp->tm_mon % 12);
-        }
-    else if(tp->tm_mon<0)
-        {
-        tp->tm_year += (tp->tm_mon / 12) - 1;
-        tp->tm_mon  =  (tp->tm_mon % 12) + 12;
-        }
-    else
-        {
-        dom = daysOfMonth(tp);
-        if(tp->tm_mday>dom)
-            {
-            tp->tm_mday -= dom;
-            tp->tm_mon  += 1;
-            dom = daysOfMonth(tp);
-            }
-        else if(tp->tm_mday < 1)
-            {
-            tp->tm_mon  -= 1;
-            dom = daysOfMonth(tp);
-            tp->tm_mday += dom;
-            }
-        }
-    }
-}
-static char *dateAddToAndFormat(char *date,char *format,int addYears,int addMonths,int addDays)
-/* Add years,months,days to a formatted date and returns the new date as a string on the stack
-*  format is a strptime/strftime format: %F = yyyy-mm-dd */
-{
-char *newDate = needMem(12);
-struct tm tp;
-if(strptime (date,format, &tp))
-    {
-    dateAdd(&tp,addYears,addMonths,addDays); // tp.tm_year only contains years since 1900
-    strftime(newDate,12,format,&tp);
-    }
-return newDate;  // newDate is never freed!
-}
-
 // FIXME FIXME Should be able to use membersForAll struct to set default sort order from subGroups
 // FIXME FIXME This should be done in hgTrackDb at load time and should change tag values to ensure js still works
 boolean tdbAddPrioritiesFromCart(struct cart *cart, struct trackDb *tdbList)
@@ -3751,7 +3726,8 @@ slSort(tdbRefList, trackDbRefCmp);
 return cartPriorities;
 }
 
-static void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed)
+void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed)
+// Methods for putting up type specific cfgs used by composites/subtracks in hui.c and exported for common use
 {
 switch(cType)
     {
@@ -3802,7 +3778,7 @@ if(metadataForTable(db,trackDb,NULL) != NULL)
     {
     addMonths = FALSE;
     date = cloneString((char *)metadataFindValue(trackDb,"dateUnrestricted"));
-    if(date == NULL)
+    if(date == NULL)  // TODO: The logic to calculate date based upon dateSubmitted should be removed.  However, I don't think we can do it until the mdb is used for all hg18 composites.
         {
         date = cloneString((char *)metadataFindValue(trackDb,"dateSubmitted"));
         addMonths = TRUE;
@@ -3821,7 +3797,7 @@ if (date != NULL)
     {
     date = strSwapChar(date, ' ', 0);   // Truncate time
     if(addMonths)
-        date = dateAddToAndFormat(date, "%F", 0, 9, 0);
+        date = dateAddTo(date, "%F", 0, 9, 0);
     }
 return date;
 }
@@ -3918,15 +3894,16 @@ if (useDragAndDrop)
         dyStringAppendC(dyHtml,' ');
     dyStringPrintf(dyHtml, "tableWithDragAndDrop");
     }
+printf(" class='subtracks");
 if (dyStringLen(dyHtml) > 0)
     {
-    printf(" class='subtracks bglevel1 %s'",dyStringContents(dyHtml));
+    printf(" bglevel1 %s'",dyStringContents(dyHtml));
     colorIx = COLOR_BG_ALTDEFAULT_IX;
     }
 if (sortOrder != NULL)
-    puts("><THEAD class=sortable>");
+    puts("'><THEAD class=sortable>");
 else
-    puts("><THEAD>");
+    puts("'><THEAD>");
 
 boolean doColorPatch = trackDbSettingOn(parentTdb, "showSubtrackColorOnUi");
 int colspan = 3;
@@ -4196,9 +4173,17 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     printf("&nbsp;");
 
     // Do we have a restricted until date?
-    char *dateDisplay = encodeRestrictionDateDisplay(db,subtrack);
-    if (dateDisplay)
-        printf("</TD>\n<TD align='center'>&nbsp;%s&nbsp;", dateDisplay);
+    if (restrictions)
+        {
+        char *dateDisplay = encodeRestrictionDateDisplay(db,subtrack);
+        if (dateDisplay)
+            {
+            if (dateIsOld(dateDisplay,"%F"))
+                printf("</TD>\n<TD align='center' nowrap style='color: #BBBBBB;'>&nbsp;%s&nbsp;", dateDisplay);
+            else
+                printf("</TD>\n<TD align='center'>&nbsp;%s&nbsp;", dateDisplay);
+            }
+        }
 
     // End of row and free ourselves of this subtrack
     puts("</TD></TR>\n");
@@ -4684,10 +4669,11 @@ if(min)
     if(deMin != NULL)
         *min = atoi(deMin);
     }
-if(min && limitMin && *min != NO_VALUE && *min < *limitMin) *min = *limitMin; // defaults within range
-if(min && limitMax && *min != NO_VALUE && *min > *limitMax) *min = *limitMax;
-if(max && limitMax && *max != NO_VALUE && *max > *limitMax) *max = *limitMax;
-if(max && limitMin && *max != NO_VALUE && *max < *limitMin) *max = *limitMin;
+// Defaulting min and max within limits.  Sorry for the horizontal ifs, but stacking the group makes them easier to follow
+if (min && limitMin && *limitMin != NO_VALUE && (*min == NO_VALUE || *min < *limitMin)) *min = *limitMin;
+if (min && limitMax && *limitMax != NO_VALUE &&                      *min > *limitMax)  *min = *limitMax;
+if (max && limitMax && *limitMax != NO_VALUE && (*max == NO_VALUE || *max > *limitMax)) *max = *limitMax;
+if (max && limitMin && *limitMin != NO_VALUE &&                      *max < *limitMin)  *max = *limitMin;
 }
 
 static void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, char *scoreName,
@@ -4730,29 +4716,189 @@ if(min)
     if(deMin != NULL)
         *min = strtod(deMin,NULL);
     }
-if(min && limitMin && (int)(*min) != NO_VALUE && *min < *limitMin) *min = *limitMin; // defaults within range
-if(min && limitMax && (int)(*min) != NO_VALUE && *min > *limitMax) *min = *limitMax;
-if(max && limitMax && (int)(*max) != NO_VALUE && *max > *limitMax) *max = *limitMax;
-if(max && limitMin && (int)(*max) != NO_VALUE && *max < *limitMin) *max = *limitMin;
+// Defaulting min and max within limits.  Sorry for the horizontal ifs, but stacking the group makes them easier to follow
+if (min && limitMin && (int)(*limitMin) != NO_VALUE && ((int)(*min) == NO_VALUE || *min < *limitMin)) *min = *limitMin;
+if (min && limitMax && (int)(*limitMax) != NO_VALUE &&                             *min > *limitMax)  *min = *limitMax;
+if (max && limitMax && (int)(*limitMax) != NO_VALUE && ((int)(*max) == NO_VALUE || *max > *limitMax)) *max = *limitMax;
+if (max && limitMin && (int)(*limitMin) != NO_VALUE &&                             *max < *limitMin)  *max = *limitMin;
 }
+
+static boolean showScoreFilter(struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
+                               boolean compositeLevel,char *name, char *title, char *label,
+                               char *scoreName, boolean isFloat)
+/* Shows a score filter control with minimum value and optional range */
+{
+char *setting = trackDbSetting(tdb, scoreName);
+if(setting)
+    {
+    if(*opened == FALSE)
+        {
+        boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+        puts("<TABLE>");
+        *opened = TRUE;
+        }
+    printf("<TR><TD align='right'><B>%s:</B><TD align='left'>",label);
+    char varName[256];
+    char altLabel[256];
+    safef(varName, sizeof(varName), "%s%s", scoreName, _BY_RANGE);
+    boolean filterByRange = trackDbSettingClosestToHomeOn(tdb, varName);
+    // NOTE: could determine isFloat = (strchr(setting,'.') != NULL);  However, historical trackDb settings of pValueFilter did not always contain '.'
+    if (isFloat)
+        {
+        double minLimit=NO_VALUE,maxLimit=NO_VALUE;
+        double minVal=minLimit,maxVal=maxLimit;
+        colonPairToDoubles(setting,&minVal,&maxVal);
+        getScoreFloatRangeFromCart(cart,tdb,scoreName,&minLimit,&maxLimit,&minVal,&maxVal);
+        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MIN);
+        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Minimum ":""), htmlEncodeText(htmlTextStripTags(label),FALSE));
+        cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
+        if(filterByRange)
+            {
+            printf("<TD align='left'>to<TD align='left'>");
+            safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MAX);
+            safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Maximum ":""), label);
+            cgiMakeDoubleVarWithLimits(varName,maxVal, altLabel, 0,minLimit, maxLimit);
+            }
+        safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
+        if(minLimit != NO_VALUE && maxLimit != NO_VALUE)
+            printf("<TD align='left'%s> (%g to %g)",altLabel,minLimit, maxLimit);
+        else if(minLimit != NO_VALUE)
+            printf("<TD align='left'%s> (minimum %g)",altLabel,minLimit);
+        else if(maxLimit != NO_VALUE)
+            printf("<TD align='left'%s> (maximum %g)",altLabel,maxLimit);
+        else
+            printf("<TD align='left'%s",altLabel);
+        }
+    else
+        {
+        int minLimit=NO_VALUE,maxLimit=NO_VALUE;
+        int minVal=minLimit,maxVal=maxLimit;
+        colonPairToInts(setting,&minVal,&maxVal);
+        getScoreIntRangeFromCart(cart,tdb,scoreName,&minLimit,&maxLimit,&minVal,&maxVal);
+        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, filterByRange ? _MIN:"");
+        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Minimum ":""), label);
+        cgiMakeIntVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
+        if(filterByRange)
+            {
+            printf("<TD align='left'>to<TD align='left'>");
+            safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MAX);
+            safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Maximum ":""), label);
+            cgiMakeIntVarWithLimits(varName,maxVal, altLabel, 0,minLimit, maxLimit);
+            }
+        safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
+        if(minLimit != NO_VALUE && maxLimit != NO_VALUE)
+            printf("<TD align='left'%s> (%d to %d)",altLabel,minLimit, maxLimit);
+        else if(minLimit != NO_VALUE)
+            printf("<TD align='left'%s> (minimum %d)",altLabel,minLimit);
+        else if(maxLimit != NO_VALUE)
+            printf("<TD align='left'%s> (maximum %d)",altLabel,maxLimit);
+        else
+            printf("<TD align='left'%s",altLabel);
+        }
+    puts("</TR>");
+    return TRUE;
+    }
+return FALSE;
+}
+
+
+#ifdef ALL_SCORE_FILTERS_LOGIC
+static int numericFiltersShowAll(struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
+                               boolean compositeLevel,char *name, char *title)
+// Shows all *Filter style filters.  Note that these are in random order and have no graceful title
+{
+int count = 0;
+struct slName *filterSettings = trackDbSettingsWildMatch(tdb, "*Filter");
+if (filterSettings)
+    {
+    puts("<BR>");
+    struct slName *filter = NULL;
+    struct slPair *extras = NULL;
+    char *extraFields = trackDbSetting(tdb, "extraFields");  // TODo: seems like there should be a cleaner way
+    if (extraFields != NULL)
+        extras = slPairListFromString(extraFields,TRUE); // Quoted strings may be okay
+
+    while ((filter = slPopHead(&filterSettings)) != NULL)
+        {
+        if (differentString(filter->name,"noScoreFilter") && differentString(filter->name,"scoreFilter")) // TODO: scoreFilter could be included
+            {
+            char *field = cloneString(filter->name);
+            int ix = strlen(field) - strlen("Filter");
+            assert(ix > 0);
+            field[ix] = '\0';
+            // Could lookup extraFields  // TODO: Should we be using extra fields?  Could this be sorted by the order in extraFields?
+            if (extras != NULL)
+                {
+                char *foundLabel = slPairFindVal(extras, field);
+                if (foundLabel != NULL)
+                    { // Found label so replace field
+                    freeMem(field);
+                    field = strchr(foundLabel,']');
+                    if (field == NULL)
+                        field = cloneString(foundLabel);
+                    else
+                        field = cloneString(field + 1);
+                    strSwapChar(field,'_',' ');
+                    }
+                }
+            char label[128];
+            safef(label,sizeof(label),"Minimum %s",field);
+            freeMem(field);
+            // Determine floating point or integer
+            char *setting = trackDbSetting(tdb, filter->name);
+            boolean isFloat = (strchr(setting,'.') != NULL);
+            showScoreFilter(cart,tdb,opened,boxed,compositeLevel,name,title,label,filter->name,isFloat);
+            count++;
+            }
+        slNameFree(&filter);
+        }
+    }
+if (count > 0)
+    puts("</TABLE>");
+return count;
+}
+#endif///def ALL_SCORE_FILTERS_LOGIC
+
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,  int maxScore, boolean boxed)
 /* Put up UI for filtering bed track based on a score */
 {
 char option[256];
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
-
+boolean skipScoreFilter = FALSE;
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
+
+#ifdef ALL_SCORE_FILTERS_LOGIC
+// Numeric filters are first
+boolean isBoxOpened = FALSE;
+if (numericFiltersShowAll(cart, tdb, &isBoxOpened, boxed, compositeLevel, name, title) > 0)
+    skipScoreFilter = TRUE;
+#endif///def ALL_SCORE_FILTERS_LOGIC
+
+// Add any multi-selects next
 if(filterBySet != NULL)
     {
-    if(!tdbIsComposite(tdb) && !tdbIsCompositeChild(tdb))
+    if(!tdbIsComposite(tdb) && cartOptionalString(cart, "ajax") == NULL)
         jsIncludeFile("hui.js",NULL);
 
-    filterBySetCfgUi(tdb,filterBySet);
+    if (!isBoxOpened)   // Note filterBy boxes are not double "boxed", if there are no other filters
+        printf("<BR>");
+    filterBySetCfgUi(tdb,filterBySet,TRUE);
     filterBySetFree(&filterBySet);
-    return; // Cannot have both 'filterBy' score and 'scoreFilter'
+    skipScoreFilter = TRUE;
     }
 
+// For no good reason scoreFilter is incompatible with filterBy and or numericFilters
+// FIXME scoreFilter should be implemented inside numericFilters and is currently specificly excluded to avoid unexpected changes
+if (skipScoreFilter)
+    {
+    #ifdef ALL_SCORE_FILTERS_LOGIC
+    if (isBoxOpened)
+        cfgEndBox(boxed);
+    #endif///def ALL_SCORE_FILTERS_LOGIC
+
+    return; // Cannot have both '*filter' and 'scoreFilter'
+    }
 
 boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL);
 boolean glvlScoreMin = (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN) != NULL);
@@ -4904,54 +5050,6 @@ if (normScoreAvailable)
 cfgEndBox(boxed);
 }
 
-static boolean showScoreFilter(struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
-                               boolean compositeLevel,char *name, char *title, char *label,
-                               char *scoreName,char *defaults,char *limitsDefault)
-/* Shows a score filter control with minimum value and optional range */
-{
-char *setting = trackDbSettingClosestToHomeOrDefault(tdb, scoreName,defaults);//"0.0");
-if(setting)
-    {
-    if(*opened == FALSE)
-        {
-        boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
-        puts("<TABLE>");
-        *opened = TRUE;
-        }
-    printf("<TR><TD align='right'><B>%s:</B><TD align='left'>",label);
-    char varName[256];
-    char altLabel[256];
-    safef(varName, sizeof(varName), "%s%s", scoreName, _BY_RANGE);
-    boolean filterByRange = trackDbSettingClosestToHomeOn(tdb, varName);
-    double minLimit=NO_VALUE,maxLimit=NO_VALUE;
-    colonPairToDoubles(limitsDefault,&minLimit,&maxLimit);
-    double minVal=minLimit,maxVal=maxLimit;
-    colonPairToDoubles(setting,&minVal,&maxVal);
-    getScoreFloatRangeFromCart(cart,tdb,scoreName,&minLimit,&maxLimit,&minVal,&maxVal);
-    safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MIN);
-    safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Minimum ":""), label);
-    cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
-    if(filterByRange) // TODO: Test this range stuff which is not yet used
-        {
-        printf("<TD align='left'>to<TD align='left'>");
-        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MAX);
-        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Maximum ":""), label);
-        cgiMakeDoubleVarWithLimits(varName,maxVal, altLabel, 0,minLimit, maxLimit);
-        }
-    safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
-    if(minLimit != NO_VALUE && maxLimit != NO_VALUE)
-        printf("<TD align='left'%s> (%g to %g)",altLabel,minLimit, maxLimit);
-    else if(minLimit != NO_VALUE)
-        printf("<TD align='left'%s> (minimum %g)",altLabel,minLimit);
-    else if(maxLimit != NO_VALUE)
-        printf("<TD align='left'%s> (maximum %g)",altLabel,maxLimit);
-    else
-        printf("<TD align='left'%s",altLabel);
-    puts("</TR>");
-    return TRUE;
-    }
-return FALSE;
-}
 struct dyString *dyAddFilterAsInt(struct cart *cart, struct trackDb *tdb,
        struct dyString *extraWhere,char *filter,char *defaultLimits, char*field, boolean *and)
 /* creates the where clause condition to support numeric int filter range.
@@ -5125,14 +5223,51 @@ if(setting)
 return extraWhere;
 }
 
+#ifdef ALL_SCORE_FILTERS_LOGIC
+struct dyString *dyAddAllScoreFilters(struct cart *cart, struct trackDb *tdb, struct dyString *extraWhere,boolean *and)
+/* creates the where clause condition to gather together all random double filters
+   Filters are expected to follow
+        {fiterName}: trackDb min or min:max - default value(s);
+        {filterName}Min or {filterName}: min (user supplied) cart variable;
+        {filterName}Max: max (user supplied) cart variable;
+        {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
+            uses:  defaultLimits: function param if no tdb limits settings found)
+   The 'and' param and dyString in/out allows stringing multiple where clauses together */
+{
+struct slName *filterSettings = trackDbSettingsWildMatch(tdb, "*Filter");
+if (filterSettings)
+    {
+    struct slName *filter = NULL;
+    while ((filter = slPopHead(&filterSettings)) != NULL)
+        {
+        if (differentString(filter->name,"noScoreFilter") && differentString(filter->name,"scoreFilter")) // TODO: scoreFilter could be included
+            {
+            char *field = cloneString(filter->name);
+            int ix = strlen(field) - strlen("filter");
+            assert(ix > 0);
+            field[ix] = '\0';
+            char *setting = trackDbSetting(tdb, filter->name);
+            // How to determine float or int ?  If actual tracDb setting has decimal places, then float!
+            if (strchr(setting,'.') == NULL)
+                extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,filter->name,"0:1000",field,and);
+            else
+                extraWhere = dyAddFilterAsDouble(cart,tdb,extraWhere,filter->name,NULL,field,and);
+            }
+        slNameFree(&filter);
+        }
+    }
+return extraWhere;
+}
+#endif///def ALL_SCORE_FILTERS_LOGIC
+
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
 {
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 boolean opened = FALSE;
-showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Q-Value (-log 10)",QVALUE_FILTER,NULL,NULL);//,"0.0",NULL);
-showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum P-Value (-log 10)",PVALUE_FILTER,NULL,NULL);//,"0.0",NULL);
-showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Signal value",     SIGNAL_FILTER,NULL,NULL);//,"0.0",NULL);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Q-Value (<code>-log<sub>10</sub></code>)",QVALUE_FILTER,TRUE);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum P-Value (<code>-log<sub>10</sub></code>)",PVALUE_FILTER,TRUE);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Signal value",     SIGNAL_FILTER,TRUE);
 
 char *setting = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,NULL);//"0:1000");
 if(setting)
@@ -5229,7 +5364,8 @@ if (cartOptionalString(cart, "ajax") == NULL)
     filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
     if(filterBySet != NULL)
         {
-        filterBySetCfgUi(tdb,filterBySet);
+        printf("<BR>");
+        filterBySetCfgUi(tdb,filterBySet,FALSE);
         filterBySetFree(&filterBySet);
         }
     }
@@ -6616,10 +6752,9 @@ if(dimensionsExist(parentTdb))
 #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"matSubCBsCheck(%s);\" id='btn_%s' src='../images/%s'>"
 #define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
 #define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
-printf("<P><B>Select subtracks:</B><P>All:&nbsp;");
 BUTTON_PLUS_ALL_GLOBAL();
 BUTTON_MINUS_ALL_GLOBAL();
-puts("</P>");
+puts("&nbsp;<B>Select all subtracks</B><BR><BR>");
 return TRUE;
 }
 
@@ -7137,4 +7272,61 @@ else if(trackDbSetting(tdb, "wgEncode") != NULL)
     return TRUE;
     }
 return FALSE;
+}
+
+void printUpdateTime(char *database, struct trackDb *tdb,
+    struct customTrack *ct)
+/* display table update time */
+{
+/* have not decided what to do for a composite container */
+if (tdbIsComposite(tdb))
+    return;
+struct sqlConnection *conn = NULL;
+char *tableName = NULL;
+if (isCustomTrack(tdb->track))
+    {
+    if (ct)
+	{
+	conn =  hAllocConn(CUSTOM_TRASH);
+	tableName = ct->dbTableName;
+	}
+    }
+else if (startsWith("big", tdb->type))
+    {
+    char *tableName = hTableForTrack(database, tdb->table);
+    struct sqlConnection *conn =  hAllocConnTrack(database, tdb);
+    char *bbiFileName = bbiNameFromSettingOrTable(tdb, conn, tableName);
+    hFreeConn(&conn);
+    struct bbiFile *bbi = NULL;
+    if (startsWith("bigBed", tdb->type))
+	bbi = bigBedFileOpen(bbiFileName);
+    if (startsWith("bigWig", tdb->type))
+	bbi = bigWigFileOpen(bbiFileName);
+    time_t timep = 0;
+    if (bbi)
+	{
+	timep = bbiUpdateTime(bbi);
+	bbiFileClose(&bbi);
+	}
+    printBbiUpdateTime(&timep);
+    }
+else
+    {
+    tableName = hTableForTrack(database, tdb->table);
+    conn = hAllocConnTrack(database, tdb);
+    }
+if (tableName)
+    {
+    char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
+    if (date != NULL)
+	printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", date);
+    }
+hFreeConn(&conn);
+}
+
+void printBbiUpdateTime(time_t *timep)
+/* for bbi files, print out the timep value */
+{
+    printf ("<B>Data last updated:&nbsp;</B>%s<BR>\n",
+	sqlUnixTimeToDate(timep, FALSE));
 }

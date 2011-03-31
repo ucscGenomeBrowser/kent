@@ -434,22 +434,6 @@ subId 534
 tableName wgEncodeUwAffyExonArraySimpleSignalRep1Jurkat
 view SimpleSignal
 
-metaObject wgEncodeUwAffyExonArraySimpleSignalRep1K562
-objType table
-cell K562
-composite wgEncodeUwAffyExonArray
-dataType AffyExonArray
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-02
-dateUnrestricted 2010-04-02
-fileName wgEncodeUwAffyExonArraySimpleSignalRep1K562.broadPeak.gz
-grant Stam
-lab UW
-project wgEncode
-replicate 1
-subId 314
-tableName wgEncodeUwAffyExonArraySimpleSignalRep1K562
-
 metaObject wgEncodeUwAffyExonArraySimpleSignalRep1K562V2
 objType table
 cell K562
@@ -484,23 +468,6 @@ project wgEncode
 replicate 1
 subId 534
 tableName wgEncodeUwAffyExonArraySimpleSignalRep1Mcf7
-view SimpleSignal
-
-metaObject wgEncodeUwAffyExonArraySimpleSignalRep1Nb4
-objType table
-cell NB4
-composite wgEncodeUwAffyExonArray
-dataType AffyExonArray
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-21
-dateUnrestricted 2010-06-21
-fileName wgEncodeUwAffyExonArraySimpleSignalRep1Nb4.broadPeak.gz
-grant Stam
-lab UW
-project wgEncode
-replicate 1
-subId 534
-tableName wgEncodeUwAffyExonArraySimpleSignalRep1Nb4
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArraySimpleSignalRep1Nb4V2
@@ -606,22 +573,6 @@ replicate 1
 subId 534
 tableName wgEncodeUwAffyExonArraySimpleSignalRep1Saec
 view SimpleSignal
-
-metaObject wgEncodeUwAffyExonArraySimpleSignalRep1Skmc
-objType table
-cell SKMC
-composite wgEncodeUwAffyExonArray
-dataType AffyExonArray
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-02
-dateUnrestricted 2010-04-02
-fileName wgEncodeUwAffyExonArraySimpleSignalRep1Skmc.broadPeak.gz
-grant Stam
-lab UW
-project wgEncode
-replicate 1
-subId 314
-tableName wgEncodeUwAffyExonArraySimpleSignalRep1Skmc
 
 metaObject wgEncodeUwAffyExonArraySimpleSignalRep1SkmcV2
 objType table
@@ -894,22 +845,6 @@ subId 970
 tableName wgEncodeUwAffyExonArraySimpleSignalRep2Hee
 view SimpleSignal
 
-metaObject wgEncodeUwAffyExonArraySimpleSignalRep2Helas3
-objType table
-cell HeLa-S3
-composite wgEncodeUwAffyExonArray
-dataType AffyExonArray
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-29
-dateUnrestricted 2010-03-29
-fileName wgEncodeUwAffyExonArraySimpleSignalRep2Helas3.broadPeak.gz
-grant Stam
-lab UW
-project wgEncode
-replicate 2
-subId 403
-tableName wgEncodeUwAffyExonArraySimpleSignalRep2Helas3
-
 metaObject wgEncodeUwAffyExonArraySimpleSignalRep2Helas3V2
 objType table
 cell HeLa-S3
@@ -1172,7 +1107,7 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
-dccNotes GEO accession provided by lab: GSM472911
+dccInternalNotes GEO accession provided by lab: GSM472911
 fileName wgEncodeUwAffyExonArraySimpleSignalRep2Skmc.broadPeak.gz
 grant Stam
 lab UW
@@ -1198,4 +1133,4 @@ replicate 2
 subId 403
 tableName wgEncodeUwAffyExonArraySimpleSignalRep2Sknshra
 
-# MAGIC: 1057896847
+# MAGIC: -1002981072

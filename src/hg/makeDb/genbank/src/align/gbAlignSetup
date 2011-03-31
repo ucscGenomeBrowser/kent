@@ -44,7 +44,7 @@ import sys, os, os.path, re
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
 sys.path.append(myBinDir + "/../lib/py")
 from optparse import OptionParser
-from genbank import procOps, fileOps
+from genbank import procOps, fileOps, gbAbsBinDir, gbSetupPath
 from genbank.Config import Config
 from genbank.GbIndex import GbIndex, GenBank, RefSeq, MRNA, EST, Native, Xeno
 from genbank.GenomeSeqs import GenomeSeqs
@@ -52,15 +52,12 @@ from genbank.GenomePartition import GenomePartition, UnplacedChroms
 from genbank.fileOps import prLine, prRow, prRowv
 import glob
 
-absBinDir = os.path.abspath(myBinDir)
-mach = os.uname()[4]
-if mach == "i686":
-    mach = "i386"
-machBinPath = absBinDir + "/" + mach
-if mach != "i386":
-    machBinPath += ":" + absBinDir + "/i386" # use on x86_64 for now
-os.environ["PATH"] = machBinPath + ":" + os.environ["PATH"]
-gbBlatPath = absBinDir + "/gbBlat"
+# collect profile output from gbAlignGet runs
+collectGmonOut = False
+gmonOutDir = "profiles"
+
+gbSetupPath()
+gbBlatPath = gbAbsBinDir() + "/gbBlat"
 
 cmdOpts = None
 
@@ -172,6 +169,14 @@ class CDnaUnaligned(object):
             raise Exception("gbAlignGet did not output \"alignCnt:\"")
         self.numAlign += cnt
 
+    def __saveGmonOut(self, procPart):
+        saveName = gmonOutDir + "/gbAlignGet/" + self.db + "/" + self.rel + "/" + procPart.update + "." + procPart.cdnaType
+        if procPart.accPrefix != None:
+            saveName += "." + procPart.accPrefix
+        saveName += ".gmon.out"
+        fileOps.ensureFileDir(saveName)
+        os.rename("gmon.out", saveName)
+        
     def __buildPart(self, cmdBase, procPart):
         "run gbAlignGet to get fasta for one partition"
         cmd = list(cmdBase)
@@ -186,7 +191,8 @@ class CDnaUnaligned(object):
         if cmdOpts.verbose >= 2:
             prLine(sys.stderr, procOps.fmtCmd(cmd))
         lines = procOps.callProcLines(cmd, inheritStderr=True)
-
+        if collectGmonOut:
+            self.__saveGmonOut(procPart)
         # process results
         self.__parseAlignGet(procPart, lines)
 

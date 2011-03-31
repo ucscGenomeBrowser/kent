@@ -5,16 +5,15 @@ include ../../../inc/common.mk
 SCRIPT_FILES = \
 	encodeMkChangeNotes
 
-PIPELINE_PATH=/hive/groups/encode/dcc/pipeline
+SCRIPT_INSTALL = "/cluster/bin/scripts"
 
 all:
 	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts scripts
 
 alpha:
-	@${MAKE} --no-print-directory SCRIPTS=${SCRIPTS} PIPELINE_DIR=encpipeline_beta scripts
+	@${MAKE} --no-print-directory SCRIPTS=${SCRIPT_INSTALL} scripts
 
-install:
-	@${MAKE} --no-print-directory SCRIPTS=${ENCODE_PIPELINE_BIN} PIPELINE_DIR=encpipeline_prod scripts
+install: alpha
 
 scripts: ${SCRIPT_FILES:%=${SCRIPTS}/%}
 

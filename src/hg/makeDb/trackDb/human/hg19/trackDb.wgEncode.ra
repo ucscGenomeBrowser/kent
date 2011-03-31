@@ -2,93 +2,179 @@
 
 include wgEncodeSuper.ra
 
-#Encode Composite tracks
-include wgEncodeUwAffyExonArray.ra
-include wgEncodeSunyAlbanyGeneSt.ra
-include wgEncodeSunyAlbanyTiling.ra
-include wgEncodeSunySwitchgear.ra
-include wgEncodeHaibMethylRrbs.ra
-include wgEncodeHaibTfbs.ra
-include wgEncodeSydhTfbs.ra
-include wgEncodeSydhHistone.ra
-include wgEncodeBroadHistone.ra
-include wgEncodeOpenChromChip.ra
-include wgEncodeOpenChromDnase.ra
-include wgEncodeOpenChromFaire.ra
-include wgEncodeDukeAffyExon.ra
-include wgEncodeUwHistone.ra
-include wgEncodeUwDgf.ra
-include wgEncodeUwDnase.ra
-include wgEncodeHaibMethylSeq.ra
-include wgEncodeHaibMethylArray.ra
-include wgEncodeGisRnaSeq.ra
-include wgEncodeGisRnaPet.ra
+# GENCODE genes (wrangler: braney )
+include wgEncodeGencode.ra
+include wgEncodeGencodeV5.ra alpha
+
+# UNC/BSU Proteogenomics (wrangler: cline)
+include wgEncodeUncBsuProt.ra alpha
+
+# Integrated Regulation (wrangler: kent)
+include wgEncodeReg.ra alpha
+#include wgEncodeRegNorm.ra alpha
+
+# Nucleosome (wrangler: venkat)
+include wgEncodeSydhNsome.ra alpha
+
+# GIS RNA PET (wrangler: cricket)
+include wgEncodeGisRnaPet.ra alpha
+
+# GIS DNA PET (wrangler: cricket)
 include wgEncodeGisDnaPet.ra
+
+# HAIB Genotype (CNV) (wrangler: Cricket)
+include wgEncodeHaibGenotype.ra alpha
+
+# BU Orchid (wrangler: cricket)
+include wgEncodeBuOrchid.ra
+
+# Affy Rna Chip (wrangler: braney)
 include wgEncodeAffyRnaChip.ra
-include wgEncodeUwTfbs.ra
-include wgEncodeCshlLongRnaSeq.ra
-include wgEncodeCaltechRnaSeq.ra
+
+# Chromatin Interactions ------
+
+# GIS ChIA-pet (wrangler: braney)
+include wgEncodeGisChiaPet.ra alpha
+
+# UMass-Dekker 5C (wrangler: kate)
+#include wgEncodeUmassDekker5C.ra alpha
+
+# UW 5C (wrangler: kate)
+include wgEncodeUw5C.ra alpha
+
+
+# Encode Affy Exon --------------------------------------------
+
+# UW Affy Exon (wrangler: cricket)
+include wgEncodeUwAffyExonArray.ra
+
+# Duke Affy Exon (wrangler: cricket)
+include wgEncodeDukeAffyExon.ra alpha
+
+
+###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
+#UNC FAIRE (wrangler: tim)
+include wgEncodeOpenChromFaire.ra
+
+#Open Chrom Synth (wrangler: tim)
+include wgEncodeOpenChromSynth.ra
+
+#Duke DNaseI HS (wrangler: tim)
+include wgEncodeOpenChromDnase.ra
+
+#Uw Dnase-Seq (wrangler: Venkat)
+include wgEncodeUwDnase.ra beta,public
+include wgEncodeUwDnase.new.ra alpha
+
+#UW DNase DGF (wrangler: Venkat)
+include wgEncodeUwDgf.ra beta,public
+include wgEncodeUwDgf.new.ra alpha
+###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
+
+
+
+
+# ENCODE RNA SEQ -----------------------------------
+
+# Riken CAGE (wrangler: cricket)
+include wgEncodeRikenCage.ra beta,public
+include wgEncodeRikenCage.new.ra alpha
+
+# CSHL Small RNA (wrangler: cricket)
+include wgEncodeCshlShortRnaSeq.ra beta,public
+include wgEncodeCshlShortRnaSeq.new.ra alpha
+
+# GIS RNA Seq (wrangler: cricket)
+include wgEncodeGisRnaSeq.ra
+
+# Caltech RNA Seq (wrangler: cricket)
+include wgEncodeCaltechRnaSeq.ra beta,public
+include wgEncodeCaltechRnaSeq.new.ra alpha
+
+# CSHL Long Rna Seq (wrangler: cricket)
+include wgEncodeCshlLongRnaSeq.ra alpha
+
+# Yale Rna Seq (wrangler: cricket)
 include wgEncodeYaleRnaSeq.ra
 
-track wgEncodeMapability
-compositeTrack on
-shortLabel Mapability
-longLabel Mapability or Uniqueness of Reference Genome
-group map
-#dimensions dimensionX=win
-dragAndDrop subTracks
-priority 0
-type bigWig 0.00 1.00
-viewLimits 0:1
-autoScale off
-canPack  On
-windowingFunction mean
-maxHeightPixels 100:32:16
-visibility hide
-wgEncode 1
-origAssembly hg19
+#HAIB RNA-seq (wrangler: Cricket)
+include wgEncodeHaibRnaSeq.ra alpha
 
-    track wgEncodeCrgMapabilityAlign24mer
-    subTrack wgEncodeMapability
-    shortLabel CRG Align 24
-    longLabel Mapability - CRG GEM Alignability of 24mers with no more than 2 mismatches
-    color 0,100,0
-    priority 1
-    
-    track wgEncodeCrgMapabilityAlign36mer
-    subTrack wgEncodeMapability
-    shortLabel CRG Align 36
-    longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
-    color 0,100,0
-    priority 2
 
-    track wgEncodeCrgMapabilityAlign40mer
-    subTrack wgEncodeMapability
-    shortLabel CRG Align 40
-    longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
-    color 0,100,0
-    priority 3
-    
-    track wgEncodeCrgMapabilityAlign50mer
-    subTrack wgEncodeMapability
-    shortLabel CRG Align 50
-    longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
-    color 0,100,0
-    priority 4
 
-    track wgEncodeCrgMapabilityAlign75mer
-    subTrack wgEncodeMapability
-    shortLabel CRG Align 75
-    longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
-    color 0,100,0
-    priority 5
 
-    track wgEncodeCrgMapabilityAlign100mer
-    subTrack wgEncodeMapability
-    shortLabel CRG Align 100
-    longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
-    color 0,100,0
-    priority 6
+
+
+# ENCODE DNA Methyl ---------------------------------------
+
+#HAIB Methyl-Seq (wrangler: Vankat) most likely never leaving alpha
+include wgEncodeHaibMethylSeq.ra
+#HAIB Methyl Array (wrangler:Cricket)
+#include wgEncodeHaibMethylArray.ra
+include wgEncodeHaibMethyl27.ra alpha
+#HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
+include wgEncodeHaibMethylRrbs.ra beta,public
+include wgEncodeHaibMethylRrbs.new.ra alpha
+
+
+
+
+
+
+# ENCODE HISTONE --------------------------------------
+
+#Broad Histone (wrangler: Tim)
+include wgEncodeBroadHistone.ra
+
+#Broad HMM (wrangler: Tim)
+include wgEncodeBroadHmm.ra
+
+#UW Histone (wrangler:Venkat)
+include wgEncodeUwHistone.ra
+
+# SYDH Histone (wrangler: Venkat)
+include wgEncodeSydhHistone.ra alpha
+
+
+# ENCODE TFBS -------------------------------------------
+
+# UW CTCF Binding (wrangler: Venkat)
+include wgEncodeUwTfbs.ra
+
+#UTA TFBS (wrangler: Tim)
+include wgEncodeOpenChromChip.ra
+
+# HAIB TFBS (wrangler: Venkat)
+include wgEncodeHaibTfbs.ra alpha
+
+# SYDH TFBS (wrangler: Venkat)
+include wgEncodeSydhTfbs.ra
+
+# U Chicago TFBS (wrangler: Venkat)
+include wgEncodeUchicagoTfbs.ra
+
+
+# SUNY RBP -----------------------------------------
+
+# SUNY Gene ST (wrangler: cricket)
+include wgEncodeSunyAlbanyGeneSt.ra alpha,beta
+
+# SUNY Tiling Array (wrangler: cricket)
+include wgEncodeSunyAlbanyTiling.ra
+
+# SUNY SwitchGear (wrangler: cricket)
+include wgEncodeSunySwitchgear.ra alpha
+
+# SUNY Rip-seq (wrangler: cricket)
+include wgEncodeSunyRipSeq.ra alpha
+
+
+# Other miscellany ------------------------------------
+
+# Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and whever else wants to help)
+include wgEncodeMapability.ra beta,public
+include wgEncodeMapability.new.ra alpha
+
 
 #  GENCODE genes (wrangler: braney )
 
@@ -227,12 +313,3 @@ searchType genePred
 searchPriority 2.5
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
-#  GENCODE genes (wrangler: braney )
-include wgEncodeGencode.ra
-include wgEncodeGencodeV5.ra alpha
-
-# Riken CAGE (wrangler: cricket)
-include wgEncodeRikenCage.ra
-
-# CSHL Small RNA (wrangler: cricket)
-include wgEncodeCshlShortRnaSeq.ra

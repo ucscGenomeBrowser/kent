@@ -34,20 +34,36 @@ if (!ajax)
 printf("<B style='font-family:serif; font-size:200%%;'>%s</B>\n", tdb->longLabel);
 
 // If Composite, link to the hgTrackUi.  But if downloadsOnly then link to any superTrack.
-#define LINK_TO_PARENT "%s<B style='font-family:serif; font-size:100%%;'>(<A HREF='%s?%s=%u&c=%s&g=%s' title='Link to parent track'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>"
+#define LINK_TO_PARENT "%s<B style='font-family:serif;'>(<A HREF='%s?%s=%u&c=%s&g=%s' title='Link to %s track settings'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>\n"
 if (tdbIsComposite(tdb))
     {
     char *encodedTrackName = cgiEncode(tdb->track);
-    printf(LINK_TO_PARENT,"&nbsp;&nbsp;", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chrom, encodedTrackName,"Browser tracks");
+    printf(LINK_TO_PARENT,"&nbsp;&nbsp;", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chrom, encodedTrackName,tdb->shortLabel,"Track settings");
     freeMem(encodedTrackName);
     }
 else if (tdb->parent) //Print link for parent track
     {
     char *encodedTrackName = cgiEncode(tdb->parent->track);
-    printf(LINK_TO_PARENT,"&nbsp;&nbsp;", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chrom, encodedTrackName, tdb->parent->shortLabel);
+    printf(LINK_TO_PARENT,"&nbsp;&nbsp;", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chrom, encodedTrackName, tdb->parent->shortLabel, tdb->parent->shortLabel);
     freeMem(encodedTrackName);
     }
-puts("<BR><BR>");
+
+// NAVLINKS - Link to Description down below
+if (tdb->html != NULL && tdb->html[0] != 0)
+    {
+    printf("<span id='navDown' style='float:right; display:none;'>");
+    // First put up a button to go to File Search
+    printf("<A HREF='hgFileSearch?db=%s' TITLE='Search for other downloadble files ...'>File Search</A>&nbsp;&nbsp;&nbsp;",db);
+
+    // Now link to description
+    char *downArrow = "&dArr;";
+    enum browserType browser = cgiBrowser();
+    if (browser == btIE || browser == btFF)
+        downArrow = "&darr;";
+    printf("<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>Description%s</A>",downArrow);
+    printf("</span>");
+    }
+puts("<BR>");
 
 filesDownloadUi(db,cart,tdb);
 
@@ -57,7 +73,7 @@ if (version)
     printf("<P><B>Data version:</B> %s<BR>\n", version);
 
 // Print lift information from trackDb, if any
-trackDbPrintOrigAssembly(tdb, db);
+(void) trackDbPrintOrigAssembly(tdb, db);
 
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
@@ -101,13 +117,6 @@ cartWebStart(cart, db, "%s %s", tdb->shortLabel, DOWNLOADS_ONLY_TITLE);
 if (!tdbIsComposite(tdb) && !tdbIsDownloadsOnly(tdb))
     {
     warn("Track '%s' of type %s is not supported by hgFileUi.",track, tdb->type);
-    return;
-    }
-
-// Check for fileSortOrder
-if (trackDbSetting(tdb, FILE_SORT_ORDER) == NULL)
-    { // FIXME: This does not have to stay.  But lets start with this restriction until trackDb gets caught up
-    warn("Track '%s' needs '%s' trackDb setting.",track,FILE_SORT_ORDER);
     return;
     }
 

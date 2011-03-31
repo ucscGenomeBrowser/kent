@@ -21,6 +21,8 @@
 #define JS_SET_ALL_BUTTON_LABEL  "Set all"
 #define JS_DEFAULTS_BUTTON_LABEL "Set defaults"
 
+// #define NEW_JQUERY 1          // temporary define turn on to test new jQuery (1.5) and jQuery UI (1.8)
+
 void jsCreateHiddenForm(struct cart *cart, char *scriptName,
 	char **vars, int varCount);
 /* Create a hidden form with the given variables.  Must be
@@ -129,5 +131,13 @@ char *stripRegEx(char *str, char *regEx, int flags);
 
 boolean advancedJavascriptFeaturesEnabled(struct cart *cart);
 // Returns TRUE if advanced javascript features are currently enabled
+
+void jsBeginCollapsibleSection(struct cart *cart, char *track, char *section, char *sectionTitle,
+			       boolean isOpenDefault);
+/* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's 
+ * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. */
+
+void jsEndCollapsibleSection();
+/* End the collapsible <TR id=...>. */
 
 #endif /* JSHELPER_H */

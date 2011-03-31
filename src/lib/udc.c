@@ -25,6 +25,7 @@
 #include "hash.h"
 #include "obscure.h"
 #include "bits.h"
+#include "linefile.h"
 #include "portable.h"
 #include "sig.h"
 #include "net.h"
@@ -175,7 +176,7 @@ if (ci == NULL || ci->socket <= 0)
 	{
 	char *newUrl = NULL;
 	int newSd = 0;
-	if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
+	if (!netSkipHttpHeaderLinesHandlingRedirect(sd, rangeUrl, &newSd, &newUrl))
 	    return -1;
 	if (newUrl)  // not sure redirection will work with byte ranges as it is now
 	    {
@@ -256,7 +257,7 @@ return size;
 }
 
 static boolean udcInfoViaTransparent(char *url, struct udcRemoteFileInfo *retInfo)
-/* Fill in *retTime with last modified time for file specified in url.
+/* Fill in *retInfo with last modified time for file specified in url.
  * Return FALSE if file does not even exist. */
 {
 internalErr();	/* Should not get here. */
@@ -359,10 +360,18 @@ if (status != 200) // && status != 302 && status != 301)
 char *sizeString = hashFindValUpperCase(hash, "Content-Length:");
 if (sizeString == NULL)
     {
-    hashFree(&hash);
-    errAbort("No Content-Length: returned in header for %s, can't proceed, sorry", url);
+    /* try to get remote file size by an alternate method */
+    retInfo->size = netUrlSizeByRangeResponse(url);
+    if (retInfo->size < 0)
+	{
+    	hashFree(&hash);
+	errAbort("No Content-Length: returned in header for %s, can't proceed, sorry", url);
+	}
     }
-retInfo->size = atoll(sizeString);
+else
+    {
+    retInfo->size = atoll(sizeString);
+    }
 
 char *lastModString = hashFindValUpperCase(hash, "Last-Modified:");
 if (lastModString == NULL)
@@ -379,20 +388,17 @@ if (lastModString == NULL)
 struct tm tm;
 time_t t;
 // Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
-// TODO: it's very likely that there are other date string patterns
-//  out there that might be encountered.
+// This will always be GMT
 if (strptime(lastModString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
     { /* Handle error */;
     hashFree(&hash);
     errAbort("unable to parse last-modified string [%s]", lastModString);
     }
-// Not set by strptime(); tells mktime() to determine whether daylight saving time is in effect:
-tm.tm_isdst = -1;
-t = mktime(&tm);
+t = mktimeFromUtc(&tm);
 if (t == -1)
     { /* Handle error */;
     hashFree(&hash);
-    errAbort("mktime failed while parsing last-modified string [%s]", lastModString);
+    errAbort("mktimeFromUtc failed while converting last-modified string [%s] from UTC time", lastModString);
     }
 retInfo->updateTime = t;
 
@@ -410,12 +416,20 @@ boolean udcInfoViaFtp(char *url, struct udcRemoteFileInfo *retInfo)
 {
 verbose(2, "checking ftp remote info on %s\n", url);
 long long size = 0;
-time_t t;
+time_t t, tUtc;
+struct tm *tm = NULL;
 // TODO: would be nice to add int *retCtrlSocket to netGetFtpInfo so we can stash 
 // in retInfo->connInfo and keep socket open.
-boolean ok = netGetFtpInfo(url, &size, &t);
+boolean ok = netGetFtpInfo(url, &size, &tUtc);
 if (!ok)
     return FALSE;
+// Convert UTC to localtime
+tm = localtime(&tUtc);
+t = mktimeFromUtc(tm);
+if (t == -1)
+    { /* Handle error */;
+    errAbort("mktimeFromUtc failed while converting FTP UTC last-modified time %ld to local time", (long) tUtc);
+    }
 retInfo->size = size;
 retInfo->updateTime = t;
 return TRUE;
@@ -1313,7 +1327,37 @@ freeMem(longBuf);
 return retString;
 }
 
+char *udcFileReadAll(char *url, char *cacheDir, size_t maxSize, size_t *retSize)
+/* Read a complete file via UDC. The cacheDir may be null in which case udcDefaultDir()
+ * will be used.  If maxSize is non-zero, check size against maxSize
+ * and abort if it's bigger.  Returns file data (with an extra terminal for the
+ * common case where it's treated as a C string).  If retSize is non-NULL then
+ * returns size of file in *retSize. Do a freeMem or freez of the returned buffer
+ * when done. */
+{
+struct udcFile  *file = udcFileOpen(url, cacheDir);
+size_t size = file->size;
+if (maxSize != 0 && size > maxSize)
+    errAbort("%s is %lld bytes, but maxSize to udcFileReadAll is %lld",
+    	url, (long long)size, (long long)maxSize);
+char *buf = needLargeMem(size+1);
+udcMustRead(file, buf, size);
+buf[size] = 0;	// add trailing zero for string processing
+udcFileClose(&file);
+if (retSize != NULL)
+    *retSize = size;
+return buf;
+}
 
+struct lineFile *udcWrapShortLineFile(char *url, char *cacheDir, size_t maxSize)
+/* Read in entire short (up to maxSize) url into memory and wrap a line file around it.
+ * The cacheDir may be null in which case udcDefaultDir() will be used.  If maxSize
+ * is zero then a default value (currently 64 meg) will be used. */
+{
+if (maxSize == 0) maxSize = 64 * 1024 * 1024;
+char *buf = udcFileReadAll(url, cacheDir, maxSize, NULL);
+return lineFileOnString(url, TRUE, buf);
+}
 
 void udcSeek(struct udcFile *file, bits64 offset)
 /* Seek to a particular position in file. */
@@ -1413,4 +1457,19 @@ void udcSetCacheTimeout(int timeout)
  * we won't ping the remote server to check the file size and update time). */
 {
 cacheTimeout = timeout;
+}
+
+time_t udcUpdateTime(struct udcFile *udc)
+/* return udc->updateTime */
+{
+if (sameString("transparent", udc->protocol))
+    {
+    struct stat status;
+    int ret = stat(udc->url, &status);
+    if (ret < 0)
+	return 0;
+    else
+	return  status.st_mtime;
+    }
+return udc->updateTime;
 }

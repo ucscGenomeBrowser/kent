@@ -23,8 +23,6 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.120 2010/05/20 03:15:51 kent Exp $";
-
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
 
@@ -368,6 +366,7 @@ for (cv = cvList; cv != NULL; cv = cv->next)
 	if (! cgiVarExists(multVar))
 	    {
 	    storeInOldVars(cart, oldVars, multVar);
+	    storeInOldVars(cart, oldVars, cv->name);
 	    cartRemove(cart, multVar);
 	    }
 	}
@@ -376,13 +375,11 @@ for (cv = cvList; cv != NULL; cv = cv->next)
 /* Handle non-boolean vars. */
 for (cv = cgiVarList(); cv != NULL; cv = cv->next)
     {
-    if (! (startsWith(booShadow, cv->name) || hashLookup(booHash, cv->name) ||
-	   startsWith(multShadow, cv->name)) )
-
+    if (! (startsWith(booShadow, cv->name) || hashLookup(booHash, cv->name)))
 	{
 	storeInOldVars(cart, oldVars, cv->name);
 	cartRemove(cart, cv->name);
-        if (differentString(cv->val, CART_VAR_EMPTY))  // NOTE: CART_VAR_EMPTY logic not implemented for boolShad or multiShad
+        if (differentString(cv->val, CART_VAR_EMPTY))  // NOTE: CART_VAR_EMPTY logic not implemented for boolShad
             hashAdd(cgiHash, cv->name, cv->val);
 	}
     }
@@ -522,15 +519,6 @@ cartCopyCustomTracks(cart, oldVars);
 
 if (isNotEmpty(actionVar))
     cartRemove(cart, actionVar);
-}
-
-char *_cartVarDbName(char *db, char *var)
-/* generate cart variable name that is local to an assembly database.
- * Only for use inside of cart.h.  WARNING: static return */
-{
-static char buf[PATH_LEN]; // something rather big
-safef(buf, sizeof(buf), "%s_%s", var, db);
-return buf;
 }
 
 static char *now()
@@ -772,7 +760,16 @@ unsigned int cartUserId(struct cart *cart)
 return cart->userInfo->id;
 }
 
-static int cartRemoveAndCount(struct cart *cart, char *var)
+static char *cartMultShadowVar(struct cart *cart, char *var)
+/* Return a pointer to the list variable shadow variable name for var.
+ * Don't modify or free result. */
+{
+static char multShadowVar[PATH_LEN];
+safef(multShadowVar, sizeof(multShadowVar), "%s%s", cgiMultListShadowPrefix(), var);
+return multShadowVar;
+}
+
+static int cartRemoveAndCountNoShadow(struct cart *cart, char *var)
 /* Remove variable from cart, returning count of removed vars. */
 {
 int removed = 0;
@@ -788,17 +785,18 @@ while (hel != NULL)
 return removed;
 }
 
+static int cartRemoveAndCount(struct cart *cart, char *var)
+/* Remove variable from cart, returning count of removed vars. */
+{
+int removed = cartRemoveAndCountNoShadow(cart, var);
+(void)cartRemoveAndCountNoShadow(cart, cartMultShadowVar(cart, var));
+return removed;
+}
+
 void cartRemove(struct cart *cart, char *var)
 /* Remove variable from cart. */
 {
-struct hashEl *hel = hashLookup(cart->hash, var);
-while (hel != NULL)
-    {
-    struct hashEl *nextHel = hashLookupNext(hel);
-    freez(&hel->val);
-    hashRemove(cart->hash, var);
-    hel = nextHel;
-    }
+(void)cartRemoveAndCount(cart, var);
 }
 
 void cartRemoveExcept(struct cart *cart, char **except)
@@ -888,6 +886,12 @@ boolean cartVarExists(struct cart *cart, char *var)
 /* Return TRUE if variable is in cart. */
 {
 return hashFindVal(cart->hash, var) != NULL;
+}
+
+boolean cartListVarExists(struct cart *cart, char *var)
+/* Return TRUE if a list variable is in cart (list may still be empty). */
+{
+return cartVarExists(cart, cartMultShadowVar(cart, var));
 }
 
 char *cartString(struct cart *cart, char *var)

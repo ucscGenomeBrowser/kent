@@ -30,23 +30,19 @@ region with high signal.)
 </DD>
 <DT><EM>Signal</EM></DT><DD> Density graph (wiggle) of signal enrichment.
 At each base-pair position the density is calculated as the number of sequenced
-tags overlapping a 25bp window centered at that position.</DD>
+tags overlapping a 25 bp window centered at that position.</DD>
 </DL>
-<!--
-Additional data that were used to generate these tracks
-are located in the ENCODE <A HREF="hgTrackUi?g=wgEncodeMapability">Mapability</A> track:
-<DL>
-<DT><I>Alignability</I></DT><DD>
-The <EM>Broad alignability</EM> track displays whether a region is made up of
-mostly unique or mostly non-unique sequence. </DD>
-</DL> -->
+</P>
+<P>Peaks and signals displayed in this track are the results of pooled replicates. The raw
+sequence and alignment files for each replicate are available for
+<A HREF="/cgi-bin/hgFileUi?g=wgEncodeBroadHistone">download</A>.
 </P>
 
 <h2>Methods</h2>
-<P><B><em>ChIP-Seq</em></B>: Cells were grown according to the approved
+<P><B><em>ChIP-seq</em></B>: Cells were grown according to the approved
 <A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
 Cells were fixed in 1% formaldehyde and resuspended in lysis buffer. Chromatin
-was sheared to 200-700bp using a Diagenode Bioruptor. Solubilized chromatin was
+was sheared to 200-700 bp using a Diagenode Bioruptor. Solubilized chromatin was
 immunoprecipitated with antibodies against each of the histone antibodies
 listed above. Antibody-chromatin complexes were pulled-down using protein
 A-sepharose (or anti-IgM-conjugated agarose for RNA polymerase II), washed and
@@ -69,10 +65,10 @@ fragment. No attempt has been made, however, to remove such artifacts from the
 data, following ENCODE practices.</p>
 
 <P><B><em>Signal</em></B>: Fragment densities were computed by counting the number of
-reads overlapping each 25bp bin along the genome. Densities were computed using
+reads overlapping each 25 bp bin along the genome. Densities were computed using
 <a href="http://www.broadinstitute.org/igv/node/173" title='http://www.broadinstitute.org/igv/node/173' rel="nofollow" TARGET = _BLANK>igvtools count</a>
 with default parameters (in particular, '<code>-w 25</code>' to set window size
-of 25bp and '<code>-f mean</code>' to report the mean value across the window),
+of 25 bp and '<code>-f mean</code>' to report the mean value across the window),
 except for '<code>-e</code>' set to extend the reads to 200 bp, and the
 <em>.wig</em> output was converted to <em>bigWig</em> using <code>wigToBigWig</code>
 from the UCSC Kent software package.</p>
@@ -93,31 +89,17 @@ based on prior expectations.
 
 <h2>Release Notes</h2>
 <P>
-Release 4 (Jan 2011) of this track consists of a remapping of all previously
-released experiments to the human reference genome <B>GRCh37/hg19</B>.
-(Previous releases had been mapped to <B>NCBI36/hg18</B>.)
-Additionally experiments for five additional cell lines (HeLa-S3, HSMMtube,
+Release 1 (Feb 2011) of this track consists of a remapping of all previously
+released experiments to the human reference genome <B>GRCh37/hg19</B>
+(these data were previously mapped to <B>NCBI36/hg18</B>; please see the Release Notes section of
+the hg18
+<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeBroadChipSeq" target=_blank>
+Broad Histone</a> track for information on the NCBI36/hg18 releases of the data).
+New experiments for five additional cell lines (HeLa-S3, HSMMtube,
 NH-A, NHDF-Ad and  Osteobl) and three additional antibody targets (H2A.Z,
-H3K9me3 and H3K79me2) have been added.
+H3K9me3 and H3K79me2) have been included in this release and are not found in
+<B>NCBI36/hg18</B>.
 </P>
-
-<P>
-Release 3 (Mar 2010) of this track adds the HSMM cell line and
-includes new experiments for H1-hESC and NHLF. No previously released data
-has been replaced in this release. Update to Release 3 (Jun 2010) of this track
-consists of a display change to the Signal subtracks. This update provides a
-better display of the data when zoomed in to a range spanning less than 16,500
-base pairs.
-</P>
-
-<P>
-Release 2 did contain newer versions of previously released data, however.
-All versioned data are marked with "submittedDataVersion=V2" in the metadata,
-along with the reason for the change.
-Previous versions of these files are available for download from the
-<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/"
- TARGET=_BLANK>FTP site</A>.
-</p>
 
 <h2>Credits</h2>
 <p>The ChIP-seq data were generated at the
@@ -149,16 +131,16 @@ Wernig M, Plath K, <em>et al</em>.
  A bivalent chromatin structure marks key developmental genes in embryonic stem cells</a>.
  <em>Cell</em>. 2006 Apr 21;125(2):315-26.</p>
 
+<p>Guttman M, Garber M, Levin JZ, Donaghey J, Robinson J, <em>et al</em>.
+ <a href="http://www.nature.com/nbt/journal/v28/n5/abs/nbt.1633.html" title="http://www.nature.com/nbt/journal/v28/n5/abs/nbt.1633.html" rel="nofollow" TARGET = _BLANK>
+ Ab initio reconstruction of cell type-specific transcriptomes in mouse reveals the conserved multi-exonic structure of lincRNAs</a>.
+ <em>Nature Biotechnology</em> 2010 Jul 9;28:503-510
+
 <p>Mikkelsen TS, Ku M, Jaffe DB, Issac B, Lieberman E, Giannoukos G, Alvarez
 P, Brockman W, Kim T, Koche RP, <em>et al</em>.
 <a href="http://www.nature.com/nature/journal/v448/n7153/abs/nature06008.html" title="http://www.nature.com/nature/journal/v448/n7153/abs/nature06008.html" rel="nofollow" TARGET = _BLANK>
  Genome-wide maps of chromatin state in pluripotent and lineage-committed cells</a>.
  <em>Nature</em>. 2007 Aug 2;448:553-60. </p>
-
-<p>Guttman M, Garber M, Levin JZ, Donaghey J, Robinson J, <em>et al</em>.
- <a href="http://www.nature.com/nbt/journal/v28/n5/abs/nbt.1633.html" title="http://www.nature.com/nbt/journal/v28/n5/abs/nbt.1633.html" rel="nofollow" TARGET = _BLANK>
- Ab initio reconstruction of cell type-specific transcriptomes in mouse reveals the conserved multi-exonic structure of lincRNAs</a>.
- <em>Nature Biotechnology</em> 2010 Jul 9;28:503-510
 
 <H2> Data Release Policy </H2>
 

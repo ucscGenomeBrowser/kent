@@ -239,6 +239,8 @@ struct track
     enum enumBool remoteDataSource; /* The data for this track is from a remote source */
                    /* Slow retrieval means image can be rendered via an AJAX callback. */
     boolean customTrack; /* Need to explicitly declare this is a custom track */
+    boolean syncChildVisToSelf;	/* If TRUE sync visibility to of children to self. */
+    char *networkErrMsg;        /* Network layer error message */
     };
 
 
@@ -397,6 +399,7 @@ extern Color shadesOfGray[10+1];  /* 10 shades of gray from white to black
 extern Color shadesOfBrown[10+1]; /* 10 shades of brown from tan to tar. */
 extern struct rgbColor guidelineColor;
 extern struct rgbColor undefinedYellowColor;
+extern Color darkGreenColor;
 
 extern Color shadesOfSea[10+1];       /* Ten sea shades. */
 
@@ -777,6 +780,10 @@ void cytoBandIdeoMethods(struct track *tg);
 void cytoBandMethods(struct track *tg);
 /* Make track for simple repeats. */
 
+void snakeMethods(struct track *track, struct trackDb *tdb,
+                                int wordCount, char *words[]);
+/* Make track group for snake alignment. */
+
 void chainMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Make track group for chain alignment. */
@@ -789,6 +796,9 @@ void mafMethods(struct track *tg);
 
 void bamMethods(struct track *track);
 /* Methods for BAM alignment files. */
+
+void vcfTabixMethods(struct track *track);
+/* Methods for Variant Call Format compressed & indexed by tabix. */
 
 void altGraphXMethods(struct track *tg);
 /* setup special methods for altGraphX track */
@@ -850,6 +860,7 @@ void wigLoadItems(struct track *tg);
 /*	load wiggle track data from database	*/
 void wigMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
+/* Set up wig pointers and do some other precalculations on a wig type track. */
 void bedGraphMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 void bigWigMethods(struct track *track, struct trackDb *tdb,
@@ -1006,6 +1017,15 @@ void lfDrawSpecialGaps(struct linkedFeatures *lf,
  * length is at least intronGap.
  * If chainLines, draw a double-line gap if both target and query have a gap
  * (mismatching sequence). */
+
+void bamWigMethods(struct track *track, struct trackDb *tdb,
+	int wordCount, char *words[]);
+/* Set up bamWig methods. */
+
+void bamLinkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis);
+/* Draw linked features items. */
 
 void bamLinkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
@@ -1241,17 +1261,25 @@ char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColu
 
 #define SMALLBUF 128
 
-char *bbiNameFromTable(struct sqlConnection *conn, char *table);
-/* Return file name from little track table. */
-
 char *trackUrl(char *mapName, char *chromName);
 /* Return hgTrackUi url; chromName is optional. */
 
 void bedDetailCtMethods (struct track *tg, struct customTrack *ct);
 /* Load bedDetail track from custom tracks as bed or linked features */
 
+void pgSnpMethods (struct track *tg);
+/* Personal Genome SNPs: show two alleles with stacked color bars for base alleles and
+ * (if available) allele counts in mouseover. */
+
 void pgSnpCtMethods (struct track *tg);
 /* Load pgSnp track from custom tracks */
+
+void gvfMethods(struct track *tg);
+/* Load GVF variant data. */
+
+void messageLineMethods(struct track *track);
+/* Methods for drawing a single-height message line instead of track items,
+ * e.g. if source was compiled without a necessary library. */
 
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
@@ -1274,6 +1302,11 @@ boolean trackShouldUseAjaxRetrieval(struct track *track);
 
 #endif//ndef REMOTE_TRACK_AJAX_CALLBACK
 
+int gCmpPriority(const void *va, const void *vb);
+/* Compare groups based on priority. */
+
+int tgCmpPriority(const void *va, const void *vb);
+/* Compare to sort based on priority; use shortLabel as secondary sort key. */
 
 #endif /* HGTRACKS_H */
 

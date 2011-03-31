@@ -24,19 +24,30 @@ Note that the html file in lower-level directories
 can override the html in higher-level directories
 without requiring an entry in trackDb.ra.
 
-
 There may be subdirectories for each organism such
 as 'mouse', and underneath these directories for
 each database, such as 'hg7'.  There are a trackDb.ra
 file and xxx.html files in these subdirectories.
-Tracks descriptions in the subdirectory will
+Track descriptions in the subdirectory will
 over-ride track descriptions in the parent directory.
 This allows you to customize a track for
 each version of the database.
 
-After editing a track definition here
-hgTrackDb to bring it into the MySQL database.  To update
-your personal copy (on hgwdev-userName) do
+xxx.html files may include the contents of other files
+using this syntax:
+
+<!--#insert file="sharedText.html"-->
+
+where "sharedText.html" is a relative path, relative to
+the directory that contains the xxx.html file.
+This can also be made conditional on a database:
+
+<!-- #if (db==hg19) #insert file="human/hg19/specialNote.html" -->
+
+
+After editing a track definition here, run ./loadTracks
+which invokes hgTrackDb to bring it into the MySQL database.
+To update your personal copy (on hgwdev-userName) do
     make update
 to do it on genome-test do
     make alpha
@@ -76,6 +87,14 @@ The format of the type fields:
    <fieldCount> - the number of standard fields
    <extraInfo> - either '.' meaning no non-standard fields
        or '+' if there are additional non-standard fields.
+   Optional variable for any '+' bed:
+   extraFields - a list of field=label pairs of table columns beyond those
+        defined before the '+'. Seen in hgc and available to filterBy (see below)
+        extraFields {columnInTable}=[{type}]{label}
+        type = [float],[integer],[string] OPTIONAL default:[string]
+            square brackets required, only first letter is tested: [float]=[f]
+        label = What will be seen in hgc and hgTrackUi.
+                May include '_' to be replaced by space. May include html tags.
    Optional variable for bed tracks with 9 or more of the standard fields:
    itemRgb=on  - interpret field nine as a color for this item specified
                - as an R,G,B triplet.  When loaded this field appears
@@ -262,33 +281,40 @@ The format of the type fields:
     substituting "bigBed" for "bed" in the type line, the same as the "type bed"
     explained above.
 
-    bigBed-specific optional field:
-        denseCoverage maxVal
-    In dense mode do a density plot based on maximum coverage seen under pixel.  The maxVal
-    corresponds to the count at which it gets as dark as it can get.  If maxVal is 0 then this
-    will be calculated from the data itself.
+
+    bigBed-specific optional fields:
+    nonBedFieldsLabel - text heading string printed on item details page before
+	display of non-bed type fields.  Default is: "Non-BED fields:"
+    denseCoverage maxVal
+	In dense mode do a density plot based on maximum coverage seen under
+	pixel.  The maxVal Borresponds to the count at which it gets as dark
+	as it can get.  If maxVal is 0 then this will be calculated from the
+	data itself.
 
     The database loading procedure for the table can be:
 	hgBbiDbLink hg18 itemRgbBbTest /gbdb/hg18/bbi/itemRgb.hg18.bb
-    which is equivalent to:
+    The file name given should be a full path name that can be accessed
+	by the Apache WEB server.  Or, the file name can also be a
+	valid URL to the bb file.
+    This loader is equivalent to:
     hgsql hg18 -e 'drop table if exists itemRgbBbTest;
             create table itemRgbBbTest (fileName varchar(255) not null);
             insert into itemRgbBbTest values
         ("/gbdb/hg18/bbi/itemRgb.hg18.bb");'
-    The fileName can also be a valid URL to the bb file.
 
 18. type bigWig [lower] [upper]
     This uses a binary indexed file rather than a database table.  It is, other
     than substituting "bigWig" for "wig" in the type line, the same as the
     "type wig" explained above.  The database loading procedure is
-        hgBbiDbLink hg19 myLocalBigWig /gbdb/hg18/bbi/myLocalBigWig.bw
-    which is equivalent to:
+        hgBbiDbLink hg19 myLocalBigWig /gbdb/hg19/bbi/myLocalBigWig.bw
+    The file name given should be a full path name that can be accessed
+	by the Apache WEB server.  Or, the file name can also be a
+	valid URL to the bw file.
+    This loader is equivalent to:
     hgsql hg19 -e 'drop table if exists myLocalBigWig; \
             create table myLocalBigWig (fileName varchar(255) not null); \
             insert into myLocalBigWig values
         ("/gbdb/hg19/bbi/myLocalBigWig.bw");'
-    I believe this works even if the entry is a URL to a remote
-    bigWig file.
 
 19. type bam
     This uses a binary indexed file (which can be a URL) named in a database table.
@@ -308,8 +334,19 @@ The format of the type fields:
 						#   default: 0:99
     baseQualRange   <min:max>			# shade base qualities within this range
 						#   default: 0:40
-    Additional general settings that may be useful to speed up display for extremely
-    dense data e.g. next-gen sequencing reads: maxWindowToDraw, chromosomes (see below)
+    Additional general settings that may be useful to speed up display for
+    extremely dense data e.g. next-gen sequencing reads: maxWindowToDraw,
+    chromosomes (see below)
+
+    Load your database table with the command:
+        hgBbiDbLink hg19 myLocalBamTrack /gbdb/hg19/bbi/myLocalFile.bam
+    Your index file is also there:  /gbdb/hg19/bbi/myLocalFile.bai
+    These path names can also be URLs to an external .bam file (and .bai)
+    use that table name: myLocalBamTrack as the name on your track line:
+    track myLocalBamTrack
+    type bam
+
+    See also, an example trackDb entry: chimp/trackDb.denisova.ra
 
 20. type factorSource
     This type is used for transcription factors on multiple cell lines.  It displays
@@ -580,6 +617,8 @@ Some settings used by various tracks:
       zoomed at no more than basesPerPixel (a float). showCdsAllScales should
       be set and showDiffBasesMaxZoom should be set to a value not more
       than showCdsMaxZoom  to make this useful.
+    o nextExonText override the default mouseover text of the next-exon button.
+    o prevExonText override the default mouseover text of the previous-exon button.
     o nextItemButton off - For tracks that have next-item buttons that
       shouldn't, turn the buttons off until whatever else is fixed.
       on - This will override the user's UI settings and display the next-item
@@ -594,9 +633,13 @@ Some settings used by various tracks:
       by clustering or aggregating data found in other tracks.  This names a table
       that is in three column format - first the input track name, then the source
       name (cell line etc) if any, then the factor name if any.
-    o inputTracksSubgroupDisplay - used with inputTrackTable.  This contains a list
-      of group types (just the left size of the var=val pairs in the subGroupN line of the parent)
-      to display as columns in the details display table.
+    o inputTableFieldDisplay - used with inputTrackTable.  Countains a list of the
+      fields from that table to display as columns in the details display table.
+    o inputTracksSubgroupDisplay - used with inputTrackTable.  One and only one of
+      inputTableFieldsDisplay or inputTracksSubgroupDisplay should be used. If present
+      this tag contains a list of group types (just the left size of the var=val pairs
+      in the subGroupN line of the parent) to display as columns in the details
+      display table.
     o showSubtrackColorOnUi - used with tracks that include other tracks.  When UI shows
       a table of tracks and this is set, a small patch of color indicating the track color
       is part of the table.
@@ -953,6 +996,32 @@ A special trick can be included in the label.  In the example label if
 "Estrogen_and_Progesterone" were replaced with "Estrogen&nbsp;and_Progesterone", then
 only the first part of the label (Estrogen) would be represented as a link to the controlled
 vocabulary.
+
+Downloadable Files associated with a composite
+----------------------------------------------
+Composites (e.g. ENCODE composites) frequently have downloadable files associated with them and
+located in a hgdownloads goldenPath/{db}/encode/{compoaiteName} directory.
+By including a 'fileSortOrder' setting, this downloads directory is reachable via the hgFileUi cgi.
+For this to work, each file must be referenced as an object in the metaDb and must have the
+composite={composite} var=val pair. Example:
+    track wgEncodeBroadHistone
+    compositeTrack on
+    fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+The setting uses tag=title not tag=direction.  All directions are initially forward. The tag
+portion of the tag=title must be the term in the mdb! The title portion is literally the column
+header. Two non-mdb terms are supported in the sort columns: fileSize and fileType.  The size is
+from the file itself and the type is determined by the file suffix.
+NOTE: Currently fileSortOrder is required for the downloads links to point to the hgFileUi CGI
+      instead of the {downloadsDir}/index.html.  However, hgFileUi wil still produce a default page
+      without the fileSortOrder setting.  Edit the URL to have hgFileUi?g={composite} to see it.
+      Use of this default is a good starting point for creating your fileSortOrder.
+NOTE: It is also possible to make a downloadsOnly composite as:
+    track wgEncodeUwDownloads
+    compositeTrack on
+    type bed 3
+    type downloadsOnly
+    fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+
 
 EXAMPLE of Composite Track with ADDITIONAL OPTIONS
 -------------------------------------------------

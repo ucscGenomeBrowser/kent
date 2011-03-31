@@ -209,205 +209,22 @@ priority 300
 # BROAD Histone (wrangler: Vankat, assisted by Tim)
 include wgEncodeBroadChipSeq.ra
 
+# BROAD Chromatin modelling by HMM HMM (wrangler: Tim)
+include wgEncodeBroadHmm.ra
+
 # Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
 include wgEncodeChromatinMap.ra
 
 
 # Mapability - Cross lab special track (wrangler: tdreszer)
-
-track wgEncodeMapability
-compositeTrack on
-shortLabel Mapability
-longLabel Mapability or Uniqueness of Reference Genome
-group map
-subGroup1 view Mapability ALN=Broad_Alignability CRGMAP=CRG_Alignability DUNIQ=Duke_Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Duke_Excluded_Regions
-subGroup2 win Sequence_Size w015=15bp w020=20bp w024=24bp w035=35bp w036=36bp w040=40bp w050=50bp w075=75bp w100=100bp zNA=Varied
-dimensions dimensionX=win
-allButtonPair on
-sortOrder view=+ win=+
-dragAndDrop subTracks
-priority 0
-type bed 3
-noInherit on
-wgEncode 1
-
-    track wgEncodeMapabilityViewALN
-    shortLabel Broad Alignability
-    view ALN
-    visibility hide
-    subTrack wgEncodeMapability
-    viewLimits 0:1
-    autoScale off
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-
-        track wgEncodeBroadMapabilityAlign36mer
-        subTrack wgEncodeMapabilityViewALN
-        shortLabel Broad Align 36
-        longLabel Mapability - ENCODE Broad Alignability of 36mers with no more than 2 mismatches
-        subGroups view=ALN win=w036
-        type wig 0.00 1.00
-        color 133,0,173
-        metadata project=wgEncode grant=Bernstein lab=Broad dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE July 2009 Freeze" subId=344 composite=wgEncodeMapability tableName=wgEncodeBroadMapabilityAlign36mer fileName=wgEncodeBroadMapabilityAlign36mer.wig.gz
-
-    track wgEncodeMapabilityViewDUNIQ
-    shortLabel Duke Uniqueness
-    view DUNIQ
-    visibility full
-    subTrack wgEncodeMapability
-    configurable on
-    viewLimits 0:1
-    autoScale off
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-
-        track wgEncodeDukeUniqueness20bp
-        subTrack wgEncodeMapabilityViewDUNIQ off
-        shortLabel Duke Uniq 20
-        longLabel Mapability - ENCODE Duke Uniqueness of 20bp sequences
-        type wig 0.00 1.00
-        subGroups view=DUNIQ win=w020
-        spanList 1
-        color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=20bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness20bp fileName=wgEncodeDukeUniqueness20bp.wig.gz
-
-        track wgEncodeDukeUniqueness24bp
-        subTrack wgEncodeMapabilityViewDUNIQ off
-        shortLabel Duke Uniq 24
-        longLabel Mapability - ENCODE Duke Uniqueness of 24bp sequences
-        type wig 0.00 1.00
-        subGroups view=DUNIQ win=w024
-        spanList 1
-        color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=24bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
-
-        track wgEncodeDukeUniqueness35bp
-        subTrack wgEncodeMapabilityViewDUNIQ
-        shortLabel Duke Uniq 35
-        longLabel Mapability - ENCODE Duke Uniqueness of 35bp sequences
-        type wig 0.00 1.00
-        subGroups view=DUNIQ win=w035
-        spanList 1
-        color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=35bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
-
-    track wgEncodeMapabilityViewRUNIQ
-    shortLabel Rosetta Uniqueness
-    view RUNIQ
-    visibility hide
-    subTrack wgEncodeMapability
-    viewLimits 0:37
-    minLimit 0
-    maxLimit 37
-    gridDefault on
-    yLineOnOff on
-    autoScale off
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-
-        track uniqueness
-        subTrack wgEncodeMapabilityViewRUNIQ
-        shortLabel Rosetta Uniq 35
-        longLabel Mapability - Rosetta Uniqueness 35-mer Alignment (BWA/MAQ, unique alignment=37)
-        subGroups view=RUNIQ win=w035
-        #viewLimits 0:37
-        #minLimit 0
-        #maxLimit 37
-        color 100,50,150
-        type bedGraph 4
-
-    track wgEncodeMapabilityViewUUNIQ
-    shortLabel UMass Uniqueness
-    view UUNIQ
-    visibility full
-    subTrack wgEncodeMapability
-    viewLimits 0.1:0.55
-    autoScale off
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-
-        track wgEncodeUmassMapabilityUniq15
-        subTrack wgEncodeMapabilityViewUUNIQ
-        shortLabel Umass Uniq 15
-        longLabel Mapability - ENCODE UMass Uniqueness at 15bp
-        subGroups view=UUNIQ win=w015
-        type wig 0.00 1.00
-        color 46,0,184
-        metadata project=wgEncode grant=Dekker lab=UMass-Dekker dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
-
-    track wgEncodeMapabilityViewXR
-    shortLabel Duke Excluded Regions
-    view XR
-    subTrack wgEncodeMapability
-
-        track wgEncodeDukeRegionsExcluded
-        subTrack wgEncodeMapabilityViewXR
-        shortLabel Excluded Regions
-        longLabel Mapability - ENCODE Duke Excluded Regions
-        subGroups view=XR win=zNA
-        type bed 6
-        noScoreFilter on
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Excludable labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
-
-    track wgEncodeMapabilityViewCRGMAP
-    shortLabel CRG GEM Alignability
-    view CRGMAP
-    visibility hide
-    subTrack wgEncodeMapability
-    viewLimits 0:1
-    autoScale off
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-
-        track wgEncodeCrgMapabilityAlign36mer
-        subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Align 36
-        longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w036
-        type bigWig 0.00 1.00
-        color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign36mer fileName=wgEncodeMapabilityAlign36mer.bw.gz
-
-        track wgEncodeCrgMapabilityAlign40mer
-        subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Align 40
-        longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w040
-        type bigWig 0.00 1.00
-        color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=40mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign40mer fileName=wgEncodeMapabilityAlign40mer.bw.gz
-
-        track wgEncodeCrgMapabilityAlign50mer
-        subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Align 50
-        longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w050
-        type bigWig 0.00 1.00
-        color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=50mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign50mer fileName=wgEncodeMapabilityAlign50mer.bw.gz
-
-        track wgEncodeCrgMapabilityAlign75mer
-        subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Align 75
-        longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w075
-        type bigWig 0.00 1.00
-        color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=75mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign75mer fileName=wgEncodeMapabilityAlign75mer.bw.gz
-
-        track wgEncodeCrgMapabilityAlign100mer
-        subTrack wgEncodeMapabilityViewCRGMAP
-        shortLabel CRG Align 100
-        longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w100
-        type bigWig 0.00 1.00
-        color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=100mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign100mer fileName=wgEncodeMapabilityAlign100mer.bw.gz
+include wgEncodeMapability.ra beta,public
+include wgEncodeMapability.new.ra alpha
 
         
 # NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
 
 track wgEncodeNhgriBip
+release beta,public
 shortLabel NHGRI Bi-Pro
 longLabel ENCODE NHGRI Elnitski Bidirectional Promoters
 visibility hide
@@ -420,6 +237,20 @@ compareGenomeLinks panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006)
 wgEncode 1
 filterBy score:Annotation=800|A)_UCSC_genes,600|B)_GenBank_mRNA_annotations,400|C)_spliced_ESTs
 metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=hg18 dataVersion="ENCODE July 2009 Freeze" subId=294 dateSubmitted=2009-04-27 dateUnrestricted=2010-01-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.hg18.bed8.gz
+
+track wgEncodeNhgriBip
+release alpha
+shortLabel NHGRI Bi-Pro
+longLabel ENCODE NHGRI Elnitski Bidirectional Promoters
+visibility hide
+group regulation
+type bed 8 +
+priority 0
+#scoreFilterByRange on
+#noScoreFilter on
+compareGenomeLinks panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
+wgEncode 1
+filterBy score:Annotation=800|A)_UCSC_genes,600|B)_GenBank_mRNA_annotations,400|C)_spliced_ESTs
 
 # NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
 
@@ -449,6 +280,7 @@ wgEncode 1
     scoreFilterByRange on
 
         track wgEncodeNhgriNRESilencersK562Ggamma
+	    release beta,public
         subTrack wgEncodeNhgriNreViewSI
         shortLabel K562 gamma Si
         longLabel ENCODE NHGRI Elnitski NRE Silencers (Ggamin prom. in K562 cells)
@@ -457,7 +289,17 @@ wgEncode 1
         color 46,0,184
         metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=G-gamma view=Silencers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNRESilencersK562Ggamma fileName=wgEncodeNhgriNRESilencersK562Ggamma.bed6.gz
 
+        track wgEncodeNhgriNRESilencersK562Ggamma
+	    release alpha
+        subTrack wgEncodeNhgriNreViewSI
+        shortLabel K562 gamma Si
+        longLabel ENCODE NHGRI Elnitski NRE Silencers (Ggamin prom. in K562 cells)
+        subGroups view=SI cellType=K562 promoter=Ggam
+        type bed 6
+        color 46,0,184
+
         track wgEncodeNhgriNRESilencersK562Sv40
+	    release beta,public
         subTrack wgEncodeNhgriNreViewSI
         shortLabel K562 SV40 Si
         longLabel ENCODE NHGRI Elnitski NRE Silencers (SV40 prom. in K562 cells)
@@ -465,6 +307,15 @@ wgEncode 1
         type bed 6
         color 46,0,184
         metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=SV40 view=Silencers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNRESilencersK562Sv40 fileName=wgEncodeNhgriNRESilencersK562Sv40.bed6.gz
+
+        track wgEncodeNhgriNRESilencersK562Sv40
+	    release alpha
+        subTrack wgEncodeNhgriNreViewSI
+        shortLabel K562 SV40 Si
+        longLabel ENCODE NHGRI Elnitski NRE Silencers (SV40 prom. in K562 cells)
+        subGroups view=SI cellType=K562 promoter=SV40
+        type bed 6
+        color 46,0,184
 
     track wgEncodeNhgriNreViewEB
     shortLabel Enhancer Blockers
@@ -474,6 +325,7 @@ wgEncode 1
     scoreFilterByRange on
 
         track wgEncodeNhgriNREEnhancerBlockersK562Ggamma
+	    release beta,public
         subTrack wgEncodeNhgriNreViewEB
         shortLabel K562 gamma EB
         longLabel ENCODE NHGRI Elnitski NRE Enhancer Blockers (Ggam prom. in K562 cells)
@@ -482,7 +334,17 @@ wgEncode 1
         color 46,0,184
         metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=G-gamma view=Enhancer_Blockers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNREEnhancerBlockersK562Ggamma fileName=wgEncodeNhgriNREEnhancerBlockersK562Ggamma.bed6.gz
 
+        track wgEncodeNhgriNREEnhancerBlockersK562Ggamma
+	    release alpha
+        subTrack wgEncodeNhgriNreViewEB
+        shortLabel K562 gamma EB
+        longLabel ENCODE NHGRI Elnitski NRE Enhancer Blockers (Ggam prom. in K562 cells)
+        subGroups view=EB cellType=K562 promoter=Ggam
+        type bed 6
+        color 46,0,184
+
         track wgEncodeNhgriNREEnhancerBlockersK562Sv40
+	    release beta,public
         subTrack wgEncodeNhgriNreViewEB
         shortLabel K562 SV40 EB
         longLabel ENCODE NHGRI Elnitski NRE Enhancer Blockers (SV40 prom. in K562 cells)
@@ -490,6 +352,15 @@ wgEncode 1
         type bed 6
         color 46,0,184
         metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=SV40 view=Enhancer_Blockers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNREEnhancerBlockersK562Sv40 fileName=wgEncodeNhgriNREEnhancerBlockersK562Sv40.bed6.gz
+
+        track wgEncodeNhgriNREEnhancerBlockersK562Sv40
+	    release alpha
+        subTrack wgEncodeNhgriNreViewEB
+        shortLabel K562 SV40 EB
+        longLabel ENCODE NHGRI Elnitski NRE Enhancer Blockers (SV40 prom. in K562 cells)
+        subGroups view=EB cellType=K562 promoter=SV40
+        type bed 6
+        color 46,0,184
 
 # Riken CAGE (wrangler: braney)
 include wgEncodeRikenCage.ra
@@ -784,7 +655,6 @@ wgEncode 1
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in SKMC cells)
     subGroups cellType=SKMC rep=rep2
     type broadPeak
-    accession GSM472911
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Bjtert
     subTrack wgEncodeUwAffyExonArray off
@@ -1114,7 +984,7 @@ canPack On
     type wig 0 10000
     superTrack wgEncodeReg full
     shortLabel Enhanced H3K4Me1
-    longLabel ENCODE Enhancer and Promoter Associated Histone Mark (H3K4Me1) on 8 Cell Lines
+    longLabel ENCODE Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on 8 Cell Lines
     configurable on
     visibility full
     viewLimits 0:50
@@ -1126,7 +996,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Gm12878
 	shortLabel Gm12878
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on Gm12878 cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on Gm12878 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	type wig 0.00 9323.50
 	color 255,128,128
@@ -1134,7 +1004,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1H1hesc
 	shortLabel H1 ES
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on H1 ES cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on H1 ES cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 255,212,128
 	table wgEncodeBroadChipSeqSignalH1hescH3k4me1
@@ -1142,7 +1012,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Hepg2
 	shortLabel HepG2
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on HepG2 cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on HepG2 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 212,255,128
 	table wgEncodeBroadChipSeqSignalHepg2H3k4me1
@@ -1150,7 +1020,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Hmec
 	shortLabel HMEC
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on HMEC cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on HMEC cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 120,235,120
 	table wgEncodeBroadChipSeqSignalHmecH3k4me1
@@ -1158,7 +1028,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Hsmm
 	shortLabel HSMM
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on HSMM cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on HSMM cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 120,235,204
 	table wgEncodeBroadChipSeqSignalHsmmH3k4me1
@@ -1166,7 +1036,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Huvec
 	shortLabel HUVEC
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on HUVEC cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on HUVEC cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 128,212,255
 	table wgEncodeBroadChipSeqSignalHuvecH3k4me1
@@ -1174,7 +1044,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1K562
 	shortLabel K562
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on K562 cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on K562 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 128,128,255
 	table wgEncodeBroadChipSeqSignalK562H3k4me1
@@ -1182,7 +1052,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Nhek
 	shortLabel NHEK
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on NHEK cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on NHEK cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 212,128,255
 	table wgEncodeBroadChipSeqSignalNhekH3k4me1
@@ -1190,7 +1060,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Nhlf
 	shortLabel NHLF
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on NHLF cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on NHLF cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 255,128,212
 	table wgEncodeBroadChipSeqSignalNhlfH3k4me1
@@ -1202,7 +1072,7 @@ canPack On
     type wig 0 10000
     superTrack wgEncodeReg hide
     shortLabel Enhanced H3K27Ac
-    longLabel ENCODE Enhancer and Promoter Associated Histone Mark (H3K27Ac) on 8 Cell Lines
+    longLabel ENCODE Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on 8 Cell Lines
     configurable on
     visibility full
     viewLimits 0:50
@@ -1214,7 +1084,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acGm12878
 	shortLabel Gm12878
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on Gm12878 cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on Gm12878 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	type wig 0.00 9323.50
 	color 255,128,128
@@ -1222,7 +1092,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acH1hesc
 	shortLabel H1 ES
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on H1 ES cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on H1 ES cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 255,212,128
 	table wgEncodeBroadChipSeqSignalH1hescH3k27ac
@@ -1230,7 +1100,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acHepg2
 	shortLabel HepG2
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on HepG2 cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on HepG2 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 212,255,128
         table wgEncodeBroadChipSeqSignalHepg2H3k27ac
@@ -1238,7 +1108,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acHmec
 	shortLabel HMEC
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on HMEC cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on HMEC cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 120,235,120
 	table wgEncodeBroadChipSeqSignalHmecH3k27ac
@@ -1246,7 +1116,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acHsmm
 	shortLabel HSMM
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on HSMM cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on HSMM cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 120,235,204
 	table wgEncodeBroadChipSeqSignalHsmmH3k27ac
@@ -1254,7 +1124,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acHuvec
 	shortLabel HUVEC
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on HUVEC cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on HUVEC cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 128,212,255
 	table wgEncodeBroadChipSeqSignalHuvecH3k27ac
@@ -1262,7 +1132,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acK562
 	shortLabel K562
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on K562 cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on K562 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 128,128,255
 	table wgEncodeBroadChipSeqSignalK562H3k27ac
@@ -1270,7 +1140,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acNhek
 	shortLabel NHEK
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on NHEK cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on NHEK cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 212,128,255
 	table wgEncodeBroadChipSeqSignalNhekH3k27ac
@@ -1278,7 +1148,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acNhlf
 	shortLabel NHLF
-	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on NHLF cells from ENCODE
+	longLabel Enhancer- and Promoter-Associated Histone Mark (H3K27Ac) on NHLF cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 255,128,212
 	table wgEncodeBroadChipSeqSignalNhlfH3k27ac
@@ -1287,8 +1157,8 @@ canPack On
     track wgEncodeRegMarkPromoter
     container multiWig
     superTrack wgEncodeReg full
-    shortLabel Promoted H3K4Me3
-    longLabel ENCODE Promoter Associated Histone Mark (H3K4Me3) on 9 Cell Lines
+    shortLabel Promoter H3K4Me3
+    longLabel ENCODE Promoter-Associated Histone Mark (H3K4Me3) on 9 Cell Lines
     type wig 0 30000
     viewLimits 0:100
     configurable on
@@ -1304,7 +1174,7 @@ canPack On
 	track wgEncodeRegMarkPromoterGm12878
         table wgEncodeBroadChipSeqSignalGm12878H3k4me3
 	shortLabel Gm12878
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on Gm12878 cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on Gm12878 cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 100593.50
 	color 255,128,128
@@ -1312,7 +1182,7 @@ canPack On
 	track wgEncodeRegMarkPromoterH1hesc
         table wgEncodeBroadChipSeqSignalH1hescH3k4me3
 	shortLabel H1 ES
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on H1 cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on H1 cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 12434.00
 	color 255,212,128
@@ -1320,7 +1190,7 @@ canPack On
 	track wgEncodeRegMarkEnhH3k4me3Hepg2
 	table wgEncodeBroadChipSeqSignalHepg2H3k4me3
 	shortLabel HepG2
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on HepG2 cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on HepG2 cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 4927.00
 	color 212,255,128
@@ -1328,7 +1198,7 @@ canPack On
 	track wgEncodeRegMarkPromoterHmec
         table wgEncodeBroadChipSeqSignalHmecH3k4me3
 	shortLabel HMEC
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on HMEC cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on HMEC cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 15838.00
 	color 120,235,120
@@ -1336,7 +1206,7 @@ canPack On
 	track wgEncodeRegMarkPromoterHsmm
         table wgEncodeBroadChipSeqSignalHsmmH3k4me3
 	shortLabel HSMM
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on HSMM cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on HSMM cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 42282.00
 	color 120,235,204
@@ -1344,7 +1214,7 @@ canPack On
 	track wgEncodeRegMarkPromoterHuvec
         table wgEncodeBroadChipSeqSignalHuvecH3k4me3
 	shortLabel HUVEC
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on HUVEC cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on HUVEC cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 9954.75
 	color 128,212,255
@@ -1352,7 +1222,7 @@ canPack On
 	track wgEncodeRegMarkPromoterK562
         table wgEncodeBroadChipSeqSignalK562H3k4me3
 	shortLabel K562
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on K562 cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on K562 cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 16145.25
 	color 128,128,255
@@ -1360,7 +1230,7 @@ canPack On
 	track wgEncodeRegMarkPromoterNhek
         table wgEncodeBroadChipSeqSignalNhekH3k4me3
 	shortLabel NHEK
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on NHEK cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on NHEK cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 12229.50
 	color 212,128,255
@@ -1368,7 +1238,7 @@ canPack On
 	track wgEncodeRegMarkPromoterNhlf
         table wgEncodeBroadChipSeqSignalNhlfH3k4me3
 	shortLabel NHLF
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on NHLF cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on NHLF cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 28587.00
 	color 255,128,212
@@ -1392,7 +1262,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Gm12878
 	shortLabel Gm12878
-	longLabel H3K27Me3 - An repressor mark on Gm12878 cells from ENCODE
+	longLabel H3K27Me3 - A repressor mark on Gm12878 cells from ENCODE
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	type wig 0.00 9323.50
@@ -1401,7 +1271,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3H1hesc
 	shortLabel H1 ES
-	longLabel H3K27Me3 - An repressor mark on H1 ES cells from ENCODE
+	longLabel H3K27Me3 - A repressor mark on H1 ES cells from ENCODE
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 255,212,128
@@ -1410,7 +1280,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Hepg2
 	shortLabel HepG2
-	longLabel H3K27Me3 - An repressor mark on HepG2 cells from ENCODE
+	longLabel H3K27Me3 - A repressor mark on HepG2 cells from ENCODE
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 212,255,128
@@ -1419,7 +1289,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Hmec
 	shortLabel HMEC
-	longLabel H3K27Me3 - An repressor mark on HMEC cells from ENCODE 
+	longLabel H3K27Me3 - A repressor mark on HMEC cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 120,235,120
@@ -1428,7 +1298,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Hsmm
 	shortLabel HSMM
-	longLabel H3K27Me3 - An repressor mark on HSMM cells from ENCODE 
+	longLabel H3K27Me3 - A repressor mark on HSMM cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 120,235,204
@@ -1437,7 +1307,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Huvec
 	shortLabel HUVEC
-	longLabel H3K27Me3 - An repressor mark on HUVEC cells from ENCODE 
+	longLabel H3K27Me3 - A repressor mark on HUVEC cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 128,212,255
@@ -1446,7 +1316,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3K562
 	shortLabel K562
-	longLabel H3K27Me3 - An repressor mark on K562 cells from ENCODE 
+	longLabel H3K27Me3 - A repressor mark on K562 cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 128,128,255
@@ -1455,7 +1325,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Nhek
 	shortLabel NHEK
-	longLabel H3K27Me3 - An repressor mark on NHEK cells from ENCODE 
+	longLabel H3K27Me3 - A repressor mark on NHEK cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 212,128,255
@@ -1464,7 +1334,7 @@ canPack On
 
 	track wgEncodeRegMarkRepressH3k27me3Nhlf
 	shortLabel NHLF
-	longLabel H3K27Me3 - An repressor mark on NHLF cells from ENCODE 
+	longLabel H3K27Me3 - A repressor mark on NHLF cells from ENCODE 
         release alpha
 	parent wgEncodeRegMarkRepressH3k27me3
 	color 255,128,212
@@ -1510,7 +1380,6 @@ include wgEncodeUwDGF.ra
 
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
 include wgEncodeUwDnaseSeq.ra
-include wgEncodeUwDnaseSeq.new.ra
 
 
 # UW DNAase-seq southerns
@@ -1742,7 +1611,8 @@ include trackDb.wgEncodeYaleRnaSeq.ra
 
 
 # Yale TFBS (wrangler: Venkat, assisted by Tim)
-include wgEncodeYaleChIPseq.ra
+include wgEncodeYaleChIPseq.ra beta,public
+include wgEncodeYaleChIPseq.new.ra alpha
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
 include wgEncodeHudsonalphaChipSeq.ra
@@ -2743,6 +2613,7 @@ include wgEncodeCshlLongRnaSeq.ra
 # UMass Weng Lab TFBS Validation (wrangler: kate)
 
 track wgEncodeUmasshaTfbsValid
+release alpha
 compositeTrack on
 shortLabel UMA/HA TFBS Val
 longLabel ENCODE TFBS Validation from Univ. Mass. (Weng Lab) and HudsonAlpha
@@ -2771,7 +2642,6 @@ wgEncode 1
         subGroups view=TestedSites cellType=K562
         type bed 6 +
         color 46,0,184
-        metadata project=wgEncode grant=Weng lab=UMassHA dataType=TfbsValid cell=K562 view=TestedSites dataVersion="ENCODE Sep 2009 Freeze" subId=689 dateSubmitted=2009-10-14 dateUnrestricted=2010-07-14 composite=wgEncodeUmasshaTfbsValid tableName=wgEncodeUmasshaTfbsValidTestedSitesK562 fileName=wgEncodeUmasshaTfbsValidTestedSitesK562.bed6+.gz
 
 include wgEncodeGisPet.ra
 

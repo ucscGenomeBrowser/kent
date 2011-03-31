@@ -33,11 +33,11 @@
 #ifdef USE_BAM
 #include "bamFile.h"
 #endif//def USE_BAM
+#include "vcf.h"
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
-/* for regular expressions */
-#include "hgFindSpec.h" 
+#include "regexHelper.h" 
 
 static char const rcsid[] = "$Id: customFactory.c,v 1.126 2010/06/01 20:38:07 galt Exp $";
 
@@ -846,27 +846,41 @@ static struct customFactory bedDetailFactory =
 
 /*** pgSnp Factory - allow pgSnp(personal genome SNP) custom tracks ***/
 
-static boolean rowIsPgSnp (char **row, char *db) 
+static boolean rowIsPgSnp (char **row, char *db, char *type) 
 /* return TRUE if row looks like a pgSnp row */
 {
 boolean isPgSnp = rowIsBed(row, 3, db);
-if (!isPgSnp) 
+if (type != NULL && !sameWord(type, "pgSnp"))
     return FALSE;
-if (!isdigit(row[4][0]))
+if (!isPgSnp && type == NULL) 
     return FALSE;
+else if (!isPgSnp) 
+    errAbort("Error line 1 of custom track, type is pgSnp but first 3 fields are not BED");
+if (!isdigit(row[4][0]) && type == NULL)
+    return FALSE;
+else if (!isdigit(row[4][0]))
+    errAbort("Error line 1 of custom track, type is pgSnp but count is not an integer (%s)", row[4]);
 int count = atoi(row[4]);
-if (count < 1) 
+if (count < 1 && type == NULL) 
     return FALSE;
+else if (count < 1) 
+    errAbort("Error line 1 of custom track, type is pgSnp but count is less than 1");
 char pattern[128]; /* include count in pattern */
 safef(pattern, sizeof(pattern), "^[ACTG-]+(\\/[ACTG-]+){%d}$", count - 1);
-if (! matchRegex(row[3], pattern))
+if (! regexMatchNoCase(row[3], pattern) && type == NULL)
     return FALSE;
+else if (! regexMatchNoCase(row[3], pattern))
+    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but allele is invalid %s", count, row[3]);
 safef(pattern, sizeof(pattern), "^[0-9]+(,[0-9]+){%d}$", count - 1);
-if (! matchRegex(row[5], pattern))
+if (! regexMatchNoCase(row[5], pattern) && type == NULL)
     return FALSE;
+else if (! regexMatchNoCase(row[5], pattern))
+    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but frequency is invalid (%s)", count, row[5]);
 safef(pattern, sizeof(pattern), "^[0-9.]+(,[0-9.]+){%d}$", count - 1);
-if (! matchRegex(row[6], pattern))
+if (! regexMatchNoCase(row[6], pattern) && type == NULL)
     return FALSE;
+else if (! regexMatchNoCase(row[6], pattern))
+    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but score is invalid (%s)", count, row[6]);
 /* if get here must be pgSnp format */
 return TRUE;
 }
@@ -889,7 +903,7 @@ if (wordCount == 7)
     {
     track->fieldCount = wordCount;
     char *ctDb = ctGenomeOrCurrent(track);
-    isPgSnp = rowIsPgSnp(row, ctDb);
+    isPgSnp = rowIsPgSnp(row, ctDb, type);
     }
 freeMem(dupe);
 customPpReuse(cpp, line);
@@ -1950,6 +1964,7 @@ if (doExtraChecking)
     }
 if (isNotEmpty(dyErr->string))
     track->networkErrMsg = dyStringCannibalize(&dyErr);
+track->dbTrackType = cloneString("bam");
 return track;
 }
 
@@ -1962,6 +1977,62 @@ static struct customFactory bamFactory =
     bamLoader,
     };
 #endif//def USE_BAM
+
+#ifdef USE_TABIX
+/*** VCF+tabix Factory - client-side Variant Call Format files compressed & indexed by tabix ***/
+
+static boolean vcfTabixRecognizer(struct customFactory *fac, struct customPp *cpp, char *type, 
+				  struct customTrack *track)
+/* Return TRUE if looks like we're handling a vcfTabix track */
+{
+return (sameType(type, "vcfTabix"));
+}
+
+static struct customTrack *vcfTabixLoader(struct customFactory *fac, struct hash *chromHash,
+					  struct customPp *cpp, struct customTrack *track,
+					  boolean dbRequested)
+/* Process the vcfTabix track line. */
+{
+struct hash *settings = track->tdb->settingsHash;
+char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+struct dyString *dyErr = dyStringNew(0);
+if (bigDataUrl == NULL)
+    errAbort("Missing bigDataUrl setting from track of type=vcfTabix (%s)",
+	     track->tdb->shortLabel);
+if (doExtraChecking)
+    {
+    /* protect against temporary network error */
+    int vcfMaxErr = 100;
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	struct vcfFile *vcff = vcfTabixFileMayOpen(bigDataUrl, NULL, 0, 0, vcfMaxErr);
+	if (vcff == NULL)
+	    {
+            dyStringPrintf(dyErr, "Unable to load and/or parse %s's bigDataUrl %s",
+			   track->tdb->shortLabel, bigDataUrl);
+	    }
+	vcfFileFree(&vcff);
+	}
+    errCatchEnd(errCatch);
+    if (isNotEmpty(errCatch->message->string))
+	dyStringPrintf(dyErr, ": %s", errCatch->message->string);
+    errCatchFree(&errCatch);
+    }
+if (isNotEmpty(dyErr->string))
+    track->networkErrMsg = dyStringCannibalize(&dyErr);
+return track;
+}
+
+static struct customFactory vcfTabixFactory = 
+/* Factory for vcfTabix tracks */
+    {
+    NULL,
+    "vcfTabix",
+    vcfTabixRecognizer,
+    vcfTabixLoader,
+    };
+#endif//def USE_TABIX
 
 /*** makeItems Factory - for track where user interactively creates items. ***/
 
@@ -2134,6 +2205,9 @@ if (factoryList == NULL)
 #ifdef USE_BAM
     slAddTail(&factoryList, &bamFactory);
 #endif//def USE_BAM
+#ifdef USE_TABIX
+    slAddTail(&factoryList, &vcfTabixFactory);
+#endif//def USE_TABIX
     slAddTail(&factoryList, &makeItemsFactory);
     }
 }
@@ -2192,8 +2266,14 @@ struct hash *newSettings = hashVarLine(line, lineIx);
 struct hashCookie hc = hashFirst(newSettings);
 struct hashEl *hel = NULL;
 
+/* there is a memory leak in this business because these values in the
+ * existing settings hash were maybe cloned strings and if they get replaced
+ * those previous strings are leaking.  We can't fix this because we don't
+ * know which values in the hash are cloned strings or not.
+ */
 while ((hel = hashNext(&hc)) != NULL)
     ctAddToSettings(track, hel->name, hel->val);
+freeHash(&newSettings);
 
 struct trackDb *tdb = track->tdb;
 struct hash *hash = tdb->settingsHash;
@@ -2203,19 +2283,24 @@ if (hash == NULL) // make sure we have a settings hash
 char *val;
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
+    freeMem(tdb->shortLabel);  // already set by customTrackTdbDefault()
     if (*val)  /* limit shortLabel to 128 characters to avoid problems */
         tdb->shortLabel = cloneStringZ(val,128);
     else
         tdb->shortLabel = cloneString("My Track");
     stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
     stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
+    freeMem(tdb->table);  // already set by customTrackTdbDefault()
     tdb->table = customTrackTableFromLabel(tdb->shortLabel);
+    freeMem(tdb->track);  // already set by customTrackTdbDefault()
     tdb->track = cloneString(tdb->table);
+    freeMem(tdb->longLabel);  // already set by customTrackTdbDefault()
     /* also use name for description, if not specified */
     tdb->longLabel = cloneString(tdb->shortLabel);
     }
 if ((val = hashFindVal(hash, "description")) != NULL)
     {
+    freeMem(tdb->longLabel);  // already set by customTrackTdbDefault() or name
     if (*val)
         tdb->longLabel = cloneString(val);
     else
@@ -2245,6 +2330,8 @@ if ((val = hashFindVal(hash, "htmlFile")) != NULL)
     if (fileExists(val))
         {
 	readInGulp(val, &track->tdb->html, NULL);
+        if (val != track->htmlFile)
+	    freeMem(track->htmlFile);
         track->htmlFile = cloneString(val);
         }
     }
@@ -2305,11 +2392,17 @@ if ((val = hashFindVal(hash, "useScore")) != NULL)
 if ((val = hashFindVal(hash, "priority")) != NULL)
     tdb->priority = atof(val);
 if ((val = hashFindVal(hash, "color")) != NULL)
-    parseRgb(cloneString(val), lineIx, 
-            &tdb->colorR, &tdb->colorG, &tdb->colorB);
+    {
+    char *c = cloneString(val);
+    parseRgb(c, lineIx, &tdb->colorR, &tdb->colorG, &tdb->colorB);
+    freeMem(c);
+    }
 if ((val = hashFindVal(hash, "altColor")) != NULL)
-    parseRgb(cloneString(val), lineIx, 
-            &tdb->altColorR, &tdb->altColorG, &tdb->altColorB);
+    {
+    char *c = cloneString(val);
+    parseRgb(c, lineIx, &tdb->altColorR, &tdb->altColorG, &tdb->altColorB);
+    freeMem(c);
+    }
 else
     {
     /* If they don't explicitly set the alt color make it a lighter version
@@ -2742,13 +2835,17 @@ struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean 
 return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, FALSE);
 }
 
-static void readAndIgnore(char *fileName)
-/* Read a few bytes from fileName, so its access time is updated. */
+static boolean readAndIgnore(char *fileName)
+/* Read a byte from fileName, so its access time is updated. */
 {
+boolean ret = FALSE;
 char buf[256];
-FILE *f = mustOpen(fileName, "r");
-mustGetLine(f, buf, sizeof(buf));
-fclose(f);
+FILE *f = fopen(fileName, "r");
+if ( f && (fread(buf, 1, 1, f) == 1 ) )
+    ret = TRUE;
+if (f)
+    fclose(f);
+return ret;
 }
 
 static boolean testFileSettings(struct trackDb *tdb, char *ctFileName)
@@ -2761,9 +2858,8 @@ struct hashEl *s;
 for (s = fileSettings;  s != NULL;  s = s->next)
     {
     char *fileName = (char *)(s->val);
-    if (fileExists(fileName))
+    if (fileExists(fileName) && readAndIgnore(fileName))
 	{
-	readAndIgnore(fileName);
 	verbose(4, "setting %s: %s\n", s->name, fileName);
 	}
     else
@@ -2787,14 +2883,56 @@ if (url)
     struct slName *el, *list = udcFileCacheFiles(url, udcDefaultDir());
     for (el = list; el; el = el->next)
 	{
-	if (fileExists(el->name))
+	if (fileExists(el->name) && readAndIgnore(el->name))
 	    {
-	    readAndIgnore(el->name);
 	    verbose(4, "setting bigDataUrl: %s\n", el->name);
 	    }
 	}
     slFreeList(&list);
     }
+}
+
+static void freeCustomTrack(struct customTrack **pTrack)
+{
+if (NULL == pTrack)
+    return;
+struct customTrack *track = *pTrack;
+if (NULL == track)
+    return;
+struct trackDb *tdb = track->tdb;
+freeMem(tdb->shortLabel);
+freeMem(tdb->longLabel);
+freeMem(tdb->table);
+freeMem(tdb->track);
+freeMem(tdb->grp);
+freeMem(tdb->type);
+freeMem(tdb->settings);
+if (tdb->restrictList)
+    {
+    freeMem(tdb->restrictList[0]);
+    freeMem(tdb->restrictList);
+    }
+hashFree(&tdb->settingsHash);
+hashFree(&tdb->overrides);
+hashFree(&tdb->extras);
+freeMem(tdb);
+freeMem(track->genomeDb);
+if (track->bedList)
+    bedFreeList(&track->bedList);
+freeMem(track->dbTableName);
+freeMem(track->dbTrackType);
+freeMem(track->dbStderrFile);
+freeMem(track->wigFile);
+freeMem(track->wibFile);
+freeMem(track->wigAscii);
+freeMem(track->htmlFile);
+if (track->gffHelper)
+    gffFileFree(&track->gffHelper);
+if (track->bbiFile)
+    bbiFileClose(&track->bbiFile);
+freeMem(track->groupName);
+freeMem(track->networkErrMsg);
+freez(pTrack);
 }
 
 void customFactoryTestExistence(char *genomeDb, char *fileName, boolean *retGotLive,
@@ -2804,7 +2942,7 @@ void customFactoryTestExistence(char *genomeDb, char *fileName, boolean *retGotL
  * they are alive or have expired.  If they are live, touch them to keep 
  * them active. */
 {
-struct customTrack *trackList = NULL, *track = NULL;
+boolean trackNotFound = TRUE;
 char *line = NULL;
 struct sqlConnection *ctConn = NULL;
 boolean dbTrack = ctDbUseAll();
@@ -2828,6 +2966,7 @@ if (dbTrack)
 /* Loop through this once for each track. */
 while ((line = customPpNextReal(cpp)) != NULL)
     {
+    struct customTrack *track = NULL;
     boolean isLive = TRUE;
     /* Parse out track line and save it in track var.
      * First time through make up track var from thin air
@@ -2839,7 +2978,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
         {
 	track = trackLineToTrack(genomeDb, line, cpp->fileStack->lineIx);
         }
-    else if (trackList == NULL)
+    else if (trackNotFound)
 	/* In this case we handle simple files with a single track
 	 * and no track line. */
         {
@@ -2905,9 +3044,11 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	if (retGotExpired)
 	    *retGotExpired = TRUE;
 	}
-    slAddHead(&trackList, track);
+    freeCustomTrack(&track);
+    trackNotFound = FALSE;
     }
 customPpFree(&cpp);
+freez(&cpp);
 hFreeConn(&ctConn);
 }
 

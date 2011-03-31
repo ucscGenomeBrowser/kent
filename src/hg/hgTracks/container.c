@@ -63,6 +63,15 @@ track->height = totalHeight;
 return totalHeight;
 }
 
+char *parentContainerType(struct track *track)
+/* Determine parent's container type if any or NULL */
+{
+if (track->parent && track->parent->tdb)
+    return trackDbSetting(track->parent->tdb, "container");
+else
+    return NULL;
+}
+
 void makeContainerTrack(struct track *track, struct trackDb *tdb)
 /* Construct track subtrack list from trackDb entry for container tracks. */
 {

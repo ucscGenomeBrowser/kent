@@ -68,7 +68,7 @@ struct users myUser;
 char *showColumns = NULL;
 
 char *defaultColumns =
-    "pqid,qid,priority,qadate,track,dbs,tbls,cgis,files,currLoc,makeDocYN,onlineHelp,ndxYN,stat,sponsor,reviewer,extSource,notes";
+    "pqid,qid,priority,importance,qadate,track,dbs,tbls,cgis,files,currLoc,makeDocYN,onlineHelp,ndxYN,stat,sponsor,reviewer,extSource,notes";
 
 char *newRandState = NULL;    
 char *oldRandState = NULL;    
@@ -76,7 +76,7 @@ char *oldRandState = NULL;
 /*
 "qid,pqid,priority,rank,qadate,newYN,track,dbs,tbls,cgis,files,sizeMB,currLoc,"
 "makeDocYN,onlineHelp,ndxYN,joinerYN,stat,sponsor,reviewer,extSource,openIssues,notes,"
-pushState,initdate,bounces,lockUser,lockDateTime,releaseLog,featureBits,releaseLogUrl";
+pushState,initdate,bounces,lockUser,lockDateTime,releaseLog,featureBits,releaseLogUrl,importance";
 */
 
 /* structural improvements suggested by MarkD:
@@ -129,7 +129,8 @@ static char const *colName[] = {
  "lockUser"  , 
  "lockDateTime",
  "releaseLog", 
- "releaseLogUrl"
+ "releaseLogUrl",
+ "importance"
 };
 
 
@@ -166,6 +167,7 @@ e_lockUser  ,
 e_lockDateTime,
 e_releaseLog,
 e_releaseLogUrl,
+e_importance,
 e_NUMCOLS
 };
 
@@ -203,7 +205,8 @@ char *colHdr[] = {
 "Lock User",
 "Lock&nbsp;Date&nbsp;Time",
 "Release&nbsp;Log",
-"Release&nbsp;Log&nbsp;Url"
+"Release&nbsp;Log&nbsp;Url",
+"Importance"
 };
 
 char *numberToMonth[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
@@ -573,6 +576,7 @@ replaceInStr(html, sizeof(html) , "<!notes>"       , ki->notes     );
 replaceInStr(html, sizeof(html) , "<!initdate>"    , ki->initdate  ); 
 replaceInStr(html, sizeof(html) , "<!releaseLog>"  , ki->releaseLog); 
 replaceInStr(html, sizeof(html) , "<!releaseLogUrl>", ki->releaseLogUrl); 
+replaceSelectOptions("importance", " ,B,L,M,H,U"   , ki->importance  );
 
 replaceInStr(html, sizeof(html) , "<!cb>"          , newRandState  ); 
 
@@ -737,6 +741,7 @@ strftime (q.initdate, sizeof(q.initdate), "%Y-%m-%d", loctime); /* automatically
 safef(q.lastdate, sizeof(q.lastdate), "%s", "" );
 q.releaseLog = "";
 q.releaseLogUrl = "";
+safef(q.importance, sizeof(q.importance), "%s", " ");  /* default importance */
 
 if (sameString(myUser.role,"dev"))
     {
@@ -778,7 +783,7 @@ return replaceChars(s,"\n","<br>\n");
 
 void drawDisplayLine(enum colEnum col, struct pushQ *ki)
 {
-
+char *temp = NULL;
 switch(col)
     {
     case e_qid:
@@ -948,6 +953,23 @@ switch(col)
 	printf("<td>%s</td>\n", ki->releaseLogUrl  );
 	break;
 
+    case e_importance:
+        temp = "";
+        if (sameString(ki->importance, "") || sameString(ki->importance, " "))
+	    temp = "Unprioritized";
+        else if (sameString(ki->importance, "B"))
+	    temp = "Background";
+        else if (sameString(ki->importance, "L"))
+	    temp = "Low";
+        else if (sameString(ki->importance, "M"))
+	    temp = "Medium";
+        else if (sameString(ki->importance, "H"))
+	    temp = "High";
+        else if (sameString(ki->importance, "U"))
+	    temp = "Urgent";
+	printf("<td>%s</td>\n", temp );
+	break;
+	
     default:
 	errAbort("drawDisplayLine: unexpected case enum %d.",col);
 	
@@ -1370,7 +1392,7 @@ void pushQUpdateEscaped(struct sqlConnection *conn, struct pushQ *el, char *tabl
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *featureBits, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lastdate, *lockUser, *lockDateTime, *releaseLog, *releaseLogUrl;
+char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *featureBits, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lastdate, *lockUser, *lockDateTime, *releaseLog, *releaseLogUrl, *importance;
 qid = sqlEscapeString(el->qid);
 pqid = sqlEscapeString(el->pqid);
 priority = sqlEscapeString(el->priority);
@@ -1400,6 +1422,7 @@ lockUser = sqlEscapeString(el->lockUser);
 lockDateTime = sqlEscapeString(el->lockDateTime);
 releaseLog = sqlEscapeString(el->releaseLog);
 releaseLogUrl = sqlEscapeString(el->releaseLogUrl);
+importance = sqlEscapeString(el->importance);
 
 /* had to split this up because dyStringPrintf only up to 4000 chars at one time */
 dyStringPrintf(update, 
@@ -1418,9 +1441,9 @@ dyStringPrintf(update, "sizeMB=%u,currLoc='%s',"
     sponsor,  reviewer,  extSource);
 dyStringPrintf(update, "openIssues='%s',",openIssues);
 dyStringPrintf(update, "notes='%s',",notes);
-dyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s',featureBits='%s',releaseLogUrl='%s' "
+dyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s',featureBits='%s',releaseLogUrl='%s',importance='%s' "
 	"where qid='%s'", 
-	pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, featureBits, releaseLogUrl,
+	pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, featureBits, releaseLogUrl, importance,
 	qid
 	);
 
@@ -1454,6 +1477,7 @@ freez(&lockUser);
 freez(&lockDateTime);
 freez(&releaseLog);
 freez(&releaseLogUrl);
+freez(&importance);
 }
 
 void getCgiData(bool *isOK, bool isPtr, void *ptr, int size, char *name)
@@ -1619,6 +1643,7 @@ getCgiData(&isOK, FALSE, q->newYN     , sizeof(q->newYN     ), "newYN"     );
 getCgiData(&isOK, FALSE, q->makeDocYN , sizeof(q->makeDocYN ), "makeDocYN" );
 getCgiData(&isOK, FALSE, q->ndxYN     , sizeof(q->ndxYN     ), "ndxYN"     );
 getCgiData(&isOK, FALSE, q->joinerYN  , sizeof(q->joinerYN  ), "joinerYN"  );
+getCgiData(&isOK, FALSE, q->importance, sizeof(q->importance), "importance"  );
 
 /* chr(255) strings */
 getCgiData(&isOK, TRUE ,&q->track     , 256                 , "track"     );
@@ -1654,7 +1679,7 @@ if (!isOK)
     {
     isRedo = TRUE;
     }
-if ((q->sizeMB < 0) || (q->sizeMB > 1000000))
+if ((q->sizeMB < 0) || (q->sizeMB > 100000000))
     {
     safef(msg,sizeof(msg),"Size(MB): invalid size. <br>\n");
     isRedo = TRUE;
@@ -3186,6 +3211,7 @@ printf("CANCEL - click to return to main display without saving changes.<br>\n")
 printf("HELP - click to see this help.<br>\n");
 printf("<br>\n");
 printf("Initial submission - displays date automatically generated when push queue record is created.<br>\n");
+printf("Importance - from Redmine.<br>\n");
 printf("Date Opened - date QA (re)opened. (YYYY-MM-DD) Defaults originally to current date to save typing.<br>\n");
 printf("New track? - choose Y if this is a new track (i.e. has never before appeared on beta).<br>\n");
 printf("Track - enter the track name as it will appear in the genome browser (use the shortLabel).<br>\n");

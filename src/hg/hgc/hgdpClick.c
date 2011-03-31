@@ -346,19 +346,34 @@ if (!fileExists(psxy) || !fileExists(ps2raster) || !fileExists(ghostscript))
 return TRUE;
 }
 
-void hgdpGeoImg(struct hgdpGeo *geo)
-/* Generate a PNG image: world map with pie charts for population allele frequencies. */
+static void getTrashFileNames(char *rsId, char epsFile[PATH_LEN], char pdfFile[PATH_LEN],
+			      char pngFile[PATH_LEN])
+/* Get stable trash file names (always in trash/hgc, based on geo->name so we can reuse). */
 {
-if (! canMakeImages())
-    return;
 struct tempName tn;
 trashDirFile(&tn, "hgc", "", "");
 char trashDir[FILENAME_LEN];
 splitPath(tn.forCgi, trashDir, NULL, NULL);
+safef(epsFile, PATH_LEN, "%shgdpGeo_%s.eps", trashDir, rsId);
+safef(pdfFile, PATH_LEN, "%shgdpGeo_%s.pdf", trashDir, rsId);
+safef(pngFile, PATH_LEN, "%shgdpGeo_%s.png", trashDir, rsId);
+}
+
+char *hgdpPngFilePath(char *rsId)
+/* Return the stable PNG trash-cached image path for rsId. */
+{
+char epsFile[PATH_LEN], pdfFile[PATH_LEN], pngFile[PATH_LEN];
+getTrashFileNames(rsId, epsFile, pdfFile, pngFile);
+return cloneString(pngFile);
+}
+
+void hgdpGeoImg(struct hgdpGeo *geo)
+/* Generate image as PNG, PDF, EPS: world map with pie charts for population allele frequencies. */
+{
+if (! canMakeImages())
+    return;
 char geoSnpEpsFile[PATH_LEN], geoSnpPdfFile[PATH_LEN], geoSnpPngFile[PATH_LEN];
-safef(geoSnpEpsFile, sizeof(geoSnpEpsFile), "%shgdpGeo_%s.eps", trashDir, geo->name);
-safef(geoSnpPdfFile, sizeof(geoSnpPdfFile), "%shgdpGeo_%s.pdf", trashDir, geo->name);
-safef(geoSnpPngFile, sizeof(geoSnpPngFile), "%shgdpGeo_%s.png", trashDir, geo->name);
+getTrashFileNames(geo->name, geoSnpEpsFile, geoSnpPdfFile, geoSnpPngFile);
 if (! (fileExists(geoSnpEpsFile) && fileExists(geoSnpPdfFile) && fileExists(geoSnpPngFile)))
     generateImgFiles(geo, geoSnpEpsFile, geoSnpPdfFile, geoSnpPngFile);
 
@@ -403,25 +418,21 @@ safef(query, sizeof(query),
       "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
       tdb->table, item, seqName, start);
 sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct hgdpGeo geo;
-    hgdpGeoStaticLoad(row+hasBin, &geo);
-    printCustomUrl(tdb, item, TRUE);
-    bedPrintPos((struct bed *)&geo, 4, tdb);
-    printf("<B>Ancestral Allele:</B> %c<BR>\n", geo.ancestralAllele);
-    printf("<B>Derived Allele:</B> %c<BR>\n", geo.derivedAllele);
-    printf("<BR>\n");
-    printf("<TABLE><TR><TD>\n");
-    hgdpGeoFreqTable(&geo);
-    printf("</TD><TD valign=top>\n");
-    hgdpGeoImg(&geo);
-    printf("</TD></TR></TABLE>\n");
-    }
-else
+if ((row = sqlNextRow(sr)) == NULL)
     errAbort("doHgdpGeo: no match in %s for %s at %s:%d", tdb->table, item, seqName, start);
-
+struct hgdpGeo *geo = hgdpGeoLoad(row+hasBin);
 sqlFreeResult(&sr);
+printCustomUrl(tdb, item, TRUE);
+bedPrintPos((struct bed *)geo, 4, tdb);
+printf("<B>Ancestral Allele:</B> %c<BR>\n", geo->ancestralAllele);
+printf("<B>Derived Allele:</B> %c<BR>\n", geo->derivedAllele);
+printOtherSnpMappings(tdb->table, item, start, conn, hasBin);
+printf("<BR>\n");
+printf("<TABLE><TR><TD>\n");
+hgdpGeoFreqTable(geo);
+printf("</TD><TD valign=top>\n");
+hgdpGeoImg(geo);
+printf("</TD></TR></TABLE>\n");
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }

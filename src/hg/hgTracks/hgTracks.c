@@ -38,7 +38,10 @@
 #include "bigBed.h"
 #include "bigWig.h"
 #include "bedCart.h"
+#include "udc.h"
 #include "customTrack.h"
+#include "trackHub.h"
+#include "hubConnect.h"
 #include "cytoBand.h"
 #include "ensFace.h"
 #include "liftOver.h"
@@ -52,6 +55,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 #include "searchTracks.h"
+#include "errCatch.h"
 
 static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
@@ -110,13 +114,30 @@ boolean ideogramToo =  FALSE;           /* caller wants the ideoGram (when reque
  * position string */
 struct hgPositions *hgp = NULL;
 
-
 /* Other global variables. */
+struct trackHub *hubList = NULL;	/* List of all relevant hubs. */
 struct group *groupList = NULL;    /* List of all tracks. */
-char *browserName;              /* Test or public browser */
+char *browserName;              /* Test, preview, or public browser */
 char *organization;             /* UCSC */
 
 struct hash *trackHash = NULL; /* Hash of the tracks by their name. */
+
+#ifdef DEBUG
+void uglySnoopTrackList(int depth, struct track *trackList)
+/* Print out some info on track list. */
+{
+struct track *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (stringIn("FaireH1h", track->track))
+	{
+	repeatCharOut(uglyOut, '+', depth);
+        uglyf("%s pri=%g defPri=%g<BR>\n", track->track, track->priority, track->defaultPriority);
+	}
+    uglySnoopTrackList(depth+1, track->subtracks);
+    }
+}
+#endif /* DEBUG */
 
 struct track *trackFindByName(struct track *tracks, char *trackName)
 /* find a track in tracks by name, recursively searching subtracks */
@@ -381,11 +402,8 @@ if (!IS_KNOWN(track->remoteDataSource))
     //    if (!startsWith("/gbdb/",track->bbiFile->fileName))
     //        SET_TO_YES(track->remoteDataSource);
     //    }
-    if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type))
-        {
-        SET_TO_YES(track->remoteDataSource);
-        }
-    else if (startsWithWord("bam",track->tdb->type))
+    if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type) ||
+	startsWithWord("bam",track->tdb->type) || startsWithWord("vcfTabix", track->tdb->type))
         {
         SET_TO_YES(track->remoteDataSource);
         }
@@ -2001,7 +2019,7 @@ for (track = trackList; track != NULL; track = track->next)
 
             // subtrack vis can be explicit or inherited from composite/view.  Then it could be limited because of pixel height
             limitedVisFromComposite(subtrack);
-            assert(subtrack->limitedVisSet);
+            //assert(subtrack->limitedVisSet); // This is no longer a valid assertion, since visible track with no items items will not have limitedVisSet
 
             if (subtrack->limitedVis != tvHide)
                 {
@@ -2291,7 +2309,7 @@ if (withGuidelines)
         safef(base,sizeof(base),"blueLines%d-%s%d-%d",pixWidth,(revCmplDisp?"r":""),insideX,guidelineSpacing);  // reusable file needs width, leftLabel start and guidelines
         exists = trashDirReusableFile(&gifBg, "hgt", base, ".png");
         if (exists && cgiVarExists("hgt.reset")) // exists means don't remake bg image.
-            exists = TRUE;                       // However, for the time being, rebuild when user presses "default tracks"
+            exists = FALSE;                       // However, for the time being, rebuild when user presses "default tracks"
 
         if (!exists)
             {
@@ -2939,11 +2957,11 @@ char *ctMapItemName(struct track *tg, void *item)
 /* Return composite item name for custom tracks. */
 {
 char *itemName = tg->itemName(tg, item);
-static char buf[256];
+static char buf[512];
 if (strlen(itemName) > 0)
-  sprintf(buf, "%s %s", ctFileName, itemName);
+    safef(buf, sizeof(buf), "%s %s", ctFileName, itemName);
 else
-  sprintf(buf, "%s NoItemName", ctFileName);
+    safef(buf, sizeof(buf), "%s NoItemName", ctFileName);
 return buf;
 }
 
@@ -3121,6 +3139,15 @@ else if (sameString(type, "bam"))
     hashAdd(tdb->settingsHash, INDEL_POLY_A, cloneString("on"));
     hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
     }
+else if (sameString(type, "vcfTabix"))
+    {
+    tg = trackFromTrackDb(tdb);
+    tg->customPt = ct;
+    vcfTabixMethods(tg);
+    if (trackShouldUseAjaxRetrieval(tg))
+        tg->loadItems = dontLoadItems;
+    tg->mapItemName = ctMapItemName;
+    }
 else if (sameString(type, "makeItems"))
     {
     tg = trackFromTrackDb(tdb);
@@ -3290,39 +3317,63 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
-void addTracksFromDataHub(char *hubUrl, struct track **pTrackList)
+static void addTracksFromTrackHub(int id, char *hubUrl, struct track **pTrackList,
+	struct trackHub **pHubList)
 /* Load up stuff from data hub and append to list. The hubUrl points to
  * a trackDb.ra format file.  */
 {
-/* Squirrel away hub directory for later. */
-char hubDir[PATH_LEN];
-splitPath(hubUrl, hubDir, NULL, NULL);
-
 /* Load trackDb.ra file and make it into proper trackDb tree */
-struct trackDb *tdb, *tdbList = trackDbFromRa(hubUrl, NULL);
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-     {
-     trackDbFieldsFromSettings(tdb);
-     trackDbPolish(tdb);
-     }
-trackDbLinkUpGenerations(tdbList);
-addTdbListToTrackList(tdbList, NULL, pTrackList);
+char hubName[8];
+safef(hubName, sizeof(hubName), "hub_%d",id);
+struct trackHub *hub = trackHubOpen(hubUrl, hubName);
+if (hub != NULL)
+    {
+    struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
+    if (hubGenome != NULL)
+	{
+	struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
+	tdbList = trackDbLinkUpGenerations(tdbList);
+	tdbList = trackDbPolishAfterLinkup(tdbList, database);
+	trackDbPrioritizeContainerItems(tdbList);
+	addTdbListToTrackList(tdbList, NULL, pTrackList);
+	if (tdbList != NULL)
+	    slAddHead(pHubList, hub);
+	}
+    }
 }
 
-void loadDataHubs(struct track **pTrackList)
-/* Load up stuff from data hubs and append to list. */
+void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
+/* Load up stuff from data hubs and append to lists. */
 {
-char *dataHubs = cloneString(cartUsualString(cart, "dataHubs", NULL));
-if (dataHubs == NULL)
-    return;
-int hubCount = chopByWhite(dataHubs, NULL, 10);
-char *hubArrays[hubCount];
-chopByWhite(dataHubs, hubArrays, hubCount);
-int i;
-for (i = 0; i<hubCount; ++i)
+struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCart(cart);
+for (hub = hubList; hub != NULL; hub = hub->next)
     {
-    addTracksFromDataHub(hubArrays[i], pTrackList);
+    if (isEmpty(hub->errorMessage))
+	{
+
+        /* error catching in so it won't just abort  */
+        struct errCatch *errCatch = errCatchNew();
+        if (errCatchStart(errCatch))
+	    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
+        errCatchEnd(errCatch);
+        if (errCatch->gotError)
+	    {
+	    struct sqlConnection *conn = hConnectCentral();
+	    char query[256];
+	    safef(query, sizeof(query),
+		"update %s set errorMessage=\"%s\", lastNotOkTime=now() where id=%d"
+		, hubConnectTableName
+		, errCatch->message->string
+		, hub->id
+		);
+	    sqlUpdate(conn, query);
+	    hDisconnectCentral(&conn);
+	    }
+        errCatchFree(&errCatch);
+
+	}
     }
+hubConnectStatusFreeList(&hubList);
 }
 
 boolean restrictionEnzymesOk()
@@ -3456,7 +3507,7 @@ if (hgPcrOk(database))
 if (!psOutput)
     {
     hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\" class=\"topbar\">"
-        " %s </A>&nbsp;&nbsp;</TD>",  hgcNameAndSettings(),
+        "%s</A>&nbsp;&nbsp;</TD>",  hgcNameAndSettings(),
         winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
     }
 
@@ -3717,8 +3768,8 @@ if (!tdbIsSuper(tdb))
 return (tdb->visibility != tvHide);
 }
 
-static void groupTracks(struct track **pTrackList, struct group **pGroupList,
-                                int vis)
+static void groupTracks(struct trackHub *hubList, struct track **pTrackList,
+	struct group **pGroupList, int vis)
 /* Make up groups and assign tracks to groups.
  * If vis is -1, restore default groups to tracks. */
 {
@@ -3729,12 +3780,14 @@ struct track *track;
 struct trackRef *tr;
 struct grp* grps = hLoadGrps(database);
 struct grp *grp;
+float maxPriority = 0;
 
 /* build group objects from database. */
 for (grp = grps; grp != NULL; grp = grp->next)
     {
     /* deal with group reordering */
     float priority = grp->priority;
+    if (priority > maxPriority) maxPriority = priority;
     if (withPriorityOverride)
         {
         char cartVar[512];
@@ -3755,6 +3808,21 @@ for (grp = grps; grp != NULL; grp = grp->next)
     hashAdd(hash, grp->name, group);
     }
 grpFreeList(&grps);
+
+/* build group objects from hub */
+    {
+    struct trackHub *hub;
+    for (hub = hubList; hub != NULL; hub = hub->next)
+        {
+	AllocVar(group);
+	group->name = cloneString(hub->name);
+	group->label = cloneString(hub->shortLabel);
+	group->defaultPriority = group->priority = maxPriority;
+	maxPriority += 1;
+	slAddHead(&list, group);
+	hashAdd(hash, group->name, group);
+	}
+    }
 
 /* Loop through tracks and fill in their groups.
  * If necessary make up an unknown group. */
@@ -4009,11 +4077,10 @@ if (wikiTrackEnabled(database, NULL))
     wikiDisconnect(&conn);
     }
 
-#ifdef SOON
-loadDataHubs(&trackList);
-#endif /* SOON */
+loadTrackHubs(&trackList, &hubList);
+slReverse(&hubList);
 loadCustomTracks(&trackList);
-groupTracks(&trackList, pGroupList, vis);
+groupTracks(hubList, &trackList, pGroupList, vis);
 setSearchedTrackToPackOrFull(trackList);
 if (cgiOptionalString( "hideTracks"))
     changeTrackVis(groupList, NULL, tvHide);
@@ -4047,6 +4114,7 @@ for (track = trackList; track != NULL; track = track->next)
     }
 if (measureTiming)
     uglyTime("getTrackList");
+
 return trackList;
 }
 
@@ -4309,6 +4377,9 @@ if (psOutput != NULL)
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
 hPrintf("<input type='hidden' id='hgt.insideX' name='insideX' value='%d'>\n", insideX);
 hPrintf("<input type='hidden' id='hgt.revCmplDisp' name='revCmplDisp' value='%d'>\n", revCmplDisp);
+#ifdef NEW_JQUERY
+hPrintf("<input type='hidden' id='hgt.newJQuery' name='hgt.newJQuery' value='1'>\n");
+#endif
 if (!psOutput) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
@@ -4325,10 +4396,6 @@ if (measureTiming)
     uglyTime("Time before getTrackList");
 trackList = getTrackList(&groupList, defaultTracks ? -1 : -2);
 makeGlobalTrackHash(trackList);
-#ifdef SOON
-if (measureTiming)
-    uglyTime("getTrackList");
-#endif /* SOON */
 
 // honor defaultImgOrder
 if(cgiVarExists("hgt.defaultImgOrder"))
@@ -5503,6 +5570,9 @@ if (hIsGisaidServer())
     }
 
 setUdcCacheDir();
+int timeout = cartUsualInt(cart, "udcTimeout", 300);
+if (udcCacheTimeout() < timeout)
+    udcSetCacheTimeout(timeout);
 
 initTl();
 measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
@@ -5529,8 +5599,12 @@ if(dragZooming)
     {
     jsIncludeFile("jquery.imgareaselect.js", NULL);
     jsIncludeFile("ajax.js", NULL);
+#ifdef NEW_JQUERY
+    webIncludeResourceFile("jquery.ui.autocomplete.css");
+#else
     webIncludeResourceFile("autocomplete.css");
     jsIncludeFile("jquery.autocomplete.js", NULL);
+#endif
     jsIncludeFile("autocomplete.js", NULL);
     }
 jsIncludeFile("hgTracks.js", NULL);
@@ -5541,11 +5615,17 @@ jsIncludeFile("lowetooltip.js", NULL);
 
 if(advancedJavascriptFeaturesEnabled(cart))
     {
-webIncludeResourceFile("jquery.contextmenu.css");
-webIncludeResourceFile("jquery-ui.css");
-#ifdef CONTEXT_MENU
-jsIncludeFile("jquery.contextmenu.js", NULL);
-#endif/// def CONTEXT_MENU
+    webIncludeResourceFile("jquery-ui.css");
+    if (sameString(cartUsualString(cart, TRACK_SEARCH,"0"),"0")) // NOT doing search
+        {
+        webIncludeResourceFile("jquery.contextmenu.css");
+        jsIncludeFile("jquery.contextmenu.js", NULL);
+        webIncludeResourceFile("ui.dropdownchecklist.css");
+#ifndef NEW_JQUERY
+        jsIncludeFile("ui.core.js", NULL);
+#endif
+        jsIncludeFile("ui.dropdownchecklist.js", NULL);
+        }
     }
 jsIncludeFile("jquery-ui.js", NULL);
 
@@ -5559,6 +5639,10 @@ if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");
     chromInfoPage();
+    }
+else if (differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0"))
+    {
+    doSearchTracks(groupList);
     }
 else if (sameWord(configPageCall, "configure") ||
     sameWord(configPageCall, "configure tracks and display"))
@@ -5616,10 +5700,6 @@ else if (cartVarExists(cart, configShowEncodeGroups))
         if (startsWith("encode", grp->name))
             collapseGroup(grp->name, FALSE);
     configPageSetTrackVis(-2);
-    }
-else if (differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0"))
-    {
-    doSearchTracks(groupList);
     }
 else
     {

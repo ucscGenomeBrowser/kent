@@ -59,15 +59,33 @@ export MYSQLINC="/usr/include/mysql"
 # If your mysql is SSL enabled, use the -lssl:
 # export MYSQLLIBS="/usr/lib64/mysql/libmysqlclient.a -lssl -lz"
 
-# BAM optional behavior for the genome browser, see also:
+# You may need to specify the location of your png library if
+#	it is not in any of: /usr/lib/libpng.a /usr/lib64/libpng.a
+#	and your compiler can't find it when specified as: -lpng
+# export PNGLIB="/opt/local/lib/libpng.a"
+# export PNGINCL"-I/opt/local/include/libpng12"
+
+# Optional support of the BAM file format, see also:
 #	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
+#	You will need to install the samtools library from
+#	http://sourceforge.net/projects/samtools/files/samtools/
 # export USE_BAM=1
 # export KNETFILE_HOOKS=1
-# if you want to set USE_BAM, you will need the samtools.  See also:
-#	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
-# export SAMDIR=${BROWSERHOME}/samtools-0.1.8
+# export SAMDIR=${BROWSERHOME}/samtools-0.1.11
 # export SAMINC=${SAMDIR}
 # export SAMLIB=${SAMDIR}/libbam.a
+# Optional support of the tabix compression and binary index format
+#	(required for support of the VCF file format),
+#	analogous to configuration of samtools above, see;
+#	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
+#	You will need to install the tabix library from
+#	http://sourceforge.net/projects/samtools/files/tabix/
+# export USE_TABIX=1
+# export KNETFILE_HOOKS=1
+# export TABIXDIR=${BROWSERHOME}/tabix-0.2.3
+# export TABIXINC=${TABIXDIR}
+# export TABIXLIB=${TABIXDIR}/libtabix.a
+
 export ENCODE_PIPELINE_BIN="${BINDIR}"
 # protect these scripts by specifying the single machine on which they
 #	should run and the single user name which should be running them.

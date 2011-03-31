@@ -1,3 +1,8 @@
+metaObject wgEncodeDukeAffyExon
+objType composite
+composite wgEncodeDukeAffyExon
+expVars lab,dataType,cell,treatment
+
 metaObject wgEncodeDukeAffyExon8988tSimpleSignalRep1
 objType table
 cell 8988T
@@ -13,7 +18,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExon8988tSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -33,7 +38,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExon8988tSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -53,7 +58,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep1
 treatment serum_free_media
 view SimpleSignal
@@ -73,7 +78,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep2
 treatment serum_free_media
 view SimpleSignal
@@ -93,7 +98,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonAosmcSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -113,7 +118,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonAosmcSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -133,7 +138,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep1
 treatment TGFb
 view SimpleSignal
@@ -153,7 +158,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep2
 treatment TGFb
 view SimpleSignal
@@ -174,7 +179,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonAstrocySimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -195,7 +200,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonAstrocySimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -216,7 +221,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonChorionSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -236,7 +241,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonCllSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -256,7 +261,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonCllSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -277,7 +282,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonFibroblSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -298,7 +303,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonFibroblSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -318,7 +323,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonFibropSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -338,7 +343,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonFibropSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -358,7 +363,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonFibropSimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -379,7 +384,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGlioblaSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -400,7 +405,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGlioblaSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -420,7 +425,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGlioblaSimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -440,7 +445,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 4
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGlioblaSimpleSignalRep4
 treatment None
 view SimpleSignal
@@ -461,7 +466,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm12878SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -482,7 +487,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm12878SimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -503,7 +508,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm12878SimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -524,7 +529,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm12891SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -545,7 +550,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm12891SimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -566,7 +571,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm12892SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -587,7 +592,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm12892SimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -608,7 +613,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm18507SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -629,7 +634,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm18507SimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -650,7 +655,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm18507SimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -671,7 +676,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm19238SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -692,7 +697,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm19238SimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -713,7 +718,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm19239SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -734,7 +739,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm19239SimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -755,7 +760,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm19240SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -776,7 +781,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonGm19240SimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -796,7 +801,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonH1hescSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -816,7 +821,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonH1hescSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -836,7 +841,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonH1hescSimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -856,7 +861,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 4
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonH1hescSimpleSignalRep4
 treatment None
 view SimpleSignal
@@ -876,7 +881,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonH9esSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -897,7 +902,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep1
 treatment IFNa4h
 view SimpleSignal
@@ -918,7 +923,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep2
 treatment IFNa4h
 view SimpleSignal
@@ -939,7 +944,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep1
 treatment IFNg4h
 view SimpleSignal
@@ -960,7 +965,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep2
 treatment IFNg4h
 view SimpleSignal
@@ -981,7 +986,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHelas3SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1002,7 +1007,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHelas3SimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1023,7 +1028,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHelas3SimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -1043,7 +1048,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHepatocytesSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1063,7 +1068,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHepatocytesSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1084,7 +1089,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHepg2SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1105,7 +1110,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHepg2SimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1126,7 +1131,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHepg2SimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -1147,7 +1152,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHmecSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1168,7 +1173,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHmecSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1188,7 +1193,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1208,7 +1213,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1228,7 +1233,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHsmmSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1248,7 +1253,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHsmmSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1268,7 +1273,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHsmmSimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -1288,7 +1293,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHsmmtSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1308,7 +1313,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHsmmtSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1328,7 +1333,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHsmmtSimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -1348,7 +1353,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHtr8SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1368,7 +1373,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHtr8SimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1388,7 +1393,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHuh75SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1408,7 +1413,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHuh7SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1429,7 +1434,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHuvecSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1450,7 +1455,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonHuvecSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1470,7 +1475,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonIpsSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1490,7 +1495,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonIpsSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1510,7 +1515,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonIpsSimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -1521,7 +1526,7 @@ cell K562
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-12-14
+dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonK562SimpleSignalRep1.broadPeak.gz
 grant Crawford
@@ -1530,7 +1535,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonK562SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1541,7 +1546,7 @@ cell K562
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-12-14
+dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonK562SimpleSignalRep2.broadPeak.gz
 grant Crawford
@@ -1550,7 +1555,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonK562SimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1561,7 +1566,7 @@ cell K562
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-12-14
+dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonK562SimpleSignalRep3.broadPeak.gz
 grant Crawford
@@ -1570,7 +1575,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonK562SimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -1591,7 +1596,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep1
 treatment androgen
 view SimpleSignal
@@ -1611,7 +1616,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep2
 treatment androgen
 view SimpleSignal
@@ -1632,7 +1637,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonLncapSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1653,7 +1658,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonLncapSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1674,7 +1679,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep1
 treatment estrogen
 view SimpleSignal
@@ -1695,7 +1700,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep2
 treatment estrogen
 view SimpleSignal
@@ -1716,7 +1721,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMcf7SimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1737,7 +1742,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep1
 treatment vehicle
 view SimpleSignal
@@ -1758,7 +1763,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep2
 treatment vehicle
 view SimpleSignal
@@ -1779,7 +1784,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMedulloSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1800,7 +1805,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMedulloSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1820,7 +1825,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMedulloSimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -1840,7 +1845,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMelanoSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1860,7 +1865,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMelanoSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1880,7 +1885,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMelanoSimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -1900,7 +1905,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 4
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMelanoSimpleSignalRep4
 treatment None
 view SimpleSignal
@@ -1920,7 +1925,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMyometrSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1940,7 +1945,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonMyometrSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -1961,7 +1966,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonNhekSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -1982,7 +1987,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonNhekSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -2003,7 +2008,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonOsteoblSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -2024,7 +2029,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonOsteoblSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -2044,7 +2049,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 3
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonOsteoblSimpleSignalRep3
 treatment None
 view SimpleSignal
@@ -2065,7 +2070,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonProgfibSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -2086,7 +2091,7 @@ labVersion 1.0
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonProgfibSimpleSignalRep2
 treatment None
 view SimpleSignal
@@ -2106,7 +2111,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonStellateSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -2126,7 +2131,7 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonUrotsaSimpleSignalRep1
 treatment None
 view SimpleSignal
@@ -2146,9 +2151,9 @@ labVersion 1.0
 origAssembly hg19
 project wgEncode
 replicate 1
-subId 3081
+subId 3200
 tableName wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1
 treatment UT189
 view SimpleSignal
 
-# MAGIC: -512591429
+# MAGIC: -57629055

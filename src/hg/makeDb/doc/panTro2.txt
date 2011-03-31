@@ -3396,3 +3396,16 @@ TMPDIR=/scratch/tmp
     hgsql panTro2 -e "INSERT INTO grp VALUES ('denisova', 'Denisova Assembly and Analysis', 6.6);"
 
 ############################################################################
+# construct liftOver to panTro3 (DONE - 2011-02-22 - Hiram) 
+    cd /hive/data/genomes/panTro2/bed
+    mkdir blat.panTro3.2011-02-22
+    cd blat.panTro3.2011-02-22
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev panTro2 panTro3 > do.log 2>&1
+    #	real    84m22.796s
+
+    # check /gbdb/panTro2/liftOver for new file there to panTro3
+    # verify convert functions on genome-test panTro2 to panTro3
+    # and file is present on htdocs-hgdownload/goldenPath/panTro2/liftOver
+
+############################################################################

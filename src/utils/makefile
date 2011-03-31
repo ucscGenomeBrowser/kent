@@ -32,6 +32,12 @@ test:
 	cd pslLiftSubrangeBlat && ${MAKE} test
 
 clean:
+	@for D in $(USE_DIRS) x; do \
+	  if test "$$D" != "x" ; then \
+	    ( cd $$D && echo $$D && $(MAKE) clean ) ;\
+	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
+	    fi ;\
+	done
 	touch non-empty-rm.o
 	- find . -name \*.o -print | xargs rm
 
@@ -50,11 +56,18 @@ DIRS = \
 	ave \
 	aveCols \
 	bedClip \
+	bedCommonRegions \
+	bedGeneParts \
 	bedGraphToBigWig \
+	bedRemoveOverlap \
+	bedRestrictToPositions \
 	bedToBigBed \
+	bigBedInfo \
 	bigBedSummary \
 	bigBedToBed \
+	bigWigAverageOverBed \
 	bigWigInfo \
+	bigWigMerge \
 	bigWigSummary \
 	bigWigToBedGraph \
 	bigWigToWig \
@@ -63,6 +76,7 @@ DIRS = \
 	catUncomment \
 	ccCp \
 	chopFaLines \
+	colTransform \
 	countChars \
 	convolve \
 	cvsTools \

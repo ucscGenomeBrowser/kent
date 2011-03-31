@@ -17,6 +17,8 @@
 #include "cheapcgi.h"
 #include "https.h"
 #include "sqlNum.h"
+#include <utime.h>
+#include "obscure.h"
 
 static char const rcsid[] = "$Id: net.c,v 1.80 2010/04/14 07:42:06 galt Exp $";
 
@@ -34,12 +36,17 @@ if (sd < 0)
 return sd;
 }
 
-
-int netConnect(char *hostName, int port)
-/* Start connection with a server. */
+static int netConnectWithTimeout(char *hostName, int port, long msTimeout)
+/* In order to avoid a very long default timeout (several minutes) for hosts that will
+ * not answer the port, we are forced to connect non-blocking.
+ * After the connection has been established, we return to blocking mode. */
 {
-int sd, err;
+int sd;
 struct sockaddr_in sai;		/* Some system socket info. */
+int res;
+fd_set mySet;
+struct timeval lTime;
+long fcntlFlags;
 
 if (hostName == NULL)
     {
@@ -50,13 +57,97 @@ if (!internetFillInAddress(hostName, port, &sai))
     return -1;
 if ((sd = netStreamSocket()) < 0)
     return sd;
-if ((err = connect(sd, (struct sockaddr*)&sai, sizeof(sai))) < 0)
-   {
-   errnoWarn("Couldn't connect to %s %d", hostName, port);
-   close(sd);
-   return err;
-   }
+
+// Set non-blocking
+if ((fcntlFlags = fcntl(sd, F_GETFL, NULL)) < 0) 
+    {
+    warn("Error fcntl(..., F_GETFL) (%s)\n", strerror(errno));
+    close(sd);
+    return -1;
+    }
+fcntlFlags |= O_NONBLOCK;
+if (fcntl(sd, F_SETFL, fcntlFlags) < 0) 
+    {
+    warn("Error fcntl(..., F_SETFL) (%s)\n", strerror(errno));
+    close(sd);
+    return -1;
+    }
+
+// Trying to connect with timeout
+res = connect(sd, (struct sockaddr*) &sai, sizeof(sai));
+if (res < 0)
+    {
+    if (errno == EINPROGRESS)
+	{
+	while (1) 
+	    {
+	    lTime.tv_sec = (long) (msTimeout/1000);
+	    lTime.tv_usec = (long) (((msTimeout/1000)-lTime.tv_sec)*1000000);
+	    FD_ZERO(&mySet);
+	    FD_SET(sd, &mySet);
+	    res = select(sd+1, NULL, &mySet, &mySet, &lTime);
+	    if (res < 0) 
+		{
+		if (errno != EINTR) 
+		    {
+		    warn("Error in select() during TCP non-blocking connect %d - %s\n", errno, strerror(errno));
+		    close(sd);
+		    return -1;
+		    }
+		}
+	    else if (res > 0)
+		{
+		// Socket selected for write when it is ready
+		// We simply re-do the connect call and get the result
+		res = connect(sd, (struct sockaddr*) &sai, sizeof(sai));
+		if (res < 0)
+		    {
+		    warn("Error in TCP non-blocking connect() %d - %s\n", errno, strerror(errno));
+		    close(sd);
+		    return -1;
+		    }
+		break;
+		}
+	    else
+		{
+		warn("TCP non-blocking connect() timed-out in select() after %ld milliseconds - Cancelling!\n", msTimeout);
+		close(sd);
+		return -1;
+		}
+	    }
+	}
+    else
+	{
+	warn("TCP non-blocking connect() error %d - %s\n", errno, strerror(errno));
+	close(sd);
+	return -1;
+	}
+    }
+
+// Set to blocking mode again
+if ((fcntlFlags = fcntl(sd, F_GETFL, NULL)) < 0)
+    {
+    warn("Error fcntl(..., F_GETFL) (%s)\n", strerror(errno));
+    close(sd);
+    return -1;
+    }
+fcntlFlags &= (~O_NONBLOCK);
+if (fcntl(sd, F_SETFL, fcntlFlags) < 0)
+    {
+    warn("Error fcntl(..., F_SETFL) (%s)\n", strerror(errno));
+    close(sd);
+    return -1;
+    }
+
 return sd;
+
+}
+
+
+int netConnect(char *hostName, int port)
+/* Start connection with a server. */
+{
+return netConnectWithTimeout(hostName, port, 10000); // 10 seconds connect timeout
 }
 
 int netMustConnect(char *hostName, int port)
@@ -608,7 +699,7 @@ return sd;
 }
 
 boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime)
-/* Return date and size of ftp url file */
+/* Return date in UTC and size of ftp url file */
 {
 /* Parse the URL and connect. */
 struct netParsedUrl npu;
@@ -733,7 +824,8 @@ if (npu.byteRangeStart != -1)
 	}
     }
 
-safef(cmd,sizeof(cmd),"RETR %s\r\n", npu.file);
+/* RETR for files, LIST for directories ending in / */
+safef(cmd,sizeof(cmd),"%s %s\r\n",((npu.file[strlen(npu.file)-1]) == '/') ? "LIST" : "RETR", npu.file);
 sendFtpCommandOnly(sd, cmd);
 
 int sdata = netConnect(npu.host, parsePasvPort(rs->string));
@@ -932,13 +1024,13 @@ static int netGetOpenHttp(char *url)
 return netOpenHttpExt(url, "GET", NULL);
 }
 
-int netUrlHead(char *url, struct hash *hash)
+int netUrlHeadExt(char *url, char *method, struct hash *hash)
 /* Go get head and return status.  Return negative number if
  * can't get head. If hash is non-null, fill it with header
  * lines with upper cased keywords for case-insensitive lookup, 
  * including hopefully CONTENT-TYPE: . */
 {
-int sd = netOpenHttpExt(url, "HEAD", NULL);
+int sd = netOpenHttpExt(url, method, NULL);
 int status = EIO;
 if (sd >= 0)
     {
@@ -974,19 +1066,63 @@ else
 return status;
 }
 
+
+int netUrlHead(char *url, struct hash *hash)
+/* Go get head and return status.  Return negative number if
+ * can't get head. If hash is non-null, fill it with header
+ * lines with upper cased keywords for case-insensitive lookup, 
+ * including hopefully CONTENT-TYPE: . */
+{
+return netUrlHeadExt(url, "HEAD", hash);
+}
+
+
+long long netUrlSizeByRangeResponse(char *url)
+/* Use byteRange as a work-around alternate method to get file size (content-length).  
+ * Return negative number if can't get. */
+{
+long long retVal = -1;
+char rangeUrl[2048];
+safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=0-0", url);
+struct hash *hash = newHash(0);
+int status = netUrlHeadExt(rangeUrl, "GET", hash);
+if (status == 206)
+    { 
+    char *rangeString = hashFindValUpperCase(hash, "Content-Range:");
+    if (rangeString)
+	{
+ 	/* input pattern: Content-Range: bytes 0-99/2738262 */
+	char *slash = strchr(rangeString,'/');
+	if (slash)
+	    {
+	    retVal = atoll(slash+1);
+	    }
+	}
+    }
+hashFree(&hash);
+return retVal;
+}
+
+
 int netUrlOpenSockets(char *url, int *retCtrlSocket)
 /* Return socket descriptor (low-level file handle) for read()ing url data,
  * or -1 if error. 
  * If retCtrlSocket is non-NULL and url is FTP, set *retCtrlSocket
  * to the FTP control socket which is left open for a persistent connection.
- * close(result) (and close(*retCtrlSocket) if applicable) when done. */
+ * close(result) (and close(*retCtrlSocket) if applicable) when done. 
+ * If url is missing :// then it's just treated as a file. */
 {
-if (startsWith("http://",url) || startsWith("https://",url) || (stringIn("://", url) == NULL))
-    return netGetOpenHttp(url);
-else if (startsWith("ftp://",url))
-    return netGetOpenFtpSockets(url, retCtrlSocket);
-else    
-    errAbort("Sorry, can only netUrlOpen http, https and ftp currently, not '%s'", url);
+if (stringIn("://", url) == NULL)
+    return open(url, O_RDONLY);
+else
+    {
+    if (startsWith("http://",url) || startsWith("https://",url))
+	return netGetOpenHttp(url);
+    else if (startsWith("ftp://",url))
+	return netGetOpenFtpSockets(url, retCtrlSocket);
+    else    
+	errAbort("Sorry, can only netUrlOpen http, https and ftp currently, not '%s'", url);
+    }
 return -1;    
 }
 
@@ -1041,6 +1177,7 @@ char *sep = NULL;
 char *headerName = NULL;
 char *headerVal = NULL;
 boolean redirect = FALSE;
+boolean byteRangeUsed = (strstr(url,";byterange=") != NULL);
 
 boolean mustUseProxy = FALSE;  /* User must use proxy 305 error*/
 char *proxyLocation = NULL;
@@ -1101,9 +1238,19 @@ while(TRUE)
 	    {
 	    mustUseProxyAuth = TRUE;
 	    }
-	else if (!(sameString(code, "200") || sameString(code, "206")))
+	else if (byteRangeUsed)
 	    {
-	    warn("%s: %s %s\n", url, code, line);
+	    if (!sameString(code, "206"))
+		{
+		if (sameString(code, "200"))
+		    warn("Byte-range request was ignored by server. ");
+		warn("Expected Partial Content 206. %s: %s %s\n", url, code, line);
+		return FALSE;
+		}
+	    }
+	else if (!sameString(code, "200"))
+	    {
+	    warn("Expected 200 %s: %s %s\n", url, code, line);
 	    return FALSE;
 	    }
 	line = buf;  /* restore it */
@@ -1218,8 +1365,8 @@ return FALSE;
 
 struct lineFile *netLineFileMayOpen(char *url)
 /* Return a lineFile attached to url. http skips header.
- * Supports some compression formats.
- * Return NULL if there's a problem. */
+ * Supports some compression formats.  Prints warning message, but
+ * does not abort, just returning NULL if there's a problem. */
 {
 int sd = netUrlOpen(url);
 if (sd < 0)
@@ -1260,6 +1407,29 @@ else
 	freeMem(newUrl); 
     return lf;
     }
+}
+
+struct lineFile *netLineFileSilentOpen(char *url)
+/* Open a lineFile on a URL.  Just return NULL without any user
+ * visible warning message if there's a problem. */
+{
+pushSilentWarnHandler();
+struct lineFile *lf = netLineFileMayOpen(url);
+popWarnHandler();
+return lf;
+}
+
+char *netReadTextFileIfExists(char *url)
+/* Read entire URL and return it as a string.  URL should be text (embedded zeros will be
+ * interpreted as end of string).  If the url doesn't exist or has other problems,
+ * returns NULL. */
+{
+struct lineFile *lf = netLineFileSilentOpen(url);
+if (lf == NULL)
+    return NULL;
+char *text = lineFileReadAll(lf);
+lineFileClose(&lf);
+return text;
 }
 
 
@@ -1397,7 +1567,7 @@ return TRUE;
 }
 
 
-boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries)
+boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries, boolean newer, boolean progress)
 /* Open multiple parallel connections to URL to speed downloading */
 {
 char *origPath = outPath;
@@ -1409,6 +1579,9 @@ off_t fileSize = 0;
 off_t totalDownloaded = 0;
 ssize_t sinceLastStatus = 0;
 char *dateString = "";
+int star = 1;  
+int starMax = 20;  
+int starStep = 1;
 // TODO handle case-sensitivity of protocols input
 if (startsWith("http://",url) || startsWith("https://",url))
     {
@@ -1461,6 +1634,7 @@ else
     warn("unrecognized protocol: %s", url);
     return FALSE;
     }
+
 
 verbose(2,"fileSize=%lld\n", (long long) fileSize);
 
@@ -1521,6 +1695,44 @@ if (restartable
     }
 else
     {
+
+    if (newer) // only download it if it is newer than what we already have
+	{
+	/* datestamp mtime from last-modified header */
+	struct tm tm;
+	// Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
+	// These strings are always GMT
+	if (strptime(dateString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
+	    {
+	    warn("unable to parse last-modified string [%s]", dateString);
+	    }
+	else
+	    {
+	    time_t t;
+	    // convert to UTC (GMT) time
+	    t = mktimeFromUtc(&tm);
+	    if (t == -1)
+		{
+		warn("mktimeFromUtc failed while converting last-modified string to UTC [%s]", dateString);
+		}
+	    else
+		{
+		// get the file mtime
+		struct stat mystat;
+		ZeroVar(&mystat);
+		if (stat(origPath,&mystat)==0)
+		    {
+		    if (t <= mystat.st_mtime)
+			{
+			verbose(2,"Since nothing newer was found, skipping %s\n", origPath);
+			verbose(3,"t from last-modified = %ld; st_mtime = %ld\n", (long) t, (long)mystat.st_mtime);
+			return TRUE;
+			}
+		    }
+		}
+	    }
+	}
+
     /* make a list of connections */
     for (c = 0; c < numConnections; ++c)
 	{
@@ -1536,6 +1748,16 @@ else
 	slAddHead(&pcList, pc);
 	}
     slReverse(&pcList);
+    }
+
+if (progress)
+    {
+    char nicenumber[1024]="";
+    sprintWithGreekByte(nicenumber, sizeof(nicenumber), fileSize);
+    printf("downloading %s ", nicenumber); fflush(stdout);
+    starStep = fileSize/starMax;
+    if (starStep < 1)
+	starStep = 1;
     }
 
 int out = open(outPath, O_CREAT|O_WRONLY, 0664);
@@ -1561,12 +1783,23 @@ sinceLastStatus = 0;
 
 int retryCount = 0;
 
+time_t startTime = time(NULL);
+
 #define SELTIMEOUT 5
 #define RETRYSLEEPTIME 30    
 while (TRUE)
     {
 
     verbose(2,"Top of big loop\n");
+
+    if (progress)
+	{
+	while (totalDownloaded >= star * starStep)
+	    {
+	    printf("*");fflush(stdout);
+	    ++star;
+	    }
+	}
 
     /* are we done? */
     if (connOpen == 0)
@@ -1618,7 +1851,7 @@ while (TRUE)
 		int newSd = 0;
 		if (startsWith("http://",url) || startsWith("https://",url))
 		    {
-		    if (!netSkipHttpHeaderLinesHandlingRedirect(pc->sd, url, &newSd, &newUrl))
+		    if (!netSkipHttpHeaderLinesHandlingRedirect(pc->sd, urlExt, &newSd, &newUrl))
 			{
 			warn("Error processing http response for %s", url);
 			return FALSE;
@@ -1776,10 +2009,66 @@ while (TRUE)
 close(out);
 
 /* delete the status file - by passing TRUE */
-writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, TRUE);  // DEBUG RESTORE!!
+writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, TRUE); 
+
+/* restore original file datestamp mtime from last-modified header */
+struct tm tm;
+// Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
+// These strings are always GMT
+if (strptime(dateString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
+    {
+    warn("unable to parse last-modified string [%s]", dateString);
+    }
+else
+    {
+    time_t t;
+    // convert to UTC (GMT) time
+    t = mktimeFromUtc(&tm);
+    if (t == -1)
+	{
+	warn("mktimeFromUtc failed while converting last-modified string to UTC [%s]", dateString);
+	}
+    else
+	{
+	// update the file mtime
+	struct utimbuf ut;
+	struct stat mystat;
+	ZeroVar(&mystat);
+	if (stat(outTemp,&mystat)==0)
+	    {
+	    ut.actime = mystat.st_atime;
+	    ut.modtime = t;
+	    if (utime(outTemp, &ut)==-1)
+		{
+		char errMsg[256];
+                safef(errMsg, sizeof(errMsg), "paraFetch: error setting modification time of %s to %s\n", outTemp, dateString);
+		perror(errMsg);
+		}
+	    }
+	}
+    }
 
 /* rename the successful download to the original name */
 rename(outTemp, origPath);
+
+
+
+if (progress)
+    {
+    while (star <= starMax)
+	{
+	printf("*");fflush(stdout);
+	++star;
+	}
+    long timeDiff = (long)(time(NULL) - startTime);
+    if (timeDiff > 0)
+	{
+	printf(" %ld seconds", timeDiff);
+	float mbpersec =  ((totalDownloaded - restartTotalDownloaded)/1000000) / timeDiff;
+	printf(" %0.1f MB/sec", mbpersec);
+	}
+    printf("\n");fflush(stdout);
+    }
 
 if (fileSize != -1 && totalDownloaded != fileSize)
     {

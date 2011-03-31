@@ -67,6 +67,19 @@ int udcGetChar(struct udcFile *file);
 char *udcReadStringAndZero(struct udcFile *file);
 /* Read in zero terminated string from file.  Do a freeMem of result when done. */
 
+char *udcFileReadAll(char *url, char *cacheDir, size_t maxSize, size_t *retSize);
+/* Read a complete file via UDC. The cacheDir may be null in which case udcDefaultDir()
+ * will be used.  If maxSize is non-zero, check size against maxSize
+ * and abort if it's bigger.  Returns file data (with an extra terminal for the
+ * common case where it's treated as a C string).  If retSize is non-NULL then
+ * returns size of file in *retSize. Do a freeMem or freez of the returned buffer
+ * when done. */
+
+struct lineFile *udcWrapShortLineFile(char *url, char *cacheDir, size_t maxSize);
+/* Read in entire short (up to maxSize) url into memory and wrap a line file around it.
+ * The cacheDir may be null in which case udcDefaultDir() will be used.  If maxSize
+ * is zero then a default value (currently 64 meg) will be used. */
+
 void udcSeek(struct udcFile *file, bits64 offset);
 /* Seek to a particular (absolute) position in file. */
 
@@ -118,5 +131,8 @@ int udcCacheTimeout();
 void udcSetCacheTimeout(int timeout);
 /* Set cache timeout (if local cache files are newer than this many seconds,
  * we won't ping the remote server to check the file size and update time). */
+
+time_t udcUpdateTime(struct udcFile *udc);
+/* return udc->updateTime */
 
 #endif /* UDC_H */

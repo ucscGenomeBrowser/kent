@@ -709,7 +709,7 @@ TMPDIR=/scratch/tmp
     #	80078057 bases of 393312790 (20.360%) in intersection
 
 ############################################################################
-## 8-Way Multiz (DONE - 2010-12-22 - Hiram)
+## 8-Way Multiz (DONE - 2011-01-18 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/danRer7/bed/multiz8way
     cd /hive/data/genomes/danRer7/bed/multiz8way
@@ -730,9 +730,15 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
 
 # (((hg19:0.131183,mm9:0.352605):0.525173,xenTro2:0.852482):0.300396,(((tetNig2:0.224774,fr2:0.205294):0.191836,(gasAcu1:0.313967,oryLat2:0.478451):0.058404):0.322824,danRer7:0.731166):0.155214);
 
-# reorder to get danRer7 on top:
+    # Mark reports three new reports for fish phylogeny:
+    #	(zebrafish, (medaka, (stickleback, (fugu, tetraodon))))
+# http://www.ncbi.nlm.nih.gov/pubmed/18771739 analyzed mitochondrial data.
+# http://www.ncbi.nlm.nih.gov/pubmed/20546903 analyzed data from 11 nuclear genes.
+# http://www.ncbi.nlm.nih.gov/pubmed/17709262 analyzed mitochrondrial data.
+
+    # So, rearrange to get Zebrafish on top and Medaka out on its own:
     cat << '_EOF_' > zFishOnTop.nh
-((danRer7:0.731166,((gasAcu1:0.313967,oryLat2:0.478451):0.058404,(tetNig2:0.224774,fr2:0.205294):0.191836):0.322824):0.155214,(xenTro2:0.852482,(mm9:0.352605,hg19:0.131183):0.525173):0.300396);
+((danRer7:0.731166,(oryLat2:0.478451,(gasAcu1:0.313967,(tetNig2:0.224774,fr2:0.205294):0.191836):0.058404):0.322824):0.155214,(xenTro2:0.852482,(mm9:0.352605,hg19:0.131183):0.525173):0.300396);
 '_EOF_'
     # << happy emacs
 
@@ -741,23 +747,22 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
 "danRer7->Zebrafish; gasAcu1->Stickleback; oryLat2->Medaka; tetNig2->Tetraodon; fr2->Fugu; xenTro2->X_Tropicalis; mm9->Mouse; hg19->Human" \
 zFishOnTop.nh
 
-((Zebrafish:0.731166,((Stickleback:0.313967,Medaka:0.478451):0.058404,(Tetraodon:0.224774,Fugu:0.205294):0.191836):0.322824):0.155214,(X_Tropicalis:0.852482,(Mouse:0.352605,Human:0.131183):0.525173):0.300396);
+((Zebrafish:0.731166,(Medaka:0.478451,(Stickleback:0.313967,(Tetraodon:0.224774,Fugu:0.205294):0.191836):0.058404):0.322824):0.155214,(X_Tropicalis:0.852482,(Mouse:0.352605,Human:0.131183):0.525173):0.300396);
 
     #	Use this specification in the phyloGif tool:
     #	http://genome.ucsc.edu/cgi-bin/phyloGif
     #	to obtain a png image for /usr/local/apache/htdocs/images/phylo/danRer7_8way.gif
 
-    /cluster/bin/phast/all_dists 8way.nh > 8way.distances.txt
+    /cluster/bin/phast/all_dists zFishOnTop.nh > 8way.distances.txt
     #	Use this output to create the table below
     grep -i danRer7 8way.distances.txt | sort -k3,3n
-
-# gasAcu1 danRer7 1.426361
-# fr2     danRer7 1.451120
-# tetNig2 danRer7 1.470600
-# oryLat2 danRer7 1.590845
-# hg19    danRer7 1.843132
-# xenTro2 danRer7 2.039258
-# mm9     danRer7 2.064554
+# danRer7 gasAcu1 1.426361
+# danRer7 fr2     1.509524
+# danRer7 tetNig2 1.529004
+# danRer7 oryLat2 1.532441
+# danRer7 hg19    1.843132
+# danRer7 xenTro2 2.039258
+# danRer7 mm9     2.064554
 
 #	If you can fill in all the numbers in this table, you are ready for
 #	the multiple alignment procedure
@@ -767,9 +772,9 @@ zFishOnTop.nh
 #                                           chainDanRer6Link  chain linearGap
 #    distance                    on danRer7  on other     minScore
 #  1  1.43 - stickleback gasAcu1   (% 10.27) (% 27.52)       2000     medium
-#  2  1.45 - Fugu fr2              (%  7.36) (% 20.36)       2000     medium
-#  3  1.47 - tetraodon tetNig2     (%  6.27) (% 23.57)       2000     medium
-#  4  1.59 - medaka oryLat2        (% 10.03) (% 17.78)       2000     medium
+#  2  1.51 - Fugu fr2              (%  7.36) (% 20.36)       2000     medium
+#  3  1.53 - tetraodon tetNig2     (%  6.27) (% 23.57)       2000     medium
+#  4  1.53 - medaka oryLat2        (% 10.03) (% 17.78)       2000     medium
 #  5  1.84 - human hg19            (%  2.79) (%  6.15)       5000     loose
 #  6  2.04 - xenopus xenTro2       (%  6.43) (%  6.61)       5000     loose
 #  7  2.06 - mouse mm9             (%  2.60) (%  5.10)       5000     loose
@@ -792,7 +797,7 @@ zFishOnTop.nh
 
     # create species list and stripped down tree for autoMZ
     sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
-	8way.nh > tmp.nh
+	zFishOnTop.nh > tmp.nh
     echo `cat tmp.nh` > tree-commas.nh
     echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
     sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
@@ -830,9 +835,9 @@ rm -fr tmp
 
     screen
     time ./autoMultiz > autoMultiz.log 2>&1 &
-    #	real    236m40.207s
-XXX - running - Wed Dec 22 11:19:32 PST 2010
-    # took 3 hours, log shows no errors.
+    #	real    242m15.543s
+    #	log shows no errors.
+    #	-rw-rw-r-- 1 1785003021 Jan 18 18:49 multiz8way.maf
 
     # Load into database
     ssh hgwdev
@@ -842,25 +847,25 @@ XXX - running - Wed Dec 22 11:19:32 PST 2010
     cd /scratch/tmp
     time nice -n +19 hgLoadMaf danRer7 multiz8way
     #	Indexing and tabulating /gbdb/danRer7/multiz8way/multiz8way.maf
-    #	Loaded 2997980 mafs in 1 files from /gbdb/danRer7/multiz8way
+    #	Loaded 2997216 mafs in 1 files from /gbdb/danRer7/multiz8way
     #	real    0m32.612s
 
     time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
 	-maxSize=50000 danRer7 multiz8waySummary \
 	/gbdb/danRer7/multiz8way/multiz8way.maf
-    #	Created 1160917 summary blocks from 9252014 components
-    #	and 2997980 mafs from /gbdb/danRer7/multiz8way/multiz8way.maf
+    #	Created 1160923 summary blocks from 9245726 components
+    #	and 2997216 mafs from /gbdb/danRer7/multiz8way/multiz8way.maf
     #	real    0m34.656s
 
     wc -l multiz8way*.tab
-    #	2997980 multiz8way.tab
-    #	1160917 multiz8waySummary.tab
-    #	4158897 total
+    #	2997216 multiz8way.tab
+    #	1160923 multiz8waySummary.tab
+    #	4158139 total
 
     rm multiz8way*.tab
 
 #########################################################################
-# GAP ANNOTATE MULTIZ6WAY MAF AND LOAD TABLES (DONE - 2010-12-22 - Hiram)
+# GAP ANNOTATE MULTIZ6WAY MAF AND LOAD TABLES (DONE - 2011-01-19 - Hiram)
 
     ssh hgwdev
     mkdir /hive/data/genomes/danRer7/bed/multiz8way/anno
@@ -883,20 +888,20 @@ done
     ln -s `pwd`/multiz8way.maf /gbdb/danRer7/multiz8way
     cd /scratch/tmp
     time nice -n +19 hgLoadMaf danRer7 multiz8way
-    #	Loaded 3399056 mafs in 1 files from /gbdb/danRer7/multiz8way
-    #	real    3m8.204s
+    #	Loaded 3398556 mafs in 1 files from /gbdb/danRer7/multiz8way
+    #	real    1m42.103s
 
     time nice hgLoadMafSummary -minSize=10000 -mergeGap=500 \
 	-maxSize=50000 danRer7 multiz8waySummary \
 	/gbdb/danRer7/multiz8way/multiz8way.maf
-    #	Created 1160917 summary blocks from 9252014 components
-    #	and 3399056 mafs from /gbdb/danRer7/multiz8way/multiz8way.maf
-    #	real    3m0.134s
+    #	Created 1160923 summary blocks from 9245726 components
+    #	and 3398556 mafs from /gbdb/danRer7/multiz8way/multiz8way.maf
+    #	real    1m37.885s
 
     wc -l multiz8way*.tab
-    #	3399056 multiz8way.tab
-    #	1160917 multiz8waySummary.tab
-    #	4559973 total
+    #	3398556 multiz8way.tab
+    #	1160923 multiz8waySummary.tab
+    #	4559479 total
 
     rm multiz8way*.tab
 
@@ -907,7 +912,7 @@ danRer7.upstreamGeneTbl = refGene
 danRer7.upstreamMaf = multiz8way /hive/data/genomes/danRer7/bed/multiz8way/species.lst
 
 #########################################################################
-# MULTIZ8WAY MAF FRAMES (DONE - 2010-12-23 - Hiram)
+# MULTIZ8WAY MAF FRAMES (DONE - 2011-01-19 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/danRer7/bed/multiz8way/frames
     cd /hive/data/genomes/danRer7/bed/multiz8way/frames
@@ -935,7 +940,7 @@ done
     # verify counts of genes are reasonable:
 for T in genes/*.gz
 do
-    echo -n $T:
+    echo -n "# $T: "
     zcat $T | cut -f1 | sort | uniq -c | wc -l
 done
 
@@ -977,22 +982,21 @@ done
 		| gzip > multiz8way.mafFrames.gz
     # verify there are frames on everything:
     zcat multiz8way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
-    #	238458 danRer7
-    #	421909 fr2
-    #	439729 gasAcu1
-    #	435589 hg19
-    #	421420 mm9
-    #	415663 oryLat2
-    #	394093 tetNig2
-    #	345932 xenTro2
-
+    #	238460 danRer7
+    #	418660 fr2
+    #	437610 gasAcu1
+    #	436329 hg19
+    #	422074 mm9
+    #	409432 oryLat2
+    #	392409 tetNig2
+    #	346443 xenTro2
 
     ssh hgwdev
     cd /hive/data/genomes/danRer7/bed/multiz8way/frames
     nice hgLoadMafFrames danRer7 multiz8wayFrames multiz8way.mafFrames.gz
 
 #######################################################################
-# Phylogenetic tree from 8-way (DONE 2010-12-23 - Hiram)
+# Phylogenetic tree from 8-way (DONE - 2011-01-19 - Hiram)
 # 	We need one tree for all chroms
 
     cd /hive/data/genomes/danRer7/bed/multiz8way/
@@ -1013,20 +1017,22 @@ done
 	| cut -f 2-20 | egrep -E -v "chrM" \
 	> refSeqReviewed.gp
     wc -l refSeqReviewed.gp 
-    #	14401 refSeqReviewed.gp
+    #	14431 refSeqReviewed.gp
 
     genePredSingleCover refSeqReviewed.gp stdout | sort > refSeqReviewedNR.gp
     wc -l refSeqReviewedNR.gp
-    #	13805 refSeqReviewedNR.gp
+    #	13835 refSeqReviewedNR.gp
 
     ssh memk
     mkdir /hive/data/genomes/danRer7/bed/multiz8way/4d/run
     cd /hive/data/genomes/danRer7/bed/multiz8way/4d/run
     mkdir ../mfa
 
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
     cat << '_EOF_' > 4d.csh
 #!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
 set r = "/hive/data/genomes/danRer7/bed/multiz8way"
 set c = $1
 set infile = $r/mafSplit/$2
@@ -1034,10 +1040,10 @@ set outfile = $3
 cd /scratch/tmp
 # 'clean' maf
 perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
-awk -v C=$c '$2 == C {print}' $r/4d/refSeqReviewedNR.gp > $c.gp
+awk -v C=$c '$2 == C {print}' $r/4d/refSeqReviewedNR.gp | sed -e "s/\t$c\t/\tdanRer7.$c\t/" > $c.gp
 set NL=`wc -l $c.gp| gawk '{print $1}'`
 if ("$NL" != "0") then
-    $PHASTBIN/msa_view --4d --features $c.gp --do-cats 3 -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
     $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
 else
     echo "" > $r/4d/run/$outfile
@@ -1064,19 +1070,18 @@ rm -f $c.gp $c.maf $c.ss
     para try ... check
     para -maxJob=30 push
     para time
-    # three of them just do not work even after trying many of the
-    # msa_view versions we have here.  Some produce this error:
-    #	ERROR: Missing or incomplete header in SS file.
-    # others product this error:
-    #	ERROR: name Zv9_NA684 not present in MSA.
+    # three of them have no result:
+    #	-rw-rw-r-- 1      0 Jan 19 10:13 Zv9_NA684.mfa
+    #	-rw-rw-r-- 1      0 Jan 19 10:13 Zv9_NA269.mfa
+    #	-rw-rw-r-- 1      0 Jan 19 10:13 Zv9_NA975.mfa
 
 # Completed: 1068 of 1071 jobs
 # Crashed: 3 jobs
-# CPU time in finished jobs:        226s       3.76m     0.06h    0.00d  0.000 y
-# IO & Wait Time:                  2796s      46.61m     0.78h    0.03d  0.000 y
-# Average job time:                   3s       0.05m     0.00h    0.00d
-# Longest finished job:              22s       0.37m     0.01h    0.00d
-# Submission to last job:           520s       8.67m     0.14h    0.01d
+# CPU time in finished jobs:        793s      13.21m     0.22h    0.01d  0.000 y
+# IO & Wait Time:                  2779s      46.32m     0.77h    0.03d  0.000 y
+# Average job time:                   3s       0.06m     0.00h    0.00d
+# Longest finished job:              44s       0.73m     0.01h    0.00d
+# Submission to last job:           343s       5.72m     0.10h    0.00d
 
     # combine mfa files
     ssh hgwdev
@@ -1087,34 +1092,33 @@ rm -f $c.gp $c.maf $c.ss
     find -type f -size 0c | xargs rm
     cd ..
     #want comma-less species.lst
-    /cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin/msa_view \
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
 	--aggregate "`cat ../species.lst`" mfa/*.mfa | sed s/"> "/">"/ \
 	    > 4d.all.mfa
     # check they are all in there:
     grep "^>" 4d.all.mfa
-    #	>hg19
-    #	>mm9
-    #	>xenTro2
+    #	>danRer7
+    #	>oryLat2
+    #	>gasAcu1
     #	>tetNig2
     #	>fr2
-    #	>gasAcu1
-    #	>oryLat2
-    #	>danRer7
+    #	>xenTro2
+    #	>mm9
+    #	>hg19
 
-
-    # fix order in case it helps:
-    #((danRer7,(tetNig2,gasAcu1)),(xenTro2,(mm9,hg19)))
+    # tree-commas.nh:
+    # ((danRer7,(oryLat2,(gasAcu1,(tetNig2,fr2)))),(xenTro2,(mm9,hg19)))
 
     # use phyloFit to create tree model (output is phyloFit.mod)
     time nice -n +19 \
-	/cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin/phyloFit \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
 	    --EM --precision MED --msa-format FASTA --subst-mod REV \
 		--tree ../tree-commas.nh 4d.all.mfa
-    #	real    0m40.544s
+    #	real    1m21.248s
     mv phyloFit.mod all.mod
 
-    grep tree all.mod
-    #	TREE: (((hg19:0.209199,mm9:0.225974):0.393594,xenTro2:0.744695):0.149830,(((tetNig2:0.201072,fr2:0.181036):0.186443,(gasAcu1:0.304472,oryLat2:0.438574):0.055013):0.343467,danRer7:0.579753):0.149830);
+    grep TREE all.mod
+    #	TREE: ((danRer7:0.580406,(oryLat2:0.364485,(gasAcu1:0.30842,(tetNig2:0.201742,fr2:0.182553):0.217051):0.106429):0.308334):0.15191,(xenTro2:0.747875,(mm9:0.228088,hg19:0.2107):0.397886):0.15191);
 
     # create subset of fish-only
     echo "tetNig2 fr2 gasAcu1 oryLat2 danRer7" > fish.lst
@@ -1150,24 +1154,26 @@ done
     #	168 > oryLat2
     #	168 > tetNig2
 
-    /cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin/msa_view \
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
 	--aggregate "`cat fish.lst`" fishMfa/*.mfa | sed s/"> "/">"/ \
 	> 4d.fish.mfa
 
-    /cluster/bin/phast/tree_doctor \
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/tree_doctor \
         --no-branchlen --prune-all-but="`cat fish.lst`" ../tree-commas.nh \
                 > tree-commas.fish.nh
     # use phyloFit to create tree model (output is phyloFit.mod)
     time nice -n +19 \
-	/cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin/phyloFit \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
 	    --EM --precision MED --msa-format FASTA --subst-mod REV \
 		--tree ./tree-commas.fish.nh 4d.fish.mfa
     mv phyloFit.mod fish.mod
-    #	real    0m0.901s
+    #	real    0m1.495s
     grep TREE fish.mod | sed 's/TREE\:\ //' > fish.8way.nh
 
+    # (danRer7:0.441576,(oryLat2:0.358316,(gasAcu1:0.302322,(tetNig2:0.201705,fr2:0.179742):0.221704):0.106667):0.441576);
+
 #########################################################################
-# phastCons 6-way (DONE - 2010-12-23 - Hiram)
+# phastCons 6-way (DONE - 2011-01-19 - Hiram)
 
     # split 8way mafs into 10M chunks and generate sufficient statistics 
     # files for # phastCons
@@ -1195,7 +1201,7 @@ rm -fr $WINDOWS
 mkdir $WINDOWS
 pushd $WINDOWS > /dev/null
 if ( $WC != $NL ) then
-/cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin/msa_split \
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
     $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
 endif
 popd > /dev/null
@@ -1220,14 +1226,14 @@ mkSS.csh $(root1) {check out line+ $(root1).done}
     para try ... check ... etc
 
 # Completed: 1072 of 1072 jobs
-# CPU time in finished jobs:        597s       9.94m     0.17h    0.01d  0.000 y
-# IO & Wait Time:                  3077s      51.29m     0.85h    0.04d  0.000 y
-# Average job time:                   3s       0.06m     0.00h    0.00d
-# Longest finished job:              70s       1.17m     0.02h    0.00d
-# Submission to last job:           163s       2.72m     0.05h    0.00d
+# CPU time in finished jobs:       1029s      17.14m     0.29h    0.01d  0.000 y
+# IO & Wait Time:                  3083s      51.39m     0.86h    0.04d  0.000 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest finished job:              63s       1.05m     0.02h    0.00d
+# Submission to last job:           227s       3.78m     0.06h    0.00d
 
     find . -type f | grep ".ss$" | wc
-    #	1081    1081   36947
+    #	1082    1082   36982
 
     # Run phastCons
     #	This job is I/O intensive in its output files, beware where this
@@ -1243,7 +1249,7 @@ mkSS.csh $(root1) {check out line+ $(root1).done}
 
     cat << '_EOF_' > doPhast.csh
 #!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
 set c = $1
 set cX = $1:r
 set f = $2
@@ -1286,7 +1292,7 @@ rm -fr $tmp
 
     find ../SS -type f | grep ".ss$" | sed -e 's/.ss$//' > ss.list
     wc -l ss.list
-    #	1081 ss.list
+    #	1082 ss.list
 
     # Create parasol batch and run it
     # run for all species
@@ -1300,12 +1306,12 @@ rm -fr $tmp
     para -ram=8g create jobList
     para try ... check ...
     para -maxJob=64 push
-# Completed: 1081 of 1081 jobs
-# CPU time in finished jobs:       2354s      39.23m     0.65h    0.03d  0.000 y
-# IO & Wait Time:                  7315s     121.92m     2.03h    0.08d  0.000 y
-# Average job time:                   9s       0.15m     0.00h    0.00d
-# Longest finished job:              30s       0.50m     0.01h    0.00d
-# Submission to last job:           204s       3.40m     0.06h    0.00d
+# Completed: 1082 of 1082 jobs
+# CPU time in finished jobs:       3539s      58.99m     0.98h    0.04d  0.000 y
+# IO & Wait Time:                  7255s     120.91m     2.02h    0.08d  0.000 y
+# Average job time:                  10s       0.17m     0.00h    0.00d
+# Longest finished job:              35s       0.58m     0.01h    0.00d
+# Submission to last job:           432s       7.20m     0.12h    0.01d
 
     cd /hive/data/genomes/danRer7/bed/multiz8way/cons/all
 
@@ -1317,17 +1323,18 @@ rm -fr $tmp
 
     # load into database
     time nice -n +19 hgLoadBed danRer7 phastConsElements8way mostConserved.bed
-    #	Loaded 1102909 elements of size 5
-    #	real    0m8.412s
+    #	Loaded 1110857 elements of size 5
+    #	real    0m7.114s
 
     # not sure what the targets should be for Zebrafish, on human we often
     # try for 5% overall cov, and 70% CDS cov 
     featureBits danRer7 -enrichment refGene:cds phastConsElements8way
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
-# refGene:cds 1.317%, phastConsElements8way 13.822%, both 1.096%, cover 83.19%, enrich 6.02x
+# refGene:cds 1.320%, phastConsElements8way 13.722%, both 1.101%
+# cover 83.38%, enrich 6.08x
     featureBits danRer7 -enrichment ensGene:cds phastConsElements8way
-# ensGene:cds 2.783%, phastConsElements8way 13.822%, both 2.165%, cover 77.79%, enrich 5.63x
-
+# ensGene:cds 2.783%, phastConsElements8way 13.722%, both 2.170%
+# cover 77.98%, enrich 5.68x
 
     # hg19 for comparison
     #	refGene:cds 1.196%, phastConsElements46way 5.065%,
@@ -1345,15 +1352,6 @@ rm -fr $tmp
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| gzip -c > downloads/phastCons8way.wigFix.gz
 
-    # make downloads
-    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/phastCons8way/
-    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/phastCons8way/
-    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/all/downloads/* .
-    md5sum *.gz >> md5sum.txt
-    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/README.txt
-    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/all/all.mod
-    popd
-
     # check integrity of data with wigToBigWig
     zcat downloads/phastCons8way.wigFix.gz \
 	| wigToBigWig stdin /hive/data/genomes/danRer7/chrom.sizes \
@@ -1363,15 +1361,16 @@ rm -fr $tmp
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 629,573,073
-# primaryIndexSize: 16,503,232
+# primaryDataSize: 631,292,485
+# primaryIndexSize: 16,520,056
 # zoomLevels: 10
-# chromCount: 958
-# basesCovered: 264,313,638
-# mean: 0.684571
+# chromCount: 959
+# basesCovered: 264,308,757
+# mean: 0.680379
 # min: 0.000000
 # max: 1.000000
-# std: 0.359616
+# std: 0.360578
+
 
     #	encode those files into wiggle data
     zcat downloads/phastCons8way.wigFix.gz \
@@ -1391,8 +1390,7 @@ rm -fr $tmp
 
     wigTableStats.sh danRer7 phastCons8way
 # db.table      min max mean count sumData stdDev viewLimits
-#danRer7.phastCons8way   0 1 0.684571 264313638 1.80942e+08 0.359616 viewLimits=0:1
-
+#danRer7.phastCons8way   0 1 0.680379 264308757 1.7983e+08 0.360578 viewLimits=0:1
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram -db=danRer7 \
@@ -1434,12 +1432,12 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     para try ... check ...
     para -maxJob=32 push
 
-# Completed: 1081 of 1081 jobs
-# CPU time in finished jobs:       2335s      38.91m     0.65h    0.03d  0.000 y
-# IO & Wait Time:                  7207s     120.12m     2.00h    0.08d  0.000 y
-# Average job time:                   9s       0.15m     0.00h    0.00d
-# Longest finished job:              27s       0.45m     0.01h    0.00d
-# Submission to last job:           339s       5.65m     0.09h    0.00d
+# Completed: 1082 of 1082 jobs
+# CPU time in finished jobs:       3479s      57.99m     0.97h    0.04d  0.000 y
+# IO & Wait Time:                  7257s     120.95m     2.02h    0.08d  0.000 y
+# Average job time:                  10s       0.17m     0.00h    0.00d
+# Longest finished job:              35s       0.58m     0.01h    0.00d
+# Submission to last job:           423s       7.05m     0.12h    0.00d
 
     cd /hive/data/genomes/danRer7/bed/multiz8way/cons/fish
 
@@ -1452,19 +1450,19 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # load into database
     time nice -n +19 hgLoadBed danRer7 \
 	phastConsElements8wayFish mostConserved.bed
-    #	Loaded 830892 elements of size 5
-    #	real    0m4.868s
+    #	Loaded 842567 elements of size 5
+    #	real    0m5.941s
 
     # not sure what the targets should be for Zebrafish, on human we often
     # try for 5% overall cov, and 70% CDS cov 
     featureBits danRer7 -enrichment refGene:cds phastConsElements8wayFish
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
-# refGene:cds 1.317%, phastConsElements8wayFish 10.741%, both 1.090%,
-#	cover 82.76%, enrich 7.70x
+# refGene:cds 1.320%, phastConsElements8wayFish 10.576%, both 1.093%
+# cover 82.82%, enrich 7.83x
 
     featureBits danRer7 -enrichment ensGene:cds phastConsElements8wayFish
-# ensGene:cds 2.783%, phastConsElements8wayFish 10.741%, both 2.140%,
-#	cover 76.89%, enrich 7.16x
+# ensGene:cds 2.783%, phastConsElements8wayFish 10.576%, both 2.141%
+# cover 76.93%, enrich 7.27x
 
     # hg19 for comparison
     #	refGene:cds 1.196%, phastConsElements46wayPrimates 3.636%,
@@ -1482,15 +1480,6 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| gzip -c > downloads/phastCons8wayFish.wigFix.gz
 
-    # make downloads
-    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/phastCons8way/
-    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/phastCons8way/
-    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/all/downloads/* .
-    md5sum *.gz >> md5sum.txt
-    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/README.txt
-    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/all/all.mod
-    popd
-
     # check integrity of data with wigToBigWig
     zcat downloads/phastCons8wayFish.wigFix.gz \
 	| wigToBigWig stdin /hive/data/genomes/danRer7/chrom.sizes \
@@ -1500,15 +1489,16 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 586,328,953
-# primaryIndexSize: 16,503,232
+# primaryDataSize: 589,598,860
+# primaryIndexSize: 16,520,056
 # zoomLevels: 10
-# chromCount: 958
-# basesCovered: 264,313,638
-# mean: 0.592151
+# chromCount: 959
+# basesCovered: 264,308,757
+# mean: 0.584684
 # min: 0.000000
 # max: 1.000000
-# std: 0.363373
+# std: 0.363150
+
 
     #	encode that ascii data into wiggle data
     zcat downloads/phastCons8wayFish.wigFix.gz \
@@ -1529,7 +1519,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     wigTableStats.sh danRer7 phastCons8wayFish
 # db.table      min max mean count sumData stdDev viewLimits
-#danRer7.phastCons8wayFish 0 1 0.592151 264313638 1.56514e+08 0.363373 viewLimits=0:1
+#danRer7.phastCons8wayFish 0 1 0.584684 264308757 1.54537e+08 0.36315 viewLimits=0:1
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram -db=danRer7 \
@@ -1561,7 +1551,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
-# phyloP for 8-way (DONE - 2010-12-27 - Hiram)
+# phyloP for 8-way (DONE - 2011-01-19 - Hiram)
     # run phyloP with score=LRT 
     ssh swarm
     mkdir /cluster/data/danRer7/bed/multiz8way/consPhyloP
@@ -1572,14 +1562,14 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # Adjust model file base composition background and rate matrix to be
     # representative of the chromosomes in play
     grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
-    #	0.581
-    /cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin/modFreqs \
-	../../cons/all/all.mod 0.581 > all.mod
+    #	0.583
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/all/all.mod 0.583 > all.mod
 
     #	following the pattern from hg19 with only one grp: "all"
     cat << '_EOF_' > doPhyloP.csh
 #!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
 set f = $1
 set file1 = $f:t
 set out = $2
@@ -1628,17 +1618,17 @@ rmdir --ignore-fail-on-non-empty $cons/tmp
     mkdir wigFix
 
     gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
-    para create jobList
+    para -ram=8g create jobList
     para try ... check ... etc ...
     para -maxJob=64 push
 
     para time > run.time
-# Completed: 1081 of 1081 jobs
-# CPU time in finished jobs:       3096s      51.60m     0.86h    0.04d  0.000 y
-# IO & Wait Time:                  7194s     119.90m     2.00h    0.08d  0.000 y
-# Average job time:                  10s       0.16m     0.00h    0.00d
-# Longest finished job:              43s       0.72m     0.01h    0.00d
-# Submission to last job:           310s       5.17m     0.09h    0.00d
+# Completed: 1082 of 1082 jobs
+# CPU time in finished jobs:       4804s      80.06m     1.33h    0.06d  0.000 y
+# IO & Wait Time:                  7456s     124.27m     2.07h    0.09d  0.000 y
+# Average job time:                  11s       0.19m     0.00h    0.00d
+# Longest finished job:              61s       1.02m     0.02h    0.00d
+# Submission to last job:           211s       3.52m     0.06h    0.00d
 
     # make downloads
     mkdir downloads
@@ -1654,20 +1644,20 @@ rmdir --ignore-fail-on-non-empty $cons/tmp
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 462,568,165
-# primaryIndexSize: 16,503,232
+# primaryDataSize: 463,742,565
+# primaryIndexSize: 16,520,056
 # zoomLevels: 10
-# chromCount: 958
-# basesCovered: 264,313,638
-# mean: 0.476697
-# min: -2.137000
-# max: 2.555000
-# std: 0.751359
+# chromCount: 959
+# basesCovered: 264,308,757
+# mean: 0.475521
+# min: -2.143000
+# max: 2.572000
+# std: 0.752223
 
     #	encode those files into wiggle data
     zcat downloads/phyloP8way.wigFix.gz \
 	| wigEncode stdin phyloP8way.wig phyloP8way.wib
-    #	Converted stdin, upper limit 2.56, lower limit -2.14
+    #	Converted stdin, upper limit 2.57, lower limit -2.14
     du -hsc *.wi?
     #	253M    phyloP8way.wib
     #	49M     phyloP8way.wig
@@ -1682,7 +1672,8 @@ rmdir --ignore-fail-on-non-empty $cons/tmp
 
     wigTableStats.sh danRer7 phyloP8way
 # db.table      min max mean count sumData stdDev viewLimits
-# danRer7.phyloP8way      -2.137 2.555 0.476697 264313638 1.25997e+08 0.751359 viewLimits=-2.137:2.555
+# danRer7.phyloP8way      -2.143 2.572 0.475521 264308757 1.25684e+08 0.752223
+# viewLimits=-2.143:2.572
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram -db=danRer7 \
@@ -1718,9 +1709,9 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # Adjust model file base composition background and rate matrix to be
     # representative of the chromosomes in play
     grep BACKGROUND ../../cons/fish/fish.mod | awk '{printf "%0.3f\n", $3 + $4}'
-    #	0.611
-    /cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin/modFreqs \
-	../../cons/fish/fish.mod 0.611 > fish.mod
+    #	0.613
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/fish/fish.mod 0.613 > fish.mod
 
     # setup run fish species subset
     mkdir /hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/fish
@@ -1734,12 +1725,12 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     para -maxJob=32 push
 
     para time > run.time
-# Completed: 1081 of 1081 jobs
-# CPU time in finished jobs:       1865s      31.08m     0.52h    0.02d  0.000 y
-# IO & Wait Time:                  7230s     120.50m     2.01h    0.08d  0.000 y
-# Average job time:                   8s       0.14m     0.00h    0.00d
-# Longest finished job:              26s       0.43m     0.01h    0.00d
-# Submission to last job:           432s       7.20m     0.12h    0.01d
+# Completed: 1082 of 1082 jobs
+# CPU time in finished jobs:       2724s      45.40m     0.76h    0.03d  0.000 y
+# IO & Wait Time:                  7369s     122.81m     2.05h    0.09d  0.000 y
+# Average job time:                   9s       0.16m     0.00h    0.00d
+# Longest finished job:              40s       0.67m     0.01h    0.00d
+# Submission to last job:           356s       5.93m     0.10h    0.00d
 
     # make downloads
     mkdir downloads
@@ -1756,23 +1747,23 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 345,277,887
-# primaryIndexSize: 16,503,232
+# primaryDataSize: 351,513,155
+# primaryIndexSize: 16,520,056
 # zoomLevels: 10
-# chromCount: 958
-# basesCovered: 264,313,638
-# mean: 0.343739
-# min: -1.489000
-# max: 1.582000
-# std: 0.618465
+# chromCount: 959
+# basesCovered: 264,308,757
+# mean: 0.340395
+# min: -1.499000
+# max: 1.587000
+# std: 0.617638
 
     #	encode those files into wiggle data
     zcat downloads/phyloP8wayFish.wigFix.gz \
 	| wigEncode stdin phyloP8wayFish.wig phyloP8wayFish.wib
-    #	Converted stdin, upper limit 1.58, lower limit -1.49
+    #	Converted stdin, upper limit 1.59, lower limit -1.50
     du -hsc *.wi?
     #	253M    phyloP8wayFish.wib
-    #	49M     phyloP8wayFish.wig
+    #	50M     phyloP8wayFish.wig
     #	302M    total
 
     # Load gbdb and database with wiggle.
@@ -1784,7 +1775,8 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     wigTableStats.sh danRer7 phyloP8wayFish
 # db.table      min max mean count sumData stdDev viewLimits
-# danRer7.phyloP8wayFish      -1.489 1.582 0.343739 264313638 9.08548e+07 0.618465 viewLimits=-1.489:1.582
+# danRer7.phyloP8wayFish      -1.499 1.587 0.340395 264308757 8.99693e+07 0.617638 viewLimits=-1.499:1.587
+
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram -db=danRer7 \
@@ -1814,6 +1806,75 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	<< happy emacs
 
     display histo.png &
+
+#############################################################################
+# download data for 8-way (DONE - 2011-01-19 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/phastCons8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/phastCons8way
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/cons/all/downloads/phastCons8way.wigFix.gz \
+	./vertebrate.phastCons8way.wigFix.gz
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/cons/fish/downloads/phastCons8wayFish.wigFix.gz \
+	./fish.phastCons8way.wigFix.gz
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/all/phastCons8way.bw \
+	./vertebrate.phastCons8way.bw
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/cons/fish/phastCons8wayFish.bw \
+	./fish.phastCons8way.bw
+
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/fish/fish.mod \
+	./fish.mod
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/all/all.mod \
+	./vertebrate.mod
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/README.txt .
+    md5sum * > /hive/data/genomes/danRer7/bed/multiz8way/cons/md5sum.txt
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/md5sum.txt .
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/phyloP8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/phyloP8way
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/all/downloads/phyloP8way.wigFix.gz \
+	./vertebrate.phyloP8way.wigFix.gz
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/fish/downloads/phyloP8wayFish.wigFix.gz \
+	./fish.phastCons8way.wigFix.gz
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/fish/phyloP8wayFish.bw
+	./fish.phastCons8way.bw
+    ln -s \
+	/hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/all/phyloP8way.bw
+	./vertebrate.phyloP8way.bw
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/run.phyloP/fish.mod \
+	./fish.mod
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/run.phyloP/all.mod \
+	./vertebrate.mod
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/README.txt .
+    md5sum * > /hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/md5sum.txt
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/md5sum.txt .
+
+    cd /hive/data/genomes/danRer7/bed/multiz8way
+    /cluster/bin/phast/tree_doctor --rename \
+"danRer7->Zebrafish; gasAcu1->Stickleback; oryLat2->Medaka; tetNig2->Tetraodon; fr2->Fugu; xenTro2->X_Tropicalis; mm9->Mouse; hg19->Human" \
+	zFishOnTop.nh > commonNames.8way.nh
+
+    mkdir /hive/data/genomes/danRer7/bed/multiz8way/downloads
+    cd /hive/data/genomes/danRer7/bed/multiz8way/downloads
+    cp -p ../anno/multiz8way.maf .
+    gzip multiz8way.maf
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/multiz8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/multiz8way
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/8way.nh .
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/commonNames.8way.nh .
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/downloads/multiz8way.maf.gz \
+	.
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/downloads/README.txt .
+
+    md5sum * > /hive/data/genomes/danRer7/bed/multiz8way/downloads/md5sum.txt
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/downloads/md5sum.txt .
 
 #############################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE braney 2010-12-29)
@@ -1984,3 +2045,23 @@ chainOne $(path1)
     rm -rf blastOut
 #end tblastn
 
+#############################################################################
+# NCBI Incident database (DONE - 2011-02-10 - Hiram)
+    # this procedure is run as a cron job in Hiram's account:
+
+    #	43 09 * * * /hive/data/outside/ncbi/incidentDb/runUpdate.sh makeItSo
+
+    # using the two scrips there: runUpdate.sh and update.sh
+    # which are checked into the source tree as files:
+    #	src/hg/utils/automation/ncbiIncidentUpdate.sh
+    #	src/hg/utils/automation/ncbiRunIncidentUpdate.sh
+
+    # they fetch the XML files from NCBI, convert them to SQL text
+    # files, construct a bigBed file, and pushes it to genomewiki if
+    # it is an update from previous
+
+    # the table in the dataBase is: ncbiIncidentDb
+    # which is the URL to the bb file, a single row:
+    # http://genomewiki.ucsc.edu/images/8/85/Hg19.ncbiIncidentDb.bb
+
+#############################################################################

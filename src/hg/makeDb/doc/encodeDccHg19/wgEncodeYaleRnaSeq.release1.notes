@@ -1,0 +1,127 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release1 of the "ENCODE wgEncodeYaleRnaSeq"
+The composite track is wgEncodeYaleRnaSeq
+# WARNINGS #################################################
+1 - could not find gbdb path in table hg19.wgEncodeYaleRnaSeqK562Ama50PolyaAln
+2 - table wgEncodeYaleRnaSeqK562Ama50PolyaAln does not exist, from filetype bam
+3 - table wgEncodeYaleRnaSeqK562Ama50PolyaSig does not exist, from filetype bigWig
+############################################################
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release1 (new+untouched):
+    Tables: 16
+    Files: 41
+    Gbdbs: 24
+
+A) Untouched Tables (0):
+
+A') Untouched Files (0 downloadables, 0 gbdbs):
+
+B) Deprecated tables (0):
+
+B') Deprecated files (0 downloadables, 0 gbdbs):
+
+C) New tables (16):
+wgEncodeYaleRnaSeqGm12878PolyaAln
+wgEncodeYaleRnaSeqGm12878PolyaSig
+wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyarrnaAln
+wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyarrnaSig
+wgEncodeYaleRnaSeqK562Ifna30PolyaAln
+wgEncodeYaleRnaSeqK562Ifna30PolyaRaw
+wgEncodeYaleRnaSeqK562Ifna6hPolyaAln
+wgEncodeYaleRnaSeqK562Ifna6hPolyaRaw
+wgEncodeYaleRnaSeqK562Ifng30PolyaAln
+wgEncodeYaleRnaSeqK562Ifng30PolyaRaw
+wgEncodeYaleRnaSeqK562Ifng6hPolyaAln
+wgEncodeYaleRnaSeqK562Ifng6hPolyaRaw
+wgEncodeYaleRnaSeqK562NonpolyaAln
+wgEncodeYaleRnaSeqK562NonpolyaRaw
+wgEncodeYaleRnaSeqK562PolyaAln
+wgEncodeYaleRnaSeqK562PolyaSig
+
+C') New files (38 downloadables, 24 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqGm12878PolyaAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqGm12878PolyaAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqGm12878PolyaRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqGm12878PolyaSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ama50PolyaAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ama50PolyaAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ama50PolyaRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ama50PolyaSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyarrnaAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyarrnaAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyarrnaRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyarrnaSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifna30PolyaAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifna30PolyaAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifna30PolyaRaw.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifna30PolyaRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifna30mPolyaRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifna6hPolyaAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifna6hPolyaAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifna6hPolyaRaw.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifna6hPolyaRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifng30PolyaAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifng30PolyaAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifng30PolyaRaw.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifng30PolyaRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifng30mPolyaRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifng6hPolyaAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifng6hPolyaAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifng6hPolyaRaw.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562Ifng6hPolyaRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562NonpolyaAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562NonpolyaAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562NonpolyaRaw.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562NonpolyaRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562PolyaAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562PolyaAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562PolyaRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/wgEncodeYaleRnaSeqK562PolyaSig.bigWig
+
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqGm12878PolyaAln.bam
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqGm12878PolyaAln.bam.bai
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqGm12878PolyaSig.bigWig
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyarrnaAln.bam
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyarrnaAln.bam.bai
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyarrnaSig.bigWig
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ifna30PolyaAln.bam
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ifna30PolyaAln.bam.bai
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ifna30PolyaRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ifna6hPolyaAln.bam
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ifna6hPolyaAln.bam.bai
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ifna6hPolyaRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ifng30PolyaAln.bam
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ifng30PolyaAln.bam.bai
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ifng30PolyaRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ifng6hPolyaAln.bam
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ifng6hPolyaAln.bam.bai
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562Ifng6hPolyaRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562NonpolyaAln.bam
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562NonpolyaAln.bam.bai
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562NonpolyaRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562PolyaAln.bam
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562PolyaAln.bam.bai
+/gbdb/hg19/bbi/wgEncodeYaleRnaSeqK562PolyaSig.bigWig
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeYaleRnaSeq/release1/md5sum.txt

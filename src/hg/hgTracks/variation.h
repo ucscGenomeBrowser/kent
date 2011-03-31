@@ -13,6 +13,7 @@
 #include "snpUi.h"
 #include "snp125.h"
 #include "snp125Ui.h"
+#include "snp132Ext.h"
 #include "spaceSaver.h"
 #include "ld.h"
 #include "ld2.h"
@@ -85,61 +86,14 @@ void snpMapMethods(struct track *tg);
 
 /****** snp ******/
 
-void filterSnpItems(struct track *tg, boolean (*filter)(struct track *tg, void *item));
-/* Filter out items from track->itemList. */
-
-boolean snpSourceFilterItem(struct track *tg, void *item);
-/* Return TRUE if item passes filter. */
-
-boolean snpMolTypeFilterItem(struct track *tg, void *item);
-/* Return TRUE if item passes filter. */
-
-boolean snpClassFilterItem(struct track *tg, void *item);
-/* Return TRUE if item passes filter. */
-
-boolean snpValidFilterItem(struct track *tg, void *item);
-/* Return TRUE if item passes filter. */
-
-boolean snpFuncFilterItem(struct track *tg, void *item);
-/* Return TRUE if item passes filter. */
-
-void loadSnp(struct track *tg);
-void loadSnp125(struct track *tg);
-/* Load up snps from database table to track items. */
-
-void freeSnp(struct track *tg);
-/* Free up snp items. */
-
-Color snpColor(struct track *tg, void *item, struct hvGfx *hvg);
-Color snp125Color(struct track *tg, void *item, struct hvGfx *hvg);
-/* Return color of snp track item. */
-
-void snpDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
-		   double scale, MgFont *font, Color color, enum trackVisibility vis);
-/* Draw a single snp item at position. */
-
 void snpMethods(struct track *tg);
 void snp125Methods(struct track *tg);
 /* Make track for snps. */
-
-struct orthoBed
-/* Browser extensible data - first four fields plus a chimp allele */
-    {
-    struct orthoBed *next;       /* Next in singly linked list. */
-    char            *chrom;      /* Human chromosome or FPC contig */
-    unsigned         chromStart; /* Start position in chromosome */
-    unsigned         chromEnd;   /* End position in chromosome */
-    char            *name;       /* Name of item */
-    char            *chimp;      /* Chimp allele */
-    };
 
 /***** haplotypes *****/
 
 char *perlegenName(struct track *tg, void *item);
 /* return the actual perlegen name, in form xx/yyyy cut off xx/ return yyyy */
-
-int haplotypeHeight(struct track *tg, struct linkedFeatures *lf, struct simpleFeature *sf);
-/* if the item isn't the first or the last make it smaller */
 
 void haplotypeMethods(struct track *tg);
 /* setup special methods for haplotype track */

@@ -1,5 +1,4 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.69 2010/06/11 18:14:23 larrym Exp $
 
 var debug = false;
 var originalPosition;
@@ -24,7 +23,10 @@ var selectedMenuItem;       // currently choosen context menu item (via context 
 var browser;                // browser ("msie", "safari" etc.)
 var mapIsUpdateable = true;
 var currentMapItem;
+var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
+var supportZoomCodon = false;
+var newJQuery = false;       // temporary #define for use while testing jQuery 1.5/jQuery UI 1.8 in dev trees
 
 function initVars(img)
 {
@@ -355,32 +357,10 @@ function toggleTrackGroupVisibility(button, prefix)
 {
 // toggle visibility of a track group; prefix is the prefix of all the id's of tr's in the
 // relevant group. This code also modifies the corresponding hidden fields and the gif of the +/- img tag.
-    var retval = true;
-    var hidden = $("input[name='hgtgroup_"+prefix+"_close']");
-    var newVal=1; // we're going - => +
-    if($(button) != undefined && $(hidden) != undefined && $(hidden).length > 0) {
-        var oldSrc = $(button).attr("src");
         if(arguments.length > 2)
-            newVal = arguments[2] ? 0 : 1;
+	return setTableRowVisibility(button, prefix, "hgtgroup", "group", false, arguments[2]);
         else
-            newVal = oldSrc.indexOf("/remove") > 0 ? 1 : 0;
-
-        var newSrc;
-        if(newVal == 1) {
-            newSrc = oldSrc.replace("/remove", "/add");
-            $(button).attr('title','Expand this group');
-            $("tr[id^='"+prefix+"-']").hide();
-        } else {
-            newSrc = oldSrc.replace("/add", "/remove");
-            $(button).attr('title','Collapse this group');
-            $("tr[id^='"+prefix+"-']").show();
-        }
-        $(button).attr("src",newSrc);
-        $(hidden).val(newVal);
-        // setCartVar("hgtgroup_" + prefix + "_close", newVal);
-        retval = false;
-    }
-    return retval;
+	return setTableRowVisibility(button, prefix, "hgtgroup", "group", false);
 }
 
 function setAllTrackGroupVisibility(newState)
@@ -1216,18 +1196,34 @@ function postToSaveSettings(obj)
 $(document).ready(function()
 {
     var db = getDb();
+    if(document.getElementById("hgt.newJQuery") != null) {
+        newJQuery = true;
+    }
     if(jQuery.fn.autocomplete && $('input#suggest') && db) {
-        $('input#suggest').autocomplete({
-                                            delay: 500,
-                                            minchars: 2,
-                                            ajax_get: ajaxGet(function () {return db;}, new Object),
-                                            callback: function (obj) {
-                                                setPosition(obj.id, commify(getSizeFromCoordinates(obj.id)));
-                                                // jQuery('body').css('cursor', 'wait');
-                                                // document.TrackHeaderForm.submit();
-                                            }
-                                        });
+        if(newJQuery) {
+            $('input#suggest').autocomplete({
+                                                delay: 500,
+                                                minLength: 2,
+                                                source: ajaxGet(function () {return db;}, new Object, true),
+                                                select: function (event, ui) {
+                                                        setPosition(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
+                                                        // jQuery('body').css('cursor', 'wait');
+                                                        // document.TrackHeaderForm.submit();
+                                                    }
+                                            });
 
+        } else {
+            $('input#suggest').autocomplete({
+                                                delay: 500,
+                                                minchars: 2,
+                                                ajax_get: ajaxGet(function () {return db;}, new Object, false),
+                                                callback: function (obj) {
+                                                    setPosition(obj.id, commify(getSizeFromCoordinates(obj.id)));
+                                                    // jQuery('body').css('cursor', 'wait');
+                                                    // document.TrackHeaderForm.submit();
+                                                }
+                                            });
+        }
         // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
         // working, which is a major annoyance.
         // $('input#suggest').focus();
@@ -1325,11 +1321,7 @@ $(document).ready(function()
                             show: function(event, ui) {
                                 $('#currentTab').val(ui.panel.id);
                             },
-                            select: function(event, ui) {
-                                if( ui.panel.id == 'simpleTab' && $('div#found').length < 1) {
-                                    setTimeout("$('input#simpleSearch').focus();",20); // delay necessary, since select event not afterSelect event
-                                }
-                            }
+                            select: function(event, ui) { findTracksSwitchTabs(ui); }
                         });
         $('#tabs').show();
         $("#tabs").tabs('option', 'selected', '#' + val);
@@ -1508,14 +1500,15 @@ function mapMouseDown(e)
     }
 }
 
-function contextMenuHit(menuItemClicked, menuObject, cmd)
+function contextMenuHit(menuItemClicked, menuObject, cmd, args)
 {
-    setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 1);
+    setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd, args); }, 1);
 }
 
-function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
+function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
 {
 // dispatcher for context menu hits
+    var id = selectedMenuItem.id;
     if(menuObject.shown) {
         // showWarning("Spinning: menu is still shown");
         setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 10);
@@ -1560,22 +1553,42 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                     }
                 } else {
                     var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
+                    var reg = new RegExp("hgg_gene=([^&]+)");
+                    var a = reg.exec(href);
+                    var name;
+                    // pull item name out of the url so we can set hgFind.matches (redmine 3062)
+                    if(a && a[1]) {
+                        name = a[1];
+                    } else {
+                        reg = new RegExp("[&?]i=([^&]+)");
+                        a = reg.exec(href);
+                        if(a && a[1]) {
+                            name = a[1];
+                        }
+                    }
                     if(browser == "safari" || imageV2) {
                         // We need to parse out more stuff to support resetting the position under imageV2 via ajax, but it's probably possible.
                         // See comments below on safari problems.
                         jQuery('body').css('cursor', 'wait');
+                        var ele;
                         if(document.TrackForm)
-                            document.TrackForm.submit();
+                            ele = document.TrackForm;
                         else
-                            document.TrackHeaderForm.submit();
+                            ele = document.TrackHeaderForm;
+                        if(name)
+                            $(ele).append("<input type='hidden' name='hgFind.matches' value='" + name + "'>");
+                        ele.submit();
                     } else {
                         // XXXX This attempt to "update whole track image in place" didn't work for a variety of reasons, so this is dead code, but
                         // I'm leaving it in case we try to implement this functionality in the future.
                         jQuery('body').css('cursor', '');
+                        var data = "hgt.trackImgOnly=1&hgt.ideogramToo=1&position=" + newPosition + "&hgsid=" + getHgsid();
+                        if(name)
+                            data += "&hgFind.matches=" + name;
                         $.ajax({
                                    type: "GET",
                                    url: "../cgi-bin/hgTracks",
-                                   data: "hgt.trackImgOnly=1&hgt.ideogramToo=1&position=" + newPosition + "&hgsid=" + getHgsid(),
+                                   data: data,
                                    dataType: "html",
                                    trueSuccess: handleUpdateTrackMap,
                                    success: catchErrorOrDispatch,
@@ -1586,6 +1599,26 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                     }
                 }
             }
+    } else if (cmd == 'zoomCodon' || cmd == 'zoomExon') {
+        var num, ajaxCmd;
+        if(cmd == 'zoomCodon') {
+            num = prompt("Please enter the codon number to jump to:");
+            ajaxCmd = 'codonToPos';
+        } else {
+            num = prompt("Please enter the exon number to jump to:");
+            ajaxCmd = 'exonToPos';
+        }
+        if(num) {
+            $.ajax({
+                       type: "GET",
+                       url: "../cgi-bin/hgApi",
+                       data: "db=" + getDb() +  "&cmd=" + ajaxCmd + "&num=" + num + "&table=" + args.table + "&name=" + args.name,
+                       trueSuccess: handleZoomCodon,
+                       success: catchErrorOrDispatch,
+                       error: errorHandler,
+                       cache: true
+                   });
+        }
     } else if (cmd == 'hgTrackUi_popup') {
 
         hgTrackUiPopUp( selectedMenuItem.id, false );  // Launches the popup but shields the ajax with a waitOnFunction
@@ -1593,7 +1626,6 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
     } else if (cmd == 'hgTrackUi_follow') {
 
         var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
-        var id = selectedMenuItem.id;
         var rec = trackDbJson[id];
         if (tdbHasParent(rec) && tdbIsLeaf(rec))
             url += rec.parentTrack
@@ -1630,25 +1662,48 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                    cmd: cmd,
                    cache: false
                });
-    } else if (cmd == 'openLink') {
-        // Remove hgsid to force a new session (see redmine ticket 1333).
-        var href = removeHgsid(selectedMenuItem.href);
-        var chrom = $("input[name=chromName]").val();
-        if(chrom && href.indexOf("c=" + chrom) == -1) {
-            // make sure the link contains chrom info (necessary b/c we are stripping hgsid)
-            href = href + "&c=" + chrom;
+    } else if (cmd == 'openLink' || cmd == 'followLink') {
+        var href = selectedMenuItem.href;
+        var vars = new Array("c", "l", "r");
+        var hiddens = new Array("chromName", "l", "r");
+        for (i in vars) {
+            // make sure the link contains chrom and window width info (necessary b/c we are stripping hgsid and/or the cart may be empty);
+            // but don't add chrom to wikiTrack links (see redmine #2476).
+            var val = $("input[name=" + hiddens[i] + "]").val();
+            var v = vars[i];
+            if(val && id != "wikiTrack" && (href.indexOf("?" + v + "=") == -1) && (href.indexOf("&" + v + "=") == -1)) {
+                href = href + "&" + v + "=" + val;
+            }
         }
-        if(window.open(href) == null) {
-            windowOpenFailedMsg();
+        if(cmd == 'followLink') {
+            // XXXX This is blocked by Safari's popup blocker (without any warning message).
+            location.assign(href);
+        } else {
+            // Remove hgsid to force a new session (see redmine ticket 1333).
+            href = removeHgsid(href);
+            if(window.open(href) == null) {
+                windowOpenFailedMsg();
+            }
         }
-    } else if (cmd == 'followLink') {
-        // XXXX This is blocked by Safari's popup blocker (without any warning message).
-        location.assign(selectedMenuItem.href);
+    } else if (cmd == 'float') {
+        if(floatingMenuItem && floatingMenuItem == id) {
+            $.floatMgr.FOArray = new Array();
+            floatingMenuItem = null;
+        } else {
+            if(floatingMenuItem) {
+                // This doesn't work.
+                $('#img_data_' + floatingMenuItem).parent().restartFloat();
+                // This does work
+                $.floatMgr.FOArray = new Array();
+            }
+            floatingMenuItem = id;
+            reloadFloatingItem();
+            updateTrackImg(id, "hgt.transparentImage=0", "");
+        }
     } else {   // if( cmd in 'hide','dense','squish','pack','full','show' )
         // Change visibility settings:
         //
         // First change the select on our form:
-        var id = selectedMenuItem.id;
         var rec = trackDbJson[id];
         var selectUpdated = updateVisibility(id, cmd);
 
@@ -1657,8 +1712,10 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         {
             // Hide local display of this track and update server side cart.
             // Subtracks controlled by 2 settings so del vis and set sel=0.  Others, just set vis hide.
-            if(rec.parentTrack != undefined)
-                setCartVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // Don't set '_sel" to [] because default gets used, but we are explicitly hiding this!
+            if(tdbIsSubtrack(rec))
+                setCartVars( [ id, id+"_sel" ], [ '[]', 0 ] ); // Remove subtrack level vis and explicitly uncheck.
+            else if(tdbIsFolderContent(rec))
+                setCartVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // supertrack children need to have _sel set to trigger superttrack reshaping
             else
                 setCartVar(id, 'hide' );
             $('#tr_' + id).remove();
@@ -1723,6 +1780,8 @@ function loadContextMenu(img)
 {
     var menu = img.contextMenu(
         function() {
+            popUpBoxCleanup();   // Popup box is not getting closed properly so must do it here
+
             var menu = [];
             var selectedImg = makeImgTag("greenChecksm.png");
             var blankImg    = makeImgTag("invisible16.png");
@@ -1739,9 +1798,11 @@ function loadContextMenu(img)
                 // XXXX what if select is not available (b/c trackControlsOnMain is off)?
                 // Move functionality to a hidden variable?
                 var select = $("select[name=" + id + "]");
-                var cur = select.val();
+                if (select.length > 1)  // Not really needed if $('#hgTrackUiDialog').html(""); has worked
+                    select =  [ $(select)[0] ];
+                var cur = $(select).val();
                 if(cur) {
-                    select.children().each(function(index, o) {
+                    $(select).children().each(function(index, o) {
                                                var title = $(this).val();
                                                var str = blankImg + " " + title;
                                                if(title == cur)
@@ -1777,28 +1838,71 @@ function loadContextMenu(img)
                 if(done) {
                     var o = new Object();
                     var any = false;
-                    if(isGene || isHgc) {
                         var title = selectedMenuItem.title || "feature";
-                        if(rec && !(rec.type.indexOf("wig") == 0 || rec.type.indexOf("bigWig") == 0)) {
-                        o[makeImgTag("magnify.png") + " Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
-                        o[makeImgTag("dnaIcon.png") + " Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
+                    if(isGene || isHgc || id == "wikiTrack") {
+                        // Add "Open details..." item
+                        var displayItemFunctions = false;
+                        if(rec) {
+                            if(rec.type.indexOf("wig") == 0 || rec.type.indexOf("bigWig") == 0 || id == "wikiTrack") {
+                                displayItemFunctions = false;
+                            } else if(rec.type.indexOf("expRatio") == 0) {
+                                displayItemFunctions = title != "zoomInMore";
+                            } else {
+                                displayItemFunctions = true;
+                            }
+                        }
+                        if(displayItemFunctions) {
+                            o[makeImgTag("magnify.png") + " Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
+                            if(supportZoomCodon && rec.type.indexOf("genePred") != -1) {
+                                // http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
+                                var name, table;
+                                var reg = new RegExp("hgg_gene=([^&]+)");
+                                var a = reg.exec(href);
+                                if(a && a[1]) {
+                                    name = a[1];
+                                    reg = new RegExp("hgg_type=([^&]+)");
+                                    a = reg.exec(href);
+                                    if(a && a[1]) {
+                                        table = a[1];
+                                    }
+                                } else {
+                                    // http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgc?o=55086724&t=55275031&g=refGene&i=NM_005228&c=chr7
+                                    // http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgc?o=55086713&t=55270769&g=wgEncodeGencodeManualV4&i=ENST00000455089&c=chr7
+                                    var reg = new RegExp("i=([^&]+)");
+                                    var a = reg.exec(href);
+                                    if(a && a[1]) {
+                                        name = a[1];
+                                        reg = new RegExp("g=([^&]+)");
+                                        a = reg.exec(href);
+                                        if(a && a[1]) {
+                                            table = a[1];
+                                        }
+                                    }
+                                }
+                                if(name && table) {
+                                    o[makeImgTag("magnify.png") + " Zoom to codon"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "zoomCodon", {name: name, table: table}); return true; }};
+                                    o[makeImgTag("magnify.png") + " Zoom to exon"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "zoomExon", {name: name, table: table}); return true; }};
+                                }
+                            }
+                            o[makeImgTag("dnaIcon.png") + " Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
                         }
                         o[makeImgTag("bookOut.png") + " Open details page in new window..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
                         any = true;
                     }
-                    if(selectedMenuItem.title != undefined && selectedMenuItem.title.length > 0
-                    && selectedMenuItem.href  != undefined && selectedMenuItem.href.length  > 0) {
-                        var str = selectedMenuItem.title;
-                        if(str.indexOf("Click to alter ") == 0) {
+                    if(href != undefined && href.length  > 0) {
+                        // Add "Show details..." item
+                        if(title.indexOf("Click to alter ") == 0) {
                             ; // suppress the "Click to alter..." items
                         } else if(selectedMenuItem.href.indexOf("cgi-bin/hgTracks") != -1) {
                             ; // suppress menu items for hgTracks links (e.g. Next/Prev map items).
                         } else {
-                            if(str.indexOf("display density") != -1)
-                                str = makeImgTag("toggle.png") + str;
+                            var item;
+                            if(title == "zoomInMore")
+                                // avoid showing menu item that says "Show details for zoomInMore..." (redmine 2447)
+                                item = makeImgTag("book.png") + " Show details...";
                             else
-                                str = makeImgTag("book.png") + " Show details for " + str + "...";
-                            o[str] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
+                                item = makeImgTag("book.png") + " Show details for " + title + "...";
+                            o[item] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
                             any = true;
                         }
                     }
@@ -1841,6 +1945,9 @@ function loadContextMenu(img)
                         o[makeImgTag("folderWrench.png") + " Configure " + rec.parentLabel + " track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
                 } else
                     o[makeImgTag("folderWrench.png") + " Configure " + rec.shortLabel + " track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
+                if(jQuery.floatMgr) {
+                    o[(selectedMenuItem.id == floatingMenuItem ? selectedImg : blankImg) + " float"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "float"); return true; }};
+                }
                 menu.push($.contextMenu.separator);
                 menu.push(o);
             }
@@ -1918,6 +2025,17 @@ function updateTrackImg(trackName,extraData,loadingId)
 var popUpTrackName = "";
 var popUpTrackDescriptionOnly = false;
 var popSaveAllVars = null;
+
+function popUpBoxCleanup()
+{  // Clean out the popup box on close
+    if ($('#hgTrackUiDialog').html().length > 0 ) {
+        $('#hgTrackUiDialog').html("");  // clear out html after close to prevent problems caused by duplicate html elements
+        popUpTrackName = ""; //set to defaults
+        popUpTrackDescriptionOnly = false;
+        popSaveAllVars = null;
+    }
+}
+
 function _hgTrackUiPopUp(trackName,descriptionOnly)
 { // popup cfg dialog
     popUpTrackName = trackName;
@@ -1979,10 +2097,12 @@ function hgTrackUiPopCfgOk(popObj, trackName)
                 updateVisibility(trackName, newVis);
             }
             var urlData = varHashToQueryString(changedVars);
-            if(mapIsUpdateable) {
-                updateTrackImg(trackName,urlData,"");
-            } else {
-                window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
+            if(urlData.length > 0) {
+                if(mapIsUpdateable) {
+                    updateTrackImg(trackName,urlData,"");
+                } else {
+                    window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
+                }
             }
         }
     }
@@ -1995,7 +2115,54 @@ function handleTrackUi(response, status)
     // make sure all links (e.g. help links) open up in a new window
     response = response.replace(/<a /ig, "<a target='_blank' ");
 
-    $('#hgTrackUiDialog').html("<div id='pop'>" + response + "</div>");
+    // TODO: Shlurp up any javascript files from the response and load them with $.getScript()
+    // example <script type='text/javascript' SRC='../js/tdreszer/jquery.contextmenu-1296177766.js'></script>
+    var cleanHtml = response;
+    var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
+    var jsFiles = cleanHtml.match(shlurpPattern);
+    cleanHtml = cleanHtml.replace(shlurpPattern,"");
+    shlurpPattern=/\<script type=\'text\/javascript\'>.*\<\/script\>/gi;
+    var jsEmbeded = cleanHtml.match(shlurpPattern);
+    cleanHtml = cleanHtml.replace(shlurpPattern,"");
+    //<LINK rel='STYLESHEET' href='../style/ui.dropdownchecklist-1276528376.css' TYPE='text/css' />
+    shlurpPattern=/\<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
+    var cssFiles = cleanHtml.match(shlurpPattern);
+    cleanHtml = cleanHtml.replace(shlurpPattern,"");
+
+    $('#hgTrackUiDialog').html("<div id='pop'>" + cleanHtml + "</div>");
+
+    // Strategy for poups with js:
+    // - jsFiles and CSS should not be included in html.  Here they are shluped out.
+    // - The resulting files ought to be loadable dynamically (with getScript()), but this was not working nicely with the modal dialog
+    //   Therefore include files must be included with hgTracks CGI !
+    // - embedded js should not be in the popup box.
+    // - Somethings should be in a popup.ready() function, and this is emulated below, as soon as the cleanHtml is added
+    //   Since there are many possible popup cfg dialogs, the ready should be all inclusive.
+
+    /* //in open ?  Will load of css work this way?
+    $(cssFiles).each(function (i) {
+        bix = "<LINK rel='STYLESHEET' href='".length;
+        eix = this.lastIndexOf("' TYPE='text/css' />");
+        file = this.substring(bix,eix);
+        $.getScript(file); // Should protect against already loaded files.
+    }); */
+    /* //in open ?  Loads fine, but then dialog gets confused
+    $(jsFiles).each(function (i) {
+        bix = "<script type='text/javascript' SRC='".length;
+        eix = this.lastIndexOf("'></script>");
+        file = this.substring(bix,eix);
+        //$.getScript(file,function(data) { warn(data.substring(0,20) + " loaded")});
+    });*/
+
+    if( ! popUpTrackDescriptionOnly ) {
+        var subtrack = tdbIsSubtrack(trackDbJson[popUpTrackName]) ? popUpTrackName :"";  // If subtrack then vis rules differ
+        popSaveAllVars = getAllVars( $('#hgTrackUiDialog'), subtrack );  // Saves the vars that may get changed by the popup cfg.
+
+        // -- popup.ready() -- Here is the place to do things that might otherwise go into a $('#pop').ready() routine!
+        $('#hgTrackUiDialog').find('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
+            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy') });
+        });
+    }
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
                                    // This doesn't work
@@ -2014,17 +2181,16 @@ function handleTrackUi(response, status)
                                         hgTrackUiPopCfgOk($('#pop'), popUpTrackName);
                                     $(this).dialog("close");
                                }},
-                               open: function() {
-                                    var subtrack = tdbIsSubtrack(trackDbJson[popUpTrackName]) ? popUpTrackName :"";  // If subtrack then vis rules differ
-                                    popSaveAllVars = getAllVars( $('#pop'), subtrack );
-                               },
+                               // popup.ready() doesn't seem to work in open.  So there is no need for open at this time.
+                               //open: function() {
+                               //     var subtrack = tdbIsSubtrack(trackDbJson[popUpTrackName]) ? popUpTrackName :"";  // If subtrack then vis rules differ
+                               //     popSaveAllVars = getAllVars( $('#pop'), subtrack );
+                               //},
                                close: function() {
-                                   $('#hgTrackUiDialog').html("");  // clear out html after close to prevent problems caused by duplicate html elements
-                                popUpTrackName = ""; //set to defaults
-                                popUpTrackDescriptionOnly = false;
-                                popSaveAllVars = null;
+                                   popUpBoxCleanup();
                                }
                            });
+    // FIXME: Why are open and close no longer working!!!
     if(popUpTrackDescriptionOnly) {
         var myWidth =  $(window).width() - 300;
         if(myWidth > 900)
@@ -2101,6 +2267,7 @@ function handleUpdateTrackMap(response, status)
                // loadContextMenu($('#tr_' + id));
                if(trackImgTbl.tableDnDUpdate)
                    trackImgTbl.tableDnDUpdate();
+               reloadFloatingItem();
                // NOTE: Want to examine the png? Uncomment:
                //var img = $('#tr_' + id).find("img[id^='img_data_']").attr('src');
                //warn("Just parsed image:<BR>"+img);
@@ -2223,87 +2390,6 @@ function remoteTrackCallback(rec)
     }
 }
 
-/////////////////////////////////////////////////////
-// findTracks functions
-
-function findTracksMdbVarChanged(obj)
-{ // Ajax call to repopulate a metadata vals select when mdb var changes
-    var newVar = $(obj).val();
-    var a = /hgt_mdbVar(\d+)/.exec(obj.name); // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
-    if(newVar != undefined && a && a[1]) {
-        var num = a[1];
-        $.ajax({
-                   type: "GET",
-                   url: "../cgi-bin/hgApi",
-                   data: "db=" + getDb() +  "&cmd=metaDb&var=" + newVar,
-                   trueSuccess: findTracksHandleNewMdbVals,
-                   success: catchErrorOrDispatch,
-                   error: errorHandler,
-                   cache: true,
-                   cmd: "hgt_mdbVal" + num, // NOTE must match METADATA_VALUE_PREFIX in hg/hgTracks/searchTracks.c
-                   num: num
-               });
-    }
-    //findTracksSearchButtonsEnable(true);
-}
-
-function findTracksHandleNewMdbVals(response, status)
-// Handle ajax response (repopulate a metadata val select)
-{   // TODO Support for returning whole control, not list of values.
-    var list = eval(response);
-    var ele = $('select[name=' + this.cmd + ']');
-    ele.empty();
-    ele.append("<option VALUE='Any'>Any</option>");
-    for (var i = 0; i < list.length; i++) {
-        var pair = list[i];
-        ele.append("<option VALUE='" + pair[1] + "'>" + pair[0] + "</option>");
-    }
-    updateMetaDataHelpLinks(this.num);
-}
-
-// TODO: Replace findTracksMdbVarChanged() and findTracksHandleNewMdbVals()
-function findTracksMdbVarChanged2(obj)
-{ // Ajax call to repopulate a metadata vals select when mdb var changes
-    var newVar = $(obj).val();
-    var a = /hgt_mdbVar(\d+)/.exec(obj.name); // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
-    if(newVar != undefined && a && a[1]) {
-        var num = a[1];
-        $.ajax({
-                   type: "GET",
-                   url: "../cgi-bin/hgApi",
-                   data: "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar,
-                   trueSuccess: findTracksHandleNewMdbVals2,
-                   success: catchErrorOrDispatch,
-                   error: errorHandler,
-                   cache: true,
-                   cmd: "hgt_mdbVal" + num, // NOTE must match METADATA_VALUE_PREFIX in hg/hgTracks/searchTracks.c
-                   num: num
-               });
-    }
-    //findTracksSearchButtonsEnable(true);
-}
-
-function findTracksHandleNewMdbVals2(response, status)
-// Handle ajax response (repopulate a metadata val select)
-{   // TODO Support for returning whole control, not list of values.
-    //var list = eval(response);
-    var td = $('td#' + this.cmd );
-    if (td != undefined) {
-        td.empty();
-        td.append(response);
-        var inp = $(td).find('.mdbVal');
-        var tdIsLike = $('td#isLike'+this.num);
-        if (inp != undefined && tdIsLike != undefined) {
-            if ($(inp).hasClass('freeText')) {
-                $(tdIsLike).text('contains');
-            } else {
-                $(tdIsLike).text('is');
-            }
-        }
-    }
-    updateMetaDataHelpLinks(this.num);
-}
-
 function searchKeydown(event)
 {
     if (event.which == 13) {
@@ -2315,283 +2401,7 @@ function searchKeydown(event)
     }
 }
 
-function findTracksChangeVis(seenVis)
-{ // called by onchange of vis
-    var visName = $(seenVis).attr('id');
-    var trackName = visName.substring(0,visName.length - "_id".length)
-    var hiddenVis = $("input[name='"+trackName+"']");
-    var tdb = tdbGetJsonRecord(trackName);
-    if($(seenVis).val() != "hide")
-        $(hiddenVis).val($(seenVis).val());
-    else {
-        var selCb = $("input#"+trackName+"_sel_id");
-        $(selCb).attr('checked',false);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-        $(seenVis).attr('disabled',true);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-        var needSel = (tdb.parentTrack != undefined);
-        if (needSel) {
-            var hiddenSel = $("input[name='"+trackName+"_sel']");
-            $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-            $(hiddenSel).attr('disabled',false);
-        }
-        if(tdbIsSubtrack(tdb))
-            $(hiddenVis).val("[]");
-        else
-            $(hiddenVis).val("hide");
-    }
-    $(hiddenVis).attr('disabled',false);
-
-    $('input.viewBtn').val('View in Browser');
-    //warn("Changed "+trackName+" to "+$(hiddenVis).val())
-}
-
-function findTracksClickedOne(selCb,justClicked)
-{ // called by on click of CB and findTracksCheckAll()
-    var selName = $(selCb).attr('id');
-    var trackName = selName.substring(0,selName.length - "_sel_id".length)
-    var hiddenSel = $("input[name='"+trackName+"_sel']");
-    var seenVis = $('select#' + trackName + "_id");
-    var hiddenVis = $("input[name='"+trackName+"']");
-    var tr = $(selCb).parents('tr.found');
-    var tdb = tdbGetJsonRecord(trackName);
-    var needSel = (tdb.parentTrack != undefined);
-    var shouldPack = tdb.canPack && tdb.kindOfParent == 0; // If parent then not pack but full
-    if (shouldPack && tdb.shouldPack != undefined && !tdb.shouldPack)
-        shouldPack = false;
-    var checked = $(selCb).attr('checked');
-    //warn(trackName +" selName:"+selName +" justClicked:"+justClicked +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" needSel:"+needSel +" shouldPack:"+shouldPack);
-
-    // First deal with seenVis control
-    if(checked) {
-        $(seenVis).attr('disabled', false);
-        if($(seenVis).attr('selectedIndex') == 0) {
-            if(shouldPack)
-                $(seenVis).attr('selectedIndex',3);  // packed
-            else
-                $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
-        }
-    } else {
-        $(seenVis).attr('selectedIndex',0);  // hide
-        $(seenVis).attr('disabled', true );
-    }
-
-    // Deal with hiddenSel and hiddenVis so that submit does the right thing
-    // Setting these requires justClicked OR seen vs. hidden to be different
-    var setHiddenInputs = justClicked;
-    if(!justClicked) {
-        if(needSel)
-            setHiddenInputs = (checked != ($(hiddenSel).val() == '1'));
-        else if (checked)
-            setHiddenInputs = ($(seenVis).val() != $(hiddenVis).val());
-        else
-            setHiddenInputs = ($(hiddenVis).val() != "hide" && $(hiddenVis).val() != "[]");
-    }
-    if(setHiddenInputs) {
-        if(checked)
-            $(hiddenVis).val($(seenVis).val());
-        else if(tdbIsSubtrack(tdb))
-            $(hiddenVis).val("[]");
-        else
-            $(hiddenVis).val("hide");
-        $(hiddenVis).attr('disabled',false);
-
-        if(needSel) {
-            if(checked)
-                $(hiddenSel).val('1');
-            else
-                $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-            $(hiddenSel).attr('disabled',false);
-        }
-    }
-
-    // The "view in browser" button should be enabled/disabled
-    if(justClicked) {
-        $('input.viewBtn').val('View in Browser');
-        findTracksCounts();
-    }
-}
-
-
-function findTracksNormalize()
-{ // Normalize the page based upon current state of all found tracks
-    $('div#found').show()
-    var selCbs = $('input.selCb');
-
-    // All should have their vis enabled/disabled appropriately (false means don't update cart)
-    $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
-
-    findTracksCounts();
-}
-
-function findTracksNormalizeWaitOn()
-{ // Put up wait mask then Normalize the page based upon current state of all found tracks
-    waitOnFunction( findTracksNormalize );
-}
-
-function findTracksCheckAll(check)
-{ // Checks/unchecks all found tracks.
-    var selCbs = $('input.selCb');
-    $(selCbs).attr('checked',check);
-
-    // All should have their vis enabled/disabled appropriately (false means don't update cart)
-    $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
-
-    $('input.viewBtn').val('View in Browser');
-    findTracksCounts();
-    return false;  // Pressing button does nothing more
-}
-
-function findTracksCheckAllWithWait(check)
-{
-    waitOnFunction( findTracksCheckAll, check);
-}
-
-function findTracksSearchButtonsEnable(enable)
-{ // Displays visible and checked track count
-    var searchButton = $('input[name="hgt_tSearch"]'); // NOTE: must match TRACK_SEARCH in hg/inc/searchTracks.h
-    var clearButton  = $('input.clear');
-    if(enable) {
-        $(searchButton).attr('disabled',false);
-        $(clearButton).attr('disabled',false);
-    } else {
-        $(searchButton).attr('disabled',true);
-        $(clearButton).attr('disabled',true);
-    }
-}
-
-function findTracksCounts()
-{// Displays visible and checked track count
-    var counter = $('.selCbCount');
-    if(counter != undefined) {
-        var selCbs =  $("input.selCb");
-        $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
-    }
-}
-
-function findTracksClear()
-{// Clear found tracks and all input controls
-    var foundTracks = $('div#found');
-    if(foundTracks != undefined)
-        $(foundTracks).remove();
-    $('input[type="text"]').val(''); // This will always be found
-    //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
-    $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
-    $('select.groupSearch').attr('selectedIndex',0);
-    $('select.typeSearch').attr('selectedIndex',0);
-    //findTracksSearchButtonsEnable(false);
-    return false;
-}
-
-function findTracksSortNow(obj)
-{// Called by radio button to sort tracks
-    if( $('#sortIt').length == 0 )
-        $('form#trackSearch').append("<input TYPE=HIDDEN id='sortIt' name='"+$(obj).attr('name')+"' value='"+$(obj).val()+"'>");
-    else
-        $('#sortIt').val($(obj).val());
-
-    // How to hold onto selected tracks?
-    // There are 2 separate forms.  Scrape named inputs from searchResults form and dup them on trackSearch?
-    var inp = $('form#searchResults').find('input:hidden').not(':disabled').not("[name='hgsid']");
-    if($(inp).length > 0) {
-        $(inp).appendTo('form#trackSearch');
-        $('form#trackSearch').attr('method','POST'); // Must be post to avoid url too long  NOTE: probably needs to be post anyway
-    }
-
-    $('#searchSubmit').click();
-    return true;
-}
-
-function findTracksPage(pageVar,startAt)
-{// Called by radio button to sort tracks
-    var pager = $("input[name='"+pageVar+"']");
-    if( $(pager).length == 1)
-        $(pager).val(startAt);
-
-    // How to hold onto selected tracks?
-    // There are 2 separate forms.  Scrape named inputs from searchResults form and dup them on trackSearch?
-    var inp = $('form#searchResults').find('input:hidden').not(':disabled').not("[name='hgsid']");
-    if($(inp).length > 0) {
-        $(inp).appendTo('form#trackSearch');
-        $('form#trackSearch').attr('method','POST'); // Must be post to avoid url too long  NOTE: probably needs to be post anyway
-    }
-
-    $('#searchSubmit').click();
-    return false;
-}
-
-function findTracksConfigureSet(name)
-{// Called when configuring a composite or superTrack
-    var thisForm =  $('form#searchResults');
-    $(thisForm).attr('action',"../cgi-bin/hgTrackUi?hgt_tSearch=Search&g="+name);
-    $(thisForm).find('input.viewBtn').click();
-}
-
 /////////////////////////////////////////////////////
-
-function delSearchSelect(obj, rowNum)
-{
-    obj = $(obj);
-    $("input[name=hgt_tsDelRow]").val(rowNum);  // NOTE: Must match TRACK_SEARCH_DEL_ROW in hg/inc/searchTracks.h
-    return true;
-}
-
-function addSearchSelect(obj, rowNum)
-{
-    obj = $(obj);
-    $("input[name=hgt_tsAddRow]").val(rowNum);  // NOTE: Must match TRACK_SEARCH_ADD_ROW in hg/inc/searchTracks.h
-    return true;
-}
-
-function updateMetaDataHelpLinks(index)
-{
-// update the metadata help links based on currently selected values.
-// If index == 0 we update all help items, otherwise we only update the one == index.
-    var i;
-    var db = getDb();
-    var disabled = {
-        'accession': 1,
-        'dataType': 1,
-        'dataVersion': 1,
-        'geoSample': 1,
-        'grant': 1,
-        'lab': 1,
-        'labExpId': 1,
-        'labVersion': 1,
-        'origAssembly': 1,
-        'replicate': 1,
-        'setType': 1,
-        'softwareVersion': 1,
-        'subId': 1,
-        'view': 1
-    }
-    for(i=1;true;i++) {
-        var span = $("#helpLink" + i);
-        if(span.length > 0) {
-            if(index == 0 || i == index) {
-                var val = $("select[name='hgt_mdbVar" + i + "']").val();  // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
-                var text = $("select[name='hgt_mdbVar" + i + "'] option:selected").text();
-                var str;
-                span.empty();
-                if(val == 'cell') {
-                    if(db.substr(0, 2) == "mm") {
-                        str = "../ENCODE/cellTypesMouse.html";
-                    } else {
-                        str = "../ENCODE/cellTypes.html";
-                    }
-                } else if (val.toLowerCase() == 'antibody') {
-                    str = "../ENCODE/antibodies.html";
-                } else {
-                    str = "../ENCODE/otherTerms.html#" + val;
-                }
-                if(typeof(disabled[val]) == 'undefined')
-                    span.html("<a target='_blank' title='detailed descriptions of terms' href='" + str + "'>" + text + "</a>");
-                else
-                    span.empty();
-            }
-        } else {
-            return;
-        }
-    }
-}
 
 function windowOpenFailedMsg()
 {
@@ -2605,6 +2415,7 @@ function updateVisibility(track, visibility)
     var rec = trackDbJson[track];
     var selectUpdated = false;
     $("select[name=" + track + "]").each(function(t) {
+                                          $(this).attr('class', visibility == 'hide' ? 'hiddenText' : 'normalText');
                                           $(this).val(visibility);
                                           selectUpdated = true;
                                       });
@@ -2612,4 +2423,26 @@ function updateVisibility(track, visibility)
         rec.localVisibility = visibility;
     }
     return selectUpdated;
+}
+
+function reloadFloatingItem()
+{
+// currently dead (experimental code)
+    if(floatingMenuItem) {
+        $('#img_data_' + floatingMenuItem).parent().makeFloat({x:"current",y:"current", speed: 'fast', alwaysVisible: true, alwaysTop: true});
+    }
+}
+
+function handleZoomCodon(response, status)
+{
+    var json = eval("(" + response + ")");
+    if(json.pos) {
+        setPosition(json.pos, 3);
+        if(document.TrackForm)
+            document.TrackForm.submit();
+        else
+            document.TrackHeaderForm.submit();
+    } else {
+        alert(json.error);
+    }
 }

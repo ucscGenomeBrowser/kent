@@ -5,10 +5,11 @@ antibody H3K4me1
 cell BoneMarrow
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-14
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
@@ -17,10 +18,11 @@ parentTable wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2491
+subId 3387
 view Alignments
 
 metaObject wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdAlnRep2
@@ -30,10 +32,11 @@ antibody H3K4me1
 cell BoneMarrow
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-14
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
@@ -42,11 +45,38 @@ parentTable wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2491
+subId 3387
 view Alignments
+
+metaObject wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me1
+cell BoneMarrow
+composite wgEncodeLicrHistone
+control std
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3387
+tableName wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -55,10 +85,11 @@ antibody H3K4me1
 cell BoneMarrow
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-14
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -67,10 +98,11 @@ parentTable wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2491
+subId 3387
 view RawData
 
 metaObject wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdRawDataRep2
@@ -80,10 +112,11 @@ antibody H3K4me1
 cell BoneMarrow
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-14
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -92,11 +125,38 @@ parentTable wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2491
+subId 3387
 view RawData
+
+metaObject wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody H3K4me1
+cell BoneMarrow
+composite wgEncodeLicrHistone
+control std
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3387
+tableName wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdSig
+view Signal
 
 metaObject wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdAlnRep1
 objType file
@@ -105,10 +165,11 @@ antibody H3K4me3
 cell BoneMarrow
 composite wgEncodeLicrHistone
 control std
+controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-13
-dateUnrestricted 2011-06-13
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
@@ -116,10 +177,11 @@ labVersion 11/19/09 Lane 3
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2205
+subId 3388
 view Alignments
 
 metaObject wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdAlnRep2
@@ -129,10 +191,11 @@ antibody H3K4me3
 cell BoneMarrow
 composite wgEncodeLicrHistone
 control std
+controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-13
-dateUnrestricted 2011-06-13
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
@@ -140,11 +203,38 @@ labVersion 12/09/09 Lane 2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2205
+subId 3388
 view Alignments
+
+metaObject wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me3
+cell BoneMarrow
+composite wgEncodeLicrHistone
+control std
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3388
+tableName wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -153,10 +243,11 @@ antibody H3K4me3
 cell BoneMarrow
 composite wgEncodeLicrHistone
 control std
+controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-13
-dateUnrestricted 2011-06-13
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -164,10 +255,11 @@ labVersion 11/19/09 Lane 3
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2205
+subId 3388
 view RawData
 
 metaObject wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdRawDataRep2
@@ -177,10 +269,11 @@ antibody H3K4me3
 cell BoneMarrow
 composite wgEncodeLicrHistone
 control std
+controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-13
-dateUnrestricted 2011-06-13
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -188,11 +281,194 @@ labVersion 12/09/09 Lane 2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2205
+subId 3388
 view RawData
+
+metaObject wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody H3K4me3
+cell BoneMarrow
+composite wgEncodeLicrHistone
+control std
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3388
+tableName wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Cerebellum
+composite wgEncodeLicrHistone
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-08
+dateUnrestricted 2011-12-07
+fileName wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdAlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 12/09/09 Lane 1
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3812
+view Alignments
+
+metaObject wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Cerebellum
+composite wgEncodeLicrHistone
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-08
+dateUnrestricted 2011-12-07
+fileName wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdAlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 02/10/10 Lane 6
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3812
+view Alignments
+
+metaObject wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me1
+cell Cerebellum
+composite wgEncodeLicrHistone
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-08
+dateUnrestricted 2011-12-07
+fileName wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3812
+tableName wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdPk
+view Peaks
+
+metaObject wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Cerebellum
+composite wgEncodeLicrHistone
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-08
+dateUnrestricted 2011-12-07
+fileName wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 12/09/09 Lane 1
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3812
+view RawData
+
+metaObject wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Cerebellum
+composite wgEncodeLicrHistone
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-08
+dateUnrestricted 2011-12-07
+fileName wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 02/10/10 Lane 6
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3812
+view RawData
+
+metaObject wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody H3K4me1
+cell Cerebellum
+composite wgEncodeLicrHistone
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-08
+dateUnrestricted 2011-12-07
+fileName wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3812
+tableName wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdSig
+view Signal
 
 metaObject wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdAlnRep1
 objType file
@@ -201,10 +477,11 @@ antibody H3K4me3
 cell Cerebellum
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-15
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
 fileName wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
@@ -212,10 +489,12 @@ labVersion 5/26/09 Lane 6
 parentTable wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
+seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2490
+subId 3394
 view Alignments
 
 metaObject wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdAlnRep2
@@ -225,10 +504,11 @@ antibody H3K4me3
 cell Cerebellum
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-15
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
 fileName wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
@@ -236,11 +516,39 @@ labVersion 8/20/09 Lane 6
 parentTable wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
+seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2490
+subId 3394
 view Alignments
+
+metaObject wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me3
+cell Cerebellum
+composite wgEncodeLicrHistone
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3394
+tableName wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -249,10 +557,11 @@ antibody H3K4me3
 cell Cerebellum
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-15
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
 fileName wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -260,10 +569,12 @@ labVersion 5/26/09 Lane 6
 parentTable wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
+seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2490
+subId 3394
 view RawData
 
 metaObject wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdRawDataRep2
@@ -273,10 +584,11 @@ antibody H3K4me3
 cell Cerebellum
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-15
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
 fileName wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -284,11 +596,39 @@ labVersion 8/20/09 Lane 6
 parentTable wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
+seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2490
+subId 3394
 view RawData
+
+metaObject wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody H3K4me3
+cell Cerebellum
+composite wgEncodeLicrHistone
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3394
+tableName wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdSig
+view Signal
 
 metaObject wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep1
 objType file
@@ -297,10 +637,11 @@ antibody H3K4me1
 cell Cortex
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
@@ -309,10 +650,11 @@ parentTable wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2508
+subId 3396
 view Alignments
 
 metaObject wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep2
@@ -322,22 +664,24 @@ antibody H3K4me1
 cell Cortex
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
-labVersion 10/23/09 Lane 7
+labVersion 12/14/09 Lane 2
 parentTable wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2508
+subId 3396
 view Alignments
 
 metaObject wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep3
@@ -365,6 +709,32 @@ strain C57BL/6
 subId 2508
 view Alignments
 
+metaObject wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me1
+cell Cortex
+composite wgEncodeLicrHistone
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3396
+tableName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -372,10 +742,11 @@ antibody H3K4me1
 cell Cortex
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -384,10 +755,11 @@ parentTable wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2508
+subId 3396
 view RawData
 
 metaObject wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdRawDataRep2
@@ -397,22 +769,24 @@ antibody H3K4me1
 cell Cortex
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
-labVersion 10/23/09 Lane 7
+labVersion 12/14/09 Lane 2
 parentTable wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2508
+subId 3396
 view RawData
 
 metaObject wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdRawDataRep3
@@ -440,6 +814,32 @@ strain C57BL/6
 subId 2508
 view RawData
 
+metaObject wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody H3K4me1
+cell Cortex
+composite wgEncodeLicrHistone
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3396
+tableName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdSig
+view Signal
+
 metaObject wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -447,10 +847,11 @@ antibody H3K4me3
 cell Cortex
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
@@ -459,10 +860,11 @@ parentTable wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2509
+subId 3397
 view Alignments
 
 metaObject wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdAlnRep2
@@ -472,10 +874,11 @@ antibody H3K4me3
 cell Cortex
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
@@ -484,11 +887,38 @@ parentTable wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2509
+subId 3397
 view Alignments
+
+metaObject wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me3
+cell Cortex
+composite wgEncodeLicrHistone
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3397
+tableName wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -497,10 +927,11 @@ antibody H3K4me3
 cell Cortex
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -509,10 +940,11 @@ parentTable wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2509
+subId 3397
 view RawData
 
 metaObject wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdRawDataRep2
@@ -522,10 +954,11 @@ antibody H3K4me3
 cell Cortex
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -534,11 +967,38 @@ parentTable wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2509
+subId 3397
 view RawData
+
+metaObject wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody H3K4me3
+cell Cortex
+composite wgEncodeLicrHistone
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3397
+tableName wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdSig
+view Signal
 
 metaObject wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdAlnRep1
 objType file
@@ -744,4 +1204,4 @@ strain C57BL/6
 subId 3002
 view RawData
 
-# MAGIC: -733265284
+# MAGIC: -370249896

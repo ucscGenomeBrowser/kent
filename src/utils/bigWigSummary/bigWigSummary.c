@@ -6,6 +6,7 @@
 #include "sqlNum.h"
 #include "udc.h"
 #include "bigWig.h"
+#include "obscure.h"
 
 static char const rcsid[] = "$Id: bigWigSummary.c,v 1.13 2009/11/20 17:12:17 kent Exp $";
 
@@ -21,6 +22,7 @@ errAbort(
   "   bigWigSummary file.bigWig chrom start end dataPoints\n"
   "Get summary data from bigWig for indicated region, broken into\n"
   "dataPoints equal parts.  (Use dataPoints=1 for simple summary.)\n"
+  "\nNOTE:  start and end coordinates are in BED format (0-based)\n\n"
   "options:\n"
   "   -type=X where X is one of:\n"
   "         mean - average value in region (default)\n"
@@ -81,5 +83,7 @@ if (argc != 6)
 summaryType = optionVal("type", summaryType);
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 bigWigSummary(argv[1], argv[2], sqlUnsigned(argv[3]), sqlUnsigned(argv[4]), sqlUnsigned(argv[5]));
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }

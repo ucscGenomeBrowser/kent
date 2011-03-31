@@ -12,7 +12,7 @@ void usage()
 errAbort("genePredToPsl - Program to create fake psl alignments from\n"
 	 "genePred records. Originally designed for use with altSplice.\n"
 	 "usage:\n"
-	 "   genePredToPsl db file.gp fileOut.psl\n"
+	 "   genePredToPsl chrom.sizes file.gp fileOut.psl\n"
 	 "\n"
 	 "options:\n"
 	 "   -bedFormat  input file is in bed format instead of genePred\n"
@@ -56,35 +56,30 @@ psl->blockCount = gp->exonCount;
 return psl;
 }
 
-int chromSize(char *db, char *string)
-/* Return the chromosome size of a given chromosome. */
+struct hash *getChromSizes(char *chromSizesFile)
+/* read the chromosome sizes file. */
 {
-static struct hash *chromSizes = NULL;
-
-if(chromSizes == NULL)
-    chromSizes = newHash(5);
-if(hashFindVal(chromSizes, string) == NULL)
-    {
-    int chrom = hChromSize(db, string);
-    char buff[256];
-    safef(buff, sizeof(buff), "%d", chrom);
-    hashAdd(chromSizes, string, cloneString(buff));
-    return chrom;
-    }
-else
-    return atoi(hashFindVal(chromSizes, string));
+struct lineFile *lf = lineFileOpen(chromSizesFile, TRUE);
+struct hash *sizes = newHash(12);
+char *words[2];
+while (lineFileRow(lf, words))
+    hashAddInt(sizes, words[0], sqlSigned(words[1]));
+lineFileClose(&lf);
+return sizes;
 }
 
-void pslListFromGenePred(char *db, struct genePred *gpList, FILE *out) 
+void pslListFromGenePred(char *chromSizesFile, struct genePred *gpList, FILE *out) 
 {
+struct hash *chromSizes = getChromSizes(chromSizesFile);
 struct genePred *gp = NULL;
 struct psl *psl=NULL;
 for(gp=gpList; gp != NULL; gp=gp->next)
     {
-    int size = chromSize(db, gp->chrom);
+    int size = hashIntVal(chromSizes, gp->chrom);
     psl = pslFromGenePred(gp, size);
     pslTabOut(psl, out);
     }
+hashFree(&chromSizes);
 }
 
 struct genePred *gpFromBedFile(char *file) 
@@ -120,14 +115,14 @@ optionInit(&argc, argv, NULL);
 if(argc !=4)
     usage();
 warn("Loading gene predictions.");
-char *db = argv[1];
+char *chromSizesFile = argv[1];
 if(optionExists("bedFormat")) 
     gpList = gpFromBedFile(argv[2]);
 else
     gpList = genePredLoadAll(argv[2]);
 out = mustOpen(argv[3],"w");
 warn("Doing conversion.");
-pslListFromGenePred(db, gpList, out);
+pslListFromGenePred(chromSizesFile, gpList, out);
 carefulClose(&out);
 warn("Done.");
 return 0;

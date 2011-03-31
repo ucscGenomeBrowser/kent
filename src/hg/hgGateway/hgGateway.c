@@ -13,6 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 #include "customTrack.h"
+#include "hubConnect.h"
 #include "hgConfig.h"
 #include "jsHelper.h"
 #include "hPrint.h"
@@ -21,7 +22,6 @@
 
 static char const rcsid[] = "$Id: hgGateway.c,v 1.117 2010/04/29 02:54:35 larrym Exp $";
 
-boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
 char *clade = NULL;
@@ -57,7 +57,12 @@ if (sameString(position, "genome") || sameString(position, "hgBatch"))
 
 webIncludeResourceFile("autocomplete.css");
 jsIncludeFile("jquery.js", NULL);
+#ifdef NEW_JQUERY
+webIncludeResourceFile("jquery-ui.css");
+jsIncludeFile("jquery-ui.js", NULL);
+#else
 jsIncludeFile("jquery.autocomplete.js", NULL);
+#endif
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("autocomplete.js", NULL);
 jsIncludeFile("hgGateway.js", NULL);
@@ -197,6 +202,14 @@ if (!hIsGsidServer() && !hIsCgbServer())
     }
 puts("</TD>");
 
+if (hubConnectTableExists())
+    {
+    puts("<TD VALIGN=\"TOP\">");
+    printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s' title='%s'>\n",
+        "../cgi-bin/hgHubConnect", "import tracks", "Import tracks");
+    puts("</TD>");
+    }
+
 // configure button
 puts("<TD VALIGN=\"TOP\">");
 cgiMakeButtonWithMsg("hgTracksConfigPage", "configure tracks and display","Configure track selections and browser display");
@@ -218,13 +231,28 @@ puts("</center>\n"
 "</td></tr></table>\n"
 );
 puts("</center>");
+#ifdef NEW_JQUERY
+hPrintf("<input type='hidden' id='hgt.newJQuery' name='hgt.newJQuery' value='1'>\n");
+#endif
 puts("</FORM>");
-if (isPrivateHost)
-puts("<P>This is just our test site.  It usually works, but it is filled with tracks in various "
+if (hIsPreviewHost())
+    {
+puts("<P>"
+"WARNING: This is our preview site. It is a weekly mirror of our internal development server for public access.  "
+"Data and tools here are under construction, have not been quality reviewed, and are subject to change "
+"at any time.  We provide this site for early access, with the warning that it is less available "
+"and stable than our public site.  For high-quality reviewed annotations on our production server, visit "
+"      <A HREF=\"http://genome.ucsc.edu\">http://genome.ucsc.edu</A>."
+"</P><BR>");
+    }
+else if (hIsPrivateHost())
+    {
+puts("<P>WARNING: This is our development and test site.  It usually works, but it is filled with tracks in various "
 "stages of construction, and others of little interest to people outside of our local group. "
 "It is usually slow because we are building databases on it. The documentation is poor. "
  "More data than usual is flat out wrong.  Maybe you want to go to "
 	 "<A HREF=\"http://genome.ucsc.edu\">genome.ucsc.edu</A> instead.");
+    }
 
 if (hIsGsidServer())
     {
@@ -266,7 +294,6 @@ if (hIsGsidServer())
 else
     {
     char buffer[128];
-    char *browserName = (isPrivateHost ? "TEST Genome Browser" : "Genome Browser");
 
     /* tell html routines *not* to escape htmlOut strings*/
     htmlNoEscape();
@@ -278,7 +305,7 @@ else
 	else
 	    safef(buffer, sizeof(buffer), "(<I>%s</I>) ", scientificName);
 	}
-    cartWebStart(theCart, db, "%s %s%s Gateway\n", organism, buffer, browserName);
+    cartWebStart(theCart, db, "%s %s%s Gateway\n", organism, buffer, hBrowserName());
     htmlDoEscape();
     }
 hgGateway();
@@ -290,7 +317,6 @@ char *excludeVars[] = {NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-isPrivateHost = hIsPrivateHost();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 

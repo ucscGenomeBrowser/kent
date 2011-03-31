@@ -5,7 +5,7 @@ table genomicSuperDups
   uint chromStart;   "Start position in chromosome"
   uint chromEnd;     "End position in chromosome"
   string name;         "Other chromosome involved"
-  uint score;        "Score from 900-1000.  1000 is best"
+  uint score;        "Score based on the raw BLAST alignment score. Set to 0 and not used in later versions."
   char[1] strand;       "Value should be + or -"
   string otherChrom;   "Other chromosome or scaffold"
   uint otherStart;   "Start in other sequence"

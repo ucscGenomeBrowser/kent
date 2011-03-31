@@ -1,16 +1,24 @@
 
 LIST=\
+wgEncodeAffyRnaChip.ra \
 wgEncodeMapability.ra \
 wgEncodeGencode.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaSeq.ra \
 wgEncodeCshlShortRnaSeq.ra \
-wgEncodeAffyRnaChip.ra \
 wgEncodeUwDnase.ra \
 wgEncodeUwDgf.ra \
 wgEncodeHaibMethylRrbs.ra \
-wgEncodeAffyRnaChip.ra \
+wgEncodeBroadHistone.ra \
+wgEncodeRikenCage.ra \
+wgEncodeUwHistone.ra \
+wgEncodeSunyAlbanyTiling.ra \
 wgEncodeCaltechRnaSeq.ra \
+wgEncodeUwAffyExonArray.ra \
+wgEncodeUwTfbs.ra \
+wgEncodeOpenChromChip.ra \
+wgEncodeOpenChromFaire.ra \
+wgEncodeSunyAlbanyGeneSt.ra \
 
 include ../../../../makefile.metaDb
 

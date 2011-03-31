@@ -45,6 +45,8 @@ visibility hide
 color 0,0,0
 type bed 4
 tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
+prevExonText Left edge
+nextExonText Right edge
 
 track caseControl
 compositeTrack on
@@ -257,9 +259,10 @@ type genePred acemblyPep acemblyMrna
 autoTranslate 0
 url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
 itemClassTbl acemblyClass
-geneClasses main putative
+geneClasses main putative cDNA_supported
 gClass_main 128,0,125
 gClass_putative 200,0,125
+gClass_cDNA_supported 200,0,125
 urlLabel AceView Gene Summary:
 
 track slamMouse
@@ -782,7 +785,6 @@ visibility hide
 color 50,70,120
 type bed 5 +
 useScore 1
-url http://enhancer.lbl.gov/cgi-bin/imagedb.pl?form=presentation&show=1&experiment_id=$$
 
 track uc16
 shortLabel Ultra Conserved
@@ -901,7 +903,7 @@ shortLabel SNPs (131)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) Not Clinically Associated
 group varRep
 priority 100.093
-visibility dense
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 defaultGeneTracks knownGene
@@ -924,7 +926,7 @@ shortLabel SNPs (131) Comp
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) -- Composite version
 group varRep
 priority 99.093
-visibility dense 
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 defaultGeneTracks knownGene
@@ -1223,7 +1225,6 @@ color 150,0,150
 type bed 4 +
 
 track dgv
-release alpha
 shortLabel DGV Struct Var
 longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
 group varRep
@@ -1237,22 +1238,6 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v10
-
-track dgv
-release beta,public
-shortLabel DGV Struct Var
-longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
-group varRep
-priority 144.8
-visibility hide
-color 0,100,0
-itemRgb on
-type bed 9 +
-noScoreFilter .
-exonArrows off
-urlLabel DGV Browser and Report:
-url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
-dataVersion v9
 
 track covMask1kGPilotLowCov
 compositeTrack on
@@ -2492,186 +2477,6 @@ expStep 0.5
 expTable sestanBrainAtlasExps
 groupings sestanBrainAtlasGroups
 
-track agilentCgh
-release alpha
-shortLabel Agilent CGH
-longLabel Agilent CGH Microarray probesets
-compositeTrack on
-group expression
-visibility hide
-noScoreFilter .
-noInherit on
-html agilentCghAlpha
-type bed 3 .
-
-    track agilentCgh1x1m
-    release alpha
-    parent agilentCgh
-    shortLabel Ag CGH 1x1m
-    longLabel Agilent SurePrint G3 Human CGH Microarray 1x1M AMADID 021529
-    color 0,128,0
-    type bed 4 .
-    priority 1
-
-    track agilentHrd1x1m
-    release alpha
-    parent agilentCgh
-    shortLabel Ag HRD 1x1m
-    longLabel Agilent SurePrint G3 Human High-Resolution Microarray 1x1M AMADID 023642
-    color 255,128,0
-    type bed 4 .
-    priority 2
-
-    track agilentCghSnp2x400k
-    release alpha
-    parent agilentCgh
-    shortLabel Ag SNP 2x400k
-    longLabel Agilent SurePrint G3 Human CGH+SNP Microarray 2x400K AMADID 028081
-    color 0,0,128
-    type bed 9 .
-    itemRgb on
-    priority 3
-
-    track agilentCgh2x400k
-    release alpha
-    parent agilentCgh
-    shortLabel Ag CGH 2x400k
-    longLabel Agilent SurePrint G3 Human CGH Microarray 2x400K AMADID 021850
-    color 0,128,0
-    type bed 4 .
-    priority 4
-
-    track agilentCghSnp4x180k
-    release alpha
-    parent agilentCgh
-    shortLabel Ag SNP 4x180k
-    longLabel Agilent SurePrint G3 Human CGH+SNP Microarray 4x180K AMADID 029830
-    color 0,0,128
-    type bed 9 .
-    itemRgb on
-    priority 5
-
-    track agilentCgh4x180k
-    release alpha
-    parent agilentCgh
-    shortLabel Ag CGH 4x180k
-    longLabel Agilent SurePrint G3 Human CGH Microarray 4x180K AMADID 022060
-    color 255,128,0
-    type bed 4 .
-    priority 6
-
-    track agilentCgh8x60k
-    release alpha
-    parent agilentCgh
-    shortLabel Ag CGH 8x60k
-    longLabel Agilent SurePrint G3 Human CGH Microarray 8x60K AMADID 021924
-    type bed 4 .
-    color 0,128,0
-    priority 7
-
-    track agilentCgh244a
-    release alpha
-    parent agilentCgh
-    shortLabel Ag CGH 1x244k
-    longLabel Agilent SurePrint HD Human CGH Microarray 1x244K AMADID 014693
-    color 255,128,0
-    type bed 4 .
-    priority 8
-
-    track agilentCgh105a
-    release alpha
-    parent agilentCgh
-    shortLabel Ag CGH 2x105k
-    longLabel Agilent SurePrint HD Human CGH Microarray 2x105K AMADID 014698
-    color 0,128,0
-    type bed 4 .
-    priority 9
-
-    track agilentCgh44k
-    release alpha
-    parent agilentCgh
-    shortLabel Ag CGH 4x44k
-    longLabel Agilent SurePrint HD Human CGH Microarray 4x44K AMADID 014950
-    color 255,128,0
-    type bed 4 .
-    priority 10
-
-track agilentCgh
-release beta,public
-shortLabel Agilent Array
-longLabel Agilent Microarray Probesets
-compositeTrack on
-group expression
-origAssembly hg18
-priority 0
-visibility hide
-noScoreFilter .
-type bed 6 .
-
-    track agilentCgh1x1m
-    release beta,public
-    parent agilentCgh
-    shortLabel Ag CGH 1x1m
-    longLabel Agilent SurePrint G3 Human CGH Microarray 1x1M AMADID 021529
-    color 0,128,0
-    priority 1
-
-    track agilentHrd1x1m
-    release beta,public
-    parent agilentCgh
-    shortLabel Ag HRD 1x1m
-    longLabel Agilent SurePrint G3 Human High-Resolution Microarray 1x1M AMADID 023642
-    color 255,128,0
-    priority 2
-
-    track agilentCgh2x400k
-    release beta,public
-    parent agilentCgh
-    shortLabel Ag CGH 2x400k
-    longLabel Agilent SurePrint G3 Human CGH Microarray 2x400K AMADID 021850
-    color 0,128,0
-    priority 3
-
-    track agilentCgh4x180k
-    release beta,public
-    parent agilentCgh
-    shortLabel Ag CGH 4x180k
-    longLabel Agilent SurePrint G3 Human CGH Microarray 4x180K AMADID 022060
-    color 255,128,0
-    priority 4
-
-    track agilentCgh8x60k
-    release beta,public
-    parent agilentCgh
-    shortLabel Ag CGH 8x60k
-    longLabel Agilent SurePrint G3 Human CGH Microarray 8x60K AMADID 021924
-    color 0,128,0
-    priority 5
-
-    track agilentCgh244a
-    release beta,public
-    parent agilentCgh
-    shortLabel Ag CGH 1x244k
-    longLabel Agilent SurePrint HD Human CGH Microarray 1x244K AMADID 014693
-    color 255,128,0
-    priority 7
-
-    track agilentCgh105a
-    release beta,public
-    parent agilentCgh
-    shortLabel Ag CGH 2x105k
-    longLabel Agilent SurePrint HD Human CGH Microarray 2x105K AMADID 014698
-    color 0,128,0
-    priority 8
-
-    track agilentCgh44k
-    release beta,public
-    parent agilentCgh
-    shortLabel Ag CGH 4x44k
-    longLabel Agilent SurePrint HD Human CGH Microarray 4x44K AMADID 014950
-    color 255,128,0
-    priority 10
-
 track xTBAmaf
 shortLabel xTBAmaf
 longLabel xTBAmaf
@@ -2742,6 +2547,36 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
     shortLabel Perlegen
     longLabel Oxford Recombination Rates from Perlegen Data
     priority 3
+
+track hapmapLdPh
+compositeTrack on
+shortLabel HapMap LD Phased
+longLabel HapMap Linkage Disequilibrium - Phase II - from phased genotypes
+group varRep
+priority 144.491
+visibility hide
+canPack off
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22
+dataVersion HapMap release 22
+type ld2
+
+    track hapmapLdPhYri
+    parent hapmapLdPh
+    shortLabel Phased YRI
+    longLabel Linkage Disequilibrium for the Yoruba (YRI) from phased genotypes
+    priority 1
+
+    track hapmapLdPhCeu
+    parent hapmapLdPh
+    shortLabel Phased CEU
+    longLabel Linkage Disequilibrium for the CEPH (CEU) from phased genotypes
+    priority 2
+
+    track hapmapLdPhChbJpt
+    parent hapmapLdPh
+    shortLabel Ph JPT+CHB
+    longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from phased genotypes
+    priority 5
 
 track snpRecombHotspot
 compositeTrack on
@@ -3141,6 +2976,39 @@ type bed 4
 hgsid on
 url http://www.ncbi.nlm.nih.gov/omim/
 
+track omimLocation
+shortLabel OMIM Loci
+longLabel OMIM Non-Gene Entry Cytogenetic Locations
+group phenDis
+priority 29.75
+visibility hide
+color 0, 100, 100
+type bed 4
+hgsid on
+url http://www.omim.org/entry/
+
+track omimGene2
+shortLabel OMIM Genes
+longLabel OMIM Genes
+group phenDis
+priority 29.73
+visibility hide
+color 220, 0, 0
+type bed 4
+hgsid on
+url http://www.omim.org/entry/
+
+track omimAvSnp
+shortLabel OMIM AV SNPs
+longLabel OMIM Allelic Variant SNPs
+group phenDis
+priority 29.71
+visibility hide
+color 220,0,0
+type bed 4
+hgsid on
+url http://www.omim.org/entry/
+
 searchTable wgRnaOld
 searchMethod fuzzy
 searchType bed
@@ -3158,6 +3026,86 @@ searchTable wgRna
 searchMethod fuzzy
 searchType bed
 searchPriority 10
+
+searchName agilentCgh1x1m
+searchTable agilentCgh1x1m
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.1
+
+searchName agilentHrd1x1m
+searchTable agilentHrd1x1m
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.2
+
+searchName agilentCghSnp2x400k
+searchTable agilentCghSnp2x400k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_(14|16|18|20)_P[0-9]+
+searchPriority 17.3
+
+searchName agilentCgh2x400k
+searchTable agilentCgh2x400k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.4
+
+searchName agilentCghSnp4x180k
+searchTable agilentCghSnp4x180k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_(14|16|18|20)_P[0-9]+
+searchPriority 17.5
+
+searchName agilentCgh4x180k
+searchTable agilentCgh4x180k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.6
+
+searchName agilentCgh8x60k
+searchTable agilentCgh8x60k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.7
+
+searchName agilentCgh244a
+searchTable agilentCgh244a
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6)_P[0-9]+
+searchPriority 17.8
+
+searchName agilentCgh105a
+searchTable agilentCgh105a
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6)_P[0-9]+
+searchPriority 17.9
+
+searchName agilentCgh44k
+searchTable agilentCgh44k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_14_P[0-9]+
+searchPriority 17.91
 
 searchName wgRnaExact
 searchTable wgRna
@@ -3489,11 +3437,28 @@ xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
 termRegex AC[0-9]{6}
 searchPriority 52
 
-searchName omimGeneAcc
-searchTable omimGene
+searchName omimAvSnpAcc
+searchTable omimAvSnp
 searchMethod exact
 searchType bed
 shortCircuit 1
+semiShortCircuit 1
+termRegex ([0-9]{6})+\.+([0-9]{4})
+searchPriority 10
+
+searchName omimGene2Acc
+searchTable omimGene2
+searchMethod exact
+searchType bed
+shortCircuit 1
+semiShortCircuit 1
+termRegex ([0-9]{6})
+searchPriority 10
+
+searchName omimGeneLocAcc
+searchTable omimLocation
+searchMethod exact
+searchType bed
 semiShortCircuit 1
 termRegex ([0-9]{6})
 searchPriority 10
@@ -3916,93 +3881,19 @@ compositeTrack on
 shortLabel UCSF Brain Methyl
 longLabel UCSF Brain DNA Methylation
 group regulation
-subGroup1 view Views ALN=Alignments COV=Raw_Signal CG=CpG_score
+subGroup1 view Views COV=Raw_Signal CG=CpG_score
 subGroup2 sampleType Sample_Type Brain=Brain
 subGroup3 assayType Assay_Type MRE1=MRE-seq MRE2=MRE-seq MRE3=MRE-seq MeDIP1=MeDIP-seq MeDIP2=MeDIP-seq H3K4me3=H3K4me3_ChIP-seq RNA1=RNA-seq RNA2=RNA-seq_(SMART)
 dimensions 
 sortOrder assayType=+ view=+
 #dimensions dimensionX=sampleType dimensionY=assayType
 dividers assayType 
-#hierachy view ALN=2 COV=3 CG=4
+#hierachy view COV=2 CG=3
 dragAndDrop subTracks
 priority 1999
 visibility hide
 #itemRgb on
 type bed 3
-
-    track ucsfBrainMethylViewALN
-    shortLabel Alignments
-    view ALN
-    parent ucsfBrainMethyl
-    visibility hide
-
-        track ucsfMedipSeqBrainReads
-        shortLabel MeDIP Reads
-        longLabel MeDIP-seq Reads
-        parent ucsfBrainMethylViewALN
-        subGroups view=ALN sampleType=Brain assayType=MeDIP1
-        baseColorDefault diffBases
-        baseColorUseSequence nameIsSequence
-        baseColorTickColor lighterShade
-        showDiffBasesAllScales .
-        showDiffBasesMaxZoom 10000.0
-        type bed 9
-        noInherit on
-        itemRgb on
-        configurable on
-        spectrum on
-        priority 1
-
-        track ucsfMreSeqBrainReads
-        shortLabel MRE Reads
-        longLabel MRE-seq Reads
-        parent ucsfBrainMethylViewALN
-        subGroups view=ALN sampleType=Brain assayType=MRE1
-        baseColorDefault diffBases
-        baseColorUseSequence nameIsSequence
-        baseColorTickColor lighterShade
-        showDiffBasesAllScales .
-        showDiffBasesMaxZoom 10000.0
-        type bed 9
-        noInherit on
-        itemRgb on
-        configurable on
-        spectrum on
-        priority 2
-
-        track ucsfRnaSeqBrainSmartReads
-        shortLabel Smart Reads
-        longLabel RNA-seq Smart-Tagged Reads
-        parent ucsfBrainMethylViewALN
-        subGroups view=ALN sampleType=Brain assayType=RNA2
-        baseColorDefault diffBases
-        baseColorUseSequence nameIsSequence
-        baseColorTickColor lighterShade
-        showDiffBasesAllScales .
-        showDiffBasesMaxZoom 10000.0
-        type bed 9
-        noInherit on
-        itemRgb on
-        configurable on
-        spectrum on
-        priority 3
-
-        track ucsfRnaSeqBrainAllReads
-        shortLabel RNA-seq Reads
-        longLabel RNA-seq Reads
-        parent ucsfBrainMethylViewALN
-        subGroups view=ALN sampleType=Brain assayType=RNA1
-        type bed 9
-        noInherit on
-        configurable on
-        baseColorDefault diffBases
-        baseColorUseSequence nameIsSequence
-        baseColorTickColor lighterShade
-        showDiffBasesAllScales .
-        showDiffBasesMaxZoom 10000.0
-        itemRgb on
-        spectrum on
-        priority 4
 
     track ucsfBrainMethylViewCOV
     shortLabel Raw Signal
@@ -4207,6 +4098,15 @@ type bed 4 .
     longLabel Illumina Human Omni1-Quad
     type bed 6 +
     priority 12
+
+track iscaRetrospective
+shortLabel ISCA Retro
+longLabel International Standard Cytogenetic Array Consortium - Retrospective variants
+group varRep
+priority 110
+visibility hide
+type gvf
+noScoreFilter .
 
 searchName decipherId
 searchTable decipher

@@ -9,6 +9,7 @@
 
 /* Variables set from command line. */
 double maxOverlap = 0.0;
+boolean invert = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -19,11 +20,13 @@ errAbort(
   "   bedWeedOverlapping weeds.bed input.bed output.bed\n"
   "options:\n"
   "   -maxOverlap=0.N - maximum overlapping ratio, default 0 (any overlap)\n"
+  "   -invert - keep the overlapping and get rid of everything else\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"maxOverlap", OPTION_DOUBLE},
+   {"invert", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -114,8 +117,12 @@ while ((fieldCount = lineFileChop(lf, row)) != 0)
         errAbort("Too many words line %d of %s\n", lf->lineIx, lf->fileName);
     struct bed *bed = bedLoadN(row, fieldCount);
     struct rbTree *rangeTree = hashFindVal(chromHash, bed->chrom);
-    if (rangeTree == NULL || !bedOverlapsRangeTree(rangeTree, bed, maxOverlap))
+    boolean doOutput = (rangeTree == NULL || !bedOverlapsRangeTree(rangeTree, bed, maxOverlap));
+    if (invert)
+        doOutput = !doOutput;
+    if (doOutput)
 	bedTabOutN(bed, fieldCount, f);
+    bedFree(&bed);
     }
 carefulClose(&f);
 }
@@ -127,6 +134,7 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 maxOverlap = optionDouble("maxOverlap", maxOverlap);
+invert = optionExists("invert");
 bedWeedOverlapping(argv[1], argv[2], argv[3]);
 return 0;
 }

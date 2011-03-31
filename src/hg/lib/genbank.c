@@ -204,8 +204,8 @@ while (lineFileRowTab(lf, row))
     char *row[3];
     while (lineFileRow(lf, row))
         {
-	if (sameString(row[1], "selenocysteine") && sameString(row[2], "yes"))
-	    hashAdd(scHash, row[0], NULL);
+	if (sameString(row[1], "translExcept") && (stringIn("aa:Sec", row[2]) != NULL))
+	    hashAdd(scHash, row[0], row[2]);
 	if (sameString(row[1], "exception") 
 		&& sameString(row[2], "alternative_start_codon"))
 	    hashAdd(altStartHash, row[0], NULL);

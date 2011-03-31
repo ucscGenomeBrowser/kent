@@ -699,7 +699,7 @@ type genePred genieAltPep
 
 track ensGene
 shortLabel Ensembl Genes
-longLabel Ensembl Gene Predictions
+longLabel Ensembl Genes 
 group genes
 priority 40
 visibility hide
@@ -1574,12 +1574,54 @@ useScore 1
 exonArrows on
 type bed 6 .
 
-track snp132
-shortLabel SNPs (132)
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 132)
+track snp132Common
+shortLabel Common SNPs(132)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 132) Found in >= 1% of Samples
 group varRep
-priority 99.092
+priority 99.0921
 visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp132Seq
+snpExceptionDesc snp132ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+
+track snp132Patient
+shortLabel Patient SNPs(132)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 132) Observed in a Clinical Setting
+group varRep
+priority 99.0922
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp132Seq
+snpExceptionDesc snp132ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+
+track snp132NonUnique
+shortLabel Mult. SNPs(132)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 132) That Map to Multiple Genomic Loci
+group varRep
+priority 99.0923
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp132Seq
+snpExceptionDesc snp132ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+
+track snp132
+shortLabel All SNPs(132)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 132)
+group varRep
+priority 99.0925
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 defaultGeneTracks knownGene
@@ -2575,12 +2617,36 @@ termRegex rs[0-9]+
 searchPriority 12.991
 padding 250
 
+searchTable snp132Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9901
+padding 250
+
+searchTable snp132Patient
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9902
+padding 250
+
+searchTable snp132NonUnique
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9903
+padding 250
+
 searchTable snp132
 searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.990
+searchPriority 12.9904
 padding 250
 
 searchTable ensGene
@@ -3053,3 +3119,14 @@ searchPriority 50
 searchTable ccdsGene
 searchType genePred
 searchPriority 1.1
+
+track ncbiIncidentDb
+shortLabel NCBI Incident
+longLabel NCBI Incident database
+group map
+priority 27
+visibility hide
+type bigBed 4 +
+url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
+urlLabel NCBI Incident:
+nonBedFieldsLabel Summary information from incident database:

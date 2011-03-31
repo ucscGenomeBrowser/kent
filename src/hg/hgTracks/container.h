@@ -12,6 +12,9 @@ void multiWigContainerMethods(struct track *track);
 void containerLoadItems(struct track *track);
 /* containerLoadItems - call load routine on all children. */
 
+char *parentContainerType(struct track *track);
+/* Determine parent's container type if any or NULL */
+
 void containerDrawItems(struct track *track, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis);

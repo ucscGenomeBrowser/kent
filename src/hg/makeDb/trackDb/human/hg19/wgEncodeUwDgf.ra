@@ -4,17 +4,17 @@
 # Notes:
 #       - Track Long Label:  DNaseI Digital Genomic Footprinting from ENCODE/University of Washington
 #	- Track Short Label: UW DNaseI DGF
-#       - View Long Labels: [cell] DNaseI DGF [view] from ENCODE/UW 
+#       - View Long Labels: [cell] DNaseI DGF [view] from ENCODE/UW
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier.
-#       - Default Tracks on: Peaks,Hotspots,Signals for 1 and 2 replicates for K562 and GM12878 Cell Lines. 
+#       - Default Tracks on: Peaks,Hotspots,Signals for 1 and 2 replicates for K562 and GM12878 Cell Lines.
 #	- Default View selections
 #		- Hotspots = pack
 #		- Peaks = pack
 #		- Signal = full
 #		- Raw Signal = hide
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
-#       - Short Labels: 
-#               Template: [cell] [view] 
+#       - Short Labels:
+#               Template: [cell] [view]
 #               - Views: For consistency sake view will be:
 #			- Hot Spots = Hspt
 #                       - Peaks = Pk
@@ -35,7 +35,7 @@ sortOrder cellType=+ view=+
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
-priority 0
+priority 5
 type bed 3
 dataVersion through the ENCODE Jun 2010 Freeze
 wgEncode 1
@@ -69,7 +69,7 @@ wgEncode 1
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Hotspots
-        parent wgEncodeUwDgfViewHotspots 
+        parent wgEncodeUwDgfViewHotspots
         shortLabel HepG2 Hspt
         longLabel HepG2 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=2HepG2
@@ -180,7 +180,7 @@ wgEncode 1
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Pk
-        parent wgEncodeUwDgfViewPeaks 
+        parent wgEncodeUwDgfViewPeaks
         shortLabel HepG2 Pk
         longLabel HepG2 DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=2HepG2
@@ -291,7 +291,7 @@ wgEncode 1
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Sig
-        parent wgEncodeUwDgfViewSignal 
+        parent wgEncodeUwDgfViewSignal
         shortLabel HepG2 Sig
         longLabel HepG2 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=2HepG2
@@ -387,7 +387,7 @@ wgEncode 1
 
         track wgEncodeUwDgfGm06990Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel GM06990 Raw 
+        shortLabel GM06990 Raw
         longLabel GM06990 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=GM06990
         type bigWig 1.000000 57178.000000

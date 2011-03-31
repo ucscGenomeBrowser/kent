@@ -191,8 +191,8 @@ while (lineFileNext(lf, &line, &lineSize))
     commit->files = files;
 
     
-    if (!isMerge  /* for now, default to filtering out the records for automatic-merges */
-        && !endsWith(commit->comment, "elease log update"))  /* filter out automatic release log commits */
+    if (!startsWith("Merge branch 'master' of", commit->comment) &&
+	!endsWith(commit->comment, "elease log update"))  /* filter out automatic release log commits */
 	slAddHead(&commits, commit);
 
     verbose(2, 
@@ -502,9 +502,9 @@ for(c = commits; c; c = c->next)
 	    // make file diff links
 	    fprintf(h, "<ul><li> %s - lines changed %d, "
 		"context: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>, "
-		"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A></li></ul>\n"
+		"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>%s</li></ul>\n"
 		, f->path, f->linesChanged
-		, cHtml, cDiff, fHtml, fDiff);
+		, cHtml, cDiff, fHtml, fDiff, f->linesChanged == 0 ? " (a binary file or whitespace-only change shows no diff)" : "");
 
 	    freeMem(relativePath);
 	    freeMem(commonPath);
@@ -637,7 +637,7 @@ for(cf = comFiles; cf; cf = cf->next)
     if (u)
 	safef(path, sizeof(path), "%s/%s%s", "full", f->path, c->commitId);
     else
-	safef(path, sizeof(path), "../user/%s/%s/%s%s", c->author, "context", f->path, c->commitId);
+	safef(path, sizeof(path), "../user/%s/%s/%s%s", c->author, "full", f->path, c->commitId);
     relativePath = cloneString(path);
     safef(path, sizeof(path), "%s.html", relativePath);
     fHtml = cloneString(path);

@@ -11,8 +11,8 @@
 #include "txRnaAccs.h"
 #include "twoBit.h"
 
-
 static char const rcsid[] = "$Id: txCdsEvFromBed.c,v 1.3 2008/04/16 15:24:27 kent Exp $";
+struct hash *compatibleTxPerCds = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -69,12 +69,14 @@ struct cdsTxCluster
     struct slRef *pairList;	/* List of pairs. */
     };
 
-int usedBedCmpRnaSize(const void *va, const void *vb)
-/* Compare to sort based on largest total rna length with largest first. */
+int cmpCompatibleTx(const void *va, const void *vb)
+/* Sort so that the CDS with the fewest compatible transcripts will be first */
 {
 const struct usedBed *a = *((struct usedBed **)va);
 const struct usedBed *b = *((struct usedBed **)vb);
-return bedTotalBlockSize(b->bed) - bedTotalBlockSize(a->bed);
+int txCountA = hashIntVal(compatibleTxPerCds, a->bed->name);
+int txCountB = hashIntVal(compatibleTxPerCds, b->bed->name);
+return (txCountA - txCountB);
 }
 
 void outputCdsEv(struct bed *tx, struct bed *cds, char *tceType, FILE *f)
@@ -212,9 +214,9 @@ else
     for (tx = cluster->txList; tx != NULL; tx = tx->next)
 	tx->used = FALSE;
 
-    /* Sort cdsList so that the biggest one will be first, and then find best (unused)
-     * transcript for each cds. */
-    slSort(&cluster->cdsList, usedBedCmpRnaSize);
+    /* Sort cdsList so that the ones with fewest compatible transcripts will be first, 
+     * and then find best (unused) transcript for each cds. */
+    slSort(&cluster->cdsList, cmpCompatibleTx);
     struct usedBed *cds;
     for (cds = cluster->cdsList;  cds != NULL; cds = cds->next)
 	{
@@ -318,6 +320,7 @@ struct hash *txKeepers = bedsIntoKeeperHash(txBedList);
 
 for (cdsBed = cdsBedList; cdsBed != NULL; cdsBed = cdsBed->next)
     {
+    hashAddInt(compatibleTxPerCds, cdsBed->name, 0);
     struct cdsTxPair *pair = NULL;
     struct binKeeper *bk = hashFindVal(txKeepers, cdsBed->chrom);
     if (bk != NULL)
@@ -333,6 +336,7 @@ for (cdsBed = cdsBedList; cdsBed != NULL; cdsBed = cdsBed->next)
 		pair->cds = cdsBed;
 		pair->tx = txBed;
 		slAddHead(&pairList, pair);
+		hashIncInt(compatibleTxPerCds, cdsBed->name);
 		}
 	    }
 	slFreeList(&belList);
@@ -354,6 +358,7 @@ void txCdsEvFromBed(char *cdsBedFile, char *tceType, char *txBedFile, char *geno
 /* Load cds and tx beds, genome, and get list of all compatible pairs. */
 struct bed *txBedList = bedLoadNAll(txBedFile, 12);
 struct bed *cdsBedList = bedLoadNAll(cdsBedFile, 12);
+compatibleTxPerCds = hashNew(0);
 struct cdsTxPair *pairList = getCompatiblePairs(txBedList, cdsBedList);
 
 /* Separate pairs into chromosomes.  This is mostly to avoid problems with ccds IDs 

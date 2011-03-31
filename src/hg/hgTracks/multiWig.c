@@ -11,6 +11,13 @@
 #include "wigCommon.h"
 #include "hui.h"
 
+
+static char *aggregateFromCartOrDefault(struct cart *cart, struct track *tg)
+/* Return aggregate value for track. */
+{
+return cartOrTdbString(cart, tg->tdb, "aggregate", WIG_AGGREGATE_TRANSPARENT);
+}
+
 static boolean isOverlayTypeAggregate(char *aggregate)
 /* Return TRUE if aggregater type is one of the overlay ones. */
 {
@@ -19,31 +26,49 @@ if (aggregate == NULL)
 return differentString(aggregate, WIG_AGGREGATE_NONE);
 }
 
-
 static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw items in multiWig container. */
 {
 struct track *subtrack;
-char *aggregate = cartOrTdbString(cart, tg->tdb, "aggregate", NULL);
+char *aggregate = aggregateFromCartOrDefault(cart, tg);
 boolean overlay = isOverlayTypeAggregate(aggregate);
+boolean errMsgShown = FALSE;
 int y = yOff;
+boolean errMsgFound = FALSE;
+// determine if any subtracks had errors
+for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (isSubtrackVisible(subtrack) && subtrack->networkErrMsg)
+	errMsgFound = TRUE;
+    }
+if (errMsgFound)
+    {
+    Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
+    hvGfxBox(hvg, xOff, yOff, width, tg->height, yellow);
+    }
+
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
 	{
-	int height = subtrack->totalHeight(subtrack, vis);
-	hvGfxSetClip(hvg, xOff, y, width, height);
-        if (sameString(WIG_AGGREGATE_TRANSPARENT, aggregate))
-            hvGfxSetWriteMode(hvg, MG_WRITE_MODE_MULTIPLY);
-	if (overlay)
-	    subtrack->lineHeight = tg->lineHeight;
-	subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
-	if (!overlay)
-	    y += height + 1;
-        hvGfxSetWriteMode(hvg, MG_WRITE_MODE_NORMAL);
-	hvGfxUnclip(hvg);
+        if (!subtrack->networkErrMsg || !errMsgShown)
+	    {
+	    if (subtrack->networkErrMsg)
+	       errMsgShown = TRUE;
+	    int height = subtrack->totalHeight(subtrack, vis);
+	    hvGfxSetClip(hvg, xOff, y, width, height);
+	    if (sameString(WIG_AGGREGATE_TRANSPARENT, aggregate))
+		hvGfxSetWriteMode(hvg, MG_WRITE_MODE_MULTIPLY);
+	    if (overlay)
+		subtrack->lineHeight = tg->lineHeight;
+	    subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
+	    if (!overlay)
+		y += height + 1;
+	    hvGfxSetWriteMode(hvg, MG_WRITE_MODE_NORMAL);
+	    hvGfxUnclip(hvg);
+	    }
 	}
     }
 char *url = trackUrl(tg->track, chromName);
@@ -54,11 +79,11 @@ mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, xOff, y, width, tg->height, tg->track, 
 static int multiWigTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return total height of multiWigcontainer. */
 {
-char *aggregate = cartOrTdbString(cart, tg->tdb, "aggregate", NULL);
+char *aggregate = aggregateFromCartOrDefault(cart, tg);
 boolean overlay = isOverlayTypeAggregate(aggregate);
 int totalHeight =  0;
-if (overlay)
-    totalHeight =  wigTotalHeight(tg, vis);
+if (overlay)                                                                                       
+    totalHeight =  wigTotalHeight(tg, vis);                                                        
 struct track *subtrack;
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
@@ -86,7 +111,7 @@ struct track *firstTrack = NULL;
 struct track *track;
 for (track = trackList; track != NULL; track = track->next)
     {
-    if (isSubtrackVisible(track))
+    if (isSubtrackVisible(track) && !track->networkErrMsg)
         {
 	if (firstTrack == NULL)
 	    *retFirstTrack = firstTrack = track;
@@ -104,7 +129,7 @@ static void multiWigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	enum trackVisibility vis)
 /* Draw left labels - by deferring to first subtrack. */
 {
-char *aggregate = cartOrTdbString(cart, tg->tdb, "aggregate", NULL);
+char *aggregate = aggregateFromCartOrDefault(cart, tg);
 boolean overlay = isOverlayTypeAggregate(aggregate);
 if (overlay)
     {
@@ -149,6 +174,7 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 void multiWigContainerMethods(struct track *track)
 /* Override general container methods for multiWig. */
 {
+track->syncChildVisToSelf = TRUE;
 track->loadItems = multiWigLoadItems;
 track->totalHeight = multiWigTotalHeight;
 track->drawItems = multiWigDraw;

@@ -35,9 +35,14 @@ struct cart
    struct cartDb *sessionInfo;	/* Info on session. */
    };
 
-char *_cartVarDbName(char *db, char *var);
+INLINE char *_cartVarDbName(const char *db, const char *var)
 /* generate cart variable name that is local to an assembly database.
  * Only for use inside of cart.h.  WARNING: static return */
+{
+static char buf[PATH_LEN]; // something rather big
+safef(buf, sizeof(buf), "%s_%s", var, db);
+return buf;
+}
 
 boolean cartTablesOk(struct sqlConnection *conn);
 /* Return TRUE if cart tables are accessible (otherwise, the connection
@@ -100,6 +105,9 @@ void cartRemovePrefix(struct cart *cart, char *prefix);
 
 boolean cartVarExists(struct cart *cart, char *var);
 /* Return TRUE if variable is in cart. */
+
+boolean cartListVarExists(struct cart *cart, char *var);
+/* Return TRUE if a list variable is in cart (list may still be empty). */
 
 INLINE boolean cartVarExistsDb(struct cart *cart, char *db, char *var)
 /* Return TRUE if variable_$db is in cart. */

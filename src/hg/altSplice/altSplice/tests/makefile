@@ -5,7 +5,8 @@ IN_DIR=input
 EXPECT_DIR=expected
 
 # Order is important
-TESTS = apSimpleCassDistTest altSimpleCassTest \
+TESTS = genePredToPslTest \
+        apSimpleCassDistTest altSimpleCassTest \
         alt3Prime5PrimeCassTest apAlt35CassRetDistTest \
 	apSoftEndsStartsDistTest
 # Order is important to avoid rebuilding too
@@ -35,6 +36,10 @@ apAlt35CassRetDistTest: alt3Prime5PrimeCassAgx
 	${BINDIR}/altPaths tmp.agx tmp.splice -dumpDistMatrix=tmp.dist
 	diff -u ${EXPECT_DIR}/apAlt35CassRetDist.gold.mat tmp.dist
 
+genePredToPslTest:
+	${BINDIR}/genePredToPsl -bedFormat ${IN_DIR}/testChrom.sizes ${IN_DIR}/testLoci.bed tmp.psl
+	diff -u ${EXPECT_DIR}/testLoci.psl tmp.psl
+
 # Create the input files necessary for tests.
 in:
 	blat ${IN_DIR}/chromTest.fa ${IN_DIR}/alt3Prime5PrimeCassAgx.fa \
@@ -53,7 +58,8 @@ in:
 clean:
 	rm -f ${IN_DIR}/chromTest.nib ${IN_DIR}/alt3Prime5PrimeCassAgx.psl \
 	${IN_DIR}/simpleCass.psl tmp.agx ${IN_DIR}/altEndsStarts.psl \
-	${IN_DIR}/altRetInt.psl ${IN_DIR}/mutExclusive.psl
+	${IN_DIR}/altRetInt.psl ${IN_DIR}/mutExclusive.psl \
+	tmp.psl
 
 # Make the basic agx for tests.
 alt3Prime5PrimeCassAgx: 
@@ -84,4 +90,3 @@ altRetIntAgx:
 	${BINDIR}/altSplice -consensus -db=hg16 -beds=${IN_DIR}/testLoci.bed \
           -agxOut=tmp.agx  -chromNib=${IN_DIR}/chromTest.nib \
           -skipTissues -localMem -pslFile=${IN_DIR}/altRetInt.psl >& /dev/null
-

@@ -14,9 +14,13 @@ static struct asObject *asForTableOrDie(struct sqlConnection *conn, char *table)
  * there's a problem*/
 {
 struct asObject *asObj = NULL;
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     {
     asObj = bigBedAsForTable(table, conn);
+    }
+else if (isBamTable(table))
+    {
+    asObj = bamAsObj();
     }
 else
     {
@@ -75,5 +79,35 @@ if (asObj!= NULL)
 	     break;
     }
 return asCol;
+}
+
+struct slName *asColNames(struct asObject *as)
+/* Get list of column names. */
+{
+struct slName *list = NULL, *el;
+struct asColumn *col;
+for (col = as->columnList; col != NULL; col = col->next)
+    {
+    el = slNameNew(col->name);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+return list;
+}
+
+struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as)
+/* Convert asObject to list of sqlFieldTypes */
+{
+struct sqlFieldType *ft, *list = NULL;
+struct asColumn *col;
+for (col = as->columnList; col != NULL; col = col->next)
+    {
+    struct dyString *type = asColumnToSqlType(col);
+    ft = sqlFieldTypeNew(col->name, type->string);
+    slAddHead(&list, ft);
+    dyStringFree(&type);
+    }
+slReverse(&list);
+return list;
 }
 

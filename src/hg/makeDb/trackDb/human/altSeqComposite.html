@@ -6,18 +6,21 @@ target=_blank>GRC</a> (Genome Reference Consortium) to the GRCh37 (hg19)
 reference sequence in an effort to provide the best possible reference 
 assembly for the human genome. GRC does this by both generating multiple 
 representations (Haplotypes/alternate loci) for regions that are too complex 
-to be represented by a single path. Additionally, GRC has released regional 
-fixes known as Patches. This allows users who are interested in a specific locus 
-to get an improved representation without affecting users who need chromosome 
-coordinate stability.
+to be represented by a single path and by releasing regional fixes to short 
+sections of DNA known as Patches. This allows users who are interested in a 
+specific locus to get an improved representation without affecting users who 
+need chromosome coordinate stability.
 </p>
+
+<a href='ftp://hgdownload.cse.ucsc.edu/gbdb/hg19/hg19Patch2/' target=_blank>Download</a>
+the GRC Patch Release track data sets from the Genome Browser downloads server.
 
 <h3>Haplotypes</h3>
 <p>
 Items in the <em>Haplotype</em> track show sequence variation present in the
 population for certain sections of the genome. Items in this track were either 
 designated as alternate loci or novel patches by GRC. To view the alternate 
-sequence, click on the ****** button above.
+sequence, click on the &quot;Fetch alternate sequence&quot; link above.
 </p>
 
 <h3>Patches</h3>
@@ -25,14 +28,14 @@ sequence, click on the ****** button above.
 Items in the <em>Patch</em> track indicate areas of the sequence that have 
 been corrected by GRC and will be updated to new sequence in the next full 
 human assembly release. To view the new, corrected sequence, click on the 
-******* link above.
+&quot;Fetch alternate sequence&quot; link above.
 </p>
 
 <H3>Alignment</H3>
 <P>
 The <em>Alignment</em> track is the PSL representation of the <em>Chain</em> 
 track.  This PSL representation allows the side-by-side alignment to be
-viewed.  It was created from the <em>Chain</em> data with
+viewed.  It was created from the Chain track data using
 the <em>chainToPsl</em> kent source utility. This track follows the display 
 conventions for 
 <a href="../goldenPath/help/hgTracksHelp.html#PSLDisplay" target=_blank>

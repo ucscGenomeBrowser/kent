@@ -1728,7 +1728,11 @@ if (initedTrack == NULL || differentString(tg->track, initedTrack))
     int overallStart, overallEnd;
     boolean isSeries = FALSE;
     if ((tg->drawItems == linkedFeaturesSeriesDraw)
+#ifdef USE_BAM
         || (tg->drawItems == bamLinkedFeaturesSeriesDraw))
+#else
+	)
+#endif
 	isSeries = TRUE;
     else if (!baseColorCanDraw(tg))
 	errAbort("baseColorInitTrack: track %s has a type not recognized by baseColorCanDraw.",

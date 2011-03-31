@@ -1,0 +1,91 @@
+# Open Chromatin Duke/UNC/UTA Synthesis (wrangler: Tim, assisted by Venkat)
+
+track wgEncodeOpenChromSynth
+release alpha
+compositeTrack on
+superTrack wgEncodeDNAseSuper pack
+shortLabel Open Chrom Synth
+longLabel DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom(Duke/UNC/UTA)
+group regulation
+subGroup1 cellType Cell_Line 1GM=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K5=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEP=HepG2&nbsp;(Tier_2) 2HUV=HUVEC&nbsp;(Tier_2) NHEK=NHEK
+dimensions dimensionX=cellType
+sortOrder cellType=+
+fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+dragAndDrop subTracks
+controlledVocabulary encode/cv.ra cellType=cell
+priority 1
+type bed 9 +
+wgEncode 1
+#noInherit on
+itemRgb on
+boxedCfg on
+pValueFilter 0.0
+pValueFilterLimits 0:16
+noScoreFilter .
+extraFields pValue=[f]Fisher's_Combined_P-Value_(<code>-log<sub>10</sub></code>) dnaseSignal=[f]DNaseI_HS_Signal dnasePvalue=[f]DNaseI_HS_P-Value_(<code>-log<sub>10</sub></code>) faireSignal=[f]FAIRE_Signal fairePvalue=[f]FAIRE_P-Value_(<code>-log<sub>10</sub></code>) polIISignal=[f]Pol-II_Signal polIIPvalue=[f]Pol-II_P-Value_(<code>-log<sub>10</sub></code>) ctcfSignal=[f]CTCF_Signal ctcfPvalue=[f]CTCF_P-Value_(<code>-log<sub>10</sub></code>) cmycSignal=[f]c-Myc_Signal cmycPvalue=[f]c-Myc_P-Value_(<code>-log<sub>10</sub></code>) ocCode=[i]Open_Chromatin_(OC)_Code
+filterBy ocCode:Open_Chromatin_(OC)_Code=+1&#58;_Validated{#000000},2&#58;_DNase-only{#009900},3&#58;_FAIRE-only{#990000},4&#58;_ChIP-only{#FF00FF}
+dataVersion through the ENCODE Jan 2011 Freeze
+
+        track wgEncodeOpenChromSynthK562Pk
+        release alpha
+        parent wgEncodeOpenChromSynth
+        shortLabel K562 OpChr Syn
+        longLabel K562 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
+        subGroups cellType=1K5
+        type bed 9 +
+        # subId=3273 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromSynthGm12878Pk
+        release alpha
+        parent wgEncodeOpenChromSynth
+        shortLabel GM12878 OpChr Syn
+        longLabel GM12878 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
+        subGroups cellType=1GM
+        type bed 9 +
+        # subId=3273 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromSynthH1hescPk
+        release alpha
+        parent wgEncodeOpenChromSynth
+        shortLabel H1-hESC OpChr Syn
+        longLabel H1-hESC DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
+        subGroups cellType=1H1
+        type bed 9 +
+        # subId=3273 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromSynthHepg2Pk
+        release alpha
+        parent wgEncodeOpenChromSynth off
+        shortLabel HepG2 OpChr Syn
+        longLabel HepG2 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
+        subGroups cellType=2HEP
+        type bed 9 +
+        # subId=3273 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromSynthHelas3Pk
+        release alpha
+        parent wgEncodeOpenChromSynth off
+        shortLabel HeLa-S3 OpChr Syn
+        longLabel HeLa-S3 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
+        subGroups cellType=2HELA
+        type bed 9 +
+        # subId=3273 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromSynthHuvecPk
+        release alpha
+        parent wgEncodeOpenChromSynth off
+        shortLabel HUVEC OpChr Syn
+        longLabel HUVEC DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
+        subGroups cellType=2HUV
+        type bed 9 +
+        # subId=3273 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromSynthNhekPk
+        release alpha
+        parent wgEncodeOpenChromSynth off
+        shortLabel NHEK OpChr Syn
+        longLabel NHEK DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
+        subGroups cellType=NHEK
+        type bed 9 +
+        # subId=3273 dateSubmitted=2011-01-17
+

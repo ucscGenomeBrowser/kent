@@ -23,6 +23,7 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
+#include "samAlignment.h"
 
 static char const rcsid[] = "$Id: filterFields.c,v 1.82 2010/06/03 18:53:59 kent Exp $";
 
@@ -324,8 +325,10 @@ boolean showItemRgb = FALSE;
 showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
 
 struct slName *fieldList;
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     fieldList = bigBedGetFields(table, conn);
+else if (isBamTable(table))
+    fieldList = bamGetFields(table);
 else
     fieldList = sqlListFields(conn, table);
 
@@ -362,13 +365,13 @@ static void showTableFieldsCt(char *db, char *table, boolean withGetButton)
 struct customTrack *ct = ctLookupName(table);
 char *type = ct->dbTrackType;
 if (startsWithWord("makeItems", type))
-   {
-   struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-   struct slName *fieldList = sqlListFields(conn, ct->dbTableName);
-   struct asObject *asObj = asParseText(makeItemsItemAutoSqlString);
-   showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
-   hFreeConn(&conn);
-   }
+    {
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    struct slName *fieldList = sqlListFields(conn, ct->dbTableName);
+    struct asObject *asObj = asParseText(makeItemsItemAutoSqlString);
+    showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
+    hFreeConn(&conn);
+    }
 else if (sameWord("bedDetail", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
@@ -384,6 +387,12 @@ else if (sameWord("pgSnp", type))
     struct asObject *asObj = asParseText(pgSnpAutoSqlString);
     showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
     hFreeConn(&conn);
+    }
+else if (sameWord("bam", type))
+    {
+    struct slName *fieldList = bamGetFields(table);
+    struct asObject *asObj = asParseText(samAlignmentAutoSqlString);
+    showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
     }
 else
     showBedTableFields(db, table, ct->fieldCount, withGetButton);
@@ -454,16 +463,6 @@ char *table = cartString(cart, hgtaTable);
 doBigSelectPage(db, table);
 }
 
-#define filterLinkedTablePrefix hgtaFilterPrefix "linked."
-
-static void removeFilterVars()
-/* Remove filter variables from cart. */
-{
-cartRemovePrefix(cart, hgtaFilterPrefix);
-cartRemove(cart, hgtaFilterTable);
-cartRemove(cart, filterLinkedTablePrefix);
-}
-
 void doOutSelectedFields(char *table, struct sqlConnection *conn)
 /* Put up select fields (for tab-separated output) page. */
 {
@@ -482,7 +481,8 @@ else
     /* Remove cart state if table has been changed: */
     if (fsTable && ! sameString(fsTable, dbTable))
 	{
-	removeFilterVars();
+	cartRemovePrefix(cart, hgtaFieldSelectPrefix);
+	cartRemove(cart, hgtaFieldSelectTable);
 	}
     doBigSelectPage(database, table);
     }
@@ -594,6 +594,13 @@ static char *filterPatternVarName(char *db, char *table, char *field)
 /* Return variable name for a filter page text box. */
 {
 return filterFieldVarName(db, table, field, filterPatternVar);
+}
+
+static void removeFilterVars()
+/* Remove filter variables from cart. */
+{
+cartRemovePrefix(cart, hgtaFilterPrefix);
+cartRemove(cart, hgtaFilterTable);
 }
 
 boolean anyFilter()
@@ -736,7 +743,10 @@ if (logOp == NULL)
     logOp = "";
 if (valMenuSize-1 > 2)
     {
-    cgiMakeCheckboxGroup(name, valMenu, valMenuSize, cartOptionalSlNameList(cart, name), 5);
+    struct slName *defaults = cartOptionalSlNameList(cart, name);
+    if (defaults == NULL)
+	defaults = slNameNew("*");
+    cgiMakeCheckboxGroup(name, valMenu, valMenuSize, defaults, 5);
     hPrintf("</TD><TD>%s </TD></TR>\n", logOp);
     }
 else
@@ -913,6 +923,7 @@ struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
 boolean isSmallWig = isWiggle(db, table);
 boolean isWig = isSmallWig || isBigWigTable(table);
 boolean isBedGr = isBedGraph(rootTable);
+boolean isBam = isBamTable(rootTable);
 int bedGraphColumn = 5;		/*	default score column	*/
 
 if (isBedGr)
@@ -948,10 +959,14 @@ if (isWig)
 else
     {
     struct sqlFieldType *ftList;
-    if (hIsBigBed(database, table, curTrack, ctLookupName))
+    if (isBigBed(database, table, curTrack, ctLookupName))
         {
         ftList = bigBedListFieldsAndTypes(table, conn);
         }
+    else if (isBamTable(table))
+        {
+	ftList = bamListFieldsAndTypes();
+	}
     else
         {
         ftList = sqlListFieldsAndTypes(conn, table);
@@ -960,7 +975,7 @@ else
     }
 
 /* Printf free-form query row. */
-if (!(isWig||isBedGr))
+if (!(isWig||isBedGr||isBam))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
@@ -973,7 +988,7 @@ if (!(isWig||isBedGr))
     hPrintf("</TD></TR></TABLE>\n");
     }
 
-if (isWig||isBedGr)
+if (isWig||isBedGr||isBam)
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
@@ -1027,9 +1042,14 @@ else if (ct->wiggle)
         numericFilter("ct", table, filterDataValueVar, filterDataValueVar,"");
         }
     }
-else if (hIsBigBed(db, table, curTrack, ctLookupName))
+else if (isBigBed(db, table, curTrack, ctLookupName))
     {
     struct sqlFieldType *ftList = bigBedListFieldsAndTypes(table, NULL);
+    printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
+    }
+else if (isBamTable(table))
+    {
+    struct sqlFieldType *ftList = bamListFieldsAndTypes();
     printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
     }
 else
@@ -1115,6 +1135,8 @@ for (dt = dtList; dt != NULL; dt = dt->next)
     }
 }
 
+
+#define filterLinkedTablePrefix hgtaFilterPrefix "linked."
 
 static void doBigFilterPage(struct sqlConnection *conn, char *db, char *table)
 /* Put up filter page on given db.table. */

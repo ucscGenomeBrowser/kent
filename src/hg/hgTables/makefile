@@ -8,14 +8,15 @@ A = hgTables
 
 T = tstbug.o
 
-O = $A.o asObj.o bedList.o bigBed.o bigWig.o chromGraph.o compositeTrack.o custom.o filterFields.o \
+O = $A.o asFilter.o asObj.o bam.o bedList.o bigBed.o bigWig.o \
+    chromGraph.o compositeTrack.o custom.o filterFields.o \
     gffOut.o identifiers.o intersect.o correlate.o correlatePlot.o \
     joining.o maf.o mainPage.o microarrayTables.o rangeHistogram.o schema.o pal.o \
     seqOut.o sumStats.o usage.o wiggle.o wikiTrack.o galaxy.o great.o userRegions.o
 
 include ../../inc/cgi_build_rules.mk
 
-rsyncDataOpts = --times --recursive --executability --omit-dir-times --cvs-exclude --delete
+rsyncDataOpts = --times --recursive --omit-dir-times --cvs-exclude --delete
 
 my::
 	rm -f ${CGI_BIN}-${USER}/all.joiner

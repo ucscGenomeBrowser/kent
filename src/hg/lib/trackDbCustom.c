@@ -210,7 +210,9 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
 		   sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
-		   sameString("bam", s) || sameString("bedDetail", s));
+		   sameString("bam", s) || sameString("bedDetail", s) ||
+		   sameString("bed8Attrs", s) || sameString("gvf", s) ||
+		   sameString("vcfTabix", s));
 freeMem(t);
 return canPack;
 }
@@ -266,10 +268,11 @@ else
     return NULL;
 }
 
-struct trackDb *trackDbFromRa(char *raFile, char *releaseTag)
-/* Load track info from ra file into list. */
+struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag)
+/* Load track info from ra file already opened as lineFile into list.  If releaseTag is
+ * non-NULL then only load tracks that mesh with release. */
 {
-struct lineFile *lf = lineFileOpen(raFile, TRUE);
+char *raFile = lf->fileName;
 char *line, *word;
 struct trackDb *btList = NULL, *bt;
 boolean done = FALSE;
@@ -336,8 +339,6 @@ for (;;)
     if (releaseTag)
         trackDbAddRelease(bt, releaseTag);
     }
-lineFileClose(&lf);
-
 slReverse(&btList);
 return btList;
 }
@@ -360,6 +361,15 @@ for(ii=0; ii < count; ii++)
 return TRUE;
 }
 
+struct trackDb *trackDbFromRa(char *raFile, char *releaseTag)
+/* Load track info from ra file into list.  If releaseTag is non-NULL
+ * then only load tracks that mesh with release. */
+{
+struct lineFile *lf = netLineFileOpen(raFile);
+struct trackDb *tdbList = trackDbFromOpenRa(lf, releaseTag);
+lineFileClose(&lf);
+return tdbList;
+}
 
 struct hash *trackDbHashSettings(struct trackDb *tdb)
 /* Force trackDb to hash up it's settings.  Usually this is just
@@ -407,6 +417,58 @@ if (tdb == NULL)
 if (tdb->settingsHash == NULL)
     tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
 return hashFindVal(tdb->settingsHash, name);
+}
+
+struct slName *trackDbLocalSettingsWildMatch(struct trackDb *tdb, char *expression)
+// Return local settings that match expression else NULL.  In alpha order.
+{
+if (tdb == NULL)
+    errAbort("Program error: null tdb passed to trackDbSetting.");
+if (tdb->settingsHash == NULL)
+    tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
+
+struct slName *slFoundVars = NULL;
+struct hashCookie brownie = hashFirst(tdb->settingsHash);
+struct hashEl* el = NULL;
+while ((el = hashNext(&brownie)) != NULL)
+    {
+    if (wildMatch(expression, el->name))
+        slNameAddHead(&slFoundVars, el->name);
+    }
+
+if (slFoundVars != NULL)
+    slNameSort(&slFoundVars);
+
+return slFoundVars;
+}
+
+struct slName *trackDbSettingsWildMatch(struct trackDb *tdb, char *expression)
+// Return settings in tdb tree that match expression else NULL.  In alpha order, no duplicates.
+{
+struct trackDb *generation;
+struct slName *slFoundVars = NULL;
+for (generation = tdb; generation != NULL; generation = generation->parent)
+    {
+    struct slName *slFoundHere = trackDbLocalSettingsWildMatch(generation,expression);
+    if (slFoundHere != NULL)
+        {
+        if (slFoundVars == NULL)
+            slFoundVars = slFoundHere;
+        else
+            {
+            struct slName *one = NULL;
+            while ((one = slPopHead(&slFoundHere)) != NULL)
+                {
+                slNameStore(&slFoundVars, one->name); // Will only store if it is not already found!  This means closest to home will work
+                slNameFree(&one);
+                }
+            }
+        }
+    }
+if (slFoundVars != NULL)
+    slNameSort(&slFoundVars);
+
+return slFoundVars;
 }
 
 boolean trackDbSettingOn(struct trackDb *tdb, char *name)
@@ -537,6 +599,19 @@ if(tdb->parent)
 freeMem(stInfo);
 }
 
+char *maybeSkipHubPrefix(char *track)
+{
+if (!startsWith("hub_", track))
+    return track;
+
+char *nextUnderBar = strchr(track + sizeof "hub_", '_');
+
+if (nextUnderBar)
+    return nextUnderBar + 1;
+
+return track;
+}
+
 void trackDbSuperMarkup(struct trackDb *tdbList)
 /* Set trackDb from superTrack setting */
 {
@@ -555,7 +630,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         tdbMarkAsSuperTrack(tdb);
         tdb->isShow = stInfo->isShow;
         if (!hashLookup(superHash, tdb->track))
-            hashAdd(superHash, tdb->track, tdb);
+            hashAdd(superHash, maybeSkipHubPrefix(tdb->track), tdb);
         tdb->children = NULL; // assertable?
         }
     freeMem(stInfo);
@@ -635,6 +710,8 @@ else if(sameWord("narrowPeak",type)
     cType = cfgPeak;
 else if(sameWord("genePred",type))
         cType = cfgGenePred;
+else if(sameWord("bedLogR",type) || sameWord("peptideMapping", type))
+    cType = cfgBedScore;
 else if(startsWith("bed ", type))
     {
     char *words[3];
@@ -905,6 +982,66 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
 
 hashFree(&trackHash);
 return forest;
+}
+
+void trackDbPrioritizeContainerItems(struct trackDb *tdbList)
+/* Set priorities in containers if they have no priorities already set
+   priorities are based upon 'sortOrder' setting or else shortLabel */
+{
+int countOfSortedContainers = 0;
+
+// Walk through tdbs looking for containers
+struct trackDb *tdbContainer;
+for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->next)
+    {
+    if (tdbContainer->subtracks == NULL)
+        continue;
+
+    sortOrder_t *sortOrder = sortOrderGet(NULL,tdbContainer);
+    boolean needsSorting = TRUE; // default
+    float firstPriority = -1.0;
+    sortableTdbItem *item,*itemsToSort = NULL;
+
+    struct slRef *child, *childList = trackDbListGetRefsToDescendantLeaves(tdbContainer->subtracks);
+    // Walk through tdbs looking for items contained
+    for (child = childList; child != NULL; child = child->next)
+        {
+	struct trackDb *tdbItem = child->val;
+	if( needsSorting && sortOrder == NULL )  // do we?
+	    {
+	    if( firstPriority == -1.0)    // all 0 or all the same value
+		firstPriority = tdbItem->priority;
+	    if(firstPriority != tdbItem->priority && (int)(tdbItem->priority + 0.9) > 0)
+		{
+		needsSorting = FALSE;
+		break;
+		}
+	    }
+	// create an Item
+	item = sortableTdbItemCreate(tdbItem,sortOrder);
+	if(item != NULL)
+	    slAddHead(&itemsToSort, item);
+	else
+	    {
+	    verbose(1,"Error: '%s' missing shortLabels or sortOrder setting is inconsistent.\n",tdbContainer->track);
+	    needsSorting = FALSE;
+	    sortableTdbItemCreate(tdbItem,sortOrder);
+	    break;
+	    }
+        }
+
+    // Does this container need to be sorted?
+    if(needsSorting && slCount(itemsToSort))
+        {
+        verbose(2,"Sorting '%s' with %d items\n",tdbContainer->track,slCount(itemsToSort));
+        sortTdbItemsAndUpdatePriorities(&itemsToSort);
+        countOfSortedContainers++;
+        }
+
+    // cleanup
+    sortOrderFree(&sortOrder);
+    sortableTdbItemsFree(&itemsToSort);
+    }
 }
 
 void trackDbAddTableField(struct trackDb *tdbList)

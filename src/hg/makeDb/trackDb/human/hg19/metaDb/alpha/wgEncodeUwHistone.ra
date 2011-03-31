@@ -1,3 +1,8 @@
+metaObject wgEncodeUwHistone
+objType composite
+composite wgEncodeUwHistone
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -6392,192 +6397,6 @@ subId 2615
 tableName wgEncodeUwHistoneHbmecInputStdRawRep1
 view RawSignal
 
-metaObject wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1
-objType file
-antibody H3K4me3
-cell HCFaa
-composite wgEncodeUwHistone
-control std
-controlId HCFaa/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-10-23
-dateUnrestricted 2011-07-23
-fileName wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.7
-origAssembly hg19
-project wgEncode
-replicate 1
-setType exp
-subId 2616
-view Alignments
-
-metaObject wgEncodeUwHistoneHcfaaH3k4me3StdHotspotsRep1
-objType table
-antibody H3K4me3
-cell HCFaa
-composite wgEncodeUwHistone
-control std
-controlId HCFaa/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-10-23
-dateUnrestricted 2011-07-23
-fileName wgEncodeUwHistoneHcfaaH3k4me3StdHotspotsRep1.broadPeak.gz
-fragLength 350
-grant Stam
-lab UW
-labVersion Hotspot-v5.1
-origAssembly hg19
-project wgEncode
-replicate 1
-setType exp
-subId 2616
-tableName wgEncodeUwHistoneHcfaaH3k4me3StdHotspotsRep1
-view Hotspots
-
-metaObject wgEncodeUwHistoneHcfaaH3k4me3StdPkRep1
-objType table
-antibody H3K4me3
-cell HCFaa
-composite wgEncodeUwHistone
-control std
-controlId HCFaa/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-10-23
-dateUnrestricted 2011-07-23
-fileName wgEncodeUwHistoneHcfaaH3k4me3StdPkRep1.narrowPeak.gz
-fragLength 350
-grant Stam
-lab UW
-labVersion lmax-v1.0
-origAssembly hg19
-project wgEncode
-replicate 1
-setType exp
-subId 2616
-tableName wgEncodeUwHistoneHcfaaH3k4me3StdPkRep1
-view Peaks
-
-metaObject wgEncodeUwHistoneHcfaaH3k4me3StdRawDataRep1
-objType file
-antibody H3K4me3
-cell HCFaa
-composite wgEncodeUwHistone
-control std
-controlId HCFaa/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-10-23
-dateUnrestricted 2011-07-23
-fileName wgEncodeUwHistoneHcfaaH3k4me3StdRawDataRep1.fastq.gz
-fragLength 350
-grant Stam
-lab UW
-origAssembly hg19
-project wgEncode
-replicate 1
-setType exp
-subId 2616
-view RawData
-
-metaObject wgEncodeUwHistoneHcfaaH3k4me3StdRawRep1
-objType table
-antibody H3K4me3
-cell HCFaa
-composite wgEncodeUwHistone
-control std
-controlId HCFaa/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-10-23
-dateUnrestricted 2011-07-23
-fileName wgEncodeUwHistoneHcfaaH3k4me3StdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg19
-project wgEncode
-replicate 1
-setType exp
-subId 2616
-tableName wgEncodeUwHistoneHcfaaH3k4me3StdRawRep1
-view RawSignal
-
-metaObject wgEncodeUwHistoneHcfaaInputStdAlnRep1
-objType file
-antibody Input
-cell HCFaa
-composite wgEncodeUwHistone
-control std
-controlId HCFaa/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-10-23
-dateUnrestricted 2011-07-23
-fileName wgEncodeUwHistoneHcfaaInputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.7
-origAssembly hg19
-project wgEncode
-replicate 1
-setType input
-subId 2617
-view Alignments
-
-metaObject wgEncodeUwHistoneHcfaaInputStdRawDataRep1
-objType file
-antibody Input
-cell HCFaa
-composite wgEncodeUwHistone
-control std
-controlId HCFaa/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-10-23
-dateUnrestricted 2011-07-23
-fileName wgEncodeUwHistoneHcfaaInputStdRawDataRep1.fastq.gz
-fragLength 350
-grant Stam
-lab UW
-origAssembly hg19
-project wgEncode
-replicate 1
-setType input
-subId 2617
-view RawData
-
-metaObject wgEncodeUwHistoneHcfaaInputStdRawRep1
-objType table
-antibody Input
-cell HCFaa
-composite wgEncodeUwHistone
-control std
-controlId HCFaa/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-10-23
-dateUnrestricted 2011-07-23
-fileName wgEncodeUwHistoneHcfaaInputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg19
-project wgEncode
-replicate 1
-setType input
-subId 2617
-tableName wgEncodeUwHistoneHcfaaInputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneHcfH3k4me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -6879,6 +6698,192 @@ replicate 1
 setType input
 subId 2620
 tableName wgEncodeUwHistoneHcfInputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell HCFaa
+composite wgEncodeUwHistone
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2616
+view Alignments
+
+metaObject wgEncodeUwHistoneHcfaaH3k4me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell HCFaa
+composite wgEncodeUwHistone
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwHistoneHcfaaH3k4me3StdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2616
+tableName wgEncodeUwHistoneHcfaaH3k4me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneHcfaaH3k4me3StdPkRep1
+objType table
+antibody H3K4me3
+cell HCFaa
+composite wgEncodeUwHistone
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwHistoneHcfaaH3k4me3StdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2616
+tableName wgEncodeUwHistoneHcfaaH3k4me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneHcfaaH3k4me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell HCFaa
+composite wgEncodeUwHistone
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwHistoneHcfaaH3k4me3StdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2616
+view RawData
+
+metaObject wgEncodeUwHistoneHcfaaH3k4me3StdRawRep1
+objType table
+antibody H3K4me3
+cell HCFaa
+composite wgEncodeUwHistone
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwHistoneHcfaaH3k4me3StdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2616
+tableName wgEncodeUwHistoneHcfaaH3k4me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneHcfaaInputStdAlnRep1
+objType file
+antibody Input
+cell HCFaa
+composite wgEncodeUwHistone
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwHistoneHcfaaInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2617
+view Alignments
+
+metaObject wgEncodeUwHistoneHcfaaInputStdRawDataRep1
+objType file
+antibody Input
+cell HCFaa
+composite wgEncodeUwHistone
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwHistoneHcfaaInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2617
+view RawData
+
+metaObject wgEncodeUwHistoneHcfaaInputStdRawRep1
+objType table
+antibody Input
+cell HCFaa
+composite wgEncodeUwHistone
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwHistoneHcfaaInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2617
+tableName wgEncodeUwHistoneHcfaaInputStdRawRep1
 view RawSignal
 
 metaObject wgEncodeUwHistoneHcmH3k4me3StdAlnRep1
@@ -14949,7 +14954,7 @@ replicate 1
 setType input
 subId 1308
 tableName wgEncodeUwHistoneK562InputStdRawRep1
-view RawSigna
+view RawSignal
 
 metaObject wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1
 objType file
@@ -18021,4 +18026,4 @@ subId 1319
 tableName wgEncodeUwHistoneSknshraInputStdRawRep1
 view RawSignal
 
-# MAGIC: 175702376
+# MAGIC: 789170353

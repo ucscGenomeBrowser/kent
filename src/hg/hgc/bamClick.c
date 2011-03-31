@@ -7,10 +7,10 @@
 #include "hdb.h"
 #include "bamFile.h"
 #include "hgc.h"
-#ifdef KNETFILE_HOOKS
+#if (defined USE_BAM && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
-#endif//def KNETFILE_HOOKS
+#endif//def USE_BAM && KNETFILE_HOOKS
 
 static char const rcsid[] = "$Id: bamClick.c,v 1.21 2010/05/11 01:43:28 kent Exp $";
 
@@ -173,6 +173,9 @@ if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
 #endif//def USE_BAM && KNETFILE_HOOKS
 
+if (sameString(item, "zoom in"))
+    printf("Zoom in to a region with fewer items to enable 'detail page' links for individual items.<BR>");
+
 char varName[1024];
 safef(varName, sizeof(varName), "%s_pairEndsByName", tdb->track);
 boolean isPaired = cartUsualBoolean(cart, varName,
@@ -181,20 +184,22 @@ char position[512];
 safef(position, sizeof(position), "%s:%d-%d", seqName, winStart, winEnd);
 struct hash *pairHash = isPaired ? hashNew(0) : NULL;
 struct bamTrackData btd = {start, item, pairHash};
-char *fileName;
-if (isCustomTrack(tdb->table))
+char *fileName = trackDbSetting(tdb, "bigDataUrl");
+if (fileName == NULL)
     {
-    fileName = trackDbSetting(tdb, "bigDataUrl");
-    if (fileName == NULL)
-	errAbort("doBamDetails: can't find bigDataUrl for custom track %s", tdb->track);
+    if (isCustomTrack(tdb->table))
+	{
+	errAbort("bamLoadItemsCore: can't find bigDataUrl for custom track %s", tdb->track);
+	}
+    else
+	{
+	struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+	fileName = bamFileNameFromTable(conn, tdb->table, seqName);
+	hFreeConn(&conn);
+	}
     }
-else
-    {
-    struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-    fileName = bamFileNameFromTable(conn, tdb->table, seqName);
-    hFreeConn(&conn);
-    }
-bamFetch(fileName, position, oneBam, &btd);
+
+bamFetch(fileName, position, oneBam, &btd, NULL);
 if (isPaired)
     {
     char *setting = trackDbSettingOrDefault(tdb, "pairSearchRange", "20000");
@@ -206,7 +211,7 @@ if (isPaired)
 	btd.pairHash = newPairHash;
 	safef(position, sizeof(position), "%s:%d-%d", seqName,
 	      max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-	bamFetch(fileName, position, oneBam, &btd);
+	bamFetch(fileName, position, oneBam, &btd, NULL);
 	}
     struct hashEl *hel;
     struct hashCookie cookie = hashFirst(btd.pairHash);

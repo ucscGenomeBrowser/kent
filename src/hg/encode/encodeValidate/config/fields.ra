@@ -3,7 +3,6 @@
 
 # DDF fields
 
-
 # This is the name of the file that is being submitted. 
 # It can be a comma separated list
 field files
@@ -23,6 +22,13 @@ required yes
 # This is a free text catch all
 # It is meant for the lab to indicate anything that is not in another field
 field labVersion
+file ddf
+type string
+required no
+
+# This is free text
+# It is used to tie together fastq files with BAM files
+field run
 file ddf
 type string
 required no
@@ -55,6 +61,12 @@ type string
 required no
 
 field geoSample
+file ddf
+type string
+required no
+
+#The md5sum of the file being submitted
+field md5sum   
 file ddf
 type string
 required no
@@ -123,6 +135,23 @@ field seqPlatform
 file ddf
 type string
 required no
+
+field readType
+file ddf
+type string
+required no 
+
+field mapAlgorithm
+file ddf
+type string
+required no 
+
+#The bioRep information for the transcriptome lab
+field bioRep
+file ddf
+type string
+required no
+
 
 
 # This is the field where you can enter which type of control is being used

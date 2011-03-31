@@ -1,9 +1,25 @@
 # $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/mouse/mm9/trackDb.wgEncode.ra,v 1.5 2010/05/25 18:28:25 vsmalladi Exp $
 
-#Tracks to be included
+#Encode Composite tracks (main wrangler:Venkat)
+
+# Stan/Yale TFBS (wrangler: Venkat) 
+include wgEncodeSydhTfbs.ra beta,public
+include wgEncodeSydhTfbs.newR2.ra alpha
+
+# Stan/Yale Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra
-include wgEncodeSydhTfbs.ra
+
+# UW DNaseI HS (wrangler: Venkat)
 include wgEncodeUwDnase.ra
+
+# PSU TFBS (wrangler: Venkat)
 include wgEncodePsuTfbs.ra
+
+# PSU Histone (wrangler: Venkat)
 include wgEncodePsuHistone.ra
-include wgEncodeSydhTfbs.newR2.ra
+
+# LICR Histone (wrangler: Venkat)
+include wgEncodeLicrHistone.ra
+
+# LICR TFBS (wrangler: Venkat)
+include wgEncodeLicrTfbs.ra

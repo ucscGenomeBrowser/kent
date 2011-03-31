@@ -18,6 +18,7 @@
 #include "correlate.h"
 #include "bbiFile.h"
 #include "bigWig.h"
+#include "hubConnect.h"
 #include "hgTables.h"
 
 static char const rcsid[] = "$Id: bigWig.c,v 1.7 2010/06/03 18:53:59 kent Exp $";
@@ -25,12 +26,18 @@ static char const rcsid[] = "$Id: bigWig.c,v 1.7 2010/06/03 18:53:59 kent Exp $"
 boolean isBigWigTable(char *table)
 /* Return TRUE if table corresponds to a bigWig file. */
 {
-return trackIsType(database, table, curTrack, "bigWig", ctLookupName);
+if (isHubTrack(table))
+    {
+    struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+    return startsWithWord("bigWig", tdb->type);
+    }
+else
+    return trackIsType(database, table, curTrack, "bigWig", ctLookupName);
 }
 
-char *bigWigFileName(char *table, struct sqlConnection *conn)
-/* Return file name associated with bigWig.  This handles differences whether it's
- * a custom or built-in track.  Do a freeMem on returned string when done. */
+char *bigFileNameFromCtOrHub(char *table, struct sqlConnection *conn)
+/* If table is a custom track or hub track, return the bigDataUrl setting;
+ * otherwise return NULL.  Do a freeMem on returned string when done. */
 {
 char *fileName = NULL;
 if (isCustomTrack(table))
@@ -39,7 +46,22 @@ if (isCustomTrack(table))
     if (ct != NULL)
         fileName = cloneString(trackDbSetting(ct->tdb, "bigDataUrl"));
     }
-else
+else if (isHubTrack(table))
+    {
+    struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+    assert(tdb != NULL);
+    fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+    assert(fileName != NULL);
+    }
+return fileName;
+}
+
+char *bigWigFileName(char *table, struct sqlConnection *conn)
+/* Return file name associated with bigWig.  This handles differences whether it's
+ * a custom or built-in track.  Do a freeMem on returned string when done. */
+{
+char *fileName = bigFileNameFromCtOrHub(table, conn);
+if (fileName == NULL)
     {
     char query[256];
     safef(query, sizeof(query), "select fileName from %s", table);

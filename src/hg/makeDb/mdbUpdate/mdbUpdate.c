@@ -26,7 +26,8 @@ errAbort(
   "             '" MDB_DEFAULT_NAME "'.\n"
   "       -recreate   Creates or empties the table.  No further arguements needed.\n"
   "       -force      Overrides restrictions placed on shared  '" MDB_DEFAULT_NAME "'.\n"
-  "    -test    Does not actually update.  Use with -verbose=2 to see the SQL.\n"
+  "    -test    Does not actually update and does full cv validation.\n"
+  "             Use with -verbose=2 to see the SQL.\n"
   "    [{fileName}] File of formatted metadata from mdbPrint (RA or lines).\n"
   "      -replace   Remove all old variables for each object before adding new.\n"
   "  if {fileName} argument not provided, then -vars or -obj must be provided:\n"
@@ -35,11 +36,13 @@ errAbort(
   "             'var!=val' 'var!=v%%' 'var!=' 'var!=val1,val2' are all supported.\n"
   "        RECOMMENDED: Test complex selection criteria with mdbPrint first.\n"
   "    -obj={objName}     Update this single object from the command line as:\n\n"
+  "    -composite={}      Special commonly used var=val pair replaces -vars=\"composite=wgEn...\".\n"
   "    These options work on objects selected with -vars or -obj:\n"
   "       -var={varName}  Provide variable name (if no -var then must be -delete)\n"
   "       -val={value}    (Enclose in \"quotes if necessary\").\n"
   "       -setVars={var=val...}  Allows setting multiple var=val pairs.\n"
   "       -delete         Remove specific var or entire object.\n"
+  "       -encodeExp      Update groups of objs as experiments defined in hgFixed.encodeExp table.\n"
   "There are two ways to call mdbUpdate.  The object (or objects matching vars) and var to update "
   "can be declared on the command line, or a file of formatted metadata lines can be provided. "
   "The file can be the formatted output from mdbPrint or the following special formats:\n"
@@ -72,11 +75,12 @@ static struct optionSpec optionSpecs[] = {
     {"table",   OPTION_STRING}, // default "metaDb"
     {"obj",     OPTION_STRING}, // objName or objId
     {"vars",    OPTION_STRING}, // Select set of object by vars
+    {"composite",OPTION_STRING}, // Special case of a commn var (replaces vars="composite=wgEncodeBroadHistone")
     {"var",     OPTION_STRING}, // variable
     {"val",     OPTION_STRING}, // value
+    {"encodeExp",OPTION_BOOLEAN},// Update Experiments as defined in the hgFixed.encodeExp table
     {"setVars", OPTION_STRING}, // Allows setting multiple var=val pairs
     {"delete",  OPTION_BOOLEAN},// delete one obj or obj/var
-    {"binary",  OPTION_BOOLEAN},// val is binary (NOT YET IMPLEMENTED) implies -val={file}
     {"replace", OPTION_BOOLEAN},// replace entire obj when loading from file
     {"recreate",OPTION_BOOLEAN},// creates or recreates the table
     {"force",   OPTION_BOOLEAN},// override restrictions on shared table
@@ -106,10 +110,32 @@ boolean deleteIt = optionExists("delete");
 boolean testIt   = optionExists("test");
 boolean recreate = optionExists("recreate");
 boolean force    = optionExists("force");
+boolean encodeExp = optionExists("encodeExp");
 boolean replace  = FALSE;
 char *var        = optionVal("var",NULL);
 char *val        = optionVal("val",NULL);
 char *setVars    = optionVal("setVars",NULL);
+
+if (recreate && encodeExp)
+    {
+    verbose(1, "Incompatible options 'recreate' and 'encodeExp':\n");
+    usage();
+    }
+if (recreate && deleteIt)
+    {
+    verbose(1, "Incompatible options 'recreate' and 'delete':\n");
+    usage();
+    }
+if (encodeExp && deleteIt)
+    {
+    verbose(1, "Incompatible options 'encodeExp' and 'delete':\n");
+    usage();
+    }
+if (testIt && force)
+    {
+    verbose(1, "Incompatible options 'test' and 'force':\n");
+    usage();
+    }
 
 struct sqlConnection *conn = sqlConnect(db);
 
@@ -160,17 +186,17 @@ if(recreate)
         verbose(1, "%s table named '%s'.\n",(recreated?"Recreated":"Created"),table);
     }
 
-if(argc > 2 && (deleteIt || var != NULL || val != NULL || setVars != NULL))
+if(argc > 2 && (deleteIt || encodeExp || var != NULL || val != NULL || setVars != NULL))
     {
-    verbose(1, "INCONSISTENT REQUEST: can't combine supplied file with -delete, -var, -val or -setVars.\n");
+    verbose(1, "INCONSISTENT REQUEST: can't combine supplied file with -delete, -encodeExp, -var, -val or -setVars.\n");
     usage();
     }
-if(deleteIt && var != NULL && val != NULL)
+if((deleteIt || encodeExp) && var != NULL && val != NULL)
     {
-    verbose(1, "INCONSISTENT REQUEST: can't combine -delete with -var and -val.\n");
+    verbose(1, "INCONSISTENT REQUEST: can't combine -%s with -var and -val.\n",deleteIt?"delete":"encodeExp");
     usage();
     }
-if (argc != 3 && !deleteIt)
+if (argc != 3 && !deleteIt && !encodeExp)
     {
     if(setVars == NULL && (var == NULL || val == NULL))
         {
@@ -204,9 +230,7 @@ if(optionExists("obj"))
         usage(); // Must not have submitted formatted file also
         }
 
-    mdbObjs = mdbObjCreate(optionVal("obj",  NULL),var,
-                            (optionExists("binary") ? "binary" : "txt"), // FIXME: don't know how to deal with binary yet
-                            val);
+    mdbObjs = mdbObjCreate(optionVal("obj",  NULL),var,val);
     mdbObjs->deleteThis = deleteIt;
 
     if(setVars != NULL)
@@ -218,7 +242,7 @@ if(optionExists("obj"))
         (mdbObjs->vars && mdbObjs->vars->val!=NULL?"=":""),
         (mdbObjs->vars && mdbObjs->vars->val!=NULL?mdbObjs->vars->val:""));
     }
-else if(optionExists("vars"))
+else if(optionExists("vars") || optionExists("composite"))
     {
     if(sharedTbl && !force)
         {
@@ -226,22 +250,37 @@ else if(optionExists("vars"))
         verbose(1, "NOT SUPPORTED for shared table '%s'.\n",MDB_DEFAULT_NAME);
         usage(); // Must not have submitted formatted file also
         }
-    if(argc > 2)
+    if((argc > 2 && (!optionExists("vars") || !optionExists("composite")))
+    || (argc > 3 &&   optionExists("vars") &&  optionExists("composite")) )
         {
         sqlDisconnect(&conn);
-        verbose(1, "INCONSISTENT REQUEST: can't combine -vars with a supplied file.\n");
+        verbose(1, "INCONSISTENT REQUEST: can't combine -vars or -composite with a supplied file.\n");
         usage(); // Must not have submitted formatted file also
         }
-    struct mdbByVar * mdbByVars = mdbByVarsLineParse(optionVal("vars", NULL));
+    struct mdbByVar * mdbByVars = NULL;
+    if (optionExists("vars"))
+        {
+        mdbByVars = mdbByVarsLineParse(optionVal("vars", NULL));
+        if (optionExists("composite"))
+            mdbByVarAppend(mdbByVars,"composite", optionVal("composite", NULL),FALSE);
+        // Would be nice to do this as mdbPrint.  However -var and -val are values to be set
+        //if (optionExists("var"))
+        //    mdbByVarAppend(mdbByVars,optionVal("var", NULL), optionVal("val", NULL),FALSE);
+        }
+    else //if (optionExists("composite"))
+        {
+        mdbByVars = mdbByVarCreate("composite", optionVal("composite", NULL));
+        // Would be nice to do this as mdbPrint.  However -var and -val are values to be set
+        //if (optionExists("var"))
+        //    mdbByVarAppend(mdbByVars,optionVal("var", NULL), optionVal("val", NULL),FALSE);
+        }
     mdbObjs = mdbObjsQueryByVars(conn,table,mdbByVars);
 
     // replace all found vars but update request
     if(setVars != NULL)
         mdbObjSwapVars(mdbObjs,setVars,deleteIt);
-    else
-        mdbObjTransformToUpdate(mdbObjs,var,
-                            (optionExists("binary") ? "binary" : "txt"), // FIXME: don't know how to deal with binary yet
-                             val,deleteIt);
+    else if (!encodeExp)
+        mdbObjTransformToUpdate(mdbObjs,var,val,deleteIt);
     }
 else // Must be submitting formatted file
     {
@@ -273,7 +312,41 @@ if(mdbObjs != NULL)
     if(testIt && verboseLevel() > 2)
         mdbObjPrint(mdbObjs,FALSE);
 
-    count = mdbObjsSetToDb(conn,table,mdbObjs,replace,testIt);
+    if(recreate) // recreate then do the fast load
+        count = mdbObjsLoadToDb(conn,table,mdbObjs,testIt);
+    else
+        {
+        if (encodeExp)
+            {
+            if (!testIt)
+                {
+                verbose(1, "NOTE: -encodeExp will only run in -test mode until the utilities are fully functional.\n");
+                testIt = TRUE;  // FIXME: No actual updates until we are ready to pull the trigger!  // FIXME: Also when will update to EXP table be turned on?
+                }
+            boolean createExpIfNecessary = FALSE; // testIt ? FALSE : TRUE; // FIXME: When we are ready, this should allow creating an experiment in the hgFixed.encodeExp table
+
+            struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,&mdbObjs,(verboseLevel() > 1? 1:0),createExpIfNecessary); // 1=warnings
+            if (updatable == NULL)
+                verbose(1, "No Experiment ID updates were discovered in %d object(s).\n", slCount(mdbObjs));
+            else
+                {
+                if (testIt)
+                    verbose(1, "Found %d of %d object(s) would have their experiment ID updated.\n", slCount(updatable), slCount(mdbObjs));
+                mdbObjsFree(&mdbObjs);
+                mdbObjs = updatable;
+                }
+            }
+        count = mdbObjsSetToDb(conn,table,mdbObjs,replace,testIt);
+        }
+
+    if (testIt && !encodeExp)
+        {
+        int invalids = mdbObjsValidate(mdbObjs,TRUE);
+        int varsCnt=mdbObjCount(mdbObjs,FALSE);
+        verbose(1, "%d invalid%s of %d variable%s according to the cv.ra.\n",invalids,(invalids==1?"":"s"),varsCnt,(varsCnt==1?"":"s"));
+        if (invalids > 0)
+            verbose(1, "Variables invalid to cv.ra ARE PERMITTED in the mdb.\n");
+        }
     }
 if(testIt)
     verbose(1, "Command would affected %d row(s) in %s.%s\n", count,db,table);

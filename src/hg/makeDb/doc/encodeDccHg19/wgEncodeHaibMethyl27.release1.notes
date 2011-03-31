@@ -1,0 +1,190 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release1 of the "ENCODE wgEncodeHaibMethylArray"
+The composite track is wgEncodeHaibMethylArray
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release1 (new+untouched):
+    Tables: 73
+    Files: 76
+    Gbdbs: 0
+
+A) Untouched Tables (0):
+
+A') Untouched Files (0 downloadables, 0 gbdbs):
+
+B) Deprecated tables (0):
+
+B') Deprecated files (0 downloadables, 0 gbdbs):
+
+C) New tables (73):
+wgEncodeHaibMethylArrayAg04449UwSitesRep2
+wgEncodeHaibMethylArrayAg04450UwSitesRep2
+wgEncodeHaibMethylArrayAg09309UwSitesRep2
+wgEncodeHaibMethylArrayAg09319UwSitesRep2
+wgEncodeHaibMethylArrayAg10803UwSitesRep2
+wgEncodeHaibMethylArrayBcadiposeuhn00001BiochainSitesRep1
+wgEncodeHaibMethylArrayBcadrenalglandh12803nBiochainSitesRep1
+wgEncodeHaibMethylArrayBcbladder0111002BiochainSitesRep1
+wgEncodeHaibMethylArrayBcbrainh11058nBiochainSitesRep1
+wgEncodeHaibMethylArrayBcbreast0203015BiochainSitesRep1
+wgEncodeHaibMethylArrayBccolon0111002BiochainSitesRep1
+wgEncodeHaibMethylArrayBccolonh12817nBiochainSitesRep1
+wgEncodeHaibMethylArrayBcesophagus0111002BiochainSitesRep1
+wgEncodeHaibMethylArrayBcesophagush12817nBiochainSitesRep1
+wgEncodeHaibMethylArrayBcjejunumh12817nBiochainSitesRep1
+wgEncodeHaibMethylArrayBckidney0111002BiochainSitesRep1
+wgEncodeHaibMethylArrayBckidneyh12817nBiochainSitesRep1
+wgEncodeHaibMethylArrayBcleftventriclen41BiochainSitesRep1
+wgEncodeHaibMethylArrayBcleukocyteuhn00204BiochainSitesRep1
+wgEncodeHaibMethylArrayBcliver0111002BiochainSitesRep1
+wgEncodeHaibMethylArrayBclung0111002BiochainSitesRep1
+wgEncodeHaibMethylArrayBclungh12817nBiochainSitesRep1
+wgEncodeHaibMethylArrayBcpancreash12817nBiochainSitesRep1
+wgEncodeHaibMethylArrayBcpenish12817nBiochainSitesRep1
+wgEncodeHaibMethylArrayBcpericardiumh12529nBiochainSitesRep1
+wgEncodeHaibMethylArrayBcplacentauhn00189BiochainSitesRep1
+wgEncodeHaibMethylArrayBcprostateglandh12817nBiochainSitesRep1
+wgEncodeHaibMethylArrayBcrectumn29BiochainSitesRep1
+wgEncodeHaibMethylArrayBcskeletalmuscle0111002BiochainSitesRep1
+wgEncodeHaibMethylArrayBcskeletalmuscleh12817nBiochainSitesRep1
+wgEncodeHaibMethylArrayBcskin0111002BiochainSitesRep1
+wgEncodeHaibMethylArrayBcsmallintestine0111002BiochainSitesRep1
+wgEncodeHaibMethylArrayCmkUwSitesRep2
+wgEncodeHaibMethylArrayGm12878SitesRep1
+wgEncodeHaibMethylArrayGm12878SitesRep2
+wgEncodeHaibMethylArrayGm12891HaibSitesRep1
+wgEncodeHaibMethylArrayGm12891HaibSitesRep2
+wgEncodeHaibMethylArrayGm12892HaibSitesRep1
+wgEncodeHaibMethylArrayGm12892HaibSitesRep2
+wgEncodeHaibMethylArrayH1hescHaibSitesRep1
+wgEncodeHaibMethylArrayH1hescHaibSitesRep2
+wgEncodeHaibMethylArrayHaeUwSitesRep2
+wgEncodeHaibMethylArrayHcfUwSitesRep2
+wgEncodeHaibMethylArrayHcmUwSitesRep2
+wgEncodeHaibMethylArrayHcpeUwSitesRep2
+wgEncodeHaibMethylArrayHeeUwSitesRep2
+wgEncodeHaibMethylArrayHek293YaleSitesRep2
+wgEncodeHaibMethylArrayHepg2HaibSitesRep3
+wgEncodeHaibMethylArrayHepg2HaibSitesRep4
+wgEncodeHaibMethylArrayHepg2SitesRep1
+wgEncodeHaibMethylArrayHepg2SitesRep2
+wgEncodeHaibMethylArrayHipeUwSitesRep2
+wgEncodeHaibMethylArrayHmecUwSitesRep2
+wgEncodeHaibMethylArrayHnpceUwSitesRep2
+wgEncodeHaibMethylArrayHpaeUwSitesRep2
+wgEncodeHaibMethylArrayHrceUwSitesRep2
+wgEncodeHaibMethylArrayHreUwSitesRep2
+wgEncodeHaibMethylArrayHrpeUwSitesRep2
+wgEncodeHaibMethylArrayImr90UwSitesRep2
+wgEncodeHaibMethylArrayJurkatUwSitesRep2
+wgEncodeHaibMethylArrayK562HaibSitesRep3
+wgEncodeHaibMethylArrayK562HaibSitesRep4
+wgEncodeHaibMethylArrayK562SitesRep1
+wgEncodeHaibMethylArrayK562SitesRep2
+wgEncodeHaibMethylArrayMcf7DukeSitesRep2
+wgEncodeHaibMethylArrayNb4UwSitesRep2
+wgEncodeHaibMethylArrayNhaUwSitesRep2
+wgEncodeHaibMethylArrayNhbeUwSitesRep2
+wgEncodeHaibMethylArrayNhdfneoUwSitesRep2
+wgEncodeHaibMethylArrayRptecUwSitesRep2
+wgEncodeHaibMethylArraySaecUwSitesRep2
+wgEncodeHaibMethylArraySkmcUwSitesRep2
+wgEncodeHaibMethylArraySknshraUwSitesRep2
+
+C') New files (73 downloadables, 0 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayAg04449UwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayAg04450UwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayAg09309UwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayAg09319UwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayAg10803UwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcadiposeuhn00001BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcadrenalglandh12803nBiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcbladder0111002BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcbrainh11058nBiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcbreast0203015BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBccolon0111002BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBccolonh12817nBiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcesophagus0111002BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcesophagush12817nBiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcjejunumh12817nBiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBckidney0111002BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBckidneyh12817nBiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcleftventriclen41BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcleukocyteuhn00204BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcliver0111002BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBclung0111002BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBclungh12817nBiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcpancreash12817nBiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcpenish12817nBiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcpericardiumh12529nBiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcplacentauhn00189BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcprostateglandh12817nBiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcrectumn29BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcskeletalmuscle0111002BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcskeletalmuscleh12817nBiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcskin0111002BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayBcsmallintestine0111002BiochainSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayCmkUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayGm12878SitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayGm12878SitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayGm12891HaibSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayGm12891HaibSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayGm12892HaibSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayGm12892HaibSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayH1hescHaibSitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayH1hescHaibSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHaeUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHcfUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHcmUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHcpeUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHeeUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHek293YaleSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHepg2HaibSitesRep3.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHepg2HaibSitesRep4.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHepg2SitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHepg2SitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHipeUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHmecUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHnpceUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHpaeUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHrceUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHreUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayHrpeUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayImr90UwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayJurkatUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayK562HaibSitesRep3.bed9.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayK562HaibSitesRep4.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayK562SitesRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayK562SitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayMcf7DukeSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayNb4UwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayNhaUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayNhbeUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayNhdfneoUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArrayRptecUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArraySaecUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArraySkmcUwSitesRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/wgEncodeHaibMethylArraySknshraUwSitesRep2.bed.gz
+
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylArray/release1/md5sum.txt

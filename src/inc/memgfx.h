@@ -18,6 +18,25 @@
 #ifdef COLOR32
 typedef unsigned int Color;
 
+// BIGENDIAN machines:
+
+#if defined(__sgi__) || defined(__sgi) || defined(__powerpc__) || defined(sparc) || defined(__ppc__) || defined(__s390__) || defined(__s390x__)
+
+#define MEMGFX_BIGENDIAN	1
+#define MG_WHITE   0xffffffff
+#define MG_BLACK   0x000000ff
+#define MG_RED     0xff0000ff
+#define MG_GREEN   0x00ff00ff
+#define MG_BLUE    0x0000ffff
+#define MG_CYAN    0x00ffffff
+#define MG_MAGENTA 0xff00ffff
+#define MG_YELLOW  0xffff00ff
+#define MG_GRAY    0x808080ff
+
+#define MAKECOLOR_32(r,g,b) (((unsigned int)0xff) | ((unsigned int)b<<8) | ((unsigned int)g << 16) | ((unsigned int)r << 24))
+
+#else
+
 #define MG_WHITE   0xffffffff
 #define MG_BLACK   0xff000000
 #define MG_RED     0xff0000ff
@@ -29,6 +48,7 @@ typedef unsigned int Color;
 #define MG_GRAY    0xff808080
 
 #define MAKECOLOR_32(r,g,b) (((unsigned int)0xff<<24) | ((unsigned int)b<<16) | ((unsigned int)g << 8) | (unsigned int)r)
+#endif
 
 #else /* 8-bit color */
 typedef unsigned char Color;

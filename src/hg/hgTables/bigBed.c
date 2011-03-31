@@ -18,10 +18,24 @@
 #include "asParse.h"
 #include "bbiFile.h"
 #include "bigBed.h"
+#include "hubConnect.h"
+#include "asFilter.h"
 #include "hgTables.h"
 
 static char const rcsid[] = "$Id: bigBed.c,v 1.11 2010/05/21 23:45:38 braney Exp $";
 
+boolean isBigBed(char *database, char *table, struct trackDb *parent, 
+	struct customTrack *(*ctLookupName)(char *table))
+/* Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed. */
+{
+if (isHubTrack(table))
+    {
+    struct trackDb *tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
+    return startsWithWord("bigBed", tdb->type);
+    }
+else
+    return hIsBigBed(database, table, parent, ctLookupName);
+}
 
 char *bigBedFileName(char *table, struct sqlConnection *conn)
 /* Return file name associated with bigBed.  This handles differences whether it's
@@ -106,20 +120,6 @@ bbiFileClose(&bbi);
 return hti;
 }
 
-struct slName *asColNames(struct asObject *as)
-/* Get list of column names. */
-{
-struct slName *list = NULL, *el;
-struct asColumn *col;
-for (col = as->columnList; col != NULL; col = col->next)
-    {
-    el = slNameNew(col->name);
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-return list;
-}
-
 struct slName *bigBedGetFields(char *table, struct sqlConnection *conn)
 /* Get fields of bigBed as simple name list. */
 {
@@ -130,22 +130,6 @@ struct slName *names = asColNames(as);
 freeMem(fileName);
 bbiFileClose(&bbi);
 return names;
-}
-
-struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as)
-/* Convert asObject to list of sqlFieldTypes */
-{
-struct sqlFieldType *ft, *list = NULL;
-struct asColumn *col;
-for (col = as->columnList; col != NULL; col = col->next)
-    {
-    struct dyString *type = asColumnToSqlType(col);
-    ft = sqlFieldTypeNew(col->name, type->string);
-    slAddHead(&list, ft);
-    dyStringFree(&type);
-    }
-slReverse(&list);
-return list;
 }
 
 struct sqlFieldType *bigBedListFieldsAndTypes(char *table, struct sqlConnection *conn)
@@ -160,293 +144,6 @@ bbiFileClose(&bbi);
 return list;
 }
 
-
-enum asFilterDataType
-/* High level data type. */
-   {
-   afdtNone = 0,
-   afdtString = 1,
-   afdtLong = 2,
-   afdtDouble = 3,
-   afdtChar = 4,
-   };
-
-struct asLongFilter
-/* Filter on long value */
-   {
-   enum numericFilterType op;
-   long long *thresholds;
-   };
-
-struct asDoubleFilter
-/* Filter on double value */
-   {
-   enum numericFilterType op;
-   double *thresholds;
-   };
-
-struct asCharFilter
-/* Filter on a char value */
-    {
-    enum charFilterType op;
-    char *matches;
-    boolean invert;
-    };
-
-struct asStringFilter
-/* Filter on a string value */
-    {
-    enum stringFilterType op;
-    char **matches;
-    boolean invert;
-    };
-
-void asCharFilterFree(struct asCharFilter **pFilter)
-/* Free up memory associated with filter. */
-{
-struct asCharFilter *filter = *pFilter;
-if (filter != NULL)
-    {
-    freeMem(filter->matches);
-    freez(pFilter);
-    }
-}
-
-void asStringFilterFree(struct asStringFilter **pFilter)
-/* Free up memory associated with filter. */
-{
-struct asStringFilter *filter = *pFilter;
-if (filter != NULL)
-    {
-    freeMem(filter->matches);
-    freez(pFilter);
-    }
-}
-
-struct asDoubleFilter *asDoubleFilterFromCart(struct cart *cart, char *fieldPrefix)
-/* Get filter settings for double out of cart. */
-{
-struct asDoubleFilter *filter = NULL;
-char varName[256];
-safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterCmpVar);
-char *cmp = cartOptionalString(cart, varName);
-safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterPatternVar);
-char *pat = cartOptionalString(cart, varName);
-if (!isEmpty(cmp) && !isEmpty(pat))
-    {
-    AllocVar(filter);
-    cgiToDoubleFilter(cmp, pat, &filter->op, &filter->thresholds);
-    }
-return filter;
-}
-
-struct asLongFilter *asLongFilterFromCart(struct cart *cart, char *fieldPrefix)
-/* Get filter settings for double out of cart. */
-{
-struct asLongFilter *filter = NULL;
-char varName[256];
-safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterCmpVar);
-char *cmp = cartOptionalString(cart, varName);
-safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterPatternVar);
-char *pat = cartOptionalString(cart, varName);
-if (!isEmpty(cmp) && !isEmpty(pat))
-    {
-    AllocVar(filter);
-    cgiToLongFilter(cmp, pat, &filter->op, &filter->thresholds);
-    }
-return filter;
-}
-
-struct asCharFilter *asCharFilterFromCart(struct cart *cart, char *fieldPrefix)
-/* Get filter settings for double out of cart. */
-{
-struct asCharFilter *filter = NULL;
-char varName[256];
-safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterDdVar);
-char *dd = cartOptionalString(cart, varName);
-safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterPatternVar);
-char *pat = cartOptionalString(cart, varName);
-if (!isEmpty(dd) && !isEmpty(pat))
-    {
-    AllocVar(filter);
-    cgiToCharFilter(dd, pat, &filter->op, &filter->matches, &filter->invert);
-    if (filter->op == cftIgnore)	// Filter out nop
-	asCharFilterFree(&filter);
-    }
-return filter;
-}
-
-struct asStringFilter *asStringFilterFromCart(struct cart *cart, char *fieldPrefix)
-/* Get filter settings for double out of cart. */
-{
-struct asStringFilter *filter = NULL;
-char varName[256];
-safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterDdVar);
-char *dd = cartOptionalString(cart, varName);
-safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterPatternVar);
-char *pat = cartOptionalString(cart, varName);
-if (!isEmpty(dd) && !isEmpty(pat))
-    {
-    AllocVar(filter);
-    cgiToStringFilter(dd, pat, &filter->op, &filter->matches, &filter->invert);
-    if (filter->op == sftIgnore)	// Filter out nop
-	asStringFilterFree(&filter);
-    }
-return filter;
-}
-
-union asFilterData
-/* One of the above four. */
-    {
-    struct asLongFilter *l;
-    struct asDoubleFilter *d;
-    struct asCharFilter *c;
-    struct asStringFilter *s;
-    };
-
-struct asFilterColumn
-/* A type of filter applied to a column. */
-   {
-   struct asFilterColumn *next;
-   struct asColumn *col;		/* Column we operate on. */
-   int colIx;				/* Index of column. */
-   enum asFilterDataType dataType;	/* Type of limit parameters. */
-   union asFilterData filter;		/* Filter data including op. */
-   };
-
-struct asFilter
-/* A filter that can be applied to weed out rows in a table with an associated .as file. */
-    {
-    struct asFilter *next;
-    struct asFilterColumn *columnList;  /* A list of column filters to apply */
-    };
-
-
-boolean asFilterString(struct asStringFilter *filter, char *x)
-/* Return TRUE if x passes filter. */
-{
-return bedFilterString(x, filter->op, filter->matches, filter->invert);
-}
-
-boolean asFilterLong(struct asLongFilter *filter, long long x)
-/* Return TRUE if x passes filter. */
-{
-return bedFilterLong(x, filter->op, filter->thresholds);
-}
-
-boolean asFilterDouble(struct asDoubleFilter *filter, double x)
-/* Return TRUE if x passes filter. */
-{
-return bedFilterDouble(x, filter->op, filter->thresholds);
-}
-
-boolean asFilterChar(struct asCharFilter *filter, char x)
-/* Return TRUE if x passes filter. */
-{
-return bedFilterChar(x, filter->op, filter->matches, filter->invert);
-}
-
-boolean asFilterOneCol(struct asFilterColumn *filtCol, char *s)
-/* Return TRUE if s passes filter. */
-{
-switch (filtCol->dataType)
-    {
-    case afdtString:
-        return asFilterString(filtCol->filter.s, s);
-    case afdtLong:
-        return asFilterLong(filtCol->filter.l, atoll(s));
-    case afdtDouble:
-        return asFilterDouble(filtCol->filter.d, atof(s));
-    case afdtChar:
-        return asFilterChar(filtCol->filter.c, s[0]);
-    default:
-        internalErr();
-	return FALSE;
-    }
-}
-
-boolean asFilterOnRow(struct asFilter *filter, char **row)
-/* Return TRUE if row passes filter if any. */
-{
-if (filter != NULL)
-    {
-    struct asFilterColumn *col;
-    for (col = filter->columnList; col != NULL; col = col->next)
-	{
-	if (!asFilterOneCol(col, row[col->colIx]))
-	    return FALSE;
-	}
-    }
-return TRUE;
-}
-
-struct asFilter *asFilterFromCart(struct cart *cart, char *db, char *table, struct asObject *as)
-/* Examine cart for filter relevant to this table, and create object around it. */
-{
-/* Get list of filter variables for this table. */
-char tablePrefix[128], fieldPrefix[192];
-safef(tablePrefix, sizeof(tablePrefix), "%s%s.%s.", hgtaFilterVarPrefix, db, table);
-
-struct asFilter *asFilter;
-AllocVar(asFilter);
-
-struct asColumn *col;
-int colIx = 0;
-for (col = as->columnList; col != NULL; col = col->next, ++colIx)
-    {
-    safef(fieldPrefix, sizeof(fieldPrefix), "%s%s.", tablePrefix, col->name);
-    struct asTypeInfo *lt = col->lowType;
-    union asFilterData lowFilter;
-    enum asFilterDataType dataType = afdtNone;	
-    lowFilter.d = NULL;
-    switch (lt->type)
-	{
-	case t_double:
-	case t_float:
-	    lowFilter.d = asDoubleFilterFromCart(cart, fieldPrefix);
-	    dataType = afdtDouble;
-	    break;
-	case t_char:
-	    lowFilter.c = asCharFilterFromCart(cart, fieldPrefix);
-	    dataType = afdtChar;
-	    break;
-	case t_int:
-	case t_uint:
-	case t_short:
-	case t_ushort:
-	case t_byte:
-	case t_ubyte:
-	case t_off:
-	    lowFilter.l = asLongFilterFromCart(cart, fieldPrefix);
-	    dataType = afdtLong;
-	    break;
-	case t_string:
-	case t_lstring:
-	    lowFilter.s = asStringFilterFromCart(cart, fieldPrefix);
-	    dataType = afdtString;
-	    break;
-	case t_object:
-	case t_simple:
-	case t_enum:
-	case t_set:
-	default:
-	    internalErr();
-	    break;
-	}
-    if (lowFilter.d != NULL)
-        {
-	struct asFilterColumn *colFilt;
-	AllocVar(colFilt);
-	colFilt->col = col;
-	colFilt->colIx = colIx;
-	colFilt->dataType = dataType;
-	colFilt->filter = lowFilter;
-	slAddHead(&asFilter->columnList, colFilt);
-	}
-    }
-slReverse(&asFilter->columnList);
-return asFilter;
-}
 
 static void addFilteredBedsOnRegion(struct bbiFile *bbi, struct region *region, 
 	char *table, struct asFilter *filter, struct lm *bedLm, struct bed **pBedList)
@@ -497,7 +194,6 @@ bbiFileClose(&bbi);
 freeMem(fileName);
 return bedList;
 }
-
 
 void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f)
 /* Print out selected fields from Big Bed.  If fields is NULL, then print out all fields. */

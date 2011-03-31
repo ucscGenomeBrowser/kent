@@ -8,6 +8,7 @@
 #include "htmshell.h"
 #include "ra.h"
 #include "hui.h"
+#include "cv.h"
 
 /* hgEncodeVocab - A CGI script to display the different types of encode controlled vocabulary.
  * usage:
@@ -24,29 +25,10 @@
 
 //options that apply to all vocab types
 
-#define TERM_FIELD         "term"
-#define TAG_FIELD          "tag"
-#define TYPE_FIELD         "type"
-#define TARGET_FIELD       "target"
-#define LABEL_FIELD        "label"
-#define TITLE_FIELD        "title"
-
-#define CELL_TYPE          "Cell Line"
-#define CELL_TYPE_ALT      "cellType"
-#define ANTIBODY_TYPE      "Antibody"
-#define ANTIBODY_TYPE_ALT  "antibody"
-#define LOCALIZATION_TYPE  "localization"
-#define LAB_TYPE           "lab"
-#define GRANT_TYPE         "grant"
-#define CONTROL_TYPE       "control"
-#define DATA_TYPE          "dataType"
-#define TYPE_OF_TERM       "typeOfTerm"
-
 #define ORGANISM           "organism"
 #define ORG_HUMAN          "human"
 #define ORG_MOUSE          "mouse"
 
-#define DESCRIPTION_FIELD  "description"
 #define MAX_TABLE_ROWS     10
 #define TABLE_ROWS_AVAILABLE(rowsUsed) (MAX_TABLE_ROWS - (rowsUsed))
 
@@ -124,14 +106,14 @@ int termCmp(const void *va, const void *vb)
 {
 const struct hash *a = *((struct hash **)va);
 const struct hash *b = *((struct hash **)vb);
-char *typeA = hashMustFindVal((struct hash *)a, TYPE_FIELD);
-char *typeB = hashMustFindVal((struct hash *)b, TYPE_FIELD);
+char *typeA = hashMustFindVal((struct hash *)a, CV_TYPE);
+char *typeB = hashMustFindVal((struct hash *)b, CV_TYPE);
 int ret = strcasecmp(typeA, typeB);
 if(ret != 0)
     return ret;
 
-char *targA = hashFindVal((struct hash *)a, TARGET_FIELD);
-char *targB = hashFindVal((struct hash *)b, TARGET_FIELD);
+char *targA = hashFindVal((struct hash *)a, CV_TARGET);
+char *targB = hashFindVal((struct hash *)b, CV_TARGET);
 if (targA != NULL && targB != NULL)
     {
     ret = strcasecmp(targA, targB);
@@ -139,30 +121,22 @@ if (targA != NULL && targB != NULL)
         return ret;
     }
 
-char *termA = hashMustFindVal((struct hash *)a, TERM_FIELD);
-char *termB = hashMustFindVal((struct hash *)b, TERM_FIELD);
+char *termA = hashMustFindVal((struct hash *)a, CV_TERM);
+char *termB = hashMustFindVal((struct hash *)b, CV_TERM);
 return (strcasecmp(termA, termB));
 }
 
-boolean doTypeDefinition(struct hash *cvHash,char *type,boolean inTable,boolean showType)
+boolean doTypeDefinition(char *type,boolean inTable,boolean showType)
 // Write out description of type the type if it is known
 {
-struct hash *ra = NULL;
-if (sameWord(type,CELL_TYPE))
-    ra = hashFindVal(cvHash,CELL_TYPE_ALT);
-else if (sameWord(type,ANTIBODY_TYPE))
-    ra = hashFindVal(cvHash,ANTIBODY_TYPE_ALT); // Find by term
-else
-    ra = hashFindVal(cvHash,type); // Find by term
+struct hash *typeHash = (struct hash *)cvTermTypeHash();
+
+struct hash *ra = hashFindVal(typeHash,cvTermNormalized(type)); // Find by term
 if (ra == NULL)
     return FALSE;
 
-char *val = hashMustFindVal(ra, TYPE_FIELD);
-if (differentWord(val,"typeOfTerm"))
-    errAbort("Expected '%s' to be typeOfTerm but was '%s'\n",type,val);
-
-val = hashMustFindVal(ra, DESCRIPTION_FIELD);
-char *label = hashFindVal(ra, LABEL_FIELD);
+char *val = hashMustFindVal(ra, CV_DESCRIPTION);
+char *label = hashFindVal(ra, CV_LABEL);
 
 puts("<TR>");
 struct dyString *dyDefinition = dyStringNew(256);
@@ -202,7 +176,7 @@ if ((organismOptLower != NULL) && !sameWord(cellOrg, organismOptLower))
 // NOTE:  All tables must have the same number of columns in order to allow 'control' to be swapped in  Use colSapn= on description column
 
 printf("<TR style='background:%s;'>\n",COLOR_BG_HEADER_LTBLUE);
-if (sameWord(type,CELL_TYPE))
+if (sameWord(type,CV_TERM_CELL))
    {
     printf("<!-- Cell Line table: contains links to protocol file and vendor description page -->");
 
@@ -217,19 +191,19 @@ if (sameWord(type,CELL_TYPE))
          // printf("  <TH>%s</TH><TH>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source</TH><TH>Term ID</TH>",type)
 	 }
     }
-else if (sameWord(type,ANTIBODY_TYPE))
+else if (sameWord(type,CV_TERM_ANTIBODY))
     {
     printf("  <TH>%s</TH><TH>Target</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH><TH>Lab</TH><TH>Documents</TH><TH>Lots</TH><TH>Target Link</TH><TH><I>Label</I></TH>",type);
     }
-else if(sameWord(type,LAB_TYPE))
+else if(sameWord(type,CV_TERM_LAB))
     {
     printf("  <TH>%s</TH><TH colspan=%d>Institution</TH><TH>Lab PI</TH><TH>Grant PI</TH><TH>Organism</TH><TH><I>Label</I></TH>",type,TABLE_ROWS_AVAILABLE(5));
     }
-else if(sameWord(type,LAB_TYPE))
+else if(sameWord(type,CV_TERM_LAB))
     {
     printf("  <TH>%s</TH><TH colspan=%d>Institution</TH><TH><I>Label</I></TH>",type,TABLE_ROWS_AVAILABLE(2));
     }
-else if(sameWord(type,DATA_TYPE))
+else if(sameWord(type,CV_TERM_DATA_TYPE))
     {
     printf("  <TH>Data Type</TH><TH colspan=%d>Description</TH><TH><I>Label</I></TH>",TABLE_ROWS_AVAILABLE(2));
     }
@@ -238,7 +212,7 @@ else
     char *caplitalized = cloneString(type);
     toUpperN(caplitalized,1);
 
-    if (sameWord(type,LOCALIZATION_TYPE))
+    if (sameWord(type,CV_TERM_LOCALIZATION))
         {
         printf("  <TH>%s</TH><TH colspan=%d>Description</TH><TH>GO ID</TH><TH><I>Label</I></TH>",caplitalized,TABLE_ROWS_AVAILABLE(3));
         }
@@ -252,11 +226,11 @@ puts("</TR>");
 
 boolean doTypeRow(struct hash *ra, char *org)
 {
-char *term = (char *)hashMustFindVal(ra, TERM_FIELD);
-char *type = (char *)hashMustFindVal(ra, TYPE_FIELD);
+char *term = (char *)hashMustFindVal(ra, CV_TERM);
+char *type = cvTermNormalized(hashMustFindVal(ra, CV_TYPE));
 char *s, *t, *u;
 
-if (sameWord(type,CELL_TYPE))
+if (sameWord(type,CV_TERM_CELL))
     {
     s = hashFindVal(ra, ORGANISM);
     if (s != NULL)
@@ -305,7 +279,7 @@ if (sameWord(type,CELL_TYPE))
 
 	s = hashFindVal(ra, "tier");
 	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
-	s = hashFindVal(ra, DESCRIPTION_FIELD);
+	s = hashFindVal(ra, CV_DESCRIPTION);
 	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
 	s = hashFindVal(ra, "lineage");
 	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
@@ -339,7 +313,7 @@ if (sameWord(type,CELL_TYPE))
 	if (u)
 	    printf("</A>");
 	puts("</TD>");
-        s = hashFindVal(ra, LABEL_FIELD);
+        s = hashFindVal(ra, CV_LABEL);
         if (s != NULL)
             printf("  <TD><I>%s</I></TD>\n", s );
         else
@@ -352,7 +326,7 @@ if (sameWord(type,CELL_TYPE))
 
 	printf("  <TD>%s</TD>\n", term);
 
-	s = hashFindVal(ra, DESCRIPTION_FIELD);
+	s = hashFindVal(ra, CV_DESCRIPTION);
 	printf("  <TD colspan=%d>%s</TD>\n", TABLE_ROWS_AVAILABLE(7), s ? s : "&nbsp;" );
 	s = hashFindVal(ra, "category");
 	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
@@ -388,7 +362,7 @@ if (sameWord(type,CELL_TYPE))
 	if (u)
 	    printf("</A>");
 	puts("</TD>");
-        s = hashFindVal(ra, LABEL_FIELD);
+        s = hashFindVal(ra, CV_LABEL);
         if (s != NULL)
             printf("  <TD><I>%s</I></TD>\n", s );
         else
@@ -397,7 +371,7 @@ if (sameWord(type,CELL_TYPE))
 
 	}
     }
-else if (sameWord(type,ANTIBODY_TYPE))
+else if (sameWord(type,CV_TERM_ANTIBODY))
     {
     /* if the type is Antibody then
      * print "term target targetDescription antibodyDescription" */
@@ -482,14 +456,14 @@ else if (sameWord(type,ANTIBODY_TYPE))
         printf("</A>");
     puts("</TD>");
 
-    s = hashFindVal(ra, LABEL_FIELD);
+    s = hashFindVal(ra, CV_LABEL);
     if (s != NULL)
         printf("  <TD><I>%s</I></TD>\n", s );
     else
         printf("  <TD>%s</TD>\n", term );
     puts("</TR>");
     }
-else if(sameWord(type,LAB_TYPE))
+else if(sameWord(type,CV_TERM_LAB))
     {
     puts("<TR>");
     printf("  <TD>%s</TD>\n", term);
@@ -501,29 +475,29 @@ else if(sameWord(type,LAB_TYPE))
     printf("  <TD>%s</TD>\n", s?s:"&nbsp;");
     s = hashFindVal(ra, "organism");
     printf("  <TD>%s</TD>\n", s?s:"&nbsp;");
-    s = hashFindVal(ra, LABEL_FIELD);
+    s = hashFindVal(ra, CV_LABEL);
     if (s != NULL)
         printf("  <TD><I>%s</I></TD>\n", s );
     else
         printf("  <TD>%s</TD>\n", term );
     }
-else if(sameWord(type,GRANT_TYPE))
+else if(sameWord(type,CV_TERM_GRANT))
     {
     puts("<TR>");
     printf("  <TD>%s</TD>\n", term);
     s = hashFindVal(ra, "grantInst");
     printf("  <TD colspan=%d>%s</TD>\n", TABLE_ROWS_AVAILABLE(2), s?s:"&nbsp;");
-    s = hashFindVal(ra, LABEL_FIELD);
+    s = hashFindVal(ra, CV_LABEL);
     if (s != NULL)
         printf("  <TD><I>%s</I></TD>\n", s );
     else
         printf("  <TD>%s</TD>\n", term );
     }
-else if (sameWord(type,LOCALIZATION_TYPE))
+else if (sameWord(type,CV_TERM_LOCALIZATION))
     {
     puts("<TR>");
     printf("  <TD>%s</TD>\n", term);
-    s = hashMustFindVal(ra, DESCRIPTION_FIELD);
+    s = hashMustFindVal(ra, CV_DESCRIPTION);
     printf("  <TD colspan=%d>%s</TD>\n", TABLE_ROWS_AVAILABLE(3), s);
     s = hashFindVal(ra, "termId");
     u = hashFindVal(ra, "termUrl");
@@ -535,32 +509,36 @@ else if (sameWord(type,LOCALIZATION_TYPE))
         printf("</A>");
     puts("</TD>");
 
-    s = hashFindVal(ra, LABEL_FIELD);
+    s = hashFindVal(ra, CV_LABEL);
     if (s != NULL)
         printf("  <TD><I>%s</I></TD>\n", s );
     else
         printf("  <TD>%s</TD>\n", term );
     puts("</TR>");
     }
-else if (sameWord(type,TYPE_OF_TERM))
+else if (sameWord(type,CV_TOT))
     {
-    s = hashFindVal(ra, DESCRIPTION_FIELD);
+    s = hashFindVal(ra, CV_DESCRIPTION);
+    if (sameString(term,cvTypeNormalized(CV_TERM_CELL)))
+        term = CV_TERM_CELL;
+    else if (sameString(term,cvTypeNormalized(CV_TERM_ANTIBODY)))
+        term = CV_TERM_ANTIBODY;
 
     puts("<TR>");
     printf("  <TD><A HREF='hgEncodeVocab?type=%s' title='%s details' TARGET=ucscVocabChild>%s</a></TD>\n", term, term, term);
     printf("  <TD colspan=%d>%s</TD>\n", TABLE_ROWS_AVAILABLE(2), s?s:"&nbsp;");
-    s = hashFindVal(ra, LABEL_FIELD);
+    s = hashFindVal(ra, CV_LABEL);
     if (s != NULL)
         printf("  <TD><I>%s</I></TD>\n", s );
     else
         printf("  <TD>%s</TD>\n", term );
-    if (sameString(term,CELL_TYPE_ALT))
+    if (sameString(term,CV_TERM_CELL))
         {
         puts("<TR>");
         printf("  <TD><A HREF='hgEncodeVocab?type=%s&organism=Mouse' title='Mouse %s details' TARGET=ucscVocabChild>%s</a> <em>(for mouse)</em></TD>\n", term, term, term);
-        s = hashFindVal(ra, DESCRIPTION_FIELD);
+        s = hashFindVal(ra, CV_DESCRIPTION);
         printf("  <TD colspan=%d>%s <em>(for mouse)</em></TD>\n", TABLE_ROWS_AVAILABLE(2), s?s:"&nbsp;");
-        s = hashFindVal(ra, LABEL_FIELD);
+        s = hashFindVal(ra, CV_LABEL);
         if (s != NULL)
             printf("  <TD><I>%s</I></TD>\n", s );
         else
@@ -569,17 +547,17 @@ else if (sameWord(type,TYPE_OF_TERM))
     }
 else
     {
-    s = hashFindVal(ra, DESCRIPTION_FIELD);
+    s = hashFindVal(ra, CV_DESCRIPTION);
     if(s == NULL)
-        s = hashFindVal(ra, TITLE_FIELD);
+        s = hashFindVal(ra, CV_TITLE);
     if(s == NULL)
-        s = hashFindVal(ra, LABEL_FIELD);
+        s = hashFindVal(ra, CV_LABEL);
 
     //printf("  <TH>%s</TH><TH>Description</TH>",type);
     puts("<TR>");
     printf("  <TD>%s</TD>\n", term);
     printf("  <TD colspan=%d>%s</TD>\n", TABLE_ROWS_AVAILABLE(2), s?s:"&nbsp;");
-    s = hashFindVal(ra, LABEL_FIELD);
+    s = hashFindVal(ra, CV_LABEL);
     if (s != NULL)
         printf("  <TD><I>%s</I></TD>\n", s );
     else
@@ -602,10 +580,10 @@ assert(requested != NULL);
 while ((hEl = hashNext(&hc)) != NULL)
     {
     ra = (struct hash *)hEl->val;
-    ix = stringArrayIx(hashMustFindVal(ra, TERM_FIELD),requested,requestCount);
+    ix = stringArrayIx(hashMustFindVal(ra, CV_TERM),requested,requestCount);
     if (ix != -1 && targets[ix] == NULL) // but not yet converted to antibody
         {
-        targets[ix] = cloneString(hashMustFindVal(ra, TARGET_FIELD)); // Must have a target
+        targets[ix] = cloneString(hashMustFindVal(ra, CV_TARGET)); // Must have a target
         }
     }
 
@@ -613,7 +591,7 @@ while ((hEl = hashNext(&hc)) != NULL)
 for(ix=0;ix<requestCount;ix++)
     {
     if (targets[ix] == NULL)
-        errAbort("Failed to find antibody %s=%s\n",TERM_FIELD,requested[ix]);
+        errAbort("Failed to find antibody %s=%s\n",CV_TERM,requested[ix]);
     }
 
 return targets;
@@ -623,17 +601,27 @@ static char *normalizeType(char *type)
 /* Strips any quotation marks and converts common synonyms */
 {
 if (type != NULL)
-{
+    {
     (void)stripChar(type,'\"');
+    if (sameWord(type,"Factor"))
+        return cloneString(CV_TERM_ANTIBODY);
+
+    char *cleanType = cloneString(cvTermNormalized(type));
+    if (differentString(cleanType,type))
+        return cleanType;
+    freeMem(cleanType);
+    /*
     if ((sameWord(type,"Cell Line"))
     ||  (sameWord(type,"cellLine" ))
     ||  (sameWord(type,"Cell Type"))
-    ||  (sameWord(type,CELL_TYPE_ALT))
+    ||  (sameWord(type,"Cell Type"))
     ||  (sameWord(type,"Cell" )))  // sameWord is case insensitive
-        return cloneString(CELL_TYPE);
+        return cloneString(CV_TERM_CELL);
     else if (sameWord(type,"Factor"))
-        return cloneString(ANTIBODY_TYPE);
-}
+         ||  (sameString(type,"Antibody")))
+        return cloneString(CV_TERM_ANTIBODY);
+    */
+    }
 return type;
 }
 
@@ -647,16 +635,18 @@ char *type = typeOpt;
 
 if (requested != NULL) // if no type, find it from requested terms.  Will validate that terms match type
 {                  // NOTE: Enter here even if there is a type, to confirm the type
-    while ((hEl = hashNext(&hc)) != NULL)
+    while ((hEl = hashNext(&hc)) != NULL)  // FIXME: This should be using mdbCv APIs to get hashes.  One per "request[]"
         {
         ra = (struct hash *)hEl->val;
+        if (sameWord(hashMustFindVal(ra, CV_TYPE),CV_TOT)) // TOT = typeOfTerm
+            continue;
         char *val = hashFindVal(ra, *queryBy);
         if (val != NULL)
             {
             int ix = stringArrayIx(val,requested,requestCount);
             if(ix != -1) // found
                 {
-                char *thisType = hashMustFindVal(ra, TYPE_FIELD);
+                char *thisType = hashMustFindVal(ra, CV_TYPE);
                 char *thisOrg = hashFindVal(ra, ORGANISM);
                 if(type == NULL)
                     {
@@ -668,9 +658,9 @@ if (requested != NULL) // if no type, find it from requested terms.  Will valida
                     }
                 else if(differentWord(type,thisType))
                     {
-                    if(sameWord(CONTROL_TYPE,type))
+                    if(sameWord(CV_TERM_CONTROL,type))
                         type = thisType;
-                    else if (differentWord(CONTROL_TYPE,thisType))
+                    else if (differentWord(CV_TERM_CONTROL,thisType))
                         errAbort("Error: Requested %s of type '%s'.  But '%s' has type '%s'\n",
                                 *queryBy,type,requested[ix],thisType);
                     }
@@ -678,23 +668,23 @@ if (requested != NULL) // if no type, find it from requested terms.  Will valida
             }
         }
     }
-if (type == NULL && sameWord(*queryBy,TERM_FIELD))    // Special case of term becoming target
+if (type == NULL && sameWord(*queryBy,CV_TERM))    // Special case of term becoming target
     {
-    char *queryByTarget = TARGET_FIELD;
+    char *queryByTarget = CV_TARGET;
     type = findType(cvHash,requested,requestCount,&queryByTarget,org,TRUE); // silent here
     if (type != NULL)
         *queryBy = queryByTarget;
     }
 if (type == NULL && !silent)    // Still not type? abort
     errAbort("Error: Required %s=%s ['%s', '%s', '%s', '%s' or '%s'] argument not found\n",
-             *queryBy,requested != NULL?*requested:"?", TYPE_FIELD, TERM_FIELD, TAG_FIELD, TARGET_FIELD, LABEL_FIELD);
+             *queryBy,requested != NULL?*requested:"?", CV_TYPE, CV_TERM, CV_TAG, CV_TARGET, CV_LABEL);
 
 return normalizeType(type);
 }
 
 void doMiddle()
 {
-struct hash *cvHash = raReadAll(cv_file(), TERM_FIELD);  // cv_file is no longer passed as an option
+struct hash *cvHash = raReadAll(cv_file(), CV_TERM);  // cv_file is no longer passed as an option
 struct hashCookie hc = hashFirst(cvHash);
 struct hashEl *hEl;
 struct slList *termList = NULL;
@@ -705,21 +695,21 @@ int totalPrinted = 0;
 int requestCount = 0;
 char **requested = NULL;
 char *requestVal = termOpt;
-char *queryBy = TERM_FIELD;
+char *queryBy = CV_TERM;
 if (tagOpt)
     {
     requestVal = tagOpt;
-    queryBy = TAG_FIELD;
+    queryBy = CV_TAG;
     }
 else if (targetOpt)
     {
     requestVal = targetOpt;
-    queryBy = TERM_FIELD;  // request target is special case: look up term, convert to target, display target
+    queryBy = CV_TERM;  // request target is special case: look up term, convert to target, display target
     }
 else if (labelOpt)
     {
     requestVal = labelOpt;
-    queryBy = LABEL_FIELD;
+    queryBy = CV_LABEL;
     }
 if (requestVal)
     {
@@ -740,7 +730,7 @@ if (org == NULL)
     org = ORG_HUMAN;
 
 // Special logic for requesting antibody by target
-if (targetOpt && requestCount > 0 && sameWord(queryBy,TERM_FIELD) && sameWord(type,ANTIBODY_TYPE))
+if (targetOpt && requestCount > 0 && sameWord(queryBy,CV_TERM) && sameWord(type,CV_TERM_ANTIBODY))
     {
     // Several antibodies may have same target.
     // requested target={antibody} and found antibody
@@ -750,18 +740,19 @@ if (targetOpt && requestCount > 0 && sameWord(queryBy,TERM_FIELD) && sameWord(ty
         {
         freeMem(requested);
         requested = targets;
-        queryBy = TARGET_FIELD;
+        queryBy = CV_TARGET;
         }
     }
+//warn("Query by: %s = '%s' type:%s",queryBy,requestVal?requestVal:"all",type);
 
 // Get just the terms that match type and requested, then sort them
-if (differentWord(type,TYPE_OF_TERM) || typeOpt != NULL )  // If type resolves to typeOfTerm and typeOfTerm was not requested, then just show definition
+if (differentWord(type,CV_TOT) || typeOpt != NULL )  // If type resolves to typeOfTerm and typeOfTerm was not requested, then just show definition
     {
     while ((hEl = hashNext(&hc)) != NULL)
         {
         ra = (struct hash *)hEl->val;
-        char *thisType = hashMustFindVal(ra,TYPE_FIELD);
-        if(differentWord(thisType,type) && (requested == NULL || differentWord(thisType,CONTROL_TYPE)))
+        char *thisType = cvTermNormalized(hashMustFindVal(ra,CV_TYPE));
+        if(differentWord(thisType,type) && (requested == NULL || differentWord(thisType,CV_TERM_CONTROL)))
             continue;
         // Skip all rows that do not match queryBy param if specified
         if(requested)
@@ -777,9 +768,9 @@ if (differentWord(type,TYPE_OF_TERM) || typeOpt != NULL )  // If type resolves t
     }
 slSort(&termList, termCmp);
 
-boolean described = doTypeDefinition(cvHash,type,FALSE,(slCount(termList) == 0));
+boolean described = doTypeDefinition(type,FALSE,(slCount(termList) == 0));
 printf("<TABLE BORDER=1 BGCOLOR=%s CELLSPACING=0 CELLPADDING=2>\n",COLOR_BG_DEFAULT);
-//boolean described = doTypeDefinition(cvHash,type,TRUE,(slCount(termList) == 0));
+//boolean described = doTypeDefinition(type,TRUE,(slCount(termList) == 0));
 if (slCount(termList) > 0)
     {
     doTypeHeader(type, org);
@@ -805,11 +796,11 @@ int main(int argc, char *argv[])
 /* Process command line */
 {
 cgiSpoof(&argc, argv);
-termOpt = cgiOptionalString(TERM_FIELD);
-tagOpt = cgiOptionalString(TAG_FIELD);
-typeOpt = cgiOptionalString(TYPE_FIELD);
-targetOpt = cgiOptionalString(TARGET_FIELD);
-labelOpt = cgiOptionalString(LABEL_FIELD);
+termOpt = cgiOptionalString(CV_TERM);
+tagOpt = cgiOptionalString(CV_TAG);
+typeOpt = cgiOptionalString(CV_TYPE);
+targetOpt = cgiOptionalString(CV_TARGET);
+labelOpt = cgiOptionalString(CV_LABEL);
 organismOpt = cgiUsualString(ORGANISM, organismOpt);
 if (organismOpt != NULL)
     {

@@ -9,6 +9,15 @@ wgEncodeAffyRnaChip.ra \
 wgEncodeUwDgf.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeUwDnase.ra \
+wgEncodeCaltechRnaSeq.ra \
+wgEncodeBroadHistone.ra \
+wgEncodeSunyAlbanyTiling.ra \
+wgEncodeUwHistone.ra \
+wgEncodeOpenChromChip.ra \
+wgEncodeUwTfbs.ra \
+wgEncodeOpenChromFaire.ra \
+wgEncodeRikenCage.ra \
+wgEncodeUwAffyExonArray.ra \
 
 include ../../../../makefile.metaDb
 

@@ -317,8 +317,11 @@ void verboseSetLevel(int verbosity);
 /* Set verbosity level in log.  0 for no logging,
  * higher number for increasing verbosity. */
 
-void zeroBytes(void *vpt, int count);
+INLINE void zeroBytes(void *vpt, int count)
 /* fill a specified area of memory with zeroes */
+{
+memset(vpt, '\0', count);
+}
 
 #define ZeroVar(v) zeroBytes(v, sizeof(*v))
 
@@ -571,6 +574,10 @@ struct slName *slNameListFromString(char *s, char delimiter);
 #define slNameListFromComma(s) slNameListFromString(s, ',')
 /* Parse out comma-separated list. */
 
+struct slName *slNameListOfUniqueWords(char *text,boolean respectQuotes);
+// Return list of unique words found by parsing string delimited by whitespace.
+// If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] will yield 2 slNames no quotes
+
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize);
 /* Return list of slNames from an array of strings of length arraySize.
  * If a string in the array is NULL, the array will be treated as
@@ -640,10 +647,20 @@ struct slPair *slPairFind(struct slPair *list, char *name);
 void *slPairFindVal(struct slPair *list, char *name);
 /* Return value associated with name in list, or NULL if not found. */
 
-struct slPair *slPairFromString(char *s);
-/* Return slPair list parsed from list in string s
- * name1=val1 name2=val2 ...
- * Returns NULL if parse error */
+struct slPair *slPairListFromString(char *str,boolean respectQuotes);
+// Return slPair list parsed from list in string like:  [name1=val1 name2=val2 ...]
+// if respectQuotes then string can have double quotes: [name1="val 1" "name 2"=val2 ...]
+//    resulting pair strips quotes: {name1}={val 1},{name 2}={val2}
+// Returns NULL if parse error.  Free this up with slPairFreeValsAndList.
+#define slPairFromString(s) slPairListFromString(s,FALSE)
+
+char *slPairListToString(struct slPair *list,boolean quoteIfSpaces);
+// Returns an allocated string of pairs in form of [name1=val1 name2=val2 ...]
+// If requested, will wrap name or val in quotes if contain spaces: [name1="val 1" "name 2"=val2]
+
+char *slPairNameToString(struct slPair *list, char delimiter,boolean quoteIfSpaces);
+// Return string created by joining all names (ignoring vals) with the delimiter.
+// If requested, will wrap name in quotes if contain spaces: [name1,"name 2" ...]
 
 int slPairCmpCase(const void *va, const void *vb);
 /* Compare two slPairs, ignore case. */
@@ -666,6 +683,12 @@ void slPairValSortCase(struct slPair **pList);
 void slPairValSort(struct slPair **pList);
 /* Sort slPair list on values (must be string). */
 
+int slPairIntCmp(const void *va, const void *vb);
+// Compare two slPairs on their integer values.
+
+void slPairIntSort(struct slPair **pList);
+// Sort slPair list on integer values.
+
 void gentleFree(void *pt);
 /* check pointer for NULL before freeing.
  * (Actually plain old freeMem does that these days.) */
@@ -680,6 +703,9 @@ char *cloneString(const char *s);
 
 char *cloneLongString(char *s);
 /* Make clone of long string. */
+
+char *catTwoStrings(char *a, char *b);
+/* Allocate new string that is a concatenation of two strings. */
 
 int differentWord(char *s1, char *s2);
 /* strcmp ignoring case - returns zero if strings are
@@ -710,7 +736,7 @@ int differentStringNullOk(char *a, char *b);
 #define sameStringN(a,b,c) (strncmp(a,b,c)==0)
 /* Returns TRUE if two strings start with the same c characters. */
 
-#define isEmpty(string) (string == NULL || string[0] == 0)
+#define isEmpty(string) ((string) == NULL || (string)[0] == 0)
 #define isNotEmpty(string) (! isEmpty(string))
 
 int cmpStringsWithEmbeddedNumbers(const char *a, const char *b);
@@ -923,6 +949,9 @@ char *lastWordInLine(char *line);
 char *nextWord(char **pLine);
 /* Return next word in *pLine and advance *pLine to next
  * word. Returns NULL when no more words. */
+
+char *nextWordRespectingQuotes(char **pLine);
+// return next word but respects single or double quotes surrounding sets of words.
 
 char *cloneFirstWord(char *line);
 /* Clone first word in line */
@@ -1361,5 +1390,22 @@ enum enumBool
 #define IS_KNOWN(ebool)   (IS_YES(ebool) || IS_NO(ebool))
 #define IS_TRUE           IS_YES
 #define IS_FALSE          IS_NO
+
+time_t mktimeFromUtc (struct tm *t);
+/* Return time_t for tm in UTC (GMT)
+ * Useful for stuff like converting to time_t the
+ * last-modified HTTP response header
+ * which is always GMT. Returns -1 on failure of mktime */
+
+
+time_t dateToSeconds(const char *date,const char*format);
+// Convert a string date to time_t
+
+boolean dateIsOld(const char *date,const char*format);
+// Is this string date older than now?
+
+char *dateAddTo(char *date,char *format,int addYears,int addMonths,int addDays);
+/* Add years,months,days to a formatted date and returns the new date as a cloned string
+*  format is a strptime/strftime format: %F = yyyy-mm-dd */
 
 #endif /* COMMON_H */

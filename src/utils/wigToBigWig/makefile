@@ -11,5 +11,8 @@ wigToBigWig: ${O} ${MYLIBS}
 	@${MKDIR} "${DESTDIR}${BINDIR}"
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
 
+compile: ${O} ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
+
 clean::
-	rm -f ${O}
+	rm -f ${O} ${A}${EXE}

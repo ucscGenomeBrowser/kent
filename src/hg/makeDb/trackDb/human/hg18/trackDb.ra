@@ -339,36 +339,6 @@ type ld2
     longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from unphased genotypes
     priority 5
 
-track hapmapLdPh
-compositeTrack on
-shortLabel HapMap LD Phased
-longLabel HapMap Linkage Disequilibrium - Phase II - from phased genotypes
-group varRep
-priority 144.491
-visibility hide
-canPack off
-chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22
-dataVersion HapMap release 22
-type ld2
-
-    track hapmapLdPhYri
-    parent hapmapLdPh
-    shortLabel Phased YRI
-    longLabel Linkage Disequilibrium for the Yoruba (YRI) from phased genotypes
-    priority 1
-
-    track hapmapLdPhCeu
-    parent hapmapLdPh
-    shortLabel Phased CEU
-    longLabel Linkage Disequilibrium for the CEPH (CEU) from phased genotypes
-    priority 2
-
-    track hapmapLdPhChbJpt
-    parent hapmapLdPh
-    shortLabel Ph JPT+CHB
-    longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from phased genotypes
-    priority 5
-
 track hapmapRecombRateBW
 shortLabel Hapmap Recomb BW
 longLabel BigWig - Hapmap Recombination Rate (phase II, release 22) - BigWig
@@ -1077,8 +1047,71 @@ spectrum on
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
-track agilentCgh override
+track agilentCgh
+shortLabel Agilent Array
+longLabel Agilent Microarray Probesets
+compositeTrack on
+group varRep
+priority 0
+visibility hide
+noScoreFilter .
 type bed 6 .
+
+    track agilentCgh1x1m
+    parent agilentCgh
+    shortLabel Ag CGH 1x1m
+    longLabel Agilent SurePrint G3 Human CGH Microarray 1x1M AMADID 021529
+    color 0,128,0
+    priority 1
+
+    track agilentHrd1x1m
+    parent agilentCgh
+    shortLabel Ag HRD 1x1m
+    longLabel Agilent SurePrint G3 Human High-Resolution Microarray 1x1M AMADID 023642
+    color 255,128,0
+    priority 2
+
+    track agilentCgh2x400k
+    parent agilentCgh
+    shortLabel Ag CGH 2x400k
+    longLabel Agilent SurePrint G3 Human CGH Microarray 2x400K AMADID 021850
+    color 0,128,0
+    priority 3
+
+    track agilentCgh4x180k
+    parent agilentCgh
+    shortLabel Ag CGH 4x180k
+    longLabel Agilent SurePrint G3 Human CGH Microarray 4x180K AMADID 022060
+    color 255,128,0
+    priority 4
+
+    track agilentCgh8x60k
+    parent agilentCgh
+    shortLabel Ag CGH 8x60k
+    longLabel Agilent SurePrint G3 Human CGH Microarray 8x60K AMADID 021924
+    color 0,128,0
+    priority 5
+
+    track agilentCgh244a
+    parent agilentCgh
+    shortLabel Ag CGH 1x244k
+    longLabel Agilent SurePrint HD Human CGH Microarray 1x244K AMADID 014693
+    color 255,128,0
+    priority 6
+
+    track agilentCgh105a
+    parent agilentCgh
+    shortLabel Ag CGH 2x105k
+    longLabel Agilent SurePrint HD Human CGH Microarray 2x105K AMADID 014698
+    color 0,128,0
+    priority 7
+
+    track agilentCgh44k
+    parent agilentCgh
+    shortLabel Ag CGH 4x44k
+    longLabel Agilent SurePrint HD Human CGH Microarray 4x44K AMADID 014950
+    color 255,128,0
+    priority 8
 
 track targetScanS
 shortLabel TS miRNA sites
@@ -1390,6 +1423,24 @@ type wig 0 1000
     parent affyTxnPhase3S
     longLabel Affymetrix HepG2 Minus Strand Short RNA (Whole Cell) Signal
     priority 4
+
+track ceuBcellRNASeqBW
+shortLabel BCell Coverage
+longLabel B Cell Transcriptome (RNA-Seq)
+group expression
+priority 301
+visibility hide
+type bigWig 0 716249
+autoScale on
+maxHeightPixels 100:50:20
+
+track ceuBcellRNASeq
+shortLabel BCell Junctions
+longLabel B Cell Junctions
+group expression
+priority 301.1
+visibility hide
+type bed 12
 
 track stanfordNRSFSites
 shortLabel Stanf NRSF Sites
@@ -3860,9 +3911,34 @@ html numtSeq
 searchTable numtSMitochondrionChrPlacement
 searchMethod exact
 searchType bed
-shortCircuit 1
+#shortCircuit 1
 searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
 
+searchTable numtSMitochondrion
+searchMethod exact
+searchType bed
+#shortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
+
+searchTable numtS
+searchMethod exact
+searchType bed
+#shortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
+
+searchTable numtSAssembled
+searchMethod exact
+searchType bed
+#shortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termiRegex HSA_NumtS_*
 
 track cactusMaf
 shortLabel cactusMaf

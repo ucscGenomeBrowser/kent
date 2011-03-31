@@ -67,7 +67,17 @@
         <INPUT TYPE=text name=qq size=30 maxlength=255 value="">
         <input TYPE="submit" VALUE="Submit">
         </FORM>
-        </p><p>
+        </p>
+	<P>
+ 	<FORM name="googleForm2" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm2.q.value=document.googleForm2.qq.value+'   site:lists.soe.ucsc.edu/pipermail/genome';">
+ 	Search the Genome mailing list archives: &nbsp;
+ 	<input type="hidden" name="q" value="">
+ 	<input type="hidden" name="num" value="10">
+ 	<input type="hidden" name="filter" value="0">
+ 	<INPUT TYPE=text name=qq size=30 maxlength=255 value="">
+ 	<input TYPE="submit" VALUE="Submit">
+ 	</FORM>
+ 	<P>
         See also the <A HREF="http://www.openhelix.com/downloads/ucsc/ucsc_home.shtml" TARGET=_blank>Open Helix tutorial and training materials</A>.
         </p><p>
         <A HREF="../../contacts.html">Questions and feedback are welcome</A>.
@@ -572,7 +582,9 @@ of data in the track, e.g. Gene Prediction Tracks, mRNA and EST tracks, etc.
 To change the display mode for a track, find the track's controller in the
 Track Controls section at the bottom of the Genome Browser page, select the desired
 mode from the control's display menu, and then click the <I>refresh</I> button. 
-Alternatively, you can toggle between dense and full modes 
+Alternatively, you can change the display mode by using the Genome
+Browser's <A HREF="#RIGHT_CLICK_NAV">right-click navigation</A> feature,
+or can toggle between dense and full modes 
 for a displayed track (or pack mode when available) by clicking on the optional 
 center label for the track. 
 <P>
@@ -606,8 +618,10 @@ can be used to establish a data threshold. By setting the min value to &quot;50&
 <P>
 To access filter and configuration options for a specific annotation track, open
 the tracks' description page by clicking the label for the track's control menu 
-under the Track Controls section or the mini-button to the left of the displayed 
-track. The filter and configration section is located at the top of the 
+under the Track Controls section, the mini-button to the left of the displayed 
+track, or the &quot;Configure...&quot; option from the Genome Browser's 
+<A HREF="#RIGHT_CLICK_NAV">right-click</A> popup menu.
+The filter and configration section is located at the top of the 
 description page. In most instances, more information about the configuration 
 options is available within the description text or through a special help link 
 located in the configuration section. 
@@ -638,6 +652,15 @@ Base Position track. In this case, the zoom is centered on the coordinate of the
 mouse click.  To view the base composition of the sequence underlying the
 current annotation track display, click the <em>base</em> button. 
 <P>
+Quickly zoom to a specific region of interest by using the browser's
+&quot;drag-and-zoom&quot; feature. To define the region you wish to zoom to, 
+click-and-hold the mouse button on one edge of the desired zoom area in the Base
+Position track, drag the mouse right or left to highlight the selection area, 
+then release the mouse button. The annotation tracks image will automatically 
+zoom to the new region. Note that the <em>Enable advanced javascript 
+features</em> option on the Track Configuration page must be toggled on to use 
+this feature. 
+<P>
 To scroll the annotation tracks sideways to the left or right by 10%, 50%, or 95% of the displayed
 size (as given in base pairs), click the corresponding <I>move</I> arrow. It is also 
 possible to scroll the left or right side of the tracks by a specified number
@@ -660,6 +683,12 @@ on the chromosome to  move to that position (the current window size will be
 maintained). Select a region of any size by clicking and dragging in the image.
 Finally, hold the &quot;control&quot; key while clicking on a chromosome band
 to select the entire band.
+<P>
+<B>Changing the order of the displayed tracks</B><BR>
+To vertically reposition a track in the annotation track window, click-and-hold 
+the mouse button on the side label or gray mini-button to the left of the track,
+then drag the highlighted track up or down within the image. Release the mouse 
+button when the track is in the desired position.
 <P>
 <A NAME="TRACK_CONFIG"></A>
 <B>Changing the width of the annotation track window</B><BR>
@@ -709,26 +738,44 @@ When the <em>Next/previous item navigation</em> configuration option is
 toggled on, on the Track Configuration page,  
 gray double-headed arrows display in the Genome Browser tracks image on both 
 sides of the track labels of gene, mRNA and EST tracks (or any standard tracks 
-based on BED, PSL or genePred format). The image window may be shifted to 
-display the next feature in that track towards the 5' or 3' end of the 
-chromosome by 
-clicking the corresponding left or right arrow. Similarly, the 
+based on BED, PSL or genePred format). Clicking on the gray arrows shifts the
+image window toward that end of the chromosome so that the next item in the
+track is displayed. Similarly, the
 <em>Next/previous exon navigation</em> configuration option displays white 
 double-headed arrows on 
 both the 5' and 3' end of each track item that has exons positioned beyond the 
-edges of the current image. Clicking on one of the arrows shifts the image 
+edges of the current image. Clicking on one of the white arrows shifts the image
 window to the next exon located towards that end of the feature.
 <P>
-<B>Enabling the drag-and-zoom feature</B><BR>
-With the <em>Drag Selection/Zooming</em> configuration option toggled on, 
-it is possible to zoom into a location of interest by clicking and 
-dragging the mouse within the Genome Browser tracks image.  Selection 
-is made via a user-defined colored rectangle in the graphical tracks 
-display.  A rectangle is created by clicking in the Base Position track 
-at one boundary of the region of interest.  After clicking, drag the 
-mouse either right or left to the other boundary of the region of 
-interest, and release the mouse.  Once the rectangle is created, the 
-zoom happens automatically. 
+<A NAME="RIGHT_CLICK_NAV"></A>
+<B>Enabling the right-click navigation feature</B><BR>
+Several of the common display and navigation operations offered on the
+Genome Browser tracks page may be quickly accessed by right-clicking on
+a feature on the tracks image and selecting an option from the displayed
+popup menu. Depending on context, the right-click feature allows the
+user to:
+<UL>
+<LI>change the track display mode
+<LI>zoom in or out to the exact position coordinates of the feature
+<LI>open the &quot;Get DNA&quot; window at the feature's coordinates
+<LI>display details about the feature 
+<LI>open a popup window to configure the track's display
+<LI>display the entire tracks image in a
+separate window for inclusion in spreadsheets or other documents. (Note
+that the Genome Browser &quot;PDF/PS&quot; described below can also be
+used to generate a high-quality annotation tracks image suitable for
+printing.)
+</UL>
+<P>
+To use the right-click feature, make sure the <em>Enable advanced
+javascript features</em> option on the Track Configuration page is checked,
+and configure your internet browser to allow the display of popup
+windows from genome.ucsc.edu. When enabled, the right-click navigation
+feature replaces the default contextual popup menu typically displayed by the
+internet browser when a user right-clicks on the tracks image. A few
+combinations of the Mozilla Firefox browser on Mac OS do not support the
+right-click menu functionality using secondary click; in these
+instances, ctrl+left-click must be used to display the menu. 
 <P>
 <B>Printing a copy of the annotation track window</B><BR>
 The Genome Browser provides a mechanism for saving a copy of 
@@ -938,7 +985,10 @@ Browser FAQ.
 Detailed information about an individual annotation track, including display
 characteristics, configuration information, and associated database tables, 
 may be obtained from the track description page accessed by clicking the 
-mini-button to the left of the displayed track in the Genome Browser.
+mini-button to the left of the displayed track in the Genome Browser, or 
+by selecting the &quot;Open details...&quot; or &quot;Show
+details...&quot; option from the Genome Browser's 
+<A HREF="#RIGHT_CLICK_NAV">right-click</A> menu.
 Click the &quot;View table schema&quot; link on the track description page to
 display additional information about the primary database table underlying the
 track. Table schema information may also be accessed via the &quot;describe 
@@ -1219,7 +1269,9 @@ genomic sequence, point out overlaps between two types of features (for example,
 genes vs. gene predictions), or mask out unwanted features. 
 <P><B>Using the DNA text formatting feature</B><BR>
 To access the feature, click on the DNA link on the top blue menu
-bar on the Genome Browser page. The Get DNA in Window page that appears contains 
+bar on the Genome Browser page, or select the &quot;Get DNA...&quot; option 
+from the Genome Browser's <A HREF="#RIGHT_CLICK_NAV">right-click</A> menu.
+The Get DNA in Window page that appears contains 
 sections for configuring the retrieval and output format. 
 <P>
 To display extra bases upstream of the 5' end of your sequence or downstream

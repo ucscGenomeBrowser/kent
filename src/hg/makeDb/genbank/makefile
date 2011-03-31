@@ -20,7 +20,7 @@ etc-update-server:
 	${MAKE} install-etc PREFIX=/cluster/data/genbank
 etc-update: etc-update-server # alternative name
 
-install-rr: ${GB_BINARCH}/hgsql ${GB_BINARCH}/hgLsSnpPdbLoad all
+install-rr: ${GB_BINARCH}/hgsql ${GB_BINARCH}/hgLsSnpPdbLoad ${GB_BINARCH}/mrnaToGene ${GB_BINARCH}/hgLoadGenePred all
 	${MAKE} install PREFIX=/genbank
 
 etc-update-rr:
@@ -55,6 +55,16 @@ ${GB_BINARCH}/hgsql: ${hgsqlSrcDir}/hgsql.c
 # need a copy of hgLsSnpPdbLoad for rr
 hgLsSnpPdbLoadSrcDir = ../outside/hgLsSnpPdbLoad
 ${GB_BINARCH}/hgLsSnpPdbLoad: ${hgLsSnpPdbLoadSrcDir}/hgLsSnpPdbLoad.c
+	${CC} ${CFLAGS} -o $@ $< $(LIBS)
+
+# need a copy of mrnaToGene for rr
+mrnaToGeneDir = ../../mrnaToGene
+${GB_BINARCH}/mrnaToGene: ${mrnaToGeneDir}/mrnaToGene.c
+	${CC} ${CFLAGS} -o $@ $< $(LIBS)
+
+# need a copy of hgLoadGenePred for rr
+hgLoadGenePredDir = ../hgLoadGenePred
+${GB_BINARCH}/hgLoadGenePred: ${hgLoadGenePredDir}/hgLoadGenePred.c
 	${CC} ${CFLAGS} -o $@ $< $(LIBS)
 
 # build emacs tags for all files

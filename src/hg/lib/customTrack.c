@@ -173,7 +173,7 @@ if (!tdb->settingsHash)
 
 /* add or replace if already in hash */
 hashReplace(tdb->settingsHash, name, val);
-
+freeMem(tdb->settings);
 /* regenerate settings string */
 tdb->settings = hashToRaString(tdb->settingsHash);
 }
@@ -570,7 +570,7 @@ for (track = trackList; track != NULL; track = track->next)
             {
             static struct tempName tn;
             trashDirFile(&tn, "ct", CT_PREFIX, ".html");
-            track->htmlFile = tn.forCgi;
+            track->htmlFile = cloneString(tn.forCgi);
             }
         writeGulp(track->htmlFile, track->tdb->html, strlen(track->tdb->html));
         ctAddToSettings(track, "htmlFile", track->htmlFile);
@@ -742,12 +742,24 @@ else if (isNotEmpty(docFileName))
     }
 else
     html = cartUsualString(cart, CT_CUSTOM_DOC_TEXT_VAR, "");
-html = customDocParse(html);
+html = cloneString(html);     /* do not let original cart var get eaten up */
+html = customDocParse(html);  /* this will chew up the input string */
 if(html != NULL)
     {
     char *tmp = html;
     html = jsStripJavascript(html);
     freeMem(tmp);
+    }
+
+if ((strlen(html) > 50*1024) || startsWith("track ", html) || startsWith("browser ", html))
+    {
+    err = cloneString(
+	"Optional track documentation appears to be either too large (greater than 50k) or it starts with a track or browser line. "
+	"This is usually an indication that the data has been accidentally put into the documentation field. "
+	"Only html documentation is intended for this field. "
+        "Please correct and re-submit.");
+    html = NULL;  /* we do not want to save this bad value */
+    customText = NULL;  /* trigger a return to the edit page */
     }
 
 struct customTrack *newCts = NULL, *ct = NULL;

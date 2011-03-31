@@ -32,6 +32,7 @@
 #ifndef GBROWSE
 #include "axtInfo.h"
 #include "ctgPos.h"
+#include "hubConnect.h"
 #include "customTrack.h"
 #include "hgFind.h"
 #endif /* GBROWSE */
@@ -3037,21 +3038,54 @@ else
     return slNameCloneList((struct slName *)(hel->val));
 }
 
-boolean hIsPrivateHost()
-/* Return TRUE if this is running on private web-server. */
+boolean hHostHasPrefix(char *prefix)
+/* Return TRUE if this is running on web-server with host name prefix */
 {
-static boolean gotIt = FALSE;
-static boolean priv = FALSE;
-if (!gotIt)
-    {
-    char *t = getenv("HTTP_HOST");
-    if (t != NULL && (startsWith("genome-test", t) || startsWith("hgwdev", t)))
-        priv = TRUE;
-    gotIt = TRUE;
-    }
-return priv;
+if (prefix == NULL)
+    return FALSE;
+
+char *httpHost = getenv("HTTP_HOST");
+if (httpHost == NULL)
+    // make sure this works when CGIs are run from the command line.
+    httpHost = getenv("HOST");
+
+if (httpHost == NULL)
+    return FALSE;
+
+return startsWith(prefix, httpHost);
 }
 
+boolean hIsPrivateHost()
+/* Return TRUE if this is running on private (development) web-server.
+ * This was originally genome-test as well as hgwdev, however genome-test
+ * may be repurposed to direct users to the preview site instead of development site. */
+{
+return hHostHasPrefix("hgwdev") || hHostHasPrefix("genome-test");  // FIXME: If genome-test
+}
+
+boolean hIsBetaHost()
+/* Return TRUE if this is running on beta (QA) web-server.
+ * Use sparingly as behavior on beta should be as close to RR as possible. */
+{
+return hHostHasPrefix("hgwbeta");
+}
+
+boolean hIsPreviewHost()
+/* Return TRUE if this is running on preview web-server.  The preview
+ * server is a mirror of the development server provided for public
+ * early access. */
+{
+if (cfgOption("test.preview"))
+    return TRUE;
+return hHostHasPrefix("genome-preview");
+}
+
+char *hBrowserName()
+/* Return browser name based on host name */
+{
+return (hIsPreviewHost() ? "Preview Genome Browser" :
+        (hIsPrivateHost() ? "TEST Genome Browser" : "Genome Browser"));
+}
 
 int hOffsetPastBin(char *db, char *chrom, char *table)
 /* Return offset into a row of table that skips past bin
@@ -3378,12 +3412,19 @@ trackDbAddTableField(tdbList);
 return tdbList;
 }
 
+static boolean trackDataAccessible(char *database, struct trackDb *tdb)
+/* Return TRUE if data accessible - meaning either it has a bigDataUrl, or the
+ * table exists. */
+{
+return trackDbSetting(tdb, "bigDataUrl") != NULL || hTableForTrack(database, tdb->table) != NULL;
+}
+
 static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
 	       boolean privateHost, struct trackDb **tdbRetList)
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
-if ((!tdb->private || privateHost) && hTableForTrack(database, tdb->table) != NULL)
+if ((!tdb->private || privateHost) && trackDataAccessible(database, tdb))
     slAddHead(tdbRetList, tdb);
 else if (sameWord(tdb->type,"downloadsOnly"))
     {
@@ -3559,6 +3600,17 @@ else
 }
 #endif /* DEBUG */
 
+struct trackDb *trackDbPolishAfterLinkup(struct trackDb *tdbList, char *db)
+/* Do various massaging that can only be done after parent/child
+ * relationships are established. */
+{
+tdbList = pruneEmpties(tdbList, db, hIsPrivateHost() || hIsPreviewHost(), 0);
+trackDbContainerMarkup(NULL, tdbList);
+rInheritFields(tdbList);
+slSort(&tdbList, trackDbCmp);
+return tdbList;
+}
+
 struct trackDb *hTrackDb(char *db)
 /* Load tracks associated with current db.
  * Supertracks are loaded as a trackDb, but are not in the returned list,
@@ -3576,12 +3628,9 @@ struct trackDb *tdbList = NULL;
 //    {
     tdbList = loadTrackDb(db, NULL);
     tdbList = trackDbLinkUpGenerations(tdbList);
+    tdbList = trackDbPolishAfterLinkup(tdbList, db);
 //    freeMem(existingDb);
 //    existingDb = cloneString(db);
-    tdbList = pruneEmpties(tdbList, db, hIsPrivateHost(), 0);
-    trackDbContainerMarkup(NULL, tdbList);
-    rInheritFields(tdbList);
-    slSort(&tdbList, trackDbCmp);
 //    }
 return tdbList;
 }
@@ -3642,9 +3691,17 @@ struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList)
 struct trackDb *theTdbs = NULL;
 if (tdbList == NULL || *tdbList == NULL)
     {
-    theTdbs = hTrackDb(db);
-    if (tdbList != NULL)
-        *tdbList = theTdbs;
+    if (isHubTrack(track))
+        {
+	struct hash *hash = hashNew(0);
+	theTdbs = hubConnectAddHubForTrackAndFindTdb(db, track, tdbList, hash);
+	}
+    else
+	{
+	theTdbs = hTrackDb(db);
+	if (tdbList != NULL)
+	    *tdbList = theTdbs;
+	}
     }
 else
     theTdbs = *tdbList;
@@ -3657,7 +3714,6 @@ struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track)
  * is actually faster if being called on lots of tracks.  This function
  * though is faster on one or two tracks. */
 {
-uglyf("hTrackDbForTrackAndAncestors(%s,%s)\n", db, track);
 struct sqlConnection *conn = hAllocConn(db);
 struct trackDb *tdb = loadTrackDbForTrack(conn, track);
 struct trackDb *ancestor = tdb;
@@ -3677,14 +3733,23 @@ for (;;)
 	}
 
     /* If no parent we're done. */
-    uglyf("parentTrack = %s\n", parentTrack);
     if (parentTrack == NULL)
         break;
 
     ancestor->parent = loadTrackDbForTrack(conn, parentTrack);
+    if (ancestor->parent == NULL)
+        break;
+
+    if (!tdbIsSuper(ancestor->parent)) // supers link to children differently
+        ancestor->parent->subtracks = ancestor;
+    else
+        ancestor->parent->children = slRefNew(ancestor);
     ancestor = ancestor->parent;
     }
-
+if (tdbIsSuper(ancestor))
+    ancestor = ancestor->children->val;
+trackDbContainerMarkup(NULL, ancestor);
+rInheritFields(ancestor);
 hFreeConn(&conn);
 return tdb;
 }
@@ -4868,4 +4933,17 @@ boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct cu
 return trackIsType(database, table, parent, "bigBed", ctLookupName);
 }
 
-
+char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table)
+/* Return file name from bigDataUrl or little table. */
+{
+char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+if (fileName == NULL)
+    {
+    char query[256];
+    safef(query, sizeof(query), "select fileName from %s", table);
+    fileName = sqlQuickString(conn, query);
+    if (fileName == NULL)
+	errAbort("Missing fileName in %s table", table);
+    }
+return fileName;
+}

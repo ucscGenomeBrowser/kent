@@ -41,3 +41,9 @@ echo "#    ${RSYNC} --stats --exclude=\"encode\" --exclude=\"trash\" --exclude=\
 ${RSYNC} --stats --exclude="encode" --exclude="trash" \
 	--exclude="lost+found/" --exclude="ENCODE/" --exclude="encodeDCC/" \
 	${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/ >> ${FETCHLOG} 2>&1
+${RSYNC} --stats --delete --max-delete=20 --exclude="encode" --exclude="trash" \
+	--exclude="lost+found/" --exclude="ENCODE/" --exclude="encodeDCC/" \
+	${HGDOWNLOAD}/htdocs/js/ ${DOCUMENTROOT}/js/ >> ${FETCHLOG} 2>&1
+${RSYNC} --stats --delete --max-delete=20 --exclude="encode" --exclude="trash" \
+	--exclude="lost+found/" --exclude="ENCODE/" --exclude="encodeDCC/" \
+	${HGDOWNLOAD}/htdocs/style/ ${DOCUMENTROOT}/style/ >> ${FETCHLOG} 2>&1

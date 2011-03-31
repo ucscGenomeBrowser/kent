@@ -12,6 +12,7 @@ use File::Basename;
 use FileHandle; 
 use POSIX qw(strftime);
 use POSIX ":sys_wait_h";  # they have got to be kidding
+use Errno qw(EEXIST :POSIX);
 
 # hideous magic required by perl modules
 BEGIN {
@@ -381,7 +382,9 @@ sub makeDir($;$) {
           }
           $path .= $part;
           if (!-d $path) {
-              mkdir($path) || gbError("mkdir failed for: $path");
+              if (!mkdir($path) && ($ERRNO != EEXIST)) {
+                  gbError("mkdir failed: " . $ERRNO . ": " . $path);
+              }
 	      if (defined($mode)) {
 		  if ($mode ne "none") {
 		      setDirMode($path, $mode);
@@ -491,20 +494,22 @@ sub runPipe($) {
       print STDERR "$command\n";
   }
   my $pid = fork();
+  if (!defined($pid)) {
+      die("can't fork");
+  }
   if ($pid == 0) {
       exec("/bin/csh", "-ef", "-c", $command);
       die("exec of /bin/csh failed");
-  }
-  if ($pid < 0) {
-      die("can't fork");
   }
   my $retPid = waitpid($pid, 0);
   my $stat = $?;
   if ($retPid < 0) {
       die("child process lost");
   }
-  if (($stat >> 8) != 0) {
+  if (WIFEXITED($stat) && (WEXITSTATUS($stat) != 0)) {
     gbError("command failed: $command");
+  } elsif (WIFSIGNALED($stat)) {
+    gbError("command failed with signal: $command");
   }
 }
 
@@ -710,8 +715,10 @@ sub backgroundWait() {
     my $desc = $gbCommon::pidTable{$pid};
     $gbCommon::pidCount--;
     $gbCommon::pidTable{$pid} = undef;
-    if ($stat != 0) {
-        die("process $pid: wait status $stat: $desc");
+    if (WIFEXITED($stat) && (WEXITSTATUS($stat) != 0)) {
+        gbError("command failed: $desc");
+    } elsif (WIFSIGNALED($stat)) {
+        gbError("command failed with signal: $desc");
     }
     if ($gbCommon::verbose) {
         prMsg("process finished: $desc");

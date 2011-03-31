@@ -16,6 +16,10 @@ sub usage() {
     printf "usage: findScores.pl <targetDb> <queryDb>\n";
     printf "  will look for arguments in:\n";
     printf "  $hiveData/targetDb/bed/*astz.queryDb/axtChain/run/chain.csh\n";
+    printf "If no scores are found but you know the lastz directories\n";
+    printf "exist, go to /hive/data/genomes/organism/bed and construct\n";
+    printf "the symlink to lastz.otherOrg, e.g.:\n";
+    printf "ln -s lastzMelGal1.2011-03-30 lastz.melGal1\n";
 }
 
 if ($argc != 2) {

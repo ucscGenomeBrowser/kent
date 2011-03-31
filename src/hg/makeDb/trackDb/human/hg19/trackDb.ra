@@ -13,7 +13,12 @@ visibility hide
 track gap override
 visibility hide
 
+track switchDbTss override
+origAssembly hg17
+pennantIcon 17.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg17"
+
 track clonePos override
+longLabel Clone Coverage
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
@@ -28,11 +33,6 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 track fosEndPairs override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
-
-track decipher override
-origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
-release alpha
 
 track rgdQtl override
 shortLabel RGD Human QTL
@@ -123,7 +123,7 @@ searchPriority 3.53
 
 track tRNAs
 shortLabel tRNA Genes
-longLabel Transfer RNA genes identified with tRNAscan-SE
+longLabel Transfer RNA genes identified with tRNAscan-SE 
 group genes
 priority 53.5
 visibility hide
@@ -137,6 +137,7 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track eioJcviNAS override
+shortLabel CD34 DnaseI
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
@@ -149,6 +150,14 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track ucsfBrainMethyl override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track pgSnp override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track sestanBrainAtlas override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
@@ -1097,7 +1106,7 @@ compositeTrack on
 shortLabel Vertebrate Chain/Net
 longLabel Non-placental Vertebrate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species Wallaby=Wallaby Opossum=Opossum Platypus=Platypus Chicken=Chicken Zebra_Finch=Zebra_Finch Lizard=Lizard X_Tro=X._tropicalis Fugu=Fugu Tetraodon=Tetraodon Stickleback=Stickleback Medaka=Medaka Zebrafish=Zebrafish Lamprey=Lamprey
+subGroup2 species Species Wallaby=Wallaby Opossum=Opossum Platypus=Platypus Chicken=Chicken Turkey=Turkey Zebra_Finch=Zebra_Finch Lizard=Lizard X_Tro=X._tropicalis Fugu=Fugu Tetraodon=Tetraodon Stickleback=Stickleback Medaka=Medaka Zebrafish=Zebrafish Lamprey=Lamprey
 subGroup3 clade Clade aMammal=Mammalia bDino=Dinosauria cLepi=Lepidosauria dAmph=Amphibia eTele=Teleostei fHyper=Hyperoartia
 dragAndDrop subTracks
 visibility hide
@@ -1192,14 +1201,14 @@ html hg19vertChainNet
         type chain fr2
         otherDb fr2
 
-        track chainDanRer6
+        track chainDanRer7
     #replaces record chainDanRer5 in parent dir missing/extra priority
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=Zebrafish clade=eTele
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain danRer6
-        otherDb danRer6
+        type chain danRer7
+        otherDb danRer7
 
         track chainTetNig2
         subTrack vertebrateChainNetViewchain off
@@ -1302,14 +1311,14 @@ html hg19vertChainNet
         type netAlign fr2 chainFr2
         otherDb fr2
 
-        track netDanRer6
+        track netDanRer7
     #replaces record netDanRer5 in parent dir missing/extra priority
         subTrack vertebrateChainNetViewnet on 
         subGroups view=net species=Zebrafish clade=eTele
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign danRer6 chainDanRer6
-        otherDb danRer6
+        type netAlign danRer6 chainDanRer7
+        otherDb danRer7
 
         track netTetNig2
         subTrack vertebrateChainNetViewnet off
@@ -1538,9 +1547,37 @@ priority 103.29
         type bed 5 .
         priority 23
 
+track snp132Common override
+snpSeqFile /gbdb/hg19/snp/snp132.fa
+chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp132CodingDbSnp,
+codingAnnoLabel_snp132CodingDbSnp dbSNP
+
+track snp132Patient override
+snpSeqFile /gbdb/hg19/snp/snp132.fa
+chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp132CodingDbSnp,
+codingAnnoLabel_snp132CodingDbSnp dbSNP
+
+track snp132NonUnique override
+snpSeqFile /gbdb/hg19/snp/snp132.fa
+chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp132CodingDbSnp,
+codingAnnoLabel_snp132CodingDbSnp dbSNP
+
 track snp132 override
-release alpha
-visibility hide
 chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2
@@ -1590,6 +1627,17 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 # Use hg18 file so we don't have to duplicate the 18G:
 snpSeqFile /gbdb/hg18/snp/snp130.fa
 origAssembly hg18
+
+track hapmapSnps override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+longLabel HapMap SNPs (rel27, merged Phase II + Phase III genotypes)
+dataVersion rel27
+hapmapPhase III
+
+track hapmapLdPh override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track nscanGene override
 informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterative pseudogene masking.
@@ -1723,6 +1771,7 @@ url http://h-invitational.jp/hinv/spsoup/transcript_view?hit_id=$$
     color 30,130,210
 
 track gc5BaseBw
+release alpha
 shortLabel GC percent
 longLabel GC percent as bigWig file
 group x
@@ -1735,42 +1784,115 @@ html gc5Base
 
 track affyExonArray
 compositeTrack on
-shortLabel Affy Exon
-longLabel Affymetrix $Organism Exon Array
 group expression
-priority 103.29
+shortLabel Affy Exon Array
+longLabel Affymetrix $Organism Exon Array Probes and Probesets
+subGroup1 view Views 1-Probeset=Probeset 2-Probe=Probe
+subGroup2 level Level 1-Core=Core 2-Extended=Extended 3-Full=Full 4-Free=Free 5-Ambiguous=Ambiguous 
+sortOrder level=+ view=+ 
+dimensions dimensionX=level dimensionY=view
+dragAndDrop subTracks
+color 0,0,0
 visibility hide
-type bed 12
 noInherit on
-    
-    track affyExonArrayExons 
-    subTrack affyExonArray 
-    shortLabel Af Ex Exons
-    longLabel Exons interrogated on the Affymetrix $Organism Exon Array
-    visibility dense
-    type bed 12
-    
-    track affyExonArrayProbesets
-    subTrack affyExonArray
-    shortLabel Af Ex Probesets
-    longLabel Probesets on the Affymetrix $Organism Exon Array 
-    visibility dense
-    type bed 12
-    
-    track affyExonArrayProbes 
-    subTrack affyExonArray
-    shortLabel Af Ex Probes
-    longLabel Probes from the Affymetrix $Organism Exon Array
-    visibility dense
-    type bed 10
+type bed 12
 
-    track affyExonArrayGeneProbesets
-    subTrack affyExonArray 
-    shortLabel Af Ex GProbesets
-    longLabel Gene probesets on the Affymetrix $Organism Exon Array
+    track affyExonProbeset
+    parent affyExonArray
+    view 1-Probeset
     visibility dense
-    type bed 12
-    
+
+        track affyExonProbesetCore
+        parent affyExonProbeset
+        subGroups view=1-Probeset level=1-Core
+        shortLabel Core PS
+        longLabel Affymetrix $Organism Exon Array Core Probesets 
+        # royalblue
+        color 65,105,225
+
+        track affyExonProbesetExtended
+        parent affyExonProbeset
+        subGroups view=1-Probeset level=2-Extended
+        shortLabel Extended PS
+        longLabel Affymetrix $Organism Exon Array Extended Probesets
+        # chocolate 4
+        color 139,69,19
+
+        track affyExonProbesetFull
+        parent affyExonProbeset off
+        subGroups view=1-Probeset level=3-Full
+        shortLabel Full PS
+        longLabel Affymetrix $Organism Exon Array Full Probesets
+        # deeppink
+        color 205,96,144
+
+        track affyExonProbesetFree 
+        parent affyExonProbeset off
+        subGroups view=1-Probeset level=4-Free
+        shortLabel Free PS
+        longLabel Affymetrix $Organism Exon Array Free Probesets
+        # darkgreen
+        color 0,100,0
+
+        track affyExonProbesetAmbiguous 
+        parent affyExonProbeset off
+        subGroups view=1-Probeset level=5-Ambiguous
+        shortLabel Ambiguous PS
+        longLabel Affymetrix $Organism Exon Array Ambiguous Probesets
+        # orchid 
+        color 218,112,214	
+
+    track affyExonProbe
+    parent affyExonArray
+    view 2-Probe
+    visibility dense
+
+        track affyExonProbeCore 
+        parent affyExonProbe off
+        subGroups view=2-Probe level=1-Core
+        shortLabel Core Probes
+        longLabel Affymetrix $Organism Exon Array Core Probes
+        # royalblue
+        color 65,105,225
+        type bed 10
+
+        track affyExonProbeExtended 
+        parent affyExonProbe off
+        subGroups view=2-Probe level=2-Extended
+        shortLabel Extended Probes
+        longLabel Affymetrix $Organism Exon Array Extended Probes
+        # chocolate 4
+        color 139,69,19
+        type bed 10
+
+        track affyExonProbeFull 
+        parent affyExonProbe off
+        subGroups view=2-Probe level=3-Full
+        shortLabel Full Probes
+        longLabel Affymetrix $Organism Exon Array Full Probes
+        # deep pink
+        color 205,96,144
+        type bed 10
+
+        track affyExonProbeFree 
+        parent affyExonProbe off
+        subGroups view=2-Probe level=4-Free
+        shortLabel Free Probes
+        longLabel Affymetrix $Organism Exon Array Free Probes
+        # darkgreen
+        color 0,100,0
+        type bed 10
+
+        track affyExonProbeAmbiguous 
+        parent affyExonProbe off
+        subGroups view=2-Probe level=5-Ambiguous
+        shortLabel Ambiguous Probes
+        longLabel Affymetrix $Organism Exon Array Ambiguous Probes
+        # orchid
+        color 218,112,214	
+        type bed 10
+
+
 searchTable haplotypeLocations
 searchMethod exact
 searchType bed
@@ -1844,7 +1966,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewpsl
     shortLabel Alignment
     view psl
-    visibility pack
+    visibility hide
     parent altSeqComposite
     type psl
     indelDoubleInsert on
@@ -1868,7 +1990,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewchain
     shortLabel Chain
     view chain
-    visibility pack
+    visibility hide
     parent altSeqComposite
     spectrum on
 
@@ -1884,7 +2006,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewnet
     shortLabel Net
     view net
-    visibility full
+    visibility hide
     parent altSeqComposite
 
         track netHg19Patch2
@@ -1915,10 +2037,6 @@ scoreFilterMax 100
 type bed 6 .
 urlLabel TargetScan link:
 url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
-
-track ntSeqReads override
-origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track ntHumChimpCodingDiff override
 origAssembly hg18
@@ -1952,3 +2070,280 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 track snpArray override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+
+track consIndelsHgMmCanFam
+shortLabel Cons Indels MmCf
+longLabel Indel-based Conservation for human hg19, mouse mm8 and dog canFam2
+group compGeno
+priority 105
+visibility hide
+useScore 1
+color 0, 60, 120
+type bed 5 .
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+searchTable consIndelsHgMmCanFam
+searchType bed
+searchMethod exact
+shortCircuit 1
+termRegex IGS.+
+searchPriority 50
+
+track polyA
+compositeTrack on
+shortLabel Poly(A)
+longLabel Poly(A) Sites, Both Reported and Predicted
+group rna
+priority 79
+visibility hide
+noInherit on
+type bed 3 .
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+
+    track polyaDb
+    parent polyA
+    shortLabel PolyA_DB
+    longLabel Reported Poly(A) Sites from PolyA_DB
+    color 51,153,51
+    priority 1
+    type bed 4 .
+    origAssembly hg18
+    pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+
+    track polyaPredict
+    parent polyA
+    longLabel Predicted Poly(A) Sites Using an SVM
+    color 102,0,153
+    priority 2
+    type bed 8 .
+    origAssembly hg18
+    pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+#include jkExperiments.ra
+
+track agilentCgh
+shortLabel Arrays
+longLabel Microarray probesets
+compositeTrack on
+group varRep
+visibility hide
+noScoreFilter .
+noInherit on
+type bed 3 .
+
+    track agilentCgh1x1m
+    parent agilentCgh
+    shortLabel Ag CGH 1x1m
+    longLabel Agilent SurePrint G3 Human CGH Microarray 1x1M AMADID 021529
+    color 0,128,0
+    type bed 4 .
+    priority 1
+
+    track agilentHrd1x1m
+    parent agilentCgh
+    shortLabel Ag HRD 1x1m
+    longLabel Agilent SurePrint G3 Human High-Resolution Microarray 1x1M AMADID 023642
+    color 255,128,0
+    type bed 4 .
+    priority 2
+
+    track agilentCghSnp2x400k
+    parent agilentCgh
+    shortLabel Ag SNP 2x400k
+    longLabel Agilent SurePrint G3 Human CGH+SNP Microarray 2x400K AMADID 028081
+    color 0,0,128
+    type bed 9 .
+    itemRgb on
+    priority 3
+
+    track agilentCgh2x400k
+    parent agilentCgh
+    shortLabel Ag CGH 2x400k
+    longLabel Agilent SurePrint G3 Human CGH Microarray 2x400K AMADID 021850
+    color 0,128,0
+    type bed 4 .
+    priority 4
+
+    track agilentCghSnp4x180k
+    parent agilentCgh
+    shortLabel Ag SNP 4x180k
+    longLabel Agilent SurePrint G3 Human CGH+SNP Microarray 4x180K AMADID 029830
+    color 0,0,128
+    type bed 9 .
+    itemRgb on
+    priority 5
+
+    track agilentCgh4x180k
+    parent agilentCgh
+    shortLabel Ag CGH 4x180k
+    longLabel Agilent SurePrint G3 Human CGH Microarray 4x180K AMADID 022060
+    color 255,128,0
+    type bed 4 .
+    priority 6
+
+    track agilentCgh8x60k
+    parent agilentCgh
+    shortLabel Ag CGH 8x60k
+    longLabel Agilent SurePrint G3 Human CGH Microarray 8x60K AMADID 021924
+    type bed 4 .
+    color 0,128,0
+    priority 7
+
+    track agilentCgh1x244k
+    parent agilentCgh
+    shortLabel Ag CGH 1x244k
+    longLabel Agilent SurePrint HD Human CGH Microarray 1x244K AMADID 014693
+    color 255,128,0
+    type bed 4 .
+    priority 8
+
+    track agilentCgh2x105k
+    parent agilentCgh
+    shortLabel Ag CGH 2x105k
+    longLabel Agilent SurePrint HD Human CGH Microarray 2x105K AMADID 014698
+    color 0,128,0
+    type bed 4 .
+    priority 9
+
+    track agilentCgh4x44k
+    parent agilentCgh
+    shortLabel Ag CGH 4x44k
+    longLabel Agilent SurePrint HD Human CGH Microarray 4x44K AMADID 014950
+    color 255,128,0
+    type bed 4 .
+    priority 10
+
+track tfbsConsSites
+shortLabel TFBS Conserved
+longLabel HMR Conserved Transcription Factor Binding Sites
+priority 0
+group regulation
+visibility hide
+type bed 6 +
+scoreMin 671
+scoreMax 1000
+spectrum on
+urlLabel Transfac matrix link:
+url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
+
+
+track snakeMm9
+release alpha
+table chainMm9
+shortLabel snakeMm9
+longLabel snakeMm9
+group x
+priority 165
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type snake mm9
+otherDb mm9
+
+track snakeRheMac2
+release alpha
+table chainRheMac2
+shortLabel snakeRheMac2
+longLabel snakeRheMac2
+group x
+priority 165
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type snake rheMac2
+otherDb rheMac2
+
+track snake_apd
+table chain_apd_hap1
+release alpha
+shortLabel snake_apd
+longLabel snake_apd
+group x
+priority 160
+visibility hide
+type snake hg19
+otherDb hg19
+
+track snake_cox
+table chain_cox_hap2
+release alpha
+shortLabel snake_cox
+longLabel snake_cox
+group x
+priority 160
+visibility hide
+type snake hg19
+otherDb hg19
+
+track snake_dbb
+table chain_dbb_hap3
+release alpha
+shortLabel snake_dbb
+longLabel snake_dbb
+group x
+priority 160
+visibility hide
+type snake hg19
+otherDb hg19
+
+track snake_mann
+table chain_mann_hap4
+release alpha
+shortLabel snake_mann
+longLabel snake_mann
+group x
+priority 160
+visibility hide
+type snake hg19
+otherDb hg19
+
+track snake_mcf
+table chain_mcf_hap5
+release alpha
+shortLabel snake_mcf
+longLabel snake_mcf
+group x
+priority 160
+visibility hide
+type snake hg19
+otherDb hg19
+
+track snake_qbl
+table chain_qbl_hap6
+release alpha
+shortLabel snake_qbl
+longLabel snake_qbl
+group x
+priority 160
+visibility hide
+type snake hg19
+otherDb hg19
+
+track snake_ssto
+table chain_ssto_hap7
+release alpha
+shortLabel snake_ssto
+longLabel snake_ssto
+group x
+priority 160
+visibility hide
+type snake hg19
+otherDb hg19
+
+track bamWigTest
+table wgEncodeYaleRnaSeqGm12878PolyaAln
+release alpha
+shortLabel bamWigTest
+longLabel bamWigTest
+group x
+priority 160
+visibility hide
+type bamWig 0 1
+viewLimits 0:1

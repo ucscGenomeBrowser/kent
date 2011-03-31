@@ -1,7 +1,9 @@
-/* bamFILE -- interface to binary alignment format files using Heng Li's samtools lib. */
+/* bamFile -- interface to binary alignment format files using Heng Li's samtools lib. */
 
 #ifndef BAMFILE_H
 #define BAMFILE_H
+
+#ifdef USE_BAM
 
 // bam.h is incomplete without _IOLIB set to 1, 2 or 3.  2 is used by Makefile.generic:
 #ifndef _IOLIB
@@ -10,18 +12,63 @@
 #include "bam.h"
 #include "sam.h"
 
+#else // no USE_BAM
+typedef struct { } bam1_t;
+typedef struct { } samfile_t;
+typedef int (*bam_fetch_f)(const bam1_t *b, void *data);
+
+#define COMPILE_WITH_SAMTOOLS "%s: in order to use this functionality you must " \
+    "install the samtools library (<A HREF=\"http://samtools.sourceforge.net\" " \
+    "TARGET=_BLANK>http://samtools.sourceforge.net</A>) and recompile kent/src with " \
+    "USE_BAM=1 in your environment " \
+    "(see <A HREF=\"http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables\" " \
+    "TARGET=_BLANK>http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables</A>)."
+
+#endif// USE_BAM
+
+#ifndef SAMALIGNMENT_H
+#include "samAlignment.h"
+#endif
+
+#ifndef DNASEQ_H
+#include "dnaseq.h"
+#endif
+
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif 
+
 char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName);
 /* Return file name from table.  If table has a seqName column, then grab the 
- * row associated with bamSeqName (which is not nec. in chromInfo, e.g. 
- * bam file might have '1' not 'chr1'). */
+ * row associated with bamSeqName (which can be e.g. '1' not 'chr1' if that is the
+ * case in the bam file). */
 
 boolean bamFileExists(char *bamFileName);
 /* Return TRUE if we can successfully open the bam file and its index file. */
 
-void bamFetch(char *bamFileName, char *position, bam_fetch_f callbackFunc, void *callbackData);
+void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+	samfile_t **pSamFile);
 /* Open the .bam file, fetch items in the seq:start-end position range,
- * and call callbackFunc on each bam item retrieved from the file plus callbackData. 
- * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. */
+ * and call callbackFunc on each bam item retrieved from the file plus callbackData.
+ * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
+ * The pSamFile parameter is optional.  If non-NULL it will be filled in, just for
+ * the benefit of the callback function, with the open samFile.  */
+
+struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int start, int end,
+	struct lm *lm);
+/* Fetch region as a list of samAlignments - which is more or less an unpacked
+ * bam record.  Results is allocated out of lm, since it tends to be large... */
+
+struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, int count, struct lm *lm);
+/* Read next count alignments in SAM format, allocated in lm.  May return less than
+ * count at end of file. */
+
+samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName);
+/* Return an open bam file, dealing with FUSE caching if need be. 
+ * Return parameter if NON-null will return the file name after FUSing */
+
+void bamClose(samfile_t **pSamFile);
+/* Close down a samefile_t */
 
 boolean bamIsRc(const bam1_t *bam);
 /* Return TRUE if alignment is on - strand. */
@@ -31,6 +78,7 @@ INLINE int bamUnpackCigarElement(unsigned int packed, char *retOp)
  * array of BAM-enhanced-CIGAR ASCII characters (operations), store operation 
  * char into *retOp (retOp must not be NULL) and return the number of bases. */
 {
+#ifdef USE_BAM
 // decoding lifted from samtools bam.c bam_format1(), long may it remain stable:
 #define BAM_DOT_C_OPCODE_STRING "MIDNSHP"
 int n = packed>>BAM_CIGAR_SHIFT;
@@ -42,6 +90,10 @@ if (opcode >= strlen(BAM_DOT_C_OPCODE_STRING))
 	     opcode, (unsigned long)(strlen(BAM_DOT_C_OPCODE_STRING)-1));
 *retOp = BAM_DOT_C_OPCODE_STRING[opcode];
 return n;
+#else // no USE_BAM
+errAbort(COMPILE_WITH_SAMTOOLS, "bamUnpackCigarElement");
+return 0;
+#endif// USE_BAM
 }
 
 void bamGetSoftClipping(const bam1_t *bam, int *retLow, int *retHigh, int *retClippedQLen);

@@ -7806,6 +7806,9 @@ done
     # trim unwanted chip-prefix to be backwards compatible with hg17 and hg18
     hgsql hg19 -e 'update knownToU133 set value=substring(value,7)'
 
+    # remove the trailing ";" from the value field (redmine #1685)
+    hgsql hg19 -e 'update knownToU133 set value=trim(trailing ";" from value);'
+
 ##########################################################################
 # GNF ATLAS 2 (Done - 2009-09-30 - Jim)
     # Align probes from GNF1H chip.
@@ -8387,7 +8390,9 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 12/7/10 angie)
+# NHGRI GWAS CATALOG (DONE 3/1/11 angie)
+# Updated 2/1/11
+# Updated 12/7/10
 # Updated 11/1/10
 # Updated 10/6/10
 # Updated 9/1/10
@@ -8414,7 +8419,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 4972 elements of size 22
+#Loaded 5467 elements of size 22
 
 
 ######################################################################## 
@@ -8924,8 +8929,244 @@ TMPDIR=/scratch/tmp
          "hg19", "kgTargetAli", "", "", \
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
+#######################################################################
+# ENCODE Regulation track  (In progress March 2010, very rough instructions
+# as am still defining how to build track...)
+
+      # make root dir and link in our bad.bed file for filtering out
+      # blacklisted and multiple mapping regions.
+      mkdir -p /cluster/data/hg19/bed/wgEncodeReg
+      cd /cluster/data/hg19/bed/wgEncodeReg
+      ln -s /hive/users/kent/regulate/companion/mapping/bad.bed badRegions.bed
+
+      # Create the DNAse peak clusters subtrack.
+      # Get all of the narrowPeak format files for the wgEncodeUwDnaseSeq
+      # linked into directory /hive/users/kent/regulate/dnase/peaks
+      mkdir dnase
+      cd dnase
+      mkdir peaks
+      cd peaks
+      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeUwDnase/*.narrowPeak.gz .
+
+      # Process these into clusters in a bed file and load clusters into
+      # table.
+      /bin/ls -1 peaks/*.narrowPeak.gz > peak.lst
+      regClusterMakeTableOfTables uw02 peak.lst peak.table
+      regCluster peak.table /dev/null peak.bed
+      awk '$4 > 1 || $5 >= 100' peak.bed > wgEncodeRegDnaseClustered.bed
+      hgLoadBed hg19 wgEncodeRegDnaseClustered wgEncodeRegDnaseClustered.bed
+
+      # Make wgEncodeRegDnaseClusteredInput table.  Start with mdbQuery, and
+      # then do some massaging since not completely in sync with file list.
+      mdbQuery out=tab "select obj,cell,antibody,treatment from hg19 where obj like 'wgEncodeUwDnase%' and view='Peaks'" | sed 's/n\/a/None/' > inputMdb.tab
+      cut -f 1 peak.table | sed 's/\.narrowPeak\.gz//' | sed 's/peaks\///' > inputs.lst
+      weedLines inputs.lst inputMdb.tab inputs.tab -invert -weeded=weeded.tab
+      hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable2.sql inputs.tab
+
+      # Make transcription factor binding site clusters.  Start with Anshul's
+      # nice uniform peak calls, downloaded from 
+      #   ftp://ftp-private.ebi.ac.uk/byDataType/peaks/jan2011/spp/optimal
+      # using the user name and password in the ENCODE wiki at:
+      #    http://genomewiki.ucsc.edu/EncodeDCC/index.php/Locations_of_ENCODE_Data
+      # Put all of the ones that actually are based on two replicates into
+      #    /cluster/data/hg19/bed/wgEncodeReg/tfbs/peaks
+      # Once that is done do a little work towards making the cluster input.
+      cd /cluster/data/hg19/bed/wgEncodeReg/tfbs
+      /bin/ls peaks/*.narrowPeak.gz > peak.lst
+      regClusterMakeTableOfTables ans01 peak.lst partial.table
+
+      # Unfortunately at this point only about 90% of the peak files actually
+      # have metaDb data associated with them in metaDb, so run C program that
+      # takes it from metaDb if possible, otherwise tries to get it from file
+      # names.
+      regClusterAttachMetadataToTableOfTables hg19 partial.table withDupes.table
+
+      # One more complication - there are often several cases where there is
+      # more than one data set on the same cell+treatment+antibody combination. 
+      # For good reasons hgBedToBedExps only wants one.
+      # This next bit filters them out based on a picks file that was hand
+      # created - picksFromDupes.  This was based on the criteria that
+      # the Broad CTCF were used,  and that Snyd was used in preference
+      # to OpenChromatin, which in turn was used in preference over Haib.
+      # The rational for this is the Broad CTCF set has been in use for a 
+      # while with no complaints,  and when examing the Pol2 signals, which
+      # were with CTCF the main component of the Dupes, the Haib were the
+      # weakest and the Snyd the strongest.  
+      cp ~/src/hg/regulate/wgEncodeReg/picksFromDupes.tab .
+      wgEncodeRegTfbsDedupeHelp withDupes.table picksFromDupes.tab peak.table
+
+      # Make three column file: fileName, cell+treatment, antibody
+      awk -F '\t' '{printf ( "%s\t%s\t%s\n", $1, ($10 == "None" ? $8 : $8 "+" $10), $9 ) ; }' peak.table > fileCellAb.tab
+
+
+      # Create config file out for clustering job, using a table assigning
+      # cell lines+treatments to single letter codes edited by hand.  In
+      # the future may be able to automate this by having fixed upper case codes for
+      # tier1&2 cell lines, and then just use first letter lower case codes
+      # for rest. That is the pattern cellLetter2.tab follows anyway.
+      cp ~/kent/src/hg/regulate/regClusterBedExpCfg/cellLetter2.tab .
+      regClusterBedExpCfg -tabList fileCellAb.tab cluster.cfg -cellLetter=cellLetter2.tab
+
+      # Do the actual clustering 
+      hgBedsToBedExps -dupeLetterOk cluster.cfg peak.bed peak.exps
+
+      # Load database
+      hgLoadBed hg19 wgEncodeRegTfbsClustered peak.bed
+      hgLoadSqlTab hg19 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
+
+      # Create inputTrackTable - six columns: <table> <source> <factor> <cell> <treatment> <lab>
+      awk '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $7, ($10 == "None" ? $8 : $8 "+" $10), $9, $8, $10, $11);}' peak.table > wgEncodeRegTfbsClusteredInputs.tab
+      hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable4.sql wgEncodeRegTfbsClusteredInputs.tab
+
+
+      # Handle the RNA seq, starting by pooling it and filtering out multiple
+      # mapping and blacklisted regions.
+      mkdir -p /hive/data/genomes/hg19/bed/wgEncodeReg/txn/pooled
+      cd /hive/data/genomes/hg19/bed/wgEncodeReg/txn/pooled
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqGm12878R2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqH1hescR2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHct116R2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHelas3R2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHepg2R2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHsmmR2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHuvecR2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqK562R2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqMcf7R2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqNhekR2x75Il200SigPooled.bedGraph
+
+      # Now have to normalize.  This takes two passes.  The first just creates
+      # a tab-separated file with normalization values. A batch file is made
+      # by running awk on the tab file, and this batch file executes the
+      # second half, transforming the bedGraphs to normalized values. The
+      # normalization standardizes all files as if the total signal integrated to 10
+      # billion over the genome.
+      rm -f ../norm.tab
+      foreach i (*SigPooled.bedGraph)
+	  echo processing $i
+	  echo -n $i " " >> ../norm.tab
+	  awk '{sum += $4*($3-$2);} END {print 10000000000/sum}' $i >> ../norm.tab
+      end
+
+      awk '{printf("colTransform 4 %s 0 %g ../normalized/%s\n", $1, $2, $1);}' ../norm.tab > ../norm.csh
+      chmod a+x ../norm.csh
+      mkdir ../normalized
+      ../norm.csh
+
+      # Make bigWigs
+      cd ../normalized
+      foreach i (*.bedGraph)
+	  echo processing $i
+          bedGraphToBigWig $i /cluster/data/hg19/chrom.sizes $i:r.bw
+      end
+
+      # Link into /gbdb
+      ln -s `pwd`/*.bw /gbdb/hg19/bbi
+
+      # Tell database about it
+      foreach i (*.bw)
+          hgBbiDbLink hg19 $i:r /gbdb/hg19/bbi/$i
+      end
+
+      # Clean up
+      cd /hive/data/genomes/hg19/bed/wgEncodeReg/txn
+      rm pooled/*.bedGraph normalized/*.bedGraph
+
+
+
+
+      # At this point actually are done with this track, except for
+      # all the trackDb work on the overlayed histone mod tracks.
+      # The rest is for some coloring stuff that is not yet actually used.
+
+
+      # Do work to figure out how to color cells.  This is based on
+      # hierarchical clustering of wbEncodeUwAffyAllExon. 
+      mkdir -p /hive/data/genomes/hg19/bed/wgEncodeReg/cellColors
+      cd /hive/data/genomes/hg19/bed/wgEncodeReg
+
+      # Start with some alas time consuming data cleanup to get rid of
+      # overlaps - losing about 10% of the data in the process which is
+      # totally ok.
+      mkdir allExon
+      cd allExon
+      mkdir inLinks noOverlap onlyCommon
+      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeUwAffyExonArray/*.gz inLinks
+      cd inLinks
+      foreach i (*.gz)
+          bedRemoveOverlap $i ../noOverlap/$i:r
+      end
+      cd ..
+      
+      # Now make up a file of regions present in all inputs for further data
+      # cleanup
+      bedCommonRegions noOverlap/*.* > commonExons.bed
+      cd noOverlap
+      foreach i (*.broadPeak)
+	  echo processing $i
+          bedRestrictToPositions $i ../commonExons.bed ../onlyCommon/$i
+      end
+      rm -r noOverlap
+
+      # Now pool replicates where possible
+      mdbQuery "select fileName,cell,replicate from hg19 where composite='wgEncodeUwAffyExonArray' and view='SimpleSignal'" -out=ra \
+         | sed 's/\.gz//g' > replicate.ra
+      encodeMergeReplicatesBatch replicate.ra onlyCommon merge.sh merged.ra merged
+      mkdir merged
+      chmod a+x merge.sh
+      merge.sh
+
+      # Resort merged output - somehow gets slightly messed by
+      # encodeMergeReplicates.
+      cd merged
+      foreach i (*.broadPeak)
+          echo sorting $i
+          sort -k 1,1 -k 2,2n $i > tmp
+	  mv tmp $i
+      end
+
+      # Make file that converts fileName to cell
+      raToTab merged.ra -cols=fileName,cell stdout \
+         | sed 's/wgEncode/merged\/wgEncode/' > fileToCell.tab
+
+      # Now build the tree. Took 2.5 minutes
+      ls -1 merged/*.broadPeak > clusterInput.lst
+      regClusterTreeCells rename=fileToCell.tab clusterInput.lst cluster.tree cluster.distances
+
+
+
+
 ########################################################################
-# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie)
+# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie - color change 2/22/11 #2917)
     ssh hgwdev
     mkdir /hive/data/genomes/hg19/bed/dgv.v10
     cd /hive/data/genomes/hg19/bed/dgv.v10
@@ -8933,7 +9174,11 @@ TMPDIR=/scratch/tmp
       http://projects.tcag.ca/variation/downloads/variation.hg19.v10.nov.2010.txt
     wget --timestamping \
       http://projects.tcag.ca/variation/downloads/indel.hg19.v10.nov.2010.txt
-    # shuffle fields into bed8+
+    # shuffle fields into bed9+ w/itemRgb
+    set purple = "200,0,200"
+    set red = "200,0,0"
+    set blue = "0,0,200"
+    set brown = "139,69,19"
     foreach f (*.v10.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
@@ -8943,11 +9188,11 @@ TMPDIR=/scratch/tmp
         $id =~ s/^Variation_//; \
         $start-- unless ($start == 0); \
         $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
-        $rgb = ($varType =~ /^Inv/) ? "200,0,200" : "0,200,0"; \
+        $rgb = ($varType =~ /^Inv/) ? "'$purple'" : "'$brown'"; \
         if ($gain ne "" || $loss ne "") { \
           $gain =~ s/^(NA)? ?$/0/;  $loss =~ s/^(NA)? ?$/0/; \
-          $rgb = "200,0,0" if ($gain > 0 && $loss == 0); \
-          $rgb = "0,0,200" if ($loss > 0 && $gain == 0); \
+          $rgb = "'$blue'" if ($gain > 0 && $loss == 0); \
+          $rgb = "'$red'" if ($loss > 0 && $gain == 0); \
         } \
         $_ = join("\t", $chr, $start, $end, $id, 0, "+", \
                   $start, $start, $rgb, $landmark, $varType, \
@@ -8959,6 +9204,8 @@ TMPDIR=/scratch/tmp
 #Loaded 101605 elements of size 15
       hgsql hg19 -NBe 'select count(distinct(pubMedId)) from dgv;'
 #42
+
+# 2/22/11 color change (Bug #2917): swap blue and red; green -> brown
 
 
 #######################################################################
@@ -13024,10 +13271,14 @@ hgLoadBed hg19 darned allChroms.bed
     # once this has been QAed, will auto-update from genbank scripts
 
 #############################################################################
-# NEW SNP132 (DONE 12/17/10 angie)
-
-    mkdir -p /hive/data/outside/dbSNP/132test/human
-    cd /hive/data/outside/dbSNP/132test/human
+# NEW SNP132 (DONE 3/8/11 angie)
+# 3/8/11: Re-ran snpNcbiToUcsc & reloaded to not count PAR SNPs as multiply mapped
+# Reloaded 1/24/11 to get rid of a couple exceptions that were derived from dbSNP bitfields
+# Previously loaded 1/5/11
+    # New table type snp132Ext, with same columns as snp125 plus exceptions,
+    # allele freqs, and submitter handles, using new script doDbSnp.pl.
+    mkdir -p /hive/data/outside/dbSNP/132/human
+    cd /hive/data/outside/dbSNP/132/human
     # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
     # to find the subdir name to use as orgDir below (human_9606 in this case).
     # Then click into that directory and look for file names like 
@@ -13041,8 +13292,7 @@ build 132
 buildAssembly 37_1
 liftUp /hive/data/genomes/hg19/jkStuff/liftContigs.lft
 EOF
-    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
-      -buildDir /hive/data/outside/dbSNP/132test >& do.log & tail -f do.log
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
 # *** This release contains more than one assembly label.
 # *** Please examine this list in case we need to exclude any of these:
 #
@@ -13062,21 +13312,48 @@ EOF
 
     # Try again with updated config:
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
-      -buildDir /hive/data/outside/dbSNP/132test \
       -continue=loadDbSnp >>& do.log &
     tail -f do.log
 
-    # Needed to tweak hg19-specific liftOver awk; run again from bigJoin but don't load:
-    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
-      -buildDir /hive/data/outside/dbSNP/132test \
-      -continue bigJoin -stop translate >>& do.log &
-    tail -f do.log
-
-    # Load it up with new columns!
-    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
-      -buildDir /hive/data/outside/dbSNP/132test \
-      -continue bigJoin >>& do.log &
-    tail -f do.log
+    # 3/8/11:
+    cd /hive/data/outside/dbSNP/132/human
+    mkdir -p `cat workingDir`
+    cp -p ucscNcbiSnp.bed.gz `cat workingDir`
+    cd `cat workingDir`
+    hgsql hg19 -NBe 'select chrom,chromStart,chromEnd,name from par' > par.bed
+    snpNcbiToUcsc -par=par.bed \
+      -snp132Ext ucscNcbiSnp.bed.gz /hive/data/genomes/hg19/hg19.2bit snp132
+    # No change to snp132Errors.bed; only change to snp132ExceptionDesc.tab was
+    # the MultipleAlignments count; snp132.bed items that lost their MultipleAlignments
+    # exceptions were X & Y PAR matches.
+    gzip snp132.bed snp132ExceptionDesc.tab snp132Errors.bed
+    mv snp132* /hive/data/outside/dbSNP/132/human/
+    cd /hive/data/outside/dbSNP/132/human/
+    # Doh, dbSNP also assigned a weight of 3 to the PAR SNPs, and that is triggering
+    # our snp132NonUnique filter (below).  I sent dbSNP an email about that, and will
+    # tweak weight to 1 where I find a PAR SNP without MultipleAlignments, since I see
+    # it as a bug fix.
+    zcat snp132.bed.gz \
+    | awk -F"\t" 'BEGIN{OFS="\t";} \
+           (($1 == "chrX" && \
+             (($3 > 60000 && $2 < 2699520) || ($3 > 154931043 && $2 < 155260560))) || \
+            ($1 == "chrY" && \
+             (($3 > 10000 && $2 < 2649520) || ($3 > 59034049 && $2 < 59363566)))) && \
+           $18 !~/MultipleAlignments/ {$17 = 1;} \
+           {print;}' > snp132.parWeightTweak.bed
+      wc -l snp132.parWeightTweak.bed
+#33026121 snp132.parWeightTweak.bed
+    # Make sure only the weight has changed:
+    zcat snp132.bed.gz | cut -f 1-16,18-25 > /data/tmp/snp132.weightless.bed
+    cut -f 1-16,18-25 snp132.parWeightTweak.bed > /data/tmp/snp132.parTweak.weightless.bed
+    cmp /data/tmp/snp132*.weightless.bed
+    # No output, good.
+    # Reload snp132 with the tweaked weights:
+    hgLoadBed -tab -onServer -tmpDir=$TMPDIR -allowStartEqualEnd \
+      hg19 snp132 -sqlTable=snp132.sql snp132.parWeightTweak.bed
+    zcat snp132ExceptionDesc.tab.gz \
+    | hgLoadSqlTab hg19 snp132ExceptionDesc $HOME/kent/src/hg/lib/snp125ExceptionDesc.sql stdin
+    gzip snp132.parWeightTweak.bed
 
 
 #############################################################################
@@ -13298,7 +13575,7 @@ grep -i split hg19.unmapped | wc -l
 grep -i part hg19.unmapped | wc -l
 #5
 for table in gadAll gadList; do 
-    echo "create table "$table" select * from hg18."$table | hgsql hg19
+    hgsqldump hg18 $table | hgsql hg19
 done
 
 #############################################################################
@@ -13411,9 +13688,8 @@ wc -l {decipher,rgdQtl,rgdRatQtl}/hg1{8,9}.bed
 ## This isn't very good.  In each case, the unmapped % is over 2%.
 ## DECIPHER: 95.8%, RGD QTL: 88.6%, RGD RAT QTL: 96.2%
 ## update for rgdQtl:
-hgsql hg19 -e "create table rgdQtlLink select * from hg18.rgdQtlLink"
-hgsql hg19 -e "create table rgdRatQtlLink select * from hg18.rgdRatQtlLink"
-
+hgsqldump hg18 rgdQtlLink | hgsql hg19 
+hgsqldump hg18 rgdRatQtlLink | hgsql hg19
 
 #############################################################################
 # FISH CLONES LIFT (DONE, Andy 2010-12-14)
@@ -13703,6 +13979,12 @@ wc -l *.fep.bed
 #  384442 hg19.fosEndPairs.fep.bed
 ## 99.6% lifted
 
+## Now we need the sequences from all_fosends to be loaded into the seq table in hg19
+
+mkdir /gbdb/hg19/fosends
+ln -s /gbdb/hg18/fosends/fosEnds.fa /gbdb/hg19/fosEnds.fromHg18.fa 
+hgLoadSeq hg19 /gbdb/hg19/fosends/fosEnds.fromHg18.fa
+
 #############################################################################
 # DECIPHER LIFT FORM HG18 (DONE 2010-12-27, Andy)
 
@@ -13742,8 +14024,21 @@ mkdir gl
 cd gl/
 echo "show tables like 'chr%_gl'" | hgsql hg18 | tail -n +2 | while read table; do echo "select * from "$table | hgsql hg18 | tail -n +2 | cut -f2- | awk -v chr=${table%_gl} 'BEGIN{OFS="\t"}{print chr, $2, $3, $1, "1000", $4;}'; done > hg18.gl.bed
 liftOver hg18.gl.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.gl.{bed,unmapped}
-awk 'BEGIN{OFS="\t";}{fname=$1"_gl.txt"; print $4, $2, $3, $6 >> fname;}' hg19.gl.bed
-for f in chr*.txt; do hgLoadSqlTab hg19 ${f%.txt} glDbRep.sql $f; done
+hgLoadBed -noLoad hg19 gl hg19.gl.bed
+mv bed.tab hg19.gl.withBin.bed
+awk 'BEGIN{OFS="\t";}{fname=$2"_gl.txt"; print $1, $5, $3, $4, $7 >> fname;}' hg19.gl.withBin.bed
+cd ../
+for tab in `echo show tables like "'chr%_gl'" | hgsql hg19 | tail -n +2`; do 
+  echo select frag from $tab | hgsql hg19 | tail -n +2  >> gl.names; 
+done
+sed 's/_.*//' gl.names | sort | uniq > uniq.gl.names
+cut -f4 hg19.clonePos.bed4p > hg19.clonePos.names
+diff uniq.gl.names hg19.clonePos.names | grep '<' | sed 's/< //' > bad_gl.names
+for f in chr*.txt; do 
+   tab=${f%.txt}
+   grep -v -f ../bad_gl.names $f > ${tab}.update.txt
+   hgLoadSqlTab hg19 ${tab} hg18.chr1_gl.sql ${tab}.update.txt; 
+done
 
 #############################################################################
 # MGI MOUSE QTL LIFT (DONE 2010-12-30, Andy)
@@ -13775,8 +14070,8 @@ hgsql hg18 --skip-column-names -e "select * from HInvGeneMrna" | cut -f2- > hg18
 liftOver -pslT hg18.HInvGeneMrna.psl /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.HInvGeneMrna.{psl,unmapped}
 hgLoadPsl -table=HInvGeneMrna hg19 hg19.HInvGeneMrna.psl
 ## A couple non-positional tables too:
-hgsql hg19 -e "create table knownToHInv select * from hg18.knownToHInv"
-hgsql hg19 -e "create table HInv select * from hg18.HInv"
+hgsqldump hg18 knownToHInv | hgsql hg19
+hgsqldump hg18 HInv | hgsql hg19
 
 #############################################################################
 # SIB ALT-SPLICING LIFT (DONE 2010-12-30, Andy)
@@ -13811,7 +14106,7 @@ cd /hive/data/genomes/hg19/bed/hg18MassiveLift
 mkdir illuminaProbes
 cd illuminaProbes/
 ## Just copy the seq table to hg19
-hgsql hg19 -e "create table illuminaProbesSeq select * from hg18.illuminaProbesSeq"
+hgsqldump hg18 illuminaProbesSeq | hgsql hg19
 ## Two tables: a PSL and a BED:
 hgsql hg18 --skip-column-names -e "select * from illuminaProbes" | cut -f2- > hg18.illuminaProbes.bed
 hgsql hg18 --skip-column-names -e "select * from illuminaProbesAlign" | cut -f2- > hg18.illuminaProbesAlign.psl
@@ -13861,8 +14156,8 @@ hgsql hg18 --skip-column-names -e "select * from oreganno" | cut -f2- > hg18.ore
 liftOver -bedPlus=3 -tab hg18.oreganno.bed3p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.oreganno.{bed3p,unmapped}
 cp ~/kent/src/hg/lib/oreganno.sql .
 hgLoadBed -tab -sqlTable=oreganno.sql hg19 oreganno hg19.oreganno.bed3p
-hgsql hg19 -e "create table oregannoLink select * from hg18.oregannoLink"
-hgsql hg19 -e "create table oregannoAttr select * from hg18.oregannoAttr"
+hgsqldump hg18 oregannoLink | hgsql hg19
+hgsqldump hg18 oregannoAttr | hgsql hg19
 wc -l *.bed3p
 #  23130 hg18.oreganno.bed3p
 #  23118 hg19.oreganno.bed3p
@@ -13961,6 +14256,16 @@ done
 
 for f in *; do gzip $f; echo $f zipped; done
 
+## One more thing: remove overlapping items in lifted bedGraphs:
+
+for f in hg19*.bg.gz; do 
+    pre=${f%.bg.gz};
+    tab=${pre#hg19.};
+    echo $tab;
+    gunzip -c $f | sort -k1,1 -k2,2n | bedGraphLegalize -report=${pre}.bad.txt stdin stdout | gzip -c > ${pre}.legal.bg.gz
+    hgLoadBed -bedGraph=4 hg19 $tab ${pre}.legal.bg.gz
+done
+
 #############################################################################
 # SNP ARRAYS LIFT TO HG19 (DONE 2010-12-31, Andy)
 
@@ -14030,4 +14335,935 @@ for tab in `echo show tables like "'snpArray%Raw'" | hgsql hg18 | tail -n +2`; d
   hgLoadSqlTab hg19 $table hg18.${table}.sql hg19.${table}.txt
 done
 
+############################################################################
+# HAPMAP SNPS AND HAPMAP LD PHASED LIFTS FROM HG18 (Andy)
+
+mkdir /hive/data/genomes/hg19/bed/hg18MassiveLift/hapmapSnps
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift/hapmapSnps
+
+## All the tables in the trackDb entry seem to be bed 6 +
+for table in `grep -B1 "parent hapmapSnps" ~/kent/src/hg/makeDb/trackDb/human/trackDb.ra | grep track | sed 's/.*track\ //'`; do
+   echo $table >> tables.txt;
+done
+for table in `cat tables.txt`; do 
+   hgsql hg18 --skip-column-names -e "select * from "$table | cut -f2- > hg18.${table}.bed6p;
+   liftOver -bedPlus=6 -tab hg18.${table}.bed6p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${table}.{bed6p,unmapped};
+   hgsqldump --no-data --compact hg18 $table | sed '/^SET/d;s/ENGINE.*//' > ${table}.sql
+   hgLoadBed -sqlTable=${table}.sql -tab hg19 $table hg19.${table}.bed6p;
+   wc -l hg1{8,9}.${table}.bed6p >> lifts.txt
+done
+## Also need hapmapLd% and hapmapAllelesSummary
+for table in `hgsql hg18 --skip-column-names -e "show tables like 'hapmapLd%'"` hapmapAllelesSummary; do
+   hgsql hg18 --skip-column-names -e "select * from "$table | cut -f2- > hg18.${table}.bed6p;
+   liftOver -bedPlus=6 -tab hg18.${table}.bed6p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${table}.{bed6p,unmapped};
+   hgsqldump --no-data --compact hg18 $table | sed '/^SET/d;s/ENGINE.*//' > ${table}.sql
+   hgLoadBed -sqlTable=${table}.sql -tab hg19 $table hg19.${table}.bed6p;
+   wc -l hg1{8,9}.${table}.bed6p >> lifts.txt
+done
+## Also need hapmapPhaseIIISummary
+hgsql hg18 --skip-column-names -e "select * from hapmapPhaseIIISummary" | cut -f2- > hg18.hapmapPhaseIIISummary.bed5p
+liftOver -bedPlus=5 hg18.hapmapPhaseIIISummary.bed5p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.hapmapPhaseIIISummary.{bed5p,unmapped}
+hgsqldump --no-data --compact hg18 hapmapPhaseIIISummary | sed '/^SET/d;s/ENGINE.*//' > hapmapPhaseIIISummary.sql
+hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.hapmapPhaseIIISummary.bed5p
+
+
+############################################################################
+# INDEL-BASED CONSERVATION TRACK liftOver to hg19 (DONE - 2010-12-21 - Chin )
+# Data from the Gerton Lunter (gerton.lunter at anat.ox.ac.uk), MRC
+# Functional Genetics Unit, University of Oxford, United Kingdom.
+# Data is from the paper:
+# Lunter G, Ponting CP and Hein J Genome-wide identification of human
+# functional DNA using a neutral indel model. PLoS Comput Biol. 2006
+# Jan;2(1):e5.
+    mkdir -p /hive/data/genomes/hg19/bed/consIndels/data
+    cd /hive/data/genomes/hg19/bed/consIndels
+    cp /hive/data/genomes/hg18/bed/consIndels/README.indels .
+    cp /hive/data/genomes/hg18/bed/consIndels/igs-hg18mm8cf2.zip .
+    # 38 Mb zip file in GFF format. This contains data for hg18
+    # comparing it to mm8 and cf2 (canFam2).
+    unzip igs-hg18mm8cf2.zip
+    mv *.gff ./data/
+    cd /hive/data/genomes/hg19/bed/consIndels/data    
+
+    for f in *.gff
+    do
+       echo processing $f
+       grep -v "track" $f >> ../allNoHeader.tmp
+    done
+
+    cd /hive/data/genomes/hg19/bed/consIndels/	
+    cat allNoHeader.tmp | \
+    awk '{print $1,$4,$5,$6,$9,$10,$11}' > consIndels.bed7p       
+
+    liftOver -bedPlus=3 consIndels.bed7p \
+      /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz \
+      consIndelsHg19Mm8CanFam2.bed7p unMapped
+
+    wc -l *.bed7p
+    #  2603017 consIndels.bed7p
+    #  2602701 consIndelsHg19Mm8CanFam2.bed7p
+    grep -i split unMapped | wc -l
+    # 41
+    grep -i partially unMapped | wc -l
+    # 66
+    rm allNoHeader.tmp
+    rm consIndels.bed7p
+   
+    # strip off the end of the name e.g. IGS0001.1:p=.74; FDR 0.27
+    # so that the name displayed is short - IGS0001.1. The score field
+    # is used to determine colouring and this is calculated from FDR
+    cd /cluster/data/hg19/bed/consIndels
+    cat  consIndelsHg19Mm8CanFam2.bed7p | 
+      awk '{print $1,$2, $3, $5, $4}' | 
+      sed -e 's/:p[=<]\.[0-9][0-9]*;//' \
+       > consIndelsHg19Mm8CanFam2.bed
+
+    # load data
+    cd /hive/data/genomes/hg19/bed/consIndels
+    hgLoadBed hg19 consIndelsHgMmCanFam consIndelsHg19Mm8CanFam2.bed
+    # Reading consIndelsHg19Mm8CanFam2.bed
+    # Loaded 2602701 elements of size 5
+    # Sorted
+    # Creating table definition for consIndelsHgMmCanFam
+    # Saving bed.tab
+    # Loading hg19
+
+    # Get the IDs, posterior probabilities (p) for the segment being
+    # neutral,
+    # and the FDR from the original GFFs for a separate table. Some
+    # items
+    # have p<.001. Can not do Table Browser queries restricting
+    # p to <, =, or > a specified value unless all values are floats.
+    # Contacted the data contributor, Gerton Lunter, and he said it
+    # would be
+    # ok to change all p<.001 to p=0.0005
+    cd /hive/data/genomes/hg19/bed/consIndels/
+    cat consIndelsHg19Mm8CanFam2.bed7p \
+      | awk 'BEGIN {FS="\t"} {print $5, $6, $7}'  \
+      | sed -e 's/:/\t/' \
+      | sed -e 's/p=\./0\./' | sed -e 's/p<\.001/0\.0005/' \
+      | sed -e 's/;\sFDR/\t/' > consIndelsHg19Mm8CanFam2Conf.txt
+
+    # there are no GFF files for the haplotype chroms
+    # Reuse $HOME/kent/src/hg/lib/itemConf.* for the table of identifier,
+    # posterior probability and false discovery rate (FDR).
+    
+    cd /hive/data/genomes/hg19/bed/consIndels
+    hgLoadSqlTab hg19 consIndelsHgMmCanFamConf \
+         $HOME/kent/src/hg/lib/itemConf.sql \
+         consIndelsHg19Mm8CanFam2Conf.txt
+
+    # check that all itesm are in this table.
+    hgsql -N -e 'select distinct(name) from consIndelsHgMmCanFam;' hg19 \
+         | sort > consIndels.names.sort
+    hgsql -N -e 'select distinct(id) from consIndelsHgMmCanFamConf;' hg19 \
+         | sort > consIndels.idsfromConf.sort
+    wc -l *.sort
+    # 2602701 consIndels.idsfromConf.sort
+    # 2602701 consIndels.names.sort
+
+    comm -12 consIndels.names.sort consIndels.idsfromConf.sort | wc -l
+    # 2602701
+    # so all element IDs are in both tables.
+    # cleanup
+    rm ./data/*.bak *.sort
+
+    # add trackDb/human/hg19/trackDb.ra entry and add description that
+    # was written by the data contributor. Add code to hgc.c to display
+    # the posterior probability and the FDR on the details page for
+    # track elements. Gerton Lunter provided a description for the data
+    # on 2007-09-12.
+    # Add hg19 to the "identifier consIndelsId" in all.joiner.
+
+
+############################################################################
+# POLYA_DB TRACK (DONE 2011-01-04 - Chin)
+#
+
+    # Data files and program:
+    # "Bin Tian" <btian@umdnj.edu> provided the following two 
+    # data files at /hive/data/outside/polyA:
+    #   hg18.polyadb.bed  hg19.polyadb.bed
+    # Andy found the SVM program he used before, and in here:
+    #  /hive/data/genomes/hg18/bed/polyaDB/polya_svm_2.2.tar.gz
+    # Copy it to /hive/data/outside/polyA. Unzip the program to 
+    # polya_svm_2.2
+
+    mkdir /hive/data/genomes/hg19/bed/polyaDB
+    cd /hive/data/genomes/hg19/bed/polyaDB
+    cp /hive/data/outside/polyA/hg19.polyadb.bed .
+    hgLoadBed hg19 polyaDb hg19.polyadb.bed
+    # add trackDb entry in human/hg19
+    # polyA.html is at top human level 
+
+    # since hg19.polyadb.bed provided is lifted over from hg18.polyadb.bed,
+    # it it safe to lift polyaPredict table from hg18 to hg19 without re-run
+    # the svm.
+    hgsql -N -e "select * from polyaPredict;" hg18 | \
+      cut -f2-9 > hg18.polyaPredict.bed
+    wc -l hg18.polyaPredict.bed
+    # 52182 hg18.polyaPredict.bed
+
+    liftOver -bedPlus=8 hg18.polyaPredict.bed \
+      /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz \
+      hg19.polyaPredict.bed unMapped.polyaPrdict
+    wc -l hg19.polyaPredict.bed
+    # 52169 hg19.polyaPredict.bed
+    hgLoadBed hg19 polyaPredict hg19.polyaPredict.bed
+    # Reading hg19.polyaPredict.bed
+    # Loaded 52169 elements of size 8
+    # Sorted
+    # Creating table definition for polyaPredict
+    # Saving bed.tab
+    # Loading hg19
+
+
 #############################################################################
+# FILTER SNP132 (DONE 3/8/11 angie)
+# 3/8/11: redone after snp132 with tweaked weights in PARs, see above
+# Previously done 1/24/11 after snp132
+    # Redmine: Track #1684 (SNPs 132 (dbSNP))
+    # Make several tracks that are filtered subsets of snp132:
+    # First, filter out the multiply-aligned and/or weight >1 SNPs [any other exceptions?]
+    cd /hive/data/outside/dbSNP/132/human
+    zcat snp132.parWeightTweak.bed.gz \
+    | perl -we \
+      'open($nonUnique, "| gzip -c > snp132NonUnique.bed.gz") || die; \
+       open($common,    "| gzip -c > snp132Common.bed.gz") || die; \
+       open($patient,   "| gzip -c > snp132Patient.bed.gz") || die; \
+       open($misc,      "| gzip -c > snp132Misc.bed.gz") || die; \
+       while (<>) { \
+         @w = split("\t"); \
+         if ($w[16] > 1 || $w[17] =~ /MultipleAlignments/) { \
+           print $nonUnique $_; \
+         } else { \
+           my ($alleleFreqCount, $nStr, $freqStr) = ($w[20], $w[22], $w[23]); \
+           my @alNs = split(",", $nStr);      die unless scalar(@alNs) == $alleleFreqCount; \
+           my @freqs = split(",", $freqStr);  die unless scalar(@freqs) == $alleleFreqCount; \
+           my ($total2N, $maxAlleleFreq) = (0, 0); \
+           for (my $i = 0;  $i < $alleleFreqCount;  $i++) { \
+             $total2N += $alNs[$i]; \
+             $maxAlleleFreq = $freqs[$i] if ($freqs[$i] > $maxAlleleFreq); \
+           } \
+           if ($alleleFreqCount >= 2 && $total2N >= 4 && $maxAlleleFreq <= 0.99) { \
+             print $common $_; \
+           } elsif($w[24] =~ /clinically-assoc/)  { \
+             print $patient $_; \
+           } else { \
+             print $misc $_; \
+           } \
+         } \
+       } \
+       close($nonUnique);  close($common); \
+       close($patient);  close($misc);'
+    zcat snp132NonUnique.bed.gz | wc -l
+#3568988
+    zcat snp132Common.bed.gz | wc -l
+#14024295
+    zcat snp132Patient.bed.gz | wc -l
+#18084
+    zcat snp132Misc.bed.gz | wc -l
+#15414754
+
+    # Load tables
+    foreach subset (NonUnique Common Patient Misc)
+      hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd -renameSqlTable \
+        hg19 snp132$subset -sqlTable=snp132.sql snp132$subset.bed.gz
+    end
+
+
+#############################################################################
+# BUILD DECIPHER WITH NEW HG19 RELEASE (Done Fan, 2/8/11)
+
+# The decipher track is built by an automated process.  The following two scripts:
+
+#   kent/src/utils/decipher/checkDecipher.sh
+#   kent/src/utils/decipher/buildDecipher 
+
+#are used to automatically detect update on DECIPHER ftp sites and then
+#download and build the decipher track.
+
+# checkDecipher.sh is invoked by a cron job, it will call buildDecipher to build 
+# the decipher track after the new data are downloaded.
+
+#############################################################################
+# NCBI Incident database (DONE - 2011-02-10 - Hiram)
+    # this procedure is run as a cron job in Hiram's account:
+
+    #	43 09 * * * /hive/data/outside/ncbi/incidentDb/runUpdate.sh makeItSo
+
+    # using the two scrips there: runUpdate.sh and update.sh
+    # which are checked into the source tree as files:
+    #	src/hg/utils/automation/ncbiIncidentUpdate.sh
+    #	src/hg/utils/automation/ncbiRunIncidentUpdate.sh
+
+    # they fetch the XML files from NCBI, convert them to SQL text
+    # files, construct a bigBed file, and pushes it to genomewiki if
+    # it is an update from previous
+
+    # the table in the dataBase is: ncbiIncidentDb
+    # which is the URL to the bb file, a single row:
+    # http://genomewiki.ucsc.edu/images/8/85/Hg19.ncbiIncidentDb.bb
+
+#############################################################################
+# UNIGENE/SAGE TRACK (RE-BUILT - 2011-02-22 Fan)
+
+# Create the uniGene alignments
+
+    # Download of the latest UniGene version is now automated by a
+    # cron job -- see /cluster/home/angie/crontab ,
+    # /cluster/home/angie/unigeneVers/unigene.csh .
+
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/022211
+    cd /hive/data/genomes/hg19/bed/uniGene/022211
+
+    set Version = 229
+
+    zcat /hive/data/outside/uniGene/uniGene.$Version/Hs.seq.uniq.gz|\
+    sed -e "s#>.*/ug=#>#; s# /len.*##;" > Hs.seq.uniq.simpleHeader.fa
+
+    ssh swarm
+    set Version = 229
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/022211/run.blat
+    cd /hive/data/genomes/hg19/bed/uniGene/022211/run.blat
+
+    ls -1 /hive/data/genomes/hg19/nib/*.nib > genome.lst
+    ls -1S \
+    /hive/data/genomes/hg19/bed/uniGene/022211/Hs.seq.uniq.simpleHeader.fa \
+      > uniGene.lst
+    
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/x86_64/blat -repeats=lower -minIdentity=95 ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 genome.lst uniGene.lst template.sub para.spec
+    para create para.spec
+    mkdir psl
+    para try
+    para check
+    para push
+
+#Completed: 93 of 93 jobs
+#CPU time in finished jobs:      67404s    1123.41m    18.72h    0.78d  0.002 y
+#IO & Wait Time:                  5838s      97.29m     1.62h    0.07d  0.000 y
+#Average job time:                 788s      13.13m     0.22h    0.01d
+#Longest finished job:            5228s      87.13m     1.45h    0.06d
+#Submission to last job:          5320s      88.67m     1.48h    0.06d
+#Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    pslSort dirs raw.psl tmp psl >& pslSort.log
+    cat raw.psl|\
+    pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
+      stdin hg19.uniGene.pslReps.psl /dev/null
+    
+    gzip raw.psl
+
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/uniGene/022211/run.blat
+
+    hgLoadPsl -table=uniGene_3 hg19 hg19.uniGene.pslReps.psl
+
+    mkdir -p /gbdb/hg19/uniGene
+    cd /gbdb/hg19/uniGene
+
+    rm Hs.seq.uniq.simpleHeader.fa
+    ln -s \
+    /hive/data/genomes/hg19/bed/uniGene/022211/Hs.seq.uniq.simpleHeader.fa \
+    Hs.seq.uniq.simpleHeader.fa
+
+# load the sequence
+
+    hgLoadSeq -replace hg19 /gbdb/hg19/uniGene/Hs.seq.uniq.simpleHeader.fa
+
+##############################################################################
+# Chimp Lastz run (DONE - 2011-02-23 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzPanTro3.2011-02-22
+    cd /hive/data/genomes/hg19/bed/lastzPanTro3.2011-02-22
+    cat << '_EOF_' > DEF
+# human vs chimp
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Chimp PanTro3
+SEQ2_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ2_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzPanTro3.2011-02-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long-running job
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-syntenicNet > do.log 2>&1 &
+    # problems with memk, after recovery, continue chainMerge:
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-continue=chainMerge -syntenicNet > chainMerge.log 2>&1 &
+    #	real    103m34.088s
+
+    cat fb.hg19.chainPanTro3Link.txt 
+    #	2760939621 bases of 2897316137 (95.293%) in intersection
+
+#	running the swap
+    mkdir /hive/data/genomes/panTro3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/panTro3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap /hive/data/genomes/hg19/bed/lastzPanTro3.2011-02-22/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-syntenicNet > swap.log 2>&1 &
+#	real    86m49.706s
+    cat fb.panTro3.chainHg19Link.txt 
+    #	2772816267 bases of 2900529764 (95.597%) in intersection
+
+############################################################################
+# MAKE tfbsConsSites and tfbsConsFactors for TFBS conserved track (DONE weirauch braney 03/07/11)
+# Questions?  braney at soe.ucsc.edu
+
+ssh hgwdev
+mkdir /cluster/data/hg19/bed/tfbsCons
+cd /cluster/data/hg19/bed/tfbsCons
+
+# Define all parameters in 'PARAMS.txt'
+# Define all chromosomes in 'CHROMS.txt'
+# Get tfbsConsUtils.tar.gz from Matt Weirauch with Perl scripts  weirauch@soe.ucsc.edu
+set tarfile=/cluster/data/hg19/bed/tfbsCons/tfbsConsUtils.tar.gz
+tar zxf $tarfile
+
+nice ./getRefseqStats.pl &
+nice ./getBatchQueries.pl &
+
+ssh swarm
+mkdir /cluster/bluearc/braney/tfloc
+mkdir /hive/users/weirauch/tfloc_hg18
+# Copy ./tmp/ctfbs_batch_list.txt to this dir
+# Copy ./scripts/doit to this dir
+para create ctfbs_batch_list.txt
+para try
+para push
+
+# When the run is done (within a day or so), the results will be in individual dirs, one for each chromosome.
+
+nice ./getBedFile.pl &
+
+hgLoadBed -noSort hg19  tfbsConsSites -sqlTable=$HOME/kent/src/hg/lib/tfbsConsSites.sql tfbsConsSites.bed -tab
+hgLoadSqlTab hg19 tfbsConsFactors $HOME/kent/src/hg/lib/tfbsConsFactors.sql tfbsConsFactors.bed
+#########################################################################
+# BUILD OMIM RELATED TRACKS (started 1/13/2011, refined, and finally done 03/08/11 Fan)
+
+ssh hgwdev
+cd /hive/data/genomes/hg19/bed
+mkdir -p omim/03052011
+cd omim/03052011
+
+# download the file morbidmap and genemap from OMIM
+
+wget --timestamping ftp://ftp.ncbi.nih.gov/repository/OMIM/genemap
+wget --timestamping ftp://ftp.ncbi.nih.gov/repository/OMIM/omim.txt.Z
+
+# put mim2gene.txt and mimAV.txt emailed from OMIM here.
+
+cat genemap|sed -e 's/|/\t/g' > genemap.tab
+
+#changed string to blob for disorders1, disorders2, disorders3. 
+hgLoadSqlTab -warn hg19 omimGeneMap ~/kent/src/hg/lib/omimGeneMap.sql genemap.tab
+
+# Build OMIM phenotype class 3 subtrack
+
+hgsql hg19 -e 'drop table mim2gene'
+hgsql hg19 < ~/kent/src/hg/lib/mim2gene.sql
+hgsql hg19 -e 'load data local infile "mim2gene.txt" into table mim2gene ignore 1 lines'
+
+doOmimDisorders hg19 omimDisorderMap.tab
+hgsql hg19 -e "drop table omimDisorderMap"
+hgsql hg19 < ~/kent/src/hg/lib/omimDisorderMap.sql
+hgLoadSqlTab -warn hg19 omimDisorderMap ~/kent/src/hg/lib/omimDisorderMap.sql omimDisorderMap.tab 
+
+# build omimGeneSymbol table
+
+doOmimGeneSymbols hg19 j.out
+cat j.out |sort -u >omimGeneSymbol.tab
+hgLoadSqlTab -warn hg19 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab 
+
+parseOmimDisorder hg19 omimDisorderPhenotype.tab
+hgLoadSqlTab -warn hg19 omimDisorderPhenotype ~/kent/src/hg/lib/omimDisorderPhenotype.sql omimDisorderPhenotype.tab 
+
+doOmimGene2 hg19 j.tmp
+cat j.tmp |sort -u > omimGene2.tab
+
+hgLoadBed hg19 omimGene2 omimGene2.tab
+
+rm j.tmp
+##############################################################
+# build the omimAvSnp track
+
+cd /hive/data/genomes/hg19/bed/omim/03052011
+mkdir av
+cd av
+
+# get the mimAV.txt data file from OMIM
+
+cut -f 1 mimAV.txt >j1
+cut -f 2 mimAV.txt >j2
+cut -f 3  mimAV.txt >j3
+cut -f 4  mimAV.txt >j4
+cut -f 5  mimAV.txt >j5
+
+cat j1 |sed -e 's/\./\t/' >j1.2
+
+cat j4 |sed -e 's/,/\t/' >j4-2
+cut -f 1 j4-2 >j4.1
+cut -f 2 j4-2 >j4.2
+
+paste j1 j1.2 j3 j4 j4.1 j4.2 j5 j2 >omimAv.tab
+
+hgsql hg19 -e 'drop table omimAv'
+hgsql hg19 < ~/src/hg/lib/omimAv.sql
+hgsql hg19 -e 'load data local infile "omimAv.tab" into table omimAv'
+hgsql hg19 -e 'update omimAv set repl2 = rtrim(ltrim(repl2))'
+
+doOmimAv hg19 omimAvRepl.tab  2>j.err
+
+hgsql hg19 -e "drop table omimAvRepl"
+hgsql hg19 < ~/kent/src/hg/lib/omimAvRepl.sql
+hgsql hg19 -e 'load data local infile "omimAvRepl.tab" into table omimAvRepl'
+
+rm j1.2  j1 j2 j3  j4  j4-2  j4.1  j4.2  j5
+##############################################################
+# build the omimLocation track
+
+cd /hive/data/genomes/hg19/bed/omim/03052011
+mkdir location
+cd location
+
+doOmimLocation hg19 omimLocation.bed 2>j.err
+hgLoadBed hg19 omimLocation omimLocation.bed
+
+# Remove all gene entries in omimGene2
+
+hgsql hg19 -N -e \
+'delete from omimLocation where name  in (select name from omimGene2) '
+
+##############################################################
+# BUILD THE TRACK OF IKMC MAPPED TO HUMAN GENOME. (DONE, Fan, 3/15/11)
+
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/hg19/bed/ikmc/110314
+    cd /hive/data/genomes/hg19/bed/ikmc/110314
+
+# recieve  20110301_human.gff.gz from Carol Bult [Carol.Bult@jax.org] and place it under this subdirectory.
+    gzip -d 20110301_human.gff.gz
+
+# build hgIkmc table from raw data file ucschuman.gff (substitue some
+# troublesome chroms in raw data file and remove some records mapped to 'chrUn')
+
+    cat 20110301_human.gff |sort -u \
+    |sed -e 's/chr9|NT_113911.1/chr9/' \
+    |grep -v 'chrUn' \
+    | perl -we \
+      'while (<>) { \
+         s/\r?\n$//; \
+         ($chr, undef, $ctr, $s, $e, undef, undef, undef, $id, $col, $n) = split("\t"); \
+         if ($s eq "") { warn "$_\n";  s/^.*//; next; } # Some lines have no coords. \
+         $col = ($col eq "Yellow") ? "255,215,0" : \
+                ($col eq "Green")  ? "0,240,0" : \
+                ($col eq "Blue")   ? "0,0,200" : "0,0,0"; \
+         $s--; \
+         $id =~ s/^MGI:\d+; (\w+); .*/$1/ || die "Cant parse id \"$id\""; \
+         my $geneId = join("|", $chr, $ctr, "${n}_$id"); \
+         push @{$geneBlks{$geneId}}, [$s, $e, $col] unless $e <= 0; \
+      } \
+      warn "Got " . scalar(keys %geneBlks) . " genes.\n"; \
+      foreach my $geneId (keys %geneBlks) { \
+         my @blks = @{$geneBlks{$geneId}}; \
+         my ($chrom, $center, $name) = split(/\|/, $geneId); \
+         my $blkCount = @blks; \
+         @blks = sort {$a->[0] <=> $b->[0]} @blks; \
+         my $chromStart = $blks[0]->[0]; \
+         my $chromEnd = $blks[$blkCount-1]->[1]; \
+         my $color = $blks[0]->[2]; \
+         my $blkStarts = ""; \
+         my $blkSizes = ""; \
+         foreach my $blk (@blks) { \
+           my ($start, $end, $col) = @{$blk}; \
+           $blkStarts .= ($start - $chromStart) . ","; \
+           $blkSizes  .= ($end - $start) . ","; \
+           if ($col ne $color) { die "Blocks of $geneId of colors $color and $col"; } \
+         } \
+        print join("\t", $chrom, $chromStart, $chromEnd, $name, 0, ".", $chromStart, \
+                   $chromStart, $color, $blkCount, $blkSizes, $blkStarts) . "\n"; \
+      }' \
+    | sort -k 1,1 -k 2n,2n > hgIkmc.bed
+# Got 41936 genes.
+
+# build hgIkmcExtra table
+
+    cat 20110301_human.gff \
+    | grep -v 'chrUn' \
+    | perl -wpe 's/\r?\n$//; @w = split("\t"); \
+      if ($w[3] eq "") { s/^.*//; next; } # Some lines have no coords. \
+      if ($w[4] <= 0) { s/^.*//; next; } # A few lines have end=0. \
+      $w[8] =~ m/^(MGI:\d+); (\w+); (\w.*)/ || die; \
+      ($mgi, $designId, $status) = ($1, $2, $3); \
+      $_ = "$w[10]_$designId\t$mgi,$designId,$w[2],$status\n";' \
+    | sort -u > hgIkmcExtra.tab
+    wc -l hgIkmcExtra.tab
+# 41936 hgIkmcExtra.tab
+
+# load tables
+    hgLoadBed hg19 hgIkmc hgIkmc.bed
+    checkTableCoords -verbose=2 hg19 hgIkmc
+
+    hgLoadSqlTab hg19 hgIkmcExtra $HOME/kent/src/hg/lib/genericAlias.sql hgIkmcExtra.tab
+
+#########################################################################
+# LOAD ACEMBLY (DONE 2011-03-14 - Chin)
+    mkdir /hive/data/outside/acembly
+    cd /hive/data/outside/acembly
+    wget --timestamping \
+ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_37_Aug10.human.genes/AceView.ncbi_37.genes_gff.gff.gz
+    wget --timestamping \
+ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_37_Aug10.human.genes/AceView.ncbi_37.good_proteins_peptide.fasta.gz
+
+    mkdir /cluster/data/hg19/bed/acembly
+    cd /cluster/data/hg19/bed/acembly
+    cp -p /hive/data/outside/acembly/AceView.ncbi_37.genes_gff.gff.gz .
+    cp -p /hive/data/outside/acembly/AceView.ncbi_37.good_proteins_peptide.fasta.gz .
+    gzip -d AceView.ncbi_37.genes_gff.gff.gz
+    gzip -d AceView.ncbi_37.good_proteins_peptide.fasta.gz
+
+    # If the result of this command is > 0, then some lines have end <
+    # start
+    # and need to be fixed:
+    awk '$5 < $4 {print;}' AceView.ncbi_37.genes_gff.gff | wc -l
+    # 0
+
+    # Filter out empty lines, lines where the product_id has a stray
+    # newline before it, and $chr|Hs# IDs that don't appear liftable.
+    # (Note: the new gff does not have these two cases anymore.) 
+    # Add 'chr' prefix to chrom number at field 1
+    egrep -h -v '^(| ?product_id.*|..?\|Hs.*)$' AceView.ncbi_37.genes_gff.gff \
+    | sed -e 's/^/chr/;' \
+      > acembly.gff
+    # fixed the chrmito prefix to chrM
+    mv acembly.gff acembly.tmp
+    cat acembly.tmp | sed -e 's/^chrmito/chrM/;' > acembly.gff 
+    
+
+    # Extract annotation classes from original gff:
+    cat AceView.ncbi_37.genes_gff.gff | awk  '{print $12}' | sort | uniq
+    # cDNA_supported;
+    # Note: version 37 gff have only one gene type - cDNA_supported;
+    # Per Danielle and Jean request, use pink to display them. 	
+    # the following replace become no-op.
+    egrep -h -v '^(| ?product_id.*|..?\|Hs.*)$' AceView.ncbi_37.genes_gff.gff \
+    | perl -wpe 's/^.*Gene_type (\w+); transcript_id (\S+);.*/$2\t$1/; \
+                 s/Cloud$/cloud/ || s/Spliced_gene$/spliced_gene/ || \
+                   die "Unrecognized class/Gene_type:\n$_\n";' \
+    | sort -u \
+      > acemblyClass.tab
+    # Useless use of single ref constructor in void context at -e line 2.
+    # warning was issued, however it is harmless.
+
+
+    # Some gff transcript_id's end in -unspliced (no intron), but the
+    # corresponding protein fasta IDs to not have that suffix.  We need
+    # them to match, so add where necessary.
+    # Use perl to make a perl script to add -unspliced to protein IDs
+    # where necessary:
+    grep unspliced acemblyClass.tab | wc -l
+    # 54180
+    egrep -h -v '^(| ?product_id.*|..?\|Hs.*)$'  AceView.ncbi_37.genes_gff.gff \
+    | perl -wpe 's@^.*transcript_id (\S+)-unspliced;.*$@\$unsp{"$1"} = 1;@ || s/^.*\n$//;' \
+    | sort -u \
+      > addUnspliced.pl
+    wc -l addUnspliced.pl
+    # 54180 addUnspliced.pl
+    cat >> addUnspliced.pl <<'_EOF_'
+while (<>) {
+  if (/^>(\S+)$/) {
+    if ($unsp{$1}) {
+      s/^>(\S+)/>$1-unspliced/;
+    }
+  }
+  print;
+}
+'_EOF_'
+    # << emacs
+
+    # Add -unspliced suffix to protein IDs where necessary, and pare
+    # down
+    # proteins to just the ones that we have transcripts for:
+    awk '{print $1;}' acemblyClass.tab   > transcriptNames.txt
+    perl addUnspliced.pl AceView.ncbi_37.good_proteins_peptide.fasta \
+    | faSomeRecords stdin transcriptNames.txt acemblyPep.fa
+    grep unspliced acemblyPep.fa | wc -l
+    # 31956
+    # Danielle Thierry-Mieg explained that noncoding genes are included
+    # so
+    # the number of proteins can be smaller than the number of
+    # transcripts.
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/hg19/bed/acembly
+    ldHgGene -gtf hg19 acembly acembly.gff
+    # Reading acembly.gff
+    # Read 259440 transcripts in 3870073 lines in 1 files
+    #   259440 groups 25 seqs 1 sources 5 feature types
+    # 259440 gene predictions
+
+    hgLoadSqlTab hg19 acemblyClass ~/kent/src/hg/lib/acemblyClass.sql \
+      acemblyClass.tab
+    # Scanning through 1 files
+    hgPepPred hg19 generic acemblyPep acemblyPep.fa
+    # rm acemblyPep.tab
+    runJoiner.csh hg19 acembly
+    # found identifiers:
+    # acemblyName
+    # Checking keys on database hg19
+    #  hg19.acemblyPep.name - hits 187692 of 187692 ok
+    #  hg19.acemblyClass.name - hits 259440 of 259440 ok
+    # running -times flag
+
+
+#############################################################################
+# Affy Exon track (DONE 2011-03-08 - Melissa Cline)
+
+# scripts/splitAffyExonBeds.py (below)
+#!/usr/bin/env python
+
+import fileinput
+import re
+import string
+
+filehandle = None
+for line in fileinput.input():
+    if re.search("track\tname", line):
+        if filehandle != None:
+            filehandle.close()
+        filename = fileinput.filename()
+        filename = string.replace(filename, "hg19-bed", "hg19-split-bed")
+        if re.search("gene level exon", line):
+            filename = string.replace(filename, ".bed", ".exon.bed")
+        elif re.search("gene probeset", line):
+            filename = string.replace(filename, ".bed", ".geneProbeset.bed")
+        elif re.search("exon probeset", line):
+            filename = string.replace(filename, ".bed", ".probeset.bed")
+        elif re.search("probe", line):
+            filename = string.replace(filename, ".bed", ".probe.bed")
+        filehandle = open(filename, 'w')
+    filehandle.write(line)
+        
+
+# scripts/mergeAcrossChromosomes.bash (below)
+#!/usr/bin/env bash
+
+
+PATHNAME="/hive/users/cline/Affy/"
+tail -n +2 $PATHNAME/Affy-HuEx-hg19-split-bed/HuEx-1_0-st-v2.hg19.*.$1.bed \
+  |grep -v "==>" > $PATHNAME/mergedBeds/AffyHuEx.$1.bed 
+
+
+# scripts/splitByProbesetType.py (below)
+#!/usr/bin/env python
+from optparse import OptionParser
+import re
+
+parser = OptionParser()
+parser.add_option("-s", "--supplementalData", dest="supplementalData",
+                  default="supportingAnnotations/HuEx-1_0-st-v2.na31.hg19.probeset.csv")
+parser.add_option("-b", "--bedData", dest="bedData", default="noOverlaps/AffyHuEx.probeset.overlapsMerged.bed")
+(parameters, args) = parser.parse_args()
+coreProbesets = dict()
+extendedProbesets = dict()
+fullProbesets = dict()
+ambiguousProbesets = dict()
+freeProbesets = dict()
+supplementalFile = open(parameters.supplementalData)
+for line in supplementalFile:
+    tokens = line.split(",")
+    probesetId = re.sub("\"", "", tokens[0])
+    if re.search("core", line):
+        coreProbesets[probesetId] = 1
+    elif re.search("extended", line):
+        extendedProbesets[probesetId] = 1
+    elif re.search("full", line):
+        fullProbesets[probesetId] = 1
+    elif re.search("ambiguous", line):
+        ambiguousProbesets[probesetId] = 1
+    elif re.search("free", line):
+        freeProbesets[probesetId] = 1
+supplementalFile.close()
+coreProbesetsOutfile = re.sub("noOverlaps", "partitioned2",
+                              re.sub("overlapsMerged", "core.overlapsMerged",
+                                     parameters.bedData))
+coreProbesetsOut = open(coreProbesetsOutfile, 'w')
+extendedProbesetsOutfile = re.sub("noOverlaps", "partitioned2",
+                                  re.sub("overlapsMerged",
+                                         "extended.overlapsMerged",
+                                         parameters.bedData))
+extendedProbesetsOut = open(extendedProbesetsOutfile, 'w')
+fullProbesetsOutfile = re.sub("noOverlaps", "partitioned2",
+                              re.sub("overlapsMerged", "full.overlapsMerged",
+                                     parameters.bedData))
+fullProbesetsOut = open(fullProbesetsOutfile, 'w')
+ambiguousProbesetsOutfile = re.sub("noOverlaps", "partitioned2",
+                                   re.sub("overlapsMerged", "ambiguous.overlapsMerged",
+                                          parameters.bedData))
+ambiguousProbesetsOut = open(ambiguousProbesetsOutfile, 'w')
+freeProbesetsOutfile = re.sub("noOverlaps", "partitioned2",
+                                   re.sub("overlapsMerged", "free.overlapsMerged",
+                                          parameters.bedData))
+freeProbesetsOut = open(freeProbesetsOutfile, 'w')
+bedInput = open(parameters.bedData)
+for line in bedInput:
+    tokens = line.split()
+    if len(tokens) < 3:
+        print "error: misformed line", line
+    else:
+        name = line.split()[3]
+        (gene,probeset) = name.split("_")
+        if coreProbesets.has_key(probeset):
+            coreProbesetsOut.write(line)
+        elif extendedProbesets.has_key(probeset):
+            extendedProbesetsOut.write(line)
+        elif fullProbesets.has_key(probeset):
+            fullProbesetsOut.write(line)
+        elif ambiguousProbesets.has_key(probeset):
+            ambiguousProbesetsOut.write(line)
+        elif freeProbesets.has_key(probeset):
+            freeProbesetsOut.write(line)
+        else:
+            print "warning: orphan line", line
+
+
+# 1. Given data from the vendor, one file per chromosome with four types of
+# bed entries per file (one file per chromosome), split them into four bed 
+# files (yielding four bed files per chromosome).
+ls Affy-HuEx-hg19-bed/*bed \
+    | awk '{ print "scripts/splitAffyExonBeds.py", $1 }' |bash
+ 
+# 2. Given a subdirectory with four bed files per chromosome for probeset
+# and probe bed files, merge them into one bed file for probeset data
+# and one bed file per probe data.  From here, we are ignoring the exon
+# and gene probeset data.
+scripts/mergeAcrossChromosomes.bash probeset
+scripts/mergeAcrossChromosomes.bash probe
+
+# 3. There is an issue that the probeset data contains overlapping blocks.
+# Fix this with bedMergeOverlappingBlocks, written by Andy Pohl.  Note that
+# the probe data does not contain overlapping blocks.
+bedMergeOverlappingBlocks mergedBeds/affyHuEx.probeset.bed \
+    noOverlaps/AffyHuEx.probeset.overlapsMerged.bed
+cp mergedBeds/AffyHuEx.probe.bed noOverlaps/AffyHuEx.probe.overlapsMerged.bed
+
+# 4. There are five different types of probesets, each of which has a different
+# significance to the user.  These should best be represented as five different
+# subtracks of a parent track (one parent track for probesets, and one for probes).
+# Split the data by probeset type.  Note that the same process can be applied to
+# both the probeset and probe data, because the probe data is represented by the
+# probeset ID rather than by a distinct probe ID.
+scripts/splitByProbesetType.py \
+    -s supportingAnnotations/HuEx-1_0-st-v2.na31.hg19.probeset.csv \
+    -p noOverlaps/AffyHuEx.probe.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbeAmbiguous \
+    partitioned2/AffyHuEx.probe.ambiguous.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbeCore \
+    partitioned2/AffyHuEx.probe.core.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbeExtended \
+    partitioned2/AffyHuEx.probe.extended.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbeFree \
+    partitioned2/AffyHuEx.probe.free.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbeFull \
+    partitioned2/AffyHuEx.probe.full.overlapsMerged.bed
+
+scripts/splitByProbesetType.py \
+    -s supportingAnnotations/HuEx-1_0-st-v2.na31.hg19.probeset.csv \
+    -p noOverlaps/AffyHuEx.probeset.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbesetAmbiguous \
+    partitioned2/AffyHuEx.probeset.ambiguous.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbesetCore \
+    partitioned2/AffyHuEx.probeset.core.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbesetExtended \
+    partitioned2/AffyHuEx.probeset.extended.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbesetFree \
+    partitioned2/AffyHuEx.probeset.free.overlapsMerged.bed
+hgLoadBed hg19 affyExonProbesetFull \
+    partitioned2/AffyHuEx.probeset.full.overlapsMerged.bed
+
+
+#########################################################################
+# LASTZ Turkey MelGal1 (DONE - 2011-03-28 - Chin)
+    mkdir /hive/data/genomes/hg19/bed/lastzMelGal1.2011-03-28
+    cd /hive/data/genomes/hg19/bed/lastzMelGal1.2011-03-28
+
+    cat << '_EOF_' > DEF
+# Turkey vs Human
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Turkey melGal1 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzMelGal1.2011-03-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+    # real    100m33.646s
+    cat fb.hg19.chainMelGal1Link.txt
+    #   76647912 bases of 2897316137 (2.645%) in intersection
+
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzMelGal1.2011-03-28/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    6m51.280s
+    cat fb.melGal1.chainHg19Link.txt
+    #   62120143 bases of 935922386 (6.637%) in intersection
+
+#############################################################################
+

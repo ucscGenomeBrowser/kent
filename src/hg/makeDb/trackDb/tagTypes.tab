@@ -69,6 +69,7 @@ db *
 dbProfile *
 dbTrackType customTracks
 defaultGeneTracks bed
+defaultMaxWeight bed
 defaultLinkedTables genePred
 dimensionAchecked *
 dimensionBchecked *
@@ -85,7 +86,7 @@ dragAndDrop *
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred
-exonArrows genePred bed
+exonArrows genePred bed broadPeak
 exonArrowsDense bed
 expDrawExons expRatio
 expProbeTable expRatio
@@ -93,6 +94,7 @@ expScale bed expRatio
 expStep bed expRatio
 expTable bed expRatio
 extTable *
+extraFields bed
 fieldCount customTracks
 filePos *
 fileSortOrder *
@@ -141,6 +143,7 @@ gClass_Validated_pseudogene genePred
 gClass_Validated_unprocessed_pseudogene genePred
 gClass_main genePred
 gClass_putative genePred
+gClass_cDNA_supported genePred
 gainColor bed
 geneClasses bed genePred
 genome customTracks
@@ -169,6 +172,7 @@ interTableKind encodeFiveC
 #inputTracksSubgroupSelect bed factorSource
 inputTracksSubgroupDisplay bed factorSource
 inputTrackTable bed factorSource
+inputTableFieldDisplay bed factorSource
 intronGap psl genePred
 irows wigMaf
 itemAttrTbl genePred
@@ -177,7 +181,7 @@ itemClassTbl bed genePred
 itemCount customTracks
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
-itemRgb bedDetail bedGraph bed
+itemRgb bedDetail bedGraph bed bedLogR
 linesAt chromGraph
 longLabel *
 longlabel genePred
@@ -196,21 +200,23 @@ maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak
-maxWindowToDraw bam rmsk bed narrowPeak broadPeak
-maxWindowToQuery bigWig bed
+maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig bedlogR genepred
+maxWindowToQuery bigWig bed bedlogR
 metadata *
 mgiUrl bed
 mgiUrlLabel bed
-minGrayLevel bed broadPeak narrowPeak
+minGrayLevel bed broadPeak narrowPeak bedLogR
 minLimit *
 minMax chromGraph
 minScore bed broadPeak narrowPeak
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
+nextExonText *
 nextItemButton *
 noColorTag bam
 noInherit *
-noScoreFilter bedGraph bed
+nonBedFieldsLabel bigBed
+noScoreFilter bedGraph bed bedLogR gvf
 notNCBI bed
 ococci bed
 offset customTracks
@@ -222,8 +228,9 @@ origTrackLine customTracks
 otherDb *
 otherDbTable bed
 otherOrg netAlign chain
-pValueFilter bed narrowPeak broadPeak
-pValueFilterLimits bed narrowPeak broadPeak
+*Filter bed narrowPeak broadPeak
+*FilterLimits bed narrowPeak broadPeak
+*FilterByRange bed narrowPeak broadPeak
 pairEndsByName bam
 pairedEndUrlFormat bed
 pairwise wigMaf
@@ -237,6 +244,7 @@ pgDbLink bed
 pgPolyphenPredTab bed
 pgSiftPredTab bed
 pred psl
+prevExonText *
 priority *
 private bed
 pslSequence psl
@@ -263,12 +271,12 @@ sGroup_vertebrate wigMaf
 sGroup_worm wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Nematode wigMaf
-scoreFilter broadPeak narrowPeak bed
-scoreFilterByRange bigBed bed
-scoreFilterLimits broadPeak narrowPeak bed
-scoreFilterMax bed
-scoreMax bed
-scoreMin broadPeak narrowPeak bed
+scoreFilter broadPeak narrowPeak bed interaction bedlogR
+scoreFilterByRange bigBed bed 
+scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR
+scoreFilterMax bed bedlogR
+scoreMax bed bedlogR interaction
+scoreMin broadPeak narrowPeak bed bedlogR interaction
 searchMethod bed
 searchType bed
 selectSubject psl
@@ -285,7 +293,7 @@ showSubtrackColorOnUi *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
 signalFilter bed narrowPeak broadPeak
 signalFilterLimits bed narrowPeak broadPeak
-smoothingWindow wig bed5FloatScore bedGraph
+smoothingWindow wig bed5FloatScore bedGraph bigWig
 snpExceptions bed
 snpExceptionDesc bed
 snpSeq bed

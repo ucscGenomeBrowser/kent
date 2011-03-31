@@ -115,8 +115,13 @@ INLINE boolean baseColorCanDraw(struct track *tg)
 {
 return (tg->drawItems == linkedFeaturesDraw || tg->drawItems == linkedFeaturesAverageDense ||
 	tg->drawItems == linkedFeaturesAverageDenseOrientEst ||
+#ifdef USE_BAM
 	tg->drawItems == linkedFeaturesSeriesDraw ||
+	tg->drawItems == bamLinkedFeaturesDraw ||
 	tg->drawItems == bamLinkedFeaturesSeriesDraw);
+#else
+	tg->drawItems == linkedFeaturesSeriesDraw);
+#endif // USE_BAM
 
 }
 

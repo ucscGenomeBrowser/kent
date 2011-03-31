@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = paraNodeStart.o
 
 paraNodeStart: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ../bin/paraNodeStart $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o ../bin/paraNodeStart $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a ${L}
 	${STRIP} ../bin/paraNodeStart${EXE}
 
 clean::

@@ -15,8 +15,13 @@ void usage()
 errAbort(
   "regClusterMakeTableOfTables - Make up a table of tables for regCluster program\n"
   "usage:\n"
-  "   regClusterMakeTableOfTables fileListFile output\n"
-  "Where the fileListFile is a list of narrowPeak format files.\n"
+  "   regClusterMakeTableOfTables type fileListFile output\n"
+  "Where the fileListFile is a list of narrowPeak format files,\n"
+  "and type is one of:\n"
+  "        ans01 - Anshul's uniform peaks from Jan 2011 ENCODE freeze\n"
+  "        uw01 - From UW DNase file names for hg18\n"
+  "        uw02 - From UW DNase file names for hg19 as of Jan 2011 freeze\n"
+  "        enh01 - From enhancer picks\n"
   );
 }
 
@@ -98,40 +103,170 @@ if (highEnd > maxVal) highEnd = maxVal;
 return 1000.0/highEnd;
 }
 
-void makeTableFromFileNames(char *input, char *output)
-/* makeTableFromFileNames - Make up a table of tables for regCluster from
- * input that is a list of file names that include metadata. */
+void uw01MetaOut(FILE *f, char *midString)
+/* uw02MetaOut - Version of function used for UW dnase on hg18. */
+{
+fprintf(f, "\t%s", midString);
+}
+
+void uw02MetaOut(FILE *f, char *midString)
+/* uw02MetaOut - Version of function used for UW dnase on hg19. */
+{
+/* At this point midString has format CellPkRep## - parse out Cell and ## */
+char *pattern = "PkRep";
+int patLen = strlen(pattern);
+char *patPos = stringIn(pattern, midString);
+if (patPos == NULL)
+    errAbort("Can't find %s in %s\n", pattern, midString);
+char *cell = cloneStringZ(midString, patPos - midString);
+char *rep = cloneString(patPos + patLen);
+
+/* Sometimes rep will have a 'V1' or 'V2' after it. Chop it off. */
+char *v = strchr(rep, 'V');
+if (v != NULL)
+    *v = 0;
+
+fprintf(f, "\t%s\t%s", cell, rep);
+}
+
+char *findKnownPrefix(char *s, char **prefixes)
+/* If s starts with one of the NULL terminated array of prefixes, return that
+ * prefix, otherwise return NULL. */
+{
+char *p;
+while ((p = *prefixes++) != NULL)
+    if (startsWith(p, s))
+        break;
+return p;
+}
+
+char *firstUpper(char *s)
+/* Return pointer to first upper case letter in string */
+{
+for (;;)
+    {
+    char c = *s;
+    if (c == 0)
+        return NULL;
+    else if (isupper(c))
+        return s;
+    ++s;
+    }
+}
+
+void printBetween(FILE *f, char *s, char *e)
+/* Print out a tab, and then from s until but not including e */
+{
+fputc('\t', f);
+while (s < e)
+    fputc(*s++, f);
+}
+
+void ans01MetaOut(FILE *f, char *midString)
+/* Version of function used for Anshul's TFBS uniform peak calling ENCODE Jan 2011 freeze. */
+{
+char *pattern = "0_VS_";
+char *patPos = stringIn(pattern, midString);
+if (patPos == NULL)
+    errAbort("Can't find %s in %s\n", pattern, midString);
+*patPos = 0;
+
+fprintf(f, "\twgEncode%s1", midString);
+}
+
+void oldAns01MetaOut(FILE *f, char *midString)
+/* Version of function used for Anshul's TFBS uniform peak calling ENCODE Jan 2011 freeze. */
+{
+/* Truncate at _VS_ */
+char *pattern = "AlnRep0_VS_";
+char *patPos = stringIn(pattern, midString);
+if (patPos == NULL)
+    errAbort("Can't find %s in %s\n", pattern, midString);
+*patPos = 0;
+
+/* Get prefix from known list. */
+static char *knownPrefixes[] = {"BroadHistone", "HaibTfbs", "OpenChromChip", 
+				"SydhTfbs", "UchicagoTfbs", "UwTfbs", NULL};
+char *prefix = findKnownPrefix(midString, knownPrefixes);
+if (prefix == NULL)
+    errAbort("Don't recognize composite prefix for %s", midString);
+char *cellStart = midString + strlen(prefix);
+
+/* Rely on camelCasing to find antibody */
+char *abStart = firstUpper(cellStart+1);
+if (abStart == NULL)
+    errAbort("Can't find antibody in %s", cellStart);
+char *cell = cloneStringZ(cellStart, abStart - cellStart);
+
+/* Rely on camelCasing to find treatment */
+char *treatStart = firstUpper(abStart+1);
+char *ab = NULL;
+if (treatStart == NULL)
+    {
+    if (sameString(prefix, "OpenChromChip"))
+	{
+        treatStart = "Std";
+	ab = cloneString(abStart);
+	}
+    else
+	errAbort("Can't find treatment in %s", midString);
+    }
+else
+    ab = cloneStringZ(abStart, treatStart - abStart);
+
+fprintf(f, "\t%s", cell);
+fprintf(f, "\t%s", ab);
+fprintf(f, "\t%s", treatStart);
+fprintf(f, "\t%s", prefix);
+}
+
+void enh01MetaOut(FILE *f, char *midString)
+/* Version of function used for Anshul's TFBS uniform peak calling ENCODE Jan 2011 freeze. */
+{
+fprintf(f, "\t%s", midString);
+}
+
+
+void regClusterMakeTableOfTables(char *type, char *input, char *output)
+/* regClusterMakeTableOfTables - Make up a table of tables for regCluster program. */
 {
 FILE *f = mustOpen(output, "w");
 struct slName *in, *inList = readAllLines(input);
+/* Generally we'll have a bunch of file names that all start and/or end with the same
+ * thing.  This loop will isolate out the bits that vary, and then call a type-specific
+ * routine to output the metadata columns from the middle parts. */
 int commonPrefix = commonPrefixSize(inList);
 int commonSuffix = commonSuffixSize(inList);
 int scoreColIx = 6;
 for (in = inList; in != NULL; in = in->next)
     {
-    fprintf(f, "%s\t0\t1\t2\tscoreColIx\t", in->name);
-    fprintf(f, "%g\t", calcNormScoreFactor(in->name, scoreColIx));
+    fprintf(f, "%s\t0\t1\t2\t%d\t", in->name, scoreColIx);
+    fprintf(f, "%g", calcNormScoreFactor(in->name, scoreColIx));
     char *s = in->name;
     int len = strlen(s);
     char *midString = cloneStringZ(s+commonPrefix, len - commonPrefix - commonSuffix);
-    fprintf(f, "%s\n", midString);
+    if (sameString(type, "uw01"))
+	uw01MetaOut(f, midString);
+    else if (sameString(type, "uw02"))
+	uw02MetaOut(f, midString);
+    else if (sameString(type, "ans01"))
+	ans01MetaOut(f, midString);
+    else if (sameString(type, "enh01"))
+        enh01MetaOut(f, midString);
+    else
+	errAbort("Unknown type '%s' in first command line parameter.", type);
     freez(&midString);
+    fprintf(f, "\n");
     }
 carefulClose(&f);
-}
-
-void regClusterMakeTableOfTables(char *input, char *output)
-/* regClusterMakeTableOfTables - Make up a table of tables for regCluster program. */
-{
-makeTableFromFileNames(input, output);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-regClusterMakeTableOfTables(argv[1], argv[2]);
+regClusterMakeTableOfTables(argv[1], argv[2], argv[3]);
 return 0;
 }

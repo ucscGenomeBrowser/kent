@@ -252,7 +252,7 @@ done
     cut -f1 ../../chrom.sizes > chr.list
     cat << '_EOF_' > template
 #LOOP
-./runOne $(root1) {check exists results/$(root1).cpg}
+./runOne $(root1) {check out exists results/$(root1).cpg}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
@@ -1392,15 +1392,50 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/calJac3/calJac3.2bit $outMaf
     #    16590205 total
     rm multiz13way*.tab
 
-    # create some downloads
-    mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf
-    cd /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf
-    time cp -p ../../anno/maf/*.maf .
-    #   real    37m48.902s
-    time gzip --rsyncable *.maf
-    #   real    64m55.554s
-    time md5sum *.gz > md5sum.txt
-    #   real    2m41.707s
+
+    # re-do the multiz13way.maf (DONE 2011-02-23 - Chin)
+    ssh hgwdev
+    rm -fr /gbdb/calJac3/multiz13way/maf
+    mkdir /gbdb/calJac3/multiz13way/maf
+    cd /hive/data/genomes/calJac3/bed/multiz13way/anno
+    grep "^##maf version" maf/000.maf \
+        | sort -u > calJac3.anno.13way.maf
+    find ./maf -type f  -name "*.maf" | while read F
+do
+    grep -v -h "^#" "${F}"
+done >> calJac3.anno.13way.maf
+    echo "##eof maf" >> calJac3.anno.13way.maf
+
+    mkdir -p /gbdb/calJac3/multiz13way/anno
+    ln -s `pwd`/calJac3.anno.13way.maf \
+                /gbdb/calJac3/multiz13way/anno/multiz13way.maf
+    #   by loading this into the table multiz13way, it will replace the
+    #   previously loaded table with the unannotated mafs
+    #   huge temp files are made, do them on local disk
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/calJac3/multiz13way/anno \
+                calJac3 multiz13way
+    # Indexing and tabulating /gbdb/calJac3/multiz13way/anno/multiz13way.maf
+    # Loading multiz13way into database
+    # Loaded 14259674 mafs in 1 files from /gbdb/calJac3/multiz13way/anno
+    # 
+    # real    25m49.362s
+
+    hgLoadMafSummary calJac3 -minSize=30000 -mergeGap=1500 \
+        -maxSize=200000  multiz13waySummary \
+            /gbdb/calJac3/multiz13way/anno/multiz13way.maf
+    # Loading into calJac3 table multiz13waySummary...
+    # Loading complete
+
+    #   by loading this into the table multiz13waySummary, it will
+    #   replace
+    #   the previously loaded table with the unannotated mafs
+    #   remove the multiz13way*.tab files in this /scratch/tmp directory
+    rm multiz13way*.tab
+    #   And, you can remove the previously loaded non-annotated maf file
+    #   link:
+    rm /gbdb/calJac3/multiz13way/maf/multiz13way.maf
+    rmdir /gbdb/calJac3/multiz13way/maf
 
 #####################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2010-04-01 - Hiram)
@@ -1675,21 +1710,29 @@ do
         | gzip -c > upstream${S}.maf.gz
     echo "done upstream${S}.maf.gz"
 done
+    # maf files
+    cp -p /hive/data/genomes/calJac3/bed/multiz13way/run/calJac3.13way.maf .
+    gzip calJac3.13way.maf
+    # mv up one level to downloads
+    mv *.* ../
+    cd ..
+    rm -r maf
 
     # download stuff
-    mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/multiz13way/maf
-    cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/multiz13way/maf
-    ln -s /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf/up*.gz .
-    md5sum up*.gz >> md5sum.txt
-
-    cp /hive/data/genomes/calJac3/bed/multiz13way/13way.nh \
-       /hive/data/genomes/calJac3/bed/multiz13way/downloads/.
-
-    cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/multiz13way
-    ln -s /hive/data/genomes/calJac3/bed/multiz13way/downloads/13way.nh .
+    cd /hive/data/genomes/calJac3/bed/multiz13way
+    /cluster/bin/phast/tree_doctor --rename \
+"calJac3->marmoset; hg19->human; papHam1->Baboon; otoGar1->Bushbaby; panTro2->Chimp; canFam2->Dog; gorGor2->Gorilla; mm9->Mouse; monDom5->Opossum; ponAbe2->Orangutan; rheMac2->Rhesus; micMur1->Mouse lemur; tarSyr1->Tarsier" \
+    13way.nh > commonNames.13way.nh
+    cp 13way.nh downloads/.
+    cp commonNames.13way.nh downloads/.
     # create /hive/data/genomes/calJac3/bed/multiz13way/downloads/README.txt
+    md5sum * > md5sum.txt
+
+    mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/multiz13way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/multiz13way
+    ln -s /hive/data/genomes/calJac3/bed/multiz13way/downloads/*.gz .
+    ln -s /hive/data/genomes/calJac3/bed/multiz13way/downloads/*.nh .
     ln -s /hive/data/genomes/calJac3/bed/multiz13way/downloads/README.txt .
-    md5sum 13way.nh > md5sum.txt
 
 #########################################################################
 # Phylogenetic tree from 13-way (DONE 2010-05-28 - Chin)
@@ -1817,7 +1860,7 @@ rm -f $c.gp $c.maf $c.ss
 
 #############################################################################
 # phastCons 13-way (DONE 2010-08-11 - Chin)
-#   rerun with 2010-08-09 version of phast suite (working 2010-08-11 - Chin
+#   rerun with 2010-08-09 version of phast suite (DONE 2010-08-11 - Chin
     #   was unable to split the full chrom MAF files, now working on the
     #   maf files as they were split up during multiz
     
@@ -2234,7 +2277,7 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
 
 
 #########################################################################
-# phyloP conservation for 13-way (working 2010-08-31 - Chin)
+# phyloP conservation for 13-way (Done 2010-08-31 - Chin)
 #
 #
     # split SS files into 1M chunks, this business needs smaller files
@@ -2483,7 +2526,6 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/phyloP13way/README.txt .
      md5sum all.mod >> md5sum.txt
      md5sum README.txt  >> md5sum.txt
-XXXX - 2010-09-15
     # packs tracks 
 
 ############################################################################
@@ -2545,5 +2587,31 @@ http://genome.wustl.edu/pub/organism/Primates/Callithrix_jacchus/end_sequences/m
     sort -k1,1 -k2,2n marmoset_singletons.3.2.bed \
 	| hgLoadBed calJac3 bacEndCalJac3Singles stdin
     checkTableCoords -verboseBlocks calJac3 bacEndCalJac3Singles
+
+############################################################################
+# Create liftOver files to and from: calJac3 <-> hg18 (DONE 2011-01-10 - Chin)
+
+    #   original alignment on hg19:
+    cd /hive/data/genomes/hg18/bed/lastzCalJac3.2010-12-20
+
+    #   and for this swap
+    mkdir /hive/data/genomes/calJac3/bed/blastz.hg18.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.hg18.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg18/bed/lastzCalJac3.2010-12-20/DEF \
+        -swap -syntenicNet \
+        -stop net \
+        -workhorse=hgwdev -smallClusterHub=swarm -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    48m54s
+    cd /hive/data/genomes/calJac3/bed/
+    ln -s blastz.hg18.swap lastz.hg18
+    cd /hive/data/genomes/calJac3/bed/lastz.hg18/axtChain
+    cp calJac3.hg18.over.chain.gz ../../liftOver/.
+    cd /hive/data/genomes/calJac3/bed/liftOver
+    mv calJac3.hg18.over.chain.gz calJac3ToHg18.over.chain.gz
+    md5sum *.gz > md5sum.txt
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/liftOver
+    ln -s /hive/data/genomes/calJac3/bed/liftOver/calJac3ToHg18.over.chain.gz .
 
 ############################################################################

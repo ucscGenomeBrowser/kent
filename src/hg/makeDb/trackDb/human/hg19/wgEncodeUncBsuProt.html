@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+</head>
+<body>
+<h2>Description</h2>
+<p>The ENCODE project has revealed the functional elements of segments
+of the human genome in unprecedented detail. However, the ability to
+clearly distinguish transcripts designated for translation into protein
+versus those that serve purely regulatory roles remains elusive. The
+standard means for doing this is to measure the proteins, if any, that
+are produced by transcripts via mass spectrometry-based proteogenomic
+mapping. In this process, chromatographically fractionated peptides are
+fed into a tandem mass spectrometer (MS/MS). The series of fragment
+masses produced in MS/MS create a signature that can then be used to
+identify the peptide from a protein or DNA sequence database. For
+proteogenomic mapping, this identifying spectrum is mapped directly
+back to its most likely encoding locus on a genome sequence[1]. This
+allows the direct verification of protein-encoding transcripts.</p>
+<p>The proteogenomic track displays mass spectrometry data that has
+been matched to the genomic sequence for selected cell lines, using a
+workflow and software specifically designed for this purpose. </p>
+<p>The proteogenomic tracks can be used to identify which parts of the
+genome are translated into proteins, to verify which transcripts
+discovered by ENCODE are protein-encoding, and can also reveal new
+genes and/or splice variants of genes. Of particular interest may be
+its ability to reveal the translation of small ORFs, antisense
+transcripts, or sites annotated as introns that encode proteins
+</p>
+<h2>Display Conventions and Configuration</h2>
+<p>The display for this track show peptide mappings as
+grayscale-colored items where higher scores correspond to
+darker-colored blocks.<br>
+</p>
+<p>In addition to the displayed genomic coordinates, several additional
+fields are available for each track item.<br>
+</p>
+<ul>
+  <li>The <span style="font-style: italic;">Raw Score</span> reflects
+the strength of the peptide mapping, in contrast to the <span
+ style="font-style: italic;">Score</span> field which reflects the
+confidence of the mapping. The <span style="font-style: italic;">Score</span>
+field is computed as <span style="font-style: italic;">-log10(EValue) </span>for
+the peptide mapping, and scores of 130 or greater have an estimated 5%
+false positive rate. The Raw Score offers an additional
+level of confidence: raw scores of 200 or greater have an estimated 1%
+false positive rate. Note that <span style="font-style: italic;">Raw
+Score</span> is not normalized for the length of the peptide mapping,
+while <span style="font-style: italic;">Score</span> is.
+Consequently, short mappings might have a strong raw score but a weaker
+score.</li>
+  <li>The <span style="font-style: italic;">Repeat Count</span>
+indicates the number of places in the genome that match the peptide
+sequence. This reflects the uniqueness of the peptide mapping in
+the genome. Any mappings to highly-duplicated regions will have
+high repeat counts.<br>
+  </li>
+  <li>The <span style="font-style: italic;">Peptide Rank </span>reflects
+that any single peak in the spectrum can be mapped with confidence to two or 
+more distinct peptides.  The reasons for this include that the peak can be
+chimeric, containing more than one peptide, and that one peak can match two
+or more distinct peptides.  In the cases where a peak maps to multiple peptides,
+the <span style="font-style: italic;">Peptide Rank</span> indicates the rank 
+of each mapping.</li>
+  <li>The <span style="font-style: italic;">spectrum ID</span> is a
+semi-unique identifier of the spectrum associated with the peptide
+mapping, and can be used to track the origins of the mapping.<br>
+  </li>
+</ul>
+<h2>Methods</h2>
+<p>ENCODE cell lines K562 and GM12878 were used for large scale
+proteomic analysis. Cell lines were cultured according to standard
+ENCODE cell culture protocols
+and in-gel digestion was completed according to the standard
+protocol[3]. </p>
+The proteolytic enzyme <i>trypsin</i> was used to digest the proteins
+in order to produce short, MS/MS analyzable peptides. Trypsin is a
+common protease that typically cleaves proteins after R or K. The
+metadata parameter <i>enzyme</i> specifies the restriction enzyme used
+for
+digestion. Tandem mass spectrometry (RPLC-MS/MS) analysis was then
+performed on an Eksigent Ultra-LTQ Orbitrap system. However, due
+to enzyme inefficiency, it does not always cleave at R or K, so there
+may be peptides that include an uncleaved R/K site. The number of such
+missed cleavages allowed in the search is described by the metadata
+parameter <i>miscleavages</i>.
+<p>We performed proteogenomic mapping with two miscleavages allowed and
+using whole human genomic sequence (UCSC hg19) via the genome
+fingerprint scanning (GFS) program [2], which uses HMM_Score [4] to
+accurately match MS/MS spectra to their corresponding genome sequences.
+E-values are calculated for all results, which estimate the number of
+results at the given score level which would be expected by random
+chance. The E-values are used to assess the false-positive rate, and
+only those matches falling within the specified 5% FPR rate
+are included in the track. </p>
+<h2>Credits</h2>
+<p>Proteogenomic mapping: Dr. Jainab Khatun, Brian Risk, Mustaque
+Ahamed, Christopher Maier and Dennis Crenshaw (Giddings Lab). </p>
+<p>Proteomic analysis: Drs. Yanbao Yu and Ling Xie (Xian Lab).</p>
+<h2>References</h2>
+<p>1. Proteogenomic mapping as a complementary method to perform genome
+annotation. Jaffe, J. D., Berg, H. C., &amp; Church, G. M. (2004).
+Proteomics 2004 4(1):59-77.</p>
+<p>2. Genome-based peptide fingerprint scanning. Giddings MC, Shah AA,
+Gesteland RF, Moore MB. Proceedings of the National Academy of Sciences
+of the United States of America 100(1):20-25. </p>
+<p>3. In-gel digestion for mass spectrometric characterization of
+proteins and proteomes. Andrej Shevchenko, Henrik Tomas, Jan Havli ,
+Jesper V Olsen &amp; Matthias Mann. Nature Protocols 1, 2856 - 2860
+(2007).</p>
+<p>4. Incorporating Sequence Information into the Scoring Function: A
+Hidden Markov Model for Improved Peptide Identification . Khatun J,
+Hamlett ED and Giddings, MC. Bioinformatics 2008 24(5):674-681.</p>
+<h2> Data Release Policy </h2>
+<p>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset
+until
+nine months following the release of the dataset. This date is listed
+in
+the <em>Restricted Until</em> column on the track configuration page
+and
+the download page. The full data release policy for ENCODE is available
+<a href="../ENCODE/terms.html" target="_BLANK">here</a>.</p>
+</body>
+</html>

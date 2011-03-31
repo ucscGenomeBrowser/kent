@@ -12,7 +12,11 @@ MAILTO=genbank@cse.ucsc.edu
 # sat,sun AM both mRNAs and ESTS
 # poll every hour midnight to 2pm
 0 0-14 * * 5-6	/cluster/data/genbank/etc/hgwdev-dbload -inclEsts
-# -extFileUpdate
+
+
+# build genbank starting at 7pm
+0 19 * * *	/cluster/data/genbank/etc/build-genbank
+
 
 # download and import ccds nightly.  Local CCDS database used for CCDS project
 # as well a browser update.
