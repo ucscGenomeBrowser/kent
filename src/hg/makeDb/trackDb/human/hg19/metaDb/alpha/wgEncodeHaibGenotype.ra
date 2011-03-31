@@ -926,7 +926,7 @@ fileName wgEncodeHaibGenotypeHrceRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -948,7 +948,7 @@ fileName wgEncodeHaibGenotypeHrceRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -970,7 +970,7 @@ fileName wgEncodeHaibGenotypeHreRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -992,7 +992,7 @@ fileName wgEncodeHaibGenotypeHreRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1014,7 +1014,7 @@ fileName wgEncodeHaibGenotypeHrpeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1036,7 +1036,7 @@ fileName wgEncodeHaibGenotypeHrpeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1146,7 +1146,7 @@ fileName wgEncodeHaibGenotypeImr90RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1168,7 +1168,7 @@ fileName wgEncodeHaibGenotypeImr90RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1190,7 +1190,7 @@ fileName wgEncodeHaibGenotypeJurkatRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1212,7 +1212,7 @@ fileName wgEncodeHaibGenotypeJurkatRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1256,7 +1256,7 @@ fileName wgEncodeHaibGenotypeLncapRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1278,7 +1278,7 @@ fileName wgEncodeHaibGenotypeMcf10aesRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy Kevin Struhl
+obtainedBy Stanford
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1300,7 +1300,7 @@ fileName wgEncodeHaibGenotypeMcf10aesRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy Kevin Struhl
+obtainedBy Stanford
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1322,7 +1322,7 @@ fileName wgEncodeHaibGenotypeMcf10aesRegionsRep3.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy Kevin Struhl
+obtainedBy Stanford
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1344,7 +1344,7 @@ fileName wgEncodeHaibGenotypeMcf10aesTamRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy Kevin Struhl
+obtainedBy Stanford
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1366,7 +1366,7 @@ fileName wgEncodeHaibGenotypeMcf7RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1388,7 +1388,7 @@ fileName wgEncodeHaibGenotypeMcf7RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1476,7 +1476,7 @@ fileName wgEncodeHaibGenotypeNb4RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1498,7 +1498,7 @@ fileName wgEncodeHaibGenotypeNb4RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1520,7 +1520,7 @@ fileName wgEncodeHaibGenotypeNhaRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1542,7 +1542,7 @@ fileName wgEncodeHaibGenotypeNhaRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1564,7 +1564,7 @@ fileName wgEncodeHaibGenotypeNhbeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1586,7 +1586,7 @@ fileName wgEncodeHaibGenotypeNhbeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1608,7 +1608,7 @@ fileName wgEncodeHaibGenotypeNhdfneoRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1630,7 +1630,7 @@ fileName wgEncodeHaibGenotypeNt2d1RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1674,7 +1674,7 @@ fileName wgEncodeHaibGenotypePanc1RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1740,7 +1740,7 @@ fileName wgEncodeHaibGenotypePrecRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1762,7 +1762,7 @@ fileName wgEncodeHaibGenotypeRptecRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1784,7 +1784,7 @@ fileName wgEncodeHaibGenotypeRptecRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1806,7 +1806,7 @@ fileName wgEncodeHaibGenotypeSaecRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1828,7 +1828,7 @@ fileName wgEncodeHaibGenotypeSaecRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1850,7 +1850,7 @@ fileName wgEncodeHaibGenotypeSkmcRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1872,7 +1872,7 @@ fileName wgEncodeHaibGenotypeSkmcRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1894,7 +1894,7 @@ fileName wgEncodeHaibGenotypeSknshraRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1916,7 +1916,7 @@ fileName wgEncodeHaibGenotypeSknshraRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1969,4 +1969,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -876164802
+# MAGIC: 1361369572
