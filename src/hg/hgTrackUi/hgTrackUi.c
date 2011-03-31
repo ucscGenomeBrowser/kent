@@ -2310,6 +2310,7 @@ cgiMakeCheckboxGroupWithVals(cartVarName, labelArr, valueArr, refCount, checked,
 hFreeConn(&conn);
 }
 
+#ifdef UNUSED
 static boolean isInTrackList(struct trackDb *tdbList, struct trackDb *target)
 /* Return TRUE if target is in tdbList. */
 {
@@ -2319,6 +2320,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         return TRUE;
 return FALSE;
 }
+#endif /* UNUSED */
 
 void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
 /* List tracks in this collection, with visibility controls and UI links */
@@ -2330,9 +2332,6 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     {
     struct trackDb *tdb = childRef->val;
     printf("<TR><TD NOWRAP>");
-    boolean uglyOne = (sameString(tdb->track, "wgEncodeRegProEnhCorrLoose"));
-    if (uglyOne)
-          uglyf("corrLoose %d", isInTrackList(tdbList, tdb));
     if (tdbIsDownloadsOnly(tdb))
         printf("%s&nbsp;",tdb->shortLabel);
     else
