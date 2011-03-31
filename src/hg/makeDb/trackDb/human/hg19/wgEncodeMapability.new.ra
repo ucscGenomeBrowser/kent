@@ -6,10 +6,13 @@ shortLabel Mapability
 longLabel Mapability or Uniqueness of Reference Genome
 group map
 subGroup1 view Mapability ALN=Broad_Alignability CRGMAP=CRG_Alignability DUNIQ=Duke_Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Duke_Excluded_Regions
-subGroup2 win Sequence_Size w015=15bp w020=20bp w024=24bp w035=35bp w036=36bp w040=40bp w050=50bp w075=75bp w100=100bp zNA=Varied
-dimensions dimensionX=win
+subGroup2 win Window_Size w015=15bp w020=20bp w024=24bp w035=35bp w036=36bp w040=40bp w050=50bp w075=75bp w100=100bp zNA=Varied
+subGroup3 lab Lab DUKE=Duke CRG=CRG-Guigo
+#dimensions dimensionX=win
+#controlledVocabulary encode/cv.ra view win=size lab
+fileSortOrder grant=PI lab=Lab view=View size=Window_size
 allButtonPair on
-sortOrder view=+ win=+
+sortOrder view=+ lab=+ win=+
 dragAndDrop subTracks
 priority 0
 type bed 3
@@ -21,7 +24,7 @@ wgEncode 1
     view DUNIQ
     visibility full
     subTrack wgEncodeMapability
-    configurable on
+    #configurable on
     viewLimits 0:1
     autoScale off
     windowingFunction mean
@@ -31,7 +34,7 @@ wgEncode 1
         parent wgEncodeMapabilityViewDUNIQ off
         shortLabel Duke Uniq 20
         longLabel ENCODE Chromatin Map Uniqueness of 20bp Windows
-        subGroups view=DUNIQ win=w020
+        subGroups view=DUNIQ win=w020 lab=DUKE
         type bigWig 0.000000 1.000000
         # subId=3840 dateSubmitted=2011-03-28
 
@@ -39,7 +42,7 @@ wgEncode 1
         parent wgEncodeMapabilityViewDUNIQ off
         shortLabel Duke Uniq 35
         longLabel ENCODE Chromatin Map Uniqueness of 35bp Windows
-        subGroups view=DUNIQ win=w035
+        subGroups view=DUNIQ win=w035 lab=DUKE
         type bigWig 0.000000 1.000000
         # subId=3840 dateSubmitted=2011-03-28
 
@@ -52,7 +55,7 @@ wgEncode 1
         parent wgEncodeMapabilityViewXR off
         shortLabel Excluded Regions
         longLabel ENCODE Chromatin Map Regions Excluded
-        subGroups view=XR win=zNA
+        subGroups view=XR win=zNA lab=DUKE
         type bed 6
         # subId=3840 dateSubmitted=2011-03-28
 
@@ -71,7 +74,7 @@ wgEncode 1
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Align 24
         longLabel Mapability - CRG GEM Alignability of 24mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w024
+        subGroups view=CRGMAP win=w024 lab=CRG
         color 0,100,0
         type bigWig 0.00 1.00
         origAssembly hg19
@@ -80,7 +83,7 @@ wgEncode 1
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Align 36
         longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w036
+        subGroups view=CRGMAP win=w036 lab=CRG
         color 0,100,0
         type bigWig 0.00 1.00
         origAssembly hg19
@@ -89,7 +92,7 @@ wgEncode 1
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Align 40
         longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w040
+        subGroups view=CRGMAP win=w040 lab=CRG
         color 0,100,0
         type bigWig 0.00 1.00
         origAssembly hg19
@@ -98,7 +101,7 @@ wgEncode 1
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Align 50
         longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w050
+        subGroups view=CRGMAP win=w050 lab=CRG
         color 0,100,0
         type bigWig 0.00 1.00
         origAssembly hg19
@@ -107,7 +110,7 @@ wgEncode 1
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Align 75
         longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w075
+        subGroups view=CRGMAP win=w075 lab=CRG
         color 0,100,0
         type bigWig 0.00 1.00
         origAssembly hg19
@@ -116,7 +119,7 @@ wgEncode 1
         subTrack wgEncodeMapabilityViewCRGMAP
         shortLabel CRG Align 100
         longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
-        subGroups view=CRGMAP win=w100
+        subGroups view=CRGMAP win=w100 lab=CRG
         color 0,100,0
         type bigWig 0.00 1.00
         origAssembly hg19

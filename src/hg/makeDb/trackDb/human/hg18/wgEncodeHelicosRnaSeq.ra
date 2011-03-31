@@ -41,6 +41,7 @@ wgEncode 1
         showDiffBasesMaxZoom 10000.0
         color 46,0,184
         configurable on
+        metadata project=wgEncode grant=Gingeras lab=Helicos dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=249 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeHelicosRnaSeq tableName=wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya fileName=wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya.tagAlign.gz
 
     track wgEncodeHelicosRnaSeqViewyRawSignal
     shortLabel Raw Signal
@@ -63,5 +64,6 @@ wgEncode 1
         maxHeightPixels 100:16:16
         color 46,0,184
         configurable on
+        metadata project=wgEncode grant=Gingeras lab=Helicos dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=249 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeHelicosRnaSeq tableName=wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya fileName=wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya.wig.gz
 
 
