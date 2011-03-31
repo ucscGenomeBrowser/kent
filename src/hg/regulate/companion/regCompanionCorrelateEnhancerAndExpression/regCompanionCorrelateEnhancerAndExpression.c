@@ -14,6 +14,8 @@ static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp
 
 double minR = 0.7071;
 double minExp = 10;
+double minAct = 15;
+int maxDist = 50000;	/* Max distance we allow between enhancer and promoter. */
 
 void usage()
 /* Explain usage and exit. */
@@ -24,25 +26,29 @@ errAbort(
   "usage:\n"
   "   regCompanionCorrelateEnhancerAndExpression enh.bed enh.levels gene.bed gene.levels out.tab\n"
   "The out.tab has the following columns\n"
-  "   <enhId> <geneId> <promoter to enhancer distance> <average expn> <max expn> <level correlation>\n"
+  "   <enhId> <geneId> <promoter to enhancer distance> <max expn> <max act><level correlation>\n"
   "The out.bed is a non-stranded, multi-block bed file with the thick block being the\n"
   "enhancer and the thin blocks being the promoters correlated with it\n"
   "options:\n"
   "   -minR=0.N (default %g) Minimum threshold of correlation to output in bed file\n"
   "   -minExp=N (default %g) Minimum expression level in some cell to output in bed file\n"
+  "   -minAct=N (default %g) Minimum activation level in some cell to output in bed file\n"
+  "   -maxDist=N (default %d) Maximum distance between promoter and enhancer\n"
   "   -outPairBed=outPair.bed - output bed file with a record for each enhancer->promoter\n"
   "   -outEnhBed=outEnh.bed - output bed file with a record for each enhancer, possibly including\n"
   "              multiple promoters per enhancer\n"
   "   -outProBed=outPro.bed - output bed file with a record for each promoter, possibly including\n"
   "              multiple enhancers per promoter\n"
   "   -outOverBed=outOver.bed -output bed file with enhancers that are over thresholds\n"
-  , minR, minExp
+  , minR, minExp, minAct, maxDist
   );
 }
 
 static struct optionSpec options[] = {
    {"minR", OPTION_DOUBLE},
    {"minExp", OPTION_DOUBLE},
+   {"minAct", OPTION_DOUBLE},
+   {"maxDist", OPTION_INT},
    {"outPairBed", OPTION_STRING},
    {"outEnhBed", OPTION_STRING},
    {"outProBed", OPTION_STRING},
@@ -51,7 +57,6 @@ static struct optionSpec options[] = {
 };
 
 int cellCount = 7;	/* Number of cell lines in our data. */
-int maxDist = 50000;	/* Max distance we allow between enhancer and promoter. */
 int proPad = 50;	/* Define promoter as this much on either side of txStart. */
 
 struct hash *readLevelsIntoHash(char *fileName)
@@ -249,6 +254,7 @@ for (enh = enhList; enh != NULL; enh = enh->next)
     int end = center + maxDist;
 
     double *enhVals = hashMustFindVal(enhLevelHash, enh->name);
+    double maxAct = maxArray(enhVals, cellCount);
     struct binElement *el, *elList = chromBinsFind(chromBins, chrom, start, end);
     struct range *correlatingPromoterList = NULL, *range;
     for (el = elList; el != NULL; el = el->next)
@@ -256,10 +262,9 @@ for (enh = enhList; enh != NULL; enh = enh->next)
 	struct bed *gene = el->val;
 	double *geneVals = hashMustFindVal(geneLevelHash, gene->name);
 	double r = correlateArrays(enhVals, geneVals, cellCount);
-	double aveExp = aveArray(geneVals, cellCount);
 	double maxExp = maxArray(geneVals, cellCount);
 	int distance;
-	if (r >= minR && maxExp >= minExp)
+	if (r >= minR && maxExp >= minExp && maxAct >= minAct)
 	    {
 	    if (fOver)
 		{
@@ -298,7 +303,7 @@ for (enh = enhList; enh != NULL; enh = enh->next)
 	else
 	    distance = center - gene->chromStart;
 	fprintf(fTab, "%s\t%s\t%d\t%g\t%g\t%g\n", 
-		enh->name, gene->name, distance, aveExp, maxExp, r);
+		enh->name, gene->name, distance, maxExp, maxAct, r);
 	}
 
     if (correlatingPromoterList != NULL)
@@ -371,6 +376,8 @@ if (argc != 6)
     usage();
 minR = optionDouble("minR", minR);
 minExp = optionDouble("minExp", minExp);
+minAct = optionDouble("minAct", minAct);
+maxDist = optionDouble("maxDist", maxDist);
 regCompanionCorrelateEnhancerAndExpression(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
