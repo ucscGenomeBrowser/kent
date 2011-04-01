@@ -2629,6 +2629,7 @@ type bed 3
 wgEncode 1
 
     track wgEncodeUmasshaTfbsValidViewTestedSites
+    release alpha
     shortLabel Tested Sites
     view TestedSites
     visibility pack
