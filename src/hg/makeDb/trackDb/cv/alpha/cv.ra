@@ -5182,11 +5182,11 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF3
 validation IRF3(Immunoblot):human_IRF3_validation_Snyder.pdf
 
 
-term  IRF4_(SC-6509)
-tag  IRF4SC6509
+term  IRF4_(SC-6059)
+tag  IRF4SC6059
 type Antibody
 target  IRF4
-antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of IRF-4 of mouse origin.
+antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of IRF-4 of mouse origin. (Provisional)
 targetDescription  The protein encoded by this gene belongs to the IRF (interferon regulatory factor) family.  It functions as a lymphocyte specific transcription factor and negatively regulates TLR signaling by selectively competing with IRF5.  A chromosomal translocation involving this gene and the IgH locus, t(6;14)(p25;q32), may be a cause of multiple myeloma (RefSeq).
 vendorName Santa Cruz Biotech
 vendorId sc-6059
@@ -5195,7 +5195,7 @@ lab  Myers
 lots  IO1O6
 targetId IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
-validation IRF4_(SC-6509)(Immunoprecipitation-WesternBlot,MassSpec):human_IRF4_SC-6509_validation_Myers.pdf
+validation IRF4_(SC-6059)(Immunoprecipitation-WesternBlot,MassSpec):human_IRF4_SC-6059_validation_Myers.pdf
 
 term JunD
 tag JUND
