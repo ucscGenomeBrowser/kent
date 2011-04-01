@@ -17,7 +17,7 @@ shortLabel HAIB RNA-seq
 longLabel RNA-seq from ENCODE/HudsonAlpha
 group expression
 subGroup1 view Views TranscriptGencV3=Gene_model RawSignal=Signal Alignments=Alignments
-subGroup2 cellType Cell_Line GM12878=GM12878<BR>&nbsp;(Tier_1) H1hESC=H1-hESC<BR>&nbsp;(Tier_1) K562=K562<BR>&nbsp;(Tier_1) HeLaS3=HeLa-S3<BR>&nbsp;(Tier_2) HepG2=HepG2<BR>&nbsp;(Tier_2) A549=A459 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC Astrocy=Astrocy BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM ECC1=ECC1 GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTR8=HTR8svn HUVEC=HUVEC IMR90=IMR90 Jurkat=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N
+subGroup2 cellType Cell_Line GM12878=GM12878<BR>&nbsp;(Tier_1) H1hESC=H1-hESC<BR>&nbsp;(Tier_1) K562=K562<BR>&nbsp;(Tier_1) HeLaS3=HeLa-S3<BR>&nbsp;(Tier_2) HepG2=HepG2<BR>&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC Astrocy=Astrocy BE2C=BE2C BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM ECC1=ECC1 GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTB11=HTB11 HTR8=HTR8svn HUVEC=HUVEC IMR90=IMR90 Jurkat=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N
 subGroup3 rnaExtract RnaExtract pAP=longPolyA shortPolyA=shortPolyA
 subGroup4 treatment Treatment  BPA14h=BPA<BR>4hr<BR>100nM DEX100nM=DEX<BR>1hr<BR>100nM DEX5nM=DEX<BR>1hr<BR>5nM DEX1nM=DEX<BR>1hr<BR>1nM DEX500pM=DEX<BR>1hr<BR>500pM DEX100pM=DEX<BR>1hr<BR>100pM DMSO4hr=DMSO<BR>4hr<BR>0.02pct ESTRADIa4h=ESTRODIOL<BR>4hr<BR>10nM ETOH02=ETOH<BR>1hr<BR>0.02pct GEN4h=GENISTEIN<BR>4hr<BR>100nM None=None
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6
@@ -313,6 +313,96 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=1849 dateSubmitted=2011-01-21
 
+        track wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel BE2_C Aln 1
+        longLabel ENCODE HAIB RNA-seq Alignments Replicate 1 (in BE2_C cells)
+        subGroups view=Alignments cellType=BE2C rnaExtract=shortPolyA treatment=None rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel BE2_C Aln 2
+        longLabel ENCODE HAIB RNA-seq Alignments Replicate 2 (in BE2_C cells)
+        subGroups view=Alignments cellType=BE2C rnaExtract=shortPolyA treatment=None rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel HTB-11 Aln 1
+        longLabel ENCODE HAIB RNA-seq Alignments Replicate 1 (in HTB-11 cells)
+        subGroups view=Alignments cellType=HTB11 rnaExtract=shortPolyA treatment=None rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel HTB-11 Aln 2
+        longLabel ENCODE HAIB RNA-seq Alignments Replicate 2 (in HTB-11 cells)
+        subGroups view=Alignments cellType=HTB11 rnaExtract=shortPolyA treatment=None rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel PANC-1 Aln 1
+        longLabel ENCODE HAIB RNA-seq Alignments Replicate 1 (in PANC-1 cells)
+        subGroups view=Alignments cellType=PANC1 rnaExtract=shortPolyA treatment=None rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel PANC-1 Aln 2
+        longLabel ENCODE HAIB RNA-seq Alignments Replicate 2 (in PANC-1 cells)
+        subGroups view=Alignments cellType=PANC1 rnaExtract=shortPolyA treatment=None rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel PFSK-1 Aln 1
+        longLabel ENCODE HAIB RNA-seq Alignments Replicate 1 (in PFSK-1 cells)
+        subGroups view=Alignments cellType=PFSK1 rnaExtract=shortPolyA treatment=None rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel PFSK-1 Aln 2
+        longLabel ENCODE HAIB RNA-seq Alignments Replicate 2 (in PFSK-1 cells)
+        subGroups view=Alignments cellType=PFSK1 rnaExtract=shortPolyA treatment=None rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqU87ShortpolyaAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel U87 Aln 1
+        longLabel ENCODE HAIB RNA-seq Alignments Replicate 1 (in U87 cells)
+        subGroups view=Alignments cellType=U87 rnaExtract=shortPolyA treatment=None rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqU87ShortpolyaAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel U87 Aln 2
+        longLabel ENCODE HAIB RNA-seq Alignments Replicate 2 (in U87 cells)
+        subGroups view=Alignments cellType=U87 rnaExtract=shortPolyA treatment=None rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
     track wgEncodeHudsonalphaRnaSeqViewGencV3
     shortLabel Transcripts GencodeV3c
     view TranscriptGencV3
@@ -590,6 +680,96 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3274 dateSubmitted=2011-01-19
 
+        track wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel BE2_C 1
+        longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in BE2_C cells)
+        subGroups view=TranscriptGencV3 cellType=BE2C rnaExtract=shortPolyA treatment=None rep=rep1
+        type genePred
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel BE2_C 2
+        longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in BE2_C cells)
+        subGroups view=TranscriptGencV3 cellType=BE2C rnaExtract=shortPolyA treatment=None rep=rep2
+        type genePred
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel HTB-11 1
+        longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in HTB-11 cells)
+        subGroups view=TranscriptGencV3 cellType=HTB11 rnaExtract=shortPolyA treatment=None rep=rep1
+        type genePred
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel HTB-11 2
+        longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in HTB-11 cells)
+        subGroups view=TranscriptGencV3 cellType=HTB11 rnaExtract=shortPolyA treatment=None rep=rep2
+        type genePred
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel PANC-1 1
+        longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in PANC-1 cells)
+        subGroups view=TranscriptGencV3 cellType=PANC1 rnaExtract=shortPolyA treatment=None rep=rep1
+        type genePred
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel PANC-1 2
+        longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in PANC-1 cells)
+        subGroups view=TranscriptGencV3 cellType=PANC1 rnaExtract=shortPolyA treatment=None rep=rep2
+        type genePred
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel PFSK-1 1
+        longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in PFSK-1 cells)
+        subGroups view=TranscriptGencV3 cellType=PFSK1 rnaExtract=shortPolyA treatment=None rep=rep1
+        type genePred
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel PFSK-1 2
+        longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in PFSK-1 cells)
+        subGroups view=TranscriptGencV3 cellType=PFSK1 rnaExtract=shortPolyA treatment=None rep=rep2
+        type genePred
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel U87 1
+        longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in U87 cells)
+        subGroups view=TranscriptGencV3 cellType=U87 rnaExtract=shortPolyA treatment=None rep=rep1
+        type genePred
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel U87 2
+        longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in U87 cells)
+        subGroups view=TranscriptGencV3 cellType=U87 rnaExtract=shortPolyA treatment=None rep=rep2
+        type genePred
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
     track wgEncodeHudsonalphaRnaSeqViewSignal
     shortLabel Signal
     view RawSignal
@@ -866,4 +1046,94 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.124371 1297.219971
         origAssembly hg19
         # subId=1849 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqBe2cShortpolyaRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel BE2_C Raw 1
+        longLabel ENCODE HAIB RNA-seq Signal Replicate 1 (in BE2_C cells)
+        subGroups view=RawSignal cellType=BE2C rnaExtract=shortPolyA treatment=None rep=rep1
+        type bigWig 0.231311 1122.900024
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqBe2cShortpolyaRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel BE2_C Raw 2
+        longLabel ENCODE HAIB RNA-seq Signal Replicate 2 (in BE2_C cells)
+        subGroups view=RawSignal cellType=BE2C rnaExtract=shortPolyA treatment=None rep=rep2
+        type bigWig 0.145512 1134.989990
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel HTB-11 Raw 1
+        longLabel ENCODE HAIB RNA-seq Signal Replicate 1 (in HTB-11 cells)
+        subGroups view=RawSignal cellType=HTB11 rnaExtract=shortPolyA treatment=None rep=rep1
+        type bigWig 0.139722 938.793030
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel HTB-11 Raw 2
+        longLabel ENCODE HAIB RNA-seq Signal Replicate 2 (in HTB-11 cells)
+        subGroups view=RawSignal cellType=HTB11 rnaExtract=shortPolyA treatment=None rep=rep2
+        type bigWig 0.149537 705.216003
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel PANC-1 Raw 1
+        longLabel ENCODE HAIB RNA-seq Signal Replicate 1 (in PANC-1 cells)
+        subGroups view=RawSignal cellType=PANC1 rnaExtract=shortPolyA treatment=None rep=rep1
+        type bigWig 0.137402 1973.189941
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel PANC-1 Raw 2
+        longLabel ENCODE HAIB RNA-seq Signal Replicate 2 (in PANC-1 cells)
+        subGroups view=RawSignal cellType=PANC1 rnaExtract=shortPolyA treatment=None rep=rep2
+        type bigWig 0.146817 2090.860107
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel PFSK-1 Raw 1
+        longLabel ENCODE HAIB RNA-seq Signal Replicate 1 (in PFSK-1 cells)
+        subGroups view=RawSignal cellType=PFSK1 rnaExtract=shortPolyA treatment=None rep=rep1
+        type bigWig 0.149150 1066.459961
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel PFSK-1 Raw 2
+        longLabel ENCODE HAIB RNA-seq Signal Replicate 2 (in PFSK-1 cells)
+        subGroups view=RawSignal cellType=PFSK1 rnaExtract=shortPolyA treatment=None rep=rep2
+        type bigWig 0.178471 1536.329956
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqU87ShortpolyaRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel U87 Raw 1
+        longLabel ENCODE HAIB RNA-seq Signal Replicate 1 (in U87 cells)
+        subGroups view=RawSignal cellType=U87 rnaExtract=shortPolyA treatment=None rep=rep1
+        type bigWig 0.141237 1836.530029
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqU87ShortpolyaRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel U87 Raw 2
+        longLabel ENCODE HAIB RNA-seq Signal Replicate 2 (in U87 cells)
+        subGroups view=RawSignal cellType=U87 rnaExtract=shortPolyA treatment=None rep=rep2
+        type bigWig 0.148672 2637.550049
+        origAssembly hg19
+        # subId=3838 dateSubmitted=2011-03-31
 
