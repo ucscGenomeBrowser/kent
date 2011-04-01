@@ -18,6 +18,7 @@ controlledVocabulary encode/cv.ra cellType=cell
 viewLimits -2.5:1.5
 noScoreFilter on
 type bed 9
+html wgEncodeHudsonalphaCnv.new
 
     track wgEncodeHudsonalphaCnvViewRegions
     shortLabel Regions
@@ -25,7 +26,7 @@ type bed 9
     visibility dense
     subTrack wgEncodeHudsonalphaCnv
 
-        track wgEncodeHudsonalphaCnvRegionsGM12878
+        track wgEncodeHudsonalphaCnvRegionsGM12878V2
         subTrack wgEncodeHudsonalphaCnvViewRegions
         shortLabel GM12878 Regions
         longLabel ENCODE Copy Number Variation Regions (GM12878 cells)
@@ -34,7 +35,7 @@ type bed 9
         itemRgb on
         priority 2
 
-        track wgEncodeHudsonalphaCnvRegionsHepG2
+        track wgEncodeHudsonalphaCnvRegionsHepG2V2
         shortLabel HepG2 Regions
         longLabel ENCODE Copy Number Variation Regions (HepG2 cells)
         subTrack wgEncodeHudsonalphaCnvViewRegions
@@ -42,7 +43,7 @@ type bed 9
         cell HepG2
         priority 4
 
-        track wgEncodeHudsonalphaCnvRegionsK562
+        track wgEncodeHudsonalphaCnvRegionsK562V2
         shortLabel K562 Regions
         longLabel ENCODE Copy Number Variation Regions (K562 cells)
         subTrack wgEncodeHudsonalphaCnvViewRegions
