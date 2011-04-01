@@ -21,7 +21,6 @@ canPack On
 extraFields logR=[f]LogR_Value
 scoreFilter 0
 scoreFilterLimits 0:1000
-maxWindowToQuery 10000000
 
         track wgEncodeHaibGenotypeGm12878RegionsRep1
         parent wgEncodeHaibGenotype on
@@ -29,6 +28,7 @@ maxWindowToQuery 10000000
         longLabel GM12878 Copy number variants Replicate 1 from ENCODE/HAIB
         subGroups cellType=1GM12878 treatment=None rep=rep1
         type bed 9 +
+        origAssembly hg18
         # subId=3195 dateSubmitted=2011-01-08
 
         track wgEncodeHaibGenotypeA549RegionsRep1
@@ -716,6 +716,7 @@ maxWindowToQuery 10000000
         shortLabel GM12878 2
         longLabel GM12878 Copy number variants Replicate 1 from ENCODE/HAIB
         subGroups cellType=1GM12878 treatment=None rep=rep2
+        origAssembly hg18
         type bed 9 +
         # subId=3536 dateSubmitted=2011-02-17
 
@@ -724,6 +725,7 @@ maxWindowToQuery 10000000
         shortLabel HepG2 1
         longLabel HepG2 Copy number variants Replicate 1 from ENCODE/HAIB
         subGroups cellType=2HepG2 treatment=None rep=rep1
+        origAssembly hg18
         type bed 9 +
         # subId=3536 dateSubmitted=2011-02-17
 
@@ -732,6 +734,7 @@ maxWindowToQuery 10000000
         shortLabel K562 1
         longLabel K562 Copy number variants Replicate 1 from ENCODE/HAIB
         subGroups cellType=1K562 treatment=None rep=rep1
+        origAssembly hg18
         type bed 9 +
         # subId=3536 dateSubmitted=2011-02-17
 
