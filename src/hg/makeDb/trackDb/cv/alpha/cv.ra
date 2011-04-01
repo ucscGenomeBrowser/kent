@@ -8137,6 +8137,12 @@ type dataType
 label FAIRE-seq
 description FAIRE followed by sequencing
 
+term Genotype
+tag genotype
+type dataType
+label Genotype
+description Genotyping experiments including copy nummber variants and SNPs PROVISIONAL
+
 term Gencode
 tag gencode
 type dataType
@@ -8247,12 +8253,12 @@ type dataType
 label RNA-seq
 description sequencing of short RNAs
 
-term Snp
-tag Snp
-type dataType
-label SNPs
-description Single-nucleotide polymorphism 
-
+#term Snp
+#tag Snp
+#type dataType
+#label SNPs
+#description PROVISIONAL Single-nucleotide polymorphism 
+# I would like to take this out and replace with Genotype as a more general datatype to match the composite
 
 term Switchgear
 tag Switchgear
