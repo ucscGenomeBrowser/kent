@@ -1,5 +1,4 @@
 track wgEncodeHudsonalphaCnv
-release alpha
 compositeTrack on
 shortLabel Common Cell CNV
 longLabel ENCODE Common Cell Type Copy Number Variation, by Illumina 1M and CBS
@@ -24,11 +23,9 @@ type bed 9
     shortLabel Regions
     view Regions
     visibility dense
-    release alpha
     subTrack wgEncodeHudsonalphaCnv
 
         track wgEncodeHudsonalphaCnvRegionsGM12878
-        release alpha
         subTrack wgEncodeHudsonalphaCnvViewRegions
         shortLabel GM12878 Regions
         longLabel ENCODE Copy Number Variation Regions (GM12878 cells)
@@ -40,7 +37,6 @@ type bed 9
         track wgEncodeHudsonalphaCnvRegionsHepG2
         shortLabel HepG2 Regions
         longLabel ENCODE Copy Number Variation Regions (HepG2 cells)
-        release alpha
         subTrack wgEncodeHudsonalphaCnvViewRegions
         subGroups cellType=HepG2 view=Regions
         cell HepG2
@@ -49,7 +45,6 @@ type bed 9
         track wgEncodeHudsonalphaCnvRegionsK562
         shortLabel K562 Regions
         longLabel ENCODE Copy Number Variation Regions (K562 cells)
-        release alpha
         subTrack wgEncodeHudsonalphaCnvViewRegions
         subGroups cellType=K562 view=Regions
         cell K562
@@ -59,12 +54,10 @@ type bed 9
     shortLabel Signal
     view Signal
     visibility hide
-    release alpha
     subTrack wgEncodeHudsonalphaCnv
     maxHeightPixels 100:32:16
 
         track wgEncodeHudsonalphaCnvSignalGM12878
-        release alpha
         subTrack wgEncodeHudsonalphaCnvViewSignal
         shortLabel  GM12878 Signal
         longLabel ENCODE Copy Number Variation Signal (GM12878 cells)
@@ -75,7 +68,6 @@ type bed 9
         priority 1
 
         track wgEncodeHudsonalphaCnvSignalHepG2
-        release alpha
         subTrack wgEncodeHudsonalphaCnvViewSignal
         shortLabel  HepG2 Signal
         longLabel ENCODE Copy Number Variation Signal (HepG2 cells)
@@ -86,7 +78,6 @@ type bed 9
         priority 3
 
         track wgEncodeHudsonalphaCnvSignalK562
-        release alpha
         subTrack wgEncodeHudsonalphaCnvViewSignal
         shortLabel  K562 Signal
         longLabel ENCODE Copy Number Variation Signal (K562 cells)
