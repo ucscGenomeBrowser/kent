@@ -507,7 +507,7 @@ if (exp->cellType == NULL)  // Okay if no cell
 if (varPairs != NULL)
     {
     slPairSortCase(&varPairs);
-    exp->expVars = slPairListToString(varPairs);
+    exp->expVars = slPairListToString(varPairs,FALSE); // don't bother adding quotes since EDVs should not have spaces
     slPairFreeList(&varPairs);
     }
 return exp;
@@ -755,7 +755,7 @@ struct encodeExp *encodeExpGetByMdbVarsFromTable(char *db, struct mdbVar *vars, 
 /* Return experiments by looking up mdb var list from the named experiment table */
 {
 struct encodeExp *exp = encodeExpFromMdbVars(db,vars);
-struct slPair *edvVars = slPairFromString(exp->expVars);
+struct slPair *edvVars = slPairListFromString(exp->expVars,FALSE); // don't expect quoted EDVs which should always be simple tokens.
 
 struct encodeExp *expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
 // No longer needed
@@ -774,7 +774,7 @@ struct encodeExp *encodeExpGetOrCreateByMdbVarsFromTable(char *db, struct mdbVar
 // Return experiment looked up or created from the mdb var list from the named experiment table.
 {
 struct encodeExp *exp = encodeExpFromMdbVars(db,vars);
-struct slPair *edvVars = slPairFromString(exp->expVars);
+struct slPair *edvVars = slPairListFromString(exp->expVars,FALSE); // don't expect quoted EDVs which should always be simple tokens.
 
 struct encodeExp *expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
 slPairFreeValsAndList(&edvVars);
@@ -805,7 +805,7 @@ freez(&exp);
 return found;
 }
 
-char *encodeGetAccessionByMdbVars(char *db, struct mdbVar *vars)
+char *encodeExpGetAccessionByMdbVars(char *db, struct mdbVar *vars)
 /* Return accession of (first) experiment matching vars, or NULL if not found */
 {
 struct encodeExp *exp = encodeExpGetByMdbVars(db, vars);

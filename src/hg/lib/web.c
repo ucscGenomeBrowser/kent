@@ -184,7 +184,10 @@ if (withHtmlHeader)
     *ptr1 = 0;
     htmlTextOut(newString);
     printf("	</TITLE>\n    ");
-    webIncludeResourceFile("HGStyle.css");
+    if (endsWith(scriptName, "qaPushQ")) // Tired of failed stylesheet versioning that messes up RR releaseLog.html (regular and ENCODE)
+	printf("    <LINK rel='STYLESHEET' href='../style/HGStyle.css' TYPE='text/css' />\n");	
+    else
+        webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)
         puts(extraStyle);
     printf("</HEAD>" "\n"
@@ -294,7 +297,7 @@ else if (dbIsFound)
     puts(
        "<!-- +++++++++++++++++++++ HOTLINKS BAR +++++++++++++++++++ -->" "\n"
        "<TR><TD COLSPAN=3 HEIGHT=40 >" "\n"
-       "<table bgcolor=\"#000000\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%%\" height=\"27\">" "\n"
+       "<table bgcolor=\"#000000\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%\" height=\"27\">" "\n"
        "<tr bgcolor=\"#"HG_COL_HOTLINKS"\"><td valign=\"middle\">" "\n"
        "	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor=\"#"HG_COL_HOTLINKS"\" height=\"24\" class=\"topbar\"><TR>" "\n"
        " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">" "\n"

@@ -1772,7 +1772,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 2784
 tableName wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters
 objType table
@@ -1796,7 +1796,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 2784
 tableName wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaRawData
 objType file
@@ -2102,7 +2102,7 @@ replicate 0
 rnaExtract total
 subId 2783
 tableName wgEncodeRikenCageHelas3NucleolusTotalMinusClusters
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageHelas3NucleolusTotalPlusClusters
 objType table
@@ -2126,7 +2126,7 @@ replicate 0
 rnaExtract total
 subId 2783
 tableName wgEncodeRikenCageHelas3NucleolusTotalPlusClusters
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCageHelas3NucleolusTotalRawData
 objType file
@@ -6776,4 +6776,4 @@ rnaExtract longPolyA
 subId 3804
 view TSS
 
-# MAGIC: -1798173089
+# MAGIC: -422806721

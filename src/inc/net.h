@@ -238,7 +238,7 @@ boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime);
 /* Return date in UTC and size of ftp url file */
 
 
-boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries);
+boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries, boolean newer, boolean progress);
 /* Open multiple parallel connections to URL to speed downloading */
 
 #endif /* NET_H */

@@ -50,7 +50,6 @@ wgEncode 1
 
     #Peak Track SYDH Histone#
     track wgEncodeSydhHistoneViewPeaks
-    release alpha
     shortLabel Peaks
     view Peaks
     visibility pack
@@ -64,7 +63,6 @@ wgEncode 1
     qValueFilterLimits 0:300
 
 		track wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk
-		release alpha
 		subTrack wgEncodeSydhHistoneViewPeaks on
 		shortLabel NT2-D1 H3K27me3B
 		longLabel NT2-D1 H3K27me3B Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale/Davis/Harvard 
@@ -73,7 +71,6 @@ wgEncode 1
 		# subId=1137 dateSubmitted=2010-05-04 
 
 		track wgEncodeSydhHistoneNt2d1H3k4me3bUcdPk
-		release alpha
 		subTrack wgEncodeSydhHistoneViewPeaks on
 		shortLabel NT2-D1 H3K4me3B
 		longLabel NT2-D1 H3K4me3B Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale/Davis/Harvard
@@ -82,7 +79,6 @@ wgEncode 1
 		# subId=1122 dateSubmitted=2010-05-04 
 
 		track wgEncodeSydhHistoneNt2d1H3k9acbUcdPk
-		release alpha
 		subTrack wgEncodeSydhHistoneViewPeaks on
 		shortLabel NT2-D1 H3K9acB
 		longLabel NT2-D1 H3K9acB Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale/Davis/Harvard
@@ -91,7 +87,6 @@ wgEncode 1
 		# subId=1173 dateSubmitted=2010-05-04 
 
 		track wgEncodeSydhHistoneK562bH3k4me1UcdPk
-        release alpha
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel K562b H3K4me1
         longLabel K562b H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale/Davis/Harvard
@@ -101,7 +96,6 @@ wgEncode 1
         # subId=1205 dateSubmitted=2010-05-20 
 
         track wgEncodeSydhHistoneK562bH3k4me3bUcdPk
-        release alpha
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel K562b H3K4me3B
         longLabel K562b H3K4me3B Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale/Davis/Harvard
@@ -111,7 +105,6 @@ wgEncode 1
     	# subId=1350 dateSubmitted=2010-06-11
 
         track wgEncodeSydhHistoneK562bH3k9acbUcdPk
-        release alpha
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel K562b H3K9acB
         longLabel K562b H3K9acB Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale/Davis/Harvard
@@ -121,7 +114,6 @@ wgEncode 1
     	# subId=1351 dateSubmitted=2010-06-11
 
         track wgEncodeSydhHistoneK562bH3k27me3bUcdPk
-        release alpha
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel K562b H3K27me3B
         longLabel K562b H3K27me3B Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale/Davis/Harvard
@@ -131,7 +123,6 @@ wgEncode 1
     	# subId=1352 dateSubmitted=2010-06-11
 
         track wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk
-        release alpha
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel NT2-D1 H3K36me3B
         longLabel NT2-D1 H3K36me3B Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale/Davis/Harvard
@@ -140,7 +131,6 @@ wgEncode 1
     	# subId=1354 dateSubmitted=2010-06-11
 
         track wgEncodeSydhHistoneNt2d1H3k9me3UcdPk
-        release alpha
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel NT2-D1 H3K9me3
         longLabel NT2-D1 H3K9me3 Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale/Davis/Harvard
@@ -149,7 +139,6 @@ wgEncode 1
     	# subId=1831 dateSubmitted=2010-06-22
 
    		track wgEncodeSydhHistoneNt2d1H3k4me1UcdPk
-        release alpha
         subTrack wgEncodeSydhHistoneViewPeaks on
         shortLabel NT2-D1 H3K4me1
         longLabel NT2-D1 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale/Davis/Harvard
@@ -158,7 +147,6 @@ wgEncode 1
     	# subId=1830 dateSubmitted=2010-06-22
 
         track wgEncodeSydhHistoneU2osH3k9me3UcdPk
-        release alpha
         parent wgEncodeSydhHistoneViewPeaks on
         shortLabel U2OS H3K9me3
         longLabel U2OS H3K9me3 Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale/Davis/Harvard
@@ -167,7 +155,6 @@ wgEncode 1
         # subId=2108 dateSubmitted=2010-08-16
 
         track wgEncodeSydhHistoneU2osH3k36me3bUcdPk
-        release alpha
         parent wgEncodeSydhHistoneViewPeaks on
         shortLabel U2OS H3K36me3B
         longLabel U2OS H3K36me3B Histone Modifications by ChIP-seq Peaks from ENCODE/Stanford/Yale/Davis/Harvard
@@ -179,7 +166,6 @@ wgEncode 1
 
     #Signal Track SYDH Histone#
     track wgEncodeSydhHistoneViewSignal
-    release alpha
     shortLabel Signal
     view Signal
     visibility full
@@ -192,7 +178,6 @@ wgEncode 1
     windowingFunction mean+whiskers
 
 		track wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig
-		release alpha
 		subTrack wgEncodeSydhHistoneViewSignal on
 		shortLabel NT2-D1 H3K27me3B
 		longLabel NT2-D1 H3K27me3B Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
@@ -201,7 +186,6 @@ wgEncode 1
 		# subId=1137 dateSubmitted=2010-05-04 
 
 		track wgEncodeSydhHistoneNt2d1InputUcdSig
-		release alpha
 		subTrack wgEncodeSydhHistoneViewSignal off
 		shortLabel NT2-D1 Input
 		longLabel NT2-D1 Input Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
@@ -210,7 +194,6 @@ wgEncode 1
 		# subId=1123 dateSubmitted=2010-05-04 
 
 		track wgEncodeSydhHistoneNt2d1H3k4me3bUcdSig
-		release alpha
 		subTrack wgEncodeSydhHistoneViewSignal on
 		shortLabel NT2-D1 H3K4me3B
 		longLabel NT2-D1 H3K4me3B Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
@@ -219,7 +202,6 @@ wgEncode 1
 		# subId=1122 dateSubmitted=2010-05-04 
 	
 		track wgEncodeSydhHistoneNt2d1H3k9acbUcdSig
-		release alpha
 		subTrack wgEncodeSydhHistoneViewSignal on
 		shortLabel NT2-D1 H3K9acB
 		longLabel NT2-D1 H3K9acB Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
@@ -228,7 +210,6 @@ wgEncode 1
 		# subId=1173 dateSubmitted=2010-05-04 
 
         track wgEncodeSydhHistoneK562bH3k4me1UcdSig
-        release alpha
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel K562b H3K4me1
         longLabel K562b H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
@@ -238,7 +219,6 @@ wgEncode 1
         # subId=1205 dateSubmitted=2010-05-20 
 
         track wgEncodeSydhHistoneK562bH3k4me3bUcdSig
-        release alpha
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel K562b H3K4me3B
         longLabel K562b H3K4me3B Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
@@ -248,7 +228,6 @@ wgEncode 1
     	# subId=1350 dateSubmitted=2010-06-11
 
         track wgEncodeSydhHistoneK562bH3k9acbUcdSig
-        release alpha
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel K562b H3K9acB
         longLabel K562b H3K9acB Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
@@ -258,7 +237,6 @@ wgEncode 1
     	# subId=1351 dateSubmitted=2010-06-11
 
         track wgEncodeSydhHistoneK562bH3k27me3bUcdSig
-        release alpha
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel K562b H3K27me3B
         longLabel K562b H3K27me3B Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
@@ -268,7 +246,6 @@ wgEncode 1
     	# subId=1352 dateSubmitted=2010-06-11
 
         track wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig
-        release alpha
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel NT2-D1 H3K36me3B
         longLabel NT2-D1 H3K36me3B Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
@@ -277,7 +254,6 @@ wgEncode 1
     	# subId=1354 dateSubmitted=2010-06-11
 
         track wgEncodeSydhHistoneNt2d1H3k9me3UcdSig
-        release alpha
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel NT2-D1 H3K9me3
         longLabel NT2-D1 H3K9me3 Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
@@ -286,7 +262,6 @@ wgEncode 1
     	# subId=1831 dateSubmitted=2010-06-22
 
         track wgEncodeSydhHistoneNt2d1H3k4me1UcdSig
-        release alpha
         subTrack wgEncodeSydhHistoneViewSignal on
         shortLabel NT2-D1 H3K4me1
         longLabel NT2-D1 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
@@ -295,7 +270,6 @@ wgEncode 1
     	# subId=1830 dateSubmitted=2010-06-22
 
         track wgEncodeSydhHistoneU2osH3k9me3UcdSig
-        release alpha
         parent wgEncodeSydhHistoneViewSignal on
         shortLabel U2OS H3K9me3
         longLabel U2OS H3K9me3 Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
@@ -304,7 +278,6 @@ wgEncode 1
         # subId=2108 dateSubmitted=2010-08-16
 
 		track wgEncodeSydhHistoneU2osH3k36me3bUcdSig
-        release alpha
         parent wgEncodeSydhHistoneViewSignal on
         shortLabel U2OS H3K36me3B
         longLabel U2OS H3K36me3B Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
@@ -313,8 +286,8 @@ wgEncode 1
         # subId=2763 dateSubmitted=2010-11-02
 
         track wgEncodeSydhHistoneK562bInputUcdSig
-        parent wgEncodeSydhHistoneViewSignal off
-        shortLabel K562b Input
+		parent wgEncodeSydhHistoneViewSignal off
+		shortLabel K562b Input
         longLabel K562b Input Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
         subGroups view=Signal factor=Input cellType=K562b control=UCD treatment=None
         type bigWig 0.000000 12876.099609
@@ -323,7 +296,7 @@ wgEncode 1
         # subId=3839 dateSubmitted=2011-03-22
 
         track wgEncodeSydhHistoneU2osInputUcdSig
-        parent wgEncodeSydhHistoneViewSignal off
+		parent wgEncodeSydhHistoneViewSignal off
         shortLabel U2OS Input
         longLabel U2OS Input Histone Modifications by ChIP-seq Signal from ENCODE/Stanford/Yale/Davis/Harvard
         subGroups view=Signal factor=Input cellType=U2OS control=UCD treatment=None
