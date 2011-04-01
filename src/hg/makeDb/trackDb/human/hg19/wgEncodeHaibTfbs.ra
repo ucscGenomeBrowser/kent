@@ -393,7 +393,7 @@ noInherit on
         color 189,0,157
     # subId=1239 dateSubmitted=2010-06-04
 
-        track wgEncodeHaibTfbsHepg2Fosl2Pcr1xPkRep1
+        track wgEncodeHaibTfbsHepg2Fosl2V0416101PkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel HepG2 FOSL2  Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (FOSL2 in HepG2 cells)
@@ -861,7 +861,7 @@ noInherit on
         type broadPeak
     # subId=1510 dateSubmitted=2010-06-17
 
-        track wgEncodeHaibTfbsGm12891Pax5c20Pcr1xPkRep1
+        track wgEncodeHaibTfbsGm12891Pax5c20V0416101PkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel GM891 PAXC20 Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (PAX5-C20 in GM12891 cells)
@@ -877,7 +877,7 @@ noInherit on
         type broadPeak
     # subId=1512 dateSubmitted=2010-06-17
 
-        track wgEncodeHaibTfbsGm12892Pax5c20Pcr1xPkRep1
+        track wgEncodeHaibTfbsGm12892Pax5c20V0416101PkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel GM892 PAXC20 Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (PAX5-C20 in GM12892 cells)
@@ -1303,7 +1303,7 @@ noInherit on
         color 189,0,157
         # subId=2202 dateSubmitted=2010-09-15
 
-        track wgEncodeHaibTfbsHepg2Atf3Pcr1xPkRep2
+        track wgEncodeHaibTfbsHepg2Atf3V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel HepG2 ATF3 Pk 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (ATF3 in HepG2 cells)
@@ -1339,7 +1339,7 @@ noInherit on
         color 0,107,27
         # subId=2210 dateSubmitted=2010-09-15
 
-        track wgEncodeHaibTfbsH1hescAtf3Pcr1xPkRep1
+        track wgEncodeHaibTfbsH1hescAtf3V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel H1-hESC ATF3 Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (ATF3 in H1-hESC cells)
@@ -1375,7 +1375,7 @@ noInherit on
         color 0,107,27
         # subId=2211 dateSubmitted=2010-09-15
 
-        track wgEncodeHaibTfbsH1hescYy1c20Pcr1xPkRep1
+        track wgEncodeHaibTfbsH1hescYy1c20V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel H1-hESC YY1_(C-20) Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (YY1_(C-20) in H1-hESC cells)
@@ -1477,7 +1477,7 @@ noInherit on
         color 0,107,27
         # subId=2426 dateSubmitted=2010-09-27
 
-        track wgEncodeHaibTfbsH1hescP300Pcr1xPkRep2
+        track wgEncodeHaibTfbsH1hescP300V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel H1-hESC p300 Pk 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (p300 in H1-hESC cells)
@@ -2054,7 +2054,7 @@ noInherit on
         color 189,0,157
         # subId=3161 dateSubmitted=2011-01-05
 
-        track wgEncodeHaibTfbsHepg2Foxa1sc101058Pcr1xPkRep1
+        track wgEncodeHaibTfbsHepg2Foxa1sc101058V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel HepG2 FOXA1_(SC-101058) Pk 1
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (FOXA1_(SC-101058) in HepG2 cells)
@@ -2302,7 +2302,7 @@ noInherit on
         color 189,0,157
         # subId=3264 dateSubmitted=2011-01-19
 
-        track wgEncodeHaibTfbsHepg2Hnf4ah171Pcr1xPkRep1
+        track wgEncodeHaibTfbsHepg2Hnf4ah171V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel HepG2 HNF4A_(H-171) Pk 1
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (HNF4A_(H-171) in HepG2 cells)
@@ -2498,7 +2498,7 @@ noInherit on
         color 153,38,0
         # subId=3494 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsGm12878Mef2csc13268Pcr1xPkRep1
+        track wgEncodeHaibTfbsGm12878Mef2csc13268V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel GM12878 MEF2C_(SC-13268) Pk 1
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (MEF2C_(SC-13268) in GM12878 cells)
@@ -2961,6 +2961,25 @@ noInherit on
         color 0,107,27
         # subId=3833 dateSubmitted=2011-03-23
 
+        track wgEncodeHaibTfbsHepg2Foxa1c20V0416101PkRep2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel HepG2 FOXA1_(C-20) Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (FOXA1_(C-20) in HepG2 cells)
+        subGroups view=Peaks factor=FOXA1C20 cellType=HEPG2 protocol=V0416101 treatment=None rep=rep2
+        type broadPeak
+        color 189,0,157
+        # subId=3066 dateSubmitted=2010-12-08
+
+        track wgEncodeHaibTfbsHepg2Foxa1c20V0416101PkRep1
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel HepG2 FOXA1_(C-20) Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (FOXA1_(C-20) in HepG2 cells)
+        subGroups view=Peaks factor=FOXA1C20 cellType=HEPG2 protocol=V0416101 treatment=None rep=rep1
+        type broadPeak
+        color 189,0,157
+        # subId=3066 dateSubmitted=2010-12-08
+
+
 
     #Raw Signal Track HAIB TFBS#
     #Short Labels for Raw Signal =Ra #
@@ -2976,7 +2995,7 @@ noInherit on
     maxHeightPixels 100:32:16
     windowingFunction maximum
 
-        track wgEncodeHaibTfbsHepg2Atf3Pcr1xRawRep2
+        track wgEncodeHaibTfbsHepg2Atf3V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HepG2 ATF3 Raw 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (ATF3 in HepG2 cells)
@@ -3198,7 +3217,7 @@ noInherit on
         # subId=3021 dateSubmitted=2010-11-29
 
 
-	track wgEncodeHaibTfbsHepg2Hnf4ah171Pcr1xRawRep1
+		track wgEncodeHaibTfbsHepg2Hnf4ah171V0416101RawRep1 
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HepG2 HNF4A_(H-171) Raw 1
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (HNF4A_(H-171) in HepG2 cells)
@@ -3251,7 +3270,7 @@ noInherit on
         # subId=3021 dateSubmitted=2010-11-29
 
 
-        track wgEncodeHaibTfbsH1hescP300Pcr1xRawRep2
+        track wgEncodeHaibTfbsH1hescP300V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel H1-hESC p300 Raw 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (p300 in H1-hESC cells)
@@ -3260,7 +3279,7 @@ noInherit on
         color 0,107,27
         # subId=3021 dateSubmitted=2010-11-29
 
-        track wgEncodeHaibTfbsGm12891Pax5c20Pcr1xRawRep1
+        track wgEncodeHaibTfbsGm12891Pax5c20V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12891 PAX5-C20 Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (PAX5-C20 in GM12891 cells)
@@ -3508,7 +3527,7 @@ noInherit on
         # subId=3021 dateSubmitted=2010-11-29
 
 
-        track wgEncodeHaibTfbsH1hescAtf3Pcr1xRawRep1
+        track wgEncodeHaibTfbsH1hescAtf3V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel H1-hESC ATF3 Raw 1
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (ATF3 in H1-hESC cells)
@@ -3817,7 +3836,7 @@ noInherit on
         color 46,0,184
         # subId=3027 dateSubmitted=2010-11-29
 
-        track wgEncodeHaibTfbsHepg2Foxa1c20Pcr1xRawRep1
+        track wgEncodeHaibTfbsHepg2Foxa1c20V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HepG2 FOXA1_(C-20) Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (FOXA1_(C-20) in HepG2 cells)
@@ -3861,7 +3880,7 @@ noInherit on
         type bigWig 0.310065 99.995796
         # subId=3027 dateSubmitted=2010-11-29
 
-        track wgEncodeHaibTfbsGm12892Pax5c20Pcr1xRawRep1
+        track wgEncodeHaibTfbsGm12892Pax5c20V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12892 PAX5-C20 Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (PAX5-C20 in GM12892 cells)
@@ -4898,7 +4917,7 @@ noInherit on
         color 189,0,157
         # subId=3161 dateSubmitted=2011-01-05
 
-        track wgEncodeHaibTfbsHepg2Foxa1sc101058Pcr1xRawRep1
+        track wgEncodeHaibTfbsHepg2Foxa1sc101058V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HepG2 FOXA1_(SC-101058) Raw 1
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (FOXA1_(SC-101058) in HepG2 cells)
@@ -5334,7 +5353,7 @@ noInherit on
         color 189,0,157
         # subId=3036 dateSubmitted=2011-01-06
 
-        track wgEncodeHaibTfbsHepg2Fosl2Pcr1xRawRep1
+        track wgEncodeHaibTfbsHepg2Fosl2V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HepG2 FOSL2 Raw 1
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (FOSL2 in HepG2 cells)
@@ -5629,7 +5648,7 @@ noInherit on
         color 153,38,0
         # subId=3494 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsGm12878Mef2csc13268Pcr1xRawRep1
+        track wgEncodeHaibTfbsGm12878Mef2csc13268V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12878 MEF2C_(SC-13268) Raw 1
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (MEF2C_(SC-13268) in GM12878 cells)
@@ -5647,7 +5666,7 @@ noInherit on
         color 0,107,27
         # subId=3495 dateSubmitted=2011-01-21
 
-	track wgEncodeHaibTfbsGm12878ControlPcr1xRawRep5
+		track wgEncodeHaibTfbsGm12878ControlPcr1xRawRep5
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12878 Control Raw 5
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 5 (Control in GM12878 cells)
