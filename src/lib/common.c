@@ -762,15 +762,20 @@ while (text != NULL)
     if (respectQuotes)
         {
         word = nextWordRespectingQuotes(&text);
-        if (word[0] == '"')
-            stripChar(word, '"');
-        else if (word[0] == '\'')
-            stripChar(word, '\'');
+        if (word != NULL)
+            {
+            if (word[0] == '"')
+                stripChar(word, '"');
+            else if (word[0] == '\'')
+                stripChar(word, '\'');
+            }
         }
     else
         word = nextWord(&text);
     if (word)
         slNameStore(&list, word);
+    else
+        break;
     }
 
 slReverse(&list);
