@@ -605,7 +605,8 @@ void freeSimpleBed(struct track *tg)
 bedFreeList(((struct bed **)(&tg->items)));
 }
 
-static void simpleBedNextPrevEdge(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next)
+void simpleBedNextPrevEdge(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w,
+			   int h, boolean next)
 /* Like linkedFeaturesNextPrevItem, but for simple bed which has no block structure so
  * this simply zaps us to the right/left edge of the feature.  Arrows have already been
  * drawn; here we figure out coords and draw a mapBox. */
@@ -643,7 +644,10 @@ tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
-tg->nextPrevExon = simpleBedNextPrevEdge;
+// Adding "tg->nextPrevExon = simpleBedNextPrevEdge;" opened a can of worms: too many
+// bed-based tracks have their own drawItems methods that don't hook into nextItem stuff,
+// or drawItemAt methods that draw mapboxes but tg->mapsSelf is not set...
+// So, set tg->nextPrevExon = simpleBedNextPrevEdge case-by-case.
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->freeItems = freeSimpleBed;
 }
