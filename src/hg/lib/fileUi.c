@@ -196,33 +196,17 @@ else
         {
         struct dyString *dySortFields = dyStringNew(512);
         struct mdbObj *commonVars = mdbObjsCommonVars(mdbObjs);
-        // FIXME: Replace with ? cv searchable combined with priority combined with cvDefined?
-        // A good first step was putting the vars in cv order.  Now walk through them, and determine if each should be sortable
-        // Problem with making common fieds as sorable is that it REQUIRES a fixed sort order
-        // All in priority order (or so) except: obtainedBy,expId,strain,labProtocolId
-        // All are searchable except: labProtocolId,replicate,submittedDataVersion,dateSubmitted,dateResubmitted,dateUnrestricted
-        // Solution: use cv order and whether searchable.  Define dates as searchable in cv.ra, make searchable: labProtocolId, replicate, submittedDataVersion
-        //           change some orders in cv and other orders here!
-        char *sortables[] = {"grant","lab","dataType","cell","strain","age","obtainedBy", "rnaExtract","localization","phase","treatment","antibody","protocol",
-                      "labProtocolId","restrictionEnzyme","control","replicate","expId","labExpId","setType","view","submittedDataVersion","subId",
-                      "dateSubmitted","dateResubmitted","dateUnrestricted","dataVersion","origAssembly"};//"labVersion","softwareVersion",
-        // Not included:    no:not searchable
-        // accession no, annotation no,   bioRep no,     composite no, controlId no, dccInternalNotes no, fileIndex no,  fileName no,
-        // fragSize no,  fragLength no,   freezeDate no, geoSample,    geoSeries,    insertLength no,     labVersion,    level no,
-        // mapAlgorithm, privacy no,      rank no,       readType,     seqPlatform,  sex,                 size no,       softwareVersion,
-        // tableName no, uniqueness no
-
-        int ix = 0, count = sizeof(sortables)/sizeof(char *);
-        for (ix=0;ix<count;ix++)
+        // common vars are already in cv defined order, searchable is also sortable
+        struct mdbVar *var = commonVars->vars;
+        for( ;var != NULL; var = var->next)
             {
-            // If sortables[ix] is in common vars then then add it to the settings field
-            if (mdbObjContains(commonVars,sortables[ix],NULL))
+            if (differentWord(var->var,MDB_VAR_LAB_VERSION)     // Exclude certain vars
+            &&  differentWord(var->var,MDB_VAR_SOFTWARE_VERSION)
+            &&  cvSearchMethod(var->var) != cvNotSearchable)   // searchable is also sortable
                 {
-                // TODO: This would be good, but valuable information slips away.  This is especially true in fileSearch
-                //       Maybe another whiteList?
-                //if (mdbRemoveCommonVar(mdbObjs, sortables[ix])) // Don't bother if all the vals are the same
-                //    continue;
-                dyStringPrintf(dySortFields,"%s=%s ",sortables[ix],strSwapChar(cloneString(cvLabel(sortables[ix])),' ','_'));
+                if (mdbObjsHasCommonVar(mdbObjs, var->var,TRUE)) // Don't bother if all the vals are the same (missing okay)
+                    continue;
+                dyStringPrintf(dySortFields,"%s=%s ",var->var,strSwapChar(cloneString(cvLabel(var->var)),' ','_'));
                 }
             }
         if (dyStringLen(dySortFields))

@@ -235,10 +235,10 @@ if (termHash != NULL)
             return cvSearchByMultiSelect;
         if (sameWord(searchable,CV_SEARCHABLE_FREE_TEXT))
             return cvSearchByFreeText;
-        //if (sameWord(searchable,"date"))
-        //    return cvSearchByDateRange;
-        //if (sameWord(searchable,"numeric"))
-        //    return cvSearchByIntegerRange;
+        if (sameWord(searchable,"date"))
+            return cvSearchByDateRange;
+        if (sameWord(searchable,"numeric"))
+            return cvSearchByIntegerRange;
         }
     }
 return cvNotSearchable;

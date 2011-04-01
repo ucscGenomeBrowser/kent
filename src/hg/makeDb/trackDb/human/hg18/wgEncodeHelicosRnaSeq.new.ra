@@ -1,5 +1,4 @@
 track wgEncodeHelicosRnaSeq
-release alpha
 compositeTrack on
 shortLabel Helicos RNA-seq
 longLabel ENCODE Helicos RNA-seq
@@ -22,12 +21,10 @@ wgEncode 1
     shortLabel Alignments
     view Alignments
     visibility pack
-    release alpha
     subTrack wgEncodeHelicosRnaSeq
     scoreFilterByRange on
 
         track wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya
-        release alpha
         subTrack wgEncodeHelicosRnaSeqViewAlignments off
         shortLabel K562cyto pA+ Tag
         longLabel ENCODE Helicos RNA-seq Tags (PolyA+ RNA in K562 cytosol)
@@ -46,11 +43,9 @@ wgEncode 1
     shortLabel Raw Signal
     view yRawSignal
     visibility full
-    release alpha
     subTrack wgEncodeHelicosRnaSeq
 
         track wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya
-        release alpha
         subTrack wgEncodeHelicosRnaSeqViewyRawSignal
         shortLabel K562cyto pA+ Sig
         longLabel ENCODE Helicos RNA-seq Raw Signal (PolyA+ RNA in K562 cytosol)

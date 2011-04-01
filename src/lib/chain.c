@@ -36,6 +36,14 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+int cBlockCmpQuery(const void *va, const void *vb)
+/* Compare to sort based on query start. */
+{
+const struct cBlock *a = *((struct cBlock **)va);
+const struct cBlock *b = *((struct cBlock **)vb);
+return a->qStart - b->qStart;
+}
+
 int cBlockCmpTarget(const void *va, const void *vb)
 /* Compare to sort based on target start. */
 {

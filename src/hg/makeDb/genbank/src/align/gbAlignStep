@@ -298,7 +298,7 @@ sub alignForDatabase($) {
 sub startAlignForDatabase($) {
     my($db) = @_;
     my $pid = fork();
-    if (($pid < 0) || !defined($pid)) {
+    if (!defined($pid)) {
         die("can't fork");
     }
     if ($pid == 0) {

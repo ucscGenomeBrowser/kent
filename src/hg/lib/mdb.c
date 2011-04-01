@@ -1773,6 +1773,7 @@ for(;mdbObj!=NULL; mdbObj=mdbObj->next)
 return FALSE;
 }
 
+#define MDB_COMMON_VARS_OBJ_SEARCH_LIMIT 10
 struct mdbObj *mdbObjsCommonVars(struct mdbObj *mdbObjs)
 // Returns a new mdbObj with all vars that are contained in every obj passed in.
 // Note that the returnd mdbObj has a meaningles obj name and vals.
@@ -1788,7 +1789,7 @@ if (mdbObj != NULL)
     int count = 1;
     // NOTE: This should not loop through all, as the list could be huge.  Just compare the first 10 for now
     struct dyString *dyPruneVars = dyStringNew(512);
-    for(;mdbObj != NULL && count < 10;mdbObj=mdbObj->next, count++)
+    for(;mdbObj != NULL && count < MDB_COMMON_VARS_OBJ_SEARCH_LIMIT;mdbObj=mdbObj->next, count++)
         {
         struct mdbVar *mdbVar = commonVars->vars;            // Will walk through the first obj's vars
         for(; mdbVar != NULL; mdbVar = mdbVar->next )
@@ -2090,30 +2091,50 @@ if (dyStringLen(dyRemoveVars))
 dyStringFree(&dyRemoveVars);
 }
 
-char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var)
-// Removes var from set of mdbObjs but only if all that have it have a commmon val
-// Returns the val if removed, else NULL
+boolean mdbObjsHasCommonVar(struct mdbObj *mdbList, char *var, boolean missingOk)
+// Returns TRUE if all mbObjs passed in have the var with the same value
 {
 char *val = NULL;
 struct mdbObj *mdb = NULL;
 for(mdb = mdbList; mdb; mdb=mdb->next)
     {
     char *thisVal = mdbObjFindValue(mdb,var);
-    if (thisVal == NULL) // If var isn't found in some, that is okay
-        continue;
+    if (thisVal == NULL)
+        {
+        if (missingOk)
+            continue;
+        else
+            return FALSE;
+        }
     if (val == NULL)
         val = thisVal;
     else if(differentWord(val,thisVal))
-        return NULL;
+        return FALSE;
     }
+return TRUE;
+}
 
-if (val)
+char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var)
+// Removes var from set of mdbObjs but only if all that have it have a commmon val
+// Returns the val if removed, else NULL
+{
+if (mdbObjsHasCommonVar(mdbList,var,TRUE))  // If var isn't found in some, that is okay
     {
-    val = cloneString(val);
-    for(mdb = mdbList;mdb;mdb=mdb->next)
+    char *val = NULL;
+    struct mdbObj *mdb = mdbList;
+    for( ; mdb; mdb=mdb->next)
+        {
+        if (val == NULL)
+            {
+            char *thisVal = mdbObjFindValue(mdb,var);
+            if (thisVal != NULL)
+                val = cloneString(thisVal);
+            }
         mdbObjRemoveVars(mdb,var);
+        }
+    return val;
     }
-return val;
+return NULL;
 }
 
 boolean mdbObjSetVar(struct mdbObj *mdbObj, char *var,char *val)
@@ -2723,7 +2744,7 @@ while(mdbObjs != NULL)
                slCount(compositeEdvs),MDB_VAR_ENCODE_EDVS,dyStringContents(dyVars)); // Set the stage
 
     // Organize composite objs by EDVs
-    dyStringPrintf(dyVars, " view replicate "); // Allows for nicer sorted list
+    dyStringPrintf(dyVars, " %s %s ",MDB_VAR_VIEW,MDB_VAR_REPLICATE); // Allows for nicer sorted list
     char *edvSortOrder = cloneString(dyStringContents(dyVars));
 
     // Walk through objs for an exp as defined by EDVs
@@ -3128,8 +3149,6 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
     else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
         {
         // TO BE IMPLEMENTED
-        // Requires new mdbObjSearch API and more than one (char *)onePair->val
-        warn("mdb search by date or number is not yet implemented.");
         }
     }
 // Be sure to include table or file in selections

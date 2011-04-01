@@ -1424,23 +1424,31 @@ type wig 0 1000
     longLabel Affymetrix HepG2 Minus Strand Short RNA (Whole Cell) Signal
     priority 4
 
-track ceuBcellRNASeqBW
-shortLabel BCell Coverage
-longLabel B Cell Transcriptome (RNA-Seq)
+track ceuBcellSuper
+superTrack on
+shortLabel B-Cell Transcriptome
+longLabel B-Cell Transcriptome (RNA-Seq)
 group expression
+visibility hide
 priority 301
-visibility hide
-type bigWig 0 716249
-autoScale on
-maxHeightPixels 100:50:20
 
-track ceuBcellRNASeq
-shortLabel BCell Junctions
-longLabel B Cell Junctions
-group expression
-priority 301.1
-visibility hide
-type bed 12
+    track ceuBcellRNASeqBW
+    superTrack ceuBcellSuper full
+    shortLabel B-Cell Coverage
+    longLabel B-Cell RNA-Seq Coverage
+    group expression
+    priority 301
+    type bigWig 0 716249
+    autoScale on
+    maxHeightPixels 100:50:20
+
+    track ceuBcellRNASeq
+    superTrack ceuBcellSuper full
+    shortLabel B-Cell Junctions
+    longLabel B-Cell RNA-Seq Junctions
+    group expression
+    priority 301.1
+    type bed 12
 
 track stanfordNRSFSites
 shortLabel Stanf NRSF Sites

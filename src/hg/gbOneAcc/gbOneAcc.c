@@ -27,7 +27,7 @@ void extractAccFromGb( char *gbName, char **accNames, int accCount)
 {
 struct lineFile *lf = lineFileOpen(gbName, TRUE);
 FILE *out = stdout;
-enum {maxHeadLines=20, headLineSize=256 };
+enum {maxHeadLines=200, headLineSize=256 };
 char *headLines[maxHeadLines];	/* Store stuff between locus and accession. */
 char *line;
 int lineSize;

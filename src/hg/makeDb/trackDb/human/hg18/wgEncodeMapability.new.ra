@@ -1,0 +1,177 @@
+track wgEncodeMapability
+compositeTrack on
+shortLabel Mapability
+longLabel Mapability or Uniqueness of Reference Genome
+group map
+subGroup1 view Mapability ALN=Broad_Alignability CRGMAP=CRG_Alignability DUNIQ=Duke_Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Duke_Excluded_Regions
+subGroup2 win Sequence_Size w015=15bp w020=20bp w024=24bp w035=35bp w036=36bp w040=40bp w050=50bp w075=75bp w100=100bp zNA=Varied
+allButtonPair on
+sortOrder view=+ win=+
+dragAndDrop subTracks
+priority 0
+type bed 3
+noInherit on
+wgEncode 1
+
+    track wgEncodeMapabilityViewALN
+    shortLabel Broad Alignability
+    view ALN
+    visibility hide
+    subTrack wgEncodeMapability
+    viewLimits 0:1
+    autoScale off
+    windowingFunction mean
+    maxHeightPixels 100:32:16
+
+        track wgEncodeBroadMapabilityAlign36mer
+        subTrack wgEncodeMapabilityViewALN
+        shortLabel Broad Align 36
+        longLabel Mapability - ENCODE Broad Alignability of 36mers with no more than 2 mismatches
+        subGroups view=ALN win=w036
+        type wig 0.00 1.00
+        color 133,0,173
+
+    track wgEncodeMapabilityViewDUNIQ
+    shortLabel Duke Uniqueness
+    view DUNIQ
+    visibility full
+    subTrack wgEncodeMapability
+    configurable on
+    viewLimits 0:1
+    autoScale off
+    windowingFunction mean
+    maxHeightPixels 100:32:16
+
+        track wgEncodeDukeUniqueness20bp
+        subTrack wgEncodeMapabilityViewDUNIQ off
+        shortLabel Duke Uniq 20
+        longLabel Mapability - ENCODE Duke Uniqueness of 20bp sequences
+        type wig 0.00 1.00
+        subGroups view=DUNIQ win=w020
+        spanList 1
+        color 153,38,0
+
+        track wgEncodeDukeUniqueness24bp
+        subTrack wgEncodeMapabilityViewDUNIQ off
+        shortLabel Duke Uniq 24
+        longLabel Mapability - ENCODE Duke Uniqueness of 24bp sequences
+        type wig 0.00 1.00
+        subGroups view=DUNIQ win=w024
+        spanList 1
+        color 153,38,0
+
+        track wgEncodeDukeUniqueness35bp
+        subTrack wgEncodeMapabilityViewDUNIQ
+        shortLabel Duke Uniq 35
+        longLabel Mapability - ENCODE Duke Uniqueness of 35bp sequences
+        type wig 0.00 1.00
+        subGroups view=DUNIQ win=w035
+        spanList 1
+        color 153,38,0
+
+    track wgEncodeMapabilityViewRUNIQ
+    shortLabel Rosetta Uniqueness
+    view RUNIQ
+    visibility hide
+    subTrack wgEncodeMapability
+    viewLimits 0:37
+    minLimit 0
+    maxLimit 37
+    gridDefault on
+    yLineOnOff on
+    autoScale off
+    windowingFunction mean
+    maxHeightPixels 100:32:16
+
+        track uniqueness
+        subTrack wgEncodeMapabilityViewRUNIQ
+        shortLabel Rosetta Uniq 35
+        longLabel Mapability - Rosetta Uniqueness 35-mer Alignment (BWA/MAQ, unique alignment=37)
+        subGroups view=RUNIQ win=w035
+        #viewLimits 0:37
+        #minLimit 0
+        #maxLimit 37
+        color 100,50,150
+        type bedGraph 4
+
+    track wgEncodeMapabilityViewUUNIQ
+    shortLabel UMass Uniqueness
+    view UUNIQ
+    visibility full
+    subTrack wgEncodeMapability
+    viewLimits 0.1:0.55
+    autoScale off
+    windowingFunction mean
+    maxHeightPixels 100:32:16
+
+        track wgEncodeUmassMapabilityUniq15
+        subTrack wgEncodeMapabilityViewUUNIQ
+        shortLabel Umass Uniq 15
+        longLabel Mapability - ENCODE UMass Uniqueness at 15bp
+        subGroups view=UUNIQ win=w015
+        type wig 0.00 1.00
+        color 46,0,184
+
+    track wgEncodeMapabilityViewXR
+    shortLabel Duke Excluded Regions
+    view XR
+    subTrack wgEncodeMapability
+
+        track wgEncodeDukeRegionsExcluded
+        subTrack wgEncodeMapabilityViewXR
+        shortLabel Excluded Regions
+        longLabel Mapability - ENCODE Duke Excluded Regions
+        subGroups view=XR win=zNA
+        type bed 6
+        noScoreFilter on
+
+    track wgEncodeMapabilityViewCRGMAP
+    shortLabel CRG GEM Alignability
+    view CRGMAP
+    visibility hide
+    subTrack wgEncodeMapability
+    viewLimits 0:1
+    autoScale off
+    windowingFunction mean
+    maxHeightPixels 100:32:16
+
+        track wgEncodeCrgMapabilityAlign36mer
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Align 36
+        longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w036
+        type bigWig 0.00 1.00
+        color 0,100,0
+
+        track wgEncodeCrgMapabilityAlign40mer
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Align 40
+        longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w040
+        type bigWig 0.00 1.00
+        color 0,100,0
+
+        track wgEncodeCrgMapabilityAlign50mer
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Align 50
+        longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w050
+        type bigWig 0.00 1.00
+        color 0,100,0
+
+        track wgEncodeCrgMapabilityAlign75mer
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Align 75
+        longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w075
+        type bigWig 0.00 1.00
+        color 0,100,0
+
+        track wgEncodeCrgMapabilityAlign100mer
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Align 100
+        longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
+        subGroups view=CRGMAP win=w100
+        type bigWig 0.00 1.00
+        color 0,100,0
+
