@@ -1368,8 +1368,8 @@ noInherit on
 
         track wgEncodeHaibTfbsH1hescYy1c20V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel H1-hESC YY1_(C-20) Pk 2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (YY1_(C-20) in H1-hESC cells)
+        shortLabel H1-hESC YY1_(SC-281) Pk 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (YY1_(SC-281) in H1-hESC cells)
         subGroups view=Peaks factor=YY1SC281 cellType=H1hESC protocol=V0416102 treatment=None rep=rep2
         type broadPeak
         color 0,107,27
@@ -1377,8 +1377,8 @@ noInherit on
 
         track wgEncodeHaibTfbsH1hescYy1c20V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel H1-hESC YY1_(C-20) Pk 1
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (YY1_(C-20) in H1-hESC cells)
+        shortLabel H1-hESC YY1_(SC-281) Pk 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (YY1_(SC-281) in H1-hESC cells)
         subGroups view=Peaks factor=YY1SC281 cellType=H1hESC protocol=V0416102 treatment=None rep=rep1
         type broadPeak
         color 0,107,27
@@ -1454,16 +1454,16 @@ noInherit on
 
         track wgEncodeHaibTfbsGm12891Yy1c20V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM12891 YY1_(C-20) Pk 1
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (YY1_(C-20) in GM12891 cells)
+        shortLabel GM12891 YY1_(SC-281) Pk 1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (YY1_(SC-281) in GM12891 cells)
         subGroups view=Peaks factor=YY1SC281 cellType=GM12891 protocol=V0416101 treatment=None rep=rep1
         type broadPeak
         # subId=2203 dateSubmitted=2010-09-27
 
         track wgEncodeHaibTfbsGm12891Yy1c20V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM12891 YY1_(C-20) Pk 2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (YY1_(C-20) in GM12891 cells)
+        shortLabel GM12891 YY1_(SC-281) Pk 2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (YY1_(SC-281) in GM12891 cells)
         subGroups view=Peaks factor=YY1SC281 cellType=GM12891 protocol=V0416101 treatment=None rep=rep2
         type broadPeak
         # subId=2203 dateSubmitted=2010-09-27
@@ -1841,16 +1841,16 @@ noInherit on
 
         track wgEncodeHaibTfbsSknshraYy1c20V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel SK-N-SH_RA YY1_(C-20) Pk 2
-        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (YY1_(C-20) in SK-N-SH_RA cells)
+        shortLabel SK-N-SH_RA YY1_(SC-281) Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (YY1_(SC-281) in SK-N-SH_RA cells)
         subGroups view=Peaks factor=YY1SC281 cellType=SKNSHRA protocol=V0416102 treatment=None rep=rep2
         type broadPeak
         # subId=3102 dateSubmitted=2010-12-17
 
         track wgEncodeHaibTfbsSknshraYy1c20V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel SK-N-SH_RA YY1_(C-20) Pk 1
-        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (YY1_(C-20) in SK-N-SH_RA cells)
+        shortLabel SK-N-SH_RA YY1_(SC-281) Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (YY1_(SC-281) in SK-N-SH_RA cells)
         subGroups view=Peaks factor=YY1SC281 cellType=SKNSHRA protocol=V0416102 treatment=None rep=rep1
         type broadPeak
         # subId=3102 dateSubmitted=2010-12-17
@@ -2518,8 +2518,8 @@ noInherit on
 
         track wgEncodeHaibTfbsGm12878Yy1c20Pcr1xPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM12878 YY1_(C-20) Pk 2
-        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (YY1_(C-20) in GM12878 cells)
+        shortLabel GM12878 YY1_(SC-281) Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (YY1_(SC-281) in GM12878 cells)
         subGroups view=Peaks factor=YY1SC281 cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
         type broadPeak
         color 153,38,0
@@ -2527,8 +2527,8 @@ noInherit on
 
         track wgEncodeHaibTfbsGm12878Yy1c20Pcr1xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM12878 YY1_(C-20) Pk 1
-        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (YY1_(C-20) in GM12878 cells)
+        shortLabel GM12878 YY1_(SC-281) Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (YY1_(SC-281) in GM12878 cells)
         subGroups view=Peaks factor=YY1SC281 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
         type broadPeak
         color 153,38,0
@@ -4722,16 +4722,16 @@ noInherit on
 
         track wgEncodeHaibTfbsSknshraYy1c20V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel SK-N-SH_RA YY1_(C-20) Raw 2
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (YY1_(C-20) in SK-N-SH_RA cells)
+        shortLabel SK-N-SH_RA YY1_(SC-281) Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (YY1_(SC-281) in SK-N-SH_RA cells)
         subGroups view=RawSignal factor=YY1SC281 cellType=SKNSHRA protocol=V0416102 treatment=None rep=rep2
         type bigWig 0.135502 209.994003
         # subId=3102 dateSubmitted=2010-12-17
 
         track wgEncodeHaibTfbsSknshraYy1c20V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel SK-N-SH_RA YY1_(C-20) Raw 1
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (YY1_(C-20) in SK-N-SH_RA cells)
+        shortLabel SK-N-SH_RA YY1_(SC-281) Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (YY1_(SC-281) in SK-N-SH_RA cells)
         subGroups view=RawSignal factor=YY1SC281 cellType=SKNSHRA protocol=V0416102 treatment=None rep=rep1
         type bigWig 0.193427 188.203995
         # subId=3102 dateSubmitted=2010-12-17
@@ -5856,8 +5856,8 @@ noInherit on
 
         track wgEncodeHaibTfbsGm12878Yy1c20Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM12878 YY1_(C-20) Raw 2
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (YY1_(C-20) in GM12878 cells)
+        shortLabel GM12878 YY1_(SC-281) Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (YY1_(SC-281) in GM12878 cells)
         subGroups view=RawSignal factor=YY1SC281 cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
         type bigWig 0.206929 143.660995
         color 153,38,0
@@ -5865,8 +5865,8 @@ noInherit on
 
         track wgEncodeHaibTfbsGm12878Yy1c20Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM12878 YY1_(C-20) Raw 1
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (YY1_(C-20) in GM12878 cells)
+        shortLabel GM12878 YY1_(SC-281) Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (YY1_(SC-281) in GM12878 cells)
         subGroups view=RawSignal factor=YY1SC281 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
         type bigWig 0.240201 156.850998
         color 153,38,0
