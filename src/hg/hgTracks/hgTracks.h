@@ -630,6 +630,12 @@ void bedLoadItemByQuery(struct track *tg, char *table,
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader);
 /* Generic tg->item loader. */
 
+void simpleBedNextPrevEdge(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w,
+			   int h, boolean next);
+/* Like linkedFeaturesNextPrevItem, but for simple bed which has no block structure so
+ * this simply zaps us to the right/left edge of the feature.  Arrows have already been
+ * drawn; here we figure out coords and draw a mapBox. */
+
 void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader)(char **row),
 				   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
 				   char *scoreColumn, char *moreWhere, boolean (*itemFilter)(struct slList *item));
