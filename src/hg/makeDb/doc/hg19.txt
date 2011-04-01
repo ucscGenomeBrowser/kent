@@ -8390,7 +8390,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 3/1/11 angie)
+# NHGRI GWAS CATALOG (DONE 4/1/11 angie)
+# Updated 3/1/11
 # Updated 2/1/11
 # Updated 12/7/10
 # Updated 11/1/10
@@ -8419,7 +8420,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 5467 elements of size 22
+#Loaded 5631 elements of size 22
 
 
 ######################################################################## 
@@ -15251,6 +15252,10 @@ TMPDIR=/scratch/tmp
     # real    100m33.646s
     cat fb.hg19.chainMelGal1Link.txt
     #   76647912 bases of 2897316137 (2.645%) in intersection
+    # Create link
+    cd /hive/data/genomes/hg19/bed
+    ln -s  lastzMelGal1.2011-03-28 lastz.melGal1
+
 
     #   running the swap 
     mkdir /hive/data/genomes/melGal1/bed/blastz.hg19.swap
@@ -15264,6 +15269,8 @@ TMPDIR=/scratch/tmp
     #   real    6m51.280s
     cat fb.melGal1.chainHg19Link.txt
     #   62120143 bases of 935922386 (6.637%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.hg19.swap lastz.hg19
 
 #############################################################################
 # BUILD seudoYale60 TRACK 
