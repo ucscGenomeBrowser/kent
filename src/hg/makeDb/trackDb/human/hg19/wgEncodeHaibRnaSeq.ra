@@ -770,6 +770,24 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3838 dateSubmitted=2011-03-31
 
+        track wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel Jurkat 1
+        longLabel Jurkat RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=Jurkat rnaExtract=shortPolyA treatment=None rep=rep1
+        type genePred
+        origAssembly hg18
+        # subId=3868 dateSubmitted=2011-04-01
+
+        track wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel Jurkat 2
+        longLabel Jurkat RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=Jurkat rnaExtract=shortPolyA treatment=None rep=rep2
+        type genePred
+        origAssembly hg18
+        # subId=3868 dateSubmitted=2011-04-01
+
     track wgEncodeHudsonalphaRnaSeqViewSignal
     shortLabel Signal
     view RawSignal
@@ -1136,4 +1154,13 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.148672 2637.550049
         origAssembly hg19
         # subId=3838 dateSubmitted=2011-03-31
+
+        track wgEncodeHaibRnaSeqJurkatShortpolyaRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel Jurkat Raw 2
+        longLabel Jurkat RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=Jurkat rnaExtract=shortPolyA treatment=None rep=rep2
+        type bigWig 0.579586 391.365997
+        origAssembly hg18
+        # subId=3868 dateSubmitted=2011-04-01
 
