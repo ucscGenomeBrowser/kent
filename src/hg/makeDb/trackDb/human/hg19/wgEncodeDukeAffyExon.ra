@@ -426,7 +426,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep1
         parent wgEncodeDukeAffyExonViewSimpleSignal on 
         shortLabel HeLa-S3 IFNa4h 1
-        longLabel HeLa-S3 IFNa4h Exon array Signal Replicate 1 from ENCODE/Duke
+        longLabel HeLa-S3 IFNa 4hr Exon array Signal Replicate 1 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNa4h rep=rep1
         type broadPeak
         color 0,119,158
@@ -436,7 +436,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep2
         parent wgEncodeDukeAffyExonViewSimpleSignal on
         shortLabel HeLa-S3 IFNa4h 2
-        longLabel HeLa-S3 IFNa4h Exon array Signal Replicate 2 from ENCODE/Duke
+        longLabel HeLa-S3 IFNa 4hr Exon array Signal Replicate 2 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNa4h rep=rep2
         type broadPeak
         color 0,119,158
@@ -446,7 +446,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep1
         parent wgEncodeDukeAffyExonViewSimpleSignal on
         shortLabel HeLa-S3 IFNg4h 1
-        longLabel HeLa-S3 IFNg4h Exon array Signal Replicate 1 from ENCODE/Duke
+        longLabel HeLa-S3 IFNg 4hr Exon array Signal Replicate 1 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNg4h rep=rep1
         type broadPeak
         color 0,119,158
@@ -456,7 +456,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep2
         parent wgEncodeDukeAffyExonViewSimpleSignal on
         shortLabel HeLa-S3 IFNg4h 2
-        longLabel HeLa-S3 IFNg4h Exon array Signal Replicate 2 from ENCODE/Duke
+        longLabel HeLa-S3 IFNg 4hr Exon array Signal Replicate 2 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNg4h rep=rep2
         type broadPeak
         color 0,119,158
