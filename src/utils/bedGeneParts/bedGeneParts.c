@@ -17,7 +17,7 @@ errAbort(
   "bedGeneParts - Given a bed, spit out promoter, first exon, or all introns.\n"
   "usage:\n"
   "   bedGeneParts part in.bed out.bed\n"
-  "Where part is either 'firstExon' or 'introns' or 'promoter'\n"
+  "Where part is either 'firstExon' or 'introns' or 'promoter' or 'firstCodingSplice'\n"
   "options:\n"
   "   -proStart=NN - start of promoter relative to txStart, default %d\n"
   "   -proEnd=NN - end of promoter relative to txStart, default %d\n"
@@ -31,7 +31,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-enum partChoice {pcFirstExon, pcIntrons, pcPromoter};
+enum partChoice {pcFirstExon, pcIntrons, pcPromoter, pcFirstCodingSplice};
 
 void bedGeneParts(char *part, char *input, char *output)
 /* bedGeneParts - Given a bed, spit out promoter, first exon, or all introns.. */
@@ -53,6 +53,11 @@ else if (sameString(part, "promoter"))
     {
     choice = pcPromoter;
     minWords = 6;
+    }
+else if (sameString(part, "firstCodingSplice"))
+    {
+    choice = pcFirstCodingSplice;
+    minWords = 12;
     }
 else
     errAbort("Unrecognized part '%s'", part);
@@ -85,6 +90,46 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
 		}
 	    fprintf(f, "%s\t%d\t%d\t%s\t%d\t%c\n", 
 	    	bed->chrom, start, end, bed->name, bed->score, strand);
+	    break;
+	    }
+	case pcFirstCodingSplice:
+	    {
+	    int blockCount = bed->blockCount;
+	    if (blockCount > 1)
+	        {
+		int i;
+		int firstCodingSplicePos = 0;
+		if (strand == '+')
+		    {
+		    for (i=1; i<blockCount; ++i)
+		        {
+			int exonStart = bed->chromStart + bed->chromStarts[i];
+			if (exonStart >= bed->thickStart && exonStart < bed->thickEnd)
+			    {
+			    firstCodingSplicePos = exonStart;
+			    break;
+			    }
+			}
+		    }
+		else
+		    {
+		    for (i=blockCount-1; i>=0; --i)
+		        {
+			int exonStart = bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i];
+			if (exonStart >= bed->thickStart && exonStart < bed->thickEnd)
+			    {
+			    firstCodingSplicePos = exonStart;
+			    break;
+			    }
+			}
+		    }
+		if (firstCodingSplicePos > 0)
+		    {
+		    fprintf(f, "%s\t%d\t%d\t%s\t%d\t%c\n", 
+			bed->chrom, firstCodingSplicePos-1, firstCodingSplicePos+1, bed->name, 
+				bed->score, strand);
+		    }
+		}
 	    break;
 	    }
 	case pcIntrons:
