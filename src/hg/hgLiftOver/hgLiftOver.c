@@ -346,13 +346,16 @@ cgiParagraph(
 
 double scoreLiftOverChain(struct liftOverChain *chain,
     char *fromOrg, char *fromDb, char *toOrg, char *toDb,
-    char *cartOrg, char *cartDb, struct hash *dbRank )
+    char *cartOrg, char *cartDb, struct hash *dbRank, 
+    struct hash *dbHash)
 /* Score the chain in terms of best match for cart settings */
 {
 double score = 0;
+struct dbDb *chainFromDbDb = hashFindVal(dbHash, chain->fromDb);
+struct dbDb *chainToDbDb = hashFindVal(dbHash, chain->toDb);
 
-char *chainFromOrg = hArchiveOrganism(chain->fromDb);
-char *chainToOrg = hArchiveOrganism(chain->toDb);
+char *chainFromOrg = (chainFromDbDb) ? chainFromDbDb->organism : NULL;
+char *chainToOrg = (chainToDbDb) ? chainToDbDb->organism : NULL;
 int fromRank = hashIntValDefault(dbRank, chain->fromDb, 0);  /* values up to approx. #assemblies */
 int toRank = hashIntValDefault(dbRank, chain->toDb, 0);
 int maxRank = hashIntVal(dbRank, "maxRank"); 
@@ -398,6 +401,7 @@ struct liftOverChain *defaultChoices(struct liftOverChain *chainList,
 char *fromOrg, *fromDb, *toOrg, *toDb, *cartOrg;
 struct liftOverChain *choice = NULL;  
 struct hash *dbRank = hGetDatabaseRank();
+struct hash *dbDbHash = hDbDbAndArchiveHash();
 double bestScore = -1;
 struct liftOverChain *this = NULL;
 
@@ -421,7 +425,7 @@ if (sameWord(cartDb,"0"))
 
 for (this = chainList; this != NULL; this = this->next)
     {
-    double score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, cartOrg, cartDb, dbRank);
+    double score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, cartOrg, cartDb, dbRank, dbDbHash);
     if (score > bestScore)
 	{
 	choice = this;
