@@ -431,7 +431,7 @@ for (this = chainList; this != NULL; this = this->next)
 	choice = this;
 	bestScore = score;
 	}
-    }  
+    }
 
 return choice;
 }
@@ -476,7 +476,7 @@ cartWebStart(cart, NULL, "Lift Genome Annotations");
 
 getDbAndGenome(cart, &db, &organism, oldVars);
 
-chainList = liftOverChainListFiltered();
+chainList = liftOverChainList();
 
 choice = defaultChoices(chainList, db);
 if (choice == NULL)

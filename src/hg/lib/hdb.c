@@ -4214,7 +4214,7 @@ struct liftOverChain *chainList = NULL, *chain;
 struct hash *hash = newHash(0), *dbNameHash = newHash(3);
 
 /* Get list of all liftOver chains in central database */
-chainList = liftOverChainListFiltered();
+chainList = liftOverChainList();
 
 /* Create hash of databases having liftOver chains from this database */
 for (chain = chainList; chain != NULL; chain = chain->next)
