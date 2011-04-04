@@ -2138,222 +2138,222 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel A549 cell shortTotal
+        shortLabel A549 cell C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in A549 cell)
         subGroups view=Contigs rep=Pooled cellType=A549 localization=cell rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         # subId=3842 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqAg04450CellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel AG04450 cell shortTotal
+        shortLabel AG04450 cell C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in AG04450 cell)
         subGroups view=Contigs rep=Pooled cellType=AG04450 localization=cell rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         # subId=3843 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqBjCellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel BJ cell shortTotal
+        shortLabel BJ cell C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in BJ cell)
         subGroups view=Contigs rep=Pooled cellType=BJ localization=cell rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         # subId=3844 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel GM12878 cytosol shortTotal
+        shortLabel GM12878 cytosol C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in GM12878 cytosol)
         subGroups view=Contigs rep=Pooled cellType=GM12878 localization=cytosol rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 153,38,0
         # subId=3845 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel GM12878 nucleus shortTotal
+        shortLabel GM12878 nucleus C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in GM12878 nucleus)
         subGroups view=Contigs rep=Pooled cellType=GM12878 localization=nucleus rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 153,38,0
         # subId=3846 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqGm12878CellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel GM12878 cell shortTotal
+        shortLabel GM12878 cell C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in GM12878 cell)
         subGroups view=Contigs rep=Pooled cellType=GM12878 localization=cell rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 153,38,0
         # subId=3847 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel H1-hESC cytosol shortTotal
+        shortLabel H1-hESC cytosol C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in H1-hESC cytosol)
         subGroups view=Contigs rep=Pooled cellType=H1hESC localization=cytosol rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 0,107,27
         # subId=3848 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel H1-hESC nucleus shortTotal
+        shortLabel H1-hESC nucleus C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in H1-hESC nucleus)
         subGroups view=Contigs rep=Pooled cellType=H1hESC localization=nucleus rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 0,107,27
         # subId=3849 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqH1hescCellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel H1-hESC cell shortTotal
+        shortLabel H1-hESC cell C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in H1-hESC cell)
         subGroups view=Contigs rep=Pooled cellType=H1hESC localization=cell rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 0,107,27
         # subId=3850 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel HUVEC cytosol shortTotal
+        shortLabel HUVEC cytosol C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HUVEC cytosol)
         subGroups view=Contigs rep=Pooled cellType=HUVEC localization=cytosol rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 224,75,0
         # subId=3851 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel HUVEC nucleus shortTotal
+        shortLabel HUVEC nucleus C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HUVEC nucleus)
         subGroups view=Contigs rep=Pooled cellType=HUVEC localization=nucleus rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 224,75,0
         # subId=3852 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqHuvecCellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel HUVEC cell shortTotal
+        shortLabel HUVEC cell C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HUVEC cell)
         subGroups view=Contigs rep=Pooled cellType=HUVEC localization=cell rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 224,75,0
         # subId=3853 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel HeLa-S3 cytosol shortTotal
+        shortLabel HeLa-S3 cytosol C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HeLa-S3 cytosol)
         subGroups view=Contigs rep=Pooled cellType=HeLaS3 localization=cytosol rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 0,119,158
         # subId=3854 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel HeLa-S3 nucleus shortTotal
+        shortLabel HeLa-S3 nucleus C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HeLa-S3 nucleus)
         subGroups view=Contigs rep=Pooled cellType=HeLaS3 localization=nucleus rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 0,119,158
         # subId=3855 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqHelas3CellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel HeLa-S3 cell shortTotal
+        shortLabel HeLa-S3 cell C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HeLa-S3 cell)
         subGroups view=Contigs rep=Pooled cellType=HeLaS3 localization=cell rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 0,119,158
         # subId=3856 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel K562 chromatin shortTotal
+        shortLabel K562 chromatin C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 chromatin)
         subGroups view=Contigs rep=Pooled cellType=K562 localization=chromatin rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 46,0,184
         # subId=3857 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqK562CytosolShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel K562 cytosol shortTotal
+        shortLabel K562 cytosol C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 cytosol)
         subGroups view=Contigs rep=Pooled cellType=K562 localization=cytosol rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 46,0,184
         # subId=3858 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel K562 nucleolus shortTotal
+        shortLabel K562 nucleolus C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 nucleolus)
         subGroups view=Contigs rep=Pooled cellType=K562 localization=nucleolus rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 46,0,184
         # subId=3859 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel K562 nucleoplasm shortTotal
+        shortLabel K562 nucleoplasm C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 nucleoplasm)
         subGroups view=Contigs rep=Pooled cellType=K562 localization=nucleoplasm rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 46,0,184
         # subId=3860 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel K562 nucleus shortTotal
+        shortLabel K562 nucleus C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 nucleus)
         subGroups view=Contigs rep=Pooled cellType=K562 localization=nucleus rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 46,0,184
         # subId=3861 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqK562CellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel K562 cell shortTotal
+        shortLabel K562 cell C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 cell)
         subGroups view=Contigs rep=Pooled cellType=K562 localization=cell rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 46,0,184
         # subId=3862 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel NHEK cytosol shortTotal
+        shortLabel NHEK cytosol C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in NHEK cytosol)
         subGroups view=Contigs rep=Pooled cellType=NHEK localization=cytosol rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 179,0,134
         # subId=3863 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel NHEK nucleus shortTotal
+        shortLabel NHEK nucleus C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in NHEK nucleus)
         subGroups view=Contigs rep=Pooled cellType=NHEK localization=nucleus rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 179,0,134
         # subId=3864 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqNhekCellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel NHEK cell shortTotal
+        shortLabel NHEK cell C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in NHEK cell)
         subGroups view=Contigs rep=Pooled cellType=NHEK localization=cell rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         color 179,0,134
         # subId=3865 dateSubmitted=2011-03-31
 
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel SK-N-SH_RA cell shortTotal
+        shortLabel SK-N-SH_RA cell C
         longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in SK-N-SH_RA cell)
         subGroups view=Contigs rep=Pooled cellType=SKNSHRA localization=cell rnaExtract=shortTotal
-        type bed 9
+        type bed 6
         # subId=3866 dateSubmitted=2011-03-31
  
