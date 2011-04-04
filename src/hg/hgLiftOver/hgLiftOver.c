@@ -22,7 +22,6 @@ static char const rcsid[] = "$Id: hgLiftOver.c,v 1.62 2009/07/14 20:17:30 markd 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
 #define HGLFT_DATAFILE_VAR "hglft_dataFile"     /* file of data to convert */
-#define HGLFT_DATAFORMAT_VAR "hglft_dataFormat" /* format of data to convert */
 #define HGLFT_FROMORG_VAR "hglft_fromOrg"         /* FROM organism */
 #define HGLFT_FROMDB_VAR "hglft_fromDb"         /* FROM assembly */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -42,16 +41,6 @@ static char const rcsid[] = "$Id: hgLiftOver.c,v 1.62 2009/07/14 20:17:30 markd 
 struct cart *cart;	        /* CGI and other variables */
 struct hash *oldVars = NULL;
 
-/* Data Formats */
-#define POSITION_FORMAT "Position"
-#define BED_FORMAT      "BED"
-#define WIGGLE_FORMAT   "Wiggle"
-
-char *formatList[] = 
-        {BED_FORMAT, POSITION_FORMAT, 0};
-
-#define DEFAULT_FORMAT  "BED"
-
 /* Filename prefix */
 #define HGLFT   "hglft"
 
@@ -64,7 +53,7 @@ HGLFT_REFRESHONLY_VAR
 ".value = 1;"
 "document.mainForm.submit();\"";
 
-void webMain(struct liftOverChain *chain, char *dataFormat, boolean multiple)
+void webMain(struct liftOverChain *chain, boolean multiple)
 /* set up page for entering data */
 {
 struct dbDb *dbList;
@@ -186,19 +175,6 @@ cgiMakeCheckBox(HGLFT_FUDGETHICK,(chain->fudgeThick[0]=='Y') ? TRUE : FALSE);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
-cgiTableEnd();
-
-/* next row -- file format menu */
-cgiParagraph(
-         "&nbsp;For descriptions of the supported data formats, see the bottom of this page.");
-cgiSimpleTableStart();
-cgiSimpleTableRowStart();
-cgiTableField("Data Format: ");
-cgiSimpleTableFieldStart();
-cgiMakeDropList(HGLFT_DATAFORMAT_VAR, 
-                formatList, sizeof(formatList)/sizeof (char*) - 1, dataFormat);
-cgiTableFieldEnd();
-cgiTableRowEnd();
 cgiTableEnd();
 
 /* text box and two buttons (submit, reset) */
@@ -442,7 +418,6 @@ void doMiddle(struct cart *theCart)
 /* struct liftOverChain *chainList = NULL, *chain; */
 char *userData;
 /* char *dataFile; */
-char *dataFormat;
 char *organism;
 char *db;
 float minBlocks, minMatch;
@@ -471,7 +446,6 @@ if (cartOptionalString(cart, "SubmitFile"))
     userData = cartOptionalString(cart, HGLFT_DATAFILE_VAR);
 else
     userData = cartOptionalString(cart, HGLFT_USERDATA_VAR);
-dataFormat = cartCgiUsualString(cart, HGLFT_DATAFORMAT_VAR, DEFAULT_FORMAT);
 cartWebStart(cart, NULL, "Lift Genome Annotations");
 
 getDbAndGenome(cart, &db, &organism, oldVars);
@@ -490,7 +464,7 @@ fudgeThick = cartCgiUsualBoolean(cart, HGLFT_FUDGETHICK, (choice->fudgeThick[0]=
 multiple = cartCgiUsualBoolean(cart, HGLFT_MULTIPLE, (choice->multiple[0]=='Y') ? TRUE : FALSE);
 refreshOnly = cartCgiUsualInt(cart, HGLFT_REFRESHONLY_VAR, 0);
 
-webMain(choice, dataFormat, multiple);
+webMain(choice, multiple);
 liftOverChainFreeList(&chainList);
 
 if (!refreshOnly && userData != NULL && userData[0] != '\0')
@@ -528,31 +502,16 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
         errAbort("ERROR: Can't convert from %s to %s: no chain file loaded",
                                 fromDb, toDb);
     readLiftOverMap(chainFile, chainHash);
-    if (sameString(dataFormat, WIGGLE_FORMAT))
-        /* TODO: implement Wiggle */
-	{}
-    else if (sameString(dataFormat, POSITION_FORMAT))
-	{
-	ct = liftOverPositions(oldTn.forCgi, chainHash, 
-			minMatch, minBlocks, 0, minSizeQ,
-			minChainT, 0, 
-			fudgeThick, mapped, unmapped, FALSE, NULL, &errCt);
-
-	
-        }
-    else if (sameString(dataFormat, BED_FORMAT))
-        {
-        ct = liftOverBed(oldTn.forCgi, chainHash, 
+    ct = liftOverBedOrPositions(oldTn.forCgi, chainHash, 
 			minMatch, minBlocks, 0, minSizeQ,
 			minChainT, 0,
 			fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
-        }
-    else
+    if (ct == -1)
         /* programming error */
-        errAbort("ERROR: Unsupported data format: %s\n", dataFormat);
+        errAbort("ERROR: Unsupported data format.\n");
 
     webNewSection("Results");
-    if (ct)
+    if (ct > 0)
         {
         /* some records succesfully converted */
         cgiParagraph("");
@@ -577,12 +536,9 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
         lineFileClose(&errFile);
         puts("</PRE></BLOCKQUOTE>\n");
         }
-    if (sameString(dataFormat, POSITION_FORMAT) && multiple)
-	{
-        puts("<BLOCKQUOTE><PRE>\n");
-        puts("Note: multiple checkbox ignored since it is not supported for position format.");
-        puts("</PRE></BLOCKQUOTE>\n");
-	}
+    puts("<BLOCKQUOTE><PRE>\n");
+    puts("Note: &quot;multiple&quot; option is not supported for position format.");
+    puts("</PRE></BLOCKQUOTE>\n");
 
     webParamsUsed(minMatch, multiple, minSizeQ, minChainT, minBlocks, fudgeThick);
 
