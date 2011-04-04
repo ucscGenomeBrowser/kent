@@ -462,7 +462,7 @@ compositeTrack on
 shortLabel Primate Chain/Net
 longLabel Primate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species Chimp=Chimp Gorilla=Gorilla Orangutan=Orangutan Rhesus=Rhesus Baboon=Baboon Marmoset=Marmoset Tarsier=Tarsier Bushbaby=Bushbaby Mouse_lemur=Mouse_lemur
+subGroup2 species Species aChimp=Chimp bGorilla=Gorilla cOrangutan=Orangutan dRhesus=Rhesus eBaboon=Baboon fMarmoset=Marmoset gTarsier=Tarsier hMouse_lemur=Mouse_lemur iBushbaby=Bushbaby
 subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cHaplo=Haplorrhini dStrep=Strepsirrhini
 dragAndDrop subTracks
 visibility hide
