@@ -1,3 +1,113 @@
+metaObject wgEncodeUwDgf
+objType composite
+composite wgEncodeUwDgf
+expVars lab,dataType,cell
+geoSeriesAccession GSE26328
+
+metaObject wgEncodeUwDgfAoafAln
+objType file
+cell AoAF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfAoafAln.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+subId 3191
+view Alignments
+
+metaObject wgEncodeUwDgfAoafHotspots
+objType table
+cell AoAF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfAoafHotspots.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+subId 3191
+tableName wgEncodeUwDgfAoafHotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfAoafPk
+objType table
+cell AoAF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfAoafPk.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3191
+tableName wgEncodeUwDgfAoafPk
+view Peaks
+
+metaObject wgEncodeUwDgfAoafRaw
+objType table
+cell AoAF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfAoafRaw.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+subId 3191
+tableName wgEncodeUwDgfAoafRaw
+view RawSignal
+
+metaObject wgEncodeUwDgfAoafRawData
+objType file
+cell AoAF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfAoafRawData.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3191
+view RawData
+
+metaObject wgEncodeUwDgfAoafSig
+objType table
+cell AoAF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfAoafSig.bigWig
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3191
+tableName wgEncodeUwDgfAoafSig
+view Signal
+
 metaObject wgEncodeUwDgfGm06990Aln
 objType file
 cell GM06990
@@ -9,6 +119,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeUwDgfGm06990Aln.bam.bai
 fileName wgEncodeUwDgfGm06990Aln.bam
+geoSampleAccession GSM646568
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -27,6 +138,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeUwDgfGm06990Hotspots.broadPeak.gz
+geoSampleAccession GSM646568
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -46,6 +158,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeUwDgfGm06990Pk.narrowPeak.gz
+geoSampleAccession GSM646568
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -65,6 +178,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeUwDgfGm06990Raw.bigWig
+geoSampleAccession GSM646568
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -73,6 +187,23 @@ project wgEncode
 subId 1682
 tableName wgEncodeUwDgfGm06990Raw
 view RawSignal
+
+metaObject wgEncodeUwDgfGm06990RawData
+objType file
+cell GM06990
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwDgfGm06990RawData.fastq.gz
+geoSampleAccession GSM646568
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+subId 3114
+view RawData
 
 metaObject wgEncodeUwDgfGm06990Sig
 objType table
@@ -84,6 +215,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeUwDgfGm06990Sig.bigWig
+geoSampleAccession GSM646568
 grant Stam
 lab UW
 origAssembly hg18
@@ -101,6 +233,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esAln.bam
+geoSampleAccession GSM646563
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -118,6 +251,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esHotspots.broadPeak.gz
+geoSampleAccession GSM646563
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -136,6 +270,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esPk.narrowPeak.gz
+geoSampleAccession GSM646563
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -143,6 +278,25 @@ origAssembly hg19
 project wgEncode
 subId 2047
 tableName wgEncodeUwDgfH7esPk
+view Peaks
+
+metaObject wgEncodeUwDgfH7esPkV2
+objType table
+cell H7-hESC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfH7esPkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfH7esPkV2
 view Peaks
 
 metaObject wgEncodeUwDgfH7esRaw
@@ -154,6 +308,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esRaw.bigWig
+geoSampleAccession GSM646563
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -172,6 +327,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esRawData.fastq.gz
+geoSampleAccession GSM646563
 grant Stam
 lab UW
 origAssembly hg19
@@ -188,6 +344,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esSig.bigWig
+geoSampleAccession GSM646563
 grant Stam
 lab UW
 origAssembly hg19
@@ -205,6 +362,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeAln.bam
+geoSampleAccession GSM646560
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -222,6 +380,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeHotspots.broadPeak.gz
+geoSampleAccession GSM646560
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -240,6 +399,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaePk.narrowPeak.gz
+geoSampleAccession GSM646560
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -247,6 +407,25 @@ origAssembly hg19
 project wgEncode
 subId 2048
 tableName wgEncodeUwDgfHaePk
+view Peaks
+
+metaObject wgEncodeUwDgfHaePkV2
+objType table
+cell HAEpiC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfHaePkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfHaePkV2
 view Peaks
 
 metaObject wgEncodeUwDgfHaeRaw
@@ -258,6 +437,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeRaw.bigWig
+geoSampleAccession GSM646560
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -276,6 +456,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeRawData.fastq.gz
+geoSampleAccession GSM646560
 grant Stam
 lab UW
 origAssembly hg19
@@ -292,6 +473,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeSig.bigWig
+geoSampleAccession GSM646560
 grant Stam
 lab UW
 origAssembly hg19
@@ -309,6 +491,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeAln.bam
+geoSampleAccession GSM646565
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -326,6 +509,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeHotspots.broadPeak.gz
+geoSampleAccession GSM646565
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -344,6 +528,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpePk.narrowPeak.gz
+geoSampleAccession GSM646565
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -351,6 +536,25 @@ origAssembly hg19
 project wgEncode
 subId 2050
 tableName wgEncodeUwDgfHcpePk
+view Peaks
+
+metaObject wgEncodeUwDgfHcpePkV2
+objType table
+cell HCPEpiC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfHcpePkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfHcpePkV2
 view Peaks
 
 metaObject wgEncodeUwDgfHcpeRaw
@@ -362,6 +566,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeRaw.bigWig
+geoSampleAccession GSM646565
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -380,6 +585,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeRawData.fastq.gz
+geoSampleAccession GSM646565
 grant Stam
 lab UW
 origAssembly hg19
@@ -396,6 +602,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeSig.bigWig
+geoSampleAccession GSM646565
 grant Stam
 lab UW
 origAssembly hg19
@@ -415,6 +622,7 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileIndex wgEncodeUwDgfHepg2Aln.bam.bai
 fileName wgEncodeUwDgfHepg2Aln.bam
+geoSampleAccession GSM646559
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -433,6 +641,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfHepg2Hotspots.broadPeak.gz
+geoSampleAccession GSM646559
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -452,6 +661,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfHepg2Pk.narrowPeak.gz
+geoSampleAccession GSM646559
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -471,6 +681,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfHepg2Raw.bigWig
+geoSampleAccession GSM646559
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -489,6 +700,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfHepg2RawData.fastq.gz
+geoSampleAccession GSM646559
 grant Stam
 lab UW
 origAssembly hg18
@@ -506,6 +718,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfHepg2Sig.bigWig
+geoSampleAccession GSM646559
 grant Stam
 lab UW
 origAssembly hg18
@@ -523,6 +736,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfAln.bam
+geoSampleAccession GSM646561
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -540,6 +754,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfHotspots.broadPeak.gz
+geoSampleAccession GSM646561
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -558,6 +773,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfPk.narrowPeak.gz
+geoSampleAccession GSM646561
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -565,6 +781,25 @@ origAssembly hg19
 project wgEncode
 subId 2049
 tableName wgEncodeUwDgfHmfPk
+view Peaks
+
+metaObject wgEncodeUwDgfHmfPkV2
+objType table
+cell HMF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfHmfPkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfHmfPkV2
 view Peaks
 
 metaObject wgEncodeUwDgfHmfRaw
@@ -576,6 +811,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfRaw.bigWig
+geoSampleAccession GSM646561
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -594,6 +830,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfRawData.fastq.gz
+geoSampleAccession GSM646561
 grant Stam
 lab UW
 origAssembly hg19
@@ -610,6 +847,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfSig.bigWig
+geoSampleAccession GSM646561
 grant Stam
 lab UW
 origAssembly hg19
@@ -627,6 +865,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladAln.bam
+geoSampleAccession GSM646570
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -644,6 +883,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladHotspots.broadPeak.gz
+geoSampleAccession GSM646570
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -662,6 +902,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladPk.narrowPeak.gz
+geoSampleAccession GSM646570
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -669,6 +910,25 @@ origAssembly hg19
 project wgEncode
 subId 2051
 tableName wgEncodeUwDgfHmvecdbladPk
+view Peaks
+
+metaObject wgEncodeUwDgfHmvecdbladPkV2
+objType table
+cell HMVEC-dBl-Ad
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfHmvecdbladPkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfHmvecdbladPkV2
 view Peaks
 
 metaObject wgEncodeUwDgfHmvecdbladRaw
@@ -680,6 +940,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladRaw.bigWig
+geoSampleAccession GSM646570
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -698,6 +959,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladRawData.fastq.gz
+geoSampleAccession GSM646570
 grant Stam
 lab UW
 origAssembly hg19
@@ -714,12 +976,429 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladSig.bigWig
+geoSampleAccession GSM646570
 grant Stam
 lab UW
 origAssembly hg19
 project wgEncode
 subId 2051
 tableName wgEncodeUwDgfHmvecdbladSig
+view Signal
+
+metaObject wgEncodeUwDgfHpafAln
+objType file
+cell HPAF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpafAln.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+subId 3193
+view Alignments
+
+metaObject wgEncodeUwDgfHpafHotspots
+objType table
+cell HPAF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpafHotspots.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+subId 3193
+tableName wgEncodeUwDgfHpafHotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfHpafPk
+objType table
+cell HPAF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpafPk.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3193
+tableName wgEncodeUwDgfHpafPk
+view Peaks
+
+metaObject wgEncodeUwDgfHpafRaw
+objType table
+cell HPAF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpafRaw.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+subId 3193
+tableName wgEncodeUwDgfHpafRaw
+view RawSignal
+
+metaObject wgEncodeUwDgfHpafRawData
+objType file
+cell HPAF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpafRawData.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3193
+view RawData
+
+metaObject wgEncodeUwDgfHpafSig
+objType table
+cell HPAF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpafSig.bigWig
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3193
+tableName wgEncodeUwDgfHpafSig
+view Signal
+
+metaObject wgEncodeUwDgfHpdlfAln
+objType file
+cell HPdLF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpdlfAln.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+subId 3194
+view Alignments
+
+metaObject wgEncodeUwDgfHpdlfHotspots
+objType table
+cell HPdLF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpdlfHotspots.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+subId 3194
+tableName wgEncodeUwDgfHpdlfHotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfHpdlfPk
+objType table
+cell HPdLF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpdlfPk.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3194
+tableName wgEncodeUwDgfHpdlfPk
+view Peaks
+
+metaObject wgEncodeUwDgfHpdlfRaw
+objType table
+cell HPdLF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpdlfRaw.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+subId 3194
+tableName wgEncodeUwDgfHpdlfRaw
+view RawSignal
+
+metaObject wgEncodeUwDgfHpdlfRawData
+objType file
+cell HPdLF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpdlfRawData.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3194
+view RawData
+
+metaObject wgEncodeUwDgfHpdlfSig
+objType table
+cell HPdLF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-07
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpdlfSig.bigWig
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3194
+tableName wgEncodeUwDgfHpdlfSig
+view Signal
+
+metaObject wgEncodeUwDgfHpfAln
+objType file
+cell HPF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpfAln.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+subId 3196
+view Alignments
+
+metaObject wgEncodeUwDgfHpfHotspots
+objType table
+cell HPF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpfHotspots.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+subId 3196
+tableName wgEncodeUwDgfHpfHotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfHpfPk
+objType table
+cell HPF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpfPk.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3196
+tableName wgEncodeUwDgfHpfPk
+view Peaks
+
+metaObject wgEncodeUwDgfHpfRaw
+objType table
+cell HPF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpfRaw.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+subId 3196
+tableName wgEncodeUwDgfHpfRaw
+view RawSignal
+
+metaObject wgEncodeUwDgfHpfRawData
+objType file
+cell HPF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpfRawData.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3196
+view RawData
+
+metaObject wgEncodeUwDgfHpfSig
+objType table
+cell HPF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHpfSig.bigWig
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3196
+tableName wgEncodeUwDgfHpfSig
+view Signal
+
+metaObject wgEncodeUwDgfHrceAln
+objType file
+cell HRCEpiC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHrceAln.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+subId 3197
+view Alignments
+
+metaObject wgEncodeUwDgfHrceHotspots
+objType table
+cell HRCEpiC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHrceHotspots.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+subId 3197
+tableName wgEncodeUwDgfHrceHotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfHrcePk
+objType table
+cell HRCEpiC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHrcePk.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3197
+tableName wgEncodeUwDgfHrcePk
+view Peaks
+
+metaObject wgEncodeUwDgfHrceRaw
+objType table
+cell HRCEpiC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHrceRaw.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+subId 3197
+tableName wgEncodeUwDgfHrceRaw
+view RawSignal
+
+metaObject wgEncodeUwDgfHrceRawData
+objType file
+cell HRCEpiC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHrceRawData.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3197
+view RawData
+
+metaObject wgEncodeUwDgfHrceSig
+objType table
+cell HRCEpiC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfHrceSig.bigWig
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3197
+tableName wgEncodeUwDgfHrceSig
 view Signal
 
 metaObject wgEncodeUwDgfK562Aln
@@ -733,6 +1412,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileIndex wgEncodeUwDgfK562Aln.bam.bai
 fileName wgEncodeUwDgfK562Aln.bam
+geoSampleAccession GSM646567
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -751,6 +1431,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeUwDgfK562Hotspots.broadPeak.gz
+geoSampleAccession GSM646567
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -770,6 +1451,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeUwDgfK562Pk.narrowPeak.gz
+geoSampleAccession GSM646567
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -789,6 +1471,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeUwDgfK562Raw.bigWig
+geoSampleAccession GSM646567
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -797,6 +1480,23 @@ project wgEncode
 subId 1815
 tableName wgEncodeUwDgfK562Raw
 view RawSignal
+
+metaObject wgEncodeUwDgfK562RawData
+objType file
+cell K562
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwDgfK562RawData.fastq.gz
+geoSampleAccession GSM646567
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+subId 3115
+view RawData
 
 metaObject wgEncodeUwDgfK562Sig
 objType table
@@ -808,12 +1508,117 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeUwDgfK562Sig.bigWig
+geoSampleAccession GSM646567
 grant Stam
 lab UW
 origAssembly hg18
 project wgEncode
 subId 1815
 tableName wgEncodeUwDgfK562Sig
+view Signal
+
+metaObject wgEncodeUwDgfNhaAln
+objType file
+cell NH-A
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfNhaAln.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+subId 3198
+view Alignments
+
+metaObject wgEncodeUwDgfNhaHotspots
+objType table
+cell NH-A
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfNhaHotspots.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+subId 3198
+tableName wgEncodeUwDgfNhaHotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfNhaPk
+objType table
+cell NH-A
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfNhaPk.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3198
+tableName wgEncodeUwDgfNhaPk
+view Peaks
+
+metaObject wgEncodeUwDgfNhaRaw
+objType table
+cell NH-A
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfNhaRaw.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+subId 3198
+tableName wgEncodeUwDgfNhaRaw
+view RawSignal
+
+metaObject wgEncodeUwDgfNhaRawData
+objType file
+cell NH-A
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfNhaRawData.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3198
+view RawData
+
+metaObject wgEncodeUwDgfNhaSig
+objType table
+cell NH-A
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfNhaSig.bigWig
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3198
+tableName wgEncodeUwDgfNhaSig
 view Signal
 
 metaObject wgEncodeUwDgfNhdfadAln
@@ -825,6 +1630,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadAln.bam
+geoSampleAccession GSM646564
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -842,6 +1648,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadHotspots.broadPeak.gz
+geoSampleAccession GSM646564
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -860,6 +1667,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadPk.narrowPeak.gz
+geoSampleAccession GSM646564
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -867,6 +1675,25 @@ origAssembly hg19
 project wgEncode
 subId 2046
 tableName wgEncodeUwDgfNhdfadPk
+view Peaks
+
+metaObject wgEncodeUwDgfNhdfadPkV2
+objType table
+cell NHDF-Ad
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfNhdfadPkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfNhdfadPkV2
 view Peaks
 
 metaObject wgEncodeUwDgfNhdfadRaw
@@ -878,6 +1705,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadRaw.bigWig
+geoSampleAccession GSM646564
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -896,6 +1724,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadRawData.fastq.gz
+geoSampleAccession GSM646564
 grant Stam
 lab UW
 origAssembly hg19
@@ -912,12 +1741,117 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadSig.bigWig
+geoSampleAccession GSM646564
 grant Stam
 lab UW
 origAssembly hg19
 project wgEncode
 subId 2046
 tableName wgEncodeUwDgfNhdfadSig
+view Signal
+
+metaObject wgEncodeUwDgfSaecAln
+objType file
+cell SAEC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfSaecAln.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+subId 3199
+view Alignments
+
+metaObject wgEncodeUwDgfSaecHotspots
+objType table
+cell SAEC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfSaecHotspots.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+subId 3199
+tableName wgEncodeUwDgfSaecHotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfSaecPk
+objType table
+cell SAEC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfSaecPk.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3199
+tableName wgEncodeUwDgfSaecPk
+view Peaks
+
+metaObject wgEncodeUwDgfSaecRaw
+objType table
+cell SAEC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfSaecRaw.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+subId 3199
+tableName wgEncodeUwDgfSaecRaw
+view RawSignal
+
+metaObject wgEncodeUwDgfSaecRawData
+objType file
+cell SAEC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfSaecRawData.fastq.gz
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3199
+view RawData
+
+metaObject wgEncodeUwDgfSaecSig
+objType table
+cell SAEC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-07
+fileName wgEncodeUwDgfSaecSig.bigWig
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+subId 3199
+tableName wgEncodeUwDgfSaecSig
 view Signal
 
 metaObject wgEncodeUwDgfSkmcAln
@@ -929,6 +1863,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcAln.bam
+geoSampleAccession GSM646562
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -946,6 +1881,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcHotspots.broadPeak.gz
+geoSampleAccession GSM646562
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -964,6 +1900,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcPk.narrowPeak.gz
+geoSampleAccession GSM646562
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -971,6 +1908,25 @@ origAssembly hg19
 project wgEncode
 subId 2045
 tableName wgEncodeUwDgfSkmcPk
+view Peaks
+
+metaObject wgEncodeUwDgfSkmcPkV2
+objType table
+cell SKMC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfSkmcPkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfSkmcPkV2
 view Peaks
 
 metaObject wgEncodeUwDgfSkmcRaw
@@ -982,6 +1938,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcRaw.bigWig
+geoSampleAccession GSM646562
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -1000,6 +1957,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcRawData.fastq.gz
+geoSampleAccession GSM646562
 grant Stam
 lab UW
 origAssembly hg19
@@ -1016,6 +1974,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcSig.bigWig
+geoSampleAccession GSM646562
 grant Stam
 lab UW
 origAssembly hg19
@@ -1035,6 +1994,7 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileIndex wgEncodeUwDgfSknshraAln.bam.bai
 fileName wgEncodeUwDgfSknshraAln.bam
+geoSampleAccession GSM646566
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -1053,6 +2013,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfSknshraHotspots.broadPeak.gz
+geoSampleAccession GSM646566
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -1072,6 +2033,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfSknshraPk.narrowPeak.gz
+geoSampleAccession GSM646566
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -1091,6 +2053,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfSknshraRaw.bigWig
+geoSampleAccession GSM646566
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -1109,6 +2072,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfSknshraRawData.fastq.gz
+geoSampleAccession GSM646566
 grant Stam
 lab UW
 origAssembly hg18
@@ -1126,6 +2090,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfSknshraSig.bigWig
+geoSampleAccession GSM646566
 grant Stam
 lab UW
 origAssembly hg18
@@ -1145,6 +2110,7 @@ dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 fileIndex wgEncodeUwDgfTh1Aln.bam.bai
 fileName wgEncodeUwDgfTh1Aln.bam
+geoSampleAccession GSM646569
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -1163,6 +2129,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 fileName wgEncodeUwDgfTh1Hotspots.broadPeak.gz
+geoSampleAccession GSM646569
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -1182,6 +2149,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 fileName wgEncodeUwDgfTh1Pk.narrowPeak.gz
+geoSampleAccession GSM646569
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -1201,6 +2169,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 fileName wgEncodeUwDgfTh1Raw.bigWig
+geoSampleAccession GSM646569
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -1219,6 +2188,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 fileName wgEncodeUwDgfTh1RawData.fastq.gz
+geoSampleAccession GSM646569
 grant Stam
 lab UW
 origAssembly hg18
@@ -1236,6 +2206,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 fileName wgEncodeUwDgfTh1Sig.bigWig
+geoSampleAccession GSM646569
 grant Stam
 lab UW
 origAssembly hg18
@@ -1244,4 +2215,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: -873844582
+# MAGIC: 658779939

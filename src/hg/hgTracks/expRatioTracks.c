@@ -1420,7 +1420,11 @@ if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
     if(theImgBox && curImgTrack)
         {
         char link[512];
-        safef(link,sizeof(link),"%s&g=%s&i=zoomInMore",hgcNameAndSettings(), tg->track); // NOTE: winStart,winEnd removed due to portal
+#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        // Tim isn't sure what to do here if/when we implement drag scroll.
+        warn("Tim take a look at this link and whether it needs different winStart and winEnd values with dragScroll > 1.");
+#endif
+        safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&i=zoomInMore", hgcNameAndSettings(), seqStart, seqEnd, tg->track);
         #ifdef IMAGEv2_SHORT_MAPITEMS
             if(xOffRc < insideX && xOffRc+insideWidth > insideX)
                 warn("expRatioMapBoxes(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",tg->track,xOffRc, y, xOffRc+insideWidth, y+totalHeight, link);
@@ -1430,8 +1434,8 @@ if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
     else
         {
         hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOffRc, y, xOffRc+insideWidth, y+totalHeight);
-        hPrintf("HREF=\"%s&g=%s&c=%s&l=%d&r=%d&db=%s&i=zoomInMore\" ",
-            hgcNameAndSettings(), tg->track, chromName, winStart, winEnd, database);
+        hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&i=zoomInMore\" ",
+                hgcNameAndSettings(), seqStart, seqEnd, tg->track, chromName, winStart, winEnd, database);
         hPrintf("TITLE=\"zoomInMore\">\n");
         }
      }
