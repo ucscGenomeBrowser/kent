@@ -5,7 +5,7 @@ compositeTrack on
 shortLabel Duke Affy Exon
 longLabel Affymetrix Exon Array from ENCODE/Duke
 group expression
-subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) HeLaS3=HeLa-S3&nbsp;(Tier_2) HepG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  AOSMC=AoSMC Astrocy=Astrocy Chorion=Chorion CLL=CLL Fibrobl=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9ES=H9ES Hepatocytes=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMt=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 iPS=iPS LNCaP=LNCaP MCF7=MCF-7 Medullo=Medullo MELANO=Melano MYOMETR=Myometr NHEK=NHEK Osteobl=Osteobl ProgFib=ProgFib Stellate=Stellate UROtsa=Urothelia 8988T=8988T
+subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2Huvec=HUVEC&nbsp;(Tier_2)  AOSMC=AoSMC Astrocy=Astrocy Chorion=Chorion CLL=CLL Fibrobl=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9ES=H9ES Hepatocytes=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMt=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 iPS=iPS LNCaP=LNCaP MCF7=MCF-7 Medullo=Medullo MELANO=Melano MYOMETR=Myometr NHEK=NHEK Osteobl=Osteobl ProgFib=ProgFib Stellate=Stellate UROtsa=Urothelia 8988T=8988T
 subGroup2 rep Rep rep1=1 rep2=2 rep3=3 rep4=4
 subGroup3 treatment Treatment None=None IFNa4h=IFN&alpha;4h IFNg4h=IFN&gamma;4h TGFb=TGFb SERUMFREE=serum_free_media ANDRO=Methyltrienolone ESTRO=Estradiol_100nM VEH=vehicle UT189=UT189  
 subGroup4 view View SimpleSignal=Signal
@@ -397,7 +397,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeDukeAffyExonViewSimpleSignal on
         shortLabel HeLa-S3 1
         longLabel HeLa-S3 Exon array Signal Replicate 1 from ENCODE/Duke
-        subGroups view=SimpleSignal cellType=HeLaS3 treatment=None rep=rep1
+        subGroups view=SimpleSignal cellType=2HeLaS3 treatment=None rep=rep1
         type broadPeak
         color 0,119,158
         origAssembly hg18
@@ -407,7 +407,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeDukeAffyExonViewSimpleSignal on
         shortLabel HeLa-S3 2
         longLabel HeLa-S3 Exon array Signal Replicate 2 from ENCODE/Duke
-        subGroups view=SimpleSignal cellType=HeLaS3 treatment=None rep=rep2
+        subGroups view=SimpleSignal cellType=2HeLaS3 treatment=None rep=rep2
         type broadPeak
         color 0,119,158
         origAssembly hg18
@@ -417,7 +417,7 @@ superTrack wgEncodeExonArraySuper dense
         #parent wgEncodeDukeAffyExonViewSimpleSignal off
         #shortLabel HeLa-S3 3
         #longLabel HeLa-S3 Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=HeLaS3 treatment=None rep=rep3
+        #subGroups view=SimpleSignal cellType=2HeLaS3 treatment=None rep=rep3
         #type broadPeak
         #color 0,119,158
         #origAssembly hg18
@@ -427,7 +427,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeDukeAffyExonViewSimpleSignal on 
         shortLabel HeLa-S3 IFNa4h 1
         longLabel HeLa-S3 IFNa 4hr Exon array Signal Replicate 1 from ENCODE/Duke
-        subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNa4h rep=rep1
+        subGroups view=SimpleSignal cellType=2HeLaS3 treatment=IFNa4h rep=rep1
         type broadPeak
         color 0,119,158
         origAssembly hg18
@@ -437,7 +437,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeDukeAffyExonViewSimpleSignal on
         shortLabel HeLa-S3 IFNa4h 2
         longLabel HeLa-S3 IFNa 4hr Exon array Signal Replicate 2 from ENCODE/Duke
-        subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNa4h rep=rep2
+        subGroups view=SimpleSignal cellType=2HeLaS3 treatment=IFNa4h rep=rep2
         type broadPeak
         color 0,119,158
         origAssembly hg18
@@ -447,7 +447,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeDukeAffyExonViewSimpleSignal on
         shortLabel HeLa-S3 IFNg4h 1
         longLabel HeLa-S3 IFNg 4hr Exon array Signal Replicate 1 from ENCODE/Duke
-        subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNg4h rep=rep1
+        subGroups view=SimpleSignal cellType=2HeLaS3 treatment=IFNg4h rep=rep1
         type broadPeak
         color 0,119,158
         origAssembly hg18
@@ -457,7 +457,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeDukeAffyExonViewSimpleSignal on
         shortLabel HeLa-S3 IFNg4h 2
         longLabel HeLa-S3 IFNg 4hr Exon array Signal Replicate 2 from ENCODE/Duke
-        subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNg4h rep=rep2
+        subGroups view=SimpleSignal cellType=2HeLaS3 treatment=IFNg4h rep=rep2
         type broadPeak
         color 0,119,158
         origAssembly hg18
@@ -483,7 +483,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeDukeAffyExonViewSimpleSignal on 
         shortLabel HepG2 1
         longLabel HepG2 Exon array Signal Replicate 1 from ENCODE/Duke
-        subGroups view=SimpleSignal cellType=HepG2 treatment=None rep=rep1
+        subGroups view=SimpleSignal cellType=2HepG2 treatment=None rep=rep1
         type broadPeak
         color 189,0,157
         origAssembly hg18
@@ -493,7 +493,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeDukeAffyExonViewSimpleSignal on 
         shortLabel HepG2 2
         longLabel HepG2 Exon array Signal Replicate 2 from ENCODE/Duke
-        subGroups view=SimpleSignal cellType=HepG2 treatment=None rep=rep2
+        subGroups view=SimpleSignal cellType=2HepG2 treatment=None rep=rep2
         type broadPeak
         color 189,0,157
         origAssembly hg18
@@ -503,7 +503,7 @@ superTrack wgEncodeExonArraySuper dense
         #parent wgEncodeDukeAffyExonViewSimpleSignal off
         #shortLabel HepG2 3
         #longLabel HepG2 Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=HepG2 treatment=None rep=rep3
+        #subGroups view=SimpleSignal cellType=2HepG2 treatment=None rep=rep3
         #type broadPeak
         #color 189,0,157
         #origAssembly hg18
@@ -627,7 +627,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeDukeAffyExonViewSimpleSignal on 
         shortLabel HUVEC 1
         longLabel HUVEC Exon array Signal Replicate 1 from ENCODE/Duke
-        subGroups view=SimpleSignal cellType=HUVEC treatment=None rep=rep1
+        subGroups view=SimpleSignal cellType=2Huvec treatment=None rep=rep1
         type broadPeak
         color 224,75,0
         origAssembly hg18
@@ -637,7 +637,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeDukeAffyExonViewSimpleSignal on 
         shortLabel HUVEC 2
         longLabel HUVEC Exon array Signal Replicate 2 from ENCODE/Duke
-        subGroups view=SimpleSignal cellType=HUVEC treatment=None rep=rep2
+        subGroups view=SimpleSignal cellType=2Huvec treatment=None rep=rep2
         type broadPeak
         color 224,75,0
         origAssembly hg18
