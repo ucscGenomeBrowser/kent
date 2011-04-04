@@ -35,6 +35,80 @@ autoTranslate 0
 dataVersion VEGA Release 28
 url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
 
+track UMassChIP-SeqSuper
+superTrack on
+shortLabel UMass ChIP-Seq
+longLabel U Mass ChIP-Seq
+group map
+visibility full
+
+    track UMassInput
+    superTrack UMassChIP-SeqSuper full
+    shortLabel UMass ChIP-Seq
+    longLabel U Mass ChIP-Seq Input Signal at 24 hours Post Fertilization
+    priority 1
+    type wig 10 500
+    autoScale on
+    visibility full
+
+    track UMassME1
+    superTrack UMassChIP-SeqSuper full
+    shortLabel UMassME1
+    longLabel U Mass ChIP-Seq H3K4me1 Binding at 24 hours Post Fertilization
+    group map
+    priority 2
+    type wig 10 404
+    autoScale on
+    visibility full
+
+    track UMassME1Peak
+    superTrack UMassChIP-SeqSuper full
+    shortLabel UMassME1Peak
+    longLabel U Mass ChIP-Seq H3K4me1 Binding Peaks at 24 hours Post Fertilization
+    group map
+    priority 3
+    autoScale on
+    visibility full
+    type wig 20 2510
+
+    track UMassME3
+    superTrack UMassChIP-SeqSuper full
+    shortLabel UMassME3
+    longLabel U Mass ChIP-Seq H3K4me3 Binding at 24 hours Post Fertilization
+    group map
+    priority 4
+    visibility full
+    autoScale on
+    type wig 10 477
+
+    track UMassME3Peak
+    superTrack UMassChIP-SeqSuper full
+    shortLabel UMassME3Peak
+    longLabel U Mass ChIP-Seq H3K4me3 Binding Peaks at 24 hours Post Fertilization
+    group map
+    priority 5
+    visibility full
+    autoScale on
+    type wig 16 6835
+
+    track UMassME1Hotspot
+    superTrack UMassChIP-SeqSuper pack
+    shortLabel UMassME1Hotspot
+    longLabel U Mass ChIP-Seq H3K4me1 Binding Hot Spots at 24 hours Post Fertilization
+    group map
+    priority 5.5
+    visibility pack
+    type bed 5
+
+    track UMassME3Hotspot
+    superTrack UMassChIP-SeqSuper pack
+    shortLabel UMassME3Hotspot
+    longLabel U Mass ChIP-Seq H3K4me3 Binding Hot Spots at 24 hours Post Fertilization
+    group map
+    priority 5.6
+    visibility pack
+    type bed 5
+
 track affyConsensusAndTargetZonWildType
 compositeTrack on
 shortLabel Wild Type Array

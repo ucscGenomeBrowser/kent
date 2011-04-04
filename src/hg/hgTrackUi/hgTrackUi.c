@@ -2709,7 +2709,9 @@ if (!tdbIsDownloadsOnly(tdb))
         if (tdbIsSuper(tdb))
             {
             /* This is a supertrack -- load its members and show hide/show dropdown */
-            hTrackDbLoadSuper(database, tdb);
+	    // hub tracks already have their subtracks loaded
+	    if (!isHubTrack(tdb->track))
+		hTrackDbLoadSuper(database, tdb);
             superTrackDropDown(cart, tdb, 1);
             }
         else
@@ -2760,7 +2762,7 @@ if (!tdbIsDownloadsOnly(tdb))
 if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb))
     {
     // NAVLINKS - For pages w/ matrix, add Description, Subtracks and Downloads links
-    if (trackDbSetting(tdb, "dimensions"))
+    if (trackDbSetting(tdb, "dimensions") || (trackDbSetting(tdb, "wgEncode") && tdbIsComposite(tdb)))
         {
         printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
         if (trackDbSetting(tdb, "wgEncode"))

@@ -730,4 +730,25 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
+
+#########################################################################
+# SWAP melGal1 lastz (DONE - 2011-03-28 - Chin)
+    #   original alignment
+    cat fb.melGal1.chainTaeGut1Link.txt
+    # 671105409 bases of 935922386 (71.705%) in intersection
+
+    mkdir /hive/data/genomes/taeGut1/bed/blastz.melGal1.swap
+    cd /hive/data/genomes/taeGut1/bed/blastz.melGal1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/melGal1/bed/lastzTaeGut1.2011-03-28/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real   36m7.017s 
+    cat fb.taeGut1.chainMelGal1Link.txt
+    #   795001886 bases of 1222864691 (65.011%) in intersection
+    cd /hive/data/genomes/taeGut1/bed
+    ln -s blastz.melGal1.swap lastz.melgal1
+
 ############################################################################

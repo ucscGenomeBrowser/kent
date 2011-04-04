@@ -21,6 +21,7 @@ errAbort(
   "        ans01 - Anshul's uniform peaks from Jan 2011 ENCODE freeze\n"
   "        uw01 - From UW DNase file names for hg18\n"
   "        uw02 - From UW DNase file names for hg19 as of Jan 2011 freeze\n"
+  "        enh01 - From enhancer picks\n"
   );
 }
 
@@ -219,6 +220,13 @@ fprintf(f, "\t%s", treatStart);
 fprintf(f, "\t%s", prefix);
 }
 
+void enh01MetaOut(FILE *f, char *midString)
+/* Version of function used for Anshul's TFBS uniform peak calling ENCODE Jan 2011 freeze. */
+{
+fprintf(f, "\t%s", midString);
+}
+
+
 void regClusterMakeTableOfTables(char *type, char *input, char *output)
 /* regClusterMakeTableOfTables - Make up a table of tables for regCluster program. */
 {
@@ -243,6 +251,8 @@ for (in = inList; in != NULL; in = in->next)
 	uw02MetaOut(f, midString);
     else if (sameString(type, "ans01"))
 	ans01MetaOut(f, midString);
+    else if (sameString(type, "enh01"))
+        enh01MetaOut(f, midString);
     else
 	errAbort("Unknown type '%s' in first command line parameter.", type);
     freez(&midString);

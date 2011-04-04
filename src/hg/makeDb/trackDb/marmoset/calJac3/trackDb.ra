@@ -123,7 +123,8 @@ priority 103.29
         speciesGroups Primates Vertebrate
         sGroup_Primates ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1
         sGroup_Vertebrate mm9 canFam2 monDom5
-        speciesDefaultOff ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1 mm9 canFam2 monDom5
+        speciesDefaultOff  rheMac2 papHam1 tarSyr1 micMur1 otoGar1 canFam2 
+        #speciesDefaultOff ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1 mm9 canFam2 monDom5
         itemFirstCharCase noChange
         treeImage phylo/calJac3_13way.gif
         priority 100

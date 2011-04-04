@@ -166,18 +166,32 @@ while ((meta = slPopHead(&metas)) != NULL)
     if (composite != NULL && !mdbObjInComposite(meta, composite))
         continue;
 
-    exp = encodeExpFromMdb(meta);
+    exp = encodeExpFromMdb(connMeta,assembly,meta);
+    if (exp == NULL)
+        continue;
+
     key = encodeExpKey(exp);
 
     if (hashLookup(newExps, key) == NULL &&
         hashLookup(oldExps, key) == NULL)
         {
-        verbose(2, "Found new experiment - Date: %s	Experiment %d: %s\n", 
+        verbose(2, "Found new experiment - Date: %s	Experiment %d: %s\n",
                 mdbObjFindValue(meta, "dateSubmitted"), ++expNum, key);
         /* save new experiment */
         hashAdd(newExps, key, NULL);
         slAddHead(&exps, exp);
         }
+    /* Skip other metas belonging to the same exp by:
+    struct mdbVar *edvs = mdbObjFindEncodeEdvs(connMeta,meta); // Can't use encodeExpVars(exp) because of "None" issues
+    assert(edvs != NULL);
+    char *expVars = slPairListToString(edvs,FALSE); // don't bother with quoting since edvs should not have spaces
+    struct mdbObj *mdbExpObjs = mdbObjsFilterByVars(&metas,expVars,TRUE,TRUE);
+    freeMem(expVars);
+    mdbVarsFree(&edvs); // If you want to do this, then encodeExpFromMdb() above should be replaced with encodeExpFromMdbVars()
+    mdbObjFree(&mdbExpObjs);
+    // Filtering destroyed sort order // NOTE: Given the re-sort, this may not prove much more efficient
+    mdbObjsSortOnVars(&metas, "dateSubmitted lab dataType cell");
+    */
     }
 /* write out experiments in .ra format */
 slReverse(&exps);
@@ -199,7 +213,7 @@ struct slPair *varPairs = NULL;
 
 /* transform var:val to var=val. Can't use var=val on command-line as it conflicts with standard options processing */
 memSwapChar(expVars, strlen(expVars), ':', '=');
-varPairs = slPairFromString(expVars);
+varPairs = slPairListFromString(expVars,FALSE); // don't expect quoted EDVs which should always be simple tokens.
 exps = encodeExpGetFromTable(organism, lab, dataType, cellType, varPairs, table);
 count = slCount(exps);
 verbose(2, "Results: %d\n", count);
@@ -259,7 +273,7 @@ verboseSetLevel(2);
 
 char *command = argv[1];
 table = optionVal("table", sameString(command, "create") ?
-                        encodeExpTableNew: 
+                        encodeExpTableNew:
                         ENCODE_EXP_TABLE);
 mdb = optionVal("mdb", MDB_DEFAULT_NAME);
 composite = optionVal("composite", NULL);

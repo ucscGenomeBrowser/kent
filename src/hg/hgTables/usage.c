@@ -45,7 +45,7 @@ hPrintf("%s",
 "        <LI><B>region: </B>Restricts the query to a\n"
 "        particular chromosome or region. Select <em>genome</em> to apply the \n"
 "        query to the entire genome or <em>ENCODE</em> to examine only the \n"
-"        ENCODE regions. \n"
+"        ENCODE Pilot regions.\n"
 "        To limit the query to a specific position, type a \n"
 "        chromosome name, e.g. <em>chrX</em>, or a chromosome coordinate \n"
 "        range, such as chrX:100000-200000, or a gene name or other id in \n"

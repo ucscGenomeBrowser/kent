@@ -89,7 +89,8 @@ return frames;
 
 static int offsetToGenomic(struct bed *bed, int exonIndx, int anchor, int offset)
 /* Return the genomic coord which is offset transcribed bases away from anchor,
- * which must fall in the exonIndx exon of bed. */
+ * which must fall in the exonIndx exon of bed.  If the offset is not contained
+ * by any exon, return -1. */
 {
 int simpleAnswer = anchor + offset;
 int exonStart = bed->chromStart + bed->chromStarts[exonIndx];
@@ -101,7 +102,7 @@ if ((offset >= 0 && (anchor >= exonEnd || anchor < exonStart)) ||
 if (offset < 0 && simpleAnswer < exonStart)
     {
     if (exonIndx < 1)
-	errAbort("offsetToGenomic: need previous exon, but given index of %d", exonIndx);
+	return -1;
     int stillNeeded = simpleAnswer - exonStart;
     int prevExonEnd = bed->chromStart + bed->chromStarts[exonIndx-1] + bed->blockSizes[exonIndx-1];
     return offsetToGenomic(bed, exonIndx-1, prevExonEnd, stillNeeded);
@@ -109,8 +110,7 @@ if (offset < 0 && simpleAnswer < exonStart)
 else if (offset > 0 && simpleAnswer > exonEnd)
     {
     if (exonIndx >= bed->blockCount - 1)
-	errAbort("offsetToGenomic: need next exon, but given index of %d (>= %d)",
-		 exonIndx, bed->blockCount - 1);
+	return -1;
     int stillNeeded = simpleAnswer - exonEnd;
     int nextExonStart = bed->chromStart + bed->chromStarts[exonIndx+1];
     return offsetToGenomic(bed, exonIndx+1, nextExonStart, stillNeeded);
@@ -129,7 +129,8 @@ boolean isRc = (bed->strand[0] == '-');
 if ((exonIndx == cdsStartIndx) && !isRc)
     {
     int startCodonEnd = offsetToGenomic(bed, exonIndx, exonCdsStart, 3);
-    addGffLineFromBed(bed, source, "start_codon", exonCdsStart, startCodonEnd, '.', txName);
+    if (startCodonEnd >= 0 && startCodonEnd <= bed->thickEnd)
+	addGffLineFromBed(bed, source, "start_codon", exonCdsStart, startCodonEnd, '.', txName);
     }
 /* If gtf2StopCodons is set, then we follow the GTF2 convention of excluding
  * the stop codon from the CDS region.  In other GFF flavors, stop_codon is
@@ -145,8 +146,13 @@ if (exonIndx == cdsStopIndx)
     if (isRc)
 	{
 	int stopCodonEnd = offsetToGenomic(bed, exonIndx, exonCdsStart, 3);
-	addGffLineFromBed(bed, source, "stop_codon", exonCdsStart, stopCodonEnd, '.', txName);
-	int cdsPortionStart = gtf2StopCodons ? stopCodonEnd : exonCdsStart;
+	int cdsPortionStart = exonCdsStart;
+	if (stopCodonEnd >= 0 && stopCodonEnd <= bed->thickEnd)
+	    {
+	    if (gtf2StopCodons)
+		cdsPortionStart = stopCodonEnd;
+	    addGffLineFromBed(bed, source, "stop_codon", exonCdsStart, stopCodonEnd, '.', txName);
+	    }
 	if (cdsPortionStart < exonCdsEnd)
 	    addGffLineFromBed(bed, source, "CDS", cdsPortionStart, exonCdsEnd,
 			      frames[exonIndx], txName);
@@ -154,11 +160,18 @@ if (exonIndx == cdsStopIndx)
     else
 	{
 	int stopCodonStart = offsetToGenomic(bed, exonIndx, exonCdsEnd, -3);
-	int cdsPortionEnd = gtf2StopCodons ? stopCodonStart : exonCdsEnd;
-	if (cdsPortionEnd > exonCdsStart)
+	int cdsPortionEnd = exonCdsEnd;
+	if (stopCodonStart >= 0 && stopCodonStart >= bed->thickStart)
+	    {
+	    if (gtf2StopCodons)
+		cdsPortionEnd = stopCodonStart;
 	    addGffLineFromBed(bed, source, "CDS", exonCdsStart, cdsPortionEnd,
 			      frames[exonIndx], txName);
-	addGffLineFromBed(bed, source, "stop_codon", stopCodonStart, exonCdsEnd, '.', txName);
+	    addGffLineFromBed(bed, source, "stop_codon", stopCodonStart, exonCdsEnd, '.', txName);
+	    }
+	else if (cdsPortionEnd > exonCdsStart)
+	    addGffLineFromBed(bed, source, "CDS", exonCdsStart, cdsPortionEnd,
+			      frames[exonIndx], txName);
 	}
     }
 else
@@ -191,7 +204,8 @@ else
 if ((exonIndx == cdsStartIndx) && isRc)
     {
     int startCodonStart = offsetToGenomic(bed, exonIndx, exonCdsEnd, -3);
-    addGffLineFromBed(bed, source, "start_codon", startCodonStart, exonCdsEnd, '.', txName);
+    if (startCodonStart >= 0 && startCodonStart >= bed->thickStart)
+	addGffLineFromBed(bed, source, "start_codon", startCodonStart, exonCdsEnd, '.', txName);
     }
 }
 

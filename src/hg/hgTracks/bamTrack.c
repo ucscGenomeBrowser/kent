@@ -954,35 +954,10 @@ hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message
 }
 
 void bamMethods(struct track *track)
-/* Methods for BAM alignment files. */
+/* Methods for BAM alignment files, in absence of USE_BAM (samtools lib). */
 {
-linkedFeaturesMethods(track);
-track->loadItems = dontLoadItems;
+messageLineMethods(track);
 track->drawItems = drawUseBamWarning;
-// Following few lines taken from hgTracks.c getTrackList, because this is called earlier
-// but needs to know track vis from tdb+cart:
-char *s = cartOptionalString(cart, track->track);
-if (cgiOptionalString("hideTracks"))
-    {
-    s = cgiOptionalString(track->track);
-    if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
-	{
-	cartSetString(cart, track->track, s);
-	}
-    }
-// end stuff copied from hgTracks.c
-enum trackVisibility trackVis = track->tdb->visibility;
-if (s != NULL)
-    trackVis = hTvFromString(s);
-if (trackVis != tvHide)
-    {
-    track->visibility = tvDense;
-    track->limitedVis = tvDense;
-    track->limitedVisSet = TRUE;
-    }
-track->nextItemButtonable = track->nextExonButtonable = FALSE;
-track->nextPrevItem = NULL;
-track->nextPrevExon = NULL;
 }
 
 void bamWigMethods(struct track *track, struct trackDb *tdb, 

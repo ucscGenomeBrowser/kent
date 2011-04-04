@@ -2,7 +2,6 @@ track wgEncodeGisRnaSeq
 compositeTrack on
 shortLabel GIS RNA-seq
 longLabel ENCODE Genome Institute of Singapore RNA-seq
-release beta,public
 group expression
 subGroup1 view Views 1-PlusRawSignal=Plus_Raw_Signal 2-MinusRawSignal=Minus_Raw_Signal 3-AllRawSignal=All_Raw_Signal 4-Alignments=Alignments 5-SplitAlign=Split_Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878 H1-hESC=H1-hESC K562=K562
@@ -25,7 +24,6 @@ wgEncode 1
     shortLabel Plus Raw Signal
     view 1-PlusRawSignal
     visibility dense
-    release beta,public
     subTrack wgEncodeGisRnaSeq
     maxHeightPixels 100:24:16
     windowingFunction maximum
@@ -34,7 +32,6 @@ wgEncode 1
     viewLimits 0:200
 
         track wgEncodeGisRnaSeqPlusRawSignalRep1K562CytosolLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal on
         longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ +S1
@@ -48,7 +45,6 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep1K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqPlusRawSignalRep2K562CytosolLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal off
         longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ +S2
@@ -62,7 +58,6 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep2K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal on
         longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
         shortLabel GM12 cyto A+ +S1
@@ -76,7 +71,6 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
 
         track wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCellLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal on
         longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cell)
         shortLabel hESC cell A+ +S1
@@ -93,7 +87,6 @@ wgEncode 1
     shortLabel Minus Raw Signal
     view 2-MinusRawSignal
     visibility dense
-    release beta,public
         subTrack wgEncodeGisRnaSeq
     maxHeightPixels 100:24:16
     windowingFunction maximum
@@ -102,7 +95,6 @@ wgEncode 1
     viewLimits 0:200
 
         track wgEncodeGisRnaSeqMinusRawSignalRep1K562CytosolLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal on
         longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ -S1
@@ -116,7 +108,6 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep1K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqMinusRawSignalRep2K562CytosolLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal off
         longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ -S2
@@ -130,7 +121,6 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep2K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal on
         longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
         shortLabel GM12 cyto A+ -S1
@@ -144,7 +134,6 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
 
         track wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCellLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal on
         longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cell)
         shortLabel hESC cell A+ -S1
@@ -161,7 +150,6 @@ wgEncode 1
     shortLabel All Raw Signal
     view 3-AllRawSignal
     visibility hide
-    release beta,public
         subTrack wgEncodeGisRnaSeq
     maxHeightPixels 100:24:16
     windowingFunction maximum
@@ -170,7 +158,6 @@ wgEncode 1
     viewLimits 0:200
 
         track wgEncodeGisRnaSeqAllRawSignalRep1K562CytosolLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
         longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ AS1
@@ -184,7 +171,6 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep1K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
         longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ AS2
@@ -198,7 +184,6 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
         longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
         shortLabel GM12 cyto A+ AS1
@@ -212,7 +197,6 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
 
         track wgEncodeGisRnaSeqAllRawSignalRep1H1hescCellLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
         longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cell)
         shortLabel hESC cell A+ AS1
@@ -229,11 +213,9 @@ wgEncode 1
     shortLabel Alignments
     view 4-Alignments
     visibility hide
-    release beta,public
         subTrack wgEncodeGisRnaSeq
 
         track wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel K562 cyto A+ AL1
         longLabel ENCODE GIS RNA-seq Alignments Rep 1 (PolyA+ RNA in K562 cytosol)
@@ -249,7 +231,6 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya.tagAlign.gz
 
         track wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel K562 cyto A+ AL2
         longLabel ENCODE GIS RNA-seq Alignments Rep 2 (PolyA+ RNA in K562 cytosol)
@@ -265,7 +246,6 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya.tagAlign.gz
 
         track wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel GM12 cyto A+ AL1
         longLabel ENCODE GIS RNA-seq Alignments Rep 1 (PolyA+ RNA in GM12878 cytosol)
@@ -281,7 +261,6 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya.tagAlign.gz
 
         track wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel hESC cell A+ AL1
         longLabel ENCODE GIS RNA-seq Alignments Rep 1 (PolyA+ RNA in H1-hESC cell)
@@ -300,11 +279,9 @@ wgEncode 1
     shortLabel Split Alignments
     view 5-SplitAlign
     visibility hide
-    release beta,public
         subTrack wgEncodeGisRnaSeq
 
         track wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView5-SplitAlign off
         shortLabel K562 cyto A+ SA1
         longLabel ENCODE GIS RNA-seq Split Alignments Rep 1 (PolyA+ RNA in K562 cytosol)
@@ -322,7 +299,6 @@ wgEncode 1
         metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=SplitAlign replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya fileName=wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya
-        release beta,public
         subTrack wgEncodeGisRnaSeqView5-SplitAlign off
         shortLabel hESC cell A+ SA1
         longLabel ENCODE GIS RNA-seq Split Alignments Rep 1 (PolyA+ RNA in H1-hESC cell)

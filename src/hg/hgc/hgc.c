@@ -3887,6 +3887,10 @@ else if (wordCount > 0)
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
 #endif // USE_BAM
+#ifdef USE_TABIX
+    else if (sameString(type, "vcfTabix"))
+	doVcfTabixDetails(tdb, item);
+#endif // USE_TABIX
     }
 if (imagePath)
     {
@@ -9368,7 +9372,7 @@ printf("<HR>");
 printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
 }
 
-void printOmimGeneClass3Details(struct trackDb *tdb, char *itemName, boolean encode)
+void printOmimGene2Details(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of an OMIM Class 3 Gene entry. */
 {
 struct sqlConnection *conn  = hAllocConn(database);
@@ -9443,6 +9447,7 @@ if (url != NULL && url[0] != 0)
     /* use geneSymbol from omimMorbidMap if available */
     if (geneSymbol!= NULL)
     	{
+	boolean disorderShown;
 	char *phenotypeClass, *questionable, *hasBracket, *hasBrace, *phenotypeId, *disorder;
 	
 	printf("<B>Gene symbol(s):</B> %s", geneSymbol);
@@ -9453,9 +9458,14 @@ if (url != NULL && url[0] != 0)
 	 "select disorder, phenotypeClass, questionable, hasBracket, hasBrace, phenotypeId from omimDisorderPhenotype where omimId=%s order by disorder",
 	 itemName);
     	sr = sqlMustGetResult(conn, query);
- 	printf("<B>Disorder(s):</B><UL>\n"); 
+	disorderShown = FALSE;
         while ((row = sqlNextRow(sr)) != NULL)
     	    {
+	    if (!disorderShown)
+	    	{
+ 		printf("<B>Disorder(s):</B><UL>\n"); 
+		disorderShown = TRUE;
+		}
 	    disorder       = row[0];
 	    phenotypeClass = row[1];
 	    questionable   = row[2];
@@ -9473,7 +9483,7 @@ if (url != NULL && url[0] != 0)
 		}
 	    printf("<BR>\n");
 	    }
-	printf("</UL>\n");
+	if (disorderShown) printf("</UL>\n");
     	sqlFreeResult(&sr);
 	}
     else
@@ -9906,11 +9916,11 @@ printOmimAvSnpDetails(tdb, item, FALSE);
 printTrackHtml(tdb);
 }
 
-void doOmimGeneClass3(struct trackDb *tdb, char *item)
+void doOmimGene2(struct trackDb *tdb, char *item)
 /* Put up OmimGene track info. */
 {
 genericHeader(tdb, item);
-printOmimGeneClass3Details(tdb, item, FALSE);
+printOmimGene2Details(tdb, item, FALSE);
 printTrackHtml(tdb);
 }
 
@@ -19652,6 +19662,10 @@ else if (sameWord(type, "bigBed"))
 else if (sameWord(type, "bam"))
     doBamDetails(ct->tdb, itemName);
 #endif//def USE_BAM
+#ifdef USE_TABIX
+else if (sameWord(type, "vcfTabix"))
+    doVcfTabixDetails(ct->tdb, itemName);
+#endif//def USE_TABIX
 else if (sameWord(type, "makeItems"))
     doMakeItemsDetails(ct, fileName);	// fileName is first word, which is, go figure, id
 else if (ct->wiggle)
@@ -23830,11 +23844,11 @@ else if (sameWord(table, "omimAvSnp"))
     }
 else if (sameWord(table, "omimGeneClass2"))
     {
-    doOmimGeneClass3(tdb, item);
+    doOmimGene2(tdb, item);
     }
 else if (sameWord(table, "omimGene2"))
     {
-    doOmimGeneClass3(tdb, item);
+    doOmimGene2(tdb, item);
     }
 else if (sameWord(table, "omimAv"))
     {
@@ -24390,7 +24404,8 @@ else if (sameWord(table, "transRegCodeProbe"))
     doTransRegCodeProbe(tdb, item, "transRegCode", "transRegCodeMotif",
     	"transRegCodeCondition", "growthCondition");
     }
-else if (sameWord(table, "wgEncodeRegDnaseClustered"))
+else if (sameWord(table, "wgEncodeRegDnaseClustered") || 
+	sameWord(table, "wgEncodeRegDnaseClusteredOn7"))
     {
     doPeakClusters(tdb, item);
     }

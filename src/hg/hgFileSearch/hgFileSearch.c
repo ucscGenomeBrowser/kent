@@ -19,6 +19,9 @@
 struct hash *trackHash = NULL;	// Is this needed?
 boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTiming=." . */
 
+#define FILE_SEARCH_WHAT "Downloadable ENCODE Files"
+#define FILE_SEARCH_NAME FILE_SEARCH_WHAT " Search"
+
 #define FILE_SEARCH              "hgfs_Search"
 #define FILE_SEARCH_FORM         "fileSearch"
 #define FILE_SEARCH_CURRENT_TAB  "fsCurTab"
@@ -41,7 +44,44 @@ boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTim
 
 //    ((sameString(op, "is") && !strcasecmp(track->shortLabel, str)) ||
 
-static boolean isDescriptionMatch(struct trackDb *tdb, struct slName *wordList)
+#define MATCH_ON_EACH_WORD
+#ifdef MATCH_ON_EACH_WORD
+#define MATCH_ON_WILDS
+static boolean matchToken(char *string, char *token)
+{
+if (string == NULL)
+    return (token == NULL);
+if (token == NULL)
+    return TRUE;
+
+if (!strchr(token,'*') && !strchr(token,'?'))
+    return (strcasestr(string,token) != NULL);
+
+#ifdef MATCH_ON_WILDS
+char wordWild[1024];
+safef(wordWild,sizeof wordWild,"*%s*",token);
+return wildMatch(wordWild, string);
+
+// do this with regex ? Would require all sorts of careful parsing for ()., etc.
+//safef(wordWild,sizeof wordWild,"^*%s*$",token);
+//regex_t regEx;
+//int err = regcomp(&regEx, token, REG_NOSUB | REG_ICASE);
+//if(err != 0)  // Compile the regular expression so that it can be used.  Use: REG_EXTENDED ?
+//    {
+//    char buffer[128];
+//    regerror(err, &regEx, buffer, sizeof buffer);
+//    warn("ERROR: Invalid regular expression: [%s] %s\n",token,buffer);
+//    regfree(&regEx);
+//    return FALSE;
+//    }
+//err = regexec(&regEx, mdbVar->val, 0, NULL, 0);
+//regfree(&regEx);
+//return (err == 0);
+
+#endif//def MATCH_ON_WILDS
+}
+
+static boolean doesNameMatch(struct trackDb *tdb, struct slName *wordList)
 // We parse str and look for every word at the start of any word in track description (i.e. google style).
 {
 if (tdb->html == NULL)
@@ -50,46 +90,91 @@ if (tdb->html == NULL)
 struct slName *word = wordList;
 for(; word != NULL; word = word->next)
     {
-    if (!wildMatch(word->name, tdb->html))
+    if (!matchToken(tdb->shortLabel,word->name)
+    &&  !matchToken(tdb->longLabel, word->name))
         return FALSE;
     }
 return TRUE;
 }
 
-static struct trackDb *tdbFilterOn(struct trackDb **pTdbList, char *name, char *description, char *group)
-// returns tdbs that pach supplied criterion, leaving unmatched in list passed in
+static boolean doesDescriptionMatch(struct trackDb *tdb, struct slName *wordList)
+// We parse str and look for every word at the start of any word in track description (i.e. google style).
 {
-// Set the word list up once
-struct slName *wordList = NULL;
+//static boolean tryitOneCycle=TRUE;
+if (tdb->html == NULL)
+    return (wordList != NULL);
+
+if (strchr(tdb->html,'\n'))
+    strSwapChar(tdb->html,'\n',' ');   // DANGER: don't own memory.  However, this CGI will use html for no other purpose
+
+struct slName *word = wordList;
+for(; word != NULL; word = word->next)
+    {
+    if (!matchToken(tdb->html,word->name))
+        return FALSE;
+    }
+return TRUE;
+}
+#endif///def MATCH_ON_EACH_WORD
+
+static struct trackDb *tdbFilterBy(struct trackDb **pTdbList, char *name, char *description, char *group)
+// returns tdbs that match supplied criterion, leaving unmatched in list passed in
+{
+#ifdef MATCH_ON_EACH_WORD
+// Set the word lists up once
+struct slName *nameList = NULL;
+if (name)
+    nameList = slNameListOfUniqueWords(cloneString(name),TRUE); // TRUE means respect quotes
+struct slName *descList = NULL;
 if (description)
-    wordList = slNameListOfUniqueWords(cloneString(description));
+    descList = slNameListOfUniqueWords(cloneString(description),TRUE);
+#endif///def MATCH_ON_EACH_WORD
 
 struct trackDb *tdbList = *pTdbList;
 struct trackDb *tdbRejects = NULL;
 struct trackDb *tdbMatched = NULL;
+#ifndef MATCH_ON_EACH_WORD
+char nameWild[256];
+if (name)
+    safef(nameWild,sizeof nameWild,"*%s*",name);
+char descWild[512];
+if (description)
+    safef(descWild,sizeof descWild,"*%s*",description);
+#endif///ndef MATCH_ON_EACH_WORD
+
 while (tdbList != NULL)
     {
     struct trackDb *tdb = slPopHead(&tdbList);
 
-    if (name && (!wildMatch(name,tdb->shortLabel) && !wildMatch(name,tdb->longLabel)))
+    if (!tdbIsComposite(tdb))
         slAddHead(&tdbRejects,tdb);
     else if (group && differentString(tdb->grp,group))
         slAddHead(&tdbRejects,tdb);
-    else if (description && !isDescriptionMatch(tdb, wordList))
+#ifdef MATCH_ON_EACH_WORD
+    else if (name && !doesNameMatch(tdb, nameList))
         slAddHead(&tdbRejects,tdb);
+    else if (description && !doesDescriptionMatch(tdb, descList))
+        slAddHead(&tdbRejects,tdb);
+#else///ifndef MATCH_ON_EACH_WORD
+    else if (name && (!wildMatch(nameWild,tdb->shortLabel) && !wildMatch(nameWild,tdb->longLabel)))
+        slAddHead(&tdbRejects,tdb);
+    else if (description && (tdb->html == NULL || !wildMatch(descWild,tdb->html)))
+        slAddHead(&tdbRejects,tdb);
+#endif///ndef MATCH_ON_EACH_WORD
     else
         slAddHead(&tdbMatched,tdb);
     }
 //slReverse(&tdbRejects); // Needed?
 //slReverse(&tdbMatched); // Needed?
-
 *pTdbList = tdbRejects;
 
+//warn("matched %d tracks",slCount(tdbMatched));
 return tdbMatched;
 }
 
 static boolean mdbSelectsAddFoundComposites(struct slPair **pMdbSelects,struct trackDb *tdbsFound)
 // Adds a composite mdbSelect (if found in tdbsFound) to the head of the pairs list.
+// If tdbsFound is NULL, then add dummy composite search criteria
 {
 // create comma separated list of composites
 struct dyString *dyComposites = dyStringNew(256);
@@ -108,10 +193,12 @@ if (dyStringLen(dyComposites) > 0)
     {
     char *composites = dyStringCannibalize(&dyComposites);
     composites[strlen(composites) - 1] = '\0';  // drop the last ','
-    slPairAdd(pMdbSelects,"composite",composites); // Composite should not already be in the list, because it is only indirectly sortable
+    //warn("Found composites: %s",composites);
+    slPairAdd(pMdbSelects,MDB_VAR_COMPOSITE,composites); // Composite should not already be in the list, because it is only indirectly sortable
     return TRUE;
     }
 
+//warn("No composites found");
 dyStringFree(&dyComposites);
 return FALSE;
 }
@@ -170,11 +257,19 @@ slReverse(grps);
 return *grps;
 }
 
-void doSearch(char *db,char *organism,struct cart *cart,struct trackDb *tdbList)
+static void doFileSearch(char *db,char *organism,struct cart *cart,struct trackDb *tdbList)
 {
 if (!advancedJavascriptFeaturesEnabled(cart))
     {
     warn("Requires advanced javascript features.");
+    return;
+    }
+struct sqlConnection *conn = hAllocConn(db);
+boolean metaDbExists = sqlTableExists(conn, "metaDb");
+if (!sqlTableExists(conn, "metaDb"))
+    {
+    warn("Assembly %s %s does not support Downloadable Files search.", organism, hFreezeFromDb(db));
+    hFreeConn(&conn);
     return;
     }
 #ifdef SUPPORT_COMPOSITE_SEARCH
@@ -183,8 +278,6 @@ char *descSearch=NULL;
 #endif///def SUPPORT_COMPOSITE_SEARCH
 char *fileTypeSearch = cartOptionalString(cart, FILE_SEARCH_ON_FILETYPE);
 boolean doSearch = sameWord(cartUsualString(cart, FILE_SEARCH,"no"), "search");
-struct sqlConnection *conn = hAllocConn(db);
-boolean metaDbExists = sqlTableExists(conn, "metaDb");
 #ifdef ONE_FUNC
 struct hash *parents = newHash(4);
 #endif///def ONE_FUNC
@@ -211,8 +304,10 @@ enum searchTab selectedTab = filesTab;
 descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
 #endif///ndef USE_TABS
 
+#ifndef MATCH_ON_EACH_WORD
 if(descSearch)
     stripChar(descSearch, '"');
+#endif///ndef MATCH_ON_EACH_WORD
 
 #ifdef USE_TABS
 struct trix *trix;
@@ -416,15 +511,22 @@ if(doSearch)
         if (nameSearch || descSearch || groupSearch)
             {  // Use nameSearch, descSearch and groupSearch to narrow down the list of composites.
 
-            struct trackDb *tdbList = hTrackDb(db);
-            struct trackDb *tdbsMatch = tdbFilterOn(&tdbList, nameSearch, descSearch, groupSearch);
+            if (isNotEmpty(nameSearch) || isNotEmpty(descSearch) || isNotEmpty(groupSearch))
+                {
+                struct trackDb *tdbList = hTrackDb(db);
+                struct trackDb *tdbsMatch = tdbFilterBy(&tdbList, nameSearch, descSearch, groupSearch);
 
-            // Now we have a list of tracks, so we need a unique list of composites to add to mdbSelects
-            mdbSelectsAddFoundComposites(&mdbSelects,tdbsMatch);
+                // Now we have a list of tracks, so we need a unique list of composites to add to mdbSelects
+                doSearch = mdbSelectsAddFoundComposites(&mdbSelects,tdbsMatch);
+                }
             }
         #endif///def SUPPORT_COMPOSITE_SEARCH
 
-        fileSearchResults(db, conn, mdbSelects, fileTypeSearch);
+        if (doSearch && mdbSelects != NULL && isNotEmpty(fileTypeSearch))
+            fileSearchResults(db, conn, mdbSelects, fileTypeSearch);
+        else
+            printf("<DIV id='filesFound'><BR>No files found.<BR></DIV><BR>\n");
+
         if (measureTiming)
             uglyTime("Searched for files");
         }
@@ -433,16 +535,11 @@ if(doSearch)
     }
 hFreeConn(&conn);
 
-webNewSection("About Downloadable Files Search");
-if(metaDbExists)
-    printf("<p>Search for terms in track names, descriptions, groups, and ENCODE "
-            "metadata.  If multiple terms are entered, only tracks with all terms "
-            "will be part of the results.");
-else
-    printf("<p>Search for terms in track descriptions, groups, and names. "
-            "If multiple terms are entered, only tracks with all terms "
-            "will be part of the results.");
-printf("<BR><a target='_blank' href='../goldenPath/help/trackSearch.html'>more help</a></p>\n");
+webNewSection("About " FILE_SEARCH_NAME);
+printf("<p>Search for downloadable ENCODE files by entering search terms in "
+        "the Track name or Description fields and/or by making selections with "
+        "the group, data format, and/or ENCODE metadata drop-downs.");
+printf("<BR><a target='_blank' href='../goldenPath/help/fileSearch.html'>more help</a></p>\n");
 webEndSectionTables();
 }
 
@@ -459,7 +556,10 @@ measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 // QUESTION: Do We need track list ???  trackHash ??? Can't we just get one track and no children
 trackHash = trackHashMakeWithComposites(db,chrom,&tdbList,FALSE);
 
-cartWebStart(cart, db, "Search for Downloadable Files in the %s %s Assembly", organism, hFreezeFromDb(db));
+cartWebStart(cart, db, "Search for " FILE_SEARCH_WHAT " in the %s %s Assembly", organism, hFreezeFromDb(db));
+
+// This cleverness allows us to have the background image like "Track Search" does, without all the hgTracks overhead
+printf("<style type='text/css'>body {background-image:url('%s');}</style>",hBackgroundImage());
 
 webIncludeResourceFile("HGStyle.css");
 webIncludeResourceFile("jquery-ui.css");
@@ -474,7 +574,7 @@ jsIncludeFile("utils.js",NULL);
 //printf("<script type='text/javascript'>$(document).ready(function() { setTimeout('updateMetaDataHelpLinks(0);',50);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
 printf("<script type='text/javascript'>$(document).ready(function() { updateMetaDataHelpLinks(0);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
 
-doSearch(db,organism,cart,tdbList);
+doFileSearch(db,organism,cart,tdbList);
 
 
 printf("<BR>\n");
@@ -494,8 +594,6 @@ return 0;
 
 // TODO:
 // 1) Done: Limit to first 1000
-// 2) SORT OF: Work out strangeness with dropdownchecklist and use in hgTracks (By some miracle multiselect is working in my hgTracks)
-// 3) Work out support for selecting composites and limiting search to those
-// 4) Work out simple verses advanced tabs
-// 5) work out support for non-encode downloads
-// 6) Make an hgTrackSearch to replces hgTracks track search ??   Silpler code, but may not be good idea.
+// 2) Work out simple verses advanced tabs
+// 3) work out support for non-encode downloads
+// 4) Make an hgTrackSearch to replces hgTracks track search ??   Silpler code, but may not be good idea.

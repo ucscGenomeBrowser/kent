@@ -182,18 +182,17 @@ if(showShortLabel)
     dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
 // Get the hash of mdb and cv term types
-struct hash *cvTermTypes = (struct hash *)mdbCvTermTypeHash();
+struct hash *cvTermTypes = (struct hash *)cvTermTypeHash();
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
-mdbObjRemoveVars(mdbObj,"composite project objType dccInternalNotes"); // Don't bother showing these (suggest: "composite project dataType view tableName")
+mdbObjRemoveVars(mdbObj,MDB_OBJ_TYPE_COMPOSITE " " MDB_VAR_PROJECT " " MDB_OBJ_TYPE); // Don't bother showing these (NOTE: composite,objType should be added to cv.ra typeOfTerms as hidden)
 mdbObjRemoveHiddenVars(mdbObj);
-mdbObjReorderVars(mdbObj,"grant lab dataType cell treatment antibody protocol replicate view setType inputType",FALSE); // Bring to front
-mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName fileIndex",TRUE); // Send to back
+mdbObjReorderByCv(mdbObj,FALSE);// Use cv defined order for visible vars
 struct mdbVar *mdbVar;
 for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     {
-    if ((sameString(mdbVar->var,"fileName") || sameString(mdbVar->var,"fileIndex") )
-    && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
+    if ((sameString(mdbVar->var,MDB_VAR_FILENAME) || sameString(mdbVar->var,MDB_VAR_FILEINDEX) )
+    && trackDbSettingClosestToHome(tdb,MDB_VAL_ENCODE_PROJECT) != NULL)
         {
         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>",mdbVar->var);
 
@@ -202,25 +201,21 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         }
     else
         {
-        // If antibody and metadata contains input={sameValue} then just print input
-        if(sameString(mdbVar->var,"antibody") && mdbObjContains(mdbObj,"input",mdbVar->val))
-            continue;
-
-        if (cvTermTypes && differentString(mdbVar->var,"tableName")) // Don't bother with tableName
+        if (cvTermTypes && differentString(mdbVar->var,MDB_VAR_TABLENAME)) // Don't bother with tableName
             {
             struct hash *cvTerm = hashFindVal(cvTermTypes,mdbVar->var);
             if (cvTerm != NULL)
                 {
-                if(SETTING_NOT_ON(hashFindVal(cvTerm,"hidden")))  // NULL is not on
+                if(SETTING_NOT_ON(hashFindVal(cvTerm,CV_TOT_HIDDEN)))  // NULL is not on
                     {
-                    char *label=hashFindVal(cvTerm,"label");
+                    char *label=hashFindVal(cvTerm,CV_LABEL);
                     if (label == NULL)
                         label = mdbVar->var;
-                    char *linkOfType = controlledVocabLink(NULL,"type",mdbVar->var,label,label,NULL);
-                    char *cvDefined=hashFindVal(cvTerm,"cvDefined");
+                    char *linkOfType = controlledVocabLink(NULL,CV_TYPE,mdbVar->var,label,label,NULL);
+                    char *cvDefined=hashFindVal(cvTerm,CV_TOT_CV_DEFINED);
                     if (cvDefined != NULL && !SETTING_IS_OFF(cvDefined)) // assume setting is ON
                         {
-                        char *linkOfTerm = controlledVocabLink(NULL,"term",mdbVar->val,mdbVar->val,mdbVar->val,NULL);
+                        char *linkOfTerm = controlledVocabLink(NULL,CV_TERM,mdbVar->val,mdbVar->val,mdbVar->val,NULL);
                         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
                         freeMem(linkOfTerm);
                         }
@@ -4821,7 +4816,7 @@ if (filterSettings)
     struct slPair *extras = NULL;
     char *extraFields = trackDbSetting(tdb, "extraFields");  // TODo: seems like there should be a cleaner way
     if (extraFields != NULL)
-        extras = slPairFromString(extraFields);
+        extras = slPairListFromString(extraFields,TRUE); // Quoted strings may be okay
 
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
@@ -6757,10 +6752,9 @@ if(dimensionsExist(parentTdb))
 #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"matSubCBsCheck(%s);\" id='btn_%s' src='../images/%s'>"
 #define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
 #define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
-printf("<P><B>Select subtracks:</B><P>All:&nbsp;");
 BUTTON_PLUS_ALL_GLOBAL();
 BUTTON_MINUS_ALL_GLOBAL();
-puts("</P>");
+puts("&nbsp;<B>Select all subtracks</B><BR><BR>");
 return TRUE;
 }
 

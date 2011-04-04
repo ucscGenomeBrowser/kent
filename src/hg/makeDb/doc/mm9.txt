@@ -11578,7 +11578,8 @@ knownToVisiGene mm9
     # http://genomewiki.ucsc.edu/images/8/85/Hg19.ncbiIncidentDb.bb
 
 #############################################################################
-# KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 2/28/2011 Fan)
+# KOMP/IKMC (KNOCKOUT MOUSE PROJECT became Int'l Knockout Mouse Cons) (DONE 3/22/11 Fan)
+# done 3/22/11 w/files emailed from Carol
 # renamed to ikmc 3/25/10 at Carol's request
 # done 3/12/10 w/files emailed from Carol 3/12
 # done 12/8/09 w/files emailed from Carol 12/7
@@ -11587,10 +11588,9 @@ knownToVisiGene mm9
 # done 2/12/09 w/files emailed from Carol Bult 2/12
 # done 10/21/08 w/files emailed from Carol Bult 10/18
     ssh hgwdev
-    mkdir -p /hive/data/genomes/mm9/bed/komp/2011_02
-    cd /hive/data/genomes/mm9/bed/komp/2011_02
-#*** NOTE FOR NEXT TIME: load as ikmc, ikmcExtra
-    # Save files emailed from Carol Bult 3/12 as 
+    mkdir -p /hive/data/genomes/mm9/bed/ikmc/2011_03
+    cd /hive/data/genomes/mm9/bed/ikmc/2011_03
+    # Save files emailed from Carol Bult as 
     # 20110221_ikmc.gff.gz
     # Make bed12 with itemRgb:
     zcat 20110221_ikmc.gff.gz \
@@ -11627,7 +11627,7 @@ knownToVisiGene mm9
         print join("\t", $chrom, $chromStart, $chromEnd, $name, 0, ".", $chromStart, \
                    $chromStart, $color, $blkCount, $blkSizes, $blkStarts) . "\n"; \
       }' \
-    | sort -k 1,1 -k 2n,2n > komp.bed
+    | sort -k 1,1 -k 2n,2n > ikmc.bed
 #Got 46125 genes.
     # No stderr empty-coord warnings this time (no unmapped items).
     # Make an alias-style table with associated info (MGI ID and status):
@@ -11638,24 +11638,34 @@ knownToVisiGene mm9
       $w[8] =~ m/^(MGI:\d+); (\w+); (\w.*)/ || die; \
       ($mgi, $designId, $status) = ($1, $2, $3); \
       $_ = "$w[10]_$designId\t$mgi,$w[2],$status\n";' \
-    | sort -u > kompExtra.tab
-    wc -l kompExtra.tab
-#46125 kompExtra.tab
+    | sort -u > ikmcExtra.tab
+    wc -l ikmcExtra.tab
+#46125 ikmcExtra.tab
     # Load 'em up:
-    hgLoadBed mm9 komp komp.bed
+    hgLoadBed mm9 ikmc ikmc.bed
 #Loaded 46125 elements of size 12
-    hgLoadSqlTab mm9 kompExtra $HOME/kent/src/hg/lib/genericAlias.sql kompExtra.tab
-    checkTableCoords -verbose=2 mm9 komp
-#mm9.komp item Tekt3_41479 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41478 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41477 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp item Tekt3_41476 chr11:62887195-62896116: blocks 3 and 4 overlap.
-#mm9.komp has 4 records with overlapping blocks.
-    # Carol talked to the Sanger folks about those (last time) ... pls waive.
+    hgLoadSqlTab mm9 ikmcExtra $HOME/kent/src/hg/lib/genericAlias.sql ikmcExtra.tab
+    checkTableCoords -verbose=2 mm9 ikmc
+#mm9.ikmc item Tekt3_41479 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41478 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41477 chr11:62887195-62896116: blocks 3 and 4 overlap.
+#mm9.ikmc item Tekt3_41476 chr11:62887195-62896116: blocks 3 and 4 overlap.
+
+#Remove those records having the overlapping block problem.
+
+hgsql mm9 -e 'delete from ikmc where name="Tekt3_41479"'
+hgsql mm9 -e 'delete from ikmc where name="Tekt3_41478"'
+hgsql mm9 -e 'delete from ikmc where name="Tekt3_41477"'
+hgsql mm9 -e 'delete from ikmc where name="Tekt3_41476"'
+
+hgsql mm9 -e 'delete from ikmcExtra where name="Tekt3_41479"'
+hgsql mm9 -e 'delete from ikmcExtra where name="Tekt3_41478"'
+hgsql mm9 -e 'delete from ikmcExtra where name="Tekt3_41477"'
+hgsql mm9 -e 'delete from ikmcExtra where name="Tekt3_41476"'
 
     # Note from July '09: Carol noticed some very long items and is asking
     # Sanger about them.  Here's how to check it ourselves next time:
-    hgsql mm9 -e 'select name, (chromEnd-chromStart) as length from komp \
+    hgsql mm9 -e 'select name, (chromEnd-chromStart) as length from ikmc \
                   where chromEnd - chromStart > 1000000 order by length desc;'
 #+----------------+-----------+
 #| name           | length    |
@@ -11674,6 +11684,59 @@ knownToVisiGene mm9
 #| Nrxn1_VG16178  |   1056424 | 
 #+----------------+-----------+
 
-    runJoiner.csh mm9 komp
-#  mm9.kompExtra.name - hits 46125 of 46125 ok 
+    runJoiner.csh mm9 ikmc
+# mm9.ikmcExtra.name - hits 46121 of 46121 ok
+
+#########################################################################
+# LASTZ Turkey MelGal1 ( DONE - 2011-03-30 - Chin)
+    mkdir /hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30
+    cd /hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30
+
+    cat << '_EOF_' > DEF
+# Turkey vs Mouse
+
+# TARGET: Mouse mm9
+SEQ1_DIR=/scratch/data/mm9/nib
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Turkey melGal1 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+    # real    71m8.450s
+    cat fb.mm9.chainMelGal1Link.txt
+    #   62597891 bases of 2620346127 (2.389%) in intersection
+    cd /hive/data/genomes/mm9/bed
+    ln -s lastzMelGal1.2011-03-30 lastz.melGal1
+
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    6m49.871s
+    cat fb.melGal1.chainMm9Link.txt
+    #   50649368 bases of 935922386 (5.412%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.mm9.swap lastz.mm9
+
 #########################################################################
