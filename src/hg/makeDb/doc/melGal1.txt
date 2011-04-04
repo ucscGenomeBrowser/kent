@@ -734,4 +734,26 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/melGal1/bed
     ln -s blastz.danRer7.swap lastz.danRer7
 
+#######################################################################
+# lastz swap from rn4 (DONE - 2011-04-04 - Chin)
+    # original alignment to rn4
+    cd /hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30
+    cat fb.mm9.chainMelGal1Link.txt
+    #   62597891 bases of 2620346127 (2.389%) in intersection
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    6m49.871s
+    cat fb.melGal1.chainMm9Link.txt
+    #   50649368 bases of 935922386 (5.412%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.mm9.swap lastz.mm9
+
+
 ############################################################################
