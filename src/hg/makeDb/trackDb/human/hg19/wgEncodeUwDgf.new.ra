@@ -72,7 +72,7 @@ wgEncode 1
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Hotspots
-        parent wgEncodeUwDgfViewHotspots 
+        parent wgEncodeUwDgfViewHotspots off
         shortLabel HepG2 Hspt
         longLabel HepG2 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=2HepG2
@@ -81,7 +81,7 @@ wgEncode 1
         # subId=1814 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfK562Hotspots
-        parent wgEncodeUwDgfViewHotspots
+        parent wgEncodeUwDgfViewHotspots off
         shortLabel K562 Hspt
         longLabel K562 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=1K562
@@ -246,7 +246,7 @@ wgEncode 1
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Pk
-        parent wgEncodeUwDgfViewPeaks 
+        parent wgEncodeUwDgfViewPeaks off
         shortLabel HepG2 Pk
         longLabel HepG2 DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=2HepG2
@@ -255,7 +255,7 @@ wgEncode 1
         # subId=1814 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfK562Pk
-        parent wgEncodeUwDgfViewPeaks
+        parent wgEncodeUwDgfViewPeaks off
         shortLabel K562 Pk
         longLabel K562 DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=1K562
@@ -582,7 +582,7 @@ wgEncode 1
     maxLimit 218367.00
     autoScale off
     maxHeightPixels 100:32:16
-    windowingFunction maximum
+    windowingFunction mean+whiskers
 
         track wgEncodeUwDgfGm06990Raw
         parent wgEncodeUwDgfViewzRaw off
@@ -610,7 +610,7 @@ wgEncode 1
         # subId=1814 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfK562Raw
-        parent wgEncodeUwDgfViewzRaw
+        parent wgEncodeUwDgfViewzRaw off
         shortLabel K562 Raw
         longLabel K562 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=1K562

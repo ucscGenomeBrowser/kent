@@ -2307,9 +2307,9 @@ type Cell Line
 organism Human
 description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
-vendorName (See the protocol documents) 
+vendorName (See the protocol documents)
 vendorId
-orderUrl 
+orderUrl
 karyotype normal
 termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256
@@ -2325,7 +2325,7 @@ description Normal Human Skeletal Muscle Myotubes
 tissue Muscle
 vendorName (See the protocol documents)
 vendorId
-orderUrl 
+orderUrl
 karyotype normal
 termId BTO:0001760 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760
@@ -2486,7 +2486,7 @@ tier 3
 organism human
 description Skeletal muscle myoblast
 lineage LHCN-M2 are a line of human skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old Caucasian male heart transplant donor.  They are immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN").   Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
-karyotype 
+karyotype
 sex M
 tissue Skeletal muscle myoblast
 vendorName Woodring Wright, M.D., Ph.D.
@@ -3300,7 +3300,7 @@ type Cell Line
 organism Mouse
 tissue Mammary
 category Cell Line
-description Mammary 
+description Mammary
 age immortalized
 strain RIII
 vendorName
@@ -3316,7 +3316,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description myeloid progenitor cells, CD34+ 
+description myeloid progenitor cells, CD34+
 age immortalized
 strain B6D2F1/J
 vendorName
@@ -3332,7 +3332,7 @@ type Cell Line
 organism Mouse
 tissue Cortex
 category Cell Line
-description Pituitary tumor LAF1 
+description Pituitary tumor LAF1
 age immortalized
 strain Unknown
 vendorName ATCC
@@ -3348,7 +3348,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description B Cell , CD19+ 
+description B Cell , CD19+
 age immortalized
 strain C57BL/6
 vendorName
@@ -3426,7 +3426,7 @@ type Cell Line
 organism Mouse
 tissue
 category Primary Cells
-description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov;7(11):2071-84.) 
+description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov;7(11):2071-84.)
 age E0
 strain 129
 vendorName Uw lab
@@ -3488,7 +3488,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description Gata1- erythroid progenitor 
+description Gata1- erythroid progenitor
 age E0
 strain 129
 vendorName Mitch Weiss lab
@@ -3505,7 +3505,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description Gata1 restored erythroid cells, differentiation induced by estradiol (E2) 
+description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)
 age E0
 strain 129
 vendorName Mitch Weiss lab
@@ -4998,7 +4998,7 @@ tag H3K79me2
 type Antibody
 target H3K79me2
 antibodyDescription Rabbit polyclonal antibody raised against a peptide containing K79 di-methylation
-targetDescription H3K79me2 is a mark of the transcriptional transition region - the region between the initiation marks (K4me3, etc) and the elongation marks (K36me3). 
+targetDescription H3K79me2 is a mark of the transcriptional transition region - the region between the initiation marks (K4me3, etc) and the elongation marks (K36me3).
 orderUrl http://www.activemotif.com/catalog/details/39143/histone-h3-dimethyl-lys79-antibody-pab.html
 vendorName Active Motif
 vendorId 39143
@@ -5186,7 +5186,7 @@ term  IRF4_(SC-6059)
 tag  IRF4SC6059
 type Antibody
 target  IRF4
-antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of IRF-4 of mouse origin. (Provisional)
+antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of IRF-4 of mouse origin.
 targetDescription  The protein encoded by this gene belongs to the IRF (interferon regulatory factor) family.  It functions as a lymphocyte specific transcription factor and negatively regulates TLR signaling by selectively competing with IRF5.  A chromosomal translocation involving this gene and the IgH locus, t(6;14)(p25;q32), may be a cause of multiple myeloma (RefSeq).
 vendorName Santa Cruz Biotech
 vendorId sc-6059
@@ -7798,261 +7798,267 @@ type restrictionEnzyme
 
 
 ### view     THIS WHOLE SECTION IS A PROVISIONAL ATTEMPT AT CONTROLLING VIEWS
-### term:  
+### term:
 ### tag:   This is the camel case convention that we use in our file names
 ### label: This will be used for human display
 
-term Alignability 
+term Alignability
 tag Alignabi
 type view
-label Alignability 
-description Provisional Alignability 
+label Alignability
+description Alignability
 
-term Alignments 
+term Alignments
 tag Alignmen
 type view
-label Alignments 
-description Provisional Alignments 
+label Alignments
+description Alignments
 
-term Base_Overlap_Signal 
+term Base_Overlap_Signal
 tag  ????
 type view
-label Base_Overlap_Signal 
-description Provisional Base_Overlap_Signal 
+label Base_Overlap_Signal
+description Base_Overlap_Signal
 
-term Clusters 
+term Clusters
 tag Clusters
 type view
-label Clusters 
-description Provisional Clusters 
+label Clusters
+description Clusters
 
-term CNV 
-tag CNV 
+term CNV
+tag CNV
 type view
-label CNV 
-description Provisional CNV 
+label CNV
+description CNV
 
-term Contigs 
-tag Contigs 
+term Contigs
+tag Contigs
 type view
-label Contigs 
-description Provisional Contigs 
+label Contigs
+description Contigs
 
-term ExonsGencV3c 
+term ExonsGencV3c
 tag ExonsGencV3c
 type view
-label Exons Gencode V3c 
-description Provisional ExonsGencV3c 
+label Exons Gencode V3c
+description ExonsGencV3c
 
-term Fasta3p 
-tag Fasta3p 
+term Fasta3p
+tag Fasta3p
 type view
-label Fasta3p 
-description Provisional Fasta3p 
+label Fasta3p
+description Fasta3p
 
-term Fasta5p 
-tag Fasta5p 
+term Fasta5p
+tag Fasta5p
 type view
-label Fasta5p 
-description Provisional Fasta5p 
+label Fasta5p
+description Fasta5p
 
-term FastaRd1 
+term FastaRd1
 tag FastaRd1
 type view
-label FastaRd1 
-description Provisional FastaRd1 
+label FastaRd1
+description FastaRd1
 
-term FastaRd2 
+term FastaRd2
 tag FastaRd2
 type view
-label FastaRd2 
-description Provisional FastaRd2 
+label FastaRd2
+description FastaRd2
 
-term Fastq 
-tag Fastq 
+term Fastq
+tag Fastq
 type view
-label Fastq 
-description Provisional Fastq 
+label Fastq
+description Fastq
 
-term FastqRd1 
+term FastqRd1
 tag FastqRd1
 type view
-label FastqRd1 
-description Provisional FastqRd1 
+label FastqRd1
+description FastqRd1
 
-term FastqRd2 
+term FastqRd2
 tag FastqRd2
 type view
-label FastqRd2 
-description Provisional FastqRd2 
+label FastqRd2
+description FastqRd2
 
-term FiltTransfrags 
+term FiltTransfrags
 tag FiltTransfrags
 type view
-label Filtered Transfrags 
-description Provisional FiltTransfrags 
+label Filtered Transfrags
+description FiltTransfrags
 
-term GeneDeNovo 
+term GeneDeNovo
 tag GeneDeNo
 type view
-label Genes DeNovo 
-description Provisional GeneDeNovo 
+label Genes DeNovo
+description GeneDeNovo
 
-term GeneGencV3c 
+term GeneGencV3c
 tag GeneGencV3c
 type view
-label Genes Gencode V3c 
-description Provisional GeneGencV3c 
+label Genes Gencode V3c
+description Provisional GeneGencV3c
 
-term HMM 
-tag HMM 
+term HMM
+tag HMM
 type view
-label HMM 
-description Provisional HMM 
+label HMM
+description HMM
 
-term Hotspots 
+term Hotspots
 tag Hotspots
 type view
-label Hotspots 
-description Provisional Hotspots 
+label Hotspots
+description Hotspots
 
-term Interactions 
+term Interactions
 tag Interactions
 type view
-label Interactions 
-description Provisional Interactions 
+label Interactions
+description Interactions
 
-term Junctions 
+term Junctions
 tag Junctions
 type view
-label Junctions 
-description Provisional Junctions 
+label Junctions
+description Junctions
 
-term Matrix 
-tag Matrix 
+term Matrix
+tag Matrix
 type view
-label Matrix 
-description Provisional Matrix 
+label Matrix
+description Matrix
 
-term MinusRawSignal 
+term MinusRawSignal
 tag MinusRawSig
 type view
-label Minus Raw Signal 
-description Provisional MinusRawSignal 
+label Minus Raw Signal
+description MinusRawSignal
 
-term Peaks 
-tag Peaks 
+term Peaks
+tag Peaks
 type view
-label Peaks 
-description Provisional Peaks 
+label Peaks
+description Peaks
 
-term PlusRawSignal 
+term PeptideMapping
+tag PeptideMap
+type view
+label Peptide Mapping
+description PeptideMapping
+
+term PlusRawSignal
 tag PlusRawSig
 type view
-label Plus Raw Signal 
-description Provisional PlusRawSignal 
+label Plus Raw Signal
+description PlusRawSignal
 
-term Qual3p 
-tag Qual3p 
+term Qual3p
+tag Qual3p
 type view
-label Qual3p 
-description Provisional Qual3p 
+label Qual3p
+description Qual3p
 
-term Qual5p 
-tag Qual5p 
+term Qual5p
+tag Qual5p
 type view
-label Qual5p 
-description Provisional Qual5p 
+label Qual5p
+description Qual5p
 
-term RawData 
-tag RawData 
+term RawData
+tag RawData
 type view
-label RawData 
-description Provisional RawData 
+label RawData
+description RawData
 
-term RawData2 
+term RawData2
 tag RawData2
 type view
-label Raw Data2 
-description Provisional Raw Data2 
+label Raw Data2
+description Raw Data2
 
-term RawSignal 
+term RawSignal
 tag RawSig
 type view
-label Raw Signal 
-description Provisional RawSignal 
+label Raw Signal
+description RawSignal
 
-term RbpAssocRna 
+term RbpAssocRna
 tag RbpAssocRna
 type view
-label Rbp Associated RNA 
-description Provisional RbpAssocRna 
+label Rbp Associated RNA
+description RbpAssocRna
 
-term Regions 
-tag Regions 
+term Regions
+tag Regions
 type view
-label Regions 
-description Provisional Regions 
+label Regions
+description Regions
 
-term Signal 
-tag Signal 
+term Signal
+tag Signal
 type view
-label Signal 
-description Provisional Signal 
+label Signal
+description Signal
 
-term SimpleSignal 
+term SimpleSignal
 tag SimpleSig
 type view
-label SimpleSignal 
-description Provisional SimpleSignal 
+label SimpleSignal
+description SimpleSignal
 
-term Sites 
-tag Sites 
+term Sites
+tag Sites
 type view
-label Sites 
-description Provisional Sites 
+label Sites
+description Sites
 
-term SNP 
-tag SNP 
+term SNP
+tag SNP
 type view
-label SNP 
-description Provisional SNP 
+label SNP
+description SNP
 
-term Splices 
-tag Splices 
+term Splices
+tag Splices
 type view
-label Splices 
-description Provisional Splices 
+label Splices
+description Splices
 
-term TranscriptDeNovo 
+term TranscriptDeNovo
 tag TranscriptDeNovo
 type view
-label TranscriptDeNovo 
-description Provisional TranscriptDeNovo 
+label TranscriptDeNovo
+description TranscriptDeNovo
 
-term TranscriptGencV3c 
+term TranscriptGencV3c
 tag TranscriptGencV3c
 type view
-label Transcript Gencode V3c 
-description Provisional TranscriptGencV3c 
+label Transcript Gencode V3c
+description TranscriptGencV3c
 
-term Transfrags 
+term Transfrags
 tag Transfrags
 type view
-label Transfrags 
-description Provisional Transfrags 
+label Transfrags
+description Transfrags
 
-term TSS 
-tag TSS 
+term TSS
+tag TSS
 type view
-label TSS 
-description Provisional TSS 
+label TSS
+description TSS
 
 term Validation
 tag Validation
 type view
 label Validation
-description Provisional Validation
+description Validation
 
 ### dataType
 ### term:  Ideally this should be the term used by NHGRI for the data type
@@ -8141,7 +8147,7 @@ term Genotype
 tag genotype
 type dataType
 label Genotype
-description Genotyping experiments including copy nummber variants and SNPs PROVISIONAL
+description Genotyping experiments including copy nummber variants and SNPs
 
 term Gencode
 tag gencode
@@ -8257,7 +8263,7 @@ description sequencing of short RNAs
 #tag Snp
 #type dataType
 #label SNPs
-#description PROVISIONAL Single-nucleotide polymorphism 
+#description PROVISIONAL Single-nucleotide polymorphism
 # I would like to take this out and replace with Genotype as a more general datatype to match the composite
 
 term Switchgear
@@ -9022,7 +9028,8 @@ projectName SUNY
 term Stam
 tag stam
 type grant
-description Stam
+label Stamatoyannopoulous
+description Stamatoyannopoulous
 grantInst University of Washington
 projectName UW
 
@@ -9155,7 +9162,7 @@ projectName UNC-Giddings
 #         expId:100  strain:110  cell:120  sex:130  age:140  rnaExtract:150  localization:160  phase:170  treatment:180  antibody:190
 #         protocol:200  restrictionEnzyme:220  control:230  replicate:240  submittedDataVersion:250
 #       DCC descriptive:
-#         origAssembly:305  dataVersion:310  dateSubmitted:315  dateResubmitted:320  dateUnrestricted:325  freezeDate:330
+#         origAssembly:305  dataVersion:310  dccAccession:312  dateSubmitted:315  dateResubmitted:320  dateUnrestricted:325  freezeDate:330
 #         subId:335  geoSeries:340  geoSample:345  setType:350  controlId:355
 #       Lab descriptive:
 #         labExpId:410  labProtocolId:420  labVersion:430  softwareVersion:440  privacy:450  rank:460
@@ -9312,6 +9319,15 @@ cvDefined no
 priority 235
 validate date # nine months more than dateSubmitted
 
+term dccAccession
+type typeOfTerm
+label ENCODE DCC Accession
+description PROVISIONAL The accession number provided by the ENCODE Data Coordination Center.
+searchable freeText
+cvDefined no
+validate regex: ^wgEncode[H,E][0-9]*$
+priority 312
+
 term dccInternalNotes
 type typeOfTerm
 label Internal DCC Notes
@@ -9331,19 +9347,27 @@ serchable yes
 cvDefined off
 validate integer
 hidden no
-priority 241 
+priority 241
 
 #This should be removed if it is not needed by 5/10/2011
 #term docId
 #type typeOfTerm
 #label UCSC document identification
-#description PROVISIONAL This is the document identification assigned byt UCSC. 
-#serchable no 
+#description PROVISIONAL This is the document identification assigned byt UCSC.
+#serchable no
 #cvDefined off
 #validate none  #Brian?
 #hidden no #maybe this will be hidden?  Brian?
-#priority 311 
+#priority 311
 
+term expId
+type typeOfTerm
+label Experiment ID
+description PROVISIONAL The ENCODE DCC experiment identification number.
+searchable freeText
+cvDefined no
+validate integer
+priority 100
 
 # term expVars
 # type typeOfTerm
@@ -9732,13 +9756,13 @@ priority 335
 #This should be removed if it is not needed by 5/10/2011
 #term submitPath
 #type typeOfTerm
-#label Name of file given by lab.  
+#label Name of file given by lab.
 #description PROVISIONAL This is the name of the file as submitted by the lab to UCSC.
-#serchable no 
+#serchable no
 #cvDefined off
-#validate none  
+#validate none
 #hidden no  #I want this hidden, but "yes" did not work
-#priority 312 
+#priority 312
 
 term submittedDataVersion
 type typeOfTerm
