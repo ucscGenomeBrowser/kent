@@ -59,8 +59,8 @@ if (webInTextMode)
     pushWarnHandler(textVaWarn);
 else
     pushWarnHandler(webVaWarn);
-hDumpStackPushAbortHandler();
 pushAbortHandler(softAbort);
+hDumpStackPushAbortHandler();
 }
 
 void webPushErrHandlersCart(struct cart *cart)
