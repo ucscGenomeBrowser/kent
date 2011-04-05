@@ -1,5 +1,6 @@
 /* dbTrash - drop tables from a database older than specified N hours. */
 #include "common.h"
+#include "obscure.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
@@ -329,9 +330,9 @@ for (el = elList; el != NULL; el = el->next)
 
 if (drop)
     {
+    char comment[256];
     if (expiredTableNames)
 	{
-	char comment[256];
 	struct slName *el;
 	int droppedCount = 0;
 	/* customTrash DB user permissions do not have permissions to
@@ -360,6 +361,33 @@ if (drop)
 		"Dropped %d tables, no size info", droppedCount);
 	verbose(2,"# %s\n", comment);
 	hgHistoryComment(conn, "%s", comment);
+	}
+    else
+	{
+	safef(comment, sizeof(comment),
+		"Dropped no tables, none expired");
+	verbose(2,"# %s\n", comment);
+	}
+    }
+else
+    {
+    char comment[256];
+    if (expiredTableNames)
+	{
+	int droppedCount = slCount(expiredTableNames);
+	if (tableStatus)
+	    safef(comment, sizeof(comment), "Would have dropped %d tables with "
+		    "total size %llu", droppedCount, totalSize);
+	else
+	    safef(comment, sizeof(comment),
+		"Would have dropped %d tables, no size info", droppedCount);
+	verbose(2,"# %s\n", comment);
+	}
+    else
+	{
+	safef(comment, sizeof(comment),
+		"Would have dropped no tables, none expired");
+	verbose(2,"# %s\n", comment);
 	}
     }
 sqlDisconnect(&conn);
@@ -418,5 +446,7 @@ verbose(2,"#	        topDir: %s\n", topDir);
 verbose(2,"#	database: %s\n", db);
 
 dbTrash(db);
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }
