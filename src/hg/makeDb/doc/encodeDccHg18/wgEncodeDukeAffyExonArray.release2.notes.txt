@@ -1,5 +1,5 @@
 # generated with encodeMkChangeNotes 0.9
-This is a release1 of the "ENCODE wgEncodeDukeAffyExonArray"
+This is a release2 of the "ENCODE wgEncodeDukeAffyExonArray"
 The composite track is wgEncodeDukeAffyExonArray
 
 Categories of tables and files('):
@@ -10,9 +10,9 @@ B) Deprecated - are currently on RR but will no longer be needed and should not 
 C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
-Summary total counts for release1 (new+untouched):
-    Tables: 58
-    Files: 61
+Summary total counts for release2 (new+untouched):
+    Tables: 54
+    Files: 57
     Gbdbs: 0
 
 A) Untouched Tables (54):
@@ -73,7 +73,7 @@ wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2
 
 A') Untouched Files (54 downloadables, 0 gbdbs):
     current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/release1/
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/release2/
     on RR:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/
 
@@ -133,29 +133,19 @@ wgEncodeDukeAffyExonArraySimpleSignalRep3Helas3.broadPeak.gz
 wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2.broadPeak.gz
 
 
-B) Deprecated tables (0):
-
-B') Deprecated files (0 downloadables, 0 gbdbs):
-    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
-    This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
-    current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/release2/
-    on RR:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/
-
-
-
-C) New tables (4):
+B) Deprecated tables (4):
 wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr
 wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro
 wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr
 wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro
 
-C') New files (4 downloadables, 0 gbdbs):
+B') Deprecated files (4 downloadables, 0 gbdbs):
+    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
+    This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/release1/
-    NOT on RR but must be placed in:
-      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/
 
 wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr.broadPeak.gz
 wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro.broadPeak.gz
@@ -163,9 +153,19 @@ wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr.broadPeak.gz
 wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro.broadPeak.gz
 
 
+C) New tables (0):
+
+C') New files (0 downloadables, 0 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/release2/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/
+
+
+
 D) Additional items:
     current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/release1/
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/release2/
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeDukeAffyExonArray/
 
