@@ -156,7 +156,7 @@ metas = mdbObjsQueryAll(connMeta, mdb);
 verbose(2, "Found %d objects\n", slCount(metas));
 
 /* order so that oldest have lowest ids */
-mdbObjsSortOnVars(&metas, "dateSubmitted lab dataType cell");  // Kate: remember your lecture about this sort of thing?
+mdbObjsSortOnVars(&metas, "dateSubmitted lab dataType cell");
 
 /* create new experiments */
 while ((meta = slPopHead(&metas)) != NULL)
@@ -181,18 +181,16 @@ while ((meta = slPopHead(&metas)) != NULL)
         hashAdd(newExps, key, NULL);
         slAddHead(&exps, exp);
         }
-    // KATE: you are leaking exps when not found, and metas always.  But this isn't lib code.
-    /* KATE: you could skip other metas belonging to the same exp by:
+    /* Skip other metas belonging to the same exp by:
     struct mdbVar *edvs = mdbObjFindEncodeEdvs(connMeta,meta); // Can't use encodeExpVars(exp) because of "None" issues
     assert(edvs != NULL);
-    char *expVars = slPairListToString(edvs);
+    char *expVars = slPairListToString(edvs,FALSE); // don't bother with quoting since edvs should not have spaces
     struct mdbObj *mdbExpObjs = mdbObjsFilterByVars(&metas,expVars,TRUE,TRUE);
     freeMem(expVars);
     mdbVarsFree(&edvs); // If you want to do this, then encodeExpFromMdb() above should be replaced with encodeExpFromMdbVars()
     mdbObjFree(&mdbExpObjs);
     // Filtering destroyed sort order // NOTE: Given the re-sort, this may not prove much more efficient
     mdbObjsSortOnVars(&metas, "dateSubmitted lab dataType cell");
-    // KATE: I personally think it is a bad idea to have 2 files named encodeExp.c in our code base.
     */
     }
 /* write out experiments in .ra format */
@@ -215,7 +213,7 @@ struct slPair *varPairs = NULL;
 
 /* transform var:val to var=val. Can't use var=val on command-line as it conflicts with standard options processing */
 memSwapChar(expVars, strlen(expVars), ':', '=');
-varPairs = slPairFromString(expVars);
+varPairs = slPairListFromString(expVars,FALSE); // don't expect quoted EDVs which should always be simple tokens.
 exps = encodeExpGetFromTable(organism, lab, dataType, cellType, varPairs, table);
 count = slCount(exps);
 verbose(2, "Results: %d\n", count);

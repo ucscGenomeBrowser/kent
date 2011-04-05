@@ -2782,7 +2782,7 @@ if (!tdbIsDownloadsOnly(tdb))
 if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb))
     {
     // NAVLINKS - For pages w/ matrix, add Description, Subtracks and Downloads links
-    if (trackDbSetting(tdb, "dimensions"))
+    if (trackDbSetting(tdb, "dimensions") || (trackDbSetting(tdb, "wgEncode") && tdbIsComposite(tdb)))
         {
         printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
         if (trackDbSetting(tdb, "wgEncode"))

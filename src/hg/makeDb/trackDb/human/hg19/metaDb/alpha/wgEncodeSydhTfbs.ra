@@ -592,7 +592,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsGm12878Brca1cIggmusAlnRep1
 objType file
-antibody BRCA1_(C-1863)
+antibody BRCA1_(A300-000A)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -614,7 +614,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsGm12878Brca1cIggmusAlnRep2
 objType file
-antibody BRCA1_(C-1863)
+antibody BRCA1_(A300-000A)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -636,7 +636,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsGm12878Brca1cIggmusPk
 objType table
-antibody BRCA1_(C-1863)
+antibody BRCA1_(A300-000A)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -658,7 +658,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsGm12878Brca1cIggmusRawDataRep1
 objType file
-antibody BRCA1_(C-1863)
+antibody BRCA1_(A300-000A)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -680,7 +680,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsGm12878Brca1cIggmusRawDataRep2
 objType file
-antibody BRCA1_(C-1863)
+antibody BRCA1_(A300-000A)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -702,7 +702,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsGm12878Brca1cIggmusSig
 objType table
-antibody BRCA1_(C-1863)
+antibody BRCA1_(A300-000A)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -886,7 +886,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsGm12878Chd21250IggmusAlnRep1
 objType file
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -907,7 +907,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsGm12878Chd21250IggmusAlnRep2
 objType file
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -928,7 +928,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsGm12878Chd21250IggmusPk
 objType table
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -950,7 +950,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsGm12878Chd21250IggmusRawDataRep1
 objType file
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -971,7 +971,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsGm12878Chd21250IggmusRawDataRep2
 objType file
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -992,7 +992,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsGm12878Chd21250IggmusSig
 objType table
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -1014,7 +1014,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsGm12878Ctcfc20StdAlnRep1
 objType file
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -1035,7 +1035,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsGm12878Ctcfc20StdAlnRep2
 objType file
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -1056,7 +1056,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsGm12878Ctcfc20StdPk
 objType table
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -1078,7 +1078,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsGm12878Ctcfc20StdRawDataRep1
 objType file
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -1099,7 +1099,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsGm12878Ctcfc20StdRawDataRep2
 objType file
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -1120,7 +1120,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsGm12878Ctcfc20StdSig
 objType table
-antibody CTCF_(C-20)
+antibody CTCF_(SC-15914)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -2059,7 +2059,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsGm12878Nfe2hStdAlnRep1
 objType file
-antibody NF-E2_(H-230)
+antibody NF-E2_(SC-22827)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -2081,7 +2081,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsGm12878Nfe2hStdAlnRep2
 objType file
-antibody NF-E2_(H-230)
+antibody NF-E2_(SC-22827)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -2103,7 +2103,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsGm12878Nfe2hStdPk
 objType table
-antibody NF-E2_(H-230)
+antibody NF-E2_(SC-22827)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -2125,7 +2125,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsGm12878Nfe2hStdRawDataRep1
 objType file
-antibody NF-E2_(H-230)
+antibody NF-E2_(SC-22827)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -2148,7 +2148,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsGm12878Nfe2hStdRawDataRep2
 objType file
-antibody NF-E2_(H-230)
+antibody NF-E2_(SC-22827)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -2171,7 +2171,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsGm12878Nfe2hStdSig
 objType table
-antibody NF-E2_(H-230)
+antibody NF-E2_(SC-22827)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -2745,7 +2745,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsGm12878P300n15StdAlnRep1
 objType file
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -2767,7 +2767,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsGm12878P300n15StdAlnRep2
 objType file
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -2789,7 +2789,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsGm12878P300n15StdPk
 objType table
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -2811,7 +2811,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsGm12878P300n15StdRawDataRep1
 objType file
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -2833,7 +2833,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsGm12878P300n15StdRawDataRep2
 objType file
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -2855,7 +2855,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsGm12878P300n15StdSig
 objType table
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -3581,7 +3581,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsGm12878Rfx5n494IggmusAlnRep1
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -3603,7 +3603,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsGm12878Rfx5n494IggmusAlnRep2
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -3625,7 +3625,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsGm12878Rfx5n494IggmusPk
 objType table
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -3647,7 +3647,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsGm12878Rfx5n494IggmusRawDataRep1
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -3669,7 +3669,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsGm12878Rfx5n494IggmusRawDataRep2
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -3691,7 +3691,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsGm12878Rfx5n494IggmusSig
 objType table
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -11069,7 +11069,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsH1hescRfx5n494IggrabAlnRep1
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell H1-hESC
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -11090,7 +11090,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsH1hescRfx5n494IggrabAlnRep2
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell H1-hESC
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -11111,7 +11111,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsH1hescRfx5n494IggrabPk
 objType table
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell H1-hESC
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -11133,7 +11133,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsH1hescRfx5n494IggrabRawDataRep1
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell H1-hESC
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -11154,7 +11154,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsH1hescRfx5n494IggrabRawDataRep2
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell H1-hESC
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -11175,7 +11175,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsH1hescRfx5n494IggrabSig
 objType table
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell H1-hESC
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -13120,7 +13120,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsHelas3Brca1cIggrabAlnRep1
 objType file
-antibody BRCA1_(C-1863)
+antibody BRCA1_(A300-000A)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -13142,7 +13142,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHelas3Brca1cIggrabAlnRep2
 objType file
-antibody BRCA1_(C-1863)
+antibody BRCA1_(A300-000A)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -13164,7 +13164,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHelas3Brca1cIggrabPk
 objType table
-antibody BRCA1_(C-1863)
+antibody BRCA1_(A300-000A)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -13186,7 +13186,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsHelas3Brca1cIggrabRawDataRep1
 objType file
-antibody BRCA1_(C-1863)
+antibody BRCA1_(A300-000A)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -13208,7 +13208,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Brca1cIggrabRawDataRep2
 objType file
-antibody BRCA1_(C-1863)
+antibody BRCA1_(A300-000A)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -13230,7 +13230,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Brca1cIggrabSig
 objType table
-antibody BRCA1_(C-1863)
+antibody BRCA1_(A300-000A)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -14743,7 +14743,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabAlnRep1
 objType file
-antibody GTF2F1_(RAP-74)
+antibody GTF2F1_(AB28179)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -14765,7 +14765,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabAlnRep2
 objType file
-antibody GTF2F1_(RAP-74)
+antibody GTF2F1_(AB28179)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -14787,7 +14787,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabPk
 objType table
-antibody GTF2F1_(RAP-74)
+antibody GTF2F1_(AB28179)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -14809,7 +14809,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabRawDataRep1
 objType file
-antibody GTF2F1_(RAP-74)
+antibody GTF2F1_(AB28179)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -14831,7 +14831,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabRawDataRep2
 objType file
-antibody GTF2F1_(RAP-74)
+antibody GTF2F1_(AB28179)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -14853,7 +14853,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabSig
 objType table
-antibody GTF2F1_(RAP-74)
+antibody GTF2F1_(AB28179)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16185,7 +16185,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabAlnRep1
 objType file
-antibody Mxi1_(bHLH)
+antibody Mxi1_(AF4185)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16207,7 +16207,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabAlnRep2
 objType file
-antibody Mxi1_(bHLH)
+antibody Mxi1_(AF4185)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16229,7 +16229,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabPk
 objType table
-antibody Mxi1_(bHLH)
+antibody Mxi1_(AF4185)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16251,7 +16251,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabRawDataRep1
 objType file
-antibody Mxi1_(bHLH)
+antibody Mxi1_(AF4185)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16273,7 +16273,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabRawDataRep2
 objType file
-antibody Mxi1_(bHLH)
+antibody Mxi1_(AF4185)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16295,7 +16295,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabSig
 objType table
-antibody Mxi1_(bHLH)
+antibody Mxi1_(AF4185)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16500,7 +16500,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsHelas3P300n15IggrabAlnRep1
 objType file
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16522,7 +16522,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHelas3P300n15IggrabAlnRep2
 objType file
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16544,7 +16544,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHelas3P300n15IggrabPk
 objType table
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16566,7 +16566,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsHelas3P300n15IggrabRawDataRep1
 objType file
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16588,7 +16588,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3P300n15IggrabRawDataRep2
 objType file
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16610,7 +16610,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3P300n15IggrabSig
 objType table
-antibody p300_(N-15)
+antibody p300_(SC-584)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16925,7 +16925,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsHelas3Prdm1vIggrabAlnRep1
 objType file
-antibody PRDM1_(Val90)
+antibody PRDM1_(9115)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16947,7 +16947,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHelas3Prdm1vIggrabAlnRep2
 objType file
-antibody PRDM1_(Val90)
+antibody PRDM1_(9115)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16969,7 +16969,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHelas3Prdm1vIggrabPk
 objType table
-antibody PRDM1_(Val90)
+antibody PRDM1_(9115)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -16991,7 +16991,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsHelas3Prdm1vIggrabRawDataRep1
 objType file
-antibody PRDM1_(Val90)
+antibody PRDM1_(9115)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -17013,7 +17013,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Prdm1vIggrabRawDataRep2
 objType file
-antibody PRDM1_(Val90)
+antibody PRDM1_(9115)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -17035,7 +17035,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Prdm1vIggrabSig
 objType table
-antibody PRDM1_(Val90)
+antibody PRDM1_(9115)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -17210,7 +17210,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsHelas3Rfx5n494IggrabAlnRep1
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -17232,7 +17232,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHelas3Rfx5n494IggrabAlnRep2
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -17254,7 +17254,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHelas3Rfx5n494IggrabPk
 objType table
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -17276,7 +17276,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsHelas3Rfx5n494IggrabRawDataRep1
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -17298,7 +17298,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Rfx5n494IggrabRawDataRep2
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -17320,7 +17320,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Rfx5n494IggrabSig
 objType table
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -18861,7 +18861,8 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabAlnRep1.bam
@@ -18870,7 +18871,7 @@ lab Stanford
 project wgEncode
 replicate 1
 setType exp
-subId 3258
+subId 3875
 treatment None
 view Alignments
 
@@ -18882,7 +18883,8 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabAlnRep2.bam
@@ -18891,7 +18893,7 @@ lab Stanford
 project wgEncode
 replicate 2
 setType exp
-subId 3258
+subId 3875
 treatment None
 view Alignments
 
@@ -18903,7 +18905,8 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabPk.narrowPeak.gz
@@ -18912,7 +18915,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
-subId 3258
+subId 3875
 tableName wgEncodeSydhTfbsHepg2CebpbIggrabPk
 treatment None
 view Peaks
@@ -18925,7 +18928,8 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabRawDataRep1.fastq.gz
@@ -18934,7 +18938,7 @@ lab Stanford
 project wgEncode
 replicate 1
 setType exp
-subId 3258
+subId 3875
 treatment None
 view RawData
 
@@ -18946,7 +18950,8 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabRawDataRep2.fastq.gz
@@ -18955,7 +18960,7 @@ lab Stanford
 project wgEncode
 replicate 2
 setType exp
-subId 3258
+subId 3875
 treatment None
 view RawData
 
@@ -18967,7 +18972,8 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabSig.bigWig
@@ -18976,14 +18982,14 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
-subId 3258
+subId 3875
 tableName wgEncodeSydhTfbsHepg2CebpbIggrabSig
 treatment None
 view Signal
 
 metaObject wgEncodeSydhTfbsHepg2Chd21250IggrabAlnRep1
 objType file
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell HepG2
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -19004,7 +19010,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHepg2Chd21250IggrabAlnRep2
 objType file
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell HepG2
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -19025,7 +19031,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHepg2Chd21250IggrabPk
 objType table
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell HepG2
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -19047,7 +19053,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsHepg2Chd21250IggrabRawDataRep1
 objType file
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell HepG2
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -19068,7 +19074,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHepg2Chd21250IggrabRawDataRep2
 objType file
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell HepG2
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -19089,7 +19095,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHepg2Chd21250IggrabSig
 objType table
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell HepG2
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -21598,7 +21604,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsHepg2Rfx5n494IggrabAlnRep1
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell HepG2
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -21619,7 +21625,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHepg2Rfx5n494IggrabAlnRep2
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell HepG2
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -21640,7 +21646,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHepg2Rfx5n494IggrabPk
 objType table
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell HepG2
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -21662,7 +21668,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsHepg2Rfx5n494IggrabRawDataRep1
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell HepG2
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -21683,7 +21689,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHepg2Rfx5n494IggrabRawDataRep2
 objType file
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell HepG2
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -21704,7 +21710,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHepg2Rfx5n494IggrabSig
 objType table
-antibody RFX5_(N-494)
+antibody RFX5_(200-401-194)
 cell HepG2
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -25030,7 +25036,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsK562Chd21250IggrabAlnRep1
 objType file
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -25052,7 +25058,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsK562Chd21250IggrabAlnRep2
 objType file
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -25074,7 +25080,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsK562Chd21250IggrabPk
 objType table
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -25096,7 +25102,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsK562Chd21250IggrabRawDataRep1
 objType file
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -25118,7 +25124,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsK562Chd21250IggrabRawDataRep2
 objType file
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -25140,7 +25146,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsK562Chd21250IggrabSig
 objType table
-antibody CHD2_(N-1250)
+antibody CHD2_(AB68301)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -26130,7 +26136,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsK562Gtf2f1rapIggrabAlnRep1
 objType file
-antibody GTF2F1_(RAP-74)
+antibody GTF2F1_(AB28179)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -26152,7 +26158,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsK562Gtf2f1rapIggrabAlnRep2
 objType file
-antibody GTF2F1_(RAP-74)
+antibody GTF2F1_(AB28179)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -26174,7 +26180,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsK562Gtf2f1rapIggrabPk
 objType table
-antibody GTF2F1_(RAP-74)
+antibody GTF2F1_(AB28179)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -26196,7 +26202,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsK562Gtf2f1rapIggrabRawDataRep1
 objType file
-antibody GTF2F1_(RAP-74)
+antibody GTF2F1_(AB28179)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -26218,7 +26224,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsK562Gtf2f1rapIggrabRawDataRep2
 objType file
-antibody GTF2F1_(RAP-74)
+antibody GTF2F1_(AB28179)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -26240,7 +26246,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsK562Gtf2f1rapIggrabSig
 objType table
-antibody GTF2F1_(RAP-74)
+antibody GTF2F1_(AB28179)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -28341,7 +28347,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsK562Mxi1bhlhIggrabAlnRep1
 objType file
-antibody Mxi1_(bHLH)
+antibody Mxi1_(AF4185)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -28363,7 +28369,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsK562Mxi1bhlhIggrabAlnRep2
 objType file
-antibody Mxi1_(bHLH)
+antibody Mxi1_(AF4185)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -28385,7 +28391,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsK562Mxi1bhlhIggrabPk
 objType table
-antibody Mxi1_(bHLH)
+antibody Mxi1_(AF4185)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -28407,7 +28413,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsK562Mxi1bhlhIggrabRawDataRep1
 objType file
-antibody Mxi1_(bHLH)
+antibody Mxi1_(AF4185)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -28429,7 +28435,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsK562Mxi1bhlhIggrabRawDataRep2
 objType file
-antibody Mxi1_(bHLH)
+antibody Mxi1_(AF4185)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -28451,7 +28457,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsK562Mxi1bhlhIggrabSig
 objType table
-antibody Mxi1_(bHLH)
+antibody Mxi1_(AF4185)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -28833,7 +28839,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsK562P300f4IggrabAlnRep1
 objType file
-antibody p300_(F-4)
+antibody p300_(SC-48343)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -28855,7 +28861,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsK562P300f4IggrabAlnRep2
 objType file
-antibody p300_(F-4)
+antibody p300_(SC-48343)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -28877,7 +28883,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsK562P300f4IggrabPk
 objType table
-antibody p300_(F-4)
+antibody p300_(SC-48343)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -28899,7 +28905,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsK562P300f4IggrabRawDataRep1
 objType file
-antibody p300_(F-4)
+antibody p300_(SC-48343)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -28921,7 +28927,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsK562P300f4IggrabRawDataRep2
 objType file
-antibody p300_(F-4)
+antibody p300_(SC-48343)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -28943,7 +28949,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsK562P300f4IggrabSig
 objType table
-antibody p300_(F-4)
+antibody p300_(SC-48343)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -36147,4 +36153,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1567991156
+# MAGIC: 1130839338

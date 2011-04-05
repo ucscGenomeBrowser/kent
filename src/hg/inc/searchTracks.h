@@ -40,13 +40,10 @@ struct slPair *fileFormatSearchWhiteList(void);
 char *fileFormatSelectHtml(char *name, char *selected, char *extraHtml);
 // returns an allocated string of HTML for the fileType select drop down
 
-struct slPair *mdbVarsRelevant(struct sqlConnection *conn);
-// returns a white list of mdb vars that are relevant to the currect DB
-
 struct slPair *mdbSelectPairs(struct cart *cart,enum searchTab selectedTab, struct slPair *mdbVars);
 // Returns the current mdb  vars and vals in the table of drop down selects
 
-char *mdbSelectsHtmlRows(struct sqlConnection *conn,struct slPair *mdbSelects, struct slPair *mdbVars,int cols);
-// genereates the html for the table rows containing mdb var and val selects
+char *mdbSelectsHtmlRows(struct sqlConnection *conn,struct slPair *mdbSelects, struct slPair *mdbVars,int cols,boolean fileSearch);
+// generates the html for the table rows containing mdb var and val selects.  Assume tableSearch unless fileSearch
 
 #endif /* SEARCHTRACKS_H */

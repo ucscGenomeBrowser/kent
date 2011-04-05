@@ -739,7 +739,7 @@ struct mdbObj *mdbObjCreate(char *obj,char *var, char *val)
 struct mdbObj *mdbObj = NULL;
 
     if(obj == NULL)
-        errAbort("Need obj to create mdbObj query object.\n");
+        errAbort("Need obj to create mdbObj object.\n");
 
     AllocVar(mdbObj);
     mdbObj->obj     = cloneString(obj);
@@ -763,7 +763,8 @@ struct mdbObj *mdbObjNew(char *obj,struct mdbVar *mdbVars)
 {
 struct mdbObj *mdbObj = NULL;
 if (obj == NULL)
-    obj =  "[unknown]";
+    errAbort("Need obj to create mdbObj object.\n");
+
 if (mdbVars == NULL)
     {
     AllocVar(mdbObj);
@@ -1424,7 +1425,7 @@ struct mdbObj *mdbObjsQueryByVarPairs(struct sqlConnection *conn,char *tableName
 //   as val may be NULL, a comma delimited list, double quoted string, containing wilds: % and ?
 {
 // Note: there is a bit of inefficiency creating a string then tearing it down, but it streamlines code
-char *varValString = slPairListToString(varValPairs);
+char *varValString = slPairListToString(varValPairs,TRUE); // quotes added when spaces found
 struct mdbObj *mdbObjs = mdbObjsQueryByVarValString(conn,tableName,varValString);
 freeMem(varValString);
 return mdbObjs;
@@ -1772,6 +1773,7 @@ for(;mdbObj!=NULL; mdbObj=mdbObj->next)
 return FALSE;
 }
 
+#define MDB_COMMON_VARS_OBJ_SEARCH_LIMIT 10
 struct mdbObj *mdbObjsCommonVars(struct mdbObj *mdbObjs)
 // Returns a new mdbObj with all vars that are contained in every obj passed in.
 // Note that the returnd mdbObj has a meaningles obj name and vals.
@@ -1787,7 +1789,7 @@ if (mdbObj != NULL)
     int count = 1;
     // NOTE: This should not loop through all, as the list could be huge.  Just compare the first 10 for now
     struct dyString *dyPruneVars = dyStringNew(512);
-    for(;mdbObj != NULL && count < 10;mdbObj=mdbObj->next, count++)
+    for(;mdbObj != NULL && count < MDB_COMMON_VARS_OBJ_SEARCH_LIMIT;mdbObj=mdbObj->next, count++)
         {
         struct mdbVar *mdbVar = commonVars->vars;            // Will walk through the first obj's vars
         for(; mdbVar != NULL; mdbVar = mdbVar->next )
@@ -1907,6 +1909,40 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     freeMem(words);
 }
 
+void mdbObjReorderByCv(struct mdbObj *mdbObjs, boolean includeHidden)
+// Reorders vars list based upon cv.ra typeOfTerms priority
+{
+struct hash *cvTermTypes = (struct hash *)cvTermTypeHash();
+struct hashEl *el, *elList = hashElListHash(cvTermTypes);
+
+struct slPair *cvVars = NULL;
+for (el = elList; el != NULL; el = el->next)
+    {
+    struct hash *varHash = el->val;
+    if (includeHidden || SETTING_NOT_ON(hashFindVal(varHash, CV_TOT_HIDDEN))) // Skip the hidden ones
+        {
+        char *priority = hashFindVal(varHash, CV_TOT_PRIORITY);
+        if (priority != NULL) // If there is no priority it will randomly fall to the back of the list
+            slPairAdd(&cvVars,el->name,(char *)sqlUnsignedLong(priority));
+        }
+    }
+hashElFreeList(&elList);
+
+if (cvVars)
+    {
+    slPairIntSort(&cvVars);  // sorts on the integer val
+
+    // Now convert this to a string of names
+    char *orderedVars = slPairNameToString(cvVars,' ',FALSE);
+    slPairFreeList(&cvVars);
+    if (orderedVars != NULL)
+        {
+        mdbObjReorderVars(mdbObjs, orderedVars,FALSE); // Finally we can reorder the vars in the mdbObjs
+        freeMem(orderedVars);
+        }
+    }
+}
+
 int mdbObjVarCmp(const void *va, const void *vb)
 /* Compare to sort on full list of vars and vals. */
 {
@@ -1972,6 +2008,14 @@ for(; onePair != NULL; onePair = onePair->next)
     dyStringPrintf(dyTerms,",%s",onePair->name);
 mdbObjsSortOnVars(mdbObjs,dyStringContents(dyTerms));
 dyStringFree(&dyTerms);
+}
+
+void mdbObjsSortOnCv(struct mdbObj **mdbObjs, boolean includeHidden)
+// Puts obj->vars in order based upon cv.ra typeOfTerms priority,
+//  then case-sensitively sorts all objs in list based upon that var order.
+{  // NOTE: assumes all var pairs match (e.g. every obj has cell,treatment,antibody,... and missing treatment messes up sort)
+mdbObjReorderByCv(*mdbObjs, includeHidden);
+slSort(mdbObjs, mdbObjVarCmp);  // While sort will not be perfect (given missing values) it does a good job none the less.
 }
 
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars)
@@ -2047,30 +2091,50 @@ if (dyStringLen(dyRemoveVars))
 dyStringFree(&dyRemoveVars);
 }
 
-char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var)
-// Removes var from set of mdbObjs but only if all that have it have a commmon val
-// Returns the val if removed, else NULL
+boolean mdbObjsHasCommonVar(struct mdbObj *mdbList, char *var, boolean missingOk)
+// Returns TRUE if all mbObjs passed in have the var with the same value
 {
 char *val = NULL;
 struct mdbObj *mdb = NULL;
 for(mdb = mdbList; mdb; mdb=mdb->next)
     {
     char *thisVal = mdbObjFindValue(mdb,var);
-    if (thisVal == NULL) // If var isn't found in some, that is okay
-        continue;
+    if (thisVal == NULL)
+        {
+        if (missingOk)
+            continue;
+        else
+            return FALSE;
+        }
     if (val == NULL)
         val = thisVal;
     else if(differentWord(val,thisVal))
-        return NULL;
+        return FALSE;
     }
+return TRUE;
+}
 
-if (val)
+char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var)
+// Removes var from set of mdbObjs but only if all that have it have a commmon val
+// Returns the val if removed, else NULL
+{
+if (mdbObjsHasCommonVar(mdbList,var,TRUE))  // If var isn't found in some, that is okay
     {
-    val = cloneString(val);
-    for(mdb = mdbList;mdb;mdb=mdb->next)
+    char *val = NULL;
+    struct mdbObj *mdb = mdbList;
+    for( ; mdb; mdb=mdb->next)
+        {
+        if (val == NULL)
+            {
+            char *thisVal = mdbObjFindValue(mdb,var);
+            if (thisVal != NULL)
+                val = cloneString(thisVal);
+            }
         mdbObjRemoveVars(mdb,var);
+        }
+    return val;
     }
-return val;
+return NULL;
 }
 
 boolean mdbObjSetVar(struct mdbObj *mdbObj, char *var,char *val)
@@ -2680,7 +2744,7 @@ while(mdbObjs != NULL)
                slCount(compositeEdvs),MDB_VAR_ENCODE_EDVS,dyStringContents(dyVars)); // Set the stage
 
     // Organize composite objs by EDVs
-    dyStringPrintf(dyVars, " view replicate "); // Allows for nicer sorted list
+    dyStringPrintf(dyVars, " %s %s ",MDB_VAR_VIEW,MDB_VAR_REPLICATE); // Allows for nicer sorted list
     char *edvSortOrder = cloneString(dyStringContents(dyVars));
 
     // Walk through objs for an exp as defined by EDVs
@@ -3085,8 +3149,6 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
     else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
         {
         // TO BE IMPLEMENTED
-        // Requires new mdbObjSearch API and more than one (char *)onePair->val
-        warn("mdb search by date or number is not yet implemented.");
         }
     }
 // Be sure to include table or file in selections
@@ -3119,33 +3181,148 @@ mdbObjsFree(&mdbObjs);
 return mdbNames;
 }
 
-struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files)
+static void mdbSearchableQueryRestictForTablesOrFiles(struct dyString *dyQuery,char *tableName, char letter,boolean hasTableName, boolean hasFileName)
+// Append table and file restrictions onto an mdb query.
+// letter (e.g. 'A') should be used in original query to alias table name: "select A.val from metaDb A where A.val = 'fred'".
+{
+// A note about tables and files: objType=table may have fileNames associated, but objType=file will not have tableNames
+// While objType=table should have a var=tableName, this is redundant because the obj=tableName
+// So the lopsided 'exists' queries below are meant to be the most flexible/efficent
+
+assert(isalpha(letter) && isalpha(letter + 2)); // will need one or two sub-queries.
+char nextLtr = letter + 1;
+
+// We are only searching for objects that are of objType table or file. objType=composite are not search targets!
+if (hasTableName && !hasFileName) // objType=table may have fileNames associated, but objType=file will not have tableNames
+    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and %c.var='objType' and %c.val = '%s')",
+                    nextLtr,tableName,nextLtr,nextLtr,letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE);
+else // tables OR files (but not objType=composite)
+    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and %c.var='objType' and %c.val in ('%s','%s'))",
+                    nextLtr,tableName,nextLtr,nextLtr,letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE,MDB_OBJ_TYPE_FILE);
+
+nextLtr++;
+
+if (!hasTableName && hasFileName) // last of 3 possibilites objType either table or file but must have fileName var
+    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and %c.var in ('%s','%s'))",
+                   nextLtr,tableName,nextLtr,nextLtr,letter,nextLtr,MDB_VAR_FILENAME,MDB_VAR_FILEINDEX);
+}
+
+struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean hasTableName, boolean hasFileName)
 // Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
+// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
 {  // TODO: Change this to use normal mdb struct routines?
 struct slName *retVal;
 
-if (!tables && !files)
-    errAbort("mdbValSearch requests values for neither table nor file objects.\n");
+if (!hasTableName && !hasFileName)
+    errAbort("mdbValSearch requests vals associated with neither table nor files.\n");
 
 char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 
+char letter = 'A';
 struct dyString *dyQuery = dyStringNew(512);
 if (limit > 0)
-    dyStringPrintf(dyQuery,"select distinct LEFT(val,%d)",limit);
+    dyStringPrintf(dyQuery,"select distinct LEFT(%c.val,%d)",letter,limit);
 else
-    dyStringPrintf(dyQuery,"select distinct val");
+    dyStringPrintf(dyQuery,"select distinct %c.val",letter);
 
-dyStringPrintf(dyQuery," from %s l1 where l1.var='%s' ",tableName,var);
+dyStringPrintf(dyQuery," from %s %c where %c.var='%s'",tableName,letter,letter,var);
 
-if (!tables || !files)
-    dyStringPrintf(dyQuery,"and exists (select l2.obj from %s l2 where l2.obj = l1.obj and l2.var='objType' and l2.val='%s')",
-                   tableName,tables?MDB_OBJ_TYPE_TABLE:MDB_OBJ_TYPE_FILE);
-dyStringAppend(dyQuery," order by val");
+mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName, letter, hasTableName, hasFileName);
+
+dyStringPrintf(dyQuery," order by %c.val",letter);
 
 retVal = sqlQuickList(conn, dyStringCannibalize(&dyQuery));
 slNameSortCase(&retVal);
 return retVal;
 }
 
-// ------------ CONTROLLED VOCABULARY APIs --------------
+struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags, boolean hasTableName, boolean hasFileName)
+// Search the metaDb table for vals by var and returns val (as pair->name) and controlled vocabulary (cv) label
+// (if it exists) (as pair->val).  Can impose (non-zero) limit on returned string size of name.
+// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
+// Return is case insensitive sorted on label (cv label or else val). If requested, return cv tag instead of mdb val.
+{  // TODO: Change this to use normal mdb struct routines?
+if (!hasTableName && !hasFileName)
+    errAbort("mdbValLabelSearch requests vals associated with neither table nor files.\n");
+
+char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
+
+char letter = 'A';
+struct dyString *dyQuery = dyStringNew(512);
+if (limit > 0)
+    dyStringPrintf(dyQuery,"select distinct LEFT(%c.val,%d)",letter,limit);
+else
+    dyStringPrintf(dyQuery,"select distinct %c.val",letter);
+
+dyStringPrintf(dyQuery," from %s %c where %c.var='%s'",tableName,letter,letter,var);
+
+mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName,letter, hasTableName, hasFileName);
+//warn("%s",dyStringContents(dyQuery));
+
+struct hash *varHash = (struct hash *)cvTermHash(var);
+
+struct slPair *pairs = NULL;
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(dyQuery));
+dyStringFree(&dyQuery);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *val = row[0];
+    char *label = NULL;
+    if (varHash != NULL)
+        {
+        struct hash *valHash = hashFindVal(varHash,val);
+        if (valHash != NULL)
+            {
+            label = cloneString(hashOptionalVal(valHash,CV_LABEL,row[0]));
+            if (tags)
+                {
+                char *tag = hashFindVal(valHash,CV_TAG);
+                if (tag != NULL)
+                    val = tag;
+                }
+            }
+        }
+    if (label == NULL);
+        label = cloneString(row[0]);
+    label = strSwapChar(label,'_',' ');  // vestigial _ meaning space
+    slPairAdd(&pairs,val,label);
+    }
+sqlFreeResult(&sr);
+slPairValSortCase(&pairs);
+return pairs;
+}
+
+struct slPair *mdbVarsSearchable(struct sqlConnection *conn, boolean hasTableName, boolean hasFileName)
+// returns a white list of mdb vars that actually exist in the current DB.
+// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
+{
+if (!hasTableName && !hasFileName)
+    errAbort("mdbVarsSearchable requests vals associated with neither table nor files.\n");
+
+char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
+
+char letter = 'A';
+struct slPair *cvApproved = cvWhiteList(TRUE,FALSE);
+struct slPair *relevant = NULL;
+struct dyString *dyQuery = dyStringNew(256);
+while(cvApproved != NULL)
+    {
+    struct slPair *oneVar = slPopHead(&cvApproved);
+    dyStringClear(dyQuery);
+    dyStringPrintf(dyQuery, "select count(DISTINCT %c.val) from %s %c where %c.var = '%s'",letter,tableName,letter,letter,oneVar->name);
+
+    mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName,letter, hasTableName, hasFileName);
+    int count = sqlQuickNum(conn,dyStringContents(dyQuery));
+    //warn("%d %s",count,dyStringContents(dyQuery));
+
+    if(count > 1)  // If there is only one value then searching on that variable is useless!
+        slAddHead(&relevant, oneVar);
+    else
+        slPairFree(&oneVar);
+    }
+dyStringFree(&dyQuery);
+slReverse(&relevant);
+return relevant;
+}

@@ -5,6 +5,7 @@ expVars lab,dataType,cell,antibody
 
 metaObject wgEncodeSunySwitchgearHt1080Elavl1RbpAssocRna
 objType table
+antibody ELAVL1
 cell HT-1080
 composite wgEncodeSunySwitchgear
 dataType Switchgear
@@ -22,6 +23,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunySwitchgearHt1080Igf2bp1RbpAssocRna
 objType table
+antibody IGF2BP1
 cell HT-1080
 composite wgEncodeSunySwitchgear
 dataType Switchgear
@@ -37,4 +39,4 @@ subId 3086
 tableName wgEncodeSunySwitchgearHt1080Igf2bp1RbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 1391846988
+# MAGIC: 1396727924

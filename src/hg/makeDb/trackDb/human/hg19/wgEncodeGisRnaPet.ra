@@ -122,7 +122,7 @@ wgEncode 1
         subGroups view=Clusters cellType=HeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
         type bed 12
         color 0,119,158
-        # subId=2115 dateSubmitted=2010-08-18
+        # subId=2115 REVOKED dateSubmitted=2010-08-18
 
         track wgEncodeGisRnaPetHepg2CytosolPapClustersRep1
         parent wgEncodeGisRnaPetViewClusters off
@@ -149,7 +149,7 @@ wgEncode 1
         subGroups view=Clusters cellType=HeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
         type bed 12
         color 0,119,158
-        # subId=2123 dateSubmitted=2010-10-08
+        # subId=2123 REVOKED dateSubmitted=2010-10-08
 
         track wgEncodeGisRnaPetH1hescCellPapClustersRep1
         parent wgEncodeGisRnaPetViewClusters on
@@ -158,7 +158,7 @@ wgEncode 1
         subGroups view=Clusters cellType=2-H1hESC localization=cell rnaExtract=pAP rep=rep1
         type bed 12
         color 0,107,27
-        # subId=2114 dateSubmitted=2010-10-08
+        # subId=2114 REVOKED dateSubmitted=2010-10-08
 
         track wgEncodeGisRnaPetK562CytosolPapClustersRep1
         parent wgEncodeGisRnaPetViewClusters on
@@ -320,7 +320,7 @@ wgEncode 1
         subGroups view=Alignments cellType=HeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
         type bam
         color 0,119,158
-        # subId=2115 dateSubmitted=2010-08-18
+        # subId=2115 REVOKED dateSubmitted=2010-08-18
 
         track wgEncodeGisRnaPetHepg2CytosolPapAlnRep1
         parent wgEncodeGisRnaPetViewAlignments off
@@ -347,7 +347,7 @@ wgEncode 1
         subGroups view=Alignments cellType=HeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
         type bam
         color 0,119,158
-        # subId=2123 dateSubmitted=2010-10-08
+        # subId=2123 REVOKED dateSubmitted=2010-10-08
 
         track wgEncodeGisRnaPetH1hescCellPapAlnRep1
         parent wgEncodeGisRnaPetViewAlignments off
@@ -356,7 +356,7 @@ wgEncode 1
         subGroups view=Alignments cellType=2-H1hESC localization=cell rnaExtract=pAP rep=rep1
         type bam
         color 0,107,27
-        # subId=2114 dateSubmitted=2010-10-08
+        # subId=2114 REVOKED dateSubmitted=2010-10-08
 
         track wgEncodeGisRnaPetK562CytosolPapAlnRep2
         parent wgEncodeGisRnaPetViewAlignments off
@@ -410,7 +410,7 @@ wgEncode 1
         subGroups view=Alignments cellType=HeLaS3 localization=cell rnaExtract=pAP rep=rep2
         type bam
         color 0,119,158
-        # subId=3270 dateSubmitted=2011-01-17
+        # subId=3270 REVOKED dateSubmitted=2011-01-17
 
         track wgEncodeGisRnaPetHelas3CellPapAlnRep1
         parent wgEncodeGisRnaPetViewAlignments off
@@ -419,7 +419,7 @@ wgEncode 1
         subGroups view=Alignments cellType=HeLaS3 localization=cell rnaExtract=pAP rep=rep1
         type bam
         color 0,119,158
-        # subId=3269 dateSubmitted=2011-01-17
+        # subId=3269 REVOKED dateSubmitted=2011-01-17
 
 # These settings are all copied from Riken Cage I am not sure if they are right
     track wgEncodeGisRnaPetViewMinusRawSig
@@ -531,7 +531,7 @@ wgEncode 1
         subGroups view=MinusRawSig cellType=HeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 1.000000 45930.000000
         color 0,119,158
-        # subId=2115 dateSubmitted=2010-08-18
+        # subId=2115 REVOKED dateSubmitted=2010-08-18
 
         track wgEncodeGisRnaPetHepg2CytosolPapMinusRawSigRep1
         parent wgEncodeGisRnaPetViewMinusRawSig off
@@ -558,7 +558,7 @@ wgEncode 1
         subGroups view=MinusRawSig cellType=HeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 1.000000 115239.000000
         color 0,119,158
-        # subId=2123 dateSubmitted=2010-10-08
+        # subId=2123 REVOKED dateSubmitted=2010-10-08
 
         track wgEncodeGisRnaPetH1hescCellPapMinusRawSigRep1
         parent wgEncodeGisRnaPetViewMinusRawSig on
@@ -567,7 +567,7 @@ wgEncode 1
         subGroups view=MinusRawSig cellType=2-H1hESC localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 106397.000000
         color 0,107,27
-        # subId=2114 dateSubmitted=2010-10-08
+        # subId=2114 REVOKED dateSubmitted=2010-10-08
 
         track wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep1
         parent wgEncodeGisRnaPetViewMinusRawSig on
@@ -621,7 +621,7 @@ wgEncode 1
         subGroups view=MinusRawSig cellType=HeLaS3 localization=cell rnaExtract=pAP rep=rep2
         type bigWig 1.000000 96585.000000
         color 0,119,158
-        # subId=3270 dateSubmitted=2011-01-17
+        # subId=3270 REVOKED dateSubmitted=2011-01-17
 
         track wgEncodeGisRnaPetHelas3CellPapMinusRawSigRep1
         parent wgEncodeGisRnaPetViewMinusRawSig off
@@ -630,7 +630,7 @@ wgEncode 1
         subGroups view=MinusRawSig cellType=HeLaS3 localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 223420.000000
         color 0,119,158
-        # subId=3269 dateSubmitted=2011-01-17
+        # subId=3269 REVOKED dateSubmitted=2011-01-17
 
 
 #These settings are all copied from RikeCage, I am not sure if they are right
@@ -744,7 +744,7 @@ wgEncode 1
         subGroups view=PlusRawSig cellType=HeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 1.000000 21143.000000
         color 0,119,158
-        # subId=2115 dateSubmitted=2010-08-18
+        # subId=2115 REVOKED dateSubmitted=2010-08-18
 
         track wgEncodeGisRnaPetHepg2CytosolPapPlusRawSigRep1
         parent wgEncodeGisRnaPetViewPlusRawSig off
@@ -771,7 +771,7 @@ wgEncode 1
         subGroups view=PlusRawSig cellType=HeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 1.000000 295497.000000
         color 0,119,158
-        # subId=2123 dateSubmitted=2010-10-08
+        # subId=2123 REVOKED dateSubmitted=2010-10-08
 
         track wgEncodeGisRnaPetH1hescCellPapPlusRawSigRep1
         parent wgEncodeGisRnaPetViewPlusRawSig on
@@ -780,7 +780,7 @@ wgEncode 1
         subGroups view=PlusRawSig cellType=2-H1hESC localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 149519.000000
         color 0,107,27
-        # subId=2114 dateSubmitted=2010-10-08
+        # subId=2114 REVOKED dateSubmitted=2010-10-08
 
         track wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep1
         parent wgEncodeGisRnaPetViewPlusRawSig on
@@ -834,7 +834,7 @@ wgEncode 1
         subGroups view=PlusRawSig cellType=HeLaS3 localization=cell rnaExtract=pAP rep=rep2
         type bigWig 1.000000 269069.000000
         color 0,119,158
-        # subId=3270 dateSubmitted=2011-01-17
+        # subId=3270 REVOKED dateSubmitted=2011-01-17
 
         track wgEncodeGisRnaPetHelas3CellPapPlusRawSigRep1
         parent wgEncodeGisRnaPetViewPlusRawSig off
@@ -843,5 +843,5 @@ wgEncode 1
         subGroups view=PlusRawSig cellType=HeLaS3 localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 429123.000000
         color 0,119,158
-        # subId=3269 dateSubmitted=2011-01-17
+        # subId=3269 REVOKED dateSubmitted=2011-01-17
 

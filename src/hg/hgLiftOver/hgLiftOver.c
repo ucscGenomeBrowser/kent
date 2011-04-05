@@ -33,7 +33,7 @@ static char const rcsid[] = "$Id: hgLiftOver.c,v 1.62 2009/07/14 20:17:30 markd 
 /* liftOver options: */
 #define HGLFT_MINMATCH "hglft_minMatch"          
 #define HGLFT_MINSIZEQ "hglft_minSizeQ"
-#define HGLFT_MINSIZET "hglft_minSizeT"
+#define HGLFT_MINCHAINT "hglft_minChainT"
 #define HGLFT_MULTIPLE "hglft_multiple"
 #define HGLFT_MINBLOCKS "hglft_minBlocks"
 #define HGLFT_FUDGETHICK "hglft_fudgeThick"
@@ -86,7 +86,7 @@ puts("<FORM ACTION=\"../cgi-bin/hgLiftOver\" METHOD=\"POST\" "
 cartSaveSession(cart);
 
 /* create HTML table for layout purposes */
-puts("\n<TABLE WIDTH=\"100%%\">\n");
+puts("\n<TABLE WIDTH=\"100%\">\n");
 
 /* top two rows -- genome and assembly menus */
 cgiSimpleTableRowStart();
@@ -127,54 +127,65 @@ cgiTableEnd();
 
 cgiParagraph("&nbsp;");
 cgiSimpleTableStart();
+
 cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
 cgiTableField("Minimum ratio of bases that must remap:");
-cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 cgiMakeDoubleVar(HGLFT_MINMATCH,chain->minMatch,6);
 cgiTableFieldEnd();
 cgiTableRowEnd();
+
 cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
-cgiTableField("Minimum chain size in target:");
-cgiTableFieldEnd();
-cgiSimpleTableFieldStart();
-cgiMakeIntVar(HGLFT_MINSIZET,chain->minSizeT,4);
-cgiTableFieldEnd();
+cgiTableField("&nbsp;");
 cgiTableRowEnd();
+
 cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
-cgiTableField("Minimum hit size in query:");
-cgiTableFieldEnd();
-cgiSimpleTableFieldStart();
-cgiMakeIntVar(HGLFT_MINSIZEQ,chain->minSizeQ,4);
-cgiTableFieldEnd();
+cgiTableField("BED 4 to BED 6 Options");
 cgiTableRowEnd();
+
 cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
 cgiTableField("Allow multiple output regions:");
-cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 cgiMakeCheckBox(HGLFT_MULTIPLE,multiple);
 cgiTableFieldEnd();
 cgiTableRowEnd();
+
 cgiSimpleTableRowStart();
+cgiTableField("&nbsp;&nbsp;Minimum hit size in query:");
 cgiSimpleTableFieldStart();
-cgiTableField("Min ratio of alignment blocks/exons that must map:");
+cgiMakeIntVar(HGLFT_MINSIZEQ,chain->minSizeQ,4);
 cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("&nbsp;&nbsp;Minimum chain size in target:");
+cgiSimpleTableFieldStart();
+cgiMakeIntVar(HGLFT_MINCHAINT,chain->minChainT,4);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("&nbsp;");
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("BED 12 Options");
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("Min ratio of alignment blocks or exons that must map:");
 cgiSimpleTableFieldStart();
 cgiMakeDoubleVar(HGLFT_MINBLOCKS,chain->minBlocks,6);
 cgiTableFieldEnd();
 cgiTableRowEnd();
+
 cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
 cgiTableField("If thickStart/thickEnd is not mapped, use the closest mapped base:");
-cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 cgiMakeCheckBox(HGLFT_FUDGETHICK,(chain->fudgeThick[0]=='Y') ? TRUE : FALSE);
 cgiTableFieldEnd();
 cgiTableRowEnd();
+
 cgiTableEnd();
 
 /* next row -- file format menu */
@@ -238,6 +249,72 @@ cartSaveSession(cart);
 puts("</FORM>");
 freeMem(fromOrg);
 freeMem(toOrg);
+}
+
+void webParamsUsed(float minMatch, boolean multiple, int minSizeQ, int minChainT, float minBlocks, boolean fudgeThick)
+{
+webNewSection("Parameters Used");
+cgiSimpleTableStart();
+
+cgiSimpleTableRowStart();
+cgiTableField("Minimum ratio of bases that must remap:");
+cgiSimpleTableFieldStart();
+printf("%.2f",minMatch);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("&nbsp;");
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("BED 4 to BED 6 Options");
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("Allow multiple output regions:");
+cgiSimpleTableFieldStart();
+printf("%s", multiple ? "on" : "off");
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("&nbsp;&nbsp;Minimum hit size in query:");
+cgiSimpleTableFieldStart();
+printf("%d",minSizeQ);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("&nbsp;&nbsp;Minimum chain size in target:");
+cgiSimpleTableFieldStart();
+printf("%d",minChainT);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("&nbsp;");
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("BED 12 Options");
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("Min ratio of alignment blocks or exons that must map:");
+cgiSimpleTableFieldStart();
+printf("%.2f",minBlocks);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("If thickStart/thickEnd is not mapped, use the closest mapped base:");
+cgiSimpleTableFieldStart();
+printf("%s", fudgeThick ? "on" : "off");
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiTableEnd();
 }
 
 void webDataFormats()
@@ -366,7 +443,7 @@ char *organism;
 char *db;
 float minBlocks, minMatch;
 boolean multiple, fudgeThick;
-int minSizeQ, minSizeT;
+int minSizeQ, minChainT;
 boolean refreshOnly = FALSE;
 
 /* char *err = NULL; */
@@ -402,7 +479,7 @@ if (choice == NULL)
     errAbort("Sorry, no conversions available from this assembly\n");
 
 minSizeQ = cartCgiUsualInt(cart, HGLFT_MINSIZEQ, choice->minSizeQ);
-minSizeT = cartCgiUsualInt(cart, HGLFT_MINSIZET, choice->minSizeT);
+minChainT = cartCgiUsualInt(cart, HGLFT_MINCHAINT, choice->minChainT);
 minBlocks = cartCgiUsualDouble(cart, HGLFT_MINBLOCKS, choice->minBlocks);
 minMatch = cartCgiUsualDouble(cart, HGLFT_MINMATCH, choice->minMatch);
 fudgeThick = cartCgiUsualBoolean(cart, HGLFT_FUDGETHICK, (choice->fudgeThick[0]=='Y') ? TRUE : FALSE);
@@ -452,21 +529,18 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
 	{}
     else if (sameString(dataFormat, POSITION_FORMAT))
 	{
-	/* minSizeT here and in liftOverChain.c/h has been renamed minChainT in liftOver.c */
-	/* ignore multiple, it must be false when position is used */
 	ct = liftOverPositions(oldTn.forCgi, chainHash, 
 			minMatch, minBlocks, 0, minSizeQ,
-			minSizeT, 0, 
+			minChainT, 0, 
 			fudgeThick, mapped, unmapped, FALSE, NULL, &errCt);
 
 	
         }
     else if (sameString(dataFormat, BED_FORMAT))
         {
-	/* minSizeT here and in liftOverChain.c/h has been renamed minChainT in liftOver.c */
         ct = liftOverBed(oldTn.forCgi, chainHash, 
 			minMatch, minBlocks, 0, minSizeQ,
-			minSizeT, 0,
+			minChainT, 0,
 			fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
         }
     else
@@ -505,6 +579,9 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
         puts("Note: multiple checkbox ignored since it is not supported for position format.");
         puts("</PRE></BLOCKQUOTE>\n");
 	}
+
+    webParamsUsed(minMatch, multiple, minSizeQ, minChainT, minBlocks, fudgeThick);
+
     carefulClose(&unmapped);
     }
 webDataFormats();

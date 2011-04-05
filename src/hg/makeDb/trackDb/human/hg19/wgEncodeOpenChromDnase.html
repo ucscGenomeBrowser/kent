@@ -112,8 +112,8 @@ the input DNA as reference (DNase-chip). A more detailed protocol is available
 cutting step of the approximately >50kb DNA fragments extracted after DNaseI
 digestion. Sequences from each experiment were aligned to the genome using
 BWA (Li <em>et al.</em>, 2010) for the NCBI 36 (hg19) assembly.
-<DIV style='position:relative; left:25px;'><DT><DT>The command used for these alignments was:</DT>
-<DD><CODE>&gt; bwa aln -t 8 genome.fa s_1.sequence.txt.bfq &gt; s_1.sequence.txt.sai</CODE></DD>
+<DIV style='position:relative; left:25px;'><DL><DT>The command used for these alignments was:</DT>
+<DD><CODE>&gt; bwa aln -t 8 genome.fa s_1.sequence.txt.bfq &gt; s_1.sequence.txt.sai</CODE></DD></DL>
 Where genome.fa is the whole genome sequence and s_1.sequence.txt.bfq is one lane
 of sequences convert into the required bfq format.</DIV>
 </P>
@@ -139,8 +139,8 @@ directly for other cell lines. Instead, a general background model was derived
 from the available Input data sets. This should provide corrections for
 sequencing biases and alignment artifacts, but will not correct for cell
 type specific copy number changes.
-<DIV style='position:relative; left:25px;'><DT><DT>The exact command used for this step is:</DT>
-<DD><CODE>&gt; fseq -l 600 -v -f 0 -b &lt;bff files&gt; -p &lt;iff files&gt; aligments.bed</CODE></DD>
+<DIV style='position:relative; left:25px;'><DL><DT>The exact command used for this step is:</DT>
+<DD><CODE>&gt; fseq -l 600 -v -f 0 -b &lt;bff files&gt; -p &lt;iff files&gt; aligments.bed</CODE></DD></DL>
 Where the (bff files) are the background files based on alignability, the
 (iff files) are the background files based on the Input experiments,
 and alignments.bed are a bed file of filtered sequence alignments.</DIV>
