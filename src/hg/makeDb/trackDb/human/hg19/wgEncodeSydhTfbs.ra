@@ -753,15 +753,14 @@ wgEncode 1
         type narrowPeak
         # subId=3254 dateSubmitted=2011-01-14
 
-        track wgEncodeSydhTfbsHepg2CebpbIggrabPk
-        release alpha
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel HepG2 CEBPB Pk
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CEBPB in HepG2 cells)
-        subGroups view=Peaks factor=CEBPB cellType=HepG2 control=IGGrab treatment=aNone
-        type narrowPeak
-        color 189,0,157
-        # subId=3258 dateSubmitted=2011-01-14
+		track wgEncodeSydhTfbsHepg2CebpbIggrabPk
+		parent wgEncodeSydhTfbsViewPeaks off
+		shortLabel HepG2 CEBPB Pk
+		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CEBPB in HepG2 cells)
+		subGroups view=Peaks factor=CEBPB cellType=HepG2 control=IGGrab treatment=aNone
+		type narrowPeak
+		color 189,0,157
+		# subId=3875 dateSubmitted=2011-04-04
 
         track wgEncodeSydhTfbsGm12878Chd21250IggmusPk
         release alpha
@@ -3876,15 +3875,14 @@ wgEncode 1
         type bigWig 1.000000 24948.000000
         # subId=3257 dateSubmitted=2011-01-14
 
-        track wgEncodeSydhTfbsHepg2CebpbIggrabSig
-        release alpha
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel HepG2 CEBPB Sig
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CEBPB in HepG2 cells)
-        subGroups view=Signal factor=CEBPB cellType=HepG2 control=IGGrab treatment=aNone
-        type bigWig 1.000000 14329.000000
-        color 189,0,157
-        # subId=3258 dateSubmitted=2011-01-14
+		track wgEncodeSydhTfbsHepg2CebpbIggrabSig
+		parent wgEncodeSydhTfbsViewSignal off
+		shortLabel HepG2 CEBPB Sig
+		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CEBPB in HepG2 cells)
+		subGroups view=Signal factor=CEBPB cellType=HepG2 control=IGGrab treatment=aNone
+		type bigWig 1.000000 19417.000000
+		color 189,0,157
+		# subId=3875 dateSubmitted=2011-04-04
 
         track wgEncodeSydhTfbsGm12878Chd21250IggmusSig
         release alpha
