@@ -9,6 +9,7 @@
 #include "basicBed.h"
 #include "correlate.h"
 #include "rangeTree.h"
+#include "obscure.h"
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
@@ -16,6 +17,7 @@ double minR = 0.7071;
 double minExp = 10;
 double minAct = 15;
 int maxDist = 50000;	/* Max distance we allow between enhancer and promoter. */
+char *permuteTest = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -40,6 +42,8 @@ errAbort(
   "   -outProBed=outPro.bed - output bed file with a record for each promoter, possibly including\n"
   "              multiple enhancers per promoter\n"
   "   -outOverBed=outOver.bed -output bed file with enhancers that are over thresholds\n"
+  "   -permuteTest=permute.tab perform a permutation test 100x and output # of pairs and\n"
+  "                number of pairs with  R >= minR\n"
   , minR, minExp, minAct, maxDist
   );
 }
@@ -53,6 +57,7 @@ static struct optionSpec options[] = {
    {"outEnhBed", OPTION_STRING},
    {"outProBed", OPTION_STRING},
    {"outOverBed", OPTION_STRING},
+   {"permuteTest", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -203,6 +208,59 @@ struct enhForGene
     struct slRef *enhList;	/* List of references to enhancer beds. */
     };
 
+struct hash *permuteHash(struct hash *inHash)
+/* Return a version of inHash with the same keys, but the values shuffled. */
+{
+struct hash *outHash = hashNew(18);
+struct hashEl *inEl, *inList = hashElListHash(inHash);
+struct slRef *refList = NULL, *ref;
+for (inEl = inList; inEl != NULL; inEl = inEl->next)
+    refAdd(&refList, inEl->val);
+shuffleList(&refList, 1);
+for (inEl = inList, ref=refList; inEl != NULL; inEl=inEl->next, ref=ref->next)
+    hashAdd(outHash,inEl->name, ref->val);
+slFreeList(&refList);
+return outHash;
+}
+
+void doPermuteTest(char *fileName, struct bed *enhList, struct chromBins *geneBins, 
+	struct hash *geneLevelHash, struct hash *enhLevelHash, int repCount, double goodLevel)
+/* Permute gene/expn levels repeatedly and report results. */
+{
+FILE *f = mustOpen(fileName, "w");
+int i;
+for (i=0; i<repCount; ++i)
+    {
+    struct hash *permutedHash = permuteHash(geneLevelHash);
+    int goodCount = 0, allCount = 0;
+    struct bed *enh;
+    for (enh = enhList; enh != NULL; enh = enh->next)
+	{
+	/* Get region to query */
+	char *chrom = enh->chrom;
+	int center = (enh->chromStart + enh->chromEnd)/2;
+	int start = center - maxDist;
+	if (start < 0) start = 0;
+	int end = center + maxDist;
+
+	double *enhVals = hashMustFindVal(enhLevelHash, enh->name);
+	struct binElement *el, *elList = chromBinsFind(geneBins, chrom, start, end);
+	for (el = elList; el != NULL; el = el->next)
+	    {
+	    struct bed *gene = el->val;
+	    double *geneVals = hashMustFindVal(permutedHash, gene->name);
+	    double r = correlateArrays(enhVals, geneVals, cellCount);
+	    if (r >= goodLevel)
+	       ++goodCount;
+	    ++allCount;
+	    }
+        }
+    fprintf(f, "%d\t%d\n", allCount, goodCount);
+    hashFree(&permutedHash);
+    }
+carefulClose(&f);
+}
+
 void regCompanionCorrelateEnhancerAndExpression(char *enhBed, char *enhLevels, 
 	char *geneBed, char *geneLevels, char *outTab)
 /* regCompanionCorrelateEnhancerAndExpression - Correlate files with info on enhancer activity 
@@ -216,11 +274,11 @@ char *outOverBed = optionVal("outOverBed", NULL);
 
 /* Read genes into a chromBin object to be able to find quickly. Just store the promoter */
 struct bed *gene, *geneList = bedLoadAll(geneBed);
-struct chromBins *chromBins = chromBinsNew(NULL);
+struct chromBins *geneBins = chromBinsNew(NULL);
 for (gene = geneList; gene != NULL; gene = gene->next)
     {
     int start = (gene->strand[0] == '-' ? gene->chromEnd-1 : gene->chromStart);
-    chromBinsAdd(chromBins, gene->chrom, start, start+1, gene);
+    chromBinsAdd(geneBins, gene->chrom, start, start+1, gene);
     }
 
 /* Read levels into hash */
@@ -255,7 +313,7 @@ for (enh = enhList; enh != NULL; enh = enh->next)
 
     double *enhVals = hashMustFindVal(enhLevelHash, enh->name);
     double maxAct = maxArray(enhVals, cellCount);
-    struct binElement *el, *elList = chromBinsFind(chromBins, chrom, start, end);
+    struct binElement *el, *elList = chromBinsFind(geneBins, chrom, start, end);
     struct range *correlatingPromoterList = NULL, *range;
     for (el = elList; el != NULL; el = el->next)
         {
@@ -361,6 +419,12 @@ for (enhGene = enhGeneList; enhGene != NULL; enhGene = enhGene->next)
     rangeTreeFree(&rt);
     }
 
+if (permuteTest != NULL)
+    {
+    verbose(1, "Permuting...\n");
+    doPermuteTest(permuteTest, enhList, geneBins, geneLevelHash, enhLevelHash, 1000, minR);
+    }
+
 carefulClose(&fTab);
 carefulClose(&fPair);
 carefulClose(&fEnh);
@@ -378,6 +442,7 @@ minR = optionDouble("minR", minR);
 minExp = optionDouble("minExp", minExp);
 minAct = optionDouble("minAct", minAct);
 maxDist = optionDouble("maxDist", maxDist);
+permuteTest = optionVal("permuteTest", NULL);
 regCompanionCorrelateEnhancerAndExpression(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
