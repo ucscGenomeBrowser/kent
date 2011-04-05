@@ -1,6 +1,6 @@
-// Track Search code which is shared between different CGIs
+// Search code which is shared between different CGIs: hgFileSearch and hgTracks(Track Search)
 
-#include "searchTracks.h"
+#include "search.h"
 #include "cheapcgi.h"
 #include "hdb.h"
 #include "hgConfig.h"

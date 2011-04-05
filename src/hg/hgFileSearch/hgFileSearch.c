@@ -10,7 +10,7 @@
 #include "hCommon.h"
 #include "hui.h"
 #include "fileUi.h"
-#include "searchTracks.h"
+#include "search.h"
 #include "cart.h"
 #include "grp.h"
 

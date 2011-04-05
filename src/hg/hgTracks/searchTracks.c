@@ -1,7 +1,7 @@
 /* Track search code used by hgTracks CGI */
 
 #include "common.h"
-#include "searchTracks.h"
+#include "search.h"
 #include "hCommon.h"
 #include "memalloc.h"
 #include "obscure.h"
