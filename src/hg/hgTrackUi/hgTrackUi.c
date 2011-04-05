@@ -2310,19 +2310,27 @@ cgiMakeCheckboxGroupWithVals(cartVarName, labelArr, valueArr, refCount, checked,
 hFreeConn(&conn);
 }
 
-void superTrackUi(struct trackDb *superTdb)
-/* List tracks in this collection, with visibility controls and UI links */
+#ifdef UNUSED
+static boolean isInTrackList(struct trackDb *tdbList, struct trackDb *target)
+/* Return TRUE if target is in tdbList. */
 {
 struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    if (tdb == target)
+        return TRUE;
+return FALSE;
+}
+#endif /* UNUSED */
+
+void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
+/* List tracks in this collection, with visibility controls and UI links */
+{
 printf("<P><TABLE CELLPADDING=2>");
-tdbSortPrioritiesFromCart(cart, &superTdb->subtracks);
-for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
+tdbRefSortPrioritiesFromCart(cart, &superTdb->children);
+struct slRef *childRef;
+for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     {
-    if (!hTableOrSplitExists(database, tdb->table)
-    && tdb->subtracks != NULL && trackDbLocalSetting(tdb, "compositeTrack") == NULL
-    && !tdbIsDownloadsOnly(tdb))
-	// NOTE: tdb if composite, is not yet populated with it's own subtracks!
-        continue;
+    struct trackDb *tdb = childRef->val;
     printf("<TR><TD NOWRAP>");
     if (tdbIsDownloadsOnly(tdb))
         printf("%s&nbsp;",tdb->shortLabel);
@@ -2355,8 +2363,8 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
 printf("</TABLE>");
 }
 
-void specificUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
-	/* Draw track specific parts of UI. */
+void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
+/* Draw track specific parts of UI. */
 {
 char *track = tdb->track;
 
@@ -2595,7 +2603,7 @@ else if (tdb->type != NULL)
     }
 if (tdbIsSuperTrack(tdb))
     {
-    superTrackUi(tdb);
+    superTrackUi(tdb, tdbList);
     }
 else if (tdbIsComposite(tdb))  // for the moment generalizing this to include other containers...
     {
@@ -2605,8 +2613,24 @@ if (!ajax)
     extraUiLinks(database,tdb, trackHash);
 }
 
+#ifdef UNUSED
+static void findSuperChildrenAndSettings(struct trackDb *tdbList, struct trackDb *super)
+/* Find the tracks that have super as a parent and stuff references to them on 
+ * super's children list. Also do some visibility and parentName futzing. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (tdb->parent == super)
+        {
+	trackDbSuperMemberSettings(tdb);  /* This adds tdb to tdb->parent->children. */
+	}
+    }
+}
+#endif /* UNUSED */
 
-void trackUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
+
+void trackUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
 /* Put up track-specific user interface. */
 {
 if (!ajax)
@@ -2708,10 +2732,6 @@ if (!tdbIsDownloadsOnly(tdb))
             printf("<B>Display&nbsp;mode:&nbsp;</B>");
         if (tdbIsSuper(tdb))
             {
-            /* This is a supertrack -- load its members and show hide/show dropdown */
-	    // hub tracks already have their subtracks loaded
-	    if (!isHubTrack(tdb->track))
-		hTrackDbLoadSuper(database, tdb);
             superTrackDropDown(cart, tdb, 1);
             }
         else
@@ -2784,7 +2804,7 @@ printf("<BR>\n");
 if (tdbIsDownloadsOnly(tdb))
     filesDownloadUi(database,cart,tdb);  // Composites without tracks but with files to download are tdb->type: downloadsOnly
 else
-    specificUi(tdb, ct, ajax);
+    specificUi(tdb, tdbList, ct, ajax);
 puts("</FORM>");
 
 if (ajax)
@@ -2929,8 +2949,6 @@ else
     }
 if (tdb == NULL)
    {
-   uglyAbort("Can't find %s in track database %s chromosome %s.  TrackHash has %d els",
-	    track, database, chromosome, trackHash->elCount);
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);
    }
@@ -2950,13 +2968,13 @@ char *title = (tdbIsSuper(tdb) ? "Super-track Settings" :
 if(cartOptionalString(cart, "ajax"))
     {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html
-    trackUi(tdb, ct, TRUE);
+    trackUi(tdb, tdbList, ct, TRUE);
     cartRemove(cart,"ajax");
     }
 else
     {
     cartWebStart(cart, database, "%s %s", tdb->shortLabel, title);
-    trackUi(tdb, ct, FALSE);
+    trackUi(tdb, tdbList, ct, FALSE);
     printf("<BR>\n");
     webEnd();
     }

@@ -3574,7 +3574,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         return matchingChild;
     }
 
-/* Look "to the sky" in parents of root generation well. */
+/* Look "to the sky" in parents of root generation as well. */
 if (level == 0)
     {
     for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
@@ -3600,11 +3600,31 @@ else
 }
 #endif /* DEBUG */
 
+static void addChildRefsToParents(struct trackDb *tdbList)
+/* Go through tdbList and set up the ->children field in parents with references
+ * to their children. */
+{
+struct trackDb *tdb;
+
+/* Insert a little paranoid check here to make sure this doesn't get called twice. */
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    if (tdb->children !=  NULL)
+        internalErr();
+        
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    struct trackDb *parent = tdb->parent;
+    if (parent != NULL)
+        refAdd(&parent->children, tdb);
+    }
+}
+
 struct trackDb *trackDbPolishAfterLinkup(struct trackDb *tdbList, char *db)
 /* Do various massaging that can only be done after parent/child
  * relationships are established. */
 {
 tdbList = pruneEmpties(tdbList, db, hIsPrivateHost() || hIsPreviewHost(), 0);
+addChildRefsToParents(tdbList);
 trackDbContainerMarkup(NULL, tdbList);
 rInheritFields(tdbList);
 slSort(&tdbList, trackDbCmp);
@@ -3656,27 +3676,6 @@ trackTdb = loadAndLookupTrackDb(conn, where);
 if (!trackTdb)
     return NULL;
 return trackTdb;
-}
-
-void hTrackDbLoadSuper(char *db, struct trackDb *tdb)
-/* Populate child trackDbs of this supertrack */
-{
-if (!tdb || !tdbIsSuper(tdb))
-    return;
-
-struct sqlConnection *conn = hAllocConn(db);
-char where[256];
-safef(where, sizeof(where),
-   "settings rlike '^(.*\n)?superTrack %s([ \n].*)?$' order by priority desc",
-    tdb->track);
-tdb->subtracks = loadAndLookupTrackDb(conn, where);       // TODO: Straighten out when super points to children and when not!
-struct trackDb *subTdb;
-for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
-    {
-    subTdb->parent = tdb;
-    trackDbSuperMemberSettings(subTdb);
-    }
-hFreeConn(&conn);
 }
 
 struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList)

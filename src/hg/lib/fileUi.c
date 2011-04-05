@@ -414,7 +414,7 @@ if (sortOrder != NULL)
             continue; // Only single selects and multi-select make good candidates for filtering
 
         struct sqlConnection *conn = hAllocConn(db);
-        struct slPair *valsAndLabels = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, TRUE, TRUE); // tags, yes tables AND files
+        struct slPair *valsAndLabels = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, FALSE, TRUE); // not tags, not tables, just files
         hFreeConn(&conn);
         // Need to verify that each val exists in an object for these files
         struct slPair *relevantVals = NULL;
