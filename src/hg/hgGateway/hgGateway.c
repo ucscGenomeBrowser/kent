@@ -133,7 +133,9 @@ printf("</td>\n");
 if(supportsSuggest)
     {
     puts("<td align=center>\n");
-    hWrites("<input name='hgt.suggest' type='text' size='5' id='suggest' />\n");
+    hPrintf("<input name='hgt.suggest' type='text' size='5' id='suggest' />\n"
+            "<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(db)
+            );
     printf("</td>\n");
     }
 

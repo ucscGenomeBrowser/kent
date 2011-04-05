@@ -7,10 +7,12 @@
 #include "jksql.h"
 #include "hdb.h"
 
-boolean connSupportsGeneSuggest(struct sqlConnection *conn);
-// return true if this connection has tables to support gene autocompletion
-
 boolean assemblySupportsGeneSuggest(char *database);
 // return true if this assembly has tables to support gene autocompletion
+
+char *assemblyGeneSuggestTrack(char *database);
+// return name of gene suggest track if this assembly has tables to support gene autocompletion, NULL otherwise
+// Do NOT free returned string.
+
 
 #endif /* SUGGEST_H */
