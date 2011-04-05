@@ -5,7 +5,6 @@ longLabel Mapability or Uniqueness of Reference Genome
 group map
 subGroup1 view Mapability ALN=Broad_Alignability CRGMAP=CRG_Alignability DUNIQ=Duke_Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Duke_Excluded_Regions
 subGroup2 win Sequence_Size w015=15bp w020=20bp w024=24bp w035=35bp w036=36bp w040=40bp w050=50bp w075=75bp w100=100bp zNA=Varied
-dimensions dimensionX=win
 allButtonPair on
 sortOrder view=+ win=+
 dragAndDrop subTracks
@@ -31,7 +30,6 @@ wgEncode 1
         subGroups view=ALN win=w036
         type wig 0.00 1.00
         color 133,0,173
-        metadata project=wgEncode grant=Bernstein lab=Broad dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE July 2009 Freeze" subId=344 composite=wgEncodeMapability tableName=wgEncodeBroadMapabilityAlign36mer fileName=wgEncodeBroadMapabilityAlign36mer.wig.gz
 
     track wgEncodeMapabilityViewDUNIQ
     shortLabel Duke Uniqueness
@@ -52,7 +50,6 @@ wgEncode 1
         subGroups view=DUNIQ win=w020
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=20bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness20bp fileName=wgEncodeDukeUniqueness20bp.wig.gz
 
         track wgEncodeDukeUniqueness24bp
         subTrack wgEncodeMapabilityViewDUNIQ off
@@ -62,7 +59,6 @@ wgEncode 1
         subGroups view=DUNIQ win=w024
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=24bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
 
         track wgEncodeDukeUniqueness35bp
         subTrack wgEncodeMapabilityViewDUNIQ
@@ -72,7 +68,6 @@ wgEncode 1
         subGroups view=DUNIQ win=w035
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=35bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
 
     track wgEncodeMapabilityViewRUNIQ
     shortLabel Rosetta Uniqueness
@@ -116,7 +111,6 @@ wgEncode 1
         subGroups view=UUNIQ win=w015
         type wig 0.00 1.00
         color 46,0,184
-        metadata project=wgEncode grant=Dekker lab=UMass-Dekker dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
 
     track wgEncodeMapabilityViewXR
     shortLabel Duke Excluded Regions
@@ -130,7 +124,6 @@ wgEncode 1
         subGroups view=XR win=zNA
         type bed 6
         noScoreFilter on
-        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Excludable labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
 
     track wgEncodeMapabilityViewCRGMAP
     shortLabel CRG GEM Alignability
@@ -149,7 +142,6 @@ wgEncode 1
         subGroups view=CRGMAP win=w036
         type bigWig 0.00 1.00
         color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign36mer fileName=wgEncodeMapabilityAlign36mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign40mer
         subTrack wgEncodeMapabilityViewCRGMAP
@@ -158,7 +150,6 @@ wgEncode 1
         subGroups view=CRGMAP win=w040
         type bigWig 0.00 1.00
         color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=40mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign40mer fileName=wgEncodeMapabilityAlign40mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign50mer
         subTrack wgEncodeMapabilityViewCRGMAP
@@ -167,7 +158,6 @@ wgEncode 1
         subGroups view=CRGMAP win=w050
         type bigWig 0.00 1.00
         color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=50mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign50mer fileName=wgEncodeMapabilityAlign50mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign75mer
         subTrack wgEncodeMapabilityViewCRGMAP
@@ -176,7 +166,6 @@ wgEncode 1
         subGroups view=CRGMAP win=w075
         type bigWig 0.00 1.00
         color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=75mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign75mer fileName=wgEncodeMapabilityAlign75mer.bw.gz
 
         track wgEncodeCrgMapabilityAlign100mer
         subTrack wgEncodeMapabilityViewCRGMAP
@@ -185,5 +174,4 @@ wgEncode 1
         subGroups view=CRGMAP win=w100
         type bigWig 0.00 1.00
         color 0,100,0
-        metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=100mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE January 2010 Freeze" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign100mer fileName=wgEncodeMapabilityAlign100mer.bw.gz
 

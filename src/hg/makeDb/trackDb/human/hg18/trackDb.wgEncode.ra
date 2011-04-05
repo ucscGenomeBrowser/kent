@@ -217,29 +217,12 @@ include wgEncodeChromatinMap.ra
 
 
 # Mapability - Cross lab special track (wrangler: tdreszer)
-include wgEncodeMapability.ra beta,public
-include wgEncodeMapability.new.ra alpha
+include wgEncodeMapability.ra
 
         
 # NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
 
 track wgEncodeNhgriBip
-release beta,public
-shortLabel NHGRI Bi-Pro
-longLabel ENCODE NHGRI Elnitski Bidirectional Promoters
-visibility hide
-group regulation
-type bed 8 +
-priority 0
-#scoreFilterByRange on
-#noScoreFilter on
-compareGenomeLinks panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
-wgEncode 1
-filterBy score:Annotation=800|A)_UCSC_genes,600|B)_GenBank_mRNA_annotations,400|C)_spliced_ESTs
-metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=hg18 dataVersion="ENCODE July 2009 Freeze" subId=294 dateSubmitted=2009-04-27 dateUnrestricted=2010-01-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.hg18.bed8.gz
-
-track wgEncodeNhgriBip
-release alpha
 shortLabel NHGRI Bi-Pro
 longLabel ENCODE NHGRI Elnitski Bidirectional Promoters
 visibility hide
