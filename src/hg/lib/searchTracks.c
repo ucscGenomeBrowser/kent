@@ -77,25 +77,6 @@ if (slCount(fileTypes) > 0)
 return NULL;
 }
 
-struct slPair *mdbVarsRelevant(struct sqlConnection *conn)
-// returns a white list of mdb vars that are relevant to the currect DB
-{
-struct slPair *cvApproved = cvWhiteList(TRUE,FALSE);
-struct slPair *relevant = NULL;
-while(cvApproved != NULL)
-    {
-    struct slPair *oneVar = slPopHead(&cvApproved);
-    char query[256];
-    safef(query, sizeof(query), "select count(*) from metaDb where var = '%s'",oneVar->name);
-    if(sqlQuickNum(conn,query) > 0)
-        slAddHead(&relevant, oneVar);
-    else
-        slPairFree(&oneVar);
-    }
-slReverse(&relevant);
-return relevant;
-}
-
 struct slPair *mdbSelectPairs(struct cart *cart,enum searchTab selectedTab, struct slPair *mdbVars)
 // Returns the current mdb  vars and vals in the table of drop down selects
 {
@@ -194,8 +175,8 @@ slReverse(&mdbSelectPairs);
 return mdbSelectPairs;
 }
 
-char *mdbSelectsHtmlRows(struct sqlConnection *conn,struct slPair *mdbSelects,struct slPair *mdbVars,int cols)
-// generates the html for the table rows containing mdb var and val selects
+char *mdbSelectsHtmlRows(struct sqlConnection *conn,struct slPair *mdbSelects,struct slPair *mdbVars,int cols,boolean fileSearch)
+// genereates the html for the table rows containing mdb var and val selects.  Assume tableSearch unless fileSearch
 {
 struct dyString *output = dyStringNew(1024);
 
@@ -238,7 +219,7 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
         {
         dyStringPrintf(output,"</td>\n<td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>is%s</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",
                 row,(searchBy == cvSearchByMultiSelect?" among":""),buf);
-        struct slPair *pairs = mdbValLabelSearch(conn, mdbSelect->name, MDB_VAL_STD_TRUNCATION, FALSE, TRUE, FALSE); // not tags, yes tables, not files
+        struct slPair *pairs = mdbValLabelSearch(conn, mdbSelect->name, MDB_VAL_STD_TRUNCATION, FALSE, !fileSearch, fileSearch); // not tags, either a file or table search
         if (slCount(pairs) > 0)
             {
             char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvSearchByMultiSelect),
