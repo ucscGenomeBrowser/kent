@@ -54,7 +54,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 #include "suggest.h"
-#include "searchTracks.h"
+#include "search.h"
 #include "errCatch.h"
 
 static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
@@ -4629,10 +4629,7 @@ if (!hideControls)
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	if(dragZooming && assemblySupportsGeneSuggest(database))
-            hPrintf(" <a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a> "
-                    "<input type='text' size='8' name='hgt.suggest' id='suggest'>\n"
-                    "<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database)
-                    );
+            hWrites(" <a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a> <input type='text' size='8' name='hgt.suggest' id='suggest'>\n");
 	hWrites(" ");
 	hButtonWithOnClick("hgt.jump", "jump", NULL, "jumpButtonOnClick()");
 	hOnClickButton(clearButtonJavascript,"clear");

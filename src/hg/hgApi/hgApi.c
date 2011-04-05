@@ -7,7 +7,7 @@
 #include "hPrint.h"
 #include "dystring.h"
 #include "hui.h"
-#include "searchTracks.h"
+#include "search.h"
 
 static char const rcsid[] = "$Id: hgApi.c,v 1.3 2010/05/30 21:11:47 larrym Exp $";
 
