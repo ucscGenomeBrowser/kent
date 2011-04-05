@@ -119,4 +119,5 @@ bedMethods(tg);
 tg->canPack = TRUE;
 tg->loadItems = gvfLoad;
 tg->itemColor = gvfColor;
+tg->nextPrevExon = simpleBedNextPrevEdge;
 }

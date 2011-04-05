@@ -61,37 +61,34 @@ with multiple subtracks are
 <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
 Sites in this track are categorized and
 color-coded for each cell type as follows:
-</P>
-<P><DT><B>Validated (Valid - Black)</B>:</DT>
-Regions identified as peaks by both the DNaseI HS assay<!-- described here--> and
+<DL>
+<DT><B>Validated (Valid - Black)</B>:</DT>
+<DD>Regions identified as peaks by both the DNaseI HS assay<!-- described here--> and
 FAIRE assay<!-- described here-->.  Peaks for DNaseI HS have
-p-values <code>< 0.05</code> (<code>-log<sub>10</sub>(p-value) > 1.3</code>)
+p-values <code>&#60; 0.05</code> (<code>-log<sub>10</sub>(p-value) &#62; 1.3</code>)
 and peaks for FAIRE have
-p-values <code>< 0.1</code> (<code>-log<sub>10</sub>(p-value) > 1.0</code>).
-</P>
-<P><DT><B>Open Chromatin (OpenChrom - <span style='color: #0000FF;'>Blue</span>)</B>:</DT>
-Regions not identified as peaks in both DNaseI HS and FAIRE, but for which
+p-values <code>&#60; 0.1</code> (<code>-log<sub>10</sub>(p-value) &#62; 1.0</code>).</DD>
+<DT><B>Open Chromatin (OpenChrom - <span style='color: #0000FF;'>Blue</span>)</B>:</DT>
+<DD>Regions not identified as peaks in both DNaseI HS and FAIRE, but for which
 the combination of p-values from these assays using Fisher's combined
 probability test results in a
-p-value <code>< 0.05</code> (<code>-log<sub>10</sub>(p-value) > 1.3</code>).
-</P>
-<P><DT><B>DNaseOnly (<span style='color: #009900;'>Green</span>)</B>:</DT>
-Regions identified by DNaseI HS as peaks and not identified by FAIRE as
+p-value <code>&#60; 0.05</code> (<code>-log<sub>10</sub>(p-value) &#62; 1.3</code>).</DD>
+<DT><B>DNaseOnly (<span style='color: #009900;'>Green</span>)</B>:</DT>
+<DD>Regions identified by DNaseI HS as peaks and not identified by FAIRE as
 peaks, and with a Fisher's combined DNaseI HS and FAIRE
-p-value <code>> 0.05</code> (<code>-log<sub>10</sub>(p-value) < 1.3</code>).
-</P>
-<P><DT><B>FAIREOnly (<span style='color: #990000;'>Dark Red</span>)</B>:</DT>
-Regions identified by FAIRE as peaks and not identified by DNaseI HS as
+p-value <code>&#62; 0.05</code> (<code>-log<sub>10</sub>(p-value) &#60; 1.3</code>).</DD>
+<DT><B>FAIREOnly (<span style='color: #990000;'>Dark Red</span>)</B>:</DT>
+<DD>Regions identified by FAIRE as peaks and not identified by DNaseI HS as
 peaks, and with a Fisher's combined DNaseI HS and FAIRE
-p-value <code>> 0.05</code> (<code>-log<sub>10</sub>(p-value) < 1.3</code>).
-</P>
-<P><DT><B>ChIPOnly (<span style='color: #FF00FF;'>Pink</span>)</B>:</DT>
-Regions identified by ChIP-seq as peaks indicating binding sites for one
+p-value <code>&#62; 0.05</code> (<code>-log<sub>10</sub>(p-value) &#60; 1.3</code>).</DD>
+<DT><B>ChIPOnly (<span style='color: #FF00FF;'>Pink</span>)</B>:</DT>
+<DD>Regions identified by ChIP-seq as peaks indicating binding sites for one
 or more of RNA Pol II, CTCF, and c-Myc described here and not identified by
 DNaseI HS or FAIRE as peaks. Peaks for ChIP-seq have
-p-values <code>< 0.05</code> (<code>-log<sub>10</sub>(p-value) > 1.3</code>).
+p-values <code>&#60; 0.05</code> (<code>-log<sub>10</sub>(p-value) > 1.3</code>).
 For RNA Pol II, only sites that overlap annotated transcription start sites
-by the UCSC Genes track are considered.
+by the UCSC Genes track are considered.</DD>
+</DL>
 </P>
 
 
@@ -120,12 +117,12 @@ thus a combined p-value can be assigned to this test statistic.
 </P>
 <P>To facilitate analyses, an <em>Open Chromatin Code (OC Code)</em> has been
 assigned for each region as follows:
-<uL>
-<li>1 = Validated, identified as a peak by DNaseI HS and FAIRE.
-<li>2 = <span style='color: #009900;'>DNase-only</span> (includes <span style='color: #0000FF;'>OpenChrom</span>), identified as a peak by DNaseI HS but not FAIRE.
-<li>3 = <span style='color: #990000;'>FAIRE-only</span> (includes <span style='color: #0000FF;'>OpenChrom</span>), identified as a peak by FAIRE but not DNaseI HS.
-<li>4 = <span style='color: #FF00FF;'>Neither</span>, not identified as a peak by DNaseI HS or FAIRE.
-</uL>
+<UL>
+<li><B>1 = Validated</B>, identified as a peak by DNaseI HS and FAIRE.
+<li><span style='color: #009900;'><B>2 = DNase-only</B></span> (includes <span style='color: #0000FF;'>OpenChrom</span>), identified as a peak by DNaseI HS but not FAIRE.
+<li><span style='color: #990000;'><B>3 = FAIRE-only</B></span> (includes <span style='color: #0000FF;'>OpenChrom</span>), identified as a peak by FAIRE but not DNaseI HS.
+<li><span style='color: #FF00FF;'><B>4 = Neither</B></span>, not identified as a peak by DNaseI HS or FAIRE.
+</UL>
 <P>All signal values, <code>-log<sub>10</sub></code>(p-values), and the OC Code is
 displayed on the detail description page for each element and is available in the
 corresponding bed file.

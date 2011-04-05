@@ -16532,15 +16532,15 @@ if (isNotEmpty(snp->bitfields) && differentString(snp->bitfields, "unknown"))
 	   "</B>\n\n");
     struct slName *bitfields = slNameListFromComma(snp->bitfields);
     if (slNameInList(bitfields, "clinically-assoc"))
-	printf("<BR> <B>***clinically associated***</B> "
-	       "(SNP is in OMIM/OMIA and/or "
-	       "at least one submitter is a Locus-Specific Database)\n");
+	printf("<BR> SNP is in OMIM/OMIA and/or "
+	       "at least one submitter is a Locus-Specific Database "
+	       "(&quot;clinically associated&quot;)\n");
     if (slNameInList(bitfields, "has-omim-omia"))
 	printf("<BR> SNP is in OMIM/OMIA\n");
     if (slNameInList(bitfields, "microattr-tpa"))
 	printf("<BR> SNP has a microattribution or third-party annotation\n");
     if (slNameInList(bitfields, "submitted-by-lsdb"))
-	printf("<BR> SNP was submitted by LSDB\n");
+	printf("<BR> SNP was submitted by Locus-Specific Database\n");
     if (slNameInList(bitfields, "maf-5-all-pops"))
 	printf("<BR> Minor Allele Frequency is at least 5%% in all "
 	       "populations assayed\n");
@@ -24404,7 +24404,8 @@ else if (sameWord(table, "transRegCodeProbe"))
     doTransRegCodeProbe(tdb, item, "transRegCode", "transRegCodeMotif",
     	"transRegCodeCondition", "growthCondition");
     }
-else if (sameWord(table, "wgEncodeRegDnaseClustered"))
+else if (sameWord(table, "wgEncodeRegDnaseClustered") || 
+	sameWord(table, "wgEncodeRegDnaseClusteredOn7"))
     {
     doPeakClusters(tdb, item);
     }

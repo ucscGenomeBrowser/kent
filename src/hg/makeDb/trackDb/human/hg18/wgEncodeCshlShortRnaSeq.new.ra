@@ -1,5 +1,4 @@
 track wgEncodeCshlShortRnaSeq
-release alpha
 compositeTrack on
 shortLabel CSHL Sm RNA-seq
 longLabel ENCODE Cold Spring Harbor Labs Small RNA-seq
@@ -20,7 +19,6 @@ noInherit on
     shortLabel Transfrags
     view 1-Transfrags
     visibility dense
-    release alpha
         subTrack wgEncodeCshlShortRnaSeq
     scoreFilter 100
     scoreFilterLimits 100:1000
@@ -28,7 +26,6 @@ noInherit on
     minGrayLevel 4
 
         track wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags on
         shortLabel GM12 cyto tot TF
         color 153,38,0
@@ -37,7 +34,6 @@ noInherit on
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel GM12 nucl tot TF
         color 153,38,0
@@ -46,7 +42,6 @@ noInherit on
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 chrm tot TF
         color 46,0,184
@@ -55,7 +50,6 @@ noInherit on
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags on
         shortLabel K562 cyto tot TF
         color 46,0,184
@@ -64,7 +58,6 @@ noInherit on
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 nucl tot TF
         color 46,0,184
@@ -73,7 +66,6 @@ noInherit on
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 nlos tot TF
         color 46,0,184
@@ -82,7 +74,6 @@ noInherit on
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 nplm tot TF
         color 46,0,184
@@ -91,7 +82,6 @@ noInherit on
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 psom tot TF
         color 46,0,184
@@ -100,7 +90,6 @@ noInherit on
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsProstateCellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags on
         shortLabel pros cell tot TF
         color 0,102,136
@@ -109,7 +98,6 @@ noInherit on
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel GM12 cell tot TF
         longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell)
@@ -118,7 +106,6 @@ noInherit on
         color 153,38,0
 
         track wgEncodeCshlShortRnaSeqTransfragsK562CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 cell tot TF
         longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell)
@@ -130,7 +117,6 @@ noInherit on
     shortLabel Plus Raw Signal
     view 2-PlusRawSignal
     visibility dense
-    release alpha
         subTrack wgEncodeCshlShortRnaSeq
     viewLimits 0:500
     minLimit 0
@@ -141,7 +127,6 @@ noInherit on
     maxHeightPixels 100:24:16
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562CytosolShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal on
         shortLabel K562 cyto tot +S
         color 46,0,184
@@ -154,7 +139,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562ChromatinShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
         shortLabel K562 chrm tot +S
         color 46,0,184
@@ -167,7 +151,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562PolysomeShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
         shortLabel K562 psom tot +S
         color 46,0,184
@@ -180,7 +163,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CytosolShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal on
         shortLabel GM12 cyto tot +S
         color 153,38,0
@@ -193,7 +175,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleoplasmShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
         shortLabel K562 nplm tot +S
         color 46,0,184
@@ -206,7 +187,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalProstateCellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal on
         shortLabel pros cell tot +S
         color 0,102,136
@@ -219,7 +199,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878NucleusShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
         shortLabel GM12 nucl tot +S
         color 153,38,0
@@ -232,7 +211,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleusShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
         shortLabel K562 nucl tot +S
         color 46,0,184
@@ -245,7 +223,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleolusShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
         shortLabel K562 nlos tot +S
         color 46,0,184
@@ -258,7 +235,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
         shortLabel GM12 cell tot +S
         longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short in GM12878 cell)
@@ -267,7 +243,6 @@ noInherit on
         color 153,38,0
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
         shortLabel K562 cell tot +S
         longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short in K562 cell)
@@ -279,7 +254,6 @@ noInherit on
     shortLabel Minus Raw Signal
     view 3-MinusRawSignal
     visibility dense
-    release alpha
         subTrack wgEncodeCshlShortRnaSeq
     viewLimits 0:500
     minLimit 0
@@ -290,7 +264,6 @@ noInherit on
     maxHeightPixels 100:24:16
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562CytosolShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal on
         shortLabel K562 cyto tot -S
         color 46,0,184
@@ -303,7 +276,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562ChromatinShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
         shortLabel K562 chrm tot -S
         color 46,0,184
@@ -316,7 +288,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562PolysomeShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
         shortLabel K562 psom tot -S
         color 46,0,184
@@ -329,7 +300,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CytosolShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal on
         shortLabel GM12 cyto tot -S
         color 153,38,0
@@ -342,7 +312,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleoplasmShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
         shortLabel K562 nplm tot -S
         color 46,0,184
@@ -355,7 +324,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalProstateCellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal on
         shortLabel pros cell tot -S
         color 0,102,136
@@ -368,7 +336,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878NucleusShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
         shortLabel GM12 nucl tot -S
         color 153,38,0
@@ -381,7 +348,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleusShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
         shortLabel K562 nucl tot -S
         color 46,0,184
@@ -394,7 +360,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleolusShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
         shortLabel K562 nlos tot -S
         color 46,0,184
@@ -407,7 +372,6 @@ noInherit on
         type bedGraph 4
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
         shortLabel GM12 cell tot -S
         longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short in GM12878 cell)
@@ -416,7 +380,6 @@ noInherit on
         color 153,38,0
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
         shortLabel K562 cell tot -S
         longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short in K562 cell)
@@ -428,11 +391,9 @@ noInherit on
     shortLabel Alignments
     view 4-Alignments
     visibility dense
-    release alpha
         subTrack wgEncodeCshlShortRnaSeq
 
         track wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments on
         shortLabel GM12 cyto tot AL
         color 153,38,0
@@ -447,7 +408,6 @@ noInherit on
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
         shortLabel GM12 nucl tot AL
         color 153,38,0
@@ -462,7 +422,6 @@ noInherit on
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
         shortLabel K562 chrm tot AL
         color 46,0,184
@@ -477,7 +436,6 @@ noInherit on
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments on
         shortLabel K562 cyto tot AL
         color 46,0,184
@@ -492,7 +450,6 @@ noInherit on
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
         shortLabel K562 nucl tot AL
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 nucleus)
@@ -507,7 +464,6 @@ noInherit on
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
         shortLabel K562 nlos tot AL
         color 46,0,184
@@ -522,7 +478,6 @@ noInherit on
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
         shortLabel K562 nplm tot AL
         color 46,0,184
@@ -537,7 +492,6 @@ noInherit on
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
         shortLabel K562 psom tot AL
         colorByStrand 46,0,184 238,85,34
@@ -552,7 +506,6 @@ noInherit on
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments on
         shortLabel pros cell tot AL
         color 0,102,136
@@ -567,7 +520,6 @@ noInherit on
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
         shortLabel GM12 cell tot AL
         longLabel ENCODE CSHL RNA-Seq Tags (short in GM12878 cell)
@@ -576,7 +528,6 @@ noInherit on
         color 153,38,0
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562CellShort
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
         shortLabel K562 cell tot AL
         longLabel ENCODE CSHL RNA-Seq Tags (short in K562 cell)

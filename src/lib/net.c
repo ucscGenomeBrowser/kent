@@ -18,6 +18,7 @@
 #include "https.h"
 #include "sqlNum.h"
 #include <utime.h>
+#include "obscure.h"
 
 static char const rcsid[] = "$Id: net.c,v 1.80 2010/04/14 07:42:06 galt Exp $";
 
@@ -1566,7 +1567,7 @@ return TRUE;
 }
 
 
-boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries)
+boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries, boolean newer, boolean progress)
 /* Open multiple parallel connections to URL to speed downloading */
 {
 char *origPath = outPath;
@@ -1578,6 +1579,9 @@ off_t fileSize = 0;
 off_t totalDownloaded = 0;
 ssize_t sinceLastStatus = 0;
 char *dateString = "";
+int star = 1;  
+int starMax = 20;  
+int starStep = 1;
 // TODO handle case-sensitivity of protocols input
 if (startsWith("http://",url) || startsWith("https://",url))
     {
@@ -1630,6 +1634,7 @@ else
     warn("unrecognized protocol: %s", url);
     return FALSE;
     }
+
 
 verbose(2,"fileSize=%lld\n", (long long) fileSize);
 
@@ -1690,6 +1695,44 @@ if (restartable
     }
 else
     {
+
+    if (newer) // only download it if it is newer than what we already have
+	{
+	/* datestamp mtime from last-modified header */
+	struct tm tm;
+	// Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
+	// These strings are always GMT
+	if (strptime(dateString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
+	    {
+	    warn("unable to parse last-modified string [%s]", dateString);
+	    }
+	else
+	    {
+	    time_t t;
+	    // convert to UTC (GMT) time
+	    t = mktimeFromUtc(&tm);
+	    if (t == -1)
+		{
+		warn("mktimeFromUtc failed while converting last-modified string to UTC [%s]", dateString);
+		}
+	    else
+		{
+		// get the file mtime
+		struct stat mystat;
+		ZeroVar(&mystat);
+		if (stat(origPath,&mystat)==0)
+		    {
+		    if (t <= mystat.st_mtime)
+			{
+			verbose(2,"Since nothing newer was found, skipping %s\n", origPath);
+			verbose(3,"t from last-modified = %ld; st_mtime = %ld\n", (long) t, (long)mystat.st_mtime);
+			return TRUE;
+			}
+		    }
+		}
+	    }
+	}
+
     /* make a list of connections */
     for (c = 0; c < numConnections; ++c)
 	{
@@ -1705,6 +1748,16 @@ else
 	slAddHead(&pcList, pc);
 	}
     slReverse(&pcList);
+    }
+
+if (progress)
+    {
+    char nicenumber[1024]="";
+    sprintWithGreekByte(nicenumber, sizeof(nicenumber), fileSize);
+    printf("downloading %s ", nicenumber); fflush(stdout);
+    starStep = fileSize/starMax;
+    if (starStep < 1)
+	starStep = 1;
     }
 
 int out = open(outPath, O_CREAT|O_WRONLY, 0664);
@@ -1730,12 +1783,23 @@ sinceLastStatus = 0;
 
 int retryCount = 0;
 
+time_t startTime = time(NULL);
+
 #define SELTIMEOUT 5
 #define RETRYSLEEPTIME 30    
 while (TRUE)
     {
 
     verbose(2,"Top of big loop\n");
+
+    if (progress)
+	{
+	while (totalDownloaded >= star * starStep)
+	    {
+	    printf("*");fflush(stdout);
+	    ++star;
+	    }
+	}
 
     /* are we done? */
     if (connOpen == 0)
@@ -1986,6 +2050,25 @@ else
 
 /* rename the successful download to the original name */
 rename(outTemp, origPath);
+
+
+
+if (progress)
+    {
+    while (star <= starMax)
+	{
+	printf("*");fflush(stdout);
+	++star;
+	}
+    long timeDiff = (long)(time(NULL) - startTime);
+    if (timeDiff > 0)
+	{
+	printf(" %ld seconds", timeDiff);
+	float mbpersec =  ((totalDownloaded - restartTotalDownloaded)/1000000) / timeDiff;
+	printf(" %0.1f MB/sec", mbpersec);
+	}
+    printf("\n");fflush(stdout);
+    }
 
 if (fileSize != -1 && totalDownloaded != fileSize)
     {

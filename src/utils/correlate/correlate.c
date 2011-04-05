@@ -7,8 +7,10 @@
 
 static char const rcsid[] = "$Id: correlate.c,v 1.1 2010/05/27 05:59:46 kent Exp $";
 
-int xCol = 0;
-int yCol = 1;
+int xCol;	/* Columns used 0 based. */
+int yCol;
+int aCol = 1;	/* Columns used by command line - 1 based */
+int bCol = 2;
 
 void usage()
 /* Explain usage and exit. */
@@ -18,14 +20,14 @@ errAbort(
   "usage:\n"
   "   correlate input.tab\n"
   "options:\n"
-  "   -xCol=N - which is first column to correlate, default 0\n"
-  "   -yCol=N - which is second column to correlate, default 1\n"
+  "   -aCol=N - which is first column to correlate, default 1\n"
+  "   -bCol=N - which is second column to correlate, default 2\n"
   );
 }
 
 static struct optionSpec options[] = {
-   {"xCol", OPTION_INT},
-   {"yCol", OPTION_INT},
+   {"aCol", OPTION_INT},
+   {"bCol", OPTION_INT},
    {NULL, 0},
 };
 
@@ -51,8 +53,10 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
-xCol = optionInt("xCol", xCol);
-yCol = optionInt("yCol", yCol);
+aCol = optionInt("aCol", aCol);
+bCol = optionInt("bCol", bCol);
+xCol = aCol-1;
+yCol = bCol-1;
 correlate(argv[1]);
 return 0;
 }
