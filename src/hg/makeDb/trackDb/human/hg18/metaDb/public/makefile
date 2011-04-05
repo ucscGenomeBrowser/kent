@@ -18,5 +18,7 @@ wgEncodeRikenCage.ra\
 wgEncodeSangerGencode.ra\
 wgEncodeYaleRNAseq.ra\
 wgEncodeCshlLongRnaSeq.ra\
+wgEncodeMapability.ra\
+wgEncodeNhgriBip.ra\
 
 include ../../../../makefile.metaDb
