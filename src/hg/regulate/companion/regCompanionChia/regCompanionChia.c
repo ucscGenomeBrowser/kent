@@ -21,10 +21,30 @@ errAbort(
   "usage:\n"
   "   regCompanionChia output.tab\n"
   "This program actually must be edited and recompiled to change the input, which is\n"
-  "an amazing 8 different files\n"
-
-  "options:\n"
-  "   -xxx=XXX\n"
+  "an amazing 8 different files.  The output is also complex, a table with 23 fields:\n"
+  "  1 - chromosome\n"
+  "  2 - chromosome start - 0 based\n"
+  "  3 - chromosome end - 1 based\n"
+  "  4 - name - unique id for this pair\n"
+  "  5 - score - 0-1000 browser style score\n"
+  "  6 - always the word \"block1\"\n"
+  "  7 - size of block 1\n"
+  "  8 - average DNAse level in block 1\n"
+  "  9 - average H3K4Me3 level in block 1\n"
+  " 10 - average H3K27Ac level in block 1\n"
+  " 11 - average H3K4Me1 level in block 1\n"
+  " 12 - average CTCF level in block 1\n"
+  " 13 - average coverage by +-500 base from txStart promoters in block 1\n"
+  " 14 - average coverage by enhancer in block 1\n"
+  " 15 - always the word \"block2\"\n"
+  " 16 - size of block 2\n"
+  " 17 - average DNAse level in block 2\n"
+  " 18 - average H3K4Me3 level in block 2\n"
+  " 19 - average H3K27Ac level in block 2\n"
+  " 20 - average H3K4Me1 level in block 2\n"
+  " 21 - average CTCF level in block 2\n"
+  " 22 - average coverage by +-500 base from txStart promoters in block 2\n"
+  " 23 - average coverage by enhancer in block 2\n"
   );
 }
 
@@ -49,7 +69,7 @@ struct inInfo inArray[] =
     {
     {"CHIApet", itBlockedBed, "/hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeGisChiaPet/wgEncodeGisChiaPetK562D000005628.bed.gz"},
     {"DNAse", itBigWig, "/hive/users/kent/regulate/companion/dnase/normalized/K562.bw"},
-    {"H3K4Me3", itBigWig, "/hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneK562H3k27me3NormSig.bw"},
+    {"H3K4Me3", itBigWig, "/hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneK562H3k4me3NormSig.bw"},
     {"H3K27Ac", itBigWig, "/hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneK562H3k27acNormSig.bw"},
     {"H3K4Me1", itBigWig, "/hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneK562H3k4me1NormSig.bw"},
     {"CTCF", itBigWig, "/hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneK562CtcfNormSig.bw"},
@@ -302,7 +322,7 @@ struct bed *chia;
 int chiaIx = 0;
 for (chia = chiaList; chia != NULL; chia = chia->next, ++chiaIx)
     {
-    fprintf(f, "%s\t%d\t%d\tchia%d\t%d\t", chia->chrom, chia->chromStart, chia->chromEnd, chiaIx+1, chia->score);
+    fprintf(f, "%s\t%d\t%d\tchia%d\t%d", chia->chrom, chia->chromStart, chia->chromEnd, chiaIx+1, chia->score);
     int blockIx;
     for (blockIx=0; blockIx < 2; ++blockIx)
 	{
