@@ -858,6 +858,17 @@ slReverse(&bedListOut);
 return bedListOut;
 }
 
+struct bed *bedListNextDifferentChrom(struct bed *bedList)
+/* Return next bed in list that is from a different chrom than the start of the list. */
+{
+char *firstChrom = bedList->chrom;
+struct bed *bed;
+for (bed = bedList->next; bed != NULL; bed = bed->next)
+    if (!sameString(firstChrom, bed->chrom))
+        break;
+return bed;
+}
+
 struct bed *bedCommaInN(char **pS, struct bed *ret, int fieldCount)
 /* Create a bed out of a comma separated string looking for fieldCount
  * fields. This will fill in ret if non-null, otherwise will return a

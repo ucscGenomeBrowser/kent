@@ -1068,6 +1068,10 @@ boolean tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
 /* Updates the tdb->priority from cart then sorts the list anew.
    Returns TRUE if priorities obtained from cart */
 
+boolean tdbRefSortPrioritiesFromCart(struct cart *cart, struct slRef **tdbRefList);
+/* Updates the tdb->priority from cart then sorts the list anew.
+   Returns TRUE if priorities obtained from cart */
+
 enum trackVisibility visCompositeViewDefault(struct trackDb *parentTdb,char *view);
 /* returns the default track visibility of particular view within a composite track */
 

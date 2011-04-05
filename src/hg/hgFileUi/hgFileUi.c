@@ -103,6 +103,9 @@ getDbAndGenome(cart, &db, &ignored, NULL);
 char *chrom = cartUsualString(cart, "c", hDefaultChrom(db));
 
 // QUESTION: Do We need track list ???  trackHash ??? Can't we just get one track and no children
+// ANSWER: The way the code is set up now you will get the whole list. This is just to put all 
+// the logic for resolving loading parents and children in one place.  We do occassionally pay the 
+// price of a 200 millisecond delay because of it though - JK.
 trackHash = trackHashMakeWithComposites(db,chrom,&tdbList,FALSE);
 tdb = tdbForTrack(db, track,&tdbList);
 
@@ -121,6 +124,9 @@ if (!tdbIsComposite(tdb) && !tdbIsDownloadsOnly(tdb))
     }
 
 // QUESTION: Do we need superTrack?  If we have lnk to superTrack, then yes.
+// ANSWER: No, you shouldn't need to do this here.  The call that generated the
+// tdbList already took care of this.  -JK
+#ifdef UNNEEDED
 char *super = trackDbGetSupertrackName(tdb);
 if (super)
     {
@@ -130,6 +136,7 @@ if (super)
         trackDbSuperMemberSettings(tdb);
         }
     }
+#endif /* UNNEEDED */
 
 fileUi(cart, tdb, db, chrom, FALSE);
 

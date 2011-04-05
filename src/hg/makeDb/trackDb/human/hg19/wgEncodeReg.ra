@@ -27,7 +27,7 @@ canPack On
     dragAndDrop subTracks
 
         track wgEncodeRegTxnGm12878
-	table wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2
+	table wgEncodeCaltechRnaSeqGm12878R2x75Il200SigPooled
 	shortLabel Gm12878
 	longLabel Transcription of Gm12878 cells from ENCODE
 	parent wgEncodeRegTxn
@@ -35,7 +35,7 @@ canPack On
 	color 255,128,128
 
 	track wgEncodeRegTxnH1hesc
-	table wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2
+	table wgEncodeCaltechRnaSeqH1hescR2x75Il200SigPooled
 	shortLabel H1-hESC
 	longLabel Transcription of H1-hESC cells from ENCODE
 	parent wgEncodeRegTxn
@@ -43,7 +43,7 @@ canPack On
 	color 255,212,128
 
 	track wgEncodeRegTxnHsmm
-	table wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2
+	table wgEncodeCaltechRnaSeqHsmmR2x75Il200SigPooled
 	shortLabel HSMM
 	longLabel Transcription of HSMM cells from ENCODE
 	parent wgEncodeRegTxn
@@ -51,7 +51,7 @@ canPack On
 	color 120,235,204
 
 	track wgEncodeRegTxnHuvec
-	table wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2
+	table wgEncodeCaltechRnaSeqHuvecR2x75Il200SigPooled
 	shortLabel HUVEC
 	longLabel Transcription of HUVEC cells from ENCODE
 	parent wgEncodeRegTxn
@@ -59,7 +59,7 @@ canPack On
 	color 128,212,255
 
 	track wgEncodeRegTxnK562
-	table wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2
+	table wgEncodeCaltechRnaSeqK562R2x75Il200SigPooled
 	shortLabel K562
 	longLabel Transcription of K562 cells from ENCODE
 	parent wgEncodeRegTxn
@@ -67,7 +67,7 @@ canPack On
 	color 128,128,255
 
 	track wgEncodeRegTxnNhek
-	table wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2
+	table wgEncodeCaltechRnaSeqNhekR2x75Il200SigPooled
 	shortLabel NHEK
 	longLabel Transcription of NHEK cells from ENCODE
 	parent wgEncodeRegTxn
@@ -75,7 +75,7 @@ canPack On
 	color 212,128,255
 
 	track wgEncodeRegTxnNhlf
-	table wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2
+	table wgEncodeCaltechRnaSeqNhlfR2x75Il200SigPooled
 	shortLabel NHLF
 	longLabel Transcription of NHLF cells from ENCODE
 	parent wgEncodeRegTxn

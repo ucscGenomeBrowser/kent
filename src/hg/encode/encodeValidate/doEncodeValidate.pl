@@ -1453,12 +1453,12 @@ if (defined($daf->{variables})) {
 
 # make replicate column required when appropriate.
 my $hasReplicates = 0;
-my $maxOrder = 0;
+#my $maxOrder = 0; Removing order for view level as this is not being used for prioritization
 for my $view (keys %{$daf->{TRACKS}}) {
     $hasReplicates += $daf->{TRACKS}{$view}{hasReplicates};
-    if($daf->{TRACKS}{$view}{order} > $maxOrder) {
-        $maxOrder = $daf->{TRACKS}{$view}{order}
-    }
+#    if($daf->{TRACKS}{$view}{order} > $maxOrder) {
+#        $maxOrder = $daf->{TRACKS}{$view}{order}
+#    }
 }
 
 if($hasReplicates) {
@@ -1666,8 +1666,9 @@ if(!@errors) {
             # Make a list of the PlusRawSignal/MinusRawSignal or RawSignals we are going to have to make
             my @newViews = ();
             #push @newViews, "RawSignal" if $daf->{TRACKS}{RawSignal}{order};  ## No longer create RawSignals
-            push @newViews, "PlusRawSignal" if $daf->{TRACKS}{PlusRawSignal}{order};
-            push @newViews, "MinusRawSignal" if $daf->{TRACKS}{MinusRawSignal}{order};
+			# Code is never triggered, but if triggered we no longer use the order field for track prioritization.
+			#push @newViews, "PlusRawSignal" if $daf->{TRACKS}{PlusRawSignal}{order};
+			#push @newViews, "MinusRawSignal" if $daf->{TRACKS}{MinusRawSignal}{order};
 
             foreach my $newView (@newViews) #loop around making them
             {
