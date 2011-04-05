@@ -53,7 +53,7 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     {
     printf("<span id='navDown' style='float:right; display:none;'>");
     // First put up a button to go to File Search
-    printf("<A HREF='hgFileSearch?db=%s' TITLE='Search for other downloadble files ...'>File Search</A>&nbsp;&nbsp;&nbsp;",db);
+    printf("<A HREF='hgFileSearch?db=%s' TITLE='Search for other downloadable files ...'>File Search</A>&nbsp;&nbsp;&nbsp;",db);
 
     // Now link to description
     char *downArrow = "&dArr;";
