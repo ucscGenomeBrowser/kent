@@ -9407,6 +9407,7 @@ priority 500
 # Cricket's special story (11/19/10): in fields.ra we have fragLength
 # and medianFragLength.  fragLength and medianFragLength appear to be
 # redundant, and should be collapsed into fragLength
+# Venkat (4/5/2011): fragLength will be used only for hg18 at the moment, term is retired for hg19, mm9
 
 term fragSize
 type typeOfTerm

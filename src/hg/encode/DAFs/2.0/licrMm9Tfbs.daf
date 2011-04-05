@@ -1,6 +1,6 @@
 # Data Agreement File for LICR ChIP-seq (Transciption Factor Binding Sites) experiments for mm9
 
-#$Revision: 1.13 $
+#$Revision: 1.14 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -31,7 +31,6 @@ dataType          ChipSeq
 variables         cell, antibody,sex,age,strain,control
 compositeSuffix   LicrTfbs
 assembly          mm9
-medianFragmentLength 200
 dafVersion        2.0
 validationSettings validateFiles.bam:mismatches=2,matchFirst=25,nMatch;validateFiles.fastq:quick=1000
 
