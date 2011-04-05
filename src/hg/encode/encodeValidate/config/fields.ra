@@ -89,14 +89,15 @@ required no
 #type int
 #required no
 
+# RETIRING it 4/5/11
 # This is a ChIP-seq variable
 # Cricket wonders if it is redundant with medianFragLength 
 # Cricket wonders how it relates to fragSize
 # This means meadianFragLength and is prefered over the other
-field fragLength
-file ddf
-type int
-required no
+#field fragLength
+#file ddf
+#type int
+#required no
 
 
 # This is a free text field
@@ -266,26 +267,26 @@ file dafHeader
 type string
 required no
 
-#UNRETIRING THIS 9/15/2010 
+#RETIRING 4/5/2011 
 # This is in the DAF and not the DDF
 # It seems to represent the same information as fragLength
 # Is it redundant
 # needs to go
 # The doEncodeValidate relies on this information
-field medianFragmentLength
-file dafHeader
-type int
-required no
+#field medianFragmentLength
+#file dafHeader
+#type int
+#required no
 
-# UNRETIRING THIS 9/15/2010
+# RETIRING 4/5/2011
 # ???????  most likely in Hudson Alpha
 # This comes from creating own signals
 # Necessary for DAF to pass validation
 # Need to look more into its function
-field fragmentLengthRange
-file dafHeader
-type int
-required no
+#field fragmentLengthRange
+#file dafHeader
+#type int
+#required no
 
 # This is where we list things like Freeze date
 # Cricket also wonders if this should be controlled
