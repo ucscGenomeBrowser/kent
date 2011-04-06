@@ -129,7 +129,7 @@ cgiTableField("&nbsp;");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("BED 4 to BED 6 Options");
+cgiTableField("<B>BED 4 to BED 6 Options</B>");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
@@ -158,7 +158,7 @@ cgiTableField("&nbsp;");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("BED 12 Options");
+cgiTableField("<B>BED 12 Options</B>");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
