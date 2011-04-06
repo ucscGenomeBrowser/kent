@@ -67,7 +67,7 @@ return hash;
 void expCreate()
 /* Create table */
 {
-verbose(2, "Creating table \'%s\'\n", table);
+verbose(1, "Creating table \'%s\'\n", table);
 encodeExpTableCreate(connExp, table);
 }
 
@@ -83,31 +83,33 @@ char *key;
 /* create hash of keys for existing experiments so we can distinguish new ones */
 oldExps = expKeyHashFromTable(connExp, table);
 
-verbose(2, "Adding experiments from file \'%s\' to table \'%s\'\n", file, table);
+verbose(1, "Adding experiments from file \'%s\' to table \'%s\'\n", file, table);
 while ((ra = raNextRecord(lf)) != NULL)
     {
     exp = encodeExpFromRa(ra);
     key = encodeExpKey(exp);
     if (hashLookup(oldExps, key) == NULL)
         {
-        verbose(3, "Adding new experiment: %s\n", key);
+        verbose(2, "Adding new experiment: %s\n", key);
         encodeExpAdd(connExp, table, exp);
         }
     else
-        verbose(4, "Old experiment: %s\n", key);
+        verbose(2, "Old experiment: %s\n", key);
     }
 }
 
 void expAcc(int id)
 /* Add accession to an existing experiment (approve it)*/
 {
-encodeExpAddAccession(connExp, table, id);
+char *acc = encodeExpAddAccession(connExp, table, id);
+verbose(1, "Added accession: %s\n", acc);
 }
 
 void expRevoke(int id)
 /* Remove accession to an existing experiment (revoke it)*/
 {
 encodeExpRemoveAccession(connExp, table, id);
+verbose(1, "Revoked accession from id: %d\n", id);
 }
 
 void expShow(int id)
@@ -124,7 +126,7 @@ void expDump(char *file)
 {
 struct encodeExp *exp = NULL, *exps = NULL;
 
-verbose(2, "Dumping table %s to %s\n", table, file);
+verbose(1, "Dumping table %s to %s\n", table, file);
 FILE *f  = mustOpen(file, "w");
 exps = encodeExpLoadAllFromTable(connExp, table);
 while ((exp = slPopHead(&exps)) != NULL)
@@ -135,7 +137,7 @@ carefulClose(&f);
 void expFind(char *assembly, char *file)
 /* Find experiments in metaDb and output .ra file */
 {
-verbose(2, "Finding experiments in %s:%s\n", assembly, mdb);
+verbose(1, "Finding experiments in %s:%s\n", assembly, mdb);
 
 struct sqlConnection *connMeta;
 struct mdbObj *meta = NULL, *metas = NULL;
@@ -212,8 +214,13 @@ int count;
 struct slPair *varPairs = NULL;
 
 /* transform var:val to var=val. Can't use var=val on command-line as it conflicts with standard options processing */
-memSwapChar(expVars, strlen(expVars), ':', '=');
-varPairs = slPairListFromString(expVars,FALSE); // don't expect quoted EDVs which should always be simple tokens.
+if (expVars == NULL)
+    varPairs = NULL;
+else
+    {
+    memSwapChar(expVars, strlen(expVars), ':', '=');
+    varPairs = slPairListFromString(expVars,FALSE); // don't expect quoted EDVs which should always be simple tokens.
+    }
 exps = encodeExpGetFromTable(organism, lab, dataType, cellType, varPairs, table);
 count = slCount(exps);
 verbose(2, "Results: %d\n", count);
@@ -269,7 +276,6 @@ int id = 0;
 optionInit(&argc, argv, options);
 if (argc < 2)
     usage();
-verboseSetLevel(2);
 
 char *command = argv[1];
 table = optionVal("table", sameString(command, "create") ?
@@ -278,7 +284,7 @@ table = optionVal("table", sameString(command, "create") ?
 mdb = optionVal("mdb", MDB_DEFAULT_NAME);
 composite = optionVal("composite", NULL);
 
-verbose(3, "Experiment table name: %s\n", table);
+verbose(2, "Experiment table name: %s\n", table);
 if (sameString("find", command))
     {
     if (argc < 3)
