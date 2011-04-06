@@ -2543,8 +2543,7 @@ include wgEncodeHelicosRnaSeq.ra beta,public
 include wgEncodeHelicosRnaSeq.new.ra alpha
 
 # CSHL short rna-seq (wrangler: braney)
-include wgEncodeCshlShortRnaSeq.ra beta,public
-include wgEncodeCshlShortRnaSeq.new.ra alpha
+include wgEncodeCshlShortRnaSeq.ra
 
 # CSHL long rna-seq (wrangler: braney)
 include wgEncodeCshlLongRnaSeq.ra

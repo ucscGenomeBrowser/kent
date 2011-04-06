@@ -32,7 +32,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in GM12878 cytosol)
         subGroups view=1-Transfrags cellType=GM12878 localization=20-cytosol
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=cytosol view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort fileName=wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -41,7 +40,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in GM12878 nucleus)
         subGroups view=1-Transfrags cellType=GM12878 localization=30-nucleus
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=nucleus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort fileName=wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -50,7 +48,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 chromatin)
         subGroups view=1-Transfrags cellType=K562 localization=50-chromatin
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=chromatin view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags on
@@ -59,7 +56,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 cytosol)
         subGroups view=1-Transfrags cellType=K562 localization=20-cytosol
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=cytosol view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -68,7 +64,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleus)
         subGroups view=1-Transfrags cellType=K562 localization=30-nucleus
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -77,7 +72,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleolus)
         subGroups view=1-Transfrags cellType=K562 localization=60-nucleolus
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleolus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -86,7 +80,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleoplasm)
         subGroups view=1-Transfrags cellType=K562 localization=40-nucleoplasm
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleoplasm view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -95,7 +88,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 polysome)
         subGroups view=1-Transfrags cellType=K562 localization=10-polysome
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=polysome view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsProstateCellShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags on
@@ -104,7 +96,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in prostate cell)
         subGroups view=1-Transfrags cellType=prostate localization=0-cell
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsProstateCellShort fileName=wgEncodeCshlShortRnaSeqTransfragsProstateCellShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -113,7 +104,6 @@ noInherit on
         subGroups view=1-Transfrags cellType=GM12878 localization=0-cell
         type broadPeak
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Jan 2010 Freeze" subId=1056 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort fileName=wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562CellShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -122,13 +112,12 @@ noInherit on
         subGroups view=1-Transfrags cellType=K562 localization=0-cell
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Jan 2010 Freeze" subId=1056 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562CellShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562CellShort.broadPeak.gz
 
     track wgEncodeCshlShortRnaSeqView2-PlusRawSignal
     shortLabel Plus Raw Signal
     view 2-PlusRawSignal
     visibility dense
-        subTrack wgEncodeCshlShortRnaSeq
+    subTrack wgEncodeCshlShortRnaSeq
     viewLimits 0:500
     minLimit 0
     maxLimit 5059134
@@ -148,7 +137,6 @@ noInherit on
         maxLimit 3557599
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=cytosol view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562CytosolShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562ChromatinShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -161,7 +149,6 @@ noInherit on
         maxLimit 5055640
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=chromatin view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562ChromatinShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562PolysomeShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -174,7 +161,6 @@ noInherit on
         maxLimit 25082
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=polysome view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562PolysomeShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CytosolShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal on
@@ -187,7 +173,6 @@ noInherit on
         maxLimit 449639
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short type=wig localization=cytosol view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CytosolShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleoplasmShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -200,7 +185,6 @@ noInherit on
         maxLimit 5059134
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleoplasm view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleoplasmShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalProstateCellShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal on
@@ -213,7 +197,6 @@ noInherit on
         maxLimit 1611371
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short type=wig localization=cell view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalProstateCellShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -226,7 +209,6 @@ noInherit on
         maxLimit 641103
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short type=wig localization=nucleus view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalGm12878NucleusShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -239,7 +221,6 @@ noInherit on
         maxLimit 516729
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleus view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleusShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleolusShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -252,7 +233,6 @@ noInherit on
         maxLimit 968064
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleolus view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleolusShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CellShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -261,7 +241,6 @@ noInherit on
         subGroups view=2-PlusRawSignal cellType=GM12878 localization=0-cell
         type bedGraph 4
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short type=wig localization=cell view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1017 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CellShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562CellShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -270,13 +249,12 @@ noInherit on
         subGroups view=2-PlusRawSignal cellType=K562 localization=0-cell
         type bedGraph 4
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=K562 rnaExtract=short type=wig localization=cell view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1000 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562CellShort
 
     track wgEncodeCshlShortRnaSeqView3-MinusRawSignal
     shortLabel Minus Raw Signal
     view 3-MinusRawSignal
     visibility dense
-        subTrack wgEncodeCshlShortRnaSeq
+    subTrack wgEncodeCshlShortRnaSeq
     viewLimits 0:500
     minLimit 0
     maxLimit 4876484
@@ -296,7 +274,6 @@ noInherit on
         maxLimit 3557416
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=cytosol view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562CytosolShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562ChromatinShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -309,7 +286,6 @@ noInherit on
         maxLimit 3376353
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=chromatin view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562ChromatinShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562PolysomeShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -322,7 +298,6 @@ noInherit on
         maxLimit 203241
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=polysome view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562PolysomeShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CytosolShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal on
@@ -335,7 +310,6 @@ noInherit on
         maxLimit 333231
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short type=wig localization=cytosol view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CytosolShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleoplasmShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -348,7 +322,6 @@ noInherit on
         maxLimit 1595004
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleoplasm view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleoplasmShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalProstateCellShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal on
@@ -361,7 +334,6 @@ noInherit on
         maxLimit 1611371
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short type=wig localization=cell view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalProstateCellShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -374,7 +346,6 @@ noInherit on
         maxLimit 4876484
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short type=wig localization=nucleus view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalGm12878NucleusShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -387,7 +358,6 @@ noInherit on
         maxLimit 768499
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleus view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleusShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleolusShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -400,7 +370,6 @@ noInherit on
         maxLimit 1076632
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleolus view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleolusShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CellShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -409,7 +378,6 @@ noInherit on
         subGroups view=3-MinusRawSignal cellType=GM12878 localization=0-cell
         type bedGraph 4
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short type=wig localization=cell view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1017 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CellShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562CellShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -418,13 +386,12 @@ noInherit on
         subGroups view=3-MinusRawSignal cellType=K562 localization=0-cell
         type bedGraph 4
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=K562 rnaExtract=short type=wig localization=cell view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1000 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562CellShort
 
     track wgEncodeCshlShortRnaSeqView4-Alignments
     shortLabel Alignments
     view 4-Alignments
     visibility dense
-        subTrack wgEncodeCshlShortRnaSeq
+    subTrack wgEncodeCshlShortRnaSeq
 
         track wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments on
@@ -439,7 +406,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in GM12878 cytosol)
         subGroups view=4-Alignments cellType=GM12878 localization=20-cytosol
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=cytosol view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort fileName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -454,7 +420,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in GM12878 nucleus)
         subGroups view=4-Alignments cellType=GM12878 localization=30-nucleus
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=nucleus view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort fileName=wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -469,7 +434,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 chromatin)
         subGroups view=4-Alignments cellType=K562 localization=50-chromatin
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=chromatin view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments on
@@ -484,7 +448,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 cytosol)
         subGroups view=4-Alignments cellType=K562 localization=20-cytosol
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=cytosol view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -499,7 +462,6 @@ noInherit on
         showDiffBasesMaxZoom 10000.0
         subGroups view=4-Alignments cellType=K562 localization=30-nucleus
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleus view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -514,7 +476,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 nucleolus)
         subGroups view=4-Alignments cellType=K562 localization=60-nucleolus
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleolus view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -529,7 +490,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 nucleoplasm)
         subGroups view=4-Alignments cellType=K562 localization=40-nucleoplasm
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleoplasm view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -544,7 +504,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 polysome)
         subGroups view=4-Alignments cellType=K562 localization=10-polysome
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=polysome view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments on
@@ -559,7 +518,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in prostate cell)
         subGroups view=4-Alignments cellType=prostate localization=0-cell
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort fileName=wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -568,7 +526,6 @@ noInherit on
         subGroups view=4-Alignments cellType=GM12878 localization=0-cell
         type bigBed 6
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=1017 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort fileName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562CellShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -577,6 +534,5 @@ noInherit on
         subGroups view=4-Alignments cellType=K562 localization=0-cell
         type bigBed 6
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=K562 rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=1000 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562CellShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562CellShort.tagAlign.gz
 
 
