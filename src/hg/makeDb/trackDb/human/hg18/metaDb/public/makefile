@@ -22,5 +22,6 @@ wgEncodeMapability.ra\
 wgEncodeNhgriBip.ra\
 wgEncodeNhgriNRE.ra\
 wgEncodeCshlShortRnaSeq.ra\
+wgEncodeGisDnaPet.ra\
 
 include ../../../../makefile.metaDb
