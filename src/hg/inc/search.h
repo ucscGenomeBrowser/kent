@@ -44,4 +44,14 @@ struct slPair *mdbSelectPairs(struct cart *cart,enum searchTab selectedTab, stru
 char *mdbSelectsHtmlRows(struct sqlConnection *conn,struct slPair *mdbSelects, struct slPair *mdbVars,int cols,boolean fileSearch);
 // generates the html for the table rows containing mdb var and val selects.  Assume tableSearch unless fileSearch
 
+boolean searchNameMatches(struct trackDb *tdb, struct slName *wordList);
+// returns TRUE if all words in preparsed list matches short or long label
+// A "word" can be "multiple words" (parsed from quoteed string).
+
+boolean searchDescriptionMatches(struct trackDb *tdb, struct slName *wordList);
+// returns TRUE if all words in preparsed list matches html description page.
+// A "word" can be "multiple words" (parsed from quoteed string).
+// Because description contains html, quoted string match has limits.
+// DANGER: this will alter html of tdb struct (replacing \n with ' ', so the html should not be displayed after.
+
 #endif /* SEARCH_H */

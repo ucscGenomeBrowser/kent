@@ -5,14 +5,14 @@
 
 #ENCODE experiments
 CREATE TABLE encodeExp (
-    ix int not null,	# auto-increment ID
-    organism varchar(255) not null,	# human | mouse
-    accession varchar(255) not null,	# wgEncodeE[H|M]00000N
-    lab varchar(255) not null,	# lab name from ENCODE cv.ra
+    ix int auto_increment,	        # auto-increment ID
+    organism varchar(255) not null,	# human or mouse
+    lab varchar(255) not null,	        # lab name from ENCODE cv.ra
     dataType varchar(255) not null,	# dataType from ENCODE cv.ra
     cellType varchar(255) not null,	# cellType from ENCODE cv.ra
-    factors varchar(255) not null,	# var=value list of experiment-defining variables
-    lastUpdated varchar(255) not null,	# auto-update timestamp
+    expVars varchar(255),	        # var=value list of experiment-defining variables. May be NULL if none.
+    accession varchar(255),	        # wgEncodeE[H|M]00000N or NULL if proposed but not yet approved
+    updateTime timestamp default now() on update now(),  # last update date-time
               #Indices
     PRIMARY KEY(ix)
 );
