@@ -4,17 +4,19 @@
 # Notes:
 #       - Track Long Label:  DNaseI Digital Genomic Footprinting from ENCODE/University of Washington
 #	- Track Short Label: UW DNaseI DGF
-#       - View Long Labels: [cell] DNaseI DGF [view] from ENCODE/UW
+#       - View Long Labels: [cell] DNaseI DGF [view] from ENCODE/UW 
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier.
-#       - Default Tracks on: Peaks,Hotspots,Signals for 1 and 2 replicates for K562 and GM12878 Cell Lines.
+#       - Default Tracks on: Peaks,Hotspots,Signals for 1 and 2 replicates for K562 and GM12878 Cell Lines. 
 #	- Default View selections
-#		- Hotspots = pack
-#		- Peaks = pack
+#		- Hotspots = hide
+#		- Peaks = hide
 #		- Signal = full
 #		- Raw Signal = hide
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
-#       - Short Labels:
-#               Template: [cell] [view]
+#       - Short Labels: 
+#               Template: [cell] [view] 
+#               - Cell: Abbreviations for cells
+#                       - SK-N-SH_RA = SKRA
 #               - Views: For consistency sake view will be:
 #			- Hot Spots = Hspt
 #                       - Peaks = Pk
@@ -29,21 +31,21 @@ longLabel DNaseI Digital Genomic Footprinting from ENCODE/University of Washingt
 group regulation
 #subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=RawSignal
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=Raw_Signal
-subGroup2 cellType Cell_Line 1K562=K562&nbsp;(Tier_1) 2HepG2=HepG2&nbsp;(Tier_2) GM06990=GM06990 H7es=H7-hESC HAE=HAEpiC HCPE=HCPEpiC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad NHDF-Ad=NHDF-Ad SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
-dimensions dimensionX=cellType
+subGroup2 cellType Cell_Line 1K562=K562&nbsp;(Tier_1) 2HepG2=HepG2&nbsp;(Tier_2) AOAF=AoAF GM06990=GM06990 H7es=H7-hESC HAE=HAEpiC HCPE=HCPEpiC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC NHA=NH-A NHDF-Ad=NHDF-Ad SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
+dimensions dimensionY=cellType
 sortOrder cellType=+ view=+
+fileSortOrder cell=Cell_Line view=View origAssembly=Assembly<BR>originally<BR>mapped<BR>to geoSampleAccession=GEO<BR>Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 priority 5
 type bed 3
-dataVersion through the ENCODE Jun 2010 Freeze
 wgEncode 1
 
     track wgEncodeUwDgfViewHotspots
     shortLabel Hotspots
     view Hotspots
-    visibility pack
+    visibility hide
     parent wgEncodeUwDgf
     pValueFilter 0.0
     pValueFilterLimits 1:324
@@ -62,14 +64,14 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel SK-N-SH_RA Hspt
+        shortLabel SKRA Hspt
         longLabel SK-N-SH_RA DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=SKNSHRA
         type broadPeak
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Hotspots
-        parent wgEncodeUwDgfViewHotspots
+        parent wgEncodeUwDgfViewHotspots off
         shortLabel HepG2 Hspt
         longLabel HepG2 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=2HepG2
@@ -78,7 +80,7 @@ wgEncode 1
         # subId=1814 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfK562Hotspots
-        parent wgEncodeUwDgfViewHotspots
+        parent wgEncodeUwDgfViewHotspots off
         shortLabel K562 Hspt
         longLabel K562 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=1K562
@@ -150,11 +152,74 @@ wgEncode 1
         type broadPeak
         # subId=2051 dateSubmitted=2010-07-25
 
+        track wgEncodeUwDgfAoafHotspots
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel AoAF Hspt
+        longLabel AoAF DNaseI DGF Hotspots from ENCODE/UW
+        subGroups view=Hotspots cellType=AOAF
+        type broadPeak
+        origAssembly hg19
+        # subId=3191 dateSubmitted=2011-01-07
+
+        track wgEncodeUwDgfHpafHotspots
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel HPAF Hspt
+	longLabel HPAF DNaseI DGF Hotspots from ENCODE/UW
+        subGroups view=Hotspots cellType=HPAF
+        type broadPeak
+        origAssembly hg19
+        # subId=3193 dateSubmitted=2011-01-07
+
+        track wgEncodeUwDgfHpdlfHotspots
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel HPdLF Hspt
+        longLabel HPdLf DNaseI DGF Hotspots from ENCODE/UW
+        subGroups view=Hotspots cellType=HPdLF
+        type broadPeak
+        origAssembly hg19
+        # subId=3194 dateSubmitted=2011-01-07
+
+        track wgEncodeUwDgfHpfHotspots
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel HPF Hspt
+        longLabel HPF DNaseI DGF Hotspots from ENCODE/UW
+        subGroups view=Hotspots cellType=HPF
+        type broadPeak
+        origAssembly hg19
+        # subId=3196 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfHrceHotspots
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel HRCEpiC Hspt
+        longLabel HRCEpiC DNaseI DGF Hotspots from ENCODE/UW
+        subGroups view=Hotspots cellType=HRCE
+        type broadPeak
+        origAssembly hg19
+        # subId=3197 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfNhaHotspots
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel NH-A Hspt
+        longLabel NH-A DNaseI DGF Hotspots from ENCODE/UW
+        subGroups view=Hotspots cellType=NHA
+        type broadPeak
+        origAssembly hg19
+        # subId=3198 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfSaecHotspots
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel SAEC Hspt
+        longLabel SAEC DNaseI DGF Hotspots from ENCODE/UW
+        subGroups view=Hotspots cellType=SAEC
+        type broadPeak
+        origAssembly hg19
+        # subId=3199 dateSubmitted=2011-01-08
+
 
     track wgEncodeUwDgfViewPeaks
     shortLabel Peaks
     view Peaks
-    visibility pack
+    visibility hide
     parent wgEncodeUwDgf
     pValueFilter 0.0
     pValueFilterLimits 1:324
@@ -173,14 +238,14 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraPk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel SK-N-SH_RA Pk
+        shortLabel SKRA Pk
         longLabel SK-N-SH_RA DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=SKNSHRA
         type narrowPeak
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Pk
-        parent wgEncodeUwDgfViewPeaks
+        parent wgEncodeUwDgfViewPeaks off
         shortLabel HepG2 Pk
         longLabel HepG2 DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=2HepG2
@@ -189,7 +254,7 @@ wgEncode 1
         # subId=1814 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfK562Pk
-        parent wgEncodeUwDgfViewPeaks
+        parent wgEncodeUwDgfViewPeaks off
         shortLabel K562 Pk
         longLabel K562 DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=1K562
@@ -205,61 +270,131 @@ wgEncode 1
         type narrowPeak
         # subId=1816 dateSubmitted=2010-06-21
 
-        track wgEncodeUwDgfSkmcPk
+        track wgEncodeUwDgfAoafPk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel SKMC Pk
-        longLabel SKMC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
-        subGroups view=Peaks cellType=SKMC
+        shortLabel AoAF Pk
+        longLabel AoAF DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
+        subGroups view=Peaks cellType=AOAF
         type narrowPeak
-        # subId=2045 dateSubmitted=2010-07-25
+        origAssembly hg19
+        # subId=3191 dateSubmitted=2011-01-07
 
-        track wgEncodeUwDgfNhdfadPk
+        track wgEncodeUwDgfHpafPk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel NHDF-Ad Pk
-        longLabel NHDF-Ad DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
-        subGroups view=Peaks cellType=NHDF-Ad
+        shortLabel HPAF Pk
+        longLabel HPAF DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
+        subGroups view=Peaks cellType=HPAF
         type narrowPeak
-        # subId=2046 dateSubmitted=2010-07-25
+        origAssembly hg19
+        # subId=3193 dateSubmitted=2011-01-07
 
-        track wgEncodeUwDgfH7esPk
+        track wgEncodeUwDgfHpdlfPk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel H7-hESC Pk
-        longLabel H7-hESC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
-        subGroups view=Peaks cellType=H7es
+        shortLabel HPdLF Pk
+        longLabel HPdLF DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
+        subGroups view=Peaks cellType=HPdLF
         type narrowPeak
-        # subId=2047 dateSubmitted=2010-07-25
+        origAssembly hg19
+        # subId=3194 dateSubmitted=2011-01-07
 
-        track wgEncodeUwDgfHaePk
+        track wgEncodeUwDgfHpfPk
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel HPF Pk
+        longLabel HPF DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
+        subGroups view=Peaks cellType=HPF
+        type narrowPeak
+        origAssembly hg19
+        # subId=3196 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfHrcePk
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel HRCEpiC Pk
+        longLabel HRCEpiC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
+        subGroups view=Peaks cellType=HRCE
+        type narrowPeak
+        origAssembly hg19
+        # subId=3197 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfNhaPk
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel NH-A Pk
+        longLabel NH-A DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
+        subGroups view=Peaks cellType=NHA
+        type narrowPeak
+        origAssembly hg19
+        # subId=3198 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfSaecPk
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel SAEC Pk
+        longLabel SAEC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
+        subGroups view=Peaks cellType=SAEC
+        type narrowPeak
+        origAssembly hg19
+        # subId=3199 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfHaePkV2
         parent wgEncodeUwDgfViewPeaks off
         shortLabel HAEpiC Pk
         longLabel HAEpiC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=HAE
         type narrowPeak
-        # subId=2048 dateSubmitted=2010-07-25
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
 
-        track wgEncodeUwDgfHmfPk
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel HMF Pk
-        longLabel HMF DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
-        subGroups view=Peaks cellType=HMF
-        type narrowPeak
-        # subId=2049 dateSubmitted=2010-07-25
-
-        track wgEncodeUwDgfHcpePk
+        track wgEncodeUwDgfHcpePkV2
         parent wgEncodeUwDgfViewPeaks off
         shortLabel HCPEpiC Pk
         longLabel HCPEpiC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=HCPE
         type narrowPeak
-        # subId=2050 dateSubmitted=2010-07-25
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
 
-        track wgEncodeUwDgfHmvecdbladPk
+        track wgEncodeUwDgfH7esPkV2
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel H7-hESC Pk
+        longLabel H7-hESC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
+        subGroups view=Peaks cellType=H7es
+        type narrowPeak
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDgfHmfPkV2
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel HMF Pk
+        longLabel HMF DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
+        subGroups view=Peaks cellType=HMF
+        type narrowPeak
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDgfHmvecdbladPkV2
         parent wgEncodeUwDgfViewPeaks off
         shortLabel HMVEC-dBl-Ad Pk
         longLabel HMVEC-dBl-Ad DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=HMVECdBlAd
         type narrowPeak
-        # subId=2051 dateSubmitted=2010-07-25
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDgfNhdfadPkV2
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel NHDF-Ad Pk
+        longLabel NHDF-Ad DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
+        subGroups view=Peaks cellType=NHDF-Ad
+        type narrowPeak
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDgfSkmcPkV2
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel SKMC Pk
+        longLabel SKMC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
+        subGroups view=Peaks cellType=SKMC
+        type narrowPeak
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
 
 
     track wgEncodeUwDgfViewSignal
@@ -267,12 +402,12 @@ wgEncode 1
     view Signal
     visibility full
     parent wgEncodeUwDgf
-    viewLimits 2:30
+    viewLimits 2:20
     minLimit 1
     maxLimit 70530
     autoScale off
     maxHeightPixels 100:32:16
-    windowingFunction maximum
+    windowingFunction mean+whiskers
 
         track wgEncodeUwDgfGm06990Sig
         parent wgEncodeUwDgfViewSignal off
@@ -284,14 +419,14 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraSig
         parent wgEncodeUwDgfViewSignal off
-        shortLabel SK-N-SH_RA Sig
+        shortLabel SKRA Sig
         longLabel SK-N-SH_RA DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=SKNSHRA
         type bigWig 1.000000 6713.000000
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Sig
-        parent wgEncodeUwDgfViewSignal
+        parent wgEncodeUwDgfViewSignal 
         shortLabel HepG2 Sig
         longLabel HepG2 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=2HepG2
@@ -372,6 +507,69 @@ wgEncode 1
         type bigWig 1.000000 34767.000000
         # subId=2051 dateSubmitted=2010-07-25
 
+        track wgEncodeUwDgfAoafSig
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel AoAF Sig
+        longLabel AoAF DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=Signal cellType=AOAF
+        type bigWig 1.000000 87444.000000
+        origAssembly hg19
+        # subId=3191 dateSubmitted=2011-01-07
+
+        track wgEncodeUwDgfHpafSig
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel HPAF Sig
+        longLabel HPAF DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=Signal cellType=HPAF
+        type bigWig 1.000000 32861.000000
+        origAssembly hg19
+        # subId=3193 dateSubmitted=2011-01-07
+
+        track wgEncodeUwDgfHpdlfSig
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel HPdLF Sig
+        longLabel HPdLF DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=Signal cellType=HPdLF
+        type bigWig 1.000000 100346.000000
+        origAssembly hg19
+        # subId=3194 dateSubmitted=2011-01-07
+
+        track wgEncodeUwDgfHpfSig
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel HPF Sig
+        longLabel HPF DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=Signal cellType=HPF
+        type bigWig 1.000000 64718.000000
+        origAssembly hg19
+        # subId=3196 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfHrceSig
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel HRCEpiC Sig
+        longLabel HRCEpiC DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=Signal cellType=HRCE
+        type bigWig 1.000000 20839.000000
+        origAssembly hg19
+        # subId=3197 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfNhaSig
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel NH-A Sig
+        longLabel NH-A DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=Signal cellType=NHA
+        type bigWig 1.000000 30394.000000
+        origAssembly hg19
+        # subId=3198 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfSaecSig
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel SAEC Sig
+        longLabel SAEC DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=Signal cellType=SAEC
+        type bigWig 1.000000 42565.000000
+        origAssembly hg19
+        # subId=3199 dateSubmitted=2011-01-08
+
 
     track wgEncodeUwDgfViewzRaw
     shortLabel RawSignal
@@ -383,11 +581,11 @@ wgEncode 1
     maxLimit 218367.00
     autoScale off
     maxHeightPixels 100:32:16
-    windowingFunction maximum
+    windowingFunction mean+whiskers
 
         track wgEncodeUwDgfGm06990Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel GM06990 Raw
+        shortLabel GM06990 Raw 
         longLabel GM06990 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=GM06990
         type bigWig 1.000000 57178.000000
@@ -395,7 +593,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel SK-N-SH_RA Raw
+        shortLabel SKRA Raw
         longLabel SK-N-SH_RA DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=SKNSHRA
         type bigWig 1.000000 36298.000000
@@ -411,7 +609,7 @@ wgEncode 1
         # subId=1814 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfK562Raw
-        parent wgEncodeUwDgfViewzRaw
+        parent wgEncodeUwDgfViewzRaw off
         shortLabel K562 Raw
         longLabel K562 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=1K562
@@ -482,5 +680,68 @@ wgEncode 1
         subGroups view=zRaw cellType=HMVECdBlAd
         type bigWig 1.000000 145895.000000
         # subId=2051 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfAoafRaw
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel AoAF Raw
+        longLabel AoAF DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=zRaw cellType=AOAF
+        type bigWig 1.000000 357614.000000
+        origAssembly hg19
+        # subId=3191 dateSubmitted=2011-01-07
+
+        track wgEncodeUwDgfHpafRaw
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel HPAF Raw
+        longLabel HPAF DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=zRaw cellType=HPAF
+        type bigWig 1.000000 193977.000000
+        origAssembly hg19
+        # subId=3193 dateSubmitted=2011-01-07
+
+        track wgEncodeUwDgfHpdlfRaw
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel HPdLF Raw
+        longLabel HPdLF DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=zRaw cellType=HPdLF
+        type bigWig 1.000000 377118.000000
+        origAssembly hg19
+        # subId=3194 dateSubmitted=2011-01-07
+
+        track wgEncodeUwDgfHpfRaw
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel HPF Raw
+        longLabel HPF DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=zRaw cellType=HPF
+        type bigWig 1.000000 212413.000000
+        origAssembly hg19
+        # subId=3196 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfHrceRaw
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel HRCEpiC Raw
+        longLabel HRCEpiC DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=zRaw cellType=HRCE
+        type bigWig 1.000000 98766.000000
+        origAssembly hg19
+        # subId=3197 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfNhaRaw
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel NH-A Raw
+        longLabel NH-A DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=zRaw cellType=NHA
+        type bigWig 1.000000 177826.000000
+        origAssembly hg19
+        # subId=3198 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfSaecRaw
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel SAEC Raw
+        longLabel SAEC DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=zRaw cellType=SAEC
+        type bigWig 1.000000 119372.000000
+        origAssembly hg19
+        # subId=3199 dateSubmitted=2011-01-08
 
 
