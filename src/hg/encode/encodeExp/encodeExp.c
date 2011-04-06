@@ -30,6 +30,7 @@ errAbort(
   "   find <db> <exp.ra>	find unassigned experiments in metaDb and create .ra to file\n"
   "   id human|mouse <lab> <dataType> <cellType> [<vars>]\n"
   "			return id for experiment (vars as 'var1:val1 var2:val2')\n"
+  "   rename <newTable> rename table and update triggers\n"
   "options:\n"
   "   -composite	limit to specified composite track (affects find)\n"
   "   -mdb		specify metaDb table name (default \'%s\') - for test use \n"
@@ -48,6 +49,7 @@ static struct optionSpec options[] = {
 struct sqlConnection *connExp = NULL;
 char *composite = NULL, *mdb = NULL, *table = NULL;
 char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *expVars = NULL;
+char *newTable = NULL;
 
 static struct hash *expKeyHashFromTable(struct sqlConnection *conn, char *table)
 /* create hash of keys for existing experiments so we can distinguish new ones */
@@ -231,6 +233,12 @@ if (count > 1)
 printf("%d\n", exps->ix);
 }
 
+void expRenameTable()
+/* Rename table and update history table triggers */
+{
+encodeExpTableRename(connExp, table, newTable);
+}
+
 int encodeExp(char *command, char *file, char *assembly, int id)
 /* manage ENCODE experiments table */
 {
@@ -257,6 +265,8 @@ else if (sameString(command, "find"))
     expFind(assembly, file);
 else if (sameString(command, "id"))
     expId();
+else if (sameString(command, "rename"))
+    expRenameTable();
 else
     {
     errAbort("ERROR: Unknown command %s\n", command);
@@ -342,6 +352,14 @@ else if (sameString("acc", command) || sameString("revoke", command) || sameStri
         if (id < 1)
             errAbort("ERROR: Bad id %d\n", id);
         }
+    }
+else if (sameString("rename", command))
+    {
+    if (argc < 3)
+        errAbort("ERROR: Missing new tablename\n");
+    if (argc != 3)
+        usage();
+    newTable = argv[2];
     }
 encodeExp(command, file, assembly, id);
 return 0;

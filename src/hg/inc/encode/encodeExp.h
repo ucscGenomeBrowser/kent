@@ -122,6 +122,9 @@ void encodeExpFieldIndex(char *fieldName);
 void encodeExpTableCreate(struct sqlConnection *conn, char *table);
 /* Create an encodeExp table */
 
+void encodeExpTableRename(struct sqlConnection *conn, char *tableName, char *newTableName);
+/* Rename table and history table, updating triggers to match */
+
 struct encodeExp *encodeExpLoadAllFromTable(struct sqlConnection *conn, char *table);
 /* Load all encodeExp in table */
 
@@ -199,7 +202,7 @@ void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,
    and only for non-accessioned experiments */
 
 void encodeExpUpdateExpVars(struct sqlConnection *conn, char *tableName,
-                                char *accession, struct slPair *varPairs);
+                                int  id, struct slPair *varPairs);
 /* Update expVars in encodeExp identified by accession */
 
 #endif /* ENCODEEXP_H */
