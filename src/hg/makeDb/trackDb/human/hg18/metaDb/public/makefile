@@ -20,5 +20,6 @@ wgEncodeYaleRNAseq.ra\
 wgEncodeCshlLongRnaSeq.ra\
 wgEncodeMapability.ra\
 wgEncodeNhgriBip.ra\
+wgEncodeNhgriNRE.ra\
 
 include ../../../../makefile.metaDb
