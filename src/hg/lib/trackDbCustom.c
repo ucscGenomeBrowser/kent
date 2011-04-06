@@ -594,7 +594,6 @@ tdbMarkAsSuperTrackChild(tdb);
 if(tdb->parent)
     {
     tdbMarkAsSuperTrack(tdb->parent);
-    refAddUnique(&(tdb->parent->children),tdb);
     }
 freeMem(stInfo);
 }
@@ -631,7 +630,6 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         tdb->isShow = stInfo->isShow;
         if (!hashLookup(superHash, tdb->track))
             hashAdd(superHash, maybeSkipHubPrefix(tdb->track), tdb);
-        tdb->children = NULL; // assertable?
         }
     freeMem(stInfo);
     }
@@ -758,14 +756,14 @@ char *trackDbSettingByView(struct trackDb *tdb, char *name)
 {
 if (tdb->parent == NULL)
     return NULL;
-return trackDbSettingClosestToHome(tdb->parent, name);
+return trackDbSetting(tdb->parent, name);
 }
 
 
 char *trackDbSettingClosestToHomeOrDefault(struct trackDb *tdb, char *name, char *defaultVal)
 /* Look for a trackDb setting (or default) from lowest level on up chain of parents. */
 {
-char *trackSetting = trackDbSettingClosestToHome(tdb,name);
+char *trackSetting = trackDbSetting(tdb,name);
 if(trackSetting == NULL)
     trackSetting = defaultVal;
 return trackSetting;
@@ -774,7 +772,7 @@ return trackSetting;
 boolean trackDbSettingClosestToHomeOn(struct trackDb *tdb, char *name)
 /* Return true if a tdb setting closest to home is "on" "true" or "enabled". */
 {
-char *setting = trackDbSettingClosestToHome(tdb,name);
+char *setting = trackDbSetting(tdb,name);
 return  (setting && (   sameWord(setting,"on")
                      || sameWord(setting,"true")
                      || sameWord(setting,"enabled")

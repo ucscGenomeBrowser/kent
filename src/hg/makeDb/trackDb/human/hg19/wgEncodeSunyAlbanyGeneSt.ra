@@ -1,7 +1,7 @@
 track wgEncodeSunyAlbanyGeneSt
 compositeTrack on
 shortLabel SUNY RIP GeneST 
-longLabel RNA Binding Protein Associated RNA by RIP-chip RIP-chip GeneST from ENCODE/SUNY Albany 
+longLabel RNA Binding Protein Associated RNA by RIP-chip GeneST from ENCODE/SUNY Albany 
 group regulation
 superTrack wgEncodeRbpSuper dense
 subGroup1 view Views RbpAssocRna=Rbp_Assoc_Rna

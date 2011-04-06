@@ -1,7 +1,7 @@
 /* Track search code used by hgTracks CGI */
 
 #include "common.h"
-#include "searchTracks.h"
+#include "search.h"
 #include "hCommon.h"
 #include "memalloc.h"
 #include "obscure.h"
@@ -300,8 +300,6 @@ int numMetadataNonEmpty = slCount(mdbPairs);
                                    (isEmpty(descSearch) || isDescriptionMatch(subTrack, descWords, descWordCount)) &&
                                    (!numMetadataNonEmpty || hashLookup(matchingTracks, subTrack->track) != NULL))
                                     {
-                                    // XXXX to parent hash. - use tdb->parent instead.
-                                    //hashAdd(parents, subTrack->track, track);
                                     if (track != NULL)
                                         {
                                         tracksFound++;
@@ -545,25 +543,6 @@ else
     // be done with json
     hWrites(jsonTdbSettingsUse(&jsonTdbVars));
     }
-#ifdef OMIT
-if(!doSearch)
-    {
-    hPrintf("<p><b>Recently Done</b><ul>\n"
-        "<li>Can now page through found tracks 100 at a time.</li>"
-        "<li>Added <IMG SRC='../images/folderWrench.png'> icon for contqainers with a configuration link.  Is this okay?</li>"
-        "<li>SuperTracks can now be found.</li>"
-        "<li>Configuration of superTrack children's vis should result in proper superTrack reshaping. (This is really an hgTrackUi feature.)</li>"
-        "<li>Added sort toggle: Relevance, Alphabetically or by Hierarchy.</li>"
-        "<li>Composite/view visibilites in hgTrackUi get reshaped to reflect found/selected subtracks.  (In demo1: only default state composites; demo2: all composites.)</li>"
-        "<li>Non-data 'container' tracks (composites and supertracks) have '*' to mark them, and can be configured before displaying.  Better suggestions?</li>"
-        "</ul></p>"
-        "<p><b>Suggested improvments:</b><ul>\n"
-        "<li>The metadata values will not be white-listed, but it would be nice to have more descriptive text for them.  A short label added to cv.ra?</li>"
-        "<li>Look and feel of found track list (here) and composite subtrack list (hgTrackUi) should converge.  Jim suggests look and feel of hgTracks 'Configure Tracks...' list instead.</li>"
-        "<li>Drop-down list of terms (cells, antibodies, etc.) should be multi-select with checkBoxes as seen in filterComposites. Perhaps saved for v2.0.</li>"
-        "</ul></p>\n");
-    }
-#endif///def OMIT
 hPrintf("</div>"); // This div allows the clear button to empty it
 }
 
@@ -598,9 +577,6 @@ boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search") 
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 int tracksFound = 0;
-#ifdef ONE_FUNC
-struct hash *parents = newHash(4);
-#endif///def ONE_FUNC
 struct trix *trix;
 char trixFile[HDB_MAX_PATH_STRING];
 char **descWords = NULL;
@@ -745,9 +721,9 @@ if (selectedTab==advancedTab && typeSearch)
 struct slPair *mdbSelects = NULL;
 if(metaDbExists)
     {
-    struct slPair *mdbVars = mdbVarsRelevant(conn);
+    struct slPair *mdbVars = mdbVarsSearchable(conn,TRUE,FALSE); // Tables but not file only objects
     mdbSelects = mdbSelectPairs(cart,selectedTab, mdbVars);
-    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols);
+    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols,FALSE);  // not a fileSearch
     if (output)
         {
         puts(output);
@@ -817,9 +793,9 @@ if (selectedTab==filesTab && fileTypeSearch)
 // mdb selects
 if(metaDbExists)
     {
-    struct slPair *mdbVars = mdbVarsRelevant(conn);
+    struct slPair *mdbVars = mdbVarsSearchable(conn,TRUE,FALSE); // Tables but not file only objects
     mdbSelects = mdbSelectPairs(cart,selectedTab, mdbVars);
-    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols);
+    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,colsFALSE);  // not a fileSearch
     if (output)
         {
         puts(output);

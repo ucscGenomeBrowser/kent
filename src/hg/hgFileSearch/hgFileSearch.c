@@ -10,7 +10,7 @@
 #include "hCommon.h"
 #include "hui.h"
 #include "fileUi.h"
-#include "searchTracks.h"
+#include "search.h"
 #include "cart.h"
 #include "grp.h"
 
@@ -435,9 +435,9 @@ if (selectedTab==filesTab && fileTypeSearch)
 struct slPair *mdbSelects = NULL;
 if(metaDbExists)
     {
-    struct slPair *mdbVars = mdbVarsRelevant(conn);
+    struct slPair *mdbVars = mdbVarsSearchable(conn,FALSE,TRUE); // Not tables, just files
     mdbSelects = mdbSelectPairs(cart,selectedTab, mdbVars);
-    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols);
+    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols,TRUE); // restricted to file search
     if (output)
         {
         puts(output);

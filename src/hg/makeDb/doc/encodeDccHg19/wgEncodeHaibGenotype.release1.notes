@@ -11,8 +11,8 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
-    Tables: 86
-    Files: 89
+    Tables: 88
+    Files: 93
     Gbdbs: 0
 
 A) Untouched Tables (0):
@@ -23,7 +23,7 @@ B) Deprecated tables (0):
 
 B') Deprecated files (0 downloadables, 0 gbdbs):
 
-C) New tables (86):
+C) New tables (88):
 wgEncodeHaibGenotypeA549RegionsRep1
 wgEncodeHaibGenotypeAg04449RegionsRep1
 wgEncodeHaibGenotypeAg04450RegionsRep2
@@ -40,6 +40,7 @@ wgEncodeHaibGenotypeChorionRegionsRep1
 wgEncodeHaibGenotypeCmkRegionsRep2
 wgEncodeHaibGenotypeGm06990RegionsRep1
 wgEncodeHaibGenotypeGm12878RegionsRep1
+wgEncodeHaibGenotypeGm12878RegionsRep2
 wgEncodeHaibGenotypeGm12891RegionsRep2
 wgEncodeHaibGenotypeGm12892RegionsRep2
 wgEncodeHaibGenotypeGm19239RegionsRep1
@@ -55,6 +56,7 @@ wgEncodeHaibGenotypeHcpeRegionsRep2
 wgEncodeHaibGenotypeHeeRegionsRep2
 wgEncodeHaibGenotypeHek293RegionsRep2
 wgEncodeHaibGenotypeHelas3RegionsRep2
+wgEncodeHaibGenotypeHepg2RegionsRep1
 wgEncodeHaibGenotypeHipeRegionsRep1
 wgEncodeHaibGenotypeHipeRegionsRep2
 wgEncodeHaibGenotypeHl60RegionsRep1
@@ -68,15 +70,15 @@ wgEncodeHaibGenotypeHreRegionsRep1
 wgEncodeHaibGenotypeHreRegionsRep2
 wgEncodeHaibGenotypeHrpeRegionsRep1
 wgEncodeHaibGenotypeHrpeRegionsRep2
-wgEncodeHaibGenotypeHsmmRegionsRep2
 wgEncodeHaibGenotypeHsmmRegionsRep3
-wgEncodeHaibGenotypeHsmmRegionsRep6
+wgEncodeHaibGenotypeHsmmtRegionsRep2
 wgEncodeHaibGenotypeHtr8RegionsRep1
 wgEncodeHaibGenotypeHuvecRegionsRep2
 wgEncodeHaibGenotypeImr90RegionsRep1
 wgEncodeHaibGenotypeImr90RegionsRep2
 wgEncodeHaibGenotypeJurkatRegionsRep1
 wgEncodeHaibGenotypeJurkatRegionsRep2
+wgEncodeHaibGenotypeK562RegionsRep1
 wgEncodeHaibGenotypeLncapRegionsRep1
 wgEncodeHaibGenotypeMcf10aesRegionsRep1
 wgEncodeHaibGenotypeMcf10aesRegionsRep2
@@ -111,7 +113,7 @@ wgEncodeHaibGenotypeSknshraRegionsRep2
 wgEncodeHaibGenotypeT47dRegionsRep2
 wgEncodeHaibGenotypeU87RegionsRep1
 
-C') New files (86 downloadables, 0 gbdbs):
+C') New files (90 downloadables, 0 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/
     NOT on RR but must be placed in:
@@ -125,6 +127,7 @@ C') New files (86 downloadables, 0 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeAg10803RegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeAosmcRegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeAstrocyRegionsRep1.bedLogR.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeBalleleSnp.txt.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeBcjejunumh12817nRegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeBcsmallintestine0111002RegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeBjRegionsRep1.bedLogR.gz
@@ -133,9 +136,11 @@ C') New files (86 downloadables, 0 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeCmkRegionsRep2.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeGm06990RegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeGm12878RegionsRep1.bedLogR.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeGm12878RegionsRep2.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeGm12891RegionsRep2.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeGm12892RegionsRep2.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeGm19239RegionsRep1.bedLogR.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeGtypeSnp.txt.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeH1hescRegionsRep2.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHaeRegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHaeRegionsRep2.bedLogR.gz
@@ -148,6 +153,7 @@ C') New files (86 downloadables, 0 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHeeRegionsRep2.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHek293RegionsRep2.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHelas3RegionsRep2.bedLogR.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHepg2RegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHipeRegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHipeRegionsRep2.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHl60RegionsRep1.bedLogR.gz
@@ -161,15 +167,15 @@ C') New files (86 downloadables, 0 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHreRegionsRep2.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHrpeRegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHrpeRegionsRep2.bedLogR.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHsmmRegionsRep2.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHsmmRegionsRep3.bedLogR.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHsmmRegionsRep6.bedLogR.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHsmmtRegionsRep2.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHtr8RegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeHuvecRegionsRep2.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeImr90RegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeImr90RegionsRep2.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeJurkatRegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeJurkatRegionsRep2.bedLogR.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeK562RegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeLncapRegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeMcf10aesRegionsRep1.bedLogR.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibGenotype/release1/wgEncodeHaibGenotypeMcf10aesRegionsRep2.bedLogR.gz

@@ -18861,7 +18861,8 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabAlnRep1.bam
@@ -18870,7 +18871,7 @@ lab Stanford
 project wgEncode
 replicate 1
 setType exp
-subId 3258
+subId 3875
 treatment None
 view Alignments
 
@@ -18882,7 +18883,8 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabAlnRep2.bam
@@ -18891,7 +18893,7 @@ lab Stanford
 project wgEncode
 replicate 2
 setType exp
-subId 3258
+subId 3875
 treatment None
 view Alignments
 
@@ -18903,7 +18905,8 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabPk.narrowPeak.gz
@@ -18912,7 +18915,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
-subId 3258
+subId 3875
 tableName wgEncodeSydhTfbsHepg2CebpbIggrabPk
 treatment None
 view Peaks
@@ -18925,7 +18928,8 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabRawDataRep1.fastq.gz
@@ -18934,7 +18938,7 @@ lab Stanford
 project wgEncode
 replicate 1
 setType exp
-subId 3258
+subId 3875
 treatment None
 view RawData
 
@@ -18946,7 +18950,8 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabRawDataRep2.fastq.gz
@@ -18955,7 +18960,7 @@ lab Stanford
 project wgEncode
 replicate 2
 setType exp
-subId 3258
+subId 3875
 treatment None
 view RawData
 
@@ -18967,7 +18972,8 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHepg2CebpbIggrabSig.bigWig
@@ -18976,7 +18982,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
-subId 3258
+subId 3875
 tableName wgEncodeSydhTfbsHepg2CebpbIggrabSig
 treatment None
 view Signal
@@ -36147,4 +36153,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 703172378
+# MAGIC: 1130839338

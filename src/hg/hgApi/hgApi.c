@@ -7,7 +7,7 @@
 #include "hPrint.h"
 #include "dystring.h"
 #include "hui.h"
-#include "searchTracks.h"
+#include "search.h"
 
 static char const rcsid[] = "$Id: hgApi.c,v 1.3 2010/05/30 21:11:47 larrym Exp $";
 
@@ -100,7 +100,8 @@ else if(!strcmp(cmd, "metaDb"))
             var = sqlEscapeString(var);
         else
             fail("Missing var parameter");
-        struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, TRUE, FALSE); // not tags, yes tables, not files
+        boolean fileSearch = (cgiOptionalInt("fileSearch",0) == 1);
+        struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, !fileSearch, fileSearch); // not tags, either a file or table search
         struct slPair *pair;
         dyStringPrintf(output, "[\n");
         for (pair = pairs; pair != NULL; pair = pair->next)
@@ -142,7 +143,8 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
         safef(name,sizeof name,"%s%i",METADATA_VALUE_PREFIX,ix);
         if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)
             {
-            struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, TRUE, FALSE); // not tags, yes tables, not files
+            boolean fileSearch = (cgiOptionalInt("fileSearch",0) == 1);
+            struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, !fileSearch, fileSearch); // not tags, either a file or table search
             if (slCount(pairs) > 0)
                 {
                 char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvSearchByMultiSelect),

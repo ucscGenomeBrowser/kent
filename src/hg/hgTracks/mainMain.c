@@ -18,7 +18,7 @@
 #include "hgFind.h"
 #include "hgTracks.h"
 #include "versionInfo.h"
-#include "searchTracks.h"
+#include "search.h"
 #include "imageV2.h"
 
 static char const rcsid[] = "$Id: hgTracks.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";

@@ -17,7 +17,8 @@ errAbort(
   "bedGeneParts - Given a bed, spit out promoter, first exon, or all introns.\n"
   "usage:\n"
   "   bedGeneParts part in.bed out.bed\n"
-  "Where part is either 'firstExon' or 'introns' or 'promoter'\n"
+  "Where part is either 'exons' or 'firstExon' or 'introns' or 'promoter' or 'firstCodingSplice'\n"
+  "or secondCodingSplice\n"
   "options:\n"
   "   -proStart=NN - start of promoter relative to txStart, default %d\n"
   "   -proEnd=NN - end of promoter relative to txStart, default %d\n"
@@ -31,7 +32,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-enum partChoice {pcFirstExon, pcIntrons, pcPromoter};
+enum partChoice {pcFirstExon, pcExons, pcIntrons, pcPromoter, pcFirstCodingSplice, pcSecondCodingSplice};
 
 void bedGeneParts(char *part, char *input, char *output)
 /* bedGeneParts - Given a bed, spit out promoter, first exon, or all introns.. */
@@ -44,6 +45,11 @@ if (sameString(part, "firstExon"))
     choice = pcFirstExon;
     minWords = 12;
     }
+else if (sameString(part, "exons"))
+    {
+    choice = pcExons;
+    minWords = 12;
+    }
 else if (sameString(part, "introns"))
     {
     choice = pcIntrons;
@@ -53,6 +59,16 @@ else if (sameString(part, "promoter"))
     {
     choice = pcPromoter;
     minWords = 6;
+    }
+else if (sameString(part, "firstCodingSplice"))
+    {
+    choice = pcFirstCodingSplice;
+    minWords = 12;
+    }
+else if (sameString(part, "secondCodingSplice"))
+    {
+    choice = pcSecondCodingSplice;
+    minWords = 12;
     }
 else
     errAbort("Unrecognized part '%s'", part);
@@ -66,8 +82,9 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     lineFileExpectAtLeast(lf, minWords, wordCount);
     struct bed *bed = bedLoadN(words, wordCount);
     char strand = bed->strand[0];
-    if (strand != '+' && strand != '-')
-        errAbort("Unrecognized strand %c line %d of %s\n", strand, lf->lineIx, lf->fileName);
+    if (choice != pcExons && choice != pcIntrons)
+	if (strand != '+' && strand != '-')
+	    errAbort("Unrecognized strand %c line %d of %s\n", strand, lf->lineIx, lf->fileName);
     int start,end;
     switch (choice)
         {
@@ -85,6 +102,98 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
 		}
 	    fprintf(f, "%s\t%d\t%d\t%s\t%d\t%c\n", 
 	    	bed->chrom, start, end, bed->name, bed->score, strand);
+	    break;
+	    }
+	case pcFirstCodingSplice:
+	    {
+	    int blockCount = bed->blockCount;
+	    if (blockCount > 1)
+	        {
+		int i;
+		int firstCodingSplicePos = 0;
+		if (strand == '+')
+		    {
+		    for (i=1; i<blockCount; ++i)
+		        {
+			int exonStart = bed->chromStart + bed->chromStarts[i];
+			if (exonStart >= bed->thickStart && exonStart < bed->thickEnd)
+			    {
+			    firstCodingSplicePos = exonStart;
+			    break;
+			    }
+			}
+		    }
+		else
+		    {
+		    for (i=blockCount-1; i>=0; --i)
+		        {
+			int exonStart = bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i];
+			if (exonStart >= bed->thickStart && exonStart < bed->thickEnd)
+			    {
+			    firstCodingSplicePos = exonStart;
+			    break;
+			    }
+			}
+		    }
+		if (firstCodingSplicePos > 0)
+		    {
+		    fprintf(f, "%s\t%d\t%d\t%s\t%d\t%c\n", 
+			bed->chrom, firstCodingSplicePos-1, firstCodingSplicePos+1, bed->name, 
+				bed->score, strand);
+		    }
+		}
+	    break;
+	    }
+	case pcSecondCodingSplice:
+	    {
+	    int blockCount = bed->blockCount;
+	    if (blockCount > 2)
+	        {
+		int i;
+		int codingSplicePos = 0;
+		if (strand == '+')
+		    {
+		    for (i=2; i<blockCount; ++i)
+		        {
+			int exonStart = bed->chromStart + bed->chromStarts[i];
+			if (exonStart >= bed->thickStart && exonStart < bed->thickEnd)
+			    {
+			    codingSplicePos = exonStart;
+			    break;
+			    }
+			}
+		    }
+		else
+		    {
+		    for (i=blockCount-2; i>=0; --i)
+		        {
+			int exonStart = bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i];
+			if (exonStart >= bed->thickStart && exonStart < bed->thickEnd)
+			    {
+			    codingSplicePos = exonStart;
+			    break;
+			    }
+			}
+		    }
+		if (codingSplicePos > 0)
+		    {
+		    fprintf(f, "%s\t%d\t%d\t%s\t%d\t%c\n", 
+			bed->chrom, codingSplicePos-1, codingSplicePos+1, bed->name, 
+				bed->score, strand);
+		    }
+		}
+	    break;
+	    }
+	case pcExons:
+	    {
+	    int i;
+	    for (i=0; i<bed->blockCount; ++i)
+	        {
+		int start = bed->chromStart + bed->chromStarts[i];
+		int end  = start + bed->blockSizes[i];
+		fprintf(f, "%s\t%d\t%d\t%s\t%d\t%s\n",
+			bed->chrom, start, end, bed->name, bed->score, bed->strand);
+		}
 	    break;
 	    }
 	case pcIntrons:

@@ -53,7 +53,11 @@ struct weight
 boolean isAccessionedSource(struct txSource *source)
 /* Return TRUE if it's some sort of source we want to keep track of. */
 {
-return sameString(source->type, "refSeq") || sameString(source->type, "mrna") || sameString(source->type, "ccds");
+return (sameString(source->type, "refSeq") 
+	|| sameString(source->type, "mrna") 
+	|| sameString(source->type, "ccds") 
+	|| sameString(source->type, "trna") 
+	|| sameString(source->type, "rfam"));
 }
 
 struct hash *hashWeights(char *in)

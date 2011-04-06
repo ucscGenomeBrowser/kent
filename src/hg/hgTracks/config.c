@@ -13,7 +13,7 @@
 #include "hgConfig.h"
 #include "jsHelper.h"
 #include "imageV2.h"
-#include "searchTracks.h"
+#include "search.h"
 
 #define DOWNLOADS_ONLY_TRACKS_INCLUDED
 #ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED

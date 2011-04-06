@@ -2064,4 +2064,57 @@ chainOne $(path1)
     # which is the URL to the bb file, a single row:
     # http://genomewiki.ucsc.edu/images/8/85/Hg19.ncbiIncidentDb.bb
 
+
+#########################################################################
+# LASTZ Turkey MelGal1 ( DONE - 2011-04-01 - Chin)
+    mkdir /hive/data/genomes/danRer7/bed/lastzMelGal1.2011-04-01
+    cd /hive/data/genomes/danRer7/bed/lastzMelGal1.2011-04-01
+
+    cat << '_EOF_' > DEF
+# Turkey vs Zebrafish
+
+# TARGET: Zebrafish danRer7
+SEQ1_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ1_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Turkey melGal1 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/danRer7/bed/lastzMelGal1.2011-04-01
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # note: No -syntenicNet option below.
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+    # real    179m52.632s 
+    cat fb.danRer7.chainMelGal1Link.txt
+    #   35772051 bases of 1409770109 (2.537%) in intersection
+    cd /hive/data/genomes/danRer7/bed
+    ln -s lastzMelGal1.2011-04-01 lastz.melGal1
+
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/danRer7/bed/lastzMelGal1.2011-04-01/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    3m28.672s
+    cat fb.melGal1.chainDanRer7Link.txt
+    #   25141503 bases of 935922386 (2.686%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.danRer7.swap lastz.danRer7
 #############################################################################
