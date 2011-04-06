@@ -2535,8 +2535,7 @@ include wgEncodeGisRnaSeq.ra beta,public
 include wgEncodeGisRnaSeq.new.ra alpha
 
 # GIS DNA Pet (wrangler: braney)
-include wgEncodeGisDnaPet.ra beta,public
-include wgEncodeGisDnaPet.new.ra alpha
+include wgEncodeGisDnaPet.ra
 
 # Helicos RNA-seq (wrangler: braney)
 include wgEncodeHelicosRnaSeq.ra beta,public
