@@ -7,19 +7,23 @@
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
+double threshold = 100;
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "regCompanion5C - Analyse 5C data initially from the Dekker lab.\n"
   "usage:\n"
-  "   regCompanion5C input.download output.tab\n"
+  "   regCompanion5C input.download output.bed\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -threshold=%g - Items over this threshold are turned into beds\n"
+  , threshold
   );
 }
 
 static struct optionSpec options[] = {
+   {"threshold", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -135,11 +139,9 @@ while (lineFileNextReal(lf, &line))
     line += 1;
     int colCount = chopByChar(line, '\t', NULL, 0);
     int wordCount = colCount+1;
-    uglyf("Got %d columns it seems\n", colCount);
     char **words;
     AllocArray(words, wordCount);
     chopByChar(line, '\t', words, colCount);
-    uglyf("words[0] = %s\n", words[0]);
 
     struct pairMatrix *pm;
     AllocVar(pm);
@@ -198,8 +200,55 @@ return pmList;
 void regCompanion5C(char *inFile, char *outFile)
 /* regCompanion5C - Analyse 5C data initially from the Dekker lab.. */
 {
-struct pairMatrix *inList = pairMatrixRead(inFile);
-uglyf("Read %d matrices from %s\n", slCount(inList), inFile);
+struct pairMatrix *pm, *pmList = pairMatrixRead(inFile);
+FILE *f = mustOpen(outFile, "w");
+for (pm = pmList; pm != NULL; pm = pm->next)
+    {
+    verbose(1, "matrix %dx%d\n", pm->colCount, pm->rowCount);
+    int i,j;
+    for (i=0; i<pm->rowCount; ++i)
+        {
+	struct pairItem *rowItem = pm->rowItems[i];
+	char *rowChrom = rowItem->chrom;
+        for (j=0; j<pm->colCount; ++j)
+	   {
+	   struct pairItem *colItem = pm->colItems[j];
+	   if (sameString(colItem->chrom, rowItem->chrom))
+	       {
+	       double x = pm->matrix[i][j];
+	       if (x > threshold)
+		    {
+		    struct pairItem *startItem, *endItem;
+		    if (rowItem->chromStart < colItem->chromStart)
+		       {
+		       startItem = rowItem;
+		       endItem = colItem;
+		       }
+		    else
+		       {
+		       startItem = colItem;
+		       endItem = rowItem;
+		       }
+		    int chromStart = startItem->chromStart;
+		    int chromEnd = endItem->chromEnd;
+		    fprintf(f, "%s\t%d\t%d\t", rowChrom, chromStart, chromEnd);
+		    fprintf(f, "a%db%d\t", i+1, j+1);	// name
+		    fprintf(f, "%d\t", round(x));	// score
+		    fprintf(f, ".\t");  			// strand
+		    fprintf(f, "%d\t%d\t", chromStart, chromEnd);  // thickStart/end
+		    fprintf(f, "0\t");	// Reserved/itemRGB
+		    fprintf(f, "2\t");	// blockCount
+		    fprintf(f, "%d,%d,\t",	// blockSizes
+			startItem->chromEnd - startItem->chromStart,
+			endItem->chromEnd - endItem->chromStart);
+		    fprintf(f, "0,%d,\n",  // chromStarts
+			endItem->chromStart - chromStart);
+		    }
+	       }
+	   }
+	}
+    }
+carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
@@ -208,6 +257,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+threshold = optionInt("threshold", threshold);
 regCompanion5C(argv[1], argv[2]);
 return 0;
 }
