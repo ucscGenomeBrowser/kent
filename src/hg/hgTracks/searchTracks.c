@@ -32,6 +32,8 @@
 #define TRACK_SEARCH_ON_DESCR    "tsDescr"
 #define TRACK_SEARCH_SORT        "tsSort"
 
+#define SUPPORT_QUOTES_IN_NAME_SEARCH
+
 //#define FILES_SEARCH
 #ifdef FILES_SEARCH
     #define FILE_SEARCH_ON_FILETYPE "tsFileType"
@@ -94,61 +96,7 @@ else
     slReverse(pTrack);
 }
 
-#define SUPPORT_QUOTES_IN_NAME_SEARCH
-#ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
-// TODO replace with tdb version moved from hgFileSearch to search.c lib code.
-static boolean matchToken(char *string, char *token)
-{
-// do this with regex ? Would require all sorts of careful parsing for ()., etc.
-if (string == NULL)
-    return (token == NULL);
-if (token == NULL)
-    return TRUE;
-
-if (!strchr(token,'*') && !strchr(token,'?'))
-    return (strcasestr(string,token) != NULL);
-
-char wordWild[1024];
-safef(wordWild,sizeof wordWild,"*%s*",token);
-return wildMatch(wordWild, string);
-}
-
-static boolean doesNameMatchTrack(struct track *track, struct slName *wordList)
-// We parse str and look for every word at the start of any word in track description (i.e. google style).
-{
-if (track->shortLabel == NULL || track->longLabel == NULL)
-    return (wordList != NULL);
-
-struct slName *word = wordList;
-for(; word != NULL; word = word->next)
-    {
-    if (!matchToken(track->shortLabel,word->name)
-    &&  !matchToken(track->longLabel, word->name))
-        return FALSE;
-    }
-return TRUE;
-}
-
-static boolean doesDescriptionMatchTrack(struct track *track, struct slName *wordList)
-// We parse str and look for every word at the start of any word in track description (i.e. google style).
-{
-if (track->tdb->html == NULL)
-    return (wordList != NULL);
-
-if (strchr(track->tdb->html,'\n'))
-    strSwapChar(track->tdb->html,'\n',' ');   // DANGER: don't own memory.  However, this track search function will use html for no other purpose
-
-struct slName *word = wordList;
-for(; word != NULL; word = word->next)
-    {
-    if (!matchToken(track->tdb->html,word->name))
-        return FALSE;
-    }
-
-return TRUE;
-}
-
-#else///ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
+#ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
 
 // XXXX make a matchString function to support "contains", "is" etc. and wildcards in contains
 
@@ -354,8 +302,8 @@ for (; pair!= NULL;pair=pair->next)
                         struct track *track = tr->track;
                         char *trackType = cloneFirstWord(track->tdb->type); // will be spilled
                 #ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
-                        if((isEmpty(nameSearch) || doesNameMatchTrack(track, nameList))
-                        && (isEmpty(descSearch) || doesDescriptionMatchTrack(track, descList))
+                        if((isEmpty(nameSearch) || searchNameMatches(track->tdb, nameList))
+                        && (isEmpty(descSearch) || searchDescriptionMatches(track->tdb, descList))
                 #else///ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
                         if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, "contains"))
                         && (isEmpty(descSearch) || isDescriptionMatch(track, descWords, descWordCount))
@@ -378,8 +326,8 @@ for (; pair!= NULL;pair=pair->next)
                                 {
                                 trackType = cloneFirstWord(subTrack->tdb->type); // will be spilled
                         #ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
-                                if((isEmpty(nameSearch) || doesNameMatchTrack(subTrack, nameList))
-                                && (isEmpty(descSearch) || doesDescriptionMatchTrack(subTrack, descList))
+                                if((isEmpty(nameSearch) || searchNameMatches(subTrack->tdb, nameList))
+                                && (isEmpty(descSearch) || searchDescriptionMatches(subTrack->tdb, descList))
                         #else///ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
                                 if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, "contains"))
                                 && (isEmpty(descSearch) || isDescriptionMatch(subTrack, descWords, descWordCount))
@@ -693,7 +641,10 @@ else if(sameString(currentTab, "filesTab"))
     }
 #endif///def FILES_SEARCH
 
-#ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
+#ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
+if(descSearch && selectedTab == simpleTab) // TODO: could support quotes in simple tab by detecting quotes and choosing to use doesNameMatch() || doesDescriptionMatch()
+    stripChar(descSearch, '"');
+#else///ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
 if(descSearch)
     stripChar(descSearch, '"');
 #endif///ndef SUPPORT_QUOTES_IN_NAME_SEARCH
