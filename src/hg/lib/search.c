@@ -33,8 +33,7 @@ struct slPair *fileFormatSearchWhiteList()
 // Gets the whitelist of approved file formats that is allowed for search
 {
 char *crudeTypes[] = {
-    "bam",
-    "bam.bai",
+    "bam",  //    "bam.bai" is now alway selected with bam,
     "tagAlign",
     "bed.gz",
     "bigBed",
@@ -42,11 +41,10 @@ char *crudeTypes[] = {
     "narrowPeak",
     "fastq",
     "bigWig",
-    "wig"
+    "wig"    // TODO: Add "other" category. TODO: make into multi-select
 };
 char *nicerTypes[] = {
-    "Alignment binary (bam) - binary SAM",
-    "Alignment binary index (bai) - binary SAM index",
+    "Alignment binary (bam) - binary SAM",  //    "Alignment binary index (bai) - binary SAM index",
     "Alignment tags (tagAlign)",
     "bed - browser extensible data",
     "bigBed - self index, often remote bed format",
