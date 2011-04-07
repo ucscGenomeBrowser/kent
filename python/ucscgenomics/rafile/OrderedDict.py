@@ -7,7 +7,6 @@ class OrderedDict(dict):
     relevant to ordering.
     """
 
-
     def __init__(self):
         self.__ordering = list()
         dict.__init__(self)
@@ -16,10 +15,19 @@ class OrderedDict(dict):
     def __setitem__(self, key, value):
         dict.__setitem__(self, key, value)
         self.__ordering.append(key)
+
    
     def __delitem__(self, key):
-        dict.__delitem(self, key)
+        dict.__delitem__(self, key)
         self.__ordering.remove(key)
+
+
+    def append(self, item):
+        self.__ordering.append(item)
+
+
+    def remove(self, item):
+        self.__ordering.remove(item)
 
 
     def __iter__(self):

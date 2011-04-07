@@ -1,0 +1,19 @@
+========Expected========
+['#comment1']
+['#comment2']
+['']
+('valA', {'key3': 'valC', 'key2': 'valB', 'key1': 'valA'})
+['#comment3']
+('valD', {'key3': 'valF', 'key2': 'valE', 'key1': 'valD'})
+('valG', {'key3': 'valI', 'key2': 'valH', 'key1': 'valG'})
+('valJ', {'key3': 'valL', 'key2': 'valK', 'key1': 'valJ'})
+=========Output=========
+['#comment1']
+['#comment2']
+['']
+('valA', {'key3': 'valC', 'key2': 'valB', 'key1': 'valA'})
+['#comment3']
+('valD', {'key3': 'valF', 'key2': 'valE', 'key1': 'valD'})
+('valG', {'key3': 'valI', 'key2': 'valH', 'key1': 'valG'})
+('valJ', {'key3': 'valL', 'key2': 'valK', 'key1': 'valJ'})
+========================

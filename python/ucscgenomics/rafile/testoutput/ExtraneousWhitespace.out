@@ -14,25 +14,57 @@ key3 valF
 
 #comment4
 =========Output=========
+
+
+
 #comment1
+
+
 #comment2
+
+
 key1 valA
 key2 valB
 key3 valC
 
+
+
 #comment3
+
 key1 valD
 key2 valE
 key3 valF
 
 #comment4
+
+
+
+
+
 ========================
 --- expected
 +++ out
-@@ -17,7 +17,6 @@
- n t 2-
+@@ -1,3 +1,6 @@
++
++
++
+ # c o@@ -8,6 +11,8 @@
+ t 1 
++
++
+ # c o@@ -17,6 +22,7 @@
+ n t 2+
  
- k e@@ -60,7 +59,6 @@
- t 3 
--
- k e y
+ 
+ k@@ -48,6 +54,8 @@
+ a l C+
++
+ 
+ 
+ #@@ -102,3 +110,8 @@
+ t 4 
++
++
++
++
++
