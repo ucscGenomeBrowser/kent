@@ -24,3 +24,5 @@ test:
 	diff introns.expected introns.out
 	bedGeneParts promoter test.in promoter.out
 	diff promoter.expected promoter.out
+	bedGeneParts firstCodingSplice test.in firstCodingSplice.out
+	diff firstCodingSplice.expected firstCodingSplice.out

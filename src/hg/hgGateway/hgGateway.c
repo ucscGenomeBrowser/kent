@@ -18,7 +18,7 @@
 #include "jsHelper.h"
 #include "hPrint.h"
 #include "suggest.h"
-#include "searchTracks.h"
+#include "search.h"
 
 static char const rcsid[] = "$Id: hgGateway.c,v 1.117 2010/04/29 02:54:35 larrym Exp $";
 
@@ -133,7 +133,9 @@ printf("</td>\n");
 if(supportsSuggest)
     {
     puts("<td align=center>\n");
-    hWrites("<input name='hgt.suggest' type='text' size='5' id='suggest' />\n");
+    hPrintf("<input name='hgt.suggest' type='text' size='5' id='suggest' />\n"
+            "<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(db)
+            );
     printf("</td>\n");
     }
 

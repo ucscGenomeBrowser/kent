@@ -7,7 +7,7 @@ metaObject wgEncodeHaibGenotypeA549RegionsRep1
 objType table
 cell A549
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -29,7 +29,7 @@ metaObject wgEncodeHaibGenotypeAg04449RegionsRep1
 objType table
 cell AG04449
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -51,7 +51,7 @@ metaObject wgEncodeHaibGenotypeAg04450RegionsRep2
 objType table
 cell AG04450
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -73,7 +73,7 @@ metaObject wgEncodeHaibGenotypeAg09309RegionsRep1
 objType table
 cell AG09309
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -95,7 +95,7 @@ metaObject wgEncodeHaibGenotypeAg09319RegionsRep2
 objType table
 cell AG09319
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -117,7 +117,7 @@ metaObject wgEncodeHaibGenotypeAg10803RegionsRep1
 objType table
 cell AG10803
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -139,7 +139,7 @@ metaObject wgEncodeHaibGenotypeAosmcRegionsRep1
 objType table
 cell AoSMC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -161,7 +161,7 @@ metaObject wgEncodeHaibGenotypeAstrocyRegionsRep1
 objType table
 cell Astrocy
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -182,7 +182,7 @@ view CNV
 metaObject wgEncodeHaibGenotypeBalleleSnp
 objType file
 composite wgEncodeHaibGenotype
-dataType Snp
+dataType Genotype
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
@@ -198,7 +198,7 @@ metaObject wgEncodeHaibGenotypeBcjejunumh12817nRegionsRep1
 objType table
 cell BC_Jejunum_H12817N
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -220,7 +220,7 @@ metaObject wgEncodeHaibGenotypeBcsmallintestine0111002RegionsRep1
 objType table
 cell BC_Small_Intestine_01-11002
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -242,7 +242,7 @@ metaObject wgEncodeHaibGenotypeBjRegionsRep1
 objType table
 cell BJ
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -264,7 +264,7 @@ metaObject wgEncodeHaibGenotypeCaco2RegionsRep1
 objType table
 cell Caco-2
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -286,7 +286,7 @@ metaObject wgEncodeHaibGenotypeChorionRegionsRep1
 objType table
 cell Chorion
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -308,7 +308,7 @@ metaObject wgEncodeHaibGenotypeCmkRegionsRep2
 objType table
 cell CMK
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -330,7 +330,7 @@ metaObject wgEncodeHaibGenotypeGm06990RegionsRep1
 objType table
 cell GM06990
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -352,7 +352,7 @@ metaObject wgEncodeHaibGenotypeGm12878RegionsRep1
 objType table
 cell GM12878
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-08
@@ -374,7 +374,7 @@ metaObject wgEncodeHaibGenotypeGm12878RegionsRep2
 objType table
 cell GM12878
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-17
 dateUnrestricted 2011-11-17
@@ -396,7 +396,7 @@ metaObject wgEncodeHaibGenotypeGm12891RegionsRep2
 objType table
 cell GM12891
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -418,7 +418,7 @@ metaObject wgEncodeHaibGenotypeGm12892RegionsRep2
 objType table
 cell GM12892
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -440,7 +440,7 @@ metaObject wgEncodeHaibGenotypeGm19239RegionsRep1
 objType table
 cell GM19239
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -461,7 +461,7 @@ view CNV
 metaObject wgEncodeHaibGenotypeGtypeSnp
 objType file
 composite wgEncodeHaibGenotype
-dataType Snp
+dataType Genotype
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
@@ -477,7 +477,7 @@ metaObject wgEncodeHaibGenotypeH1hescRegionsRep2
 objType table
 cell H1-hESC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -499,7 +499,7 @@ metaObject wgEncodeHaibGenotypeHaeRegionsRep1
 objType table
 cell HAEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -521,7 +521,7 @@ metaObject wgEncodeHaibGenotypeHaeRegionsRep2
 objType table
 cell HAEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -543,7 +543,7 @@ metaObject wgEncodeHaibGenotypeHcfRegionsRep1
 objType table
 cell HCF
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -565,7 +565,7 @@ metaObject wgEncodeHaibGenotypeHcfRegionsRep2
 objType table
 cell HCF
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -587,7 +587,7 @@ metaObject wgEncodeHaibGenotypeHcmRegionsRep1
 objType table
 cell HCM
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -609,7 +609,7 @@ metaObject wgEncodeHaibGenotypeHcmRegionsRep2
 objType table
 cell HCM
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -631,7 +631,7 @@ metaObject wgEncodeHaibGenotypeHcpeRegionsRep1
 objType table
 cell HCPEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -653,7 +653,7 @@ metaObject wgEncodeHaibGenotypeHcpeRegionsRep2
 objType table
 cell HCPEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -675,7 +675,7 @@ metaObject wgEncodeHaibGenotypeHeeRegionsRep2
 objType table
 cell HEEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -697,7 +697,7 @@ metaObject wgEncodeHaibGenotypeHek293RegionsRep2
 objType table
 cell HEK293
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -719,7 +719,7 @@ metaObject wgEncodeHaibGenotypeHelas3RegionsRep2
 objType table
 cell HeLa-S3
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -741,7 +741,7 @@ metaObject wgEncodeHaibGenotypeHepg2RegionsRep1
 objType table
 cell HepG2
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-17
 dateUnrestricted 2011-11-17
@@ -763,7 +763,7 @@ metaObject wgEncodeHaibGenotypeHipeRegionsRep1
 objType table
 cell HIPEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -785,7 +785,7 @@ metaObject wgEncodeHaibGenotypeHipeRegionsRep2
 objType table
 cell HIPEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -807,7 +807,7 @@ metaObject wgEncodeHaibGenotypeHl60RegionsRep1
 objType table
 cell HL-60
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -829,7 +829,7 @@ metaObject wgEncodeHaibGenotypeHmecRegionsRep2
 objType table
 cell HMEC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -851,7 +851,7 @@ metaObject wgEncodeHaibGenotypeHnpceRegionsRep1
 objType table
 cell HNPCEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -873,7 +873,7 @@ metaObject wgEncodeHaibGenotypeHpaeRegionsRep1
 objType table
 cell HPAEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -895,7 +895,7 @@ metaObject wgEncodeHaibGenotypeHpaeRegionsRep2
 objType table
 cell HPAEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -917,7 +917,7 @@ metaObject wgEncodeHaibGenotypeHrceRegionsRep1
 objType table
 cell HRCEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -926,7 +926,7 @@ fileName wgEncodeHaibGenotypeHrceRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -939,7 +939,7 @@ metaObject wgEncodeHaibGenotypeHrceRegionsRep2
 objType table
 cell HRCEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -948,7 +948,7 @@ fileName wgEncodeHaibGenotypeHrceRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -961,7 +961,7 @@ metaObject wgEncodeHaibGenotypeHreRegionsRep1
 objType table
 cell HRE
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -970,7 +970,7 @@ fileName wgEncodeHaibGenotypeHreRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -983,7 +983,7 @@ metaObject wgEncodeHaibGenotypeHreRegionsRep2
 objType table
 cell HRE
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -992,7 +992,7 @@ fileName wgEncodeHaibGenotypeHreRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1005,7 +1005,7 @@ metaObject wgEncodeHaibGenotypeHrpeRegionsRep1
 objType table
 cell HRPEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1014,7 +1014,7 @@ fileName wgEncodeHaibGenotypeHrpeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1027,7 +1027,7 @@ metaObject wgEncodeHaibGenotypeHrpeRegionsRep2
 objType table
 cell HRPEpiC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1036,7 +1036,7 @@ fileName wgEncodeHaibGenotypeHrpeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1049,7 +1049,7 @@ metaObject wgEncodeHaibGenotypeHsmmRegionsRep3
 objType table
 cell HSMM
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -1071,7 +1071,7 @@ metaObject wgEncodeHaibGenotypeHsmmtRegionsRep2
 objType table
 cell HSMMtube
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -1093,7 +1093,7 @@ metaObject wgEncodeHaibGenotypeHtr8RegionsRep1
 objType table
 cell HTR8svn
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -1115,7 +1115,7 @@ metaObject wgEncodeHaibGenotypeHuvecRegionsRep2
 objType table
 cell HUVEC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -1137,7 +1137,7 @@ metaObject wgEncodeHaibGenotypeImr90RegionsRep1
 objType table
 cell IMR90
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1146,7 +1146,7 @@ fileName wgEncodeHaibGenotypeImr90RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1159,7 +1159,7 @@ metaObject wgEncodeHaibGenotypeImr90RegionsRep2
 objType table
 cell IMR90
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1168,7 +1168,7 @@ fileName wgEncodeHaibGenotypeImr90RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1181,7 +1181,7 @@ metaObject wgEncodeHaibGenotypeJurkatRegionsRep1
 objType table
 cell Jurkat
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1190,7 +1190,7 @@ fileName wgEncodeHaibGenotypeJurkatRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1203,7 +1203,7 @@ metaObject wgEncodeHaibGenotypeJurkatRegionsRep2
 objType table
 cell Jurkat
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1212,7 +1212,7 @@ fileName wgEncodeHaibGenotypeJurkatRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1225,7 +1225,7 @@ metaObject wgEncodeHaibGenotypeK562RegionsRep1
 objType table
 cell K562
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-17
 dateUnrestricted 2011-11-17
@@ -1247,7 +1247,7 @@ metaObject wgEncodeHaibGenotypeLncapRegionsRep1
 objType table
 cell LNCaP
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1256,7 +1256,7 @@ fileName wgEncodeHaibGenotypeLncapRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1269,7 +1269,7 @@ metaObject wgEncodeHaibGenotypeMcf10aesRegionsRep1
 objType table
 cell MCF10A-Er-Src
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1278,7 +1278,7 @@ fileName wgEncodeHaibGenotypeMcf10aesRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy Kevin Struhl
+obtainedBy Stanford
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1291,7 +1291,7 @@ metaObject wgEncodeHaibGenotypeMcf10aesRegionsRep2
 objType table
 cell MCF10A-Er-Src
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1300,7 +1300,7 @@ fileName wgEncodeHaibGenotypeMcf10aesRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy Kevin Struhl
+obtainedBy Stanford
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1313,7 +1313,7 @@ metaObject wgEncodeHaibGenotypeMcf10aesRegionsRep3
 objType table
 cell MCF10A-Er-Src
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1322,7 +1322,7 @@ fileName wgEncodeHaibGenotypeMcf10aesRegionsRep3.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy Kevin Struhl
+obtainedBy Stanford
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1335,7 +1335,7 @@ metaObject wgEncodeHaibGenotypeMcf10aesTamRegionsRep1
 objType table
 cell MCF10A-Er-Src
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1344,7 +1344,7 @@ fileName wgEncodeHaibGenotypeMcf10aesTamRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy Kevin Struhl
+obtainedBy Stanford
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1357,7 +1357,7 @@ metaObject wgEncodeHaibGenotypeMcf7RegionsRep1
 objType table
 cell MCF-7
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1366,7 +1366,7 @@ fileName wgEncodeHaibGenotypeMcf7RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1379,7 +1379,7 @@ metaObject wgEncodeHaibGenotypeMcf7RegionsRep2
 objType table
 cell MCF-7
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1388,7 +1388,7 @@ fileName wgEncodeHaibGenotypeMcf7RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1401,7 +1401,7 @@ metaObject wgEncodeHaibGenotypeMelanoRegionsRep1
 objType table
 cell Melano
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -1423,7 +1423,7 @@ metaObject wgEncodeHaibGenotypeMelanoRegionsRep2
 objType table
 cell Melano
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -1445,7 +1445,7 @@ metaObject wgEncodeHaibGenotypeMyometrRegionsRep1
 objType table
 cell Myometr
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -1467,7 +1467,7 @@ metaObject wgEncodeHaibGenotypeNb4RegionsRep1
 objType table
 cell NB4
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1476,7 +1476,7 @@ fileName wgEncodeHaibGenotypeNb4RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1489,7 +1489,7 @@ metaObject wgEncodeHaibGenotypeNb4RegionsRep2
 objType table
 cell NB4
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1498,7 +1498,7 @@ fileName wgEncodeHaibGenotypeNb4RegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1511,7 +1511,7 @@ metaObject wgEncodeHaibGenotypeNhaRegionsRep1
 objType table
 cell NH-A
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1520,7 +1520,7 @@ fileName wgEncodeHaibGenotypeNhaRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1533,7 +1533,7 @@ metaObject wgEncodeHaibGenotypeNhaRegionsRep2
 objType table
 cell NH-A
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1542,7 +1542,7 @@ fileName wgEncodeHaibGenotypeNhaRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1555,7 +1555,7 @@ metaObject wgEncodeHaibGenotypeNhbeRegionsRep1
 objType table
 cell NHBE
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1564,7 +1564,7 @@ fileName wgEncodeHaibGenotypeNhbeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1577,7 +1577,7 @@ metaObject wgEncodeHaibGenotypeNhbeRegionsRep2
 objType table
 cell NHBE
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1586,7 +1586,7 @@ fileName wgEncodeHaibGenotypeNhbeRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1599,7 +1599,7 @@ metaObject wgEncodeHaibGenotypeNhdfneoRegionsRep1
 objType table
 cell NHDF-neo
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1608,7 +1608,7 @@ fileName wgEncodeHaibGenotypeNhdfneoRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1621,7 +1621,7 @@ metaObject wgEncodeHaibGenotypeNt2d1RegionsRep1
 objType table
 cell NT2-D1
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1630,7 +1630,7 @@ fileName wgEncodeHaibGenotypeNt2d1RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1643,7 +1643,7 @@ metaObject wgEncodeHaibGenotypeOvcar3RegionsRep1
 objType table
 cell ovcar-3
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -1665,7 +1665,7 @@ metaObject wgEncodeHaibGenotypePanc1RegionsRep1
 objType table
 cell PANC-1
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1674,7 +1674,7 @@ fileName wgEncodeHaibGenotypePanc1RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1687,7 +1687,7 @@ metaObject wgEncodeHaibGenotypePanc1RegionsRep2
 objType table
 cell PANC-1
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -1709,7 +1709,7 @@ metaObject wgEncodeHaibGenotypePfsk1RegionsRep1
 objType table
 cell PFSK-1
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -1731,7 +1731,7 @@ metaObject wgEncodeHaibGenotypePrecRegionsRep1
 objType table
 cell PrEC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1740,7 +1740,7 @@ fileName wgEncodeHaibGenotypePrecRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1753,7 +1753,7 @@ metaObject wgEncodeHaibGenotypeRptecRegionsRep1
 objType table
 cell RPTEC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1762,7 +1762,7 @@ fileName wgEncodeHaibGenotypeRptecRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1775,7 +1775,7 @@ metaObject wgEncodeHaibGenotypeRptecRegionsRep2
 objType table
 cell RPTEC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1784,7 +1784,7 @@ fileName wgEncodeHaibGenotypeRptecRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1797,7 +1797,7 @@ metaObject wgEncodeHaibGenotypeSaecRegionsRep1
 objType table
 cell SAEC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1806,7 +1806,7 @@ fileName wgEncodeHaibGenotypeSaecRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1819,7 +1819,7 @@ metaObject wgEncodeHaibGenotypeSaecRegionsRep2
 objType table
 cell SAEC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1828,7 +1828,7 @@ fileName wgEncodeHaibGenotypeSaecRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1841,7 +1841,7 @@ metaObject wgEncodeHaibGenotypeSkmcRegionsRep1
 objType table
 cell SKMC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1850,7 +1850,7 @@ fileName wgEncodeHaibGenotypeSkmcRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1863,7 +1863,7 @@ metaObject wgEncodeHaibGenotypeSkmcRegionsRep2
 objType table
 cell SKMC
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1872,7 +1872,7 @@ fileName wgEncodeHaibGenotypeSkmcRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1885,7 +1885,7 @@ metaObject wgEncodeHaibGenotypeSknshraRegionsRep1
 objType table
 cell SK-N-SH_RA
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1894,7 +1894,7 @@ fileName wgEncodeHaibGenotypeSknshraRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1907,7 +1907,7 @@ metaObject wgEncodeHaibGenotypeSknshraRegionsRep2
 objType table
 cell SK-N-SH_RA
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1916,7 +1916,7 @@ fileName wgEncodeHaibGenotypeSknshraRegionsRep2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
-obtainedBy John Stam
+obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1929,7 +1929,7 @@ metaObject wgEncodeHaibGenotypeT47dRegionsRep2
 objType table
 cell T-47D
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -1951,7 +1951,7 @@ metaObject wgEncodeHaibGenotypeU87RegionsRep1
 objType table
 cell U87
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
@@ -1969,4 +1969,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -876164802
+# MAGIC: 1516784922

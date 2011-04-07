@@ -1,6 +1,5 @@
 track wgEncodeGisDnaPet
 compositeTrack on
-release beta,public
 shortLabel GIS DNA PET
 longLabel ENCODE Genome Institute of Singapore DNA Paired-End Ditags
 group varRep
@@ -19,11 +18,9 @@ wgEncode 1
     shortLabel Alignments
     view Alignments
     visibility dense
-    release beta,public
         subTrack wgEncodeGisDnaPet
 
         track wgEncodeGisDnaPetAlignmentsK5621k
-        release beta,public
         subTrack wgEncodeGisDnaPetViewAlignments off
         shortLabel K562 1k
         color 46,0,184
@@ -37,10 +34,8 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
     #    configurable on
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=K562 fragSize=1k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=256 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsK5621k fileName=wgEncodeGisDnaPetAlignmentsK5621k.pairedTagAlign.gz
 
         track wgEncodeGisDnaPetAlignmentsK56210k
-        release beta,public
         subTrack wgEncodeGisDnaPetViewAlignments on
         shortLabel K562 10k
         color 46,0,184
@@ -54,10 +49,8 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
     #    configurable on
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=K562 fragSize=10k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=257 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsK56210k fileName=wgEncodeGisDnaPetAlignmentsK56210k.pairedTagAlign.gz
 
 	track wgEncodeGisDnaPetAlignmentsK56220k
-        release beta,public
         subTrack wgEncodeGisDnaPetViewAlignments off
 	shortLabel K562 20k
         color 46,0,184
@@ -69,10 +62,8 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
 	showDiffBasesMaxZoom 10000.0
-	metadata project=wgEncode grant=Gingeras lab=Gis(Ruan) dataType=DnaPet cell=K562 fragSize=20k view=Alignments dataVersion="ENCODE June 2010 Freeze" subId=1075 dateSubmitted=2010-04-05 dateUnrestricted=2011-01-05 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsK56220k fileName=wgEncodeGisDnaPetAlignmentsK56220k.pairedTagAlign.gz
 
         track wgEncodeGisDnaPetAlignmentsGm128781k
-        release beta,public
         subTrack wgEncodeGisDnaPetViewAlignments off
         shortLabel GM12878 1k
         color 153,38,0
@@ -86,10 +77,8 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
     #    configurable on
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=GM12878 fragSize=1k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=253 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsGm128781k fileName=wgEncodeGisDnaPetAlignmentsGm128781k.pairedTagAlign.gz
 
         track wgEncodeGisDnaPetAlignmentsGm128785k
-        release beta,public
         subTrack wgEncodeGisDnaPetViewAlignments off
         shortLabel GM12878 5k
         color 153,38,0
@@ -103,10 +92,8 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
     #    configurable on
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=GM12878 fragSize=5k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=254 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsGm128785k fileName=wgEncodeGisDnaPetAlignmentsGm128785k.pairedTagAlign.gz
 
         track wgEncodeGisDnaPetAlignmentsGm1287810k
-        release beta,public
         subTrack wgEncodeGisDnaPetViewAlignments on
         color 153,38,0
         shortLabel GM12878 10k
@@ -118,7 +105,5 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=GM12878 fragSize=10k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=255 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsGm1287810k fileName=wgEncodeGisDnaPetAlignmentsGm1287810k.pairedTagAlign.gz
-
 
 

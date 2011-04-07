@@ -3181,33 +3181,148 @@ mdbObjsFree(&mdbObjs);
 return mdbNames;
 }
 
-struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files)
+static void mdbSearchableQueryRestictForTablesOrFiles(struct dyString *dyQuery,char *tableName, char letter,boolean hasTableName, boolean hasFileName)
+// Append table and file restrictions onto an mdb query.
+// letter (e.g. 'A') should be used in original query to alias table name: "select A.val from metaDb A where A.val = 'fred'".
+{
+// A note about tables and files: objType=table may have fileNames associated, but objType=file will not have tableNames
+// While objType=table should have a var=tableName, this is redundant because the obj=tableName
+// So the lopsided 'exists' queries below are meant to be the most flexible/efficent
+
+assert(isalpha(letter) && isalpha(letter + 2)); // will need one or two sub-queries.
+char nextLtr = letter + 1;
+
+// We are only searching for objects that are of objType table or file. objType=composite are not search targets!
+if (hasTableName && !hasFileName) // objType=table may have fileNames associated, but objType=file will not have tableNames
+    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and %c.var='objType' and %c.val = '%s')",
+                    nextLtr,tableName,nextLtr,nextLtr,letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE);
+else // tables OR files (but not objType=composite)
+    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and %c.var='objType' and %c.val in ('%s','%s'))",
+                    nextLtr,tableName,nextLtr,nextLtr,letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE,MDB_OBJ_TYPE_FILE);
+
+nextLtr++;
+
+if (!hasTableName && hasFileName) // last of 3 possibilites objType either table or file but must have fileName var
+    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and %c.var in ('%s','%s'))",
+                   nextLtr,tableName,nextLtr,nextLtr,letter,nextLtr,MDB_VAR_FILENAME,MDB_VAR_FILEINDEX);
+}
+
+struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean hasTableName, boolean hasFileName)
 // Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
+// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
 {  // TODO: Change this to use normal mdb struct routines?
 struct slName *retVal;
 
-if (!tables && !files)
-    errAbort("mdbValSearch requests values for neither table nor file objects.\n");
+if (!hasTableName && !hasFileName)
+    errAbort("mdbValSearch requests vals associated with neither table nor files.\n");
 
 char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 
+char letter = 'A';
 struct dyString *dyQuery = dyStringNew(512);
 if (limit > 0)
-    dyStringPrintf(dyQuery,"select distinct LEFT(val,%d)",limit);
+    dyStringPrintf(dyQuery,"select distinct LEFT(%c.val,%d)",letter,limit);
 else
-    dyStringPrintf(dyQuery,"select distinct val");
+    dyStringPrintf(dyQuery,"select distinct %c.val",letter);
 
-dyStringPrintf(dyQuery," from %s l1 where l1.var='%s' ",tableName,var);
+dyStringPrintf(dyQuery," from %s %c where %c.var='%s'",tableName,letter,letter,var);
 
-if (!tables || !files)
-    dyStringPrintf(dyQuery,"and exists (select l2.obj from %s l2 where l2.obj = l1.obj and l2.var='objType' and l2.val='%s')",
-                   tableName,tables?MDB_OBJ_TYPE_TABLE:MDB_OBJ_TYPE_FILE);
-dyStringAppend(dyQuery," order by val");
+mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName, letter, hasTableName, hasFileName);
+
+dyStringPrintf(dyQuery," order by %c.val",letter);
 
 retVal = sqlQuickList(conn, dyStringCannibalize(&dyQuery));
 slNameSortCase(&retVal);
 return retVal;
 }
 
-// ------------ CONTROLLED VOCABULARY APIs --------------
+struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags, boolean hasTableName, boolean hasFileName)
+// Search the metaDb table for vals by var and returns val (as pair->name) and controlled vocabulary (cv) label
+// (if it exists) (as pair->val).  Can impose (non-zero) limit on returned string size of name.
+// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
+// Return is case insensitive sorted on label (cv label or else val). If requested, return cv tag instead of mdb val.
+{  // TODO: Change this to use normal mdb struct routines?
+if (!hasTableName && !hasFileName)
+    errAbort("mdbValLabelSearch requests vals associated with neither table nor files.\n");
+
+char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
+
+char letter = 'A';
+struct dyString *dyQuery = dyStringNew(512);
+if (limit > 0)
+    dyStringPrintf(dyQuery,"select distinct LEFT(%c.val,%d)",letter,limit);
+else
+    dyStringPrintf(dyQuery,"select distinct %c.val",letter);
+
+dyStringPrintf(dyQuery," from %s %c where %c.var='%s'",tableName,letter,letter,var);
+
+mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName,letter, hasTableName, hasFileName);
+//warn("%s",dyStringContents(dyQuery));
+
+struct hash *varHash = (struct hash *)cvTermHash(var);
+
+struct slPair *pairs = NULL;
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(dyQuery));
+dyStringFree(&dyQuery);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *val = row[0];
+    char *label = NULL;
+    if (varHash != NULL)
+        {
+        struct hash *valHash = hashFindVal(varHash,val);
+        if (valHash != NULL)
+            {
+            label = cloneString(hashOptionalVal(valHash,CV_LABEL,row[0]));
+            if (tags)
+                {
+                char *tag = hashFindVal(valHash,CV_TAG);
+                if (tag != NULL)
+                    val = tag;
+                }
+            }
+        }
+    if (label == NULL);
+        label = cloneString(row[0]);
+    label = strSwapChar(label,'_',' ');  // vestigial _ meaning space
+    slPairAdd(&pairs,val,label);
+    }
+sqlFreeResult(&sr);
+slPairValSortCase(&pairs);
+return pairs;
+}
+
+struct slPair *mdbVarsSearchable(struct sqlConnection *conn, boolean hasTableName, boolean hasFileName)
+// returns a white list of mdb vars that actually exist in the current DB.
+// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
+{
+if (!hasTableName && !hasFileName)
+    errAbort("mdbVarsSearchable requests vals associated with neither table nor files.\n");
+
+char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
+
+char letter = 'A';
+struct slPair *cvApproved = cvWhiteList(TRUE,FALSE);
+struct slPair *relevant = NULL;
+struct dyString *dyQuery = dyStringNew(256);
+while(cvApproved != NULL)
+    {
+    struct slPair *oneVar = slPopHead(&cvApproved);
+    dyStringClear(dyQuery);
+    dyStringPrintf(dyQuery, "select count(DISTINCT %c.val) from %s %c where %c.var = '%s'",letter,tableName,letter,letter,oneVar->name);
+
+    mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName,letter, hasTableName, hasFileName);
+    int count = sqlQuickNum(conn,dyStringContents(dyQuery));
+    //warn("%d %s",count,dyStringContents(dyQuery));
+
+    if(count > 1)  // If there is only one value then searching on that variable is useless!
+        slAddHead(&relevant, oneVar);
+    else
+        slPairFree(&oneVar);
+    }
+dyStringFree(&dyQuery);
+slReverse(&relevant);
+return relevant;
+}

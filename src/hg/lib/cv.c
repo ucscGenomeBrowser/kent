@@ -85,63 +85,6 @@ if (cvHashForTerm == NULL)
 return cvHashForTerm;
 }
 
-struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags, boolean tables, boolean files)
-// Search the metaDb table for vals by var and returns val (as pair->name) and controlled vocabulary (cv) label
-// (if it exists) (as pair->val).  Can impose (non-zero) limit on returned string size of name.
-// if requested, return cv tag instead of mdb val.  If requested, limit to table objs or file objs
-// Return is case insensitive sorted on label (cv label or else val).
-{  // TODO: Change this to use normal mdb struct routines?
-if (!tables && !files)
-    errAbort("mdbValSearch requests values for neither table nor file objects.\n");
-
-char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
-
-struct dyString *dyQuery = dyStringNew(512);
-if (limit > 0)
-    dyStringPrintf(dyQuery,"select distinct LEFT(val,%d)",limit);
-else
-    dyStringPrintf(dyQuery,"select distinct val");
-
-dyStringPrintf(dyQuery," from %s l1 where l1.var='%s' ",tableName,var);
-
-if (!tables || !files)
-    dyStringPrintf(dyQuery,"and exists (select l2.obj from %s l2 where l2.obj = l1.obj and l2.var='objType' and l2.val='%s')",
-                   tableName,tables?MDB_OBJ_TYPE_TABLE:MDB_OBJ_TYPE_FILE);
-
-struct hash *varHash = (struct hash *)cvTermHash(var);
-
-struct slPair *pairs = NULL;
-struct sqlResult *sr = sqlGetResult(conn, dyStringContents(dyQuery));
-dyStringFree(&dyQuery);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *val = row[0];
-    char *label = NULL;
-    if (varHash != NULL)
-        {
-        struct hash *valHash = hashFindVal(varHash,val);
-        if (valHash != NULL)
-            {
-            label = cloneString(hashOptionalVal(valHash,CV_LABEL,row[0]));
-            if (tags)
-                {
-                char *tag = hashFindVal(valHash,CV_TAG);
-                if (tag != NULL)
-                    val = tag;
-                }
-            }
-        }
-    if (label == NULL);
-        label = cloneString(row[0]);
-    label = strSwapChar(label,'_',' ');  // vestigial _ meaning space
-    slPairAdd(&pairs,val,label);
-    }
-sqlFreeResult(&sr);
-slPairValSortCase(&pairs);
-return pairs;
-}
-
 const struct hash *cvTermTypeHash()
 // returns a hash of hashes of mdb and controlled vocabulary (cv) term types
 // Those terms should contain label,description,searchable,cvDefined,hidden

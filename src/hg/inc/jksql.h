@@ -145,6 +145,12 @@ struct sqlConnection *sqlConnCacheProfileAlloc(struct sqlConnCache *cache,
                                                char *database);
 /* Allocate a cached connection given a profile and/or database. */
 
+struct sqlConnection *sqlConnCacheProfileAllocMaybe(struct sqlConnCache *cache,
+                                                    char *profileName,
+                                                    char *database);
+/* Allocate a cached connection given a profile and/or database. Return NULL
+ * if the database doesn't exist.  */
+
 void sqlConnCacheDealloc(struct sqlConnCache *cache,struct sqlConnection **pConn);
 /* Free up a cached connection. */
 

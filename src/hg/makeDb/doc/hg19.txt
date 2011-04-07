@@ -8390,7 +8390,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 3/1/11 angie)
+# NHGRI GWAS CATALOG (DONE 4/1/11 angie)
+# Updated 3/1/11
 # Updated 2/1/11
 # Updated 12/7/10
 # Updated 11/1/10
@@ -8419,7 +8420,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 5467 elements of size 22
+#Loaded 5631 elements of size 22
 
 
 ######################################################################## 
@@ -15251,6 +15252,10 @@ TMPDIR=/scratch/tmp
     # real    100m33.646s
     cat fb.hg19.chainMelGal1Link.txt
     #   76647912 bases of 2897316137 (2.645%) in intersection
+    # Create link
+    cd /hive/data/genomes/hg19/bed
+    ln -s  lastzMelGal1.2011-03-28 lastz.melGal1
+
 
     #   running the swap 
     mkdir /hive/data/genomes/melGal1/bed/blastz.hg19.swap
@@ -15264,6 +15269,197 @@ TMPDIR=/scratch/tmp
     #   real    6m51.280s
     cat fb.melGal1.chainHg19Link.txt
     #   62120143 bases of 935922386 (6.637%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.hg19.swap lastz.hg19
 
 #############################################################################
+# BUILD seudoYale60 TRACK 
+# Rachel built this for Gencode first, Fan adopted for UCSC GB, DONE, 3/31/2011.
+#
+# First, how Rachel built it:
+# YALE PSEUDOPIPE PSEUDOGENE PREDICTIONS BASED ON ENSEMBL 60 
+# (hartera, 2011-01-10, DONE)
+# FTP site e-mailed by Suganthi Balasubramanian (suganthi.bala@yale.edu) from 
+# the Gerstein lab. Data is from their PseudoPipe pipeline and it is based on 
+# proteins from Ensembl Build 60 (pseudogene data from December 2010?). 
+
+mkdir -p /hive/groups/gencode/browser/hg19/gencodeYalePseudoBuild60
+cd /hive/groups/gencode/browser/hg19/gencodeYalePseudoBuild60
+
+wget --timestamping \
+     "http://tables.pseudogene.org/dump.cgi?table=Human60"
+
+# Then re-name the file:
+mv dump.cgi\?table=Human60 Human60YalePseudo.txt
+# Header from data file.
+ID      Chromosome      Start Coordinate        Stop Coordinate Strand  Parent
+Protein  Protein Start   Protein Stop    Parent Gene     Fraction        Num
+Insertions  Num Deletions   Num Shifts      Num Stops       E Value Identity
+PolyA   Disablements    Exons   Introns Class   Sequence        Link
+
+# urls are of type:
+# http://tables.pseudogene.org/human60/<ID> so this can be added to the
+# trackDb as for the previous track. 
+
+# Get list of haplotype chroms:
+grep _ Human60YalePseudo.txt | awk '{print $2}' | sort | uniq
+HSCHR17_1
+HSCHR6_MHC_APD
+HSCHR6_MHC_COX
+HSCHR6_MHC_DBB
+HSCHR6_MHC_MANN
+HSCHR6_MHC_MCF
+HSCHR6_MHC_QBL
+HSCHR6_MHC_SSTO
+
+# These correspond to the haplotype chroms in GRCh37 (hg19).
+# Convert data to genePred:
+# chromsomomes are 1-22, X, Y, chr17_ctg5_hap1 (HSCHR17_1) and the chr6 
+# haplotypes e.g. chr6_cox_hap1 (HSCHR6_MHC_COX) 
+
+cat << '_EOF_' > formatPseudogenesToGenePred
+#!/usr/bin/awk -f
+# Parse Yale pseudogene data file.
+# Exon coordinates are in this format: [[28688544, 28688864], [28689678, 2869117# 4], [28694308, 28694460], [28701327, 28701749]]
+# Ignore header line
+/^ID/ {
+  next;
+}
+# Parse the data lines
+BEGIN {FS="\t"} {OFS="\t"} {
+  gsub(/\[/, "", $19);
+  gsub(/\]/, "", $19); 
+  split($19, exons, ",");
+  # Count the number of start and end coordinates for exons and 
+  # calculate the number of exons.
+  count=(length(exons))/2;
+  # Write out genePred. Add chr in front of chrom only if not haplotype.
+  if ($2 !~ /HSCHR/) {
+     printf "%s\tchr%s\t%c\t%d\t%d\t0\t0\t%d\t", $1, $2, $5, $3-1, $4, count; 
+  }
+  else {
+     printf "%s\t%s\t%c\t%d\t%d\t0\t0\t%d\t", $1, $2, $5, $3-1, $4, count; 
+  }
+  # get list of exon starts, convert from 1-based to 0-based
+  for (i=1; i <= length(exons); i+=2) {
+     printf "%d,", exons[i]-1","; 
+  }
+  printf "\t";
+  # get list of exon ends
+  for (i=2; i <= length(exons); i+=2) {
+     printf "%d,", exons[i]","; 
+  }
+  printf "\n"; 
+}
+'_EOF_'
+
+chmod +x formatPseudogenesToGenePred
+# format the Yale pseudogenes data to genePred.
+./formatPseudogenesToGenePred Human60YalePseudo.txt \
+    > gencodeYalePseudoBuild60.gp 
+
+# The Genome Browser represents just the haplotype region as a separate 
+# "chromosome" whereas the coordinates represent the haplotype region embedded
+# into chr6.
+cp -p /hive/data/genomes/hg19/jkStuff/ensGene.haplotype.lift .
+# The lift file assumes the following chrom names 
+-69170076       HSCHR4_1        191154276       chr4_ctg9_hap1  590426
+-43384863       HSCHR17_1       81195210        chr17_ctg5_hap1 1680828
+-28696603       HSCHR6_MHC_APD  171115067       chr6_apd_hap1   4622290
+-28477796       HSCHR6_MHC_COX  171115067       chr6_cox_hap2   4795371
+-28696603       HSCHR6_MHC_DBB  171115067       chr6_dbb_hap3   4610396
+-28696603       HSCHR6_MHC_MANN 171115067       chr6_mann_hap4  4683263
+-28696603       HSCHR6_MHC_MCF  171115067       chr6_mcf_hap5   4833398
+-28696603       HSCHR6_MHC_QBL  171115067       chr6_qbl_hap6   4611984
+-28659142       HSCHR6_MHC_SSTO 171115067       chr6_ssto_hap7  4928567
+
+liftUp -type=.gp gencodeYalePseudoBuild60HapsLifted.gp \
+       ensGene.haplotype.lift carry gencodeYalePseudoBuild60.gp
+# Got 68 lifts in ensGene.haplotype.lift
+# Lifting gencodeYalePseudoBuild55.gp
+
+wc -l gencode*.gp
+17888 gencodeYalePseudoBuild60.gp
+17888 gencodeYalePseudoBuild60HapsLifted.gp
+ 
+# Load table and then check some haplotype regions. See if look plausible. 
+# Load the genePred file into hg19
+hgLoadGenePred hg19 gencodeYalePseudoBuild60 \
+gencodeYalePseudoBuild60HapsLifted.gp
+# Didn't load. There are 12 invalid genePreds (10 in Ensembl 55, 12 for 59):
+Error: invalid genePred: PGOHUM00000244617 exon 2 overlaps previous exon
+Error: invalid genePred: PGOHUM00000244796 exon 1 overlaps previous exon
+Error: invalid genePred: PGOHUM00000248470 exon 1 overlaps previous exon
+Error: invalid genePred: PGOHUM00000251325 exon 1 overlaps previous exon
+Error: invalid genePred: PGOHUM00000250199 exon 1 overlaps previous exon
+Error: invalid genePred: PGOHUM00000243651 exon 1 overlaps previous exon
+Error: invalid genePred: PGOHUM00000232858 exon 1 overlaps previous exon
+Error: invalid genePred: PGOHUM00000232933 exon 1 overlaps previous exon
+Error: invalid genePred: PGOHUM00000233065 exon 1 overlaps previous exon
+Error: invalid genePred: PGOHUM00000236237 exon 1 overlaps previous exon
+Error: invalid genePred: PGOHUM00000241760 exon 1 overlaps previous exon
+Error: invalid genePred: PGOHUM00000233784 exon 8 overlaps previous exon
+Error: 12 invalid genePreds, database unchanged
+
+# These are on chroms 1, 6, 7, 9, X, Y.
+# File didn't load into database.
+# Make a file of these ids - invalidIds
+grep -f invalidIds -vw gencodeYalePseudoBuild60HapsLifted.gp \
+    > gencodeYalePseudoBuild60HapsLiftedNoInvalidGps.gp
+wc -l gencode*gp
+# 17888 gencodeYalePseudoBuild60.gp
+# 17888 gencodeYalePseudoBuild60HapsLifted.gp
+# 17876 gencodeYalePseudoBuild60HapsLiftedNoInvalidGps.gp
+
+# Then re-load database
+hgLoadGenePred hg19 gencodeYalePseudoBuild60 \
+      gencodeYalePseudoBuild60HapsLiftedNoInvalidGps.gp
+
+# Add trackDb.ra entry for track, add a search and make sure
+# there is a description page, copy over from the gencodeYalePseudoBuild59
+# html. Commit these to SVN. 
+# Add to the html description, the list of 12 IDs of genes that were removed 
+# due to overlapping exon coordinates. This was also a problem for the Yale
+# pseudogenes based on Ensembl Build 53 and 55 but there were 10 problem IDs
+# for those builds. 
+
+# Build class table for colouring pseudogenes by type. 
+# copy over class table definition from a previous set of Yale pseudogenes.
+cp -p ../gencodeYalePseudoBuild55/gencodeYalePseudoBuild55Class.sql \
+ gencodeYalePseudoBuild60Class.sql
+
+# Make the class table file:
+tail -n +2 Human60YalePseudo.txt \
+  | tawk '{print $1, $21, "Yale"}' | sort > yalePseudoBuild60Class.txt
+
+# load table
+hgLoadSqlTab hg19 gencodeYalePseudoBuild60Class \
+    gencodeYalePseudoBuild60Class.sql yalePseudoBuild60Class.txt
+
+hgsql -e 'select distinct(class) from gencodeYalePseudoBuild60Class;' hg19
++------------+
+| class      |
++------------+
+| Ambiguous  | 
+| Processed  | 
+| Duplicated | 
++------------+
+
+# Add these classes to the trackDb.ra entry for the geneClasses field and 
+# to the list of classes with colours.
+
+# Next, how Fan adopted it:
+
+ssh hgwdev
+mkdir -p /hive/data/genomes/hg19/bed/pseudoYale60
+cd /hive/data/genomes/hg19/bed/pseudoYale60
+
+hgsql hg19 < ~/src/hg/lib/pseudoYale60.sql
+hgsql hg19 < ~/src/hg/lib/pseudoYale60Class.sql
+
+hgsql hg19 -e "insert into pseudoYale60 select * from gencodeYalePseudoBuild60"
+hgsql hg19 -e "insert into pseudoYale60Class select * from gencodeYalePseudoBuild60Class"
+
+##########################################################################################
+
 

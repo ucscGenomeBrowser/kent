@@ -762,15 +762,20 @@ while (text != NULL)
     if (respectQuotes)
         {
         word = nextWordRespectingQuotes(&text);
-        if (word[0] == '"')
-            stripChar(word, '"');
-        else if (word[0] == '\'')
-            stripChar(word, '\'');
+        if (word != NULL)
+            {
+            if (word[0] == '"')
+                stripChar(word, '"');
+            else if (word[0] == '\'')
+                stripChar(word, '\'');
+            }
         }
     else
         word = nextWord(&text);
     if (word)
         slNameStore(&list, word);
+    else
+        break;
     }
 
 slReverse(&list);
@@ -1005,8 +1010,8 @@ struct slPair *list = NULL;
 for (ix=1; ix < count;ix++) // starting at 1 and looking back to 0
     {
     // name comes from prev token!
-    char *name = tokens[ix -1];
-    char *val = tokens[ix];
+    char *name = skipLeadingSpaces(tokens[ix - 1]); // Could be multiple spaces delimiting one pair from next
+    char *val =  tokens[ix];                        // should be immediately after '='
 
     // Parse of val and set up ptr for next name
     char *next = NULL;

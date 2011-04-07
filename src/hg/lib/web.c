@@ -14,7 +14,7 @@
 #include "dbDb.h"
 #include "hgColors.h"
 #include "hubConnect.h"
-#include "searchTracks.h"
+#include "search.h"
 #ifndef GBROWSE
 #include "axtInfo.h"
 #include "wikiLink.h"
@@ -185,7 +185,7 @@ if (withHtmlHeader)
     htmlTextOut(newString);
     printf("	</TITLE>\n    ");
     if (endsWith(scriptName, "qaPushQ")) // Tired of failed stylesheet versioning that messes up RR releaseLog.html (regular and ENCODE)
-	printf("    <LINK rel='STYLESHEET' href='../style/HGStyle.css' TYPE='text/css' />\n");	
+	printf("    <LINK rel='STYLESHEET' href='../style/HGStyle.css' TYPE='text/css' />\n");
     else
         webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)

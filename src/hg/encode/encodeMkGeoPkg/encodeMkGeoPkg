@@ -218,10 +218,10 @@ sub mapMdbToCv {
 sub isRaw {
     my $type = shift;
     return (
-            #$type eq "Fasta3p" or
-            #$type eq "Fasta5p" or
-            #$type eq "FastaRd1" or
-            #$type eq "FastaRd2" or
+            $type eq "Fasta3p" or
+            $type eq "Fasta5p" or
+            $type eq "FastaRd1" or
+            $type eq "FastaRd2" or
             $type eq "Fastq" or
             $type eq "FastqRd1" or
             $type eq "FastqRd2" or
@@ -364,6 +364,13 @@ while(scalar(keys %objsSet) > 0) {
     # get the experimental variables for that object
 
     %metadata = getObjMetadata($dbHandle, $firstObject, $mySqlDatabase);
+
+    if ($metadata{'objType'} eq "composite"){
+	my $firstObject = (keys(%objsSet))[0];
+	my @currentObjects = ($firstObject);
+	delete $objsSet{$firstObject};
+    }
+
     my @currentMetadata = {%metadata};
     my @currentExpVars;
     for my $i (@expVars) {
@@ -377,9 +384,17 @@ while(scalar(keys %objsSet) > 0) {
         %metadata = getObjMetadata($dbHandle, $o, $mySqlDatabase);
         my $match = 1;
         for($i = 0; $i < scalar(@expVars); ++$i) {
-            defined $metadata{$expVars[$i]} or die "can't find field for experimental variable '" . $expVars[$i] . "' in obj " . $o;
-            if ($metadata{$expVars[$i]} ne $currentExpVars[$i]) {
-                $match = 0;
+
+            #Tests to see if it's the stub object at top of file
+	    if ($metadata{'objType'} eq "composite"){
+		$match = 0;
+		delete $objsSet{$o};
+	    }else{
+
+                defined $metadata{$expVars[$i]} or die "can't find field for experimental variable '" . $expVars[$i] . "' in obj " . $o;
+                if ($metadata{$expVars[$i]} ne $currentExpVars[$i]) {
+                    $match = 0;
+                }
             }
         }
         if ($match) {
