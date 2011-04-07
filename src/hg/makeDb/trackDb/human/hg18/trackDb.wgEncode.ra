@@ -305,8 +305,7 @@ wgEncode 1
 include wgEncodeRikenCage.ra
 
 # Duke Affy Exon (wrangler: braney)
-include wgEncodeDukeAffyExon.ra beta,public
-include wgEncodeDukeAffyExon.new.ra alpha
+include wgEncodeDukeAffyExon.ra
 
 # U. Washington Affy Exon (wrangler: Andy, Brian)
 
@@ -1451,8 +1450,7 @@ type encodeFiveC
     priority 2
 
 # Affymetrix RNA-chip (wrangler: braney)
-include wgEncodeAffyRnaChip.ra beta,public
-include wgEncodeAffyRnaChip.new.ra alpha
+include wgEncodeAffyRnaChip.ra
 
 # SUNY Albany genechp (wrangler: braney)
 
@@ -1790,8 +1788,7 @@ include wgEncodeHudsonalphaCnv.ra beta,public
 include wgEncodeHudsonalphaCnv.new.ra alpha
 
 # HudsonAlpha Methyl-seq (wrangler: braney)
-include wgEncodeHudsonalphaMethylSeq.ra beta,public
-include wgEncodeHudsonalphaMethylSeq.new.ra alpha
+include wgEncodeHudsonalphaMethylSeq.ra
 
 # Wold Lab (Caltech) RNA-seq (wrangler: braney)
 include wgEncodeCaltechRnaSeq.ra
@@ -1804,8 +1801,7 @@ include wgEncodeGisRnaSeq.new.ra alpha
 include wgEncodeGisDnaPet.ra
 
 # Helicos RNA-seq (wrangler: braney)
-include wgEncodeHelicosRnaSeq.ra beta,public
-include wgEncodeHelicosRnaSeq.new.ra alpha
+include wgEncodeHelicosRnaSeq.ra
 
 # CSHL short rna-seq (wrangler: braney)
 include wgEncodeCshlShortRnaSeq.ra

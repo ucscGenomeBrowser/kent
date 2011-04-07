@@ -23,7 +23,6 @@ wgEncode 1
     longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12891 cells)
     subGroups cellType=GM12891 replicate=1
     type bed 9
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12891 view=Regions replicate=1 softwareVersion=myerslab dataVersion="ENCODE Jan 2010 Freeze" subId=794 dateSubmitted=2009-11-25 dateUnrestricted=2010-08-25 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12891 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12891.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12891
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -31,7 +30,6 @@ wgEncode 1
     longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in GM12891 cells)
     subGroups cellType=GM12891 replicate=2
     type bed 9
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12891 view=Regions replicate=2 softwareVersion=myerslab dataVersion="ENCODE Jan 2010 Freeze" subId=794 dateSubmitted=2009-11-25 dateUnrestricted=2010-08-25 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12891 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12891.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12892
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -39,7 +37,6 @@ wgEncode 1
     longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12892 cells)
     subGroups cellType=GM12892 replicate=1
     type bed 9
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12892 view=Regions replicate=1 softwareVersion=myerslab dataVersion="ENCODE Jan 2010 Freeze" subId=796 dateSubmitted=2009-11-30 dateUnrestricted=2010-08-29 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12892 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12892.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12892
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -47,7 +44,6 @@ wgEncode 1
     longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in GM12892 cells)
     subGroups cellType=GM12892 replicate=2
     type bed 9
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12892 view=Regions replicate=2 softwareVersion=myerslab dataVersion="ENCODE Jan 2010 Freeze" subId=796 dateSubmitted=2009-11-30 dateUnrestricted=2010-08-29 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12892 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12892.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2H1hesc
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -56,7 +52,6 @@ wgEncode 1
     subGroups cellType=H1hESC replicate=2
     type bed 9
     color 0,107,27
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H1-hESC protocol=PCR1x restrictionEnzyme=None view=Regions replicate=2 softwareVersion=SL659 dataVersion="ENCODE Jan 2010 Freeze" subId=887 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2H1hesc fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2H1hesc.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -65,7 +60,6 @@ wgEncode 1
     subGroups cellType=H1hESC replicate=1
     type bed 9
     color 0,107,27
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H1-hESC protocol=PCR1x restrictionEnzyme=None view=Regions replicate=1 softwareVersion=SL605 dataVersion="ENCODE Jan 2010 Freeze" subId=887 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc.bed9.gz
 
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x
@@ -75,7 +69,6 @@ wgEncode 1
     subGroups cellType=HeLaS3 replicate=2
     type bed 9
     color 0,119,158
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HeLa-S3 protocol=PCR1x restrictionEnzyme=None view=Regions replicate=2 labVersion=SL603 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=905 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -84,7 +77,6 @@ wgEncode 1
     subGroups cellType=HeLaS3 replicate=1
     type bed 9
     color 0,119,158
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HeLa-S3 protocol=PCR1x restrictionEnzyme=None view=Regions replicate=1 labVersion=SL577 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=905 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -93,7 +85,6 @@ wgEncode 1
     subGroups cellType=HepG2 replicate=2
     type bed 9
     color 189,0,157
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HepG2 protocol=PCR1x restrictionEnzyme=None view=Regions replicate=2 labVersion=SL579 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=905 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -102,7 +93,6 @@ wgEncode 1
     subGroups cellType=HepG2 replicate=1
     type bed 9
     color 189,0,157
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HepG2 protocol=PCR1x restrictionEnzyme=None view=Regions replicate=1 labVersion=SL578 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=905 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-07 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -113,11 +103,10 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    #    noInherit on
+#    noInherit on
     itemRgb on
     cell HCT-116
     color 0,55,219
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HCT-116 replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -132,7 +121,6 @@ wgEncode 1
     itemRgb on
     cell HCT-116
     color 0,55,219
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HCT-116 replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9es
     subTrack wgEncodeHudsonalphaMethylSeq
@@ -147,7 +135,6 @@ wgEncode 1
     itemRgb on
     cell H9ES
     color 0,128,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -162,7 +149,6 @@ wgEncode 1
     itemRgb on
     cell H9ES-E
     color 0,128,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES-E replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -171,7 +157,6 @@ wgEncode 1
     subGroups cellType=H9ES-AFPP replicate=1
     type bed 9
     color 0,128,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES-AFP+ replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -180,7 +165,6 @@ wgEncode 1
     subGroups cellType=H9ES-AFP- replicate=1
     type bed 9
     color 0,128,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES-AFP- replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -194,7 +178,6 @@ wgEncode 1
     itemRgb on
     cell H9ES-EB
     color 0,128,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES-EB replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -208,7 +191,6 @@ wgEncode 1
     itemRgb on
     cell H9ES-CM
     color 0,128,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES-CM replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -222,7 +204,6 @@ wgEncode 1
     itemRgb on
     cell H9ES-EBD
     color 0,128,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES-EBD replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02es
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -236,7 +217,6 @@ wgEncode 1
     itemRgb on
     cell BG02ES
     color 0,128,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=BG02ES replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02es fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02es.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -250,7 +230,6 @@ wgEncode 1
     itemRgb on
     cell BG02ES-EBD
     color 0,128,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=BG02ES-EBD replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Bg02esebd
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -264,7 +243,6 @@ wgEncode 1
     itemRgb on
     cell BG02ES-EBD
     color 0,128,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=BG02ES-EBD replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Bg02esebd fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Bg02esebd.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -278,7 +256,6 @@ wgEncode 1
     itemRgb on
     cell HFL11W
     color 189,0,157
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HFL11W replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w
     subTrack wgEncodeHudsonalphaMethylSeq off
@@ -292,7 +269,6 @@ wgEncode 1
     itemRgb on
     cell HFL24W
     color 189,0,157
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HFL24W replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hal
     subTrack wgEncodeHudsonalphaMethylSeq
@@ -306,7 +282,6 @@ wgEncode 1
     itemRgb on
     cell HAL
     color 189,0,157
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HAL replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hal fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hal.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878
     subTrack wgEncodeHudsonalphaMethylSeq
@@ -317,7 +292,6 @@ wgEncode 1
     itemRgb on
     color 153,38,0
     cell GM12878
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12878 replicate=1 softwareVersion=myerslab dataVersion="ENCODE July 2009 Freeze" subId=387 dateSubmitted=2009-07-15 dateUnrestricted=2010-04-15 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12878
     subTrack wgEncodeHudsonalphaMethylSeq
@@ -328,7 +302,6 @@ wgEncode 1
     itemRgb on
     color 153,38,0
     cell GM12878
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12878 replicate=2 softwareVersion=myerslab dataVersion="ENCODE July 2009 Freeze" subId=387 dateSubmitted=2009-07-15 dateUnrestricted=2010-04-15 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12878 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12878.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1K562
     subTrack wgEncodeHudsonalphaMethylSeq
@@ -339,7 +312,6 @@ wgEncode 1
     cell K562
     itemRgb on
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=K562 replicate=1 softwareVersion=myerslab dataVersion="ENCODE July 2009 Freeze" subId=387 dateSubmitted=2009-07-15 dateUnrestricted=2010-04-15 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1K562 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1K562.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2K562
     subTrack wgEncodeHudsonalphaMethylSeq
@@ -350,4 +322,3 @@ wgEncode 1
     cell K562
     itemRgb on
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=K562 replicate=2 softwareVersion=myerslab dataVersion="ENCODE July 2009 Freeze" subId=387 dateSubmitted=2009-07-15 dateUnrestricted=2010-04-15 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2K562 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2K562.bed9.gz
