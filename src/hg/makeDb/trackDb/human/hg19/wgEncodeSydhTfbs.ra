@@ -754,6 +754,7 @@ wgEncode 1
         # subId=3254 dateSubmitted=2011-01-14
 
 		track wgEncodeSydhTfbsHepg2CebpbIggrabPk
+		release alpha
 		parent wgEncodeSydhTfbsViewPeaks off
 		shortLabel HepG2 CEBPB Pk
 		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CEBPB in HepG2 cells)
@@ -3876,6 +3877,7 @@ wgEncode 1
         # subId=3257 dateSubmitted=2011-01-14
 
 		track wgEncodeSydhTfbsHepg2CebpbIggrabSig
+		release alpha
 		parent wgEncodeSydhTfbsViewSignal off
 		shortLabel HepG2 CEBPB Sig
 		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CEBPB in HepG2 cells)
