@@ -1790,8 +1790,7 @@ include wgEncodeHudsonalphaCnv.ra beta,public
 include wgEncodeHudsonalphaCnv.new.ra alpha
 
 # HudsonAlpha Methyl-seq (wrangler: braney)
-include wgEncodeHudsonalphaMethylSeq.ra beta,public
-include wgEncodeHudsonalphaMethylSeq.new.ra alpha
+include wgEncodeHudsonalphaMethylSeq.ra
 
 # Wold Lab (Caltech) RNA-seq (wrangler: braney)
 include wgEncodeCaltechRnaSeq.ra
