@@ -1802,8 +1802,7 @@ include wgEncodeGisRnaSeq.new.ra alpha
 include wgEncodeGisDnaPet.ra
 
 # Helicos RNA-seq (wrangler: braney)
-include wgEncodeHelicosRnaSeq.ra beta,public
-include wgEncodeHelicosRnaSeq.new.ra alpha
+include wgEncodeHelicosRnaSeq.ra
 
 # CSHL short rna-seq (wrangler: braney)
 include wgEncodeCshlShortRnaSeq.ra
