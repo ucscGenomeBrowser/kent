@@ -1450,8 +1450,7 @@ type encodeFiveC
     priority 2
 
 # Affymetrix RNA-chip (wrangler: braney)
-include wgEncodeAffyRnaChip.ra beta,public
-include wgEncodeAffyRnaChip.new.ra alpha
+include wgEncodeAffyRnaChip.ra
 
 # SUNY Albany genechp (wrangler: braney)
 
