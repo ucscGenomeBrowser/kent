@@ -488,66 +488,6 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3358 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HepG nucl sm A 2
-        longLabel HepG2 nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
-        subGroups view=Alignments cellType=2HepG2 localization=nucleus rnaExtract=shortTotal rep=rep2
-        type bam
-        origAssembly hg19
-        color 189,0,157
-        # subId=3357 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HepG nucl sm A 1
-        longLabel HepG2 nucleus small RNA-seq Alignments Rep 1 from ENCODE/CSHL
-        subGroups view=Alignments cellType=2HepG2 localization=nucleus rnaExtract=shortTotal rep=rep1
-        type bam
-        origAssembly hg19
-        color 189,0,157
-        # subId=3356 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HepG cyto sm A 2
-        longLabel HepG2 cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
-        subGroups view=Alignments cellType=2HepG2 localization=cytosol rnaExtract=shortTotal rep=rep2
-        type bam
-        origAssembly hg19
-        color 189,0,157
-        # subId=3355 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep1
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HepG cyto sm A 1
-        longLabel HepG2 cytosol small RNA-seq Alignments Rep 1 from ENCODE/CSHL
-        subGroups view=Alignments cellType=2HepG2 localization=cytosol rnaExtract=shortTotal rep=rep1
-        type bam
-        origAssembly hg19
-        color 189,0,157
-        # subId=3354 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HepG cell sm A 2
-        longLabel HepG2 cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
-        subGroups view=Alignments cellType=2HepG2 localization=cell rnaExtract=shortTotal rep=rep2
-        type bam
-        origAssembly hg19
-        color 189,0,157
-        # subId=3351 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HepG cell sm A 1
-        longLabel HepG2 cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
-        subGroups view=Alignments cellType=2HepG2 localization=cell rnaExtract=shortTotal rep=rep1
-        type bam
-        origAssembly hg19
-        color 189,0,157
-        # subId=3350 dateSubmitted=2011-01-19
-
         track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa nucl sm A 2
