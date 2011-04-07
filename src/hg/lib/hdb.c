@@ -507,6 +507,15 @@ if (hdbCc == NULL)
 return sqlConnCacheProfileAlloc(hdbCc, profileName, db);
 }
 
+struct sqlConnection *hAllocConnProfileMaybe(char *profileName, char *db)
+/* Get free connection, specifying a profile and/or a database. If none is
+ * available, allocate a new one.  Return NULL if database doesn't exist. */
+{
+if (hdbCc == NULL)
+    hdbCc = sqlConnCacheNew();
+return sqlConnCacheProfileAllocMaybe(hdbCc, profileName, db);
+}
+
 char *getTrackProfileName(struct trackDb *tdb)
 /* get profile is associated with a track, return it, otherwise NULL */
 {
@@ -524,7 +533,7 @@ struct sqlConnection *hAllocConnTrack(char *db, struct trackDb *tdb)
 return hAllocConnProfile(getTrackProfileName(tdb), db);
 }
 
-struct sqlConnection *hAllocConnProfileTbl(char *db, char *spec, char **tableRet)
+static struct sqlConnection *hAllocConnProfileTblInternal(char *db, char *spec, char **tableRet, bool abortOnError)
 /* Allocate a connection to db, spec can either be in the form `table' or
  * `profile:table'.  If it contains profile, connect via that profile.  Also
  * returns pointer to table in spec string. */
@@ -540,7 +549,26 @@ if (sep != NULL)
     }
 else
     *tableRet = spec;
-return hAllocConnProfile(profile, db);
+if (abortOnError)
+    return hAllocConnProfile(profile, db);
+else
+    return hAllocConnProfileMaybe(profile, db);
+}
+
+struct sqlConnection *hAllocConnProfileTbl(char *db, char *spec, char **tableRet)
+/* Allocate a connection to db, spec can either be in the form `table' or
+ * `profile:table'.  If it contains profile, connect via that profile.  Also
+ * returns pointer to table in spec string. */
+{
+return hAllocConnProfileTblInternal(db, spec, tableRet, TRUE);
+}
+
+struct sqlConnection *hAllocConnProfileTblMaybe(char *db, char *spec, char **tableRet)
+/* Allocate a connection to db, spec can either be in the form `table' or
+ * `profile:table'.  If it contains profile, connect via that profile.  Also
+ * returns pointer to table in spec string. Return NULL if database doesn't exist */
+{
+return hAllocConnProfileTblInternal(db, spec, tableRet, FALSE);
 }
 
 struct sqlConnection *hAllocConnDbTbl(char *spec, char **tableRet, char *defaultDb)
@@ -3361,8 +3389,10 @@ static boolean loadOneTrackDb(char *db, char *where, char *tblSpec,
 {
 char *tbl;
 boolean exists;
-struct sqlConnection *conn = hAllocConnProfileTbl(db, tblSpec, &tbl);
-if ((exists = sqlTableExists(conn, tbl)))
+// when using dbProfiles and a list of trackDb entries, it's possible that the
+// database doesn't exist in one of servers.
+struct sqlConnection *conn = hAllocConnProfileTblMaybe(db, tblSpec, &tbl);
+if ((exists = ((conn != NULL) && sqlTableExists(conn, tbl))))
     {
     struct trackDb *oneTable = trackDbLoadWhere(conn, tbl, where), *oneRow;
     while ((oneRow = slPopHead(&oneTable)) != NULL)
