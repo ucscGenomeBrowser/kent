@@ -1794,8 +1794,7 @@ include wgEncodeHudsonalphaMethylSeq.ra
 include wgEncodeCaltechRnaSeq.ra
 
 # GIS RNA-seq (wrangler: braney)
-include wgEncodeGisRnaSeq.ra beta,public
-include wgEncodeGisRnaSeq.new.ra alpha
+include wgEncodeGisRnaSeq.ra
 
 # GIS DNA Pet (wrangler: braney)
 include wgEncodeGisDnaPet.ra
