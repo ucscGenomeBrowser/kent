@@ -1,20 +1,3 @@
-metaObject wgEncodeHudsonalphaCnvRegionsGM12878
-objType table
-cell GM12878
-composite wgEncodeHudsonalphaCnv
-dataType Cnv
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-07-24
-dateSubmitted 2008-11-20
-dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaCnvRegionsGM12878.bed.gz
-grant Myers
-lab HudsonAlpha
-project wgEncode
-subId 449
-tableName wgEncodeHudsonalphaCnvRegionsGM12878
-view Regions
-
 metaObject wgEncodeHudsonalphaCnvRegionsGM12878V2
 objType table
 cell GM12878
@@ -32,23 +15,6 @@ subId 449
 tableName wgEncodeHudsonalphaCnvRegionsGM12878V2
 view Regions
 
-metaObject wgEncodeHudsonalphaCnvRegionsHepG2
-objType table
-cell HepG2
-composite wgEncodeHudsonalphaCnv
-dataType Cnv
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-07-24
-dateSubmitted 2008-11-20
-dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaCnvRegionsHepG2.bed.gz
-grant Myers
-lab HudsonAlpha
-project wgEncode
-subId 449
-tableName wgEncodeHudsonalphaCnvRegionsHepG2
-view Regions
-
 metaObject wgEncodeHudsonalphaCnvRegionsHepG2V2
 objType table
 cell HepG2
@@ -64,23 +30,6 @@ lab HudsonAlpha
 project wgEncode
 subId 449
 tableName wgEncodeHudsonalphaCnvRegionsHepG2V2
-view Regions
-
-metaObject wgEncodeHudsonalphaCnvRegionsK562
-objType table
-cell K562
-composite wgEncodeHudsonalphaCnv
-dataType Cnv
-dataVersion ENCODE July 2009 Freeze
-dateResubmitted 2009-07-24
-dateSubmitted 2008-11-20
-dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaCnvRegionsK562.bed.gz
-grant Myers
-lab HudsonAlpha
-project wgEncode
-subId 449
-tableName wgEncodeHudsonalphaCnvRegionsK562
 view Regions
 
 metaObject wgEncodeHudsonalphaCnvRegionsK562V2
@@ -151,4 +100,4 @@ subId 449
 tableName wgEncodeHudsonalphaCnvSignalK562
 view Signal
 
-# MAGIC: -1320590715
+# MAGIC: 482938409
