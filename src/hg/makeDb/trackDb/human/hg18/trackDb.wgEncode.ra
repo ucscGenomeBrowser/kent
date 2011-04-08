@@ -1784,8 +1784,8 @@ wgEncode 1
 #    color 46,0,184
 
 # HudsonAlpha CNV (wrangler: braney)
-include wgEncodeHudsonalphaCnv.ra beta,public
-include wgEncodeHudsonalphaCnv.new.ra alpha
+include wgEncodeHudsonalphaCnv.ra public
+include wgEncodeHudsonalphaCnv.new.ra alpha,beta
 
 # HudsonAlpha Methyl-seq (wrangler: braney)
 include wgEncodeHudsonalphaMethylSeq.ra
