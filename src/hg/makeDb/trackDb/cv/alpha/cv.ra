@@ -9155,7 +9155,7 @@ projectName UNC-Giddings
 #     "regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" )  # ("regex:" includes colon)
 #    # NOTE: that validate rules may end comment delimited by a '#'
 #
-#     priority Like in trackDb.ra this is used for enfocing a sort order in certain circumstances, with lower numbers implying greater priority.
+#     priority Like in trackDb.ra this is used for enforcing a sort order in certain circumstances, with lower numbers implying greater priority.
 #       At beginnning:
 #         species:??  assembly:??  project:010  grant:015  lab:020  composite:025  dataType:030  view:035  type:040
 #       Experiment defining:
@@ -9167,7 +9167,7 @@ projectName UNC-Giddings
 #       Lab descriptive:
 #         labExpId:410  labProtocolId:420  labVersion:430  softwareVersion:440  privacy:450  rank:460
 #       Miscellaneous junk which will be put into the 500 pot which will sort near the end
-#         accession:500  annotation:500  bioRep:500  fragLength:500  fragSize:500  mapAlgorithm:500
+#         accession:500  annotation:500  bioRep:500  fragLength:500  fragSize:500  mapAlgorithm:500  expVars:500
 #         insertLength:500  level:500  obtainedBy:500  readType:500  run:500  seqPlatform:500  size:500  uniqueness:500
 #       At End:
 #         dccInternalNotes:910  parentTable:920  tableName:970  fileName:980  fileIndex:990
@@ -9369,13 +9369,15 @@ cvDefined no
 validate integer
 priority 100
 
-# term expVars
-# type typeOfTerm
-# label Experimental variables
-# description Experiment defining variables for a given ENCODE composite set of tracks.
-# searchable no
-# cvDefined no
-# Only defined for one obj: wgEncodeCaltechRnaSeq  Must be from geo submissions and attached to composite. 11/3/10
+term expVars
+type typeOfTerm
+label Experimental variables
+description Experiment defining variables for a given ENCODE composite set of tracks.
+searchable no
+cvDefined no
+hidden yes
+priority 500
+# Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
 
 term fileIndex
 type typeOfTerm
