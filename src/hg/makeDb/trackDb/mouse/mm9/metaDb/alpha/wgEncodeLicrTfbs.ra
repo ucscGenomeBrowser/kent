@@ -1,3 +1,8 @@
+metaObject wgEncodeLicrTfbs
+objType composite
+composite wgEncodeLicrTfbs
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -1630,4 +1635,4 @@ strain C57BL/6
 subId 3005
 view RawData
 
-# MAGIC: 159414582
+# MAGIC: 924906958

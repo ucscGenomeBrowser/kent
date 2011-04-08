@@ -1,3 +1,8 @@
+metaObject wgEncodeSydhHist
+objType composite
+composite wgEncodeSydhHist
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1
 objType file
 age immortalized
@@ -435,4 +440,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: -377783445
+# MAGIC: 388065051

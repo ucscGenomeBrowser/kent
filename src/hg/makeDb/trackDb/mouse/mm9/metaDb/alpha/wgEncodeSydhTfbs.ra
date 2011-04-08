@@ -22,6 +22,11 @@ tableName wgEncodeSydh
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbs
+objType composite
+composite wgEncodeSydhTfbs
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeSydhTfbsCh12Chd2ab68301IggrabAlnRep1
 objType file
 age immortalized
@@ -5499,4 +5504,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 1153761830
+# MAGIC: 1919611610
