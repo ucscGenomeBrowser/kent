@@ -9377,6 +9377,7 @@ searchable no
 cvDefined no
 hidden yes
 priority 500
+validate none # Perhaps could add a validte option to restrict/require this var for objType=composite
 # Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
 
 term fileIndex
