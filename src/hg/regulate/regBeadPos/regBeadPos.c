@@ -327,16 +327,13 @@ highHistoneProbs = makeEmissionProbsForHistones();
 
 #define prob1(table, letter) ((table)[letter])
 
-void upcTraceback(int *scores, State **allStates, UBYTE *dna, int dnaSize, FILE *out)
-/* Trace back, then print out result. */
+void traceback(int *scores, State **allStates, int letterCount, State *tStates)
+/* Fill in tStates with the states of along the optimal path */
 {
 int i;
 int maxScore = -0x3fffffff;
 int maxState = 0;
-int lineSize;
-int maxLineSize = 50;
 State *states;
-State *tStates = needMem(dnaSize * sizeof(tStates[0]));
 
 /* Find end state. */
 for (i=0; i<aStateCount; ++i)
@@ -348,27 +345,18 @@ for (i=0; i<aStateCount; ++i)
         }
     }
 
-for (i = dnaSize-1; i >= 0; i -= 1)
+/* Fill in tStates with record of states of optimal path */
+for (i = letterCount-1; i >= 0; i -= 1)
     {
-    tStates[i] = visStates[maxState];
-    // if (tStates[i] != '.' && tStates[i] != 'm' && tStates[i] != '^' && tStates[i] != 'o')  uglyAbort("Wow, got %c", tStates[i]);
+    tStates[i] = maxState;
     states = allStates[maxState];
     maxState = states[i];
-    }
-
-for (i=0; i<dnaSize; i += lineSize)
-    {
-    lineSize = dnaSize - i;
-    if (lineSize > maxLineSize)
-        lineSize = maxLineSize;
-    mustWrite(out, tStates+i, lineSize);
-    fputc('\n', out);
     }
 }
 
 
-void dynamo(UBYTE *letters, int letterCount, FILE *out)
-/* Run dynamic programming algorithm on HMM. */
+void dynamo(UBYTE *letters, int letterCount, State *out)
+/* Run dynamic program of HMM and put states of most likely path in out. */
 {
 State **allStates;
 UBYTE *pos, c;
@@ -391,10 +379,8 @@ for (i=0; i<stateCount; ++i)
 initScores();
 for (i=0; i<stateCount; ++i)
     prevScores[i] = unlikely;
-// prevScores[aLow] = scaledLog(0.99);
-// prevScores[aMed] = scaledLog(0.01);
-prevScores[aLow] = scaledLog(0.000001);
-prevScores[aMed] = scaledLog(0.999999);
+prevScores[aLow] = scaledLog(0.99);
+prevScores[aMed] = scaledLog(0.01);
 
 for (lettersIx=0; lettersIx<scanSize; lettersIx += 1)
     {
@@ -476,8 +462,7 @@ for (lettersIx=0; lettersIx<scanSize; lettersIx += 1)
     flopScores();
     }
 
-
-upcTraceback(prevScores, allStates, letters, scanSize, out);
+traceback(prevScores, allStates, scanSize, out);
 
 /* Clean up. */
 for (i=0; i<stateCount; ++i)
@@ -487,22 +472,38 @@ for (i=0; i<stateCount; ++i)
 freeMem(allStates);
 }
 
+void upcTraceback(int *scores, State **allStates, UBYTE *letters, int letterCount, FILE *out)
+/* Trace back, then print out result. */
+{
+int lineSize;
+int maxLineSize = 100;
+State *states;
+AllocArray(states, letterCount);
+traceback(scores, allStates, letterCount, states);
+int i,j;
+for (i=0; i<letterCount; i += lineSize)
+    {
+    lineSize = letterCount - i;
+    if (lineSize > maxLineSize)
+        lineSize = maxLineSize;
+    State *t = states + i;
+    for (j=0; j<lineSize; ++j)
+	fputc(visStates[t[j]], out);
+    fputc('\n', out);
+    }
+}
+
 void runHmmOnChrom(struct bbiChromInfo *chrom, struct inFile *dnaseIn, struct inFile *histoneIn, FILE *f)
 /* Do the HMM run on the one chromosome. */
 {
 int inLetterCount;
 UBYTE *inLetters;
-uglyf("Quantizing %s of size %d\n", chrom->name, chrom->size);
 makeInLetters(chrom->size, dnaseIn, histoneIn, 5, &inLetterCount, &inLetters);
-uglyf("Reduced to %d entities of 25 possible values\n", inLetterCount);
-int zeroCount = countLeadingChars((char *)inLetters, 0);
-if (zeroCount >= inLetterCount)
-    errAbort("Whaaa?  %d out of %d are zero?\n",  zeroCount, inLetterCount);
-uglyf("1st nonZero at %d of %d.  Next line shows next 100 chars\n", zeroCount, inLetterCount);
-dumpLetters(uglyOut, inLetters+zeroCount, 80);
-uglyf("\n");
-
-dynamo(inLetters, inLetterCount, f);
+uglyTime("Quantizing %s of size %d", chrom->name, chrom->size);
+State *states;
+AllocArray(states, inLetterCount);
+dynamo(inLetters, inLetterCount, states);
+uglyTime("Ran HMM dynamo");
 }
 
 
@@ -520,12 +521,13 @@ struct bbiChromInfo *chrom, *chromList = bbiChromList(dnaseIn->bigWig);
 makeTransitionProbs();
 makeEmissionProbs();
 verbose(2, "Processing %d chromosomes\n", slCount(chromList));
+uglyTime(NULL);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     if (bigWigValsOnChromFetchData(dnaseIn->chromVals, chrom->name, dnaseIn->bigWig)
     &&  bigWigValsOnChromFetchData(histoneIn->chromVals, chrom->name, histoneIn->bigWig))
         {
-	uglyf("Got data\n");
+	uglyTime("Got data");
 	runHmmOnChrom(chrom, dnaseIn, histoneIn, f);
 	}
     }
