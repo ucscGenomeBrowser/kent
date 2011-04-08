@@ -145,6 +145,11 @@ tableName wgEncodeDukeUniqueness35bp
 uniqueness 1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more
 view Uniqueness
 
+metaObject wgEncodeMapability
+objType composite
+composite wgEncodeMapability
+expVars lab,dataType,view,size
+
 metaObject wgEncodeUmassMapabilityUniq15
 objType table
 composite wgEncodeMapability
@@ -159,4 +164,4 @@ subId 345
 tableName wgEncodeUmassMapabilityUniq15
 view Uniqueness
 
-# MAGIC: -711268818
+# MAGIC: 1265080648
