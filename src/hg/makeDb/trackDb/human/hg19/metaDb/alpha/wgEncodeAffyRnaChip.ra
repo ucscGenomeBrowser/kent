@@ -1,3 +1,8 @@
+metaObject wgEncodeAffyRnaChip
+objType composite
+composite wgEncodeAffyRnaChip
+expVars lab,dataType,cell,localization,rnaExtract
+
 metaObject wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal
 objType table
 cell GM12878
@@ -986,4 +991,4 @@ subId 2121
 tableName wgEncodeAffyRnaChipTransfragsProstateCellLongpolya
 view Transfrags
 
-# MAGIC: 736979792
+# MAGIC: -1081390068
