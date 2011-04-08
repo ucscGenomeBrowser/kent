@@ -1,3 +1,8 @@
+metaObject wgEncodeHelicosRnaSeq
+objType composite
+composite wgEncodeHelicosRnaSeq
+expVars lab,dataType,cell,localization,rnaExtract
+
 metaObject wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya
 objType table
 cell K562
@@ -51,4 +56,4 @@ subId 249
 tableName wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya
 view RawSignal
 
-# MAGIC: 234845390
+# MAGIC: 19165341

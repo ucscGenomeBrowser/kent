@@ -1,3 +1,8 @@
+metaObject wgEncodeBuOrchid
+objType composite
+composite wgEncodeBuOrchid
+expVars lab,dataType
+
 metaObject wgEncodeBuOrchidSignalRep1Gm12878
 objType table
 cell GM12878
@@ -32,4 +37,4 @@ subId 1095
 tableName wgEncodeBuOrchidSignalRep2Gm12878
 view Signal
 
-# MAGIC: 390992319
+# MAGIC: -489531895

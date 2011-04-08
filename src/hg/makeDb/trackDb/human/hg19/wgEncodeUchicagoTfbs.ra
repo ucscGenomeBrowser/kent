@@ -2,17 +2,10 @@
 # Notes:
 #       - Track Long Label: Transcription Factor Binding Sites by Epitope-Tag ChIP-seq from ENCODE/University of Chicago
 #       - Track Short Label: UChicago TFBS
-#       - View Long Labels: [cell] [factor] TFBS [view] from ENCODE/UChicago 
+#       - View Long Labels: [cell] [factor] TFBS GFP-tag ChIP-seq [view] from ENCODE/UChicago 
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier
 #       - Short Labels: 
-#               Template: [cell] [factor] [view]
-#					- Factor: Abbreviations for factor
-#						- eGFP-HDAC8 = GFP-HDAC8
-#						- eGFP-NR4A1 = GFP-NR4A1
-#						- eGFP-FOS = GFP-FOS
-#						- eGFP-JunB = GFP-JunB
-#						- eGFP-JunD = GFP-JunD
-#						- eGFP-GATA2 = GFP-GATA2
+#               Template: [cell] [factor]/GFP [view]
 #					- Views: For consistency sake view will be two letters
 #                       - Peaks = Pk
 #                       - Signal = Sg
@@ -38,7 +31,7 @@ longLabel Transcription Factor Binding Sites by Epitope-Tag ChIP-seq from ENCODE
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line K562=K562&nbsp;(Tier_1)
-subGroup3 factor Factor eHDAC8=eGFP-HDAC8 eNR4A1=eGFP-NR4A1 eFOS=eGFP-FOS eJunB=eGFP-JunB eJunD=eGFP-JunD eGATA2=eGFP-GATA2
+subGroup3 factor Factor eHDAC8=HDAC8 eNR4A1=NR4A1 eFOS=FOS eJunB=JunB eJunD=JunD eGATA2=GATA2
 subGroup4 control Control ControlGATA2=Control_eGFP-GATA2 ControlFOS=Control_eGFP-FOS Control=Control ControlHDAC8=Control_eGFP-HDAC8 ControlNR4A1=Control_eGFP-NR4A1 ControlJunD=Control_eGFP-JunD ControlJunB=Control_eGFP-JunB
 dimensions dimensionX=cellType dimensionY=factor 
 sortOrder cellType=+ factor=+ control=+ view=+
@@ -68,8 +61,8 @@ noInherit on
         track wgEncodeUchicagoTfbsK562EfosControlPk
         release alpha
         parent wgEncodeUchicagoTfbsPeaks 
-        shortLabel K562 GFP-FOS Pk
-        longLabel K562 eGFP-FOS TFBS Peaks from ENCODE/UChicago 
+        shortLabel K562 FOS/GFP Pk
+        longLabel K562 FOS TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago 
         subGroups view=Peaks factor=eFOS cellType=K562 control=Control
         type narrowPeak
         color 46,0,184
@@ -78,8 +71,8 @@ noInherit on
         track wgEncodeUchicagoTfbsK562Egata2ControlPk
         release alpha
         parent wgEncodeUchicagoTfbsPeaks 
-        shortLabel K562 GFP-GATA2 Pk
-        longLabel K562 eGFP-GATA2 TFBS Peaks from ENCODE/UChicago
+        shortLabel K562 GATA2/GFP Pk
+        longLabel K562 GATA2 TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=eGATA2 cellType=K562 control=Control
         type narrowPeak
         color 46,0,184
@@ -88,8 +81,8 @@ noInherit on
         track wgEncodeUchicagoTfbsK562Ehdac8ControlPk
         release alpha
         parent wgEncodeUchicagoTfbsPeaks 
-        shortLabel K562 GFP-HDAC8 Pk
-        longLabel K562 eGFP-HDAC8 TFBS Peaks from ENCODE/UChicago
+        shortLabel K562 HDAC8/GFP Pk
+        longLabel K562 HDAC8 TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=eHDAC8 cellType=K562 control=Control
         type narrowPeak
         color 46,0,184
@@ -98,8 +91,8 @@ noInherit on
         track wgEncodeUchicagoTfbsK562EjunbControlPk
         release alpha
         parent wgEncodeUchicagoTfbsPeaks 
-        shortLabel K562 GFP-JunB Pk
-        longLabel K562 eGFP-JunB TFBS Peaks from ENCODE/UChicago
+        shortLabel K562 JunB/GFP Pk
+        longLabel K562 JunB TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=eJunB cellType=K562 control=Control
         type narrowPeak
         color 46,0,184
@@ -108,8 +101,8 @@ noInherit on
         track wgEncodeUchicagoTfbsK562EjundControlPk
         release alpha
         parent wgEncodeUchicagoTfbsPeaks 
-        shortLabel K562 GFP-JunD Pk
-        longLabel K562 eGFP-JunD TFBS Peaks from ENCODE/UChicago
+        shortLabel K562 JunD/GFP Pk
+        longLabel K562 JunD TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=eJunD cellType=K562 control=Control
         type narrowPeak
         color 46,0,184
@@ -118,8 +111,8 @@ noInherit on
         track wgEncodeUchicagoTfbsK562Enr4a1ControlPk
         release alpha
         parent wgEncodeUchicagoTfbsPeaks 
-        shortLabel K562 GFP-NR4A1 Pk
-        longLabel K562 eGFP-NR4A1 TFBS Peaks from ENCODE/UChicago
+        shortLabel K562 NR4A1/GFP Pk
+        longLabel K562 NR4A1 TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=eNR4A1 cellType=K562 control=Control
         type narrowPeak
         color 46,0,184
@@ -141,8 +134,8 @@ noInherit on
         track wgEncodeUchicagoTfbsK562EfosControlSig
         release alpha
         parent wgEncodeUchicagoTfbsViewSignal 
-        shortLabel K562 GFP-FOS Sg
-        longLabel K562 eGFP-FOS TFBS Signal from ENCODE/UChicago
+        shortLabel K562 FOS/GFP Sg
+        longLabel K562 FOS TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
         subGroups view=Signal factor=eFOS cellType=K562 control=Control
         type bigWig -19284.970703 7497.709473
         color 46,0,184
@@ -151,8 +144,8 @@ noInherit on
         track wgEncodeUchicagoTfbsK562Egata2ControlSig
         release alpha
         parent wgEncodeUchicagoTfbsViewSignal 
-        shortLabel K562 GFP-GATA2 Sg
-        longLabel K562 eGFP-GATA2 TFBS Signal from ENCODE/UChicago
+        shortLabel K562 GATA2/GFP Sg
+        longLabel K562 GATA2 TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
         subGroups view=Signal factor=eGATA2 cellType=K562 control=Control
         type bigWig -3732.796387 6083.967285
         color 46,0,184
@@ -161,8 +154,8 @@ noInherit on
         track wgEncodeUchicagoTfbsK562Ehdac8ControlSig
         release alpha
         parent wgEncodeUchicagoTfbsViewSignal 
-        shortLabel K562 GFP-HDAC8 Sg
-        longLabel K562 eGFP-HDAC8 TFBS Signal from ENCODE/UChicago
+        shortLabel K562 HDAC8/GFP Sg
+        longLabel K562 HDAC8 TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
         subGroups view=Signal factor=eHDAC8 cellType=K562 control=Control
         type bigWig -3635.416016 7391.409180
         color 46,0,184
@@ -171,8 +164,8 @@ noInherit on
         track wgEncodeUchicagoTfbsK562EjunbControlSig
         release alpha
         parent wgEncodeUchicagoTfbsViewSignal 
-        shortLabel K562 GFP-JunB Sg
-        longLabel K562 eGFP-JunB TFBS Signal from ENCODE/UChicago
+        shortLabel K562 JunB/GFP Sg
+        longLabel K562 JunB TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
         subGroups view=Signal factor=eJunB cellType=K562 control=Control
         type bigWig -11520.261719 17224.816406
         color 46,0,184
@@ -181,8 +174,8 @@ noInherit on
         track wgEncodeUchicagoTfbsK562EjundControlSig
         release alpha
         parent wgEncodeUchicagoTfbsViewSignal 
-        shortLabel K562 GFP-JunD Sg
-        longLabel K562 eGFP-JunD TFBS Signal from ENCODE/UChicago
+        shortLabel K562 JunD/GFP Sg
+        longLabel K562 JunD TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
         subGroups view=Signal factor=eJunD cellType=K562 control=Control
         type bigWig -4305.450684 19676.619141
         color 46,0,184
@@ -191,8 +184,8 @@ noInherit on
         track wgEncodeUchicagoTfbsK562Enr4a1ControlSig
         release alpha
         parent wgEncodeUchicagoTfbsViewSignal 
-        shortLabel K562 GFP-NR4A1 Sg
-        longLabel K562 eGFP-NR4A1 TFBS Signal from ENCODE/UChicago
+        shortLabel K562 NR4A1/GFP Sg
+        longLabel K562 NR4A1 TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
         subGroups view=Signal factor=eNR4A1 cellType=K562 control=Control
         type bigWig -2001.193604 1318.283081
         color 46,0,184
