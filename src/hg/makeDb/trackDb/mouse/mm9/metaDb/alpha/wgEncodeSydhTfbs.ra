@@ -1,31 +1,7 @@
-metaObject wgEncodeSydh
-objType table
-age immortalized
-antibody Input
-cell MEL
-composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-04-26
-dateUnrestricted 2011-01-26
-grant Snyder
-lab Stanford-m
-labVersion PeakSeq1.0
-project wgEncode
-setType input
-sex M
-strain Unknown
-subId 1168
-tableName wgEncodeSydh
-treatment None
-view Signal
-
 metaObject wgEncodeSydhTfbs
 objType composite
 composite wgEncodeSydhTfbs
-expVars lab,dataType,cell,antibody
+expVars lab,dataType,cell,antibody,treatment
 
 metaObject wgEncodeSydhTfbsCh12Chd2ab68301IggrabAlnRep1
 objType file
@@ -5504,4 +5480,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 1919611610
+# MAGIC: 1992052883
