@@ -252,66 +252,49 @@ transProbLookup[aHD2][aLow] = scaledLog(0.004);
 }
 
 
-double *probsFromDnaseHistones(double *dnase, double *histones)
+int *probsFromDnaseHistones(double *dnase, double *histones)
 {
-double *p;
+int *p;
 AllocArray(p, HMM_LETTERS);
 int i,j, ix=0;
 for (i=0; i<DNASE_LEVELS; ++i)
     for (j=0; j<HISTONE_LEVELS; ++j)
         {
-	p[ix] = dnase[i]*histones[j];
+	p[ix] = scaledLog(dnase[i]*histones[j]);
 	++ix;
 	}
 return p;
 }
 
-double *makeEmissionProbsForLo()
+int *makeEmissionProbsForLo()
 {
 static double dnase[5] = {0.9, 0.08, 0.019, 0.001, 0};
 static double histone[5] = {0.8, 0.15, 0.04, 0.0099, 0.0001};
 return probsFromDnaseHistones(dnase, histone);
 }
 
-double *makeEmissionProbsForMed()
+int *makeEmissionProbsForMed()
 {
 static double dnase[5] = {0.1, 0.2, 0.3, 0.2, 0.1};
 static double histone[5] = {0.1, 0.2, 0.3, 0.2, 0.1};
 return probsFromDnaseHistones(dnase, histone);
 }
 
-double *makeEmissionProbsForDnase()
+int *makeEmissionProbsForDnase()
 {
 static double dnase[5] = {0.05, 0.05, 0.1, 0.4, 0.4};
 static double histone[5] = {0.22, 0.23, 0.23, 0.22, 0.1};
 return probsFromDnaseHistones(dnase, histone);
 }
 
-double *makeEmissionProbsForHistones()
+int *makeEmissionProbsForHistones()
 {
 static double dnase[5] = {0.4, 0.25, 0.2, 0.1, 0.05};
 static double histone[5] = {0.05, 0.05, 0.1, 0.4, 0.4};
 return probsFromDnaseHistones(dnase, histone);
 }
 
-void dumpProb(FILE *f, double *p, char *name)
-{
-fprintf(f, "%s", name);
-int i, j, ix=0;
-for (i=0; i<5; ++i)
-    {
-    fprintf(f, "  ");
-    for (j=0; j<5; ++j)
-	{
-	fprintf(f, " %03d", round(p[ix]*1000));
-	++ix;
-	}
-    }
-fprintf(f, "\n");
-}
-
-
-double *lowProbs, *medProbs, *highDnaseProbs, *highHistoneProbs;
+int *lowProbs, *medProbs, *highDnaseProbs, *highHistoneProbs;
 
 static void makeEmissionProbs()
 {
@@ -368,6 +351,7 @@ for (i=0; i<aStateCount; ++i)
 for (i = dnaSize-1; i >= 0; i -= 1)
     {
     tStates[i] = visStates[maxState];
+    // if (tStates[i] != '.' && tStates[i] != 'm' && tStates[i] != '^' && tStates[i] != 'o')  uglyAbort("Wow, got %c", tStates[i]);
     states = allStates[maxState];
     maxState = states[i];
     }
@@ -407,8 +391,10 @@ for (i=0; i<stateCount; ++i)
 initScores();
 for (i=0; i<stateCount; ++i)
     prevScores[i] = unlikely;
-prevScores[aLow] = scaledLog(0.99);
-prevScores[aMed] = scaledLog(0.01);
+// prevScores[aLow] = scaledLog(0.99);
+// prevScores[aMed] = scaledLog(0.01);
+prevScores[aLow] = scaledLog(0.000001);
+prevScores[aMed] = scaledLog(0.999999);
 
 for (lettersIx=0; lettersIx<scanSize; lettersIx += 1)
     {
