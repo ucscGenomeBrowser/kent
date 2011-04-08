@@ -1,3 +1,8 @@
+metaObject wgEncodeBroadHmm
+objType composite
+composite wgEncodeBroadHmm
+expVars lab,dataType,cell
+
 metaObject wgEncodeBroadHmmGm12878HMM
 objType table
 cell GM12878
@@ -160,4 +165,4 @@ subId 3823
 tableName wgEncodeBroadHmmNhlfHMM
 view HMM
 
-# MAGIC: -545435684
+# MAGIC: -244732807
