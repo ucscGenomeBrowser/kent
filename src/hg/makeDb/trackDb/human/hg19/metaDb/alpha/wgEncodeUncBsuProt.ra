@@ -1,3 +1,8 @@
+metaObject wgEncodeUncBsuProt
+objType composite
+composite wgEncodeUncBsuProt
+expVars lab,dataType,cell,localization
+
 metaObject wgEncodeUncBsuProtGm12878NucleusSig
 objType table
 cell GM12878
@@ -36,4 +41,4 @@ subId 3238
 tableName wgEncodeUncBsuProtK562MembranefractionSig
 view Signal
 
-# MAGIC: -1519554458
+# MAGIC: 519215696

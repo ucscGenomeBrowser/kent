@@ -12,7 +12,7 @@ dimensions dimensionX=cellType dimensionC=rnaExtract dimensionY=localization dim
 dimensionCchecked longPolyA,longNonPolyA,total
 dimensionBchecked rep0,rep1,rep2,rep3,rep4
 sortOrder view=- cellType=+ localization=+ rnaExtract=+ rep=+
-fileSortOrder cell=Cell_Line labProtocolId=<i>Protocol<BR>ID</i>  localization=Localization rnaExtract=RNA<BR>Extract view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line labProtocolId=<i>Protocol<BR>ID</i>  localization=Localization rnaExtract=RNA<BR>Extract view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on

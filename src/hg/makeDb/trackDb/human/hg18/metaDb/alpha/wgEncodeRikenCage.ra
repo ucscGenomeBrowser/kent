@@ -1,3 +1,8 @@
+metaObject wgEncodeRikenCage
+objType composite
+composite wgEncodeRikenCage
+expVars lab,dataType,cell,localization,rnaExtract
+
 metaObject wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya
 objType table
 cell GM12878
@@ -1414,4 +1419,4 @@ rnaExtract longNonPolyA
 subId 9
 view RawData
 
-# MAGIC: 654321639
+# MAGIC: 1256593498
