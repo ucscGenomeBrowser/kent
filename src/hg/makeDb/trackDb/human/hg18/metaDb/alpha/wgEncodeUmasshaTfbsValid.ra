@@ -1,3 +1,8 @@
+metaObject wgEncodeUmasshaTfbsValid
+objType composite
+composite wgEncodeUmasshaTfbsValid
+expVars lab,dataType,cell
+
 metaObject wgEncodeUmasshaTfbsValidTestedSitesK562
 objType table
 cell K562
@@ -14,4 +19,4 @@ subId 689
 tableName wgEncodeUmasshaTfbsValidTestedSitesK562
 view TestedSites
 
-# MAGIC: -1134037375
+# MAGIC: -1417901040

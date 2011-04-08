@@ -1,3 +1,8 @@
+metaObject wgEncodeHudsonalphaCnv
+objType composite
+composite wgEncodeHudsonalphaCnv
+expVars lab,dataType,cell
+
 metaObject wgEncodeHudsonalphaCnvRegionsGM12878
 objType table
 cell GM12878
@@ -151,4 +156,4 @@ subId 449
 tableName wgEncodeHudsonalphaCnvSignalK562
 view Signal
 
-# MAGIC: -1320590715
+# MAGIC: 1457569242
