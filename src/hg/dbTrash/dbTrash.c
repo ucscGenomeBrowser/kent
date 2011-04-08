@@ -32,7 +32,10 @@ errAbort(
   "   -topDir     - directory name to prepend to file names in extFile\n"
   "               - default is /usr/local/apache/trash\n"
   "               - file names in extFile are typically: \"../trash/ct/...\"\n"
-  "   -tableStatus  - use tableStatus to get size data, very inefficient\n"
+  "   -tableStatus  - use 'show table status' to get size data, very inefficient\n"
+  "   -delLostTable - delete tables that exist but are missing from metaInfo\n"
+  "                 - this operation can be even slower than -tableStatus\n"
+  "                 - if there are many tables to check.\n"
   "   -verbose=N - 2 == show arguments, dates, and dropped tables,\n"
   "              - 3 == show date information for all tables."
   );
@@ -46,6 +49,7 @@ static struct optionSpec options[] = {
     {"db", OPTION_STRING},
     {"topDir", OPTION_STRING},
     {"tableStatus", OPTION_BOOLEAN},
+    {"delLostTables", OPTION_BOOLEAN},
     {"historyToo", OPTION_BOOLEAN},
     {NULL, 0},
 };
@@ -61,6 +65,7 @@ static time_t dropTime = 0;
 static boolean extFileCheck = FALSE;
 static boolean extDel = FALSE;
 static boolean tableStatus = FALSE;
+static boolean delLostTable = FALSE;
 static char *topDir = "/usr/local/apache/trash";
 
 void checkExtFile(struct sqlConnection *conn)
@@ -164,6 +169,7 @@ unsigned long long totalSize = 0;
 // expiredTableNames: table exists and is in metaInfo and subject to age limits
 struct slName *expiredTableNames = NULL;
 struct slName *lostTables = NULL;	// tables existing but not in metaInfo
+unsigned long long lostTableCount = 0;
 struct hash *expiredHash = newHash(10); // as determined by metaInfo
 struct hash *notExpiredHash = newHash(10);
 struct sqlConnection *conn = sqlConnect(db);
@@ -275,8 +281,14 @@ else
 	    }
         }
     sqlFreeResult(&sr);
-    if (lostTables) // tables exist, but not in metaInfo, check their age
-	{	    // this happens rarely, should not be many of these, if ever
+    lostTableCount = slCount(lostTables);
+    // If tables exist, but not in metaInfo, check their age to expire them.
+    // It turns out even this show table status is slow too, so, only
+    // run thru it if asked to eliminate lost tables.  It is better to
+    // do this operation with the stand-alone perl script on the customTrash
+    // database machine.
+    if (delLostTable && lostTables)
+	{
 	struct slName *el;
 	for (el = lostTables; el != NULL; el = el->next)
 	    {
@@ -355,17 +367,20 @@ if (drop)
 	/* add a comment to the history table and finish up connection */
 	if (tableStatus)
 	    safef(comment, sizeof(comment), "Dropped %d tables with "
-		    "total size %llu", droppedCount, totalSize);
+		"total size %llu, %llu lost tables",
+		    droppedCount, totalSize, lostTableCount);
 	else
 	    safef(comment, sizeof(comment),
-		"Dropped %d tables, no size info", droppedCount);
+		"Dropped %d tables, no size info, %llu lost tables",
+		    droppedCount, lostTableCount);
 	verbose(2,"# %s\n", comment);
 	hgHistoryComment(conn, "%s", comment);
 	}
     else
 	{
 	safef(comment, sizeof(comment),
-		"Dropped no tables, none expired");
+	    "Dropped no tables, none expired, %llu lost tables",
+		lostTableCount);
 	verbose(2,"# %s\n", comment);
 	}
     }
@@ -377,16 +392,19 @@ else
 	int droppedCount = slCount(expiredTableNames);
 	if (tableStatus)
 	    safef(comment, sizeof(comment), "Would have dropped %d tables with "
-		    "total size %llu", droppedCount, totalSize);
+		"total size %llu, %llu lost tables",
+		    droppedCount, totalSize, lostTableCount);
 	else
 	    safef(comment, sizeof(comment),
-		"Would have dropped %d tables, no size info", droppedCount);
+		"Would have dropped %d tables, no size info, %llu lost tables",
+		    droppedCount, lostTableCount);
 	verbose(2,"# %s\n", comment);
 	}
     else
 	{
 	safef(comment, sizeof(comment),
-		"Would have dropped no tables, none expired");
+	    "Would have dropped no tables, none expired, %llu lost tables",
+		lostTableCount);
 	verbose(2,"# %s\n", comment);
 	}
     }
