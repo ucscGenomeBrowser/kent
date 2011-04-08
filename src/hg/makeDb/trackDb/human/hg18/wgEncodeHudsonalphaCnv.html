@@ -24,10 +24,10 @@ individually on the browser. Instructions for configuring multi-view tracks are
 <DT><I>Regions</I></DT><DD> Regions of the genome where copy number variation has been assesed.
 CNV regions are colored by type: 
 <ul>
-<li><font color="#e600e6">magenta</font> = amplified  </li>
-<li><font color="#00cd00">green</font> = homozygous deletion</li>
-<li><font color="#0000CD">blue</font> = heterozygous deletion  </li>
+<li><font color="#0000FF">blue</font> = amplified  </li>
 <li><font color="#000000">black</font> = normal</li>
+<li><font color="#FF9933">orange</font> = heterozygous deletion</li>
+<li><font color="#FF0000">red</font> = homozygous deletion</li>
 </ul>
 </p></DD>
 <DT><I>Signal</I></DT><DD> Mean log R ratio for each region. See Methods below.
@@ -67,6 +67,12 @@ Log ratios of ~-0.2 to -1.5 can be considered heterozygous deletions,
  < -1.5 homozygous deletions, and > 0.2 amplifications.
 
 The coordinates for the genotypes and copy number calls are from Human Genome Build 36.
+
+<H2>Release Notes</H2>
+<p>
+Release 2 (April 2011) of this track updates the colors used in the Regions view subtracks (the
+data remains unchanged). The colors now adhere to the color standards determined at the first annual
+International Standards for Cytogenomic Arrays (ISCA) Scientific Conference.
 
 <H2>Credits</H2>
 Tim Reddy, Rebekka Sprouse, Richard Myers, Devin Absher from HudsonAlpha Institute.
