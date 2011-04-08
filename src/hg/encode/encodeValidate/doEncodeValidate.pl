@@ -1913,6 +1913,13 @@ foreach my $ddfLine (@ddfLines) {
             $metadata .= " controlId=$controlId";
         }
     }
+	# Extend meta-data for mouse to input sex,strain and age information from CV without labs needing to input
+	# meta-data in DDF for cell lines and primary cell lines.
+	if( ($daf->{assembly} eq 'mm9') && ($terms{'Cell Line'}->{$ddfLine->{cell}}->{'category'} ne 'Tissue')) {
+	   $metadata .= " sex=$terms{'Cell Line'}->{$ddfLine->{cell}}->{'sex'}" if !$ddfLine->{sex};
+	   $metadata .= " strain=$terms{'Cell Line'}->{$ddfLine->{cell}}->{'strain'}" if !$ddfLine->{strain};
+	   $metadata .= " age=$terms{'Cell Line'}->{$ddfLine->{cell}}->{'age'}" if !$ddfLine->{age};
+	}   
     $metadata .= " view=$view";
     $metadata .= " replicate=$ddfLine->{replicate}" if $ddfLine->{replicate} && $daf->{TRACKS}{$view}{hasReplicates};
     $metadata .= " labVersion=$ddfLine->{labVersion}" if $ddfLine->{labVersion};
