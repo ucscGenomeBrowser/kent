@@ -1,3 +1,8 @@
+metaObject wgEncodeYaleRNAseq
+objType composite
+composite wgEncodeYaleRNAseq
+expVars lab,dataType,cell,treatment,treatment
+
 metaObject wgEncodeYaleRnaSeqPolyaAlignmentsGm12878
 objType file
 cell GM12878
@@ -295,4 +300,4 @@ tableName wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
 treatment IFNg6h
 view Signal
 
-# MAGIC: 18630115
+# MAGIC: 934732196

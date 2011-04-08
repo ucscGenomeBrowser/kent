@@ -1,3 +1,8 @@
+metaObject wgEncodeDukeAffyExonArray
+objType composite
+composite wgEncodeDukeAffyExonArray
+expVars lab,dataType,cell,treatment
+
 metaObject wgEncodeDukeAffyExonArraySimpleSignalRep1Astrocy
 objType table
 cell Astrocy
@@ -1042,4 +1047,4 @@ subId 829
 tableName wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2
 treatment None
 
-# MAGIC: 732090445
+# MAGIC: 254643268
