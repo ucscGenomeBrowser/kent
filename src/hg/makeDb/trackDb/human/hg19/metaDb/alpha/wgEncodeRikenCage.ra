@@ -14,6 +14,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 1
 fileName wgEncodeRikenCageA549CellPapAlnRep1.bam
+md5sum 4cfc99373e471ba419ec43760eb75d6f
 grant Gingeras
 lab RIKEN
 labExpId K16
@@ -38,6 +39,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 2
 fileName wgEncodeRikenCageA549CellPapAlnRep2.bam
+md5sum 19b5a4f9929fe434cb11983a93433584
 grant Gingeras
 lab RIKEN
 labExpId K17
@@ -62,6 +64,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccRep 1
 fileName wgEncodeRikenCageA549CellPapMinusRawRep1.bigWig
+md5sum cb45e712458ae6c29623d0e1cf7bc5b2
 grant Gingeras
 lab RIKEN
 labExpId K16
@@ -86,6 +89,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccRep 2
 fileName wgEncodeRikenCageA549CellPapMinusRawRep2.bigWig
+md5sum cac38e9a81172791a918cdfb5c6775f3
 grant Gingeras
 lab RIKEN
 labExpId K17
@@ -110,6 +114,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccRep 1
 fileName wgEncodeRikenCageA549CellPapPlusRawRep1.bigWig
+md5sum 189929e27bbae8fbc603a66fd646e238
 grant Gingeras
 lab RIKEN
 labExpId K16
@@ -134,6 +139,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccRep 2
 fileName wgEncodeRikenCageA549CellPapPlusRawRep2.bigWig
+md5sum 286cb07c282eb64f4204349d61fa3678
 grant Gingeras
 lab RIKEN
 labExpId K17
@@ -158,6 +164,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 1
 fileName wgEncodeRikenCageA549CellPapRawDataRep1.fastq.gz
+md5sum 6dc8e90ede3de081cd9391bddb3046c7
 grant Gingeras
 lab RIKEN
 labExpId K16
@@ -181,6 +188,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 2
 fileName wgEncodeRikenCageA549CellPapRawDataRep2.fastq.gz
+md5sum 5b90dc178a0d5c91d683b0d52fbc5eee
 grant Gingeras
 lab RIKEN
 labExpId K17
@@ -204,6 +212,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageA549CellPapTSS.gtf.gz
+md5sum a8c7e7c990c3375f40982f58e16887d4
 grant Gingeras
 lab RIKEN
 labExpId K16,K17
@@ -225,6 +234,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 1
 fileName wgEncodeRikenCageAg04450CellPapAlnRep1.bam
+md5sum b4e3933531d3d4ba91680a2d19cbd497
 grant Gingeras
 lab RIKEN
 labExpId K12
@@ -249,6 +259,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 2
 fileName wgEncodeRikenCageAg04450CellPapAlnRep2.bam
+md5sum 6137d7782b16a37eea79cf2580ffbce5
 grant Gingeras
 lab RIKEN
 labExpId K13
@@ -273,6 +284,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccRep 1
 fileName wgEncodeRikenCageAg04450CellPapMinusRawRep1.bigWig
+md5sum f0a6517e60934654068bdc9e403abb1e
 grant Gingeras
 lab RIKEN
 labExpId K12
@@ -297,6 +309,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccRep 2
 fileName wgEncodeRikenCageAg04450CellPapMinusRawRep2.bigWig
+md5sum a5a9e730880d6f3d05f9bcbf476ed337
 grant Gingeras
 lab RIKEN
 labExpId K13
@@ -321,6 +334,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccRep 1
 fileName wgEncodeRikenCageAg04450CellPapPlusRawRep1.bigWig
+md5sum 3655e816beecbbf279250e30a9691b66
 grant Gingeras
 lab RIKEN
 labExpId K12
@@ -345,6 +359,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccRep 2
 fileName wgEncodeRikenCageAg04450CellPapPlusRawRep2.bigWig
+md5sum 3582ebe3e115d576f987a5f5b61e04e4
 grant Gingeras
 lab RIKEN
 labExpId K13
@@ -369,6 +384,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 1
 fileName wgEncodeRikenCageAg04450CellPapRawDataRep1.fastq.gz
+md5sum eed6b59cf45655fa0ef9debfd8039f37
 grant Gingeras
 lab RIKEN
 labExpId K12
@@ -392,6 +408,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 2
 fileName wgEncodeRikenCageAg04450CellPapRawDataRep2.fastq.gz
+md5sum eb2c60ac4cbe40d0c33933a7f296becc
 grant Gingeras
 lab RIKEN
 labExpId K13
@@ -415,6 +432,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageAg04450CellPapTSS.gtf.gz
+md5sum 69ef30344a494e06eec874b5d87d77d7
 grant Gingeras
 lab RIKEN
 labExpId K12,K13
@@ -436,6 +454,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 1
 fileName wgEncodeRikenCageBjCellPapAlnRep1.bam
+md5sum a1132dad095044a9d2db183fdb09e3ff
 grant Gingeras
 lab RIKEN
 labExpId K18
@@ -460,6 +479,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 2
 fileName wgEncodeRikenCageBjCellPapAlnRep2.bam
+md5sum f4f7f44b1ac7044c8e9a886cccd5c391
 grant Gingeras
 lab RIKEN
 labExpId K19
@@ -484,6 +504,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccRep 1
 fileName wgEncodeRikenCageBjCellPapMinusRawRep1.bigWig
+md5sum 364067cd07ff38b75ad2e65b2d244d31
 grant Gingeras
 lab RIKEN
 labExpId K18
@@ -508,6 +529,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccRep 2
 fileName wgEncodeRikenCageBjCellPapMinusRawRep2.bigWig
+md5sum af499c5f6e76233e78ab0c07f9676b51
 grant Gingeras
 lab RIKEN
 labExpId K19
@@ -532,6 +554,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccRep 1
 fileName wgEncodeRikenCageBjCellPapPlusRawRep1.bigWig
+md5sum f8a208df77bad82c559a9c79454b27cc
 grant Gingeras
 lab RIKEN
 labExpId K18
@@ -556,6 +579,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccRep 2
 fileName wgEncodeRikenCageBjCellPapPlusRawRep2.bigWig
+md5sum e8984fe76c3bf0b9808485aca37169dc
 grant Gingeras
 lab RIKEN
 labExpId K19
@@ -580,6 +604,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 1
 fileName wgEncodeRikenCageBjCellPapRawDataRep1.fastq.gz
+md5sum 65d8e70e4d31f8c6fac7150db9dce317
 grant Gingeras
 lab RIKEN
 labExpId K18
@@ -603,6 +628,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 2
 fileName wgEncodeRikenCageBjCellPapRawDataRep2.fastq.gz
+md5sum b0c6e9f6d1bf16355c44fb7b68d379f2
 grant Gingeras
 lab RIKEN
 labExpId K19
@@ -626,6 +652,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageBjCellPapTSS.gtf.gz
+md5sum 620cd44ecd70c257b0c867e8c3483116
 grant Gingeras
 lab RIKEN
 labExpId K18,K19
@@ -649,6 +676,7 @@ dateUnrestricted 2009-12-09
 dccRep 1
 fileIndex wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam
+md5sum ce61eeed6ffb7b9ea07c9e912a2aa65d
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -673,6 +701,7 @@ dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccRep 1
 fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaMinusClusters.bigWig
+md5sum 16f881e10265380521e309683375cf3d
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -697,6 +726,7 @@ dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccRep 1
 fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters.bigWig
+md5sum 5fec08d3900bf7c1c20a9b35689f5663
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -720,6 +750,7 @@ dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccRep 1
 fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaRawData.fastq.gz
+md5sum a55c37bad666e528ba5cdd59e5479f09
 grant Gingeras
 lab RIKEN
 localization cytosol
@@ -741,6 +772,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageGm12878CytosolPamTSS.gtf.gz
+md5sum 4ea1293f2c4d8c68f7b5c01f505cf590
 grant Gingeras
 lab RIKEN
 labExpId I27
@@ -764,6 +796,7 @@ dateUnrestricted 2010-10-13
 dccRep 1
 fileIndex wgEncodeRikenCageGm12878NucleolusTotalAln.bam.bai
 fileName wgEncodeRikenCageGm12878NucleolusTotalAln.bam
+md5sum d4e4b81db44e2902ecb84ac658b3c7c2
 grant Gingeras
 lab RIKEN
 localization nucleolus
@@ -787,6 +820,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageGm12878NucleolusTotalMinusClusters.bigWig
+md5sum 90b6c133f36725b2bf30b34aee1cc200
 grant Gingeras
 lab RIKEN
 localization nucleolus
@@ -810,6 +844,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageGm12878NucleolusTotalPlusClusters.bigWig
+md5sum 500c1be9022e41ab500e533982de78d5
 grant Gingeras
 lab RIKEN
 localization nucleolus
@@ -832,6 +867,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageGm12878NucleolusTotalRawData.fastq.gz
+md5sum b41da47757f986b41e82570a3a702b7e
 grant Gingeras
 lab RIKEN
 localization nucleolus
@@ -853,6 +889,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageGm12878NucleolusTotalTSS.gtf.gz
+md5sum 5566d9262a93b5fde4da9e15ce000457
 grant Gingeras
 lab RIKEN
 labExpId I69
@@ -874,6 +911,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam.bai
 fileName wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam
+md5sum eff9f038c0e003bc34a4ea4516569c61
 grant Gingeras
 lab RIKEN
 labExpId J59
@@ -896,6 +934,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageGm12878NucleusLongnonpolyaMinusClustersRep1.bigWig
+md5sum f88733366681111f6386a981891d2f48
 grant Gingeras
 lab RIKEN
 labExpId J59
@@ -918,6 +957,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageGm12878NucleusLongnonpolyaPlusClustersRep1.bigWig
+md5sum b567929178ba7d6de1e0680babf3d94c
 grant Gingeras
 lab RIKEN
 labExpId J59
@@ -940,6 +980,7 @@ dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccRep 1
 fileName wgEncodeRikenCageGm12878NucleusLongnonpolyaRawDataRep1.fastq.gz
+md5sum 056368b4dbedbdafdfbc294b1b5b53c9
 grant Gingeras
 lab RIKEN
 labExpId J59
@@ -962,6 +1003,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageGm12878NucleusPamTSS.gtf.gz
+md5sum 7e1f61a8dd96708ea95cbce86ba34ea3
 grant Gingeras
 lab RIKEN
 labExpId J59
@@ -985,6 +1027,7 @@ dateUnrestricted 2010-10-13
 dccRep 1
 fileIndex wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam
+md5sum 9cd926fb78e6a109c6f83f67bba264f3
 grant Gingeras
 lab RIKEN
 localization cell
@@ -1009,6 +1052,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters.bigWig
+md5sum 94db6594e3652cd5d769fbcb24e7ec27
 grant Gingeras
 lab RIKEN
 localization cell
@@ -1033,6 +1077,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters.bigWig
+md5sum 7ec869e6e5dc08e4ff210d8f10a53ee6
 grant Gingeras
 lab RIKEN
 localization cell
@@ -1056,6 +1101,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageH1hescCellLongnonpolyaRawData.fastq.gz
+md5sum 4d3aa53e55b2bc0038a5b73991a1a86a
 grant Gingeras
 lab RIKEN
 localization cell
@@ -1078,6 +1124,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageH1hescCellPapAlnRep1.bam.bai
 fileName wgEncodeRikenCageH1hescCellPapAlnRep1.bam
+md5sum 8967b37d49e4aeb1a827c2bba18ff2dd
 grant Gingeras
 lab RIKEN
 labExpId J74
@@ -1103,6 +1150,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageH1hescCellPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageH1hescCellPapAlnRep2.bam
+md5sum b2d2b1db4c8ea702619e5d43bf8b9faa
 grant Gingeras
 lab RIKEN
 labExpId J75
@@ -1127,6 +1175,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageH1hescCellPapMinusClustersRep1.bigWig
+md5sum af71f718325dffa717412c03a20b3a24
 grant Gingeras
 lab RIKEN
 labExpId J74
@@ -1151,6 +1200,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageH1hescCellPapMinusClustersRep2.bigWig
+md5sum 65ec690e4f56dcbbf777be0515a99579
 grant Gingeras
 lab RIKEN
 labExpId J75
@@ -1175,6 +1225,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageH1hescCellPapPlusClustersRep1.bigWig
+md5sum 407e55ddec4a0cb0d4140c5419b06311
 grant Gingeras
 lab RIKEN
 labExpId J74
@@ -1199,6 +1250,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageH1hescCellPapPlusClustersRep2.bigWig
+md5sum a7e9cfc789181f09584692acfea929bb
 grant Gingeras
 lab RIKEN
 labExpId J75
@@ -1223,6 +1275,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageH1hescCellPapRawDataRep1.fastq.gz
+md5sum e5dfecc88e4f357a611b0944415c64bc
 grant Gingeras
 lab RIKEN
 labExpId J74
@@ -1246,6 +1299,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageH1hescCellPapRawDataRep2.fastq.gz
+md5sum dcad914c266f19fac2224892613f7142
 grant Gingeras
 lab RIKEN
 labExpId J75
@@ -1269,6 +1323,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageH1hescCellPapTSS.gtf.gz
+md5sum 21bd58306b4009713f2b443090d61ce9
 grant Gingeras
 lab RIKEN
 labExpId J74,J75
@@ -1291,6 +1346,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageH1hescCytosolPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageH1hescCytosolPapAlnRep2.bam
+md5sum 517fe6f8794493006e2756b5f1e1c2e7
 grant Gingeras
 lab RIKEN
 labExpId J86
@@ -1315,6 +1371,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageH1hescCytosolPapMinusClustersRep2.bigWig
+md5sum 45702da159378b723c5fe749c9a600b8
 grant Gingeras
 lab RIKEN
 labExpId J86
@@ -1339,6 +1396,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageH1hescCytosolPapPlusClustersRep2.bigWig
+md5sum bacc17901f779ee8551afd858bc7bac7
 grant Gingeras
 lab RIKEN
 labExpId J86
@@ -1363,6 +1421,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageH1hescCytosolPapRawDataRep2.fastq.gz
+md5sum c4bab48736c9028348ef5945dca8cddf
 grant Gingeras
 lab RIKEN
 labExpId J86
@@ -1386,6 +1445,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageH1hescCytosolPapTSS.gtf.gz
+md5sum 61ad157782f4b671bf2725711b913f74
 grant Gingeras
 lab RIKEN
 labExpId J86
@@ -1408,6 +1468,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageH1hescNucleusPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageH1hescNucleusPapAlnRep2.bam
+md5sum 13a82092ce42218948697041ae6942b9
 grant Gingeras
 lab RIKEN
 labExpId J95
@@ -1432,6 +1493,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageH1hescNucleusPapMinusClustersRep2.bigWig
+md5sum 3da9ef1cdb0957a337294e60f7edb79d
 grant Gingeras
 lab RIKEN
 labExpId J95
@@ -1456,6 +1518,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageH1hescNucleusPapPlusClustersRep2.bigWig
+md5sum 2a1be0ad1384fa93a1ef60cf3e24adad
 grant Gingeras
 lab RIKEN
 labExpId J95
@@ -1480,6 +1543,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageH1hescNucleusPapRawDataRep2.fastq.gz
+md5sum 22719a100ed3942f15197f84d8f0ee08
 grant Gingeras
 lab RIKEN
 labExpId J95
@@ -1503,6 +1567,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageH1hescNucleusPapTSS.gtf.gz
+md5sum 186f22c642be1559b676910cd16ff68e
 grant Gingeras
 lab RIKEN
 labExpId J95
@@ -1525,6 +1590,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageHelas3CellPapAlnRep1.bam.bai
 fileName wgEncodeRikenCageHelas3CellPapAlnRep1.bam
+md5sum 45d63896684904984986a8eee2b0801e
 grant Gingeras
 lab RIKEN
 labExpId J80
@@ -1550,6 +1616,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageHelas3CellPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageHelas3CellPapAlnRep2.bam
+md5sum e856fe6b026f841fa8c7cfa3809fc9c8
 grant Gingeras
 lab RIKEN
 labExpId J81
@@ -1574,6 +1641,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHelas3CellPapMinusClustersRep1.bigWig
+md5sum fb530996757594dd8bec8f8c6cc5e777
 grant Gingeras
 lab RIKEN
 labExpId J80
@@ -1598,6 +1666,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHelas3CellPapMinusClustersRep2.bigWig
+md5sum 1d44544b712c79cb24e087be43f43d82
 grant Gingeras
 lab RIKEN
 labExpId J81
@@ -1622,6 +1691,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHelas3CellPapPlusClustersRep1.bigWig
+md5sum fdd5a24977678434f95070287a48f89a
 grant Gingeras
 lab RIKEN
 labExpId J80
@@ -1646,6 +1716,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHelas3CellPapPlusClustersRep2.bigWig
+md5sum f05df8e18f2f5ad1a406e3349fa3c722
 grant Gingeras
 lab RIKEN
 labExpId J81
@@ -1670,6 +1741,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHelas3CellPapRawDataRep1.fastq.gz
+md5sum 01a8d9a661f09a2696d8dc79ed8cdedc
 grant Gingeras
 lab RIKEN
 labExpId J80
@@ -1693,6 +1765,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHelas3CellPapRawDataRep2.fastq.gz
+md5sum 646c43a96b0cad93f08b7dff0a7aa562
 grant Gingeras
 lab RIKEN
 labExpId J81
@@ -1716,6 +1789,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHelas3CellPapTSS.gtf.gz
+md5sum 241c272edbb61ade06396392add0d353
 grant Gingeras
 lab RIKEN
 labExpId J80,J81
@@ -1737,6 +1811,7 @@ dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccRep 1
 fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaAln.bam
+md5sum def431706c70f3d46525988474ed8f89
 grant Gingeras
 lab RIKEN
 labExpId J56
@@ -1761,6 +1836,7 @@ dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccRep 1
 fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters.bigWig
+md5sum f65ac5a8ff72138a0be9c5ec35237a18
 grant Gingeras
 lab RIKEN
 labExpId J56
@@ -1785,6 +1861,7 @@ dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccRep 1
 fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters.bigWig
+md5sum adeaec4bbf04650b98a3b562d3714081
 grant Gingeras
 lab RIKEN
 labExpId J56
@@ -1809,6 +1886,7 @@ dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccRep 1
 fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaRawData.fastq.gz
+md5sum d871d29397114870d82b1c19b0111519
 grant Gingeras
 lab RIKEN
 labExpId J56
@@ -1833,6 +1911,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHelas3CytosolPamTSS.gtf.gz
+md5sum 7ffc4bfcfef90f58ba757178693ea9e5
 grant Gingeras
 lab RIKEN
 labExpId J56
@@ -1855,6 +1934,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageHelas3CytosolPapAlnRep1.bam.bai
 fileName wgEncodeRikenCageHelas3CytosolPapAlnRep1.bam
+md5sum af7972342466cd98b2059e0c24830aca
 grant Gingeras
 lab RIKEN
 labExpId J87
@@ -1880,6 +1960,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageHelas3CytosolPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageHelas3CytosolPapAlnRep2.bam
+md5sum 52059340eaedef246a80e3f7cc3e66cd
 grant Gingeras
 lab RIKEN
 labExpId J88
@@ -1904,6 +1985,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHelas3CytosolPapMinusClustersRep1.bigWig
+md5sum 963897966f19b8d1089a8d0d074f9522
 grant Gingeras
 lab RIKEN
 labExpId J87
@@ -1928,6 +2010,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHelas3CytosolPapMinusClustersRep2.bigWig
+md5sum 9aaf4bb31fd997e3593b3e27458727b5
 grant Gingeras
 lab RIKEN
 labExpId J88
@@ -1952,6 +2035,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHelas3CytosolPapPlusClustersRep1.bigWig
+md5sum 9eb664071fa7d9dd0f2db954508deeb6
 grant Gingeras
 lab RIKEN
 labExpId J87
@@ -1976,6 +2060,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHelas3CytosolPapPlusClustersRep2.bigWig
+md5sum f08210a600e1121ee30ccdf5c8c3f194
 grant Gingeras
 lab RIKEN
 labExpId J88
@@ -2000,6 +2085,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHelas3CytosolPapRawDataRep1.fastq.gz
+md5sum 3ec04315018620e6c3a76f3b93b2a4f5
 grant Gingeras
 lab RIKEN
 labExpId J87
@@ -2023,6 +2109,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHelas3CytosolPapRawDataRep2.fastq.gz
+md5sum b57efcce8b62a36fbe010c8b3f594a88
 grant Gingeras
 lab RIKEN
 labExpId J88
@@ -2046,6 +2133,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHelas3CytosolPapTSS.gtf.gz
+md5sum 25e205dde2da2861c3419de79d7c4512
 grant Gingeras
 lab RIKEN
 labExpId J88
@@ -2067,6 +2155,7 @@ dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccRep 1
 fileName wgEncodeRikenCageHelas3NucleolusTotalAln.bam
+md5sum e5fdab898b87acb8a98bc67ec2727dce
 grant Gingeras
 lab RIKEN
 labExpId J58
@@ -2091,6 +2180,7 @@ dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccRep 1
 fileName wgEncodeRikenCageHelas3NucleolusTotalMinusClusters.bigWig
+md5sum f349b38f1156fd7c9af1e502a488ce72
 grant Gingeras
 lab RIKEN
 labExpId J58
@@ -2115,6 +2205,7 @@ dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccRep 1
 fileName wgEncodeRikenCageHelas3NucleolusTotalPlusClusters.bigWig
+md5sum 7fc3c66d83b13f92308e99d96452ccf3
 grant Gingeras
 lab RIKEN
 labExpId J58
@@ -2139,6 +2230,7 @@ dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccRep 1
 fileName wgEncodeRikenCageHelas3NucleolusTotalRawData.fastq.gz
+md5sum fb18f833db6f51bee64857dc15bd9ea9
 grant Gingeras
 lab RIKEN
 labExpId J58
@@ -2163,6 +2255,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHelas3NucleolusTotalTSS.gtf.gz
+md5sum b902c896c9306a45edea230c8b7f3985
 grant Gingeras
 lab RIKEN
 labExpId J58
@@ -2185,6 +2278,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageHelas3NucleusPapAlnRep1.bam.bai
 fileName wgEncodeRikenCageHelas3NucleusPapAlnRep1.bam
+md5sum 64ca6d02c8eefe813cc02030a07b83f7
 grant Gingeras
 lab RIKEN
 labExpId J96
@@ -2210,6 +2304,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageHelas3NucleusPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageHelas3NucleusPapAlnRep2.bam
+md5sum 3df468fc8f7c745a44d8d9856a6c6974
 grant Gingeras
 lab RIKEN
 labExpId J97
@@ -2234,6 +2329,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHelas3NucleusPapMinusClustersRep1.bigWig
+md5sum e5ee4571965b12cabb39c5a22e984f5d
 grant Gingeras
 lab RIKEN
 labExpId J96
@@ -2258,6 +2354,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHelas3NucleusPapMinusClustersRep2.bigWig
+md5sum fa076d5af435705fdbd2b3a6272417ba
 grant Gingeras
 lab RIKEN
 labExpId J97
@@ -2282,6 +2379,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHelas3NucleusPapPlusClustersRep1.bigWig
+md5sum c628400c758e62742bbb79c992d8bde6
 grant Gingeras
 lab RIKEN
 labExpId J96
@@ -2306,6 +2404,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHelas3NucleusPapPlusClustersRep2.bigWig
+md5sum 5b58fcac958a5a6f247282695c07a56c
 grant Gingeras
 lab RIKEN
 labExpId J97
@@ -2330,6 +2429,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHelas3NucleusPapRawDataRep1.fastq.gz
+md5sum 55ba068e7b13d75201c663ffe39400c9
 grant Gingeras
 lab RIKEN
 labExpId J96
@@ -2353,6 +2453,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHelas3NucleusPapRawDataRep2.fastq.gz
+md5sum a7c9beb6040c6c2d92d5bfdb0e9afe54
 grant Gingeras
 lab RIKEN
 labExpId J97
@@ -2376,6 +2477,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHelas3NucleusPapTSS.gtf.gz
+md5sum cadad6799350a6cb7265bd277b709b54
 grant Gingeras
 lab RIKEN
 labExpId J96,J97
@@ -2398,6 +2500,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageHepg2CellPapAlnRep1.bam.bai
 fileName wgEncodeRikenCageHepg2CellPapAlnRep1.bam
+md5sum d9a71394518093f651170aba5575e7bc
 grant Gingeras
 lab RIKEN
 labExpId K01
@@ -2423,6 +2526,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileiIndex wgEncodeRikenCageHepg2CellPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageHepg2CellPapAlnRep2.bam
+md5sum 64bc1bb977669eee40c05f36f4877c71
 grant Gingeras
 lab RIKEN
 labExpId K02
@@ -2447,6 +2551,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHepg2CellPapMinusClustersRep1.bigWig
+md5sum 82ac89a39f86ff1945ccfff997d5042b
 grant Gingeras
 lab RIKEN
 labExpId K01
@@ -2471,6 +2576,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHepg2CellPapMinusClustersRep2.bigWig
+md5sum 8393ef3f063acf9007dc29e119ec0a17
 grant Gingeras
 lab RIKEN
 labExpId K02
@@ -2495,6 +2601,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHepg2CellPapPlusClustersRep1.bigWig
+md5sum c51b79f62d0642bfe8b157ba6fe8c3b1
 grant Gingeras
 lab RIKEN
 labExpId K01
@@ -2519,6 +2626,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHepg2CellPapPlusClustersRep2.bigWig
+md5sum cb73a8f5e68669952b6e1435094a268e
 grant Gingeras
 lab RIKEN
 labExpId K02
@@ -2543,6 +2651,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHepg2CellPapRawDataRep1.fastq.gz
+md5sum 2b131f5ab11e14ed60047eb8ca57613d
 grant Gingeras
 lab RIKEN
 labExpId K01
@@ -2566,6 +2675,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHepg2CellPapRawDataRep2.fastq.gz
+md5sum 01e8e30cca2077b5eda9380746db5148
 grant Gingeras
 lab RIKEN
 labExpId K02
@@ -2589,6 +2699,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHepg2CellPapTSS.gtf.gz
+md5sum e2ecd0628061d9795d9055224b82b5df
 grant Gingeras
 lab RIKEN
 labExpId K01
@@ -2612,6 +2723,7 @@ dateUnrestricted 2010-10-13
 dccRep 1
 fileIndex wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam
+md5sum d09381a7e4e875d23af8f89ff8ef6c0e
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -2636,6 +2748,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaMinusClusters.bigWig
+md5sum c02bc2a4d781f2be6ed726b8ed6dbe3e
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -2660,6 +2773,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaPlusClusters.bigWig
+md5sum 89550776f2ae3c69924f69c6435bbcea
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -2683,6 +2797,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaRawData.fastq.gz
+md5sum 96d301a41cebd3f2b3f0b6d30f83171b
 grant Gingeras
 lab RIKEN
 localization cytosol
@@ -2704,6 +2819,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHepg2CytosolPamTSS.gtf.gz
+md5sum e332d8e25221e0482782170bb1ce8988
 grant Gingeras
 lab RIKEN
 labExpId I42
@@ -2726,6 +2842,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageHepg2CytosolPapAlnRep1.bam.bai
 fileName wgEncodeRikenCageHepg2CytosolPapAlnRep1.bam
+md5sum deb03288f236c8ed5ec8d270b45659fd
 grant Gingeras
 lab RIKEN
 labExpId J89
@@ -2751,6 +2868,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageHepg2CytosolPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageHepg2CytosolPapAlnRep2.bam
+md5sum b8ca0c61793baf48fa30fd30ba3ba097
 grant Gingeras
 lab RIKEN
 labExpId J90
@@ -2775,6 +2893,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHepg2CytosolPapMinusClustersRep1.bigWig
+md5sum 2ea39955c9b1c0f9eeda48377cce7b30
 grant Gingeras
 lab RIKEN
 labExpId J89
@@ -2799,6 +2918,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHepg2CytosolPapMinusClustersRep2.bigWig
+md5sum 92820cb9611cfcef2dce9613e83f3a1a
 grant Gingeras
 lab RIKEN
 labExpId J90
@@ -2823,6 +2943,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHepg2CytosolPapPlusClustersRep1.bigWig
+md5sum 4f2463a54df250799d0312ffbc678e41
 grant Gingeras
 lab RIKEN
 labExpId J89
@@ -2847,6 +2968,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHepg2CytosolPapPlusClustersRep2.bigWig
+md5sum 2e37e3e1ba081ffe36a3faf2845b337d
 grant Gingeras
 lab RIKEN
 labExpId J90
@@ -2871,6 +2993,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHepg2CytosolPapRawDataRep1.fastq.gz
+md5sum 66622788bfa7867bbfd53e3464f124c8
 grant Gingeras
 lab RIKEN
 labExpId J89
@@ -2894,6 +3017,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHepg2CytosolPapRawDataRep2.fastq.gz
+md5sum 9284f1dc696bc0d6ddcd696fb3f16bdd
 grant Gingeras
 lab RIKEN
 labExpId J90
@@ -2917,6 +3041,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHepg2CytosolPapTSS.gtf.gz
+md5sum 0c40e30ebf3419baa3784198dc5fa1b6
 grant Gingeras
 lab RIKEN
 labExpId J89,J90
@@ -2940,6 +3065,7 @@ dateUnrestricted 2010-10-13
 dccRep 1
 fileIndex wgEncodeRikenCageHepg2NucleolusTotalAln.bam.bai
 fileName wgEncodeRikenCageHepg2NucleolusTotalAln.bam
+md5sum 274d002f9968cc52ba04eac8d0e4d1ec
 grant Gingeras
 lab RIKEN
 localization nucleolus
@@ -2963,6 +3089,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageHepg2NucleolusTotalMinusClusters.bigWig
+md5sum b4620610e3fcdfe229ef24235b641733
 grant Gingeras
 lab RIKEN
 localization nucleolus
@@ -2986,6 +3113,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageHepg2NucleolusTotalPlusClusters.bigWig
+md5sum 5d86d5e6d91a02ce636b273fdd482557
 grant Gingeras
 lab RIKEN
 localization nucleolus
@@ -3008,6 +3136,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageHepg2NucleolusTotalRawData.fastq.gz
+md5sum ce7414eb4bb738ac9cd421b02f4ae1a9
 grant Gingeras
 lab RIKEN
 localization nucleolus
@@ -3029,6 +3158,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHepg2NucleolusTotalTSS.gtf.gz
+md5sum 9fd88b059490d1ed2f21cc964bbfa307
 grant Gingeras
 lab RIKEN
 labExpId I68
@@ -3052,6 +3182,7 @@ dateUnrestricted 2010-10-13
 dccRep 1
 fileIndex wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam
+md5sum 53561b0344a0a0dd0816a302464d962d
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -3076,6 +3207,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaMinusClusters.bigWig
+md5sum 8c20300cab17417cde04b9f2137b72d3
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -3100,6 +3232,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaPlusClusters.bigWig
+md5sum 43f9c074b1d343f2bf9d8bd9e7125f38
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -3123,6 +3256,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaRawData.fastq.gz
+md5sum beeabe1b50f52f84a613ba2d37473847
 grant Gingeras
 lab RIKEN
 localization nucleus
@@ -3144,6 +3278,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHepg2NucleusPamTSS.gtf.gz
+md5sum eddaeb9fe83ff991a5b1dc0caa8790b7
 grant Gingeras
 lab RIKEN
 labExpId I44
@@ -3166,6 +3301,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageHepg2NucleusPapAlnRep1.bam.bai
 fileName wgEncodeRikenCageHepg2NucleusPapAlnRep1.bam
+md5sum cedcde207c25f5915ba125669078692b
 grant Gingeras
 lab RIKEN
 labExpId J98
@@ -3191,6 +3327,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageHepg2NucleusPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageHepg2NucleusPapAlnRep2.bam
+md5sum 8b427967a1650d8f8f80b2bf621d7ae4
 grant Gingeras
 lab RIKEN
 labExpId J99
@@ -3215,6 +3352,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHepg2NucleusPapMinusClustersRep1.bigWig
+md5sum 92814b7e04f59782da8ea5890d0521a2
 grant Gingeras
 lab RIKEN
 labExpId J98
@@ -3239,6 +3377,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHepg2NucleusPapMinusClustersRep2.bigWig
+md5sum 5a1c86cb20a5d05c51e425094ee36dac
 grant Gingeras
 lab RIKEN
 labExpId J99
@@ -3263,6 +3402,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHepg2NucleusPapPlusClustersRep1.bigWig
+md5sum eef2741f84bc636e4a0e93ad2519359e
 grant Gingeras
 lab RIKEN
 labExpId J98
@@ -3287,6 +3427,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHepg2NucleusPapPlusClustersRep2.bigWig
+md5sum 4aaba67241aa3e10eedf931262b3b043
 grant Gingeras
 lab RIKEN
 labExpId J99
@@ -3311,6 +3452,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHepg2NucleusPapRawDataRep1.fastq.gz
+md5sum 6281fe7344b8068fd76b57c14cf9cb61
 grant Gingeras
 lab RIKEN
 labExpId J98
@@ -3334,6 +3476,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHepg2NucleusPapRawDataRep2.fastq.gz
+md5sum 32d6ac6b48b5d5a57a17eeb005845310
 grant Gingeras
 lab RIKEN
 labExpId J99
@@ -3357,6 +3500,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHepg2NucleusPapTSS.gtf.gz
+md5sum 83cac2495804b0a6b414b826d2168a81
 grant Gingeras
 lab RIKEN
 labExpId J98,J99
@@ -3379,6 +3523,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageHuvecCellPapAlnRep1.bam.bai
 fileName wgEncodeRikenCageHuvecCellPapAlnRep1.bam
+md5sum 537b2508198602e5da0c6f947a25146b
 grant Gingeras
 lab RIKEN
 labExpId J78
@@ -3404,6 +3549,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageHuvecCellPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageHuvecCellPapAlnRep2.bam
+md5sum c50d709d79cd25c8de7b46bf3122db2a
 grant Gingeras
 lab RIKEN
 labExpId J79
@@ -3428,6 +3574,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHuvecCellPapMinusClustersRep1.bigWig
+md5sum 605d5f495f9db3ea5d60413739956ea8
 grant Gingeras
 lab RIKEN
 labExpId J78
@@ -3452,6 +3599,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHuvecCellPapMinusClustersRep2.bigWig
+md5sum ef982e6ab9386be510f833d95e3207a7
 grant Gingeras
 lab RIKEN
 labExpId J79
@@ -3476,6 +3624,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHuvecCellPapPlusClustersRep1.bigWig
+md5sum 01dfb230ab89be13d8f70c2078362da8
 grant Gingeras
 lab RIKEN
 labExpId J78
@@ -3500,6 +3649,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHuvecCellPapPlusClustersRep2.bigWig
+md5sum e8c8190de5ff0064026fa1ac9b466bf9
 grant Gingeras
 lab RIKEN
 labExpId J79
@@ -3524,6 +3674,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHuvecCellPapRawDataRep1.fastq.gz
+md5sum 05685594e155c33386e463d3d42b1592
 grant Gingeras
 lab RIKEN
 labExpId J78
@@ -3547,6 +3698,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHuvecCellPapRawDataRep2.fastq.gz
+md5sum 69437ea2c9b2a78278e6f1e50c1a0b33
 grant Gingeras
 lab RIKEN
 labExpId J79
@@ -3570,6 +3722,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHuvecCellPapTSS.gtf.gz
+md5sum 163729e18441b1f0d544e4e623bdf50b
 grant Gingeras
 lab RIKEN
 labExpId J78,J79
@@ -3593,6 +3746,7 @@ dateUnrestricted 2010-10-13
 dccRep 1
 fileIndex wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam
+md5sum a52493b98f0fa3a92d3b6a0185cb4b77
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -3617,6 +3771,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaMinusClusters.bigWig
+md5sum 0a572af5457e703ee9514005f13edf19
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -3641,6 +3796,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaPlusClusters.bigWig
+md5sum 6291b1e05295a86e8b2aa7e0b8ae0c05
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -3664,6 +3820,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaRawData.fastq.gz
+md5sum d68e00e456608b90d3340578bcef160a
 grant Gingeras
 lab RIKEN
 localization cytosol
@@ -3685,6 +3842,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHuvecCytosolPamTSS.gtf.gz
+md5sum 0c834f1f2514157f7e94a1fdaca36f4c
 grant Gingeras
 lab RIKEN
 labExpId I72
@@ -3707,6 +3865,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageHuvecCytosolPapAlnRep3.bam.bai
 fileName wgEncodeRikenCageHuvecCytosolPapAlnRep3.bam
+md5sum 405a779918393752aff80fef296423de
 grant Gingeras
 lab RIKEN
 labExpId K03
@@ -3732,6 +3891,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageHuvecCytosolPapAlnRep4.bam.bai
 fileName wgEncodeRikenCageHuvecCytosolPapAlnRep4.bam
+md5sum 5772c68d93fcca419418180b7407b10f
 grant Gingeras
 lab RIKEN
 labExpId K04
@@ -3756,6 +3916,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHuvecCytosolPapMinusClustersRep3.bigWig
+md5sum 0af38b6061decd89498c9b035cefe734
 grant Gingeras
 lab RIKEN
 labExpId K03
@@ -3780,6 +3941,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHuvecCytosolPapMinusClustersRep4.bigWig
+md5sum 11384c6a20004845a1908588c9ce7f01
 grant Gingeras
 lab RIKEN
 labExpId K04
@@ -3804,6 +3966,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHuvecCytosolPapPlusClustersRep3.bigWig
+md5sum 78d7a2c1fbecbbcebf31141e47a4c3bd
 grant Gingeras
 lab RIKEN
 labExpId K03
@@ -3828,6 +3991,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHuvecCytosolPapPlusClustersRep4.bigWig
+md5sum b7587592dd6dfd8ed87dabd3ee6df2c3
 grant Gingeras
 lab RIKEN
 labExpId K04
@@ -3852,6 +4016,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHuvecCytosolPapRawDataRep3.fastq.gz
+md5sum e64901fc3b901c948ddca1c4bf2cfcc5
 grant Gingeras
 lab RIKEN
 labExpId K03
@@ -3875,6 +4040,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHuvecCytosolPapRawDataRep4.fastq.gz
+md5sum 6efef534d2909964b534bc3a2536d7e3
 grant Gingeras
 lab RIKEN
 labExpId K04
@@ -3898,6 +4064,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHuvecCytosolPapTSS.gtf.gz
+md5sum 717f2eacb90ff422c9988da1cb7fb50a
 grant Gingeras
 lab RIKEN
 labExpId K03,K04
@@ -3920,6 +4087,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageHuvecNucleusPapAlnRep3.bam.bai
 fileName wgEncodeRikenCageHuvecNucleusPapAlnRep3.bam
+md5sum 9049b048deef9813a507943b4a143a9d
 grant Gingeras
 lab RIKEN
 labExpId K05
@@ -3945,6 +4113,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageHuvecNucleusPapAlnRep4.bam.bai
 fileName wgEncodeRikenCageHuvecNucleusPapAlnRep4.bam
+md5sum 8dbdc63630485064eb8849443f87d8ef
 grant Gingeras
 lab RIKEN
 labExpId K06
@@ -3969,6 +4138,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHuvecNucleusPapMinusClustersRep3.bigWig
+md5sum 4b4c9685bc810855c8120de03a190608
 grant Gingeras
 lab RIKEN
 labExpId K05
@@ -3993,6 +4163,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHuvecNucleusPapMinusClustersRep4.bigWig
+md5sum 36c37d8e3a87cb4ec71181fc38b2ab42
 grant Gingeras
 lab RIKEN
 labExpId K06
@@ -4017,6 +4188,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHuvecNucleusPapPlusClustersRep3.bigWig
+md5sum 5e374fa9c298c3b3201108e0d5ae6ae3
 grant Gingeras
 lab RIKEN
 labExpId K05
@@ -4041,6 +4213,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHuvecNucleusPapPlusClustersRep4.bigWig
+md5sum ee75882cf87e463a5773b62139320725
 grant Gingeras
 lab RIKEN
 labExpId K06
@@ -4065,6 +4238,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageHuvecNucleusPapRawDataRep3.fastq.gz
+md5sum f9cc135cca9e65cfe20b3d6e7403bb07
 grant Gingeras
 lab RIKEN
 labExpId K05
@@ -4088,6 +4262,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageHuvecNucleusPapRawDataRep4.fastq.gz
+md5sum 247cce4782779a20f48c5d0a8407f302
 grant Gingeras
 lab RIKEN
 labExpId K06
@@ -4111,6 +4286,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageHuvecNucleusPapTSS.gtf.gz
+md5sum e7fdd751bc0de31b7a65142364c037c6
 grant Gingeras
 lab RIKEN
 labExpId K05,K06
@@ -4133,6 +4309,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageK562CellPapAlnRep1.bam.bai
 fileName wgEncodeRikenCageK562CellPapAlnRep1.bam
+md5sum 72474aac692f85f799fce7390f57b0e8
 grant Gingeras
 lab RIKEN
 labExpId J70
@@ -4158,6 +4335,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageK562CellPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageK562CellPapAlnRep2.bam
+md5sum 0b3b753312128c5bdaf4c26d5efa2fc2
 grant Gingeras
 lab RIKEN
 labExpId J71
@@ -4182,6 +4360,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageK562CellPapMinusClustersRep1.bigWig
+md5sum 6f086cc3562ae92ff913d473c0c43871
 grant Gingeras
 lab RIKEN
 labExpId J70
@@ -4206,6 +4385,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageK562CellPapMinusClustersRep2.bigWig
+md5sum fe038ad751c4879be5e432d34d020907
 grant Gingeras
 lab RIKEN
 labExpId J71
@@ -4230,6 +4410,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageK562CellPapPlusClustersRep1.bigWig
+md5sum 78696f2a0d7ebf7fa80ac6fbc2101a0e
 grant Gingeras
 lab RIKEN
 labExpId J70
@@ -4254,6 +4435,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageK562CellPapPlusClustersRep2.bigWig
+md5sum a61180a4b5b5c4dc75f09eff75be3e34
 grant Gingeras
 lab RIKEN
 labExpId J71
@@ -4278,6 +4460,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageK562CellPapRawDataRep1.fastq.gz
+md5sum 9fa5e69c3d4cc16e3cac828e5e750f20
 grant Gingeras
 lab RIKEN
 labExpId J70
@@ -4301,6 +4484,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageK562CellPapRawDataRep2.fastq.gz
+md5sum 9c048e5938ae18420e6490473c99a822
 grant Gingeras
 lab RIKEN
 labExpId J71
@@ -4324,6 +4508,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageK562CellPapTSS.gtf.gz
+md5sum 6bb0f2f24e6d7d42302fa3388f228ac8
 grant Gingeras
 lab RIKEN
 labExpId J70,J71
@@ -4347,6 +4532,7 @@ dateUnrestricted 2009-11-19
 dccRep 1
 fileIndex wgEncodeRikenCageK562ChromatinTotalAln.bam.bai
 fileName wgEncodeRikenCageK562ChromatinTotalAln.bam
+md5sum 23910151fa6062f0e07eb805d812535c
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -4371,6 +4557,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccRep 1
 fileName wgEncodeRikenCageK562ChromatinTotalMinusClusters.bigWig
+md5sum 18d6ebd6a5f4e8c9b46e28ab6c2caf7a
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -4395,6 +4582,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccRep 1
 fileName wgEncodeRikenCageK562ChromatinTotalPlusClusters.bigWig
+md5sum 71d8a7f9110b6ceb708acc2bc8e775ce
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -4418,6 +4606,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccRep 1
 fileName wgEncodeRikenCageK562ChromatinTotalRawData.fastq.gz
+md5sum 1cc5198e0171504bf322ffe6e56c42bb
 grant Gingeras
 lab RIKEN
 localization chromatin
@@ -4439,6 +4628,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageK562ChromatinTotalTSS.gtf.gz
+md5sum 1b3adbd35ccffdc6cf3447a8443280d1
 grant Gingeras
 lab RIKEN
 labExpId I35
@@ -4462,6 +4652,7 @@ dateUnrestricted 2009-09-09
 dccRep 1
 fileIndex wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam
+md5sum 40da6c19aac1826ae56d9d1240a031db
 grant Gingeras
 lab RIKEN
 localization cytosol
@@ -4486,6 +4677,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccRep 1
 fileName wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters.bigWig
+md5sum 25a45b47cf8b88b03a2adbdb3af5aed7
 grant Gingeras
 lab RIKEN
 localization cytosol
@@ -4510,6 +4702,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccRep 1
 fileName wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters.bigWig
+md5sum ca6b99fc622308a19d709dd7557f52f3
 grant Gingeras
 lab RIKEN
 localization cytosol
@@ -4534,6 +4727,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccRep 1
 fileName wgEncodeRikenCageK562CytosolLongnonpolyaRawData.csfasta.gz
+md5sum aaaf93fdef20e44bef7b755cb6eafa75
 grant Gingeras
 lab RIKEN
 localization cytosol
@@ -4556,6 +4750,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccRep 1
 fileName wgEncodeRikenCageK562CytosolLongnonpolyaRawData2.csqual.gz
+md5sum f59a10743632dc7c0b096f42cf6a4e5a
 grant Gingeras
 lab RIKEN
 localization cytosol
@@ -4577,6 +4772,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageK562CytosolPamTSS.gtf.gz
+md5sum c642a79ed02bc1e5dfd4b122d8975448
 grant Gingeras
 lab RIKEN
 labExpId I22
@@ -4600,6 +4796,7 @@ dateUnrestricted 2009-11-09
 dccRep 1
 fileIndex wgEncodeRikenCageK562CytosolPapAln.bam.bai
 fileName wgEncodeRikenCageK562CytosolPapAln.bam
+md5sum f412cac2323b33b71e378768059b294b
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -4624,6 +4821,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageK562CytosolPapAlnRep1.bam.bai
 fileName wgEncodeRikenCageK562CytosolPapAlnRep1.bam
+md5sum 895bcf6430707991d108281ddf1e8977
 grant Gingeras
 lab RIKEN
 labExpId J82
@@ -4649,6 +4847,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageK562CytosolPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageK562CytosolPapAlnRep2.bam
+md5sum f8e8546a0b4577b901612ab456004b6c
 grant Gingeras
 lab RIKEN
 labExpId J83
@@ -4674,6 +4873,7 @@ dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-09
 dccRep 1
 fileName wgEncodeRikenCageK562CytosolPapMinusClusters.bigWig
+md5sum 6bfd6923f449ef9a7153601d03a25c96
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -4697,6 +4897,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageK562CytosolPapMinusClustersRep1.bigWig
+md5sum a2d833c942e225c4ae693c0122fddcb8
 grant Gingeras
 lab RIKEN
 labExpId J82
@@ -4721,6 +4922,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageK562CytosolPapMinusClustersRep2.bigWig
+md5sum ba8ce41a46b5e708fd93e387fb1eedf8
 grant Gingeras
 lab RIKEN
 labExpId J83
@@ -4746,6 +4948,7 @@ dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-09
 dccRep 1
 fileName wgEncodeRikenCageK562CytosolPapPlusClusters.bigWig
+md5sum 7581b8936432aa99d1ec01329e202789
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -4769,6 +4972,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageK562CytosolPapPlusClustersRep1.bigWig
+md5sum bb9304ed152e51a9926377537039a95d
 grant Gingeras
 lab RIKEN
 labExpId J82
@@ -4793,6 +4997,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageK562CytosolPapPlusClustersRep2.bigWig
+md5sum a0855e5cb17e07b485a58c9ec00b71cb
 grant Gingeras
 lab RIKEN
 labExpId J83
@@ -4818,6 +5023,7 @@ dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
 dccRep 1
 fileName wgEncodeRikenCageK562CytosolPapRawData.fastq.gz
+md5sum e0592429b9f0a5f521202790659e8aa3
 grant Gingeras
 lab RIKEN
 localization cytosol
@@ -4839,6 +5045,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageK562CytosolPapRawDataRep1.fastq.gz
+md5sum 5f1238be6920dc23869318410c1addad
 grant Gingeras
 lab RIKEN
 labExpId J82
@@ -4862,6 +5069,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageK562CytosolPapRawDataRep2.fastq.gz
+md5sum 9c000f7e2d870101ef7093dfff43d891
 grant Gingeras
 lab RIKEN
 labExpId J83
@@ -4885,6 +5093,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageK562CytosolPapTSS.gtf.gz
+md5sum 5060e3b385cbd19c5127911e3fb5ed0b
 grant Gingeras
 lab RIKEN
 labExpId J82,J83
@@ -4906,6 +5115,7 @@ dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 dccRep 1
 fileName wgEncodeRikenCageK562NucleolusTotalAlnRep1.bam
+md5sum d2c294e100c3fc98f43cd5a4c77627ac
 grant Gingeras
 lab RIKEN
 labExpId I33
@@ -4930,6 +5140,7 @@ dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 dccRep 1
 fileName wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1.bigWig
+md5sum 7d445026a18f2b1c554e2f0c3ebf8f8a
 grant Gingeras
 lab RIKEN
 labExpId I33
@@ -4954,6 +5165,7 @@ dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 dccRep 1
 fileName wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1.bigWig
+md5sum cdc9ca00446c34277d4087560af6350e
 grant Gingeras
 lab RIKEN
 labExpId I33
@@ -4978,6 +5190,7 @@ dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 dccRep 1
 fileName wgEncodeRikenCageK562NucleolusTotalRawDataRep1.fastq.gz
+md5sum f524bb1dc39a0045b91d2cc19d1adec6
 grant Gingeras
 lab RIKEN
 labExpId I33
@@ -5001,6 +5214,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageK562NucleolusTotalTSS.gtf.gz
+md5sum b5423be7d905e2d2302c3b2a7b78d01f
 grant Gingeras
 lab RIKEN
 labExpId I33
@@ -5024,6 +5238,7 @@ dateUnrestricted 2009-11-19
 dccRep 1
 fileIndex wgEncodeRikenCageK562NucleoplasmTotalAln.bam.bai
 fileName wgEncodeRikenCageK562NucleoplasmTotalAln.bam
+md5sum 979b0afae494798eee9261abb41b5674
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -5048,6 +5263,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccRep 1
 fileName wgEncodeRikenCageK562NucleoplasmTotalMinusClusters.bigWig
+md5sum 4deb2a5079895e41d1912971f390f3fa
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -5072,6 +5288,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccRep 1
 fileName wgEncodeRikenCageK562NucleoplasmTotalPlusClusters.bigWig
+md5sum b1025cf17ea4d9ae297fb89fba57fe0b
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -5095,6 +5312,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccRep 1
 fileName wgEncodeRikenCageK562NucleoplasmTotalRawData.fastq.gz
+md5sum 18b951622e82343c60ec991d946c2c80
 grant Gingeras
 lab RIKEN
 localization nucleoplasm
@@ -5116,6 +5334,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageK562NucleoplasmTotalTSS.gtf.gz
+md5sum 2d4d13d6202c2a45a1acf1806c597bb9
 grant Gingeras
 lab RIKEN
 labExpId I34
@@ -5139,6 +5358,7 @@ dateUnrestricted 2009-09-09
 dccRep 1
 fileIndex wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam
+md5sum a77cd54e73cd13920cbd94f9d411b334
 grant Gingeras
 lab RIKEN
 localization nucleus
@@ -5162,6 +5382,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccRep 1
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaMinusClusters.bigWig
+md5sum f1ecbb07206d715ab314c3deb96307fd
 grant Gingeras
 lab RIKEN
 localization nucleus
@@ -5185,6 +5406,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccRep 1
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaPlusClusters.bigWig
+md5sum 4925d0a5508ed083b599c0bc5cdc02b1
 grant Gingeras
 lab RIKEN
 localization nucleus
@@ -5208,6 +5430,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccRep 1
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaRawData.csfasta.gz
+md5sum 3157c80ffbe34f481385d58e6ba015e3
 grant Gingeras
 lab RIKEN
 localization nucleus
@@ -5230,6 +5453,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccRep 1
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaRawData2.csqual.gz
+md5sum 7a6278ff2b4228af25c0ef82038b302a
 grant Gingeras
 lab RIKEN
 localization nucleus
@@ -5251,6 +5475,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageK562NucleusPamTSS.gtf.gz
+md5sum af79e94c024719f81080b0ccd9ae7121
 grant Gingeras
 lab RIKEN
 labExpId I23
@@ -5273,6 +5498,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageK562NucleusPapAlnRep1.bam.bai
 fileName wgEncodeRikenCageK562NucleusPapAlnRep1.bam
+md5sum 7095cc38763f444217fcce8f70b3562a
 grant Gingeras
 lab RIKEN
 labExpId J91
@@ -5298,6 +5524,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageK562NucleusPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageK562NucleusPapAlnRep2.bam
+md5sum 42b508a3c9c0f650ea0c9a329f5390e0
 grant Gingeras
 lab RIKEN
 labExpId J92
@@ -5322,6 +5549,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageK562NucleusPapMinusClustersRep1.bigWig
+md5sum b5fd0f7d76d85c01c7f2ce1fb8594ded
 grant Gingeras
 lab RIKEN
 labExpId J91
@@ -5346,6 +5574,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageK562NucleusPapMinusClustersRep2.bigWig
+md5sum 15af3feafc52f392285999ffb37d1c63
 grant Gingeras
 lab RIKEN
 labExpId J92
@@ -5370,6 +5599,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageK562NucleusPapPlusClustersRep1.bigWig
+md5sum 4668f5224bb32d2f95ecfb32c80200d3
 grant Gingeras
 lab RIKEN
 labExpId J91
@@ -5394,6 +5624,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageK562NucleusPapPlusClustersRep2.bigWig
+md5sum 36303939dc404d37bc19cd51620e6e33
 grant Gingeras
 lab RIKEN
 labExpId J92
@@ -5418,6 +5649,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageK562NucleusPapRawDataRep1.fastq.gz
+md5sum 311db9270ded082662c108218dc44223
 grant Gingeras
 lab RIKEN
 labExpId J91
@@ -5441,6 +5673,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageK562NucleusPapRawDataRep2.fastq.gz
+md5sum 18ad97363a6db77d49474fdc02429d37
 grant Gingeras
 lab RIKEN
 labExpId J92
@@ -5464,6 +5697,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageK562NucleusPapTSS.gtf.gz
+md5sum 751e5f14587055d2aece6b6029c562d7
 grant Gingeras
 lab RIKEN
 labExpId J91,J92
@@ -5487,6 +5721,7 @@ dateUnrestricted 2009-11-19
 dccRep 1
 fileIndex wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam
+md5sum 6e5c518d2b24e9b5f819a7f8e12e4e13
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -5511,6 +5746,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccRep 1
 fileName wgEncodeRikenCageK562PolysomeLongnonpolyaMinusClusters.bigWig
+md5sum 2a67aaedcdcb0db5677862869690a278
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -5535,6 +5771,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccRep 1
 fileName wgEncodeRikenCageK562PolysomeLongnonpolyaPlusClusters.bigWig
+md5sum bedc4bae7b7243f4eed278ceb8ca8158
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -5558,6 +5795,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccRep 1
 fileName wgEncodeRikenCageK562PolysomeLongnonpolyaRawData.fastq.gz
+md5sum 15d330184e3f51e4eac5478b2d1f604a
 grant Gingeras
 lab RIKEN
 localization polysome
@@ -5579,6 +5817,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageK562PolysomePamTSS.gtf.gz
+md5sum 662a8ae3b7df952198ffc3f65c8b6b48
 grant Gingeras
 lab RIKEN
 labExpId I32
@@ -5601,6 +5840,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageMcf7CellPapAlnRep1.bam.bai
 fileName wgEncodeRikenCageMcf7CellPapAlnRep1.bam
+md5sum db7303df970c7760e1e0adc88dbcff8b
 grant Gingeras
 lab RIKEN
 labExpId K07
@@ -5625,6 +5865,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 2
 fileName wgEncodeRikenCageMcf7CellPapAlnRep2.bam
+md5sum c50051557b805f73374c50f331822916
 grant Gingeras
 lab RIKEN
 labExpId K11
@@ -5649,6 +5890,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageMcf7CellPapMinusClustersRep1.bigWig
+md5sum eb8a6806e1430468c0fb7a7376d42fd8
 grant Gingeras
 lab RIKEN
 labExpId K07
@@ -5673,6 +5915,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageMcf7CellPapPlusClustersRep1.bigWig
+md5sum 5e98104d551182c37b3b820bdbc822c8
 grant Gingeras
 lab RIKEN
 labExpId K07
@@ -5697,6 +5940,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageMcf7CellPapRawDataRep1.fastq.gz
+md5sum 6f6e3091d024d9ad7e57f0213a501827
 grant Gingeras
 lab RIKEN
 labExpId K07
@@ -5719,6 +5963,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 2
 fileName wgEncodeRikenCageMcf7CellPapRawDataRep2.fastq.gz
+md5sum cb3f964491ca3adf30f4fa6082d29363
 grant Gingeras
 lab RIKEN
 labExpId K11
@@ -5742,6 +5987,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageMcf7CellPapTSS.gtf.gz
+md5sum a119e1d76938b647dfb5fc9f9e433ed4
 grant Gingeras
 lab RIKEN
 labExpId K07,K11
@@ -5764,6 +6010,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageNhekCellPapAlnRep1.bam.bai
 fileName wgEncodeRikenCageNhekCellPapAlnRep1.bam
+md5sum 883264f44451a2e311de7c8797b3e1d4
 grant Gingeras
 lab RIKEN
 labExpId J76
@@ -5789,6 +6036,7 @@ dateUnrestricted 2011-06-21
 dccRep 2
 fileIndex wgEncodeRikenCageNhekCellPapAlnRep2.bam.bai
 fileName wgEncodeRikenCageNhekCellPapAlnRep2.bam
+md5sum f5326f647a5302771f1ea7625f4d7042
 grant Gingeras
 lab RIKEN
 labExpId J77
@@ -5813,6 +6061,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageNhekCellPapMinusClustersRep1.bigWig
+md5sum cb87b610e265b22898e57000cce919f8
 grant Gingeras
 lab RIKEN
 labExpId J76
@@ -5837,6 +6086,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageNhekCellPapMinusClustersRep2.bigWig
+md5sum f6130549c92a04c88a95771417f92546
 grant Gingeras
 lab RIKEN
 labExpId J77
@@ -5861,6 +6111,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageNhekCellPapPlusClustersRep1.bigWig
+md5sum 81a5abe828ab0b1b4987b4bcbe20643b
 grant Gingeras
 lab RIKEN
 labExpId J76
@@ -5885,6 +6136,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageNhekCellPapPlusClustersRep2.bigWig
+md5sum e26630bd52e58208c4acd1c11cbe4b46
 grant Gingeras
 lab RIKEN
 labExpId J77
@@ -5909,6 +6161,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageNhekCellPapRawDataRep1.fastq.gz
+md5sum e36c75543fd9e57d3254ab9ab082d6be
 grant Gingeras
 lab RIKEN
 labExpId J76
@@ -5932,6 +6185,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 2
 fileName wgEncodeRikenCageNhekCellPapRawDataRep2.fastq.gz
+md5sum 4e735ecd76e55d3e1b47f0b299b67adf
 grant Gingeras
 lab RIKEN
 labExpId J77
@@ -5955,6 +6209,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageNhekCellPapTSS.gtf.gz
+md5sum bf415a108e3360769d6671fa31ffd0eb
 grant Gingeras
 lab RIKEN
 labExpId J76,J77
@@ -5978,6 +6233,7 @@ dateUnrestricted 2010-10-13
 dccRep 1
 fileIndex wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam
+md5sum 893a566d89dae3fa2944c35f6c339c96
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -6002,6 +6258,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageNhekCytosolLongnonpolyaMinusClusters.bigWig
+md5sum 599d873f455c6a2804433bbd979862db
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -6026,6 +6283,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageNhekCytosolLongnonpolyaPlusClusters.bigWig
+md5sum 665dbad88c377d41c6ab12cda3fabc97
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -6049,6 +6307,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageNhekCytosolLongnonpolyaRawData.fastq.gz
+md5sum 9d03b4f6b30606abc1eab76a4223af9e
 grant Gingeras
 lab RIKEN
 localization cytosol
@@ -6070,6 +6329,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageNhekCytosolPamTSS.gtf.gz
+md5sum 14ac93bf6892038418e0fe887d49252b
 grant Gingeras
 lab RIKEN
 labExpId I70
@@ -6092,6 +6352,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageNhekCytosolPapAlnRep3.bam.bai
 fileName wgEncodeRikenCageNhekCytosolPapAlnRep3.bam
+md5sum 2b048dee3ece6207be96d584917172db
 grant Gingeras
 lab RIKEN
 labExpId K08
@@ -6116,6 +6377,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 2
 fileName wgEncodeRikenCageNhekCytosolPapAlnRep4.bam
+md5sum 0826bda15b1784b4db2c45379c741a39
 grant Gingeras
 lab RIKEN
 labExpId K20
@@ -6140,6 +6402,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageNhekCytosolPapMinusClustersRep3.bigWig
+md5sum 41920333b916209b8881297a58fd6e0b
 grant Gingeras
 lab RIKEN
 labExpId K08
@@ -6164,6 +6427,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageNhekCytosolPapPlusClustersRep3.bigWig
+md5sum 7dfd1736962c08aa755f321bb8848e8c
 grant Gingeras
 lab RIKEN
 labExpId K08
@@ -6188,6 +6452,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageNhekCytosolPapRawDataRep3.fastq.gz
+md5sum 75efcd24749256d1695653f345ef514c
 grant Gingeras
 lab RIKEN
 labExpId K08
@@ -6210,6 +6475,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 2
 fileName wgEncodeRikenCageNhekCytosolPapRawDataRep4.fastq.gz
+md5sum 004cea6db848d9ced05a2f90a510673f
 grant Gingeras
 lab RIKEN
 labExpId K20
@@ -6233,6 +6499,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageNhekCytosolPapTSS.gtf.gz
+md5sum c822dd907af40f4e756183089261c3d3
 grant Gingeras
 lab RIKEN
 labExpId K08,K20
@@ -6256,6 +6523,7 @@ dateUnrestricted 2010-10-13
 dccRep 1
 fileIndex wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam
+md5sum ea5528ee53c5fe8fd0ee3c41be3942e7
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -6280,6 +6548,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageNhekNucleusLongnonpolyaMinusClusters.bigWig
+md5sum 7585ee170197c1585a4483590dcb92eb
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -6304,6 +6573,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageNhekNucleusLongnonpolyaPlusClusters.bigWig
+md5sum 5aa7077b8e7071e16411d442e9941dbb
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
@@ -6327,6 +6597,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccRep 1
 fileName wgEncodeRikenCageNhekNucleusLongnonpolyaRawData.fastq.gz
+md5sum 878ea53a02c3abbd147227af41b19194
 grant Gingeras
 lab RIKEN
 localization nucleus
@@ -6348,6 +6619,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageNhekNucleusPamTSS.gtf.gz
+md5sum 725b6df938a043c39e25ece3696a3621
 grant Gingeras
 lab RIKEN
 labExpId I71
@@ -6370,6 +6642,7 @@ dateUnrestricted 2011-06-21
 dccRep 1
 fileIndex wgEncodeRikenCageNhekNucleusPapAlnRep3.bam.bai
 fileName wgEncodeRikenCageNhekNucleusPapAlnRep3.bam
+md5sum 1c62e411bd0588cf11a275c2df0a8214
 grant Gingeras
 lab RIKEN
 labExpId K09
@@ -6394,6 +6667,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageNhekNucleusPapMinusClustersRep3.bigWig
+md5sum ec648f02819365949f5daed76290dc0d
 grant Gingeras
 lab RIKEN
 labExpId K09
@@ -6418,6 +6692,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageNhekNucleusPapPlusClustersRep3.bigWig
+md5sum 94507040dc098a73dac79897197dab11
 grant Gingeras
 lab RIKEN
 labExpId K09
@@ -6442,6 +6717,7 @@ dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
 fileName wgEncodeRikenCageNhekNucleusPapRawDataRep3.fastq.gz
+md5sum c236ae0b6d35366584b656068e9557ad
 grant Gingeras
 lab RIKEN
 labExpId K09
@@ -6465,6 +6741,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageNhekNucleusPapTSS.gtf.gz
+md5sum 3428a05e7bb8252bbb54395e4071054b
 grant Gingeras
 lab RIKEN
 labExpId K09
@@ -6488,6 +6765,7 @@ dateUnrestricted 2009-09-09
 dccRep 1
 fileIndex wgEncodeRikenCageProstateCellLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageProstateCellLongnonpolyaAln.bam
+md5sum 1d926e84501daaf20f7cde1c46108b77
 grant Gingeras
 lab RIKEN
 localization cell
@@ -6512,6 +6790,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccRep 1
 fileName wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters.bigWig
+md5sum 78471d5d5a867cd1642a09261f239926
 grant Gingeras
 lab RIKEN
 localization cell
@@ -6536,6 +6815,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccRep 1
 fileName wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters.bigWig
+md5sum 5e23eeff74cfa82ed6bfcbcda7eb02c4
 grant Gingeras
 lab RIKEN
 localization cell
@@ -6560,6 +6840,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccRep 1
 fileName wgEncodeRikenCageProstateCellLongnonpolyaRawData.csfasta.gz
+md5sum d149812b46a088135f76b11ee02ca828
 grant Gingeras
 lab RIKEN
 localization cell
@@ -6582,6 +6863,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccRep 1
 fileName wgEncodeRikenCageProstateCellLongnonpolyaRawData2.csqual.gz
+md5sum db1ae71115cabc68f4770cea867eaae8
 grant Gingeras
 lab RIKEN
 localization cell
@@ -6603,6 +6885,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageProstateCellPamTSS.gtf.gz
+md5sum cbcfce6814f6423cd3447b9d2f880ff5
 grant Gingeras
 lab RIKEN
 labExpId I09
@@ -6624,6 +6907,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 1
 fileName wgEncodeRikenCageSknshraCellPapAlnRep1.bam
+md5sum dd157c5757c5e85f4c7854089a09bbf2
 grant Gingeras
 lab RIKEN
 labExpId K14
@@ -6648,6 +6932,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccRep 2
 fileName wgEncodeRikenCageSknshraCellPapAlnRep2.bam
+md5sum e0edada032843539e6d28574d4a0f766
 grant Gingeras
 lab RIKEN
 labExpId K15-DA
@@ -6672,6 +6957,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccRep 2
 fileName wgEncodeRikenCageSknshraCellPapMinusClustersRep2.bigWig
+md5sum 49c53bb840d8c3f0b5f081f7f0e86ddc
 grant Gingeras
 lab RIKEN
 labExpId K15-DA
@@ -6696,6 +6982,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccRep 2
 fileName wgEncodeRikenCageSknshraCellPapPlusClustersRep2.bigWig
+md5sum 19083c96c5056b16a4345fb333e68b2a
 grant Gingeras
 lab RIKEN
 labExpId K15-DA
@@ -6720,6 +7007,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccRep 1
 fileName wgEncodeRikenCageSknshraCellPapRawDataRep1.fastq.gz
+md5sum aa505f281a58a7364a46d78534344add
 grant Gingeras
 lab RIKEN
 labExpId K14
@@ -6743,6 +7031,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccRep 2
 fileName wgEncodeRikenCageSknshraCellPapRawDataRep2.fastq.gz
+md5sum 5a506d27437e288f9672da2947864970
 grant Gingeras
 lab RIKEN
 labExpId K15-DA
@@ -6766,6 +7055,7 @@ dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
 dccRep Pooled
 fileName wgEncodeRikenCageSknshraCellPapTSS.gtf.gz
+md5sum 3f035a3f8679d92a98104058ed959cdb
 grant Gingeras
 lab RIKEN
 labExpId K14,K15

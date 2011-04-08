@@ -5,6 +5,7 @@ dataType BiP
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
+expVars lab,dataType
 fileName wgEncodeNhgriBip.hg18.bed8.gz
 grant Elnitski
 lab NHGRI
@@ -13,4 +14,4 @@ species hg18
 subId 294
 tableName wgEncodeNhgriBip
 
-# MAGIC: -1295043918
+# MAGIC: -709011534
