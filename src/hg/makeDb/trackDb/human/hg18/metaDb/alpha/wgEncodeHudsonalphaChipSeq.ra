@@ -1,3 +1,8 @@
+metaObject wgEncodeHudsonalphaChipSeq
+objType composite
+composite wgEncodeHudsonalphaChipSeq
+expVars lab,dataType,cell,treatment,antibody,protocol
+
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsA549Control
 objType file
 antibody Input
@@ -16225,4 +16230,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: 1803797804
+# MAGIC: 1620146386

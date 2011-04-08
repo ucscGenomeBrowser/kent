@@ -1,3 +1,8 @@
+metaObject wgEncodeUwDnaseSeq
+objType composite
+composite wgEncodeUwDnaseSeq
+expVars lab,dataType,cell
+
 metaObject wgEncodeUwDnaseSeqAlignmentsRep1Ag04449
 objType file
 cell AG04449
@@ -6850,4 +6855,4 @@ submittedDataVersion V2 - Improved DNA Library
 tableName wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
 view RawSignal
 
-# MAGIC: 2077071393
+# MAGIC: -1965534808

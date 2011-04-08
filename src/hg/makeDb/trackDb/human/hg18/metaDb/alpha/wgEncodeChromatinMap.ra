@@ -1,7 +1,7 @@
 metaObject wgEncodeChromatinMap
 objType composite
 composite wgEncodeChromatinMap
-expVars species,lab,dataType,cell,treatment,antibody
+expVars lab,dataType,cell,treatment,antibody
 
 metaObject wgEncodeDukeDNaseSeqAlignmentsRep1AosmcSerumfree
 objType file
@@ -10235,4 +10235,4 @@ subId 871
 tableName wgEncodeUtaustinChIPseqSignalProgfib
 view Signal
 
-# MAGIC: 308668854
+# MAGIC: 308668062

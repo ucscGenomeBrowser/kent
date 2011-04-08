@@ -1,3 +1,8 @@
+metaObject wgEncodeUwDGF
+objType composite
+composite wgEncodeUwDGF
+expVars lab,dataType,cell
+
 metaObject wgEncodeUwDGFAlignmentsGm06990
 objType file
 cell GM06990
@@ -458,4 +463,4 @@ subId 637
 tableName wgEncodeUwDGFSignalTh1
 view Signal
 
-# MAGIC: -1088892641
+# MAGIC: -1068893362
