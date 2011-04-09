@@ -216,16 +216,16 @@ for (i=0; i<aStateCount; ++i)
 
 
 transProbLookup[aLow][aLow] =     scaledLog(0.9999);
-transProbLookup[aLow][aMed] = scaledLog(0.00001);
+transProbLookup[aLow][aMed] = scaledLog(0.000005);
 transProbLookup[aLow][aH] = scaledLog(0.00001);
 transProbLookup[aLow][aD] = scaledLog(0.00001);
-transProbLookup[aLow][aHDH1] = scaledLog(0.00005);
+transProbLookup[aLow][aHDH1] = scaledLog(0.000055);
 transProbLookup[aLow][aDH1] = scaledLog(0.00001);
 transProbLookup[aLow][aHD1] = scaledLog(0.00001);
 
 
-transProbLookup[aMed][aMed] = scaledLog(0.995);
-transProbLookup[aMed][aLow] = scaledLog(0.005);
+transProbLookup[aMed][aMed] = scaledLog(0.998);
+transProbLookup[aMed][aLow] = scaledLog(0.002);
 
 
 transProbLookup[aH][aH] = scaledLog(0.995);
@@ -284,33 +284,49 @@ return probsFromDnaseHistones(dnase, histone);
 
 int *makeEmissionProbsForMed()
 {
-static double dnase[5] = {0.07, 0.18, 0.33, 0.21, 0.11};
-static double histone[5] = {0.07, 0.18, 0.33, 0.21, 0.11};
+static double dnase[5] = {0.07, 0.16, 0.34, 0.22, 0.11};
+static double histone[5] = {0.07, 0.16, 0.34, 0.22, 0.11};
 return probsFromDnaseHistones(dnase, histone);
 }
 
 int *makeEmissionProbsForDnase()
 {
-static double dnase[5] = {0.05, 0.1, 0.20, 0.30, 0.35};
+static double dnase[5] = {0.05, 0.12, 0.23, 0.30, 0.30};
 static double histone[5] = {0.21, 0.22, 0.22, 0.21, 0.14};
 return probsFromDnaseHistones(dnase, histone);
 }
 
-int *makeEmissionProbsForHistones()
+int *makeEmissionProbsForIsolatedDnase()
+{
+static double dnase[5] = {0.04, 0.10, 0.21, 0.32, 0.33};
+static double histone[5] = {0.21, 0.22, 0.22, 0.21, 0.14};
+return probsFromDnaseHistones(dnase, histone);
+}
+
+int *makeEmissionProbsForIsolatedHistones()
 {
 static double dnase[5] = {0.35, 0.25, 0.2, 0.15, 0.1};
 static double histone[5] = {0.05, 0.10, 0.25, 0.30, 0.30};
 return probsFromDnaseHistones(dnase, histone);
 }
 
-int *lowProbs, *medProbs, *highDnaseProbs, *highHistoneProbs;
+int *makeEmissionProbsForFramingHistones()
+{
+static double dnase[5] = {0.35, 0.25, 0.2, 0.15, 0.1};
+static double histone[5] = {0.08, 0.15, 0.25, 0.26, 0.26};
+return probsFromDnaseHistones(dnase, histone);
+}
+
+int *lowProbs, *medProbs, *highDnaseProbs, *isolatedDnaseProbs, *highHistoneProbs, *framingHistoneProbs;
 
 static void makeEmissionProbs()
 {
 lowProbs = makeEmissionProbsForLo();
 medProbs = makeEmissionProbsForMed();
+isolatedDnaseProbs = makeEmissionProbsForIsolatedDnase();
 highDnaseProbs = makeEmissionProbsForDnase();
-highHistoneProbs = makeEmissionProbsForHistones();
+highHistoneProbs = makeEmissionProbsForIsolatedHistones();
+framingHistoneProbs = makeEmissionProbsForFramingHistones();
 }
 
 
@@ -421,13 +437,13 @@ for (lettersIx=0; lettersIx<scanSize; lettersIx += 1)
     endState(aH)
         
     startState(aD)
-        int b = prob1(highDnaseProbs, c);
+        int b = prob1(isolatedDnaseProbs, c);
 	source(aD, b);
 	source(aLow, b);
     endState(aD)
         
     startState(aHDH1)
-        int b = prob1(highHistoneProbs, c);
+        int b = prob1(framingHistoneProbs, c);
 	source(aHDH1, b);
 	source(aLow, b);
     endState(aHDH1)
@@ -440,7 +456,7 @@ for (lettersIx=0; lettersIx<scanSize; lettersIx += 1)
     endState(aHDH2)
         
     startState(aHDH3)
-        int b = prob1(highHistoneProbs, c);
+        int b = prob1(framingHistoneProbs, c);
 	source(aHDH3, b);
 	source(aHDH2, b);
     endState(aHDH3)
@@ -452,13 +468,13 @@ for (lettersIx=0; lettersIx<scanSize; lettersIx += 1)
     endState(aDH1)
         
     startState(aDH2)
-        int b = prob1(highHistoneProbs, c);
+        int b = prob1(framingHistoneProbs, c);
 	source(aDH2, b);
 	source(aDH1, b);
     endState(aDH2)
         
     startState(aHD1)
-        int b = prob1(highHistoneProbs, c);
+        int b = prob1(framingHistoneProbs, c);
 	source(aHD1, b);
 	source(aLow, b);
     endState(aHD1)
