@@ -9,6 +9,9 @@
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
+char *simpleBed = NULL;
+FILE *simpleBedFile = NULL;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -16,13 +19,15 @@ errAbort(
   "regBeadPos - Position regulatory beads along a chromosome string.  The beads\n"
   "are nucleosomes, open regions and closed regions.\n"
   "usage:\n"
-  "   regBeadPos in.tab outFile\n"
+  "   regBeadPos in.tab outFile.bed\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -simpleBed=simpleOut.bed\n"
   );
 }
 
+
 static struct optionSpec options[] = {
+   {"simpleBed", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -211,10 +216,10 @@ for (i=0; i<aStateCount; ++i)
 
 
 transProbLookup[aLow][aLow] =     scaledLog(0.9999);
-transProbLookup[aLow][aMed] = scaledLog(0.00003);
+transProbLookup[aLow][aMed] = scaledLog(0.00001);
 transProbLookup[aLow][aH] = scaledLog(0.00001);
 transProbLookup[aLow][aD] = scaledLog(0.00001);
-transProbLookup[aLow][aHDH1] = scaledLog(0.00003);
+transProbLookup[aLow][aHDH1] = scaledLog(0.00005);
 transProbLookup[aLow][aDH1] = scaledLog(0.00001);
 transProbLookup[aLow][aHD1] = scaledLog(0.00001);
 
@@ -226,15 +231,19 @@ transProbLookup[aMed][aLow] = scaledLog(0.005);
 transProbLookup[aH][aH] = scaledLog(0.995);
 transProbLookup[aH][aLow] = scaledLog(0.005);
 
+transProbLookup[aD][aD] = scaledLog(0.995);
+transProbLookup[aD][aLow] = scaledLog(0.005);
 
-transProbLookup[aHDH1][aHDH1] = scaledLog(0.997);
-transProbLookup[aHDH1][aHDH2] = scaledLog(0.003);
 
-transProbLookup[aHDH2][aHDH2] = scaledLog(0.997);
-transProbLookup[aHDH2][aHDH3] = scaledLog(0.003);
+transProbLookup[aHDH1][aHDH1] = scaledLog(0.990);
+transProbLookup[aHDH1][aHDH2] = scaledLog(0.010);
 
-transProbLookup[aHDH3][aHDH3] = scaledLog(0.997);
-transProbLookup[aHDH3][aLow] = scaledLog(0.003);
+transProbLookup[aHDH2][aHDH2] = scaledLog(0.990);
+transProbLookup[aHDH2][aHDH3] = scaledLog(0.010);
+
+transProbLookup[aHDH3][aHDH3] = scaledLog(0.996);
+transProbLookup[aHDH3][aLow] = scaledLog(0.002);
+transProbLookup[aHDH3][aHDH2] = scaledLog(0.002);
 
 
 transProbLookup[aDH1][aDH1] = scaledLog(0.996);
@@ -268,29 +277,29 @@ return p;
 
 int *makeEmissionProbsForLo()
 {
-static double dnase[5] = {0.9, 0.08, 0.019, 0.001, 0};
-static double histone[5] = {0.8, 0.15, 0.04, 0.0099, 0.0001};
+static double dnase[5] = {0.93, 0.05, 0.019, 0.001, unlikelyProb};
+static double histone[5] = {0.90, 0.08, 0.019, 0.001, unlikelyProb};
 return probsFromDnaseHistones(dnase, histone);
 }
 
 int *makeEmissionProbsForMed()
 {
-static double dnase[5] = {0.1, 0.2, 0.3, 0.2, 0.1};
-static double histone[5] = {0.1, 0.2, 0.3, 0.2, 0.1};
+static double dnase[5] = {0.07, 0.18, 0.33, 0.21, 0.11};
+static double histone[5] = {0.07, 0.18, 0.33, 0.21, 0.11};
 return probsFromDnaseHistones(dnase, histone);
 }
 
 int *makeEmissionProbsForDnase()
 {
-static double dnase[5] = {0.05, 0.05, 0.1, 0.4, 0.4};
-static double histone[5] = {0.22, 0.23, 0.23, 0.22, 0.1};
+static double dnase[5] = {0.05, 0.1, 0.20, 0.30, 0.35};
+static double histone[5] = {0.21, 0.22, 0.22, 0.21, 0.14};
 return probsFromDnaseHistones(dnase, histone);
 }
 
 int *makeEmissionProbsForHistones()
 {
-static double dnase[5] = {0.4, 0.25, 0.2, 0.1, 0.05};
-static double histone[5] = {0.05, 0.05, 0.1, 0.4, 0.4};
+static double dnase[5] = {0.35, 0.25, 0.2, 0.15, 0.1};
+static double histone[5] = {0.05, 0.10, 0.25, 0.30, 0.30};
 return probsFromDnaseHistones(dnase, histone);
 }
 
@@ -427,6 +436,7 @@ for (lettersIx=0; lettersIx<scanSize; lettersIx += 1)
         int b = prob1(highDnaseProbs, c);
 	source(aHDH2, b);
 	source(aHDH1, b);
+	source(aHDH3, b);
     endState(aHDH2)
         
     startState(aHDH3)
@@ -472,25 +482,95 @@ for (i=0; i<stateCount; ++i)
 freeMem(allStates);
 }
 
-void upcTraceback(int *scores, State **allStates, UBYTE *letters, int letterCount, FILE *out)
-/* Trace back, then print out result. */
+
+void outputSimpleStates(char *chrom, int shrinkFactor, State *states, int shrunkSize, FILE *f)
+/* output bed - item every 5. */
 {
-int lineSize;
-int maxLineSize = 100;
-State *states;
-AllocArray(states, letterCount);
-traceback(scores, allStates, letterCount, states);
-int i,j;
-for (i=0; i<letterCount; i += lineSize)
+/* Run it through a look up table. */
+int i;
+for (i=0; i<shrunkSize; ++i)
     {
-    lineSize = letterCount - i;
-    if (lineSize > maxLineSize)
-        lineSize = maxLineSize;
-    State *t = states + i;
-    for (j=0; j<lineSize; ++j)
-	fputc(visStates[t[j]], out);
-    fputc('\n', out);
+    int start = i*shrinkFactor;
+    char c = visStates[states[i]];
+    if (c != '.')
+	fprintf(f, "%s\t%d\t%d\t%c\n", chrom, start, start+shrinkFactor, visStates[states[i]]);
     }
+}
+
+void outputStates(char *chrom, int shrinkFactor, State *states, int shrunkSize, FILE *f)
+/* Convert runs of states to various types of BED lines. */
+{
+/* Run it through a look up table. */
+int stateIx = 0;
+char *labels = needMem(shrunkSize+1);	/* Extra so the countLeadingChars always end. */
+int i;
+for (i=0; i<shrunkSize; ++i)
+    labels[i] = visStates[states[i]];
+
+while (stateIx < shrunkSize)
+    {
+    char label = labels[stateIx];
+    int n;
+    int dCount, hCount;
+    int start = stateIx * shrinkFactor;
+    switch (label)
+        {
+	case '.':
+	    n = countLeadingChars(labels+stateIx, '.');
+	    stateIx += n;
+	    break;
+	case 'm':
+	    n = countLeadingChars(labels+stateIx, 'm');
+	    fprintf(f, "%s\t%d\t%d\tmixed\n", chrom, start, start + n*shrinkFactor);
+	    stateIx += n;
+	    break;
+	case '^':
+	    dCount = countLeadingChars(labels+stateIx, '^');
+	    hCount = countLeadingChars(labels+stateIx+dCount, 'o');
+	    if (hCount <= 0)
+	        {
+		fprintf(f, "%s\t%d\t%d\tdnase\n", chrom, start, start + dCount*shrinkFactor);
+		stateIx += dCount;
+		}
+	    else
+	        {
+		n = dCount + hCount;
+		fprintf(f, "%s\t%d\t%d\tpair\n", chrom, start, start + n*shrinkFactor);
+		stateIx += n;
+		}
+	    break;
+	case 'o':
+	    hCount = countLeadingChars(labels+stateIx, 'o');
+	    dCount = countLeadingChars(labels+stateIx+hCount, '^');
+	    if (dCount <= 0)
+	        {
+		fprintf(f, "%s\t%d\t%d\thistone\n", chrom, start, start + hCount*shrinkFactor);
+		stateIx += hCount;
+		}
+	    else
+	        {
+		n = dCount + hCount;
+		fprintf(f, "%s\t%d\t%d\tpair\n", chrom, start, start + n*shrinkFactor);
+		stateIx += n;
+		}
+	    break;
+	case 'O':
+	    hCount = countLeadingChars(labels+stateIx, 'O');
+	    n = hCount;
+	    while ((dCount = countLeadingChars(labels+stateIx+n, '^')) > 0)
+	        {
+		n += dCount;
+		n += countLeadingChars(labels+stateIx+n, 'O');
+		}
+	    fprintf(f, "%s\t%d\t%d\tframed\n", chrom, start, start + n*shrinkFactor);
+	    stateIx += n;
+	    break;
+	default:
+	    internalErr();
+	    break;
+	}
+    }
+freez(&labels);
 }
 
 void runHmmOnChrom(struct bbiChromInfo *chrom, struct inFile *dnaseIn, struct inFile *histoneIn, FILE *f)
@@ -504,6 +584,10 @@ State *states;
 AllocArray(states, inLetterCount);
 dynamo(inLetters, inLetterCount, states);
 uglyTime("Ran HMM dynamo");
+outputStates(chrom->name, 5, states, inLetterCount, f);
+if (simpleBedFile)
+    outputSimpleStates(chrom->name, 5, states, inLetterCount, simpleBedFile);
+uglyTime("Wrote output");
 }
 
 
@@ -517,6 +601,8 @@ struct inFile *dnaseIn = findInHashFromFile("DNASE", inHash, inTab);
 struct inFile *histoneIn = findInHashFromFile("HISTONE", inHash, inTab);
 uglyf("%s and %s found\n", dnaseIn->name, histoneIn->name);
 FILE *f = mustOpen(outFile, "w");
+if (simpleBed != NULL)
+    simpleBedFile = mustOpen(simpleBed, "w");
 struct bbiChromInfo *chrom, *chromList = bbiChromList(dnaseIn->bigWig);
 makeTransitionProbs();
 makeEmissionProbs();
@@ -531,6 +617,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	runHmmOnChrom(chrom, dnaseIn, histoneIn, f);
 	}
     }
+carefulClose(&simpleBedFile);
 carefulClose(&f);
 }
 
@@ -540,6 +627,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+simpleBed = optionVal("simpleBed", simpleBed);
 regBeadPos(argv[1], argv[2]);
 return 0;
 }
