@@ -1,4 +1,4 @@
-P300SC48343# Stanford/Yale/UCD/Harvard TFBS (wrangler: vsmalladi)
+# Stanford/Yale/UCD/Harvard TFBS (wrangler: vsmalladi)
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
 # Notes:
 #       - Short Labels: 7 charactesr for cell type, 2 characters for view
@@ -680,14 +680,14 @@ wgEncode 1
         type narrowPeak
         # subId=3254 dateSubmitted=2011-01-14
 
-		track wgEncodeSydhTfbsHepg2CebpbIggrabPk
-		parent wgEncodeSydhTfbsViewPeaks off
-		shortLabel HepG2 CEBPB Pk
-		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CEBPB in HepG2 cells)
-		subGroups view=Peaks factor=CEBPB cellType=HepG2 control=IGGrab treatment=aNone
-		type narrowPeak
-		color 189,0,157
-		# subId=3875 dateSubmitted=2011-04-04
+        track wgEncodeSydhTfbsHepg2CebpbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 CEBPB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CEBPB in HepG2 cells)
+        subGroups view=Peaks factor=CEBPB cellType=HepG2 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 189,0,157
+        # subId=3875 dateSubmitted=2011-04-04
 
         track wgEncodeSydhTfbsGm12878Chd21250IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -965,6 +965,51 @@ wgEncode 1
         type narrowPeak
         color 46,0,184
         # subId=3755 dateSubmitted=2011-02-25
+
+        track wgEncodeSydhTfbsHepg2Brca1a300IggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 BRCA1_(A300-000A) Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BRCA1_(A300-000A) in HepG2 cells)
+        subGroups view=Peaks factor=BRCA1A300 cellType=HepG2 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 189,0,157
+        # subId=3871 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsGm12878Pol2s2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 Pol2(phosphoS2) Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2(phosphoS2) in GM12878 cells)
+        subGroups view=Peaks factor=POL2S2 cellType=GM12878 control=IGGmus treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=3870 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsHepg2P300sc582IggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 p300_(SC-584) Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (p300_(SC-584) in HepG2 cells)
+        subGroups view=Peaks factor=P300SC582 cellType=HepG2 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 189,0,157
+        # subId=3872 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsHepg2Pol2s2IggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 Pol2(phosphoS2) Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2(phosphoS2) in HepG2 cells)
+        subGroups view=Peaks factor=POL2S2 cellType=HepG2 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 189,0,157
+        # subId=3873 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsHepg2Smc3ab9263IggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 SMC3_(ab9263) Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SMC3_(ab9263) in HepG2 cells)
+        subGroups view=Peaks factor=SMC3ab9263 cellType=HepG2 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 189,0,157
+        # subId=3874 dateSubmitted=2011-03-31
 
     #Signal Track SYDH TFBS#
     #Short Labels for signal =Sg # 
@@ -3485,14 +3530,14 @@ wgEncode 1
         type bigWig 1.000000 24948.000000
         # subId=3257 dateSubmitted=2011-01-14
 
-		track wgEncodeSydhTfbsHepg2CebpbIggrabSig
-		parent wgEncodeSydhTfbsViewSignal off
-		shortLabel HepG2 CEBPB Sig
-		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CEBPB in HepG2 cells)
-		subGroups view=Signal factor=CEBPB cellType=HepG2 control=IGGrab treatment=aNone
-		type bigWig 1.000000 19417.000000
-		color 189,0,157
-		# subId=3875 dateSubmitted=2011-04-04
+        track wgEncodeSydhTfbsHepg2CebpbIggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 CEBPB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CEBPB in HepG2 cells)
+        subGroups view=Signal factor=CEBPB cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 1.000000 19417.000000
+        color 189,0,157
+        # subId=3875 dateSubmitted=2011-04-04
 
         track wgEncodeSydhTfbsGm12878Chd21250IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3812,4 +3857,49 @@ wgEncode 1
         type bigWig 1.000000 18479.000000
         color 46,0,184
         # subId=3755 dateSubmitted=2011-02-25
+
+        track wgEncodeSydhTfbsHepg2Brca1a300IggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 BRCA1_(A300-000A) Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRCA1_(A300-000A) in HepG2 cells)
+        subGroups view=Signal factor=BRCA1A300 cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 1.000000 9420.000000
+        color 189,0,157
+        # subId=3871 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsGm12878Pol2s2IggmusSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 Pol2(phosphoS2) Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2(phosphoS2) in GM12878 cells)
+        subGroups view=Signal factor=POL2S2 cellType=GM12878 control=IGGmus treatment=aNone
+        type bigWig 1.000000 5123.000000
+        color 153,38,0
+        # subId=3870 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsHepg2P300sc582IggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 p300_(SC-584) Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (p300_(SC-584) in HepG2 cells)
+        subGroups view=Signal factor=P300SC582 cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 1.000000 15243.000000
+        color 189,0,157
+        # subId=3872 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsHepg2Pol2s2IggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 Pol2(phosphoS2) Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2(phosphoS2) in HepG2 cells)
+        subGroups view=Signal factor=POL2S2 cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 1.000000 7379.000000
+        color 189,0,157
+        # subId=3873 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsHepg2Smc3ab9263IggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 SMC3_(ab9263) Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SMC3_(ab9263) in HepG2 cells)
+        subGroups view=Signal factor=SMC3ab9263 cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 1.000000 11218.000000
+        color 189,0,157
+        # subId=3874 dateSubmitted=2011-03-31
 
