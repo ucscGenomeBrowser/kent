@@ -14520,6 +14520,9 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
 
 #############################################################################
 # FILTER SNP132 (DONE 3/8/11 angie)
+# 4/8/11: changing table names to be consistent with shortLabel:
+#         snp132Patient -> snp132Flagged
+#         snp132NonUnique -> snp132Mult
 # 3/8/11: redone after snp132 with tweaked weights in PARs, see above
 # Previously done 1/24/11 after snp132
     # Redmine: Track #1684 (SNPs 132 (dbSNP))
@@ -14528,14 +14531,14 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
     cd /hive/data/outside/dbSNP/132/human
     zcat snp132.parWeightTweak.bed.gz \
     | perl -we \
-      'open($nonUnique, "| gzip -c > snp132NonUnique.bed.gz") || die; \
+      'open($mult, "| gzip -c > snp132Mult.bed.gz") || die; \
        open($common,    "| gzip -c > snp132Common.bed.gz") || die; \
-       open($patient,   "| gzip -c > snp132Patient.bed.gz") || die; \
+       open($flagged,   "| gzip -c > snp132Flagged.bed.gz") || die; \
        open($misc,      "| gzip -c > snp132Misc.bed.gz") || die; \
        while (<>) { \
          @w = split("\t"); \
          if ($w[16] > 1 || $w[17] =~ /MultipleAlignments/) { \
-           print $nonUnique $_; \
+           print $mult $_; \
          } else { \
            my ($alleleFreqCount, $nStr, $freqStr) = ($w[20], $w[22], $w[23]); \
            my @alNs = split(",", $nStr);      die unless scalar(@alNs) == $alleleFreqCount; \
@@ -14548,25 +14551,24 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
            if ($alleleFreqCount >= 2 && $total2N >= 4 && $maxAlleleFreq <= 0.99) { \
              print $common $_; \
            } elsif($w[24] =~ /clinically-assoc/)  { \
-             print $patient $_; \
+             print $flagged $_; \
            } else { \
              print $misc $_; \
            } \
          } \
        } \
-       close($nonUnique);  close($common); \
-       close($patient);  close($misc);'
-    zcat snp132NonUnique.bed.gz | wc -l
+       close($mult);  close($common); close($flagged);  close($misc);'
+    zcat snp132Mult.bed.gz | wc -l
 #3568988
     zcat snp132Common.bed.gz | wc -l
 #14024295
-    zcat snp132Patient.bed.gz | wc -l
+    zcat snp132Flagged.bed.gz | wc -l
 #18084
     zcat snp132Misc.bed.gz | wc -l
 #15414754
 
     # Load tables
-    foreach subset (NonUnique Common Patient Misc)
+    foreach subset (Mult Common Flagged Misc)
       hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd -renameSqlTable \
         hg19 snp132$subset -sqlTable=snp132.sql snp132$subset.bed.gz
     end
