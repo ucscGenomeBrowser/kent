@@ -1557,7 +1557,7 @@ hapmapPhase III
 codingAnnotations snp132CodingDbSnp,
 codingAnnoLabel_snp132CodingDbSnp dbSNP
 
-track snp132Patient override
+track snp132Flagged override
 snpSeqFile /gbdb/hg19/snp/snp132.fa
 chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
 chimpDb panTro2
@@ -1567,7 +1567,7 @@ hapmapPhase III
 codingAnnotations snp132CodingDbSnp,
 codingAnnoLabel_snp132CodingDbSnp dbSNP
 
-track snp132NonUnique override
+track snp132Mult override
 snpSeqFile /gbdb/hg19/snp/snp132.fa
 chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
 chimpDb panTro2
