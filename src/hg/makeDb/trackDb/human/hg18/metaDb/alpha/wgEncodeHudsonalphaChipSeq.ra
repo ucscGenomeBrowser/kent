@@ -1,8 +1,3 @@
-metaObject wgEncodeHudsonalphaChipSeq
-objType composite
-composite wgEncodeHudsonalphaChipSeq
-expVars lab,dataType,cell,treatment,antibody,protocol
-
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsA549Control
 objType file
 antibody Input
@@ -11560,7 +11555,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-11
 dateUnrestricted 2010-08-10
-fileName wgEncodeHudsonalphaChipSeqAlignmentsA549Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11585,7 +11579,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-11
 dateUnrestricted 2010-08-10
-fileName wgEncodeHudsonalphaChipSeqAlignmentsA549Gr.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11610,7 +11603,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr1xDexa.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11634,7 +11626,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11658,7 +11649,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549ControlPcr2xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11682,7 +11672,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549CtcfPcr1xDexa.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11706,7 +11695,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549CtcfPcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11730,7 +11718,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xDex500pm.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11754,7 +11741,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xDex50nm.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11778,7 +11764,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xDex5nm.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11802,7 +11787,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-01
 dateUnrestricted 2010-12-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549GrPcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11827,7 +11811,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11851,7 +11834,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Pol2Pcr2xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11875,7 +11857,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Usf1Pcr1xDexa.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11899,7 +11880,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1A549Usf1Pcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11923,7 +11903,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Be2cControl.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11946,7 +11925,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Be2cNrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11969,7 +11947,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Batf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -11993,7 +11970,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Bcl11a.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12017,7 +11993,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-10
 dateUnrestricted 2010-09-10
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Bcl3Pcr1xBcl3.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12041,7 +12016,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878ControlPcr2x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12067,7 +12041,6 @@ dataVersion post ENCODE Jan 2010 Freeze
 dateResubmitted 2010-03-25
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878ControlV2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12092,7 +12065,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Ebf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12116,7 +12088,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Egr1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12140,7 +12111,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Gabp.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12164,7 +12134,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-27
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Irf4.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12188,7 +12157,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12212,7 +12180,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Oct2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12236,7 +12203,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878P300.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12260,7 +12226,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pax5c20.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12284,7 +12249,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pax5n19.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12308,7 +12272,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pbx3.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12332,7 +12295,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12356,7 +12318,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12380,7 +12341,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pu1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12404,7 +12364,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Sin3ak20.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12428,7 +12387,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Sp1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12452,7 +12410,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Srf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12476,7 +12433,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Taf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12501,7 +12457,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-27
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Tcf12.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12525,7 +12480,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Usf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12549,7 +12503,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Zbtb33.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12573,7 +12526,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891ControlPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12597,7 +12549,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12621,7 +12572,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Pol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12645,7 +12595,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Pou2f2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12669,7 +12618,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Pu1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12693,7 +12641,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12891Taf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12717,7 +12664,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12892ControlPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12741,7 +12687,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12892Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12765,7 +12710,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12892Pol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12789,7 +12733,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12892Taf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12813,7 +12756,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescControlPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12837,7 +12779,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescNrsfPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12861,7 +12802,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescPol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12885,7 +12825,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescPol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12909,7 +12848,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1H1hescTaf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12933,7 +12871,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Helas3Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12956,7 +12893,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Helas3Gabp.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -12980,7 +12916,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Helas3Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13003,7 +12938,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Helas3Taf1Pcr1xTaf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13027,7 +12961,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Bhlhe40Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13051,7 +12984,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2ControlPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13075,7 +13007,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Fosl2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13099,7 +13030,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Gabp.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13123,7 +13053,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Hey1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13147,7 +13076,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Jund.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13170,7 +13098,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13193,7 +13120,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2P300.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13216,7 +13142,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13239,7 +13164,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2RxraPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13263,7 +13187,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Sin3ak20.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13286,7 +13209,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Srf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13309,7 +13231,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-16
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Taf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13333,7 +13254,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Usf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13356,7 +13276,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Zbtb33Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13380,7 +13299,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Htb11Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13403,7 +13321,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Htb11Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13426,7 +13343,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1JurkatControlPcr2x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13450,7 +13366,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1JurkatPol2Pcr2x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13474,7 +13389,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562ControlPcr2x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13500,7 +13414,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-26
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562ControlV2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13525,7 +13438,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Egr1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13549,7 +13461,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Gabp.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13573,7 +13484,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Hey1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13597,7 +13507,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13621,7 +13530,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13645,7 +13553,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Pol24h8.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13669,7 +13576,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Pu1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13693,7 +13599,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Sin3ak20.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13717,7 +13622,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Six5.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13741,7 +13645,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Srf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13765,7 +13668,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Taf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13789,7 +13691,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Usf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13813,7 +13714,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Panc1Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13836,7 +13736,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Panc1Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13859,7 +13758,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Pfsk1Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13882,7 +13780,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Pfsk1Foxp2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13905,7 +13802,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Pfsk1Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13928,7 +13824,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1SknmcFoxp2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13951,7 +13846,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1U87Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13974,7 +13868,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1U87Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -13997,7 +13890,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549CtcfPcr1xDexa.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14021,7 +13913,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549CtcfPcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14045,7 +13936,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xDex500pm.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14069,7 +13959,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xDex50nm.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14093,7 +13982,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xDex5nm.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14117,7 +14005,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-01
 dateUnrestricted 2010-12-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549GrPcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14141,7 +14028,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14165,7 +14051,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-15
 dateUnrestricted 2010-09-15
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Pol2Pcr2xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14189,7 +14074,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Usf1Pcr1xDexa.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14213,7 +14097,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2A549Usf1Pcr1xEtoh02.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14237,7 +14120,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Be2cControl.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14260,7 +14142,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Be2cNrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14283,7 +14164,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Batf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14307,7 +14187,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Bcl11a.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14331,7 +14210,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-10
 dateUnrestricted 2010-09-10
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Bcl3Pcr1xBcl3.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14355,7 +14233,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878ControlPcr2x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14381,7 +14258,6 @@ dataVersion post ENCODE Jan 2010 Freeze
 dateResubmitted 2010-03-25
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14406,7 +14282,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Ebf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14430,7 +14305,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Egr1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14454,7 +14328,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Gabp.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14478,7 +14351,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Irf4.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14502,7 +14374,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14526,7 +14397,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Oct2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14550,7 +14420,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878P300.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14574,7 +14443,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pax5c20.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14598,7 +14466,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pax5n19.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14622,7 +14489,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pbx3.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14646,7 +14512,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14670,7 +14535,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14694,7 +14558,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pu1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14718,7 +14581,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Sin3ak20.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14742,7 +14604,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Sp1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14766,7 +14627,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Srf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14790,7 +14650,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Taf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14815,7 +14674,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Tcf12.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14839,7 +14697,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Usf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14863,7 +14720,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Zbtb33.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14887,7 +14743,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14911,7 +14766,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Pol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14935,7 +14789,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Pou2f2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14959,7 +14812,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Pu1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -14983,7 +14835,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12891Taf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15007,7 +14858,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12892Pol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15031,7 +14881,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12892Pol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15055,7 +14904,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12892Taf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15079,7 +14927,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescNrsfPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15103,7 +14950,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescPol24h8Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15127,7 +14973,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescPol2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15151,7 +14996,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2H1hescTaf1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15175,7 +15019,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Helas3Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15199,7 +15042,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Helas3Gabp.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15223,7 +15065,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Helas3Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15246,7 +15087,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Helas3Taf1Pcr1xTaf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15270,7 +15110,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Bhlhe40Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15294,7 +15133,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2ControlPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15318,7 +15156,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Fosl2Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15342,7 +15179,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Gabp.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15366,7 +15202,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Hey1Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15390,7 +15225,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Jund.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15413,7 +15247,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15436,7 +15269,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2P300.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15459,7 +15291,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15482,7 +15313,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2RxraPcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15506,7 +15336,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Sin3ak20.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15529,7 +15358,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-16
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Taf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15553,7 +15381,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Usf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15576,7 +15403,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Zbtb33Pcr1x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15600,7 +15426,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Htb11Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15623,7 +15448,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Htb11Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15646,7 +15470,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2JurkatControlPcr2x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15670,7 +15493,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2JurkatPol2Pcr2x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15694,7 +15516,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-15
 dateUnrestricted 2010-04-15
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562ControlPcr2x.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15720,7 +15541,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-26
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562ControlV2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15745,7 +15565,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Egr1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15769,7 +15588,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Gabp.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15793,7 +15611,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Hey1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15817,7 +15634,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15841,7 +15657,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15865,7 +15680,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Pol24h8.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15889,7 +15703,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Pu1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15913,7 +15726,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Sin3ak20.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15937,7 +15749,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Six5.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15961,7 +15772,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Srf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -15985,7 +15795,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Taf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -16009,7 +15818,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Usf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -16033,7 +15841,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Panc1Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -16056,7 +15863,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Panc1Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -16079,7 +15885,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Pfsk1Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -16102,7 +15907,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Pfsk1Foxp2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -16125,7 +15929,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Pfsk1Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -16148,7 +15951,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2SknmcFoxp2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -16171,7 +15973,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2U87Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -16194,7 +15995,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2U87Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -16217,7 +16017,6 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-09-11
 dateUnrestricted 2009-06-11
-fileName wgEncodeHudsonalphaChipSeqAlignmentsSknmcControl.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
@@ -16230,4 +16029,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: 1620146386
+# MAGIC: -80917459
