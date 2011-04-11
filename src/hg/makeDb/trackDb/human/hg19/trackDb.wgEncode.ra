@@ -148,7 +148,7 @@ include wgEncodeOpenChromChip.ra
 include wgEncodeHaibTfbs.ra alpha
 
 # SYDH TFBS (wrangler: Venkat)
-include wgEncodeSydhTfbs.ra
+include wgEncodeSydhTfbs.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra
