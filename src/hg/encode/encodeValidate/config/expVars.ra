@@ -1,6 +1,11 @@
 # This file lists what controlled vocabulary terms defined an "experiment".
 # This is given on a composite track basis.
 
+composite wgEncodeAffyRnaChip
+expVar1 cell
+expVar2 localization
+expVar3 rnaExtract
+
 composite wgEncodeBuOrchid
 expVar1 replicate
 
