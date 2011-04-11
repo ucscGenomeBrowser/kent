@@ -4,220 +4,6 @@ composite wgEncodeCshlShortRnaSeq
 expVars lab,dataType,cell,localization,rnaExtract
 geoSeriesAccession GSE24565
 
-metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1
-objType table
-bioRep 021WC
-cell A549
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-18
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1.bam
-grant Gingeras
-lab CSHL
-labExpId LID20749
-labProtocolId 021WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3333
-tableName wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1
-view Alignments
-
-metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2
-objType table
-bioRep 022WC
-cell A549
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-18
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2.bam
-grant Gingeras
-lab CSHL
-labExpId LID20750
-labProtocolId 022WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3334
-tableName wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2
-view Alignments
-
-metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalContigs
-objType table
-bioRep 021WC,022WC
-cell A549
-composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
-dccRep Pooled
-fileName wgEncodeCshlShortRnaSeqA549CellShorttotalContigs.bedRnaElements.gz
-grant Gingeras
-lab CSHL
-labExpId LID20749,LID20750
-labProtocolId 021WCs,022WCs
-labVersion iIDR
-localization cell
-project wgEncode
-replicate 1,2
-rnaExtract shortTotal
-subId 3842
-tableName wgEncodeCshlShortRnaSeqA549CellShorttotalContigs
-view Contigs
-
-metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1
-objType table
-bioRep 021WC
-cell A549
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-18
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID20749
-labProtocolId 021WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3333
-tableName wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1
-view MinusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2
-objType table
-bioRep 022WC
-cell A549
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-18
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID20750
-labProtocolId 022WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3334
-tableName wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2
-view MinusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1
-objType table
-bioRep 021WC
-cell A549
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-18
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID20749
-labProtocolId 021WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3333
-tableName wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1
-view PlusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2
-objType table
-bioRep 022WC
-cell A549
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-18
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID20750
-labProtocolId 022WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3334
-tableName wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2
-view PlusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalRawDataRep1
-objType file
-bioRep 021WC
-cell A549
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-18
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqA549CellShorttotalRawDataRep1.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID20749
-labProtocolId 021WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3333
-view RawData
-
-metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalRawDataRep2
-objType file
-bioRep 022WC
-cell A549
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-18
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqA549CellShorttotalRawDataRep2.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID20750
-labProtocolId 022WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3334
-view RawData
-
 metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep1
 objType table
 bioRep 017WC
@@ -271,7 +57,7 @@ objType table
 bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -485,7 +271,7 @@ objType table
 bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -648,7 +434,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortAln
 objType table
-attic yes
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -675,7 +461,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw
 objType table
-attic yes
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -701,7 +487,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw
 objType table
-attic yes
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -727,7 +513,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortRawData
 objType file
-attic yes
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -802,7 +588,7 @@ objType table
 bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -965,6 +751,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortAln
 objType table
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -991,6 +778,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw
 objType table
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1016,6 +804,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw
 objType table
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1041,6 +830,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortRawData
 objType file
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1064,6 +854,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags
 objType table
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1140,7 +931,7 @@ objType table
 bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -1303,6 +1094,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
 objType table
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1329,6 +1121,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
 objType table
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1354,6 +1147,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
 objType table
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1379,6 +1173,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortRawData
 objType file
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1402,6 +1197,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags
 objType table
+attic aux
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1478,7 +1274,7 @@ objType table
 bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -1692,7 +1488,7 @@ objType table
 bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -1882,7 +1678,7 @@ objType table
 bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -2001,7 +1797,7 @@ objType table
 bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -2144,7 +1940,7 @@ objType table
 bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -2358,7 +2154,7 @@ objType table
 bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -2572,7 +2368,7 @@ objType table
 bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -2733,576 +2529,6 @@ rnaExtract shortTotal
 subId 3349
 view RawData
 
-metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1
-objType table
-bioRep 013WC
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1.bam
-grant Gingeras
-lab CSHL
-labExpId LID21186
-labProtocolId 013WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3350
-tableName wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1
-view Alignments
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2
-objType table
-bioRep 014WC
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2.bam
-grant Gingeras
-lab CSHL
-labExpId LID21189
-labProtocolId 014WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3351
-tableName wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2
-view Alignments
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1
-objType table
-bioRep 013WC
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID21186
-labProtocolId 013WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3350
-tableName wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1
-view MinusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep2
-objType table
-bioRep 014WC
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep2.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID21189
-labProtocolId 014WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3351
-tableName wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep2
-view MinusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1
-objType table
-bioRep 013WC
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID21186
-labProtocolId 013WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3350
-tableName wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1
-view PlusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2
-objType table
-bioRep 014WC
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID21189
-labProtocolId 014WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3351
-tableName wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2
-view PlusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalRawDataRep1
-objType file
-bioRep 013WC
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalRawDataRep1.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID21186
-labProtocolId 013WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3350
-view RawData
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalRawDataRep2
-objType file
-bioRep 014WC
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalRawDataRep2.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID21189
-labProtocolId 014WCs
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3351
-view RawData
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep1
-objType table
-bioRep 013C
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep1.bam
-grant Gingeras
-lab CSHL
-labExpId LID21188
-labProtocolId 013Cs
-localization cytosol
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3354
-tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep1
-view Alignments
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2
-objType table
-bioRep 014C
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2.bam
-grant Gingeras
-lab CSHL
-labExpId LID21191
-labProtocolId 014Cs
-localization cytosol
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3355
-tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2
-view Alignments
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep1
-objType table
-bioRep 013C
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep1.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID21188
-labProtocolId 013Cs
-localization cytosol
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3354
-tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep1
-view MinusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2
-objType table
-bioRep 014C
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID21191
-labProtocolId 014Cs
-localization cytosol
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3355
-tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2
-view MinusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep1
-objType table
-bioRep 013C
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep1.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID21188
-labProtocolId 013Cs
-localization cytosol
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3354
-tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep1
-view PlusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2
-objType table
-bioRep 014C
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID21191
-labProtocolId 014Cs
-localization cytosol
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3355
-tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2
-view PlusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalRawDataRep1
-objType file
-bioRep 013C
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalRawDataRep1.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID21188
-labProtocolId 013Cs
-localization cytosol
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3354
-view RawData
-
-metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalRawDataRep2
-objType file
-bioRep 014C
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalRawDataRep2.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID21191
-labProtocolId 014Cs
-localization cytosol
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3355
-view RawData
-
-metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1
-objType table
-bioRep 013N
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1.bam
-grant Gingeras
-lab CSHL
-labExpId LID21187
-labProtocolId 013Ns
-localization nucleus
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3356
-tableName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1
-view Alignments
-
-metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2
-objType table
-bioRep 014N
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2.bam
-grant Gingeras
-lab CSHL
-labExpId LID21190
-labProtocolId 014Ns
-localization nucleus
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3357
-tableName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2
-view Alignments
-
-metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep1
-objType table
-bioRep 013N
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep1.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID21187
-labProtocolId 013Ns
-localization nucleus
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3356
-tableName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep1
-view MinusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep2
-objType table
-bioRep 014N
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep2.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID21190
-labProtocolId 014Ns
-localization nucleus
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3357
-tableName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep2
-view MinusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep1
-objType table
-bioRep 013N
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep1.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID21187
-labProtocolId 013Ns
-localization nucleus
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3356
-tableName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep1
-view PlusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep2
-objType table
-bioRep 014N
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep2.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID21190
-labProtocolId 014Ns
-localization nucleus
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3357
-tableName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep2
-view PlusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalRawDataRep1
-objType file
-bioRep 013N
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 1
-fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalRawDataRep1.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID21187
-labProtocolId 013Ns
-localization nucleus
-origAssembly hg19
-project wgEncode
-replicate 1
-rnaExtract shortTotal
-subId 3356
-view RawData
-
-metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalRawDataRep2
-objType file
-bioRep 014N
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccRep 2
-fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalRawDataRep2.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID21190
-labProtocolId 014Ns
-localization nucleus
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract shortTotal
-subId 3357
-view RawData
-
 metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep1
 objType table
 bioRep 009WC
@@ -3356,7 +2582,7 @@ objType table
 bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -3570,7 +2796,7 @@ objType table
 bioRep 029C,030C
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -3784,7 +3010,7 @@ objType table
 bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -3947,6 +3173,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortAln
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3973,6 +3200,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortMinusRaw
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3998,6 +3226,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortPlusRaw
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4023,6 +3252,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortRawData
 objType file
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4046,6 +3276,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortTransfrags
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4122,7 +3353,7 @@ objType table
 bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -4285,6 +3516,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortAln
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4311,6 +3543,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4336,6 +3569,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4361,6 +3595,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortRawData
 objType file
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4384,6 +3619,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4460,7 +3696,7 @@ objType table
 bioRep 025CH,026CH
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -4623,6 +3859,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortAln
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4649,6 +3886,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4674,6 +3912,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4699,6 +3938,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortRawData
 objType file
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4722,6 +3962,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4798,7 +4039,7 @@ objType table
 bioRep 001C,002C
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -4961,6 +4202,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortAln
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4987,6 +4229,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5012,6 +4255,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5037,6 +4281,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortRawData
 objType file
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5060,6 +4305,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5136,7 +4382,7 @@ objType table
 bioRep 025NL,026NL
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -5299,6 +4545,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5325,6 +4572,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5350,6 +4598,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5375,6 +4624,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortRawData
 objType file
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5398,6 +4648,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5474,7 +4725,7 @@ objType table
 bioRep 025NP,026NP
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -5637,6 +4888,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortAln
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5663,6 +4915,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5688,6 +4941,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5713,6 +4967,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortRawData
 objType file
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5736,6 +4991,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags
 objType table
+attic aux
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5812,7 +5068,7 @@ objType table
 bioRep 001N,002N
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -6340,7 +5596,7 @@ objType table
 bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -6554,7 +5810,7 @@ objType table
 bioRep 027C,028C
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -6768,7 +6024,7 @@ objType table
 bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -7106,7 +6362,7 @@ objType table
 bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
@@ -7267,4 +6523,4 @@ rnaExtract shortTotal
 subId 3377
 view RawData
 
-# MAGIC: -586092658
+# MAGIC: 518437703

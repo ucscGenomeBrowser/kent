@@ -1,6 +1,7 @@
 metaObject wgEncodeCshlLongRnaSeq
 objType composite
 composite wgEncodeCshlLongRnaSeq
+expVars lab,dataType,cell,localization,rnaExtract
 geoSeriesAccession GSE26284
 
 metaObject wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878CellTotal
@@ -472,4 +473,4 @@ rnaExtract total
 subId 752
 view RawData
 
-# MAGIC: 417647951
+# MAGIC: -863852941

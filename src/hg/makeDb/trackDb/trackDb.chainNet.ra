@@ -3375,7 +3375,7 @@ html chainNet
 
 track chainNetOviAri1
 compositeTrack on
-shortLabel $o_db Chain/Net
+shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks

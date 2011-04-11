@@ -1,8 +1,3 @@
-metaObject wgEncodeHudsonalphaMethylSeq
-objType composite
-composite wgEncodeHudsonalphaMethylSeq
-expVars lab,dataType,cell
-
 metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Gm12878Hpa
 objType file
 cell GM12878
@@ -1614,4 +1609,4 @@ subId 387
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep2K562
 view Regions
 
-# MAGIC: 1833488188
+# MAGIC: 1841333711

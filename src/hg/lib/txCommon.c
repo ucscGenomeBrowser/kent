@@ -19,13 +19,14 @@ while (s > tempName && periodCount < 2)
     char c = *(--s);
     if (c == '.')
         ++periodCount;
+
     }
 if (periodCount < 2)
     errAbort("Can't extract accession.ver from %s, expecting at least two periods",
     	tempName); 
 s += 1;
 int len = strlen(s);
-if ((len < 8 && !startsWith("CCDS", s) ) || len > 18)
+if ((len < 8 && !startsWith("CCDS", s) ) || len > 75)
     {
     errAbort("Accession seems a little too long or short in %s", tempName);
     }

@@ -1,3 +1,8 @@
+metaObject wgEncodeSunyalbanyRnaGeneChip
+objType composite
+composite wgEncodeSunyalbanyRnaGeneChip
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Nov69522T7tag
 objType table
 antibody T7Tag
@@ -138,4 +143,4 @@ subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1
 view RbpAssocRna
 
-# MAGIC: -2099872552
+# MAGIC: 1158176913
