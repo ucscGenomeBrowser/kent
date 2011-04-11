@@ -1,3 +1,8 @@
+metaObject wgEncodeLicrHistone
+objType composite
+composite wgEncodeLicrHistone
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -1204,4 +1209,4 @@ strain C57BL/6
 subId 3002
 view RawData
 
-# MAGIC: -370249896
+# MAGIC: 1348604394

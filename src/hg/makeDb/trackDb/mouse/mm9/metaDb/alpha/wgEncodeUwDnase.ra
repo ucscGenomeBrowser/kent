@@ -1,3 +1,8 @@
+metaObject wgEncodeUwDnase
+objType composite
+composite wgEncodeUwDnase
+expVars lab,dataType,cell,antibody,age
+
 metaObject wgEncodeUwDnase3134C3hMAdult8wksAlnRep1
 objType file
 age immortalized
@@ -3355,4 +3360,4 @@ subId 2028
 tableName wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep2
 view RawSignal
 
-# MAGIC: -1794617082
+# MAGIC: 2105946263

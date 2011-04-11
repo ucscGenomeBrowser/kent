@@ -411,9 +411,9 @@ int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full);
 // Validates vars and vals against cv.ra.  Returns count of errors found.
 // Full considers vars not defined in cv as invalids
 
-struct slName *mdbObjFindCompositeEncodeEdvNames(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj);
+struct slName *mdbObjFindCompositeNamedEncodeEdvs(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj);
 // returns NULL or the Experiment Defining Variable names for this composite
-#define mdbObjFindCompositeEncodeEdvs(conn,mdbObj) mdbObjFindCompositeEncodeEdvNames((conn),NULL,(mdbObj))
+#define mdbObjFindCompositeEncodeEdvs(conn,mdbObj) mdbObjFindCompositeNamedEncodeEdvs((conn),NULL,(mdbObj))
 
 struct mdbVar *mdbObjFindEncodeEdvPairs(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj,boolean includeNone);
 // returns NULL or the Experiment Defining Variables and values for this composite member object
