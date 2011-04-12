@@ -562,6 +562,13 @@ TMPDIR=/scratch/tmp
     #	adding -normScore
     hgLoadChain -normScore -tIndex hg19 chainSelf hg19.hg19.all.chain.gz
 
+    # a user asked about axtNet files, d
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-ignoreSelf -continue=net -workhorse=hgwdev \
+	-stop=net -smallClusterHub=encodek -bigClusterHub=swarm > net.log 2>&1 &
+    #	about 8m 17s
+
 ############################################################################
 # Chimp Lastz run (DONE - 2009-03-19 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzPanTro2.2009-03-19
