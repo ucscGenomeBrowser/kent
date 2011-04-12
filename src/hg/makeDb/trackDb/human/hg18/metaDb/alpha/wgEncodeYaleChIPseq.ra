@@ -1657,7 +1657,7 @@ view Alignments
 
 metaObject wgEncodeYaleChIPseqAlignmentsRep1Helas3Ha
 objType file
-antibody HA-F2F1
+antibody HA-E2F1
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
 control std
@@ -5380,7 +5380,7 @@ view Alignments
 
 metaObject wgEncodeYaleChIPseqAlignmentsRep2Helas3Ha
 objType file
-antibody HA-F2F1
+antibody HA-E2F1
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
 control std
@@ -13505,7 +13505,7 @@ view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataRep1Helas3Ha
 objType file
-antibody HA-F2F1
+antibody HA-E2F1
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
 control std
@@ -16937,7 +16937,7 @@ view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataRep2Helas3Ha
 objType file
-antibody HA-F2F1
+antibody HA-E2F1
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
 control std
@@ -24047,4 +24047,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: 1166578981
+# MAGIC: 1166578721

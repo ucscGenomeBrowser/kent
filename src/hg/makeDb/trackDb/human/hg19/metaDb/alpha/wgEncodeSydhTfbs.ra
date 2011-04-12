@@ -1140,9 +1140,9 @@ tableName wgEncodeSydhTfbsGm12878Ctcfc20StdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm12878EbfStdAlnRep1
+metaObject wgEncodeSydhTfbsGm12878Ebf1sc137065StdAlnRep1
 objType file
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -1151,7 +1151,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
-fileName wgEncodeSydhTfbsGm12878EbfStdAlnRep1.bam
+fileName wgEncodeSydhTfbsGm12878Ebf1sc137065StdAlnRep1.bam
 grant Snyder
 lab Stanford
 project wgEncode
@@ -1161,9 +1161,9 @@ subId 3313
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878EbfStdAlnRep2
+metaObject wgEncodeSydhTfbsGm12878Ebf1sc137065StdAlnRep2
 objType file
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -1172,7 +1172,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
-fileName wgEncodeSydhTfbsGm12878EbfStdAlnRep2.bam
+fileName wgEncodeSydhTfbsGm12878Ebf1sc137065StdAlnRep2.bam
 grant Snyder
 lab Stanford
 project wgEncode
@@ -1182,9 +1182,9 @@ subId 3313
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878EbfStdPk
+metaObject wgEncodeSydhTfbsGm12878Ebf1sc137065StdPk
 objType table
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -1193,20 +1193,20 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
-fileName wgEncodeSydhTfbsGm12878EbfStdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm12878Ebf1sc137065StdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 3313
-tableName wgEncodeSydhTfbsGm12878EbfStdPk
+tableName wgEncodeSydhTfbsGm12878Ebf1sc137065StdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm12878EbfStdRawDataRep1
+metaObject wgEncodeSydhTfbsGm12878Ebf1sc137065StdRawDataRep1
 objType file
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -1215,7 +1215,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
-fileName wgEncodeSydhTfbsGm12878EbfStdRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm12878Ebf1sc137065StdRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 project wgEncode
@@ -1225,9 +1225,9 @@ subId 3313
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878EbfStdRawDataRep2
+metaObject wgEncodeSydhTfbsGm12878Ebf1sc137065StdRawDataRep2
 objType file
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -1236,7 +1236,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
-fileName wgEncodeSydhTfbsGm12878EbfStdRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm12878Ebf1sc137065StdRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 project wgEncode
@@ -1246,9 +1246,9 @@ subId 3313
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878EbfStdSig
+metaObject wgEncodeSydhTfbsGm12878Ebf1sc137065StdSig
 objType table
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeSydhTfbs
 control std
@@ -1257,14 +1257,14 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
-fileName wgEncodeSydhTfbsGm12878EbfStdSig.bigWig
+fileName wgEncodeSydhTfbsGm12878Ebf1sc137065StdSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 3313
-tableName wgEncodeSydhTfbsGm12878EbfStdSig
+tableName wgEncodeSydhTfbsGm12878Ebf1sc137065StdSig
 treatment None
 view Signal
 
@@ -33566,7 +33566,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsMcf10aesInputUcdAln.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 setType input
 subId 3497
@@ -33586,7 +33586,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsMcf10aesInputUcdRawData.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 setType input
 subId 3497
@@ -33606,7 +33606,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsMcf10aesInputUcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -36229,7 +36229,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsShsy5yInputUcdAln.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 setType input
 subId 3498
@@ -36249,7 +36249,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsShsy5yInputUcdRawData.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 setType input
 subId 3498
@@ -36269,7 +36269,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsShsy5yInputUcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -36291,7 +36291,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsThek293InputUcdAln.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 setType input
 subId 3499
@@ -36311,7 +36311,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsThek293InputUcdRawData.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 setType input
 subId 3499
@@ -36331,7 +36331,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsThek293InputUcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -36793,4 +36793,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -776349534
+# MAGIC: -1256354725
