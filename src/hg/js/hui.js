@@ -369,6 +369,9 @@ function matChkBoxNormalize(matCB)
         subCBs = objsFilterByClasses(subCBs,"not",arguments[1]);
     }
 
+    // Only look at visible views
+    subCBs = $(subCBs).not(":disabled");
+
     if(subCBs.length > 0) {
         var CBsChecked = subCBs.filter(":checked");
         if(!isABC) {
