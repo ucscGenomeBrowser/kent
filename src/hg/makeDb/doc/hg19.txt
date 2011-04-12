@@ -568,6 +568,14 @@ TMPDIR=/scratch/tmp
 	-ignoreSelf -continue=net -workhorse=hgwdev \
 	-stop=net -smallClusterHub=encodek -bigClusterHub=swarm > net.log 2>&1 &
     #	about 8m 17s
+    cd /hive/data/genomes/hg19/bed/lastzSelf.2009-03-19/axtChain
+    netClass -verbose=0 -noAr noClass.net hg19 hg19 hg19.hg19.net
+    gzip hg19.hg19.net
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/vsSelf
+    ln -s \
+/hive/data/genomes/hg19/bed/lastzSelf.2009-03-19/axtChain/hg19.hg19.net.gz .
+    # fixup README.txt and md5sum.txt files
+    md5sum hg19.hg19.net.gz >> md5sum.txt
 
 ############################################################################
 # Chimp Lastz run (DONE - 2009-03-19 - Hiram)
