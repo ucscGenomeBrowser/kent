@@ -7797,7 +7797,7 @@ description HPA Restriction Enzyme
 type restrictionEnzyme
 
 
-### view     THIS WHOLE SECTION IS A PROVISIONAL ATTEMPT AT CONTROLLING VIEWS
+### view     THIS WHOLE SECTION IS A ATTEMPT AT CONTROLLING VIEWS
 ### term:
 ### tag:   This is the camel case convention that we use in our file names
 ### label: This will be used for human display
@@ -7902,7 +7902,7 @@ term GeneGencV3c
 tag GeneGencV3c
 type view
 label Genes Gencode V3c
-description Provisional GeneGencV3c
+description GeneGencV3c
 
 term HMM
 tag HMM
@@ -9322,7 +9322,7 @@ validate date # nine months more than dateSubmitted
 term dccAccession
 type typeOfTerm
 label ENCODE DCC Accession
-description PROVISIONAL The accession number provided by the ENCODE Data Coordination Center.
+description The accession number provided by the ENCODE Data Coordination Center.
 searchable freeText
 cvDefined no
 validate regex: ^wgEncode[H,E][0-9]*$
@@ -9363,7 +9363,7 @@ priority 241
 term expId
 type typeOfTerm
 label Experiment ID
-description PROVISIONAL The ENCODE DCC experiment identification number.
+description The ENCODE DCC experiment identification number.
 searchable freeText
 cvDefined no
 validate integer
