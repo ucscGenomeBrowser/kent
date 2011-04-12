@@ -13,9 +13,9 @@ source `which qaConfig.csh`
 
 set go=""
 # make lists of substitutions for email addresses
-set counter=( 1 2 3 4 5 6 7 8 9 10 11 12 )
-set alias=( andy belinda  brian  brooke bob  fan    jim  jing larry  mark  rachel  zach     )
-set email=( aamp giardine braney rhead  kuhn fanhsu kent jzhu larrym markd hartera jsanborn )
+set counter=( 1 2 3 4 5 6 7 8 9 10 11 12 13 )
+set alias=( andy belinda  brian  brooke bob  donna  fan    jim  jing larry  mark  rachel  zach     )
+set email=( aamp giardine braney rhead  kuhn donnak fanhsu kent jzhu larrym markd hartera jsanborn )
 
 
 if ( $#argv != 1  ) then
@@ -83,12 +83,9 @@ foreach i ( $counter )
     # set contacts="pauline rhead ann"
     echo "   contacts $contacts"
     cat Bfile 
+    exit
   endif 
 end
-
-if ( $debug == "true" ) then
-  exit
-endif
 
 # add ann to list
 set contacts="$contacts ann donnak"
