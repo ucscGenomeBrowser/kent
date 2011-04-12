@@ -201,6 +201,12 @@ file ddf
 type string
 required no
 
+# This is the specific tissue source for mouse tissue: pooled or single animal
+# It is verified against tissue source in cv.ra
+field tissueSource
+file ddf
+type string
+required no
 
 # required DAF header fields
 

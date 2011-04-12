@@ -8445,6 +8445,18 @@ tag 3
 type tier
 description tier 3
 
+
+## Tissue Sourced (Used for Mouse cell)
+term Individual
+tag Individual
+type tissueSource
+description Tissue obtained from an individual (Provisional)
+
+term Pooled
+tag Pooled
+type tissueSource
+description Tissue obtained from pooling samples from various sample organisms (Provisional)
+
 #Venkat: Trial to add seqPlatform for use for GEO submissions
 #Uses the GEO terms to be conistent and help with GEO submissions
 ### Seq Platform
@@ -9165,7 +9177,7 @@ projectName UNC-Giddings
 #         origAssembly:305  dataVersion:310  dccAccession:312  dateSubmitted:315  dateResubmitted:320  dateUnrestricted:325  freezeDate:330
 #         subId:335  geoSeries:340  geoSample:345  setType:350  controlId:355
 #       Lab descriptive:
-#         labExpId:410  labProtocolId:420  labVersion:430  softwareVersion:440  privacy:450  rank:460
+#         labExpId:410  labProtocolId:420  labVersion:430  softwareVersion:440  privacy:450  rank:460 tissueSource:470
 #       Miscellaneous junk which will be put into the 500 pot which will sort near the end
 #         accession:500  annotation:500  bioRep:500  fragLength:500  fragSize:500  mapAlgorithm:500  expVars:500
 #         insertLength:500  level:500  obtainedBy:500  readType:500  run:500  seqPlatform:500  size:500  uniqueness:500
@@ -9797,6 +9809,15 @@ searchable multiSelect
 cvDefined yes
 validate cv or None
 priority 180
+
+term tissueSource
+type typeOfTerm
+label Tissue Source
+description Source of tissue from either an indiviual organism or pooled set of organism
+searchable multiSelect
+cvDefined yes
+validate cv 
+priority 470
 
 # term type
 # type typeOfTerm
