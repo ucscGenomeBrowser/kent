@@ -19,7 +19,7 @@ noInherit on
     shortLabel Transfrags
     view 1-Transfrags
     visibility dense
-        subTrack wgEncodeCshlShortRnaSeq
+    subTrack wgEncodeCshlShortRnaSeq
     scoreFilter 100
     scoreFilterLimits 100:1000
     scoreMin 100
@@ -117,7 +117,7 @@ noInherit on
     shortLabel Plus Raw Signal
     view 2-PlusRawSignal
     visibility dense
-        subTrack wgEncodeCshlShortRnaSeq
+    subTrack wgEncodeCshlShortRnaSeq
     viewLimits 0:500
     minLimit 0
     maxLimit 5059134
@@ -254,7 +254,7 @@ noInherit on
     shortLabel Minus Raw Signal
     view 3-MinusRawSignal
     visibility dense
-        subTrack wgEncodeCshlShortRnaSeq
+    subTrack wgEncodeCshlShortRnaSeq
     viewLimits 0:500
     minLimit 0
     maxLimit 4876484
@@ -391,7 +391,7 @@ noInherit on
     shortLabel Alignments
     view 4-Alignments
     visibility dense
-        subTrack wgEncodeCshlShortRnaSeq
+    subTrack wgEncodeCshlShortRnaSeq
 
         track wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments on

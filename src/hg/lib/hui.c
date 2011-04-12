@@ -7028,9 +7028,10 @@ if (sameString("show", setting))
 if (show && (visibleChild == -1))
     {
     visibleChild = 0;
-    struct trackDb *cTdb;
-    for (cTdb = tdb->subtracks; cTdb != NULL; cTdb = tdb->next)
+    struct slRef *childRef;
+    for ( childRef = tdb->children; childRef != NULL; childRef = childRef->next)
         {
+	struct trackDb *cTdb = childRef->val;
         cTdb->visibility =
                 hTvFromString(cartUsualString(cart, cTdb->track,
                                       hStringFromTv(cTdb->visibility)));

@@ -1,3 +1,8 @@
+metaObject wgEncodeYaleChIPseq
+objType composite
+composite wgEncodeYaleChIPseq
+expVars lab,dataType,cell,treatment,antibody,control
+
 metaObject wgEncodeYaleChIPseqAlignmentsHelas3Input
 objType file
 antibody Input
@@ -24042,4 +24047,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: -400854049
+# MAGIC: 1166578981

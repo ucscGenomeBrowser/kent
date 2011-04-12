@@ -414,7 +414,7 @@ if (sortOrder != NULL)
             continue; // Only single selects and multi-select make good candidates for filtering
 
         struct sqlConnection *conn = hAllocConn(db);
-        struct slPair *valsAndLabels = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, TRUE, TRUE); // tags, yes tables AND files
+        struct slPair *valsAndLabels = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, FALSE, TRUE); // not tags, not tables, just files
         hFreeConn(&conn);
         // Need to verify that each val exists in an object for these files
         struct slPair *relevantVals = NULL;
@@ -843,8 +843,9 @@ int fileCount = 0;
 // Verify file existance and make fileList of those found
 struct fileDb *fileList = NULL, *oneFile = NULL; // Will contain found files
 struct mdbObj *mdbFiles = NULL; // Will caontain a list of mdbs for the found files
-while(mdbList && fileCount < FOUND_FILE_LIMIT)
+while(mdbList && fileCount < FOUND_FILE_LIMIT)    // TODO: collapse this and the hgFileUi version into a single function.
     {
+    char buf[512];
     boolean found = FALSE;
     struct mdbObj *mdbFile = slPopHead(&mdbList);
     char *composite = mdbObjFindValue(mdbFile,MDB_VAR_COMPOSITE);
@@ -874,7 +875,13 @@ while(mdbList && fileCount < FOUND_FILE_LIMIT)
                     fileDbFree(&oneFile);
             }
         // Now for FileIndexes
-        fileName = mdbObjFindValue(mdbFile,MDB_VAR_FILEINDEX);
+        if (fileName && endsWith(fileName,".bam")) // Special to fill in missing .bam.bai's
+            {
+            safef(buf,sizeof(buf),"%s.bai",fileName);
+            fileName = buf;
+            }
+        else
+            fileName = mdbObjFindValue(mdbFile,MDB_VAR_FILEINDEX);
         if (fileName != NULL)
             {
            // Verify existance first
@@ -883,7 +890,8 @@ while(mdbList && fileCount < FOUND_FILE_LIMIT)
                 {
                 //warn("%s == %s",fileType,oneFile->fileType);
                 if (isEmpty(fileType) || sameWord(fileType,"Any")
-                || (oneFile->fileType && sameWord(fileType,oneFile->fileType)))
+                || (oneFile->fileType && sameWord(fileType,oneFile->fileType))
+                || (oneFile->fileType && sameWord(fileType,"bam") && sameWord("bam.bai",oneFile->fileType))) // TODO: put fileType matching into search.c lib code to segregate index logic.
                    {
                     slAddHead(&fileList,oneFile);
                     if (found) // if already found then need two mdbObjs (assertable but then this is metadata)

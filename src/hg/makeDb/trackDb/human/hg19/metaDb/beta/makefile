@@ -19,7 +19,7 @@ wgEncodeUwTfbs.ra \
 wgEncodeOpenChromChip.ra \
 wgEncodeOpenChromFaire.ra \
 wgEncodeSunyAlbanyGeneSt.ra \
-wgEncodeUwDgf.ra \
+wgEncodeOpenChromDnase.ra\
 
 include ../../../../makefile.metaDb
 

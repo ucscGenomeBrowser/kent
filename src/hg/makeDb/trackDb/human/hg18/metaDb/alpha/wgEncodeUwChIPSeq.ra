@@ -1,3 +1,8 @@
+metaObject wgEncodeUwChIPSeq
+objType composite
+composite wgEncodeUwChIPSeq
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeUwChIPSeqAlignmentsBjInput
 objType file
 antibody Input
@@ -12402,4 +12407,4 @@ subId 407
 tableName wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
 view RawSignal
 
-# MAGIC: -1328533646
+# MAGIC: -720814594

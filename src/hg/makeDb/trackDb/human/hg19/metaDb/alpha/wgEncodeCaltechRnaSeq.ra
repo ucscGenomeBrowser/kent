@@ -1,7 +1,7 @@
 metaObject wgEncodeCaltechRnaSeq
 objType composite
 composite wgEncodeCaltechRnaSeq
-expVars lab,dataType,cell,readType,insertLength,replicate
+expVars lab,dataType,cell,readType,insertLength
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep1V2
 objType table
@@ -11448,4 +11448,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: 497173944
+# MAGIC: -1386987274

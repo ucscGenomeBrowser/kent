@@ -1,3 +1,8 @@
+metaObject wgEncodeBroadChipSeq
+objType composite
+composite wgEncodeBroadChipSeq
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeBroadChipSeqAlignmentsRep1Gm12878ControlV2
 objType file
 antibody Input
@@ -2699,7 +2704,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k4me2.tagAlign.gz
 grant Bernstein
 lab Broad
-labVersion Illumina Genome Analyzer IIe 
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8205,7 +8210,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-labVersion Illumina Genome Analyzer IIe 
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -11157,4 +11162,4 @@ subId 579
 tableName wgEncodeBroadChipSeqSignalNhlfH4k20me1
 view Signal
 
-# MAGIC: 487550617
+# MAGIC: -241723705

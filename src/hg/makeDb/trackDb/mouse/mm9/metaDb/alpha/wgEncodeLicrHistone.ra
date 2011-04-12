@@ -1,3 +1,8 @@
+metaObject wgEncodeLicrHistone
+objType composite
+composite wgEncodeLicrHistone
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -691,7 +696,7 @@ antibody H3K4me1
 cell Cortex
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
@@ -796,7 +801,7 @@ antibody H3K4me1
 cell Cortex
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
@@ -1007,7 +1012,7 @@ antibody H3K4me1
 cell Heart
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -1032,7 +1037,7 @@ antibody H3K4me1
 cell Heart
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -1057,7 +1062,7 @@ antibody H3K4me1
 cell Heart
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -1082,7 +1087,7 @@ antibody H3K4me1
 cell Heart
 composite wgEncodeLicrHistone
 control std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -1204,4 +1209,4 @@ strain C57BL/6
 subId 3002
 view RawData
 
-# MAGIC: -370249896
+# MAGIC: 1341360156

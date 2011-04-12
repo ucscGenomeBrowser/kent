@@ -135,6 +135,10 @@ struct sqlConnection *hAllocConnProfile(char *profileName, char *db);
 /* Get free connection, specifying a profile and/or a database. If none
  * is available, allocate a new one. */
 
+struct sqlConnection *hAllocConnProfileMaybe(char *profileName, char *db);
+/* Get free connection, specifying a profile and/or a database. If none is
+ * available, allocate a new one.  Return NULL if database doesn't exist. */
+
 struct sqlConnection *hAllocConnTrack(char *db, struct trackDb *tdb);
 /* Get free connection for accessing tables associated with the specified
  * track and database. If none is available, allocate a new one. */
@@ -143,6 +147,11 @@ struct sqlConnection *hAllocConnProfileTbl(char *db, char *spec, char **tableRet
 /* Allocate a connection to db, spec can either be in the form `table' or
  * `profile:table'.  If it contains profile, connect via that profile.  Also
  * returns pointer to table in spec string. */
+
+struct sqlConnection *hAllocConnProfileTblMaybe(char *db, char *spec, char **tableRet);
+/* Allocate a connection to db, spec can either be in the form `table' or
+ * `profile:table'.  If it contains profile, connect via that profile.  Also
+ * returns pointer to table in spec string. Return NULL if database doesn't exist */
 
 struct sqlConnection *hAllocConnDbTbl(char *spec, char **tableRet, char *defaultDb);
 /* Allocate a connection to db and table, spec is in form `db.table'; if
@@ -471,9 +480,6 @@ struct trackDb *hCompositeTrackDbForSubtrack(char *db, struct trackDb *sTdb);
  * return the trackDb for the composite track if we can find it, else NULL.
  * Note: if the composite trackDb is found and returned, then its subtracks
  * member will contain a newly allocated tdb like sTdb (but not ==). */
-
-void hTrackDbLoadSuper(char *db, struct trackDb *tdb);
-/* Populate child trackDbs of this supertrack */
 
 struct hTableInfo *hFindTableInfoWithConn(struct sqlConnection *conn, char *chrom, char *rootName);
 /* Find table information, with conn as part of input parameters.  Return NULL if no table.  */

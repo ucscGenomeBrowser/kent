@@ -1,6 +1,6 @@
 # Data Agreement File for Stanford/Yale ChIP-seq (Transcription Factor Binding Sites) experiments (Input) for mm9  
 
-$Revision: 1.3 $
+#$Revision: 1.4 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -18,7 +18,6 @@ group             regulation
 variables         cell,strain, antibody, treatment, input
 assembly          mm9
 
-medianFragmentLength 200
 validationSettings validateFiles.bam:mmCheckOneInN=1000,mismatches=2;validateFiles.fastq:quick=1000
 
 # Track/view definition

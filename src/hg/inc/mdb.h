@@ -411,9 +411,9 @@ int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full);
 // Validates vars and vals against cv.ra.  Returns count of errors found.
 // Full considers vars not defined in cv as invalids
 
-struct slName *mdbObjFindCompositeEncodeEdvNames(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj);
+struct slName *mdbObjFindCompositeNamedEncodeEdvs(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj);
 // returns NULL or the Experiment Defining Variable names for this composite
-#define mdbObjFindCompositeEncodeEdvs(conn,mdbObj) mdbObjFindCompositeEncodeEdvNames((conn),NULL,(mdbObj))
+#define mdbObjFindCompositeEncodeEdvs(conn,mdbObj) mdbObjFindCompositeNamedEncodeEdvs((conn),NULL,(mdbObj))
 
 struct mdbVar *mdbObjFindEncodeEdvPairs(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj,boolean includeNone);
 // returns NULL or the Experiment Defining Variables and values for this composite member object
@@ -477,16 +477,21 @@ struct slName *mdbObjNameSearch(struct sqlConnection *conn, char *var, char *val
 // Search the metaDb table for objs by var and val.  Can restrict by op "is" or "like" and accept (non-zero) limited string size
 // Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
 
-struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files);
+struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean hasTableName, boolean hasFileName);
 // Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
+// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
 
-struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags, boolean tables, boolean files);
+struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags, boolean hasTableName, boolean hasFileName);
 // Search the metaDb table for vals by var and returns val (as pair->name) and controlled vocabulary (cv) label
 // (if it exists) (as pair->val).  Can impose (non-zero) limit on returned string size of name.
-// if requested, return cv tag instead of mdb val.  If requested, limit to table objs or file objs
-// Return is case insensitive sorted on label (cv label or else val).
+// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
+// Return is case insensitive sorted on label (cv label or else val). If requested, return cv tag instead of mdb val.
 #define mdbPairVal(pair) (pair)->name
 #define mdbPairLabel(pair) (pair)->val
+
+struct slPair *mdbVarsSearchable(struct sqlConnection *conn, boolean hasTableName, boolean hasFileName);
+// returns a white list of mdb vars that actually exist in the current DB.
+// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
 
 #endif /* MDB_H */

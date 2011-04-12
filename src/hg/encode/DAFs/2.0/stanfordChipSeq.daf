@@ -14,7 +14,6 @@ group             regulation
 variables         cell, antibody, treatment, input
 assembly          hg19
 
-medianFragmentLength 200
 validationSettings validateFiles.tagAlign:mmCheckOneInN=1000,mismatches=3,nMatch,matchFirst=32;validateFiles.fastq:quick=100
 
 # Track/view definition

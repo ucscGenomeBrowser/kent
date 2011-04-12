@@ -1,88 +1,96 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
-  <HEAD>
-    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-    <META name="description" content="ENCODE Project at UCSC - ">
-    <META name="keywords" content="ENCODE, project, ENCODE project, ENCODE Search, search, NHGRI, NISC">
-    <TITLE>ENCODE Search</TITLE>
-    <LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;CHARSET=iso-8859-1" />
+	<title>UCSC Genome Browser: User's Guide</title>
+	<link rel="stylesheet" href="../../style/HGStyle.css" />
+</head>
 
-    <style type="text/css">
-        .hd0 { font-size: 120%; text-align: left; font-weight:bold; text-indent:.6em; height:2em;  }
-        .hd1 { font-size: 115%; text-align: left; font-weight:bold; text-indent:.18em; height:1.5em; }
-        .hd2 { font-size: 100%; text-align: left; font-weight:bold; text-indent:.1em; }
-        .virtual { height: 2.1em; }
-        .contentTbl { border: 1px solid #888888; background-color: #fffee8; width: 100%; }
-        .content { background-color: #fffee8; padding:0em .9em 1.2em; margin: 0; }
-        .itemTbl { border: 1px solid #000088; background-color: #FFFEE8; }
-        .ltBlue { background-color: #D9E4F8; }
-        .buttonLink { width:100px; }
-    </style>
-  </HEAD>
+<body style="background-color:#fff9d2" link="0000CC" vlink="#330066" alink="#330066">
+<a name="top"></a>
 
-  <BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#6600FF">
-  <A NAME="TOP"></A>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr><th colspan="2" align="left"><img src="../../images/title.jpg" alt="title" /></th></tr>
 
-    <!-- Header Images and links -->
-    <div class='hd0'>
-        <A HREF="http://www.genome.gov/10005107" TARGET=_BLANK><IMG SRC="../images/ENCODE_scaleup_logo.png" height=50 ALT="ENCODE Project at NHGRI"></A>
-        &nbsp;
-        <A HREF="/encode/"><IMG SRC="../images/encodeDcc.jpg" ALT="ENCODE Data Coordination Center at UCSC"></A>
-        <div class='virtual'><!--#include virtual="../inc/encode.terms.topbar.html"--></div>
-    <div>
-
-    <!-- Content table -->
-    <TABLE class='contentTbl' BORDER="0" CELLSPACING="0" CELLPADDING="0">
-        <TR><TD class='ltBlue hd1'>&nbsp; File Search</TD></TR>
-        <TR><TD class='content'>
-            <p>
-            The Genome Browser's File Search feature allows users to find ENCODE downloadable files
-            of interest quickly and easily.
-            </p>
-            <p>
-            <font size="4"><b>Searching</b></font></p>
-            <p>
-            Downloadable ENCODE files can be found by entering terms of interest in the free text
-            Track Name and Description fields, by selecting the appropriate Group or Data
-            Format from the drop-down menus, and/or by using the "ENCODE terms" drop-down filters.
-            <ul style="list-style-type:none;">
-            <li><b>ENCODE terms</b>: This section of allows users search for files (or refine their
-           search based on) the metadata associated with the ENCODE downloadable files. By default,
-           there are two rows of ENCODE metadata search criteria, but more can be added by clicking
-           the "+" button. To remove an added metadata search row, click the "-" button. Each row is
-           comprised of two menus, which, most often, are both drop-down menus: the first containing
-           the metadata categories available, and the second containing the the possible metadata
-           terms available in that category. Usually the default is set to "Any" but clicking on
-           "Any" opens up the drop-down with the possible options. Multiple options can be selected
-           by clicking multiple check-boxes. For a small number of the categories in the first
-           drop-down, the second menu is a free text field. Because these metadata drop-downs are
-           assembly dependent, the options may vary from assembly to assembly. Some categories have
-           a link to the far right of the row if there is more information available about the
-           metadata category selected.
-           </p></li>
-           </ul>
-           <p>
-           <font size="4"><b>Results</b></font></p>
-           <p>
-           After clicking the "Search" button, the files that meet the search criteria (up to a
-           maxiumum of 1000 files) are displayed in a table; each row of the table represents a file meeting the critera
-           that was set. When a search is limited to the first 1000 files, a message stating that
-           the results were limited to 1000 is displayed.
-           </p>
-           <p> 
-           <b>Results Header</b>
-           The first column of the header contains the number of files found (up to a maximum
-           of 1000 files) and the other colums of the header contain a header for the information
-           about the file displayed in that column. The list of files can be sorted by clicking on
-           the header of the column. The files can be sorted on on up to 5 attribues.
-           </p>
-           <p>
-           <b>Files</b>
-           Click the "Download" button to download a file. Click the
-           <img src="../../images/images/folderC.png" /> to go to the downloads page of the track
-           containing that particular file (to see all the files associated with that track).
-        </TD></TR>
-    </TABLE>
-  </BODY>
-</HTML>
-
+<tr><td colspan="2" height="40"><!--#include virtual="../../inc/topbar.html"--></td></tr>
+<!-----------File Search Help Page------------------------------>
+<tr><td rowspan="2" valign="top"></td></tr>
+<tr><td>
+	<!--outer table is for border purposes-->
+	<table width="100%" style="background-color:#888888;" border="0" cellspacing="0" cellpadding="1">
+	    <tr><td>
+		<table style="background-color:#fffee8;" width="100%" border="0" cellspacing="0" cellpadding="0">
+		    <tr><td>
+			<table style="background-color:#d9e4f8" background="../../images/hr.gif" width="100%">
+			    <tr><td><font size="4"><b>&nbsp;File Search</b></font>
+			    </td></tr>
+			</table>
+			<table style="background-color:#fffee8" width="100%" cellpadding="0">
+			    <tr><th height="10"></th></tr>
+			    <tr><td width="10">&nbsp;</td><td>
+                              The Genome Browser's File Search feature allows users to find
+                              downloadable ENCODE files of interest quickly and easily.
+                              </p>
+                              <p>
+                              <font size="4"><b>Searching</b></font></p>
+                              <p>
+                              Downloadable ENCODE files can be found by entering terms of interest
+                              in the free-text Track Name and Description fields, by selecting the
+                              appropriate Group or Data Format from the drop-down menus, and/or by
+                              using the "ENCODE terms" drop-down filters.
+                              <ul style="list-style-type:none;">
+                              <li><b>ENCODE terms</b>: The filters in this section allow users to
+                              search (or refine their search) for files based on the metadata
+                              associated with the ENCODE downloadable files. By default, there are
+                              two rows of ENCODE metadata search criteria, but more can be added by
+                              clicking the "+" button. To remove an added metadata search row, click
+                              the "-" button. Each row is comprised of two menus. The first is a
+                              drop-down menu that contains the searchable metadata categories.
+                              Please note that because the metadata categories are assembly
+                              dependent, the options may vary from assembly to assembly. Some
+                              metadata categories have a link on the far right of the row that
+                              provides more information about that category.
+                              The second menu is usually a multi-select drop-down menu containing
+                              the the metadata terms available for the category selected (in the
+                              first drop-down). The default is usually set to "Any." Clicking on
+                              "Any" opens up the multi-select drop-down with the possible options.
+                              Multiple options can be selected by clicking multiple check-boxes.
+                              For a few of the metadata categories in the first drop-down menu, the
+                              second menu is a free-text field in which the desired term must be
+                              entered.
+                              </p></li>
+                              </ul>
+                              <p>
+                              <font size="4"><b>Results</b></font></p>
+                              <p>
+                              After clicking the "Search" button, the files that meet the search
+                              criteria (up to a maximum of 1000 files) are displayed in a table;
+                              each row of the table represents a file meeting the critera that was
+                              set. If the displayed search results have been limited to the first
+                              1000 files, a message stating so will be displayed above the results.
+                              <ul style="list-style-type:none;">
+                              <li><b>Results Header</b>:
+                              The first column of the header contains the number of files found (up
+                              to a maximum of 1000 files) and the subsequent colums contain a title
+                              for the information displayed in that column.
+                              The list of files can be sorted by clicking on the header of the
+                              column. The files can be sorted on up to 5 attributes.
+                              </li>
+                              <li><b>Files</b>:
+                              Click the "Download" button to download a file. Click the
+                              <img src="../../images/folderC.png" /> to go to the downloads page to
+                              view that file and all other files associated with the track.
+                              </li></p>
+                              </ul> 
+			        </td>
+			        <td width="15"></td>
+			    </tr>
+			</table>
+		    <br></td></tr>
+		</table>
+	    </td></tr>
+	</table>
+     </td></tr>
+    </table>
+</body></html>

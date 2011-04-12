@@ -1,3 +1,8 @@
+metaObject wgEncodeGisRnaSeq
+objType composite
+composite wgEncodeGisRnaSeq
+expVars lab,dataType,cell,localization,rnaExtract
+
 metaObject wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya
 objType table
 cell GM12878
@@ -436,4 +441,4 @@ subId 758
 tableName wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya
 view SplitAlign
 
-# MAGIC: 1080846082
+# MAGIC: 1935132971
