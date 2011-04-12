@@ -49,7 +49,7 @@ grant Snyder
 lab Yale
 project wgEncode
 subId 540
-treatment IFNa30m
+treatment IFNa30
 view Alignments
 
 metaObject wgEncodeYaleRnaSeqPolyaAlignmentsK562Ifna6h
@@ -81,7 +81,7 @@ grant Snyder
 lab Yale
 project wgEncode
 subId 542
-treatment IFNg30m
+treatment IFNg30
 view Alignments
 
 metaObject wgEncodeYaleRnaSeqPolyaAlignmentsK562Ifng6h
@@ -143,7 +143,7 @@ grant Snyder
 lab Yale
 project wgEncode
 subId 540
-treatment IFNa30m
+treatment IFNa30
 view RawData
 
 metaObject wgEncodeYaleRnaSeqPolyaRawDataK562Ifna6h
@@ -175,7 +175,7 @@ grant Snyder
 lab Yale
 project wgEncode
 subId 542
-treatment IFNg30m
+treatment IFNg30
 view RawData
 
 metaObject wgEncodeYaleRnaSeqPolyaRawDataK562Ifng6h
@@ -243,7 +243,7 @@ labVersion PeakSeq1.0
 project wgEncode
 subId 540
 tableName wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m
-treatment IFNa30m
+treatment IFNa30
 view Signal
 
 metaObject wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h
@@ -279,7 +279,7 @@ labVersion PeakSeq1.0
 project wgEncode
 subId 542
 tableName wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m
-treatment IFNg30m
+treatment IFNg30
 view Signal
 
 metaObject wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
@@ -300,4 +300,4 @@ tableName wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
 treatment IFNg6h
 view Signal
 
-# MAGIC: 934732196
+# MAGIC: 932939600
