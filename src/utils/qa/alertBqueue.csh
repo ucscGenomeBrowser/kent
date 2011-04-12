@@ -88,7 +88,7 @@ foreach i ( $counter )
 end
 
 # add ann to list
-set contacts="$contacts ann donnak"
+set contacts="$contacts ann "
 
 # cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "test. ignore  " $USER
 cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "B-queue alert" $USER
