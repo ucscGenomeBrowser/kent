@@ -26,6 +26,7 @@ errAbort(
   "   acc <id>		add accession to experiment (approve it)\n"
   "   revoke <id>		remove accession to experiment (revoke it)\n"
   "   show <id>		print experiment to stdout\n"
+  "   history <id>      show changes to experiment entry\n"
   "   dump <exp.ra>	output experiment table to file\n"
   "   find <db> <exp.ra>	find unassigned experiments in metaDb and create .ra to file\n"
   "   id human|mouse <lab> <dataType> <cellType> [<vars>]\n"
@@ -67,10 +68,17 @@ return hash;
 }
 
 void expCreate()
-/* Create table */
+/* Create table and history */
 {
 verbose(1, "Creating table \'%s\'\n", table);
 encodeExpTableCreate(connExp, table);
+}
+
+void expDrop()
+/* Drop table and history*/
+{
+verbose(1, "Dropping table \'%s\'\n", table);
+encodeExpTableDrop(connExp, table);
 }
 
 void expAdd(char *file)
@@ -121,6 +129,28 @@ struct encodeExp *exp;
 
 exp = encodeExpGetByIdFromTable(connExp, table, id);
 encodeExpToRaFile(exp, stdout);
+}
+
+void expHistory(int id)
+/* Show changes to an existing experiment */
+{
+// TODO:  Libify
+
+int i;
+char **row;
+struct dyString *dy = dyStringCreate("select * from %sHistory where ix = %d order by updateTime",
+                                        table, id);
+struct sqlResult *sr = sqlGetResult(connExp, dyStringCannibalize(&dy));
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    for (i = 0; i < ENCODEEXP_NUM_COLS+2; i++)
+        // history has 2 additional fields:  action and user
+        {
+        printf("%s\t", row[i]);
+        }
+    puts("\n");
+    }
+sqlFreeResult(&sr);
 }
 
 void expDump(char *file)
@@ -251,6 +281,8 @@ if (assembly != NULL)
 
 if (sameString(command, "create"))
     expCreate();
+else if (sameString(command, "drop"))
+    expDrop();
 else if (sameString(command, "add"))
     expAdd(file);
 else if (sameString(command, "acc"))
@@ -259,6 +291,8 @@ else if (sameString(command, "revoke"))
     expRevoke(id);
 else if (sameString(command, "show"))
     expShow(id);
+else if (sameString(command, "history"))
+    expHistory(id);
 else if (sameString(command, "dump"))
     expDump(file);
 else if (sameString(command, "find"))
@@ -288,7 +322,7 @@ if (argc < 2)
     usage();
 
 char *command = argv[1];
-table = optionVal("table", sameString(command, "create") ?
+table = optionVal("table", (sameString(command, "create") || sameString(command, "drop")) ?
                         encodeExpTableNew:
                         ENCODE_EXP_TABLE);
 mdb = optionVal("mdb", MDB_DEFAULT_NAME);
@@ -339,7 +373,10 @@ else if (sameString("id", command))
             expVars = argv[6];
         }
     }
-else if (sameString("acc", command) || sameString("revoke", command) || sameString("show", command))
+else if (sameString("history", command) ||
+        sameString("acc", command) || 
+        sameString("revoke", command) || 
+        sameString("show", command))
     {
     if (argc < 3)
         {

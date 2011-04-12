@@ -116,11 +116,16 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 #define ENCODE_EXP_ACC_PREFIX   "wgEncodeE"
 #define ENCODE_EXP_TABLE_LOCK   "lock_encodeExp"
 
+#define ENCODE_EXP_HISTORY_TABLE_SUFFIX "History"
+
 void encodeExpFieldIndex(char *fieldName);
 /* Get column number of named field in EncodeExp schema */
 
 void encodeExpTableCreate(struct sqlConnection *conn, char *table);
-/* Create an encodeExp table */
+/* Create an encodeExp table and history */
+
+void encodeExpTableDrop(struct sqlConnection *conn, char *tableName);
+/* Drop an encodeExp table and history */
 
 void encodeExpTableRename(struct sqlConnection *conn, char *tableName, char *newTableName);
 /* Rename table and history table, updating triggers to match */

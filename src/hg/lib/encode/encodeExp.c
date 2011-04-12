@@ -52,8 +52,8 @@ static void encodeExpAddUserToLatestHistory(struct sqlConnection *conn, char *ta
 {
 /* Add user name to history table record */
 struct dyString *dy = dyStringCreate(
-        "update %sHistory set changedBy='%s' where updateTime = (select max(updateTime) from %s)",
-                        table, getlogin(), table);
+        "update %s%s set changedBy='%s' where updateTime = (select max(updateTime) from %s)",
+                        table, ENCODE_EXP_HISTORY_TABLE_SUFFIX, getlogin(), table);
 sqlUpdate(conn, dyStringCannibalize(&dy));
 }
 
@@ -463,9 +463,10 @@ else if sameString(action, "delete")
 else
     errAbort("Invalid SQL trigger action: %s", action);
 dy = dyStringCreate(
-    "CREATE TRIGGER %sHistory_%s AFTER %s ON %s FOR EACH ROW INSERT INTO %sHistory VALUES \n"
+    "CREATE TRIGGER %s_%s AFTER %s ON %s FOR EACH ROW INSERT INTO %s%s VALUES \n"
     "(%s.ix, %s.organism, %s.lab, %s.dataType, %s.cellType, %s.expVars, %s.accession, NOW(),'I',USER())",
-        tableName, action, action, tableName, tableName,
+        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, action, action, tableName,
+        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX,
         which, which, which, which, which, which, which);
 sqlUpdate(conn, dyStringCannibalize(&dy));
 }
@@ -478,27 +479,49 @@ struct dyString *dy;
 if (differentString(action, "insert") && differentString(action, "update") &&
     differentString(action, "delete"))
         errAbort("Invalid SQL trigger action: %s", action);
-dy = dyStringCreate("DROP TRIGGER %sHistory_%s", tableName, action);
+dy = dyStringCreate("DROP TRIGGER IF EXISTS %s%s_%s", tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, action);
 sqlUpdate(conn, dyStringCannibalize(&dy));
+}
+
+static void encodExpAddTriggers(struct sqlConnection *conn, char *tableName)
+{
+/* Add history triggers to experiment table */
+encodExpAddHistoryTrigger(conn, tableName, "insert");
+encodExpAddHistoryTrigger(conn, tableName, "update");
+encodExpAddHistoryTrigger(conn, tableName, "delete");
+}
+
+static void encodeExpDropTriggers(struct sqlConnection *conn, char *tableName)
+{
+/* Drop history triggers from experiment table */
+encodExpDropHistoryTrigger(conn, tableName, "insert");
+encodExpDropHistoryTrigger(conn, tableName, "update");
+encodExpDropHistoryTrigger(conn, tableName, "delete");
 }
 
 void encodeExpTableRename(struct sqlConnection *conn, char *tableName, char *newTableName)
 /* Rename table and history table, updating triggers to match */
 {
-struct dyString *dy;
+char oldBuf[64];
+char newBuf[64];
 
-encodExpDropHistoryTrigger(conn, tableName, "insert");
-encodExpDropHistoryTrigger(conn, tableName, "update");
-encodExpDropHistoryTrigger(conn, tableName, "delete");
+encodeExpDropTriggers(conn, tableName);
+sqlRenameTable(conn, tableName, newTableName);
+safef(oldBuf, sizeof oldBuf, "%s%s", tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
+safef(newBuf, sizeof newBuf, "%s%s", newTableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
+sqlRenameTable(conn, oldBuf, newBuf);
+encodExpAddTriggers(conn, newTableName);
+}
 
-dy = dyStringCreate("ALTER TABLE %s RENAME TO %s", tableName, newTableName);
-sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %sHistory RENAME TO %sHistory", tableName, newTableName);
-sqlUpdate(conn, dyStringCannibalize(&dy));
+void encodeExpTableDrop(struct sqlConnection *conn, char *tableName)
+{
+/* Drop an encodeExp table */
+char buf[64];
 
-encodExpAddHistoryTrigger(conn, newTableName, "insert");
-encodExpAddHistoryTrigger(conn, newTableName, "update");
-encodExpAddHistoryTrigger(conn, newTableName, "delete");
+encodeExpDropTriggers(conn, tableName);
+sqlDropTable(conn, tableName);
+safef(buf, sizeof buf, "%s%s", tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
+sqlDropTable(conn, buf);
 }
 
 void encodeExpTableCreate(struct sqlConnection *conn, char *tableName)
@@ -510,23 +533,26 @@ sqlRemakeTable(conn, tableName, dyStringCannibalize(&dy));
 
 /* Create history table -- a clone with 2 additional columns (action, changedBy).
  * Remove auto-inc attribute on ix, and use ix and updateTime as primary key  */
-dy = dyStringCreate("CREATE TABLE %sHistory LIKE %s", tableName, tableName);
+dy = dyStringCreate("CREATE TABLE %s%s LIKE %s", 
+                tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, tableName);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %sHistory ADD COLUMN action CHAR(1) DEFAULT ''", tableName);
+dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN action CHAR(1) DEFAULT ''", 
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %sHistory ADD COLUMN changedBy VARCHAR(77) NOT NULL", tableName);
+dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN changedBy VARCHAR(77) NOT NULL", 
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %sHistory MODIFY COLUMN ix INT DEFAULT 0", tableName);
+dy = dyStringCreate("ALTER TABLE %s%s MODIFY COLUMN ix INT DEFAULT 0",
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %sHistory DROP PRIMARY KEY", tableName);
+dy = dyStringCreate("ALTER TABLE %s%s DROP PRIMARY KEY",
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %sHistory ADD PRIMARY KEY (ix, updateTime)", tableName);
+dy = dyStringCreate("ALTER TABLE %s%s ADD PRIMARY KEY (ix, updateTime)",
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
 sqlUpdate(conn, dyStringCannibalize(&dy));
 
-/* Add triggers for insert, update, and delete */
-encodExpAddHistoryTrigger(conn, tableName, "insert");
-encodExpAddHistoryTrigger(conn, tableName, "update");
-encodExpAddHistoryTrigger(conn, tableName, "delete");
+encodExpAddTriggers(conn, tableName);
 }
 
 /* END schema-dependent section */
@@ -563,6 +589,7 @@ struct encodeExp *exp = encodeExpFromMdbVars(db, edVars);
 mdbVarsFree(&edVars);
 return exp;
 }
+
 
 struct encodeExp *encodeExpFromMdbVars(char *db, struct mdbVar *vars)
 // Creates and returns an encodeExp struct from mdbVars, but does not touch the table
@@ -922,4 +949,3 @@ char *acc = encodeExpGetAccession(exp);
 freez(&exp);
 return acc;
 }
-
