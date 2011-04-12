@@ -2644,7 +2644,6 @@ if (!mdbObjIsCompositeMember(mdbObj))
 struct mdbObj *compObj = mdbObjQueryCompositeObj(conn,tableName,mdbObj);
 if (compObj == NULL)
     return NULL;
-
 struct slName *edvs = mdbObjGetNamedEncodeEdvs(compObj);
 mdbObjFree(&compObj);
 return edvs;
@@ -2658,7 +2657,7 @@ struct mdbVar *mdbObjFindEncodeEdvPairs(struct sqlConnection *conn,char *tableNa
 struct slName *compositeEdvs = mdbObjGetNamedEncodeEdvs(mdbObj);  // looking locally first.
 if (compositeEdvs == NULL)
     {
-    struct slName *compositeEdvs = mdbObjFindCompositeNamedEncodeEdvs(conn,tableName,mdbObj);
+    compositeEdvs = mdbObjFindCompositeNamedEncodeEdvs(conn,tableName,mdbObj);
     if (compositeEdvs == NULL)
         return NULL;
     }
