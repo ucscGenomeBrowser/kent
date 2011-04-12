@@ -64,7 +64,7 @@ antibody CTCF
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-14
 dateUnrestricted 2011-07-14
@@ -169,7 +169,7 @@ antibody CTCF
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-14
 dateUnrestricted 2011-07-14
@@ -774,7 +774,7 @@ antibody Input
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
@@ -799,7 +799,7 @@ antibody Input
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
@@ -1635,4 +1635,4 @@ strain C57BL/6
 subId 3005
 view RawData
 
-# MAGIC: 924906958
+# MAGIC: 920077466
