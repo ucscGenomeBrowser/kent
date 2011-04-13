@@ -2361,3 +2361,13 @@ priority 160
 visibility hide
 type bamWig 0 1
 viewLimits 0:1
+
+track netSelf
+shortLabel Self Net
+longLabel $Organism Chained Self Alignment Net
+group varRep
+priority 401
+visibility hide
+spectrum on
+type netAlign hg19 chainSelf
+otherDb hg19
