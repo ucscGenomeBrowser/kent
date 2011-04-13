@@ -20,6 +20,7 @@ errAbort(
   "                  [{fileName}] [-replace] or\n"
   "                  [[-vars=\"var1=val1 var2=val2...\"] or [-obj=]]\n"
   "                  [[-var= [-val=]] or [-setVars=\"var1=val1 ...\"]] [-delete]\n"
+  "                  [-encodeExp [-accession]\n"
   "Options:\n"
   "    {db}     Database to update metadata in.  This argument is required.\n"
   "    -table   Table to update metadata to.  Default is the sandbox version of\n"
@@ -43,6 +44,7 @@ errAbort(
   "       -setVars={var=val...}  Allows setting multiple var=val pairs.\n"
   "       -delete         Remove specific var or entire object.\n"
   "       -encodeExp      Update groups of objs as experiments defined in hgFixed.encodeExp table.\n"
+  "        -accession     If encodeExp, then make/update accession too.\n"
   "There are two ways to call mdbUpdate.  The object (or objects matching vars) and var to update "
   "can be declared on the command line, or a file of formatted metadata lines can be provided. "
   "The file can be the formatted output from mdbPrint or the following special formats:\n"
@@ -79,6 +81,7 @@ static struct optionSpec optionSpecs[] = {
     {"var",     OPTION_STRING}, // variable
     {"val",     OPTION_STRING}, // value
     {"encodeExp",OPTION_BOOLEAN},// Update Experiments as defined in the hgFixed.encodeExp table
+    {"accession",OPTION_BOOLEAN},// Adds/updates accession when experimentifying
     {"setVars", OPTION_STRING}, // Allows setting multiple var=val pairs
     {"delete",  OPTION_BOOLEAN},// delete one obj or obj/var
     {"replace", OPTION_BOOLEAN},// replace entire obj when loading from file
@@ -318,14 +321,10 @@ if(mdbObjs != NULL)
         {
         if (encodeExp)
             {
-            if (!testIt)
-                {
-                verbose(1, "NOTE: -encodeExp will only run in -test mode until the utilities are fully functional.\n");
-                testIt = TRUE;  // FIXME: No actual updates until we are ready to pull the trigger!  // FIXME: Also when will update to EXP table be turned on?
-                }
-            boolean createExpIfNecessary = FALSE; // testIt ? FALSE : TRUE; // FIXME: When we are ready, this should allow creating an experiment in the hgFixed.encodeExp table
+            boolean createExpIfNecessary = testIt ? FALSE : TRUE; // FIXME: When we are ready, this should allow creating an experiment in the hgFixed.encodeExp table
 
-            struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,&mdbObjs,(verboseLevel() > 1? 1:0),createExpIfNecessary); // 1=warnings
+            boolean updateAccession = (optionExists("accession") && createExpIfNecessary);
+            struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,NULL,&mdbObjs,(verboseLevel() > 1? 1:0),createExpIfNecessary,updateAccession); // 1=warnings
             if (updatable == NULL)
                 verbose(1, "No Experiment ID updates were discovered in %d object(s).\n", slCount(mdbObjs));
             else

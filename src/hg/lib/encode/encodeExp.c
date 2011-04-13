@@ -535,13 +535,13 @@ sqlRemakeTable(conn, tableName, dyStringCannibalize(&dy));
 
 /* Create history table -- a clone with 2 additional columns (action, changedBy).
  * Remove auto-inc attribute on ix, and use ix and updateTime as primary key  */
-dy = dyStringCreate("CREATE TABLE %s%s LIKE %s", 
+dy = dyStringCreate("CREATE TABLE %s%s LIKE %s",
                 tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, tableName);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN action CHAR(1) DEFAULT ''", 
+dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN action CHAR(1) DEFAULT ''",
                         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN changedBy VARCHAR(77) NOT NULL", 
+dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN changedBy VARCHAR(77) NOT NULL",
                         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
 sqlUpdate(conn, dyStringCannibalize(&dy));
 dy = dyStringCreate("ALTER TABLE %s%s MODIFY COLUMN ix INT DEFAULT 0",
@@ -780,6 +780,16 @@ char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id)
  * Return the accession. */
 {
 return encodeExpAccession(conn, tableName, id, TRUE);
+}
+
+void encodeExpSetAccession(struct encodeExp *exp, char *tableName)
+// Adds accession field to an existing experiment, updating the table.
+{
+struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
+
+exp->accession = encodeExpAccession(conn, tableName, exp->ix, TRUE);
+
+sqlDisconnect(&conn);
 }
 
 void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int id)
