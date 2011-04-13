@@ -15,7 +15,7 @@ void usage()
 errAbort(
   "mdbPrint - Prints metadata objects, variables and values from '" MDB_DEFAULT_NAME "' table.\n"
   "usage:\n"
-  "   mdbPrint {db} [-table=] [-byVar] [-line/-count,-countObjs/-countVars/-countVals]\n"
+  "   mdbPrint {db} [-table=] [-byVar] [-line/-count]\n"
   "                 [-all]\n"
   "                 [-vars=\"var1=val1 var2=val2...\"]\n"
   "                 [-obj= [-var= [-val=]]]\n"
@@ -57,7 +57,7 @@ errAbort(
   "           Return each all vars for all objects with the constraint.\n"
   "  mdbPrint hg18 -obj=wgEncodeUncFAIREseqPeaksPanislets -line\n"
   "           Return a single formatted metadata line for one object.\n"
-  "  mdbPrint hg18 -countObjs -var=cell -val=GM%%\n"
+  "  mdbPrint hg18 -count -var=cell -val=GM%%\n"
   "           Return the count of objects which have a cell begining with 'GM'.\n"
   );
 }
