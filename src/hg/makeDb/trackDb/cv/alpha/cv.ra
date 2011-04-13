@@ -8684,11 +8684,12 @@ organism human
 ### HAIB Project Labs
 ### Caltech and HudsonAlpha
 
-term Caltech(Wold)
+term Caltech
 tag Caltech
 type lab
 label Wold - California Institute of Technology
-description Wold - California Institute of Technology
+description PROVISIONAL Wold - California Institute of Technology
+#I took out the Wold at the request of Kate
 grantInst California Institute of Technology (Wold Lab)
 labPi Wold
 labPiFull Barbara Wold
