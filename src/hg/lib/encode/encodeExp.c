@@ -450,6 +450,8 @@ static char *sqlCreate =
 ")";
 
 
+/* History table approach from Peter Brawley, http://www.artfulsoftware.com */
+
 static void encodExpAddHistoryTrigger(struct sqlConnection *conn, char *tableName, char *action)
 /* Create an SQL query to add a trigger to the history table for an encodeExp table */
 {
@@ -465,7 +467,7 @@ else
 dy = dyStringCreate(
     "CREATE TRIGGER %s_%s AFTER %s ON %s FOR EACH ROW INSERT INTO %s%s VALUES \n"
     "(%s.ix, %s.organism, %s.lab, %s.dataType, %s.cellType, %s.expVars, %s.accession, NOW(),'I',USER())",
-        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, action, action, tableName,
+        tableName, action, action, tableName,
         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX,
         which, which, which, which, which, which, which);
 sqlUpdate(conn, dyStringCannibalize(&dy));
@@ -479,7 +481,7 @@ struct dyString *dy;
 if (differentString(action, "insert") && differentString(action, "update") &&
     differentString(action, "delete"))
         errAbort("Invalid SQL trigger action: %s", action);
-dy = dyStringCreate("DROP TRIGGER IF EXISTS %s%s_%s", tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, action);
+dy = dyStringCreate("DROP TRIGGER IF EXISTS %s_%s", tableName, action);
 sqlUpdate(conn, dyStringCannibalize(&dy));
 }
 
@@ -548,9 +550,8 @@ sqlUpdate(conn, dyStringCannibalize(&dy));
 dy = dyStringCreate("ALTER TABLE %s%s DROP PRIMARY KEY",
                         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s ADD PRIMARY KEY (ix, updateTime)",
-                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
-sqlUpdate(conn, dyStringCannibalize(&dy));
+/*
+* If we do need a primary key, will need to add a msec or autoinc column */
 
 encodExpAddTriggers(conn, tableName);
 }
@@ -560,8 +561,10 @@ encodExpAddTriggers(conn, tableName);
 struct encodeExp *encodeExpLoadAllFromTable(struct sqlConnection *conn, char *tableName)
 /* Load all encodeExp in table */
 {
-struct encodeExp *exps;
+struct encodeExp *exps = NULL;
 
+if (!sqlTableExists(conn, tableName))
+    return NULL;
 struct dyString *dy = newDyString(0);
 dyStringPrintf(dy, "select * from %s", tableName);
 exps = encodeExpLoadByQuery(conn, dyStringContents(dy));
@@ -575,14 +578,16 @@ struct encodeExp *encodeExpFromMdb(struct sqlConnection *conn, char *db, struct 
 if (!mdbObjIsEncode(mdb))
     errAbort("Metadata object is not from ENCODE");
 
-struct mdbVar *edVars = mdbObjFindEncodeEdvs(conn,mdb,TRUE); // includes "None"
+struct mdbVar *edVars = mdbObjFindEncodeEdvs(conn,mdb,FALSE); // exclude vars where val=None
+// To use shared metaDb:
+//struct mdbVar *edVars = mdbObjFindEncodeEdvPairs(conn, MDB_DEFAULT_NAME, mdb, FALSE);
 if (edVars == NULL)
     {  // Not willing to make these erraborts at this time.
     char *composite = mdbObjFindValue(mdb,MDB_VAR_COMPOSITE);
     if (composite == NULL)
-        verbose(1,"MDB object '%s' does not have a composite defined\n",mdb->obj);
+        verbose(1,"MDB object '%s' does not have a composite defined in user metaDb\n",mdb->obj);
     else
-        verbose(1,"Experiment Defining Variables not defined for composite '%s'\n",composite);
+        verbose(1,"Experiment Defining Variables not defined for composite '%s' in user metaDb\n",composite);
     return NULL;
     }
 struct encodeExp *exp = encodeExpFromMdbVars(db, edVars);
@@ -613,7 +618,7 @@ for(;edv != NULL; edv = edv->next)
     if (sameWord(edv->var,MDB_VAR_LAB))
         {
         assert(exp->lab == NULL);
-        exp->lab = cloneString((char *)(edv->val));
+        exp->lab = cvLabNormalize((char *)(edv->val));
         }
     else if (sameWord(edv->var,MDB_VAR_DATATYPE))
         {
@@ -626,7 +631,11 @@ for(;edv != NULL; edv = edv->next)
         exp->cellType = cloneString((char *)(edv->val));
         }
     else
-        slPairAdd(&varPairs, edv->var, edv->val); // No need to clone
+        {
+        // exclude uninformative EDV's
+        if (differentString(MDB_VAL_ENCODE_EDV_NONE, (char *)(edv->val)))
+            slPairAdd(&varPairs, edv->var, edv->val); // No need to clone
+        }
     }
 
 // Be sure we have what we need

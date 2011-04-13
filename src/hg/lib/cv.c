@@ -45,6 +45,31 @@ if (sameWord(sloppyTerm,CV_UGLY_TERM_ANTIBODY))
 return sloppyTerm;
 }
 
+char *cvLabNormalize(char *sloppyTerm)
+/* CV inconsistency work-arounds.  Return lab name trimmed of parenthesized trailing 
+ * info (a few ENCODE labs have this in metaDb and/or in CV term -- 
+ * PI name embedded in parens in the CV term).  Also fixes other problems until
+ * cleaned up in CV, metaDb and user processes.  Caller must free mem. */
+{
+char *lab = sloppyTerm;
+
+if (containsStringNoCase(sloppyTerm, "Weissman"))
+    lab = "Yale-Weissman";
+
+char *ret = cloneString(lab);
+chopSuffixAt(ret, '(');
+return ret;
+}
+
+/*
+TBD
+char *cvLabDeNormalize(char *minimalTerm)
+// returns lab name with parenthesized trailing info, by lookup in cv.ra, and restores
+// other oddities caught by Normalize
+}
+*/
+
+
 // TODO: decide to make this public or hide it away inside the one function so far that uses it.
 static char *cv_file()
 // return default location of cv.ra
