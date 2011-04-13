@@ -2665,8 +2665,6 @@ if (compositeEdvs == NULL)
 return mdbObjEncodeEdvsAsMdbVars(mdbObj,compositeEdvs,includeNone);
 }
 
-#define EXPERIMENTS_TABLE "hgFixed.encodeExp"
-
 struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,
                                           int warn,boolean createExpIfNecessary)
 // Organizes objects into experiments and validates experiment IDs.  Will add/update the ids in the structures.
@@ -2842,7 +2840,7 @@ while(mdbObjs != NULL)
             {
             safef(experimentId,sizeof(experimentId),"{missing}");
             if (warn > 0)
-                printf("Experiment %s EDV: [%s] is not defined in %s table.\n",experimentId,dyStringContents(dyVars),EXPERIMENTS_TABLE);
+                printf("Experiment %s EDV: [%s] is not defined in %s.%s table.\n",experimentId,dyStringContents(dyVars), ENCODE_EXP_DATABASE, ENCODE_EXP_TABLE);
                 //printf("Experiment %s EDV: [%s] is not defined in %s table. Remaining:%d and %d\n",experimentId,dyStringContents(dyVars),EXPERIMENTS_TABLE,slCount(mdbCompositeObjs),slCount(mdbObjs));
             if (warn < 2) // From mdbUpdate (warn=1), just interested in testing waters.  From mdbPrint (warn=2) list all objs in exp.
                 {
