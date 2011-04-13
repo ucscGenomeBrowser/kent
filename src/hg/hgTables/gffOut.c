@@ -165,8 +165,9 @@ if (exonIndx == cdsStopIndx)
 	    {
 	    if (gtf2StopCodons)
 		cdsPortionEnd = stopCodonStart;
-	    addGffLineFromBed(bed, source, "CDS", exonCdsStart, cdsPortionEnd,
-			      frames[exonIndx], txName);
+	    if (cdsPortionEnd > exonCdsStart)
+		addGffLineFromBed(bed, source, "CDS", exonCdsStart, cdsPortionEnd,
+				  frames[exonIndx], txName);
 	    addGffLineFromBed(bed, source, "stop_codon", stopCodonStart, exonCdsEnd, '.', txName);
 	    }
 	else if (cdsPortionEnd > exonCdsStart)
