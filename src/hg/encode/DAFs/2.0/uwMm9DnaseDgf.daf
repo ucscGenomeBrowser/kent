@@ -1,12 +1,12 @@
-# Data Agreement File for UW DNase-Seq experiments for mm9
+# Data Agreement File for UW DNase DGF experiments for mm9
 
-#$Revision: 1.4 $
+#$Revision: 1.1 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the associated DDF should look like this:
-#files   view    cell	sex     age     strain	replicate	tissueSourceType      seqPlatform	labVersion
+#files   view    cell   sex     age     strain  replicate   tissueSourceType      seqPlatform   labVersion
 
 
 #Explanation of DDF terms
@@ -26,9 +26,9 @@ dafVersion        2.0
 
 # Lab and general info
 grant             Stam
-lab               UW-m
-dataType          DnaseSeq 
-compositeSuffix   UwDnase
+lab               UW-M
+dataType          DnaseDgf 
+compositeSuffix   UwDgf
 group             regulation
 variables         cell,strain,sex,age
 assembly          mm9
@@ -37,31 +37,46 @@ validationSettings validateFiles.bam:mmCheckOneInN=1000,mismatches=2;validateFil
 
 
 # Track/view definition
+view             Footprints
+longLabelPrefix  UW Digital Genomic Footprinting - Footprints
+type             bed 6 +
+required         no
+hasReplicates    no
+
 view             Hotspots
-longLabelPrefix  UW DNaseI HS Hotspots
+longLabelPrefix  UW Digital Genomic Footprinting - Hotspots
 type             broadPeak
-required         yes
-hasReplicates    yes
+required         no
+hasReplicates    no
 
 view             Peaks
-longLabelPrefix  UW DNaseI HS Peaks
+longLabelPrefix  UW Digital Genomic Footprinting - Peaks(FDR 1%)
 type             narrowPeak
-required         yes
-hasReplicates    yes
+required         no
+hasReplicates    no
 
-view             RawSignal
-longLabelPrefix  UW DNaseI HS Raw Signal
+view             Signal
+longLabelPrefix  UW Digital Genomic Footprinting - Per-base Signal
 type             bigWig
 required         yes
-hasReplicates    yes
+hasReplicates    no
+
+view             RawSignal
+longLabelPrefix  UW Digital Genomic Footprinting - Raw Signal
+type             bigWig
+required         no
+hasReplicates    no
 
 view             Alignments
-longLabelPrefix  UW DNaseI HS Tags
+longLabelPrefix  UW Digital Genomic Footprinting - Tags
 type             bam
 required         yes
-hasReplicates    yes
+hasReplicates    no
+downloadOnly     yes
 
 view             RawData
 type             fastq
 required         no
-hasReplicates    yes
+hasReplicates    no
+downloadOnly     yes
+
