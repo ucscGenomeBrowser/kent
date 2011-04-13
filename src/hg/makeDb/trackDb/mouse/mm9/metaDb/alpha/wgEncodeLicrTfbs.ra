@@ -1280,7 +1280,8 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-12
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdAlnRep1.bam
@@ -1294,7 +1295,7 @@ setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2788
+subId 3884
 view Alignments
 
 metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdAlnRep2
@@ -1306,7 +1307,8 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-12
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdAlnRep2.bam
@@ -1320,8 +1322,35 @@ setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2788
+subId 3884
 view Alignments
+
+metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody CTCF
+cell Heart
+composite wgEncodeLicrTfbs
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-12
+dateSubmitted 2010-11-01
+dateUnrestricted 2011-08-01
+fileName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3884
+tableName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -1332,7 +1361,8 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-12
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
@@ -1346,7 +1376,7 @@ setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2788
+subId 3884
 view RawData
 
 metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -1358,7 +1388,8 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-12
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
@@ -1372,8 +1403,35 @@ setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2788
+subId 3884
 view RawData
+
+metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody CTCF
+cell Heart
+composite wgEncodeLicrTfbs
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-12
+dateSubmitted 2010-11-01
+dateUnrestricted 2011-08-01
+fileName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3884
+tableName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdSig
+view Signal
 
 metaObject wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdAlnRep1
 objType file
@@ -1384,7 +1442,8 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-07
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdAlnRep1.bam
@@ -1398,7 +1457,7 @@ setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 3001
+subId 3878
 view Alignments
 
 metaObject wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdAlnRep2
@@ -1410,7 +1469,8 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-07
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdAlnRep2.bam
@@ -1424,8 +1484,35 @@ setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 3001
+subId 3878
 view Alignments
+
+metaObject wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody CTCF
+cell Kidney
+composite wgEncodeLicrTfbs
+control std
+controlId Kidney/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-07
+dateSubmitted 2010-11-18
+dateUnrestricted 2011-08-18
+fileName wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3878
+tableName wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -1436,7 +1523,8 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-07
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
@@ -1450,7 +1538,7 @@ setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 3001
+subId 3878
 view RawData
 
 metaObject wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -1462,7 +1550,8 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-07
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
@@ -1476,8 +1565,35 @@ setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 3001
+subId 3878
 view RawData
+
+metaObject wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody CTCF
+cell Kidney
+composite wgEncodeLicrTfbs
+control std
+controlId Kidney/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-07
+dateSubmitted 2010-11-18
+dateUnrestricted 2011-08-18
+fileName wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3878
+tableName wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdSig
+view Signal
 
 metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep1
 objType file
@@ -1514,7 +1630,8 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-12
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep2.bam
@@ -1528,7 +1645,7 @@ setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 3005
+subId 3880
 view Alignments
 
 metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep3
@@ -1540,7 +1657,8 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-12
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep3.bam
@@ -1554,8 +1672,35 @@ setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 3005
+subId 3880
 view Alignments
+
+metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody Pol2
+cell Kidney
+composite wgEncodeLicrTfbs
+control std
+controlId Kidney/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-12
+dateSubmitted 2010-11-18
+dateUnrestricted 2011-08-18
+fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3880
+tableName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -1592,7 +1737,8 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-12
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
@@ -1606,7 +1752,7 @@ setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 3005
+subId 3880
 view RawData
 
 metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep3
@@ -1618,7 +1764,8 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-12
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep3.fastq.gz
@@ -1632,7 +1779,34 @@ setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 3005
+subId 3880
 view RawData
 
-# MAGIC: 920077466
+metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody Pol2
+cell Kidney
+composite wgEncodeLicrTfbs
+control std
+controlId Kidney/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-12
+dateSubmitted 2010-11-18
+dateUnrestricted 2011-08-18
+fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3880
+tableName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdSig
+view Signal
+
+# MAGIC: 1680515820
