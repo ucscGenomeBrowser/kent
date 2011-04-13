@@ -1425,44 +1425,6 @@ rnaExtract polyA
 subId 904
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep1
-objType file
-cell GM12878
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-14
-dateUnrestricted 2011-04-14
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep1.fastq.gz
-grant Myers
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-project wgEncode
-readType 1x75D
-replicate 1
-subId 1874
-view Fastq
-
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2
-objType file
-cell GM12878
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-14
-dateUnrestricted 2011-04-14
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2.fastq.gz
-grant Myers
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-project wgEncode
-readType 1x75D
-replicate 2
-subId 1874
-view Fastq
-
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1
 objType file
 cell GM12878
@@ -1582,44 +1544,6 @@ readType 2x75
 replicate 2
 subId 1874
 view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep2
-objType file
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-14
-dateUnrestricted 2011-04-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep2.fastq.gz
-grant Myers
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-project wgEncode
-readType 1x75D
-replicate 2
-subId 1874
-view Fastq
-
-metaObject wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep1
-objType file
-cell K562
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-14
-dateUnrestricted 2011-04-14
-fileName wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep1.fastq.gz
-grant Myers
-lab Caltech(Wold)
-localization cell
-mapAlgorithm NA
-project wgEncode
-readType 1x75D
-replicate 1
-subId 1874
-view Fastq
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1
 objType file
@@ -6807,4 +6731,4 @@ subId 1065
 tableName wgEncodeCaltechRnaSeqSplicesRep5H1hescCellPapBb2R2x75
 view Splices
 
-# MAGIC: 704211961
+# MAGIC: -1079039395
