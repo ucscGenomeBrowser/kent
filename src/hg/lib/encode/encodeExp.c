@@ -450,6 +450,8 @@ static char *sqlCreate =
 ")";
 
 
+/* History table approach from Peter Brawley, http://www.artfulsoftware.com */
+
 static void encodExpAddHistoryTrigger(struct sqlConnection *conn, char *tableName, char *action)
 /* Create an SQL query to add a trigger to the history table for an encodeExp table */
 {
@@ -465,7 +467,7 @@ else
 dy = dyStringCreate(
     "CREATE TRIGGER %s_%s AFTER %s ON %s FOR EACH ROW INSERT INTO %s%s VALUES \n"
     "(%s.ix, %s.organism, %s.lab, %s.dataType, %s.cellType, %s.expVars, %s.accession, NOW(),'I',USER())",
-        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, action, action, tableName,
+        tableName, action, action, tableName,
         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX,
         which, which, which, which, which, which, which);
 sqlUpdate(conn, dyStringCannibalize(&dy));
@@ -479,7 +481,7 @@ struct dyString *dy;
 if (differentString(action, "insert") && differentString(action, "update") &&
     differentString(action, "delete"))
         errAbort("Invalid SQL trigger action: %s", action);
-dy = dyStringCreate("DROP TRIGGER IF EXISTS %s%s_%s", tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, action);
+dy = dyStringCreate("DROP TRIGGER IF EXISTS %s_%s", tableName, action);
 sqlUpdate(conn, dyStringCannibalize(&dy));
 }
 
@@ -548,9 +550,8 @@ sqlUpdate(conn, dyStringCannibalize(&dy));
 dy = dyStringCreate("ALTER TABLE %s%s DROP PRIMARY KEY",
                         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s ADD PRIMARY KEY (ix, updateTime)",
-                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
-sqlUpdate(conn, dyStringCannibalize(&dy));
+/*
+* If we do need a primary key, will need to add a msec or autoinc column */
 
 encodExpAddTriggers(conn, tableName);
 }

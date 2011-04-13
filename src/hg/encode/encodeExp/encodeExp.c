@@ -128,6 +128,8 @@ void expShow(int id)
 struct encodeExp *exp;
 
 exp = encodeExpGetByIdFromTable(connExp, table, id);
+if (exp == NULL)
+    errAbort("Id %d not found in experiment table %s", id, table);
 encodeExpToRaFile(exp, stdout);
 }
 
