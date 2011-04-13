@@ -578,7 +578,9 @@ struct encodeExp *encodeExpFromMdb(struct sqlConnection *conn, char *db, struct 
 if (!mdbObjIsEncode(mdb))
     errAbort("Metadata object is not from ENCODE");
 
-struct mdbVar *edVars = mdbObjFindEncodeEdvs(conn,mdb,TRUE); // includes "None"
+struct mdbVar *edVars = mdbObjFindEncodeEdvs(conn,mdb,FALSE); // exclude vars where val=None
+// To use shared metaDb:
+//struct mdbVar *edVars = mdbObjFindEncodeEdvPairs(conn, MDB_DEFAULT_NAME, mdb, FALSE);
 if (edVars == NULL)
     {  // Not willing to make these erraborts at this time.
     char *composite = mdbObjFindValue(mdb,MDB_VAR_COMPOSITE);
@@ -631,7 +633,7 @@ for(;edv != NULL; edv = edv->next)
     else
         {
         // exclude uninformative EDV's
-        if (differentString("None", (char *)(edv->val)))
+        if (differentString(MDB_VAL_ENCODE_EDV_NONE, (char *)(edv->val)))
             slPairAdd(&varPairs, edv->var, edv->val); // No need to clone
         }
     }
