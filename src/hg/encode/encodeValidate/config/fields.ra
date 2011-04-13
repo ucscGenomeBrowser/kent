@@ -201,9 +201,9 @@ file ddf
 type string
 required no
 
-# This is the specific tissue source for mouse tissue: pooled or single animal
+# This is the specific tissue source type for mouse tissue: pooled or single animal
 # It is verified against tissue source in cv.ra
-field tissueSource
+field tissueSourceType
 file ddf
 type string
 required no
