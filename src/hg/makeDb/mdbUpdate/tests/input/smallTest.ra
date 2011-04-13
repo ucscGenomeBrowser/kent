@@ -1,0 +1,29 @@
+metaObject wgEncodeTest
+objType composite
+composite wgEncodeTest
+expVars lab,dataType,cell,antibody,treatment
+
+metaObject wgEncodeTestMelUsf2IggmusRawDataRep2
+objType file
+age immortalized
+antibody USF2
+cell MEL
+composite wgEncodeTest
+control IgG-mus
+controlId MEL/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-08
+dateUnrestricted 2011-04-08
+fileName wgEncodeTestMelUsf2IggmusRawDataRep2.fastq.gz
+grant Snyder
+lab Lab
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 1865
+treatment None
+view RawData
+
