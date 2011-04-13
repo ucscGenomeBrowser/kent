@@ -422,6 +422,12 @@ xrefQuery select orfName,protName from %s where protName like '%s'
 searchDescription UniProt Accession of WormBase Sanger Genes
 searchPriority 8
 
+searchName sangerRnaGene
+searchTable sangerRnaGene
+searchMethod fuzzy
+searchType genePred
+searchPriority 29
+
 track sibTxGraph override
 url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?db=ce4&species=C.+elegans&tromer=$$
 
