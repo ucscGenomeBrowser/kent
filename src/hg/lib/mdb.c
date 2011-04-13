@@ -2829,20 +2829,21 @@ while(mdbObjs != NULL)
 
         // Look up each exp in EXPERIMENTS_TABLE
         char experimentId[128];
-        int expId = -1;
+        int expId = ENCODE_EXP_IX_UNDEFINED;
         struct encodeExp *exp = encodeExpGetByMdbVarsFromTable(db, edvVarVals, expTable);
         if (exp == NULL && createExpIfNecessary)
             exp = encodeExpGetOrCreateByMdbVarsFromTable(db, edvVarVals, expTable);
         mdbVarsFree(&edvVarVals); // No longer needed
 
         // Make sure the accession is set if requested.
-        if (createExpIfNecessary && updateAccession && exp->ix != -1 && exp->accession == NULL)
+        if (createExpIfNecessary && updateAccession
+        && exp->ix != ENCODE_EXP_IX_UNDEFINED && exp->accession == NULL)
             encodeExpSetAccession(exp, expTable);
 
         if (exp != NULL)
             expId = exp->ix;
 
-        if (expId == -1)
+        if (expId == ENCODE_EXP_IX_UNDEFINED)
             {
             safef(experimentId,sizeof(experimentId),"{missing}");
             if (warn > 0)
@@ -2886,7 +2887,7 @@ while(mdbObjs != NULL)
                 {
                 foundId = TRUE; // warn==1 will give only 1 exp wide error if no individual errors.  NOTE: would be nice if those with expId sorted to beginning, but can't have everything.
                 int thisId = atoi(val);
-                if (expId == -1 || thisId != expId)
+                if (expId == ENCODE_EXP_IX_UNDEFINED || thisId != expId)
                     {
                     updateObj = TRUE;
                     if (warn > 0)
@@ -2911,13 +2912,13 @@ while(mdbObjs != NULL)
                         {
                         errors--;       // One less error
                         if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
-                            printf("           %s %s\n",experimentId,obj->obj);
+                            printf("           %s %s %s\n",experimentId,obj->obj,(exp->accession != NULL ? exp->accession : ""));
                         }
                     }
                 }
             else
                 {
-                updateObj = (expId != -1);
+                updateObj = (expId != ENCODE_EXP_IX_UNDEFINED);
                 if ((foundId && warn > 0) || warn > 1)
                     {
                     if (updateObj)

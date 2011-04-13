@@ -116,6 +116,8 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 #define ENCODE_EXP_ACC_PREFIX   "wgEncodeE"
 #define ENCODE_EXP_TABLE_LOCK   "lock_encodeExp"
 
+#define ENCODE_EXP_IX_UNDEFINED 0
+
 #define ENCODE_EXP_HISTORY_TABLE_SUFFIX "History"
 
 void encodeExpFieldIndex(char *fieldName);

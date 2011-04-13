@@ -602,7 +602,7 @@ struct encodeExp *encodeExpFromMdbVars(char *db, struct mdbVar *vars)
 {
 struct encodeExp *exp;
 AllocVar(exp);
-exp->ix = 0; // This exp is not yet defined
+exp->ix = ENCODE_EXP_IX_UNDEFINED; // This exp is not yet defined
 
 if (db == NULL)
     errAbort("Missing assembly");
@@ -932,23 +932,16 @@ struct encodeExp *exp = encodeExpFromMdbVars(db,vars);
 struct slPair *edvVars = slPairListFromString(exp->expVars,FALSE); // don't expect quoted EDVs which should always be simple tokens.
 
 struct encodeExp *expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
-slPairFreeValsAndList(&edvVars);
-if (expFound)
+if (expFound == NULL)
     {
-    // No longer needed
-    encodeExpFree(&exp);
-    slPairFreeValsAndList(&edvVars);
-    return expFound;
+    struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
+    encodeExpAdd(conn, table, exp);
+    sqlDisconnect(&conn);
+    expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
     }
-
-struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
-encodeExpAdd(conn, table, exp);
-sqlDisconnect(&conn);
-
-// No longer needed
+encodeExpFree(&exp);
 slPairFreeValsAndList(&edvVars);
-
-return exp;
+return expFound;
 }
 
 int encodeExpExists(char *db, struct mdbVar *vars)
