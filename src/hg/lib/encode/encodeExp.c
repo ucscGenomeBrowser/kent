@@ -561,8 +561,10 @@ encodExpAddTriggers(conn, tableName);
 struct encodeExp *encodeExpLoadAllFromTable(struct sqlConnection *conn, char *tableName)
 /* Load all encodeExp in table */
 {
-struct encodeExp *exps;
+struct encodeExp *exps = NULL;
 
+if (!sqlTableExists(conn, tableName))
+    return NULL;
 struct dyString *dy = newDyString(0);
 dyStringPrintf(dy, "select * from %s", tableName);
 exps = encodeExpLoadByQuery(conn, dyStringContents(dy));
@@ -581,9 +583,9 @@ if (edVars == NULL)
     {  // Not willing to make these erraborts at this time.
     char *composite = mdbObjFindValue(mdb,MDB_VAR_COMPOSITE);
     if (composite == NULL)
-        verbose(1,"MDB object '%s' does not have a composite defined\n",mdb->obj);
+        verbose(1,"MDB object '%s' does not have a composite defined in user metaDb\n",mdb->obj);
     else
-        verbose(1,"Experiment Defining Variables not defined for composite '%s'\n",composite);
+        verbose(1,"Experiment Defining Variables not defined for composite '%s' in user metaDb\n",composite);
     return NULL;
     }
 struct encodeExp *exp = encodeExpFromMdbVars(db, edVars);
@@ -614,7 +616,7 @@ for(;edv != NULL; edv = edv->next)
     if (sameWord(edv->var,MDB_VAR_LAB))
         {
         assert(exp->lab == NULL);
-        exp->lab = cloneString((char *)(edv->val));
+        exp->lab = cvLabNormalize((char *)(edv->val));
         }
     else if (sameWord(edv->var,MDB_VAR_DATATYPE))
         {
@@ -627,7 +629,11 @@ for(;edv != NULL; edv = edv->next)
         exp->cellType = cloneString((char *)(edv->val));
         }
     else
-        slPairAdd(&varPairs, edv->var, edv->val); // No need to clone
+        {
+        // exclude uninformative EDV's
+        if (differentString("None", (char *)(edv->val)))
+            slPairAdd(&varPairs, edv->var, edv->val); // No need to clone
+        }
     }
 
 // Be sure we have what we need
