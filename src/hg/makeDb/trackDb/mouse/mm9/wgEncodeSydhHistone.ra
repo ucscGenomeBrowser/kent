@@ -27,7 +27,6 @@
 
 
 track wgEncodeSydhHist
-release alpha
 compositeTrack on
 shortLabel Stan/Yale Histone
 longLabel Histone Modifications by ChIP-seq from ENCODE/Stanford/Yale
@@ -54,7 +53,6 @@ wgEncode 1
 
 	#####Peak Tracks###########
 	track wgEncodeSydhHistViewPeaks
-	release alpha
 	shortLabel Peaks
 	view Peaks
 	visibility dense
@@ -68,78 +66,71 @@ wgEncode 1
 	qValueFilterLimits 0:300
   
 		#### Submission 1166 ####
-   		track wgEncodeSydhHistMelH3k4me3IggyalePk
-   		release alpha
-    		subTrack wgEncodeSydhHistViewPeaks 
-    		shortLabel MEL H3K4me3 Pk
-                longLabel MEL H3K4me3 Histone Modifications Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=None
-    		type narrowPeak
-    		color 46,0,184 
+		track wgEncodeSydhHistMelH3k4me3IggyalePk
+		subTrack wgEncodeSydhHistViewPeaks 
+		shortLabel MEL H3K4me3 Pk
+		longLabel MEL H3K4me3 Histone Modifications Peaks from ENCODE/Stanford/Yale
+		subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=None
+		type narrowPeak
+		color 46,0,184 
 
 		
 		#### Submission 1194 ####
-    		track wgEncodeSydhHistCh12H3k4me3IggyalePk
-    		release alpha
-    		subTrack wgEncodeSydhHist 
-    		shortLabel CH12 H3K4me3 Pk
-                longLabel CH12 H3K4me3 Histone Modifications Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=H3K4me3 cellType=CH12 control=IGGYale treatment=None
-    		type narrowPeak
-    		color 153,38,0
+		track wgEncodeSydhHistCh12H3k4me3IggyalePk
+		subTrack wgEncodeSydhHist 
+		shortLabel CH12 H3K4me3 Pk
+		longLabel CH12 H3K4me3 Histone Modifications Peaks from ENCODE/Stanford/Yale
+		subGroups view=Peaks factor=H3K4me3 cellType=CH12 control=IGGYale treatment=None
+		type narrowPeak
+		color 153,38,0
 
 
 	#####Signal Tracks###########
 	track wgEncodeSydhHistViewSig
-	release alpha
 	shortLabel Signal
 	view Signal
 	visibility full
 	#viewUi 
 	subTrack wgEncodeSydhHist
-    	viewLimits 10:20
-    	autoScale off
-    	maxHeightPixels 100:16:16
-    	windowingFunction mean
+	viewLimits 10:20
+	autoScale off
+	maxHeightPixels 100:16:16
+	windowingFunction mean
 	
 
 		#### Submission 1166 ####
-    		track wgEncodeSydhHistMelH3k4me3IggyaleSig
-    		release alpha
-    		subTrack wgEncodeSydhHistViewSig 
-    		shortLabel MEL H3K4me3 Sg
-                longLabel MEL H3K4me3 Histone Modifications Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=H3K4me3 cellType=MEL control=IGGYale treatment=None
-    		type bigWig 1 38729
-    		color 46,0,184 
+		track wgEncodeSydhHistMelH3k4me3IggyaleSig
+		subTrack wgEncodeSydhHistViewSig 
+		shortLabel MEL H3K4me3 Sg
+		longLabel MEL H3K4me3 Histone Modifications Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=H3K4me3 cellType=MEL control=IGGYale treatment=None
+		type bigWig 1 38729
+		color 46,0,184 
 
 		#### Submission 1168 ####
-    		track wgEncodeSydhHistMelInputIggyaleSig
-    		release alpha
-    		subTrack wgEncodeSydhHistViewSig off
-    		shortLabel MEL IgGYale Sg 
-                longLabel MEL IgG-Yale Input Histone Modifications Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=None
-    		type bigWig 1 80497
-    		color 46,0,184
+		track wgEncodeSydhHistMelInputIggyaleSig
+		subTrack wgEncodeSydhHistViewSig off
+		shortLabel MEL IgGYale Sg 
+		longLabel MEL IgG-Yale Input Histone Modifications Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=None
+		type bigWig 1 80497
+		color 46,0,184
 
 		#### Submision 1194 ####
-   		track wgEncodeSydhHistCh12H3k4me3IggyaleSig
-    		release alpha
-    		subTrack wgEncodeSydhHistViewSig 
-    		shortLabel CH12 H3K4me3 Sg
-                longLabel CH12 H3K4me3 Histone Modifications Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=H3K4me3 cellType=CH12 control=IGGYale treatment=None
-    		type bigWig 1.000000 45491.000000
-    		color 153,38,0
+		track wgEncodeSydhHistCh12H3k4me3IggyaleSig
+		subTrack wgEncodeSydhHistViewSig 
+		shortLabel CH12 H3K4me3 Sg
+		longLabel CH12 H3K4me3 Histone Modifications Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=H3K4me3 cellType=CH12 control=IGGYale treatment=None
+		type bigWig 1.000000 45491.000000
+		color 153,38,0
 
 		#### Submission 1195 #####
 		track wgEncodeSydhHistCh12InputIggyaleSig
-		release alpha
-    		subTrack wgEncodeSydhHistViewSig off 
-    		shortLabel CH12 IgGYale Sg
-                longLabel CH12 IgG-Yale Input Histone Modifications Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=zInputIGGYALE cellType=CH12 control=IGGYale treatment=None
-    		type bigWig 1.000000 59055.000000
-    		color 153,38,0
+		subTrack wgEncodeSydhHistViewSig off 
+		shortLabel CH12 IgGYale Sg
+		longLabel CH12 IgG-Yale Input Histone Modifications Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=zInputIGGYALE cellType=CH12 control=IGGYale treatment=None
+		type bigWig 1.000000 59055.000000
+		color 153,38,0
 
