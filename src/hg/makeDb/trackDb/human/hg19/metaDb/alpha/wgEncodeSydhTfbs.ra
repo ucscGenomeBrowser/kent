@@ -1281,7 +1281,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdAlnRep1.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -1302,7 +1302,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdAlnRep2.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -1323,7 +1323,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdPk.narrowPeak.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1345,7 +1345,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdRawDataRep1.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -1366,7 +1366,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdRawDataRep2.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -1387,7 +1387,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
 fileName wgEncodeSydhTfbsGm12878Gcn5StdSig.bigWig
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3980,7 +3980,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdAlnRep1.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -4001,7 +4001,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdAlnRep2.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -4022,7 +4022,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdPk.narrowPeak.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4044,7 +4044,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdRawDataRep1.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -4065,7 +4065,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdRawDataRep2.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -4086,7 +4086,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsGm12878Spt20StdSig.bigWig
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -18679,7 +18679,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdAlnRep1.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -18700,7 +18700,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdAlnRep2.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -18721,7 +18721,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdPk.narrowPeak.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -18743,7 +18743,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdRawDataRep1.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein A Sepharose
 project wgEncode
 replicate 1
@@ -18765,7 +18765,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdRawDataRep2.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein A Sepharose
 project wgEncode
 replicate 2
@@ -18787,7 +18787,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3StdSig.bigWig
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -33421,7 +33421,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01bStdAln.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 setType input
 subId 3256
@@ -33441,7 +33441,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01bStdRawData.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 setType input
 subId 3256
@@ -33461,7 +33461,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01bStdSig.bigWig
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -33483,7 +33483,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01cStdAln.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 setType input
 subId 3255
@@ -33503,7 +33503,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01cStdRawData.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 setType input
 subId 3255
@@ -33523,7 +33523,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesInputEtoh01cStdSig.bigWig
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -33739,7 +33739,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep1.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep1
 project wgEncode
 replicate 1
@@ -33761,7 +33761,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep2.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep2
 project wgEncode
 replicate 2
@@ -33783,7 +33783,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdPk.narrowPeak.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -33805,7 +33805,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdRawDataRep1.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdRawSignalRep1
 project wgEncode
 replicate 1
@@ -33827,7 +33827,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdRawDataRep2.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdRawSignalRep2
 project wgEncode
 replicate 2
@@ -33849,7 +33849,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdSig.bigWig
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -33871,7 +33871,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1
 project wgEncode
 replicate 1
@@ -33893,7 +33893,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2
 project wgEncode
 replicate 2
@@ -33915,7 +33915,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdPk.narrowPeak.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -33937,7 +33937,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep1.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -33959,7 +33959,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep2.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -33981,7 +33981,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdSig.bigWig
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -34003,7 +34003,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdAlnRep1.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -34024,7 +34024,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdAlnRep2.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -34045,7 +34045,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdPk.narrowPeak.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -34067,7 +34067,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdRawDataRep1.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -34088,7 +34088,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdRawDataRep2.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -34109,7 +34109,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdSig.bigWig
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -34259,7 +34259,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep1.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep1
 project wgEncode
 replicate 1
@@ -34281,7 +34281,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep2.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep2
 project wgEncode
 replicate 2
@@ -34303,7 +34303,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdPk.narrowPeak.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -34325,7 +34325,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdRawDataRep1.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdRawSignalRep1
 project wgEncode
 replicate 1
@@ -34347,7 +34347,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdRawDataRep2.fastq.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdRawSignalRep2
 project wgEncode
 replicate 2
@@ -34369,7 +34369,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdSig.bigWig
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -36772,4 +36772,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1225111796
+# MAGIC: 673117196

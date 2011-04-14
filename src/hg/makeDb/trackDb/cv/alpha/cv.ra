@@ -8205,7 +8205,7 @@ label Methyl RRBS
 description Methyl RRBS
 
 # tag not standard to match hg18
-term Nre
+term NRE
 tag NRE
 type dataType
 description Negative Regulatory Elements
@@ -8844,7 +8844,7 @@ labPiFull Michael Snyder
 grantPi Snyder
 organism human
 
-term Harvard(Weissman)
+term Yale-Weissman
 tag  YaleWeis
 type lab
 label Weissman - Yale University
@@ -9239,7 +9239,7 @@ label  Transcriptome Bio-Replicate ID
 description Cross Transcriptome sample ID number.
 searchable no
 cvDefined no
-validate regex: ^[0-9][0-9][0-9][A-Z]*$
+validate regex: ^[0-9][0-9][0-9][A-Z,0-9]*$
 priority 500
 
 term cellType
@@ -9568,7 +9568,7 @@ label md5sum
 description The md5sum for the file associated with the object.
 searchable no
 cvDefined no
-validate regex: ^([0-9a-f]){32,32}$
+validate regex: ^[0-9a-f]*$
 priority 500
 
 term obtainedBy
