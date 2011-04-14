@@ -1,7 +1,7 @@
 metaObject wgEncodeGisDnaPet
 objType composite
 composite wgEncodeGisDnaPet
-expVars lab,dataType,cell,fragsize
+expVars lab,dataType,cell,fragSize
 
 metaObject wgEncodeGisDnaPetAlignmentsGm1287810k
 objType table
@@ -553,4 +553,4 @@ project wgEncode
 subId 1075
 view Qual5p
 
-# MAGIC: 184825203
+# MAGIC: 184823123

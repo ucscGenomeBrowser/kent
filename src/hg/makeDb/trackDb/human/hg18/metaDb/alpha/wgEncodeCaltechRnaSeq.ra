@@ -1,7 +1,7 @@
 metaObject wgEncodeCaltechRnaSeq
 objType composite
 composite wgEncodeCaltechRnaSeq
-expVars cell,localization,readType,insertLength,replicate
+expVars lab,dataType, cell,localization,readType,insertLength
 geoSeries GSE23316
 
 metaObject wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32
@@ -16,7 +16,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591674
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm bow098
@@ -40,7 +40,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellPapBb2R1x75d.bed12.gz
 geoSample GSM591664
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -64,7 +64,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep1H1hescCellPapBb2R1x75d.bed12.gz
 geoSample GSM572173
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -88,7 +88,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep1Helas3CellPapBb2R1x75d.bed12.gz
 geoSample GSM591670
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -112,7 +112,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep1Hepg2CellPapBb2R1x75d.bed12.gz
 geoSample GSM591665
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -136,7 +136,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep1HuvecCellPapBb2R1x75d.bed12.gz
 geoSample GSM591655
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -160,7 +160,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591675
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm bow098
@@ -184,7 +184,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep1K562CellPapBb2R1x75d.bed12.gz
 geoSample GSM591679
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -208,7 +208,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep1NhekCellPapBb2R1x75d.bed12.gz
 geoSample GSM591681
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -232,7 +232,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591657
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm bow098
@@ -256,7 +256,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellPapBb2R1x75d.bed12.gz
 geoSample GSM591669
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -280,7 +280,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep2H1hescCellPapBb2R1x75d.bed12.gz
 geoSample GSM591680
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -304,7 +304,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep2Helas3CellPapBb2R1x75d.bed12.gz
 geoSample GSM591671
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -328,7 +328,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep2Hepg2CellPapBb2R1x75d.bed12.gz
 geoSample GSM591677
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -352,7 +352,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep2HuvecCellPapBb2R1x75d.bed12.gz
 geoSample GSM591683
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -376,7 +376,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591667
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm bow098
@@ -400,7 +400,7 @@ fileName wgEncodeCaltechRnaSeqAlignsRep2K562CellPapBb2R1x75d.bed12.gz
 geoSample GSM591660
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -425,7 +425,7 @@ geoSample GSM591658
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -449,7 +449,7 @@ geoSample GSM572172
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -473,7 +473,7 @@ geoSample GSM591682
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -497,7 +497,7 @@ geoSample GSM591672
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -521,7 +521,7 @@ geoSample GSM591663
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -545,7 +545,7 @@ geoSample GSM591656
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -569,7 +569,7 @@ geoSample GSM591684
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -593,7 +593,7 @@ geoSample GSM591652
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -617,7 +617,7 @@ geoSample GSM591659
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -641,7 +641,7 @@ geoSample GSM591653
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -665,7 +665,7 @@ geoSample GSM591678
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -689,7 +689,7 @@ geoSample GSM591676
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -713,7 +713,7 @@ geoSample GSM591685
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -735,7 +735,7 @@ dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep5H1hescCellPapNaR2x75.fastq.gz
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -759,7 +759,7 @@ geoSample GSM591658
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -783,7 +783,7 @@ geoSample GSM572172
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -807,7 +807,7 @@ geoSample GSM591682
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -831,7 +831,7 @@ geoSample GSM591672
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -855,7 +855,7 @@ geoSample GSM591663
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -879,7 +879,7 @@ geoSample GSM591656
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -903,7 +903,7 @@ geoSample GSM591684
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -927,7 +927,7 @@ geoSample GSM591652
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -951,7 +951,7 @@ geoSample GSM591659
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -975,7 +975,7 @@ geoSample GSM591653
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -999,7 +999,7 @@ geoSample GSM591678
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1023,7 +1023,7 @@ geoSample GSM591676
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1047,7 +1047,7 @@ geoSample GSM591685
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1069,7 +1069,7 @@ dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep5H1hescCellPapNaR2x75.fastq.gz
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1092,7 +1092,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep1Gm12878CellPapNaR1x75d.fastq.gz
 geoSample GSM591664
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1115,7 +1115,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep1H1hescCellPapNaR1x75d.fastq.gz
 geoSample GSM572173
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1138,7 +1138,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep1Helas3CellPapNaR1x75d.fastq.gz
 geoSample GSM591670
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1161,7 +1161,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x32.fastq.gz
 geoSample GSM591654
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1184,7 +1184,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x75d.fastq.gz
 geoSample GSM591665
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1207,7 +1207,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep1HuvecCellPapNaR1x75d.fastq.gz
 geoSample GSM591655
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1230,7 +1230,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep1K562CellPapNaR1x75d.fastq.gz
 geoSample GSM591679
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1253,7 +1253,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep1NhekCellPapNaR1x75d.fastq.gz
 geoSample GSM591681
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1276,7 +1276,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep2Gm12878CellPapNaR1x75d.fastq.gz
 geoSample GSM591669
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1299,7 +1299,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep2H1hescCellPapNaR1x75d.fastq.gz
 geoSample GSM591680
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1322,7 +1322,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep2Helas3CellPapNaR1x75d.fastq.gz
 geoSample GSM591671
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1345,7 +1345,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x32.fastq.gz
 geoSample GSM591662
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1368,7 +1368,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x75d.fastq.gz
 geoSample GSM591677
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1391,7 +1391,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep2HuvecCellPapNaR1x75d.fastq.gz
 geoSample GSM591683
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1414,7 +1414,7 @@ fileName wgEncodeCaltechRnaSeqFastqRep2K562CellPapNaR1x75d.fastq.gz
 geoSample GSM591660
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
@@ -1436,7 +1436,7 @@ dateUnrestricted 2011-04-14
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 localization cell
 mapAlgorithm NA
 project wgEncode
@@ -1456,7 +1456,7 @@ dateUnrestricted 2011-04-14
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 localization cell
 mapAlgorithm NA
 project wgEncode
@@ -1476,7 +1476,7 @@ dateUnrestricted 2011-04-14
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 localization cell
 mapAlgorithm NA
 project wgEncode
@@ -1496,7 +1496,7 @@ dateUnrestricted 2011-04-14
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 localization cell
 mapAlgorithm NA
 project wgEncode
@@ -1516,7 +1516,7 @@ dateUnrestricted 2011-04-14
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 localization cell
 mapAlgorithm NA
 project wgEncode
@@ -1536,7 +1536,7 @@ dateUnrestricted 2011-04-14
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 localization cell
 mapAlgorithm NA
 project wgEncode
@@ -1556,7 +1556,7 @@ dateUnrestricted 2011-04-14
 fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 localization cell
 mapAlgorithm NA
 project wgEncode
@@ -1576,7 +1576,7 @@ dateUnrestricted 2011-04-14
 fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 localization cell
 mapAlgorithm NA
 project wgEncode
@@ -1597,7 +1597,7 @@ fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1Gm12878CellPapBb2R1x75d.wig.gz
 geoSample GSM591664
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -1621,7 +1621,7 @@ fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1H1hescCellPapBb2R1x75d.wig.gz
 geoSample GSM572173
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -1645,7 +1645,7 @@ fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1Helas3CellPapBb2R1x75d.wig.gz
 geoSample GSM591670
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -1669,7 +1669,7 @@ fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1Hepg2CellPapBb2R1x75d.wig.gz
 geoSample GSM591665
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -1693,7 +1693,7 @@ fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1HuvecCellPapBb2R1x75d.wig.gz
 geoSample GSM591655
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -1717,7 +1717,7 @@ fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1K562CellPapBb2R1x75d.wig.gz
 geoSample GSM591679
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -1741,7 +1741,7 @@ fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1NhekCellPapBb2R1x75d.wig.gz
 geoSample GSM591681
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -1765,7 +1765,7 @@ fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2Gm12878CellPapBb2R1x75d.wig.gz
 geoSample GSM591669
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -1789,7 +1789,7 @@ fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2H1hescCellPapBb2R1x75d.wig.gz
 geoSample GSM591680
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -1813,7 +1813,7 @@ fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2Helas3CellPapBb2R1x75d.wig.gz
 geoSample GSM591671
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -1837,7 +1837,7 @@ fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2Hepg2CellPapBb2R1x75d.wig.gz
 geoSample GSM591677
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -1861,7 +1861,7 @@ fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2HuvecCellPapBb2R1x75d.wig.gz
 geoSample GSM591683
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -1885,7 +1885,7 @@ fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2K562CellPapBb2R1x75d.wig.gz
 geoSample GSM591660
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -1910,7 +1910,7 @@ geoSample GSM591661
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -1935,7 +1935,7 @@ geoSample GSM591658
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -1960,7 +1960,7 @@ geoSample GSM572172
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -1985,7 +1985,7 @@ geoSample GSM591682
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2009,7 +2009,7 @@ fileName wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR1x32.bed12.gz
 geoSample GSM591654
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2034,7 +2034,7 @@ geoSample GSM591672
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2059,7 +2059,7 @@ geoSample GSM591663
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2084,7 +2084,7 @@ geoSample GSM591666
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -2109,7 +2109,7 @@ geoSample GSM591656
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2134,7 +2134,7 @@ geoSample GSM591673
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -2159,7 +2159,7 @@ geoSample GSM591684
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2184,7 +2184,7 @@ geoSample GSM591652
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2209,7 +2209,7 @@ geoSample GSM591659
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2233,7 +2233,7 @@ fileName wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR1x32.bed12.gz
 geoSample GSM591662
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2258,7 +2258,7 @@ geoSample GSM591653
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2283,7 +2283,7 @@ geoSample GSM591678
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2308,7 +2308,7 @@ geoSample GSM591668
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -2333,7 +2333,7 @@ geoSample GSM591676
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2358,7 +2358,7 @@ geoSample GSM591685
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2381,7 +2381,7 @@ dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqPairedRep5H1hescCellPapErng32aR2x75.bed12.gz
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -2405,7 +2405,7 @@ fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1Gm12878CellPapBb2R1x75d.wig.gz
 geoSample GSM591664
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -2429,7 +2429,7 @@ fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1H1hescCellPapBb2R1x75d.wig.gz
 geoSample GSM572173
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -2453,7 +2453,7 @@ fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1Helas3CellPapBb2R1x75d.wig.gz
 geoSample GSM591670
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -2477,7 +2477,7 @@ fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1Hepg2CellPapBb2R1x75d.wig.gz
 geoSample GSM591665
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -2501,7 +2501,7 @@ fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1HuvecCellPapBb2R1x75d.wig.gz
 geoSample GSM591655
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -2525,7 +2525,7 @@ fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1K562CellPapBb2R1x75d.wig.gz
 geoSample GSM591679
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -2549,7 +2549,7 @@ fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1NhekCellPapBb2R1x75d.wig.gz
 geoSample GSM591681
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -2573,7 +2573,7 @@ fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2Gm12878CellPapBb2R1x75d.wig.gz
 geoSample GSM591669
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -2597,7 +2597,7 @@ fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2H1hescCellPapBb2R1x75d.wig.gz
 geoSample GSM591680
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -2621,7 +2621,7 @@ fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2Helas3CellPapBb2R1x75d.wig.gz
 geoSample GSM591671
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -2645,7 +2645,7 @@ fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2Hepg2CellPapBb2R1x75d.wig.gz
 geoSample GSM591677
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -2669,7 +2669,7 @@ fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2HuvecCellPapBb2R1x75d.wig.gz
 geoSample GSM591683
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -2693,7 +2693,7 @@ fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2K562CellPapBb2R1x75d.wig.gz
 geoSample GSM591660
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -2718,7 +2718,7 @@ geoSample GSM591661
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
@@ -2742,7 +2742,7 @@ geoSample GSM591666
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
@@ -2766,7 +2766,7 @@ geoSample GSM591673
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
@@ -2790,7 +2790,7 @@ geoSample GSM591668
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
@@ -2814,7 +2814,7 @@ geoSample GSM591661
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
@@ -2838,7 +2838,7 @@ geoSample GSM591666
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
@@ -2862,7 +2862,7 @@ geoSample GSM591673
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
@@ -2886,7 +2886,7 @@ geoSample GSM591668
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
@@ -2910,7 +2910,7 @@ geoSample GSM591661
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -2934,7 +2934,7 @@ geoSample GSM591666
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -2958,7 +2958,7 @@ geoSample GSM591673
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -2982,7 +2982,7 @@ geoSample GSM591668
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -3006,7 +3006,7 @@ geoSample GSM591661
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
@@ -3029,7 +3029,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellLongpolyaErng3b1x32.rpkm.gz
 geoSample GSM591674
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
@@ -3052,7 +3052,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591664
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3075,7 +3075,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep1H1hescCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM572173
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3099,7 +3099,7 @@ geoSample GSM591658
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3123,7 +3123,7 @@ geoSample GSM572172
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3146,7 +3146,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep1Helas3CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591670
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3170,7 +3170,7 @@ geoSample GSM591682
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3193,7 +3193,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR1x32.rpkm.gz
 geoSample GSM591654
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3216,7 +3216,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591665
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3240,7 +3240,7 @@ geoSample GSM591672
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3263,7 +3263,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep1HuvecCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591655
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3287,7 +3287,7 @@ geoSample GSM591663
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3311,7 +3311,7 @@ geoSample GSM591666
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
@@ -3334,7 +3334,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep1K562CellLongpolyaErng3b1x32.rpkm.gz
 geoSample GSM591675
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
@@ -3357,7 +3357,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep1K562CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591679
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3380,7 +3380,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep1NhekCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591681
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3404,7 +3404,7 @@ geoSample GSM591656
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3428,7 +3428,7 @@ geoSample GSM591673
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
@@ -3451,7 +3451,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellLongpolyaErng3b1x32.rpkm.gz
 geoSample GSM591657
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
@@ -3474,7 +3474,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591669
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3498,7 +3498,7 @@ geoSample GSM591684
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3521,7 +3521,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep2H1hescCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591680
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3545,7 +3545,7 @@ geoSample GSM591652
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3568,7 +3568,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep2Helas3CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591671
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3592,7 +3592,7 @@ geoSample GSM591659
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3615,7 +3615,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR1x32.rpkm.gz
 geoSample GSM591662
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3638,7 +3638,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591677
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3662,7 +3662,7 @@ geoSample GSM591653
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3685,7 +3685,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep2HuvecCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591683
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3709,7 +3709,7 @@ geoSample GSM591678
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3733,7 +3733,7 @@ geoSample GSM591668
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
@@ -3756,7 +3756,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep2K562CellLongpolyaErng3b1x32.rpkm.gz
 geoSample GSM591667
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
@@ -3779,7 +3779,7 @@ fileName wgEncodeCaltechRnaSeqRawData5Rep2K562CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591660
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3803,7 +3803,7 @@ geoSample GSM591676
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3827,7 +3827,7 @@ geoSample GSM591685
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3849,7 +3849,7 @@ dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData5Rep5H1hescCellPapErng32aR2x75.rpkm.gz
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3873,7 +3873,7 @@ geoSample GSM591661
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
@@ -3896,7 +3896,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep1Gm12878CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591664
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3919,7 +3919,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep1H1hescCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM572173
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3943,7 +3943,7 @@ geoSample GSM591658
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3967,7 +3967,7 @@ geoSample GSM572172
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -3990,7 +3990,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep1Helas3CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591670
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4014,7 +4014,7 @@ geoSample GSM591682
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4037,7 +4037,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR1x32.rpkm.gz
 geoSample GSM591654
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4060,7 +4060,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591665
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4084,7 +4084,7 @@ geoSample GSM591672
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4107,7 +4107,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep1HuvecCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591655
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4131,7 +4131,7 @@ geoSample GSM591663
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4155,7 +4155,7 @@ geoSample GSM591666
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
@@ -4178,7 +4178,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep1K562CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591679
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4201,7 +4201,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep1NhekCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591681
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4225,7 +4225,7 @@ geoSample GSM591656
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4249,7 +4249,7 @@ geoSample GSM591673
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
@@ -4272,7 +4272,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep2Gm12878CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591669
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4296,7 +4296,7 @@ geoSample GSM591684
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4319,7 +4319,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep2H1hescCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591680
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4343,7 +4343,7 @@ geoSample GSM591652
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4366,7 +4366,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep2Helas3CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591671
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4390,7 +4390,7 @@ geoSample GSM591659
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4413,7 +4413,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR1x32.rpkm.gz
 geoSample GSM591662
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4436,7 +4436,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591677
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4460,7 +4460,7 @@ geoSample GSM591653
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4483,7 +4483,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep2HuvecCellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591683
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4507,7 +4507,7 @@ geoSample GSM591678
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4531,7 +4531,7 @@ geoSample GSM591668
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
@@ -4554,7 +4554,7 @@ fileName wgEncodeCaltechRnaSeqRawData6Rep2K562CellPapErng32aR1x75d.rpkm.gz
 geoSample GSM591660
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4578,7 +4578,7 @@ geoSample GSM591676
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4602,7 +4602,7 @@ geoSample GSM591685
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4624,7 +4624,7 @@ dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData6Rep5H1hescCellPapErng32aR2x75.rpkm.gz
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
@@ -4648,7 +4648,7 @@ geoSample GSM591661
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
@@ -4672,7 +4672,7 @@ geoSample GSM591666
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
@@ -4696,7 +4696,7 @@ geoSample GSM591673
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
@@ -4720,7 +4720,7 @@ geoSample GSM591668
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
@@ -4744,7 +4744,7 @@ geoSample GSM591661
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 localization cell
 mapAlgorithm NA
 project wgEncode
@@ -4767,7 +4767,7 @@ geoSample GSM591666
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 localization cell
 mapAlgorithm NA
 project wgEncode
@@ -4790,7 +4790,7 @@ geoSample GSM591673
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 localization cell
 mapAlgorithm NA
 project wgEncode
@@ -4813,7 +4813,7 @@ geoSample GSM591668
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 localization cell
 mapAlgorithm NA
 project wgEncode
@@ -4836,7 +4836,7 @@ geoSample GSM591661
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -4860,7 +4860,7 @@ fileName wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32.wig.gz
 geoSample GSM591674
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
@@ -4885,7 +4885,7 @@ geoSample GSM591658
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -4910,7 +4910,7 @@ geoSample GSM572172
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -4935,7 +4935,7 @@ geoSample GSM591682
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -4959,7 +4959,7 @@ fileName wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R1x32.wig.gz
 geoSample GSM591654
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -4984,7 +4984,7 @@ geoSample GSM591672
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5009,7 +5009,7 @@ geoSample GSM591663
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5034,7 +5034,7 @@ geoSample GSM591666
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -5058,7 +5058,7 @@ fileName wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32.wig.gz
 geoSample GSM591675
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
@@ -5083,7 +5083,7 @@ geoSample GSM591656
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5108,7 +5108,7 @@ geoSample GSM591673
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -5132,7 +5132,7 @@ fileName wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32.wig.gz
 geoSample GSM591657
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
@@ -5157,7 +5157,7 @@ geoSample GSM591684
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5182,7 +5182,7 @@ geoSample GSM591652
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5207,7 +5207,7 @@ geoSample GSM591659
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5231,7 +5231,7 @@ fileName wgEncodeCaltechRnaSeqRawSignalRep2Hepg2CellPapBb2R1x32.wig.gz
 geoSample GSM591662
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5256,7 +5256,7 @@ geoSample GSM591653
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5281,7 +5281,7 @@ geoSample GSM591678
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5306,7 +5306,7 @@ geoSample GSM591668
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -5330,7 +5330,7 @@ fileName wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32.wig.gz
 geoSample GSM591667
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
@@ -5355,7 +5355,7 @@ geoSample GSM591676
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5380,7 +5380,7 @@ geoSample GSM591685
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5403,7 +5403,7 @@ dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawSignalRep5H1hescCellPapBb2R2x75.wig.gz
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5428,7 +5428,7 @@ geoSample GSM591661
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -5453,7 +5453,7 @@ geoSample GSM591661
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0/blat34
 localization cell
 mapAlgorithm blat34
@@ -5477,7 +5477,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591674
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta/bowtie0.981
 localization cell
 mapAlgorithm bow098
@@ -5501,7 +5501,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75d.bed12.gz
 geoSample GSM591664
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5525,7 +5525,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591664
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
@@ -5549,7 +5549,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBb2R1x75d.bed12.gz
 geoSample GSM572173
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5574,7 +5574,7 @@ geoSample GSM591658
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5599,7 +5599,7 @@ geoSample GSM572172
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5623,7 +5623,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBlat34R1x75d.bed12.gz
 geoSample GSM572173
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
@@ -5647,7 +5647,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1Helas3CellPapBb2R1x75d.bed12.gz
 geoSample GSM591670
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5672,7 +5672,7 @@ geoSample GSM591682
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5696,7 +5696,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1Helas3CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591670
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
@@ -5720,7 +5720,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R1x32.bed12.gz
 geoSample GSM591654
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5744,7 +5744,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R1x75d.bed12.gz
 geoSample GSM591665
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5769,7 +5769,7 @@ geoSample GSM591672
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5793,7 +5793,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591665
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
@@ -5817,7 +5817,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1HuvecCellPapBb2R1x75d.bed12.gz
 geoSample GSM591655
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5842,7 +5842,7 @@ geoSample GSM591663
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5866,7 +5866,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1HuvecCellPapBlat34R1x75d.bed12.gz
 geoSample GSM591655
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
@@ -5891,7 +5891,7 @@ geoSample GSM591666
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -5916,7 +5916,7 @@ geoSample GSM591666
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0/blat34
 localization cell
 mapAlgorithm blat34
@@ -5940,7 +5940,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591675
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta/bowtie0.981
 localization cell
 mapAlgorithm bow098
@@ -5964,7 +5964,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBb2R1x75d.bed12.gz
 geoSample GSM591679
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -5988,7 +5988,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591679
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
@@ -6012,7 +6012,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1NhekCellPapBb2R1x75d.bed12.gz
 geoSample GSM591681
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6037,7 +6037,7 @@ geoSample GSM591656
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6061,7 +6061,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep1NhekCellPapBlat34R1x75d.bed12.gz
 geoSample GSM591681
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
@@ -6086,7 +6086,7 @@ geoSample GSM591673
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -6111,7 +6111,7 @@ geoSample GSM591673
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1/blat34
 localization cell
 mapAlgorithm blat34
@@ -6135,7 +6135,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591657
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta/bowtie0.981
 localization cell
 mapAlgorithm bow098
@@ -6159,7 +6159,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R1x75d.bed12.gz
 geoSample GSM591669
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6184,7 +6184,7 @@ geoSample GSM591684
 geoSeries GSE23316
 grant Myers
 insertLength 400
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6208,7 +6208,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591669
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
@@ -6232,7 +6232,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2H1hescCellPapBb2R1x75d.bed12.gz
 geoSample GSM591680
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6257,7 +6257,7 @@ geoSample GSM591652
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6281,7 +6281,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2H1hescCellPapBlat34R1x75d.bed12.gz
 geoSample GSM591680
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
@@ -6305,7 +6305,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2Helas3CellPapBb2R1x75d.bed12.gz
 geoSample GSM591671
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6330,7 +6330,7 @@ geoSample GSM591659
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6354,7 +6354,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2Helas3CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591671
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
@@ -6378,7 +6378,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R1x32.bed12.gz
 geoSample GSM591662
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6402,7 +6402,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R1x75d.bed12.gz
 geoSample GSM591677
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6427,7 +6427,7 @@ geoSample GSM591653
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6451,7 +6451,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591677
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
@@ -6475,7 +6475,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2HuvecCellPapBb2R1x75d.bed12.gz
 geoSample GSM591683
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6500,7 +6500,7 @@ geoSample GSM591678
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6524,7 +6524,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2HuvecCellPapBlat34R1x75d.bed12.gz
 geoSample GSM591683
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
@@ -6549,7 +6549,7 @@ geoSample GSM591668
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
@@ -6574,7 +6574,7 @@ geoSample GSM591668
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0.1/blat34
 localization cell
 mapAlgorithm blat34
@@ -6598,7 +6598,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32.bed12.gz
 geoSample GSM591667
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion erange3.0beta/bowtie0.981
 localization cell
 mapAlgorithm bow098
@@ -6622,7 +6622,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBb2R1x75d.bed12.gz
 geoSample GSM591660
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6646,7 +6646,7 @@ fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBlat34R1x75d.bed12.gz
 geoSample GSM591660
 geoSeries GSE23316
 grant Myers
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
@@ -6671,7 +6671,7 @@ geoSample GSM591676
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6696,7 +6696,7 @@ geoSample GSM591685
 geoSeries GSE23316
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6719,7 +6719,7 @@ dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep5H1hescCellPapBb2R2x75.bed12.gz
 grant Myers
 insertLength 200
-lab Caltech(Wold)
+lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
@@ -6731,4 +6731,4 @@ subId 1065
 tableName wgEncodeCaltechRnaSeqSplicesRep5H1hescCellPapBb2R2x75
 view Splices
 
-# MAGIC: -1079039395
+# MAGIC: -801054170
