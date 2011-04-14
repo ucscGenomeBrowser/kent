@@ -535,13 +535,13 @@ sqlRemakeTable(conn, tableName, dyStringCannibalize(&dy));
 
 /* Create history table -- a clone with 2 additional columns (action, changedBy).
  * Remove auto-inc attribute on ix, and use ix and updateTime as primary key  */
-dy = dyStringCreate("CREATE TABLE %s%s LIKE %s", 
+dy = dyStringCreate("CREATE TABLE %s%s LIKE %s",
                 tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, tableName);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN action CHAR(1) DEFAULT ''", 
+dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN action CHAR(1) DEFAULT ''",
                         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN changedBy VARCHAR(77) NOT NULL", 
+dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN changedBy VARCHAR(77) NOT NULL",
                         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
 sqlUpdate(conn, dyStringCannibalize(&dy));
 dy = dyStringCreate("ALTER TABLE %s%s MODIFY COLUMN ix INT DEFAULT 0",
@@ -602,7 +602,7 @@ struct encodeExp *encodeExpFromMdbVars(char *db, struct mdbVar *vars)
 {
 struct encodeExp *exp;
 AllocVar(exp);
-exp->ix = 0; // This exp is not yet defined
+exp->ix = ENCODE_EXP_IX_UNDEFINED; // This exp is not yet defined
 
 if (db == NULL)
     errAbort("Missing assembly");
@@ -782,6 +782,16 @@ char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id)
 return encodeExpAccession(conn, tableName, id, TRUE);
 }
 
+void encodeExpSetAccession(struct encodeExp *exp, char *tableName)
+// Adds accession field to an existing experiment, updating the table.
+{
+struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
+
+exp->accession = encodeExpAccession(conn, tableName, exp->ix, TRUE);
+
+sqlDisconnect(&conn);
+}
+
 void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int id)
 /* Revoke an experiment by removing the accession.
 */
@@ -922,23 +932,16 @@ struct encodeExp *exp = encodeExpFromMdbVars(db,vars);
 struct slPair *edvVars = slPairListFromString(exp->expVars,FALSE); // don't expect quoted EDVs which should always be simple tokens.
 
 struct encodeExp *expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
-slPairFreeValsAndList(&edvVars);
-if (expFound)
+if (expFound == NULL)
     {
-    // No longer needed
-    encodeExpFree(&exp);
-    slPairFreeValsAndList(&edvVars);
-    return expFound;
+    struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
+    encodeExpAdd(conn, table, exp);
+    sqlDisconnect(&conn);
+    expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
     }
-
-struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
-encodeExpAdd(conn, table, exp);
-sqlDisconnect(&conn);
-
-// No longer needed
+encodeExpFree(&exp);
 slPairFreeValsAndList(&edvVars);
-
-return exp;
+return expFound;
 }
 
 int encodeExpExists(char *db, struct mdbVar *vars)
