@@ -100,9 +100,11 @@ char *trackHubString = cartOptionalString(cart, hubConnectTrackHubsVarName);
 return slNameListFromString(trackHubString, ' ');
 }
 
-struct hubConnectStatus *hubConnectStatusForId(struct sqlConnection *conn, int id)
+static struct hubConnectStatus *hubConnectStatusForIdDb(struct sqlConnection *conn, int id)
 /* Given a hub ID return associated status. Returns NULL if no such hub.  If hub
  * exists but has problems will return with errorMessage field filled in. */
+ /* If the id is negative, then the hub is private and the number is the
+  * offset into the private hubfile in the trash */
 {
 struct hubConnectStatus *hub = NULL;
 char query[1024];
@@ -128,6 +130,106 @@ sqlFreeResult(&sr);
 return hub;
 }
 
+boolean hubWriteToFile(FILE *f, struct hubConnectStatus *el)
+/* write out a hubConnectStatus structure to a file */
+{
+char sep = '\t';
+char lastSep = '\n';
+
+fprintf(f, "%d", el->id);
+fputc(sep,f);
+fprintf(f, "%s", el->shortLabel);
+fputc(sep,f);
+fprintf(f, "%s", el->longLabel);
+fputc(sep,f);
+fprintf(f, "%s", el->hubUrl);
+fputc(sep,f);
+fprintf(f, "%s", el->errorMessage);
+fputc(sep,f);
+fprintf(f, "%u", el->dbCount);
+fputc(sep,f);
+int ii;
+for(ii=0; ii < el->dbCount; ii++)
+    {
+    fprintf(f, "%s", el->dbArray[ii]);
+    if (ii != el->dbCount - 1)
+	fprintf(f, ",");
+    }
+fputc(lastSep,f);
+
+return TRUE;
+}
+
+
+static struct hubConnectStatus *readHubFromFile(struct lineFile *lf)
+{
+struct hubConnectStatus *hub = NULL;
+char *row[5];
+int count;
+if ((count = lineFileChopTab(lf, row)) != ArraySize(row))
+    errAbort("expect %d fields on line %d in %s, got %d\n",(int)ArraySize(row),lf->lineIx, lf->fileName, count);
+
+AllocVar(hub);
+hub->id = sqlSigned(row[0]);
+hub->shortLabel = cloneString(row[1]);
+hub->longLabel = cloneString(row[2]);
+hub->hubUrl = cloneString(row[3]);
+//hub->errorMessage = cloneString(row[4]);
+hub->dbCount = sqlUnsigned(row[4]);
+//int sizeOne;
+//sqlStringDynamicArray(row[5], &hub->dbArray, &sizeOne);
+//assert(sizeOne == hub->dbCount);
+
+return hub;
+}
+
+#define HUBFILE_CART_NAME	"hghub_file"
+
+char *hubFileVar()
+/* return the name of the cart variable that holds the name of the
+ * file in trash that has private hubs */
+{
+return HUBFILE_CART_NAME;
+}
+
+struct hubConnectStatus *hubConnectStatusForIdFile(struct cart *cart, int id)
+  /* id is offset into the private hubfile in the trash */
+{
+struct hubConnectStatus *hub = NULL;
+char *fileVar = hubFileVar();
+char *hubFileName = cartOptionalString(cart, fileVar);
+struct lineFile *lf = lineFileOpen(hubFileName, TRUE);
+int lineSize;
+char *line;
+int count = id;
+
+while(--count)
+    if (lineFileNext(lf, &line, &lineSize) == FALSE)
+	errAbort("not enough lines in %s to find line number %d\n",
+	    lf->fileName, id);
+
+hub = readHubFromFile(lf);
+
+return hub;
+}
+
+struct hubConnectStatus *hubConnectStatusForId(struct cart *cart, struct sqlConnection *conn, int id)
+/* Given a hub ID return associated status. Returns NULL if no such hub.  If hub
+ * exists but has problems will return with errorMessage field filled in. */
+ /* If the id is negative, then the hub is private and the number is the
+  * offset into the private hubfile in the trash */
+{
+struct hubConnectStatus *hub = NULL;
+
+if (id < 0)
+    hub = hubConnectStatusForIdFile(cart, -id);
+else
+    hub = hubConnectStatusForIdDb(conn, id);
+
+return hub;
+}
+
+
 struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart)
 /* Return list of track hubs that are turned on by user in cart. */
 {
@@ -136,10 +238,12 @@ struct slName *name, *nameList = hubConnectHubsInCart(cart);
 struct sqlConnection *conn = hConnectCentral();
 for (name = nameList; name != NULL; name = name->next)
     {
-    int id = sqlUnsigned(name->name);
-    hub = hubConnectStatusForId(conn, id);
+    int id = sqlSigned(name->name);
+    hub = hubConnectStatusForId(cart, conn, id);
     if (hub != NULL)
+	{
         slAddHead(&hubList, hub);
+	}
     }
 slFreeList(&nameList);
 hDisconnectCentral(&conn);
@@ -167,12 +271,12 @@ assert(trackName != NULL);
 return trackName + 1;
 }
 
-struct trackHub *trackHubFromId(int hubId)
+struct trackHub *trackHubFromId(struct cart *cart, int hubId)
 /* Given a hub ID number, return corresponding trackHub structure. 
  * ErrAbort if there's a problem. */
 {
 struct sqlConnection *conn = hConnectCentral();
-struct hubConnectStatus *status = hubConnectStatusForId(conn, hubId);
+struct hubConnectStatus *status = hubConnectStatusForId(cart, conn, hubId);
 hDisconnectCentral(&conn);
 if (status == NULL)
     errAbort("The hubId %d was not found", hubId);
@@ -210,15 +314,16 @@ for(tdb = tdbList; tdb; tdb = next)
 return p;
 }
 
-struct trackDb *hubConnectAddHubForTrackAndFindTdb(char *database, 
-	char *trackName, struct trackDb **pTdbList, struct hash *trackHash)
+struct trackDb *hubConnectAddHubForTrackAndFindTdb(struct cart *cart,
+	char *database, char *trackName, struct trackDb **pTdbList, 
+	struct hash *trackHash)
 /* Go find hub for trackName (which will begin with hub_), and load the tracks
  * for it, appending to end of list and adding to trackHash.  Return the
  * trackDb associated with trackName. This will also fill in the html fields,
  * but just for that track and it's parents. */ 
 {
 int hubId = hubIdFromTrackName(trackName);
-struct trackHub *hub = trackHubFromId(hubId);
+struct trackHub *hub = trackHubFromId(cart, hubId);
 struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
 struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
 tdbList = trackDbLinkUpGenerations(tdbList);

@@ -3720,12 +3720,15 @@ struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList)
 struct trackDb *theTdbs = NULL;
 if (tdbList == NULL || *tdbList == NULL)
     {
+#ifdef NOTNOW   /* this is handled by the routines that call us, removed
+                 * from here because we don't have a cart down here */
     if (isHubTrack(track))
         {
 	struct hash *hash = hashNew(0);
 	theTdbs = hubConnectAddHubForTrackAndFindTdb(db, track, tdbList, hash);
 	}
     else
+#endif
 	{
 	theTdbs = hTrackDb(db);
 	if (tdbList != NULL)
