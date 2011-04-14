@@ -8205,7 +8205,7 @@ label Methyl RRBS
 description Methyl RRBS
 
 # tag not standard to match hg18
-term Nre
+term NRE
 tag NRE
 type dataType
 description Negative Regulatory Elements
