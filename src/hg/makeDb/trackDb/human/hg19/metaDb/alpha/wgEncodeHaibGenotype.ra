@@ -1,7 +1,7 @@
 metaObject wgEncodeHaibGenotype
 objType composite
 composite wgEncodeHaibGenotype
-expVars lab,dataType,cell,treatment,obtainedBy
+expVars lab,dataType,cell,treatment
 
 metaObject wgEncodeHaibGenotypeA549RegionsRep1
 objType table
@@ -1969,4 +1969,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: 1516784922
+# MAGIC: 2054025640
