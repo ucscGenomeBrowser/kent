@@ -256,7 +256,6 @@ int hubIdFromTrackName(char *trackName)
 {
 assert(startsWith("hub_", trackName));
 trackName += 4;
-assert(isdigit(trackName[0]));
 return atoi(trackName);
 }
 
@@ -265,7 +264,6 @@ char *hubConnectSkipHubPrefix(char *trackName)
 {
 assert(startsWith("hub_", trackName));
 trackName += 4;
-assert(isdigit(trackName[0]));
 trackName = strchr(trackName, '_');
 assert(trackName != NULL);
 return trackName + 1;
