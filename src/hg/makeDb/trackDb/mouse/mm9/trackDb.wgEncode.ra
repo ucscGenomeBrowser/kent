@@ -23,3 +23,7 @@ include wgEncodeLicrHistone.ra
 
 # LICR TFBS (wrangler: Venkat)
 include wgEncodeLicrTfbs.ra
+
+# Stan/Yale RNA-Seq (wrangler: Venkat)
+include wgEncodeSydhRnaSeq.ra alpha
+
