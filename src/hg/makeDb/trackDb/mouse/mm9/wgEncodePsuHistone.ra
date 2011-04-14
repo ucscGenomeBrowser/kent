@@ -6,22 +6,22 @@
 #       - View Long Labels: [cell] [factor] Histone Modifications [view] from ENCODE/PSU 
 #       - cellType Order: Ordering is alphabetical
 #       - Default View selections
-#               - Peaks = dense
-#               - Signal = full
+#	       - Peaks = dense
+#	       - Signal = full
 #       - Short Labels: 
-#               Template: [cell] {factor] [view]
-#               - Cells: Abbreviation for cells
-#                       - G1E-ER4+E2 = G1E-ER4
-#               - Views: For consistency sake view will be
-#                       - Peaks = Pk
-#                       - Signal = Sg
+#	       Template: [cell] {factor] [view]
+#	       - Cells: Abbreviation for cells
+#	               - G1E-ER4+E2 = G1E-ER4
+#	       - Views: For consistency sake view will be
+#	               - Peaks = Pk
+#	               - Signal = Sg
 #       - Tracks On: All tracks on 
 #       - Matrix Dimensions:
-#               X - Cell Line
-#               Y - Factor
+#	       X - Cell Line
+#	       Y - Factor
 #	- View Specific changes
-#               -Signal
-#                       - windowing function = maximum
+#	       -Signal
+#	               - windowing function = maximum
 
 track wgEncodePsuHistone
 compositeTrack on
@@ -46,9 +46,8 @@ priority 0
 type bed 3
 wgEncode 1
 
-        #####Peak Tracks###########
+	#####Peak Tracks###########
 	track wgEncodePsuHistoneViewPeaks
-	release alpha
 	shortLabel Peaks
 	view Peaks
 	visibility dense
@@ -61,62 +60,56 @@ wgEncode 1
 	qValueFilter 0
 	qValueFilterLimits 0:300
 
-        	track wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputPk
-        	release alpha
-        	parent wgEncodePsuHistoneViewPeaks 
-        	shortLabel G1E-ER4 H3K4me1 Pk
-        	longLabel G1E-ER4+E2 H3K4me1 Histone Modifications Peaks from ENCODE/PSU
-        	subGroups view=Peaks age=E0 factor=H3K4me1 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
-        	type broadPeak
-        	color 153,38,0
-        	# subId=3040 dateSubmitted=2010-12-01
+		track wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputPk
+		parent wgEncodePsuHistoneViewPeaks 
+		shortLabel G1E-ER4 H3K4me1 Pk
+		longLabel G1E-ER4+E2 H3K4me1 Histone Modifications Peaks from ENCODE/PSU
+		subGroups view=Peaks age=E0 factor=H3K4me1 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
+		type broadPeak
+		color 153,38,0
+		# subId=3040 dateSubmitted=2010-12-01
 
 	
-        	track wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk
-        	release alpha
-        	parent wgEncodePsuHistoneViewPeaks 
-        	shortLabel G1E-ER4 H3K27me3 Pk
-        	longLabel G1E-ER4+E2 H3K27me3 Histone Modifications Peaks from ENCODE/PSU
-        	subGroups view=Peaks age=E0 factor=H3K27me3 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
-        	type broadPeak
-        	color 153,38,0
-        	# subId=3039 dateSubmitted=2010-12-01
+		track wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk
+		parent wgEncodePsuHistoneViewPeaks 
+		shortLabel G1E-ER4 H3K27me3 Pk
+		longLabel G1E-ER4+E2 H3K27me3 Histone Modifications Peaks from ENCODE/PSU
+		subGroups view=Peaks age=E0 factor=H3K27me3 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
+		type broadPeak
+		color 153,38,0
+		# subId=3039 dateSubmitted=2010-12-01
 
 	
-        	track wgEncodePsuHistoneG1eer4e2H3k4me3ME0S129InputPk
-        	release alpha
-        	parent wgEncodePsuHistoneViewPeaks 
-        	shortLabel G1E-ER4 H3K4me3 Pk
-        	longLabel G1E-ER4+E2 H3K4me3 Histone Modifications Peaks from ENCODE/PSU
-        	subGroups view=Peaks age=E0 factor=H3K4me3 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
-        	type broadPeak
-        	color 153,38,0
-        	# subId=3041 dateSubmitted=2010-12-02
+		track wgEncodePsuHistoneG1eer4e2H3k4me3ME0S129InputPk
+		parent wgEncodePsuHistoneViewPeaks 
+		shortLabel G1E-ER4 H3K4me3 Pk
+		longLabel G1E-ER4+E2 H3K4me3 Histone Modifications Peaks from ENCODE/PSU
+		subGroups view=Peaks age=E0 factor=H3K4me3 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
+		type broadPeak
+		color 153,38,0
+		# subId=3041 dateSubmitted=2010-12-02
 
 
-        	track wgEncodePsuHistoneG1eH3k4me3ME0S129InputPk
-        	release alpha
-        	parent wgEncodePsuHistoneViewPeaks 
-        	shortLabel G1E H3K4me3 Pk
-        	longLabel G1E H3K4me3 Histone Modifications Peaks from ENCODE/PSU
-        	subGroups view=Peaks age=E0 factor=H3K4me3 cellType=G1E control=Input sex=M strain=S129
-        	type broadPeak
-        	color 153,38,0
-        	# subId=3042 dateSubmitted=2010-12-02
+		track wgEncodePsuHistoneG1eH3k4me3ME0S129InputPk
+		parent wgEncodePsuHistoneViewPeaks 
+		shortLabel G1E H3K4me3 Pk
+		longLabel G1E H3K4me3 Histone Modifications Peaks from ENCODE/PSU
+		subGroups view=Peaks age=E0 factor=H3K4me3 cellType=G1E control=Input sex=M strain=S129
+		type broadPeak
+		color 153,38,0
+		# subId=3042 dateSubmitted=2010-12-02
 
-        	track wgEncodePsuHistoneG1eH3k4me1ME0S129InputPk
-        	release alpha
-        	parent wgEncodePsuHistoneViewPeaks
-        	shortLabel G1E H3K4me1 Pk
-        	longLabel G1E H3K4me1 Histone Modifications Peaks from ENCODE/PSU
-        	subGroups view=Peaks age=E0 factor=H3K4me1 cellType=G1E control=Input sex=M strain=S129
-        	type broadPeak
-        	color 153,38,0
-        	# subId=3043 dateSubmitted=2010-12-01
+		track wgEncodePsuHistoneG1eH3k4me1ME0S129InputPk
+		parent wgEncodePsuHistoneViewPeaks
+		shortLabel G1E H3K4me1 Pk
+		longLabel G1E H3K4me1 Histone Modifications Peaks from ENCODE/PSU
+		subGroups view=Peaks age=E0 factor=H3K4me1 cellType=G1E control=Input sex=M strain=S129
+		type broadPeak
+		color 153,38,0
+		# subId=3043 dateSubmitted=2010-12-01
 
-        #####Signal Tracks###########
+	#####Signal Tracks###########
 	track wgEncodePsuHistoneViewSignal
-	release alpha
 	shortLabel Signal
 	view Signal
 	visibility full
@@ -127,54 +120,49 @@ wgEncode 1
 	maxHeightPixels 100:16:16
 	windowingFunction maximum
 
-      		track wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputSig
-       		release alpha
-        	parent wgEncodePsuHistoneViewSignal
-        	shortLabel G1E-ER4 H3K4me1 Sg
-        	longLabel G1E-ER4+E2 H3K4me1 Histone Modifications Signal from ENCODE/PSU
-        	subGroups view=Signal age=E0 factor=H3K4me1 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
-        	type bigWig 1.000000 158.000000
-        	color 153,38,0
-        	# subId=3040 dateSubmitted=2010-12-01
+		track wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputSig
+		parent wgEncodePsuHistoneViewSignal
+		shortLabel G1E-ER4 H3K4me1 Sg
+		longLabel G1E-ER4+E2 H3K4me1 Histone Modifications Signal from ENCODE/PSU
+		subGroups view=Signal age=E0 factor=H3K4me1 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
+		type bigWig 1.000000 158.000000
+		color 153,38,0
+		# subId=3040 dateSubmitted=2010-12-01
 
-        	track wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig
-        	release alpha
-        	parent wgEncodePsuHistoneViewSignal 
-        	shortLabel G1E-ER4 H3K27me3 Sg
-        	longLabel G1E-ER4+E2 H3K27me3 Histone Modifications Signal from ENCODE/PSU
-        	subGroups view=Signal age=E0 factor=H3K27me3 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
-        	type bigWig 1.000000 265.000000
-        	color 153,38,0
-        	# subId=3039 dateSubmitted=2010-12-01
+		track wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig
+		parent wgEncodePsuHistoneViewSignal 
+		shortLabel G1E-ER4 H3K27me3 Sg
+		longLabel G1E-ER4+E2 H3K27me3 Histone Modifications Signal from ENCODE/PSU
+		subGroups view=Signal age=E0 factor=H3K27me3 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
+		type bigWig 1.000000 265.000000
+		color 153,38,0
+		# subId=3039 dateSubmitted=2010-12-01
 
-        	track wgEncodePsuHistoneG1eer4e2H3k4me3ME0S129InputSig
-        	release alpha
-        	parent wgEncodePsuHistoneViewSignal 
-        	shortLabel G1E-ER4 H3K4me3 Sg
-        	longLabel G1E-ER4+E2 H3K4me3 Histone Modifications Signal from ENCODE/PSU
-        	subGroups view=Signal age=E0 factor=H3K4me3 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
-        	type bigWig 1.000000 336.000000
-        	color 153,38,0
-        	# subId=3041 dateSubmitted=2010-12-02
+		track wgEncodePsuHistoneG1eer4e2H3k4me3ME0S129InputSig
+		parent wgEncodePsuHistoneViewSignal 
+		shortLabel G1E-ER4 H3K4me3 Sg
+		longLabel G1E-ER4+E2 H3K4me3 Histone Modifications Signal from ENCODE/PSU
+		subGroups view=Signal age=E0 factor=H3K4me3 cellType=G1E_ER4_E2 control=Input sex=M strain=S129
+		type bigWig 1.000000 336.000000
+		color 153,38,0
+		# subId=3041 dateSubmitted=2010-12-02
 
-        	track wgEncodePsuHistoneG1eH3k4me3ME0S129InputSig
-        	release alpha
-        	parent wgEncodePsuHistoneViewSignal 
-        	shortLabel G1E H3K4me3 Sg
-        	longLabel G1E H3K4me3 Histone Modifications Signal from ENCODE/PSU
-        	subGroups view=Signal age=E0 factor=H3K4me3 cellType=G1E control=Input sex=M strain=S129
-        	type bigWig 1.000000 300.000000
-        	color 153,38,0
-        	# subId=3042 dateSubmitted=2010-12-02
+		track wgEncodePsuHistoneG1eH3k4me3ME0S129InputSig
+		parent wgEncodePsuHistoneViewSignal 
+		shortLabel G1E H3K4me3 Sg
+		longLabel G1E H3K4me3 Histone Modifications Signal from ENCODE/PSU
+		subGroups view=Signal age=E0 factor=H3K4me3 cellType=G1E control=Input sex=M strain=S129
+		type bigWig 1.000000 300.000000
+		color 153,38,0
+		# subId=3042 dateSubmitted=2010-12-02
 
-        	track wgEncodePsuHistoneG1eH3k4me1ME0S129InputSig
-        	release alpha
-        	parent wgEncodePsuHistoneViewSignal 
-        	shortLabel G1E H3K4me1 Sg
-        	longLabel G1E H3K4me1 Histone Modifications Signal from ENCODE/PSU
-        	subGroups view=Signal age=E0 factor=H3K4me1 cellType=G1E control=Input sex=M strain=S129
-        	type bigWig 1.000000 144.000000
-        	color 153,38,0
-        	# subId=3043 dateSubmitted=2010-12-01
+		track wgEncodePsuHistoneG1eH3k4me1ME0S129InputSig
+		parent wgEncodePsuHistoneViewSignal 
+		shortLabel G1E H3K4me1 Sg
+		longLabel G1E H3K4me1 Histone Modifications Signal from ENCODE/PSU
+		subGroups view=Signal age=E0 factor=H3K4me1 cellType=G1E control=Input sex=M strain=S129
+		type bigWig 1.000000 144.000000
+		color 153,38,0
+		# subId=3043 dateSubmitted=2010-12-01
 
 
