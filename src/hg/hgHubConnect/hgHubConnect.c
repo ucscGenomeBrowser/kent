@@ -75,9 +75,6 @@ for (;;)
 void hgHubConnectPrivate()
 /* Put up the list of private hubs and other controls for the page. */
 {
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", "../cgi-bin/hgHubConnect");
-cartSaveSession(cart);
-cgiMakeHiddenVar(hgHubDoAdd, "on");
 printf("<B>List of Private Hubs</B><BR>");
 struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCart(cart);
 int count = 0;
@@ -85,11 +82,11 @@ for(hub = hubList; hub; hub = hub->next)
     {
     if (hub->id > 0)
 	continue;
-    count++;
-    if (hub != hubList)
+    if (count)
 	webPrintLinkTableNewRow();
     else
 	webPrintLinkTableStart();
+    count++;
 
     if (isEmpty(hub->errorMessage))
 	{
@@ -112,16 +109,21 @@ if (count)
     webPrintLinkTableEnd();
 else
     printf("No Private Track Hubs for this genome assembly<BR>");
+}
+
+static void makeNewHubButton()
+{
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"secondForm\">\n", "../cgi-bin/hgHubConnect");
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgHubDoAdd, "on");
 cgiMakeButton("add", "add new private hub");
+printf("</FORM>\n");
 }
 
 void hgHubConnectPublic()
 /* Put up the list of external hubs and other controls for the page. */
 {
-destUrl = cartUsualString(cart, hgHubConnectCgiDestUrl, destUrl);
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
-cartSaveSession(cart);
-cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+//destUrl = cartUsualString(cart, hgHubConnectCgiDestUrl, destUrl);
 printf(
    "<P>Track data hubs are collections of tracks from outside of UCSC that can be imported into "
    "the Genome Browser.  To import a public hub check the box in the list below. "
@@ -179,12 +181,12 @@ if (gotAnyRows)
     webPrintLinkTableEnd();
 else
     printf("No Track Hubs for this genome assembly");
-printf("</FORM>\n");
 hDisconnectCentral(&conn);
 }
 
 static void addIntro()
 {
+printf("Enter URL to remote hub.<BR>\n");
 }
 
 void makeClearButton(char *field)
@@ -237,6 +239,8 @@ puts("</FORM>");
 
 void helpPrivateHub()
 {
+printf("Private hubs are constructed the same way as public hubs, but they "
+   "aren't listed in hgcentral<BR>\n");
 }
 
 void doAddPrivateHub(struct cart *theCart, char *err)
@@ -292,7 +296,18 @@ char *url = cartOptionalString(cart, hgHubDataText);
 if (url != NULL)
     {
     struct hubConnectStatus *hub = NULL;
-    struct trackHub *tHub = trackHubOpen(url, "1");
+    struct trackHub *tHub = NULL;
+
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	tHub = trackHubOpen(url, "1");
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	warn(errCatch->message->string);
+	return;
+	}
+    errCatchFree(&errCatch);
     AllocVar(hub);
 
     hub->hubUrl = cloneString(url);
@@ -319,13 +334,19 @@ else
     {
     cartWebStart(cart, NULL, pageTitle);
     checkForNewHub(cart);
+    printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
+    cartSaveSession(cart);
+    cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
     hgHubConnectPublic();
     hgHubConnectPrivate();
+    puts("</FORM>");
+
+    makeNewHubButton();
     }
 cartWebEnd();
 }
 
-char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl, NULL};
+char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl, hgHubDoAdd, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
