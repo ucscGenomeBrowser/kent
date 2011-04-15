@@ -75,9 +75,6 @@ for (;;)
 void hgHubConnectPrivate()
 /* Put up the list of private hubs and other controls for the page. */
 {
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", "../cgi-bin/hgHubConnect");
-cartSaveSession(cart);
-cgiMakeHiddenVar(hgHubDoAdd, "on");
 printf("<B>List of Private Hubs</B><BR>");
 struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCart(cart);
 int count = 0;
@@ -85,11 +82,11 @@ for(hub = hubList; hub; hub = hub->next)
     {
     if (hub->id > 0)
 	continue;
-    count++;
-    if (hub != hubList)
+    if (count)
 	webPrintLinkTableNewRow();
     else
 	webPrintLinkTableStart();
+    count++;
 
     if (isEmpty(hub->errorMessage))
 	{
@@ -112,28 +109,27 @@ if (count)
     webPrintLinkTableEnd();
 else
     printf("No Private Track Hubs for this genome assembly<BR>");
+}
+
+static void makeNewHubButton()
+{
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"secondForm\">\n", "../cgi-bin/hgHubConnect");
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgHubDoAdd, "on");
 cgiMakeButton("add", "add new private hub");
+printf("</FORM>\n");
+}
+
+static void makeGenomePrint()
+{
+getDbAndGenome(cart, &database, &organism, oldVars);
+printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s &nbsp;&nbsp;&nbsp;[%s] ", 
+	organism, hFreezeDate(database), database);
 }
 
 void hgHubConnectPublic()
 /* Put up the list of external hubs and other controls for the page. */
 {
-destUrl = cartUsualString(cart, hgHubConnectCgiDestUrl, destUrl);
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
-cartSaveSession(cart);
-cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
-printf(
-   "<P>Track data hubs are collections of tracks from outside of UCSC that can be imported into "
-   "the Genome Browser.  To import a public hub check the box in the list below. "
-   "After import the hub will show up as a group of tracks with its own blue "
-   "bar and label underneath the main browser graphic, and in the configure page. To arrange "
-   "for your own track data hub to appear in this list, please contact genome@soe.ucsc.edu.</P>\n"
-   );
-getDbAndGenome(cart, &database, &organism, oldVars);
-printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s &nbsp;&nbsp;&nbsp;[%s] ", 
-	organism, hFreezeDate(database), database);
-cgiMakeButton("submit", "submit");
-printf("<BR>");
 printf("<B>List of Public Hubs</B><BR>");
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
@@ -179,12 +175,12 @@ if (gotAnyRows)
     webPrintLinkTableEnd();
 else
     printf("No Track Hubs for this genome assembly");
-printf("</FORM>\n");
 hDisconnectCentral(&conn);
 }
 
 static void addIntro()
 {
+printf("Enter URL to remote hub.<BR>\n");
 }
 
 void makeClearButton(char *field)
@@ -237,6 +233,8 @@ puts("</FORM>");
 
 void helpPrivateHub()
 {
+printf("Private hubs are constructed the same way as public hubs, but they "
+   "aren't listed in hgcentral<BR>\n");
 }
 
 void doAddPrivateHub(struct cart *theCart, char *err)
@@ -274,6 +272,7 @@ else
 	fprintf(f, "%s\n", line);
 	}
     lineFileClose(&lf);
+    unlink(oldHubTrashName);
     hub->id = -count;
     }
 hubWriteToFile(f, hub);
@@ -292,7 +291,18 @@ char *url = cartOptionalString(cart, hgHubDataText);
 if (url != NULL)
     {
     struct hubConnectStatus *hub = NULL;
-    struct trackHub *tHub = trackHubOpen(url, "1");
+    struct trackHub *tHub = NULL;
+
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	tHub = trackHubOpen(url, "1");
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	warn(errCatch->message->string);
+	return;
+	}
+    errCatchFree(&errCatch);
     AllocVar(hub);
 
     hub->hubUrl = cloneString(url);
@@ -304,7 +314,6 @@ if (url != NULL)
     hub->dbArray[0] = database;
 
     hubSaveInCart(cart, hub);
-    cartRemove(cart, hgHubDataText);
     }
 }
 
@@ -319,13 +328,33 @@ else
     {
     cartWebStart(cart, NULL, pageTitle);
     checkForNewHub(cart);
+    printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
+    cartSaveSession(cart);
+
+    cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+
+    printf(
+       "<P>Track data hubs are collections of tracks from outside of UCSC that can be imported into "
+       "the Genome Browser.  To import a public hub check the box in the list below. "
+       "After import the hub will show up as a group of tracks with its own blue "
+       "bar and label underneath the main browser graphic, and in the configure page. To arrange "
+       "for your own track data hub to appear in this list, please contact genome@soe.ucsc.edu.</P>\n"
+       );
+    makeGenomePrint();
+    cgiMakeSubmitButton();
+
+    printf("<BR>");
     hgHubConnectPublic();
+    puts("<BR>");
     hgHubConnectPrivate();
+    puts("</FORM>");
+
+    makeNewHubButton();
     }
 cartWebEnd();
 }
 
-char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl, NULL};
+char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl, hgHubDoAdd, hgHubDataText, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
