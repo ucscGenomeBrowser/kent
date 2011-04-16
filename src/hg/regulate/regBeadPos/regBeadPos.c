@@ -13,6 +13,10 @@ char *simpleBed = NULL;
 FILE *simpleBedFile = NULL;
 char *stateProb = NULL;
 FILE *stateProbFile = NULL;
+double peakThreshold=40;
+double minPeakSum = 500;
+char *narrowPeak = NULL;
+FILE *narrowPeakFile = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +28,8 @@ errAbort(
   "   regBeadPos in.tab outFile.bed\n"
   "options:\n"
   "   -simpleBed=simpleOut.bed - output each little window separately\n"
+  "   -narrowPeak=peaks.narrowPeak - output just the peak base here\n"
+  "   -peakThreshold=N.N - min average dnase score for peak output\n"
   "   -stateProb=stateProbs.c\n"
   );
 }
@@ -32,6 +38,8 @@ errAbort(
 static struct optionSpec options[] = {
    {"simpleBed", OPTION_STRING},
    {"stateProb", OPTION_STRING},
+   {"narrowPeak", OPTION_STRING},
+   {"peakThreshold", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -39,7 +47,7 @@ enum aStates
 /* Internal states for HMM. */
 {
     aLow,                        /* Not much DNAse or histone activity. */
-    aHDH1, aHDH2, aHDH3,	/* Nice sequence histone to dnase to histone. */
+    aHisStart, aDnase, aHisEnd,
     aStateCount,
 };
 
@@ -51,7 +59,7 @@ char visStates[] =
 /* User visible states of HMM. */
 {
     '.',
-    'O', '^', 'O',
+    'O', 'x', 'O',
 };
 
 struct stateSummary
@@ -172,8 +180,8 @@ for (i=0; i<count; ++i)
 typedef UBYTE State;    /* A state. We'll only have 256 at most for now. */
 
 /* This lets us keep the last two columns of scores. */
-static int *scoreColumns[2];
-static int *curScores, *prevScores;
+static double *scoreColumns[2];
+static double *curScores, *prevScores;
 static int scoreFlopper = 0; /* Flops between 0 and 1. */
 
 static void flopScores()
@@ -197,13 +205,13 @@ flopScores();
 #define unlikelyProb (1.0E-20)
 
 /* Transition probabilities. */
-static int *transProbLookup[256];
+static double *transProbLookup[256];
 
 static void makeTransitionProbs()
 /* Allocate transition probabilities and initialize them. */
 {
 int i, j;
-int unlikely = scaledLog(unlikelyProb);
+double unlikely = log(unlikelyProb);
 
 /* In this loop allocate transition table and set all values to
  * something improbable, but not so improbable that the log value
@@ -216,66 +224,73 @@ for (i=0; i<aStateCount; ++i)
     }
 
 
-transProbLookup[aLow][aLow] =     scaledLog(0.9999);
-transProbLookup[aLow][aHDH1] =    scaledLog(0.0001);
+transProbLookup[aLow][aLow] =     log(0.9999);
+transProbLookup[aLow][aHisStart] =    log(0.0001);
 
+transProbLookup[aHisStart][aHisStart] = log(0.99);
+transProbLookup[aHisStart][aDnase] = log(0.01);
 
-transProbLookup[aHDH1][aHDH1] = scaledLog(0.990);
-transProbLookup[aHDH1][aHDH2] = scaledLog(0.010);
+transProbLookup[aDnase][aDnase] = log(0.99);
+transProbLookup[aDnase][aHisEnd] = log(0.01);
 
-transProbLookup[aHDH2][aHDH2] = scaledLog(0.990);
-transProbLookup[aHDH2][aHDH3] = scaledLog(0.010);
-
-transProbLookup[aHDH3][aHDH3] = scaledLog(0.990);
-transProbLookup[aHDH3][aLow] = scaledLog(0.010);
+transProbLookup[aHisEnd][aHisEnd] = log(0.99);
+transProbLookup[aHisEnd][aLow] = log(0.01);
 }
 
 
-int *probsFromDnaseHistones(double *dnase, double *histones)
+double *probsFromDnaseHistones(double *dnase, double *histones)
 {
-int *p;
+double *p;
 AllocArray(p, HMM_LETTERS);
 int i,j, ix=0;
 for (i=0; i<DNASE_LEVELS; ++i)
     for (j=0; j<HISTONE_LEVELS; ++j)
         {
-	p[ix] = scaledLog(dnase[i]*histones[j]);
+	p[ix] = log(dnase[i]*histones[j]);
 	++ix;
 	}
 return p;
 }
 
-int *makeEmissionProbsForLo()
+double *makeEmissionProbsForLo()
 {
 static double dnase[5] = {0.93, 0.05, 0.019, 0.001, unlikelyProb};
 static double histone[5] = {0.90, 0.08, 0.019, 0.001, unlikelyProb};
 return probsFromDnaseHistones(dnase, histone);
 }
 
-int *makeEmissionProbsForDnase()
+double *makeEmissionProbsForDnase()
 {
-static double dnase[5] = {0.05, 0.12, 0.23, 0.30, 0.30};
-static double histone[5] = {0.21, 0.22, 0.22, 0.21, 0.14};
+static double dnase[5] = {0.05, 0.10, 0.23, 0.30, 0.32};
+static double histone[5] = {0.20, 0.20, 0.20, 0.20, 0.20};
 return probsFromDnaseHistones(dnase, histone);
 }
 
-int *makeEmissionProbsForFramingHistones()
+double *makeEmissionProbsForDnasePeak()
 {
-static double dnase[5] = {0.35, 0.25, 0.2, 0.15, 0.1};
-static double histone[5] = {0.05, 0.10, 0.25, 0.30, 0.30};
+static double dnase[5] = {0.0001, 0.0001, 0.0998, 0.35, 0.55};
+static double histone[5] = {0.20, 0.20, 0.20, 0.20, 0.20};
 return probsFromDnaseHistones(dnase, histone);
 }
 
-int *lowProbs, *highDnaseProbs, *framingHistoneProbs;
+double *makeEmissionProbsForFramingHistones()
+{
+static double dnase[5] = {0.27, 0.27, 0.27, 0.13, 0.1};
+static double histone[5] = {0.07, 0.12, 0.24, 0.28, 0.29};
+return probsFromDnaseHistones(dnase, histone);
+}
 
-void oldMakeEmissionProbs()
+double *lowProbs, *peakDnaseProbs, *highDnaseProbs, *framingHistoneProbs;
+
+void makeEmissionProbs()
 {
 lowProbs = makeEmissionProbsForLo();
 highDnaseProbs = makeEmissionProbsForDnase();
+peakDnaseProbs = makeEmissionProbsForDnasePeak();
 framingHistoneProbs = makeEmissionProbsForFramingHistones();
 }
 
-int *probsFromCounts(int *counts, int numSlots)
+double *probsFromCounts(int *counts, int numSlots)
 /* Sum up counts of slots and turn into probabilities
  * to see a value in that slot.  Uses a pseudocount
  * of 1 to avoid zero probabilities. Output is in form
@@ -287,12 +302,12 @@ long long sum = 0;
 for (i=0; i<numSlots; ++i)
     sum += counts[i] + pseudoCount;
 double invSum = 1.0/sum;
-int *p;
+double *p;
 AllocArray(p, numSlots);
 for (i=0; i<numSlots; ++i)
     {
     int count = counts[i] + pseudoCount;
-    p[i] = scaledLog(count*invSum);
+    p[i] = log(count*invSum);
     }
 return p;
 }
@@ -305,6 +320,7 @@ for (i=0; i<size; ++i)
    out[i] = a[i] + b[i];
 }
 
+#ifdef SOMEDAY
 void makeEmissionProbs()
 {
 static int aLowCounts[] = {11889074,215103,41151,26670,11037,111204,36430,20841,23551,17678,15675,8146,6616,10394,12824,9413,6322,4640,9454,15055,4614,5223,5066,8210,12701,};
@@ -318,13 +334,14 @@ int summedCounts[HMM_LETTERS];
 sumCounts(HMM_LETTERS, aHDH1Counts, aHDH3Counts, summedCounts);
 framingHistoneProbs = probsFromCounts(summedCounts, HMM_LETTERS);
 }
+#endif /* SOMEDAY */
 
 #define startState(curState) \
     { \
     int destState = curState; \
-    int newScore = -0x3fffffff; \
+    double newScore = -0x3fffffff; \
     State parent = 0; \
-    int oneScore; 
+    double oneScore; 
 
 #define endState(curState) \
     curScores[destState] = newScore; \
@@ -340,11 +357,11 @@ framingHistoneProbs = probsFromCounts(summedCounts, HMM_LETTERS);
 
 #define prob1(table, letter) ((table)[letter])
 
-void traceback(int *scores, State **allStates, int letterCount, State *tStates)
+void traceback(double *scores, State **allStates, int letterCount, State *tStates)
 /* Fill in tStates with the states of along the optimal path */
 {
 int i;
-int maxScore = -0x3fffffff;
+double maxScore = -0x3fffffff;
 int maxState = 0;
 State *states;
 
@@ -378,7 +395,7 @@ int stateByteSize = letterCount * sizeof(State);
 int i;
 int lettersIx;
 int scanSize = letterCount;
-int unlikely = scaledLog(unlikelyProb);
+double unlikely = log(unlikelyProb);
 
 /* Allocate state tables. */
 allStates = needMem(stateCount * sizeof(allStates[0]));
@@ -392,7 +409,7 @@ for (i=0; i<stateCount; ++i)
 initScores();
 for (i=0; i<stateCount; ++i)
     prevScores[i] = unlikely;
-prevScores[aLow] = scaledLog(1.0);
+prevScores[aLow] = log(0.9999);
 
 for (lettersIx=0; lettersIx<scanSize; lettersIx += 1)
     {
@@ -401,29 +418,28 @@ for (lettersIx=0; lettersIx<scanSize; lettersIx += 1)
 
         
     startState(aLow)
-        int b = prob1(lowProbs, c);
+        double b = prob1(lowProbs, c);
 	source(aLow, b);
-	source( aHDH3, b);
+	source( aHisEnd, b);
     endState(aLow)
         
-    startState(aHDH1)
-        int b = prob1(framingHistoneProbs, c);
-	source(aHDH1, b);
+    startState(aHisStart)
+        double b = prob1(framingHistoneProbs, c);
+	source(aHisStart, b);
 	source(aLow, b);
-    endState(aHDH1)
+    endState(aHisStart)
         
-    startState(aHDH2)
-        int b = prob1(highDnaseProbs, c);
-	source(aHDH2, b);
-	source(aHDH1, b);
-    endState(aHDH2)
+    startState(aDnase)
+        double b = prob1(highDnaseProbs, c);
+	source(aDnase, b);
+	source(aHisStart, b);
+    endState(aDnase)
         
-    startState(aHDH3)
-        int b = prob1(framingHistoneProbs, c);
-	source(aHDH3, b);
-	source(aHDH2, b);
-    endState(aHDH3)
-        
+    startState(aHisEnd)
+        double b = prob1(framingHistoneProbs, c);
+	source(aHisEnd, b);
+	source(aDnase, b);
+    endState(aHisEnd)
         
     flopScores();
     }
@@ -462,9 +478,9 @@ void writeStateSummaryInC(FILE *f, struct stateSummary *summary)
 /* Output summary as a C array */
 {
 writeOneStateSummaryInC(f, summary, "aLowCounts", aLow);
-writeOneStateSummaryInC(f, summary, "aHDH1Counts", aHDH1);
-writeOneStateSummaryInC(f, summary, "aHDH2Counts", aHDH2);
-writeOneStateSummaryInC(f, summary, "aHDH3Counts", aHDH3);
+writeOneStateSummaryInC(f, summary, "aHisStart", aHisStart);
+writeOneStateSummaryInC(f, summary, "aDnase", aDnase);
+writeOneStateSummaryInC(f, summary, "aHisEnd", aHisEnd);
 };
 
 void outputSimpleStates(char *chrom, int shrinkFactor, State *states, int shrunkSize, FILE *f)
@@ -481,7 +497,46 @@ for (i=0; i<shrunkSize; ++i)
     }
 }
 
-void newOutputStates(char *chrom, int shrinkFactor, State *states, int shrunkSize, FILE *f)
+void outputPeakIfOverThreshold(char *chrom, int chromStart, int chromEnd, 
+	struct inFile *dnaseIn, int shrinkFactor, double threshold, FILE *f)
+/* Output peak if over theshold and more than minimum size. */
+{
+int width = chromEnd - chromStart;
+if (width > shrinkFactor)
+    {
+    double sum = 0;
+    int i;
+    double *valBuf = dnaseIn->chromVals->valBuf;
+    double maxVal = valBuf[chromStart];
+    int maxIx = chromStart;
+    for (i=chromStart; i<chromEnd; ++i)
+	{
+	double val = valBuf[i];
+	if (val > maxVal)
+	    {
+	    maxVal = val;
+	    maxIx = i;
+	    }
+        sum += dnaseIn->chromVals->valBuf[i];
+	}
+    double ave = sum/width;
+    if (ave >= threshold && sum >= minPeakSum)
+        {
+	int maxEndIx;
+	for (maxEndIx=maxIx; maxEndIx<chromEnd; ++maxEndIx)
+	    if (valBuf[maxEndIx] != maxVal)
+	        break;
+	int score = ave * 4;
+	if (score > 1000)
+	    score = 1000;
+	fprintf(f, "%s\t%d\t%d\tpk\t%d\t.\t", chrom, maxIx, maxEndIx, score);
+	fprintf(f, "%g\t-1\t-1\t%d\n", sum, (maxIx+maxEndIx)/2 - maxIx);
+	}
+    }
+}
+
+void newOutputStates(char *chrom, int shrinkFactor, State *states, int shrunkSize, FILE *f,
+	struct inFile *dnaseIn, FILE *peakFile)
 /* Convert runs of states to various types of BED lines. */
 {
 /* Run it through a look up table. */
@@ -504,14 +559,31 @@ while (stateIx < shrunkSize)
 	    break;
 	case 'O':
 	    {
-	    int h1Count = countLeadingChars(labels+stateIx, 'O');
-	    int dCount = countLeadingChars(labels+stateIx+h1Count, '^');
-	    int h2Count = countLeadingChars(labels+stateIx+h1Count+dCount, 'O');
-	    int totalWidth = h1Count + dCount + h2Count;
-	    fprintf(f, "%s\t%d\t%d\tbead\t0\t.\t", chrom, start, start+totalWidth*shrinkFactor);
-	    fprintf(f, "%d\t%d\n", start + h1Count*shrinkFactor,  
-	    	start + (h1Count+dCount)*shrinkFactor);
-	    stateIx += totalWidth;
+	    /* Count up something of form OOOxxxx^xxOO  - exactly one ^, else multiple */
+	    char *pt = labels+stateIx;
+	    int h1Count = countLeadingChars(pt, 'O');
+	    pt += h1Count;
+	    int dCount = countLeadingChars(pt, 'x');
+	    pt += dCount;
+	    int h2Count = countLeadingChars(pt, 'O');
+	    pt += h2Count;
+	    n = pt - (labels+stateIx);
+
+	    int dnaseStart = start + (h1Count)*shrinkFactor;
+	    int dnaseWidth = (dCount)*shrinkFactor;
+	    int hisStart = start;
+	    int hisWidth = (h1Count + dCount + h2Count)*shrinkFactor;
+	    fprintf(f, "%s\t%d\t%d\t", chrom, hisStart, hisStart+hisWidth);
+	    fprintf(f, "bead");
+	    fprintf(f, "\t0\t.\t");
+	    fprintf(f, "%d\t%d\n", dnaseStart,  dnaseStart + dnaseWidth);
+	    stateIx += n;
+
+	    if (peakFile != NULL)
+	        {
+		outputPeakIfOverThreshold(chrom, dnaseStart, dnaseStart + dnaseWidth, 
+			dnaseIn, shrinkFactor, peakThreshold, peakFile);
+		}
 	    break;
 	    }
 	default:
@@ -609,7 +681,7 @@ State *states;
 AllocArray(states, inLetterCount);
 dynamo(inLetters, inLetterCount, states);
 uglyTime("Ran HMM dynamo");
-newOutputStates(chrom->name, 5, states, inLetterCount, f);
+newOutputStates(chrom->name, 5, states, inLetterCount, f, dnaseIn, narrowPeakFile);
 if (simpleBedFile)
     outputSimpleStates(chrom->name, 5, states, inLetterCount, simpleBedFile);
 if (stateProbFile)
@@ -633,6 +705,8 @@ if (simpleBed != NULL)
     simpleBedFile = mustOpen(simpleBed, "w");
 if (stateProb != NULL)
     stateProbFile = mustOpen(stateProb, "w");
+if (narrowPeak != NULL)
+    narrowPeakFile = mustOpen(narrowPeak, "w");
 struct bbiChromInfo *chrom, *chromList = bbiChromList(dnaseIn->bigWig);
 makeTransitionProbs();
 makeEmissionProbs();
@@ -651,6 +725,7 @@ if (stateProbFile)
     writeStateSummaryInC(stateProbFile, &stateSummary);
 carefulClose(&stateProbFile);
 carefulClose(&simpleBedFile);
+carefulClose(&narrowPeakFile);
 carefulClose(&f);
 }
 
@@ -662,6 +737,8 @@ if (argc != 3)
     usage();
 simpleBed = optionVal("simpleBed", simpleBed);
 stateProb = optionVal("stateProb", stateProb);
+peakThreshold = optionDouble("peakThreshold", peakThreshold);
+narrowPeak = optionVal("narrowPeak", narrowPeak);
 regBeadPos(argv[1], argv[2]);
 return 0;
 }
