@@ -1387,6 +1387,21 @@ if (s == NULL || s[0] == 0)
 return s[strlen(s)-1];
 }
 
+char *lastNonwhitespaceChar(char *s)
+// Return pointer to last character in string that is not whitespace.
+{
+if (s == NULL || s[0] == 0)
+    return NULL;
+
+char *sPos = s + (strlen(s) - 1);
+for (;sPos >= s;sPos--)
+    {
+    if (!isspace(*sPos))
+        return sPos;
+    }
+return NULL;
+}
+
 char *matchingCharBeforeInLimits(char *limit, char *s, char c)
 /* Look for character c sometime before s, but going no further than limit.
  * Return NULL if not found. */

@@ -2847,7 +2847,7 @@ wgEncode 1
     maxLimit 127303.00
     autoScale off
     maxHeightPixels 100:32:16
-    windowingFunction maximum
+    windowingFunction mean+whiskers
 
         track wgEncodeUwDnaseAg04450RawRep1
         parent wgEncodeUwDnaseViewzRaw off

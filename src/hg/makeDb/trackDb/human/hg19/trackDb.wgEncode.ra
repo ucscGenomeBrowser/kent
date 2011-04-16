@@ -10,7 +10,7 @@ include wgEncodeGencodeV5.ra alpha
 include wgEncodeUncBsuProt.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.ra alpha
+include wgEncodeReg.ra alpha,beta
 #include wgEncodeRegNorm.ra alpha
 
 # Nucleosome (wrangler: venkat)
