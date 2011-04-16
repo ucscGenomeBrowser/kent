@@ -18,7 +18,7 @@
 #include "jsHelper.h"
 #include "hPrint.h"
 #include "suggest.h"
-#include "searchTracks.h"
+#include "search.h"
 
 static char const rcsid[] = "$Id: hgGateway.c,v 1.117 2010/04/29 02:54:35 larrym Exp $";
 

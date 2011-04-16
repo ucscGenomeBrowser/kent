@@ -10,7 +10,7 @@
 #include "hCommon.h"
 #include "hui.h"
 #include "fileUi.h"
-#include "searchTracks.h"
+#include "search.h"
 #include "cart.h"
 #include "grp.h"
 
@@ -34,93 +34,11 @@ boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTim
 #define TRACK_SEARCH_ON_DESCR    "tsDescr"
 #define TRACK_SEARCH_SORT        "tsSort"
 
-#define SUPPORT_COMPOSITE_SEARCH
-#ifdef SUPPORT_COMPOSITE_SEARCH
-    //#define USE_TABS
-#endif///def SUPPORT_COMPOSITE_SEARCH
-
-#ifdef SUPPORT_COMPOSITE_SEARCH
-// make a matchString function to support "contains", "is" etc. and wildcards in contains
-
-//    ((sameString(op, "is") && !strcasecmp(track->shortLabel, str)) ||
-
-#define MATCH_ON_EACH_WORD
-#ifdef MATCH_ON_EACH_WORD
-#define MATCH_ON_WILDS
-static boolean matchToken(char *string, char *token)
-{
-if (string == NULL)
-    return (token == NULL);
-if (token == NULL)
-    return TRUE;
-
-if (!strchr(token,'*') && !strchr(token,'?'))
-    return (strcasestr(string,token) != NULL);
-
-#ifdef MATCH_ON_WILDS
-char wordWild[1024];
-safef(wordWild,sizeof wordWild,"*%s*",token);
-return wildMatch(wordWild, string);
-
-// do this with regex ? Would require all sorts of careful parsing for ()., etc.
-//safef(wordWild,sizeof wordWild,"^*%s*$",token);
-//regex_t regEx;
-//int err = regcomp(&regEx, token, REG_NOSUB | REG_ICASE);
-//if(err != 0)  // Compile the regular expression so that it can be used.  Use: REG_EXTENDED ?
-//    {
-//    char buffer[128];
-//    regerror(err, &regEx, buffer, sizeof buffer);
-//    warn("ERROR: Invalid regular expression: [%s] %s\n",token,buffer);
-//    regfree(&regEx);
-//    return FALSE;
-//    }
-//err = regexec(&regEx, mdbVar->val, 0, NULL, 0);
-//regfree(&regEx);
-//return (err == 0);
-
-#endif//def MATCH_ON_WILDS
-}
-
-static boolean doesNameMatch(struct trackDb *tdb, struct slName *wordList)
-// We parse str and look for every word at the start of any word in track description (i.e. google style).
-{
-if (tdb->html == NULL)
-    return (wordList != NULL);
-
-struct slName *word = wordList;
-for(; word != NULL; word = word->next)
-    {
-    if (!matchToken(tdb->shortLabel,word->name)
-    &&  !matchToken(tdb->longLabel, word->name))
-        return FALSE;
-    }
-return TRUE;
-}
-
-static boolean doesDescriptionMatch(struct trackDb *tdb, struct slName *wordList)
-// We parse str and look for every word at the start of any word in track description (i.e. google style).
-{
-//static boolean tryitOneCycle=TRUE;
-if (tdb->html == NULL)
-    return (wordList != NULL);
-
-if (strchr(tdb->html,'\n'))
-    strSwapChar(tdb->html,'\n',' ');   // DANGER: don't own memory.  However, this CGI will use html for no other purpose
-
-struct slName *word = wordList;
-for(; word != NULL; word = word->next)
-    {
-    if (!matchToken(tdb->html,word->name))
-        return FALSE;
-    }
-return TRUE;
-}
-#endif///def MATCH_ON_EACH_WORD
+//#define USE_TABS
 
 static struct trackDb *tdbFilterBy(struct trackDb **pTdbList, char *name, char *description, char *group)
 // returns tdbs that match supplied criterion, leaving unmatched in list passed in
 {
-#ifdef MATCH_ON_EACH_WORD
 // Set the word lists up once
 struct slName *nameList = NULL;
 if (name)
@@ -128,19 +46,10 @@ if (name)
 struct slName *descList = NULL;
 if (description)
     descList = slNameListOfUniqueWords(cloneString(description),TRUE);
-#endif///def MATCH_ON_EACH_WORD
 
 struct trackDb *tdbList = *pTdbList;
 struct trackDb *tdbRejects = NULL;
 struct trackDb *tdbMatched = NULL;
-#ifndef MATCH_ON_EACH_WORD
-char nameWild[256];
-if (name)
-    safef(nameWild,sizeof nameWild,"*%s*",name);
-char descWild[512];
-if (description)
-    safef(descWild,sizeof descWild,"*%s*",description);
-#endif///ndef MATCH_ON_EACH_WORD
 
 while (tdbList != NULL)
     {
@@ -150,22 +59,13 @@ while (tdbList != NULL)
         slAddHead(&tdbRejects,tdb);
     else if (group && differentString(tdb->grp,group))
         slAddHead(&tdbRejects,tdb);
-#ifdef MATCH_ON_EACH_WORD
-    else if (name && !doesNameMatch(tdb, nameList))
+    else if (name && !searchNameMatches(tdb, nameList))
         slAddHead(&tdbRejects,tdb);
-    else if (description && !doesDescriptionMatch(tdb, descList))
+    else if (description && !searchDescriptionMatches(tdb, descList))
         slAddHead(&tdbRejects,tdb);
-#else///ifndef MATCH_ON_EACH_WORD
-    else if (name && (!wildMatch(nameWild,tdb->shortLabel) && !wildMatch(nameWild,tdb->longLabel)))
-        slAddHead(&tdbRejects,tdb);
-    else if (description && (tdb->html == NULL || !wildMatch(descWild,tdb->html)))
-        slAddHead(&tdbRejects,tdb);
-#endif///ndef MATCH_ON_EACH_WORD
     else
         slAddHead(&tdbMatched,tdb);
     }
-//slReverse(&tdbRejects); // Needed?
-//slReverse(&tdbMatched); // Needed?
 *pTdbList = tdbRejects;
 
 //warn("matched %d tracks",slCount(tdbMatched));
@@ -202,7 +102,6 @@ if (dyStringLen(dyComposites) > 0)
 dyStringFree(&dyComposites);
 return FALSE;
 }
-#endif///def SUPPORT_COMPOSITE_SEARCH
 
 #ifdef USE_TABS
 static struct slRef *simpleSearchForTdbs(struct trix *trix,char **descWords,int descWordCount)
@@ -225,7 +124,7 @@ return foundTdbs;
 
 struct slName *tdbListGetGroups(struct trackDb *tdbList)
 // Returns a list of groups found in the tdbList
-// FIXME: Should be movedf to trackDbCustom and shared
+// FIXME: Should be moved to trackDbCustom and shared
 {
 struct slName *groupList = NULL;
 char *lastGroup = "[]";
@@ -272,10 +171,8 @@ if (!sqlTableExists(conn, "metaDb"))
     hFreeConn(&conn);
     return;
     }
-#ifdef SUPPORT_COMPOSITE_SEARCH
 char *nameSearch = cartOptionalString(cart, TRACK_SEARCH_ON_NAME);
 char *descSearch=NULL;
-#endif///def SUPPORT_COMPOSITE_SEARCH
 char *fileTypeSearch = cartOptionalString(cart, FILE_SEARCH_ON_FILETYPE);
 boolean doSearch = sameWord(cartUsualString(cart, FILE_SEARCH,"no"), "search");
 #ifdef ONE_FUNC
@@ -284,7 +181,6 @@ struct hash *parents = newHash(4);
 boolean searchTermsExist = FALSE;  // FIXME: Why is this needed?
 int cols;
 
-#ifdef SUPPORT_COMPOSITE_SEARCH
 #ifdef USE_TABS
 enum searchTab selectedTab = simpleTab;
 char *currentTab = cartUsualString(cart, FILE_SEARCH_CURRENT_TAB, "simpleTab");
@@ -304,32 +200,22 @@ enum searchTab selectedTab = filesTab;
 descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
 #endif///ndef USE_TABS
 
-#ifndef MATCH_ON_EACH_WORD
-if(descSearch)
-    stripChar(descSearch, '"');
-#endif///ndef MATCH_ON_EACH_WORD
-
 #ifdef USE_TABS
 struct trix *trix;
 char trixFile[HDB_MAX_PATH_STRING];
 getSearchTrixFile(db, trixFile, sizeof(trixFile));
 trix = trixOpen(trixFile);
 #endif///def USE_TABS
-#endif///def SUPPORT_COMPOSITE_SEARCH
 
 printf("<div style='max-width:1080px;'>");
 // FIXME: Do we need a form at all?
-//printf("<form action='%s' name='%s' id='%s' method='get'>\n\n", hgTracksName(),FILE_SEARCH_FORM,FILE_SEARCH_FORM);
 printf("<form action='../cgi-bin/hgFileSearch' name='%s' id='%s' method='get'>\n\n", FILE_SEARCH_FORM,FILE_SEARCH_FORM);
 cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
-//safef(buf, sizeof(buf), "%lu", clock1());
-//cgiMakeHiddenVar("hgt_", buf);  // timestamps page to avoid browser cache
 
 printf("<input type='hidden' name='db' value='%s'>\n", db);
 printf("<input type='hidden' name='%s' value=''>\n",TRACK_SEARCH_DEL_ROW);
 printf("<input type='hidden' name='%s' value=''>\n",TRACK_SEARCH_ADD_ROW);
 
-#ifdef SUPPORT_COMPOSITE_SEARCH
 #ifdef USE_TABS
 printf("<input type='hidden' name='%s' id='currentTab' value='%s'>\n", FILE_SEARCH_CURRENT_TAB, currentTab);
 printf("<div id='tabs' style='display:none; %s'>\n"
@@ -348,23 +234,18 @@ if (selectedTab==simpleTab && descSearch)
     searchTermsExist = TRUE;
 
 printf("</td></tr><td style='max-height:4px;'></td></tr></table>");
-//printf("</td></tr></table>");
 printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", FILE_SEARCH);
 printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
 printf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
 printf("</div>\n");
-//#else///ifndef USE_TABS
-//printf("<div id='noTabs' style='width:1060px;'>\n");//,cgiBrowser()==btIE?"width:1060px;":"max-width:inherit;");
 #endif///def USE_TABS
-#endif///def SUPPORT_COMPOSITE_SEARCH
 
 // Files tab
 printf("<div id='filesTab' style='width:inherit;'>\n"
         "<table id='filesTable' cellSpacing=0 style='width:inherit; font-size:.9em;'>\n");
 cols = 8;
 
-#ifdef SUPPORT_COMPOSITE_SEARCH
-//// Track Name contains
+// Track Name contains
 printf("<tr><td colspan=3></td>");
 printf("<td nowrap><b style='max-width:100px;'>Track&nbsp;Name:</b></td>");
 printf("<td align='right'>contains</td>\n");
@@ -409,15 +290,9 @@ cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearc
 printf("</td></tr>\n");
 if (selectedTab==filesTab && groupSearch)
     searchTermsExist = TRUE;
-#endif///def SUPPORT_COMPOSITE_SEARCH
 
 // Track Type is (drop down)
-#ifdef SUPPORT_COMPOSITE_SEARCH
 printf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
-#else///ifndef SUPPORT_COMPOSITE_SEARCH
-printf("<tr><td colspan=2></td><td align='right'>&nbsp;</td>\n");
-#endif///ndef SUPPORT_COMPOSITE_SEARCH
-//printf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n"); // Bring back "and" if using "Track Name,Description or Group
 printf("<td nowrap><b style='max-width:100px;'>Data Format:</b></td>");
 printf("<td align='right'>is</td>\n");
 printf("<td colspan='%d'>", cols - 4);
@@ -453,7 +328,6 @@ printf("<input type='submit' name='submit' value='cancel' class='cancel' style='
 //printf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
 printf("</div>\n");
 
-#ifdef SUPPORT_COMPOSITE_SEARCH
 #ifdef USE_TABS
 printf("</div>\n"); // End tabs div
 #endif///def USE_TABS
@@ -464,7 +338,6 @@ if(descSearch != NULL && !strlen(descSearch))
     descSearch = NULL;
 if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
     groupSearch = NULL;
-#endif///def SUPPORT_COMPOSITE_SEARCH
 
 printf("</form>\n");
 printf("</div>"); // Restricts to max-width:1000px;
@@ -507,7 +380,6 @@ if(doSearch)
     else if(selectedTab==filesTab && mdbPairs != NULL)
 #endif///def USE_TABS
         {
-        #ifdef SUPPORT_COMPOSITE_SEARCH
         if (nameSearch || descSearch || groupSearch)
             {  // Use nameSearch, descSearch and groupSearch to narrow down the list of composites.
 
@@ -520,7 +392,6 @@ if(doSearch)
                 doSearch = mdbSelectsAddFoundComposites(&mdbSelects,tdbsMatch);
                 }
             }
-        #endif///def SUPPORT_COMPOSITE_SEARCH
 
         if (doSearch && mdbSelects != NULL && isNotEmpty(fileTypeSearch))
             fileSearchResults(db, conn, mdbSelects, fileTypeSearch);
@@ -596,4 +467,4 @@ return 0;
 // 1) Done: Limit to first 1000
 // 2) Work out simple verses advanced tabs
 // 3) work out support for non-encode downloads
-// 4) Make an hgTrackSearch to replces hgTracks track search ??   Silpler code, but may not be good idea.
+// 4) Make an hgTrackSearch to replace hgTracks track search ??   Simlpler code, but may not be good idea because of composite reshaping in cart vars

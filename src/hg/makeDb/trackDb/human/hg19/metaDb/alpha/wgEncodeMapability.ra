@@ -82,6 +82,11 @@ tableName wgEncodeCrgMapabilityAlign75mer
 uniqueness no more than 2 mismatches
 view Alignability
 
+metaObject wgEncodeMapability
+objType composite
+composite wgEncodeMapability
+expVars lab,dataType,view,size
+
 metaObject wgEncodeMapabilityDukeRegionsExcluded
 objType table
 composite wgEncodeMapability
@@ -129,4 +134,4 @@ subId 3840
 tableName wgEncodeMapabilityDukeUniqueness35bp
 view Uniqueness
 
-# MAGIC: -62410028
+# MAGIC: 1151436231

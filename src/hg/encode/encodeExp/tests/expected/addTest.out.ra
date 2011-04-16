@@ -12,3 +12,9 @@ dataType ChipSeq
 cellType CH12
 expVars Antibody=Pol2
 
+ix 3
+organism human
+lab Duke
+dataType DnaseSeq
+cellType K562
+

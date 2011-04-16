@@ -4124,7 +4124,7 @@ type bed 4 .
 
 track iscaRetrospective
 shortLabel ISCA Retro
-longLabel International Standard Cytogenetic Array Consortium - Retrospective variants
+longLabel International Standards for Cytogenetic Arrays Consortium - Retrospective variants
 group varRep
 priority 110
 visibility hide

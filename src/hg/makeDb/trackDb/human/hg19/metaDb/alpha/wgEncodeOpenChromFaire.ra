@@ -628,7 +628,7 @@ dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeOpenChromFaireGm12878Validation.tgz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 subId 3831
@@ -2651,7 +2651,7 @@ dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeOpenChromFaireK562Validation.tgz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 subId 3831
@@ -3577,4 +3577,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 95994083
+# MAGIC: 81612381

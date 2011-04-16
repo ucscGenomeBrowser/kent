@@ -7797,7 +7797,7 @@ description HPA Restriction Enzyme
 type restrictionEnzyme
 
 
-### view     THIS WHOLE SECTION IS A PROVISIONAL ATTEMPT AT CONTROLLING VIEWS
+### view     THIS WHOLE SECTION IS A ATTEMPT AT CONTROLLING VIEWS
 ### term:
 ### tag:   This is the camel case convention that we use in our file names
 ### label: This will be used for human display
@@ -7902,7 +7902,7 @@ term GeneGencV3c
 tag GeneGencV3c
 type view
 label Genes Gencode V3c
-description Provisional GeneGencV3c
+description GeneGencV3c
 
 term HMM
 tag HMM
@@ -8205,7 +8205,7 @@ label Methyl RRBS
 description Methyl RRBS
 
 # tag not standard to match hg18
-term Nre
+term NRE
 tag NRE
 type dataType
 description Negative Regulatory Elements
@@ -8445,6 +8445,18 @@ tag 3
 type tier
 description tier 3
 
+
+## Tissue Sourced (Used for Mouse cell)
+term Individual
+tag Individual
+type tissueSourceType
+description Tissue obtained from an individual (Provisional)
+
+term Pooled
+tag Pooled
+type tissueSourceType
+description Tissue obtained from pooling samples from various sample organisms (Provisional)
+
 #Venkat: Trial to add seqPlatform for use for GEO submissions
 #Uses the GEO terms to be conistent and help with GEO submissions
 ### Seq Platform
@@ -8672,11 +8684,12 @@ organism human
 ### HAIB Project Labs
 ### Caltech and HudsonAlpha
 
-term Caltech(Wold)
+term Caltech
 tag Caltech
 type lab
 label Wold - California Institute of Technology
-description Wold - California Institute of Technology
+description PROVISIONAL Wold - California Institute of Technology
+#I took out the Wold at the request of Kate
 grantInst California Institute of Technology (Wold Lab)
 labPi Wold
 labPiFull Barbara Wold
@@ -8831,7 +8844,7 @@ labPiFull Michael Snyder
 grantPi Snyder
 organism human
 
-term Harvard(Weissman)
+term Yale-Weissman
 tag  YaleWeis
 type lab
 label Weissman - Yale University
@@ -9155,7 +9168,7 @@ projectName UNC-Giddings
 #     "regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" )  # ("regex:" includes colon)
 #    # NOTE: that validate rules may end comment delimited by a '#'
 #
-#     priority Like in trackDb.ra this is used for enfocing a sort order in certain circumstances, with lower numbers implying greater priority.
+#     priority Like in trackDb.ra this is used for enforcing a sort order in certain circumstances, with lower numbers implying greater priority.
 #       At beginnning:
 #         species:??  assembly:??  project:010  grant:015  lab:020  composite:025  dataType:030  view:035  type:040
 #       Experiment defining:
@@ -9165,9 +9178,9 @@ projectName UNC-Giddings
 #         origAssembly:305  dataVersion:310  dccAccession:312  dateSubmitted:315  dateResubmitted:320  dateUnrestricted:325  freezeDate:330
 #         subId:335  geoSeries:340  geoSample:345  setType:350  controlId:355
 #       Lab descriptive:
-#         labExpId:410  labProtocolId:420  labVersion:430  softwareVersion:440  privacy:450  rank:460
+#         labExpId:410  labProtocolId:420  labVersion:430  softwareVersion:440  privacy:450  rank:460 tissueSourceType:470
 #       Miscellaneous junk which will be put into the 500 pot which will sort near the end
-#         accession:500  annotation:500  bioRep:500  fragLength:500  fragSize:500  mapAlgorithm:500
+#         accession:500  annotation:500  bioRep:500  fragLength:500  fragSize:500  mapAlgorithm:500  expVars:500
 #         insertLength:500  level:500  obtainedBy:500  readType:500  run:500  seqPlatform:500  size:500  uniqueness:500
 #       At End:
 #         dccInternalNotes:910  parentTable:920  tableName:970  fileName:980  fileIndex:990
@@ -9226,7 +9239,7 @@ label  Transcriptome Bio-Replicate ID
 description Cross Transcriptome sample ID number.
 searchable no
 cvDefined no
-validate regex: ^[0-9][0-9][0-9][A-Z]*$
+validate regex: ^[0-9][0-9][0-9][A-Z,0-9]*$
 priority 500
 
 term cellType
@@ -9322,7 +9335,7 @@ validate date # nine months more than dateSubmitted
 term dccAccession
 type typeOfTerm
 label ENCODE DCC Accession
-description PROVISIONAL The accession number provided by the ENCODE Data Coordination Center.
+description The accession number provided by the ENCODE Data Coordination Center.
 searchable freeText
 cvDefined no
 validate regex: ^wgEncode[H,E][0-9]*$
@@ -9363,19 +9376,22 @@ priority 241
 term expId
 type typeOfTerm
 label Experiment ID
-description PROVISIONAL The ENCODE DCC experiment identification number.
+description The ENCODE DCC experiment identification number.
 searchable freeText
 cvDefined no
 validate integer
 priority 100
 
-# term expVars
-# type typeOfTerm
-# label Experimental variables
-# description Experiment defining variables for a given ENCODE composite set of tracks.
-# searchable no
-# cvDefined no
-# Only defined for one obj: wgEncodeCaltechRnaSeq  Must be from geo submissions and attached to composite. 11/3/10
+term expVars
+type typeOfTerm
+label Experimental variables
+description Experiment defining variables for a given ENCODE composite set of tracks.
+searchable no
+cvDefined no
+hidden yes
+priority 500
+validate none # Perhaps could add a validte option to restrict/require this var for objType=composite
+# Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
 
 term fileIndex
 type typeOfTerm
@@ -9407,6 +9423,7 @@ priority 500
 # Cricket's special story (11/19/10): in fields.ra we have fragLength
 # and medianFragLength.  fragLength and medianFragLength appear to be
 # redundant, and should be collapsed into fragLength
+# Venkat (4/5/2011): fragLength will be used only for hg18 at the moment, term is retired for hg19, mm9
 
 term fragSize
 type typeOfTerm
@@ -9551,7 +9568,7 @@ label md5sum
 description The md5sum for the file associated with the object.
 searchable no
 cvDefined no
-validate regex: ^([0-9a-f]){32,32}$
+validate regex: ^[0-9a-f]*$
 priority 500
 
 term obtainedBy
@@ -9793,6 +9810,15 @@ searchable multiSelect
 cvDefined yes
 validate cv or None
 priority 180
+
+term tissueSourceType
+type typeOfTerm
+label Tissue Source Type
+description Source of tissue from either an indiviual organism or pooled set of organisms (Provisional)
+searchable multiSelect
+cvDefined yes
+validate cv 
+priority 470
 
 # term type
 # type typeOfTerm

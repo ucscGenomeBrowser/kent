@@ -8,7 +8,7 @@ wgEncodeGencode.ra \
 wgEncodeGisChiaPet.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaSeq.ra \
-wgEncodeHaibMethyl27.ra \
+wgEncodeHaibMethylArray.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibRnaSeq.ra\
 wgEncodeHaibTfbs.ra \

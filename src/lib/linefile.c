@@ -1,5 +1,5 @@
 /* lineFile - stuff to rapidly read text files and parse them into
- * lines. 
+ * lines.
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
@@ -23,14 +23,14 @@ if (startsWith("\x1f\x8b",m)) ext = "gz";
 else if (startsWith("\x1f\x9d\x90",m)) ext = "Z";
 else if (startsWith("BZ",m)) ext = "bz2";
 else if (startsWith("PK\x03\x04",m)) ext = "zip";
-if (ext==NULL) 
+if (ext==NULL)
     return NULL;
 safef(buf, sizeof(buf), "somefile.%s", ext);
 return cloneString(buf);
-}   
+}
 
 static char **getDecompressor(char *fileName)
-/* if a file is compressed, return the command to decompress the 
+/* if a file is compressed, return the command to decompress the
  * approriate format, otherwise return NULL */
 {
 static char *GZ_READ[] = {"gzip", "-dc", NULL};
@@ -51,7 +51,7 @@ else
 }
 
 static void metaDataAdd(struct lineFile *lf, char *line)
-/* write a line of metaData to output file 
+/* write a line of metaData to output file
  * internal function called by lineFileNext */
 {
 struct metaOutput *meta = NULL;
@@ -98,7 +98,7 @@ lf->metaLines = hashNew(8);
 }
 
 static char * headerBytes(char *fileName, int numbytes)
-/* Return specified number of header bytes from file 
+/* Return specified number of header bytes from file
  * if file exists as a string which should be freed. */
 {
 int fd,bytesread=0;
@@ -106,7 +106,7 @@ char *result = NULL;
 if ((fd = open(fileName, O_RDONLY)) >= 0)
     {
     result=needMem(numbytes+1);
-    if ((bytesread=read(fd,result,numbytes)) < numbytes) 
+    if ((bytesread=read(fd,result,numbytes)) < numbytes)
 	freez(&result);  /* file too short? can read numbytes */
     else
 	result[numbytes]=0;
@@ -114,7 +114,7 @@ if ((fd = open(fileName, O_RDONLY)) >= 0)
     }
 return result;
 }
-     
+
 
 struct lineFile *lineFileDecompress(char *fileName, bool zTerm)
 /* open a linefile with decompression */
@@ -331,7 +331,7 @@ noTabixSupport(lf, "lineFileSeek");
 if (lf->pl != NULL)
     errnoAbort("Can't lineFileSeek on a compressed file: %s", lf->fileName);
 lf->reuse = FALSE;
-if (whence == SEEK_SET && offset >= lf->bufOffsetInFile 
+if (whence == SEEK_SET && offset >= lf->bufOffsetInFile
 	&& offset < lf->bufOffsetInFile + lf->bytesInBuf)
     {
     lf->lineStart = lf->lineEnd = offset - lf->bufOffsetInFile;
@@ -381,8 +381,8 @@ while (c < buf+bufSize)
     if (*c=='\r')
 	{
     	lf->nlType = nlt_mac;
-	if (++c < buf+bufSize) 
-    	    if (*c == '\n') 
+	if (++c < buf+bufSize)
+    	    if (*c == '\n')
     		lf->nlType = nlt_dos;
 	return;
 	}
@@ -408,8 +408,8 @@ if (lf->reuse)
     if (retSize != NULL)
 	*retSize = lf->lineEnd - lf->lineStart;
     *retStart = buf + lf->lineStart;
-    if (lf->metaOutput && *retStart[0] == '#') 
-        metaDataAdd(lf, *retStart); 
+    if (lf->metaOutput && *retStart[0] == '#')
+        metaDataAdd(lf, *retStart);
     return TRUE;
     }
 
@@ -518,7 +518,7 @@ while (!gotLf)
     lf->lineEnd = 0;
 
     determineNlType(lf, buf+endIx, bytesInBuf);
-	
+
     /* Look for next end of line.  */
     switch(lf->nlType)
 	{
@@ -662,7 +662,7 @@ void lineFileExpectWords(struct lineFile *lf, int expecting, int got)
 /* Check line has right number of words. */
 {
 if (expecting != got)
-    errAbort("Expecting %d words line %d of %s got %d", 
+    errAbort("Expecting %d words line %d of %s got %d",
 	    expecting, lf->lineIx, lf->fileName, got);
 }
 
@@ -670,7 +670,7 @@ void lineFileExpectAtLeast(struct lineFile *lf, int expecting, int got)
 /* Check line has right number of words. */
 {
 if (got < expecting)
-    errAbort("Expecting at least %d words line %d of %s got %d", 
+    errAbort("Expecting at least %d words line %d of %s got %d",
 	    expecting, lf->lineIx, lf->fileName, got);
 }
 
@@ -680,8 +680,74 @@ void lineFileShort(struct lineFile *lf)
 errAbort("Short line %d of %s", lf->lineIx, lf->fileName);
 }
 
+void lineFileReuseFull(struct lineFile *lf)
+// Reuse last full line read.  Unlike lineFileReuse,
+// lineFileReuseFull only works with previous lineFileNextFull call
+{
+assert(lf->fullLine != NULL);
+lf->fullLineResuse = TRUE;
+}
+
+
+boolean lineFileNextFull(struct lineFile *lf, char **retStart, int *retSize)
+// Fetch next line from file joining up any that are continued by ending '\'
+// NOTE: comment lines can't be continued!  ("# comment \ \n more comment" is 2 lines.)
+{
+// May have requested reusing the last full line.
+if (lf->fullLineResuse)
+    {
+    assert(lf->fullLine != NULL);
+    lf->fullLineResuse = FALSE;
+    *retStart = dyStringContents(lf->fullLine);
+    if (retSize)
+        *retSize = dyStringLen(lf->fullLine);
+    return TRUE;
+    }
+
+*retStart = NULL;
+
+// Initialize memory if needed
+if (lf->fullLine == NULL)
+    lf->fullLine = dyStringNew(1024);
+dyStringClear(lf->fullLine);
+
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    char *clippedText = skipLeadingSpaces(line);
+
+    // Fill lf memory in case of continued lines
+    if (dyStringLen(lf->fullLine) == 0)
+        {
+        dyStringAppend(lf->fullLine,line); // includes first line's whitespace.
+        *retStart = dyStringContents(lf->fullLine);
+        }
+    else if (clippedText[0] != '\0')
+        dyStringAppend(lf->fullLine,clippedText); // don't include continued line's leading spaces
+
+    // Will the next line continue this one?
+    if (clippedText[0] != '\0' && clippedText[0] != '#') // Comment lines can't be continued!
+        {
+        line = dyStringContents(lf->fullLine);
+        char *lastChar = lastNonWhitespaceChar(line);
+        if (lastChar != NULL && *lastChar == '\\')
+            {
+            if (lastChar > line && *(lastChar - 1) != '\\') // Not an escaped continuation char
+                {
+                dyStringResize(lf->fullLine,(lastChar - line)); // This clips off the last char and any trailing white-space in dyString
+                continue;
+                }
+            }
+        }
+    if (retSize)
+        *retSize = dyStringLen(lf->fullLine);
+    return TRUE;
+    }
+return FALSE;
+}
+
 boolean lineFileNextReal(struct lineFile *lf, char **retStart)
-/* Fetch next line from file that is not blank and 
+/* Fetch next line from file that is not blank and
  * does not start with a '#'. */
 {
 char *s, c;
@@ -690,12 +756,24 @@ while (lineFileNext(lf, retStart, NULL))
     s = skipLeadingSpaces(*retStart);
     c = s[0];
     if (c != 0 && c != '#')
-        {
-	return TRUE;
-        }
+        return TRUE;
     }
 return FALSE;
 }
+
+boolean lineFileNextFullReal(struct lineFile *lf, char **retStart)
+// Fetch next line from file that is not blank and does not start with a '#'.
+// Continuation lines (ending in '\') are joined into a single line.
+{
+while (lineFileNextFull(lf, retStart, NULL))
+    {
+    char *clippedText = skipLeadingSpaces(*retStart);
+    if (clippedText[0] != '\0' && clippedText[0] != '#')
+        return TRUE;
+    }
+return FALSE;
+}
+
 
 int lineFileChopNext(struct lineFile *lf, char *words[], int maxWords)
 /* Return next non-blank line that doesn't start with '#' chopped into words. */
@@ -799,7 +877,7 @@ for (c = words[wordIx]; *c; c++)
     if (*c == '-' || isdigit(*c))
         /* NOTE: embedded '-' will be caught by lineFileNeedNum */
         continue;
-    errAbort("Expecting integer field %d line %d of %s, got %s", 
+    errAbort("Expecting integer field %d line %d of %s, got %s",
             wordIx+1, lf->lineIx, lf->fileName, words[wordIx]);
     }
 return lineFileNeedNum(lf, words, wordIx);
@@ -812,7 +890,7 @@ int lineFileNeedNum(struct lineFile *lf, char *words[], int wordIx)
 char *ascii = words[wordIx];
 char c = ascii[0];
 if (c != '-' && !isdigit(c))
-    errAbort("Expecting number field %d line %d of %s, got %s", 
+    errAbort("Expecting number field %d line %d of %s, got %s",
     	wordIx+1, lf->lineIx, lf->fileName, ascii);
 return atoi(ascii);
 }
@@ -872,7 +950,7 @@ return dyStringCannibalize(&dy);
 
 boolean lineFileParseHttpHeader(struct lineFile *lf, char **hdr,
 				boolean *chunked, int *contentLength)
-/* Extract HTTP response header from lf into hdr, tell if it's 
+/* Extract HTTP response header from lf into hdr, tell if it's
  * "Transfer-Encoding: chunked" or if it has a contentLength. */
 {
   struct dyString *header = newDyString(1024);
@@ -949,7 +1027,7 @@ boolean lineFileParseHttpHeader(struct lineFile *lf, char **hdr,
 
 struct dyString *lineFileSlurpHttpBody(struct lineFile *lf,
 				       boolean chunked, int contentLength)
-/* Return a dyString that contains the http response body in lf.  Handle 
+/* Return a dyString that contains the http response body in lf.  Handle
  * chunk-encoding and content-length. */
 {
   struct dyString *body = newDyString(64*1024);
@@ -983,7 +1061,7 @@ struct dyString *lineFileSlurpHttpBody(struct lineFile *lf,
 	      if (line == NULL || (line[0] != '\r' && line[0] != 0))
 		warn("%s: chunked transfer-encoding: expected blank line, got %s\n",
 		     lf->fileName, line);
-	      
+
 	      break;
 	    }
 	  /* Read (and save) lines until we have read in chunk. */
@@ -994,7 +1072,7 @@ struct dyString *lineFileSlurpHttpBody(struct lineFile *lf,
 	      dyStringAppendN(body, line, lineSize-1);
 	      dyStringAppendC(body, '\n');
 	    }
-	  /* Read blank line - or extra CRLF inserted in the middle of the 
+	  /* Read blank line - or extra CRLF inserted in the middle of the
 	   * current line, in which case we need to trim it. */
 	  if (size > chunkSize)
 	    {

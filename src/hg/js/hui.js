@@ -369,6 +369,9 @@ function matChkBoxNormalize(matCB)
         subCBs = objsFilterByClasses(subCBs,"not",arguments[1]);
     }
 
+    // Only look at visible views
+    subCBs = $(subCBs).not(":disabled");
+
     if(subCBs.length > 0) {
         var CBsChecked = subCBs.filter(":checked");
         if(!isABC) {
@@ -421,7 +424,7 @@ function matCbFindFromSubCb(subCB)
 {
 // returns the one matCB associated with a subCB (or undefined)
     var classList =  $( subCB ).attr("class").split(" ");
-    classes = '.' + classList.slice(1,3).join('.');   // How to get only X and Y classes?  Assume they are the first 2 ("subCB GM12878 H3K4me3 rep1 p1" we only want ".GM12878.H3K4me3")
+    var classes = '.' + classList.slice(1,classList.length - 1).join('.');   // How to get only X and Y classes?  Assume they are the first 2 ("subCB GM12878 H3K4me3 rep1 p1" we only want ".GM12878.H3K4me3")
     // At this point classes has been converted from "subCB 1GM12878 CTCF rep1 cHot" to ".1GM12878.CTCF"
     var matCB = $("input.matCB"+classes); // NOte, this works for filtering multiple classes because we want AND
     if(matCB.length == 1)

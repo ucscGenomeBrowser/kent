@@ -42,7 +42,6 @@ wgEncode 1
         maxLimit 175406
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep1K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqPlusRawSignalRep2K562CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal off
@@ -55,7 +54,6 @@ wgEncode 1
         maxLimit 13556
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep2K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal on
@@ -68,7 +66,6 @@ wgEncode 1
         maxLimit 20925
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
 
         track wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCellLongpolya
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal on
@@ -81,7 +78,6 @@ wgEncode 1
         minLimit 0
         maxLimit 45103
         transformFunc NONE
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCellLongpolya
 
     track wgEncodeGisRnaSeqView2-MinusRawSignal
     shortLabel Minus Raw Signal
@@ -105,7 +101,6 @@ wgEncode 1
         maxLimit 56250
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep1K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqMinusRawSignalRep2K562CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal off
@@ -118,7 +113,6 @@ wgEncode 1
         maxLimit 10333
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep2K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal on
@@ -131,7 +125,6 @@ wgEncode 1
         maxLimit 13935
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
 
         track wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCellLongpolya
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal on
@@ -144,7 +137,6 @@ wgEncode 1
         maxLimit 48723
         color 0,107,27
         transformFunc NONE
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCellLongpolya
 
     track wgEncodeGisRnaSeqView3-AllRawSignal
     shortLabel All Raw Signal
@@ -168,7 +160,6 @@ wgEncode 1
         maxLimit 175407
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep1K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
@@ -181,7 +172,6 @@ wgEncode 1
         maxLimit 13556
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
@@ -194,7 +184,6 @@ wgEncode 1
         maxLimit 20925
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
 
         track wgEncodeGisRnaSeqAllRawSignalRep1H1hescCellLongpolya
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
@@ -207,7 +196,6 @@ wgEncode 1
         minLimit 0
         maxLimit 48723
         transformFunc NONE
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep1H1hescCellLongpolya
 
     track wgEncodeGisRnaSeqView4-Alignments
     shortLabel Alignments
@@ -228,7 +216,6 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya.tagAlign.gz
 
         track wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView4-Alignments off
@@ -243,7 +230,6 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya.tagAlign.gz
 
         track wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView4-Alignments off
@@ -258,7 +244,6 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya.tagAlign.gz
 
         track wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya
         subTrack wgEncodeGisRnaSeqView4-Alignments off
@@ -273,7 +258,6 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya.tagAlign.gz
 
     track wgEncodeGisRnaSeqView5-SplitAlign
     shortLabel Split Alignments
@@ -296,7 +280,6 @@ wgEncode 1
         showDiffBasesMaxZoom 10000.0
     #    configurable on
         type bed 6
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=SplitAlign replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya fileName=wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya
         subTrack wgEncodeGisRnaSeqView5-SplitAlign off
@@ -313,6 +296,5 @@ wgEncode 1
         showDiffBasesMaxZoom 10000.0
     #    configurable on
         type bed 6
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=SplitAlign replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya fileName=wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya.pairedTagAlign.gz
 
 

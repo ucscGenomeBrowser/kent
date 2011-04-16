@@ -285,7 +285,7 @@ for (;;)
 	{
         char *subRelease;
 
-	if (!lineFileNext(lf, &line, NULL))
+	if (!lineFileNextFull(lf, &line, NULL)) // NOTE: lineFileNextFull joins continuation lines
 	   {
 	   done = TRUE;
 	   break;
@@ -293,7 +293,7 @@ for (;;)
 	line = skipLeadingSpaces(line);
         if (startsWithWord("track", line))
             {
-            lineFileReuse(lf);
+            lineFileReuseFull(lf); // NOTE: lineFileReuseFull only works with previous lineFileNextFull call
             break;
             }
         else if ((incFile = trackDbInclude(raFile, line, &subRelease)) != NULL)
@@ -314,28 +314,28 @@ for (;;)
     slAddHead(&btList, bt);
     for (;;)
         {
-	/* Break at blank line or EOF. */
-	if (!lineFileNext(lf, &line, NULL))
-	    break;
-	line = skipLeadingSpaces(line);
-	if (line == NULL || line[0] == 0)
-	    break;
+        /* Break at blank line or EOF. */
+        if (!lineFileNextFull(lf, &line, NULL))  // NOTE: lineFileNextFull joins continuation lines
+            break;
+        line = skipLeadingSpaces(line);
+        if (line == NULL || line[0] == 0)
+            break;
 
-	/* Skip comments. */
-	if (line[0] == '#')
-	    continue;
+        /* Skip comments. */
+        if (line[0] == '#')
+            continue;
 
-	/* Parse out first word and decide what to do. */
-	word = nextWord(&line);
-	if (line == NULL)
-	    errAbort("No value for %s line %d of %s", word, lf->lineIx, lf->fileName);
-	line = trimSpaces(line);
-	trackDbUpdateOldTag(&word, &line);
+        /* Parse out first word and decide what to do. */
+        word = nextWord(&line);
+        if (line == NULL)
+            errAbort("No value for %s line %d of %s", word, lf->lineIx, lf->fileName);
+        line = trimSpaces(line);
+        trackDbUpdateOldTag(&word, &line);
         if (releaseTag && sameString(word, "release"))
             errAbort("Release tag %s in stanza with include override %s, line %d of %s",
                 line, releaseTag, lf->lineIx, lf->fileName);
-	trackDbAddInfo(bt, word, line, lf);
-	}
+        trackDbAddInfo(bt, word, line, lf);
+        }
     if (releaseTag)
         trackDbAddRelease(bt, releaseTag);
     }

@@ -315,7 +315,7 @@ sub parseDaf
     my %daf = ();
     $daf{TRACKS} = {};
     my $lines = readFile("$dafFile");
-    my $order = 1;
+	#my $order = 1; Removing order for view level as this is not being used for prioritization
 
     while (@{$lines}) {
         my $line = shift @{$lines};
@@ -334,7 +334,7 @@ sub parseDaf
             my %track = ();
             my $track = $val;
             # remember track of order, so we can prioritize tracks correctly
-            $track{order} = $order++;
+			# $track{order} = $order++; Removing order for view level as this is not being used for prioritization
             $daf{TRACKS}->{$track} = \%track;
             HgAutomate::verbose(5, "  Found view: \'$track\'\n");
             while ($line = shift @{$lines}) {

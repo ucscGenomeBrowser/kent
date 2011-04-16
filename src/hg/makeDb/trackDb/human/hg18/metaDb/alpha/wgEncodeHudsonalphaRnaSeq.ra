@@ -1,3 +1,8 @@
+metaObject wgEncodeHudsonalphaRnaSeq
+objType composite
+composite wgEncodeHudsonalphaRnaSeq
+expVars lab,dataType,cell,treatment,rnaExtract
+
 metaObject wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Dexa
 objType table
 cell A549
@@ -276,4 +281,4 @@ tableName wgEncodeHudsonalphaRnaSeqRPKMRep2JurkatCellPapBow10R1x25
 treatment None
 view RPKM
 
-# MAGIC: -1891417448
+# MAGIC: 1109249421

@@ -6,21 +6,20 @@
 #define ENCODEEXP_H
 
 #include "jksql.h"
-
 #define ENCODEEXP_NUM_COLS 8
 
 struct encodeExp
 /* ENCODE experiments */
     {
     struct encodeExp *next;  /* Next in singly linked list. */
-    int ix;	/* auto-increment ID */
-    char *organism;	/* human | mouse */
-    char *accession;	/* wgEncodeE[H|M]00000N */
+    unsigned ix;	/* auto-increment ID */
+    char *organism;	/* human or mouse */
     char *lab;	/* lab name from ENCODE cv.ra */
     char *dataType;	/* dataType from ENCODE cv.ra */
     char *cellType;	/* cellType from ENCODE cv.ra */
-    char *expVars;	/* typeOfTerm=term list of experiment-defining variables */
-    char *lastUpdated;  /* auto-update timestamp */  // WARNING: hand-edit here
+    char *expVars;	/* var=value list of experiment-defining variables. May be NULL if none. */
+    char *accession;	/* wgEncodeE[H|M]00000N or NULL if proposed but not yet approved */
+    char *updateTime;	/* auto-update timestamp */
     };
 
 void encodeExpStaticLoad(char **row, struct encodeExp *ret);
@@ -100,26 +99,38 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 
 #define ENCODE_EXP_FIELD_IX             "ix"
 #define ENCODE_EXP_FIELD_ORGANISM       "organism"
-#define ENCODE_EXP_FIELD_ACCESSION      "accession"
 #define ENCODE_EXP_FIELD_LAB            "lab"
 #define ENCODE_EXP_FIELD_DATA_TYPE      "dataType"
 #define ENCODE_EXP_FIELD_CELL_TYPE      "cellType"
 #define ENCODE_EXP_FIELD_FACTORS        "expVars"
-#define ENCODE_EXP_FIELD_LAST_UPDATED   "lastUpdated"
+#define ENCODE_EXP_FIELD_ACCESSION      "accession"
+#define ENCODE_EXP_FIELD_UPDATE_TIME    "updateTime"
+
+#define ENCODE_EXP_ORGANISM_HUMAN       "human"
+#define ENCODE_EXP_ORGANISM_MOUSE       "mouse"
 
 #define ENCODE_EXP_NO_CELL              "None"
-#define ENCODE_EXP_NO_VAR               "None"
 
 #define ENCODE_EXP_TABLE        "encodeExp"
 #define ENCODE_EXP_DATABASE     "hgFixed"
 #define ENCODE_EXP_ACC_PREFIX   "wgEncodeE"
 #define ENCODE_EXP_TABLE_LOCK   "lock_encodeExp"
 
+#define ENCODE_EXP_IX_UNDEFINED 0
+
+#define ENCODE_EXP_HISTORY_TABLE_SUFFIX "History"
+
 void encodeExpFieldIndex(char *fieldName);
 /* Get column number of named field in EncodeExp schema */
 
 void encodeExpTableCreate(struct sqlConnection *conn, char *table);
-/* Create an encodeExp table */
+/* Create an encodeExp table and history */
+
+void encodeExpTableDrop(struct sqlConnection *conn, char *tableName);
+/* Drop an encodeExp table and history */
+
+void encodeExpTableRename(struct sqlConnection *conn, char *tableName, char *newTableName);
+/* Rename table and history table, updating triggers to match */
 
 struct encodeExp *encodeExpLoadAllFromTable(struct sqlConnection *conn, char *table);
 /* Load all encodeExp in table */
@@ -154,6 +165,9 @@ char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id)
 /* Add accession field to an existing "temp" experiment.  This is done
  * after experiment is determined to be valid.
  * Return the accession. */
+
+void encodeExpSetAccession(struct encodeExp *exp, char *tableName);
+// Adds accession field to an existing experiment, updating the table.
 
 void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int id);
 /* Revoke an experiment by removing the accession. */
@@ -198,10 +212,8 @@ void encodeExpUpdateField(struct sqlConnection *conn, char *tableName,
    and only for non-accessioned experiments */
 
 void encodeExpUpdateExpVars(struct sqlConnection *conn, char *tableName,
-                                char *accession, struct slPair *varPairs);
+                                int  id, struct slPair *varPairs);
 /* Update expVars in encodeExp identified by accession */
 
 #endif /* ENCODEEXP_H */
-
-
 

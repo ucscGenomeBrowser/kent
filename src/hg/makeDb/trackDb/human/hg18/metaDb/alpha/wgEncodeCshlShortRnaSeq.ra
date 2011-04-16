@@ -1,6 +1,7 @@
 metaObject wgEncodeCshlShortRnaSeq
 objType composite
 composite wgEncodeCshlShortRnaSeq
+expVars lab,dataType,cell,localization,rnaExtract
 geoSeriesAccession GSE24565
 
 metaObject wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort
@@ -1015,4 +1016,4 @@ subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsProstateCellShort
 view Transfrags
 
-# MAGIC: -564665704
+# MAGIC: -1846208836

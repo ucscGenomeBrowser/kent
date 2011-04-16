@@ -1,4 +1,4 @@
-P300SC48343# Stanford/Yale/UCD/Harvard TFBS (wrangler: vsmalladi)
+# Stanford/Yale/UCD/Harvard TFBS (wrangler: vsmalladi)
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
 # Notes:
 #       - Short Labels: 7 charactesr for cell type, 2 characters for view
@@ -14,7 +14,6 @@ P300SC48343# Stanford/Yale/UCD/Harvard TFBS (wrangler: vsmalladi)
 
 
 track wgEncodeSydhTfbs
-release alpha
 compositeTrack on
 superTrack wgEncodeTfBindingSuper dense
 shortLabel  SYDH TFBS
@@ -26,7 +25,7 @@ origAssembly hg19
 nextItemButton on
 subGroup1 view Views Peaks=Peaks  Signal=Signal 
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) K562b=K562b&nbsp;(Tier_1) HeLaS3=HeLa-S3&nbsp;(Tier_2) HepG2=HepG2&nbsp;(Tier_2) HepG2b=HepG2(b)&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293=HEK293 HEK293b=HEK293(b) HCT116=HCT-116 MCF7=MCF-7 MCF10AES=MCF10A-Er-Src  NB4=NB4 NT2D1=NT2-D1 PBDE=PBDE Raji=Raji SHSY5Y=SH-SY5Y tHEK293=T-REx-HEK293  U2OS=U2OS 
-subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=BAF155 BAF170=BAF170 BDP1=BDP1 BHLHE40NB100=BHLHE40_(NB100-1800)  BRCA1A300=BRCA1_(A300-000A) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB cFOS=c-FOS  CHD2AB68301=CHD2_(AB68301) cJUN=c-Jun cMYC=c-Myc CTBP2=CtBP2 CTCFSC15914=CTCF_(SC-15914) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF=EBF ELK4=ELK4 ERRA=ERRA GATA1=GATA-1 GATA2=GATA2 GCN5=GCN5 GRP20=GRp20 GTF2B=GTF2B GTF2F1ab28179=GTF2F1_(AB28179)  HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF1=IRF1 IRF3=IRF3  JUND=JunD KAP1=KAP1 MafFM8194=MafF_(M8194) MafKab50322=MafK_(ab50322) MafKsc477=MafK_(sc477) MAX=Max  Mxi1AF4185=Mxi1_(AF4185) NFE2SC22827=NF-E2_(SC-22827) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300SC48343=p300_(SC-48343) P300SC582=p300_(SC-584) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM19115=PRDM1_(9115) RAD21=Rad21 RFX5200401194=RFX5_(200-401-194) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SMC3ab9263=SMC3_(ab9263) SPT20=SPT20 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 Znf143166181AP=Znf143_(16618-1-AP) ZNF274=ZNF274 ZNF263=ZNF263 ZZZ3=ZZZ3 zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>)  zInputucd=Input_(<i>UCDavis</i>)
+subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=BAF155 BAF170=BAF170 BDP1=BDP1 BHLHE40NB100=BHLHE40_(NB100-1800)  BRCA1A300=BRCA1_(A300-000A) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB cFOS=c-FOS  CHD2AB68301=CHD2_(AB68301) cJUN=c-Jun cMYC=c-Myc CTBP2=CtBP2 CTCFSC15914=CTCF_(SC-15914) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) ELK4=ELK4 ERRA=ERRA GATA1=GATA-1 GATA2=GATA2 GCN5=GCN5 GRP20=GRp20 GTF2B=GTF2B GTF2F1ab28179=GTF2F1_(AB28179)  HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF1=IRF1 IRF3=IRF3  JUND=JunD KAP1=KAP1 MafFM8194=MafF_(M8194) MafKab50322=MafK_(ab50322) MafKsc477=MafK_(sc477) MAX=Max  Mxi1AF4185=Mxi1_(AF4185) NFE2SC22827=NF-E2_(SC-22827) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300SC48343=p300_(SC-48343) P300SC582=p300_(SC-584) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM19115=PRDM1_(9115) RAD21=Rad21 RFX5200401194=RFX5_(200-401-194) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SMC3ab9263=SMC3_(ab9263) SPT20=SPT20 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 Znf143166181AP=Znf143_(16618-1-AP) ZNF274=ZNF274 ZNF263=ZNF263 ZZZ3=ZZZ3 zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>)  zInputucd=Input_(<i>UCDavis</i>)
 subGroup4 control Control std=Standard IGGmus=IgG_mus IGGrab=IgG-rab IGGYale=IgG_Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
 subGroup5 treatment Treatment aNone=None ETOH01=EtOH_0.01pct ETOH01c=EtOH_0.01pct_12hr ETOH01b=EtOH_0.01pct_4hr FORSKLN=forskolin IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=TAM TNFa=TNFa
 dimensions dimensionX=cellType dimensionY=factor dimensionZ=treatment dimensionA=control
@@ -44,7 +43,6 @@ wgEncode 1
 	#Peak Track SYDH TFBS#
 	# Short Label for Peaks= Pk #
     track wgEncodeSydhTfbsViewPeaks
-    release alpha
     shortLabel Peaks
     view Peaks
     visibility pack
@@ -58,7 +56,6 @@ wgEncode 1
     qValueFilterLimits 0:300
 
 	    track wgEncodeSydhTfbsGm12878WhipIggmusPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel GM12878 WHIP   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (WHIP in GM12878 cells)
@@ -68,7 +65,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=GM12878 antibody=WHIP treatment=None control=IgG-mus setType=exp inputType=GM12878/None/Input/IgG-mus view=Peaks labVersion="PeakSeq1.0; Although this dataset barely misses the establish ENCODE standard for data agreement with 77% agreement between replicates instead of 80%, we have submitted it because it appears to be of high quality and because it is from the GM12878 cell line where we and others have generally observed weaker ChIP signal." dataVersion="ENCODE June 2010 Freeze" subId=1178 dateSubmitted=2010-04-26 dateUnrestricted=2011-01-26 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsGm12878WhipIggmusPk fileName=wgEncodeSydhTfbsGm12878WhipIggmusPk.narrowPeak.gz
 
    	    track wgEncodeSydhTfbsHelas3Rad21IggrabPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel HeLa-S3 Rad21  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Rad21 in HeLa-S3 cells)
@@ -78,7 +74,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=Rad21 treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1134 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Rad21IggrabPk fileName=wgEncodeSydhTfbsHelas3Rad21IggrabPk.narrowPeak.gz
 
 	    track wgEncodeSydhTfbsHelas3TbpIggrabPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel HeLa-S3 TBP    Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (TBP in HeLa-S3 cells)
@@ -88,7 +83,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=TBP treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1142 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3TbpIggrabPk fileName=wgEncodeSydhTfbsHelas3TbpIggrabPk.narrowPeak.gz
 
 	    track wgEncodeSydhTfbsHelas3Elk4UcdPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel HeLa-S3 ELK4   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (ELK4 in HeLa-S3 cells)
@@ -98,7 +92,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HeLa-S3 antibody=ELK4 treatment=None control=UCDavis setType=exp inputType=HeLa-S3/None/Input/UCDavis view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1138 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Elk4UcdPk fileName=wgEncodeSydhTfbsHelas3Elk4UcdPk.narrowPeak.gz
 
 	    track wgEncodeSydhTfbsHelas3Irf3IggrabPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel HeLa-S3 IRF3   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (IRF3 in HeLa-S3 cells)
@@ -108,7 +101,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=IRF3 treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1177 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Irf3IggrabPk fileName=wgEncodeSydhTfbsHelas3Irf3IggrabPk.narrowPeak.gz
 
 	    track wgEncodeSydhTfbsHepg2CjunIggrabPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel HepG2   c-Jun  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in HepG2 cells)
@@ -118,7 +110,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=c-Jun treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1145 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2CjunIggrabPk fileName=wgEncodeSydhTfbsHepg2CjunIggrabPk.narrowPeak.gz
 
 	    track wgEncodeSydhTfbsHepg2Pol2IggrabPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel HepG2   Pol2   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HepG2 cells)
@@ -128,7 +119,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=Pol2 treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1179 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Pol2IggrabPk fileName=wgEncodeSydhTfbsHepg2Pol2IggrabPk.narrowPeak.gz
 
 	    track wgEncodeSydhTfbsHepg2TbpIggrabPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel HepG2   TBP    Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (TBP in HepG2 cells)
@@ -138,7 +128,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=TBP treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1141 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2TbpIggrabPk fileName=wgEncodeSydhTfbsHepg2TbpIggrabPk.narrowPeak.gz
 
 	    track wgEncodeSydhTfbsH1hescSuz12UcdPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel H1-hESC SUZ12  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (SUZ12 in H1-hESC cells)
@@ -148,7 +137,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=H1-hESC antibody=SUZ12 treatment=None control=UCDavis setType=exp inputType=H1-hESC/None/Input/UCDavis view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1175 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescSuz12UcdPk fileName=wgEncodeSydhTfbsH1hescSuz12UcdPk.narrowPeak.gz
 
 	    track wgEncodeSydhTfbsK562Ccnt2StdPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    CCNT2  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (CCNT2 in K562 cells)
@@ -158,7 +146,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=CCNT2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1147 dateSubmitted=2010-04-28 dateUnrestricted=2011-01-28 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Ccnt2StdPk fileName=wgEncodeSydhTfbsK562Ccnt2StdPk.narrowPeak.gz
 
 	    track wgEncodeSydhTfbsK562Hmgn3StdPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    HMGN3  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (HMGN3 in K562 cells)
@@ -169,7 +156,6 @@ wgEncode 1
 
 		#Trial of stating treatment of IFNa30 as /a3#
 	    track wgEncodeSydhTfbsK562Irf1Ifna30StdPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562/a3 IRF1   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (IRF1 in K562 cells)
@@ -180,7 +166,6 @@ wgEncode 1
 
 		#Trial of stating treatment of IFNg6 as /g6#
 	    track wgEncodeSydhTfbsK562Irf1Ifng6hStdPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562/g6 IRF1   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (IRF1 in K562 cells)
@@ -190,7 +175,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=IRF1 treatment=IFNg6h control=std setType=exp inputType=K562/IFNg6h/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1139 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Irf1Ifng6hStdPk fileName=wgEncodeSydhTfbsK562Irf1Ifng6hStdPk.narrowPeak.gz
 
 	    track wgEncodeSydhTfbsK562Nrf1IggrabPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    Nrf1   Pk 
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Nrf1 in K562 cells)
@@ -200,7 +184,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=Nrf1 treatment=None control=IgG-rab setType=exp inputType=K562/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1133 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Nrf1IggrabPk fileName=wgEncodeSydhTfbsK562Nrf1IggrabPk.narrowPeak.gz
 
 	    track wgEncodeSydhTfbsK562Gtf2bStdPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    GTF2B  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (GTF2B in K562 cells)
@@ -210,7 +193,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=GTF2B treatment=None control=std setType=exp inputType=K562/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1149 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Gtf2bStdPk fileName=wgEncodeSydhTfbsK562Gtf2bStdPk.narrowPeak.gz
 
 	    track wgEncodeSydhTfbsK562Usf2StdPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    USF2   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (USF2 in K562 cells)
@@ -220,7 +202,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=USF2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1146 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Usf2StdPk fileName=wgEncodeSydhTfbsK562Usf2StdPk.narrowPeak.gz
 
 	    track wgEncodeSydhTfbsHepg2bZnf274UcdPk
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel HepG2b   ZNF274 Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (ZNF274 in HepG2b cells)
@@ -230,7 +211,6 @@ wgEncode 1
 	    #metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HepG2 antibody=ZNF274 setType=exp treatment=None inputType=HepG2/None/Input/UCDavis control=UCDavis view=Peaks labVersion="PeakSeq1.0;  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions." dataVersion="ENCODE June 2010 Freeze" subId=1190 dateSubmitted=2010-05-10 dateUnrestricted=2011-02-10 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Znf274UcdPk fileName=wgEncodeSydhTfbsHepg2Znf274UcdPk.narrowPeak.gz
 
         track wgEncodeSydhTfbsGm12878Znf274UcdPk
-        release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 ZNF274 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (ZNF274 in GM12878 cells)
@@ -240,7 +220,6 @@ wgEncode 1
         metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=GM12878 antibody=ZNF274 setType=exp treatment=None inputType=GM12878/None/Input/UCDavis control=UCDavis view=Peaks labVersion="PeakSeq1.0;  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions." dataVersion="ENCODE June 2010 Freeze" subId=1203 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsGm12878Znf274UcdPk fileName=wgEncodeSydhTfbsGm12878Znf274UcdPk.narrowPeak.gz
 
         track wgEncodeSydhTfbsHuvecGata2UcdPk
-        release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel HUVEC   GATA2  Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (GATA-2 in HUVEC cells)
@@ -250,7 +229,6 @@ wgEncode 1
         metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HUVEC antibody=GATA-2 setType=exp treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1204 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecGata2UcdPk fileName=wgEncodeSydhTfbsHuvecGata2UcdPk.narrowPeak.gz
 
         track wgEncodeSydhTfbsH1hescMaxUcdPk
-        release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel H1-hESC Max    Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Max in H1-hESC cells)
@@ -260,7 +238,6 @@ wgEncode 1
         metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=H1-hESC antibody=Max setType=exp treatment=None inputType=H1-hESC/None/Input/UCDavis control=UCDavis view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1206 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescMaxUcdPk fileName=wgEncodeSydhTfbsH1hescMaxUcdPk.narrowPeak.gz
 
         track wgEncodeSydhTfbsRajiPol2UcdPk
-        release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel Raji    Pol2   Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in Raji cells)
@@ -269,7 +246,6 @@ wgEncode 1
     # subId=1209 dateSubmitted=2010-05-20
 
         track wgEncodeSydhTfbsGm12878TbpIggmusPk
-        release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 TBP    Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (TBP in GM12878 cells)
@@ -279,7 +255,6 @@ wgEncode 1
     # subId=1345 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2JundIggrabPk
-        release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2   JunD   Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (JunD in HepG2 cells)
@@ -289,7 +264,6 @@ wgEncode 1
     # subId=1347 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2Nrf1IggrabPk
-        release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2   Nrf1   Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Nrf1 in HepG2 cells)
@@ -299,7 +273,6 @@ wgEncode 1
     # subId=1348 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2Rad21IggrabPk
-        release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2   Rad21  Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Rad21 in HepG2 cells)
@@ -309,7 +282,6 @@ wgEncode 1
     # subId=1349 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2Usf2IggrabPk
-        release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2   USF2   Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (USF2 in HepG2 cells)
@@ -319,7 +291,6 @@ wgEncode 1
     # subId=1357 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsU2osSetdb1UcdPk
-        release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel U2OS    SETDB  Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (SETDB1 in U2OS cells)
@@ -328,7 +299,6 @@ wgEncode 1
     # subId=1356 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHelas3Stat3IggrabPk
-        release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 STAT3  Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (STAT3 in HeLa-S3 cells)
@@ -338,7 +308,6 @@ wgEncode 1
     # subId=1346 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2Irf3IggrabPk
-        release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2   IRF3   Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (IRF3 in HepG2 cells)
@@ -348,7 +317,6 @@ wgEncode 1
     # subId=1365 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsK562Pol2s2StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off 
         shortLabel K562    Pol2S2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2(phosphoS2) in K562 cells)
@@ -358,7 +326,6 @@ wgEncode 1
         # subId=1623 dateSubmitted=2010-07-12
 
         track wgEncodeSydhTfbsHelas3Znf274UcdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 ZNF274 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (ZNF274 in HeLa-S3 cells)
@@ -368,7 +335,6 @@ wgEncode 1
         # subId=2112 dateSubmitted=2010-08-17
 
         track wgEncodeSydhTfbsHelas3Zzz3StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 ZZZ3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (ZZZ3 in HeLa-S3 cells)
@@ -378,7 +344,6 @@ wgEncode 1
         # subId=2093 dateSubmitted=2010-08-17
 
         track wgEncodeSydhTfbsK562bKap1UcdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off 
         shortLabel K562b KAP1 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (KAP1 in K562b cells)
@@ -388,7 +353,6 @@ wgEncode 1
         # subId=2126 dateSubmitted=2010-08-23
 
         track wgEncodeSydhTfbsK562CmycIfng30StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 c-Myc Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Myc in K562 cells)
@@ -398,7 +362,6 @@ wgEncode 1
         # subId=2111 dateSubmitted=2010-08-17
 
         track wgEncodeSydhTfbsNb4MaxStdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel NB4 Max Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Max in NB4 cells)
@@ -407,7 +370,6 @@ wgEncode 1
         # subId=2131 dateSubmitted=2010-08-26
 
         track wgEncodeSydhTfbsNb4CmycStdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel NB4 c-Myc Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Myc in NB4 cells)
@@ -416,7 +378,6 @@ wgEncode 1
         # subId=2129 dateSubmitted=2010-08-26
 
         track wgEncodeSydhTfbsGm12878Nfe2hStdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 NF-E2_(SC-22827) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NF-E2_(SC-22827) in GM12878 cells)
@@ -426,7 +387,6 @@ wgEncode 1
         # subId=2130 dateSubmitted=2010-09-03
 
         track wgEncodeSydhTfbsPbdeGata1UcdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel PBDE GATA-1 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (GATA-1 in PBDE cells)
@@ -435,7 +395,6 @@ wgEncode 1
         # subId=1955 dateSubmitted=2010-09-23
 
         track wgEncodeSydhTfbsPbdePol2UcdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel PBDE Pol2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in PBDE cells)
@@ -444,7 +403,6 @@ wgEncode 1
         # subId=2485 dateSubmitted=2010-10-13
 
         track wgEncodeSydhTfbsHelas3Rfx5n494IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 RFX5_(200-401-194) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (RFX5_(200-401-194) in HeLa-S3 cells)
@@ -454,7 +412,6 @@ wgEncode 1
         # subId=2517 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsGm12878Rfx5n494IggmusPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 RFX5_(200-401-194) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (RFX5_(200-401-194) in GM12878 cells)
@@ -464,7 +421,6 @@ wgEncode 1
         # subId=2518 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsHelas3Prdm1vIggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 PRDM1_(9115) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (PRDM1_(9115) in HeLa-S3 cells)
@@ -474,7 +430,6 @@ wgEncode 1
         # subId=2519 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562Chd21250IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 CHD2_(AB68301) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CHD2_(AB68301) in K562 cells)
@@ -484,7 +439,6 @@ wgEncode 1
         # subId=2520 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 GTF2F1_(AB28179) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (GTF2F1_(AB28179) in HeLa-S3 cells)
@@ -494,7 +448,6 @@ wgEncode 1
         # subId=2521 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsHelas3Usf2IggmusPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 USF2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (USF2 in HeLa-S3 cells)
@@ -504,7 +457,6 @@ wgEncode 1
         # subId=2522 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsGm12878P300n15StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 p300_(SC-584) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (p300_(SC-584) in GM12878 cells)
@@ -514,7 +466,6 @@ wgEncode 1
         # subId=2523 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsGm12878Irf3StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 IRF3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (IRF3 in GM12878 cells)
@@ -524,7 +475,6 @@ wgEncode 1
         # subId=2524 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsGm12878Usf2IggmusPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 USF2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (USF2 in GM12878 cells)
@@ -534,7 +484,6 @@ wgEncode 1
         # subId=2525 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsHelas3Brca1cIggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 BRCA1_(A300-000A) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BRCA1_(A300-000A) in HeLa-S3 cells)
@@ -544,7 +493,6 @@ wgEncode 1
         # subId=2526 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsHelas3P300n15IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 p300_(SC-584) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (p300_(SC-584) in HeLa-S3 cells)
@@ -554,7 +502,6 @@ wgEncode 1
         # subId=2527 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsGm12878Stat3IggmusPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 STAT3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT3 in GM12878 cells)
@@ -564,7 +511,6 @@ wgEncode 1
         # subId=2529 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsHelas3CebpbIggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 CEBPB Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CEBPB in HeLa-S3 cells)
@@ -574,7 +520,6 @@ wgEncode 1
         # subId=2531 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562Tal1sc12984IggmusPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 TAL1_(SC-12984) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (TAL1_(SC-12984) in K562 cells)
@@ -584,7 +529,6 @@ wgEncode 1
         # subId=2532 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562Mxi1bhlhIggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 Mxi1_(AF4185) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Mxi1_(AF4185) in K562 cells)
@@ -594,7 +538,6 @@ wgEncode 1
         # subId=2533 dateSubmitted=2010-10-27
 
         track wgEncodeSydhTfbsK562Gtf2f1rapIggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 GTF2F1_(AB28179) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (GTF2F1_(AB28179) in K562 cells)
@@ -604,7 +547,6 @@ wgEncode 1
         # subId=2534 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562CebpbIggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 CEBPB Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CEBPB in K562 cells)
@@ -614,7 +556,6 @@ wgEncode 1
         # subId=2535 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562TbpIggmusPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 TBP Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (TBP in K562 cells)
@@ -624,7 +565,6 @@ wgEncode 1
         # subId=2536 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsShsy5yGata2UcdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel SH-SY5Y GATA-2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (GATA-2 in SH-SY5Y cells)
@@ -633,7 +573,6 @@ wgEncode 1
         # subId=2537 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562P300f4IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 p300_(SC-48343) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (p300_(SC-48343) in K562 cells)
@@ -643,7 +582,6 @@ wgEncode 1
         # subId=2769 dateSubmitted=2010-10-27
 
         track wgEncodeSydhTfbsH1hescCtbp2UcdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel H1-hESC CtBP2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CtBP2 in H1-hESC cells)
@@ -653,7 +591,6 @@ wgEncode 1
         # subId=2544 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsMcf10aesStat3TamStdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src STAT3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT3 in MCF10A-Er-Src cells)
@@ -662,7 +599,6 @@ wgEncode 1
         # subId=2547 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsMcf10aesPol2TamStdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src Pol2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in MCF10A-Er-Src cells)
@@ -671,7 +607,6 @@ wgEncode 1
         # subId=2548 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsMcf10aesStat3Etoh01StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src STAT3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT3 in MCF10A-Er-Src cells)
@@ -680,7 +615,6 @@ wgEncode 1
         # subId=2767 dateSubmitted=2010-10-27
 
         track wgEncodeSydhTfbsMcf10aesPol2Etoh01StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src Pol2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in MCF10A-Er-Src cells)
@@ -689,7 +623,6 @@ wgEncode 1
         # subId=2768 dateSubmitted=2010-10-27
 
         track wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 Mxi1_(AF4185) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Mxi1_(AF4185) in HeLa-S3 cells)
@@ -699,7 +632,6 @@ wgEncode 1
         # subId=2770 dateSubmitted=2010-10-27
 
         track wgEncodeSydhTfbsHek293bElk4UcdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HEK293(b) ELK4 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (ELK4 in HEK293(b) cells)
@@ -708,7 +640,6 @@ wgEncode 1
         # subId=3248 dateSubmitted=2011-01-13
 
         track wgEncodeSydhTfbsHuvecCfosUcdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HUVEC c-Fos Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Fos in HUVEC cells)
@@ -718,7 +649,6 @@ wgEncode 1
         # subId=3250 dateSubmitted=2011-01-13
 
         track wgEncodeSydhTfbsNt2d1Znf274UcdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel NT2-D1 ZNF274 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (ZNF274 in NT2-D1 cells)
@@ -727,7 +657,6 @@ wgEncode 1
         # subId=3251 dateSubmitted=2011-01-13
 
         track wgEncodeSydhTfbsU2osKap1UcdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel U2OS KAP1 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (KAP1 in U2OS cells)
@@ -736,7 +665,6 @@ wgEncode 1
         # subId=3252 dateSubmitted=2011-01-13
 
         track wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src STAT3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT3 in MCF10A-Er-Src cells)
@@ -745,7 +673,6 @@ wgEncode 1
         # subId=3253 dateSubmitted=2011-01-14
 
         track wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src STAT3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT3 in MCF10A-Er-Src cells)
@@ -753,17 +680,16 @@ wgEncode 1
         type narrowPeak
         # subId=3254 dateSubmitted=2011-01-14
 
-		track wgEncodeSydhTfbsHepg2CebpbIggrabPk
-		parent wgEncodeSydhTfbsViewPeaks off
-		shortLabel HepG2 CEBPB Pk
-		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CEBPB in HepG2 cells)
-		subGroups view=Peaks factor=CEBPB cellType=HepG2 control=IGGrab treatment=aNone
-		type narrowPeak
-		color 189,0,157
-		# subId=3875 dateSubmitted=2011-04-04
+        track wgEncodeSydhTfbsHepg2CebpbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 CEBPB Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CEBPB in HepG2 cells)
+        subGroups view=Peaks factor=CEBPB cellType=HepG2 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 189,0,157
+        # subId=3875 dateSubmitted=2011-04-04
 
         track wgEncodeSydhTfbsGm12878Chd21250IggmusPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 CHD2_(AB68301) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CHD2_(AB68301) in GM12878 cells)
@@ -772,18 +698,16 @@ wgEncode 1
         color 153,38,0
         # subId=3312 dateSubmitted=2011-01-18
 
-        track wgEncodeSydhTfbsGm12878EbfStdPk
-        release alpha
+        track wgEncodeSydhTfbsGm12878Ebf1sc137065StdPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM12878 EBF Pk
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (EBF in GM12878 cells)
-        subGroups view=Peaks factor=EBF cellType=GM12878 control=std treatment=aNone
+        shortLabel GM12878 EBF1_(SC-137065) Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (EBF1_(SC-137065) in GM12878 cells)
+        subGroups view=Peaks factor=EBF1SC137065 cellType=GM12878 control=std treatment=aNone
         type narrowPeak
         color 153,38,0
         # subId=3313 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsGm12878Smc3ab9263IggmusPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 SMC3_(ab9263) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SMC3_(ab9263) in GM12878 cells)
@@ -793,7 +717,6 @@ wgEncode 1
         # subId=3315 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHelas3Smc3ab9263IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 SMC3_(ab9263) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SMC3_(ab9263) in HeLa-S3 cells)
@@ -803,7 +726,6 @@ wgEncode 1
         # subId=3317 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHelas3Pol2s2IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 Pol2(phosphoS2) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2(phosphoS2) in HeLa-S3 cells)
@@ -813,7 +735,6 @@ wgEncode 1
         # subId=3318 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHepg2Chd21250IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2 CHD2_(AB68301) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CHD2_(AB68301) in HepG2 cells)
@@ -823,7 +744,6 @@ wgEncode 1
         # subId=3319 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHepg2Maffm8194IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2 MafF_(M8194) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (MafF_(M8194) in HepG2 cells)
@@ -833,7 +753,6 @@ wgEncode 1
         # subId=3320 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHepg2Mafkab50322IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2 MafK_(ab50322) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (MafK_(ab50322) in HepG2 cells)
@@ -843,7 +762,6 @@ wgEncode 1
         # subId=3321 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHepg2Rfx5n494IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2 RFX5_(200-401-194) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (RFX5_(200-401-194) in HepG2 cells)
@@ -853,7 +771,6 @@ wgEncode 1
         # subId=3322 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsK562Mafkab50322IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 MafK_(ab50322) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (MafK_(ab50322) in K562 cells)
@@ -863,7 +780,6 @@ wgEncode 1
         # subId=3323 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsK562Smc3ab9263IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 SMC3_(ab9263) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SMC3_(ab9263) in K562 cells)
@@ -873,7 +789,6 @@ wgEncode 1
         # subId=3324 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsH1hescUsf2IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel H1-hESC USF2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (USF2 in H1-hESC cells)
@@ -883,7 +798,6 @@ wgEncode 1
         # subId=3326 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsH1hescRfx5n494IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel H1-hESC RFX5_(200-401-194) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (RFX5_(200-401-194) in H1-hESC cells)
@@ -893,7 +807,6 @@ wgEncode 1
         # subId=3327 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsH1hescRad21IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel H1-hESC Rad21 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Rad21 in H1-hESC cells)
@@ -903,7 +816,6 @@ wgEncode 1
         # subId=3328 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHepg2Mafksc477IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2 MafK_(sc477) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (MafK_(sc477) in HepG2 cells)
@@ -913,7 +825,6 @@ wgEncode 1
         # subId=3331 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsH1hescNrf1IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel H1-hESC Nrf1 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Nrf1 in H1-hESC cells)
@@ -923,7 +834,6 @@ wgEncode 1
         # subId=3332 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsHepg2Tcf4UcdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2b TCF4 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (TCF4 in HepG2b cells)
@@ -933,7 +843,6 @@ wgEncode 1
         # subId=3390 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsH1hescTbpStdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel H1-hESC TBP Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (TBP in H1-hESC cells)
@@ -943,7 +852,6 @@ wgEncode 1
         # subId=3392 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsGm12878Ctcfc20StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 CTCF_(SC-15914) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CTCF_(SC-15914) in GM12878 cells)
@@ -953,7 +861,6 @@ wgEncode 1
         # subId=3403 dateSubmitted=2011-01-20
 
         track wgEncodeSydhTfbsGm12878Stat1StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 STAT1 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT1 in GM12878 cells)
@@ -963,7 +870,6 @@ wgEncode 1
         # subId=3434 dateSubmitted=2011-01-20
 
         track wgEncodeSydhTfbsGm12878Znf143166181apStdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 Znf143_(16618-1-AP) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Znf143_(16618-1-AP) in GM12878 cells)
@@ -973,7 +879,6 @@ wgEncode 1
         # subId=3435 dateSubmitted=2011-01-20
 
         track wgEncodeSydhTfbsTrexhek293Znf263UcdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel T-REx-HEK293 ZNF263 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (ZNF263 in T-REx-HEK293 cells)
@@ -982,7 +887,6 @@ wgEncode 1
         # subId=3249 dateSubmitted=2011-01-24
 
         track wgEncodeSydhTfbsGm12878Brca1cIggmusPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 BRCA1_(A300-000A) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BRCA1_(A300-000A) in GM12878 cells)
@@ -992,7 +896,6 @@ wgEncode 1
         # subId=3311 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsGm12878Nrf1IggmusPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 Nrf1 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Nrf1 in GM12878 cells)
@@ -1002,7 +905,6 @@ wgEncode 1
         # subId=3389 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsHek293bKap1UcdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HEK293(b) KAP1 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (KAP1 in HEK293(b) cells)
@@ -1011,7 +913,6 @@ wgEncode 1
         # subId=3316 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsGm12878Gcn5StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 GCN5 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (GCN5 in GM12878 cells)
@@ -1021,7 +922,6 @@ wgEncode 1
         # subId=3399 dateSubmitted=2011-01-21
 
         track wgEncodeSydhTfbsGm12878Spt20StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 SPT20 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SPT20 in GM12878 cells)
@@ -1031,7 +931,6 @@ wgEncode 1
         # subId=3400 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsHelas3Gcn5StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 GCN5 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (GCN5 in HeLa-S3 cells)
@@ -1041,7 +940,6 @@ wgEncode 1
         # subId=3401 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsHelas3Spt20StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 SPT20 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SPT20 in HeLa-S3 cells)
@@ -1051,7 +949,6 @@ wgEncode 1
         # subId=3402 dateSubmitted=2011-01-20
 
         track wgEncodeSydhTfbsH1hescCjunIggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel H1-hESC c-Jun Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Jun in H1-hESC cells)
@@ -1061,7 +958,6 @@ wgEncode 1
         # subId=3405 dateSubmitted=2011-01-20
 
         track wgEncodeSydhTfbsK562Bhlhe40nb100IggrabPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 BHLHE40_(NB100-1800) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BHLHE40_(NB100-1800) in K562 cells)
@@ -1070,10 +966,54 @@ wgEncode 1
         color 46,0,184
         # subId=3755 dateSubmitted=2011-02-25
 
+        track wgEncodeSydhTfbsHepg2Brca1a300IggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 BRCA1_(A300-000A) Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BRCA1_(A300-000A) in HepG2 cells)
+        subGroups view=Peaks factor=BRCA1A300 cellType=HepG2 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 189,0,157
+        # subId=3871 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsGm12878Pol2s2IggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 Pol2(phosphoS2) Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2(phosphoS2) in GM12878 cells)
+        subGroups view=Peaks factor=POL2S2 cellType=GM12878 control=IGGmus treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=3870 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsHepg2P300sc582IggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 p300_(SC-584) Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (p300_(SC-584) in HepG2 cells)
+        subGroups view=Peaks factor=P300SC582 cellType=HepG2 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 189,0,157
+        # subId=3872 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsHepg2Pol2s2IggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 Pol2(phosphoS2) Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2(phosphoS2) in HepG2 cells)
+        subGroups view=Peaks factor=POL2S2 cellType=HepG2 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 189,0,157
+        # subId=3873 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsHepg2Smc3ab9263IggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HepG2 SMC3_(ab9263) Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (SMC3_(ab9263) in HepG2 cells)
+        subGroups view=Peaks factor=SMC3ab9263 cellType=HepG2 control=IGGrab treatment=aNone
+        type narrowPeak
+        color 189,0,157
+        # subId=3874 dateSubmitted=2011-03-31
+
     #Signal Track SYDH TFBS#
     #Short Labels for signal =Sg # 
     track wgEncodeSydhTfbsViewSignal
-    release alpha
     shortLabel Signal
     view Signal
     visibility full
@@ -1088,7 +1028,6 @@ wgEncode 1
    
 
 	    track wgEncodeSydhTfbsGm12878WhipIggmusSig
-	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
 	    shortLabel GM12878 WHIP   Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (WHIP in GM12878 cells)
@@ -1098,7 +1037,6 @@ wgEncode 1
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=GM12878 antibody=WHIP treatment=None control=IgG-mus setType=exp inputType=GM12878/None/Input/IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1178 dateSubmitted=2010-04-26 dateUnrestricted=2011-01-26 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsGm12878WhipIggmusSig fileName=wgEncodeSydhTfbsGm12878WhipIggmusSig.bigWig.gz
 
 #	    track wgEncodeSydhTfbsHelas3Rad21IggrabSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel HeLa-S3 Rad21  Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Rad21 in HeLa-S3 cells)
@@ -1108,7 +1046,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=Rad21 treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1134 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Rad21IggrabSig fileName=wgEncodeSydhTfbsHelas3Rad21IggrabSig.bigWig.gz
 
         track wgEncodeSydhTfbsHelas3Rad21IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Rad21 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Rad21 in HeLa-S3 cells)
@@ -1118,7 +1055,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #	    track wgEncodeSydhTfbsHelas3TbpIggrabSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel HeLa-S3 TBP    Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in HeLa-S3 cells)
@@ -1128,7 +1064,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=TBP treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1142 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3TbpIggrabSig fileName=wgEncodeSydhTfbsHelas3TbpIggrabSig.bigWig.gz
 
         track wgEncodeSydhTfbsHelas3TbpIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 TBP Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TBP in HeLa-S3 cells)
@@ -1138,7 +1073,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #	    track wgEncodeSydhTfbsHelas3Elk4UcdSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel HeLa-S3 ELK4   Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (ELK4 in HeLa-S3 cells)
@@ -1148,7 +1082,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HeLa-S3 antibody=ELK4 treatment=None control=UCDavis setType=exp inputType=HeLa-S3/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1138 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Elk4UcdSig fileName=wgEncodeSydhTfbsHelas3Elk4UcdSig.bigWig.gz
 
         track wgEncodeSydhTfbsHelas3Elk4UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 ELK4 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ELK4 in HeLa-S3 cells)
@@ -1158,7 +1091,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #	    track wgEncodeSydhTfbsHelas3Irf3IggrabSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel HeLa-S3 IRF3   Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF3 in HeLa-S3 cells)
@@ -1168,7 +1100,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=IRF3 treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1177 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Irf3IggrabSig fileName=wgEncodeSydhTfbsHelas3Irf3IggrabSig.bigWig.gz
 
         track wgEncodeSydhTfbsHelas3Irf3IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 IRF3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (IRF3 in HeLa-S3 cells)
@@ -1178,7 +1109,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #	    track wgEncodeSydhTfbsHelas3InputUcdSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel HeLa-S3 Input  Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa-S3 cells)
@@ -1188,7 +1118,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HeLa-S3 antibody=Input treatment=None control=UCDavis setType=input inputType=HeLa-S3/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1140 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3InputUcdSig fileName=wgEncodeSydhTfbsHelas3InputUcdSig.bigWig.gz
 
         track wgEncodeSydhTfbsHelas3InputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
@@ -1199,7 +1128,6 @@ wgEncode 1
 
 
 #	    track wgEncodeSydhTfbsHepg2CjunIggrabSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel HepG2   c-Jun  Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (c-Jun in HepG2 cells)
@@ -1209,7 +1137,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=c-Jun treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1145 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2CjunIggrabSig fileName=wgEncodeSydhTfbsHepg2CjunIggrabSig.bigWig.gz
 
         track wgEncodeSydhTfbsHepg2CjunIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 c-Jun Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in HepG2 cells)
@@ -1219,7 +1146,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #	    track wgEncodeSydhTfbsHepg2Pol2IggrabSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel HepG2   Pol2   Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HepG2 cells)
@@ -1229,7 +1155,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=Pol2 treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1179 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Pol2IggrabSig fileName=wgEncodeSydhTfbsHepg2Pol2IggrabSig.bigWig.gz
 
         track wgEncodeSydhTfbsHepg2Pol2IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HepG2 cells)
@@ -1239,7 +1164,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #	    track wgEncodeSydhTfbsHepg2InputIggrabSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel HepG2   Input  Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2 cells)
@@ -1249,7 +1173,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=Input treatment=None control=IgG-rab setType=input inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1136 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2InputIggrabSig fileName=wgEncodeSydhTfbsHepg2InputIggrabSig.bigWig.gz
 
         track wgEncodeSydhTfbsHepg2InputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HepG2 cells)
@@ -1259,7 +1182,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #	    track wgEncodeSydhTfbsHepg2TbpIggrabSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel HepG2   TBP    Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in HepG2 cells)
@@ -1269,7 +1191,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=TBP treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1141 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2TbpIggrabSig fileName=wgEncodeSydhTfbsHepg2TbpIggrabSig.bigWig.gz
 
         track wgEncodeSydhTfbsHepg2TbpIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 TBP Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TBP in HepG2 cells)
@@ -1279,7 +1200,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #	    track wgEncodeSydhTfbsH1hescSuz12UcdSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel H1-hESC SUZ12  Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (SUZ12 in H1-hESC cells)
@@ -1289,7 +1209,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=H1-hESC antibody=SUZ12 treatment=None control=UCDavis setType=exp inputType=H1-hESC/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1175 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescSuz12UcdSig fileName=wgEncodeSydhTfbsH1hescSuz12UcdSig.bigWig.gz
 
         track wgEncodeSydhTfbsH1hescSuz12UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC SUZ12 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SUZ12 in H1-hESC cells)
@@ -1299,7 +1218,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #	    track wgEncodeSydhTfbsH1hescInputUcdSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel H1-hESC Input  Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in H1-hESC cells)
@@ -1309,7 +1227,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=H1-hESC antibody=Input treatment=None control=UCDavis setType=input inputType=H1-hESC/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1176 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescInputUcdSig fileName=wgEncodeSydhTfbsH1hescInputUcdSig.bigWig.gz
 
         track wgEncodeSydhTfbsH1hescInputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in H1-hESC cells)
@@ -1320,7 +1237,6 @@ wgEncode 1
 
 #		#Tier 1 Cell Line, deafult track on #
 #	    track wgEncodeSydhTfbsK562Ccnt2StdSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal on
 #	    shortLabel K562    CCNT2  Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (CCNT2 in K562 cells)
@@ -1330,7 +1246,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=CCNT2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1147 dateSubmitted=2010-04-28 dateUnrestricted=2011-01-28 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Ccnt2StdSig fileName=wgEncodeSydhTfbsK562Ccnt2StdSig.bigWig.gz
 
         track wgEncodeSydhTfbsK562Ccnt2StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 CCNT2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CCNT2 in K562 cells)
@@ -1341,7 +1256,6 @@ wgEncode 1
 
 #		#Tier 1 Cell Line, deafult track on #
 #	    track wgEncodeSydhTfbsK562Hmgn3StdSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal on
 #	    shortLabel K562    HMGN3  Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (HMGN3 in K562 cells)
@@ -1351,7 +1265,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=HMGN3 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1148 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Hmgn3StdSig fileName=wgEncodeSydhTfbsK562Hmgn3StdSig.bigWig.gz
 
         track wgEncodeSydhTfbsK562Hmgn3StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 HMGN3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (HMGN3 in K562 cells)
@@ -1362,7 +1275,6 @@ wgEncode 1
 
 #		#Trial of stating treatment of IFNa30 as /a3#
 #	    track wgEncodeSydhTfbsK562Irf1Ifna30StdSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel K562/a3 IRF1   Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF1 in K562 cells)
@@ -1372,7 +1284,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=IRF1 treatment=IFNa30 control=std setType=exp inputType=K562/IFNa30/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1135 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Irf1Ifna30StdSig fileName=wgEncodeSydhTfbsK562Irf1Ifna30StdSig.bigWig.gz
 
         track wgEncodeSydhTfbsK562Irf1Ifna30StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 IRF1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (IRF1 in K562 cells)
@@ -1383,7 +1294,6 @@ wgEncode 1
 
 #		#Trial of stating treatment of IFNg6h as /g6#
 #	    track wgEncodeSydhTfbsK562Irf1Ifng6hStdSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel K562/g6 IRF1   Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF1 in K562 cells)
@@ -1393,7 +1303,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=IRF1 treatment=IFNg6h control=std setType=exp inputType=K562/IFNg6h/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1139 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Irf1Ifng6hStdSig fileName=wgEncodeSydhTfbsK562Irf1Ifng6hStdSig.bigWig.gz
 
         track wgEncodeSydhTfbsK562Irf1Ifng6hStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 IRF1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (IRF1 in K562 cells)
@@ -1404,7 +1313,6 @@ wgEncode 1
 
 #		#Tier 1 Cell Line, deafult track on #
 #	    track wgEncodeSydhTfbsK562Nrf1IggrabSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal on
 #	    shortLabel K562    Nrf1   Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Nrf1 in K562 cells)
@@ -1414,7 +1322,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=Nrf1 treatment=None control=IgG-rab setType=exp inputType=K562/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1133 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Nrf1IggrabSig fileName=wgEncodeSydhTfbsK562Nrf1IggrabSig.bigWig.gz
 
         track wgEncodeSydhTfbsK562Nrf1IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Nrf1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Nrf1 in K562 cells)
@@ -1425,7 +1332,6 @@ wgEncode 1
 #		
 #		#Tier 1 Cell Line, deafult track on #
 #	    track wgEncodeSydhTfbsK562InputIggrabSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal on
 #	    shortLabel K562    Input  Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in K562 cells)
@@ -1435,7 +1341,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=Input treatment=None control=IgG-rab setType=input inputType=K562/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1132 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562InputIggrabSig fileName=wgEncodeSydhTfbsK562InputIggrabSig.bigWig.gz
 
         track wgEncodeSydhTfbsK562InputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
@@ -1446,7 +1351,6 @@ wgEncode 1
 
 #		#Tier 1 Cell Line, deafult track on #
 #	    track wgEncodeSydhTfbsK562Gtf2bStdSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal on
 #	    shortLabel K562    GTF2B  Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (GTF2B in K562 cells)
@@ -1456,7 +1360,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=GTF2B treatment=None control=std setType=exp inputType=K562/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1149 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Gtf2bStdSig fileName=wgEncodeSydhTfbsK562Gtf2bStdSig.bigWig.gz
 
         track wgEncodeSydhTfbsK562Gtf2bStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 GTF2B Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GTF2B in K562 cells)
@@ -1467,7 +1370,6 @@ wgEncode 1
 
 #		#Tier 1 Cell Line, deafult track on #
 #	    track wgEncodeSydhTfbsK562Usf2StdSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal on
 #	    shortLabel K562    USF2   Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (USF2 in K562 cells)
@@ -1477,7 +1379,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=USF2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1146 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Usf2StdSig fileName=wgEncodeSydhTfbsK562Usf2StdSig.bigWig.gz
 
         track wgEncodeSydhTfbsK562Usf2StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 USF2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (USF2 in K562 cells)
@@ -1487,7 +1388,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #	    track wgEncodeSydhTfbsHepg2Znf274UcdSig
-#	    release alpha
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel HepG2   ZNF274 Sg
 #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (ZNF274 in HepG2 cells)
@@ -1497,7 +1397,6 @@ wgEncode 1
 #	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HepG2 antibody=ZNF274 setType=exp treatment=None inputType=HepG2/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1190 dateSubmitted=2010-05-10 dateUnrestricted=2011-02-10 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Znf274UcdSig fileName=wgEncodeSydhTfbsHepg2Znf274UcdSig.bigWig.gz
 
         track wgEncodeSydhTfbsHepg2bZnf274UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2b ZNF274 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZNF274 in HepG2b cells)
@@ -1507,7 +1406,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
         track wgEncodeSydhTfbsGm12878Znf274UcdSig
-        release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 ZNF274 Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (ZNF274 in GM12878 cells)
@@ -1517,7 +1415,6 @@ wgEncode 1
         metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=GM12878 antibody=ZNF274 setType=exp treatment=None inputType=GM12878/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1203 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsGm12878Znf274UcdSig fileName=wgEncodeSydhTfbsGm12878Znf274UcdSig.bigWig.gz
 
 #        track wgEncodeSydhTfbsHuvecGata2UcdSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel HUVEC   GATA2  Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (GATA-2 in HUVEC cells)
@@ -1527,7 +1424,6 @@ wgEncode 1
 #        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HUVEC antibody=GATA-2 setType=exp treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1204 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecGata2UcdSig fileName=wgEncodeSydhTfbsHuvecGata2UcdSig.bigWig.gz
 
         track wgEncodeSydhTfbsHuvecGata2UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HUVEC GATA-2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GATA-2 in HUVEC cells)
@@ -1537,7 +1433,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #        track wgEncodeSydhTfbsH1hescMaxUcdSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel H1-hESC Max    Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Max in H1-hESC cells)
@@ -1547,7 +1442,6 @@ wgEncode 1
 #        metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=H1-hESC antibody=Max setType=exp treatment=None inputType=H1-hESC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1206 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescMaxUcdSig fileName=wgEncodeSydhTfbsH1hescMaxUcdSig.bigWig.gz
 
         track wgEncodeSydhTfbsH1hescMaxUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC Max Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Max in H1-hESC cells)
@@ -1557,7 +1451,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #        track wgEncodeSydhTfbsHuvecInputUcdSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel HUVEC   Input  Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HUVEC cells)
@@ -1567,7 +1460,6 @@ wgEncode 1
 #        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HUVEC antibody=Input setType=input treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1207 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecInputUcdSig fileName=wgEncodeSydhTfbsHuvecInputUcdSig.bigWig.gz
 
         track wgEncodeSydhTfbsHuvecInputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HUVEC Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HUVEC cells)
@@ -1577,7 +1469,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #        track wgEncodeSydhTfbsRajiPol2UcdSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel Raji    Pol2   Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Pol2 in Raji cells)
@@ -1586,7 +1477,6 @@ wgEncode 1
 #    # subId=1209 dateSubmitted=2010-05-20
 
         track wgEncodeSydhTfbsRajiPol2UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel Raji Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in Raji cells)
@@ -1595,7 +1485,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #        track wgEncodeSydhTfbsRajiInputUcdSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel Raji    Input  Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in Raji cells)
@@ -1604,7 +1493,6 @@ wgEncode 1
 #    # subId=1208 dateSubmitted=2010-05-20
 
         track wgEncodeSydhTfbsRajiInputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel Raji Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in Raji cells)
@@ -1614,7 +1502,6 @@ wgEncode 1
 
 #		#Tier 1 Cell Line, deafult track on #
 #        track wgEncodeSydhTfbsGm12878TbpIggmusSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal on
 #        shortLabel GM12878 TBP    Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in GM12878 cells)
@@ -1624,7 +1511,6 @@ wgEncode 1
 #    # subId=1345 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsGm12878TbpIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 TBP Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TBP in GM12878 cells)
@@ -1634,7 +1520,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #        track wgEncodeSydhTfbsHepg2JundIggrabSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel HepG2   JunD   Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (JunD in HepG2 cells)
@@ -1644,7 +1529,6 @@ wgEncode 1
 #    # subId=1347 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2JundIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 JunD Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (JunD in HepG2 cells)
@@ -1654,7 +1538,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #        track wgEncodeSydhTfbsHepg2Nrf1IggrabSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel HepG2   Nrf1   Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Nrf1 in HepG2 cells)
@@ -1664,7 +1547,6 @@ wgEncode 1
 #    # subId=1348 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2Nrf1IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 Nrf1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Nrf1 in HepG2 cells)
@@ -1674,7 +1556,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #        track wgEncodeSydhTfbsHepg2Rad21IggrabSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel HepG2   Rad21  Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Rad21 in HepG2 cells)
@@ -1684,7 +1565,6 @@ wgEncode 1
 #    # subId=1349 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2Rad21IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 Rad21 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Rad21 in HepG2 cells)
@@ -1694,7 +1574,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #        track wgEncodeSydhTfbsHepg2Usf2IggrabSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel HepG2   USF2   Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (USF2 in HepG2 cells)
@@ -1704,7 +1583,6 @@ wgEncode 1
 #    # subId=1357 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2Usf2IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 USF2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (USF2 in HepG2 cells)
@@ -1714,7 +1592,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #        track wgEncodeSydhTfbsU2osInputUcdSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel U2OS    Input  Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in U2OS cells)
@@ -1723,7 +1600,6 @@ wgEncode 1
 #    # subId=1355 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsU2osInputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel U2OS Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in U2OS cells)
@@ -1732,7 +1608,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #        track wgEncodeSydhTfbsU2osSetdb1UcdSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel U2OS    SETDB  Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (SETDB1 in U2OS cells)
@@ -1741,7 +1616,6 @@ wgEncode 1
 #    # subId=1356 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsU2osSetdb1UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel U2OS SETDB1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SETDB1 in U2OS cells)
@@ -1750,7 +1624,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #        track wgEncodeSydhTfbsHelas3Stat3IggrabSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel HeLa-S3 STAT3  Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (STAT3 in HeLa-S3 cells)
@@ -1760,7 +1633,6 @@ wgEncode 1
 #    # subId=1346 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHelas3Stat3IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 STAT3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT3 in HeLa-S3 cells)
@@ -1770,7 +1642,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
 #        track wgEncodeSydhTfbsHepg2Irf3IggrabSig
-#        release alpha
 #        subTrack wgEncodeSydhTfbsViewSignal off
 #        shortLabel HepG2   IRF3   Sg
 #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF3 in HepG2 cells)
@@ -1780,7 +1651,6 @@ wgEncode 1
 #    # subId=1365 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2Irf3IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 IRF3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (IRF3 in HepG2 cells)
@@ -1790,7 +1660,6 @@ wgEncode 1
         # subId=3072 dateSubmitted=2010-12-06
 
         track wgEncodeSydhTfbsK562Pol2s2StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562    Pol2S2 Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2(phosphoS2) in K562 cells)
@@ -1800,7 +1669,6 @@ wgEncode 1
         # subId=1623 dateSubmitted=2010-07-12
 
         track wgEncodeSydhTfbsHelas3Znf274UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 ZNF274 Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZNF274 in HeLa-S3 cells)
@@ -1810,7 +1678,6 @@ wgEncode 1
         # subId=2112 dateSubmitted=2010-08-17
 
         track wgEncodeSydhTfbsHelas3Zzz3StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 ZZZ3 Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZZZ3 in HeLa-S3 cells)
@@ -1820,7 +1687,6 @@ wgEncode 1
         # subId=2093 dateSubmitted=2010-08-17
 
         track wgEncodeSydhTfbsK562bKap1UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off 
         shortLabel K562b KAP1 Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (KAP1 in K562b cells)
@@ -1830,7 +1696,6 @@ wgEncode 1
         # subId=2126 dateSubmitted=2010-08-23
 
         track wgEncodeSydhTfbsK562CmycIfng30StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 c-Myc Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in K562 cells)
@@ -1840,7 +1705,6 @@ wgEncode 1
         # subId=2111 dateSubmitted=2010-08-17
 
         track wgEncodeSydhTfbsNb4MaxStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel NB4 Max Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Max in NB4 cells)
@@ -1849,7 +1713,6 @@ wgEncode 1
         # subId=2131 dateSubmitted=2010-08-26
 
         track wgEncodeSydhTfbsNb4CmycStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel NB4 c-Myc Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in NB4 cells)
@@ -1858,7 +1721,6 @@ wgEncode 1
         # subId=2129 dateSubmitted=2010-08-26
 
         track wgEncodeSydhTfbsGm12878Nfe2hStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 NF-E2_(SC-22827) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NF-E2_(SC-22827) in GM12878 cells)
@@ -1868,7 +1730,6 @@ wgEncode 1
         # subId=2130 dateSubmitted=2010-09-03
 
         track wgEncodeSydhTfbsPbdeGata1UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel PBDE GATA-1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GATA-1 in PBDE cells)
@@ -1878,7 +1739,6 @@ wgEncode 1
 
 
         track wgEncodeSydhTfbsPbdePol2UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel PBDE Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in PBDE cells)
@@ -1887,7 +1747,6 @@ wgEncode 1
         # subId=2485 dateSubmitted=2010-10-13
 
         track wgEncodeSydhTfbsHelas3Rfx5n494IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 RFX5_(200-401-194) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (RFX5_(200-401-194) in HeLa-S3 cells)
@@ -1897,7 +1756,6 @@ wgEncode 1
         # subId=2517 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsGm12878Rfx5n494IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 RFX5_(200-401-194) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (RFX5_(200-401-194) in GM12878 cells)
@@ -1907,7 +1765,6 @@ wgEncode 1
         # subId=2518 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsHelas3Prdm1vIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 PRDM1_(9115) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (PRDM1_(9115) in HeLa-S3 cells)
@@ -1917,7 +1774,6 @@ wgEncode 1
         # subId=2519 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562Chd21250IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 CHD2_(AB68301) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CHD2_(AB68301) in K562 cells)
@@ -1927,7 +1783,6 @@ wgEncode 1
         # subId=2520 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 GTF2F1_(AB28179) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GTF2F1_(AB28179) in HeLa-S3 cells)
@@ -1937,7 +1792,6 @@ wgEncode 1
         # subId=2521 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsHelas3Usf2IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 USF2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (USF2 in HeLa-S3 cells)
@@ -1947,7 +1801,6 @@ wgEncode 1
         # subId=2522 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsGm12878P300n15StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 p300_(SC-584) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (p300_(SC-584) in GM12878 cells)
@@ -1957,7 +1810,6 @@ wgEncode 1
         # subId=2523 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsGm12878Irf3StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 IRF3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (IRF3 in GM12878 cells)
@@ -1967,7 +1819,6 @@ wgEncode 1
         # subId=2524 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsGm12878Usf2IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 USF2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (USF2 in GM12878 cells)
@@ -1977,7 +1828,6 @@ wgEncode 1
         # subId=2525 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsHelas3Brca1cIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 BRCA1_(A300-000A) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRCA1_(A300-000A) in HeLa-S3 cells)
@@ -1987,7 +1837,6 @@ wgEncode 1
         # subId=2526 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsHelas3P300n15IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 p300_(SC-584) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (p300_(SC-584) in HeLa-S3 cells)
@@ -1997,7 +1846,6 @@ wgEncode 1
         # subId=2527 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsGm12878Stat3IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 STAT3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT3 in GM12878 cells)
@@ -2007,7 +1855,6 @@ wgEncode 1
         # subId=2529 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsHelas3CebpbIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 CEBPB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CEBPB in HeLa-S3 cells)
@@ -2017,7 +1864,6 @@ wgEncode 1
         # subId=2531 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562Tal1sc12984IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 TAL1_(SC-12984) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TAL1_(SC-12984) in K562 cells)
@@ -2027,7 +1873,6 @@ wgEncode 1
         # subId=2532 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562Mxi1bhlhIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Mxi1_(AF4185) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Mxi1_(AF4185) in K562 cells)
@@ -2037,7 +1882,6 @@ wgEncode 1
         # subId=2533 dateSubmitted=2010-10-27
 
         track wgEncodeSydhTfbsK562Gtf2f1rapIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 GTF2F1_(AB28179) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GTF2F1_(AB28179) in K562 cells)
@@ -2047,7 +1891,6 @@ wgEncode 1
         # subId=2534 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562CebpbIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 CEBPB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CEBPB in K562 cells)
@@ -2057,7 +1900,6 @@ wgEncode 1
         # subId=2535 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562TbpIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 TBP Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TBP in K562 cells)
@@ -2067,7 +1909,6 @@ wgEncode 1
         # subId=2536 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsShsy5yGata2UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel SH-SY5Y GATA-2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GATA-2 in SH-SY5Y cells)
@@ -2076,7 +1917,6 @@ wgEncode 1
         # subId=2537 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562P300f4IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 p300_(SC-48343) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (p300_(SC-48343) in K562 cells)
@@ -2086,7 +1926,6 @@ wgEncode 1
         # subId=2769 dateSubmitted=2010-10-27
 
         track wgEncodeSydhTfbsH1hescCtbp2UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC CtBP2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CtBP2 in H1-hESC cells)
@@ -2096,7 +1935,6 @@ wgEncode 1
         # subId=2544 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsMcf10aesStat3TamStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src STAT3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT3 in MCF10A-Er-Src cells)
@@ -2105,7 +1943,6 @@ wgEncode 1
         # subId=2547 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsMcf10aesPol2TamStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in MCF10A-Er-Src cells)
@@ -2115,7 +1952,6 @@ wgEncode 1
 
 
         track wgEncodeSydhTfbsMcf10aesStat3Etoh01StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src STAT3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT3 in MCF10A-Er-Src cells)
@@ -2124,7 +1960,6 @@ wgEncode 1
         # subId=2767 dateSubmitted=2010-10-27
 
         track wgEncodeSydhTfbsMcf10aesPol2Etoh01StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in MCF10A-Er-Src cells)
@@ -2133,7 +1968,6 @@ wgEncode 1
         # subId=2768 dateSubmitted=2010-10-27
 
         track wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Mxi1_(AF4185) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Mxi1_(AF4185) in HeLa-S3 cells)
@@ -2143,7 +1977,6 @@ wgEncode 1
         # subId=2770 dateSubmitted=2010-10-27
 
         track wgEncodeSydhTfbsGm10847InputIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM10847 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM10847 cells)
@@ -2152,7 +1985,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm10847InputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM10847 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM10847 cells)
@@ -2161,7 +1993,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm10847NfkbIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM10847 NFKB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM10847 cells)
@@ -2170,7 +2001,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm10847Pol2IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM10847 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM10847 cells)
@@ -2179,7 +2009,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878CfosStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 c-Fos Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Fos in GM12878 cells)
@@ -2189,7 +2018,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878InputIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12878 cells)
@@ -2199,7 +2027,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878InputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12878 cells)
@@ -2209,7 +2036,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878InputStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12878 cells)
@@ -2219,7 +2045,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878JundStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 JunD Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (JunD in GM12878 cells)
@@ -2229,7 +2054,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878MaxStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 Max Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Max in GM12878 cells)
@@ -2239,7 +2063,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878NfkbIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 NFKB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM12878 cells)
@@ -2249,7 +2072,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878NfkbTnfaStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 NFKB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM12878 cells)
@@ -2259,7 +2081,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878Pol2IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM12878 cells)
@@ -2269,7 +2090,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878Pol2StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM12878 cells)
@@ -2279,7 +2099,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878Pol3StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 Pol3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol3 in GM12878 cells)
@@ -2289,7 +2108,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878Rad21IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 Rad21 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Rad21 in GM12878 cells)
@@ -2299,7 +2117,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878Tr4StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 TR4 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TR4 in GM12878 cells)
@@ -2309,7 +2126,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878Xrcc4IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 WHIP Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (WHIP in GM12878 cells)
@@ -2319,7 +2135,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878Yy1StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 YY1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (YY1 in GM12878 cells)
@@ -2329,7 +2144,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878Zzz3StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 ZZZ3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZZZ3 in GM12878 cells)
@@ -2339,7 +2153,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12891InputIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12891 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12891 cells)
@@ -2348,7 +2161,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12891InputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12891 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12891 cells)
@@ -2357,7 +2169,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12891NfkbIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12891 NFKB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM12891 cells)
@@ -2366,7 +2177,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12891Pol2IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12891 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM12891 cells)
@@ -2375,7 +2185,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12892InputIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12892 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12892 cells)
@@ -2384,7 +2193,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12892InputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12892 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12892 cells)
@@ -2393,7 +2201,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12892NfkbIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12892 NFKB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM12892 cells)
@@ -2402,7 +2209,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12892Pol2IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12892 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM12892 cells)
@@ -2411,7 +2217,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm15510InputIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM15510 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM15510 cells)
@@ -2420,7 +2225,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm15510InputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM15510 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM15510 cells)
@@ -2429,7 +2233,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm15510NfkbIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM15510 NFKB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM15510 cells)
@@ -2438,7 +2241,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm15510Pol2IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM15510 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM15510 cells)
@@ -2447,7 +2249,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm18505InputIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM18505 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM18505 cells)
@@ -2456,7 +2257,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm18505InputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM18505 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM18505 cells)
@@ -2465,7 +2265,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm18505NfkbIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM18505 NFKB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM18505 cells)
@@ -2474,7 +2273,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm18505Pol2IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM18505 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM18505 cells)
@@ -2483,7 +2281,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm18526InputIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM18526 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM18526 cells)
@@ -2492,7 +2289,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm18526InputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM18526 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM18526 cells)
@@ -2501,7 +2297,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm18526NfkbIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM18526 NFKB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM18526 cells)
@@ -2510,7 +2305,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm18526Pol2IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM18526 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM18526 cells)
@@ -2519,7 +2313,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm18951InputIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM18951 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM18951 cells)
@@ -2528,7 +2321,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm18951InputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM18951 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM18951 cells)
@@ -2537,7 +2329,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm18951NfkbIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM18951 NFKB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM18951 cells)
@@ -2546,7 +2337,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm18951Pol2IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM18951 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM18951 cells)
@@ -2555,7 +2345,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm19099InputIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM19099 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM19099 cells)
@@ -2564,7 +2353,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm19099InputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM19099 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM19099 cells)
@@ -2573,7 +2361,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm19099NfkbIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM19099 NFKB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM19099 cells)
@@ -2582,7 +2369,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm19099Pol2IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM19099 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM19099 cells)
@@ -2591,7 +2377,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm19193InputIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM19193 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM19193 cells)
@@ -2600,7 +2385,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm19193InputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM19193 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM19193 cells)
@@ -2609,7 +2393,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm19193NfkbIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM19193 NFKB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM19193 cells)
@@ -2618,7 +2401,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm19193Pol2IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM19193 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM19193 cells)
@@ -2627,7 +2409,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHct116InputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HCT-116 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HCT-116 cells)
@@ -2636,7 +2417,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHct116Pol2UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HCT-116 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HCT-116 cells)
@@ -2645,7 +2425,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHct116Tcf4UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HCT-116 TCF4 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TCF4 in HCT-116 cells)
@@ -2654,7 +2433,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHek293bInputStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HEK293(b) Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HEK293(b) cells)
@@ -2663,7 +2441,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHek293bPol2StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HEK293(b) Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HEK293(b) cells)
@@ -2672,7 +2449,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Ap2alphaStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 AP-2alpha Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (AP-2alpha in HeLa-S3 cells)
@@ -2682,7 +2458,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Ap2gammaStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 AP-2gamma Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (AP-2gamma in HeLa-S3 cells)
@@ -2692,7 +2467,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Baf155IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 BAF155 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BAF155 in HeLa-S3 cells)
@@ -2702,7 +2476,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Baf170IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 BAF170 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BAF170 in HeLa-S3 cells)
@@ -2712,7 +2485,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Bdp1StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 BDP1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BDP1 in HeLa-S3 cells)
@@ -2722,7 +2494,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Brf1StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 BRF1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRF1 in HeLa-S3 cells)
@@ -2732,7 +2503,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Brf2StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 BRF2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRF2 in HeLa-S3 cells)
@@ -2742,7 +2512,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Brg1IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Brg1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Brg1 in HeLa-S3 cells)
@@ -2752,7 +2521,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3CfosStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 c-Fos Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Fos in HeLa-S3 cells)
@@ -2762,7 +2530,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3CjunIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 c-Jun Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in HeLa-S3 cells)
@@ -2772,7 +2539,6 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3CmycStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 c-Myc Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in HeLa-S3 cells)
@@ -2782,7 +2548,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3E2f1StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 E2F1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (E2F1 in HeLa-S3 cells)
@@ -2792,7 +2557,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3E2f4StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 E2F4 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (E2F4 in HeLa-S3 cells)
@@ -2802,7 +2566,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3E2f6StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 E2F6 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (E2F6 in HeLa-S3 cells)
@@ -2812,7 +2575,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Hae2f1StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 HA-E2F1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (HA-E2F1 in HeLa-S3 cells)
@@ -2822,7 +2584,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Ini1IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Ini1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Ini1 in HeLa-S3 cells)
@@ -2832,7 +2593,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3InputIfng30StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
@@ -2842,7 +2602,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3InputIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
@@ -2852,7 +2611,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3InputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
@@ -2862,7 +2620,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3InputLargefragmentSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
@@ -2872,7 +2629,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3InputMnaseSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
@@ -2882,7 +2638,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3InputNakeddnaSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
@@ -2892,7 +2647,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3InputStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
@@ -2902,7 +2656,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3JundIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 JunD Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (JunD in HeLa-S3 cells)
@@ -2912,7 +2665,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3MaxStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Max Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Max in HeLa-S3 cells)
@@ -2922,7 +2674,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Nrf1IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Nrf1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Nrf1 in HeLa-S3 cells)
@@ -2932,7 +2683,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Pol2StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HeLa-S3 cells)
@@ -2942,7 +2692,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Rpc155StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 RPC155 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (RPC155 in HeLa-S3 cells)
@@ -2952,7 +2701,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Stat1Ifng30StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 STAT1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT1 in HeLa-S3 cells)
@@ -2962,7 +2710,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Tf3c110StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 TFIIIC-110 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TFIIIC-110 in HeLa-S3 cells)
@@ -2972,7 +2719,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHelas3Tr4StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 TR4 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TR4 in HeLa-S3 cells)
@@ -2982,7 +2728,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2CebpbForsklnStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 CEBPB Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CEBPB in HepG2 cells)
@@ -2992,7 +2737,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2ErraForsklnStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 ERRA Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ERRA in HepG2 cells)
@@ -3002,7 +2746,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2Grp20ForsklnStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 GRp20 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GRp20 in HepG2 cells)
@@ -3012,7 +2755,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2Hnf4aForsklnStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 HNF4A Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (HNF4A in HepG2 cells)
@@ -3022,7 +2764,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2Hsf1ForsklnStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 HSF1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (HSF1 in HepG2 cells)
@@ -3032,7 +2773,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2InputForsklnStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HepG2 cells)
@@ -3042,7 +2782,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2InputInslnStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HepG2 cells)
@@ -3052,7 +2791,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2InputPravastStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HepG2 cells)
@@ -3062,7 +2800,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2Pgc1aForsklnStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 PGC1A Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (PGC1A in HepG2 cells)
@@ -3072,7 +2809,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2Pol2ForsklnStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HepG2 cells)
@@ -3082,7 +2818,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2Pol2PravastStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HepG2 cells)
@@ -3092,7 +2827,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2Srebp1InslnStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 SREBP1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SREBP1 in HepG2 cells)
@@ -3102,7 +2836,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2Srebp1PravastStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 SREBP1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SREBP1 in HepG2 cells)
@@ -3112,7 +2845,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2Srebp2PravastStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 SREBP2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SREBP2 in HepG2 cells)
@@ -3122,7 +2854,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2bInputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2b Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HepG2b cells)
@@ -3132,7 +2863,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHepg2bTr4UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2b TR4 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TR4 in HepG2b cells)
@@ -3142,7 +2872,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHuvecCjunStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HUVEC c-Jun Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in HUVEC cells)
@@ -3152,7 +2881,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHuvecInputStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HUVEC Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HUVEC cells)
@@ -3162,7 +2890,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHuvecMaxStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HUVEC Max Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Max in HUVEC cells)
@@ -3172,7 +2899,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsHuvecPol2StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HUVEC Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HUVEC cells)
@@ -3182,7 +2908,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Atf3StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 ATF3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ATF3 in K562 cells)
@@ -3192,7 +2917,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Bdp1StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 BDP1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BDP1 in K562 cells)
@@ -3202,7 +2926,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Brf1StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 BRF1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRF1 in K562 cells)
@@ -3212,7 +2935,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Brf2StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 BRF2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRF2 in K562 cells)
@@ -3222,7 +2944,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Brg1IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Brg1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Brg1 in K562 cells)
@@ -3232,7 +2953,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562CfosStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 c-Fos Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Fos in K562 cells)
@@ -3242,7 +2962,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562CjunIfna6hStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 c-Jun Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in K562 cells)
@@ -3252,7 +2971,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562CjunIfng30StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 c-Jun Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in K562 cells)
@@ -3262,7 +2980,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562CjunIfng6hStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 c-Jun Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in K562 cells)
@@ -3272,7 +2989,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562CjunStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 c-Jun Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in K562 cells)
@@ -3282,7 +2998,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562CmycIfna30StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 c-Myc Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in K562 cells)
@@ -3292,7 +3007,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562CmycIfna6hStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 c-Myc Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in K562 cells)
@@ -3302,7 +3016,6 @@ wgEncode 1
         # subId=3055 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562CmycIfng6hStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 c-Myc Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in K562 cells)
@@ -3312,7 +3025,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562CmycStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 c-Myc Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in K562 cells)
@@ -3322,7 +3034,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Ini1IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Ini1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Ini1 in K562 cells)
@@ -3332,7 +3043,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562InputIfna30StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
@@ -3342,7 +3052,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562InputIfna6hStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
@@ -3352,7 +3061,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562InputIfng30StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
@@ -3362,7 +3070,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562InputIfng6hStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
@@ -3372,7 +3079,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562InputIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
@@ -3382,7 +3088,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562InputStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
@@ -3392,7 +3097,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562JundStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 JunD Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (JunD in K562 cells)
@@ -3402,7 +3106,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562MaxStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Max Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Max in K562 cells)
@@ -3412,7 +3115,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562NelfeStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 NELFe Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NELFe in K562 cells)
@@ -3422,7 +3124,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Nfe2StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 NF-E2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NF-E2 in K562 cells)
@@ -3432,7 +3133,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Pol2Ifna30StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in K562 cells)
@@ -3442,7 +3142,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Pol2Ifna6hStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in K562 cells)
@@ -3452,7 +3151,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Pol2Ifng30StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in K562 cells)
@@ -3462,7 +3160,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Pol2Ifng6hStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in K562 cells)
@@ -3472,7 +3169,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Pol2IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in K562 cells)
@@ -3482,7 +3178,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Pol2StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in K562 cells)
@@ -3492,7 +3187,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Pol3StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Pol3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol3 in K562 cells)
@@ -3502,7 +3196,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Rad21StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Rad21 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Rad21 in K562 cells)
@@ -3512,7 +3205,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Rpc155StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 RPC155 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (RPC155 in K562 cells)
@@ -3522,7 +3214,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Sirt6StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 SIRT6 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SIRT6 in K562 cells)
@@ -3532,7 +3223,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Stat1Ifna30StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 STAT1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT1 in K562 cells)
@@ -3542,7 +3232,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Stat1Ifna6hStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 STAT1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT1 in K562 cells)
@@ -3552,7 +3241,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Stat1Ifng30StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 STAT1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT1 in K562 cells)
@@ -3562,7 +3250,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Stat1Ifng6hStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 STAT1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT1 in K562 cells)
@@ -3572,7 +3259,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Stat2Ifna30StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 STAT2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT2 in K562 cells)
@@ -3582,7 +3268,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Stat2Ifna6hStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 STAT2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT2 in K562 cells)
@@ -3592,7 +3277,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Tf3c110StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 TFIIIC-110 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TFIIIC-110 in K562 cells)
@@ -3602,7 +3286,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Xrcc4StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 XRCC4 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (XRCC4 in K562 cells)
@@ -3612,7 +3295,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562bE2f4UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562b E2F4 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (E2F4 in K562b cells)
@@ -3622,7 +3304,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562bE2f6UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562b E2F6 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (E2F6 in K562b cells)
@@ -3632,7 +3313,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562bGata1UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562b GATA-1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GATA-1 in K562b cells)
@@ -3642,7 +3322,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562bGata2UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562b GATA-2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GATA-2 in K562b cells)
@@ -3652,7 +3331,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562bInputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562b Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562b cells)
@@ -3662,7 +3340,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562bSetdb1MnasedUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562b SETDB1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SETDB1 in K562b cells)
@@ -3672,7 +3349,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562bSetdb1UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562b SETDB1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SETDB1 in K562b cells)
@@ -3682,7 +3358,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562bTr4UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562b TR4 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TR4 in K562b cells)
@@ -3692,7 +3367,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562bYy1UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562b YY1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (YY1 in K562b cells)
@@ -3702,7 +3376,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562bZnf263UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562b ZNF263 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZNF263 in K562b cells)
@@ -3712,7 +3385,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562bZnf274UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562b ZNF274 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZNF274 in K562b cells)
@@ -3722,7 +3394,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsMcf7Hae2f1UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF-7 HA-E2F1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (HA-E2F1 in MCF-7 cells)
@@ -3731,7 +3402,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsMcf7InputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF-7 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in MCF-7 cells)
@@ -3740,7 +3410,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsNb4InputStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel NB4 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in NB4 cells)
@@ -3749,7 +3418,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsNb4Pol2StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel NB4 Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in NB4 cells)
@@ -3758,7 +3426,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsNt2d1InputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel NT2-D1 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in NT2-D1 cells)
@@ -3767,7 +3434,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsNt2d1Suz12UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel NT2-D1 SUZ12 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SUZ12 in NT2-D1 cells)
@@ -3776,7 +3442,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsNt2d1Yy1UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel NT2-D1 YY1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (YY1 in NT2-D1 cells)
@@ -3785,7 +3450,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsPbdeInputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel PBDE Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in PBDE cells)
@@ -3794,7 +3458,6 @@ wgEncode 1
         # subId=1956 dateSubmitted=2011-01-14
 
         track wgEncodeSydhTfbsHek293bElk4UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HEK293(b) ELK4 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ELK4 in HEK293(b) cells)
@@ -3803,7 +3466,6 @@ wgEncode 1
         # subId=3248 dateSubmitted=2011-01-13
 
         track wgEncodeSydhTfbsHuvecCfosUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HUVEC c-Fos Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Fos in HUVEC cells)
@@ -3813,7 +3475,6 @@ wgEncode 1
         # subId=3250 dateSubmitted=2011-01-13
 
         track wgEncodeSydhTfbsNt2d1Znf274UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel NT2-D1 ZNF274 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZNF274 in NT2-D1 cells)
@@ -3822,7 +3483,6 @@ wgEncode 1
         # subId=3251 dateSubmitted=2011-01-13
 
         track wgEncodeSydhTfbsU2osKap1UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel U2OS KAP1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (KAP1 in U2OS cells)
@@ -3831,7 +3491,6 @@ wgEncode 1
         # subId=3252 dateSubmitted=2011-01-13
 
         track wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src STAT3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT3 in MCF10A-Er-Src cells)
@@ -3840,7 +3499,6 @@ wgEncode 1
         # subId=3253 dateSubmitted=2011-01-14
 
         track wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src STAT3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT3 in MCF10A-Er-Src cells)
@@ -3849,7 +3507,6 @@ wgEncode 1
         # subId=3254 dateSubmitted=2011-01-14
 
         track wgEncodeSydhTfbsMcf10aesInputEtoh01cStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in MCF10A-Er-Src cells)
@@ -3858,7 +3515,6 @@ wgEncode 1
         # subId=3255 dateSubmitted=2011-01-14
 
         track wgEncodeSydhTfbsMcf10aesInputEtoh01bStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in MCF10A-Er-Src cells)
@@ -3867,7 +3523,6 @@ wgEncode 1
         # subId=3256 dateSubmitted=2011-01-14
 
         track wgEncodeSydhTfbsHek293InputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HEK293(b) Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HEK293(b) cells)
@@ -3875,17 +3530,16 @@ wgEncode 1
         type bigWig 1.000000 24948.000000
         # subId=3257 dateSubmitted=2011-01-14
 
-		track wgEncodeSydhTfbsHepg2CebpbIggrabSig
-		parent wgEncodeSydhTfbsViewSignal off
-		shortLabel HepG2 CEBPB Sig
-		longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CEBPB in HepG2 cells)
-		subGroups view=Signal factor=CEBPB cellType=HepG2 control=IGGrab treatment=aNone
-		type bigWig 1.000000 19417.000000
-		color 189,0,157
-		# subId=3875 dateSubmitted=2011-04-04
+        track wgEncodeSydhTfbsHepg2CebpbIggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 CEBPB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CEBPB in HepG2 cells)
+        subGroups view=Signal factor=CEBPB cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 1.000000 19417.000000
+        color 189,0,157
+        # subId=3875 dateSubmitted=2011-04-04
 
         track wgEncodeSydhTfbsGm12878Chd21250IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 CHD2_(AB68301) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CHD2_(AB68301) in GM12878 cells)
@@ -3894,18 +3548,16 @@ wgEncode 1
         color 153,38,0
         # subId=3312 dateSubmitted=2011-01-18
 
-        track wgEncodeSydhTfbsGm12878EbfStdSig
-        release alpha
+        track wgEncodeSydhTfbsGm12878Ebf1sc137065StdSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM12878 EBF Sig
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (EBF in GM12878 cells)
-        subGroups view=Signal factor=EBF cellType=GM12878 control=std treatment=aNone
+        shortLabel GM12878 EBF1_(SC-137065) Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (EBF1_(SC-137065) in GM12878 cells)
+        subGroups view=Signal factor=EBF1SC137065 cellType=GM12878 control=std treatment=aNone
         type bigWig 1.000000 10389.000000
         color 153,38,0
         # subId=3313 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsGm12878Smc3ab9263IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 SMC3_(ab9263) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SMC3_(ab9263) in GM12878 cells)
@@ -3915,7 +3567,6 @@ wgEncode 1
         # subId=3315 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHelas3Smc3ab9263IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 SMC3_(ab9263) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SMC3_(ab9263) in HeLa-S3 cells)
@@ -3925,7 +3576,6 @@ wgEncode 1
         # subId=3317 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHelas3Pol2s2IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Pol2(phosphoS2) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2(phosphoS2) in HeLa-S3 cells)
@@ -3935,7 +3585,6 @@ wgEncode 1
         # subId=3318 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHepg2Chd21250IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 CHD2_(AB68301) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CHD2_(AB68301) in HepG2 cells)
@@ -3945,7 +3594,6 @@ wgEncode 1
         # subId=3319 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHepg2Maffm8194IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 MafF_(M8194) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (MafF_(M8194) in HepG2 cells)
@@ -3955,7 +3603,6 @@ wgEncode 1
         # subId=3320 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHepg2Mafkab50322IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 MafK_(ab50322) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (MafK_(ab50322) in HepG2 cells)
@@ -3965,7 +3612,6 @@ wgEncode 1
         # subId=3321 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHepg2Rfx5n494IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 RFX5_(200-401-194) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (RFX5_(200-401-194) in HepG2 cells)
@@ -3975,7 +3621,6 @@ wgEncode 1
         # subId=3322 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsK562Mafkab50322IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 MafK_(ab50322) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (MafK_(ab50322) in K562 cells)
@@ -3985,7 +3630,6 @@ wgEncode 1
         # subId=3323 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsK562Smc3ab9263IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 SMC3_(ab9263) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SMC3_(ab9263) in K562 cells)
@@ -3995,7 +3639,6 @@ wgEncode 1
         # subId=3324 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsH1hescInputIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in H1-hESC cells)
@@ -4005,7 +3648,6 @@ wgEncode 1
         # subId=3325 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsH1hescUsf2IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC USF2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (USF2 in H1-hESC cells)
@@ -4015,7 +3657,6 @@ wgEncode 1
         # subId=3326 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsH1hescRfx5n494IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC RFX5_(200-401-194) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (RFX5_(200-401-194) in H1-hESC cells)
@@ -4025,7 +3666,6 @@ wgEncode 1
         # subId=3327 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsH1hescRad21IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC Rad21 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Rad21 in H1-hESC cells)
@@ -4035,7 +3675,6 @@ wgEncode 1
         # subId=3328 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsHepg2Mafksc477IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 MafK_(sc477) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (MafK_(sc477) in HepG2 cells)
@@ -4045,7 +3684,6 @@ wgEncode 1
         # subId=3331 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsH1hescNrf1IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC Nrf1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Nrf1 in H1-hESC cells)
@@ -4055,7 +3693,6 @@ wgEncode 1
         # subId=3332 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsHepg2Tcf4UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2b TCF4 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TCF4 in HepG2b cells)
@@ -4065,7 +3702,6 @@ wgEncode 1
         # subId=3390 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsH1hescTbpStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC TBP Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TBP in H1-hESC cells)
@@ -4075,7 +3711,6 @@ wgEncode 1
         # subId=3392 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsGm12878Ctcfc20StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 CTCF_(SC-15914) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CTCF_(SC-15914) in GM12878 cells)
@@ -4085,7 +3720,6 @@ wgEncode 1
         # subId=3403 dateSubmitted=2011-01-20
 
         track wgEncodeSydhTfbsGm12878Stat1StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 STAT1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT1 in GM12878 cells)
@@ -4095,7 +3729,6 @@ wgEncode 1
         # subId=3434 dateSubmitted=2011-01-20
 
         track wgEncodeSydhTfbsGm12878Znf143166181apStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 Znf143_(16618-1-AP) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Znf143_(16618-1-AP) in GM12878 cells)
@@ -4105,7 +3738,6 @@ wgEncode 1
         # subId=3435 dateSubmitted=2011-01-20
 
         track wgEncodeSydhTfbsTrexhek293Znf263UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel T-REx-HEK293 ZNF263 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZNF263 in T-REx-HEK293 cells)
@@ -4114,7 +3746,6 @@ wgEncode 1
         # subId=3249 dateSubmitted=2011-01-24
 
         track wgEncodeSydhTfbsGm12878Brca1cIggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 BRCA1_(A300-000A) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRCA1_(A300-000A) in GM12878 cells)
@@ -4124,7 +3755,6 @@ wgEncode 1
         # subId=3311 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsGm12878Nrf1IggmusSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 Nrf1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Nrf1 in GM12878 cells)
@@ -4134,7 +3764,6 @@ wgEncode 1
         # subId=3389 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsHek293bKap1UcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HEK293(b) KAP1 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (KAP1 in HEK293(b) cells)
@@ -4143,7 +3772,6 @@ wgEncode 1
         # subId=3316 dateSubmitted=2011-01-18
 
         track wgEncodeSydhTfbsGm12878Gcn5StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 GCN5 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GCN5 in GM12878 cells)
@@ -4153,7 +3781,6 @@ wgEncode 1
         # subId=3399 dateSubmitted=2011-01-21
 
         track wgEncodeSydhTfbsGm12878Spt20StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 SPT20 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SPT20 in GM12878 cells)
@@ -4163,7 +3790,6 @@ wgEncode 1
         # subId=3400 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsHelas3Gcn5StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 GCN5 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GCN5 in HeLa-S3 cells)
@@ -4173,7 +3799,6 @@ wgEncode 1
         # subId=3401 dateSubmitted=2011-01-19
 
         track wgEncodeSydhTfbsHelas3Spt20StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 SPT20 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SPT20 in HeLa-S3 cells)
@@ -4183,7 +3808,6 @@ wgEncode 1
         # subId=3402 dateSubmitted=2011-01-20
 
         track wgEncodeSydhTfbsH1hescCjunIggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC c-Jun Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in H1-hESC cells)
@@ -4193,7 +3817,6 @@ wgEncode 1
         # subId=3405 dateSubmitted=2011-01-20
 
         track wgEncodeSydhTfbsThek293InputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel T-REx-HEK293 Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in T-REx-HEK293 cells)
@@ -4202,7 +3825,6 @@ wgEncode 1
         # subId=3499 dateSubmitted=2011-02-03
 
         track wgEncodeSydhTfbsShsy5yInputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel SH-SY5Y Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in SH-SY5Y cells)
@@ -4211,7 +3833,6 @@ wgEncode 1
         # subId=3498 dateSubmitted=2011-02-03
 
         track wgEncodeSydhTfbsH1hescInputStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in H1-hESC cells)
@@ -4221,7 +3842,6 @@ wgEncode 1
         # subId=3501 dateSubmitted=2011-02-03
 
         track wgEncodeSydhTfbsMcf10aesInputUcdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src Input Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in MCF10A-Er-Src cells)
@@ -4230,7 +3850,6 @@ wgEncode 1
         # subId=3497 dateSubmitted=2011-02-03
 
         track wgEncodeSydhTfbsK562Bhlhe40nb100IggrabSig
-        release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 BHLHE40_(NB100-1800) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BHLHE40_(NB100-1800) in K562 cells)
@@ -4238,4 +3857,49 @@ wgEncode 1
         type bigWig 1.000000 18479.000000
         color 46,0,184
         # subId=3755 dateSubmitted=2011-02-25
+
+        track wgEncodeSydhTfbsHepg2Brca1a300IggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 BRCA1_(A300-000A) Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRCA1_(A300-000A) in HepG2 cells)
+        subGroups view=Signal factor=BRCA1A300 cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 1.000000 9420.000000
+        color 189,0,157
+        # subId=3871 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsGm12878Pol2s2IggmusSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 Pol2(phosphoS2) Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2(phosphoS2) in GM12878 cells)
+        subGroups view=Signal factor=POL2S2 cellType=GM12878 control=IGGmus treatment=aNone
+        type bigWig 1.000000 5123.000000
+        color 153,38,0
+        # subId=3870 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsHepg2P300sc582IggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 p300_(SC-584) Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (p300_(SC-584) in HepG2 cells)
+        subGroups view=Signal factor=P300SC582 cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 1.000000 15243.000000
+        color 189,0,157
+        # subId=3872 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsHepg2Pol2s2IggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 Pol2(phosphoS2) Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2(phosphoS2) in HepG2 cells)
+        subGroups view=Signal factor=POL2S2 cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 1.000000 7379.000000
+        color 189,0,157
+        # subId=3873 dateSubmitted=2011-03-31
+
+        track wgEncodeSydhTfbsHepg2Smc3ab9263IggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 SMC3_(ab9263) Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SMC3_(ab9263) in HepG2 cells)
+        subGroups view=Signal factor=SMC3ab9263 cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 1.000000 11218.000000
+        color 189,0,157
+        # subId=3874 dateSubmitted=2011-03-31
 

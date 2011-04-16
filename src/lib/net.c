@@ -98,14 +98,23 @@ if (res < 0)
 	    else if (res > 0)
 		{
 		// Socket selected for write when it is ready
-		// We simply re-do the connect call and get the result
-		res = connect(sd, (struct sockaddr*) &sai, sizeof(sai));
-		if (res < 0)
-		    {
-		    warn("Error in TCP non-blocking connect() %d - %s\n", errno, strerror(errno));
-		    close(sd);
-		    return -1;
-		    }
+		int valOpt;
+		socklen_t lon;
+                // But check the socket for any errors
+                lon = sizeof(valOpt);
+                if (getsockopt(sd, SOL_SOCKET, SO_ERROR, (void*) (&valOpt), &lon) < 0)
+                    {
+                    warn("Error in getsockopt() %d - %s\n", errno, strerror(errno));
+                    close(sd);
+                    return -1;
+                    }
+                // Check the value returned...
+                if (valOpt)
+                    {
+                    warn("Error in TCP non-blocking connect() %d - %s\n", valOpt, strerror(valOpt));
+                    close(sd);
+                    return -1;
+                    }
 		break;
 		}
 	    else

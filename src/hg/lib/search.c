@@ -1,6 +1,6 @@
-// Track Search code which is shared between different CGIs
+// Search code which is shared between different CGIs: hgFileSearch and hgTracks(Track Search)
 
-#include "searchTracks.h"
+#include "search.h"
 #include "cheapcgi.h"
 #include "hdb.h"
 #include "hgConfig.h"
@@ -33,8 +33,7 @@ struct slPair *fileFormatSearchWhiteList()
 // Gets the whitelist of approved file formats that is allowed for search
 {
 char *crudeTypes[] = {
-    "bam",
-    "bam.bai",
+    "bam",  //    "bam.bai" is now alway selected with bam,
     "tagAlign",
     "bed.gz",
     "bigBed",
@@ -42,11 +41,10 @@ char *crudeTypes[] = {
     "narrowPeak",
     "fastq",
     "bigWig",
-    "wig"
+    "wig"    // TODO: Add "other" category. TODO: make into multi-select
 };
 char *nicerTypes[] = {
-    "Alignment binary (bam) - binary SAM",
-    "Alignment binary index (bai) - binary SAM index",
+    "Alignment binary (bam) - binary SAM",  //    "Alignment binary index (bai) - binary SAM index",
     "Alignment tags (tagAlign)",
     "bed - browser extensible data",
     "bigBed - self index, often remote bed format",
@@ -249,5 +247,61 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
     dyStringPrintf(output,"<tr><td colspan='%d' align='right' style='height:10px; max-height:10px;'>&nbsp;</td></tr>", cols);
 
 return dyStringCannibalize(&output);
+}
+
+
+static boolean searchMatchToken(char *string, char *token)
+{
+// do this with regex ? Would require all sorts of careful parsing for ()., etc.
+if (string == NULL)
+    return (token == NULL);
+if (token == NULL)
+    return TRUE;
+
+if (!strchr(token,'*') && !strchr(token,'?'))
+    return (strcasestr(string,token) != NULL);
+
+char wordWild[1024];
+safef(wordWild,sizeof wordWild,"*%s*",token);
+return wildMatch(wordWild, string);
+
+}
+
+boolean searchNameMatches(struct trackDb *tdb, struct slName *wordList)
+// returns TRUE if all words in preparsed list matches short or long label
+// A "word" can be "multiple words" (parsed from quoteed string).
+{
+if (tdb->shortLabel == NULL || tdb->longLabel == NULL)
+    return (wordList != NULL);
+
+struct slName *word = wordList;
+for(; word != NULL; word = word->next)
+    {
+    if (!searchMatchToken(tdb->shortLabel,word->name)
+    &&  !searchMatchToken(tdb->longLabel, word->name))
+        return FALSE;
+    }
+return TRUE;
+}
+
+boolean searchDescriptionMatches(struct trackDb *tdb, struct slName *wordList)
+// returns TRUE if all words in preparsed list matches html description page.
+// A "word" can be "multiple words" (parsed from quoteed string).
+// Because description contains html, quoted string match has limits.
+// DANGER: this will alter html of tdb struct (replacing \n with ' ', so the html should not be displayed after.
+{
+if (tdb->html == NULL)
+    return (wordList != NULL);
+
+if (strchr(tdb->html,'\n'))
+    strSwapChar(tdb->html,'\n',' ');   // DANGER: don't own memory.  However, this CGI will use html for no other purpose
+
+struct slName *word = wordList;
+for(; word != NULL; word = word->next)
+    {
+    if (!searchMatchToken(tdb->html,word->name))
+        return FALSE;
+    }
+return TRUE;
 }
 

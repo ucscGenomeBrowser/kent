@@ -2596,7 +2596,7 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
 return invalids;
 }
 
-static struct slName *mdbCompositeFindEncodeEdvs(struct mdbObj *compObj)
+static struct slName *mdbObjGetNamedEncodeEdvs(struct mdbObj *compObj)
 // returns NULL or the list of EDVs defined for this composite
 {
 char *edvs = mdbObjFindValue(compObj,MDB_VAR_ENCODE_EDVS);
@@ -2635,7 +2635,7 @@ slReverse(&edvVars);
 return edvVars;
 }
 
-struct slName *mdbObjFindCompositeEncodeEdvNames(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj)
+struct slName *mdbObjFindCompositeNamedEncodeEdvs(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj)
 // returns NULL or the Experiment Defining Variable names for this composite
 {
 if (!mdbObjIsCompositeMember(mdbObj))
@@ -2644,8 +2644,7 @@ if (!mdbObjIsCompositeMember(mdbObj))
 struct mdbObj *compObj = mdbObjQueryCompositeObj(conn,tableName,mdbObj);
 if (compObj == NULL)
     return NULL;
-
-struct slName *edvs = mdbCompositeFindEncodeEdvs(compObj);
+struct slName *edvs = mdbObjGetNamedEncodeEdvs(compObj);
 mdbObjFree(&compObj);
 return edvs;
 }
@@ -2654,21 +2653,24 @@ struct mdbVar *mdbObjFindEncodeEdvPairs(struct sqlConnection *conn,char *tableNa
 // returns NULL or the Experiment Defining Variables and values for this composite member object
 // If includeNone, then defined variables not found in obj will be included as {var}="None".
 {
-struct slName *compositeEdvs = mdbObjFindCompositeEncodeEdvNames(conn,tableName,mdbObj);
+// In rare cases, the EDVs reside with the object and NOT in a objType=composite.
+struct slName *compositeEdvs = mdbObjGetNamedEncodeEdvs(mdbObj);  // looking locally first.
 if (compositeEdvs == NULL)
-    return NULL;
+    {
+    compositeEdvs = mdbObjFindCompositeNamedEncodeEdvs(conn,tableName,mdbObj);
+    if (compositeEdvs == NULL)
+        return NULL;
+    }
 
 return mdbObjEncodeEdvsAsMdbVars(mdbObj,compositeEdvs,includeNone);
 }
 
-#define EXPERIMENTS_TABLE "hgFixed.encodeExp"
-
-struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,
-                                          int warn,boolean createExpIfNecessary)
+struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,char *expTable,
+                       struct mdbObj **pMdbObjs,int warn,boolean createExpIfNecessary,boolean updateAccession)
 // Organizes objects into experiments and validates experiment IDs.  Will add/update the ids in the structures.
 // If warn=1, then prints to stdout all the experiments/obs with missing or wrong expIds;
 //    warn=2, then print line for each obj with expId or warning.
-// createExpIfNecessary means go ahead and add to the hgFixed.encodeExp table to get an ID
+// createExpIfNecessary means add expId to encodeExp table. updateAccession too if necessary.
 // Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
 {
 // Here is what "experimentify" does from "mdbPrint -encodeExp" and "mdbUpdate -encodeExp":
@@ -2689,7 +2691,10 @@ if (pMdbObjs == NULL || *pMdbObjs == NULL)
 struct mdbObj *mdbObjs = *pMdbObjs;
 struct mdbObj *mdbProcessedObs = NULL;
 struct mdbObj *mdbUpdateObjs = NULL;
+if (expTable == NULL)
+    expTable = ENCODE_EXP_TABLE;
 
+verbose(2, "mdbObjsEncodeExperimentify() beginning for %d objects.\n",slCount(*pMdbObjs));
 // Sort all objects by composite, so that we handle composite by composite
 mdbObjsSortOnVars(&mdbObjs, MDB_VAR_COMPOSITE);
 
@@ -2698,40 +2703,64 @@ struct dyString *dyVars = dyStringNew(256);
 while(mdbObjs != NULL)
     {
     // Work on a composite at a time
+    boolean compositelessObj = FALSE;
     char *compName = NULL;
     while(mdbObjs != NULL && compName == NULL)
         {
         compName = mdbObjFindValue(mdbObjs,MDB_VAR_COMPOSITE);
         if (compName == NULL)
             {
-            verbose(1, "Object '%s' has no %s defined.\n",mdbObjs->obj,MDB_VAR_COMPOSITE);
-            mdbProcessedObs = slCat(mdbProcessedObs,slPopHead(&mdbObjs));
-            continue;
+            if (mdbObjFindValue(mdbObjs,MDB_VAR_ENCODE_EDVS) == NULL)
+                {
+                verbose(1, "Object '%s' has no %s or %s defined.\n",mdbObjs->obj,MDB_VAR_COMPOSITE,MDB_VAR_ENCODE_EDVS);
+                mdbProcessedObs = slCat(mdbProcessedObs,slPopHead(&mdbObjs));
+                continue;
+                }
+            verbose(2, "mdbObjsEncodeExperimentify() starting on compositeless set.\n");
+            break;
             }
         }
-    struct mdbObj *mdbCompositeObjs = mdbObjsFilter(&mdbObjs, MDB_VAR_COMPOSITE, compName,TRUE);
+    struct mdbObj *mdbCompositeObjs = NULL;
+    if (compName != NULL)
+        mdbCompositeObjs = mdbObjsFilter(&mdbObjs, MDB_VAR_COMPOSITE, compName,TRUE);
+    else
+        mdbCompositeObjs = slPopHead(&mdbObjs); // Rare cases there is no composite set.
+    assert(mdbCompositeObjs != NULL);
     // --- At this point we have nibbled off a composite worth of objects from the full set of objects
 
     // Find the composite obj if it exists
-    struct mdbObj *compObj = mdbObjsFilter(&mdbCompositeObjs, MDB_OBJ_TYPE, MDB_OBJ_TYPE_COMPOSITE,TRUE);
-    if (compObj == NULL) // May be NULL if mdbObjs passed in was produced by too narrow of selection criteria
-        compObj = mdbObjQueryCompositeObj(conn,tableName,mdbCompositeObjs);  // First obj on list will do
-    else
-        slAddHead(&mdbProcessedObs,compObj); // We can still use the pointer, but will not "process" it.  NOTE: leak the queried one
-    if(compObj == NULL)
+    struct mdbObj *compObj = NULL;
+    if (compName != NULL)
         {
-        verbose(1, "Composite '%s' has not been defined.\n",compName);
-        mdbProcessedObs = slCat(mdbProcessedObs,mdbCompositeObjs);
-        mdbCompositeObjs = NULL;
-        continue;
+        compObj =mdbObjsFilter(&mdbCompositeObjs, MDB_OBJ_TYPE, MDB_OBJ_TYPE_COMPOSITE,TRUE);
+        if (compObj == NULL) // May be NULL if mdbObjs passed in was produced by too narrow of selection criteria
+            {
+            compObj = mdbObjQueryCompositeObj(conn,tableName,mdbCompositeObjs);  // First obj on list will do
+            if(compObj == NULL)  // This should be assertable
+                {
+                verbose(1, "Composite '%s' has not been defined.\n",compName);
+                mdbProcessedObs = slCat(mdbProcessedObs,mdbCompositeObjs);
+                mdbCompositeObjs = NULL;
+                continue;
+                }
+            }
+        else
+            slAddHead(&mdbProcessedObs,compObj); // We can still use the pointer, but will not "process" it.  NOTE: leak the queried one
         }
+    else
+        {
+        compObj = mdbCompositeObjs;  // Should be only one
+        compName = mdbCompositeObjs->obj;
+        compositelessObj = TRUE;
+        }
+    verbose(2, "mdbObjsEncodeExperimentify() working on %s %s%s.\n",compName,MDB_VAR_COMPOSITE,(compositelessObj?"less set":""));
 
-    // Obtain experiment defining variables for the composite
-    struct slName *compositeEdvs = mdbCompositeFindEncodeEdvs(compObj);
+    // Obtain experiment defining variables for the composite (or compositeless obj)
+    struct slName *compositeEdvs = mdbObjGetNamedEncodeEdvs(compObj);
     if (compositeEdvs == NULL)
         {
-        verbose(1, "There are no experiment defining variables established for this %s.  Add them to obj %s => var:%s.\n",
-                MDB_VAR_COMPOSITE, compName,MDB_VAR_ENCODE_EDVS);
+        verbose(1, "There are no experiment defining variables established for this %s%s.  Add them to obj %s => var:%s.\n",
+                MDB_VAR_COMPOSITE,(compositelessObj?"less set":""), compName,MDB_VAR_ENCODE_EDVS);
         mdbProcessedObs = slCat(mdbProcessedObs,mdbCompositeObjs);
         mdbCompositeObjs = NULL;
         continue;
@@ -2740,8 +2769,8 @@ while(mdbObjs != NULL)
     dyStringAppend(dyVars,slNameListToString(compositeEdvs, ' '));
 
     if (warn > 0)
-        printf("Composite '%s' with %d objects has %d EDVs(%s): [%s].\n",compName,slCount(mdbCompositeObjs),
-               slCount(compositeEdvs),MDB_VAR_ENCODE_EDVS,dyStringContents(dyVars)); // Set the stage
+        printf("Composite%s '%s' with %d objects has %d EDVs(%s): [%s].\n",(compositelessObj?"less set":""),compName,
+               slCount(mdbCompositeObjs),slCount(compositeEdvs),MDB_VAR_ENCODE_EDVS,dyStringContents(dyVars)); // Set the stage
 
     // Organize composite objs by EDVs
     dyStringPrintf(dyVars, " %s %s ",MDB_VAR_VIEW,MDB_VAR_REPLICATE); // Allows for nicer sorted list
@@ -2788,6 +2817,7 @@ while(mdbObjs != NULL)
             }
 
         // Work on one experiment at a time
+        verbose(2, "mdbObjsEncodeExperimentify() working on EDVs: %s.\n",dyStringContents(dyVars));
         struct mdbObj *mdbExpObjs = mdbObjsFilterByVars(&mdbCompositeObjs,dyStringContents(dyVars),TRUE,TRUE); // None={notFound}
 
         // --- At this point we have nibbled off an experiment worth of objects from the composite set of objects
@@ -2799,20 +2829,25 @@ while(mdbObjs != NULL)
 
         // Look up each exp in EXPERIMENTS_TABLE
         char experimentId[128];
-        int expId = -1;
-        struct encodeExp *exp = encodeExpGetByMdbVars(db, edvVarVals);
+        int expId = ENCODE_EXP_IX_UNDEFINED;
+        struct encodeExp *exp = encodeExpGetByMdbVarsFromTable(db, edvVarVals, expTable);
         if (exp == NULL && createExpIfNecessary)
-            exp = encodeExpGetOrCreateByMdbVars(db, edvVarVals);
+            exp = encodeExpGetOrCreateByMdbVarsFromTable(db, edvVarVals, expTable);
         mdbVarsFree(&edvVarVals); // No longer needed
+
+        // Make sure the accession is set if requested.
+        if (createExpIfNecessary && updateAccession
+        && exp->ix != ENCODE_EXP_IX_UNDEFINED && exp->accession == NULL)
+            encodeExpSetAccession(exp, expTable);
 
         if (exp != NULL)
             expId = exp->ix;
 
-        if (expId == -1)
+        if (expId == ENCODE_EXP_IX_UNDEFINED)
             {
             safef(experimentId,sizeof(experimentId),"{missing}");
             if (warn > 0)
-                printf("Experiment %s EDV: [%s] is not defined in %s table.\n",experimentId,dyStringContents(dyVars),EXPERIMENTS_TABLE);
+                printf("Experiment %s EDV: [%s] is not defined in %s.%s table.\n",experimentId,dyStringContents(dyVars), ENCODE_EXP_DATABASE, expTable);
                 //printf("Experiment %s EDV: [%s] is not defined in %s table. Remaining:%d and %d\n",experimentId,dyStringContents(dyVars),EXPERIMENTS_TABLE,slCount(mdbCompositeObjs),slCount(mdbObjs));
             if (warn < 2) // From mdbUpdate (warn=1), just interested in testing waters.  From mdbPrint (warn=2) list all objs in exp.
                 {
@@ -2852,28 +2887,38 @@ while(mdbObjs != NULL)
                 {
                 foundId = TRUE; // warn==1 will give only 1 exp wide error if no individual errors.  NOTE: would be nice if those with expId sorted to beginning, but can't have everything.
                 int thisId = atoi(val);
-                if (thisId == expId && expId != -1)
-                    {
-                    errors--; // One less error
-                    if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
-                        {
-                        char *acc = mdbObjFindValue(obj,MDB_VAR_DCC_ACCESSION); // FIXME: Add code to update accession to encodeExp
-                        if (acc == NULL)
-                            printf("           %s %s\n",experimentId,obj->obj);
-                        else
-                            printf("           %s %s %s set, needs %s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION);
-                        }
-                    }
-                else
+                if (expId == ENCODE_EXP_IX_UNDEFINED || thisId != expId)
                     {
                     updateObj = TRUE;
                     if (warn > 0)
                         printf("           %s %s has bad %s=%s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,val);
                     }
+                else
+                    {
+                    char *acc = mdbObjFindValue(obj,MDB_VAR_DCC_ACCESSION); // FIXME: Add code to update accession to encodeExp
+                    if (exp->accession != NULL && (acc == NULL || differentString(acc,exp->accession)))
+                        {
+                        updateObj = TRUE;
+                        if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
+                            {
+                            if (acc == NULL)
+                                printf("           %s %s %s set, needs %s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION);
+                            else
+                                printf("           %s %s %s set, has wrong %s: %s.\n",experimentId,obj->obj,
+                                       MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION,exp->accession);
+                            }
+                        }
+                    else
+                        {
+                        errors--;       // One less error
+                        if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
+                            printf("           %s %s %s\n",experimentId,obj->obj,(exp->accession != NULL ? exp->accession : ""));
+                        }
+                    }
                 }
             else
                 {
-                updateObj = (expId != -1);
+                updateObj = (expId != ENCODE_EXP_IX_UNDEFINED);
                 if ((foundId && warn > 0) || warn > 1)
                     {
                     if (updateObj)
@@ -2908,8 +2953,8 @@ while(mdbObjs != NULL)
     // Done with one composite
 
     if (expCount > 0)
-        printf("Composite '%s' has %d recognizable experiment%s with %d missing an %s.\n   objects/experiment: min:%d  max:%d  mean:%lf.\n",
-               compName,expCount,(expCount != 1?"s":""),expMissing,MDB_VAR_ENCODE_EXP_ID,expMin,expMax,((double)expObjsCount/expCount));
+        printf("Composite%s '%s' has %d recognizable experiment%s with %d missing an %s.\n   objects/experiment: min:%d  max:%d  mean:%lf.\n",
+               (compositelessObj?"less set":""),compName,expCount,(expCount != 1?"s":""),expMissing,MDB_VAR_ENCODE_EXP_ID,expMin,expMax,((double)expObjsCount/expCount));
 
     if (edvSortOrder != NULL)
         freeMem(edvSortOrder);

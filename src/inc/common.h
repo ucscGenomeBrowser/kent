@@ -779,6 +779,9 @@ boolean endsWith(char *string, char *end);
 char lastChar(char *s);
 /* Return last character in string. */
 
+char *lastNonWhitespaceChar(char *s);
+// Return pointer to last character in string that is not whitespace.
+
 char *matchingCharBeforeInLimits(char *limit, char *s, char c);
 /* Look for character c sometime before s, but going no further than limit.
  * Return NULL if not found. */
