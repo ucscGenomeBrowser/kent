@@ -8,7 +8,7 @@
 
 #ifndef RA_H
 
-struct hash *raNextStanza(struct lineFile *lf,boolean unjoined);
+struct hash *raNextStanza(struct lineFile *lf,boolean joined);
 // Return a hash containing next record, or NULL at end of file.
 // Will ignore '#' comments and if requsted, joins lines ending in continuation char.
 // freeHash this when done.  Note this will free the hash keys and values as well,
@@ -16,7 +16,7 @@ struct hash *raNextStanza(struct lineFile *lf,boolean unjoined);
 #define raNextRecord(lf)         raNextStanza((lf),TRUE)
 #define raNextRecordUnjoined(lf) raNextStanza((lf),FALSE)
 
-struct slPair *raNextStanzAsPairs(struct lineFile *lf,boolean unjoined);
+struct slPair *raNextStanzAsPairs(struct lineFile *lf,boolean joined);
 // Return ra stanza as an slPair list instead of a hash.  Handy to preserve the order.
 // Will ignore '#' comments and if requsted, join lines ending in continuation char '\'.
 #define raNextRecordAsSlPairList(lf)         raNextStanzAsPairs((lf),TRUE)
