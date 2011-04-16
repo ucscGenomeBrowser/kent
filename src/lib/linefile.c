@@ -685,7 +685,7 @@ void lineFileReuseFull(struct lineFile *lf)
 // lineFileReuseFull only works with previous lineFileNextFull call
 {
 assert(lf->fullLine != NULL);
-lf->fullLineResuse = TRUE;
+lf->fullLineReuse = TRUE;
 }
 
 
@@ -694,10 +694,10 @@ boolean lineFileNextFull(struct lineFile *lf, char **retStart, int *retSize)
 // NOTE: comment lines can't be continued!  ("# comment \ \n more comment" is 2 lines.)
 {
 // May have requested reusing the last full line.
-if (lf->fullLineResuse)
+if (lf->fullLineReuse)
     {
     assert(lf->fullLine != NULL);
-    lf->fullLineResuse = FALSE;
+    lf->fullLineReuse = FALSE;
     *retStart = dyStringContents(lf->fullLine);
     if (retSize)
         *retSize = dyStringLen(lf->fullLine);
@@ -729,12 +729,13 @@ while (lineFileNext(lf, &line, NULL))
     if (clippedText[0] != '\0' && clippedText[0] != '#') // Comment lines can't be continued!
         {
         line = dyStringContents(lf->fullLine);
-        char *lastChar = lastNonWhitespaceChar(line);
+        char *lastChar = lastNonwhitespaceChar(line);
         if (lastChar != NULL && *lastChar == '\\')
             {
             if (lastChar > line && *(lastChar - 1) != '\\') // Not an escaped continuation char
                 {
-                dyStringResize(lf->fullLine,(lastChar - line)); // This clips off the last char and any trailing white-space in dyString
+                // This clips off the last char and any trailing white-space in dyString
+                dyStringResize(lf->fullLine,(lastChar - line));
                 continue;
                 }
             }

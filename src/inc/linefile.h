@@ -55,7 +55,7 @@ struct lineFile
     ti_iter_t tabixIter;	/* An iterator to get decompressed indexed lines of text */
 #endif
     struct dyString *fullLine;  // Filled with full line when a lineFileNextFull is called
-    boolean fullLineResuse;     // If TRUE, next call to lineFileNextFull will get already built fullLine
+    boolean fullLineReuse;      // If TRUE, next call to lineFileNextFull will get already built fullLine
     };
 
 char *getFileNameFromHdrSig(char *m);

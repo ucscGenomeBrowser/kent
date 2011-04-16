@@ -1387,7 +1387,7 @@ if (s == NULL || s[0] == 0)
 return s[strlen(s)-1];
 }
 
-char *lastNonWhitespaceChar(char *s)
+char *lastNonwhitespaceChar(char *s)
 // Return pointer to last character in string that is not whitespace.
 {
 if (s == NULL || s[0] == 0)

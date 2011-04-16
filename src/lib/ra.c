@@ -63,7 +63,7 @@ dyStringClear(dyFullLine);
 
 char *line;
 while (lineFileNext(lf, &line, NULL)) // NOTE: While it would be nice to use lineFileNextFull here,
-    {                                 //       we cannot because we need the true lines to fill dyRecord
+    {                                 // we cannot because we need the true lines to fill dyRecord
     char *clippedText = skipLeadingSpaces(line);
     if (clippedText == NULL || clippedText[0] == 0)
         {
@@ -114,7 +114,8 @@ if (dyStringLen(dyFullLine) > 0)
 return (*retTag != NULL);
 }
 
-boolean raNextTagValUnjoined(struct lineFile *lf, char **retTag, char **retVal, struct dyString *dy)
+boolean raNextTagValUnjoined(struct lineFile *lf, char **retTag, char **retVal,
+                             struct dyString *dy)
 // NOTE: this is the former raNextTagVal routine is ignorant of continuation lines.
 //       It is provided in case older RAs need it.
 // Read next line.  Return FALSE at end of file or blank line.  Otherwise
@@ -245,12 +246,13 @@ while (lineFileNext(lf, &line, NULL))
     if (clippedText[0] != '\0' && clippedText[0] != '#') // Comment lines can't be continued!
         {
         line = dyStringContents(dyFullLine);
-        char *lastChar = lastNonWhitespaceChar(line);
+        char *lastChar = lastNonwhitespaceChar(line);
         if (lastChar != NULL && *lastChar == '\\')
             {
             if (lastChar > line && *(lastChar - 1) != '\\') // Not an escaped continuation char
                 {
-                dyStringResize(dyFullLine,(lastChar - line)); // This clips off the last char and any trailing white-space in dyString
+                // This clips off the last char and any trailing white-space in dyString
+                dyStringResize(dyFullLine,(lastChar - line));
                 dyStringAppendC(dyUntouched,'\n'); // Untouched lines delimited by newlines
                 buildingContinuation = TRUE;
                 continue;
@@ -258,7 +260,8 @@ while (lineFileNext(lf, &line, NULL))
             }
         }
     if (buildingContinuation)
-        slPairAdd(&pairs, dyStringContents(dyFullLine), cloneString(dyStringContents(dyUntouched)));
+        slPairAdd(&pairs, dyStringContents(dyFullLine),
+                   cloneString(dyStringContents(dyUntouched)));
     else
         slPairAdd(&pairs, dyStringContents(dyFullLine), NULL);
 
