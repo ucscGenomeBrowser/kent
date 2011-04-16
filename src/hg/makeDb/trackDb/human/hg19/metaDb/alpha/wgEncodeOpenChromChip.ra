@@ -676,7 +676,7 @@ dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeOpenChromChipGm12878CmycValidation.tgz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 setType exp
@@ -887,7 +887,7 @@ dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeOpenChromChipGm12878CtcfValidation.tgz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 setType exp
@@ -1121,7 +1121,7 @@ dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeOpenChromChipGm12878Pol2Validation.tgz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 setType exp
@@ -4035,7 +4035,7 @@ dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeOpenChromChipK562CmycValidation.tgz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 setType exp
@@ -4252,7 +4252,7 @@ dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeOpenChromChipK562CtcfValidation.tgz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 setType exp
@@ -4487,7 +4487,7 @@ dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeOpenChromChipK562Pol2Validation.tgz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 setType exp
@@ -6013,4 +6013,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: 1301041794
+# MAGIC: 1127919294

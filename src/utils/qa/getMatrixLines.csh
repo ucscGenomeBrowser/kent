@@ -19,7 +19,7 @@ set matrix=""
 
 if ( $#argv != 2 ) then
   echo
-  echo '  Searches the documentation to find the correct parameters for the '
+  echo '  Searches the README.txt files to find the correct parameters for the '
   echo '  $matrix variable.  This is the q-parameter from the blastz run. '
   echo
   echo '    usage:  fromDb toDb (these can be in either order)'

@@ -1,7 +1,7 @@
 metaObject wgEncodeUwDnase
 objType composite
 composite wgEncodeUwDnase
-expVars lab,dataType,cell
+expVars lab,dataType,cell,treatment
 
 metaObject wgEncodeUwDnaseA549AlnRep1
 objType file
@@ -15226,4 +15226,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1532240322
+# MAGIC: 590720206
