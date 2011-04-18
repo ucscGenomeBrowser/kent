@@ -1337,8 +1337,8 @@ sub makeDownloadTargetFileName {
                 }
             }
 
-            if (Encode::isZipped($srcFile) || Encode::isTarZipped($srcFile)) { # don't gz anything already gz'd
-                $target = "$tablename.$fileType";
+            if (Encode::isTarZipped($srcFile)) {
+                $target = "$tablename.$fileType.tgz";
             } else {
                 $target = "$tablename.$fileType.gz";
             }
@@ -1919,7 +1919,7 @@ foreach my $ddfLine (@ddfLines) {
 	   $metadata .= " sex=$terms{'Cell Line'}->{$ddfLine->{cell}}->{'sex'}" if !$ddfLine->{sex};
 	   $metadata .= " strain=$terms{'Cell Line'}->{$ddfLine->{cell}}->{'strain'}" if !$ddfLine->{strain};
 	   $metadata .= " age=$terms{'Cell Line'}->{$ddfLine->{cell}}->{'age'}" if !$ddfLine->{age};
-	}   
+	}
     $metadata .= " view=$view";
     $metadata .= " replicate=$ddfLine->{replicate}" if $ddfLine->{replicate} && $daf->{TRACKS}{$view}{hasReplicates};
     $metadata .= " labVersion=$ddfLine->{labVersion}" if $ddfLine->{labVersion};
