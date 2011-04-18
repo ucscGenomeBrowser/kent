@@ -55,6 +55,7 @@ struct lineFile
     ti_iter_t tabixIter;	/* An iterator to get decompressed indexed lines of text */
 #endif
     struct dyString *fullLine;  // Filled with full line when a lineFileNextFull is called
+    struct dyString *rawLines;  // Filled with raw lines used to create the full line
     boolean fullLineReuse;      // If TRUE, next call to lineFileNextFull will get already built fullLine
     };
 
@@ -96,8 +97,10 @@ void lineFileCloseList(struct lineFile **pList);
 boolean lineFileNext(struct lineFile *lf, char **retStart, int *retSize);
 /* Fetch next line from file. */
 
-boolean lineFileNextFull(struct lineFile *lf, char **retStart, int *retSize);
+boolean lineFileNextFull(struct lineFile *lf, char **retFull, int *retFullSize,
+                        char **retRaw, int *retRawSize);
 // Fetch next line from file joining up any that are continued by ending '\'
+// If requested, and was joined, the unjoined raw lines are also returned
 // NOTE: comment lines can't be continued!  ("# comment \ \n more comment" is 2 lines.)
 
 boolean lineFileNextReal(struct lineFile *lf, char **retStart);
