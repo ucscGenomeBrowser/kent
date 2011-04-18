@@ -33,7 +33,7 @@ wgEncode 1
 noInherit on
 maxWindowToDraw 10000000
 superTrack wgEncodeRnaSeqSuper dense
-
+html wgEncodeHaibRnaSeq.new
 
     track wgEncodeHaibRnaSeqViewAlignments
     shortLabel Alignments

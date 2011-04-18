@@ -36,7 +36,7 @@ expVar4 replicate
 composite wgEncodeDukeAffyExon
 expVar1 cell
 expVar2 treatment
-expvar3 replicate
+expVar3 replicate
 
 composite wgEncodeGisDnaPet
 expVar1 cell
