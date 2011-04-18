@@ -82,7 +82,7 @@ char *dyStringCannibalize(struct dyString **pDy);
 #define dyStringContents(ds) (ds)->string
 /* return raw string. */
 
-#define dyStringLen(ds) strlen((ds)->string)
+#define dyStringLen(ds) ds->stringSize
 /* return raw string length. */
 
 void dyStringResize(struct dyString *ds, int newSize);
