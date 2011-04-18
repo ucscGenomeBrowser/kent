@@ -4,7 +4,7 @@ shortLabel LICR Histone
 longLabel Histone Modifications by ChIP-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line BMarrow=BoneMarrow Cbellum=Cerebellum Cortex=Cortex Heart=Heart Kidney=Kidney Liver=Liver
+subGroup2 cellType Cell_Line BMarrow=BoneMarrow Cbellum=Cerebellum Cortex=Cortex Heart=Heart Kidney=Kidney Liver=Liver Lung=Lung
 subGroup3 factor Factor H3K4me1=H3K4me1 H3K4me3=H3K4me3
 subGroup4 sex Sex M=M
 subGroup5 age Age adult8wks=adult-8wks
@@ -144,6 +144,24 @@ noInherit on
 		color 153,38,0
 		# subId=2790 dateSubmitted=2011-04-12
 
+        track wgEncodeLicrHistoneLungH3k4me3MAdult8wksC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks off
+        shortLabel Lung H3K4me3 Pk
+        longLabel ENCODE LICR Histone Peaks (H3K4me3 in Lung cells)
+        subGroups view=Peaks age=adult8wks factor=H3K4me3 cellType=Lung control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=3887 dateSubmitted=2011-04-15
+
+        track wgEncodeLicrHistoneLungH3k4me1MAdult8wksC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks off
+        shortLabel Lung H3K4me1 Pk
+        longLabel ENCODE LICR Histone Peaks (H3K4me1 in Lung cells)
+        subGroups view=Peaks age=adult8wks factor=H3K4me1 cellType=Lung control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=3886 dateSubmitted=2011-04-15
+
 	#######	Signal Tracks###########
 	track wgEncodeLicrHistoneViewSignal
 	shortLabel Signal
@@ -263,4 +281,22 @@ noInherit on
 		type bigWig 0.130000 67.910004
 		color 153,38,0
 		# subId=2790 dateSubmitted=2011-04-12
+
+        track wgEncodeLicrHistoneLungH3k4me3MAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel Lung H3K4me3 Sig
+        longLabel ENCODE LICR Histone Signal (H3K4me3 in Lung cells)
+        subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=Lung control=std sex=M strain=C57BL6
+        type bigWig 0.120000 55.680000
+        color 153,38,0
+        # subId=3887 dateSubmitted=2011-04-15
+
+        track wgEncodeLicrHistoneLungH3k4me1MAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel Lung H3K4me1 Sig
+        longLabel ENCODE LICR Histone Signal (H3K4me1 in Lung cells)
+        subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=Lung control=std sex=M strain=C57BL6
+        type bigWig 0.130000 25.240000
+        color 153,38,0
+        # subId=3886 dateSubmitted=2011-04-15
 
