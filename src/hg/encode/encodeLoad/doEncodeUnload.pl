@@ -229,7 +229,6 @@ for my $key (keys %ra) {
 
     unlink $target;
     if ($type eq "bam") {
-        $target = "$downloadDir/$tablename.$type.bai";
         unlink "$target.bai";
     }
 }
