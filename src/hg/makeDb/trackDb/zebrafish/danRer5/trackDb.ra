@@ -47,18 +47,23 @@ visibility full
     shortLabel UMass ChIP-Seq
     longLabel U Mass ChIP-Seq Input Signal at 24 hours Post Fertilization
     priority 1
-    type wig 10 500
-    autoScale on
+    type wig 0 100
+    maxHeightPixels 128:64:16
+    autoScale off
+    html UMassChIP-Seq
     visibility full
 
     track UMassME1
     superTrack UMassChIP-SeqSuper full
     shortLabel UMassME1
     longLabel U Mass ChIP-Seq H3K4me1 Binding at 24 hours Post Fertilization
+    color 255,0,0
     group map
     priority 2
-    type wig 10 404
-    autoScale on
+    maxHeightPixels 128:64:16
+    type wig 0 100
+    autoScale off
+    html UMassChIP-Seq
     visibility full
 
     track UMassME1Peak
@@ -67,9 +72,12 @@ visibility full
     longLabel U Mass ChIP-Seq H3K4me1 Binding Peaks at 24 hours Post Fertilization
     group map
     priority 3
-    autoScale on
+    maxHeightPixels 128:64:16
+    color 255,0,0
+    autoScale off
+    html UMassChIP-Seq
     visibility full
-    type wig 20 2510
+    type wig 0 100
 
     track UMassME3
     superTrack UMassChIP-SeqSuper full
@@ -77,9 +85,12 @@ visibility full
     longLabel U Mass ChIP-Seq H3K4me3 Binding at 24 hours Post Fertilization
     group map
     priority 4
+    maxHeightPixels 128:64:16
+    color 0,0,255
     visibility full
-    autoScale on
-    type wig 10 477
+    autoScale off
+    html UMassChIP-Seq
+    type wig 0 100
 
     track UMassME3Peak
     superTrack UMassChIP-SeqSuper full
@@ -87,9 +98,12 @@ visibility full
     longLabel U Mass ChIP-Seq H3K4me3 Binding Peaks at 24 hours Post Fertilization
     group map
     priority 5
+    maxHeightPixels 128:64:16
+    color 0,0,255
     visibility full
-    autoScale on
-    type wig 16 6835
+    autoScale off
+    html UMassChIP-Seq
+    type wig 0 100
 
     track UMassME1Hotspot
     superTrack UMassChIP-SeqSuper pack
@@ -97,6 +111,7 @@ visibility full
     longLabel U Mass ChIP-Seq H3K4me1 Binding Hot Spots at 24 hours Post Fertilization
     group map
     priority 5.5
+    html UMassChIP-Seq
     visibility pack
     type bed 5
 
@@ -106,6 +121,7 @@ visibility full
     longLabel U Mass ChIP-Seq H3K4me3 Binding Hot Spots at 24 hours Post Fertilization
     group map
     priority 5.6
+    html UMassChIP-Seq
     visibility pack
     type bed 5
 
