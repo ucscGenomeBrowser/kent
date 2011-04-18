@@ -17,7 +17,7 @@ wgEncodeOpenChromChip.ra \
 wgEncodeUwTfbs.ra \
 wgEncodeOpenChromFaire.ra \
 wgEncodeRikenCage.ra \ 
-wgEncodeOpenChromDnase.ra 
+wgEncodeOpenChromDnase.ra \
 
 include ../../../../makefile.metaDb
 
