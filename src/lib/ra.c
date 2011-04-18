@@ -54,64 +54,41 @@ boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal, struct d
 *retTag = NULL;
 *retVal = NULL;
 
-// Old function returned pointers to lf memory, but joining continuation lines requires new mem.
-// Not wishing to force memory management on callers, static memeory is held here!
-static struct dyString *dyFullLine = NULL;   // static must be initialized with constant
-if (dyFullLine == NULL)
-    dyFullLine = dyStringNew(1024);
-dyStringClear(dyFullLine);
-
-char *line;
-while (lineFileNext(lf, &line, NULL)) // NOTE: While it would be nice to use lineFileNextFull here,
-    {                                 // we cannot because we need the true lines to fill dyRecord
+char *line, *raw;
+int lineLen,rawLen;
+while (lineFileNextFull(lf, &line, &lineLen, &raw, &rawLen)) // Joins continuation lines
+    {
     char *clippedText = skipLeadingSpaces(line);
-    if (clippedText == NULL || clippedText[0] == 0)
+    if (*clippedText == 0)
         {
         if (dyRecord)
             lineFileReuse(lf);   // Just so don't loose leading space in dy.
-        break;
+        return FALSE;
         }
 
     // Append whatever line was read from file.
     if (dyRecord)
        {
-       dyStringAppend(dyRecord, line); // Line may contain continuation chars
+        if (raw != NULL)
+            dyStringAppendN(dyRecord, raw, rawLen);
+       else
+            dyStringAppendN(dyRecord, line, lineLen);
        dyStringAppendC(dyRecord,'\n');
        }
 
-    // ignores commented lines
-    if (clippedText[0] == '#')
-        {
-        if (startsWith("#EOF", clippedText))
-            break;
-        else
-            continue;
-        }
-
-    // Something we are interested in so add to static memory
-    eraseTrailingSpaces(clippedText);   // don't bother with trailing whitespace
-
-    // Join continued lines
-    char *lastChar = clippedText + (strlen(clippedText) - 1);
-    if (*lastChar == '\\')
-        {
-        if (lastChar > clippedText && *(lastChar - 1) != '\\') // Not an escaped continuation char
-            {
-            *lastChar = '\0';
-            dyStringAppend(dyFullLine,clippedText);
-            continue; // More to look forward to.
-            }
-        }
-    dyStringAppend(dyFullLine,clippedText);
-    break;
-    }
-if (dyStringLen(dyFullLine) > 0)
-    {
-    line = dyStringContents(dyFullLine);
+    // Skip comments
+    if (*clippedText == '#')
+       {
+       if (startsWith("#EOF", clippedText))
+           return FALSE;
+       else
+           continue;
+       }
     *retTag = nextWord(&line);
     *retVal = trimSpaces(line);
+    return TRUE;
     }
-return (*retTag != NULL);
+return FALSE;
 }
 
 boolean raNextTagValUnjoined(struct lineFile *lf, char **retTag, char **retVal,
@@ -213,66 +190,25 @@ struct slPair *raNextStanzaLinesAndUntouched(struct lineFile *lf)
 // returns pairs with name=joined line and if joined,
 // val will contain raw lines '\'s and linefeeds, else val will be NULL.
 {
-struct dyString *dyFullLine      = dyStringNew(1024);
-struct dyString *dyUntouched = dyStringNew(1024);
 struct slPair *pairs = NULL;
-boolean buildingContinuation = FALSE;
 boolean stanzaStarted = FALSE;
-char *line;
-while (lineFileNext(lf, &line, NULL))
+char *line, *raw;
+int lineLen,rawLen;
+while (lineFileNextFull(lf, &line, &lineLen, &raw, &rawLen)) // Joins continuation lines
     {
     char *clippedText = skipLeadingSpaces(line);
 
-    // When to break?  After the stanza is over.  But first detect that it has started.
-    if (!buildingContinuation)
+    if (stanzaStarted && clippedText[0] == 0)
         {
-        if (stanzaStarted && clippedText[0] == 0)
-            {
-            lineFileReuse(lf);
-            break;
-            }
-        if (!stanzaStarted && clippedText[0] != 0 && clippedText[0] != '#')
-            stanzaStarted = TRUE; // Comments don't start stanzas and may be followed by blanks
+        lineFileReuse(lf);
+        break;
         }
+    if (!stanzaStarted && clippedText[0] != 0 && clippedText[0] != '#')
+        stanzaStarted = TRUE; // Comments don't start stanzas and may be followed by blanks
 
-    // build full lines
-    dyStringAppend(dyUntouched,line);
-    if (dyStringLen(dyFullLine) == 0)
-        dyStringAppend(dyFullLine,line); // includes first line's whitespace.
-    else if (clippedText[0] != '\0')
-        dyStringAppend(dyFullLine,clippedText); // don't include continued line's leading spaces
-
-    // Will the next line continue this one?
-    if (clippedText[0] != '\0' && clippedText[0] != '#') // Comment lines can't be continued!
-        {
-        line = dyStringContents(dyFullLine);
-        char *lastChar = lastNonwhitespaceChar(line);
-        if (lastChar != NULL && *lastChar == '\\')
-            {
-            if (lastChar > line && *(lastChar - 1) != '\\') // Not an escaped continuation char
-                {
-                // This clips off the last char and any trailing white-space in dyString
-                dyStringResize(dyFullLine,(lastChar - line));
-                dyStringAppendC(dyUntouched,'\n'); // Untouched lines delimited by newlines
-                buildingContinuation = TRUE;
-                continue;
-                }
-            }
-        }
-    if (buildingContinuation)
-        slPairAdd(&pairs, dyStringContents(dyFullLine),
-                   cloneString(dyStringContents(dyUntouched)));
-    else
-        slPairAdd(&pairs, dyStringContents(dyFullLine), NULL);
-
-    // Ready to start the next full line
-    dyStringClear(dyFullLine);
-    dyStringClear(dyUntouched);
-    buildingContinuation = FALSE;
+    slPairAdd(&pairs, line,(raw != NULL?cloneString(raw):NULL));
     }
 slReverse(&pairs);
-dyStringFree(&dyFullLine);
-dyStringFree(&dyUntouched);
 return pairs;
 }
 

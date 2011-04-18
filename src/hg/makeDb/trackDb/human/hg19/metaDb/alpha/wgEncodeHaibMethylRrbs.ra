@@ -6541,7 +6541,7 @@ labExpId SL767
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 subId 2395
 tableName wgEncodeHaibMethylRrbsOsteoblDukeSitesRep1
 treatment None
@@ -6563,7 +6563,7 @@ labExpId SL1806
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
-replicate 1
+replicate 2
 subId 2395
 tableName wgEncodeHaibMethylRrbsOsteoblDukeSitesRep2
 treatment None

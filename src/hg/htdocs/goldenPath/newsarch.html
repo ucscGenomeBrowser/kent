@@ -38,6 +38,127 @@
 <!--------------- 2011 archived news --------------->
 <A NAME="2011"></A>
 
+<a name="041811.2"></a>
+			<!-- hg19 snp132 release -->
+		    <p>
+                <font color="#006666" size="4"><b>18 April 2011 - dbSNP 132 Available for hg19</b></font>
+		    </p>
+                    <p>
+                    We are pleased to announce the release of four tracks derived from
+                    dbSNP build 132, available on the human assembly (GRCh37/hg19).
+                    dbSNP build 132 is <a href="http://www.ncbi.nlm.nih.gov/projects/SNP/"
+                    target=_blank>available at NCBI</a>. The new tracks contain
+                    additional annotation data not included in previous dbSNP tracks, 
+                    with corresponding coloring and filtering options in the Genome
+                    Browser.
+                    </p>
+                    <p>
+                    As for prior builds of dbSNP, there is a track that contains all
+                    mappings of reference SNPs to the human assembly; it is now labeled
+                    &quot;All SNPs (132)&quot;.  Three new tracks have been added to show
+                    interesting and easily defined subsets of dbSNP:
+                    </p>
+                    <ul>
+                    <li> Common SNPs (132): uniquely mapped variants that appear in at
+                    least 1% of the population</li>
+
+                    <li>Flagged SNPs (132): uniquely mapped variants, excluding Common
+                    SNPs, that have been flagged by dbSNP as &quot;clinically associated&quot;</li>
+
+                    <li>Mult. SNPs (132): variants that have been mapped to more than one
+                    genomic location</li>
+                    </ul>
+                    <p>
+                    By default, only the Common SNPs (132) are visible; other tracks must
+                    be made visible using the track controls.
+                    </p>
+                    <p>
+                    The counts of distinct reference SNPs and their mappings to hg19
+                    differ greatly among the tracks:
+                    </p>
+                    <table border="1" cellpadding="3">
+                      <tr>
+                        <th>Track</th>
+                        <th>Reference SNPs</th>
+                        <th>Mappings to hg19</th>
+                      </tr>
+                      <tr>
+                        <td>Common SNPs (132)</td>
+                        <td>13,842,381</td>
+                        <td>14,024,295 *</td>
+                      </tr>
+                      <tr>
+                        <td>Flagged SNPs (132)</td>
+                        <td>17,899</td>
+                        <td>18,084 *</td>
+                      </tr>
+                      <tr>
+                        <td>Mult. SNPs (132)</td>
+                        <td>1,114,599</td>
+                        <td>3,568,988</td>
+                      </tr>
+                      <tr>
+                        <td>All SNPs (132)</td>
+                        <td>30,030,754</td>
+                        <td>33,026,121</td>
+                      </tr>
+                    </table>
+                    <p>
+                    * There are more mappings than SNPs even for the Common and Flagged
+                    subsets, because single mappings to alternate haplotype sequences
+                    and the Pseudo-Autosomal Regions on X and Y don't disqualify a SNP
+                    from consideration as uniquely mapped.
+		            </p>
+                    <p>
+                    You will find the four SNPs (132) tracks on the Human Feb. 2009
+                    (GRCh37/hg19) browser in the &quot;Variation and Repeats&quot; group.
+		    		</p>
+                    <p>
+                    Many thanks to dbSNP at NCBI for the data, and to 
+                    <a href="http://www.gs.washington.edu/faculty/king.htm"
+                       target=_blank>Mary-Claire King</a>                    
+                    at the University of Washington for helpful comments that motivated
+                    us to enhance our dbSNP annotations. The tracks were produced at UCSC
+                    by Angie Hinrichs, Brooke Rhead, Bob Kuhn, and Jim Kent.
+		    </p>
+
+            <hr>
+
+<a name="041811.1"></a>
+			<!-- SHEEP BROWSER RELEASE -->
+			<p>
+             <font color="#006666" size="4"><b>18 April 2011 - Sheep Browser Released</b></font>
+		    </p>
+		    
+		    <p>We are happy to announce a Genome Browser for
+		    the initial release of sheep (<em>Ovis aries</em>) genome. The Feb. 2010 <em>Ovis
+			aries</em> draft assembly (NCBI project <a
+			href="http://www.ncbi.nlm.nih.gov/sites/entrez?Db=genomeprj&cmd=ShowDetailView&TermToSearch=10709"
+			target=_blank>10709</a>, <a
+			href="ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Ovis_aries/
+			Ovis_aries_1.0/" target=_blank>GCA_000005525.1</a>) was produced by the <a
+			href="http://www.sheephapmap.org/" target=_blank>International Sheep Genomics Consortium (ISGC)
+			sequencing center</a>. The mitochondrial genome was sequenced by <a href="http://www.uni-giessen.de/cms/"
+			target=_blank>Justus-Liebig-University</a>.</p>
+		    
+		    <p>There are 27 chromosomes: chr1 - chr26, chrX, plus the mitochondrial sequence chrM from
+			genbank accession NC_001941, for a total sequence length of 2,860,512,983 bases. There are
+			1,659,241,706 'N' bases in gaps, leaving 1,201,271,277 ACGT bases.</p>
+			
+			<p>The genome has been sequenced using 454 FLX sequencing to 3X coverage (DNA derived from
+			six female sheep each sequenced with 0.5X coverage). Contigs were assembled based on alignment to
+			the bovine genome and ordered into ovine chromosomes using BAC-end sequences and the virtual sheep
+			genome.</p>
+			
+			<p>We'd like to thank the International Sheep Genomics Consortium (ISGC)
+			sequencing center and Justus-Liebig-University for providing this assembly.
+		    We'd also like to acknowledge the UCSC team who worked on 
+		    this release: Chin Li, Greg Roe, and Luvina Guruvadoo. 
+		    The sheep browser annotation tracks were generated by 
+		    UCSC and collaborators worldwide.</p>
+		    
+		    <hr> 
+		    
 <A NAME="030411"></A>
 		    <P>
                     <FONT SIZE=4 COLOR="#006666"><B>04 March 2011 - The Meaning of Red: Consensus on color scheme for CNVs</B></FONT>

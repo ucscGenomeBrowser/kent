@@ -285,15 +285,15 @@ for (;;)
 	{
         char *subRelease;
 
-	if (!lineFileNextFull(lf, &line, NULL)) // NOTE: lineFileNextFull joins continuation lines
-	   {
+	if (!lineFileNextFull(lf, &line, NULL, NULL, NULL))
+            { // NOTE: lineFileNextFull joins continuation lines
 	   done = TRUE;
 	   break;
 	   }
 	line = skipLeadingSpaces(line);
         if (startsWithWord("track", line))
             {
-            lineFileReuseFull(lf); // NOTE: lineFileReuseFull only works with previous lineFileNextFull call
+            lineFileReuseFull(lf); // NOTE: only works with previous lineFileNextFull call
             break;
             }
         else if ((incFile = trackDbInclude(raFile, line, &subRelease)) != NULL)
@@ -315,7 +315,7 @@ for (;;)
     for (;;)
         {
         /* Break at blank line or EOF. */
-        if (!lineFileNextFull(lf, &line, NULL))  // NOTE: lineFileNextFull joins continuation lines
+        if (!lineFileNextFull(lf, &line, NULL, NULL, NULL))  // NOTE: joins continuation lines
             break;
         line = skipLeadingSpaces(line);
         if (line == NULL || line[0] == 0)

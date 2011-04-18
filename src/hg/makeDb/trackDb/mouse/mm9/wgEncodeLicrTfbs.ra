@@ -4,7 +4,7 @@ shortLabel LICR TFBS
 longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line BMarrow=BoneMarrow Cbellum=Cerebellum Cortex=Cortex Heart=Heart Kidney=Kidney Liver=Liver
+subGroup2 cellType Cell_Line BMarrow=BoneMarrow Cbellum=Cerebellum Cortex=Cortex Heart=Heart Kidney=Kidney Liver=Liver Lung=Lung
 subGroup3 factor Factor CTCF=CTCF POL2=Pol2 Input=Input
 subGroup4 sex Sex M=M
 subGroup5 age Age adult8wks=adult-8wks
@@ -134,6 +134,15 @@ noInherit on
 		type broadPeak
 		color 153,38,0
 		# subId=3883 dateSubmitted=2011-04-13
+
+        track wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdPk
+        parent wgEncodeLicrTfbsViewPeaks off
+        shortLabel Lung Pol2 Pk
+        longLabel ENCODE LICR TFBS Peaks (Pol2 in Lung cells)
+        subGroups view=Peaks age=adult8wks factor=POL2 cellType=Lung control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=3888 dateSubmitted=2011-04-15
 
 	#######	Signal Tracks###########
 	track wgEncodeLicrTfbsViewSignal
@@ -265,4 +274,13 @@ noInherit on
 		type bigWig 0.160000 45.200001
 		color 153,38,0
 		# subId=3883 dateSubmitted=2011-04-13
+
+        track wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel Lung Pol2 Sig
+        longLabel ENCODE LICR TFBS Signal (Pol2 in Lung cells)
+        subGroups view=Signal age=adult8wks factor=POL2 cellType=Lung control=std sex=M strain=C57BL6
+        type bigWig 0.120000 48.990002
+        color 153,38,0
+        # subId=3888 dateSubmitted=2011-04-15
 
