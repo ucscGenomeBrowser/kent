@@ -1320,7 +1320,7 @@ sub makeDownloadTargetFileName {
         $fileType = "bed" if ($type =~ /^bed /);
 
         if (@srcFiles > 1) {
-                if (($type eq "fastQ") || ($type eq "doc")) {
+                if (($type eq "fastq") || ($type eq "doc")) {
                 $target = "$tablename.$fileType.tgz"; # will want to tar these
             } else {
                 $target = "$tablename.$fileType.gz";  # will cat and gz these
