@@ -70,9 +70,7 @@ while (lineFileNextFull(lf, &line, &lineLen, &raw, &rawLen)) // Joins continuati
     if (dyRecord)
        {
         if (raw != NULL)
-            {
             dyStringAppendN(dyRecord, raw, rawLen);
-            }
        else
             dyStringAppendN(dyRecord, line, lineLen);
        dyStringAppendC(dyRecord,'\n');
