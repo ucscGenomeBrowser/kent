@@ -6362,6 +6362,50 @@ subId 3820
 treatment None
 view RawData
 
+metaObject wgEncodeHaibMethylRrbsNt2d1StanfordSitesRep1
+objType table
+cell NT2-D1
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-13
+fileName wgEncodeHaibMethylRrbsNt2d1StanfordSitesRep1.bedRrbs.gz
+geoSampleAccession GSM683832
+grant Myers
+lab HudsonAlpha
+labExpId SL758
+obtainedBy Stanford
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 1223
+tableName wgEncodeHaibMethylRrbsNt2d1StanfordSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsNt2d1StanfordSitesRep2
+objType table
+cell NT2-D1
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-13
+fileName wgEncodeHaibMethylRrbsNt2d1StanfordSitesRep2.bedRrbs.gz
+geoSampleAccession GSM683929
+grant Myers
+lab HudsonAlpha
+labExpId SL1899
+obtainedBy Stanford
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 1223
+tableName wgEncodeHaibMethylRrbsNt2d1StanfordSitesRep2
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethylRrbsNt2d1UwRawDataRep1
 objType file
 cell NT2-D1
@@ -6443,50 +6487,6 @@ tableName wgEncodeHaibMethylRrbsNt2d1UwSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1
-objType table
-cell NT2-D1
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1.bedRrbs.gz
-geoSampleAccession GSM683832
-grant Myers
-lab HudsonAlpha
-labExpId SL758
-obtainedBy Stanford
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 1223
-tableName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2
-objType table
-cell NT2-D1
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2.bedRrbs.gz
-geoSampleAccession GSM683929
-grant Myers
-lab HudsonAlpha
-labExpId SL1899
-obtainedBy Stanford
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 1223
-tableName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2
-treatment None
-view Sites
-
 metaObject wgEncodeHaibMethylRrbsOsteoblDukeRawDataRep1
 objType file
 cell Osteobl
@@ -6541,7 +6541,7 @@ labExpId SL767
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 subId 2395
 tableName wgEncodeHaibMethylRrbsOsteoblDukeSitesRep1
 treatment None
@@ -6563,7 +6563,7 @@ labExpId SL1806
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
-replicate 1
+replicate 2
 subId 2395
 tableName wgEncodeHaibMethylRrbsOsteoblDukeSitesRep2
 treatment None
@@ -7744,4 +7744,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 369669650
+# MAGIC: -624383170
