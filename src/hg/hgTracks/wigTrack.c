@@ -126,7 +126,7 @@ if(trackLoaded && colorTrack->freeItems != NULL)
 }
 
 void wigSetCart(struct track *track, char *dataID, void *dataValue)
-    /*	set one of the variables in the wigCart	*/
+/*	set one of the variables in the wigCart.  Actually just MIN_Y or MAX_Y	*/
 {
 struct wigCartOptions *wigCart;
 wigCart = (struct wigCartOptions *) track->extraUiData;
@@ -135,6 +135,8 @@ if (sameWord(dataID, MIN_Y))
     wigCart->minY = *((double *)dataValue);
 else if (sameWord(dataID, MAX_Y))
     wigCart->maxY = *((double *)dataValue);
+else
+    internalErr();
 }
 
 /*	these two routines unused at this time	*/
@@ -541,30 +543,22 @@ wigDebugPrint("wigFreeItems");
 #endif
 }
 
-struct preDrawElement * initPreDraw(int width, int *preDrawSize,
-	int *preDrawZero)
-/*	initialize a preDraw array of size width	*/
+struct preDrawContainer *initPreDrawContainer(int width)
+/* Initialize preDraw of given size */
 {
-struct preDrawElement *preDraw = (struct preDrawElement *)NULL;
-int i = 0;
-
-/*	we are going to keep an array that is three times the size of
- *	the screen to allow a screen full on either side of the visible
- *	region.  Those side screens can be used in the smoothing
- *	operation so there won't be any discontinuity at the visible screen
- *	boundaries.
- */
-*preDrawSize = width * 3;
-*preDrawZero = width / 3;
-preDraw = (struct preDrawElement *) needMem ((size_t)
-		*preDrawSize * sizeof(struct preDrawElement));
-for (i = 0; i < *preDrawSize; ++i)
+struct preDrawContainer *pre;
+AllocVar(pre);
+int size = pre->preDrawSize = width + 2*wiggleSmoothingMax;	
+pre->preDrawZero = wiggleSmoothingMax;
+struct preDrawElement *preDraw = AllocArray(pre->preDraw, pre->preDrawSize);
+int i;
+for (i = 0; i < size; ++i)
     {
     preDraw[i].count = 0;
     preDraw[i].max = wigEncodeStartingUpperLimit;
     preDraw[i].min = wigEncodeStartingLowerLimit;
     }
-return preDraw;
+return pre;
 }
 
 static double doTransform(double x, enum wiggleTransformFuncEnum transformFunc)
@@ -1122,8 +1116,8 @@ return usingDataSpan;
 void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis,
-	struct preDrawContainer *preDrawList,
-	int preDrawZero, int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit)
+	struct preDrawContainer *preDrawList, int preDrawZero, 
+	int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit)
 /* Draw once we've figured out predraw... */
 {
 enum wiggleYLineMarkEnum yLineOnOff;
@@ -1226,11 +1220,8 @@ if (retGraphLowerLimit != NULL)
     *retGraphLowerLimit = graphLowerLimit;
 }
 
-
-static void wigDrawItems(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis)
-/* Draw wiggle items that resolve to doing a box for each pixel. */
+struct preDrawContainer *wigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
+/* Do bits that load the predraw buffer tg->preDraw and also preDrawSize and preDrawZero. */
 {
 struct wigItem *wi;
 double pixelsPerBase = scaleForPixels(width);
@@ -1238,16 +1229,13 @@ double basesPerPixel = 1.0;
 int itemCount = 0;
 char currentFile[PATH_LEN];
 int wibFH = 0;		/*	file handle to binary file */
-struct preDrawElement *preDraw;	/* to accumulate everything in prep for draw */
-int preDrawZero;		/* location in preDraw where screen starts */
-int preDrawSize;		/* size of preDraw array */
 int i;				/* an integer loop counter	*/
 int x1 = 0;			/*	screen coordinates	*/
 int x2 = 0;			/*	screen coordinates	*/
 int usingDataSpan = 1;		/* will become larger if possible */
 
 if (tg->items == NULL)
-    return;
+    return NULL;
 
 currentFile[0] = '\0';
 
@@ -1260,7 +1248,11 @@ if (pixelsPerBase > 0.0)
  */
 itemCount = 0;
 
-preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
+/* Allocate predraw and save it and related info in the track. */
+struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(width);
+struct preDrawElement *preDraw = pre->preDraw;	/* to accumulate everything in prep for draw */
+int preDrawZero = pre->preDrawZero;		/* location in preDraw where screen starts */
+int preDrawSize = pre->preDrawSize;		/* size of preDraw array */
 
 usingDataSpan = wigFindSpan(tg, basesPerPixel);
 
@@ -1398,20 +1390,22 @@ if (wibFH > 0)
     close(wibFH);
     wibFH = 0;
     }
+return pre;
+}
 
-/*	now we are ready to draw.  Each element in the preDraw[] array
- *	cooresponds to a single pixel on the screen
- */
-
-struct preDrawContainer *preDrawContainer;
-AllocVar(preDrawContainer);
-preDrawContainer->preDraw = preDraw;
-wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	preDrawContainer, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
-
-freeMem(preDrawContainer);
-freeMem(preDraw);
-}	/*	wigDrawItems()	*/
+static void wigDrawItems(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw wiggle items that resolve to doing a box for each pixel. */
+{
+struct preDrawContainer *pre = wigLoadPreDraw(tg, seqStart, seqEnd, width);
+if (pre != NULL)
+    {
+    wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+	pre, pre->preDrawZero, pre->preDrawSize, 
+	&tg->graphUpperLimit, &tg->graphLowerLimit);
+    }
+}
 
 void wigLeftAxisLabels(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
@@ -1560,7 +1554,6 @@ wigLeftAxisLabels(tg, seqStart, seqEnd, hvg, xOff, yOff, width, height, withCent
 	font, color, vis, tg->shortLabel, tg->graphUpperLimit, tg->graphLowerLimit, TRUE);
 }
 
-
 struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[])
 /* Create a wigCartOptions from cart contents and tdb. */
 {
@@ -1598,6 +1591,13 @@ wigFetchMinMaxYWithCart(cart,tdb,tdb->track, &wigCart->minY, &wigCart->maxY, NUL
 
 wigCart->colorTrack = trackDbSetting(tdb, "wigColorBy");
 
+char *containerType = trackDbSetting(tdb, "container");
+if (containerType != NULL && sameString(containerType, "multiWig"))
+     wigCart->isMultiWig = TRUE;
+
+char *aggregate = wigFetchAggregateValWithCart(cart, tdb);
+if (aggregate != NULL)
+    wigCart->overlay = wigIsOverlayTypeAggregate(aggregate);
 return wigCart;
 }
 

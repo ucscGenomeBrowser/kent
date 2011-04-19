@@ -153,9 +153,13 @@ struct track
     int subType;     /* Variable to say what subtype this is for similar tracks
 	              * to share code. */
 
+    /* Stuff for the various wig incarnations - sample, wig, bigWig */
     float minRange, maxRange;	  /*min and max range for sample tracks 0.0 to 1000.0*/
     float scaleRange;             /* What to scale samples by to get logical 0-1 */
     double graphUpperLimit, graphLowerLimit;	/* Limits of actual data in window for wigs. */
+    struct preDrawContainer *preDrawContainer;  /* Numbers to graph in wig, one per pixel */
+    void (*wigLoadPreDraw)(struct track *tg, int seqStart, int seqEnd, int width);  
+    /* Do bits that load the predraw buffer.  Called to set preDrawContainer */
 
     struct bbiFile *bbiFile;	/* Associated bbiFile for bigWig or bigBed. */
 
