@@ -993,14 +993,14 @@ struct slPair *slPairListFromString(char *str,boolean respectQuotes)
 //    resulting pair strips quotes: {name1}={val 1},{name 2}={val2}
 // Returns NULL if parse error.  Free this up with slPairFreeValsAndList.
 {
-if (isEmpty(str))
+char *s = skipLeadingSpaces(str);  // Would like to remove this and tighten up the standard someday.
+if (isEmpty(s))
     return NULL;
 
 struct slPair *list = NULL;
 char name[1024];
 char val[1024];
 char buf[1024];
-char *s = str;
 bool inQuote = FALSE;
 char *b = buf;
 char sep = '=';
