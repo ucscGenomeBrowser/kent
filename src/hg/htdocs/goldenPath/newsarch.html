@@ -39,15 +39,17 @@
 <A NAME="2011"></A>
 
 <a name="041811.2"></a>
-			<!-- hg19 snp132 release -->
+            <!-- hg19 snp132 release -->
 		    <p>
-                <font color="#006666" size="4"><b>18 April 2011 - dbSNP 132 Available for hg19</b></font>
+                    <font color="#006666" size="4"><b>18 April 2011 - dbSNP 132 Available for hg19</b></font>
+
+                    <FONT FACE="courier" SIZE="3"><B></B></FONT>
 		    </p>
                     <p>
                     We are pleased to announce the release of four tracks derived from
-                    dbSNP build 132, available on the human assembly (GRCh37/hg19).
-                    dbSNP build 132 is <a href="http://www.ncbi.nlm.nih.gov/projects/SNP/"
-                    target=_blank>available at NCBI</a>. The new tracks contain
+                    <a href="http://www.ncbi.nlm.nih.gov/projects/SNP/" target=_blank>dbSNP</a>
+                    build 132, available on the human assembly (GRCh37/hg19).
+                    dbSNP build 132 is available at NCBI. The new tracks contain
                     additional annotation data not included in previous dbSNP tracks, 
                     with corresponding coloring and filtering options in the Genome
                     Browser.
@@ -104,15 +106,18 @@
                       </tr>
                     </table>
                     <p>
-                    * There are more mappings than SNPs even for the Common and Flagged
-                    subsets, because single mappings to alternate haplotype sequences
-                    and the Pseudo-Autosomal Regions on X and Y don't disqualify a SNP
-                    from consideration as uniquely mapped.
-		            </p>
+
+                    * The Common and Flagged tracks have more mappings than SNPs due to the
+                    alternate haplotype sequences and the pseudoautosomal regions on X and Y.
+                    SNPs are considered uniquely mapped if they map only once to a haploid
+                    reference genome.  These regions add non-haploid sequence to the reference
+                    genome; therefore, multiple mappings involving these regions are still 
+                    considered unique.
+		    </p>
                     <p>
                     You will find the four SNPs (132) tracks on the Human Feb. 2009
                     (GRCh37/hg19) browser in the &quot;Variation and Repeats&quot; group.
-		    		</p>
+		    </p>
                     <p>
                     Many thanks to dbSNP at NCBI for the data, and to 
                     <a href="http://www.gs.washington.edu/faculty/king.htm"
@@ -121,8 +126,7 @@
                     us to enhance our dbSNP annotations. The tracks were produced at UCSC
                     by Angie Hinrichs, Brooke Rhead, Bob Kuhn, and Jim Kent.
 		    </p>
-
-            <hr>
+                    <hr>
 
 <a name="041811.1"></a>
 			<!-- SHEEP BROWSER RELEASE -->

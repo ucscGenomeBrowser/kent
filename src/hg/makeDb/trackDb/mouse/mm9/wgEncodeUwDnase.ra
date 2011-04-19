@@ -227,11 +227,11 @@ wgEncode 1
 		color 46,0,184
 		# subId=2019 dateSubmitted=2010-07-24
 
-		track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep1
+		track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep2
 		parent wgEncodeUwDnaseViewHotspots off
-		shortLabel T-Naive Hspt 1
-		longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in T-Naive cells)
-		subGroups view=Hotspots age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep1
+		shortLabel T-Naive Hspt 2
+		longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in T-Naive cells)
+		subGroups view=Hotspots age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep2
 		type broadPeak
 		color 153,38,0
 		# subId=2020 dateSubmitted=2010-07-24
@@ -535,11 +535,11 @@ wgEncode 1
 		color 46,0,184
 		# subId=2019 dateSubmitted=2010-07-24
 
-		track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep1
+		track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep2
 		parent wgEncodeUwDnaseViewPeaks off
-		shortLabel T-Naive Pk 1
-		longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in T-Naive cells)
-		subGroups view=Peaks age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep1
+		shortLabel T-Naive Pk 2
+		longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in T-Naive cells)
+		subGroups view=Peaks age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep2
 		type narrowPeak
 		color 153,38,0
 		# subId=2020 dateSubmitted=2010-07-24
@@ -846,11 +846,11 @@ wgEncode 1
 		color 46,0,184
 		# subId=2019 dateSubmitted=2010-07-24
 
-		track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep1
+		track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep2
 		parent wgEncodeUwDnaseViewRawSignal off
-		shortLabel T-Naive Sig 1
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in T-Naive cells)
-		subGroups view=RawSignal age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep1
+		shortLabel T-Naive Sig 2
+		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in T-Naive cells)
+		subGroups view=RawSignal age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 86604.000000
 		color 153,38,0
 		# subId=2020 dateSubmitted=2010-07-24
