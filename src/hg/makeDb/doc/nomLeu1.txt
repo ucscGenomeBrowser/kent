@@ -268,3 +268,23 @@ nomLeu1.refseq.mrna.xeno.loadDesc  = yes
 
 
 ############################################################################
+#  nomLeu1 - Gibbon - Ensembl Genes version 62  (DONE - 2011-04-19 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/nomLeu1
+    cat << '_EOF_' > nomLeu1.ensGene.ra
+# required db variable
+db nomLeu1
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With single quotes to protect
+#       everything in perl
+nameTranslation 's/^GL\([0-9][0-9]*\).1/GL\1/; s/^ADFV\([0-9][0-9]*\).1/ADFV\1/;'
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=62 nomLeu1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/nomLeu1/bed/ensGene.62
+    featureBits nomLeu1 ensGene
+    # 45293349 bases of 2756591777 (1.643%) in intersection
+
+############################################################################
