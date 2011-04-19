@@ -8,23 +8,10 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "container.h"
+#include "wiggle.h"
 #include "wigCommon.h"
 #include "hui.h"
 
-
-static char *aggregateFromCartOrDefault(struct cart *cart, struct track *tg)
-/* Return aggregate value for track. */
-{
-return cartOrTdbString(cart, tg->tdb, "aggregate", WIG_AGGREGATE_TRANSPARENT);
-}
-
-static boolean isOverlayTypeAggregate(char *aggregate)
-/* Return TRUE if aggregater type is one of the overlay ones. */
-{
-if (aggregate == NULL)
-    return FALSE;
-return differentString(aggregate, WIG_AGGREGATE_NONE);
-}
 
 static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
@@ -32,8 +19,8 @@ static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
 /* Draw items in multiWig container. */
 {
 struct track *subtrack;
-char *aggregate = aggregateFromCartOrDefault(cart, tg);
-boolean overlay = isOverlayTypeAggregate(aggregate);
+char *aggregate = wigFetchAggregateValWithCart(cart, tg->tdb);
+boolean overlay = wigIsOverlayTypeAggregate(aggregate);
 boolean errMsgShown = FALSE;
 int y = yOff;
 boolean errMsgFound = FALSE;
@@ -79,8 +66,8 @@ mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, xOff, y, width, tg->height, tg->track, 
 static int multiWigTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return total height of multiWigcontainer. */
 {
-char *aggregate = aggregateFromCartOrDefault(cart, tg);
-boolean overlay = isOverlayTypeAggregate(aggregate);
+char *aggregate = wigFetchAggregateValWithCart(cart, tg->tdb);
+boolean overlay = wigIsOverlayTypeAggregate(aggregate);
 int totalHeight =  0;
 if (overlay)                                                                                       
     totalHeight =  wigTotalHeight(tg, vis);                                                        
@@ -129,8 +116,8 @@ static void multiWigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	enum trackVisibility vis)
 /* Draw left labels - by deferring to first subtrack. */
 {
-char *aggregate = aggregateFromCartOrDefault(cart, tg);
-boolean overlay = isOverlayTypeAggregate(aggregate);
+char *aggregate = wigFetchAggregateValWithCart(cart, tg->tdb);
+boolean overlay = wigIsOverlayTypeAggregate(aggregate);
 if (overlay)
     {
     struct track *firstVisibleSubtrack = NULL;

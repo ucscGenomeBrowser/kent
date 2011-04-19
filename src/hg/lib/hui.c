@@ -185,7 +185,7 @@ if(showShortLabel)
 struct hash *cvTermTypes = (struct hash *)cvTermTypeHash();
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
-mdbObjRemoveVars(mdbObj,MDB_OBJ_TYPE_COMPOSITE " " MDB_VAR_PROJECT " " MDB_OBJ_TYPE); // Don't bother showing these (NOTE: composite,objType should be added to cv.ra typeOfTerms as hidden)
+mdbObjRemoveVars(mdbObj,MDB_OBJ_TYPE_COMPOSITE " " MDB_VAR_PROJECT " " MDB_OBJ_TYPE " " MDB_VAR_MD5SUM); // Don't bother showing these (NOTE: composite,objType should be added to cv.ra typeOfTerms as hidden)
 mdbObjRemoveHiddenVars(mdbObj);
 mdbObjReorderByCv(mdbObj,FALSE);// Use cv defined order for visible vars
 struct mdbVar *mdbVar;
@@ -194,9 +194,22 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     if ((sameString(mdbVar->var,MDB_VAR_FILENAME) || sameString(mdbVar->var,MDB_VAR_FILEINDEX) )
     && trackDbSettingClosestToHome(tdb,MDB_VAL_ENCODE_PROJECT) != NULL)
         {
-        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>",mdbVar->var);
-
+        dyStringPrintf(dyTable,"<tr valign='top'><td align='right' nowrap><i>%s:</i></td><td nowrap>",mdbVar->var);
+//#define NO_FILENAME_LISTS
+#ifdef NO_FILENAME_LISTS
         dyStringAppend(dyTable,htmlStringForDownloadsLink(db, tdb, mdbVar->val, TRUE, trackHash));
+#else///ifndef NO_FILENAME_LISTS
+
+        struct slName *fileSet = slNameListFromComma(mdbVar->val);
+        while (fileSet != NULL)
+            {
+            struct slName *file = slPopHead(&fileSet);
+            dyStringAppend(dyTable,htmlStringForDownloadsLink(db, tdb, file->name, TRUE, trackHash));
+            if (fileSet != NULL)
+                dyStringAppend(dyTable,"<BR>");
+            slNameFree(&file);
+            }
+#endif///ndef NO_FILENAME_LISTS
         dyStringAppend(dyTable,"</td></tr>");
         }
     else
