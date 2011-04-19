@@ -1409,7 +1409,7 @@ priority 103.29
         subGroups view=phyloP clade=primate
         shortLabel Primate Cons
         longLabel Primate Basewise Conservation by PhyloP
-        noInherit on
+        noInhersit on
         configurable on
         type wig -9.06 0.66
         maxHeightPixels 100:50:11
@@ -1593,18 +1593,6 @@ track snp131NonClinical override
 snpSeqFile /gbdb/hg19/snp/snp131.fa
 
 track snp131 override
-release beta,public
-chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp131CodingDbSnp,
-codingAnnoLabel_snp131CodingDbSnp dbSNP
-
-track snp131 override
-release alpha
-visibility hide
 chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2
