@@ -518,6 +518,7 @@ CREATE TABLE $db (
   releaseLog longblob NOT NULL,
   featureBits longblob NOT NULL,
   releaseLogUrl longblob NOT NULL,
+  importance char(1) NOT NULL default '',
   PRIMARY KEY  (`qid`)
 ) TYPE=MyISAM;
 
@@ -535,7 +536,7 @@ sub printEntry($$$$) {
   my $size = 0;  # User will have to use qaPushq to update for now.
   chomp $date;
   print <<_EOF_
-INSERT INTO $db VALUES ('$idStr','','A',$rank,'$date','Y','$entry->{shortLabel}','$localDb','$entry->{tables}','','$entry->{files}',$size,'$dbHost','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','$releaseLog','','');
+INSERT INTO $db VALUES ('$idStr','','A',$rank,'$date','Y','$entry->{shortLabel}','$localDb','$entry->{tables}','','$entry->{files}',$size,'$dbHost','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','$releaseLog','','','');
 _EOF_
   ;
 } # printEntry
@@ -614,7 +615,7 @@ sub printMainPushQEntry {
   print <<_EOF_
 
 -- New entry in Main Push Queue, to alert QA to existence of $db:
-INSERT INTO pushQ SELECT right(concat("00000",convert(max(qid)+1,CHAR)),6),'','A',$rank,'$date','Y','$db Initial Release','$db','','','',$size,'hgwdev','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','Initial $db release (using $assemblyLabel): see separate push queue $db.','','' from pushQ;
+INSERT INTO pushQ SELECT right(concat("00000",convert(max(qid)+1,CHAR)),6),'','A',$rank,'$date','Y','$db Initial Release','$db','','','',$size,'hgwdev','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','Initial $db release (using $assemblyLabel): see separate push queue $db.','','','' from pushQ;
 _EOF_
   ;
 } # printMainPushQEntry

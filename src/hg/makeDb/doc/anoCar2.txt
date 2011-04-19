@@ -1,0 +1,362 @@
+# for emacs: -*- mode: sh; -*-
+
+# Anolis carolinensis 2.0 sequence:
+# ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/
+#	Anolis_carolinensis/
+
+##########################################################################
+# Download sequence (DONE - 2011-04-12 - Hiram)
+    mkdir -p /hive/data/genomes/anoCar2/genbank
+    cd /hive/data/genomes/anoCar2/genbank
+    wget --timestamping -r --cut-dirs=5 --level=0 -nH -x \
+	--no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Anolis_carolinensis/*"
+
+###########################################################################
+# fixup to UCSC names (DONE - 2011-04-12 - Hiram)
+    cd /hive/data/genomes/anoCar2/genbank
+
+    mkdir ucsc
+
+    cat << '_EOF_' > ucscNames.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %cuToChr;
+
+open (FH, "<assembled_chromosomes/chr2acc") or
+	die "can not read assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chrN, $cuName) = split('\s+', $line);
+    $cuToChr{$cuName} = $chrN;
+    printf "%s\t%s\n", $chrN, $cuName;
+    open (AG, "zcat assembled_chromosomes/AGP/chr${chrN}.comp.agp.gz|") or
+	die "can not read assembled_chromosomes/AGP/chr${chrN}.comp.agp.gz";
+    open (UC, "|gzip -c > ucsc/chr${chrN}.agp.gz") or
+	die "can not write to ucsc/chr${chrN}.agp.gz";
+    while (my $agpLine = <AG>) {
+	if ($agpLine =~ m/^#/) {
+	    print UC $agpLine;
+	} else {
+	    chomp $agpLine;
+	    my ($cuId, $rest) = split('\s+', $agpLine, 2);
+	    printf UC "chr%s\t%s\n", $cuToChr{$cuId}, $rest;
+	}
+    }
+    close (AG);
+    close (UC);
+    print `zcat assembled_chromosomes/FASTA/chr${chrN}.fa.gz | sed -e "s#>.*#>chr${chrN}#" | gzip -c > ucsc/chr${chrN}.fa.gz`
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ucscNames.pl
+
+
+    # fixup the unplaced names to make them chrUn_*
+    cat << '_EOF_' > chrUn.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, "|gzip -c > ucsc/chrUn.agp") or die "can not write to ucsc/chrUn.agp";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\.1//;    
+        printf UC "chrUn_%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, "|gzip -c > ucsc/chrUn.fa") or die "can not write to ucsc/chrUn.fa";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/\.1\|.*//;
+        printf UC ">chrUn_$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x chrUn.pl
+
+    time ./chrUn.pl
+    #	real    3m13.579s
+
+    # verify nothing was broken, should get the same numbers:
+    faSize assembled_chromosomes/FASTA/chr*.fa.gz \
+	unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+    #	1799126364 bases (97789817 N's 1701336547 real
+    #	1701336547 upper 0 lower) in 6456 sequences in 14 files
+    faSize ucsc/chr*.fa.gz
+    #	1799126364 bases (97789817 N's 1701336547 real
+    #	1701336547 upper 0 lower) in 6456 sequences in 14 files
+
+###########################################################################
+# Initial genome build (DONE - 2011-04-12 - Hiram)
+    cd /hive/data/genomes/anoCar2
+
+    cat << '_EOF_' > anoCar2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db anoCar2
+clade vertebrate
+genomeCladePriority 70
+scientificName Anolis carolinensis
+commonName Lizard
+assemblyDate May 2010
+assemblyLabel Broad Institute of MIT and Harvard AnoCar 2.0 (GCA_000090745.1)
+assemblyShortLabel Broad AnoCar2.0
+orderKey 439
+mitoAcc NC_010972.2
+# same mito sequence in EU747728.2
+fastaFiles /cluster/data/anoCar2/genbank/ucsc/chr*.fa.gz
+agpFiles /cluster/data/anoCar2/genbank/ucsc/chr*.agp.gz
+# qualFiles /cluster/data/anoCar2/genbank/scaffold.lifted.qac
+dbDbSpeciesDir lizard
+taxId 28377
+'_EOF_'
+
+    # run step wise to confirm sequence and AGP files match each other
+    time nice -n +19 makeGenomeDb.pl -fileServer=hgwdev \
+	-workhorse=hgwdev -stop=agp anoCar2.config.ra > agp.out 2>&1
+    #	real    1m24.691s
+
+    time nice -n +19 makeGenomeDb.pl -fileServer=hgwdev \
+	-workhorse=hgwdev -continue=db anoCar2.config.ra > db.out 2>&1
+    #	real    12m41.598s
+
+    # add the trackDb business to the source tree
+
+##########################################################################
+# running repeat masker (DONE - 2011-04-12 - Hiram)
+    mkdir /hive/data/genomes/anoCar2/bed/repeatMasker
+    cd /hive/data/genomes/anoCar2/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=memk anoCar2 > do.log 2>&1 &
+    #	real    35m31.331s
+    cat faSize.rmsk.txt
+# 1799143587 bases (97789820 N's 1701353767 real 1565234655
+#	upper 136119112 lower) in 6457 sequences in 1 files
+#	%7.57 masked total, %8.00 masked real
+
+    grep -i versi do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.25 2010/09/08 21:32:26 angie Exp $
+#    June 30 2010 (open-3-2-9) version of RepeatMasker
+
+##########################################################################
+# running simple repeat (DONE - 2011-04-12 - Hiram)
+    mkdir /hive/data/genomes/anoCar2/bed/simpleRepeat
+    cd /hive/data/genomes/anoCar2/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
+	anoCar2 > do.log 2>&1 &
+    #	real    23m18.960s
+
+XXX - READY - Tue Apr 12 16:21:42 PDT 2011
+
+    #	real    198m33.953s
+    cat fb.simpleRepeat 
+    #	66211508 bases of 2752505800 (2.405%) in intersection
+
+    cd /hive/data/genomes/anoCar2
+    twoBitMask anoCar2.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed anoCar2.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa anoCar2.2bit stdout | faSize stdin > faSize.anoCar2.2bit.txt
+    cat faSize.anoCar2.2bit.txt
+# 2914958544 bases (162452744 N's 2752505800 real 1439244378 upper
+#	1313261422 lower) in 14205 sequences in 1 files
+#	%45.05 masked total, %47.71 masked real
+
+    rm /gbdb/anoCar2/anoCar2.2bit
+    ln -s `pwd`/anoCar2.2bit /gbdb/anoCar2/anoCar2.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2011-04-13 - Hiram)
+    mkdir /hive/data/genomes/anoCar2/bed/gap
+    cd /hive/data/genomes/anoCar2/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../anoCar2.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m40.949s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits anoCar2 -not gap -bed=notGap.bed
+    #	1701353770 bases of 1701353770 (100.000%) in intersection
+    featureBits anoCar2 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	3 bases of 1701353770 (0.000%) in intersection
+    # not worth it:
+    cat new.gaps.bed
+chrM    9797    9798    chrM.1
+chrM    15667   15668   chrM.2
+chrM    15783   15784   chrM.3
+
+##########################################################################
+## WINDOWMASKER (WORKING - 2011-04-12 - Hiram)
+    mkdir /hive/data/genomes/anoCar2/bed/windowMasker
+    cd /hive/data/genomes/anoCar2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev anoCar2 > do.log 2>&1 &
+    #	real    116m26.778s
+
+    # Masking statistics
+    twoBitToFa anoCar2.wmsk.2bit stdout | faSize stdin
+    #	1799143587 bases (97789820 N's 1701353767 real 996337045 upper
+    #	705016722 lower) in 6457 sequences in 1 files
+    #	%39.19 masked total, %41.44 masked real
+    twoBitToFa anoCar2.wmsk.sdust.2bit stdout | faSize stdin
+    #	1799143587 bases (97789820 N's 1701353767 real 987278282 upper
+    #	714075485 lower) in 6457 sequences in 1 files
+    #	%39.69 masked total, %41.97 masked real
+
+    hgLoadBed anoCar2 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 8198619 elements of size 3
+
+    featureBits -countGaps anoCar2 windowmaskerSdust
+    #	811865302 bases of 1799143587 (45.125%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits anoCar2 -not gap -bed=notGap.bed
+    #	1701353770 bases of 1701353770 (100.000%) in intersection
+    time nice -n +19 featureBits anoCar2 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	714075485 bases of 1701353770 (41.971%) in intersection
+    #	reload track to get it clean
+    hgLoadBed anoCar2 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 8199653 elements of size 4
+    featureBits -countGaps anoCar2 windowmaskerSdust
+    #	714075485 bases of 1799143587 (39.690%) in intersection
+    #	mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../anoCar2.unmasked.2bit stdin \
+	    -type=.bed anoCar2.cleanWMSdust.2bit
+    twoBitToFa anoCar2.cleanWMSdust.2bit stdout | faSize stdin \
+        > anoCar2.cleanWMSdust.faSize.txt
+    cat anoCar2.cleanWMSdust.faSize.txt
+    #	1799143587 bases (97789820 N's 1701353767 real 987278282 upper
+    #	714075485 lower) in 6457 sequences in 1 files
+    #	%39.69 masked total, %41.97 masked real
+
+#########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-04-13 - Hiram)
+    cd /hive/data/genomes/anoCar2
+    twoBitMask -add bed/windowMasker/anoCar2.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed anoCar2.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa anoCar2.2bit stdout | faSize stdin > faSize.anoCar2.txt
+    cat faSize.anoCar2.txt
+    #	1799143587 bases (97789820 N's 1701353767 real 987044085 upper
+    #	714309682 lower) in 6457 sequences in 1 files
+    #	%39.70 masked total, %41.98 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/anoCar2/anoCar2.2bit
+    ln -s `pwd`/anoCar2.2bit /gbdb/anoCar2/anoCar2.2bit
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2011-04-13 - Hiram)
+    # Use -repMatch=650, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1701353767 / 2897316137 \) \* 1024
+    #	( 1701353767 / 2897316137 ) * 1024 = 601.310377
+    # round up to 650
+
+    cd /hive/data/genomes/anoCar2
+    blat anoCar2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/anoCar2.11.ooc -repMatch=650
+    #	Wrote 27991 overused 11-mers to jkStuff/anoCar2.11.ooc
+
+    #	copy all of this stuff to the klusters:
+    cd /hive/data/genomes/anoCar2/jkStuff
+    gapToLift anoCar2 nonBridged.lift -bedFile=nonBridged.bed
+    cd /hive/data/genomes/anoCar2
+    mkdir /hive/data/staging/data/anoCar2
+    cp -p jkStuff/anoCar2.11.ooc jkStuff/nonBridged.lift chrom.sizes \
+	anoCar2.2bit /hive/data/staging/data/anoCar2
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2011-04-13,14 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Anolis carolinensis     115     156803  0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # this appears that anoCar2 has plenty of native est's
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add anoCar2 before anoCar1 and commit to GIT
+# anoCar2 (A. carolinensis)
+anoCar2.serverGenome = /hive/data/genomes/anoCar2/anoCar2.2bit
+anoCar2.clusterGenome = /scratch/data/anoCar2/anoCar2.2bit
+anoCar2.ooc = /scratch/data/anoCar2/anoCar2.11.ooc
+anoCar2.lift = /scratch/data/anoCar2/nonBridged.lift
+anoCar2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+anoCar2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+anoCar2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+anoCar2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+anoCar2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+anoCar2.refseq.mrna.native.load = no
+anoCar2.genbank.est.native.load = yes
+anoCar2.refseq.mrna.xeno.load = yes
+anoCar2.genbank.mrna.xeno.load = yes
+anoCar2.downloadDir = anoCar2
+anoCar2.perChromTables = no
+
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding anoCar2 lizard" genbank.conf
+    git push
+    make etc-update
+
+    # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
+    # anoCar genome information, if this is a new species, need to add stuff
+    # there
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen			# long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial anoCar2 &
+    #	var/build/logs/2011.04.13-21:34:22.anoCar2.initalign.log
+    #	real    805m44.341s
+    # 5h33m
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad anoCar2 &
+    #	logFile: var/dbload/hgwdev/logs/2011.04.14-12:33:34.dbload.log
+    #	real    24m24.093s
+
+    # enable daily alignment and update of hgwdev (DONE - 2011-04-14 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add anoCar2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added anoCar2." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+###########################################################################

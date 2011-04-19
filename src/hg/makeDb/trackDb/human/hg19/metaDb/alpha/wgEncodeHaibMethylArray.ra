@@ -1,7 +1,7 @@
 metaObject wgEncodeHaibMethylArray
 objType composite
 composite wgEncodeHaibMethylArray
-expVars lab,dataType,cell,treatment,obtainedBy
+expVars lab,dataType,cell,treatment
 
 metaObject wgEncodeHaibMethylArrayAg04449UwSitesRep2
 objType table
@@ -1463,4 +1463,4 @@ tableName wgEncodeHaibMethylArraySknshraUwSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 109946813
+# MAGIC: 647187531

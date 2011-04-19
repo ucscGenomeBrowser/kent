@@ -16,7 +16,9 @@ wgEncodeUwHistone.ra \
 wgEncodeOpenChromChip.ra \
 wgEncodeUwTfbs.ra \
 wgEncodeOpenChromFaire.ra \
-wgEncodeRikenCage.ra 
+wgEncodeRikenCage.ra \
+wgEncodeOpenChromDnase.ra \
+wgEncodeUwAffyExonArray.ra \
 
 include ../../../../makefile.metaDb
 

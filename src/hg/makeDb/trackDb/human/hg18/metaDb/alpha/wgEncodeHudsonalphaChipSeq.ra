@@ -1,3 +1,8 @@
+metaObject wgEncodeHudsonalphaChipSeq
+objType composite
+composite wgEncodeHudsonalphaChipSeq
+expVars lab,dataType,cell,antibody,protocol,treatment
+
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsA549Control
 objType file
 antibody Input
@@ -507,7 +512,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Ebf
 objType file
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -576,7 +581,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Irf4
 objType file
-antibody IRF4
+antibody IRF4_(SC-6059)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -2723,7 +2728,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Ebf
 objType file
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -2792,7 +2797,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Irf4
 objType file
-antibody IRF4
+antibody IRF4_(SC-6059)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -4814,7 +4819,7 @@ view Peaks
 
 metaObject wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Ebf
 objType table
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -4885,7 +4890,7 @@ view Peaks
 
 metaObject wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Irf4
 objType table
-antibody IRF4
+antibody IRF4_(SC-6059)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -6732,7 +6737,7 @@ view Peaks
 
 metaObject wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Ebf
 objType table
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -6803,7 +6808,7 @@ view Peaks
 
 metaObject wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Irf4
 objType table
-antibody IRF4
+antibody IRF4_(SC-6059)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -8584,7 +8589,7 @@ view RawData
 
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Ebf
 objType file
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -8650,7 +8655,7 @@ view RawData
 
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Irf4
 objType file
-antibody IRF4
+antibody IRF4_(SC-6059)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -10188,7 +10193,7 @@ view RawData
 
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Ebf
 objType file
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -10276,7 +10281,7 @@ view RawData
 
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Irf4
 objType file
-antibody IRF4
+antibody IRF4_(SC-6059)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -12057,7 +12062,7 @@ view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Ebf
 objType table
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -12126,7 +12131,7 @@ view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Irf4
 objType table
-antibody IRF4
+antibody IRF4_(SC-6059)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -14274,7 +14279,7 @@ view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Ebf
 objType table
-antibody EBF
+antibody EBF1_(SC-137065)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -14343,7 +14348,7 @@ view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Irf4
 objType table
-antibody IRF4
+antibody IRF4_(SC-6059)
 cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
@@ -16029,4 +16034,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: -80917459
+# MAGIC: -1064906760

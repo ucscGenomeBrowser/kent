@@ -18,6 +18,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
+html wgEncodeSunyRipSeq.new
 
     track wgEncodeSunyRipSeqViewAlignments
     shortLabel Alignments

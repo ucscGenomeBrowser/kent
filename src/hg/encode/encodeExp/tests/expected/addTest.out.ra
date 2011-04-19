@@ -11,7 +11,6 @@ lab Stanford-m
 dataType ChipSeq
 cellType CH12
 expVars Antibody=Pol2
-accession wgEncodeEM000002
 
 ix 3
 organism human
