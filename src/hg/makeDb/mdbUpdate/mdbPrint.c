@@ -33,7 +33,8 @@ errAbort(
   "    -count      Just print count of objects, variables and values selected.\n"
   "    -validate    Validate mdb objects against cv.ra. (Incompatible with -byVars, -ra, -line.)\n"
   "    -validateFull like validate but considers vars not defined in cv as invalid.\n"
-  "    -encodeExp     Validates groups of objs as experiments defined in hgFixed.encodeExp table.\n"
+  "    -experimentify      Groups objs into experiments defined in encodeExp table.\n"
+  "    -encodeExp={table}  Optionally tell which encodeExp table to use.\n"
   "    -specialHelp    Prints help for some special case features.\n"
   "  Four alternate ways to select metadata:\n"
   "    -all       Will print entire table (this could be huge).\n"
@@ -77,7 +78,8 @@ static struct optionSpec optionSpecs[] = {
     {"val",      OPTION_STRING}, // value
     {"validate", OPTION_BOOLEAN},// Validate vars and vals against cv.ra terms
     {"validateFull", OPTION_BOOLEAN},// Like validate but considers vars not defined in cv as invalid
-    {"encodeExp",OPTION_BOOLEAN},// Validate Experiments as defined in the hgFixed.encodeExp table
+    {"experimentify",OPTION_BOOLEAN},// Validate Experiments as defined in the hgFixed.encodeExp table
+    {"encodeExp",OPTION_STRING},     // Optionally tell which encodeExp to use
     {"vars",     OPTION_STRING},// var1=val1 var2=val2...
     {"updDb",    OPTION_STRING},// DB to update
     {"updMdb",   OPTION_STRING},// MDB table to update
@@ -271,11 +273,22 @@ if(optionExists("line") && !optionExists("ra"))
 boolean justCounts = (optionExists("count") || optionExists("counts"));
 boolean byVar      = optionExists("byVar");
 boolean validate   = (optionExists("validate") || optionExists("validateFull"));
-boolean encodeExp = optionExists("encodeExp");
-
-if ((validate || encodeExp) && (byVar || optionExists("line") || optionExists("ra")))
+char *encodeExp = NULL;
+if (optionExists("experimentify"))
     {
-    verbose(1, "Incompatible to combine validate or encodeExp option with 'byVar', 'line' or 'ra':\n");
+    encodeExp = optionVal("encodeExp","encodeExp");
+    if (strlen(encodeExp) == 0)
+        errAbort("encodeExp table will be ?\n");
+    if  (sameWord("std",encodeExp))
+        encodeExp = "encodeExp";
+    verbose(0, "Using hgFixed.%s\n",encodeExp);
+    }
+else if (optionExists("encodeExp"))
+    errAbort("-encodeExp option requires -experimentify option.\n");
+
+if ((validate || encodeExp != NULL) && (byVar || optionExists("line") || optionExists("ra")))
+    {
+    verbose(1, "Incompatible to combine validate or experimentify option with 'byVar', 'line' or 'ra':\n");
     usage();
     }
 
@@ -374,9 +387,9 @@ else
                 mdbObjPrintUpdateLines(&queryResults,optionVal("updDb",NULL),optionVal("updMdb",NULL),
                                                     optionVal("updSelect",NULL),optionVal("updVars",NULL));
                 }
-            else if (encodeExp) // Organizes vars as experiments and validates expId values
+            else if (encodeExp != NULL) // Organizes vars as experiments and validates expId values
                 {
-                struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,NULL,&queryResults,2,FALSE,FALSE); // 2=full experiments described
+                struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,encodeExp,&queryResults,2,FALSE,FALSE); // 2=full experiments described
                 printf("%d of %d obj%s can have their experiment IDs updated now.\n",slCount(updatable),objsCnt,(objsCnt==1?"":"s"));
                 mdbObjsFree(&updatable);
                 }
