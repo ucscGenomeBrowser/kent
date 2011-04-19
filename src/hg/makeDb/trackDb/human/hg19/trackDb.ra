@@ -1409,7 +1409,7 @@ priority 103.29
         subGroups view=phyloP clade=primate
         shortLabel Primate Cons
         longLabel Primate Basewise Conservation by PhyloP
-        noInhersit on
+        noInherit on
         configurable on
         type wig -9.06 0.66
         maxHeightPixels 100:50:11
