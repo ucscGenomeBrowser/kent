@@ -2167,7 +2167,7 @@ my %ensGeneFtpPeptideFileNames_62 = (
 'xenTro3' => 'xenopus_tropicalis/pep/Xenopus_tropicalis.JGI_4.2.62.pep.all.fa.gz',
 );
 
-my %ensGeneFtpMySqlFileNames_61 = (
+my %ensGeneFtpMySqlFileNames_62 = (
 'ailMel1' => 'ailuropoda_melanoleuca_core_62_1b',
 'anoCar2' => 'anolis_carolinensis_core_62_2a',
 'bosTau4' => 'bos_taurus_core_62_4k',
