@@ -2475,7 +2475,7 @@ view RawSignal
 
 metaObject wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep2
 objType file
-age adult-8wks
+0 adult-8wks
 cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -2491,6 +2491,7 @@ replicate 2
 sex M
 strain C57BL/6
 subId 2020
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep2
@@ -2512,6 +2513,7 @@ sex M
 strain C57BL/6
 subId 2020
 tableName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep2
+tissueSourceType Pooled
 view Hotspots
 
 metaObject wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep2
@@ -2533,6 +2535,7 @@ sex M
 strain C57BL/6
 subId 2020
 tableName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep2
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawDataRep2
@@ -2553,6 +2556,7 @@ replicate 2
 sex M
 strain C57BL/6
 subId 2020
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep2
@@ -2574,6 +2578,7 @@ sex M
 strain C57BL/6
 subId 2020
 tableName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep2
+tissueSourceType Pooled
 view RawSignal
 
 metaObject wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep1
@@ -3460,4 +3465,4 @@ tableName wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep2
 tissueSourceType Individual
 view RawSignal
 
-# MAGIC: -310372142
+# MAGIC: -1279226572
