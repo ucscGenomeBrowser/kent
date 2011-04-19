@@ -685,62 +685,109 @@ void lineFileReuseFull(struct lineFile *lf)
 // lineFileReuseFull only works with previous lineFileNextFull call
 {
 assert(lf->fullLine != NULL);
-lf->fullLineResuse = TRUE;
+lf->fullLineReuse = TRUE;
 }
 
 
-boolean lineFileNextFull(struct lineFile *lf, char **retStart, int *retSize)
+boolean lineFileNextFull(struct lineFile *lf, char **retFull, int *retFullSize,
+                        char **retRaw, int *retRawSize)
 // Fetch next line from file joining up any that are continued by ending '\'
+// If requested, and was joined, the unjoined raw lines are also returned
 // NOTE: comment lines can't be continued!  ("# comment \ \n more comment" is 2 lines.)
 {
 // May have requested reusing the last full line.
-if (lf->fullLineResuse)
+if (lf->fullLineReuse)
     {
+    lf->fullLineReuse = FALSE;
     assert(lf->fullLine != NULL);
-    lf->fullLineResuse = FALSE;
-    *retStart = dyStringContents(lf->fullLine);
-    if (retSize)
-        *retSize = dyStringLen(lf->fullLine);
+    *retFull = dyStringContents(lf->fullLine);
+    if (retFullSize)
+        *retFullSize = dyStringLen(lf->fullLine);
+    if (retRaw != NULL)
+        {
+        assert(lf->rawLines != NULL);
+        *retRaw = dyStringContents(lf->rawLines);
+        if (retRawSize)
+            *retRawSize = dyStringLen(lf->rawLines);
+        }
     return TRUE;
     }
 
-*retStart = NULL;
+// Empty pointers
+*retFull = NULL;
+if (retRaw != NULL)
+    *retRaw = NULL;
 
-// Initialize memory if needed
+// Prepare lf buffers
 if (lf->fullLine == NULL)
+    {
     lf->fullLine = dyStringNew(1024);
-dyStringClear(lf->fullLine);
+    lf->rawLines = dyStringNew(1024); // Better to always create it than test every time
+    }
+else
+    {
+    dyStringClear(lf->fullLine);
+    dyStringClear(lf->rawLines);
+    }
 
 char *line;
 while (lineFileNext(lf, &line, NULL))
     {
-    char *clippedText = skipLeadingSpaces(line);
-
-    // Fill lf memory in case of continued lines
-    if (dyStringLen(lf->fullLine) == 0)
-        {
-        dyStringAppend(lf->fullLine,line); // includes first line's whitespace.
-        *retStart = dyStringContents(lf->fullLine);
-        }
-    else if (clippedText[0] != '\0')
-        dyStringAppend(lf->fullLine,clippedText); // don't include continued line's leading spaces
+    char *start = skipLeadingSpaces(line);
 
     // Will the next line continue this one?
-    if (clippedText[0] != '\0' && clippedText[0] != '#') // Comment lines can't be continued!
+    char *end = start;
+    if (*start == '#')  // Comment lines can't be continued!
+        end = start + strlen(start);
+    else
         {
-        line = dyStringContents(lf->fullLine);
-        char *lastChar = lastNonWhitespaceChar(line);
-        if (lastChar != NULL && *lastChar == '\\')
+        while (*end != '\0')  // walking forward for efficiency (avoid strlens())
             {
-            if (lastChar > line && *(lastChar - 1) != '\\') // Not an escaped continuation char
-                {
-                dyStringResize(lf->fullLine,(lastChar - line)); // This clips off the last char and any trailing white-space in dyString
+            for (;*end != '\0' && *end != '\\'; end++) ; // Tight loop to find '\'
+            if (*end == '\0')
+                break;
+
+            // This could be a continuation
+            char *slash = end;
+            if (*(++end) == '\\')  // escaped
                 continue;
+            end = skipLeadingSpaces(end);
+
+            if (*end == '\0') // Just whitespace after '\', so true continuation mark
+                {
+                if (retRaw != NULL) // Only if actually requested.
+                    {
+                    dyStringAppendN(lf->rawLines,line,(end - line));
+                    dyStringAppendC(lf->rawLines,'\n'); // New lines delimit raw lines.
+                    }
+                end = slash; // Don't need to zero, because of appending by length
+                break;
                 }
             }
         }
-    if (retSize)
-        *retSize = dyStringLen(lf->fullLine);
+
+    // Stitch together full lines
+    if (dyStringLen(lf->fullLine) == 0)
+        dyStringAppendN(lf->fullLine,line,(end - line)); // includes first line's whitespace
+    else if (start < end)             // don't include continued line's leading spaces
+        dyStringAppendN(lf->fullLine,start,(end - start));
+
+    if (*end == '\\')
+        continue;
+
+    // Got a full line now!
+    *retFull = dyStringContents(lf->fullLine);
+    if (retFullSize)
+        *retFullSize = dyStringLen(lf->fullLine);
+
+    if (retRaw != NULL && dyStringLen(lf->rawLines) > 0) // Only if actually requested & continued
+        {
+        // This is the final line which doesn't have a continuation char
+        dyStringAppendN(lf->rawLines,line,(end - line));
+        *retRaw = dyStringContents(lf->rawLines);
+        if (retRawSize)
+            *retRawSize = dyStringLen(lf->rawLines);
+        }
     return TRUE;
     }
 return FALSE;
@@ -765,7 +812,7 @@ boolean lineFileNextFullReal(struct lineFile *lf, char **retStart)
 // Fetch next line from file that is not blank and does not start with a '#'.
 // Continuation lines (ending in '\') are joined into a single line.
 {
-while (lineFileNextFull(lf, retStart, NULL))
+while (lineFileNextFull(lf, retStart, NULL, NULL, NULL))
     {
     char *clippedText = skipLeadingSpaces(*retStart);
     if (clippedText[0] != '\0' && clippedText[0] != '#')

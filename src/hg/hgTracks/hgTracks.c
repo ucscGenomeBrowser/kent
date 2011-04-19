@@ -3567,6 +3567,12 @@ if (!psOutput)
             printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd);
             hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
             }
+        else if (sameWord(database,"anoCar2"))
+            {
+            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
+            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
+            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+            }
         else if (ensVersionString[0])
             {
             char *archive = NULL;

@@ -40,7 +40,8 @@ boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal, struct d
 // gets appended to dy. Continuation lines in RA file will be joined to produce tag and val,
 // but dy will be filled with the unedited multiple lines containing the continuation chars.
 
-boolean raNextTagValUnjoined(struct lineFile *lf, char **retTag, char **retVal, struct dyString *dyRecord);
+boolean raNextTagValUnjoined(struct lineFile *lf, char **retTag, char **retVal,
+                             struct dyString *dyRecord);
 // NOTE: this is the former raNextTagVal routine is ignorant of continuation lines.
 //       It is provided in case older RAs need it.
 // Read next line.  Return FALSE at end of file or blank line.  Otherwise
