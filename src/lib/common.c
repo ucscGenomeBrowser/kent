@@ -995,6 +995,119 @@ struct slPair *slPairListFromString(char *str,boolean respectQuotes)
 {
 if (isEmpty(str))
     return NULL;
+
+struct slPair *list = NULL;
+char name[1024];
+char val[1024];
+char buf[1024];
+char *s = str;
+bool inQuote = FALSE;
+char *b = buf;
+char sep = '=';
+char c = ' ';
+int mode = 0;
+while(1)
+    {
+    c = *s++;
+    if (mode == 0 || mode == 2) // reading name or val
+	{
+	boolean term = FALSE;
+	if (respectQuotes && b == buf && !inQuote && c == '"')
+	    inQuote = TRUE;
+	else if (inQuote && c == '"')
+	    term = TRUE;
+	else if ((c == sep || c == 0) && !inQuote)
+	    {
+	    term = TRUE;
+	    --s;  // rewind
+	    }
+	else if (c == ' ' && !inQuote)
+	    {
+	    warn("slPairListFromString: Unexpected whitespace in %s", str);
+	    return NULL;
+	    }
+	else if (c == 0 && inQuote)
+	    {
+	    warn("slPairListFromString: Unterminated quote in %s", str);
+	    return NULL;
+	    }
+	else
+	    {
+	    *b++ = c;
+	    if ((b - buf) > sizeof buf)
+		{
+		warn("slPairListFromString: pair name or value too long in %s", str);
+		return NULL;
+		}
+	    }
+	if (term)
+	    {
+	    inQuote = FALSE;
+	    *b = 0;
+	    if (mode == 0)
+		{
+		safecpy(name, sizeof name, buf);
+		if (strlen(name)<1)
+		    {
+		    warn("slPairListFromString: Pair name cannot be empty in %s", str);
+		    return NULL;
+		    }
+		// Shall we check for name being alphanumeric, at least for the respectQuotes=FALSE case?
+		}
+	    else // mode == 2
+		{	    
+		safecpy(val, sizeof val, buf);
+		if (!respectQuotes && (hasWhiteSpace(name) || hasWhiteSpace(val))) // should never happen
+		    {
+		    warn("slPairListFromString() Unexpected white space in name=value pair: [%s]=[%s] in string=[%s]\n", name, val, str);
+		    break;
+		    }
+		slPairAdd(&list, name, cloneString(val));
+		}
+	    ++mode;
+	    }
+	}
+    else if (mode == 1) // read required "=" sign
+	{
+	if (c != '=')
+	    {
+	    warn("slPairListFromString: Expected character = after name in %s", str);
+	    return NULL;
+	    }		
+	++mode;
+	sep = ' ';
+	b = buf;
+	}
+    else // (mode == 3) reading optional separating space
+	{
+	if (c == 0)
+	    break;
+	if (c != ' ')
+	    {
+	    mode = 0;
+	    --s;
+	    b = buf;
+	    sep = '=';
+	    }
+	}
+    }
+slReverse(&list);
+return list;
+}
+
+struct slPair *oopsSlPairListFromString(char *str,boolean respectQuotes)
+// Do not use.
+// This version does not handle '=' in the name or val field, even when quoted.
+// But drosophila/trackDb.ra has fields like this since 2009:
+// [best1=Best_Antibody_(FDR=1%) best25=Best_Antibody_(FDR=25%) other1=Other_Antibodies_(FDR=1%) other25=Other_Antibodies_(FDR=25%)]
+//
+// Return slPair list parsed from list in string like:  [name1=val1 name2=val2 ...]
+// if respectQuotes then string can have double quotes: [name1="val 1" "name 2"=val2 ...]
+//    resulting pair strips quotes: {name1}={val 1},{name 2}={val2}
+// Returns NULL if parse error.  Free this up with slPairFreeValsAndList.
+{
+if (isEmpty(str))
+    return NULL;
 int count = countChars(str, '=') + 1; // Should have 1 more token than '=': {"name 1"},{val1 name2},{"val 2"}
 if (count < 2)
     {
