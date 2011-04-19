@@ -887,16 +887,15 @@ static void bamWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	MgFont *font, Color color, enum trackVisibility vis)
 {
 /* Allocate predraw area. */
-int preDrawZero, preDrawSize;
-struct preDrawContainer *preDrawList = NULL;
 struct bamWigTrackData *bwData;
 double scale = (double)width/(winEnd - winStart);
 
+struct preDrawContainer *pre = initPreDrawContainer(width);
 AllocVar(bwData);
-bwData->preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
+bwData->preDraw = pre->preDraw;
 bwData->scale = scale;
 bwData->width = width;
-bwData->preDrawZero = preDrawZero;
+bwData->preDrawZero = pre->preDrawZero;
 
 char posForBam[512];
 safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
@@ -907,6 +906,7 @@ tg->customPt = NULL;
 bamFetch(fileName, posForBam, countBam, bwData, NULL);
 
 /* fill in rest of predraw */
+int preDrawZero = pre->preDrawZero;
 int i;
 for (i=0; i<width; ++i)
     {
@@ -917,11 +917,9 @@ for (i=0; i<width; ++i)
     pe->sumSquares = (pe->count * pe->count)/scale;
     }
 
-AllocVar(preDrawList);
-preDrawList->preDraw = bwData->preDraw;
 /* Call actual graphing routine. */
 wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	       preDrawList, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+	       pre, pre->preDrawZero, pre->preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
 
 }
 

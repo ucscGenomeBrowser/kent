@@ -23,7 +23,6 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     /* Allocate predraw area. */
-    int preDrawZero, preDrawSize;
     struct preDrawContainer *preDrawList = NULL;
 
     /* Get summary info from bigWig */
@@ -34,16 +33,15 @@ if (errCatchStart(errCatch))
     struct bbiFile *bbiFile ;
     for(bbiFile = tg->bbiFile; bbiFile ; bbiFile = bbiFile->next)
 	{
-	struct preDrawContainer *preDrawContainer;
-	struct preDrawElement *preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
-	AllocVar(preDrawContainer);
-	preDrawContainer->preDraw = preDraw;
-	slAddHead(&preDrawList, preDrawContainer);
+	struct preDrawContainer *pre = initPreDrawContainer(width);
+	slAddHead(&preDrawList, pre);
 
 	if (bigWigSummaryArrayExtended(bbiFile, chromName, winStart, winEnd, summarySize, summary))
 	    {
 	    /* Convert format to predraw */
 	    int i;
+	    int preDrawZero = pre->preDrawZero;
+	    struct preDrawElement *preDraw = pre->preDraw;
 	    for (i=0; i<summarySize; ++i)
 		{
 		struct preDrawElement *pe = &preDraw[i + preDrawZero];
@@ -59,7 +57,8 @@ if (errCatchStart(errCatch))
 
     /* Call actual graphing routine. */
     wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-		   preDrawList, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+		   preDrawList, preDrawList->preDrawZero, preDrawList->preDrawSize, 
+		   &tg->graphUpperLimit, &tg->graphLowerLimit);
 
     struct preDrawContainer *nextContain;
     for(; preDrawList ; preDrawList = nextContain)

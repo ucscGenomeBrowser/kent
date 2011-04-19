@@ -19,9 +19,10 @@ void usage()
 errAbort(
   "regCompanionChia - Analyse chia pet data against promoters and enhancers.\n"
   "usage:\n"
-  "   regCompanionChia output.tab\n"
-  "This program actually must be edited and recompiled to change the input, which is\n"
-  "an amazing 8 different files.  The output is also complex, a table with 23 fields:\n"
+  "   regCompanionChia input.bed output.tab\n"
+  "where input.bed has to be all two-block items.  There's alas 7 other input files\n"
+  "which you'll have to recompile the C source to change.  The output is also complex\n"
+  "a table with 23 fields:\n"
   "  1 - chromosome\n"
   "  2 - chromosome start - 0 based\n"
   "  3 - chromosome end - 1 based\n"
@@ -67,12 +68,13 @@ struct inInfo
 
 struct inInfo inArray[] =
     {
-    {"CHIApet", itBlockedBed, "/hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeGisChiaPet/wgEncodeGisChiaPetK562D000005628.bed.gz"},
-    {"DNAse", itBigWig, "/hive/users/kent/regulate/companion/dnase/normalized/K562.bw"},
-    {"H3K4Me3", itBigWig, "/hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneK562H3k4me3NormSig.bw"},
-    {"H3K27Ac", itBigWig, "/hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneK562H3k27acNormSig.bw"},
-    {"H3K4Me1", itBigWig, "/hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneK562H3k4me1NormSig.bw"},
-    {"CTCF", itBigWig, "/hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneK562CtcfNormSig.bw"},
+    {"pairs", itBlockedBed, NULL},
+    // {"CHIApet", itBlockedBed, "/hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeGisChiaPet/wgEncodeGisChiaPetGm12878D000005628.bed.gz"},
+    {"DNAse", itBigWig, "/hive/users/kent/regulate/companion/dnase/normalized/Gm12878.bw"},
+    {"H3K4Me3", itBigWig, "/hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneGm12878H3k4me3NormSig.bw"},
+    {"H3K27Ac", itBigWig, "/hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneGm12878H3k27acNormSig.bw"},
+    {"H3K4Me1", itBigWig, "/hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneGm12878H3k4me1NormSig.bw"},
+    {"CTCF", itBigWig, "/hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneGm12878CtcfNormSig.bw"},
     {"UCSCgenes", itPromoterBed, "/hive/data/genomes/hg19/bed/ucsc.12/ucscGenes.bed"},
     {"UCSCenh", itUnstrandedBed, "/hive/users/kent/regulate/companion/enhPicks/stringent/enh7.bed"},
     };
@@ -278,9 +280,10 @@ for (chromStart = chiaList; chromStart != NULL; chromStart = chromEnd)
 }
 
 
-void regCompanionChia(char *output)
+void regCompanionChia(char *inBedPairs, char *output)
 /* regCompanionChia - Analyse chia pet data against promoters and enhancers.. */
 {
+inArray[0].fileName = inBedPairs;
 checkInputOpenFiles(inArray, ArraySize(inArray));
 verbose(1, "Opened all %d inputs successfully\n", (int)ArraySize(inArray));
 struct bed *chiaList = bedLoadTwoBlocks(inArray[0].lf);
@@ -322,7 +325,8 @@ struct bed *chia;
 int chiaIx = 0;
 for (chia = chiaList; chia != NULL; chia = chia->next, ++chiaIx)
     {
-    fprintf(f, "%s\t%d\t%d\tchia%d\t%d", chia->chrom, chia->chromStart, chia->chromEnd, chiaIx+1, chia->score);
+    // fprintf(f, "%s\t%d\t%d\tchia%d\t%d", chia->chrom, chia->chromStart, chia->chromEnd, chiaIx+1, chia->score);
+    fprintf(f, "%s\t%d\t%d\t%s\t%d", chia->chrom, chia->chromStart, chia->chromEnd, chia->name, chia->score);
     int blockIx;
     for (blockIx=0; blockIx < 2; ++blockIx)
 	{
@@ -344,8 +348,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (argc != 3)
     usage();
-regCompanionChia(argv[1]);
+regCompanionChia(argv[1], argv[2]);
 return 0;
 }

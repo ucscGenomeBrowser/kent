@@ -360,3 +360,94 @@ anoCar2.perChromTables = no
     make etc-update
 
 ###########################################################################
+# construct downloads files (DONE - 2011-04-14 - Hiram)
+    cd /hive/data/genomes/anoCar2
+    makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev anoCar2 \
+	> downloads.log 2>&1
+    # edit the README.txt files to set project URL and check
+    #	the text
+
+###########################################################################
+###########################################################################
+# ready for first pushQ entry (DONE - 2011-04-14 - Hiram)
+    mkdir /hive/data/genomes/anoCar2/pushQ
+    cd /hive/data/genomes/anoCar2/pushQ
+    makePushQSql.pl anoCar2 > anoCar2.sql 2> stderr.out
+    # some errors are legitimate and OK:
+     head stderr.out 
+# WARNING: hgwdev does not have /gbdb/anoCar2/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/anoCar2/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/anoCar2/bbi/quality.bw
+# WARNING: anoCar2 does not have seq
+# WARNING: anoCar2 does not have extFile
+    scp -p anoCar2.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < anoCar2.sql
+
+###########################################################################
+#  anoCar2 - Lizard - Ensembl Genes version 61  (DONE - 2011-04-19 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2
+    cat << '_EOF_' > anoCar2.ensGene.ra
+# required db variable
+db anoCar2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation 's/^\([0-9L]\)/chr\1/; s/^GL\([0-9][0-9]*\).1/chrUn_GL\1/; s/^A/chrUn_A/'
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=61 anoCar2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2/bed/ensGene.61
+    featureBits anoCar2 ensGene
+    # 27905138 bases of 1701353770 (1.640%) in intersection
+
+    hgsql -e \
+'update trackVersion set dateReference="current" where db="anoCar2";' hgFixed
+
+############################################################################
+# Construct UCSC to Ensembl name translation (DONE - 2011-04-19 - Hiram)
+    mkdir /hive/data/genomes/anoCar2/bed/ucscToEnsembl
+    cd /hive/data/genomes/anoCar2/bed/ucscToEnsembl
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo -e -n "${C}\t"
+    echo "${C}" | sed -e "s/^chr//; s/Un_//; s/^\(GL.*\)/\1.1/; s/^M/Mt/"
+done | sort > ucscToEnsembl.tab
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(21))
+);
+'_EOF_'
+
+    hgsql anoCar2 < ucscToEnsembl.sql
+    hgsql anoCar2 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+############################################################################
+# lastz alignment with Human/hg19 (DONE - 2004-04-19 - Hiram)
+    #	the original alignment
+    cd /hive/data/genomes/hg19/bed/lastzAnoCar2.2011-04-19
+    cat fb.hg19.chainAnoCar2Link.txt 
+    #	102917023 bases of 2897316137 (3.552%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/anoCar2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/anoCar2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzAnoCar2.2011-04-19/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-syntenicNet -swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
+    #	real    20m45.683s
+    cat fb.anoCar2.chainHg19Link.txt 
+    #	88296392 bases of 1701353770 (5.190%) in intersection
+
+############################################################################

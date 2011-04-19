@@ -93,7 +93,6 @@ void bbiIntervalCorrelatePair(struct bbiInterval *a, struct bbiInterval *b, stru
 int overlap = rangeIntersection(a->start, a->end, b->start, b->end);
 assert(overlap > 0);
 correlateNextMulti(c, clamp(a->val), clamp(b->val), overlap);
-// correlateNext(c, a->val, b->val);
 }
 
 void bbiIntervalCorrelatePairWrapper(void *a, void *b, void *context)
