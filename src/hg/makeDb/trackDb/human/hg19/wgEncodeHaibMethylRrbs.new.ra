@@ -788,7 +788,7 @@ visibility dense
         # subId=3190 dateSubmitted=2011-01-08
 
         #ATTIC
-        #track wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2
+        #track wgEncodeHaibMethylRrbsMcf7UwSitesRep2
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel MCF-7 2
         #longLabel MCF-7 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
@@ -824,7 +824,7 @@ visibility dense
         # was wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep2 cricket Mon Apr 18 11:24:39 2011
 
         #ATTIC
-        #track wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1
+        #track wgEncodeHaibMethylRrbsMcf7UwSitesRep1
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel MCF-7 1
         #longLabel MCF-7 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
@@ -1151,17 +1151,17 @@ visibility dense
         # was wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1 cricket Mon Apr 18 11:24:35 2011
 
         #ATTIC
-        #track wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1
+        #track wgEncodeHaibMethylRrbsHepg2HaibSitesRep1
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel HepG2 1
         #longLabel HepG2Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         #subGroups view=Sites cellType=2HepG2 obtainedBy=HAIB treatment=None rep=rep1
         #type bed 9
         #color 189,0,157
-#        # subId=1152 dateSubmitted=2010-07-16
+        # subId=1152 dateSubmitted=2010-07-16
 
         #ATTIC
-        #track wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2
+        #track wgEncodeHaibMethylRrbsHepg2HaibSitesRep2
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel HepG2 2
         #longLabel HepG2Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
