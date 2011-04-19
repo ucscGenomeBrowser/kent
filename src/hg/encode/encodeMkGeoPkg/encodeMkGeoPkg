@@ -101,7 +101,7 @@ my %dataTypeLibrarySource = (
     "Orchid"	=> "genomic",
     "Proteogenomics" => "protein",
     "RnaPet"	=> "transcriptomic",
-    "RNA-seq"   => "genomic",
+    "RNA-seq"   => "transcriptomic",
 );
 
 # given a normalized datatype, give the library selection method
@@ -459,6 +459,7 @@ while(scalar(keys %objsSet) > 0) {
             $currentExpVars[$i] eq "None" or
             $currentExpVars[$i] eq "none" or
             ($expVars[$i] eq "antibody" and $currentExpVars[$i] eq "Input") or
+            ($expVars[$i] eq "antibody" and $currentExpVars[$i] eq "Control") or
             $expVars[$i] eq "replicate" or $expVars[$i] eq "rank") {
             # do nothing more
         } else {

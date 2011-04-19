@@ -1433,6 +1433,7 @@ visibility hide
 noInherit on
 priority 301
 autoScale on
+html ceuBcellRNASeq
 type bed 3
 
     track ceuBcellRNASeqBW
@@ -1443,6 +1444,7 @@ type bed 3
     type bigWig 0 716249
     configurable on
     autoScale on
+    html ceuBcellRNASeq
     maxHeightPixels 200:100:20
 
     track ceuBcellRNASeq
@@ -1450,6 +1452,7 @@ type bed 3
     shortLabel B-Cell Junctions
     longLabel B-Cell RNA-Seq Junctions
     configurable on
+    html ceuBcellRNASeq
     priority 2
     type bed 12
 

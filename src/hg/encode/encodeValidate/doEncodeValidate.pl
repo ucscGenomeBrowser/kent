@@ -1320,7 +1320,7 @@ sub makeDownloadTargetFileName {
         $fileType = "bed" if ($type =~ /^bed /);
 
         if (@srcFiles > 1) {
-                if (($type eq "fastQ") || ($type eq "doc")) {
+                if (($type eq "fastq") || ($type eq "doc")) {
                 $target = "$tablename.$fileType.tgz"; # will want to tar these
             } else {
                 $target = "$tablename.$fileType.gz";  # will cat and gz these
@@ -1337,8 +1337,8 @@ sub makeDownloadTargetFileName {
                 }
             }
 
-            if (Encode::isZipped($srcFile) || Encode::isTarZipped($srcFile)) { # don't gz anything already gz'd
-                $target = "$tablename.$fileType";
+            if (Encode::isTarZipped($srcFile)) {
+                $target = "$tablename.$fileType.tgz";
             } else {
                 $target = "$tablename.$fileType.gz";
             }
@@ -1919,7 +1919,7 @@ foreach my $ddfLine (@ddfLines) {
 	   $metadata .= " sex=$terms{'Cell Line'}->{$ddfLine->{cell}}->{'sex'}" if !$ddfLine->{sex};
 	   $metadata .= " strain=$terms{'Cell Line'}->{$ddfLine->{cell}}->{'strain'}" if !$ddfLine->{strain};
 	   $metadata .= " age=$terms{'Cell Line'}->{$ddfLine->{cell}}->{'age'}" if !$ddfLine->{age};
-	}   
+	}
     $metadata .= " view=$view";
     $metadata .= " replicate=$ddfLine->{replicate}" if $ddfLine->{replicate} && $daf->{TRACKS}{$view}{hasReplicates};
     $metadata .= " labVersion=$ddfLine->{labVersion}" if $ddfLine->{labVersion};
