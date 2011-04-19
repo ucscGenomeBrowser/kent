@@ -890,7 +890,7 @@ static void bamWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 struct bamWigTrackData *bwData;
 double scale = (double)width/(winEnd - winStart);
 
-struct preDrawContainer *pre = initPreDrawContainer(width);
+struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(width);
 AllocVar(bwData);
 bwData->preDraw = pre->preDraw;
 bwData->scale = scale;

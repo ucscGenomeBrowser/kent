@@ -12,6 +12,35 @@
 #include "wigCommon.h"
 #include "hui.h"
 
+static void minMaxVals(struct slRef *refList, double *retMin, double *retMax)
+/* Figure out min/max of everything in list.  The refList contains pointers to
+ * preDrawContainers */
+{
+/* Turns out to be *much* shorter to rewrite than to reuse preDrawAutoScale */
+double max = -BIGDOUBLE, min = BIGDOUBLE;
+struct slRef *ref;
+for (ref = refList; ref != NULL; ref = ref->next)
+    {
+    struct preDrawContainer *pre;
+    for (pre = ref->val; pre != NULL; pre = pre->next)
+	{
+	struct preDrawElement *p = pre->preDraw + pre->preDrawZero;
+	int width = pre->width;
+	int i;
+	for (i=0; i<width; ++i)
+	    {
+	    if (p->count)
+		{
+		if (min > p->min) min = p->min;
+		if (max < p->max) max = p->max;
+		}
+	    ++p;
+	    }
+	}
+    }
+*retMax = max;
+*retMin = min;
+}
 
 static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
@@ -34,6 +63,42 @@ if (errMsgFound)
     {
     Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
     hvGfxBox(hvg, xOff, yOff, width, tg->height, yellow);
+    }
+
+/* Cope with autoScale - we do it here rather than in the child tracks, so that
+ * all children can be on same scale. */
+struct wigCartOptions *wigCart = tg->extraUiData;
+if (wigCart->autoScale)
+    {
+    /* Force load of all predraw arrays so can do calcs. Build up list, and then
+     * figure out max/min.  No worries about multiple loading, the loaders protect
+     * themselves. */
+    struct slRef *refList = NULL;
+    for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        {
+	struct preDrawContainer *pre = subtrack->loadPreDraw(subtrack, seqStart, seqEnd, width);
+	refAdd(&refList, pre);
+	}
+    double minVal, maxVal;
+    minMaxVals(refList, &minVal, &maxVal);
+    slFreeList(&refList);
+
+    /* Cope with log transform if need be */
+    if (wigCart->transformFunc == wiggleTransformFuncLog)
+         {
+	 minVal = wiggleLogish(minVal);
+	 maxVal = wiggleLogish(maxVal);
+	 }
+
+    /* Loop through again setting up the wigCarts of the children to have minY/maxY for
+     * our limits and autoScale off. */
+    for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        {
+	struct wigCartOptions *wigCart = subtrack->extraUiData;
+	wigCart->minY = minVal;
+	wigCart->maxY = maxVal;
+	wigCart->autoScale = wiggleScaleManual;
+	}
     }
 
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
