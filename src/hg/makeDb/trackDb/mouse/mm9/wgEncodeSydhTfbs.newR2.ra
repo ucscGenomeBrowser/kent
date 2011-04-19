@@ -71,7 +71,7 @@ wgEncode 1
     		type narrowPeak
     		color 153,38,0
 
-	        track wgEncodeSydhTfbsCh12P300IggrabPk
+	        track wgEncodeSydhTfbsCh12P300sc584IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel CH12 p300 Pk
                 longLabel CH12 p300 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
@@ -79,8 +79,9 @@ wgEncode 1
 	        type narrowPeak
 	        color 153,38,0
 	        # subId=1855 dateSubmitted=2010-07-08
+	        # was wgEncodeSydhTfbsCh12P300IggrabPk cricket Tue Apr 19 11:41:13 2011
 
-	        track wgEncodeSydhTfbsCh12CtcfIggyalePk
+	        track wgEncodeSydhTfbsCh12Ctcfsc15914IggyalePk
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel CH12 CTCF Pk
                 longLabel CH12 CTCF TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
@@ -88,6 +89,7 @@ wgEncode 1
 	        type narrowPeak
 	        color 153,38,0
 	        # subId=1858 dateSubmitted=2010-07-08
+	        # was wgEncodeSydhTfbsCh12CtcfIggyalePk cricket Tue Apr 19 11:41:12 2011
 
 	        track wgEncodeSydhTfbsCh12MaxIggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks off
@@ -125,7 +127,7 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=1863 dateSubmitted=2010-07-08
 
-	        track wgEncodeSydhTfbsMelP300IggrabPk
+	        track wgEncodeSydhTfbsMelP300sc584IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL p300 Pk
                 longLabel MEL p300 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
@@ -133,6 +135,7 @@ wgEncode 1
 	        type narrowPeak
 	        color 46,0,184
 	        # subId=1864 dateSubmitted=2010-07-08
+	        # was wgEncodeSydhTfbsMelP300IggrabPk cricket Tue Apr 19 11:41:13 2011
 
 	        track wgEncodeSydhTfbsMelUsf2IggmusPk
 	        parent wgEncodeSydhTfbsViewPeaks off
@@ -143,7 +146,7 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=1865 dateSubmitted=2010-07-08
 
-	        track wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
+	        track wgEncodeSydhTfbsMelCtcfsc15914Dmso20IggyalePk
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL CTCF D Pk
                 longLabel MEL CTCF 2% DMSO TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
@@ -151,6 +154,7 @@ wgEncode 1
 	        type narrowPeak
 	        color 46,0,184
 		# subId=3502 dateSubmitted=2011-02-03
+	        # was wgEncodeSydhTfbsMelCtcfDmso20IggyalePk cricket Tue Apr 19 11:41:12 2011
 
 	        track wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks off
@@ -179,7 +183,7 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=2543 dateSubmitted=2010-10-20
 
-	        track wgEncodeSydhTfbsMelCmybh141IggrabPk
+	        track wgEncodeSydhTfbsMelCmybsc7874IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL c-Myb Pk
                 longLabel MEL c-Myb_(SC-7874) TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
@@ -187,6 +191,7 @@ wgEncode 1
 	        type narrowPeak
 	        color 46,0,184
 	        # subId=2542 dateSubmitted=2010-10-27
+	        # was wgEncodeSydhTfbsMelCmybh141IggrabPk cricket Tue Apr 19 11:41:14 2011
 
         track wgEncodeSydhTfbsMelP300StdPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -540,7 +545,7 @@ wgEncode 1
     		type bigWig 1.000000 91713.000000
     		color 46,0,184
 
-	        track wgEncodeSydhTfbsCh12P300IggrabSig
+	        track wgEncodeSydhTfbsCh12P300sc584IggrabSig
 	        parent wgEncodeSydhTfbsViewSig 
 	        shortLabel CH12 p300 Sg
                 longLabel CH12 p300 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
@@ -548,8 +553,9 @@ wgEncode 1
 	        type bigWig 1.000000 106426.000000
 	        color 153,38,0
 	        # subId=1855 dateSubmitted=2010-07-08
+	        # was wgEncodeSydhTfbsCh12P300IggrabSig cricket Tue Apr 19 11:41:13 2011
 
-	        track wgEncodeSydhTfbsCh12CtcfIggyaleSig
+	        track wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleSig
 	        parent wgEncodeSydhTfbsViewSig 
 	        shortLabel CH12 CTCF Sg
                 longLabel CH12 CTCF TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
@@ -557,6 +563,7 @@ wgEncode 1
 	        type bigWig 1.000000 94966.000000
 	        color 153,38,0
 	        # subId=1858 dateSubmitted=2010-07-08
+	        # was wgEncodeSydhTfbsCh12CtcfIggyaleSig cricket Tue Apr 19 11:41:12 2011
 
 	        track wgEncodeSydhTfbsCh12MaxIggrabSig
 	        parent wgEncodeSydhTfbsViewSig off
@@ -594,7 +601,7 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=1863 dateSubmitted=2010-07-08
 
-	        track wgEncodeSydhTfbsMelP300IggrabSig
+	        track wgEncodeSydhTfbsMelP300sc584IggrabSig
 	        parent wgEncodeSydhTfbsViewSig 
 	        shortLabel MEL p300 Sg
                 longLabel MEL p300 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
@@ -602,6 +609,7 @@ wgEncode 1
 	        type bigWig 1.000000 93877.000000
 	        color 46,0,184
 	        # subId=1864 dateSubmitted=2010-07-08
+	        # was wgEncodeSydhTfbsMelP300IggrabSig cricket Tue Apr 19 11:41:14 2011
 
 	        track wgEncodeSydhTfbsMelUsf2IggmusSig
 	        parent wgEncodeSydhTfbsViewSig off
@@ -612,7 +620,7 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=1865 dateSubmitted=2010-07-08
 
-	        track wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
+	        track wgEncodeSydhTfbsMelCtcfsc15914Dmso20IggyaleSig
 	        parent wgEncodeSydhTfbsViewSig
 	        shortLabel MEL CTCF D Sg
                 longLabel MEL CTCF 2% DMSO TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
@@ -620,6 +628,7 @@ wgEncode 1
 	        type bigWig 1.000000 93856.000000
 	        color 46,0,184
 	        # subId=1857 dateSubmitted=2010-07-09
+	        # was wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig cricket Tue Apr 19 11:41:12 2011
 
 	        track wgEncodeSydhTfbsMelInputDmso20IggyaleSig
 	        parent wgEncodeSydhTfbsViewSig off
@@ -657,7 +666,7 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=2543 dateSubmitted=2010-10-20
 
-	        track wgEncodeSydhTfbsMelCmybh141IggrabSig
+	        track wgEncodeSydhTfbsMelCmybsc7874IggrabSig
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL c-Myb Sg
                 longLabel MEL c-Myb_(SC-7874) TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
@@ -665,6 +674,7 @@ wgEncode 1
 	        type bigWig 1.000000 106720.000000
 	        color 46,0,184
 	        # subId=2542 dateSubmitted=2010-10-27
+	        # was wgEncodeSydhTfbsMelCmybh141IggrabSig cricket Tue Apr 19 11:41:15 2011
 
         track wgEncodeSydhTfbsMelP300StdSig
         parent wgEncodeSydhTfbsViewSig off
