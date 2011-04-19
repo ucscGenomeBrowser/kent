@@ -4470,6 +4470,50 @@ subId 3830
 treatment None
 view RawData
 
+metaObject wgEncodeHaibMethylRrbsHsmmDukeSitesRep1
+objType table
+cell HSMM
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-09-29
+dateUnrestricted 2011-06-29
+fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep1.bedRrbs.gz
+geoSampleAccession GSM683818
+grant Myers
+lab HudsonAlpha
+labExpId SL939
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 2471
+tableName wgEncodeHaibMethylRrbsHsmmDukeSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHsmmDukeSitesRep2
+objType table
+cell HSMM
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-09-29
+dateUnrestricted 2011-06-29
+fileName wgEncodeHaibMethylRrbsHsmmDukeSitesRep2.bedRrbs.gz
+geoSampleAccession GSM683907
+grant Myers
+lab HudsonAlpha
+labExpId SL940
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 2471
+tableName wgEncodeHaibMethylRrbsHsmmDukeSitesRep2
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethylRrbsHsmmDukeSitesRep3
 objType table
 cell HSMM
@@ -4488,50 +4532,6 @@ project wgEncode
 replicate 3
 subId 3159
 tableName wgEncodeHaibMethylRrbsHsmmDukeSitesRep3
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHsmmSitesRep1
-objType table
-cell HSMM
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-09-29
-dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsHsmmSitesRep1.bedRrbs.gz
-geoSampleAccession GSM683818
-grant Myers
-lab HudsonAlpha
-labExpId SL939
-obtainedBy Duke
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 2471
-tableName wgEncodeHaibMethylRrbsHsmmSitesRep1
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHsmmSitesRep2
-objType table
-cell HSMM
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-09-29
-dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsHsmmSitesRep2.bedRrbs.gz
-geoSampleAccession GSM683907
-grant Myers
-lab HudsonAlpha
-labExpId SL940
-obtainedBy Duke
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 2471
-tableName wgEncodeHaibMethylRrbsHsmmSitesRep2
 treatment None
 view Sites
 
@@ -7750,4 +7750,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 1922812942
+# MAGIC: -1013197500

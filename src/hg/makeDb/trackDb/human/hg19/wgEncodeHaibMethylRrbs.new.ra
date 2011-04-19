@@ -1571,21 +1571,23 @@ visibility dense
      #   type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
-        track wgEncodeHaibMethylRrbsHsmmSitesRep2
+        track wgEncodeHaibMethylRrbsHsmmDukeSitesRep2
         parent wgEncodeHaibMethylRrbsViewSites off
         shortLabel HSMM 2
         longLabel HSMM Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites obtainedBy=Duke cellType=HSMM treatment=None rep=rep2
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
+        # was wgEncodeHaibMethylRrbsHsmmSitesRep2 cricket Tue Apr 19 09:02:15 2011
 
-        track wgEncodeHaibMethylRrbsHsmmSitesRep1
+        track wgEncodeHaibMethylRrbsHsmmDukeSitesRep1
         parent wgEncodeHaibMethylRrbsViewSites off
         shortLabel HSMM 1
         longLabel HSMM Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites obtainedBy=Duke cellType=HSMM treatment=None rep=rep1
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
+        # was wgEncodeHaibMethylRrbsHsmmSitesRep1 cricket Tue Apr 19 09:02:02 2011
 
         track wgEncodeHaibMethylRrbsProgfibSitesRep1
         parent wgEncodeHaibMethylRrbsViewSites off
