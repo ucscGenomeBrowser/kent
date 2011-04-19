@@ -432,4 +432,22 @@ CREATE TABLE ucscToEnsembl (
 -e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
 
 ############################################################################
+# lastz alignment with Human/hg19 (DONE - 2004-04-19 - Hiram)
+    #	the original alignment
+    cd /hive/data/genomes/hg19/bed/lastzAnoCar2.2011-04-19
+    cat fb.hg19.chainAnoCar2Link.txt 
+    #	102917023 bases of 2897316137 (3.552%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/anoCar2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/anoCar2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzAnoCar2.2011-04-19/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-syntenicNet -swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
+    #	real    20m45.683s
+    cat fb.anoCar2.chainHg19Link.txt 
+    #	88296392 bases of 1701353770 (5.190%) in intersection
+
+############################################################################
