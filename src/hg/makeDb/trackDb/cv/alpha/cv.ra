@@ -3497,7 +3497,7 @@ termId 7035
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
 color 153,38,0
 sex M
-protocol
+protocol UW(Stam):3134_Stam_protocol.pdf
 
 term 416B
 tag 416B
@@ -3545,7 +3545,7 @@ termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 153,38,0
 sex M
-protocol
+protocol UW(Stam):bCellCd19_Stam_protocol.pdf
 
 term BoneMarrow
 tag BMarrow
