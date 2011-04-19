@@ -486,4 +486,10 @@ nameTranslation 's/^\([0-9L]\)/chr\1/; s/^GL\([0-9][0-9]*\).1/chrUn_GL\1/; s/^A/
     featureBits anoCar2 ensGene
     # 27905138 bases of 1701353770 (1.640%) in intersection
 
+    hgsql -e \
+'update trackVersion set dateReference="current" where db="anoCar2" AND version=62;' hgFixed
+
+    hgsql -e \
+'update trackVersion set dateReference="feb2011" where db="anoCar2" AND version=61;' hgFixed
+
 ############################################################################
