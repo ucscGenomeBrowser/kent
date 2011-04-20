@@ -11,6 +11,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-03
 dateSubmitted 2010-01-24
 dateUnrestricted 2010-10-24
+dccAccession wgEncodeEH000001
+expId 1
 expVars lab, dataType
 fileName wgEncodeBuOrchidV1.bigWig
 grant Tullius
@@ -29,6 +31,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-03
 dateSubmitted 2010-01-24
 dateUnrestricted 2010-10-24
+dccAccession wgEncodeEH000001
+expId 1
 fileName wgEncodeBuOrchidV2.bigWig
 grant Tullius
 lab BU
@@ -38,4 +42,4 @@ subId 3118
 tableName wgEncodeBuOrchidV2
 view Signal
 
-# MAGIC: 212064145
+# MAGIC: -161955993
