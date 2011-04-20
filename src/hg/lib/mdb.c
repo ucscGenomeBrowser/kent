@@ -1916,7 +1916,7 @@ struct slPair *cvVars = NULL;
 for (el = elList; el != NULL; el = el->next)
     {
     struct hash *varHash = el->val;
-    if (includeHidden || SETTING_NOT_ON(hashFindVal(varHash, CV_TOT_HIDDEN))) // Skip the hidden ones
+    if (includeHidden || !cvTermIsHidden(el->name)) // Skip the hidden ones
         {
         char *priority = hashFindVal(varHash, CV_TOT_PRIORITY);
         if (priority != NULL) // If there is no priority it will randomly fall to the back of the list
@@ -2073,12 +2073,8 @@ struct dyString *dyRemoveVars = dyStringNew(256);
 
 for (el = elList; el != NULL; el = el->next)
     {
-    struct hash *varHash = el->val;
-    if (SETTING_IS_ON(hashFindVal(varHash, CV_TOT_HIDDEN)))
-        {
-        assert(cvSearchMethod(el->name) == cvNotSearchable);  // Good idea to assert but cv.ra is a user updatable file
+    if (cvTermIsHidden(el->name))
         dyStringPrintf(dyRemoveVars,"%s ",el->name);
-        }
     }
 hashElFreeList(&elList);
 
