@@ -2888,24 +2888,25 @@ while(mdbObjs != NULL)
                 int thisId = atoi(val);
                 if (expId == ENCODE_EXP_IX_UNDEFINED || thisId != expId)
                     {
-                    updateObj = TRUE;
-                    if (warn > 0)
-                        printf("           %s %s has bad %s=%s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,val);
+                    updateObj = TRUE;  // Always an error!
+                    printf("    ERROR  %s %s has bad %s=%s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,val);
                     }
                 else
                     {
                     char *acc = mdbObjFindValue(obj,MDB_VAR_DCC_ACCESSION); // FIXME: Add code to update accession to encodeExp
+                    if (updateAccession && !createExpIfNecessary && exp->accession == NULL)
+                        {
+                        exp->accession = needMem(16);
+                        safef(exp->accession, 16, "TEMP%06d", exp->ix); // Temporary since this is not an update but we want -test to work.
+                        }
                     if (exp->accession != NULL && (acc == NULL || differentString(acc,exp->accession)))
                         {
                         updateObj = TRUE;
-                        if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
-                            {
-                            if (acc == NULL)
-                                printf("           %s %s %s set, needs %s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION);
-                            else
-                                printf("           %s %s %s set, has wrong %s: %s.\n",experimentId,obj->obj,
-                                       MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION,exp->accession);
-                            }
+                        if (acc != NULL) // Always an error
+                            printf("    ERROR  %s %s %s set, has wrong %s: %s.\n",experimentId,obj->obj,
+                                    MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION,acc);
+                        else if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
+                            printf("           %s %s %s set, needs %s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION);
                         }
                     else
                         {

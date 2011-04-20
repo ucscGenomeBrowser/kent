@@ -331,7 +331,7 @@ if(mdbObjs != NULL)
             {
             boolean createExpIfNecessary = testIt ? FALSE : TRUE; // FIXME: When we are ready, this should allow creating an experiment in the hgFixed.encodeExp table
 
-            boolean updateAccession = (optionExists("accession") && createExpIfNecessary);
+            boolean updateAccession = (optionExists("accession"));
             struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,encodeExp,&mdbObjs,(verboseLevel() > 1? 1:0),createExpIfNecessary,updateAccession); // 1=warnings
             if (updatable == NULL)
                 verbose(1, "No Experiment ID updates were discovered in %d object(s).\n", slCount(mdbObjs));
