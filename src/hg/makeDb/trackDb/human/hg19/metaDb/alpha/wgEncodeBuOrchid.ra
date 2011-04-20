@@ -13,7 +13,6 @@ dateSubmitted 2010-01-24
 dateUnrestricted 2010-10-24
 dccAccession wgEncodeEH000001
 expId 1
-expVars lab, dataType
 fileName wgEncodeBuOrchidV1.bigWig
 grant Tullius
 lab BU
@@ -44,4 +43,4 @@ subId 3118
 tableName wgEncodeBuOrchidV2
 view Signal
 
-# MAGIC: -1447340129
+# MAGIC: 509686399
