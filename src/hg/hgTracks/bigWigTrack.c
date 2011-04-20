@@ -14,16 +14,19 @@
 #include "container.h"
 #include "bigWarn.h"
 
-static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis)
+struct preDrawContainer *bigWigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
+/* Do bits that load the predraw buffer tg->preDrawContainer. */
 {
+/* Just need to do this once... */
+if (tg->preDrawContainer != NULL)
+    return tg->preDrawContainer;
+
+struct preDrawContainer *preDrawList = NULL;
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     /* Allocate predraw area. */
-    struct preDrawContainer *preDrawList = NULL;
 
     /* Get summary info from bigWig */
     int summarySize = width;
@@ -54,28 +57,32 @@ if (errCatchStart(errCatch))
 		}
 	    }
 	}
-
-    /* Call actual graphing routine. */
-    wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-		   preDrawList, preDrawList->preDrawZero, preDrawList->preDrawSize, 
-		   &tg->graphUpperLimit, &tg->graphLowerLimit);
-
-    struct preDrawContainer *nextContain;
-    for(; preDrawList ; preDrawList = nextContain)
-	{
-	nextContain = preDrawList->next;
-	freeMem(preDrawList->preDraw);
-	freeMem(preDrawList);
-	}
     freeMem(summary);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
     tg->networkErrMsg = cloneString(errCatch->message->string);
-    bigDrawWarning(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
     }
 errCatchFree(&errCatch);
+tg->preDrawContainer = preDrawList;
+return preDrawList;
+}
+
+static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis)
+{
+struct preDrawContainer *pre = bigWigLoadPreDraw(tg, seqStart, seqEnd, width);
+if (tg->networkErrMsg == NULL)
+    {
+    /* Call actual graphing routine. */
+    wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+		   pre, pre->preDrawZero, pre->preDrawSize, 
+		   &tg->graphUpperLimit, &tg->graphLowerLimit);
+    }
+else
+    bigDrawWarning(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
 static void bigWigOpenCatch(struct track *tg, char *fileName)
@@ -128,4 +135,5 @@ void bigWigMethods(struct track *track, struct trackDb *tdb,
 bedGraphMethods(track, tdb, wordCount, words);
 track->loadItems = bigWigLoadItems;
 track->drawItems = bigWigDrawItems;
+track->loadPreDraw = bigWigLoadPreDraw;
 }

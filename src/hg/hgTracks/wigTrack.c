@@ -550,6 +550,7 @@ struct preDrawContainer *pre;
 AllocVar(pre);
 int size = pre->preDrawSize = width + 2*wiggleSmoothingMax;	
 pre->preDrawZero = wiggleSmoothingMax;
+pre->width = width;
 struct preDrawElement *preDraw = AllocArray(pre->preDraw, pre->preDrawSize);
 int i;
 for (i = 0; i < size; ++i)
@@ -561,15 +562,21 @@ for (i = 0; i < size; ++i)
 return pre;
 }
 
+double wiggleLogish(double x)
+/* Return log-like transform without singularity at 0. */
+{
+if (x >= 0)
+    return log(1+x);
+else
+    return -log(1-x);
+}
+
 static double doTransform(double x, enum wiggleTransformFuncEnum transformFunc)
 /* Do log-type transformation if asked. */
 {
 if (transformFunc == wiggleTransformFuncLog)
     {
-    if (x >= 0)
-	x = log(1+x);
-    else
-	x = -log(1-x);
+    x = wiggleLogish(x);
     }
 return x;
 }
@@ -691,10 +698,10 @@ double graphRange;
 
 if (autoScale == wiggleScaleAuto)
     {
-    int i;
+    int i, lastI = preDrawZero+width;
 
     /* reset limits for auto scale */
-    for (i = preDrawZero; i < preDrawZero+width; ++i)
+    for (i = preDrawZero; i < lastI; ++i)
 	{
 	/*	count is non-zero meaning valid data exists here	*/
 	if (preDraw[i].count)
@@ -719,20 +726,28 @@ if (autoScale == wiggleScaleAuto)
 	    {
 	    *graphUpperLimit = *overallUpperLimit;
 	    *graphLowerLimit = 0.0;
-	    } else if (*overallUpperLimit < 0.0) {
+	    } 
+	else if (*overallUpperLimit < 0.0) 
+	    {
 	    *graphUpperLimit = 0.0;
 	    *graphLowerLimit = *overallUpperLimit;
-	    } else {
+	    } 
+	else 
+	    {
 	    *graphUpperLimit = 1.0;
 	    *graphLowerLimit = -1.0;
 	    }
-	} else {
+	} 
+    else 
+        {
 	*graphUpperLimit = *overallUpperLimit;
 	*graphLowerLimit = *overallLowerLimit;
 	}
-    } else {
-	*graphUpperLimit = maxY;
-	*graphLowerLimit = minY;
+    } 
+else 
+    {
+    *graphUpperLimit = maxY;
+    *graphLowerLimit = minY;
     }
 graphRange = *graphUpperLimit - *graphLowerLimit;
 *epsilon = graphRange / lineHeight;
@@ -1185,13 +1200,11 @@ for(preContainer = preDrawList; preContainer; preContainer = preContainer->next)
 	}
     }
 
-
 overallRange = overallUpperLimit - overallLowerLimit;
 graphRange = graphUpperLimit - graphLowerLimit;
 epsilon = graphRange / tg->lineHeight;
 struct preDrawElement *preDraw = preDrawList->preDraw;
-colorArray = makeColorArray(preDraw, width, preDrawZero,
-    wigCart, tg, hvg);
+colorArray = makeColorArray(preDraw, width, preDrawZero, wigCart, tg, hvg);
 
 /* now draw all the containers */
 for(preContainer = preDrawList; preContainer; preContainer = preContainer->next)
@@ -1221,8 +1234,12 @@ if (retGraphLowerLimit != NULL)
 }
 
 struct preDrawContainer *wigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
-/* Do bits that load the predraw buffer tg->preDraw and also preDrawSize and preDrawZero. */
+/* Do bits that load the predraw buffer tg->preDrawContainer. */
 {
+/* Just need to do this once... */
+if (tg->preDrawContainer)
+    return tg->preDrawContainer;
+
 struct wigItem *wi;
 double pixelsPerBase = scaleForPixels(width);
 double basesPerPixel = 1.0;
@@ -1632,6 +1649,7 @@ track->mapsSelf = TRUE;
 track->extraUiData = (void *) wigCart;
 track->colorShades = shadesOfGray;
 track->drawLeftLabels = wigLeftLabels;
+track->loadPreDraw = wigLoadPreDraw;
 /*	the lfSubSample type makes the image map function correctly */
 track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 

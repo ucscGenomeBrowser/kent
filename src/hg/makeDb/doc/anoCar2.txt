@@ -451,3 +451,45 @@ CREATE TABLE ucscToEnsembl (
     #	88296392 bases of 1701353770 (5.190%) in intersection
 
 ############################################################################
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("anoCar2", "blat2", "17780", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("anoCar2", "blat2", "17781", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+#########################################################################
+## Default position set at LFNG (DONE - 2011-04-19 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr5:23430070-23476097"
+	where name="anoCar2";' hgcentraltest
+
+#########################################################################
+#  anoCar2 - Lizard - Ensembl Genes version 62 (DONE - 2011-04-19 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2
+    cat << '_EOF_' > anoCar2.ensGene.ra
+# required db variable
+db anoCar2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation 's/^\([0-9L]\)/chr\1/; s/^GL\([0-9][0-9]*\).1/chrUn_GL\1/; s/^A/chrUn_A/'
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=62 anoCar2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2/bed/ensGene.62
+    featureBits anoCar2 ensGene
+    # 27905138 bases of 1701353770 (1.640%) in intersection
+
+    hgsql -e \
+'update trackVersion set dateReference="current" where db="anoCar2" AND version=62;' hgFixed
+
+    hgsql -e \
+'update trackVersion set dateReference="feb2011" where db="anoCar2" AND version=61;' hgFixed
+
+############################################################################
