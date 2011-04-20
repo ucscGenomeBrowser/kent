@@ -158,7 +158,7 @@ struct track
     float scaleRange;             /* What to scale samples by to get logical 0-1 */
     double graphUpperLimit, graphLowerLimit;	/* Limits of actual data in window for wigs. */
     struct preDrawContainer *preDrawContainer;  /* Numbers to graph in wig, one per pixel */
-    void (*wigLoadPreDraw)(struct track *tg, int seqStart, int seqEnd, int width);  
+    struct preDrawContainer *(*loadPreDraw)(struct track *tg, int seqStart, int seqEnd, int width);  
     /* Do bits that load the predraw buffer.  Called to set preDrawContainer */
 
     struct bbiFile *bbiFile;	/* Associated bbiFile for bigWig or bigBed. */
