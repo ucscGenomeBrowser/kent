@@ -2828,8 +2828,10 @@ while(mdbObjs != NULL)
         char experimentId[128];
         int expId = ENCODE_EXP_IX_UNDEFINED;
         struct encodeExp *exp = encodeExpGetByMdbVarsFromTable(db, edvVarVals, expTable);
-        if (exp == NULL && createExpIfNecessary)
-            exp = encodeExpGetOrCreateByMdbVarsFromTable(db, edvVarVals, expTable);
+        // --------- BLOCK creation of expIds, at least during rollout of encodeExp
+        // BLOCKED if (exp == NULL && createExpIfNecessary)
+        // BLOCKED     exp = encodeExpGetOrCreateByMdbVarsFromTable(db, edvVarVals, expTable);
+        // --------- BLOCK creation of expIds, at least during rollout of encodeExp
         mdbVarsFree(&edvVarVals); // No longer needed
 
         // Make sure the accession is set if requested.
