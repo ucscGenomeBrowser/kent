@@ -27,7 +27,6 @@ noInherit on
     type bigWig -1 2 
 
         track wgEncodeBuOrchidV1
-        release alpha
         parent wgEncodeBuOrchidSignalView
         shortLabel ORChID V1
         longLabel OH Radical Cleavage Intensity Database (ORChID) V1 from ENCODE/Boston Univ
@@ -36,7 +35,6 @@ noInherit on
         # subId=3118 dateSubmitted=2011-01-03
 
         track wgEncodeBuOrchidV2
-        release alpha
         parent wgEncodeBuOrchidSignalView
         shortLabel ORChID V2
         longLabel OH Radical Cleavage Intensity Database (ORChID) V2 from ENCODE/Boston Univ
