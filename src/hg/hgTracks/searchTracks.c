@@ -34,11 +34,6 @@
 
 #define SUPPORT_QUOTES_IN_NAME_SEARCH
 
-//#define FILES_SEARCH
-#ifdef FILES_SEARCH
-    #define FILE_SEARCH_ON_FILETYPE "tsFileType"
-#endif///def FILES_SEARCH
-
 static int gCmpGroup(const void *va, const void *vb)
 /* Compare groups based on label. */
 {
@@ -603,9 +598,6 @@ groups[0] = ANYLABEL;
 labels[0] = ANYLABEL;
 char *nameSearch = cartOptionalString(cart, TRACK_SEARCH_ON_NAME);
 char *typeSearch = cartOptionalString(cart, TRACK_SEARCH_ON_TYPE);
-#ifdef FILES_SEARCH
-char *fileTypeSearch = cartOptionalString(cart, FILE_SEARCH_ON_FILETYPE);
-#endif///def FILES_SEARCH
 char *descSearch = NULL;
 char *groupSearch = cartOptionalString(cart, TRACK_SEARCH_ON_GROUP);
 boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search") || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
@@ -633,13 +625,6 @@ else if(sameString(currentTab, "advancedTab"))
     selectedTab = advancedTab;
     descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
     }
-#ifdef FILES_SEARCH
-else if(sameString(currentTab, "filesTab"))
-    {
-    selectedTab = filesTab;
-    descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
-    }
-#endif///def FILES_SEARCH
 
 #ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
 if(descSearch && selectedTab == simpleTab) // TODO: could support quotes in simple tab by detecting quotes and choosing to use doesNameMatch() || doesDescriptionMatch()
@@ -691,9 +676,6 @@ hPrintf("<div id='tabs' style='display:none; %s'>\n"
         "<ul>\n"
         "<li><a href='#simpleTab'><B style='font-size:.9em;font-family: arial, Geneva, Helvetica, san-serif;'>Search</B></a></li>\n"
         "<li><a href='#advancedTab'><B style='font-size:.9em;font-family: arial, Geneva, Helvetica, san-serif;'>Advanced</B></a></li>\n"
-#ifdef FILES_SEARCH
-        "<li><a href='#filesTab'><B style='font-size:.9em;font-family: arial, Geneva, Helvetica, san-serif;'>Files</B></a></li>\n"
-#endif///def FILES_SEARCH
         "</ul>\n"
         "<div id='simpleTab' style='max-width:inherit;'>\n",cgiBrowser()==btIE?"width:1060px;":"max-width:inherit;");
 
@@ -779,79 +761,6 @@ hPrintf("<input type='submit' name='submit' value='cancel' class='cancel' style=
 //hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
 hPrintf("</div>\n");
 
-#ifdef FILES_SEARCH
-// Files tab
-hPrintf("<div id='filesTab' style='width:inherit;'>\n"
-        "<table id='filesTable' cellSpacing=0 style='width:inherit; font-size:.9em;'>\n");
-cols = 8;
-
-//// Track Name contains
-//hPrintf("<tr><td colspan=3></td>");
-//hPrintf("<td nowrap><b style='max-width:100px;'>Track&nbsp;Name:</b></td>");
-//hPrintf("<td align='right'>contains</td>\n");
-//hPrintf("<td colspan='%d'>", cols - 4);
-//hPrintf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:326px; font-size:.9em;'>",
-//        TRACK_SEARCH_ON_NAME, nameSearch == NULL ? "" : nameSearch);
-//hPrintf("</td></tr>\n");
-//
-//// Description contains
-//hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>");
-//hPrintf("<td><b style='max-width:100px;'>Description:</b></td>");
-//hPrintf("<td align='right'>contains</td>\n");
-//hPrintf("<td colspan='%d'>", cols - 4);
-//hPrintf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:536px; width:536px; font-size:.9em;'>",
-//        TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
-//hPrintf("</td></tr>\n");
-//if (selectedTab==fileTab && descSearch)
-//    searchTermsExist = TRUE;
-//
-//hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
-//hPrintf("<td><b style='max-width:100px;'>Group:</b></td>");
-//hPrintf("<td align='right'>is</td>\n");
-//hPrintf("<td colspan='%d'>", cols - 4);
-//cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch, "class='groupSearch' style='min-width:40%; font-size:.9em;'");
-//hPrintf("</td></tr>\n");
-//if (selectedTab==fileTab && groupSearch)
-//    searchTermsExist = TRUE;
-
-// Track Type is (drop down)
-hPrintf("<tr><td colspan=2></td><td align='right'>&nbsp;</td>\n");
-//hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n"); // Bring back "and" if using "Track Name,Description or Group
-hPrintf("<td nowrap><b style='max-width:100px;'>Data Format:</b></td>");
-hPrintf("<td align='right'>is</td>\n");
-hPrintf("<td colspan='%d'>", cols - 4);
-char *dropDownHtml = fileFormatSelectHtml(FILE_SEARCH_ON_FILETYPE,fileTypeSearch,"style='min-width:40%; font-size:.9em;'");
-if (dropDownHtml)
-    {
-    puts(dropDownHtml);
-    freeMem(dropDownHtml);
-    }
-hPrintf("</td></tr>\n");
-if (selectedTab==filesTab && fileTypeSearch)
-    searchTermsExist = TRUE;
-
-// mdb selects
-if(metaDbExists)
-    {
-    struct slPair *mdbVars = mdbVarsSearchable(conn,TRUE,FALSE); // Tables but not file only objects
-    mdbSelects = mdbSelectPairs(cart,selectedTab, mdbVars);
-    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,colsFALSE);  // not a fileSearch
-    if (output)
-        {
-        puts(output);
-        freeMem(output);
-        }
-    slPairFreeList(&mdbVars);
-    }
-
-hPrintf("</table>\n");
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", TRACK_SEARCH);
-hPrintf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
-hPrintf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
-//hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
-hPrintf("</div>\n");
-
-#endif///def FILES_SEARCH
 hPrintf("</div>\n");
 
 hPrintf("</form>\n");
@@ -895,10 +804,6 @@ if(doSearch)
         tracks = simpleSearchForTracksstruct(trix,descWords,descWordCount);
     else if(selectedTab==advancedTab)
         tracks = advancedSearchForTracks(conn,groupList,descWords,descWordCount,nameSearch,typeSearch,descSearch,groupSearch,mdbSelects);
-#ifdef FILES_SEARCH
-    else if(selectedTab==filesTab && mdbSelects != NULL)
-        fileSearchResults(database, conn, mdbSelects, fileTypeSearch);
-#endif///def FILES_SEARCH
 
     if (measureTiming)
         uglyTime("Searched for tracks");

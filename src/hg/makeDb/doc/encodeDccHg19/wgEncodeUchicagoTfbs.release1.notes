@@ -14,7 +14,7 @@ D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
     Tables: 12
-    Files: 84
+    Files: 99
     Gbdbs: 6
 
 A) Untouched Tables (0):
@@ -39,7 +39,7 @@ wgEncodeUchicagoTfbsK562EjundControlSig
 wgEncodeUchicagoTfbsK562Enr4a1ControlPk
 wgEncodeUchicagoTfbsK562Enr4a1ControlSig
 
-C') New files (81 downloadables, 6 gbdbs):
+C') New files (96 downloadables, 6 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/
     NOT on RR but must be placed in:
@@ -99,32 +99,47 @@ C') New files (81 downloadables, 6 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1AlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1AlnRep2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlfosAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlfosAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlfosAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlfosAlnRep2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlfosAlnRep3.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlfosAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlfosRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlfosRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlfosRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlgata2AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlgata2AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlgata2AlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlgata2AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlgata2RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlgata2RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlhdac8AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlhdac8AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlhdac8AlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlhdac8AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlhdac8RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlhdac8RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljunbAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljunbAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljunbAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljunbAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljunbRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljunbRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljundAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljundAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljundAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljundAlnRep2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljundAlnRep3.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljundAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljundRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljundRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControljundRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlnr4a1AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlnr4a1AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlnr4a1AlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlnr4a1AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlnr4a1RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/release1/wgEncodeUchicagoTfbsK562InputControlnr4a1RawDataRep2.fastq.gz
 
 /gbdb/hg19/bbi/wgEncodeUchicagoTfbsK562EfosControlSig.bigWig

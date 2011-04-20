@@ -2615,3 +2615,56 @@ http://genome.wustl.edu/pub/organism/Primates/Callithrix_jacchus/end_sequences/m
     ln -s /hive/data/genomes/calJac3/bed/liftOver/calJac3ToHg18.over.chain.gz .
 
 ############################################################################
+# construct ucscToEnsembl chrom name translation (2011-04-20 - Hiram)
+    # the Ensembl genes v62 have new chrom names, construct translation:
+    mkdir /hive/data/genomes/calJac3/bed/ucscToEnsembl
+    cd /hive/data/genomes/calJac3/bed/ucscToEnsembl
+
+zcat ../ensGene.62/download/Callithrix_jacchus.C_jacchus3.2.1.62.gtf.gz \
+    | awk '{print $1}' | sort -u \
+        | sed -e 's/^\([0-9XY][0-9]*\)/chr\1/; s/\.1$//;' | sort > t.t
+
+cat t.t | while read C
+do
+    WC=`grep "${C}" ../../chrom.sizes | wc -l`
+    EN=`echo ${C} | sed -e "s/^chr//; s/^\(ACFV.*\)/\1.1/; s/^\(GL.*\)/\1.1/;"`
+    if [ "${WC}" -eq 1 ]; then
+        UCSC=`grep "${C}" ../../chrom.sizes | awk '{print $1}'`
+        echo -e "${UCSC}\t${EN}"
+    else
+        WC=`egrep "^${C}        " ../../chrom.sizes | wc -l`
+        if [ "${WC}" -eq 1 ]; then
+            UCSC=`egrep "^${C}  " ../../chrom.sizes | awk '{print $1}'`
+            echo -e "${UCSC}\t${EN}"
+        else
+            echo "ERROR: one only not found for: ${C} - ${WC}"
+        fi
+    fi
+done | sort > ensemblGenes.tab
+
+cut -f1 ensemblGenes.tab | sort > ucsc.done.list
+cut -f1 ../../chrom.sizes | sort > ucsc.all.list
+
+comm -13 ucsc.done.list ucsc.all.list | while read UCSC
+do
+    EN=`echo $UCSC | sed -e 's/^chr[0-9XYU][n0-9]*_//; s/_random//; s/$/.1/'`
+    echo -e "${UCSC}\t${EN}"
+done > noEnsemblGenes.tab
+
+sort ensemblGenes.tab noEnsemblGenes.tab > ucscToEnsembl.tab
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(21))
+);
+'_EOF_'
+
+    hgsql calJac3 < ucscToEnsembl.sql
+    hgsql calJac3 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+############################################################################

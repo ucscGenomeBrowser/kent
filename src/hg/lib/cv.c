@@ -6,6 +6,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
+#include "hdb.h"
 #include "ra.h"
 #include "hui.h"
 #include "mdb.h"
@@ -46,8 +47,8 @@ return sloppyTerm;
 }
 
 char *cvLabNormalize(char *sloppyTerm)
-/* CV inconsistency work-arounds.  Return lab name trimmed of parenthesized trailing 
- * info (a few ENCODE labs have this in metaDb and/or in CV term -- 
+/* CV inconsistency work-arounds.  Return lab name trimmed of parenthesized trailing
+ * info (a few ENCODE labs have this in metaDb and/or in CV term --
  * PI name embedded in parens in the CV term).  Also fixes other problems until
  * cleaned up in CV, metaDb and user processes.  Caller must free mem. */
 {
@@ -139,6 +140,32 @@ if (cvHashOfTermTypes == NULL)
 return cvHashOfTermTypes;
 }
 
+static boolean cvHiddenIsTrue(char *setting)
+// returns TRUE if hidden setting passed in is true for this browser
+{
+if (setting != NULL)
+    {
+    if (sameWord(setting,"yes") || sameWord(setting,"on") || sameWord(setting,"true"))
+        return TRUE;
+    if (hIsPrivateHost() || hIsPreviewHost())
+        {
+        if (strstrNoCase(setting,"alpha"))
+            return TRUE;
+        }
+    else if (hIsBetaHost())
+        {
+        if (strstrNoCase(setting,"beta"))
+            return TRUE;
+        }
+    else // RR and everyone else
+        {
+        if (strstrNoCase(setting,"public"))
+            return TRUE;
+        }
+    }
+return FALSE;
+}
+
 struct slPair *cvWhiteList(boolean searchTracks, boolean cvDefined)
 // returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
 // TODO: change to return struct that includes searchable!
@@ -156,7 +183,7 @@ while ((hEl = hashNext(&hc)) != NULL)
     //if (!includeHidden)
         {
         setting = hashFindVal(typeHash,CV_TOT_HIDDEN);
-        if(SETTING_IS_ON(setting))
+        if (cvHiddenIsTrue(setting))
             continue;
         }
     if (searchTracks)
@@ -226,3 +253,17 @@ if (termHash != NULL)
     }
 return term;
 }
+
+boolean cvTermIsHidden(char *term)
+// returns TRUE if term is defined as hidden in cv.ra
+{
+struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
+struct hash *termHash = hashFindVal(termTypeHash,term);
+if (termHash != NULL)
+    {
+    char *setting = hashFindVal(termHash,CV_TOT_HIDDEN);
+    return cvHiddenIsTrue(setting);
+    }
+return FALSE;
+}
+

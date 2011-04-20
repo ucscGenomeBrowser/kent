@@ -1412,7 +1412,10 @@ boolean startsWithWordByDelimiter(char *firstWord,char delimit, char *line)
 {
 if(delimit == ' ')
     return startsWithWord(firstWord,line);
-return (startsWith(firstWord,line) && line[strlen(firstWord)] == delimit);
+if (!startsWith(firstWord,line))
+    return FALSE;
+char c = line[strlen(firstWord)];
+return (c == '\0' || c == delimit);
 }
 
 char * findWordByDelimiter(char *word,char delimit, char *line)
