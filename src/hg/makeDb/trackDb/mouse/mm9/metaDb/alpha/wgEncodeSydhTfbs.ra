@@ -453,7 +453,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleAlnRep1.bam
 grant Snyder
 lab Stanford-m
@@ -478,7 +477,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsCh12Ctcfsc15914IggyaleAlnRep2.bam
 grant Snyder
 lab Stanford-m
@@ -1035,7 +1033,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
@@ -1060,7 +1057,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
@@ -1329,7 +1325,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
@@ -1354,7 +1349,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
@@ -1769,7 +1763,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
@@ -1794,7 +1787,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
@@ -2209,7 +2201,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam
 grant Snyder
 lab Stanford-m
@@ -2234,7 +2225,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam
 grant Snyder
 lab Stanford-m
@@ -2945,7 +2935,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhTfbsMelCtcfsc15914Dmso20IggyaleAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMelCtcfsc15914Dmso20IggyaleAlnRep1.bam
 grant Snyder
 lab Stanford-m
@@ -2970,7 +2959,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhTfbsMelCtcfsc15914Dmso20IggyaleAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMelCtcfsc15914Dmso20IggyaleAlnRep2.bam
 grant Snyder
 lab Stanford-m
@@ -3094,7 +3082,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileIndex wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
@@ -3119,7 +3106,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileIndex wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
@@ -3388,7 +3374,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhTfbsMelInputDmso20IggyaleAln.bam.bai
 fileName wgEncodeSydhTfbsMelInputDmso20IggyaleAln.bam
 grant Snyder
 lab Stanford-m
@@ -3719,7 +3704,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
-fileIndex wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
@@ -3744,7 +3728,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
-fileIndex wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
@@ -3867,7 +3850,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelMaxIggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
@@ -3892,7 +3874,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelMaxIggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
@@ -4457,7 +4438,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelP300sc584IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMelP300sc584IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
@@ -4482,7 +4462,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelP300sc584IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMelP300sc584IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
@@ -5344,7 +5323,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam
 grant Snyder
 lab Stanford-m
@@ -5369,7 +5347,6 @@ dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam
 grant Snyder
 lab Stanford-m
@@ -5480,4 +5457,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 1928971525
+# MAGIC: -1730802026

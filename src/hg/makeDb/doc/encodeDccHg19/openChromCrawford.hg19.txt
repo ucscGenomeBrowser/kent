@@ -3935,3 +3935,197 @@ wigToBigWig allChrs_35_freq.wig /hive/data/genomes/hg19/chrom.sizes wgEncodeDuke
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3242 released
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3271 released
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3272 released
+
+2011-03-18 Resume attempting to load Mapability
+===============================================
+# In Terry's ftp dir, made bigwigs
+# No move everything there to make an archive
+# Mock up a DAF/DDF.  Of course I expect submission to fail so errors don't matter much
+
+tar -czf dukeExtras.tgz dukeExtraTracks.daf dukeExtraTracks.ddf ucsc/dukeUnique20.bw ucsc/dukeUnique35.bw dukeExcludeRegions.bed
+
+2011-03-28 Document what went down for validation by experiment docs
+====================================================================
+Terry submitted one tar and then we agreed upon a format: tar of tars submibmitted as downloadOnly view to sort with exp in downloads dir.
+Terry resubmitted: 3829, 3831, 3832
+### Problem: all the *.tgz's were converted to *.doc.gz by pipeline
+# Would be good to fix pipline before Terry submits more.
+Manually
+1) renamed all to *.tgz/gz
+2) gunzipped to *.tgz
+3) edited mdb.txt
+# loaded mdb, rebuilt index.html: tgzs show up as they ought!
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3829 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3829 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3831 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3831 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3832 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3832 approved
+
+2011-03-29 Resume attempting to load Mapability (again)
+=======================================================
+# submitted 3840
+# took a few rounds to get the daf/ddf right
+cd out
+mdbUpdate hg19 mdb.txt
+e trackDb.ra
+# make a wgEncodeMapability.new.ra and wgEncodeMapability.new.html
+
+# standardize this as if a normal Terry submission:
+select id,name,status,user_id from projects where id = 3840;
+| 3840 | uniqTest | loaded |       9 | 
+update projects set name = "DNCT Uniqueness and Excluded 2011-03-28" where id = 3840;
+update projects set user_id = 17 where id = 3840;
+
+select id,name,status,user_id from projects where id = 3840;
++------+-----------------------------------------+--------+---------+
+| id   | name                                    | status | user_id |
++------+-----------------------------------------+--------+---------+
+| 3840 | DNCT Uniqueness and Excluded 2011-03-28 | loaded |      17 | 
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3840 displayed
+
+ 
+2011-04-20 Experimentify
+========================
+cd trackDb/human/hg19/metaDb/alpha
+
+mdbPrint hg19 -composite=%OpenChromCh% -experimentify > tmp.txt
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+objects:278  vars:5459
+
+Experiment 1128 has 2 objects based upon 4 EDVs: [lab=UT-A dataType=ChipSeq cell=Fibrobl treatment=None antibody=Input].
+           1128 wgEncodeOpenChromChipFibroblInputAln needs updating to mdb.
+           1128 wgEncodeOpenChromChipFibroblInputSig needs updating to mdb.
+           1128 all 2 objects are missing an expId.
+           No fastq
+### Modeled?
+Experiment 593 has 2 objects based upon 4 EDVs: [lab=UT-A dataType=ChipSeq cell=ProgFib treatment=None antibody=Input].
+           593 wgEncodeOpenChromChipProgfibInputAln needs updating to mdb.
+           593 wgEncodeOpenChromChipProgfibInputSig needs updating to mdb.
+           593 all 2 objects are missing an expId.
+           No fastq
+### Modeled?
+Experiment 599 has 2 objects based upon 4 EDVs: [lab=UT-A dataType=ChipSeq cell=MCF-7 treatment=None antibody=c-Myc].
+           599 wgEncodeOpenChromChipMcf7CmycRawDataRep1 needs updating to mdb.
+           599 wgEncodeOpenChromChipMcf7CmycRawDataRep2 needs updating to mdb.
+           599 all 2 objects are missing an expId.
+           2 fastq's and also Estro and Veh exps.
+### Extras, but no related           
+           
+mdbUpdate hg19 -composite=%OpenChromCh% -encodeExp=std -test    
+Composite 'wgEncodeOpenChromChip' has 46 recognizable experiments with 46 missing an expId.
+   objects/experiment: min:2  max:10  mean:6.021739.
+Found 277 of 278 object(s) would have their experiment ID updated.
+Command would affected 492 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromCh% -encodeExp=std      
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromChip' has 46 recognizable experiments with 46 missing an expId.
+   objects/experiment: min:2  max:10  mean:6.021739.
+Affected 492 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromCh% -encodeExp=std -accession -test
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromChip' has 46 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:2  max:10  mean:6.021739.
+Found 62 of 278 object(s) would have their experiment ID updated.
+Command would affected 62 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromCh% -encodeExp=std -accession      
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromChip' has 46 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:2  max:10  mean:6.021739.
+Affected 62 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -composite=wgEncodeOpenChromChip > wgEncodeOpenChromChip.ra
+
+gold wgEncodeOpenChromChip.ra
+
+mdbPrint hg19 -composite=%OpenChromDnase -experimentify > tmp.txt
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+objects:329  vars:5997
+           
+mdbUpdate hg19 -composite=%OpenChromDnase -encodeExp=std -test    
+Composite 'wgEncodeOpenChromDnase' has 47 recognizable experiments with 47 missing an expId.
+   objects/experiment: min:5  max:14  mean:6.978723.
+Found 328 of 329 object(s) would have their experiment ID updated.
+Command would affected 519 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromDnase -encodeExp=std      
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromDnase' has 47 recognizable experiments with 47 missing an expId.
+   objects/experiment: min:5  max:14  mean:6.978723.
+Affected 519 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromDnase -encodeExp=std -accession -test
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromDnase' has 47 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:5  max:14  mean:6.978723.
+Found 137 of 329 object(s) would have their experiment ID updated.
+Command would affected 137 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromDnase -encodeExp=std -accession      
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromDnase' has 47 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:5  max:14  mean:6.978723.
+Affected 137 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -composite=wgEncodeOpenChromDnase > wgEncodeOpenChromDnase.ra
+
+gold wgEncodeOpenChromDnase.ra
+
+mdbPrint hg19 -composite=%OpenChromFaire -experimentify > tmp.txt
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+objects:182  vars:3215
+           
+mdbUpdate hg19 -composite=%OpenChromFaire -encodeExp=std -test    
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromFaire' has 25 recognizable experiments with 25 missing an expId.
+   objects/experiment: min:5  max:10  mean:7.240000.
+Found 181 of 182 object(s) would have their experiment ID updated.
+Command would affected 276 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromFaire -encodeExp=std      
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromFaire' has 25 recognizable experiments with 25 missing an expId.
+   objects/experiment: min:5  max:10  mean:7.240000.
+Affected 276 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromFaire -encodeExp=std -accession -test
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromFaire' has 25 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:5  max:10  mean:7.240000.
+Found 86 of 182 object(s) would have their experiment ID updated.
+Command would affected 86 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromFaire -encodeExp=std -accession      
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromFaire' has 25 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:5  max:10  mean:7.240000.
+Affected 86 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -composite=wgEncodeOpenChromFaire > wgEncodeOpenChromFaire.ra
+Using table named 'hg19.metaDb_tdreszer'.
+objects:182  vars:3577
+
+gold wgEncodeOpenChromFaire.ra
+
+gold, gadd, gci, gup,gpush
+
+
+

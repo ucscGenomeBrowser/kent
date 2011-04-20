@@ -2475,7 +2475,7 @@ view RawSignal
 
 metaObject wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep2
 objType file
-0 adult-8wks
+age adult-8wks
 cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -3465,4 +3465,4 @@ tableName wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep2
 tissueSourceType Individual
 view RawSignal
 
-# MAGIC: -1279226572
+# MAGIC: -1279224302
