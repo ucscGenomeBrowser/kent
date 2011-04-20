@@ -135,8 +135,12 @@ wigDebugPrint("bedGraphFreeItems");
 }
 
 struct preDrawContainer *bedGraphLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
-/* Do bits that load the predraw buffer tg->preDraw and also preDrawSize and preDrawZero. */
+/* Do bits that load the predraw buffer tg->preDrawContainer. */
 {
+/* Just need to do this once... */
+if (tg->preDrawContainer)
+    return tg->preDrawContainer;
+
 struct bedGraphItem *wi;
 double pixelsPerBase = scaleForPixels(width);
 double basesPerPixel = 1.0;
@@ -272,6 +276,7 @@ track->mapsSelf = TRUE;
 track->extraUiData = (void *) wigCart;
 track->colorShades = shadesOfGray;
 track->drawLeftLabels = wigLeftLabels;
+track->loadPreDraw = bedGraphLoadPreDraw;
 /*	the lfSubSample type makes the image map function correctly */
 track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 

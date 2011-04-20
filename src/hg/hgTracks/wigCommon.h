@@ -42,6 +42,7 @@ struct preDrawContainer
     int preDrawSize;		/* Size of preDraw */
     int preDrawZero;		/* Offset from start of predraw array to data requested.  We
                                  * get more because of smoothing */
+    int width;			/* Passed in width, number of pixels to display without smooth */
     };
 
 struct preDrawElement
@@ -141,6 +142,9 @@ void wigLeftAxisLabels(struct track *tg, int seqStart, int seqEnd,
 	enum trackVisibility vis, char *shortLabel, double graphUpperLimit, double graphLowerLimit,
 	boolean showNumbers);
 /* Draw labels on left for a wiggle-type track. */
+
+double wiggleLogish(double x);
+/* Return log-like transform without singularity at 0. */
 
 /******************  in source file bedGraph.c ************************/
 void wigBedGraphFindItemLimits(void *items,
