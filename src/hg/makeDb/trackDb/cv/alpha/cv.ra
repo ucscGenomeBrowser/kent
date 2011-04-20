@@ -9529,7 +9529,7 @@ label UCSC Accession
 description The accession number provided by the UCSC Genome Browser.
 searchable freeText
 cvDefined no
-validate regex: ^wgEncode[H,E][0-9]*$
+validate regex: ^wgEncodeE[H,E][0-9]*$
 priority 312
 
 term dccInternalNotes
