@@ -44,7 +44,7 @@ static struct optionSpec options[] = {
 };
 
 
-/* Program first reads in patchs to list of raPatches.  Then it creates a list of filePatches 
+/* Program first reads in patchs to list of raPatches.  Then it creates a list of filePatches
  * so that it can do all patches in one pile at once. */
 
 struct raPatch
@@ -57,7 +57,7 @@ struct raPatch
     struct slPair *tagList;	/* List of tags to merge in. */
     };
 
-struct fileToPatch 
+struct fileToPatch
 /* A file needing patching */
     {
     struct fileToPatch *next;
@@ -70,7 +70,7 @@ int glPatchFieldAddCount = 0;
 int glPatchRecordCount = 0;
 
 struct fileToPatch *groupPatchesByFiles(struct raPatch *patchList, boolean firstFile)
-/* Make fileToPatch list that covers all files in patchList. If lastFile is set will apply patch to first (as 
+/* Make fileToPatch list that covers all files in patchList. If lastFile is set will apply patch to first (as
  * opposed to the usual last) file in list of files  associated with a patch. */
 {
 struct fileToPatch *fileList = NULL, *file;
@@ -155,7 +155,7 @@ for (tag = tagList; tag != NULL; tag = next)
 	        errAbort("Empty filePos tag near line %d of %s", lf->lineIx, lf->fileName);
 	    else if (!clMultiFile)
 	        errAbort("Multiple files in filePos near line %d of %s. "
-			"Use -multiFile option if this is not a mistake.", 
+			"Use -multiFile option if this is not a mistake.",
 			lf->lineIx, lf->fileName);
 	    }
 	freeMem(tag->val);
@@ -229,33 +229,6 @@ if (err != 0)
     errnoAbort("Couldn't rename %s to %s", oldPath, newPath);
 }
 
-struct slName *raNextStanza(struct lineFile *lf)
-/* Return list of lines starting from current position, up through last line of next stanza.
- * May return a few blank/comment lines at end with no real stanza. */
-{
-struct slName *lineList = NULL;
-char *line;
-while (lineFileNext(lf, &line, NULL))
-    {
-    slNameAddHead(&lineList, line);
-    line = skipLeadingSpaces(line);
-    if (line[0] != 0 && line[0] != '#')
-	break;
-    }
-while (lineFileNext(lf, &line, NULL))
-    {
-    char *s = skipLeadingSpaces(line);
-    if (*s == 0)
-         {
-	 lineFileReuse(lf);
-	 break;
-	 }
-    slNameAddHead(&lineList, line);
-    }
-slReverse(&lineList);
-return lineList;
-}
-
 static void applyPatches(char *inName, struct slRef *patchRefList, char *keyField, char *outName,
 	boolean doDelete)
 /* Apply patches in list. */
@@ -282,13 +255,13 @@ FILE *f = mustOpen(outName, "w");
 for (;;)
     {
     /* First just fetch stanza - including any blank and comment lines before, into a list of strings. */
-    struct slName *stanza = raNextStanza(lf);
+    struct slPair *stanza = raNextStanzaLinesAndUntouched(lf);
     if (stanza == NULL)
         break;
 
     /* Go through stanza once just to see if have any patches to apply. */
     struct raPatch *patch = NULL;
-    struct slName *line;
+    struct slPair *line;
     for (line = stanza; line != NULL; line = line->next)
         {
 	char *tagStart = skipLeadingSpaces(line->name);
@@ -315,8 +288,8 @@ for (;;)
 
 	    /* Go through stanza looking for tags to update. */
 	    char *lineStart = NULL;	// At end of loop points to last line
-	    int indent = 0;	// # of whitespace chars 
-	    for (line = stanza; line != NULL; line = line->next)
+	    int indent = 0;	// # of whitespace chars
+            for (line = stanza; line != NULL; line = line->next)
 		{
 		lineStart = line->name;
 		char *tagStart = skipLeadingSpaces(lineStart);
@@ -341,7 +314,7 @@ for (;;)
 		    }
 		if (copyLine)
 		    {
-		    fprintf(f, "%s\n", line->name);
+		    fprintf(f, "%s\n", line->val != NULL ? (char *)(line->val) : line->name);
 		    }
 		}
 
@@ -366,19 +339,24 @@ for (;;)
 	for (line = stanza; line != NULL; line = line->next)
 	    {
 	    if (startsWithWord("track", skipLeadingSpaces(line->name)))
-		verbose(3, "copying %s unchanged\n", line->name); 
-	    fprintf(f, "%s\n", line->name);
+		verbose(3, "copying %s unchanged\n", line->name);
+            fprintf(f, "%s\n", line->val != NULL ? (char *)(line->val) : line->name);
 	    }
 	}
 
-    slFreeList(&stanza);
+    for (line = stanza; line != NULL; line = line->next)
+        {
+        if (line->val != NULL)
+            freeMem(line->val);
+        }
+    slPairFreeList(&stanza);
     }
 lineFileClose(&lf);
 carefulClose(&f);
 }
 
 void trackDbPatch(char *patchesFile, char *backupDir)
-/* trackDbPatch - Patch files in trackDb with a specification .ra file that has db, track, and file fields that say 
+/* trackDbPatch - Patch files in trackDb with a specification .ra file that has db, track, and file fields that say
  * where to apply the patch, and other fields that are patched in.. */
 {
 /* Read in patch file. */

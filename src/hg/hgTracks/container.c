@@ -103,10 +103,6 @@ if (sameString(containerType, "multiWig"))
     {
     multiWigContainerMethods(track);
     }
-else if (sameString(containerType, "folder"))
-    {
-    /* Folder's just use the default methods. */
-    }
 else
     errAbort("unknown container type %s in trackDb for %s", containerType, tdb->track);
 }

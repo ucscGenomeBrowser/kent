@@ -18,7 +18,6 @@ lab SunyAlbany
 labVersion Mil_05621 antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein CELF1
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna
 view RbpAssocRna
@@ -38,7 +37,6 @@ lab SunyAlbany
 labVersion SC_5261 antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein ELAVL1
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRna
 view RbpAssocRna
@@ -58,7 +56,6 @@ lab SunyAlbany
 labVersion SC_21027 antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein IGF2BP1
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRna
 view RbpAssocRna
@@ -78,7 +75,6 @@ lab SunyAlbany
 labVersion Sig_P6246 antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein PABPC1
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRna
 view RbpAssocRna
@@ -98,7 +94,6 @@ lab SunyAlbany
 labVersion Input
 origAssembly hg18
 project wgEncode
-ripTgtProtein ripInput
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRna
 view RbpAssocRna
@@ -118,7 +113,6 @@ lab SunyAlbany
 labVersion SC_26522 antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein SLBP
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRna
 view RbpAssocRna
@@ -138,7 +132,6 @@ lab SunyAlbany
 labVersion Nov_69522 antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein T7Tag
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRna
 view RbpAssocRna
@@ -157,7 +150,6 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
 project wgEncode
-ripTgtProtien ELAVL1
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna
 view RbpAssocRna
@@ -176,7 +168,6 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Input
 project wgEncode
-ripTgtProtien ripInput
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
 view RbpAssocRna
@@ -195,7 +186,6 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
 project wgEncode
-ripTgtProtien T7Tag
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna
 view RbpAssocRna
@@ -215,7 +205,6 @@ lab SunyAlbany
 labVersion SC_5261 antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein ELAVL1
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRna
 view RbpAssocRna
@@ -235,7 +224,6 @@ lab SunyAlbany
 labVersion Sig_P6246 antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein PABPC1
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRna
 view RbpAssocRna
@@ -255,7 +243,6 @@ lab SunyAlbany
 labVersion Input
 origAssembly hg18
 project wgEncode
-ripTgtProtein ripInput
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRna
 view RbpAssocRna
@@ -275,7 +262,6 @@ lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
 origAssembly hg18
 project wgEncode
-ripTgtProtein T7Tag
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRna
 view RbpAssocRna
@@ -295,7 +281,6 @@ lab SunyAlbany
 labVersion SC_5261 antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein ELAVL1
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRna
 view RbpAssocRna
@@ -315,7 +300,6 @@ lab SunyAlbany
 labVersion Sig_P6246 antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein PABPC1
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRna
 view RbpAssocRna
@@ -335,7 +319,6 @@ lab SunyAlbany
 labVersion Input
 origAssembly hg18
 project wgEncode
-ripTgtProtein ripInput
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRna
 view RbpAssocRna
@@ -355,7 +338,6 @@ lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
 origAssembly hg18
 project wgEncode
-ripTgtProtein T7Tag
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRna
 view RbpAssocRna
@@ -375,7 +357,6 @@ lab SunyAlbany
 labVersion Mil_05621 antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein CELF1
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRna
 view RbpAssocRna
@@ -395,7 +376,6 @@ lab SunyAlbany
 labVersion SC_5261 antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein ELAVL1
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRna
 view RbpAssocRna
@@ -415,7 +395,6 @@ lab SunyAlbany
 labVersion Sig_P6246  antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein PABPC1
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRna
 view RbpAssocRna
@@ -435,7 +414,6 @@ lab SunyAlbany
 labVersion Input
 origAssembly hg18
 project wgEncode
-ripTgtProtein ripInput
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRna
 view RbpAssocRna
@@ -455,7 +433,6 @@ lab SunyAlbany
 labVersion SC_26522,Mil_061376 antibodies
 origAssembly hg18
 project wgEncode
-ripTgtProtein SLBP
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRna
 view RbpAssocRna
@@ -475,9 +452,8 @@ lab SunyAlbany
 labVersion Nov_69522 antibody
 origAssembly hg18
 project wgEncode
-ripTgtProtein T7Tag
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 1961181920
+# MAGIC: 2038630507

@@ -8,22 +8,38 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "container.h"
+#include "wiggle.h"
 #include "wigCommon.h"
 #include "hui.h"
 
-
-static char *aggregateFromCartOrDefault(struct cart *cart, struct track *tg)
-/* Return aggregate value for track. */
+static void minMaxVals(struct slRef *refList, double *retMin, double *retMax)
+/* Figure out min/max of everything in list.  The refList contains pointers to
+ * preDrawContainers */
 {
-return cartOrTdbString(cart, tg->tdb, "aggregate", WIG_AGGREGATE_TRANSPARENT);
-}
-
-static boolean isOverlayTypeAggregate(char *aggregate)
-/* Return TRUE if aggregater type is one of the overlay ones. */
-{
-if (aggregate == NULL)
-    return FALSE;
-return differentString(aggregate, WIG_AGGREGATE_NONE);
+/* Turns out to be *much* shorter to rewrite than to reuse preDrawAutoScale */
+double max = -BIGDOUBLE, min = BIGDOUBLE;
+struct slRef *ref;
+for (ref = refList; ref != NULL; ref = ref->next)
+    {
+    struct preDrawContainer *pre;
+    for (pre = ref->val; pre != NULL; pre = pre->next)
+	{
+	struct preDrawElement *p = pre->preDraw + pre->preDrawZero;
+	int width = pre->width;
+	int i;
+	for (i=0; i<width; ++i)
+	    {
+	    if (p->count)
+		{
+		if (min > p->min) min = p->min;
+		if (max < p->max) max = p->max;
+		}
+	    ++p;
+	    }
+	}
+    }
+*retMax = max;
+*retMin = min;
 }
 
 static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
@@ -32,8 +48,8 @@ static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
 /* Draw items in multiWig container. */
 {
 struct track *subtrack;
-char *aggregate = aggregateFromCartOrDefault(cart, tg);
-boolean overlay = isOverlayTypeAggregate(aggregate);
+char *aggregate = wigFetchAggregateValWithCart(cart, tg->tdb);
+boolean overlay = wigIsOverlayTypeAggregate(aggregate);
 boolean errMsgShown = FALSE;
 int y = yOff;
 boolean errMsgFound = FALSE;
@@ -47,6 +63,42 @@ if (errMsgFound)
     {
     Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
     hvGfxBox(hvg, xOff, yOff, width, tg->height, yellow);
+    }
+
+/* Cope with autoScale - we do it here rather than in the child tracks, so that
+ * all children can be on same scale. */
+struct wigCartOptions *wigCart = tg->extraUiData;
+if (wigCart->autoScale)
+    {
+    /* Force load of all predraw arrays so can do calcs. Build up list, and then
+     * figure out max/min.  No worries about multiple loading, the loaders protect
+     * themselves. */
+    struct slRef *refList = NULL;
+    for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        {
+	struct preDrawContainer *pre = subtrack->loadPreDraw(subtrack, seqStart, seqEnd, width);
+	refAdd(&refList, pre);
+	}
+    double minVal, maxVal;
+    minMaxVals(refList, &minVal, &maxVal);
+    slFreeList(&refList);
+
+    /* Cope with log transform if need be */
+    if (wigCart->transformFunc == wiggleTransformFuncLog)
+         {
+	 minVal = wiggleLogish(minVal);
+	 maxVal = wiggleLogish(maxVal);
+	 }
+
+    /* Loop through again setting up the wigCarts of the children to have minY/maxY for
+     * our limits and autoScale off. */
+    for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        {
+	struct wigCartOptions *wigCart = subtrack->extraUiData;
+	wigCart->minY = minVal;
+	wigCart->maxY = maxVal;
+	wigCart->autoScale = wiggleScaleManual;
+	}
     }
 
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
@@ -79,8 +131,8 @@ mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, xOff, y, width, tg->height, tg->track, 
 static int multiWigTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return total height of multiWigcontainer. */
 {
-char *aggregate = aggregateFromCartOrDefault(cart, tg);
-boolean overlay = isOverlayTypeAggregate(aggregate);
+char *aggregate = wigFetchAggregateValWithCart(cart, tg->tdb);
+boolean overlay = wigIsOverlayTypeAggregate(aggregate);
 int totalHeight =  0;
 if (overlay)                                                                                       
     totalHeight =  wigTotalHeight(tg, vis);                                                        
@@ -129,8 +181,8 @@ static void multiWigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	enum trackVisibility vis)
 /* Draw left labels - by deferring to first subtrack. */
 {
-char *aggregate = aggregateFromCartOrDefault(cart, tg);
-boolean overlay = isOverlayTypeAggregate(aggregate);
+char *aggregate = wigFetchAggregateValWithCart(cart, tg->tdb);
+boolean overlay = wigIsOverlayTypeAggregate(aggregate);
 if (overlay)
     {
     struct track *firstVisibleSubtrack = NULL;

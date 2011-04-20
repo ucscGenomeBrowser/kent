@@ -20,6 +20,7 @@ errAbort(
   "                  [{fileName}] [-replace] or\n"
   "                  [[-vars=\"var1=val1 var2=val2...\"] or [-obj=]]\n"
   "                  [[-var= [-val=]] or [-setVars=\"var1=val1 ...\"]] [-delete]\n"
+  "                  [-encodeExp [-accession]\n"
   "Options:\n"
   "    {db}     Database to update metadata in.  This argument is required.\n"
   "    -table   Table to update metadata to.  Default is the sandbox version of\n"
@@ -42,7 +43,8 @@ errAbort(
   "       -val={value}    (Enclose in \"quotes if necessary\").\n"
   "       -setVars={var=val...}  Allows setting multiple var=val pairs.\n"
   "       -delete         Remove specific var or entire object.\n"
-  "       -encodeExp      Update groups of objs as experiments defined in hgFixed.encodeExp table.\n"
+  "       -encodeExp={table}  Update groups of objs as experiments defined in hgFixed.{table}.\n"
+  "        -accession         If encodeExp, then make/update accession too.\n"
   "There are two ways to call mdbUpdate.  The object (or objects matching vars) and var to update "
   "can be declared on the command line, or a file of formatted metadata lines can be provided. "
   "The file can be the formatted output from mdbPrint or the following special formats:\n"
@@ -78,7 +80,8 @@ static struct optionSpec optionSpecs[] = {
     {"composite",OPTION_STRING}, // Special case of a commn var (replaces vars="composite=wgEncodeBroadHistone")
     {"var",     OPTION_STRING}, // variable
     {"val",     OPTION_STRING}, // value
-    {"encodeExp",OPTION_BOOLEAN},// Update Experiments as defined in the hgFixed.encodeExp table
+    {"encodeExp",OPTION_STRING},// Update Experiments as defined in the hgFixed.encodeExp table
+    {"accession",OPTION_BOOLEAN},// Adds/updates accession when experimentifying
     {"setVars", OPTION_STRING}, // Allows setting multiple var=val pairs
     {"delete",  OPTION_BOOLEAN},// delete one obj or obj/var
     {"replace", OPTION_BOOLEAN},// replace entire obj when loading from file
@@ -110,13 +113,21 @@ boolean deleteIt = optionExists("delete");
 boolean testIt   = optionExists("test");
 boolean recreate = optionExists("recreate");
 boolean force    = optionExists("force");
-boolean encodeExp = optionExists("encodeExp");
 boolean replace  = FALSE;
 char *var        = optionVal("var",NULL);
 char *val        = optionVal("val",NULL);
 char *setVars    = optionVal("setVars",NULL);
+char *encodeExp  = optionVal("encodeExp",NULL);
+if (encodeExp != NULL)
+    {
+    if (strlen(encodeExp) == 0)
+        errAbort("encodeExp table will be ?\n");
+    if  (sameWord("std",encodeExp))
+        encodeExp = "encodeExp";
+    verbose(0, "Using hgFixed.%s\n",encodeExp);
+    }
 
-if (recreate && encodeExp)
+if (recreate && encodeExp != NULL)
     {
     verbose(1, "Incompatible options 'recreate' and 'encodeExp':\n");
     usage();
@@ -126,7 +137,7 @@ if (recreate && deleteIt)
     verbose(1, "Incompatible options 'recreate' and 'delete':\n");
     usage();
     }
-if (encodeExp && deleteIt)
+if (encodeExp != NULL && deleteIt)
     {
     verbose(1, "Incompatible options 'encodeExp' and 'delete':\n");
     usage();
@@ -186,17 +197,17 @@ if(recreate)
         verbose(1, "%s table named '%s'.\n",(recreated?"Recreated":"Created"),table);
     }
 
-if(argc > 2 && (deleteIt || encodeExp || var != NULL || val != NULL || setVars != NULL))
+if(argc > 2 && (deleteIt || encodeExp != NULL || var != NULL || val != NULL || setVars != NULL))
     {
     verbose(1, "INCONSISTENT REQUEST: can't combine supplied file with -delete, -encodeExp, -var, -val or -setVars.\n");
     usage();
     }
-if((deleteIt || encodeExp) && var != NULL && val != NULL)
+if((deleteIt || encodeExp != NULL) && var != NULL && val != NULL)
     {
     verbose(1, "INCONSISTENT REQUEST: can't combine -%s with -var and -val.\n",deleteIt?"delete":"encodeExp");
     usage();
     }
-if (argc != 3 && !deleteIt && !encodeExp)
+if (argc != 3 && !deleteIt && encodeExp == NULL)
     {
     if(setVars == NULL && (var == NULL || val == NULL))
         {
@@ -279,7 +290,7 @@ else if(optionExists("vars") || optionExists("composite"))
     // replace all found vars but update request
     if(setVars != NULL)
         mdbObjSwapVars(mdbObjs,setVars,deleteIt);
-    else if (!encodeExp)
+    else if (encodeExp == NULL)
         mdbObjTransformToUpdate(mdbObjs,var,val,deleteIt);
     }
 else // Must be submitting formatted file
@@ -316,16 +327,12 @@ if(mdbObjs != NULL)
         count = mdbObjsLoadToDb(conn,table,mdbObjs,testIt);
     else
         {
-        if (encodeExp)
+        if (encodeExp != NULL)
             {
-            if (!testIt)
-                {
-                verbose(1, "NOTE: -encodeExp will only run in -test mode until the utilities are fully functional.\n");
-                testIt = TRUE;  // FIXME: No actual updates until we are ready to pull the trigger!  // FIXME: Also when will update to EXP table be turned on?
-                }
-            boolean createExpIfNecessary = FALSE; // testIt ? FALSE : TRUE; // FIXME: When we are ready, this should allow creating an experiment in the hgFixed.encodeExp table
+            boolean createExpIfNecessary = testIt ? FALSE : TRUE; // FIXME: When we are ready, this should allow creating an experiment in the hgFixed.encodeExp table
 
-            struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,&mdbObjs,(verboseLevel() > 1? 1:0),createExpIfNecessary); // 1=warnings
+            boolean updateAccession = (optionExists("accession") && createExpIfNecessary);
+            struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,encodeExp,&mdbObjs,(verboseLevel() > 1? 1:0),createExpIfNecessary,updateAccession); // 1=warnings
             if (updatable == NULL)
                 verbose(1, "No Experiment ID updates were discovered in %d object(s).\n", slCount(mdbObjs));
             else
@@ -339,7 +346,7 @@ if(mdbObjs != NULL)
         count = mdbObjsSetToDb(conn,table,mdbObjs,replace,testIt);
         }
 
-    if (testIt && !encodeExp)
+    if (testIt && encodeExp == NULL)
         {
         int invalids = mdbObjsValidate(mdbObjs,TRUE);
         int varsCnt=mdbObjCount(mdbObjs,FALSE);

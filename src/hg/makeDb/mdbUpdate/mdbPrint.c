@@ -15,7 +15,7 @@ void usage()
 errAbort(
   "mdbPrint - Prints metadata objects, variables and values from '" MDB_DEFAULT_NAME "' table.\n"
   "usage:\n"
-  "   mdbPrint {db} [-table=] [-byVar] [-line/-count,-countObjs/-countVars/-countVals]\n"
+  "   mdbPrint {db} [-table=] [-byVar] [-line/-count]\n"
   "                 [-all]\n"
   "                 [-vars=\"var1=val1 var2=val2...\"]\n"
   "                 [-obj= [-var= [-val=]]]\n"
@@ -33,7 +33,8 @@ errAbort(
   "    -count      Just print count of objects, variables and values selected.\n"
   "    -validate    Validate mdb objects against cv.ra. (Incompatible with -byVars, -ra, -line.)\n"
   "    -validateFull like validate but considers vars not defined in cv as invalid.\n"
-  "    -encodeExp     Validates groups of objs as experiments defined in hgFixed.encodeExp table.\n"
+  "    -experimentify      Groups objs into experiments defined in encodeExp table.\n"
+  "    -encodeExp={table}  Optionally tell which encodeExp table to use.\n"
   "    -specialHelp    Prints help for some special case features.\n"
   "  Four alternate ways to select metadata:\n"
   "    -all       Will print entire table (this could be huge).\n"
@@ -57,7 +58,7 @@ errAbort(
   "           Return each all vars for all objects with the constraint.\n"
   "  mdbPrint hg18 -obj=wgEncodeUncFAIREseqPeaksPanislets -line\n"
   "           Return a single formatted metadata line for one object.\n"
-  "  mdbPrint hg18 -countObjs -var=cell -val=GM%%\n"
+  "  mdbPrint hg18 -count -var=cell -val=GM%%\n"
   "           Return the count of objects which have a cell begining with 'GM'.\n"
   );
 }
@@ -77,14 +78,15 @@ static struct optionSpec optionSpecs[] = {
     {"val",      OPTION_STRING}, // value
     {"validate", OPTION_BOOLEAN},// Validate vars and vals against cv.ra terms
     {"validateFull", OPTION_BOOLEAN},// Like validate but considers vars not defined in cv as invalid
-    {"encodeExp",OPTION_BOOLEAN},// Validate Experiments as defined in the hgFixed.encodeExp table
+    {"experimentify",OPTION_BOOLEAN},// Validate Experiments as defined in the hgFixed.encodeExp table
+    {"encodeExp",OPTION_STRING},     // Optionally tell which encodeExp to use
     {"vars",     OPTION_STRING},// var1=val1 var2=val2...
     {"updDb",    OPTION_STRING},// DB to update
     {"updMdb",   OPTION_STRING},// MDB table to update
     {"updSelect",OPTION_STRING},// Experiment defining vars: "var1,var2"
     {"updVars",  OPTION_STRING},// Vars to update: "var1,var2"
-    {"expTbl",   OPTION_STRING},// Name of Experiment table
-    {"expVars",  OPTION_STRING},// Experiment defining vars: "var1,var2"
+//    {"expTbl",   OPTION_STRING},// Name of Experiment table
+//  "    -expTbl     The experiment table name to be used in insert statements.\n"
     {NULL,       0}
 };
 
@@ -96,7 +98,6 @@ errAbort(
   "usage:\n"
   "   mdbPrint {db} [-table=] -vars=\"var1=val1 var2=val2...\"\n"
   "            -updDB={db} -updMdb={metaDb} -updSelect=var1,var2,... -updVars=varA,varB,...\n"
-  "            -expTbl={table} -expVars=var1,var2,...\n"
   "Options:\n"
   "    {db}     Database to query metadata from.  This argument is required.\n"
   "    -table   Table to query metadata from.  Default is the sandbox version of\n"
@@ -112,9 +113,6 @@ errAbort(
   "    -updVars    A comma separated list of variables that will be set in the\n"
   "                mdbUpdate lines (via '-setVars').\n"
   "                Special case updVar=\"expId={n}\" to insert expIds starting with 'n'.\n"
-  "    Print INSERT SQL statements to load experiment table with metadata values.\n"
-  "    -expTbl     The experiment table name to be used in insert statements.\n"
-  "    -expVars    A comma separated list of variables that are 'experiment defining'\n"
   "The purpose of this special option is to generate mdbUpdate commands from existing metadata.\n"
   "Examples:\n"
   "  mdbPrint hg18 -vars=\"composite=wgEncodeYaleChIPseq\" -updDb=hg19 -updMdb=metaDb_braney\n"
@@ -135,8 +133,6 @@ errAbort(
   "  mdbPrint hg18 -vars=\"composite=wgEncodeBroad\" -updDb=hg18 -updMdb=metaDb_vsmalladi\n"
   "    (cont.)     -updSelect=grant,cell,antibody -updVars=expId=1200\n"
   "           This will create mdbUpdate statements to add expId to the mdb for Broad, starting with expId=1200.\n"
-  "  mdbPrint hg18 -vars=\"composite=wgEncodeBroad\" -expTbl=expTable -expVars=expId,grant,cell,antibody\n"
-  "           This will create SQL insert statements for adding expTable entries based upon mdb contents.\n"
   );
 }
 
@@ -247,79 +243,6 @@ dyStringFree(&thisSelection);
 dyStringFree(&lastSelection);
 }
 
-static void mdbObjPrintInsertToExperimentsTable(struct mdbObj **mdbObjs,char *expTableName, char *expDefiningVars)
-// prints insert statements for the experiments table to backfill experiments submitted before the experiments table existed
-// Specialty prints for limited puropse
-{
-if (expTableName == NULL || expDefiningVars == NULL)
-    errAbort("mdbObjPrintInsertToExpTbl is missing important parameter.\n");
-
-int varCount = 0;
-char **expVars = NULL;
-if (sameWord(expDefiningVars,"obj"))
-    errAbort("mdbObjPrintInsertToExpTbl 'obj' is an invalid experiment defining variable.\n");
-
-// Sort objs to avoid duplicate mdbUpdate statements
-mdbObjsSortOnVars(mdbObjs, expDefiningVars);
-
-// Parse variables that are experiment defining
-// expDefiningVars is comma delimited string of var names.  Vals are discovered in each obj
-varCount = chopByChar(expDefiningVars,',',NULL,0);
-if (varCount <= 0)
-    errAbort("mdbObjPrintInsertToExpTbl is missing experiment defining variables.\n");
-expVars = needMem(sizeof(char *) * varCount);
-varCount = chopByChar(expDefiningVars,',',expVars,varCount);
-int ix=0;
-
-// For each passed in obj, write an insert into expTable statement
-struct mdbObj *mdbObj = NULL;
-struct dyString *varNames = newDyString(256);
-struct dyString *varVals  = newDyString(256);
-struct dyString *lastVals = newDyString(256);
-for (mdbObj=*mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next)
-    {
-    if (mdbObj->obj == NULL || mdbObj->deleteThis)
-        continue;
-
-    // Build this selection string
-    dyStringClear(varNames);
-    dyStringClear(varVals);
-
-    boolean first=TRUE;
-    // "insert into expTable (cell,antibody) values ('GM12878','CTCF');
-    for (ix = 0;ix < varCount; ix++)
-        {
-        char *val = mdbObjFindValue(mdbObj,expVars[ix]);
-        if (val != NULL) // TODO what to do for NULLS?
-            {
-            if (first)
-                first=FALSE;
-            else
-                {
-                dyStringAppendC(varNames,',');
-                dyStringAppendC(varVals,',');
-                }
-            dyStringPrintf(varNames,"%s", expVars[ix]);
-            if(countLeadingDigits(val) == strlen(val))
-                dyStringPrintf(varVals,"%s",val);
-            else
-                dyStringPrintf(varVals,"'%s'",val);
-            }
-        }
-
-    // Don't bother making another insert statment if selection is the same.
-    if (dyStringLen(lastVals) > 0 && sameString(dyStringContents(lastVals),dyStringContents(varVals)))
-        continue;
-    dyStringClear(lastVals);
-    dyStringAppend(lastVals,dyStringContents(varVals));
-
-    printf("INSERT INTO %s (%s) VALUES (%s);\n",expTableName,dyStringContents(varNames),dyStringContents(varVals));
-
-    }
-dyStringFree(&varNames);
-dyStringFree(&varVals);
-dyStringFree(&lastVals);
-}
 
 int main(int argc, char *argv[])
 // Process command line.
@@ -350,11 +273,22 @@ if(optionExists("line") && !optionExists("ra"))
 boolean justCounts = (optionExists("count") || optionExists("counts"));
 boolean byVar      = optionExists("byVar");
 boolean validate   = (optionExists("validate") || optionExists("validateFull"));
-boolean encodeExp = optionExists("encodeExp");
-
-if ((validate || encodeExp) && (byVar || optionExists("line") || optionExists("ra")))
+char *encodeExp = NULL;
+if (optionExists("experimentify"))
     {
-    verbose(1, "Incompatible to combine validate or encodeExp option with 'byVar', 'line' or 'ra':\n");
+    encodeExp = optionVal("encodeExp","encodeExp");
+    if (strlen(encodeExp) == 0)
+        errAbort("encodeExp table will be ?\n");
+    if  (sameWord("std",encodeExp))
+        encodeExp = "encodeExp";
+    verbose(0, "Using hgFixed.%s\n",encodeExp);
+    }
+else if (optionExists("encodeExp"))
+    errAbort("-encodeExp option requires -experimentify option.\n");
+
+if ((validate || encodeExp != NULL) && (byVar || optionExists("line") || optionExists("ra")))
+    {
+    verbose(1, "Incompatible to combine validate or experimentify option with 'byVar', 'line' or 'ra':\n");
     usage();
     }
 
@@ -453,16 +387,9 @@ else
                 mdbObjPrintUpdateLines(&queryResults,optionVal("updDb",NULL),optionVal("updMdb",NULL),
                                                     optionVal("updSelect",NULL),optionVal("updVars",NULL));
                 }
-            else if(optionExists("expVars")) // Special print of insert SQl statements for exp table
+            else if (encodeExp != NULL) // Organizes vars as experiments and validates expId values
                 {
-                if(!optionExists("expTbl"))
-                    errAbort("To print insert SQL statements, both 'expTbl' and 'expVars' must be defined.\n");
-
-                mdbObjPrintInsertToExperimentsTable(&queryResults,optionVal("expTbl",NULL),optionVal("expVars",NULL));
-                }
-            else if (encodeExp) // Organizes vars as experiments and validates expId values
-                {
-                struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,&queryResults,2,FALSE); // 2=full experiments described
+                struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,encodeExp,&queryResults,2,FALSE,FALSE); // 2=full experiments described
                 printf("%d of %d obj%s can have their experiment IDs updated now.\n",slCount(updatable),objsCnt,(objsCnt==1?"":"s"));
                 mdbObjsFree(&updatable);
                 }

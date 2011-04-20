@@ -10,7 +10,7 @@ include wgEncodeGencodeV5.ra alpha
 include wgEncodeUncBsuProt.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.ra alpha
+include wgEncodeReg.ra alpha,beta
 #include wgEncodeRegNorm.ra alpha
 
 # Nucleosome (wrangler: venkat)
@@ -60,7 +60,7 @@ include wgEncodeOpenChromFaire.ra
 include wgEncodeOpenChromSynth.ra
 
 #Duke DNaseI HS (wrangler: tim)
-include wgEncodeOpenChromDnase.ra alpha,beta
+include wgEncodeOpenChromDnase.ra
 
 #Uw Dnase-Seq (wrangler: Venkat)
 include wgEncodeUwDnase.ra beta,public

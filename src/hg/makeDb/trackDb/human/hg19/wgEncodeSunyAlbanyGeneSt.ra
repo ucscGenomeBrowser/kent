@@ -9,7 +9,7 @@ subGroup2 cellType Cell_Line  GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(
 subGroup3 factor Antibody_Target  CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=RIP-Input
 dimensions dimensionX=factor dimensionY=cellType
 sortOrder cellType=+ factor=+ 
-fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target labVersion=Antibody view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 visibilityViewDefaults  RbpAssocRna=hide 
@@ -27,10 +27,10 @@ noInherit on
     viewUi on
     subTrack wgEncodeSunyAlbanyGeneSt
     pValueFilter 0.0
-    pValueFilterLimits 0:5
+    pValueFilterLimits 0:0.5
     scoreFilter 2
     scoreFilterLimits 1:800
-    minGrayLevel 100
+    minGrayLevel 11%
     type broadPeak
 
 
@@ -39,6 +39,7 @@ noInherit on
 	shortLabel GM12878 Input
 	longLabel GM12878 RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=GM12878 factor=ripInput
+        origAssembly hg18
 	type broadPeak
 	color 153,38,0
 	# subId=1237 dateSubmitted=2010-06-01
@@ -48,6 +49,7 @@ noInherit on
 	shortLabel GM12878 T7Tag
 	longLabel GM12878 T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=GM12878 factor=T7Tag
+        origAssembly hg18
 	type broadPeak
 	color 153,38,0
 	# subId=1237 dateSubmitted=2010-06-01
@@ -57,6 +59,7 @@ noInherit on
 	shortLabel GM12878 PABPC1
 	longLabel GM12878 PABPC1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=GM12878 factor=PABPC1
+        origAssembly hg18
 	type broadPeak
 	color 153,38,0
 	# subId=1237 dateSubmitted=2010-06-01
@@ -66,6 +69,7 @@ noInherit on
 	shortLabel GM12878 SLBP
 	longLabel GM12878 SLBP RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=GM12878 factor=SLBP
+        origAssembly hg18
 	type broadPeak
 	color 153,38,0
 	# subId=1237 dateSubmitted=2010-06-01
@@ -75,6 +79,7 @@ noInherit on
 	shortLabel GM12878 ELAVL1
 	longLabel GM12878 ELAVL1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=GM12878 factor=ELAVL1
+        origAssembly hg18
 	type broadPeak
 	color 153,38,0
 	# subId=1237 dateSubmitted=2010-06-01
@@ -84,6 +89,7 @@ noInherit on
 	shortLabel GM12878 IGF2BP1
 	longLabel GM12878 IGF2BP1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=GM12878 factor=IGF2BP1
+        origAssembly hg18
 	type broadPeak
 	color 153,38,0
 	# subId=1237 dateSubmitted=2010-06-01
@@ -93,6 +99,7 @@ noInherit on
 	shortLabel GM12878 CELF1
 	longLabel GM12878 CELF1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=GM12878 factor=CELF1
+        origAssembly hg18
 	type broadPeak
 	color 153,38,0
 	# subId=1237 dateSubmitted=2010-06-01
@@ -102,6 +109,7 @@ noInherit on
 	shortLabel K562 Input
 	longLabel K562 RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=K562 factor=ripInput
+        origAssembly hg18
 	type broadPeak
 	color 46,0,184
 	# subId=1237 dateSubmitted=2010-06-01
@@ -111,6 +119,7 @@ noInherit on
 	shortLabel K562 T7Tag
 	longLabel K562 T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=K562 factor=T7Tag
+        origAssembly hg18
 	type broadPeak
 	color 46,0,184
 	# subId=1237 dateSubmitted=2010-06-01
@@ -120,6 +129,7 @@ noInherit on
 	shortLabel K562 PABPC1
 	longLabel K562 PABPC1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=K562 factor=PABPC1
+        origAssembly hg18
 	type broadPeak
 	color 46,0,184
 	# subId=1237 dateSubmitted=2010-06-01
@@ -128,6 +138,7 @@ noInherit on
 	subTrack wgEncodeSunyAlbanyGeneStView
 	shortLabel K562 SLBP
 	longLabel K562 SLBP RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
+        origAssembly hg18
 	subGroups view=RbpAssocRna cellType=K562 factor=SLBP
 	type broadPeak
 	color 46,0,184
@@ -138,6 +149,7 @@ noInherit on
 	shortLabel K562 ELAVL1
 	longLabel K562 ELAVL1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=K562 factor=ELAVL1
+        origAssembly hg18
 	type broadPeak
 	color 46,0,184
 	# subId=1237 dateSubmitted=2010-06-01
@@ -147,6 +159,7 @@ noInherit on
 	shortLabel HeLa-S3 Input
 	longLabel HeLa-S3 RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=HeLaS3 factor=ripInput
+        origAssembly hg18
 	type broadPeak
 	color 0,119,158
 	# subId=1237 dateSubmitted=2010-06-01
@@ -156,6 +169,7 @@ noInherit on
 	shortLabel HepG2 Input
 	longLabel HepG2 RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=HepG2 factor=ripInput
+        origAssembly hg18
 	type broadPeak
 	color 189,0,157
 	# subId=1237 dateSubmitted=2010-06-01
@@ -165,6 +179,7 @@ noInherit on
 	shortLabel K562 CELF1
 	longLabel K562 CELF1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=K562 factor=CELF1
+        origAssembly hg18
 	type broadPeak
 	color 46,0,184
 	# subId=1613 dateSubmitted=2010-06-18
@@ -174,6 +189,7 @@ noInherit on
 	shortLabel HeLa-S3 T7Tag
 	longLabel HeLa-S3 T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=HeLaS3 factor=T7Tag
+        origAssembly hg18
 	type broadPeak
 	color 0,119,158
 	# subId=1613 dateSubmitted=2010-06-18
@@ -183,6 +199,7 @@ noInherit on
 	shortLabel HeLa-S3  PABPC1
 	longLabel HeLa-S3 PABPC1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=HeLaS3 factor=PABPC1
+        origAssembly hg18
 	type broadPeak
 	color 0,119,158
 	# subId=1613 dateSubmitted=2010-06-18
@@ -192,6 +209,7 @@ noInherit on
 	shortLabel HeLa-S3 ELAV1
 	longLabel HeLa-S3 ELAV1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=HeLaS3 factor=ELAVL1
+        origAssembly hg18
 	type broadPeak
 	color 0,119,158
 	# subId=1613 dateSubmitted=2010-06-18
@@ -201,6 +219,7 @@ noInherit on
 	shortLabel HepG2 T7Tag
 	longLabel HepG2 T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=HepG2 factor=T7Tag
+        origAssembly hg18
 	type broadPeak
 	color 189,0,157
 	# subId=1613 dateSubmitted=2010-06-18
@@ -210,6 +229,7 @@ noInherit on
 	shortLabel HepG2 PABPC1
 	longLabel HepG2 PABPC1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=HepG2 factor=PABPC1
+        origAssembly hg18
 	type broadPeak
 	color 189,0,157
 	# subId=1613 dateSubmitted=2010-06-18
@@ -219,6 +239,7 @@ noInherit on
 	shortLabel HepG2 ELAVL1
 	longLabel HepG2 ELAVL1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna cellType=HepG2 factor=ELAVL1
+        origAssembly hg18
 	type broadPeak
 	color 189,0,157
 	# subId=1613 dateSubmitted=2010-06-18
@@ -228,6 +249,7 @@ noInherit on
 	shortLabel H1-hESC ripInput
 	longLabel H1-hESC RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna factor=ripInput cellType=H1hESC
+        origAssembly hg18
 	type broadPeak
 	color 0,107,27
 	# subId=3084 dateSubmitted=2010-12-10 
@@ -238,6 +260,7 @@ noInherit on
 	shortLabel H1-hESC T7Tag
 	longLabel H1-hESC T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna factor=T7Tag cellType=H1hESC
+        origAssembly hg18
 	type broadPeak
 	color 0,107,27
 	# subId=3084 dateSubmitted=2010-12-10
@@ -247,6 +270,7 @@ noInherit on
 	shortLabel H1-hESC ELAVL1
 	longLabel H1-hESC ELAV1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna factor=ELAVL1 cellType=H1hESC
+        origAssembly hg18
 	type broadPeak
 	color 0,107,27
 	# subId=3084 dateSubmitted=2010-12-10

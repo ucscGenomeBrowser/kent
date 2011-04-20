@@ -1006,9 +1006,8 @@ struct mdbVar *mdbVar;
 int count = 0;
 
 if(tableName == NULL)
-    tableName = MDB_DEFAULT_NAME;
-
-if(!sqlTableExists(conn,tableName))
+    tableName = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+else if(!sqlTableExists(conn,tableName))
     errAbort("mdbObjsSetToDb attempting to update non-existent table named '%s'.\n",tableName);
 
 for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
@@ -1115,9 +1114,8 @@ int mdbObjsLoadToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *md
 int count = 0;
 
 if (tableName == NULL)
-    tableName = MDB_DEFAULT_NAME;
-
-if (!sqlTableExists(conn,tableName))
+    tableName = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+else if (!sqlTableExists(conn,tableName))
     errAbort("mdbObjsLoadToDb attempting to load non-existent table named '%s'.\n",tableName);
 
 assert(mdbObjs != NULL);  // If this is the case, then be vocal
@@ -1155,9 +1153,8 @@ struct mdbObj *mdbObjQuery(struct sqlConnection *conn,char *table,struct mdbObj 
     boolean buildHash = TRUE;
 
     if(table == NULL)
-        table = MDB_DEFAULT_NAME;
-
-    if(!sqlTableExists(conn,table))
+        table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+    else if(!sqlTableExists(conn,table))
         return NULL;
 
     struct dyString *dy = newDyString(4096);
@@ -1226,8 +1223,8 @@ struct mdbByVar *mdbByVarsQuery(struct sqlConnection *conn,char *table,struct md
 //  select obj,var,val where (var= [and val in (val1,val2)]) or (var= [and val in (val1,val2)]) order by var,val,obj
 
     if(table == NULL)
-        table = MDB_DEFAULT_NAME;
-    if(!sqlTableExists(conn,table))
+            table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+    else if(!sqlTableExists(conn,table))
         return NULL;
 
     struct dyString *dy = newDyString(4096);
@@ -1329,8 +1326,8 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 //                                                           AND EXISTS (SELECT T3.obj FROM metaDb T3 WHERE T3.obj = T1.obj AND T3.var = 'cell' AND T3.val != 'GM12878') ORDER BY T1.obj, T1.var;
 
     if(table == NULL)
-        table = MDB_DEFAULT_NAME;
-    if(!sqlTableExists(conn,table))
+        table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+    else if(!sqlTableExists(conn,table))
         return NULL;
 
     struct dyString *dy = newDyString(4096);
@@ -2644,7 +2641,6 @@ if (!mdbObjIsCompositeMember(mdbObj))
 struct mdbObj *compObj = mdbObjQueryCompositeObj(conn,tableName,mdbObj);
 if (compObj == NULL)
     return NULL;
-
 struct slName *edvs = mdbObjGetNamedEncodeEdvs(compObj);
 mdbObjFree(&compObj);
 return edvs;
@@ -2658,7 +2654,7 @@ struct mdbVar *mdbObjFindEncodeEdvPairs(struct sqlConnection *conn,char *tableNa
 struct slName *compositeEdvs = mdbObjGetNamedEncodeEdvs(mdbObj);  // looking locally first.
 if (compositeEdvs == NULL)
     {
-    struct slName *compositeEdvs = mdbObjFindCompositeNamedEncodeEdvs(conn,tableName,mdbObj);
+    compositeEdvs = mdbObjFindCompositeNamedEncodeEdvs(conn,tableName,mdbObj);
     if (compositeEdvs == NULL)
         return NULL;
     }
@@ -2666,14 +2662,12 @@ if (compositeEdvs == NULL)
 return mdbObjEncodeEdvsAsMdbVars(mdbObj,compositeEdvs,includeNone);
 }
 
-#define EXPERIMENTS_TABLE "hgFixed.encodeExp"
-
-struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,
-                                          int warn,boolean createExpIfNecessary)
+struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,char *expTable,
+                       struct mdbObj **pMdbObjs,int warn,boolean createExpIfNecessary,boolean updateAccession)
 // Organizes objects into experiments and validates experiment IDs.  Will add/update the ids in the structures.
 // If warn=1, then prints to stdout all the experiments/obs with missing or wrong expIds;
 //    warn=2, then print line for each obj with expId or warning.
-// createExpIfNecessary means go ahead and add to the hgFixed.encodeExp table to get an ID
+// createExpIfNecessary means add expId to encodeExp table. updateAccession too if necessary.
 // Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
 {
 // Here is what "experimentify" does from "mdbPrint -encodeExp" and "mdbUpdate -encodeExp":
@@ -2694,6 +2688,8 @@ if (pMdbObjs == NULL || *pMdbObjs == NULL)
 struct mdbObj *mdbObjs = *pMdbObjs;
 struct mdbObj *mdbProcessedObs = NULL;
 struct mdbObj *mdbUpdateObjs = NULL;
+if (expTable == NULL)
+    expTable = ENCODE_EXP_TABLE;
 
 verbose(2, "mdbObjsEncodeExperimentify() beginning for %d objects.\n",slCount(*pMdbObjs));
 // Sort all objects by composite, so that we handle composite by composite
@@ -2830,20 +2826,25 @@ while(mdbObjs != NULL)
 
         // Look up each exp in EXPERIMENTS_TABLE
         char experimentId[128];
-        int expId = -1;
-        struct encodeExp *exp = encodeExpGetByMdbVars(db, edvVarVals);
+        int expId = ENCODE_EXP_IX_UNDEFINED;
+        struct encodeExp *exp = encodeExpGetByMdbVarsFromTable(db, edvVarVals, expTable);
         if (exp == NULL && createExpIfNecessary)
-            exp = encodeExpGetOrCreateByMdbVars(db, edvVarVals);
+            exp = encodeExpGetOrCreateByMdbVarsFromTable(db, edvVarVals, expTable);
         mdbVarsFree(&edvVarVals); // No longer needed
+
+        // Make sure the accession is set if requested.
+        if (createExpIfNecessary && updateAccession
+        && exp->ix != ENCODE_EXP_IX_UNDEFINED && exp->accession == NULL)
+            encodeExpSetAccession(exp, expTable);
 
         if (exp != NULL)
             expId = exp->ix;
 
-        if (expId == -1)
+        if (expId == ENCODE_EXP_IX_UNDEFINED)
             {
             safef(experimentId,sizeof(experimentId),"{missing}");
             if (warn > 0)
-                printf("Experiment %s EDV: [%s] is not defined in %s table.\n",experimentId,dyStringContents(dyVars),EXPERIMENTS_TABLE);
+                printf("Experiment %s EDV: [%s] is not defined in %s.%s table.\n",experimentId,dyStringContents(dyVars), ENCODE_EXP_DATABASE, expTable);
                 //printf("Experiment %s EDV: [%s] is not defined in %s table. Remaining:%d and %d\n",experimentId,dyStringContents(dyVars),EXPERIMENTS_TABLE,slCount(mdbCompositeObjs),slCount(mdbObjs));
             if (warn < 2) // From mdbUpdate (warn=1), just interested in testing waters.  From mdbPrint (warn=2) list all objs in exp.
                 {
@@ -2883,28 +2884,38 @@ while(mdbObjs != NULL)
                 {
                 foundId = TRUE; // warn==1 will give only 1 exp wide error if no individual errors.  NOTE: would be nice if those with expId sorted to beginning, but can't have everything.
                 int thisId = atoi(val);
-                if (thisId == expId && expId != -1)
-                    {
-                    errors--; // One less error
-                    if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
-                        {
-                        char *acc = mdbObjFindValue(obj,MDB_VAR_DCC_ACCESSION); // FIXME: Add code to update accession to encodeExp
-                        if (acc == NULL)
-                            printf("           %s %s\n",experimentId,obj->obj);
-                        else
-                            printf("           %s %s %s set, needs %s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION);
-                        }
-                    }
-                else
+                if (expId == ENCODE_EXP_IX_UNDEFINED || thisId != expId)
                     {
                     updateObj = TRUE;
                     if (warn > 0)
                         printf("           %s %s has bad %s=%s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,val);
                     }
+                else
+                    {
+                    char *acc = mdbObjFindValue(obj,MDB_VAR_DCC_ACCESSION); // FIXME: Add code to update accession to encodeExp
+                    if (exp->accession != NULL && (acc == NULL || differentString(acc,exp->accession)))
+                        {
+                        updateObj = TRUE;
+                        if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
+                            {
+                            if (acc == NULL)
+                                printf("           %s %s %s set, needs %s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION);
+                            else
+                                printf("           %s %s %s set, has wrong %s: %s.\n",experimentId,obj->obj,
+                                       MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION,exp->accession);
+                            }
+                        }
+                    else
+                        {
+                        errors--;       // One less error
+                        if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
+                            printf("           %s %s %s\n",experimentId,obj->obj,(exp->accession != NULL ? exp->accession : ""));
+                        }
+                    }
                 }
             else
                 {
-                updateObj = (expId != -1);
+                updateObj = (expId != ENCODE_EXP_IX_UNDEFINED);
                 if ((foundId && warn > 0) || warn > 1)
                     {
                     if (updateObj)

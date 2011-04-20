@@ -5,6 +5,30 @@
 #	Robert's experiments with an automated process.
 #
 ############################################################################
+#  anoCar2 - Lizard - Ensembl Genes version 61  (DONE - 2011-04-19 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2
+    cat << '_EOF_' > anoCar2.ensGene.ra
+# required db variable
+db anoCar2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation 's/^\([0-9L]\)/chr\1/; s/^GL\([0-9][0-9]*\).1/chrUn_GL\1/; s/^A/chrUn_A/'
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=61 anoCar2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2/bed/ensGene.61
+    featureBits anoCar2 ensGene
+    # 27905138 bases of 1701353770 (1.640%) in intersection
+
+    hgsql -e \
+'update trackVersion set dateReference="current" where db="anoCar2";' hgFixed
+
+############################################################################
+
+############################################################################
 # ensembl 61 update (DONE - 2011-02-04 - Hiram)
 
 # to finish off the v61 update after all were complete:

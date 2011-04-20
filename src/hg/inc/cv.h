@@ -81,5 +81,11 @@ enum cvSearchable cvSearchMethod(char *term);
 const char *cvLabel(char *term);
 // returns cv label if term found or else just term
 
+char *cvLabNormalize(char *sloppyTerm);
+/* CV inconsistency work-arounds.  Return lab name trimmed of parenthesized trailing 
+ * info (a few ENCODE labs have this in metaDb and/or in CV term -- 
+ * PI name embedded in parens in the CV term).  Also fixes other problems until
+ * cleaned up in CV, metaDb and user processes.  Caller must free mem. */
+
 #endif /* CV_H */
 

@@ -7,7 +7,7 @@ longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha
 group regulation
 subGroup1 view Views Peaks=Peaks  RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line A549=A549 BE2C=BE2_C ECC1=ECC-1 GM12878=GM12878&nbsp;(Tier_1) GM12891=GM12891 GM12892=GM12892 H1hESC=H1-hESC&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier&nbsp;3) HCT116=HCT-116 HTB11=HTB-11 K562=K562&nbsp;(Tier&nbsp;1) PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87
-subGroup3 factor Factor ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF101388=BCLAF1_(SC-101388) BHLHE40=BHLHE40 CTCF=CTCF CTCFSC5916=CTCF_(SC-5916) CTCFLSC98982=CTCFL_(SC-98982) E2F6SC22823=E2F6_(SC-22823) EBF1SC137065=EBF1_(SC-137065) EGR1=Egr-1 ELF1SC631=ELF1_(SC-631) ERaa=ERalpha_a ETS1=ETS1 FOSL1SC183=FOSL1_(SC-183) FOSL2=FOSL2 FOXA1SC6553=FOXA1_(SC-6553) FOXA1SC101058=FOXA1_(SC-101058) FOXA2SC6554=FOXA2_(SC-6554)  GABP=GABP GATA2=GATA2 GATA2SC267=GATA2_(SC-267) GATA3SC268=GATA3_(SC-268) GR=GR HDAC2SC6296=HDAC2_(SC-6296) HEY1=HEY1 HNF4ASC8987=HNF4A_(SC-8987) HNF4GSC6558=HNF4G_(SC-6558) IRF4SC6059=IRF4_(SC-6059) JUND=JunD LEF1SC8592=LEF1_(SC-8592) MAX=Max MEF2A=MEF2A MEF2CSC13268=MEF2C_(SC-13268) NANOGSC33759=NANOG_(SC-33759) NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 POU5F1SC9081=POU5F1_(SC-9081) PU1=PU.1 RAD21=RAD21 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SP2SC643=SP2_(SC-643) SRF=SRF TAF1=TAF1 TAF7SC101167=TAF7_(SC-101167) TCF12=TCF12 THAP1SC98174=THAP1_(SC-98174) USF1=USF-1 USF1SC8983=USF1_(SC-8983) YY1=YY1 YY1SC281=YY1_(SC-281) ZBTB33=ZBTB33 ZBTB7ASC34508=ZBTB7A_(SC-34508) ZEB1SC25388=ZEB1_(SC-25388)  zControl=Input(control)
+subGroup3 factor Factor ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF101388=BCLAF1_(SC-101388) BHLHE40=BHLHE40 CTCF=CTCF CTCFSC5916=CTCF_(SC-5916) CTCFLSC98982=CTCFL_(SC-98982) E2F6SC22823=E2F6_(SC-22823) EBF1SC137065=EBF1_(SC-137065) EGR1=Egr-1 ELF1SC631=ELF1_(SC-631) ERaa=ERalpha_a ETS1=ETS1 FOSL1SC183=FOSL1_(SC-183) FOSL2=FOSL2 FOXA1SC6553=FOXA1_(SC-6553) FOXA1SC101058=FOXA1_(SC-101058) FOXA2SC6554=FOXA2_(SC-6554) FOXP2=FOXP2 GABP=GABP GATA2=GATA2 GATA2SC267=GATA2_(SC-267) GATA3SC268=GATA3_(SC-268) GR=GR HDAC2SC6296=HDAC2_(SC-6296) HEY1=HEY1 HNF4ASC8987=HNF4A_(SC-8987) HNF4GSC6558=HNF4G_(SC-6558) IRF4SC6059=IRF4_(SC-6059) JUND=JunD LEF1SC8592=LEF1_(SC-8592) MAX=Max MEF2A=MEF2A MEF2CSC13268=MEF2C_(SC-13268) NANOGSC33759=NANOG_(SC-33759) NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 POU5F1SC9081=POU5F1_(SC-9081) PU1=PU.1 RAD21=RAD21 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SP2SC643=SP2_(SC-643) SRF=SRF TAF1=TAF1 TAF7SC101167=TAF7_(SC-101167) TCF12=TCF12 THAP1SC98174=THAP1_(SC-98174) USF1=USF-1 USF1SC8983=USF1_(SC-8983) YY1=YY1 YY1SC281=YY1_(SC-281) ZBTB33=ZBTB33 ZBTB7ASC34508=ZBTB7A_(SC-34508) ZEB1SC25388=ZEB1_(SC-25388)  zControl=Input(control)
 subGroup4 protocol Protocol PCR1x=PCR1x PCR2x=PCR2x V0416101=v041610.1 V0416102=v041610.2
 subGroup5 treatment Treatment DEXa=DEX_100nM DEXb=DEX_50nM DEXc=DEX_5nM DEX100nM=DEX_100nM DEXd=DEX_500pM DMSO2=DMSO_0.02pct ESTRADIa1h=Estradiol_10nM ETOH02=EtOH_0.02pct GEN1h=Genistein_100nM None=None
 subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5
@@ -583,7 +583,7 @@ noInherit on
         color 153,38,0
     # subId=1241 dateSubmitted=2010-06-08
 
-        track wgEncodeHaibTfbsGm12878EbfPcr1xPkRep1
+        track wgEncodeHaibTfbsGm12878Ebfsc137065Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel GM878 EBF1_(SC-137065)    Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (EBF1_(SC-137065) in GM12878 cells)
@@ -591,6 +591,7 @@ noInherit on
         type broadPeak
         color 153,38,0
     # subId=1241 dateSubmitted=2010-06-08
+        # was wgEncodeHaibTfbsGm12878EbfPcr1xPkRep1 cricket Tue Apr 19 11:11:44 2011
 
         track wgEncodeHaibTfbsGm12878Sp1Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -665,7 +666,7 @@ noInherit on
         color 153,38,0
     # subId=1241 dateSubmitted=2010-06-08
 
-        track wgEncodeHaibTfbsGm12878Irf4Pcr1xPkRep2
+        track wgEncodeHaibTfbsGm12878Irf4sc6059Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel GM878 IRF4_(SC-6059)   Pk 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (IRF4_(SC-6059) in GM12878 cells)
@@ -673,6 +674,7 @@ noInherit on
         type broadPeak
         color 153,38,0
     # subId=1241 dateSubmitted=2010-06-08
+        # was wgEncodeHaibTfbsGm12878Irf4Pcr1xPkRep2 cricket Tue Apr 19 11:11:45 2011
 
         track wgEncodeHaibTfbsGm12878Bcl11aPcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -692,7 +694,7 @@ noInherit on
         color 153,38,0
     # subId=1241 dateSubmitted=2010-06-08
 
-        track wgEncodeHaibTfbsGm12878EbfPcr1xPkRep2
+        track wgEncodeHaibTfbsGm12878Ebfsc137065Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel GM878 EBF1_(SC-137065)    Pk 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (EBF1_(SC-137065) in GM12878 cells)
@@ -700,6 +702,7 @@ noInherit on
         type broadPeak
         color 153,38,0
     # subId=1241 dateSubmitted=2010-06-08
+        # was wgEncodeHaibTfbsGm12878EbfPcr1xPkRep2 cricket Tue Apr 19 11:11:45 2011
 
 
         track wgEncodeHaibTfbsGm12878Six5Pcr1xPkRep2
@@ -799,7 +802,7 @@ noInherit on
         type broadPeak
     # subId=1261 dateSubmitted=2010-06-08
 
-        track wgEncodeHaibTfbsGm12878Irf4Pcr1xPkRep1
+        track wgEncodeHaibTfbsGm12878Irf4sc6059Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel GM878 IRF4_(SC-6059)   Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (IRF4_(SC-6059) in GM12878 cells)
@@ -807,6 +810,7 @@ noInherit on
         type broadPeak
         color 153,38,0
     # subId=1261 dateSubmitted=2010-06-08
+        # was wgEncodeHaibTfbsGm12878Irf4Pcr1xPkRep1 cricket Tue Apr 19 11:11:45 2011
 
         track wgEncodeHaibTfbsHepg2Hey1V0416101PkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -1240,7 +1244,7 @@ noInherit on
         color 153,38,0
         # subId=2207 dateSubmitted=2010-09-15
 
-        track wgEncodeHaibTfbsGm12878Bclaf1m33V0416101PkRep2
+        track wgEncodeHaibTfbsGm12878Bclaf101388V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel GM12878 BCLAF1_(SC-101388) Pk 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (BCLAF1_(SC-101388) in GM12878 cells)
@@ -1248,8 +1252,9 @@ noInherit on
         type broadPeak
         color 153,38,0
         # subId=2212 dateSubmitted=2010-09-15
+        # was wgEncodeHaibTfbsGm12878Bclaf1m33V0416101PkRep2 cricket Tue Apr 19 10:19:31 2011
 
-        track wgEncodeHaibTfbsGm12878Bclaf1m33V0416101PkRep1
+        track wgEncodeHaibTfbsGm12878Bclaf101388V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel GM12878 BCLAF1_(SC-101388) Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (BCLAF1_(SC-101388) in GM12878 cells)
@@ -1257,6 +1262,7 @@ noInherit on
         type broadPeak
         color 153,38,0
         # subId=2212 dateSubmitted=2010-09-15
+        # was wgEncodeHaibTfbsGm12878Bclaf1m33V0416101PkRep1 cricket Tue Apr 19 10:19:31 2011
 
         track wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -1366,7 +1372,7 @@ noInherit on
         color 0,107,27
         # subId=2132 dateSubmitted=2010-09-13
 
-        track wgEncodeHaibTfbsH1hescYy1c20V0416102PkRep2
+        track wgEncodeHaibTfbsH1hescYy1sc281V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel H1-hESC YY1_(SC-281) Pk 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (YY1_(SC-281) in H1-hESC cells)
@@ -1374,8 +1380,9 @@ noInherit on
         type broadPeak
         color 0,107,27
         # subId=2211 dateSubmitted=2010-09-15
+        # was wgEncodeHaibTfbsH1hescYy1c20V0416102PkRep2 cricket Tue Apr 19 10:32:54 2011
 
-        track wgEncodeHaibTfbsH1hescYy1c20V0416102PkRep1
+        track wgEncodeHaibTfbsH1hescYy1sc281V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel H1-hESC YY1_(SC-281) Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (YY1_(SC-281) in H1-hESC cells)
@@ -1383,6 +1390,7 @@ noInherit on
         type broadPeak
         color 0,107,27
         # subId=2211 dateSubmitted=2010-09-15
+        # was wgEncodeHaibTfbsH1hescYy1c20V0416102PkRep1 cricket Tue Apr 19 10:32:54 2011
 
         track wgEncodeHaibTfbsK562Zbtb33Pcr1xPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -1452,21 +1460,23 @@ noInherit on
         type broadPeak
         # subId=2451 dateSubmitted=2010-09-28
 
-        track wgEncodeHaibTfbsGm12891Yy1c20V0416101PkRep1
+        track wgEncodeHaibTfbsGm12891Yy1sc281V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel GM12891 YY1_(SC-281) Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (YY1_(SC-281) in GM12891 cells)
         subGroups view=Peaks factor=YY1SC281 cellType=GM12891 protocol=V0416101 treatment=None rep=rep1
         type broadPeak
         # subId=2203 dateSubmitted=2010-09-27
+        # was wgEncodeHaibTfbsGm12891Yy1c20V0416101PkRep1 cricket Tue Apr 19 10:32:53 2011
 
-        track wgEncodeHaibTfbsGm12891Yy1c20V0416101PkRep2
+        track wgEncodeHaibTfbsGm12891Yy1sc281V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel GM12891 YY1_(SC-281) Pk 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (YY1_(SC-281) in GM12891 cells)
         subGroups view=Peaks factor=YY1SC281 cellType=GM12891 protocol=V0416101 treatment=None rep=rep2
         type broadPeak
         # subId=2203 dateSubmitted=2010-09-27
+        # was wgEncodeHaibTfbsGm12891Yy1c20V0416101PkRep2 cricket Tue Apr 19 10:32:53 2011
 
         track wgEncodeHaibTfbsH1hescP300V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
@@ -1486,7 +1496,7 @@ noInherit on
         color 0,107,27
         # subId=2426 dateSubmitted=2010-09-27
 
-        track wgEncodeHaibTfbsK562Bclaf1m33Pcr1xPkRep2
+        track wgEncodeHaibTfbsK562Bclaf101388Pcr1xPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 BCLAF1_(SC-101388) Pk 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (BCLAF1_(SC-101388) in K562 cells)
@@ -1494,8 +1504,9 @@ noInherit on
         type broadPeak
         color 46,0,184
         # subId=2209 dateSubmitted=2010-09-21
+        # was wgEncodeHaibTfbsK562Bclaf1m33Pcr1xPkRep2 cricket Tue Apr 19 10:32:36 2011
 
-        track wgEncodeHaibTfbsK562Bclaf1m33Pcr1xPkRep1
+        track wgEncodeHaibTfbsK562Bclaf101388Pcr1xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 BCLAF1_(SC-101388) Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (BCLAF1_(SC-101388) in K562 cells)
@@ -1503,8 +1514,9 @@ noInherit on
         type broadPeak
         color 46,0,184
         # subId=2209 dateSubmitted=2010-09-21
+        # was wgEncodeHaibTfbsK562Bclaf1m33Pcr1xPkRep1 cricket Tue Apr 19 10:22:10 2011
 
-        track wgEncodeHaibTfbsK562Gata2cg2Pcr1xPkRep2
+        track wgEncodeHaibTfbsK562Gata2sc267Pcr1xPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 GATA2_(SC-267) Pk 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (GATA2_(SC-267) in K562 cells)
@@ -1512,8 +1524,9 @@ noInherit on
         type broadPeak
         color 46,0,184
         # subId=2453 dateSubmitted=2010-09-28
+        # was wgEncodeHaibTfbsK562Gata2cg2Pcr1xPkRep2 cricket Tue Apr 19 10:32:45 2011
 
-        track wgEncodeHaibTfbsK562Gata2cg2Pcr1xPkRep1
+        track wgEncodeHaibTfbsK562Gata2sc267Pcr1xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 GATA2_(SC-267) Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (GATA2_(SC-267) in K562 cells)
@@ -1521,6 +1534,7 @@ noInherit on
         type broadPeak
         color 46,0,184
         # subId=2453 dateSubmitted=2010-09-28
+        # was wgEncodeHaibTfbsK562Gata2cg2Pcr1xPkRep1 cricket Tue Apr 19 10:32:45 2011
 
         track wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -1682,37 +1696,41 @@ noInherit on
         color 46,0,184
         # subId=2721 dateSubmitted=2010-10-25
 
-        track wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2PkRep2
+        track wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T-47D FOXA1_(SC-6553) Pk 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (FOXA1_(SC-6553) in T-47D cells)
         subGroups view=Peaks factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DMSO2 rep=rep2
         type broadPeak
         # subId=2427 dateSubmitted=2010-11-15
+        # was wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2PkRep2 cricket Tue Apr 19 10:32:43 2011
 
-        track wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2PkRep1
+        track wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel T-47D FOXA1_(SC-6553) Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (FOXA1_(SC-6553) in T-47D cells)
         subGroups view=Peaks factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DMSO2 rep=rep1
         type broadPeak
         # subId=2427 dateSubmitted=2010-11-15
+        # was wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2PkRep1 cricket Tue Apr 19 10:32:43 2011
 
-        track wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2PkRep2
+        track wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC-1 FOXA1_(SC-6553) Pk 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (FOXA1_(SC-6553) in ECC-1 cells)
         subGroups view=Peaks factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DMSO2 rep=rep2
         type broadPeak
         # subId=2428 dateSubmitted=2010-11-15
+        # was wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2PkRep2 cricket Tue Apr 19 10:32:40 2011
 
-        track wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2PkRep1
+        track wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC-1 FOXA1_(SC-6553) Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (FOXA1_(SC-6553) in ECC-1 cells)
         subGroups view=Peaks factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DMSO2 rep=rep1
         type broadPeak
         # subId=2428 dateSubmitted=2010-11-15
+        # was wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2PkRep1 cricket Tue Apr 19 10:32:40 2011
 
         track wgEncodeHaibTfbsK562Sin3ak20V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -1733,7 +1751,7 @@ noInherit on
         # subId=3058 dateSubmitted=2010-12-03
 
 
-        track wgEncodeHaibTfbsK562E2f6h50V0416102PkRep2
+        track wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 E2F6_(SC-22823) Pk 2
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (E2F6_(SC-22823) in K562 cells)
@@ -1741,8 +1759,9 @@ noInherit on
         type broadPeak
         color 46,0,184
         # subId=3069 dateSubmitted=2010-12-08
+        # was wgEncodeHaibTfbsK562E2f6h50V0416102PkRep2 cricket Tue Apr 19 10:32:38 2011
 
-        track wgEncodeHaibTfbsK562E2f6h50V0416102PkRep1
+        track wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 E2F6_(SC-22823) Pk 1
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (E2F6_(SC-22823) in K562 cells)
@@ -1750,6 +1769,7 @@ noInherit on
         type broadPeak
         color 46,0,184
         # subId=3069 dateSubmitted=2010-12-08
+        # was wgEncodeHaibTfbsK562E2f6h50V0416102PkRep1 cricket Tue Apr 19 10:32:37 2011
 
         track wgEncodeHaibTfbsHepg2Rad21V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -1785,7 +1805,7 @@ noInherit on
         type broadPeak
         # subId=3083 dateSubmitted=2010-12-11
 
-        track wgEncodeHaibTfbsH1hescTaf7sq8V0416102PkRep2
+        track wgEncodeHaibTfbsH1hescTaf7sc101167V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel H1-hESC TAF7_(SC-101167) Pk 2
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (TAF7_(SC-101167) in H1-hESC cells)
@@ -1793,8 +1813,9 @@ noInherit on
         type broadPeak
         color 0,107,27
         # subId=3093 dateSubmitted=2010-12-13
+        # was wgEncodeHaibTfbsH1hescTaf7sq8V0416102PkRep2 cricket Tue Apr 19 10:32:48 2011
 
-        track wgEncodeHaibTfbsH1hescTaf7sq8V0416102PkRep1
+        track wgEncodeHaibTfbsH1hescTaf7sc101167V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel H1-hESC TAF7_(SC-101167) Pk 1
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (TAF7_(SC-101167) in H1-hESC cells)
@@ -1802,6 +1823,7 @@ noInherit on
         type broadPeak
         color 0,107,27
         # subId=3093 dateSubmitted=2010-12-13
+        # was wgEncodeHaibTfbsH1hescTaf7sq8V0416102PkRep1 cricket Tue Apr 19 10:32:48 2011
 
         track wgEncodeHaibTfbsHepg2P300V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -1839,21 +1861,23 @@ noInherit on
         color 189,0,157
         # subId=3104 dateSubmitted=2010-12-15
 
-        track wgEncodeHaibTfbsSknshraYy1c20V0416102PkRep2
+        track wgEncodeHaibTfbsSknshraYy1sc281V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel SK-N-SH_RA YY1_(SC-281) Pk 2
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (YY1_(SC-281) in SK-N-SH_RA cells)
         subGroups view=Peaks factor=YY1SC281 cellType=SKNSHRA protocol=V0416102 treatment=None rep=rep2
         type broadPeak
         # subId=3102 dateSubmitted=2010-12-17
+        # was wgEncodeHaibTfbsSknshraYy1c20V0416102PkRep2 cricket Tue Apr 19 10:32:54 2011
 
-        track wgEncodeHaibTfbsSknshraYy1c20V0416102PkRep1
+        track wgEncodeHaibTfbsSknshraYy1sc281V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel SK-N-SH_RA YY1_(SC-281) Pk 1
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (YY1_(SC-281) in SK-N-SH_RA cells)
         subGroups view=Peaks factor=YY1SC281 cellType=SKNSHRA protocol=V0416102 treatment=None rep=rep1
         type broadPeak
         # subId=3102 dateSubmitted=2010-12-17
+        # was wgEncodeHaibTfbsSknshraYy1c20V0416102PkRep1 cricket Tue Apr 19 10:32:54 2011
 
         track wgEncodeHaibTfbsSknshraCtcfV0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -2293,7 +2317,7 @@ noInherit on
         color 46,0,184
         # subId=3265 dateSubmitted=2011-01-19
 
-        track wgEncodeHaibTfbsHepg2Hnf4ah171V0416101PkRep2
+        track wgEncodeHaibTfbsHepg2Hnf4asc8987V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel HepG2 HNF4A_(SC-8987) Pk 2
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (HNF4A_(SC-8987) in HepG2 cells)
@@ -2301,8 +2325,9 @@ noInherit on
         type broadPeak
         color 189,0,157
         # subId=3264 dateSubmitted=2011-01-19
+        # was wgEncodeHaibTfbsHepg2Hnf4ah171V0416101PkRep2 cricket Tue Apr 19 10:32:46 2011
 
-        track wgEncodeHaibTfbsHepg2Hnf4ah171V0416101PkRep1
+        track wgEncodeHaibTfbsHepg2Hnf4asc8987V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel HepG2 HNF4A_(SC-8987) Pk 1
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (HNF4A_(SC-8987) in HepG2 cells)
@@ -2310,6 +2335,7 @@ noInherit on
         type broadPeak
         color 189,0,157
         # subId=3264 dateSubmitted=2011-01-19
+        # was wgEncodeHaibTfbsHepg2Hnf4ah171V0416101PkRep1 cricket Tue Apr 19 10:32:45 2011
 
         track wgEncodeHaibTfbsGm12878Zeb1sc25388V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -2390,7 +2416,7 @@ noInherit on
         color 0,119,158
         # subId=3442 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsK562Taf7sq8V0416101PkRep2
+        track wgEncodeHaibTfbsK562Taf7sc101167V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 TAF7_(SC-101167) Pk 2
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (TAF7_(SC-101167) in K562 cells)
@@ -2398,8 +2424,9 @@ noInherit on
         type broadPeak
         color 46,0,184
         # subId=3444 dateSubmitted=2011-01-21
+        # was wgEncodeHaibTfbsK562Taf7sq8V0416101PkRep2 cricket Tue Apr 19 10:32:50 2011
 
-        track wgEncodeHaibTfbsK562Taf7sq8V0416101PkRep1
+        track wgEncodeHaibTfbsK562Taf7sc101167V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 TAF7_(SC-101167) Pk 1
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (TAF7_(SC-101167) in K562 cells)
@@ -2407,6 +2434,7 @@ noInherit on
         type broadPeak
         color 46,0,184
         # subId=3444 dateSubmitted=2011-01-21
+        # was wgEncodeHaibTfbsK562Taf7sq8V0416101PkRep1 cricket Tue Apr 19 10:32:50 2011
 
         track wgEncodeHaibTfbsGm12878Sin3ak20V0416101PkRep3
         parent wgEncodeHaibTfbsViewPeaks off
@@ -2516,7 +2544,7 @@ noInherit on
         color 0,107,27
         # subId=3495 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsGm12878Yy1c20Pcr1xPkRep2
+        track wgEncodeHaibTfbsGm12878Yy1sc281Pcr1xPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel GM12878 YY1_(SC-281) Pk 2
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (YY1_(SC-281) in GM12878 cells)
@@ -2524,8 +2552,9 @@ noInherit on
         type broadPeak
         color 153,38,0
         # subId=3531 dateSubmitted=2011-02-15
+        # was wgEncodeHaibTfbsGm12878Yy1c20Pcr1xPkRep2 cricket Tue Apr 19 10:32:52 2011
 
-        track wgEncodeHaibTfbsGm12878Yy1c20Pcr1xPkRep1
+        track wgEncodeHaibTfbsGm12878Yy1sc281Pcr1xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel GM12878 YY1_(SC-281) Pk 1
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (YY1_(SC-281) in GM12878 cells)
@@ -2533,6 +2562,7 @@ noInherit on
         type broadPeak
         color 153,38,0
         # subId=3531 dateSubmitted=2011-02-15
+        # was wgEncodeHaibTfbsGm12878Yy1c20Pcr1xPkRep1 cricket Tue Apr 19 10:32:51 2011
 
         track wgEncodeHaibTfbsGm12878Bcl3V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -2961,7 +2991,7 @@ noInherit on
         color 0,107,27
         # subId=3833 dateSubmitted=2011-03-23
 
-        track wgEncodeHaibTfbsHepg2Foxa1c20V0416101PkRep2
+        track wgEncodeHaibTfbsHepg2Foxa1sc6553V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel HepG2 FOXA1_(SC-6553) Pk 2
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (FOXA1_(SC-6553) in HepG2 cells)
@@ -2969,8 +2999,9 @@ noInherit on
         type broadPeak
         color 189,0,157
         # subId=3066 dateSubmitted=2010-12-08
+        # was wgEncodeHaibTfbsHepg2Foxa1c20V0416101PkRep2 cricket Tue Apr 19 10:32:42 2011
 
-        track wgEncodeHaibTfbsHepg2Foxa1c20V0416101PkRep1
+        track wgEncodeHaibTfbsHepg2Foxa1sc6553V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel HepG2 FOXA1_(SC-6553) Pk 1
         longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (FOXA1_(SC-6553) in HepG2 cells)
@@ -2978,6 +3009,7 @@ noInherit on
         type broadPeak
         color 189,0,157
         # subId=3066 dateSubmitted=2010-12-08
+        # was wgEncodeHaibTfbsHepg2Foxa1c20V0416101PkRep1 cricket Tue Apr 19 10:32:42 2011
 
         track wgEncodeHaibTfbsGm12892Yy1V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -3012,6 +3044,31 @@ noInherit on
         type broadPeak
         color 0,107,27
         # subId=3067 dateSubmitted=2010-12-08
+
+        track wgEncodeHaibTfbsGm12878Taf1Pcr1xPkRep2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM12878 TAF1 Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (TAF1 in GM12878 cells)
+        subGroups view=Peaks factor=TAF1 cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
+        type broadPeak
+        color 153,38,0
+        # subId=3877 dateSubmitted=2011-04-18
+
+        track wgEncodeHaibTfbsPfsk1Foxp2Pcr2xPkRep2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel PFSK-1 FOXP2 Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (FOXP2 in PFSK-1 cells)
+        subGroups view=Peaks factor=FOXP2 cellType=PFSK1 protocol=PCR2x treatment=None rep=rep2
+        type broadPeak
+        # subId=3877 dateSubmitted=2011-04-18
+
+        track wgEncodeHaibTfbsSknmcFoxp2Pcr2xPkRep2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel SK-N-MC FOXP2 Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (FOXP2 in SK-N-MC cells)
+        subGroups view=Peaks factor=FOXP2 cellType=SKNMC protocol=PCR2x treatment=None rep=rep2
+        type broadPeak
+        # subId=3877 dateSubmitted=2011-04-18
 
 
 
@@ -3056,7 +3113,7 @@ noInherit on
         color 46,0,184
         # subId=3021 dateSubmitted=2010-11-29
 
-        track wgEncodeHaibTfbsK562Bclaf1m33Pcr1xRawRep1
+        track wgEncodeHaibTfbsK562Bclaf101388Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 BCLAF1_(SC-101388) Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (BCLAF1_(SC-101388) in K562 cells)
@@ -3064,8 +3121,9 @@ noInherit on
         type bigWig 0.271154 76.736504
         color 46,0,184
         # subId=3021 dateSubmitted=2010-11-29
+        # was wgEncodeHaibTfbsK562Bclaf1m33Pcr1xRawRep1 cricket Tue Apr 19 10:32:37 2011
 
-        track wgEncodeHaibTfbsGm12878Bclaf1m33V0416101RawRep1
+        track wgEncodeHaibTfbsGm12878Bclaf101388V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12878 BCLAF1_(SC-101388) Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (BCLAF1_(SC-101388) in GM12878 cells)
@@ -3073,8 +3131,9 @@ noInherit on
         type bigWig 0.183709 124.371002
         color 153,38,0
         # subId=3021 dateSubmitted=2010-11-29
+        # was wgEncodeHaibTfbsGm12878Bclaf1m33V0416101RawRep1 cricket Tue Apr 19 10:19:31 2011
 
-        track wgEncodeHaibTfbsK562Bclaf1m33Pcr1xRawRep2
+        track wgEncodeHaibTfbsK562Bclaf101388Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 BCLAF1_(SC-101388) Raw 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (BCLAF1_(SC-101388) in K562 cells)
@@ -3082,6 +3141,7 @@ noInherit on
         type bigWig 0.284958 110.990997
         color 46,0,184
         # subId=3021 dateSubmitted=2010-11-29
+        # was wgEncodeHaibTfbsK562Bclaf1m33Pcr1xRawRep2 cricket Tue Apr 19 10:32:37 2011
 
         track wgEncodeHaibTfbsHepg2Bhlhe40V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -3157,39 +3217,43 @@ noInherit on
         color 189,0,157
         # subId=3021 dateSubmitted=2010-11-29
 
-        track wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2RawRep1
+        track wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T-47D FOXA1_(SC-6553) Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (FOXA1_(SC-6553) in T-47D cells)
         subGroups view=RawSignal factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DMSO2 rep=rep1
         type bigWig 0.292482 169.054993
         # subId=3021 dateSubmitted=2010-11-29
+        # was wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2RawRep1 cricket Tue Apr 19 10:32:44 2011
 
-        track wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2RawRep1
+        track wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC-1 FOXA1_(SC-6553) Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (FOXA1_(SC-6553) in ECC-1 cells)
         subGroups view=RawSignal factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DMSO2 rep=rep1
         type bigWig 0.214719 212.035004
         # subId=3021 dateSubmitted=2010-11-29
+        # was wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2RawRep1 cricket Tue Apr 19 10:32:41 2011
 
-        track wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2RawRep2
+        track wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC-1 FOXA1_(SC-6553) Raw 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (FOXA1_(SC-6553) in ECC-1 cells)
         subGroups view=RawSignal factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DMSO2 rep=rep2
         type bigWig 0.221521 202.138000
         # subId=3021 dateSubmitted=2010-11-29
+        # was wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2RawRep2 cricket Tue Apr 19 10:32:41 2011
 
-        track wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2RawRep2
+        track wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dmso2RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel T-47D FOXA1_(SC-6553) Raw 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (FOXA1_(SC-6553) in T-47D cells)
         subGroups view=RawSignal factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DMSO2 rep=rep2
         type bigWig 0.201189 168.798004
         # subId=3021 dateSubmitted=2010-11-29
+        # was wgEncodeHaibTfbsT47dFoxa1c20V0416102Dmso2RawRep2 cricket Tue Apr 19 10:32:44 2011
 
-        track wgEncodeHaibTfbsHepg2Foxa1c20V0416101RawRep2
+        track wgEncodeHaibTfbsHepg2Foxa1sc6553V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HepG2 FOXA1_(SC-6553) Raw 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (FOXA1_(SC-6553) in HepG2 cells)
@@ -3197,6 +3261,7 @@ noInherit on
         type bigWig 0.227945 147.936005
         color 189,0,157
         # subId=3021 dateSubmitted=2010-11-29
+        # was wgEncodeHaibTfbsHepg2Foxa1c20V0416101RawRep2 cricket Tue Apr 19 10:32:43 2011
 
         track wgEncodeHaibTfbsH1hescGabpPcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -3251,7 +3316,7 @@ noInherit on
         # subId=3021 dateSubmitted=2010-11-29
 
 
-		track wgEncodeHaibTfbsHepg2Hnf4ah171V0416101RawRep1 
+		track wgEncodeHaibTfbsHepg2Hnf4asc8987V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HepG2 HNF4A_(SC-8987) Raw 1
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (HNF4A_(SC-8987) in HepG2 cells)
@@ -3259,6 +3324,7 @@ noInherit on
         type bigWig 0.422290 325.691010
         color 189,0,157
         # subId=3264 dateSubmitted=2011-01-19
+		# was wgEncodeHaibTfbsHepg2Hnf4ah171V0416101RawRep1 cricket Tue Apr 19 10:32:46 2011
 
         track wgEncodeHaibTfbsH1hescNrsfV0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -3799,7 +3865,7 @@ noInherit on
         color 153,38,0
         # subId=3035 dateSubmitted=2011-01-20
 
-        track wgEncodeHaibTfbsGm12878Bclaf1m33V0416101RawRep2
+        track wgEncodeHaibTfbsGm12878Bclaf101388V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12878 BCLAF1_(SC-101388) Raw 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (BCLAF1_(SC-101388) in GM12878 cells)
@@ -3807,6 +3873,7 @@ noInherit on
         type bigWig 0.150221 104.178001
         color 153,38,0
         # subId=3027 dateSubmitted=2010-11-29
+        # was wgEncodeHaibTfbsGm12878Bclaf1m33V0416101RawRep2 cricket Tue Apr 19 10:19:32 2011
 
         track wgEncodeHaibTfbsGm12878ControlPcr2xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -3870,7 +3937,7 @@ noInherit on
         color 46,0,184
         # subId=3027 dateSubmitted=2010-11-29
 
-        track wgEncodeHaibTfbsHepg2Foxa1c20V0416101RawRep1
+        track wgEncodeHaibTfbsHepg2Foxa1sc6553V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HepG2 FOXA1_(SC-6553) Raw 1
        	longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (FOXA1_(SC-6553) in HepG2 cells)
@@ -3878,8 +3945,9 @@ noInherit on
         type bigWig 0.169883 73.262001
         color 189,0,157
         # subId=3027 dateSubmitted=2010-11-29
+        # was wgEncodeHaibTfbsHepg2Foxa1c20V0416101RawRep1 cricket Tue Apr 19 10:32:42 2011
 
-        track wgEncodeHaibTfbsHepg2Hnf4ah171V0416101RawRep2
+        track wgEncodeHaibTfbsHepg2Hnf4asc8987V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HepG2 HNF4A_(SC-8987) Raw 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (HNF4A_(SC-8987) in HepG2 cells)
@@ -3887,6 +3955,7 @@ noInherit on
         type bigWig 0.420062 350.752014
         color 189,0,157
         # subId=3027 dateSubmitted=2010-11-29
+        # was wgEncodeHaibTfbsHepg2Hnf4ah171V0416101RawRep2 cricket Tue Apr 19 10:32:47 2011
 
         track wgEncodeHaibTfbsGm12878Mef2aPcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4150,7 +4219,7 @@ noInherit on
         type bigWig 0.145188 133.645004
         # subId=3029 dateSubmitted=2010-11-29
 
-        track wgEncodeHaibTfbsK562E2f6h50V0416102RawRep2
+        track wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 E2F6_(SC-22823) Raw 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (E2F6_(SC-22823) in K562 cells)
@@ -4158,6 +4227,7 @@ noInherit on
         type bigWig 0.209743 292.433990
         color 46,0,184
         # subId=3029 dateSubmitted=2010-11-29
+        # was wgEncodeHaibTfbsK562E2f6h50V0416102RawRep2 cricket Tue Apr 19 10:32:38 2011
 
         track wgEncodeHaibTfbsK562Ets1V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4454,7 +4524,7 @@ noInherit on
         color 153,38,0
         # subId=3037 dateSubmitted=2010-12-01
 
-        track wgEncodeHaibTfbsGm12878Irf4Pcr1xRawRep1
+        track wgEncodeHaibTfbsGm12878Irf4sc6059Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12878 IRF4_(SC-6059) Raw 1
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (IRF4_(SC-6059) in GM12878 cells)
@@ -4462,6 +4532,7 @@ noInherit on
         type bigWig 0.188264 148.587006
         color 153,38,0
         # subId=3037 dateSubmitted=2010-12-01
+        # was wgEncodeHaibTfbsGm12878Irf4Pcr1xRawRep1 cricket Tue Apr 19 11:11:46 2011
 
         track wgEncodeHaibTfbsGm12878Zbtb33Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4522,7 +4593,7 @@ noInherit on
         type bigWig 0.271463 198.100006
         # subId=3037 dateSubmitted=2010-12-01
 
-        track wgEncodeHaibTfbsGm12878Irf4Pcr1xRawRep2
+        track wgEncodeHaibTfbsGm12878Irf4sc6059Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12878 IRF4_(SC-6059) Raw 2
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (IRF4_(SC-6059) in GM12878 cells)
@@ -4530,6 +4601,7 @@ noInherit on
         type bigWig 0.161846 177.746994
         color 153,38,0
         # subId=3038 dateSubmitted=2010-11-30
+        # was wgEncodeHaibTfbsGm12878Irf4Pcr1xRawRep2 cricket Tue Apr 19 11:11:46 2011
 
         track wgEncodeHaibTfbsH1hescControlV0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4540,7 +4612,7 @@ noInherit on
         color 0,107,27
         # subId=3038 dateSubmitted=2010-11-30
 
-        track wgEncodeHaibTfbsGm12878Ebf1c8Pcr1xRawRep2
+        track wgEncodeHaibTfbsGm12878Ebf1sc137065Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12878 EBF1_(SC-137065) Raw 2
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (EBF1_(SC-137065) in GM12878 cells)
@@ -4548,6 +4620,7 @@ noInherit on
         type bigWig 0.198833 116.863998
         color 153,38,0
         # subId=3038 dateSubmitted=2010-11-30
+        # was wgEncodeHaibTfbsGm12878Ebf1c8Pcr1xRawRep2 cricket Tue Apr 19 10:32:39 2011
 
         track wgEncodeHaibTfbsK562Hey1Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4673,7 +4746,7 @@ noInherit on
         color 46,0,184
         # subId=3058 dateSubmitted=2010-12-03
 
-        track wgEncodeHaibTfbsK562E2f6h50V0416102RawRep1
+        track wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 E2F6_(SC-22823) Raw 1
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (E2F6_(SC-22823) in K562 cells)
@@ -4681,6 +4754,7 @@ noInherit on
         type bigWig 0.297230 676.867004
         color 46,0,184
         # subId=3069 dateSubmitted=2010-12-08
+        # was wgEncodeHaibTfbsK562E2f6h50V0416102RawRep1 cricket Tue Apr 19 10:32:38 2011
 
         track wgEncodeHaibTfbsHepg2Rad21V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4700,7 +4774,7 @@ noInherit on
         color 189,0,157
         # subId=3071 dateSubmitted=2010-12-06
 
-        track wgEncodeHaibTfbsH1hescTaf7sq8V0416102RawRep2
+        track wgEncodeHaibTfbsH1hescTaf7sc101167V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel H1-hESC TAF7_(SC-101167) Raw 2
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (TAF7_(SC-101167) in H1-hESC cells)
@@ -4708,8 +4782,9 @@ noInherit on
         type bigWig 0.069639 259.299988
         color 0,107,27
         # subId=3093 dateSubmitted=2010-12-13
+        # was wgEncodeHaibTfbsH1hescTaf7sq8V0416102RawRep2 cricket Tue Apr 19 10:32:49 2011
 
-        track wgEncodeHaibTfbsH1hescTaf7sq8V0416102RawRep1
+        track wgEncodeHaibTfbsH1hescTaf7sc101167V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel H1-hESC TAF7_(SC-101167) Raw 1
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (TAF7_(SC-101167) in H1-hESC cells)
@@ -4717,6 +4792,7 @@ noInherit on
         type bigWig 0.297870 286.252991
         color 0,107,27
         # subId=3093 dateSubmitted=2010-12-13
+        # was wgEncodeHaibTfbsH1hescTaf7sq8V0416102RawRep1 cricket Tue Apr 19 10:32:49 2011
 
         track wgEncodeHaibTfbsHepg2P300V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4754,21 +4830,23 @@ noInherit on
         color 189,0,157
         # subId=3104 dateSubmitted=2010-12-15
 
-        track wgEncodeHaibTfbsSknshraYy1c20V0416102RawRep2
+        track wgEncodeHaibTfbsSknshraYy1sc281V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel SK-N-SH_RA YY1_(SC-281) Raw 2
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (YY1_(SC-281) in SK-N-SH_RA cells)
         subGroups view=RawSignal factor=YY1SC281 cellType=SKNSHRA protocol=V0416102 treatment=None rep=rep2
         type bigWig 0.135502 209.994003
         # subId=3102 dateSubmitted=2010-12-17
+        # was wgEncodeHaibTfbsSknshraYy1c20V0416102RawRep2 cricket Tue Apr 19 10:32:55 2011
 
-        track wgEncodeHaibTfbsSknshraYy1c20V0416102RawRep1
+        track wgEncodeHaibTfbsSknshraYy1sc281V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel SK-N-SH_RA YY1_(SC-281) Raw 1
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (YY1_(SC-281) in SK-N-SH_RA cells)
         subGroups view=RawSignal factor=YY1SC281 cellType=SKNSHRA protocol=V0416102 treatment=None rep=rep1
         type bigWig 0.193427 188.203995
         # subId=3102 dateSubmitted=2010-12-17
+        # was wgEncodeHaibTfbsSknshraYy1c20V0416102RawRep1 cricket Tue Apr 19 10:32:55 2011
 
         track wgEncodeHaibTfbsSknshraCtcfV0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -5235,7 +5313,7 @@ noInherit on
         color 0,119,158
         # subId=3036 dateSubmitted=2011-01-06
 
-        track wgEncodeHaibTfbsGm12878Ebf1c8Pcr1xRawRep1
+        track wgEncodeHaibTfbsGm12878Ebf1sc137065Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12878 EBF1_(SC-137065) Raw 1
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (EBF1_(SC-137065) in GM12878 cells)
@@ -5243,6 +5321,7 @@ noInherit on
         type bigWig 0.108531 129.695007
         color 153,38,0
         # subId=3036 dateSubmitted=2011-01-06
+        # was wgEncodeHaibTfbsGm12878Ebf1c8Pcr1xRawRep1 cricket Tue Apr 19 10:32:39 2011
 
         track wgEncodeHaibTfbsGm12892Taf1V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -5556,7 +5635,7 @@ noInherit on
         color 0,119,158
         # subId=3442 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsK562Taf7sq8V0416101RawRep2
+        track wgEncodeHaibTfbsK562Taf7sc101167V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 TAF7_(SC-101167) Raw 2
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (TAF7_(SC-101167) in K562 cells)
@@ -5564,8 +5643,9 @@ noInherit on
         type bigWig 0.211353 666.976990
         color 46,0,184
         # subId=3444 dateSubmitted=2011-01-21
+        # was wgEncodeHaibTfbsK562Taf7sq8V0416101RawRep2 cricket Tue Apr 19 10:32:51 2011
 
-        track wgEncodeHaibTfbsK562Taf7sq8V0416101RawRep1
+        track wgEncodeHaibTfbsK562Taf7sc101167V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 TAF7_(SC-101167) Raw 1
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (TAF7_(SC-101167) in K562 cells)
@@ -5573,6 +5653,7 @@ noInherit on
         type bigWig 0.242982 254.766006
         color 46,0,184
         # subId=3444 dateSubmitted=2011-01-21
+        # was wgEncodeHaibTfbsK562Taf7sq8V0416101RawRep1 cricket Tue Apr 19 10:32:51 2011
 
         track wgEncodeHaibTfbsGm12878Sin3ak20V0416101RawRep3
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -5888,7 +5969,7 @@ noInherit on
         type bigWig 0.162516 577.216003
         # subId=3035 dateSubmitted=2011-01-20
 
-        track wgEncodeHaibTfbsGm12878Yy1c20Pcr1xRawRep2
+        track wgEncodeHaibTfbsGm12878Yy1sc281Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12878 YY1_(SC-281) Raw 2
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (YY1_(SC-281) in GM12878 cells)
@@ -5896,8 +5977,9 @@ noInherit on
         type bigWig 0.206929 143.660995
         color 153,38,0
         # subId=3531 dateSubmitted=2011-02-15
+        # was wgEncodeHaibTfbsGm12878Yy1c20Pcr1xRawRep2 cricket Tue Apr 19 10:32:52 2011
 
-        track wgEncodeHaibTfbsGm12878Yy1c20Pcr1xRawRep1
+        track wgEncodeHaibTfbsGm12878Yy1sc281Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12878 YY1_(SC-281) Raw 1
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (YY1_(SC-281) in GM12878 cells)
@@ -5905,6 +5987,7 @@ noInherit on
         type bigWig 0.240201 156.850998
         color 153,38,0
         # subId=3531 dateSubmitted=2011-02-15
+        # was wgEncodeHaibTfbsGm12878Yy1c20Pcr1xRawRep1 cricket Tue Apr 19 10:32:52 2011
 
         track wgEncodeHaibTfbsGm12878Bcl3V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -6444,3 +6527,45 @@ noInherit on
         subGroups view=RawSignal factor=YY1 cellType=GM12892 protocol=V0416101 treatment=None rep=rep1
         type bigWig 0.272818 145.412003
         # subId=3059 dateSubmitted=2010-12-08
+
+        track wgEncodeHaibTfbsGm12878Taf1Pcr1xRawRep2
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 TAF1 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (TAF1 in GM12878 cells)
+        subGroups view=RawSignal factor=TAF1 cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.152062 165.367004
+        color 153,38,0
+        # subId=3877 dateSubmitted=2011-04-18
+
+        track wgEncodeHaibTfbsPfsk1Foxp2Pcr2xRawRep2
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel PFSK-1 FOXP2 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (FOXP2 in PFSK-1 cells)
+        subGroups view=RawSignal factor=FOXP2 cellType=PFSK1 protocol=PCR2x treatment=None rep=rep2
+        type bigWig 0.673525 35.191700
+        # subId=3877 dateSubmitted=2011-04-18
+
+        track wgEncodeHaibTfbsSknmcFoxp2Pcr2xRawRep2
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel SK-N-MC FOXP2 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (FOXP2 in SK-N-MC cells)
+        subGroups view=RawSignal factor=FOXP2 cellType=SKNMC protocol=PCR2x treatment=None rep=rep2
+        type bigWig 0.296521 84.879204
+        # subId=3877 dateSubmitted=2011-04-18
+
+        track wgEncodeHaibTfbsHepg2NrsfPcr2xRawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel HepG2 NRSF Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (NRSF in HepG2 cells)
+        subGroups view=RawSignal factor=NRSF cellType=HEPG2 protocol=PCR2x treatment=None rep=rep1
+        type bigWig 0.218070 452.549988
+        color 189,0,157
+        # subId=3877 dateSubmitted=2011-04-18
+
+        track wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmRawRep2
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel A549 Pol2 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Pol2 in A549 cells)
+        subGroups view=RawSignal factor=POL2 cellType=A549 protocol=PCR2x treatment=DEX100nM rep=rep2
+        type bigWig 0.162130 1033.780029
+        # subId=3877 dateSubmitted=2011-04-18

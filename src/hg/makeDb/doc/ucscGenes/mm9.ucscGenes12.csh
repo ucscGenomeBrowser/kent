@@ -25,7 +25,7 @@ set spDb = sp101005
 set pbDb = proteins090821
 set ratDb = rn4
 set RatDb = Rn4
-set fishDb = danRer5
+set fishDb = danRer7
 set flyDb = dm3
 set wormDb = ce6
 set yeastDb = sacCer2
@@ -45,8 +45,8 @@ endif
 # make tempDb same as db.
 set tempPrefix = "tmp"
 set tmpSuffix = "Foo14"
-set tempDb = ${tempPrefix}${tmpSuffix}
-#set tempDb = mm9
+#set tempDb = ${tempPrefix}${tmpSuffix}
+set tempDb = mm9
 set bioCycTempDb = tmpBioCyc${tmpSuffix}
 
 # Table for SNPs
@@ -936,12 +936,6 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
 hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
 
-# Clean up
-cd $dir/hgNearBlastp
-cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
-rm -r run.*/out
-gzip run.*/all.tab
-
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
 cd $dir
@@ -1239,9 +1233,6 @@ sudo rm /var/lib/mysql/proteome
 sudo ln -s /var/lib/mysql/$pbDb /var/lib/mysql/proteome
 hgsqladmin flush-tables
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
 # Make full text index.  Takes a minute or so.  After this the genome browser
 # tracks display will work including the position search.  The genes details
 # page, gene sorter, and proteome browser still need more tables.
@@ -1271,6 +1262,9 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
 
 
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
 #
 # Finally, need to wait until after testing, but update databases in other organisms
 # with blastTabs
@@ -1287,6 +1281,12 @@ hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
 synBlastp.csh $ratDb $db
+
+# Clean up
+cd $dir/hgNearBlastp
+cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
+rm -r run.*/out
+gzip run.*/all.tab
 
 # move this exit statement to the end of the section to be done next
 exit $status # BRACKET

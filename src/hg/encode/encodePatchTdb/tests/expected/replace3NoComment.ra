@@ -513,7 +513,7 @@ wgEncode 1
     maxHeightPixels 100:32:16
 
         track wgEncodeBroadMapabilityAlign36mer
-        subTrack wgEncodeMapabilityViewALN
+        parent wgEncodeMapabilityViewALN
         shortLabel Broad Align 36
         longLabel REPLACED Mapability - ENCODE Broad Alignability of 36mers with no more than 2 mismatches
         subGroups view=ALN win=w36
@@ -553,7 +553,7 @@ wgEncode 1
         metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=24bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
 
         track wgEncodeDukeUniqueness35bp
-        subTrack wgEncodeMapabilityViewDUNIQ
+        parent wgEncodeMapabilityViewDUNIQ
         shortLabel Duke Uniq 35
         longLabel REPLACED Mapability - ENCODE Duke Uniqueness of 35bp sequences
         type wig 0.00 1.00
@@ -612,7 +612,7 @@ wgEncode 1
     subTrack wgEncodeMapability
 
         track wgEncodeDukeRegionsExcluded
-        subTrack wgEncodeMapabilityViewXR
+        parent wgEncodeMapabilityViewXR
         shortLabel Excluded Regions
         longLabel REPLACED Mapability - ENCODE Duke Excluded Regions
         subGroups view=XR win=zNA

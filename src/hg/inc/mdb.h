@@ -115,6 +115,7 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 #define MDB_VAR_CONTROL         CV_TERM_CONTROL
 #define MDB_VAR_TABLENAME       "tableName"
 #define MDB_VAR_FILENAME        "fileName"
+#define MDB_VAR_MD5SUM          "md5sum"
 #define MDB_VAR_FILEINDEX       "fileIndex"
 #define MDB_VAR_DCC_ACCESSION   "dccAccession"
 #define MDB_VAR_PROJECT         "project"
@@ -420,12 +421,12 @@ struct mdbVar *mdbObjFindEncodeEdvPairs(struct sqlConnection *conn,char *tableNa
 // If includeNone, then defined variables not found in obj will be included as {var}="None".
 #define mdbObjFindEncodeEdvs(conn,mdbObj,includeNone) mdbObjFindEncodeEdvPairs((conn),NULL,(mdbObj),(includeNone))
 
-struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,
-                                          int warn,boolean createExpIfNecessary);
+struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,char *expTable,
+                      struct mdbObj **pMdbObjs,int warn,boolean createExpIfNecessary,boolean updateAccession);
 // Organizes objects into experiments and validates experiment IDs.  Will add/update the ids in the structures.
 // If warn=1, then prints to stdout all the experiments/obs with missing or wrong expIds;
 //    warn=2, then print line for each obj with expId or warning.
-// createExpIfNecessary means go ahead and add to the hgFixed.encodeExp table to get an ID
+// createExpIfNecessary means add expId to encodeExp table. updateAccession too if necessary.
 // Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
 
 boolean mdbObjIsEncode(struct mdbObj *mdbObj);
