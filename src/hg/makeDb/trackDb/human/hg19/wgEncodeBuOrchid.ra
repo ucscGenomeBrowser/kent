@@ -5,6 +5,7 @@ shortLabel BU ORChID
 longLabel ORChID Predicted DNA Cleavage Sites from ENCODE/Boston Univ (Tullius lab)
 group map
 subGroup1 view Views Signal=Signal
+fileSortOrder tableName=Version view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder view=+
 controlledVocabulary encode/cv.ra 
 priority 0
@@ -22,7 +23,7 @@ noInherit on
     viewLimits 0:0.4
     autoScale on
     transformFunc NONE
-    windowingFunction mean 
+    windowingFunction mean+whiskers
     smoothingWindow 7
     type bigWig -1 2 
 

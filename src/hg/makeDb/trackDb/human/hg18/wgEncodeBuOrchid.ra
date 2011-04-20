@@ -5,16 +5,13 @@ shortLabel BU ORChID
 longLabel ENCODE Boston Univ (Tullius Lab) ORChID Predicted DNA Cleavage Sites
 group map
 subGroup1 view Views Signal=Signal
-#subGroup2 cellType Cell_Line GM12878=GM12878
-#subGroup1 cellType Cell_Line GM12878=GM12878
-#dimensions dimensionX=cellType
 sortOrder view=+
 controlledVocabulary encode/cv.ra cellType
 dragAndDrop subTracks
-#visibilityViewDefaults  Signal=full
 priority 0
 type bed 3
 wgEncode 1
+fileSortOrder replicate=Version view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 maxWindowToQuery 10000000
 noInherit on
 
