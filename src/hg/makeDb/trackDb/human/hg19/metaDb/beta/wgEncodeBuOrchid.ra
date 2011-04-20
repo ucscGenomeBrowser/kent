@@ -1,0 +1,45 @@
+metaObject wgEncodeBuOrchid
+objType composite
+composite wgEncodeBuOrchid
+expVars lab,dataType
+
+metaObject wgEncodeBuOrchidV1
+objType table
+composite wgEncodeBuOrchid
+dataType Orchid
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2011-01-03
+dateSubmitted 2010-01-24
+dateUnrestricted 2010-10-24
+dccAccession wgEncodeEH000001
+expId 1
+expVars lab, dataType
+fileName wgEncodeBuOrchidV1.bigWig
+grant Tullius
+lab BU
+origAssembly hg18
+project wgEncode
+subId 3118
+tableName wgEncodeBuOrchidV1
+view Signal
+
+metaObject wgEncodeBuOrchidV2
+objType table
+composite wgEncodeBuOrchid
+dataType Orchid
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2011-01-03
+dateSubmitted 2010-01-24
+dateUnrestricted 2010-10-24
+dccAccession wgEncodeEH000001
+expId 1
+fileName wgEncodeBuOrchidV2.bigWig
+grant Tullius
+lab BU
+origAssembly hg18
+project wgEncode
+subId 3118
+tableName wgEncodeBuOrchidV2
+view Signal
+
+# MAGIC: -161955993
