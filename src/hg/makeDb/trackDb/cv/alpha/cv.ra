@@ -2801,6 +2801,7 @@ organism Human
 tissue Myometrium
 description Myometrial cells
 vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, PA)
+orderUrl http://www.mwrif.org/188/condon-jeyasuria-lab
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
 termId BTO:0000907
 sex F
