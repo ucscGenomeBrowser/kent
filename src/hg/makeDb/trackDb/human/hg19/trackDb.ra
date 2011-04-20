@@ -2371,3 +2371,14 @@ visibility hide
 spectrum on
 type netAlign hg19 chainSelf
 otherDb hg19
+
+track allHg19RS_BW
+shortLabel GERP
+longLabel GERP scores for mammalian alignments
+group compGeno
+visibility hide
+priority 105
+type bigWig -15 7
+autoScale on
+maxHeightPixels 128:64:20
+
