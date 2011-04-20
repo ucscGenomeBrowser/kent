@@ -385,7 +385,7 @@ subId 3601
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
@@ -406,7 +406,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3601
-tableName wgEncodeCshlLongRnaSeqA549CellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPapAlnRep1
@@ -1027,7 +1026,7 @@ subId 3603
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
@@ -1048,7 +1047,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3603
-tableName wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapAlnRep1
@@ -1433,7 +1431,7 @@ subId 3604
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptGencV3c
-objType table
+objType file
 bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
@@ -1454,7 +1452,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3604
-tableName wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep1
@@ -1839,7 +1836,7 @@ subId 3605
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
@@ -1860,7 +1857,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3605
-tableName wgEncodeCshlLongRnaSeqBjCellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapAlnRep1
@@ -2245,7 +2241,7 @@ subId 3606
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapTranscriptGencV3c
-objType table
+objType file
 bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
@@ -2266,7 +2262,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3606
-tableName wgEncodeCshlLongRnaSeqBjCellPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1
@@ -2651,7 +2646,7 @@ subId 3611
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -2672,7 +2667,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3611
-tableName wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep1
@@ -3466,7 +3460,7 @@ subId 3607
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptGencV3c
-objType table
+objType file
 bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -3487,7 +3481,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3607
-tableName wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep1
@@ -3872,7 +3865,7 @@ subId 3608
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptGencV3c
-objType table
+objType file
 bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -3893,7 +3886,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3608
-tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep1
@@ -4278,7 +4270,7 @@ subId 3609
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptGencV3c
-objType table
+objType file
 bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -4299,7 +4291,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3609
-tableName wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep1
@@ -4684,7 +4675,7 @@ subId 3610
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptGencV3c
-objType table
+objType file
 bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -4705,7 +4696,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3610
-tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep1
@@ -5090,7 +5080,7 @@ subId 3613
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -5111,7 +5101,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3613
-tableName wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep1
@@ -5496,7 +5485,7 @@ subId 3614
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptGencV3c
-objType table
+objType file
 bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -5517,7 +5506,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3614
-tableName wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAlnRep2
@@ -5784,7 +5772,7 @@ subId 3615
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptGencV3c
-objType table
+objType file
 bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -5805,7 +5793,6 @@ project wgEncode
 replicate 2
 rnaExtract longNonPolyA
 subId 3615
-tableName wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapAlnRep2
@@ -6072,7 +6059,7 @@ subId 3616
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptGencV3c
-objType table
+objType file
 bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -6093,7 +6080,6 @@ project wgEncode
 replicate 2
 rnaExtract longPolyA
 subId 3616
-tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaAlnRep2
@@ -6360,7 +6346,7 @@ subId 3617
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptGencV3c
-objType table
+objType file
 bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -6381,7 +6367,6 @@ project wgEncode
 replicate 2
 rnaExtract longNonPolyA
 subId 3617
-tableName wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapAlnRep2
@@ -6648,7 +6633,7 @@ subId 3618
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptGencV3c
-objType table
+objType file
 bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -6669,7 +6654,6 @@ project wgEncode
 replicate 2
 rnaExtract longPolyA
 subId 3618
-tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep1
@@ -7054,7 +7038,7 @@ subId 3629
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -7075,7 +7059,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3629
-tableName wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep1
@@ -7460,7 +7443,7 @@ subId 3630
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptGencV3c
-objType table
+objType file
 bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -7481,7 +7464,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3630
-tableName wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAlnRep2
@@ -7748,7 +7730,7 @@ subId 3631
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamTranscriptGencV3c
-objType table
+objType file
 bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -7769,7 +7751,6 @@ project wgEncode
 replicate 2
 rnaExtract longNonPolyA
 subId 3631
-tableName wgEncodeCshlLongRnaSeqHelas3CytosolPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep1
@@ -8154,7 +8135,7 @@ subId 3632
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptGencV3c
-objType table
+objType file
 bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -8175,7 +8156,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3632
-tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep1
@@ -8560,7 +8540,7 @@ subId 3633
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptGencV3c
-objType table
+objType file
 bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -8581,7 +8561,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3633
-tableName wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep1
@@ -8966,7 +8945,7 @@ subId 3634
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptGencV3c
-objType table
+objType file
 bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -8987,7 +8966,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3634
-tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep1
@@ -9372,7 +9350,7 @@ subId 3639
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -9393,7 +9371,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3639
-tableName wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep1
@@ -9778,7 +9755,7 @@ subId 3640
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptGencV3c
-objType table
+objType file
 bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -9799,7 +9776,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3640
-tableName wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep1
@@ -10420,7 +10396,7 @@ subId 3636
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptGencV3c
-objType table
+objType file
 bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -10441,7 +10417,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3636
-tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep1
@@ -10826,7 +10801,7 @@ subId 3637
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptGencV3c
-objType table
+objType file
 bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -10847,7 +10822,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3637
-tableName wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapAlnRep1
@@ -11232,7 +11206,7 @@ subId 3638
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptGencV3c
-objType table
+objType file
 bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -11253,7 +11227,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3638
-tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaAlnRep1
@@ -11520,7 +11493,7 @@ subId 3619
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
@@ -11541,7 +11514,6 @@ project wgEncode
 replicate 2
 rnaExtract longNonPolyA
 subId 3619
-tableName wgEncodeCshlLongRnaSeqHmecCellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapAlnRep1
@@ -11808,7 +11780,7 @@ subId 3620
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapTranscriptGencV3c
-objType table
+objType file
 bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
@@ -11829,7 +11801,6 @@ project wgEncode
 replicate 2
 rnaExtract longPolyA
 subId 3620
-tableName wgEncodeCshlLongRnaSeqHmecCellPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep1
@@ -12214,7 +12185,7 @@ subId 3621
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
@@ -12235,7 +12206,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3621
-tableName wgEncodeCshlLongRnaSeqHsmmCellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep1
@@ -12620,7 +12590,7 @@ subId 3622
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptGencV3c
-objType table
+objType file
 bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
@@ -12641,7 +12611,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3622
-tableName wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep1
@@ -13026,7 +12995,7 @@ subId 3627
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -13047,7 +13016,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3627
-tableName wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep1
@@ -13432,7 +13400,7 @@ subId 3628
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptGencV3c
-objType table
+objType file
 bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -13453,7 +13421,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3628
-tableName wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAlnRep3
@@ -13720,7 +13687,7 @@ subId 3623
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptGencV3c
-objType table
+objType file
 bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -13741,7 +13708,6 @@ project wgEncode
 replicate 3,4
 rnaExtract longNonPolyA
 subId 3623
-tableName wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep3
@@ -14126,7 +14092,7 @@ subId 3624
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptGencV3c
-objType table
+objType file
 bioRep 029C,030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -14147,7 +14113,6 @@ project wgEncode
 replicate 3,4
 rnaExtract longPolyA
 subId 3624
-tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep3
@@ -14532,7 +14497,7 @@ subId 3625
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptGencV3c
-objType table
+objType file
 bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -14553,7 +14518,6 @@ project wgEncode
 replicate 3,4
 rnaExtract longNonPolyA
 subId 3625
-tableName wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapAlnRep3
@@ -14938,7 +14902,7 @@ subId 3626
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptGencV3c
-objType table
+objType file
 bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -14959,7 +14923,6 @@ project wgEncode
 replicate 3,4
 rnaExtract longPolyA
 subId 3626
-tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1
@@ -15344,7 +15307,7 @@ subId 3648
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -15365,7 +15328,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3648
-tableName wgEncodeCshlLongRnaSeqK562CellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPapAlnRep1
@@ -16158,7 +16120,7 @@ subId 3641
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptGencV3c
-objType table
+objType file
 bioRep 025CH,026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -16179,7 +16141,6 @@ project wgEncode
 replicate 3,4
 rnaExtract total
 subId 3641
-tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep1
@@ -16820,7 +16781,7 @@ subId 3643
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptGencV3c
-objType table
+objType file
 bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -16841,7 +16802,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3643
-tableName wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3
@@ -17226,7 +17186,7 @@ subId 3644
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptGencV3c
-objType table
+objType file
 bioRep 025NL,026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -17247,7 +17207,6 @@ project wgEncode
 replicate 3,4
 rnaExtract total
 subId 3644
-tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep3
@@ -17632,7 +17591,7 @@ subId 3645
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptGencV3c
-objType table
+objType file
 bioRep 025NP,026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -17653,7 +17612,6 @@ project wgEncode
 replicate 3,4
 rnaExtract total
 subId 3645
-tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep1
@@ -18038,7 +17996,7 @@ subId 3646
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptGencV3c
-objType table
+objType file
 bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -18059,7 +18017,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3646
-tableName wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep1
@@ -18444,7 +18401,7 @@ subId 3647
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptGencV3c
-objType table
+objType file
 bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -18465,7 +18422,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3647
-tableName wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep1
@@ -18850,7 +18806,7 @@ subId 3650
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
@@ -18871,7 +18827,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3650
-tableName wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep1
@@ -19256,7 +19211,7 @@ subId 3651
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptGencV3c
-objType table
+objType file
 bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
@@ -19277,7 +19232,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3651
-tableName wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep1
@@ -19780,7 +19734,7 @@ subId 3657
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -19801,7 +19755,6 @@ project wgEncode
 replicate 5
 rnaExtract longNonPolyA
 subId 3657
-tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1
@@ -20304,7 +20257,7 @@ subId 3659
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV3c
-objType table
+objType file
 bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -20325,7 +20278,6 @@ project wgEncode
 replicate 5
 rnaExtract longPolyA
 subId 3659
-tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep3
@@ -20592,7 +20544,7 @@ subId 3652
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptGencV3c
-objType table
+objType file
 bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -20613,7 +20565,6 @@ project wgEncode
 replicate 3
 rnaExtract longNonPolyA
 subId 3652
-tableName wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep3
@@ -20998,7 +20949,7 @@ subId 3653
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptGencV3c
-objType table
+objType file
 bioRep 027C,028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -21019,7 +20970,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3653
-tableName wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep3
@@ -21404,7 +21354,7 @@ subId 3654
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptGencV3c
-objType table
+objType file
 bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -21425,7 +21375,6 @@ project wgEncode
 replicate 3,4
 rnaExtract longNonPolyA
 subId 3654
-tableName wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep3
@@ -21810,7 +21759,7 @@ subId 3655
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptGencV3c
-objType table
+objType file
 bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -21831,7 +21780,6 @@ project wgEncode
 replicate 3,4
 rnaExtract longPolyA
 subId 3655
-tableName wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep1
@@ -22216,7 +22164,7 @@ subId 3660
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
@@ -22237,7 +22185,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3660
-tableName wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1
@@ -22622,7 +22569,7 @@ subId 3661
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptGencV3c
-objType table
+objType file
 bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
@@ -22643,7 +22590,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3661
-tableName wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep1
@@ -23028,7 +22974,7 @@ subId 3662
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptGencV3c
-objType table
+objType file
 bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
@@ -23049,7 +22995,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longNonPolyA
 subId 3662
-tableName wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptGencV3c
 view TranscriptGencV3c
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep1
@@ -23434,7 +23379,7 @@ subId 3663
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV3c
-objType table
+objType file
 bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
@@ -23455,7 +23400,6 @@ project wgEncode
 replicate 1,2
 rnaExtract longPolyA
 subId 3663
-tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV3c
 view TranscriptGencV3c
 
-# MAGIC: 1963017320
+# MAGIC: -147093001
