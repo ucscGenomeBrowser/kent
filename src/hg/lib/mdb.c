@@ -1006,9 +1006,8 @@ struct mdbVar *mdbVar;
 int count = 0;
 
 if(tableName == NULL)
-    tableName = MDB_DEFAULT_NAME;
-
-if(!sqlTableExists(conn,tableName))
+    tableName = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+else if(!sqlTableExists(conn,tableName))
     errAbort("mdbObjsSetToDb attempting to update non-existent table named '%s'.\n",tableName);
 
 for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
@@ -1115,9 +1114,8 @@ int mdbObjsLoadToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *md
 int count = 0;
 
 if (tableName == NULL)
-    tableName = MDB_DEFAULT_NAME;
-
-if (!sqlTableExists(conn,tableName))
+    tableName = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+else if (!sqlTableExists(conn,tableName))
     errAbort("mdbObjsLoadToDb attempting to load non-existent table named '%s'.\n",tableName);
 
 assert(mdbObjs != NULL);  // If this is the case, then be vocal
@@ -1155,9 +1153,8 @@ struct mdbObj *mdbObjQuery(struct sqlConnection *conn,char *table,struct mdbObj 
     boolean buildHash = TRUE;
 
     if(table == NULL)
-        table = MDB_DEFAULT_NAME;
-
-    if(!sqlTableExists(conn,table))
+        table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+    else if(!sqlTableExists(conn,table))
         return NULL;
 
     struct dyString *dy = newDyString(4096);
@@ -1226,8 +1223,8 @@ struct mdbByVar *mdbByVarsQuery(struct sqlConnection *conn,char *table,struct md
 //  select obj,var,val where (var= [and val in (val1,val2)]) or (var= [and val in (val1,val2)]) order by var,val,obj
 
     if(table == NULL)
-        table = MDB_DEFAULT_NAME;
-    if(!sqlTableExists(conn,table))
+            table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+    else if(!sqlTableExists(conn,table))
         return NULL;
 
     struct dyString *dy = newDyString(4096);
@@ -1329,8 +1326,8 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 //                                                           AND EXISTS (SELECT T3.obj FROM metaDb T3 WHERE T3.obj = T1.obj AND T3.var = 'cell' AND T3.val != 'GM12878') ORDER BY T1.obj, T1.var;
 
     if(table == NULL)
-        table = MDB_DEFAULT_NAME;
-    if(!sqlTableExists(conn,table))
+        table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+    else if(!sqlTableExists(conn,table))
         return NULL;
 
     struct dyString *dy = newDyString(4096);

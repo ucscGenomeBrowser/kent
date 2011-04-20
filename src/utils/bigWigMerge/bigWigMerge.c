@@ -21,15 +21,18 @@ errAbort(
   "options:\n"
   "   -threshold=0.N - don't output values at or below this threshold. Default is 0.0\n"
   "   -adjust=0.N - add adjustment to each value\n"
+  "   -clip=NNN.N - values higher than this are clipped to this value\n"
   );
 }
 
 double clThreshold = 0.0;
 double clAdjust = 0.0;
+double clClip = BIGDOUBLE;
 
 static struct optionSpec options[] = {
    {"threshold", OPTION_DOUBLE},
    {"adjust", OPTION_DOUBLE},
+   {"clip", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -106,7 +109,8 @@ for (i=0; i<inCount; ++i)
 FILE *f = mustOpen(outFile, "w");
 
 struct slName *chrom, *chromList = getAllChroms(inFileList);
-verbose(1, "Got %d chromosomes from %d bigWigs\n", slCount(chromList), slCount(inFileList));
+verbose(1, "Got %d chromosomes from %d bigWigs\nProcessing", 
+	slCount(chromList), slCount(inFileList));
 double *mergeBuf = NULL;
 int mergeBufSize = 0;
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
@@ -115,6 +119,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 
     /* Make sure merge buffer is big enough. */
     int chromSize = bbiChromSize(inFileList, chrom->name);
+    verboseDot();
     verbose(2, "Processing %s (%d bases)\n", chrom->name, chromSize);
     if (chromSize > mergeBufSize)
         {
@@ -135,11 +140,14 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	for (iv = ivList; iv != NULL; iv = iv->next)
 	    {
 	    double val = iv->val;
+	    if (val > clClip)
+	        val = clClip;
 	    int end = iv->end;
 	    for (i=iv->start; i < end; ++i)
 	         mergeBuf[i] += val;
 	    }
 	}
+
 
     /* Output each range of same values as a bedGraph item */
     int sameCount;
@@ -153,6 +161,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 
     lmCleanup(&lm);
     }
+verbose(1, "\n");
 
 carefulClose(&f);
 }
@@ -163,6 +172,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 clThreshold = optionDouble("threshold", clThreshold);
 clAdjust = optionDouble("adjust", clAdjust);
+clClip = optionDouble("clip", clClip);
 if (argc < 4)
     usage();
 bigWigMerge(argc-2, argv+1, argv[argc-1]);
