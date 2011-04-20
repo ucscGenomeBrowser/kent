@@ -1690,7 +1690,7 @@ tag H9ESAFPPlus
 type Cell Line
 organism Human
 description H9 AFP+ human ESCells-derived
-#)description Provisional human Embryonic Stem Cell (hESC) H9  human ESCells-derived Treatment: H9 AFP+ 
+#)description Provisional human Embryonic Stem Cell (hESC) H9  human ESCells-derived Treatment: H9 AFP+
 tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -1707,7 +1707,7 @@ tag H9ESAFPMinus
 type Cell Line
 organism Human
 description H9 AFP- human ESCells-derived
-#)description Provisional human Embryonic Stem Cell (hESC) H9  human ESCells-derived Treatment: H9 AFP- 
+#)description Provisional human Embryonic Stem Cell (hESC) H9  human ESCells-derived Treatment: H9 AFP-
 tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -9344,7 +9344,8 @@ projectName UNC-Giddings
 #
 #    cvDefined [no/yes]  DEFAULT: NO.  Yes when every possible value must be in cv.ra
 #
-#       hidden [no/yes]  DEFAULT: NO.  Yes when users should not see this internal metadata.
+#       hidden [no/yes/beta,public]  DEFAULT: no.  Yes when users should not see this internal metadata.
+#              use comma delimited list of alpha,beta,public to restrict visibility from certain machines.
 #
 #     validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values.  ENFORCED by mdbPrint -validate
 #           cv: must be defined term in cv (e.g. cell=GM12878).  "cv or None" indicates that "None is also acceptable.
@@ -9524,8 +9525,8 @@ validate date # nine months more than dateSubmitted
 
 term dccAccession
 type typeOfTerm
-label ENCODE DCC Accession
-description The accession number provided by the ENCODE Data Coordination Center.
+label UCSC Accession
+description The accession number provided by the UCSC Genome Browser.
 searchable freeText
 cvDefined no
 validate regex: ^wgEncode[H,E][0-9]*$
@@ -9569,6 +9570,7 @@ label Experiment ID
 description The ENCODE DCC experiment identification number.
 searchable freeText
 cvDefined no
+hidden beta,public
 validate integer
 priority 100
 
@@ -10007,7 +10009,7 @@ label Tissue Source Type
 description Source of tissue from either an indiviual organism or pooled set of organisms (Provisional)
 searchable multiSelect
 cvDefined yes
-validate cv 
+validate cv
 priority 470
 
 # term type
