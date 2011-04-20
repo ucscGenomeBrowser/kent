@@ -38,7 +38,7 @@ void usage()
 errAbort(
   "regCompanionPickEnhancers - Pick enhancer regions by a number of criteria\n"
   "usage:\n"
-  "   regCompanionPickEnhancers dnase.peak genes.bed txn.bigWig ctcf.peak h3k4me1.bigWig output.tab\n"
+  "   regCompanionPickEnhancers dnase.peak genes.bed txn.bigWig ctcf.peak h3k4me1.bigWig output.peak\n"
   "Where:\n"
   "   dnase.peak is a narrow peak format file with DNAse called peaks\n"
   "   genes.bed is a set of gene predictions.  Only txStart, txEnd, and strand are used.\n"
@@ -215,10 +215,11 @@ return outList;
 struct encodePeak *filterOutUnderInNeighborhood(struct encodePeak *inList, struct bbiFile *bbi,
 	struct bigWigValsOnChrom *chromVals, int neighborhoodSize, double stdDevAboveMean)
 /* Return sublist of inList that has levels in bbi averaging at least stdDevAboveMean
- * in window of neighborhoodSize centered around peak. */
+ * in window of neighborhoodSize centered around peak.  Actually inlist is a bit further
+ * changed as well, the ->qValue field gets filled in with the average signal */
 {
 struct encodePeak *outList = NULL;
-struct encodePeak *peak, *next, *chromStart, *chromEnd;
+struct encodePeak *next, *chromStart, *chromEnd;
 
 /* Figure out threshold based on stdDevAboveMean */
 struct bbiSummaryElement summary = bbiTotalSummary(bbi);
@@ -235,13 +236,8 @@ for (chromStart = inList; chromStart != NULL; chromStart = chromEnd)
     Bits *covBuf = chromVals->covBuf;
     double *valBuf = chromVals->valBuf;
 
-    if (chromSize == 0)	/* No transcription on this chromosome, so add all peaks. */
+    if (chromSize == 0)	/* No data on this chromosome, nothing over threshold. */
         {
-	for (peak = chromStart; peak != chromEnd; peak = next)
-	    {
-	    next = peak->next;
-	    slAddHead(&outList, peak);
-	    }
 	continue;
 	}
 
@@ -272,6 +268,7 @@ for (chromStart = inList; chromStart != NULL; chromStart = chromEnd)
 	    }
 	if (ave >= minSignal)
 	    {
+	    peak->qValue = ave;	/* I feel bad about taking over this field. */
 	    slAddHead(&outList, peak);
 	    }
 	}
@@ -297,6 +294,80 @@ uglyf("no chr2:157333421-157333570 %s\n", message);
 return FALSE;
 }
 #endif /* DEBUG */
+
+struct zScoreKeeper
+/* Enough stuff to calculate zScore, plus min,max. */
+     {
+     struct zScoreKeeper *next;
+     long n;	/* Number of observations seen */
+     double minVal, maxVal;	/* Extremes */
+     double sum, sumSquares;	/* Can calc mean and standard deviation from these. */
+     double mean, std;		/* These are only good after call to zScoreKeeperCalcResults */
+     boolean didCalc;		/* If true already did calc. */
+     };
+
+struct zScoreKeeper *zScoreKeeperNew()
+/* Return nice empty zScoreKeeper. */
+{
+struct zScoreKeeper *z;
+AllocVar(z);
+return needMem(sizeof(struct zScoreKeeper));
+}
+
+void zScoreKeeperAdd(struct zScoreKeeper *z, double val)
+/* Add observation of given val. */
+{
+if (z->n == 0)
+    {
+    z->minVal = z->maxVal = z->sum = val;
+    z->sumSquares = val*val;
+    z->n = 1;
+    }
+else
+    {
+    if (z->didCalc)
+        internalErr();
+    z->n += 1;
+    z->sum += val;
+    z->sumSquares += val*val;
+    if (val < z->minVal)
+        z->minVal = val;
+    if (val > z->maxVal)
+        z->maxVal = val;
+    }
+}
+
+boolean zScoreKeeperCalcResults(struct zScoreKeeper *z)
+/* Update mean and std, and flag to make it an error to add more values. 
+ * Return FALSE if no results added if you care.*/
+{
+if (z->n == 0)
+    return FALSE;
+z->mean = z->sum/z->n;
+z->std = calcStdFromSums(z->sum, z->sumSquares, z->n);
+z->didCalc = TRUE;
+return TRUE;
+}
+
+int zScoreToMilliScore(struct zScoreKeeper *z, double score)
+/* Convert a z score to something between 0 and 1000 for browser */
+{
+if (!z->didCalc)
+    internalErr();
+
+/* This bit of going +/- 5 standard deviations and then clipping to what's
+ * really there often works visually. */
+double rStart = z->mean - 5*z->std;
+double rEnd = z->mean + 5*z->std;
+if (rStart < z->minVal) rStart = z->minVal;
+if (rEnd > z->maxVal) rEnd = z->maxVal;
+double range = rEnd - rStart;
+
+double scaledScore = (score - rStart)/range;
+if (scaledScore < 0) scaledScore = 0;
+if (scaledScore > 1) scaledScore = 1;
+return scaledScore * 1000;
+}
 
 void regCompanionPickEnhancers(char *dnasePeaks, char *genesBed, char *txnWig, char *ctcfPeaks,
 	char *h3k4me1Wig, char *outputTab)
@@ -344,18 +415,42 @@ slSort(&dnaseList, encodePeakCmpSignalVal);
 dnaseList = filterOnListSize(dnaseList, maxDnasePeaks);
 verbose(1, "top%d: %d\n", maxDnasePeaks, slCount(dnaseList));
 slSort(&dnaseList, encodePeakCmpChrom);
+dnaseList = filterOutUnderInNeighborhood(dnaseList, h3k4me1Bbi, chromVals, 
+	histoneBoxSize, histoneMinBoxStds);
+verbose(1, "gotH3k4me1: %d\n", slCount(dnaseList));
 dnaseList = filterOutOverlapping(dnaseList, ctcfRanges);
 verbose(1, "nonCtcf: %d\n", slCount(dnaseList));
 dnaseList = filterOutOverlapping(dnaseList, promoterRanges);
 verbose(1, "nonPromoter: %d\n", slCount(dnaseList));
 dnaseList = filterOutTranscribed(dnaseList, txnBbi, chromVals);
 verbose(1, "nonTranscribed: %d\n", slCount(dnaseList));
-dnaseList = filterOutUnderInNeighborhood(dnaseList, h3k4me1Bbi, chromVals, 
-	histoneBoxSize, histoneMinBoxStds);
-verbose(1, "gotH3k4me1: %d\n", slCount(dnaseList));
 
-FILE *f = mustOpen(outputTab, "w");
+/* Update score and signal.  Start out by collecting info needed to calculate zScores. */
+struct zScoreKeeper *dnaseScores = zScoreKeeperNew();
+struct zScoreKeeper *histoneScores = zScoreKeeperNew();
 struct encodePeak *peak;
+for (peak = dnaseList; peak != NULL; peak = peak->next)
+    {
+    zScoreKeeperAdd(dnaseScores, peak->signalValue);
+    zScoreKeeperAdd(histoneScores, peak->qValue);
+    }
+zScoreKeeperCalcResults(dnaseScores);
+zScoreKeeperCalcResults(histoneScores);
+
+/* Now, compose the 0-1000 score out of a combination of dnase and histone z-scores.   */
+for (peak = dnaseList; peak != NULL; peak = peak->next)
+    {
+    double dnaseScore = zScoreToMilliScore(dnaseScores, peak->signalValue);
+    double histoneScore = zScoreToMilliScore(histoneScores, peak->qValue);
+    double combinedScore = 0.3*dnaseScore + 0.7*histoneScore;
+    peak->score = combinedScore;
+    peak->signalValue = combinedScore;
+    peak->pValue = -1;
+    peak->qValue = -1;
+    }
+
+/* Write out result. */
+FILE *f = mustOpen(outputTab, "w");
 for (peak = dnaseList; peak != NULL; peak = peak->next)
     {
     encodePeakOutputWithType(peak, narrowPeak, f);

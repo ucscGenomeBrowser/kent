@@ -176,7 +176,7 @@ if (!joined)
 
 while (raNextTagAndVal(lf, &key, &val, NULL))
     {
-    slPairAdd(&list, key, cloneString(val)); // val is already cloned so just pass it through.
+    slPairAdd(&list, key, cloneString(val)); // key gets cloned by slPairAdd
     }
 
 slReverse(&list);

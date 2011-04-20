@@ -31201,7 +31201,9 @@ TMPDIR=/scratch/tmp
     md5sum *.gz > md5sum.txt
 
 #########################################################################
-# ISCA RETROSPECTIVE FROM DBVAR (DONE 1/31/11 angie)
+# ISCA RETROSPECTIVE FROM DBVAR (DONE 4/19/11 angie)
+# Reloaded 4/19/11 to drop the boring aggregate variants (sv; keep ssv).
+# Originally done 1/31/11
     # Redmine: Track #34 (dbVar for human)
     mkdir -p /hive/data/genomes/hg18/bed/isca/2011_01_31
     cd /hive/data/genomes/hg18/bed/isca/2011_01_31
@@ -31229,6 +31231,7 @@ TMPDIR=/scratch/tmp
           $val =~ s/%/%25/g;   $val =~ s/,/%2C/g; \
           $attrTags .= "$tag,";  $attrVals .= "$val,";  $attrCount++; \
         } \
+        next if ($name =~ /^[ne]sv\d/); # keep only supporting variants (ssv) \
         %attrs = map { ($key, $val) = split("="); $key => $val } split(";", $attrs); \
         @bed8Attrs = ($c, $s-1, $e, $name, $score, $strand, $thickS-1, $thickE, \
                       $attrCount, $attrTags, $attrVals); \
