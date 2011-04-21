@@ -1,0 +1,18 @@
+foreach entry in rafile
+
+    #check that entry contains some mandatory key-value pair
+    if key not in entry
+        raise Error('entry missing key')
+
+    #check that every key-value pair for some key is unique
+    val = entry[somekey]
+    foreach en in rafile
+        if (en != entry && en[somekey] == val)
+            raise Error('entry and en share same value!')
+
+    #check that for some key the value is another entry
+    val = entry[akey]
+    if val not in rafile
+        raise Error('value of entry[akey] doesn't exist')
+
+

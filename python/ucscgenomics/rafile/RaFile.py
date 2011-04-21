@@ -1,16 +1,17 @@
 import sys
 import re
-import OrderedDict
+from OrderedDict import *
 
-class RaFile(OrderedDict.OrderedDict):
+class RaFile(OrderedDict):
     """
     Stores an Ra file in a set of entries, one for each stanza in the file.
     """
 
-    def __init__(self, entryType):
-        self.__entryType = entryType 
-        OrderedDict.OrderedDict.__init__(self)
- 
+    def __init__(self, filePath=''):
+        OrderedDict.__init__(self)
+        if filePath != '':
+            self.read(filePath) 
+
     def read(self, filePath):
         """
         Reads an rafile stanza by stanza, and internalizes it.
@@ -18,7 +19,7 @@ class RaFile(OrderedDict.OrderedDict):
 
         file = open(filePath, 'r')
 
-        entry = self.__entryType()
+        #entry = self.__entryType()
         stanza = list()
         keyValue = ''
 
@@ -34,9 +35,9 @@ class RaFile(OrderedDict.OrderedDict):
                 stanza.append(line)
             elif len(stanza) > 0:
                if keyValue == '':
-                   keyValue, name = entry.readStanza(stanza)
+                   keyValue, name, entry = self.readStanza(stanza)
                else:
-                   testKey, name = entry.readStanza(stanza)
+                   testKey, name, entry = self.readStanza(stanza)
                    if keyValue != testKey:
                        raise KeyError('Inconsistent Key ' + testKey)
        
@@ -44,13 +45,19 @@ class RaFile(OrderedDict.OrderedDict):
                    raise KeyError('Duplicate Key ' + name)
 
                self[name] = entry
-               entry = self.__entryType()
+               #entry = self.__entryType()
                stanza = list()
 
         if len(stanza) > 0:
             raise IOError('File is not newline terminated')
 
         file.close()
+
+   
+    def readStanza(self, stanza):
+        entry = RaEntry()
+        val1, val2 = entry.readStanza(stanza)
+        return val1, val2, entry
 
 
     def iter(self):
@@ -87,14 +94,14 @@ class RaFile(OrderedDict.OrderedDict):
         return str
 
 
-class RaEntry(OrderedDict.OrderedDict):
+class RaEntry(OrderedDict):
     """
     Holds an individual entry in the RaFile.
     """
 
     def __init__(self):
         self._name = ''
-        OrderedDict.OrderedDict.__init__(self)
+        OrderedDict.__init__(self)
   
     @property 
     def name(self):
@@ -133,7 +140,11 @@ class RaEntry(OrderedDict.OrderedDict):
         if line.startswith('#') or line == '':
             self._OrderedDict__ordering.append(line)
         else:
-           raKey, raVal = map(str, line.split(' ', 1))
+           raKey = line.split(' ', 1)[0]
+           raVal = ''
+           if (len(line.split(' ', 1)) == 2):
+               raVal = line.split(' ', 1)[1]
+           #raKey, raVal = map(str, line.split(' ', 1))
            self[raKey] = raVal
 
 
