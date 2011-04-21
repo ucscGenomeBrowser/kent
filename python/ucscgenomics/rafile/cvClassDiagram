@@ -1,0 +1,21 @@
+CvFile : RaFile
+    keeps each type of stanza organized as well as the whole list
+    adds validate() which will call Stanza.validate() for all stanzas
+
+CvStanza : RaStanza
+    adds validate() which will be overriden in child classes
+    validate() checks for things all stanzas need (term, tag, desc, type)
+
+HumanCellStanza, MouseCellStanza, AntibodyStanza : CvStanza
+    overrides validate():
+        -checks necessary fields are present (and not blank)
+        -checks remaining fields against list of optional fields to ensure
+         that no extraneous fields are present
+        -checks typed fields correctly match with a stanza of that type
+
+AgeStanza, SeqPlatformStanza, LabStanza... : CvStanza
+    stanzas with minor tweaks to validate()
+
+ControlStanza, TierStanza, PhaseStanza... : CvStanza
+    blank classes that only need the default CvStanza.validate() behavior
+        
