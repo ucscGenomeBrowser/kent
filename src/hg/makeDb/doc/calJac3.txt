@@ -2668,3 +2668,36 @@ CREATE TABLE ucscToEnsembl (
 -e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
 
 ############################################################################
+#  calJac3 - Marmoset - Ensembl Genes version 62  (DONE - 2011-04-21 - hiram)
+    # need a new lift file to translate names
+    cd /hive/data/genomes/calJac3/jkStuff
+
+grep "^chr" ../chrom.sizes | while read L
+do
+    size=`echo $L | awk '{print $2}'`
+    ucName=`echo $L | awk '{print $1}'`
+    ensName=`hgsql -N -e 'select ensembl from ucscToEnsembl where ucsc="'${ucName}'";' calJac3`
+    echo -e "0\t${ensName}.1\t$size\t$ucName\t$size\n"
+done > ens.62.lft
+
+    # place that file name in the calJac3.ensGene.ra file, then:
+
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3
+    cat << '_EOF_' > calJac3.ensGene.ra
+# required db variable
+db calJac3
+# nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/;
+# s/^GL\([0-9][0-9]*\).1/chrUn_GL\1/;"
+# name translation in Ensembl v62
+liftUp /hive/data/genomes/calJac3/jkStuff/ens.62.lft
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=62 calJac3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/ensGene.62
+    featureBits calJac3 ensGene
+    # 51944550 bases of 2752505800 (1.887%) in intersection
+
+############################################################################
