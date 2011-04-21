@@ -34,6 +34,7 @@ dimensions dimensionX=cellType dimensionY=age dimensionA=strain dimensionB=rep
 dimensionAchecked C57BL6,S129,UKN
 dimensionBchecked rep1
 sortOrder cellType=+ strain=+ age=+ sex=+ rep=+ view=+
+fileSortOrder cell=Cell_Line strain=Strain sex=Sex age=Age replicate=Replicate view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain age=age sex=sex
 dragAndDrop subTracksi
 noInherit on
