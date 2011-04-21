@@ -424,7 +424,6 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-21
 dateUnrestricted 2011-04-20
-fileIndex wgEncodeUwDnaseCerebellumC57bl6MAdult8wksAlnRep1.bam.bai
 fileName wgEncodeUwDnaseCerebellumC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
@@ -1382,7 +1381,6 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep1.bam.bai
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
@@ -1404,7 +1402,6 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep2.bam.bai
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
@@ -1427,7 +1424,6 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep3.bam.bai
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep3.bam
 grant Stam
 lab UW-m
@@ -1450,7 +1446,6 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep7.bam.bai
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep7.bam
 grant Stam
 lab UW-m
@@ -1473,7 +1468,6 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep8.bam.bai
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep8.bam
 grant Stam
 lab UW-m
@@ -1496,7 +1490,6 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep9.bam.bai
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep9.bam
 grant Stam
 lab UW-m
@@ -2056,7 +2049,6 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep2.bam.bai
 fileName wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
@@ -2165,7 +2157,6 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep1.bam.bai
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
@@ -2186,7 +2177,6 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep2.bam.bai
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
@@ -2208,7 +2198,6 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep3.bam.bai
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep3.bam
 grant Stam
 lab UW-m
@@ -3465,4 +3454,4 @@ tableName wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep2
 tissueSourceType Individual
 view RawSignal
 
-# MAGIC: -1279224302
+# MAGIC: 916293688
