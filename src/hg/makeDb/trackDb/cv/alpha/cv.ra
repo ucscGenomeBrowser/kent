@@ -8351,20 +8351,6 @@ type dataType
 label ChIA-pet
 description ChIA-pet
 
-# TODO: retire this ?  (11/3/10)
-term LongRnaSeq
-tag longRnaSeq
-type dataType
-label RNA-seq
-description RNA sequencing: long RNAs
-
-# TODO: retire this ?  (11/3/10)
-term RnaSeqPolyA
-tag rnaSeqPolya
-type dataType
-label RNA-seq
-description RNA sequencing: polyA+ RNA
-
 term Orchid
 tag orchid
 type dataType
@@ -8429,6 +8415,20 @@ tag rnaSeq
 type dataType
 label RNA-seq
 description Sequencing analysis of RNA expression
+
+#GeneST and Tiling are flavors of the RIP-chip.  
+#They need separate dataTypes for the experiment table to work
+term GeneSt 
+tag  GeneSt 
+type dataType
+label RIP-chip Gene ST
+description Provisional RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays 
+
+term Tiling 
+tag  Tiling 
+type dataType
+label RIP-chip Tiling Array
+description Provisional RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays 
 
 term RipChip
 tag  ripChip
