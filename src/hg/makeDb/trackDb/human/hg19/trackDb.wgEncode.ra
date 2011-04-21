@@ -54,13 +54,15 @@ include wgEncodeDukeAffyExon.ra alpha
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 #UNC FAIRE (wrangler: tim)
-include wgEncodeOpenChromFaire.ra
+include wgEncodeOpenChromFaire.new.ra alpha
+include wgEncodeOpenChromFaire.ra beta,public
 
 #Open Chrom Synth (wrangler: tim)
 include wgEncodeOpenChromSynth.ra
 
 #Duke DNaseI HS (wrangler: tim)
-include wgEncodeOpenChromDnase.ra
+include wgEncodeOpenChromDnase.new.ra alpha
+include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
 include wgEncodeUwDnase.ra beta,public
@@ -124,7 +126,8 @@ include wgEncodeHaibMethylRrbs.new.ra alpha
 # ENCODE HISTONE --------------------------------------
 
 #Broad Histone (wrangler: Tim)
-include wgEncodeBroadHistone.ra
+include wgEncodeBroadHistone.new.ra alpha
+include wgEncodeBroadHistone.ra beta,public
 
 #Broad HMM (wrangler: Tim)
 include wgEncodeBroadHmm.ra
@@ -142,7 +145,8 @@ include wgEncodeSydhHistone.ra alpha
 include wgEncodeUwTfbs.ra
 
 #UTA TFBS (wrangler: Tim)
-include wgEncodeOpenChromChip.ra
+include wgEncodeOpenChromChip.new.ra alpha
+include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
 include wgEncodeHaibTfbs.ra alpha

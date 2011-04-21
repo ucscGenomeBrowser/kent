@@ -120,11 +120,8 @@ char *setVars    = optionVal("setVars",NULL);
 char *encodeExp  = optionVal("encodeExp",NULL);
 if (encodeExp != NULL)
     {
-    if (strlen(encodeExp) == 0)
-        errAbort("encodeExp table will be ?\n");
-    if  (sameWord("std",encodeExp))
+    if (strlen(encodeExp) == 0 || sameWord("std",encodeExp))
         encodeExp = "encodeExp";
-    verbose(0, "Using hgFixed.%s\n",encodeExp);
     }
 
 if (recreate && encodeExp != NULL)
@@ -166,8 +163,11 @@ if(table == NULL)
                 errAbort("No '%s.%s' found.\n",db,MDB_DEFAULT_NAME);
             }
         }
-    verbose(1, "Using table named '%s.%s'.\n",db,table);
     }
+if (encodeExp != NULL)
+    verbose(1, "Using tables named '%s.%s' and 'hgFixed.%s'.\n",db,table,encodeExp);
+else
+    verbose(1, "Using table named '%s.%s'.\n",db,table);
 
 boolean sharedTbl = sameWord(table,MDB_DEFAULT_NAME);  // Special restrictions apply
 
