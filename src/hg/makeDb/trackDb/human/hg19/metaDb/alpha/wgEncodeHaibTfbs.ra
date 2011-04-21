@@ -12423,29 +12423,6 @@ tableName wgEncodeHaibTfbsGm12891Yy1sc281V0416101RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsGm12892ControlPcr1xAlnRep2
-objType file
-antibody Control
-cell GM12892
-composite wgEncodeHaibTfbs
-controlId SL818
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-04-18
-dateSubmitted 2011-01-05
-dateUnrestricted 2011-10-05
-fileName wgEncodeHaibTfbsGm12892ControlPcr1xAlnRep2.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL818
-project wgEncode
-protocol PCR1x
-replicate 2
-setType input
-subId 3877
-treatment None
-view Alignments
-
 metaObject wgEncodeHaibTfbsGm12892ControlV0416101AlnRep1
 objType file
 antibody Control
@@ -12535,7 +12512,7 @@ lab HudsonAlpha
 labExpId SL818
 origAssembly hg18
 project wgEncode
-protocol v04161022
+protocol v041610.2
 replicate 1
 setType input
 subId 1225
@@ -35625,4 +35602,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 696266807
+# MAGIC: -1386859496
