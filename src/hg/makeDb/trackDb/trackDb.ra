@@ -699,7 +699,7 @@ type genePred genieAltPep
 
 track ensGene
 shortLabel Ensembl Genes
-longLabel Ensembl Gene Predictions
+longLabel Ensembl Genes 
 group genes
 priority 40
 visibility hide
@@ -1588,9 +1588,9 @@ defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
 
-track snp132Patient
-shortLabel Patient SNPs(132)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 132) Observed in a Clinical Setting
+track snp132Flagged
+shortLabel Flagged SNPs(132)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 132) Flagged by dbSNP as Clinically Assoc
 group varRep
 priority 99.0922
 visibility hide
@@ -1599,10 +1599,9 @@ urlLabel dbSNP:
 snpSeq snp132Seq
 snpExceptionDesc snp132ExceptionDesc
 defaultGeneTracks knownGene
-maxWindowToDraw 10000000
 type bed 6 +
 
-track snp132NonUnique
+track snp132Mult
 shortLabel Mult. SNPs(132)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 132) That Map to Multiple Genomic Loci
 group varRep
@@ -1634,7 +1633,7 @@ shortLabel SNPs (131)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 131)
 group varRep
 priority 99.093
-visibility dense 
+visibility hide 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 defaultGeneTracks knownGene
@@ -2626,7 +2625,7 @@ termRegex rs[0-9]+
 searchPriority 12.9901
 padding 250
 
-searchTable snp132Patient
+searchTable snp132Flagged
 searchMethod exact
 searchType bed
 semiShortCircuit 1
@@ -2634,7 +2633,7 @@ termRegex rs[0-9]+
 searchPriority 12.9902
 padding 250
 
-searchTable snp132NonUnique
+searchTable snp132Mult
 searchMethod exact
 searchType bed
 semiShortCircuit 1

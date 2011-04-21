@@ -12,6 +12,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001126
+expId 1126
 fileName wgEncodeOpenChromFaireA549AlnRep1.bam
 grant Crawford
 lab UNC
@@ -31,6 +33,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001126
+expId 1126
 fileName wgEncodeOpenChromFaireA549AlnRep2.bam
 grant Crawford
 lab UNC
@@ -50,6 +54,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001126
+expId 1126
 fileName wgEncodeOpenChromFaireA549BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -69,6 +75,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001126
+expId 1126
 fileName wgEncodeOpenChromFaireA549Pk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -88,6 +96,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001126
+expId 1126
 fileName wgEncodeOpenChromFaireA549RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -106,6 +116,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001126
+expId 1126
 fileName wgEncodeOpenChromFaireA549RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -124,6 +136,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001126
+expId 1126
 fileName wgEncodeOpenChromFaireA549Sig.bigWig
 grant Crawford
 lab UNC
@@ -143,6 +157,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
 fileIndex wgEncodeOpenChromFaireAstrocyAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireAstrocyAlnRep1.bam
 grant Crawford
@@ -163,6 +179,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
 fileIndex wgEncodeOpenChromFaireAstrocyAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireAstrocyAlnRep2.bam
 grant Crawford
@@ -183,6 +201,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
 fileName wgEncodeOpenChromFaireAstrocyBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -202,6 +222,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
 fileName wgEncodeOpenChromFaireAstrocyPk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -221,6 +243,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
 fileName wgEncodeOpenChromFaireAstrocyRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -239,6 +263,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
 fileName wgEncodeOpenChromFaireAstrocyRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -257,6 +283,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
 fileName wgEncodeOpenChromFaireAstrocySig.bigWig
 grant Crawford
 lab UNC
@@ -276,6 +304,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+dccAccession wgEncodeEH001119
+expId 1119
 fileIndex wgEncodeOpenChromFaireGlioblaAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGlioblaAlnRep1.bam
 grant Crawford
@@ -296,6 +326,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+dccAccession wgEncodeEH001119
+expId 1119
 fileIndex wgEncodeOpenChromFaireGlioblaAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGlioblaAlnRep2.bam
 grant Crawford
@@ -316,6 +348,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+dccAccession wgEncodeEH001119
+expId 1119
 fileIndex wgEncodeOpenChromFaireGlioblaAlnRep3.bam.bai
 fileName wgEncodeOpenChromFaireGlioblaAlnRep3.bam
 grant Crawford
@@ -336,6 +370,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+dccAccession wgEncodeEH001119
+expId 1119
 fileName wgEncodeOpenChromFaireGlioblaBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -355,6 +391,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+dccAccession wgEncodeEH001119
+expId 1119
 fileName wgEncodeOpenChromFaireGlioblaPk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -374,6 +412,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+dccAccession wgEncodeEH001119
+expId 1119
 fileName wgEncodeOpenChromFaireGlioblaRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -392,6 +432,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+dccAccession wgEncodeEH001119
+expId 1119
 fileName wgEncodeOpenChromFaireGlioblaRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -410,6 +452,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+dccAccession wgEncodeEH001119
+expId 1119
 fileName wgEncodeOpenChromFaireGlioblaRawDataRep3.fastq.gz
 grant Crawford
 lab UNC
@@ -428,6 +472,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+dccAccession wgEncodeEH001119
+expId 1119
 fileName wgEncodeOpenChromFaireGlioblaSig.bigWig
 grant Crawford
 lab UNC
@@ -448,6 +494,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
+expId 533
 fileIndex wgEncodeOpenChromFaireGm12878AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm12878AlnRep1.bam
 grant Crawford
@@ -469,6 +517,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
+expId 533
 fileIndex wgEncodeOpenChromFaireGm12878AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm12878AlnRep2.bam
 grant Crawford
@@ -490,6 +540,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
+expId 533
 fileIndex wgEncodeOpenChromFaireGm12878AlnRep3.bam.bai
 fileName wgEncodeOpenChromFaireGm12878AlnRep3.bam
 grant Crawford
@@ -511,6 +563,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000533
+expId 533
 fileName wgEncodeOpenChromFaireGm12878BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -531,6 +585,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
+expId 533
 fileName wgEncodeOpenChromFaireGm12878Pk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -551,6 +607,8 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
+expId 533
 fileName wgEncodeOpenChromFaireGm12878RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -570,6 +628,8 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
+expId 533
 fileName wgEncodeOpenChromFaireGm12878RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -589,6 +649,8 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000533
+expId 533
 fileName wgEncodeOpenChromFaireGm12878RawDataRep3.fastq.gz
 grant Crawford
 lab UNC
@@ -608,6 +670,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000533
+expId 533
 fileName wgEncodeOpenChromFaireGm12878Sig.bigWig
 grant Crawford
 lab UNC
@@ -618,6 +682,24 @@ subId 1480
 tableName wgEncodeOpenChromFaireGm12878Sig
 view Signal
 
+metaObject wgEncodeOpenChromFaireGm12878Validation
+objType file
+cell GM12878
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000533
+expId 533
+fileName wgEncodeOpenChromFaireGm12878Validation.tgz
+grant Crawford
+lab UNC
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 3831
+view Validation
+
 metaObject wgEncodeOpenChromFaireGm12891AlnRep1
 objType file
 cell GM12891
@@ -627,6 +709,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001116
+expId 1116
 fileIndex wgEncodeOpenChromFaireGm12891AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm12891AlnRep1.bam
 grant Crawford
@@ -647,6 +731,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001116
+expId 1116
 fileIndex wgEncodeOpenChromFaireGm12891AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm12891AlnRep2.bam
 grant Crawford
@@ -667,6 +753,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001116
+expId 1116
 fileName wgEncodeOpenChromFaireGm12891BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -686,6 +774,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001116
+expId 1116
 fileName wgEncodeOpenChromFaireGm12891Pk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -705,6 +795,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001116
+expId 1116
 fileName wgEncodeOpenChromFaireGm12891RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -723,6 +815,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001116
+expId 1116
 fileName wgEncodeOpenChromFaireGm12891RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -741,6 +835,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001116
+expId 1116
 fileName wgEncodeOpenChromFaireGm12891Sig.bigWig
 grant Crawford
 lab UNC
@@ -760,6 +856,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001117
+expId 1117
 fileIndex wgEncodeOpenChromFaireGm12892AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm12892AlnRep1.bam
 grant Crawford
@@ -780,6 +878,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001117
+expId 1117
 fileIndex wgEncodeOpenChromFaireGm12892AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm12892AlnRep2.bam
 grant Crawford
@@ -800,6 +900,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001117
+expId 1117
 fileName wgEncodeOpenChromFaireGm12892BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -819,6 +921,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001117
+expId 1117
 fileName wgEncodeOpenChromFaireGm12892Pk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -838,6 +942,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001117
+expId 1117
 fileName wgEncodeOpenChromFaireGm12892RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -856,6 +962,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001117
+expId 1117
 fileName wgEncodeOpenChromFaireGm12892RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -874,6 +982,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001117
+expId 1117
 fileName wgEncodeOpenChromFaireGm12892Sig.bigWig
 grant Crawford
 lab UNC
@@ -894,6 +1004,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
+expId 586
 fileIndex wgEncodeOpenChromFaireGm18507AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm18507AlnRep1.bam
 grant Crawford
@@ -915,6 +1027,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
+expId 586
 fileIndex wgEncodeOpenChromFaireGm18507AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm18507AlnRep2.bam
 grant Crawford
@@ -936,6 +1050,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
+expId 586
 fileName wgEncodeOpenChromFaireGm18507BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -956,6 +1072,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
+expId 586
 fileName wgEncodeOpenChromFaireGm18507Pk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -976,6 +1094,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
+expId 586
 fileName wgEncodeOpenChromFaireGm18507RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -996,6 +1116,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
+expId 586
 fileName wgEncodeOpenChromFaireGm18507RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -1016,6 +1138,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
+dccAccession wgEncodeEH000586
+expId 586
 fileName wgEncodeOpenChromFaireGm18507Sig.bigWig
 grant Crawford
 lab UNC
@@ -1036,6 +1160,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
+expId 580
 fileIndex wgEncodeOpenChromFaireGm19239AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm19239AlnRep1.bam
 grant Crawford
@@ -1057,6 +1183,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
+expId 580
 fileIndex wgEncodeOpenChromFaireGm19239AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm19239AlnRep2.bam
 grant Crawford
@@ -1078,6 +1206,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
+expId 580
 fileName wgEncodeOpenChromFaireGm19239BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -1098,6 +1228,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
+expId 580
 fileName wgEncodeOpenChromFaireGm19239Pk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -1118,6 +1250,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
+expId 580
 fileName wgEncodeOpenChromFaireGm19239RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -1138,6 +1272,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
+expId 580
 fileName wgEncodeOpenChromFaireGm19239RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -1158,6 +1294,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
+dccAccession wgEncodeEH000580
+expId 580
 fileName wgEncodeOpenChromFaireGm19239Sig.bigWig
 grant Crawford
 lab UNC
@@ -1178,6 +1316,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
+expId 557
 fileIndex wgEncodeOpenChromFaireH1hescAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireH1hescAlnRep1.bam
 grant Crawford
@@ -1199,6 +1339,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
+expId 557
 fileIndex wgEncodeOpenChromFaireH1hescAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireH1hescAlnRep2.bam
 grant Crawford
@@ -1220,6 +1362,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
+expId 557
 fileName wgEncodeOpenChromFaireH1hescBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -1240,6 +1384,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
+expId 557
 fileName wgEncodeOpenChromFaireH1hescPk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -1260,6 +1406,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
+expId 557
 fileName wgEncodeOpenChromFaireH1hescRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -1280,6 +1428,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
+expId 557
 fileName wgEncodeOpenChromFaireH1hescRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -1300,6 +1450,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000557
+expId 557
 fileName wgEncodeOpenChromFaireH1hescSig.bigWig
 grant Crawford
 lab UNC
@@ -1320,6 +1472,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
+expId 544
 fileIndex wgEncodeOpenChromFaireHelas3AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireHelas3AlnRep1.bam
 grant Crawford
@@ -1341,6 +1495,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
+expId 544
 fileIndex wgEncodeOpenChromFaireHelas3AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireHelas3AlnRep2.bam
 grant Crawford
@@ -1362,6 +1518,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
+expId 544
 fileName wgEncodeOpenChromFaireHelas3BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -1382,6 +1540,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000587
+expId 587
 fileIndex wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam
 grant Crawford
@@ -1404,6 +1564,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000587
+expId 587
 fileIndex wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam
 grant Crawford
@@ -1426,6 +1588,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000587
+expId 587
 fileName wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -1447,6 +1611,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000587
+expId 587
 fileName wgEncodeOpenChromFaireHelas3Ifna4hPk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -1468,6 +1634,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000587
+expId 587
 fileName wgEncodeOpenChromFaireHelas3Ifna4hRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -1488,6 +1656,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000587
+expId 587
 fileName wgEncodeOpenChromFaireHelas3Ifna4hRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -1508,6 +1678,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000587
+expId 587
 fileName wgEncodeOpenChromFaireHelas3Ifna4hSig.bigWig
 grant Crawford
 lab UNC
@@ -1529,6 +1701,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000588
+expId 588
 fileIndex wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam
 grant Crawford
@@ -1551,6 +1725,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000588
+expId 588
 fileIndex wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam
 grant Crawford
@@ -1573,6 +1749,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000588
+expId 588
 fileName wgEncodeOpenChromFaireHelas3Ifng4hBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -1594,6 +1772,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000588
+expId 588
 fileName wgEncodeOpenChromFaireHelas3Ifng4hPk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -1615,6 +1795,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000588
+expId 588
 fileName wgEncodeOpenChromFaireHelas3Ifng4hRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -1635,6 +1817,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
+dccAccession wgEncodeEH000588
+expId 588
 fileName wgEncodeOpenChromFaireHelas3Ifng4hRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -1655,6 +1839,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000588
+expId 588
 fileName wgEncodeOpenChromFaireHelas3Ifng4hSig.bigWig
 grant Crawford
 lab UNC
@@ -1676,6 +1862,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
+expId 544
 fileName wgEncodeOpenChromFaireHelas3Pk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -1696,6 +1884,8 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
+expId 544
 fileName wgEncodeOpenChromFaireHelas3RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -1715,6 +1905,8 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
+expId 544
 fileName wgEncodeOpenChromFaireHelas3RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -1734,6 +1926,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
+dccAccession wgEncodeEH000544
+expId 544
 fileName wgEncodeOpenChromFaireHelas3Sig.bigWig
 grant Crawford
 lab UNC
@@ -1754,6 +1948,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
+expId 546
 fileIndex wgEncodeOpenChromFaireHepg2AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireHepg2AlnRep1.bam
 grant Crawford
@@ -1775,6 +1971,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
+expId 546
 fileIndex wgEncodeOpenChromFaireHepg2AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireHepg2AlnRep2.bam
 grant Crawford
@@ -1796,6 +1994,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
+expId 546
 fileIndex wgEncodeOpenChromFaireHepg2AlnRep3.bam.bai
 fileName wgEncodeOpenChromFaireHepg2AlnRep3.bam
 grant Crawford
@@ -1817,6 +2017,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
+expId 546
 fileName wgEncodeOpenChromFaireHepg2BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -1837,6 +2039,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
+expId 546
 fileName wgEncodeOpenChromFaireHepg2Pk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -1857,6 +2061,8 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
+expId 546
 fileName wgEncodeOpenChromFaireHepg2RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -1876,6 +2082,8 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
+expId 546
 fileName wgEncodeOpenChromFaireHepg2RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -1895,6 +2103,8 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
+expId 546
 fileName wgEncodeOpenChromFaireHepg2RawDataRep3.fastq.gz
 grant Crawford
 lab UNC
@@ -1914,6 +2124,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
+dccAccession wgEncodeEH000546
+expId 546
 fileName wgEncodeOpenChromFaireHepg2Sig.bigWig
 grant Crawford
 lab UNC
@@ -1933,6 +2145,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001124
+expId 1124
 fileName wgEncodeOpenChromFaireHtr8AlnRep1.bam
 grant Crawford
 lab UNC
@@ -1952,6 +2166,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001124
+expId 1124
 fileName wgEncodeOpenChromFaireHtr8AlnRep2.bam
 grant Crawford
 lab UNC
@@ -1971,6 +2187,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001124
+expId 1124
 fileName wgEncodeOpenChromFaireHtr8BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -1990,6 +2208,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001124
+expId 1124
 fileName wgEncodeOpenChromFaireHtr8Pk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -2009,6 +2229,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001124
+expId 1124
 fileName wgEncodeOpenChromFaireHtr8RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -2027,6 +2249,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001124
+expId 1124
 fileName wgEncodeOpenChromFaireHtr8RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -2045,6 +2269,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001124
+expId 1124
 fileName wgEncodeOpenChromFaireHtr8Sig.bigWig
 grant Crawford
 lab UNC
@@ -2065,6 +2291,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
+expId 549
 fileIndex wgEncodeOpenChromFaireHuvecAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireHuvecAlnRep1.bam
 grant Crawford
@@ -2086,6 +2314,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
+expId 549
 fileIndex wgEncodeOpenChromFaireHuvecAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireHuvecAlnRep2.bam
 grant Crawford
@@ -2107,6 +2337,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
+expId 549
 fileName wgEncodeOpenChromFaireHuvecBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -2127,6 +2359,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
+expId 549
 fileName wgEncodeOpenChromFaireHuvecPk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -2147,6 +2381,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
+expId 549
 fileName wgEncodeOpenChromFaireHuvecRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -2167,6 +2403,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
+expId 549
 fileName wgEncodeOpenChromFaireHuvecRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -2187,6 +2425,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000549
+expId 549
 fileName wgEncodeOpenChromFaireHuvecSig.bigWig
 grant Crawford
 lab UNC
@@ -2207,6 +2447,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
+dccAccession wgEncodeEH000531
+expId 531
 fileIndex wgEncodeOpenChromFaireK562AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireK562AlnRep1.bam
 grant Crawford
@@ -2228,6 +2470,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
+dccAccession wgEncodeEH000531
+expId 531
 fileIndex wgEncodeOpenChromFaireK562AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireK562AlnRep2.bam
 grant Crawford
@@ -2249,6 +2493,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
+dccAccession wgEncodeEH000531
+expId 531
 fileName wgEncodeOpenChromFaireK562BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -2268,6 +2514,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001120
+expId 1120
 fileIndex wgEncodeOpenChromFaireK562NabutAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireK562NabutAlnRep1.bam
 grant Crawford
@@ -2290,6 +2538,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001120
+expId 1120
 fileIndex wgEncodeOpenChromFaireK562NabutAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireK562NabutAlnRep2.bam
 grant Crawford
@@ -2312,6 +2562,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001120
+expId 1120
 fileName wgEncodeOpenChromFaireK562NabutBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -2332,6 +2584,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001120
+expId 1120
 fileName wgEncodeOpenChromFaireK562NabutPk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -2352,6 +2606,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001120
+expId 1120
 fileName wgEncodeOpenChromFaireK562NabutRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -2372,6 +2628,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001120
+expId 1120
 fileName wgEncodeOpenChromFaireK562NabutRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -2392,6 +2650,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001120
+expId 1120
 fileName wgEncodeOpenChromFaireK562NabutSig.bigWig
 grant Crawford
 lab UNC
@@ -2412,6 +2672,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001121
+expId 1121
 fileIndex wgEncodeOpenChromFaireK562OhureaAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep1.bam
 grant Crawford
@@ -2434,6 +2696,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001121
+expId 1121
 fileIndex wgEncodeOpenChromFaireK562OhureaAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep2.bam
 grant Crawford
@@ -2456,6 +2720,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001121
+expId 1121
 fileName wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -2476,6 +2742,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001121
+expId 1121
 fileName wgEncodeOpenChromFaireK562OhureaPk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -2496,6 +2764,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001121
+expId 1121
 fileName wgEncodeOpenChromFaireK562OhureaRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -2516,6 +2786,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001121
+expId 1121
 fileName wgEncodeOpenChromFaireK562OhureaRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -2536,6 +2808,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+dccAccession wgEncodeEH001121
+expId 1121
 fileName wgEncodeOpenChromFaireK562OhureaSig.bigWig
 grant Crawford
 lab UNC
@@ -2557,6 +2831,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
+dccAccession wgEncodeEH000531
+expId 531
 fileName wgEncodeOpenChromFaireK562Pk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -2577,6 +2853,8 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
+dccAccession wgEncodeEH000531
+expId 531
 fileName wgEncodeOpenChromFaireK562RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -2596,6 +2874,8 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
+dccAccession wgEncodeEH000531
+expId 531
 fileName wgEncodeOpenChromFaireK562RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -2615,6 +2895,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-02-26
 dateUnrestricted 2009-11-26
+dccAccession wgEncodeEH000531
+expId 531
 fileName wgEncodeOpenChromFaireK562Sig.bigWig
 grant Crawford
 lab UNC
@@ -2625,6 +2907,24 @@ subId 1531
 tableName wgEncodeOpenChromFaireK562Sig
 view Signal
 
+metaObject wgEncodeOpenChromFaireK562Validation
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000531
+expId 531
+fileName wgEncodeOpenChromFaireK562Validation.tgz
+grant Crawford
+lab UNC
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 3831
+view Validation
+
 metaObject wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1
 objType file
 cell MCF-7
@@ -2634,6 +2934,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001125
+expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1.bam
 grant Crawford
 lab UNC
@@ -2654,6 +2956,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001125
+expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2.bam
 grant Crawford
 lab UNC
@@ -2674,6 +2978,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001125
+expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -2694,6 +3000,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001125
+expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacPk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -2714,6 +3022,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001125
+expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -2733,6 +3043,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001125
+expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -2752,6 +3064,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001125
+expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacSig.bigWig
 grant Crawford
 lab UNC
@@ -2772,6 +3086,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+dccAccession wgEncodeEH001118
+expId 1118
 fileIndex wgEncodeOpenChromFaireMedulloAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireMedulloAlnRep1.bam
 grant Crawford
@@ -2792,6 +3108,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+dccAccession wgEncodeEH001118
+expId 1118
 fileIndex wgEncodeOpenChromFaireMedulloAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireMedulloAlnRep2.bam
 grant Crawford
@@ -2812,6 +3130,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+dccAccession wgEncodeEH001118
+expId 1118
 fileName wgEncodeOpenChromFaireMedulloBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -2831,6 +3151,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+dccAccession wgEncodeEH001118
+expId 1118
 fileName wgEncodeOpenChromFaireMedulloPk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -2850,6 +3172,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+dccAccession wgEncodeEH001118
+expId 1118
 fileName wgEncodeOpenChromFaireMedulloRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -2868,6 +3192,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+dccAccession wgEncodeEH001118
+expId 1118
 fileName wgEncodeOpenChromFaireMedulloRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -2886,6 +3212,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+dccAccession wgEncodeEH001118
+expId 1118
 fileName wgEncodeOpenChromFaireMedulloSig.bigWig
 grant Crawford
 lab UNC
@@ -2905,6 +3233,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
+expId 604
 fileName wgEncodeOpenChromFaireNhbeAlnRep1.bam
 grant Crawford
 lab UNC
@@ -2924,6 +3254,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
+expId 604
 fileName wgEncodeOpenChromFaireNhbeAlnRep2.bam
 grant Crawford
 lab UNC
@@ -2943,6 +3275,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
+expId 604
 fileName wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -2962,6 +3296,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
+expId 604
 fileName wgEncodeOpenChromFaireNhbePk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -2982,6 +3318,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
+expId 604
 fileName wgEncodeOpenChromFaireNhbeRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -3003,6 +3341,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
+expId 604
 fileName wgEncodeOpenChromFaireNhbeRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -3023,6 +3363,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
+dccAccession wgEncodeEH000604
+expId 604
 fileName wgEncodeOpenChromFaireNhbeSig.bigWig
 grant Crawford
 lab UNC
@@ -3043,6 +3385,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
+expId 558
 fileIndex wgEncodeOpenChromFaireNhekAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireNhekAlnRep1.bam
 grant Crawford
@@ -3064,6 +3408,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
+expId 558
 fileIndex wgEncodeOpenChromFaireNhekAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireNhekAlnRep2.bam
 grant Crawford
@@ -3085,6 +3431,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
+expId 558
 fileName wgEncodeOpenChromFaireNhekBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -3105,6 +3453,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
+expId 558
 fileName wgEncodeOpenChromFaireNhekPk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -3125,6 +3475,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
+expId 558
 fileName wgEncodeOpenChromFaireNhekRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -3145,6 +3497,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
+expId 558
 fileName wgEncodeOpenChromFaireNhekRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -3165,6 +3519,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
+dccAccession wgEncodeEH000558
+expId 558
 fileName wgEncodeOpenChromFaireNhekSig.bigWig
 grant Crawford
 lab UNC
@@ -3185,6 +3541,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
+dccAccession wgEncodeEH000573
+expId 573
 fileIndex wgEncodeOpenChromFairePanisletsAlnRep1.bam.bai
 fileName wgEncodeOpenChromFairePanisletsAlnRep1.bam
 grant Crawford
@@ -3206,6 +3564,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
+dccAccession wgEncodeEH000573
+expId 573
 fileName wgEncodeOpenChromFairePanisletsBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -3226,6 +3586,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
+dccAccession wgEncodeEH000573
+expId 573
 fileName wgEncodeOpenChromFairePanisletsPk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -3246,6 +3608,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
+dccAccession wgEncodeEH000573
+expId 573
 fileName wgEncodeOpenChromFairePanisletsRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -3266,6 +3630,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
+dccAccession wgEncodeEH000573
+expId 573
 fileName wgEncodeOpenChromFairePanisletsSig.bigWig
 grant Crawford
 lab UNC
@@ -3285,6 +3651,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001122
+expId 1122
 fileName wgEncodeOpenChromFaireUrotsaAlnRep1.bam
 grant Crawford
 lab UNC
@@ -3304,6 +3672,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001122
+expId 1122
 fileName wgEncodeOpenChromFaireUrotsaAlnRep2.bam
 grant Crawford
 lab UNC
@@ -3323,6 +3693,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001122
+expId 1122
 fileName wgEncodeOpenChromFaireUrotsaBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -3342,6 +3714,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001122
+expId 1122
 fileName wgEncodeOpenChromFaireUrotsaPk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -3361,6 +3735,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001122
+expId 1122
 fileName wgEncodeOpenChromFaireUrotsaRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -3379,6 +3755,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001122
+expId 1122
 fileName wgEncodeOpenChromFaireUrotsaRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -3397,6 +3775,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001122
+expId 1122
 fileName wgEncodeOpenChromFaireUrotsaSig.bigWig
 grant Crawford
 lab UNC
@@ -3416,6 +3796,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001123
+expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep1.bam
 grant Crawford
 lab UNC
@@ -3436,6 +3818,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001123
+expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep2.bam
 grant Crawford
 lab UNC
@@ -3456,6 +3840,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001123
+expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
@@ -3476,6 +3862,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001123
+expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189Pk.narrowPeak.gz
 grant Crawford
 lab UNC
@@ -3496,6 +3884,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001123
+expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
@@ -3515,6 +3905,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001123
+expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
@@ -3534,6 +3926,8 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001123
+expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189Sig.bigWig
 grant Crawford
 lab UNC
@@ -3545,4 +3939,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -956119105
+# MAGIC: 593027136

@@ -1,7 +1,7 @@
 metaObject wgEncodeUwDnase
 objType composite
 composite wgEncodeUwDnase
-expVars lab,dataType,cell
+expVars lab,dataType,cell,treatment
 
 metaObject wgEncodeUwDnaseA549AlnRep1
 objType file
@@ -206,7 +206,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-05
-fileIndex wgEncodeUwDnaseAg04449AlnRep1.bam.bai
 fileName wgEncodeUwDnaseAg04449AlnRep1.bam
 grant Stam
 lab UW
@@ -227,7 +226,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseAg04449AlnRep2.bam.bai
 fileName wgEncodeUwDnaseAg04449AlnRep2.bam
 grant Stam
 lab UW
@@ -410,7 +408,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseAg04450AlnRep1.bam.bai
 fileName wgEncodeUwDnaseAg04450AlnRep1.bam
 grant Stam
 lab UW
@@ -431,7 +428,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseAg04450AlnRep2.bam.bai
 fileName wgEncodeUwDnaseAg04450AlnRep2.bam
 grant Stam
 lab UW
@@ -614,7 +610,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseAg09309AlnRep1.bam.bai
 fileName wgEncodeUwDnaseAg09309AlnRep1.bam
 grant Stam
 lab UW
@@ -635,7 +630,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseAg09309AlnRep2.bam.bai
 fileName wgEncodeUwDnaseAg09309AlnRep2.bam
 grant Stam
 lab UW
@@ -818,7 +812,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseAg09319AlnRep1.bam.bai
 fileName wgEncodeUwDnaseAg09319AlnRep1.bam
 grant Stam
 lab UW
@@ -839,7 +832,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseAg09319AlnRep2.bam.bai
 fileName wgEncodeUwDnaseAg09319AlnRep2.bam
 grant Stam
 lab UW
@@ -1043,7 +1035,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-fileIndex wgEncodeUwDnaseAg10803AlnRep1.bam.bai
 fileName wgEncodeUwDnaseAg10803AlnRep1.bam
 grant Stam
 lab UW
@@ -1064,7 +1055,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-fileIndex wgEncodeUwDnaseAg10803AlnRep2.bam.bai
 fileName wgEncodeUwDnaseAg10803AlnRep2.bam
 grant Stam
 lab UW
@@ -1635,7 +1625,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-06-19
 dateUnrestricted 2011-03-19
-fileIndex wgEncodeUwDnaseBjAlnRep1.bam.bai
 fileName wgEncodeUwDnaseBjAlnRep1.bam
 grant Stam
 lab UW
@@ -1656,7 +1645,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-06
 dateSubmitted 2010-06-06
 dateUnrestricted 2011-03-06
-fileIndex wgEncodeUwDnaseBjAlnRep2.bam.bai
 fileName wgEncodeUwDnaseBjAlnRep2.bam
 grant Stam
 lab UW
@@ -1876,7 +1864,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-04-24
 dateUnrestricted 2010-01-24
-fileIndex wgEncodeUwDnaseCaco2AlnRep1.bam.bai
 fileName wgEncodeUwDnaseCaco2AlnRep1.bam
 grant Stam
 lab UW
@@ -1897,7 +1884,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-03-30
-fileIndex wgEncodeUwDnaseCaco2AlnRep2.bam.bai
 fileName wgEncodeUwDnaseCaco2AlnRep2.bam
 grant Stam
 lab UW
@@ -2080,7 +2066,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseCmkAlnRep1.bam.bai
 fileName wgEncodeUwDnaseCmkAlnRep1.bam
 grant Stam
 lab UW
@@ -2182,7 +2167,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
-fileIndex wgEncodeUwDnaseGm06990AlnRep1.bam.bai
 fileName wgEncodeUwDnaseGm06990AlnRep1.bam
 grant Stam
 lab UW
@@ -2203,7 +2187,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-fileIndex wgEncodeUwDnaseGm06990AlnRep2.bam.bai
 fileName wgEncodeUwDnaseGm06990AlnRep2.bam
 grant Stam
 lab UW
@@ -2483,7 +2466,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileIndex wgEncodeUwDnaseGm12865AlnRep1.bam.bai
 fileName wgEncodeUwDnaseGm12865AlnRep1.bam
 grant Stam
 lab UW
@@ -2504,7 +2486,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileIndex wgEncodeUwDnaseGm12865AlnRep2.bam.bai
 fileName wgEncodeUwDnaseGm12865AlnRep2.bam
 grant Stam
 lab UW
@@ -2687,7 +2668,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-fileIndex wgEncodeUwDnaseGm12878AlnRep1.bam.bai
 fileName wgEncodeUwDnaseGm12878AlnRep1.bam
 grant Stam
 lab UW
@@ -2708,7 +2688,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-fileIndex wgEncodeUwDnaseGm12878AlnRep2.bam.bai
 fileName wgEncodeUwDnaseGm12878AlnRep2.bam
 grant Stam
 lab UW
@@ -2891,7 +2870,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-18
-fileIndex wgEncodeUwDnaseH1hescAlnRep1.bam.bai
 fileName wgEncodeUwDnaseH1hescAlnRep1.bam
 grant Stam
 lab UW
@@ -2993,7 +2971,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-fileIndex wgEncodeUwDnaseH7esAlnRep1.bam.bai
 fileName wgEncodeUwDnaseH7esAlnRep1.bam
 grant Stam
 lab UW
@@ -3013,7 +2990,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwDnaseH7esAlnRep2.bam.bai
 fileName wgEncodeUwDnaseH7esAlnRep2.bam
 grant Stam
 lab UW
@@ -3408,7 +3384,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseHaeAlnRep1.bam.bai
 fileName wgEncodeUwDnaseHaeAlnRep1.bam
 grant Stam
 lab UW
@@ -3429,7 +3404,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseHaeAlnRep2.bam.bai
 fileName wgEncodeUwDnaseHaeAlnRep2.bam
 grant Stam
 lab UW
@@ -4194,7 +4168,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-fileIndex wgEncodeUwDnaseHcfAlnRep1.bam.bai
 fileName wgEncodeUwDnaseHcfAlnRep1.bam
 grant Stam
 lab UW
@@ -4215,7 +4188,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseHcfAlnRep2.bam.bai
 fileName wgEncodeUwDnaseHcfAlnRep2.bam
 grant Stam
 lab UW
@@ -4592,7 +4564,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-fileIndex wgEncodeUwDnaseHcmAlnRep1.bam.bai
 fileName wgEncodeUwDnaseHcmAlnRep1.bam
 grant Stam
 lab UW
@@ -4613,7 +4584,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-fileIndex wgEncodeUwDnaseHcmAlnRep2.bam.bai
 fileName wgEncodeUwDnaseHcmAlnRep2.bam
 grant Stam
 lab UW
@@ -4990,7 +4960,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseHcpeAlnRep1.bam.bai
 fileName wgEncodeUwDnaseHcpeAlnRep1.bam
 grant Stam
 lab UW
@@ -5011,7 +4980,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseHcpeAlnRep2.bam.bai
 fileName wgEncodeUwDnaseHcpeAlnRep2.bam
 grant Stam
 lab UW
@@ -5193,7 +5161,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
-fileIndex wgEncodeUwDnaseHct116AlnRep1.bam.bai
 fileName wgEncodeUwDnaseHct116AlnRep1.bam
 grant Stam
 lab UW
@@ -5213,7 +5180,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
-fileIndex wgEncodeUwDnaseHct116AlnRep2.bam.bai
 fileName wgEncodeUwDnaseHct116AlnRep2.bam
 grant Stam
 lab UW
@@ -5390,7 +5356,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileIndex wgEncodeUwDnaseHeeAlnRep1.bam.bai
 fileName wgEncodeUwDnaseHeeAlnRep1.bam
 grant Stam
 lab UW
@@ -5411,7 +5376,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseHeeAlnRep2.bam.bai
 fileName wgEncodeUwDnaseHeeAlnRep2.bam
 grant Stam
 lab UW
@@ -5594,7 +5558,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-fileIndex wgEncodeUwDnaseHelas3AlnRep1.bam.bai
 fileName wgEncodeUwDnaseHelas3AlnRep1.bam
 grant Stam
 lab UW
@@ -5615,7 +5578,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-fileIndex wgEncodeUwDnaseHelas3AlnRep2.bam.bai
 fileName wgEncodeUwDnaseHelas3AlnRep2.bam
 grant Stam
 lab UW
@@ -5798,7 +5760,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
-fileIndex wgEncodeUwDnaseHepg2AlnRep1.bam.bai
 fileName wgEncodeUwDnaseHepg2AlnRep1.bam
 grant Stam
 lab UW
@@ -5819,7 +5780,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
-fileIndex wgEncodeUwDnaseHepg2AlnRep2.bam.bai
 fileName wgEncodeUwDnaseHepg2AlnRep2.bam
 grant Stam
 lab UW
@@ -6390,7 +6350,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileIndex wgEncodeUwDnaseHgfAlnRep1.bam.bai
 fileName wgEncodeUwDnaseHgfAlnRep1.bam
 grant Stam
 lab UW
@@ -6411,7 +6370,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileIndex wgEncodeUwDnaseHgfAlnRep2.bam.bai
 fileName wgEncodeUwDnaseHgfAlnRep2.bam
 grant Stam
 lab UW
@@ -6788,7 +6746,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileIndex wgEncodeUwDnaseHl60AlnRep1.bam.bai
 fileName wgEncodeUwDnaseHl60AlnRep1.bam
 grant Stam
 lab UW
@@ -6809,7 +6766,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-fileIndex wgEncodeUwDnaseHl60AlnRep2.bam.bai
 fileName wgEncodeUwDnaseHl60AlnRep2.bam
 grant Stam
 lab UW
@@ -6993,7 +6949,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileIndex wgEncodeUwDnaseHmecAlnRep1.bam.bai
 fileName wgEncodeUwDnaseHmecAlnRep1.bam
 grant Stam
 lab UW
@@ -7013,7 +6968,6 @@ dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
-fileIndex wgEncodeUwDnaseHmecAlnRep2.bam.bai
 fileName wgEncodeUwDnaseHmecAlnRep2.bam
 grant Stam
 lab UW
@@ -8745,7 +8699,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseHnpceAlnRep1.bam.bai
 fileName wgEncodeUwDnaseHnpceAlnRep1.bam
 grant Stam
 lab UW
@@ -8766,7 +8719,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
-fileIndex wgEncodeUwDnaseHnpceAlnRep2.bam.bai
 fileName wgEncodeUwDnaseHnpceAlnRep2.bam
 grant Stam
 lab UW
@@ -9552,7 +9504,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-fileIndex wgEncodeUwDnaseHrceAlnRep1.bam.bai
 fileName wgEncodeUwDnaseHrceAlnRep1.bam
 grant Stam
 lab UW
@@ -9573,7 +9524,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-fileIndex wgEncodeUwDnaseHrceAlnRep2.bam.bai
 fileName wgEncodeUwDnaseHrceAlnRep2.bam
 grant Stam
 lab UW
@@ -9756,7 +9706,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-fileIndex wgEncodeUwDnaseHreAlnRep1.bam.bai
 fileName wgEncodeUwDnaseHreAlnRep1.bam
 grant Stam
 lab UW
@@ -9777,7 +9726,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
-fileIndex wgEncodeUwDnaseHreAlnRep2.bam.bai
 fileName wgEncodeUwDnaseHreAlnRep2.bam
 grant Stam
 lab UW
@@ -10196,7 +10144,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-fileIndex wgEncodeUwDnaseHrpeAlnRep1.bam.bai
 fileName wgEncodeUwDnaseHrpeAlnRep1.bam
 grant Stam
 lab UW
@@ -10217,7 +10164,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-fileIndex wgEncodeUwDnaseHrpeAlnRep2.bam.bai
 fileName wgEncodeUwDnaseHrpeAlnRep2.bam
 grant Stam
 lab UW
@@ -10733,7 +10679,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
-fileIndex wgEncodeUwDnaseHuvecAlnRep1.bam.bai
 fileName wgEncodeUwDnaseHuvecAlnRep1.bam
 grant Stam
 lab UW
@@ -11343,7 +11288,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-fileIndex wgEncodeUwDnaseK562AlnRep1.bam.bai
 fileName wgEncodeUwDnaseK562AlnRep1.bam
 grant Stam
 lab UW
@@ -11364,7 +11308,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-fileIndex wgEncodeUwDnaseK562AlnRep2.bam.bai
 fileName wgEncodeUwDnaseK562AlnRep2.bam
 grant Stam
 lab UW
@@ -11741,7 +11684,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileIndex wgEncodeUwDnaseMcf7AlnRep1.bam.bai
 fileName wgEncodeUwDnaseMcf7AlnRep1.bam
 grant Stam
 lab UW
@@ -11762,7 +11704,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileIndex wgEncodeUwDnaseMcf7AlnRep2.bam.bai
 fileName wgEncodeUwDnaseMcf7AlnRep2.bam
 grant Stam
 lab UW
@@ -12042,7 +11983,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-fileIndex wgEncodeUwDnaseNb4AlnRep1.bam.bai
 fileName wgEncodeUwDnaseNb4AlnRep1.bam
 grant Stam
 lab UW
@@ -12063,7 +12003,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-fileIndex wgEncodeUwDnaseNb4AlnRep2.bam.bai
 fileName wgEncodeUwDnaseNb4AlnRep2.bam
 grant Stam
 lab UW
@@ -12635,7 +12574,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
-fileIndex wgEncodeUwDnaseNhdfneoAlnRep1.bam.bai
 fileName wgEncodeUwDnaseNhdfneoAlnRep1.bam
 grant Stam
 lab UW
@@ -12656,7 +12594,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-fileIndex wgEncodeUwDnaseNhdfneoAlnRep2.bam.bai
 fileName wgEncodeUwDnaseNhdfneoAlnRep2.bam
 grant Stam
 lab UW
@@ -12839,7 +12776,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-fileIndex wgEncodeUwDnaseNhekAlnRep1.bam.bai
 fileName wgEncodeUwDnaseNhekAlnRep1.bam
 grant Stam
 lab UW
@@ -13038,7 +12974,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileIndex wgEncodeUwDnaseNhlfAlnRep1.bam.bai
 fileName wgEncodeUwDnaseNhlfAlnRep1.bam
 grant Stam
 lab UW
@@ -13059,7 +12994,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileIndex wgEncodeUwDnaseNhlfAlnRep2.bam.bai
 fileName wgEncodeUwDnaseNhlfAlnRep2.bam
 grant Stam
 lab UW
@@ -13242,7 +13176,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-fileIndex wgEncodeUwDnasePanc1AlnRep1.bam.bai
 fileName wgEncodeUwDnasePanc1AlnRep1.bam
 grant Stam
 lab UW
@@ -13263,7 +13196,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-fileIndex wgEncodeUwDnasePanc1AlnRep2.bam.bai
 fileName wgEncodeUwDnasePanc1AlnRep2.bam
 grant Stam
 lab UW
@@ -13640,7 +13572,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-fileIndex wgEncodeUwDnaseSaecAlnRep1.bam.bai
 fileName wgEncodeUwDnaseSaecAlnRep1.bam
 grant Stam
 lab UW
@@ -13661,7 +13592,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
-fileIndex wgEncodeUwDnaseSaecAlnRep2.bam.bai
 fileName wgEncodeUwDnaseSaecAlnRep2.bam
 grant Stam
 lab UW
@@ -13844,7 +13774,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-fileIndex wgEncodeUwDnaseSkmcAlnRep1.bam.bai
 fileName wgEncodeUwDnaseSkmcAlnRep1.bam
 grant Stam
 lab UW
@@ -13865,7 +13794,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-26
-fileIndex wgEncodeUwDnaseSkmcAlnRep2.bam.bai
 fileName wgEncodeUwDnaseSkmcAlnRep2.bam
 grant Stam
 lab UW
@@ -14244,7 +14172,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-fileIndex wgEncodeUwDnaseSknshraAlnRep1.bam.bai
 fileName wgEncodeUwDnaseSknshraAlnRep1.bam
 grant Stam
 lab UW
@@ -14265,7 +14192,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-fileIndex wgEncodeUwDnaseSknshraAlnRep2.bam.bai
 fileName wgEncodeUwDnaseSknshraAlnRep2.bam
 grant Stam
 lab UW
@@ -14449,7 +14375,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileIndex wgEncodeUwDnaseTh1AlnRep1.bam.bai
 fileName wgEncodeUwDnaseTh1AlnRep1.bam
 grant Stam
 lab UW
@@ -14551,7 +14476,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
-fileIndex wgEncodeUwDnaseTh2AlnRep1.bam.bai
 fileName wgEncodeUwDnaseTh2AlnRep1.bam
 grant Stam
 lab UW
@@ -15226,4 +15150,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1532240322
+# MAGIC: 54577616

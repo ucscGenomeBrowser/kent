@@ -1,4 +1,9 @@
-metaObject wgEncodeHudsonalphaCnvRegionsGM12878
+metaObject wgEncodeHudsonalphaCnv
+objType composite
+composite wgEncodeHudsonalphaCnv
+expVars lab,dataType,cell
+
+metaObject wgEncodeHudsonalphaCnvRegionsGM12878V2
 objType table
 cell GM12878
 composite wgEncodeHudsonalphaCnv
@@ -7,15 +12,15 @@ dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-07-24
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaCnvRegionsGM12878.bed.gz
+fileName wgEncodeHudsonalphaCnvRegionsGM12878V2.bed.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
 subId 449
-tableName wgEncodeHudsonalphaCnvRegionsGM12878
+tableName wgEncodeHudsonalphaCnvRegionsGM12878V2
 view Regions
 
-metaObject wgEncodeHudsonalphaCnvRegionsHepG2
+metaObject wgEncodeHudsonalphaCnvRegionsHepG2V2
 objType table
 cell HepG2
 composite wgEncodeHudsonalphaCnv
@@ -24,15 +29,15 @@ dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-07-24
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaCnvRegionsHepG2.bed.gz
+fileName wgEncodeHudsonalphaCnvRegionsHepG2V2.bed.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
 subId 449
-tableName wgEncodeHudsonalphaCnvRegionsHepG2
+tableName wgEncodeHudsonalphaCnvRegionsHepG2V2
 view Regions
 
-metaObject wgEncodeHudsonalphaCnvRegionsK562
+metaObject wgEncodeHudsonalphaCnvRegionsK562V2
 objType table
 cell K562
 composite wgEncodeHudsonalphaCnv
@@ -41,12 +46,12 @@ dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-07-24
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaCnvRegionsK562.bed.gz
+fileName wgEncodeHudsonalphaCnvRegionsK562V2.bed.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
 subId 449
-tableName wgEncodeHudsonalphaCnvRegionsK562
+tableName wgEncodeHudsonalphaCnvRegionsK562V2
 view Regions
 
 metaObject wgEncodeHudsonalphaCnvSignalGM12878
@@ -100,4 +105,4 @@ subId 449
 tableName wgEncodeHudsonalphaCnvSignalK562
 view Signal
 
-# MAGIC: -1473470755
+# MAGIC: -1033868930

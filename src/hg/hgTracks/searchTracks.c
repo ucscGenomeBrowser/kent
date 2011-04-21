@@ -1,7 +1,7 @@
 /* Track search code used by hgTracks CGI */
 
 #include "common.h"
-#include "searchTracks.h"
+#include "search.h"
 #include "hCommon.h"
 #include "memalloc.h"
 #include "obscure.h"
@@ -32,10 +32,7 @@
 #define TRACK_SEARCH_ON_DESCR    "tsDescr"
 #define TRACK_SEARCH_SORT        "tsSort"
 
-//#define FILES_SEARCH
-#ifdef FILES_SEARCH
-    #define FILE_SEARCH_ON_FILETYPE "tsFileType"
-#endif///def FILES_SEARCH
+#define SUPPORT_QUOTES_IN_NAME_SEARCH
 
 static int gCmpGroup(const void *va, const void *vb)
 /* Compare groups based on label. */
@@ -94,6 +91,7 @@ else
     slReverse(pTrack);
 }
 
+#ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
 
 // XXXX make a matchString function to support "contains", "is" etc. and wildcards in contains
 
@@ -147,6 +145,7 @@ if(words)
     }
 return FALSE;
 }
+#endif///ndef SUPPORT_QUOTES_IN_NAME_SEARCH
 
 static int getFormatTypes(char ***pLabels, char ***pTypes)
 {
@@ -245,24 +244,45 @@ static struct slRef *advancedSearchForTracks(struct sqlConnection *conn,struct g
 {
 int tracksFound = 0;
 struct slRef *tracks = NULL;
-int numMetadataNonEmpty = slCount(mdbPairs);
+int numMetadataNonEmpty = 0;
+struct slPair *pair = mdbPairs;
+for (; pair!= NULL;pair=pair->next)
+    {
+    if (!isEmpty((char *)(pair->val)))
+        numMetadataNonEmpty++;
+    }
 
     if(!isEmpty(nameSearch) || typeSearch != NULL || descSearch != NULL || groupSearch != NULL || numMetadataNonEmpty)
         {
         // First do the metaDb searches, which can be done quickly for all tracks with db queries.
-        struct hash *matchingTracks = newHash(0);
+        struct hash *matchingTracks = NULL;
 
         if (numMetadataNonEmpty)
             {
-
             struct mdbObj *mdbObj, *mdbObjs = mdbObjRepeatedSearch(conn,mdbPairs,TRUE,FALSE);
             if (mdbObjs)
                 {
                 for (mdbObj = mdbObjs; mdbObj != NULL; mdbObj = mdbObj->next)
+                    {
+                    if (matchingTracks == NULL)
+                        matchingTracks = newHash(0);
                     hashAddInt(matchingTracks, mdbObj->obj, 1);
+                    }
                 mdbObjsFree(&mdbObjs);
                 }
+           if (matchingTracks == NULL)
+                return NULL;
             }
+
+    #ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
+        // Set the word lists up once
+        struct slName *nameList = NULL;
+        if (nameSearch)
+            nameList = slNameListOfUniqueWords(cloneString(nameSearch),TRUE); // TRUE means respect quotes
+        struct slName *descList = NULL;
+        if (descSearch)
+            descList = slNameListOfUniqueWords(cloneString(descSearch),TRUE);
+    #endif///def SUPPORT_QUOTES_IN_NAME_SEARCH
 
         struct group *group;
         for (group = groupList; group != NULL; group = group->next)
@@ -276,10 +296,15 @@ int numMetadataNonEmpty = slCount(mdbPairs);
                         {
                         struct track *track = tr->track;
                         char *trackType = cloneFirstWord(track->tdb->type); // will be spilled
-                        if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, "contains")) &&
-                           (isEmpty(typeSearch) || (sameWord(typeSearch, trackType) && !tdbIsComposite(track->tdb))) &&
-                           (isEmpty(descSearch) || isDescriptionMatch(track, descWords, descWordCount)) &&
-                          (!numMetadataNonEmpty || hashLookup(matchingTracks, track->track) != NULL))
+                #ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
+                        if((isEmpty(nameSearch) || searchNameMatches(track->tdb, nameList))
+                        && (isEmpty(descSearch) || searchDescriptionMatches(track->tdb, descList))
+                #else///ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
+                        if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, "contains"))
+                        && (isEmpty(descSearch) || isDescriptionMatch(track, descWords, descWordCount))
+                #endif///ndef SUPPORT_QUOTES_IN_NAME_SEARCH
+                        && (isEmpty(typeSearch) || (sameWord(typeSearch, trackType) && !tdbIsComposite(track->tdb)))
+                        && (matchingTracks == NULL || hashLookup(matchingTracks, track->track) != NULL))
                             {
                             if (track != NULL)
                                 {
@@ -295,13 +320,16 @@ int numMetadataNonEmpty = slCount(mdbPairs);
                             for (subTrack = track->subtracks; subTrack != NULL; subTrack = subTrack->next)
                                 {
                                 trackType = cloneFirstWord(subTrack->tdb->type); // will be spilled
-                                if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, "contains")) &&
-                                   (isEmpty(typeSearch) || sameWord(typeSearch, trackType)) &&
-                                   (isEmpty(descSearch) || isDescriptionMatch(subTrack, descWords, descWordCount)) &&
-                                   (!numMetadataNonEmpty || hashLookup(matchingTracks, subTrack->track) != NULL))
+                        #ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
+                                if((isEmpty(nameSearch) || searchNameMatches(subTrack->tdb, nameList))
+                                && (isEmpty(descSearch) || searchDescriptionMatches(subTrack->tdb, descList))
+                        #else///ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
+                                if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, "contains"))
+                                && (isEmpty(descSearch) || isDescriptionMatch(subTrack, descWords, descWordCount))
+                        #endif///ndef SUPPORT_QUOTES_IN_NAME_SEARCH
+                                && (isEmpty(typeSearch) || sameWord(typeSearch, trackType))
+                                && (matchingTracks == NULL || hashLookup(matchingTracks, subTrack->track) != NULL))
                                     {
-                                    // XXXX to parent hash. - use tdb->parent instead.
-                                    //hashAdd(parents, subTrack->track, track);
                                     if (track != NULL)
                                         {
                                         tracksFound++;
@@ -545,25 +573,6 @@ else
     // be done with json
     hWrites(jsonTdbSettingsUse(&jsonTdbVars));
     }
-#ifdef OMIT
-if(!doSearch)
-    {
-    hPrintf("<p><b>Recently Done</b><ul>\n"
-        "<li>Can now page through found tracks 100 at a time.</li>"
-        "<li>Added <IMG SRC='../images/folderWrench.png'> icon for contqainers with a configuration link.  Is this okay?</li>"
-        "<li>SuperTracks can now be found.</li>"
-        "<li>Configuration of superTrack children's vis should result in proper superTrack reshaping. (This is really an hgTrackUi feature.)</li>"
-        "<li>Added sort toggle: Relevance, Alphabetically or by Hierarchy.</li>"
-        "<li>Composite/view visibilites in hgTrackUi get reshaped to reflect found/selected subtracks.  (In demo1: only default state composites; demo2: all composites.)</li>"
-        "<li>Non-data 'container' tracks (composites and supertracks) have '*' to mark them, and can be configured before displaying.  Better suggestions?</li>"
-        "</ul></p>"
-        "<p><b>Suggested improvments:</b><ul>\n"
-        "<li>The metadata values will not be white-listed, but it would be nice to have more descriptive text for them.  A short label added to cv.ra?</li>"
-        "<li>Look and feel of found track list (here) and composite subtrack list (hgTrackUi) should converge.  Jim suggests look and feel of hgTracks 'Configure Tracks...' list instead.</li>"
-        "<li>Drop-down list of terms (cells, antibodies, etc.) should be multi-select with checkBoxes as seen in filterComposites. Perhaps saved for v2.0.</li>"
-        "</ul></p>\n");
-    }
-#endif///def OMIT
 hPrintf("</div>"); // This div allows the clear button to empty it
 }
 
@@ -589,18 +598,12 @@ groups[0] = ANYLABEL;
 labels[0] = ANYLABEL;
 char *nameSearch = cartOptionalString(cart, TRACK_SEARCH_ON_NAME);
 char *typeSearch = cartOptionalString(cart, TRACK_SEARCH_ON_TYPE);
-#ifdef FILES_SEARCH
-char *fileTypeSearch = cartOptionalString(cart, FILE_SEARCH_ON_FILETYPE);
-#endif///def FILES_SEARCH
-char *descSearch=FALSE;
+char *descSearch = NULL;
 char *groupSearch = cartOptionalString(cart, TRACK_SEARCH_ON_GROUP);
 boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search") || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 int tracksFound = 0;
-#ifdef ONE_FUNC
-struct hash *parents = newHash(4);
-#endif///def ONE_FUNC
 struct trix *trix;
 char trixFile[HDB_MAX_PATH_STRING];
 char **descWords = NULL;
@@ -622,16 +625,14 @@ else if(sameString(currentTab, "advancedTab"))
     selectedTab = advancedTab;
     descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
     }
-#ifdef FILES_SEARCH
-else if(sameString(currentTab, "filesTab"))
-    {
-    selectedTab = filesTab;
-    descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
-    }
-#endif///def FILES_SEARCH
 
+#ifdef SUPPORT_QUOTES_IN_NAME_SEARCH
+if(descSearch && selectedTab == simpleTab) // TODO: could support quotes in simple tab by detecting quotes and choosing to use doesNameMatch() || doesDescriptionMatch()
+    stripChar(descSearch, '"');
+#else///ifndef SUPPORT_QUOTES_IN_NAME_SEARCH
 if(descSearch)
     stripChar(descSearch, '"');
+#endif///ndef SUPPORT_QUOTES_IN_NAME_SEARCH
 trackList = getTrackList(&groupList, -2); // global
 makeGlobalTrackHash(trackList);
 
@@ -675,9 +676,6 @@ hPrintf("<div id='tabs' style='display:none; %s'>\n"
         "<ul>\n"
         "<li><a href='#simpleTab'><B style='font-size:.9em;font-family: arial, Geneva, Helvetica, san-serif;'>Search</B></a></li>\n"
         "<li><a href='#advancedTab'><B style='font-size:.9em;font-family: arial, Geneva, Helvetica, san-serif;'>Advanced</B></a></li>\n"
-#ifdef FILES_SEARCH
-        "<li><a href='#filesTab'><B style='font-size:.9em;font-family: arial, Geneva, Helvetica, san-serif;'>Files</B></a></li>\n"
-#endif///def FILES_SEARCH
         "</ul>\n"
         "<div id='simpleTab' style='max-width:inherit;'>\n",cgiBrowser()==btIE?"width:1060px;":"max-width:inherit;");
 
@@ -745,9 +743,9 @@ if (selectedTab==advancedTab && typeSearch)
 struct slPair *mdbSelects = NULL;
 if(metaDbExists)
     {
-    struct slPair *mdbVars = mdbVarsRelevant(conn);
+    struct slPair *mdbVars = mdbVarsSearchable(conn,TRUE,FALSE); // Tables but not file only objects
     mdbSelects = mdbSelectPairs(cart,selectedTab, mdbVars);
-    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols);
+    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols,FALSE);  // not a fileSearch
     if (output)
         {
         puts(output);
@@ -763,79 +761,6 @@ hPrintf("<input type='submit' name='submit' value='cancel' class='cancel' style=
 //hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
 hPrintf("</div>\n");
 
-#ifdef FILES_SEARCH
-// Files tab
-hPrintf("<div id='filesTab' style='width:inherit;'>\n"
-        "<table id='filesTable' cellSpacing=0 style='width:inherit; font-size:.9em;'>\n");
-cols = 8;
-
-//// Track Name contains
-//hPrintf("<tr><td colspan=3></td>");
-//hPrintf("<td nowrap><b style='max-width:100px;'>Track&nbsp;Name:</b></td>");
-//hPrintf("<td align='right'>contains</td>\n");
-//hPrintf("<td colspan='%d'>", cols - 4);
-//hPrintf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:326px; font-size:.9em;'>",
-//        TRACK_SEARCH_ON_NAME, nameSearch == NULL ? "" : nameSearch);
-//hPrintf("</td></tr>\n");
-//
-//// Description contains
-//hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>");
-//hPrintf("<td><b style='max-width:100px;'>Description:</b></td>");
-//hPrintf("<td align='right'>contains</td>\n");
-//hPrintf("<td colspan='%d'>", cols - 4);
-//hPrintf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:536px; width:536px; font-size:.9em;'>",
-//        TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
-//hPrintf("</td></tr>\n");
-//if (selectedTab==fileTab && descSearch)
-//    searchTermsExist = TRUE;
-//
-//hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
-//hPrintf("<td><b style='max-width:100px;'>Group:</b></td>");
-//hPrintf("<td align='right'>is</td>\n");
-//hPrintf("<td colspan='%d'>", cols - 4);
-//cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch, "class='groupSearch' style='min-width:40%; font-size:.9em;'");
-//hPrintf("</td></tr>\n");
-//if (selectedTab==fileTab && groupSearch)
-//    searchTermsExist = TRUE;
-
-// Track Type is (drop down)
-hPrintf("<tr><td colspan=2></td><td align='right'>&nbsp;</td>\n");
-//hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n"); // Bring back "and" if using "Track Name,Description or Group
-hPrintf("<td nowrap><b style='max-width:100px;'>Data Format:</b></td>");
-hPrintf("<td align='right'>is</td>\n");
-hPrintf("<td colspan='%d'>", cols - 4);
-char *dropDownHtml = fileFormatSelectHtml(FILE_SEARCH_ON_FILETYPE,fileTypeSearch,"style='min-width:40%; font-size:.9em;'");
-if (dropDownHtml)
-    {
-    puts(dropDownHtml);
-    freeMem(dropDownHtml);
-    }
-hPrintf("</td></tr>\n");
-if (selectedTab==filesTab && fileTypeSearch)
-    searchTermsExist = TRUE;
-
-// mdb selects
-if(metaDbExists)
-    {
-    struct slPair *mdbVars = mdbVarsRelevant(conn);
-    mdbSelects = mdbSelectPairs(cart,selectedTab, mdbVars);
-    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols);
-    if (output)
-        {
-        puts(output);
-        freeMem(output);
-        }
-    slPairFreeList(&mdbVars);
-    }
-
-hPrintf("</table>\n");
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", TRACK_SEARCH);
-hPrintf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
-hPrintf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
-//hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
-hPrintf("</div>\n");
-
-#endif///def FILES_SEARCH
 hPrintf("</div>\n");
 
 hPrintf("</form>\n");
@@ -867,6 +792,7 @@ if(!isEmpty(descSearch))
     for(i = 0, el = descList; el != NULL; i++, el = el->next)
         descWords[i] = strLower(el->name);
     }
+
 if (doSearch && selectedTab==simpleTab && descWordCount <= 0)
     doSearch = FALSE;
 
@@ -878,10 +804,6 @@ if(doSearch)
         tracks = simpleSearchForTracksstruct(trix,descWords,descWordCount);
     else if(selectedTab==advancedTab)
         tracks = advancedSearchForTracks(conn,groupList,descWords,descWordCount,nameSearch,typeSearch,descSearch,groupSearch,mdbSelects);
-#ifdef FILES_SEARCH
-    else if(selectedTab==filesTab && mdbSelects != NULL)
-        fileSearchResults(database, conn, mdbSelects, fileTypeSearch);
-#endif///def FILES_SEARCH
 
     if (measureTiming)
         uglyTime("Searched for tracks");

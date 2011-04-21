@@ -165,6 +165,10 @@ struct bed *bedLoadAll(char *fileName);
 /* Determines how many fields are in a bedFile and load all beds from
  * a tab-separated file.  Dispose of this with bedFreeList(). */
 
+void bedLoadAllReturnFieldCount(char *fileName, struct bed **retList, int *retFieldCount);
+/* Load bed of unknown size and return number of fields as well as list of bed items.
+ * Ensures that all lines in bed file have same field count. */
+
 void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep);
 /* Write a bed of wordCount fields. */
 
@@ -209,6 +213,9 @@ struct bed *cloneBed(struct bed *bed);
 
 struct bed *cloneBedList(struct bed *bed);
 /* Make an all-newly-allocated list copied from bed. */
+
+struct bed *bedListNextDifferentChrom(struct bed *bedList);
+/* Return next bed in list that is from a different chrom than the start of the list. */
 
 struct bed *lmCloneBed(struct bed *bed, struct lm *lm);
 /* Make a copy of bed in local memory. */

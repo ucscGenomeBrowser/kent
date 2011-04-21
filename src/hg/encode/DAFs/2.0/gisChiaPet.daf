@@ -18,7 +18,7 @@ dafVersion        2.0
 
 # Lab and general info
 grant             Ruan
-lab               Gis
+lab               Gis(Ruan)
 dataType          ChiaPet
 variables         cell, antibody
 compositeSuffix   GisChiaPet
@@ -26,34 +26,38 @@ assembly          hg19
 dafVersion        2.0
 
 #should probably have the bam validation here
-validationSettings 
+validationSettings validateFiles.bam:
 
 # Track/view definition
-
-# Interactions that can be between chromosomes - coming soon
-#view             Interactions
-#longLabelPrefix  ChIA-PET Interactions
-#type             crossChrom
-#hasReplicates    yes
-#required         no
-
-# Interactions within chromosome - on it's way out
-view             IntraInteractions
-longLabelPrefix  GIS ChIA-PET Same Chromosome Interactions
+view             Interactions
+longLabelPrefix  ChIA-PET Chromatin Interaction PET clusters
 type             bed 12
 hasReplicates    yes
-required         no
+required         yes
 
-# Alignments - change type to sam if you're unable to run the SAM to BAM converter
+view             Signal
+longLabelPrefix  ChIA-PET Signal
+type             bigWig
+hasReplicates    yes
+required         yes
+downloadOnly     no 
+
 view             Alignments
-longLabelPrefix  GIS ChIA-PET Alignments
+longLabelPrefix  ChIA-PET Alignments
 type             bam
 hasReplicates    yes
 required         yes
+downloadOnly     yes
 
-# Fastq should be in the _Sanger_ variation of fastq.  Let me know if you'd like me
-# to double check this.  The validator might already do this for us.
-view             RawData
+view             FastqRd1
 type             fastq
 hasReplicates    yes
 required         yes
+downloadOnly     yes
+
+view             FastqRd2
+type             fastq
+hasReplicates    yes
+required         yes 
+downloadOnly     yes
+

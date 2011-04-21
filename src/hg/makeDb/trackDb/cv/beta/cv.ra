@@ -2307,9 +2307,9 @@ type Cell Line
 organism Human
 description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
-vendorName Lonza
-vendorId CC-2580
-orderUrl http://www.lonza.com/
+vendorName (See the protocol documents)
+vendorId
+orderUrl
 karyotype normal
 termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256
@@ -2323,9 +2323,9 @@ type Cell Line
 organism Human
 description Normal Human Skeletal Muscle Myotubes
 tissue Muscle
-vendorName Lonza
-vendorId CC-2580
-orderUrl http://www.lonza.com/
+vendorName (See the protocol documents)
+vendorId
+orderUrl
 karyotype normal
 termId BTO:0001760 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760
@@ -2486,7 +2486,7 @@ tier 3
 organism human
 description Skeletal muscle myoblast
 lineage LHCN-M2 are a line of human skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old Caucasian male heart transplant donor.  They are immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN").   Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
-karyotype 
+karyotype
 sex M
 tissue Skeletal muscle myoblast
 vendorName Woodring Wright, M.D., Ph.D.
@@ -3301,6 +3301,8 @@ organism Mouse
 tissue Mammary
 category Cell Line
 description Mammary
+age immortalized
+strain RIII
 vendorName
 termId 7035
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
@@ -3315,6 +3317,8 @@ organism Mouse
 tissue Blood
 category Cell Line
 description myeloid progenitor cells, CD34+
+age immortalized
+strain B6D2F1/J
 vendorName
 termId 7043
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
@@ -3329,6 +3333,8 @@ organism Mouse
 tissue Cortex
 category Cell Line
 description Pituitary tumor LAF1
+age immortalized
+strain Unknown
 vendorName ATCC
 termId 7087
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
@@ -3343,6 +3349,8 @@ organism Mouse
 tissue Blood
 category Cell Line
 description B Cell , CD19+
+age immortalized
+strain C57BL/6
 vendorName
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
@@ -3399,6 +3407,8 @@ organism Mouse
 tissue Blood
 category Cell Line
 description B-cell lymphoma (GM12878 analog)
+age immortalized
+strain B10.H-2aH-4bp/Wts
 vendorName Weissman lab
 vendorId
 orderUrl
@@ -3416,9 +3426,9 @@ type Cell Line
 organism Mouse
 tissue
 category Primary Cells
-description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a
-targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T.
-Genes Dev. 1993 Nov;7(11):2071-84.)
+description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov;7(11):2071-84.)
+age E0
+strain 129
 vendorName Uw lab
 vendorId
 orderUrl
@@ -3479,6 +3489,8 @@ organism Mouse
 tissue Blood
 category Cell Line
 description Gata1- erythroid progenitor
+age E0
+strain 129
 vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
@@ -3494,6 +3506,8 @@ organism Mouse
 tissue Blood
 category Cell Line
 description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)
+age E0
+strain 129
 vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
@@ -3612,6 +3626,8 @@ type Cell Line
 organism Mouse
 category Cell Line
 description Leukemia (K562 analog)
+age immortalized
+strain Unknown
 tissue Blood
 color 46,0,184
 sex M
@@ -3945,7 +3961,7 @@ orderUrl http://www.scbt.com/datasheet-101388-bclaf1-m33-p5b11-antibody.html
 lab Myers
 targetId GeneCard:BCLAF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCLAF1
-validation BCLAF1(Immunoblot):human_BCLAF1_SC-101388_validation_Myers.pdf
+validation BCLAF1(Immunoblot):human_BCLAF1_SC101388_validation_Myers.pdf
 
 term BDP1
 tag BDP1
@@ -4319,7 +4335,7 @@ lab White
 lots
 targetId GeneCards:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
-validation human_validation_White.pdf
+validation eGFP-FOS:human_validation_White.pdf
 
 term eGFP-GATA2
 tag eGATA2
@@ -4334,7 +4350,7 @@ lab White
 lots
 targetId GeneCards:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation human_validation_White.pdf
+validation eGFP-GATA2:human_validation_White.pdf
 
 term eGFP-HDAC8
 tag eHDAC8
@@ -4349,7 +4365,7 @@ lab White
 lots
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
-validation human_validation_White.pdf
+validation eGFP-HDAC8:human_validation_White.pdf
 
 term eGFP-JunB
 tag eJunB
@@ -4364,7 +4380,7 @@ lab White
 lots
 targetId GeneCards:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
-validation human_validation_White.pdf
+validation eGFP-JunB:human_validation_White.pdf
 
 term eGFP-JunD
 tag eJunD
@@ -4379,7 +4395,7 @@ lab White
 lots
 targetId GeneCards:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
-validation human_validation_White.pdf
+validation eGFP-JunD:human_validation_White.pdf
 
 term eGFP-NR4A1
 tag eNR4A1
@@ -4394,7 +4410,7 @@ lab White
 lots
 targetId GeneCards:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
-validation human_validation_White.pdf
+validation eGFP-NR4A1:human_validation_White.pdf
 
 term  ELF1_(SC-631)
 tag  ELF1SC631
@@ -4595,7 +4611,7 @@ targetId
 targetUrl
 lab Myers / Wold
 lots F1804
-validation GABP(Immunoprecipitation-WesternBlot,MassSpec):human_GABP1_validation_Myers.pdf
+validation GABP(Immunoprecipitation-WesternBlot,MassSpec):human_GABP_validation_Myers.pdf
 
 term GATA-1
 tag GATA1
@@ -4982,7 +4998,7 @@ tag H3K79me2
 type Antibody
 target H3K79me2
 antibodyDescription Rabbit polyclonal antibody raised against a peptide containing K79 di-methylation
-targetDescription H3K79me2 is a mark of the transcriptional transition region - ie, the region between the initiation marks (K4me3, etc) and the elongation marks (K36me3). 
+targetDescription H3K79me2 is a mark of the transcriptional transition region - the region between the initiation marks (K4me3, etc) and the elongation marks (K36me3).
 orderUrl http://www.activemotif.com/catalog/details/39143/histone-h3-dimethyl-lys79-antibody-pab.html
 vendorName Active Motif
 vendorId 39143
@@ -5166,8 +5182,8 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF3
 validation IRF3(Immunoblot):human_IRF3_validation_Snyder.pdf
 
 
-term  IRF4_(SC-6509)
-tag  IRF4SC6509
+term  IRF4_(SC-6059)
+tag  IRF4SC6059
 type Antibody
 target  IRF4
 antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of IRF-4 of mouse origin.
@@ -5179,7 +5195,7 @@ lab  Myers
 lots  IO1O6
 targetId IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
-validation IRF4_(SC-6509)(Immunoprecipitation-WesternBlot,MassSpec):human_IRF4_SC-6509_validation_Myers.pdf
+validation IRF4_(SC-6059)(Immunoprecipitation-WesternBlot,MassSpec):human_IRF4_SC-6059_validation_Myers.pdf
 
 term JunD
 tag JUND
@@ -6298,8 +6314,8 @@ target YY1
 antibodyDescription Rabbit polyclonal
 targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel class of zinc finger proteins.
 vendorName Santa Cruz Biotech
-vendorId sc-1703X
-orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/product.php?datasheet=281
+vendorId sc-1703
+orderUrl http://www.scbt.com/product.php?datasheet=1703
 lab Farnham
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
@@ -6313,7 +6329,7 @@ antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of 
 targetDescription YY1 is a ubiquitously distributed transcription factor belonging to the GLI-Kruppel class of zinc finger proteins.  The protein is involved in repressing and activating a diverse number of promoters.  YY1 may direct histone deacetylases and histone acetyltransferases to a promoter in order to activate or repress the promoter, thus implicating histone modification in the function of YY1
 vendorName Santa Cruz Biotech
 vendorId sc-281
-orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/product.php?datasheet=281
+orderUrl http://www.scbt.com/product.php?datasheet=281
 lab Myers
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
@@ -7666,7 +7682,7 @@ type treatment
 
 term pravastatin
 tag PRAVAST
-description For sterol deprivation, cells were cultured with pravastatin (2 M; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
+description For sterol deprivation, cells were cultured with pravastatin (2 uM; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
 type treatment
 
 term Prednisolone_100nM
@@ -7781,6 +7797,269 @@ description HPA Restriction Enzyme
 type restrictionEnzyme
 
 
+### view     THIS WHOLE SECTION IS A ATTEMPT AT CONTROLLING VIEWS
+### term:
+### tag:   This is the camel case convention that we use in our file names
+### label: This will be used for human display
+
+term Alignability
+tag Alignabi
+type view
+label Alignability
+description Alignability
+
+term Alignments
+tag Alignmen
+type view
+label Alignments
+description Alignments
+
+term Base_Overlap_Signal
+tag  ????
+type view
+label Base_Overlap_Signal
+description Base_Overlap_Signal
+
+term Clusters
+tag Clusters
+type view
+label Clusters
+description Clusters
+
+term CNV
+tag CNV
+type view
+label CNV
+description CNV
+
+term Contigs
+tag Contigs
+type view
+label Contigs
+description Contigs
+
+term ExonsGencV3c
+tag ExonsGencV3c
+type view
+label Exons Gencode V3c
+description ExonsGencV3c
+
+term Fasta3p
+tag Fasta3p
+type view
+label Fasta3p
+description Fasta3p
+
+term Fasta5p
+tag Fasta5p
+type view
+label Fasta5p
+description Fasta5p
+
+term FastaRd1
+tag FastaRd1
+type view
+label FastaRd1
+description FastaRd1
+
+term FastaRd2
+tag FastaRd2
+type view
+label FastaRd2
+description FastaRd2
+
+term Fastq
+tag Fastq
+type view
+label Fastq
+description Fastq
+
+term FastqRd1
+tag FastqRd1
+type view
+label FastqRd1
+description FastqRd1
+
+term FastqRd2
+tag FastqRd2
+type view
+label FastqRd2
+description FastqRd2
+
+term FiltTransfrags
+tag FiltTransfrags
+type view
+label Filtered Transfrags
+description FiltTransfrags
+
+term GeneDeNovo
+tag GeneDeNo
+type view
+label Genes DeNovo
+description GeneDeNovo
+
+term GeneGencV3c
+tag GeneGencV3c
+type view
+label Genes Gencode V3c
+description GeneGencV3c
+
+term HMM
+tag HMM
+type view
+label HMM
+description HMM
+
+term Hotspots
+tag Hotspots
+type view
+label Hotspots
+description Hotspots
+
+term Interactions
+tag Interactions
+type view
+label Interactions
+description Interactions
+
+term Junctions
+tag Junctions
+type view
+label Junctions
+description Junctions
+
+term Matrix
+tag Matrix
+type view
+label Matrix
+description Matrix
+
+term MinusRawSignal
+tag MinusRawSig
+type view
+label Minus Raw Signal
+description MinusRawSignal
+
+term Peaks
+tag Peaks
+type view
+label Peaks
+description Peaks
+
+term PeptideMapping
+tag PeptideMap
+type view
+label Peptide Mapping
+description PeptideMapping
+
+term PlusRawSignal
+tag PlusRawSig
+type view
+label Plus Raw Signal
+description PlusRawSignal
+
+term Qual3p
+tag Qual3p
+type view
+label Qual3p
+description Qual3p
+
+term Qual5p
+tag Qual5p
+type view
+label Qual5p
+description Qual5p
+
+term RawData
+tag RawData
+type view
+label RawData
+description RawData
+
+term RawData2
+tag RawData2
+type view
+label Raw Data2
+description Raw Data2
+
+term RawSignal
+tag RawSig
+type view
+label Raw Signal
+description RawSignal
+
+term RbpAssocRna
+tag RbpAssocRna
+type view
+label Rbp Associated RNA
+description RbpAssocRna
+
+term Regions
+tag Regions
+type view
+label Regions
+description Regions
+
+term Signal
+tag Signal
+type view
+label Signal
+description Signal
+
+term SimpleSignal
+tag SimpleSig
+type view
+label SimpleSignal
+description SimpleSignal
+
+term Sites
+tag Sites
+type view
+label Sites
+description Sites
+
+term SNP
+tag SNP
+type view
+label SNP
+description SNP
+
+term Splices
+tag Splices
+type view
+label Splices
+description Splices
+
+term TranscriptDeNovo
+tag TranscriptDeNovo
+type view
+label TranscriptDeNovo
+description TranscriptDeNovo
+
+term TranscriptGencV3c
+tag TranscriptGencV3c
+type view
+label Transcript Gencode V3c
+description TranscriptGencV3c
+
+term Transfrags
+tag Transfrags
+type view
+label Transfrags
+description Transfrags
+
+term TSS
+tag TSS
+type view
+label TSS
+description TSS
+
+term Validation
+tag Validation
+type view
+label Validation
+description Validation
+
 ### dataType
 ### term:  Ideally this should be the term used by NHGRI for the data type
 ### tag:   This is the camel case convention that we use in our file names
@@ -7863,6 +8142,12 @@ tag FAIREseq
 type dataType
 label FAIRE-seq
 description FAIRE followed by sequencing
+
+term Genotype
+tag genotype
+type dataType
+label Genotype
+description Genotyping experiments including copy nummber variants and SNPs
 
 term Gencode
 tag gencode
@@ -7974,12 +8259,12 @@ type dataType
 label RNA-seq
 description sequencing of short RNAs
 
-term Snp
-tag Snp
-type dataType
-label SNPs
-description Single-nucleotide polymorphism 
-
+#term Snp
+#tag Snp
+#type dataType
+#label SNPs
+#description PROVISIONAL Single-nucleotide polymorphism
+# I would like to take this out and replace with Genotype as a more general datatype to match the composite
 
 term Switchgear
 tag Switchgear
@@ -8743,7 +9028,8 @@ projectName SUNY
 term Stam
 tag stam
 type grant
-description Stam
+label Stamatoyannopoulous
+description Stamatoyannopoulous
 grantInst University of Washington
 projectName UW
 
@@ -8869,19 +9155,19 @@ projectName UNC-Giddings
 #     "regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" )  # ("regex:" includes colon)
 #    # NOTE: that validate rules may end comment delimited by a '#'
 #
-#     priority Like in trackDb.ra this is used for enfocing a sort order in certain circumstances, with lower numbers implying greater priority.
+#     priority Like in trackDb.ra this is used for enforcing a sort order in certain circumstances, with lower numbers implying greater priority.
 #       At beginnning:
 #         species:??  assembly:??  project:010  grant:015  lab:020  composite:025  dataType:030  view:035  type:040
 #       Experiment defining:
 #         expId:100  strain:110  cell:120  sex:130  age:140  rnaExtract:150  localization:160  phase:170  treatment:180  antibody:190
 #         protocol:200  restrictionEnzyme:220  control:230  replicate:240  submittedDataVersion:250
 #       DCC descriptive:
-#         origAssembly:305  dataVersion:310  dateSubmitted:315  dateResubmitted:320  dateUnrestricted:325  freezeDate:330
+#         origAssembly:305  dataVersion:310  dccAccession:312  dateSubmitted:315  dateResubmitted:320  dateUnrestricted:325  freezeDate:330
 #         subId:335  geoSeries:340  geoSample:345  setType:350  controlId:355
 #       Lab descriptive:
 #         labExpId:410  labProtocolId:420  labVersion:430  softwareVersion:440  privacy:450  rank:460
 #       Miscellaneous junk which will be put into the 500 pot which will sort near the end
-#         accession:500  annotation:500  bioRep:500  fragLength:500  fragSize:500  mapAlgorithm:500
+#         accession:500  annotation:500  bioRep:500  fragLength:500  fragSize:500  mapAlgorithm:500  expVars:500
 #         insertLength:500  level:500  obtainedBy:500  readType:500  run:500  seqPlatform:500  size:500  uniqueness:500
 #       At End:
 #         dccInternalNotes:910  parentTable:920  tableName:970  fileName:980  fileIndex:990
@@ -9033,6 +9319,15 @@ cvDefined no
 priority 235
 validate date # nine months more than dateSubmitted
 
+term dccAccession
+type typeOfTerm
+label ENCODE DCC Accession
+description The accession number provided by the ENCODE Data Coordination Center.
+searchable freeText
+cvDefined no
+validate regex: ^wgEncode[H,E][0-9]*$
+priority 312
+
 term dccInternalNotes
 type typeOfTerm
 label Internal DCC Notes
@@ -9052,27 +9347,38 @@ serchable yes
 cvDefined off
 validate integer
 hidden no
-priority 241 
+priority 241
 
 #This should be removed if it is not needed by 5/10/2011
 #term docId
 #type typeOfTerm
 #label UCSC document identification
-#description PROVISIONAL This is the document identification assigned byt UCSC. 
-#serchable no 
+#description PROVISIONAL This is the document identification assigned byt UCSC.
+#serchable no
 #cvDefined off
 #validate none  #Brian?
 #hidden no #maybe this will be hidden?  Brian?
-#priority 311 
+#priority 311
 
+term expId
+type typeOfTerm
+label Experiment ID
+description The ENCODE DCC experiment identification number.
+searchable freeText
+cvDefined no
+validate integer
+priority 100
 
-# term expVars
-# type typeOfTerm
-# label Experimental variables
-# description Experiment defining variables for a given ENCODE composite set of tracks.
-# searchable no
-# cvDefined no
-# Only defined for one obj: wgEncodeCaltechRnaSeq  Must be from geo submissions and attached to composite. 11/3/10
+term expVars
+type typeOfTerm
+label Experimental variables
+description Experiment defining variables for a given ENCODE composite set of tracks.
+searchable no
+cvDefined no
+hidden yes
+priority 500
+validate none # Perhaps could add a validte option to restrict/require this var for objType=composite
+# Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
 
 term fileIndex
 type typeOfTerm
@@ -9104,6 +9410,7 @@ priority 500
 # Cricket's special story (11/19/10): in fields.ra we have fragLength
 # and medianFragLength.  fragLength and medianFragLength appear to be
 # redundant, and should be collapsed into fragLength
+# Venkat (4/5/2011): fragLength will be used only for hg18 at the moment, term is retired for hg19, mm9
 
 term fragSize
 type typeOfTerm
@@ -9453,13 +9760,13 @@ priority 335
 #This should be removed if it is not needed by 5/10/2011
 #term submitPath
 #type typeOfTerm
-#label Name of file given by lab.  
+#label Name of file given by lab.
 #description PROVISIONAL This is the name of the file as submitted by the lab to UCSC.
-#serchable no 
+#serchable no
 #cvDefined off
-#validate none  
+#validate none
 #hidden no  #I want this hidden, but "yes" did not work
-#priority 312 
+#priority 312
 
 term submittedDataVersion
 type typeOfTerm

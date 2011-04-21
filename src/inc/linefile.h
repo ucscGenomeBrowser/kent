@@ -1,11 +1,13 @@
 /* lineFile - stuff to rapidly read text files and parse them into
- * lines. 
+ * lines.
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
 #ifndef LINEFILE_H
 #define LINEFILE_H
+
+#include "dystring.h"
 
 #ifdef USE_TABIX
 #include "tabix.h"
@@ -19,7 +21,7 @@ enum nlType {
 };
 
 struct metaOutput
-/* struct to store list of file handles to output meta data to 
+/* struct to store list of file handles to output meta data to
  * meta data is text after # */
     {
     struct metaOutput *next;    /* next file handle */
@@ -41,7 +43,7 @@ struct lineFile
     int lineStart;		/* Offset of line in buffer. */
     int lineEnd;		/* End of line in buffer. */
     bool zTerm;			/* Replace '\n' with zero? */
-    enum nlType nlType;         /* type of line endings: dos, unix, mac or undet */  
+    enum nlType nlType;         /* type of line endings: dos, unix, mac or undet */
     bool reuse;			/* Set if reusing input. */
     char *buf;			/* Buffer. */
     struct pipeline *pl;        /* pipeline if reading compressed */
@@ -52,6 +54,9 @@ struct lineFile
     tabix_t *tabix;		/* A tabix-compressed file and its binary index file (.tbi) */
     ti_iter_t tabixIter;	/* An iterator to get decompressed indexed lines of text */
 #endif
+    struct dyString *fullLine;  // Filled with full line when a lineFileNextFull is called
+    struct dyString *rawLines;  // Filled with raw lines used to create the full line
+    boolean fullLineReuse;      // If TRUE, next call to lineFileNextFull will get already built fullLine
     };
 
 char *getFileNameFromHdrSig(char *m);
@@ -92,15 +97,29 @@ void lineFileCloseList(struct lineFile **pList);
 boolean lineFileNext(struct lineFile *lf, char **retStart, int *retSize);
 /* Fetch next line from file. */
 
+boolean lineFileNextFull(struct lineFile *lf, char **retFull, int *retFullSize,
+                        char **retRaw, int *retRawSize);
+// Fetch next line from file joining up any that are continued by ending '\'
+// If requested, and was joined, the unjoined raw lines are also returned
+// NOTE: comment lines can't be continued!  ("# comment \ \n more comment" is 2 lines.)
+
 boolean lineFileNextReal(struct lineFile *lf, char **retStart);
-/* Fetch next line from file that is not blank and 
+/* Fetch next line from file that is not blank and
  * does not start with a '#'. */
+
+boolean lineFileNextFullReal(struct lineFile *lf, char **retStart);
+// Fetch next line from file that is not blank and does not start with a '#'.
+// Continuation lines (ending in '\') are joined into a single line.
 
 void lineFileNeedNext(struct lineFile *lf, char **retStart, int *retSize);
 /* Fetch next line from file.  Squawk and die if it's not there. */
 
 void lineFileReuse(struct lineFile *lf);
 /* Reuse current line. */
+
+void lineFileReuseFull(struct lineFile *lf);
+// Reuse last full line read.  Unlike lineFileReuse,
+// lineFileReuseFull only works with previous lineFileNextFull call
 
 #define lineFileString(lf) ((lf)->buf + (lf)->lineStart)
 /* Current string in line file. */
@@ -123,7 +142,7 @@ __attribute__((format(printf, 2, 3)))
 
 void lineFileVaAbort(struct lineFile *lf, char *format, va_list args);
 /* Print file name, line number, and error message, and abort. */
- 
+
 void lineFileUnexpectedEnd(struct lineFile *lf);
 /* Complain about unexpected end of file. */
 
@@ -196,12 +215,12 @@ char *lineFileReadAll(struct lineFile *lf);
 
 boolean lineFileParseHttpHeader(struct lineFile *lf, char **hdr,
 				boolean *chunked, int *contentLength);
-/* Extract HTTP response header from lf into hdr, tell if it's 
+/* Extract HTTP response header from lf into hdr, tell if it's
  * "Transfer-Encoding: chunked" or if it has a contentLength. */
 
 struct dyString *lineFileSlurpHttpBody(struct lineFile *lf,
 				       boolean chunked, int contentLength);
-/* Return a dyString that contains the http response body in lf.  Handle 
+/* Return a dyString that contains the http response body in lf.  Handle
  * chunk-encoding and content-length. */
 
 void lineFileSetMetaDataOutput(struct lineFile *lf, FILE *f);
@@ -222,7 +241,7 @@ void lineFileRemoveInitialCustomTrackLines(struct lineFile *lf);
      "http://samtools.sourceforge.net/ and rebuilt kent/src with USE_TABIX=1\n" \
      "(see http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables)."
 
-struct lineFile *lineFileOnTabix(char *fileOrUrl, bool zTerm);
+struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm);
 /* Wrap a line file around a data file that has been compressed and indexed
  * by the tabix command line program.  The index file <fileName>.tbi must be
  * readable in addition to fileName. If there's a problem, warn & return NULL.
@@ -230,7 +249,7 @@ struct lineFile *lineFileOnTabix(char *fileOrUrl, bool zTerm);
  * with the tabix C library. */
 
 boolean lineFileSetTabixRegion(struct lineFile *lf, char *seqName, int start, int end);
-/* Assuming lf was created by lineFileOnTabix, tell tabix to seek to the specified region
+/* Assuming lf was created by lineFileTabixMayOpen, tell tabix to seek to the specified region
  * and return TRUE (or if there are no items in region, return FALSE). */
 
 #endif /* LINEFILE_H */

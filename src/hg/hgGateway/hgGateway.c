@@ -18,7 +18,7 @@
 #include "jsHelper.h"
 #include "hPrint.h"
 #include "suggest.h"
-#include "searchTracks.h"
+#include "search.h"
 
 static char const rcsid[] = "$Id: hgGateway.c,v 1.117 2010/04/29 02:54:35 larrym Exp $";
 
@@ -57,7 +57,12 @@ if (sameString(position, "genome") || sameString(position, "hgBatch"))
 
 webIncludeResourceFile("autocomplete.css");
 jsIncludeFile("jquery.js", NULL);
+#ifdef NEW_JQUERY
+webIncludeResourceFile("jquery-ui.css");
+jsIncludeFile("jquery-ui.js", NULL);
+#else
 jsIncludeFile("jquery.autocomplete.js", NULL);
+#endif
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("autocomplete.js", NULL);
 jsIncludeFile("hgGateway.js", NULL);
@@ -128,7 +133,9 @@ printf("</td>\n");
 if(supportsSuggest)
     {
     puts("<td align=center>\n");
-    hWrites("<input name='hgt.suggest' type='text' size='5' id='suggest' />\n");
+    hPrintf("<input name='hgt.suggest' type='text' size='5' id='suggest' />\n"
+            "<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(db)
+            );
     printf("</td>\n");
     }
 
@@ -226,6 +233,9 @@ puts("</center>\n"
 "</td></tr></table>\n"
 );
 puts("</center>");
+#ifdef NEW_JQUERY
+hPrintf("<input type='hidden' id='hgt.newJQuery' name='hgt.newJQuery' value='1'>\n");
+#endif
 puts("</FORM>");
 if (hIsPreviewHost())
     {

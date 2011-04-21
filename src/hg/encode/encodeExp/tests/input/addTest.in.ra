@@ -1,0 +1,22 @@
+# test input for encodeExp tests
+
+ix 0
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars Antibody=Pol2
+
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars Antibody=Pol2
+
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType K562
+

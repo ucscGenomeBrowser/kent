@@ -34,18 +34,6 @@ boolean bigWigFileCheckSigs(char *fileName)
 return bbiFileCheckSigs(fileName, bigWigSig, "big wig");
 }
 
-struct bwgSectionHead
-/* A header from a bigWig file section */
-    {
-    bits32 chromId;	/* Chromosome short identifier. */
-    bits32 start,end;	/* Range covered. */
-    bits32 itemStep;	/* For some section types, the # of bases between items. */
-    bits32 itemSpan;	/* For some section types, the # of bases in each item. */
-    UBYTE type;		/* Type byte. */
-    UBYTE reserved;	/* Always zero for now. */
-    bits16 itemCount;	/* Number of items in block. */
-    };
-
 #ifdef OLD
 static void bwgSectionHeadRead(struct bbiFile *bwf, struct bwgSectionHead *head)
 /* Read section header. */
@@ -63,7 +51,7 @@ head->itemCount = udcReadBits16(udc, isSwapped);
 }
 #endif /* OLD */
 
-static void bwgSectionHeadFromMem(char **pPt, struct bwgSectionHead *head, boolean isSwapped)
+void bwgSectionHeadFromMem(char **pPt, struct bwgSectionHead *head, boolean isSwapped)
 /* Read section header. */
 {
 char *pt = *pPt;

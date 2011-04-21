@@ -2615,3 +2615,89 @@ http://genome.wustl.edu/pub/organism/Primates/Callithrix_jacchus/end_sequences/m
     ln -s /hive/data/genomes/calJac3/bed/liftOver/calJac3ToHg18.over.chain.gz .
 
 ############################################################################
+# construct ucscToEnsembl chrom name translation (2011-04-20 - Hiram)
+    # the Ensembl genes v62 have new chrom names, construct translation:
+    mkdir /hive/data/genomes/calJac3/bed/ucscToEnsembl
+    cd /hive/data/genomes/calJac3/bed/ucscToEnsembl
+
+zcat ../ensGene.62/download/Callithrix_jacchus.C_jacchus3.2.1.62.gtf.gz \
+    | awk '{print $1}' | sort -u \
+        | sed -e 's/^\([0-9XY][0-9]*\)/chr\1/; s/\.1$//;' | sort > t.t
+
+cat t.t | while read C
+do
+    WC=`grep "${C}" ../../chrom.sizes | wc -l`
+    EN=`echo ${C} | sed -e "s/^chr//; s/^\(ACFV.*\)/\1.1/; s/^\(GL.*\)/\1.1/;"`
+    if [ "${WC}" -eq 1 ]; then
+        UCSC=`grep "${C}" ../../chrom.sizes | awk '{print $1}'`
+        echo -e "${UCSC}\t${EN}"
+    else
+        WC=`egrep "^${C}        " ../../chrom.sizes | wc -l`
+        if [ "${WC}" -eq 1 ]; then
+            UCSC=`egrep "^${C}  " ../../chrom.sizes | awk '{print $1}'`
+            echo -e "${UCSC}\t${EN}"
+        else
+            echo "ERROR: one only not found for: ${C} - ${WC}"
+        fi
+    fi
+done | sort > ensemblGenes.tab
+
+cut -f1 ensemblGenes.tab | sort > ucsc.done.list
+cut -f1 ../../chrom.sizes | sort > ucsc.all.list
+
+comm -13 ucsc.done.list ucsc.all.list | while read UCSC
+do
+    EN=`echo $UCSC | sed -e 's/^chr[0-9XYU][n0-9]*_//; s/_random//; s/$/.1/'`
+    echo -e "${UCSC}\t${EN}"
+done > noEnsemblGenes.tab
+
+sort ensemblGenes.tab noEnsemblGenes.tab > ucscToEnsembl.tab
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(21))
+);
+'_EOF_'
+
+    hgsql calJac3 < ucscToEnsembl.sql
+    hgsql calJac3 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+############################################################################
+#  calJac3 - Marmoset - Ensembl Genes version 62  (DONE - 2011-04-21 - hiram)
+    # need a new lift file to translate names
+    cd /hive/data/genomes/calJac3/jkStuff
+
+grep "^chr" ../chrom.sizes | while read L
+do
+    size=`echo $L | awk '{print $2}'`
+    ucName=`echo $L | awk '{print $1}'`
+    ensName=`hgsql -N -e 'select ensembl from ucscToEnsembl where ucsc="'${ucName}'";' calJac3`
+    echo -e "0\t${ensName}.1\t$size\t$ucName\t$size\n"
+done > ens.62.lft
+
+    # place that file name in the calJac3.ensGene.ra file, then:
+
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3
+    cat << '_EOF_' > calJac3.ensGene.ra
+# required db variable
+db calJac3
+# nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/;
+# s/^GL\([0-9][0-9]*\).1/chrUn_GL\1/;"
+# name translation in Ensembl v62
+liftUp /hive/data/genomes/calJac3/jkStuff/ens.62.lft
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=62 calJac3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/ensGene.62
+    featureBits calJac3 ensGene
+    # 51944550 bases of 2752505800 (1.887%) in intersection
+
+############################################################################

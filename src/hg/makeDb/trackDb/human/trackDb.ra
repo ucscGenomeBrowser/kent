@@ -259,9 +259,10 @@ type genePred acemblyPep acemblyMrna
 autoTranslate 0
 url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
 itemClassTbl acemblyClass
-geneClasses main putative
+geneClasses main putative cDNA_supported
 gClass_main 128,0,125
 gClass_putative 200,0,125
+gClass_cDNA_supported 200,0,125
 urlLabel AceView Gene Summary:
 
 track slamMouse
@@ -305,6 +306,29 @@ spectrum on
 type genePred
 autoTranslate 0
 url http://www.pseudogene.org/cgi-bin/display-by-acc.cgi?id=$$
+
+track pseudoYale60
+shortLabel Yale Pseudo60
+longLabel Yale Pseudogenes based on Ensembl Release 60
+group genes
+priority 53
+visibility hide
+spectrum on
+type genePred
+autoTranslate 0
+geneClasses Processed Duplicated Ambiguous
+gClass_Processed 180,0,0
+gClass_Duplicated 100,50,0
+gClass_Ambiguous 100,91,191
+itemClassTbl pseudoYale60Class
+dataVersion December 2010
+urlLabel Yale pseudogene.org link:
+url http://tables.pseudogene.org/human55/$$
+
+searchTable pseudoYale60
+searchType genePred
+termRegex PGOHUM[0-9]+
+searchPriority 50
 
 track luNega
 shortLabel UCSC Pseudo
@@ -4100,7 +4124,7 @@ type bed 4 .
 
 track iscaRetrospective
 shortLabel ISCA Retro
-longLabel International Standard Cytogenetic Array Consortium - Retrospective variants
+longLabel International Standards for Cytogenetic Arrays Consortium - Retrospective variants
 group varRep
 priority 110
 visibility hide
@@ -4158,3 +4182,9 @@ termRegex rs[0-9]+
 searchPriority 12.991
 padding 250
 
+searchTable iscaRetrospective
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex [ne]ss?v[0-9]+
+searchPriority 20

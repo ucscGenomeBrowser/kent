@@ -108,7 +108,7 @@ return val;
 }
 
 struct trackHub *trackHubOpen(char *url, char *hubName)
-/* Open up a track hub from url.  Reads and parses hub.ra and the genomesFile. 
+/* Open up a track hub from url.  Reads and parses hub.txt and the genomesFile. 
  * The hubName is generally just the asciified ID number. */
 {
 struct lineFile *lf = udcWrapShortLineFile(url, NULL, 256*1024);
@@ -204,26 +204,33 @@ if (hel != NULL)
     }
 }
 
-static void checkTagsLegal(struct trackHub *hub, struct trackHubGenome *genome,
-	struct trackDb *tdb)
-/* Make sure that tdb has all the required tags and is of a supported type. */
+struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName)
+/* Return trackHubGenome of given name associated with hub.  Return NULL if no
+ * such genome. */
+{
+return hashFindVal(hub->genomeHash, genomeName);
+}
+
+static void validateOneTrack( struct trackHub *hub, 
+    struct trackHubGenome *genome, struct trackDb *tdb)
 {
 /* Check for existence of fields required in all tracks */
 requiredSetting(hub, genome, tdb, "shortLabel");
 requiredSetting(hub, genome, tdb, "longLabel");
 
-/* Further checks depend whether it is a container. */
+// subtracks is not NULL if a track said we were its parent
 if (tdb->subtracks != NULL)
     {
-    if (trackDbSetting(tdb, "compositeTrack"))
+    boolean isSuper = FALSE;
+    char *superTrack = trackDbSetting(tdb, "superTrack");
+    if ((superTrack != NULL) && sameString(superTrack, "on"))
+	isSuper = TRUE;
+
+    if (!(trackDbSetting(tdb, "compositeTrack") ||
+          trackDbSetting(tdb, "container") || 
+	  isSuper))
         {
-	}
-    else if (trackDbSetting(tdb, "container"))
-        {
-	}
-    else
-        {
-	errAbort("Parent track %s is not compositeTrack or container in hub %s genome %s", 
+	errAbort("Parent track %s is not compositeTrack, container, or superTrack in hub %s genome %s", 
 		tdb->track, hub->url, genome->name);
 	}
     }
@@ -231,26 +238,80 @@ else
     {
     /* Check type field. */
     char *type = requiredSetting(hub, genome, tdb, "type");
-    if (startsWithWord("bigWig", type))
-	;
-    else if (startsWithWord("bigBed", type))
-	;
-    else if (startsWithWord("bam", type))
-	;
-    else
+    if (!(startsWithWord("bigWig", type) ||
+          startsWithWord("bigBed", type) ||
+          startsWithWord("bam", type)))
+	{
 	errAbort("Unsupported type %s in hub %s genome %s track %s", type,
 	    hub->url, genome->name, tdb->track);
+	}
 
     requiredSetting(hub, genome, tdb, "bigDataUrl");
     }
-
 }
 
-struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName)
-/* Return trackHubGenome of given name associated with hub.  Return NULL if no
- * such genome. */
+static void markContainers( struct trackHub *hub, 
+    struct trackHubGenome *genome, struct trackDb *tdbList)
+/* mark containers that are parents, or have them */
 {
-return hashFindVal(hub->genomeHash, genomeName);
+struct hash *hash = hashNew(0);
+struct trackDb *tdb;
+
+// add all the track names to a hash
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    hashAdd(hash, tdb->track, tdb);
+
+// go through and find the container tracks
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    char *parentLine = trackDbLocalSetting(tdb, "parent");
+
+    // maybe it's a child of a supertrack?
+    if (parentLine == NULL)
+	{
+	parentLine = trackDbLocalSetting(tdb, "superTrack");
+	if ((parentLine != NULL) && sameString(parentLine, "on"))
+	    parentLine = NULL;
+	}
+
+    if (parentLine != NULL)
+         {
+	 char *parentName = cloneFirstWord(parentLine);
+	 struct trackDb *parent = hashFindVal(hash, parentName);
+	 if (parent == NULL)
+	    errAbort("Parent %s of track %s doesn't exist in hub %s genome %s", parentName,
+		tdb->track, hub->url, genome->name);
+	 // mark the parent as a container
+	 parent->subtracks = tdb;
+
+	 // ugh...do this so requiredSetting looks at parent
+	 // in the case of views.  We clear this after 
+	 // validating anyway
+	 tdb->parent = parent;
+
+	 freeMem(parentName);
+	 }
+    }
+hashFree(&hash);
+}
+
+static void validateTracks( struct trackHub *hub, struct trackHubGenome *genome,
+    struct trackDb *tdbList)
+/* make sure a hub track list has the right settings and its parents exist */
+{
+// mark the containers by setting their subtracks pointer
+markContainers(hub, genome, tdbList);
+
+/* Loop through list checking tags */
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    validateOneTrack(hub, genome, tdb);
+
+    // clear these two pointers which we set in markContainers
+    tdb->subtracks = NULL;
+    tdb->parent = NULL;
+    }
 }
 
 struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome)
@@ -266,37 +327,7 @@ struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     expandBigDataUrl(hub, genome, tdb);
 
-/* Connect up subtracks and parents.  Note this loop does not actually move tracks
- * from list to parent subtracks, it just uses the field as a marker. Just do this
- * so when doing error checking can distinguish between container tracks and others.
- * This does have the pleasant side effect of making good error messages for
- * non-existant parents. */
-struct hash *hash = hashNew(0);
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-    hashAdd(hash, tdb->track, tdb);
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-    {
-    char *parentLine = trackDbLocalSetting(tdb, "parent");
-    if (parentLine != NULL)
-         {
-	 char *parentName = cloneFirstWord(parentLine);
-	 struct trackDb *parent = hashFindVal(hash, parentName);
-	 if (parent == NULL)
-	    errAbort("Parent %s of track %s doesn't exist in hub %s genome %s", parentName,
-		tdb->track, hub->url, genome->name);
-	 tdb->parent = parent;
-	 parent->subtracks = tdb;
-	 freeMem(parentName);
-	 }
-    }
-hashFree(&hash);
-
-/* Loop through list checking tags and removing ad-hoc use of parent and subtracks tags. */
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-    {
-    checkTagsLegal(hub, genome, tdb);
-    tdb->parent = tdb->subtracks = NULL;
-    }
+validateTracks(hub, genome, tdbList);
 
 trackDbAddTableField(tdbList);
 trackHubAddNamePrefix(hub->name, tdbList);

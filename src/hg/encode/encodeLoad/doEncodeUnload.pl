@@ -32,6 +32,9 @@ sub usage
 {
     print STDERR <<END;
     usage: doEncodeUnload.pl submission_type project_submission_dir
+           submission_type is currently ignored
+           project_submission_dir needs a full path
+           OPTIONS: -verbose=i -configDir=s
 END
     exit(1);
 }
@@ -202,25 +205,31 @@ for my $key (keys %ra) {
         die "ERROR: unknown type: $h->{type} in load.ra ($PROG)\n";
     }
 
-    # delete the download files 
-    my $target = "$downloadDir/$tablename.$type.gz";
-    if(@files == 1 && $files[0] =~ /^$Encode::autoCreatedPrefix/) {
-        $target = "$downloadDir/raw/$tablename.$type.gz";
-        if (! -d "$downloadDir/raw") {
-            mkdir "$downloadDir/raw" or die "Could not create dir [$downloadDir/raw] error: [$!]\n";
-            }
+    # delete the download files
+    my $target = $downloadDir . "/" . $h->{targetFile};
+
+    # Just in case we are unloading an OLD unload.ra which does not name the targetFile
+    if (!defined($h->{targetFile})) {
+        $target = "$downloadDir/$tablename.$type.gz";
+
+        if (@files == 1 && $files[0] =~ /^$Encode::autoCreatedPrefix/) {
+            $target = "$downloadDir/raw/$tablename.$type.gz";
+            if (! -d "$downloadDir/raw") {
+                mkdir "$downloadDir/raw" or die "Could not create dir [$downloadDir/raw] error: [$!]\n";
+                }
+        }
+        if ($type eq "bam") {
+            $target = "$downloadDir/$tablename.$type";
+        } elsif ($type eq "bigWig") {
+            $target = "$downloadDir/$tablename.$type";
+        } else {
+            $target =~ s/ //g;  # removes space in ".bed 5.gz" for example
+        }
     }
+
+    unlink $target;
     if ($type eq "bam") {
-        $target = "$downloadDir/$tablename.$type";
-        unlink $target;
-        $target = "$downloadDir/$tablename.$type.bai";
-        unlink $target;
-    } elsif ($type eq "bigWig") {
-        $target = "$downloadDir/$tablename.$type";
-        unlink $target;
-    } else {
-        $target =~ s/ //g;  # removes space in ".bed 5.gz" for example
-        unlink $target;
+        unlink "$target.bai";
     }
 }
 

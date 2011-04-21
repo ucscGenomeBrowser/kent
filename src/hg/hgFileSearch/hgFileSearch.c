@@ -10,7 +10,7 @@
 #include "hCommon.h"
 #include "hui.h"
 #include "fileUi.h"
-#include "searchTracks.h"
+#include "search.h"
 #include "cart.h"
 #include "grp.h"
 
@@ -18,6 +18,9 @@
 
 struct hash *trackHash = NULL;	// Is this needed?
 boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTiming=." . */
+
+#define FILE_SEARCH_WHAT "Downloadable ENCODE Files"
+#define FILE_SEARCH_NAME FILE_SEARCH_WHAT " Search"
 
 #define FILE_SEARCH              "hgfs_Search"
 #define FILE_SEARCH_FORM         "fileSearch"
@@ -31,65 +34,47 @@ boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTim
 #define TRACK_SEARCH_ON_DESCR    "tsDescr"
 #define TRACK_SEARCH_SORT        "tsSort"
 
-#define SUPPORT_COMPOSITE_SEARCH
-#ifdef SUPPORT_COMPOSITE_SEARCH
-    //#define USE_TABS
-#endif///def SUPPORT_COMPOSITE_SEARCH
+//#define USE_TABS
 
-#ifdef SUPPORT_COMPOSITE_SEARCH
-// make a matchString function to support "contains", "is" etc. and wildcards in contains
-
-//    ((sameString(op, "is") && !strcasecmp(track->shortLabel, str)) ||
-
-static boolean isDescriptionMatch(struct trackDb *tdb, struct slName *wordList)
-// We parse str and look for every word at the start of any word in track description (i.e. google style).
+static struct trackDb *tdbFilterBy(struct trackDb **pTdbList, char *name, char *description, char *group)
+// returns tdbs that match supplied criterion, leaving unmatched in list passed in
 {
-if (tdb->html == NULL)
-    return (wordList != NULL);
-
-struct slName *word = wordList;
-for(; word != NULL; word = word->next)
-    {
-    if (!wildMatch(word->name, tdb->html))
-        return FALSE;
-    }
-return TRUE;
-}
-
-static struct trackDb *tdbFilterOn(struct trackDb **pTdbList, char *name, char *description, char *group)
-// returns tdbs that pach supplied criterion, leaving unmatched in list passed in
-{
-// Set the word list up once
-struct slName *wordList = NULL;
+// Set the word lists up once
+struct slName *nameList = NULL;
+if (name)
+    nameList = slNameListOfUniqueWords(cloneString(name),TRUE); // TRUE means respect quotes
+struct slName *descList = NULL;
 if (description)
-    wordList = slNameListOfUniqueWords(cloneString(description));
+    descList = slNameListOfUniqueWords(cloneString(description),TRUE);
 
 struct trackDb *tdbList = *pTdbList;
 struct trackDb *tdbRejects = NULL;
 struct trackDb *tdbMatched = NULL;
+
 while (tdbList != NULL)
     {
     struct trackDb *tdb = slPopHead(&tdbList);
 
-    if (name && (!wildMatch(name,tdb->shortLabel) && !wildMatch(name,tdb->longLabel)))
+    if (!tdbIsComposite(tdb))
         slAddHead(&tdbRejects,tdb);
     else if (group && differentString(tdb->grp,group))
         slAddHead(&tdbRejects,tdb);
-    else if (description && !isDescriptionMatch(tdb, wordList))
+    else if (name && !searchNameMatches(tdb, nameList))
+        slAddHead(&tdbRejects,tdb);
+    else if (description && !searchDescriptionMatches(tdb, descList))
         slAddHead(&tdbRejects,tdb);
     else
         slAddHead(&tdbMatched,tdb);
     }
-//slReverse(&tdbRejects); // Needed?
-//slReverse(&tdbMatched); // Needed?
-
 *pTdbList = tdbRejects;
 
+//warn("matched %d tracks",slCount(tdbMatched));
 return tdbMatched;
 }
 
 static boolean mdbSelectsAddFoundComposites(struct slPair **pMdbSelects,struct trackDb *tdbsFound)
 // Adds a composite mdbSelect (if found in tdbsFound) to the head of the pairs list.
+// If tdbsFound is NULL, then add dummy composite search criteria
 {
 // create comma separated list of composites
 struct dyString *dyComposites = dyStringNew(256);
@@ -108,14 +93,15 @@ if (dyStringLen(dyComposites) > 0)
     {
     char *composites = dyStringCannibalize(&dyComposites);
     composites[strlen(composites) - 1] = '\0';  // drop the last ','
-    slPairAdd(pMdbSelects,"composite",composites); // Composite should not already be in the list, because it is only indirectly sortable
+    //warn("Found composites: %s",composites);
+    slPairAdd(pMdbSelects,MDB_VAR_COMPOSITE,composites); // Composite should not already be in the list, because it is only indirectly sortable
     return TRUE;
     }
 
+//warn("No composites found");
 dyStringFree(&dyComposites);
 return FALSE;
 }
-#endif///def SUPPORT_COMPOSITE_SEARCH
 
 #ifdef USE_TABS
 static struct slRef *simpleSearchForTdbs(struct trix *trix,char **descWords,int descWordCount)
@@ -138,7 +124,7 @@ return foundTdbs;
 
 struct slName *tdbListGetGroups(struct trackDb *tdbList)
 // Returns a list of groups found in the tdbList
-// FIXME: Should be movedf to trackDbCustom and shared
+// FIXME: Should be moved to trackDbCustom and shared
 {
 struct slName *groupList = NULL;
 char *lastGroup = "[]";
@@ -170,28 +156,31 @@ slReverse(grps);
 return *grps;
 }
 
-void doSearch(char *db,char *organism,struct cart *cart,struct trackDb *tdbList)
+static void doFileSearch(char *db,char *organism,struct cart *cart,struct trackDb *tdbList)
 {
 if (!advancedJavascriptFeaturesEnabled(cart))
     {
     warn("Requires advanced javascript features.");
     return;
     }
-#ifdef SUPPORT_COMPOSITE_SEARCH
-char *nameSearch = cartOptionalString(cart, TRACK_SEARCH_ON_NAME);
-char *descSearch=NULL;
-#endif///def SUPPORT_COMPOSITE_SEARCH
-char *fileTypeSearch = cartOptionalString(cart, FILE_SEARCH_ON_FILETYPE);
-boolean doSearch = sameWord(cartUsualString(cart, FILE_SEARCH,"no"), "search");
 struct sqlConnection *conn = hAllocConn(db);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
+if (!sqlTableExists(conn, "metaDb"))
+    {
+    warn("Assembly %s %s does not support Downloadable Files search.", organism, hFreezeFromDb(db));
+    hFreeConn(&conn);
+    return;
+    }
+char *nameSearch = cartOptionalString(cart, TRACK_SEARCH_ON_NAME);
+char *descSearch=NULL;
+char *fileTypeSearch = cartOptionalString(cart, FILE_SEARCH_ON_FILETYPE);
+boolean doSearch = sameWord(cartUsualString(cart, FILE_SEARCH,"no"), "search");
 #ifdef ONE_FUNC
 struct hash *parents = newHash(4);
 #endif///def ONE_FUNC
 boolean searchTermsExist = FALSE;  // FIXME: Why is this needed?
 int cols;
 
-#ifdef SUPPORT_COMPOSITE_SEARCH
 #ifdef USE_TABS
 enum searchTab selectedTab = simpleTab;
 char *currentTab = cartUsualString(cart, FILE_SEARCH_CURRENT_TAB, "simpleTab");
@@ -211,30 +200,22 @@ enum searchTab selectedTab = filesTab;
 descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
 #endif///ndef USE_TABS
 
-if(descSearch)
-    stripChar(descSearch, '"');
-
 #ifdef USE_TABS
 struct trix *trix;
 char trixFile[HDB_MAX_PATH_STRING];
 getSearchTrixFile(db, trixFile, sizeof(trixFile));
 trix = trixOpen(trixFile);
 #endif///def USE_TABS
-#endif///def SUPPORT_COMPOSITE_SEARCH
 
 printf("<div style='max-width:1080px;'>");
 // FIXME: Do we need a form at all?
-//printf("<form action='%s' name='%s' id='%s' method='get'>\n\n", hgTracksName(),FILE_SEARCH_FORM,FILE_SEARCH_FORM);
 printf("<form action='../cgi-bin/hgFileSearch' name='%s' id='%s' method='get'>\n\n", FILE_SEARCH_FORM,FILE_SEARCH_FORM);
 cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
-//safef(buf, sizeof(buf), "%lu", clock1());
-//cgiMakeHiddenVar("hgt_", buf);  // timestamps page to avoid browser cache
 
 printf("<input type='hidden' name='db' value='%s'>\n", db);
 printf("<input type='hidden' name='%s' value=''>\n",TRACK_SEARCH_DEL_ROW);
 printf("<input type='hidden' name='%s' value=''>\n",TRACK_SEARCH_ADD_ROW);
 
-#ifdef SUPPORT_COMPOSITE_SEARCH
 #ifdef USE_TABS
 printf("<input type='hidden' name='%s' id='currentTab' value='%s'>\n", FILE_SEARCH_CURRENT_TAB, currentTab);
 printf("<div id='tabs' style='display:none; %s'>\n"
@@ -253,23 +234,18 @@ if (selectedTab==simpleTab && descSearch)
     searchTermsExist = TRUE;
 
 printf("</td></tr><td style='max-height:4px;'></td></tr></table>");
-//printf("</td></tr></table>");
 printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", FILE_SEARCH);
 printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
 printf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
 printf("</div>\n");
-//#else///ifndef USE_TABS
-//printf("<div id='noTabs' style='width:1060px;'>\n");//,cgiBrowser()==btIE?"width:1060px;":"max-width:inherit;");
 #endif///def USE_TABS
-#endif///def SUPPORT_COMPOSITE_SEARCH
 
 // Files tab
 printf("<div id='filesTab' style='width:inherit;'>\n"
         "<table id='filesTable' cellSpacing=0 style='width:inherit; font-size:.9em;'>\n");
 cols = 8;
 
-#ifdef SUPPORT_COMPOSITE_SEARCH
-//// Track Name contains
+// Track Name contains
 printf("<tr><td colspan=3></td>");
 printf("<td nowrap><b style='max-width:100px;'>Track&nbsp;Name:</b></td>");
 printf("<td align='right'>contains</td>\n");
@@ -314,15 +290,9 @@ cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearc
 printf("</td></tr>\n");
 if (selectedTab==filesTab && groupSearch)
     searchTermsExist = TRUE;
-#endif///def SUPPORT_COMPOSITE_SEARCH
 
 // Track Type is (drop down)
-#ifdef SUPPORT_COMPOSITE_SEARCH
 printf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
-#else///ifndef SUPPORT_COMPOSITE_SEARCH
-printf("<tr><td colspan=2></td><td align='right'>&nbsp;</td>\n");
-#endif///ndef SUPPORT_COMPOSITE_SEARCH
-//printf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n"); // Bring back "and" if using "Track Name,Description or Group
 printf("<td nowrap><b style='max-width:100px;'>Data Format:</b></td>");
 printf("<td align='right'>is</td>\n");
 printf("<td colspan='%d'>", cols - 4);
@@ -340,9 +310,9 @@ if (selectedTab==filesTab && fileTypeSearch)
 struct slPair *mdbSelects = NULL;
 if(metaDbExists)
     {
-    struct slPair *mdbVars = mdbVarsRelevant(conn);
+    struct slPair *mdbVars = mdbVarsSearchable(conn,FALSE,TRUE); // Not tables, just files
     mdbSelects = mdbSelectPairs(cart,selectedTab, mdbVars);
-    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols);
+    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols,TRUE); // restricted to file search
     if (output)
         {
         puts(output);
@@ -358,7 +328,6 @@ printf("<input type='submit' name='submit' value='cancel' class='cancel' style='
 //printf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
 printf("</div>\n");
 
-#ifdef SUPPORT_COMPOSITE_SEARCH
 #ifdef USE_TABS
 printf("</div>\n"); // End tabs div
 #endif///def USE_TABS
@@ -369,7 +338,6 @@ if(descSearch != NULL && !strlen(descSearch))
     descSearch = NULL;
 if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
     groupSearch = NULL;
-#endif///def SUPPORT_COMPOSITE_SEARCH
 
 printf("</form>\n");
 printf("</div>"); // Restricts to max-width:1000px;
@@ -412,19 +380,24 @@ if(doSearch)
     else if(selectedTab==filesTab && mdbPairs != NULL)
 #endif///def USE_TABS
         {
-        #ifdef SUPPORT_COMPOSITE_SEARCH
         if (nameSearch || descSearch || groupSearch)
             {  // Use nameSearch, descSearch and groupSearch to narrow down the list of composites.
 
-            struct trackDb *tdbList = hTrackDb(db);
-            struct trackDb *tdbsMatch = tdbFilterOn(&tdbList, nameSearch, descSearch, groupSearch);
+            if (isNotEmpty(nameSearch) || isNotEmpty(descSearch) || isNotEmpty(groupSearch))
+                {
+                struct trackDb *tdbList = hTrackDb(db);
+                struct trackDb *tdbsMatch = tdbFilterBy(&tdbList, nameSearch, descSearch, groupSearch);
 
-            // Now we have a list of tracks, so we need a unique list of composites to add to mdbSelects
-            mdbSelectsAddFoundComposites(&mdbSelects,tdbsMatch);
+                // Now we have a list of tracks, so we need a unique list of composites to add to mdbSelects
+                doSearch = mdbSelectsAddFoundComposites(&mdbSelects,tdbsMatch);
+                }
             }
-        #endif///def SUPPORT_COMPOSITE_SEARCH
 
-        fileSearchResults(db, conn, mdbSelects, fileTypeSearch);
+        if (doSearch && mdbSelects != NULL && isNotEmpty(fileTypeSearch))
+            fileSearchResults(db, conn, mdbSelects, fileTypeSearch);
+        else
+            printf("<DIV id='filesFound'><BR>No files found.<BR></DIV><BR>\n");
+
         if (measureTiming)
             uglyTime("Searched for files");
         }
@@ -433,16 +406,11 @@ if(doSearch)
     }
 hFreeConn(&conn);
 
-webNewSection("About Downloadable Files Search");
-if(metaDbExists)
-    printf("<p>Search for terms in track names, descriptions, groups, and ENCODE "
-            "metadata.  If multiple terms are entered, only tracks with all terms "
-            "will be part of the results.");
-else
-    printf("<p>Search for terms in track descriptions, groups, and names. "
-            "If multiple terms are entered, only tracks with all terms "
-            "will be part of the results.");
-printf("<BR><a target='_blank' href='../goldenPath/help/trackSearch.html'>more help</a></p>\n");
+webNewSection("About " FILE_SEARCH_NAME);
+printf("<p>Search for downloadable ENCODE files by entering search terms in "
+        "the Track name or Description fields and/or by making selections with "
+        "the group, data format, and/or ENCODE metadata drop-downs.");
+printf("<BR><a target='_blank' href='../goldenPath/help/fileSearch.html'>more help</a></p>\n");
 webEndSectionTables();
 }
 
@@ -459,7 +427,10 @@ measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 // QUESTION: Do We need track list ???  trackHash ??? Can't we just get one track and no children
 trackHash = trackHashMakeWithComposites(db,chrom,&tdbList,FALSE);
 
-cartWebStart(cart, db, "Search for Downloadable Files in the %s %s Assembly", organism, hFreezeFromDb(db));
+cartWebStart(cart, db, "Search for " FILE_SEARCH_WHAT " in the %s %s Assembly", organism, hFreezeFromDb(db));
+
+// This cleverness allows us to have the background image like "Track Search" does, without all the hgTracks overhead
+printf("<style type='text/css'>body {background-image:url('%s');}</style>",hBackgroundImage());
 
 webIncludeResourceFile("HGStyle.css");
 webIncludeResourceFile("jquery-ui.css");
@@ -474,14 +445,14 @@ jsIncludeFile("utils.js",NULL);
 //printf("<script type='text/javascript'>$(document).ready(function() { setTimeout('updateMetaDataHelpLinks(0);',50);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
 printf("<script type='text/javascript'>$(document).ready(function() { updateMetaDataHelpLinks(0);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
 
-doSearch(db,organism,cart,tdbList);
+doFileSearch(db,organism,cart,tdbList);
 
 
 printf("<BR>\n");
 webEnd();
 }
 
-char *excludeVars[] = { "submit", "Submit", "g", NULL, "ajax", NULL,};  // HOW IS 'ajax" going to be supported?
+char *excludeVars[] = { "submit", "Submit", "g", "ajax", FILE_SEARCH,TRACK_SEARCH_ADD_ROW,TRACK_SEARCH_DEL_ROW};  // HOW IS 'ajax" going to be supported?
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -494,8 +465,6 @@ return 0;
 
 // TODO:
 // 1) Done: Limit to first 1000
-// 2) SORT OF: Work out strangeness with dropdownchecklist and use in hgTracks (By some miracle multiselect is working in my hgTracks)
-// 3) Work out support for selecting composites and limiting search to those
-// 4) Work out simple verses advanced tabs
-// 5) work out support for non-encode downloads
-// 6) Make an hgTrackSearch to replces hgTracks track search ??   Silpler code, but may not be good idea.
+// 2) Work out simple verses advanced tabs
+// 3) work out support for non-encode downloads
+// 4) Make an hgTrackSearch to replace hgTracks track search ??   Simlpler code, but may not be good idea because of composite reshaping in cart vars

@@ -29790,7 +29790,8 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 3/1/11)
+# NHGRI GWAS CATALOG (DONE 4/1/11)
+# Updated 3/1/11
 # Updated 2/1/11
 # Updated 12/7/10
 # Updated 11/1/10
@@ -29871,7 +29872,7 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 5019 elements of size 22
+#Loaded 5172 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
@@ -29885,7 +29886,7 @@ see doc/builds.txt for specific details.
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#273 ambigStrand.txt
+#275 ambigStrand.txt
 
 
 #############################################################################
@@ -31200,7 +31201,9 @@ TMPDIR=/scratch/tmp
     md5sum *.gz > md5sum.txt
 
 #########################################################################
-# ISCA RETROSPECTIVE FROM DBVAR (DONE 1/31/11 angie)
+# ISCA RETROSPECTIVE FROM DBVAR (DONE 4/19/11 angie)
+# Reloaded 4/19/11 to drop the boring aggregate variants (sv; keep ssv).
+# Originally done 1/31/11
     # Redmine: Track #34 (dbVar for human)
     mkdir -p /hive/data/genomes/hg18/bed/isca/2011_01_31
     cd /hive/data/genomes/hg18/bed/isca/2011_01_31
@@ -31228,6 +31231,7 @@ TMPDIR=/scratch/tmp
           $val =~ s/%/%25/g;   $val =~ s/,/%2C/g; \
           $attrTags .= "$tag,";  $attrVals .= "$val,";  $attrCount++; \
         } \
+        next if ($name =~ /^[ne]sv\d/); # keep only supporting variants (ssv) \
         %attrs = map { ($key, $val) = split("="); $key => $val } split(";", $attrs); \
         @bed8Attrs = ($c, $s-1, $e, $name, $score, $strand, $thickS-1, $thickE, \
                       $attrCount, $attrTags, $attrVals); \
@@ -31239,3 +31243,25 @@ TMPDIR=/scratch/tmp
 
 
 #############################################################################
+# BUILD B CELL RNA-SEQ TRACKS (DONE, 3/29/11, Fan)
+
+ssh hgwdev
+mkdir -p /hive/data/genomes/gs.19/build36/bed/Bcell
+cd /hive/data/genomes/gs.19/build36/bed/Bcell
+
+# Get data from custom track site
+
+wget --timestamping http://genomicsweb1.med.upenn.edu/ucsc/bcelltranscriptometracks.txt
+wget --timestamping http://genomicsweb1.med.upenn.edu/ucsc/800m_junctions.bed
+wget --timestamping http://genomicsweb1.med.upenn.edu/ucsc/800m.bw
+
+ln -s `pwd`/800m.bw /gbdb/hg18/bbi/ceuBcellRNASeqBW.bw
+
+hgsql hg18 -e 'drop table if exists ceuBcellRNASeqBW; \
+               create table ceuBcellRNASeqBW (fileName varchar(255) not null); \
+	       insert into ceuBcellRNASeqBW values ("/gbdb/hg18/bbi/ceuBcellRNASeqBW.bw");'
+
+fgrep -v track 800m_junctions.bed >ceuBcellRNASeq.bed
+hgLoadBed hg18 ceuBcellRNASeq ceuBcellRNASeq.bed
+#############################################################################
+

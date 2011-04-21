@@ -7,9 +7,9 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "hdb.h"
-#include "cheapcgi.h"
-#include "hui.h"
+#include "cv.h"
 #include "mdb.h"
+#include "encode/encodeExp.h"
 #include <regex.h>
 
 static char const rcsid[] = "$Id: mdb.c,v 1.8 2010/06/11 17:11:28 tdreszer Exp $";
@@ -234,17 +234,8 @@ fputc('}',f);
 #define MDB_METADATA_KEY  "metadata"
 #define MDB_METAOBJ_RAKEY "metaObject"
 #define MDB_METAVAR_RAKEY "metaVariable"
-#define MDB_OBJ_TYPE "objType"
 
 // ------- (static) convert from autoSql -------
-static void mdbVarFree(struct mdbVar **mdbVarPtr)
-// Frees a single mdbVar struct
-{
-    freeMem((*mdbVarPtr)->val);
-    freeMem((*mdbVarPtr)->var);
-    freez(mdbVarPtr);
-}
-
 static void mdbLeafObjFree(struct mdbLeafObj **leafObjPtr)
 // Frees a single mdbVar struct
 {
@@ -266,6 +257,24 @@ struct mdbLimbVal *limbVal = *limbValPtr;
 
     freeMem(limbVal->val);
     freez(limbValPtr);
+}
+
+static struct mdbVar *mdbVarNew(char *var, void *val)
+// Creates a new mdbVar and adds it onto the head of the list
+{
+struct mdbVar *mdbVar;
+AllocVar(mdbVar);
+mdbVar->var = cloneString(var);
+mdbVar->val = cloneString(val);
+return mdbVar;
+}
+
+static struct mdbVar *mdbVarAdd(struct mdbVar **pMdbVars, char *var, void *val)
+// Creates a new mdbVar and adds it onto the head of the list
+{
+struct mdbVar *mdbVar = mdbVarNew(var,val);
+slAddHead(pMdbVars, mdbVar);
+return mdbVar;
 }
 
 static struct mdbObj *mdbObjsLoadFromMemory(struct mdb **mdbPtr,boolean buildHashes)
@@ -490,22 +499,22 @@ char *cloneVars = cloneString(varPairs);
             mdbVar != NULL && (tableName == NULL || fileName == NULL);
             mdbVar  = mdbVar->next)
             {
-            if(sameString(mdbVar->var,"tableName"))
+            if(sameString(mdbVar->var,MDB_VAR_TABLENAME))
                 tableName = mdbVar->val;
-            else if(sameString(mdbVar->var,"fileName"))
+            else if(sameString(mdbVar->var,MDB_VAR_FILENAME))
                 fileName = mdbVar->val;
             }
 
         mdbVar = NULL; // assertably so, but this is conditioanally created below
         if(tableName != NULL)
             {
-            verbose(3, "tableName:%s\n",tableName);
+            verbose(3, "%s:%s\n",MDB_VAR_TABLENAME,tableName);
             if(fileName == NULL || startsWithWordByDelimiter(tableName,'.',fileName))
                 {
                 mdbObj->obj     = cloneString(tableName);
                 AllocVar(mdbVar);
                 mdbVar->var = cloneString(MDB_OBJ_TYPE);
-                mdbVar->val = cloneString("table");
+                mdbVar->val = cloneString(MDB_OBJ_TYPE_TABLE);
                 }
             else if(stringIn(ENCODE_ALN,fileName) && stringIn(ENCODE_RSIG,tableName))// Messier case where the file has "Alignment" but the table has "RawSignal"
                 {
@@ -516,19 +525,19 @@ char *cloneVars = cloneString(varPairs);
                     mdbObj->obj     = cloneString(tableName);
                     AllocVar(mdbVar);
                     mdbVar->var = cloneString(MDB_OBJ_TYPE);
-                    mdbVar->val = cloneString("table");
+                    mdbVar->val = cloneString(MDB_OBJ_TYPE_TABLE);
                     }
                 freeMem(tmpFilName);
                 }
             }
         else if(fileName != NULL)
             {
-            verbose(3, "fileName:%s\n",fileName);
+            verbose(3, "%s:%s\n",MDB_VAR_FILENAME,fileName);
             // NOTE: that the file object is the root of the name, so both file.fastq.gz and file.fastq are same obj!
             mdbObj->obj     = cloneFirstWordByDelimiter(fileName,'.');
             AllocVar(mdbVar);
             mdbVar->var = cloneString(MDB_OBJ_TYPE);
-            mdbVar->val = cloneString("file");
+            mdbVar->val = cloneString(MDB_OBJ_TYPE_FILE);
             }
 
         if(mdbVar != NULL) // Just determined an objType
@@ -576,7 +585,7 @@ if(strchr(nibbledWord, '=') == NULL) // If this is not a var=val then it should 
     {
     AllocVar(mdbObj);
     mdbObj->obj = nibbledWord;
-    verbose(3, "metadataLineParse() obj=%s\n",mdbObj->obj);
+    verbose(3, "metadataLineParse() %s=%s\n",MDB_OBJ,mdbObj->obj);
     varPairs = line;
     while(strlen(line) > 0)
         {
@@ -624,7 +633,7 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
     for (thisWord=0; thisWord<count; thisWord++)
         {
         if (strchr(words[thisWord], '=') == NULL)
-            errAbort("Expected 'var=val' but found '%s'.  This is not properly formatted metadata:\n\t%s\n",words[thisWord],line);
+            errAbort("Expected '%s=%s' but found '%s'.  This is not properly formatted metadata:\n\t%s\n",MDB_VAR,MDB_VAL,words[thisWord],line);
 
         // Set up var struct from 1st half of pair
         AllocVar(rootVar);
@@ -730,7 +739,7 @@ struct mdbObj *mdbObjCreate(char *obj,char *var, char *val)
 struct mdbObj *mdbObj = NULL;
 
     if(obj == NULL)
-        errAbort("Need obj to create mdbObj query object.\n");
+        errAbort("Need obj to create mdbObj object.\n");
 
     AllocVar(mdbObj);
     mdbObj->obj     = cloneString(obj);
@@ -745,6 +754,33 @@ struct mdbObj *mdbObj = NULL;
             mdbVar->val     = cloneString(val);
         mdbObj->vars = mdbVar; // Only one
         }
+return mdbObj;
+}
+
+struct mdbObj *mdbObjNew(char *obj,struct mdbVar *mdbVars)
+// Returns a new mdbObj with whatever was passed in.
+// An mdbObj requires and obj, so if one is not supplied it will be "[unknown]"
+{
+struct mdbObj *mdbObj = NULL;
+if (obj == NULL)
+    errAbort("Need obj to create mdbObj object.\n");
+
+if (mdbVars == NULL)
+    {
+    AllocVar(mdbObj);
+    mdbObj->obj = cloneString(obj);
+    return mdbObj;
+    }
+else
+    {
+    mdbObj = mdbObjCreate(obj,mdbVars->var,mdbVars->val);
+    mdbObj->varHash = hashNew(0);
+    hashAddUnique(mdbObj->varHash, mdbVars->var, mdbObj->vars); // pointer to struct to resolve type
+
+    struct mdbVar *var = mdbVars->next;
+    for(;var != NULL;var = var->next);
+        mdbObjSetVar(mdbObj, var->var,var->val);
+    }
 return mdbObj;
 }
 
@@ -855,20 +891,6 @@ void mdbReCreate(struct sqlConnection *conn,char *tblName,boolean testOnly)
 // Creates ore Recreates the named mdb.
 {
 char *sqlCreate =
-#define MDB_STILL_HAS_VARTYPE
-#ifdef MDB_STILL_HAS_VARTYPE
-"# Contains metadata for a table, file or other objects.\n"
-"CREATE TABLE %s (\n"
-"    obj varchar(255) not null,      # Object name or ID.\n"
-"    var varchar(255) not null,      # Metadata variable name.\n"
-"    varType enum ('txt','binary')   # OBSOLETE All vars are txt\n"
-"            not null default 'txt',\n"
-"    val varchar(2048) not null,     # Metadata value.\n"
-"  #Indices\n"
-"    PRIMARY KEY(obj,var),\n"
-"    INDEX varKey (var,val(32),obj)\n"
-")";
-#else///ifndef MDB_STILL_HAS_VARTYPE
 "# Contains metadata for a table, file or other objects.\n"
 "CREATE TABLE %s (\n"
 "    obj varchar(255) not null,      # Object name or ID.\n"
@@ -878,7 +900,6 @@ char *sqlCreate =
 "    PRIMARY KEY(obj,var),\n"
 "    INDEX varKey (var,val(32),obj)\n"
 ")";
-#endif///ndef MDB_STILL_HAS_VARTYPE
 
 if(sqlTableExists(conn,tblName))
     verbose(2, "Table '%s' already exists.  It will be recreated.\n",tblName);
@@ -892,15 +913,18 @@ if(!testOnly)
 dyStringFree(&dy);
 }
 
+#define HG_CONF_SANDBOX_MDB "db.metaDb"
+#define HG_CONF_SANDBOX_TDB "db.trackDb"
+#define SANDBOX_TDB_ROOT    "trackDb"
 static char*mdbTableNamePreferSandbox()
 // returns the mdb table name or NULL if conn supplied but the table doesn't exist
 {
-char *table = cfgOption("db.metaDb");
+char *table = cfgOption(HG_CONF_SANDBOX_MDB);
 if(table != NULL)
     return cloneString(table);
 
 // Look for trackDb name to model
-char *name = cfgOption("db.trackDb");
+char *name = cfgOption(HG_CONF_SANDBOX_TDB);
 if(name == NULL)
     return cloneString(MDB_DEFAULT_NAME);
 
@@ -926,7 +950,7 @@ root = cloneNextWordByDelimiter(&name,delimit);
 sand = name;
 
 // Since db.trackDb was used, make sure to swap it
-if (startsWith("trackDb",root))
+if (startsWith(SANDBOX_TDB_ROOT,root))
     {
     freeMem(root);
     root = cloneString(MDB_DEFAULT_NAME);
@@ -982,9 +1006,8 @@ struct mdbVar *mdbVar;
 int count = 0;
 
 if(tableName == NULL)
-    tableName = MDB_DEFAULT_NAME;
-
-if(!sqlTableExists(conn,tableName))
+    tableName = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+else if(!sqlTableExists(conn,tableName))
     errAbort("mdbObjsSetToDb attempting to update non-existent table named '%s'.\n",tableName);
 
 for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
@@ -1091,17 +1114,14 @@ int mdbObjsLoadToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *md
 int count = 0;
 
 if (tableName == NULL)
-    tableName = MDB_DEFAULT_NAME;
-
-if (!sqlTableExists(conn,tableName))
+    tableName = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+else if (!sqlTableExists(conn,tableName))
     errAbort("mdbObjsLoadToDb attempting to load non-existent table named '%s'.\n",tableName);
 
 assert(mdbObjs != NULL);  // If this is the case, then be vocal
 
 #define MDB_TEMPORARY_TAB_FILE "temporaryMdb.tab"
-#define SHOW_TIMING(last,msg) { int now = clock1000(); verbose(0,"%04ldms - %s\n",(now - (last)),(msg)); (last) = now; }
 long lastTime = 0;
-SHOW_TIMING(lastTime,"Before printing tab delimited file");
 
 count = mdbObjPrintToTabFile(mdbObjs,MDB_TEMPORARY_TAB_FILE);
 
@@ -1111,16 +1131,15 @@ safef(query, sizeof(query),"alter table %s disable keys",tableName);
 sqlUpdate(conn, query);
 
 // Quick? load
-SHOW_TIMING(lastTime,"Before loading the mdb from tab-delimited file");
 sqlLoadTabFile(conn, MDB_TEMPORARY_TAB_FILE, tableName, SQL_TAB_FILE_WARN_ON_ERROR|SQL_TAB_FILE_WARN_ON_WARN);
-SHOW_TIMING(lastTime,"Done 'LOAD DATA INFILE' mysql command for the mdb");
 
 // Enabling the keys again
 safef(query, sizeof(query),"alter table %s enable keys",tableName);
 sqlUpdate(conn, query);
-SHOW_TIMING(lastTime,"Done re-enabling keys");
 
 unlink(MDB_TEMPORARY_TAB_FILE);
+
+verbose(0,"%04ldms - Done loading mdb with 'LOAD DATA INFILE' mysql command.\n",(clock1000() - lastTime));
 
 return count;
 }
@@ -1134,9 +1153,8 @@ struct mdbObj *mdbObjQuery(struct sqlConnection *conn,char *table,struct mdbObj 
     boolean buildHash = TRUE;
 
     if(table == NULL)
-        table = MDB_DEFAULT_NAME;
-
-    if(!sqlTableExists(conn,table))
+        table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+    else if(!sqlTableExists(conn,table))
         return NULL;
 
     struct dyString *dy = newDyString(4096);
@@ -1205,8 +1223,8 @@ struct mdbByVar *mdbByVarsQuery(struct sqlConnection *conn,char *table,struct md
 //  select obj,var,val where (var= [and val in (val1,val2)]) or (var= [and val in (val1,val2)]) order by var,val,obj
 
     if(table == NULL)
-        table = MDB_DEFAULT_NAME;
-    if(!sqlTableExists(conn,table))
+            table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+    else if(!sqlTableExists(conn,table))
         return NULL;
 
     struct dyString *dy = newDyString(4096);
@@ -1308,8 +1326,8 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 //                                                           AND EXISTS (SELECT T3.obj FROM metaDb T3 WHERE T3.obj = T1.obj AND T3.var = 'cell' AND T3.val != 'GM12878') ORDER BY T1.obj, T1.var;
 
     if(table == NULL)
-        table = MDB_DEFAULT_NAME;
-    if(!sqlTableExists(conn,table))
+        table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+    else if(!sqlTableExists(conn,table))
         return NULL;
 
     struct dyString *dy = newDyString(4096);
@@ -1382,6 +1400,46 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
     verbose(3, "Returned %d object(s) with %d var(s).\n",
         mdbObjCount(mdbObjs,TRUE),mdbObjCount(mdbObjs,FALSE));
     return mdbObjs;
+}
+
+struct mdbObj *mdbObjsQueryByVarValString(struct sqlConnection *conn,char *tableName,char *varVals)
+// returns mdbObjs matching varVals in form of: [var1=val1 var2=val2a,val2b var3=v%3 var4="val 4" var5!=val5 var6=]
+//   var2=val2a,val2b: matches asny of comma separated list
+//   var3=v%3        : matches '%' and '?' wild cards.
+//   var4="val 4"    : matches simple double quoted strings.
+//   var5!=val5      : matches not equal.
+//   var6=           : matches that var exists (same as var6=%). var6!= also works.
+{
+struct mdbByVar *mdbByVars = mdbByVarsLineParse(varVals);
+if (mdbByVars == NULL)
+    return NULL;
+return mdbObjsQueryByVars(conn,tableName,mdbByVars);
+}
+
+struct mdbObj *mdbObjsQueryByVarPairs(struct sqlConnection *conn,char *tableName,struct slPair *varValPairs)
+// returns mdbObjs matching varValPairs provided.
+//   The != logic of mdbObjsQueryByVarValString() is not possible, but other cases are supported:
+//   as val may be NULL, a comma delimited list, double quoted string, containing wilds: % and ?
+{
+// Note: there is a bit of inefficiency creating a string then tearing it down, but it streamlines code
+char *varValString = slPairListToString(varValPairs,TRUE); // quotes added when spaces found
+struct mdbObj *mdbObjs = mdbObjsQueryByVarValString(conn,tableName,varValString);
+freeMem(varValString);
+return mdbObjs;
+}
+
+struct mdbObj *mdbObjQueryCompositeObj(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj)
+// returns NULL or the composite mdbObj associated with the object passed in.
+{
+char *objType = mdbObjFindValue(mdbObj,MDB_OBJ_TYPE);
+assert(objType != NULL);
+if (sameWord(objType,MDB_VAR_COMPOSITE))
+    return mdbObjClone(mdbObj);
+char *compName = mdbObjFindValue(mdbObj,MDB_VAR_COMPOSITE);
+if (compName == NULL)
+    return NULL;
+
+return mdbObjQuery(conn,tableName,mdbObjCreate(compName,NULL,NULL));
 }
 
 
@@ -1513,11 +1571,7 @@ for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
         {
         if (mdbVar->var == NULL || mdbVar->val == NULL)
             continue;
-#ifdef MDB_STILL_HAS_VARTYPE
-        fprintf(tabFile, "%s\t%s\ttxt\t%s\n",mdbObj->obj,mdbVar->var,sqlEscapeString(mdbVar->val));
-#else///ifndef MDB_STILL_HAS_VARTYPE
         fprintf(tabFile, "%s\t%s\t%s\n",mdbObj->obj,mdbVar->var,sqlEscapeString(mdbVar->val));
-#endif///ndef MDB_STILL_HAS_VARTYPE
         count++;
         }
     }
@@ -1716,6 +1770,7 @@ for(;mdbObj!=NULL; mdbObj=mdbObj->next)
 return FALSE;
 }
 
+#define MDB_COMMON_VARS_OBJ_SEARCH_LIMIT 10
 struct mdbObj *mdbObjsCommonVars(struct mdbObj *mdbObjs)
 // Returns a new mdbObj with all vars that are contained in every obj passed in.
 // Note that the returnd mdbObj has a meaningles obj name and vals.
@@ -1731,7 +1786,7 @@ if (mdbObj != NULL)
     int count = 1;
     // NOTE: This should not loop through all, as the list could be huge.  Just compare the first 10 for now
     struct dyString *dyPruneVars = dyStringNew(512);
-    for(;mdbObj != NULL && count < 10;mdbObj=mdbObj->next, count++)
+    for(;mdbObj != NULL && count < MDB_COMMON_VARS_OBJ_SEARCH_LIMIT;mdbObj=mdbObj->next, count++)
         {
         struct mdbVar *mdbVar = commonVars->vars;            // Will walk through the first obj's vars
         for(; mdbVar != NULL; mdbVar = mdbVar->next )
@@ -1851,6 +1906,40 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     freeMem(words);
 }
 
+void mdbObjReorderByCv(struct mdbObj *mdbObjs, boolean includeHidden)
+// Reorders vars list based upon cv.ra typeOfTerms priority
+{
+struct hash *cvTermTypes = (struct hash *)cvTermTypeHash();
+struct hashEl *el, *elList = hashElListHash(cvTermTypes);
+
+struct slPair *cvVars = NULL;
+for (el = elList; el != NULL; el = el->next)
+    {
+    struct hash *varHash = el->val;
+    if (includeHidden || !cvTermIsHidden(el->name)) // Skip the hidden ones
+        {
+        char *priority = hashFindVal(varHash, CV_TOT_PRIORITY);
+        if (priority != NULL) // If there is no priority it will randomly fall to the back of the list
+            slPairAdd(&cvVars,el->name,(char *)sqlUnsignedLong(priority));
+        }
+    }
+hashElFreeList(&elList);
+
+if (cvVars)
+    {
+    slPairIntSort(&cvVars);  // sorts on the integer val
+
+    // Now convert this to a string of names
+    char *orderedVars = slPairNameToString(cvVars,' ',FALSE);
+    slPairFreeList(&cvVars);
+    if (orderedVars != NULL)
+        {
+        mdbObjReorderVars(mdbObjs, orderedVars,FALSE); // Finally we can reorder the vars in the mdbObjs
+        freeMem(orderedVars);
+        }
+    }
+}
+
 int mdbObjVarCmp(const void *va, const void *vb)
 /* Compare to sort on full list of vars and vals. */
 {
@@ -1918,6 +2007,14 @@ mdbObjsSortOnVars(mdbObjs,dyStringContents(dyTerms));
 dyStringFree(&dyTerms);
 }
 
+void mdbObjsSortOnCv(struct mdbObj **mdbObjs, boolean includeHidden)
+// Puts obj->vars in order based upon cv.ra typeOfTerms priority,
+//  then case-sensitively sorts all objs in list based upon that var order.
+{  // NOTE: assumes all var pairs match (e.g. every obj has cell,treatment,antibody,... and missing treatment messes up sort)
+mdbObjReorderByCv(*mdbObjs, includeHidden);
+slSort(mdbObjs, mdbObjVarCmp);  // While sort will not be perfect (given missing values) it does a good job none the less.
+}
+
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars)
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
 {
@@ -1970,18 +2067,14 @@ void mdbObjRemoveHiddenVars(struct mdbObj *mdbObjs)
 // Prunes list of vars for mdb objs that have been declared as hidden in cv.ra typeOfTerms
 {
 // make comma delimited list of hidden vars
-struct hash *cvTermTypes = (struct hash *)mdbCvTermTypeHash();
+struct hash *cvTermTypes = (struct hash *)cvTermTypeHash();
 struct hashEl *el, *elList = hashElListHash(cvTermTypes);
 struct dyString *dyRemoveVars = dyStringNew(256);
 
 for (el = elList; el != NULL; el = el->next)
     {
-    struct hash *varHash = el->val;
-    if (SETTING_IS_ON(hashFindVal(varHash, "hidden")))
-        {
-        assert(mdbCvSearchMethod(el->name) == cvsNotSearchable);  // Good idea to assert but cv.ra is a user updatable file
+    if (cvTermIsHidden(el->name))
         dyStringPrintf(dyRemoveVars,"%s ",el->name);
-        }
     }
 hashElFreeList(&elList);
 
@@ -1991,30 +2084,50 @@ if (dyStringLen(dyRemoveVars))
 dyStringFree(&dyRemoveVars);
 }
 
-char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var)
-// Removes var from set of mdbObjs but only if all that have it have a commmon val
-// Returns the val if removed, else NULL
+boolean mdbObjsHasCommonVar(struct mdbObj *mdbList, char *var, boolean missingOk)
+// Returns TRUE if all mbObjs passed in have the var with the same value
 {
 char *val = NULL;
 struct mdbObj *mdb = NULL;
 for(mdb = mdbList; mdb; mdb=mdb->next)
     {
     char *thisVal = mdbObjFindValue(mdb,var);
-    if (thisVal == NULL) // If var isn't found in some, that is okay
-        continue;
+    if (thisVal == NULL)
+        {
+        if (missingOk)
+            continue;
+        else
+            return FALSE;
+        }
     if (val == NULL)
         val = thisVal;
     else if(differentWord(val,thisVal))
-        return NULL;
+        return FALSE;
     }
+return TRUE;
+}
 
-if (val)
+char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var)
+// Removes var from set of mdbObjs but only if all that have it have a commmon val
+// Returns the val if removed, else NULL
+{
+if (mdbObjsHasCommonVar(mdbList,var,TRUE))  // If var isn't found in some, that is okay
     {
-    val = cloneString(val);
-    for(mdb = mdbList;mdb;mdb=mdb->next)
+    char *val = NULL;
+    struct mdbObj *mdb = mdbList;
+    for( ; mdb; mdb=mdb->next)
+        {
+        if (val == NULL)
+            {
+            char *thisVal = mdbObjFindValue(mdb,var);
+            if (thisVal != NULL)
+                val = cloneString(thisVal);
+            }
         mdbObjRemoveVars(mdb,var);
+        }
+    return val;
     }
-return val;
+return NULL;
 }
 
 boolean mdbObjSetVar(struct mdbObj *mdbObj, char *var,char *val)
@@ -2065,9 +2178,7 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     if(mdbObj->varHash != NULL)
         hashFree(&mdbObj->varHash);
 
-    struct mdbVar *mdbVar = NULL;
-    while((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
-        mdbVarFree(&mdbVar);
+    mdbVarsFree(&(mdbObj->vars));
 
     mdbObjAddVarPairs(mdbObj,vars);
     }
@@ -2131,7 +2242,7 @@ for(ix=0;ix<count;ix++)
             val = NULL;
         }
     struct mdbObj *objNotMatching = mdbObjsFilter(&mdbObjsMatch,var[ix],val,notEqual); // exclude non-matching
-    if (noneEqualsNotFound && val != NULL && sameWord(val,"None"))
+    if (noneEqualsNotFound && val != NULL && sameWord(val,MDB_VAL_ENCODE_EDV_NONE))
         mdbObjsMatch = slCat(mdbObjsMatch,mdbObjsFilter(&objNotMatching,var[ix],NULL,notEqual)); // 1st match on var=None, now match on var!= (var not defined)
     mdbObjsNoMatch = slCat(mdbObjsNoMatch,objNotMatching);  // Multiple passes "cat" non-matching and destroys sort order
     }
@@ -2155,14 +2266,14 @@ assert(tables || files); // Cant exclude both
 struct mdbObj *mdbObjs = *pMdbObjs;
 struct mdbObj *mdbObjsDropped  = NULL;
 if (tables)
-    mdbObjsDropped = mdbObjsFilter(&mdbObjs,"objType","table",FALSE);
+    mdbObjsDropped = mdbObjsFilter(&mdbObjs,MDB_OBJ_TYPE,MDB_OBJ_TYPE_TABLE,FALSE);
 
 if (files)
     {
-    struct mdbObj *mdbObjsNoFileName = mdbObjsDropped = mdbObjsFilter(&mdbObjs,"fileName",NULL,FALSE);
+    struct mdbObj *mdbObjsNoFileName = mdbObjsDropped = mdbObjsFilter(&mdbObjs,MDB_VAR_FILENAME,NULL,FALSE);
     if (mdbObjsNoFileName)
         {
-        struct mdbObj *mdbObjsNoFileIndex = mdbObjsFilter(&mdbObjsNoFileName,"fileIndex",NULL,FALSE);
+        struct mdbObj *mdbObjsNoFileIndex = mdbObjsFilter(&mdbObjsNoFileName,MDB_VAR_FILEINDEX,NULL,FALSE);
         if (mdbObjsNoFileIndex)
             {
             mdbObjs        = slCat(mdbObjs,mdbObjsNoFileName);
@@ -2220,12 +2331,11 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     if(mdbObj->varHash != NULL)
         hashFree(&mdbObj->varHash);
 
-    struct mdbVar *mdbVar = NULL;
-    while((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
-        mdbVarFree(&mdbVar);
+    mdbVarsFree(&(mdbObj->vars));
 
     if(var != NULL)
         {
+        struct mdbVar *mdbVar;
         AllocVar(mdbVar);
 
         mdbVar->var     = cloneString(var);
@@ -2284,12 +2394,31 @@ slReverse(&mdbNames);
 return mdbNames;
 }
 
-// ----------------- Validateion and specialty APIs -----------------
+// ----------------- Validation and specialty APIs -----------------
+
+boolean mdbObjIsComposite(struct mdbObj *mdbObj)
+// returns TRUE if this is a valid composite object
+{
+char *objType = mdbObjFindValue(mdbObj,MDB_OBJ_TYPE);
+assert(objType != NULL);
+return sameWord(objType,MDB_OBJ_TYPE_COMPOSITE);
+}
+
+boolean mdbObjIsCompositeMember(struct mdbObj *mdbObj)
+// returns TRUE if this is a valid member of a composite.  DOES not confirm that composite obj exists
+{
+char *objType = mdbObjFindValue(mdbObj,MDB_OBJ_TYPE);
+assert(objType != NULL);
+if (differentWord(objType,MDB_OBJ_TYPE_TABLE) && differentWord(objType,MDB_OBJ_TYPE_FILE))
+    return FALSE;
+return mdbObjContains(mdbObj,MDB_VAR_COMPOSITE,NULL);
+}
+
 int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full)
 // Validates vars and vals against cv.ra.  Returns count of errors found.
 // Full considers vars not defined in cv as invalids
 {
-struct hash *termTypeHash = (struct hash *)mdbCvTermTypeHash();
+struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
 struct mdbObj *mdbObj = NULL;
 int invalids = 0;
 for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
@@ -2302,17 +2431,19 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
             {
             if (!full)
                 continue;
-            if (sameString(mdbVar->var,"objType")
-            && (sameString(mdbVar->val,"table") || sameString(mdbVar->val,"file") || sameString(mdbVar->val,"composite")))
+            if (sameString(mdbVar->var,MDB_OBJ_TYPE)
+            && (   sameString(mdbVar->val,MDB_OBJ_TYPE_TABLE)
+                || sameString(mdbVar->val,MDB_OBJ_TYPE_FILE)
+                || sameString(mdbVar->val,MDB_OBJ_TYPE_COMPOSITE)))
                 continue;
-            printf("INVALID '%s' not defined in cv.ra: %s -> %s = %s\n",mdbVar->var,mdbObj->obj,mdbVar->var,mdbVar->val);
+            printf("INVALID '%s' not defined in %s: %s -> %s = %s\n",mdbVar->var,CV_FILE_NAME,mdbObj->obj,mdbVar->var,mdbVar->val);
             invalids++;
             continue;
             }
-        char *validationRule = hashFindVal(termHash,"validate");
+        char *validationRule = hashFindVal(termHash,CV_VALIDATE);
         if (validationRule == NULL)
             {
-            verbose(1,"ERROR in cv.ra: Term %s in typeOfTerms but has no 'validate' setting.\n",mdbVar->var);
+            verbose(1,"ERROR in %s: Term '%s' in typeOfTerms but has no '%s' setting.\n",CV_FILE_NAME,mdbVar->var,CV_VALIDATE);
             continue;  // Should we errAbort?
             }
 
@@ -2321,42 +2452,41 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
         validationRule = trimSpaces(validationRule);
 
         // Validate should be or start with known word
-        if (startsWithWord("cv",validationRule))
+        if (startsWithWord(CV_VALIDATE_CV,validationRule))
             {
-            if (SETTING_NOT_ON(hashFindVal(termHash,"cvDefined"))) // Known type of term but no validation to be done
+            if (SETTING_NOT_ON(hashFindVal(termHash,CV_TOT_CV_DEFINED))) // Known type of term but no validation to be done
                 {
-                verbose(1,"ERROR in cv.ra: Term %s says validate in cv but is not 'cvDefined'.\n",mdbVar->var);
+                verbose(1,"ERROR in %s: Term '%s' says validate in cv but is not '%s'.\n",CV_FILE_NAME,mdbVar->var,CV_TOT_CV_DEFINED);
                 continue;
                 }
 
            // cvDefined so every val should be in cv
-           struct hash *cvTermHash = (struct hash *)mdbCvTermHash(mdbVar->var);
-           if (cvTermHash == NULL)
+           struct hash *cvHashForTerm = (struct hash *)cvTermHash(mdbVar->var);
+           if (cvHashForTerm == NULL)
                 {
-                verbose(1,"ERROR in cv.ra: Term %s says validate in cv but not found as a cv term.\n",mdbVar->var);
+                verbose(1,"ERROR in %s: Term '%s' says validate in cv but not found as a cv term.\n",CV_FILE_NAME,mdbVar->var);
                 continue;
                 }
-            if (hashFindVal(cvTermHash,mdbVar->val) == NULL) // No cv definition for term so no validation can be done
+            if (hashFindVal(cvHashForTerm,mdbVar->val) == NULL) // No cv definition for term so no validation can be done
                 {
-                char * orControl = skipBeyondDelimit(validationRule,' ');
-                if (orControl && sameString(orControl,"or None") && sameString(mdbVar->val,"None"))
+                if (sameString(validationRule,CV_VALIDATE_CV_OR_NONE) && sameString(mdbVar->val,MDB_VAL_ENCODE_EDV_NONE))
                     continue;
-                else if (orControl && sameString(orControl,"or control"))
+                else if (sameString(validationRule,CV_VALIDATE_CV_OR_CONTROL))
                     {
-                    cvTermHash = (struct hash *)mdbCvTermHash("control");
-                    if (cvTermHash == NULL)
+                    cvHashForTerm = (struct hash *)cvTermHash(CV_TERM_CONTROL);
+                    if (cvHashForTerm == NULL)
                         {
-                        verbose(1,"ERROR in cv.ra: Term control says validate in cv but not found as a cv term.\n");
+                        verbose(1,"ERROR in %s: Term '%s' says validate in cv but not found as a cv term.\n",CV_FILE_NAME,CV_TERM_CONTROL);
                         continue;
                         }
-                    if (hashFindVal(cvTermHash,mdbVar->val) != NULL)
+                    if (hashFindVal(cvHashForTerm,mdbVar->val) != NULL)
                         continue;
                     }
                 printf("INVALID cv lookup: %s -> %s = %s\n",mdbObj->obj,mdbVar->var,mdbVar->val);
                 invalids++;
                 }
            }
-        else if (startsWithWord("date",validationRule))
+        else if (startsWithWord(CV_VALIDATE_DATE,validationRule))
             {
             if (dateToSeconds(mdbVar->val,"%F") == 0)
                 {
@@ -2364,9 +2494,9 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
                 invalids++;
                 }
             }
-        else if (startsWithWord("exists",validationRule))
+        else if (startsWithWord(CV_VALIDATE_EXISTS,validationRule))
             continue;  // (e.g. fileName exists) Nothing to be done at this time.
-        else if (startsWithWord("float",validationRule))
+        else if (startsWithWord(CV_VALIDATE_FLOAT,validationRule))
             {
             char* end;
             double notNeeded = strtod(mdbVar->val, &end); // Don't want float, just error (However, casting to void resulted in a comple error on Ubuntu Maveric and Lucid)
@@ -2377,7 +2507,7 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
                 invalids++;
                 }
             }
-        else if (startsWithWord("integer",validationRule))
+        else if (startsWithWord(CV_VALIDATE_INT,validationRule))
             {
             char *p0 = mdbVar->val;
             if (*p0 == '-')
@@ -2391,12 +2521,12 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
                 invalids++;
                 }
             }
-        else if (startsWithWord("list:",validationRule))
+        else if (startsWithWord(CV_VALIDATE_LIST,validationRule))
             {
             validationRule = skipBeyondDelimit(validationRule,' ');
             if (validationRule == NULL)
                 {
-                verbose(1,"ERROR in cv.ra: Invalid 'list:' for %s.\n",mdbVar->var);
+                verbose(1,"ERROR in %s: Invalid '%s' for %s.\n",CV_FILE_NAME,CV_VALIDATE_LIST,mdbVar->var);
                 continue;
                 }
             int count = chopByChar(validationRule, ',', NULL, 0);
@@ -2420,16 +2550,16 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
                     }
                 }
             else
-                verbose(1,"ERROR in cv.ra: Invalid 'validate list: %s' for term %s,\n",validationRule,mdbVar->var);
+                verbose(1,"ERROR in %s: Invalid 'validate list: %s' for term %s,\n",CV_FILE_NAME,validationRule,mdbVar->var);
             }
-        else if (startsWithWord("none",validationRule))
+        else if (startsWithWord(CV_VALIDATE_NONE,validationRule))
             continue;
-        else if (startsWithWord("regex:",validationRule))
+        else if (startsWithWord(CV_VALIDATE_REGEX,validationRule))
             {
             validationRule = skipBeyondDelimit(validationRule,' ');
             if (validationRule == NULL)
                 {
-                verbose(1,"ERROR in cv.ra: Invalid 'regex:' for %s.\n",mdbVar->var);
+                verbose(1,"ERROR in %s: Invalid '%s' for %s.\n",CV_FILE_NAME,CV_VALIDATE_REGEX,mdbVar->var);
                 continue;
                 }
             // Real work ahead interpreting regex
@@ -2439,7 +2569,7 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
                 {
                 char buffer[128];
                 regerror(err, &regEx, buffer, sizeof buffer);
-                verbose(1,"ERROR in cv.ra: Invalid regular expression for %s - %s.  %s\n",mdbVar->var,validationRule,buffer);
+                verbose(1,"ERROR in %s: Invalid regular expression for %s - %s.  %s\n",CV_FILE_NAME,mdbVar->var,validationRule,buffer);
                 continue;
                 }
             err = regexec(&regEx, mdbVar->val, 0, NULL, 0);
@@ -2453,117 +2583,196 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
             regfree(&regEx);
             }
         else
-            verbose(1,"ERROR in cv.ra: Unknown validationRule rule '%s' for term %s.\n",validationRule,mdbVar->var);
+            verbose(1,"ERROR in %s: Unknown validationRule rule '%s' for term %s.\n",CV_FILE_NAME,validationRule,mdbVar->var);
         }
     }
 return invalids;
 }
 
-#define EXPERIMENTS_TABLE "hgFixed.encodeExp"
-#define EDV_VAR_NAME "expVars"
-#define EXP_ID_NAME "expId"
-#define COMPOSITE_VAR "composite"
-#define SPECIES_VAR  "species"
-#define DCC_ACCESSION "dccAccession"
+static struct slName *mdbObjGetNamedEncodeEdvs(struct mdbObj *compObj)
+// returns NULL or the list of EDVs defined for this composite
+{
+char *edvs = mdbObjFindValue(compObj,MDB_VAR_ENCODE_EDVS);
+if (edvs == NULL)
+    return NULL;
 
-struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,int warn)
+edvs = cloneString(edvs);
+if (strchr(     edvs,',') != NULL) // Tolerate delimit by commas
+    strSwapChar(edvs,',',' ');
+else if (strchr(edvs,';') != NULL) // Tolerate delimit by semicolons
+    strSwapChar(edvs,';',' ');
+
+struct slName *compositeEdvs = slNameListFromString(edvs,' ');
+freeMem(edvs);
+return compositeEdvs;
+}
+
+static struct mdbVar *mdbObjEncodeEdvsAsMdbVars(struct mdbObj *mdbObj,struct slName *compositeEdvs,boolean includeNone)
+// returns the EDVs and values for the composite member object
+// If includeNone, then defined variables not found in obj will be included as {var}="None".
+{
+struct mdbVar *edvVars = NULL;
+struct slName *var = compositeEdvs;
+for(;var!=NULL;var=var->next)
+    {
+    char *val = mdbObjFindValue(mdbObj,var->name);
+    if (val)
+        mdbVarAdd(&edvVars, var->name,val);
+    else if (includeNone)
+        {
+        if (differentWord(var->name,ENCODE_EXP_FIELD_ORGANISM)) // Does not go into EDV's sent to encodeExp table
+            mdbVarAdd(&edvVars, var->name,MDB_VAL_ENCODE_EDV_NONE);
+        }
+    }
+slReverse(&edvVars);
+return edvVars;
+}
+
+struct slName *mdbObjFindCompositeNamedEncodeEdvs(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj)
+// returns NULL or the Experiment Defining Variable names for this composite
+{
+if (!mdbObjIsCompositeMember(mdbObj))
+    return NULL; // This should be a valid composite memeber
+
+struct mdbObj *compObj = mdbObjQueryCompositeObj(conn,tableName,mdbObj);
+if (compObj == NULL)
+    return NULL;
+struct slName *edvs = mdbObjGetNamedEncodeEdvs(compObj);
+mdbObjFree(&compObj);
+return edvs;
+}
+
+struct mdbVar *mdbObjFindEncodeEdvPairs(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj,boolean includeNone)
+// returns NULL or the Experiment Defining Variables and values for this composite member object
+// If includeNone, then defined variables not found in obj will be included as {var}="None".
+{
+// In rare cases, the EDVs reside with the object and NOT in a objType=composite.
+struct slName *compositeEdvs = mdbObjGetNamedEncodeEdvs(mdbObj);  // looking locally first.
+if (compositeEdvs == NULL)
+    {
+    compositeEdvs = mdbObjFindCompositeNamedEncodeEdvs(conn,tableName,mdbObj);
+    if (compositeEdvs == NULL)
+        return NULL;
+    }
+
+return mdbObjEncodeEdvsAsMdbVars(mdbObj,compositeEdvs,includeNone);
+}
+
+struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,char *expTable,
+                       struct mdbObj **pMdbObjs,int warn,boolean createExpIfNecessary,boolean updateAccession)
 // Organizes objects into experiments and validates experiment IDs.  Will add/update the ids in the structures.
 // If warn=1, then prints to stdout all the experiments/obs with missing or wrong expIds;
 //    warn=2, then print line for each obj with expId or warning.
+// createExpIfNecessary means add expId to encodeExp table. updateAccession too if necessary.
 // Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
 {
+// Here is what "experimentify" does from "mdbPrint -encodeExp" and "mdbUpdate -encodeExp":
+//    - Uses normal selection methods to get a set of objects (e.g. one composite worth) or all objs. (in mdbPrint and mdbUpdate)
+//    - This API:
+//    - Breaks up and walks through set of objects composite by composite
+//    - Looks up EDVs (Experiment Defining Variables) for composite.
+//        These are defined in the mdb under objType=composite expVars=
+//    - Breaks up and walks through composite objects exp by exp as defined by EDVs
+//    - Uses encodeExp API to determine what expId should be.
+//    - Creates new mdbObjs list of updates needed to put expId and dccAccession into the mdb.
+//    - From "mdbPrint", this API warns of mismatches or missing expIds
+//    - From "mdbUpdate" (not -test) then that utility will update the mdb from this API's return structs.  If -test, will reveal what would be updated.
+//    - FIXME: Need to extend this to update dccAccession separately from expId.
+
 if (pMdbObjs == NULL || *pMdbObjs == NULL)
     return 0;
 struct mdbObj *mdbObjs = *pMdbObjs;
 struct mdbObj *mdbProcessedObs = NULL;
 struct mdbObj *mdbUpdateObjs = NULL;
+if (expTable == NULL)
+    expTable = ENCODE_EXP_TABLE;
 
-/* Here is what "experimentify" does from "mdbPrint -encodeExp" and "mdbUpdate -encodeExp":
-    - Uses normal selection methods to get a set of objects (e.g. one composite worth) or all objs. (in mdbPrint and mdbUpdate)
-    - This API:
-    - Breaks up and walks through set of objects composite by composite
-    - Looks up EDVs (expiment defining vars) for composite.
-        Currently these are defined in the mdb under objType=composite expVars=
-        (e.g. obj=wgEncodeBroadHistone objType=composite expVars=lab,dataType,cell,antibody)
-        FIXME: Nice to add white-list to cv.ra typeOfTerms
-    - Breaks up and walks through composite objects exp by exp (handle's "None"s gracefully)
-    - Determines what expId should be.
-        FIXME: This needs APIs to get the id from the hgFixed.encodeExp table
-        FIXME: Could also use API to set the expId in the hgFixed.encodeExp table
-    - Creates new mdbObjs list of updates needed to put expId and dccAccession into the mdb.
-    - From "mdbPrint", this API warns of mismatches or missing expIds
-    - From "mdbUpdate" (not -test) then that utility will update the mdb from this API's return structs.  If -test, will reveal what would be updated. */
-
+verbose(2, "mdbObjsEncodeExperimentify() beginning for %d objects.\n",slCount(*pMdbObjs));
 // Sort all objects by composite, so that we handle composite by composite
-mdbObjsSortOnVars(&mdbObjs, COMPOSITE_VAR);
+mdbObjsSortOnVars(&mdbObjs, MDB_VAR_COMPOSITE);
 
 struct dyString *dyVars = dyStringNew(256);
 
 while(mdbObjs != NULL)
     {
     // Work on a composite at a time
+    boolean compositelessObj = FALSE;
     char *compName = NULL;
     while(mdbObjs != NULL && compName == NULL)
         {
-        compName = mdbObjFindValue(mdbObjs,COMPOSITE_VAR);
+        compName = mdbObjFindValue(mdbObjs,MDB_VAR_COMPOSITE);
         if (compName == NULL)
             {
-            verbose(1, "Object '%s' has no %s defined.\n",mdbObjs->obj,COMPOSITE_VAR);
-            mdbProcessedObs = slCat(mdbProcessedObs,slPopHead(&mdbObjs));
-            continue;
+            if (mdbObjFindValue(mdbObjs,MDB_VAR_ENCODE_EDVS) == NULL)
+                {
+                verbose(1, "Object '%s' has no %s or %s defined.\n",mdbObjs->obj,MDB_VAR_COMPOSITE,MDB_VAR_ENCODE_EDVS);
+                mdbProcessedObs = slCat(mdbProcessedObs,slPopHead(&mdbObjs));
+                continue;
+                }
+            verbose(2, "mdbObjsEncodeExperimentify() starting on compositeless set.\n");
+            break;
             }
         }
-    struct mdbObj *mdbCompositeObjs = mdbObjsFilter(&mdbObjs, COMPOSITE_VAR, compName,TRUE);
+    struct mdbObj *mdbCompositeObjs = NULL;
+    if (compName != NULL)
+        mdbCompositeObjs = mdbObjsFilter(&mdbObjs, MDB_VAR_COMPOSITE, compName,TRUE);
+    else
+        mdbCompositeObjs = slPopHead(&mdbObjs); // Rare cases there is no composite set.
+    assert(mdbCompositeObjs != NULL);
     // --- At this point we have nibbled off a composite worth of objects from the full set of objects
 
-
     // Find the composite obj if it exists
-    struct mdbObj *compObj = mdbObjsFilter(&mdbCompositeObjs, "objType", "composite",TRUE);
-    if (compObj == NULL)
+    struct mdbObj *compObj = NULL;
+    if (compName != NULL)
         {
-        dyStringClear(dyVars);
-        dyStringPrintf(dyVars,"composite=%s %s=", compName,EDV_VAR_NAME);
-        struct mdbByVar *mdbByVars = mdbByVarsLineParse(dyStringContents(dyVars));
-        compObj = mdbObjsQueryByVars(conn,tableName,mdbByVars);
+        compObj =mdbObjsFilter(&mdbCompositeObjs, MDB_OBJ_TYPE, MDB_OBJ_TYPE_COMPOSITE,TRUE);
+        if (compObj == NULL) // May be NULL if mdbObjs passed in was produced by too narrow of selection criteria
+            {
+            compObj = mdbObjQueryCompositeObj(conn,tableName,mdbCompositeObjs);  // First obj on list will do
+            if(compObj == NULL)  // This should be assertable
+                {
+                verbose(1, "Composite '%s' has not been defined.\n",compName);
+                mdbProcessedObs = slCat(mdbProcessedObs,mdbCompositeObjs);
+                mdbCompositeObjs = NULL;
+                continue;
+                }
+            }
+        else
+            slAddHead(&mdbProcessedObs,compObj); // We can still use the pointer, but will not "process" it.  NOTE: leak the queried one
         }
+    else
+        {
+        compObj = mdbCompositeObjs;  // Should be only one
+        compName = mdbCompositeObjs->obj;
+        compositelessObj = TRUE;
+        }
+    verbose(2, "mdbObjsEncodeExperimentify() working on %s %s%s.\n",compName,MDB_VAR_COMPOSITE,(compositelessObj?"less set":""));
 
-    // Obtain experiment defining variables for the composite
-    dyStringClear(dyVars);
-    if (compObj != NULL)
+    // Obtain experiment defining variables for the composite (or compositeless obj)
+    struct slName *compositeEdvs = mdbObjGetNamedEncodeEdvs(compObj);
+    if (compositeEdvs == NULL)
         {
-        char *expVars = mdbObjFindValue(compObj,EDV_VAR_NAME);
-        if (expVars)
-            dyStringAppend(dyVars, expVars); // expVars in form of "var1 var2 var3"
-        }
-    if (dyStringLen(dyVars) == 0)
-        {
-        // figure them out?
-        // FIXME: White list of EDVs from the cv
-        // Walk through the mdbCompositeObjs looking for matching vars.
-        verbose(1, "There are no experiment defining variables established for this composite.  Add them to obj %s => var:%s.\n",compName,EDV_VAR_NAME);
+        verbose(1, "There are no experiment defining variables established for this %s%s.  Add them to obj %s => var:%s.\n",
+                MDB_VAR_COMPOSITE,(compositelessObj?"less set":""), compName,MDB_VAR_ENCODE_EDVS);
         mdbProcessedObs = slCat(mdbProcessedObs,mdbCompositeObjs);
         mdbCompositeObjs = NULL;
         continue;
         }
-
-    // Parse into individual Experiment Defining Variables (no vals at the composite level)
-    if (strchr(dyStringContents(dyVars), ',') != NULL) // Tolerate delimit by commas
-        strSwapChar(dyStringContents(dyVars),',',' ');
-    else if (strchr(dyStringContents(dyVars), ';') != NULL) // Tolerate delimit by semicolons
-        strSwapChar(dyStringContents(dyVars),';',' ');
-    struct slName *compositeEdvs = slNameListFromString(dyStringContents(dyVars), ' ');
-    assert(slCount(compositeEdvs) > 0);
+    dyStringClear(dyVars);
+    dyStringAppend(dyVars,slNameListToString(compositeEdvs, ' '));
 
     if (warn > 0)
-        printf("Composite '%s' with %d objects has %d EDVs(%s): [%s].\n",compName,slCount(mdbCompositeObjs),slCount(compositeEdvs),EDV_VAR_NAME,dyStringContents(dyVars)); // Set the stage
+        printf("Composite%s '%s' with %d objects has %d EDVs(%s): [%s].\n",(compositelessObj?"less set":""),compName,
+               slCount(mdbCompositeObjs),slCount(compositeEdvs),MDB_VAR_ENCODE_EDVS,dyStringContents(dyVars)); // Set the stage
 
     // Organize composite objs by EDVs
-    dyStringPrintf(dyVars, " view replicate "); // Allows for nicer sorted list
+    dyStringPrintf(dyVars, " %s %s ",MDB_VAR_VIEW,MDB_VAR_REPLICATE); // Allows for nicer sorted list
     char *edvSortOrder = cloneString(dyStringContents(dyVars));
 
     // Walk through objs for an exp as defined by EDVs
     int expCount=0;     // Count of experiments in composite
-    int expMissing=0;   // Count of experiments with missing expId
+    int expMissing=0;   // Count of objects with missing expId
+    int accMissing=0;   // Count of objects with missing accessions
     int expObjsCount=0; // Total of all experimental object accoss the composite
     int expMax=0;       // Largest experiment (in number of objects)
     int expMin=999;     // Smallest experiment (in number of objects)
@@ -2572,30 +2781,24 @@ while(mdbObjs != NULL)
         // Must sort each cycle, because sort order is lost during mdbObjs FilterByVars();
         mdbObjsSortOnVars(&mdbCompositeObjs, edvSortOrder);
 
-        // Construct the var=val string for the exp at the top of the stack
-        dyStringClear(dyVars);
-        struct dyString *filterVars = dyStringNew(256);
-        struct slName *var = compositeEdvs;
-        int valsFound = 0;
-        for(;var!=NULL;var=var->next)
+        // Get the EDVs for the first obj
+        struct mdbVar *edvVarVals = mdbObjEncodeEdvsAsMdbVars(mdbCompositeObjs,compositeEdvs,TRUE); // use first obj on list and include Nones
+        if (edvVarVals == NULL)
             {
-            char *val = mdbObjFindValue(mdbCompositeObjs,var->name);  // Looking at first obj in queue
-            if (val)
-                {
+            verbose(1, "There are no experiment defining variables for this object '%s'.\n",mdbCompositeObjs->obj);
+            slAddHead(&mdbProcessedObs,slPopHead(&mdbCompositeObjs)); // We're done with this one
+            continue;
+            }
+
+        // Construct the var=val string for filtering a single exp (set of objs) from composite worth of objs
+        dyStringClear(dyVars);
+        struct mdbVar *edvVar = edvVarVals;
+        int valsFound = 0;
+        for(;edvVar!=NULL;edvVar=edvVar->next)
+            {
+            dyStringPrintf(dyVars,"%s=%s ",edvVar->var,edvVar->val);
+            if (differentString(edvVar->val,MDB_VAL_ENCODE_EDV_NONE))
                 valsFound++;
-                dyStringPrintf(filterVars,"%s=%s ",var->name,val);
-                dyStringPrintf(dyVars,"%s=%s ",var->name,val);
-                }
-            else
-                {
-                if (sameWord(var->name,SPECIES_VAR))
-                    dyStringPrintf(dyVars,"%s=%s ",SPECIES_VAR,(startsWith("mm",db)?"Mouse":"Human")); // Can't go into mdbObj FilterVars
-                else
-                    {
-                    dyStringPrintf(dyVars,"%s=None ",var->name);
-                    dyStringPrintf(filterVars,"%s=None ",var->name);
-                    }
-                }
             }
         dyStringContents(dyVars)[dyStringLen(dyVars) -1] = '\0'; // Nicer printing is all
 
@@ -2603,41 +2806,51 @@ while(mdbObjs != NULL)
             {
             verbose(1, "There are no experiment defining variables for this object '%s'.\n",mdbCompositeObjs->obj);
             slAddHead(&mdbProcessedObs,slPopHead(&mdbCompositeObjs)); // We're done with this one
-            dyStringFree(&filterVars);
+            mdbVarsFree(&edvVarVals);
             continue;
             }
 
-
         // Work on one experiment at a time
-        struct mdbObj *mdbExpObjs = mdbObjsFilterByVars(&mdbCompositeObjs,dyStringContents(filterVars),TRUE,TRUE);
-        dyStringFree(&filterVars);
-        // --- At this point we have nibbled off an experiment worth of objects from the composite set of objects
+        verbose(2, "mdbObjsEncodeExperimentify() working on EDVs: %s.\n",dyStringContents(dyVars));
+        struct mdbObj *mdbExpObjs = mdbObjsFilterByVars(&mdbCompositeObjs,dyStringContents(dyVars),TRUE,TRUE); // None={notFound}
 
+        // --- At this point we have nibbled off an experiment worth of objects from the composite set of objects
 
         int objsInExp = slCount(mdbExpObjs);
         assert(objsInExp > 0);
         expCount++;
-        expObjsCount += objsInExp; // Total of all experimental object across the composite
+        expObjsCount += objsInExp; // Total of all experimental objects across the composite
 
         // Look up each exp in EXPERIMENTS_TABLE
-        // FIXME: Kate.  Need the encodeExp lib
-        // Further FIXME: dyStringContents(dyVars) could have species=hg18 when what would be desired is species=Human
-        // int expId = encodeExpGetExpId(dyStringContents(dyVars));
-        int expId = -1;
         char experimentId[128];
+        int expId = ENCODE_EXP_IX_UNDEFINED;
+        struct encodeExp *exp = encodeExpGetByMdbVarsFromTable(db, edvVarVals, expTable);
+        // --------- BLOCK creation of expIds, at least during rollout of encodeExp
+        // BLOCKED if (exp == NULL && createExpIfNecessary)
+        // BLOCKED     exp = encodeExpGetOrCreateByMdbVarsFromTable(db, edvVarVals, expTable);
+        // --------- BLOCK creation of expIds, at least during rollout of encodeExp
+        mdbVarsFree(&edvVarVals); // No longer needed
 
-        if (expId == -1)
+        // Make sure the accession is set if requested.
+        if (createExpIfNecessary && updateAccession
+        && exp->ix != ENCODE_EXP_IX_UNDEFINED && exp->accession == NULL)
+            encodeExpSetAccession(exp, expTable);
+
+        if (exp != NULL)
+            expId = exp->ix;
+
+        if (expId == ENCODE_EXP_IX_UNDEFINED)
             {
-            // FIXME: Kate should provide an API to create an experiment in the hgFixed.encodeExp table.  This will leave one algorithm for grouping experiments by EDVs
             safef(experimentId,sizeof(experimentId),"{missing}");
             if (warn > 0)
-                printf("Experiment %s EDV: [%s] is not defined in %s table.\n",experimentId,dyStringContents(dyVars),EXPERIMENTS_TABLE);
+                printf("Experiment %s EDV: [%s] is not defined in %s.%s table.\n",experimentId,dyStringContents(dyVars), ENCODE_EXP_DATABASE, expTable);
                 //printf("Experiment %s EDV: [%s] is not defined in %s table. Remaining:%d and %d\n",experimentId,dyStringContents(dyVars),EXPERIMENTS_TABLE,slCount(mdbCompositeObjs),slCount(mdbObjs));
             if (warn < 2) // From mdbUpdate (warn=1), just interested in testing waters.  From mdbPrint (warn=2) list all objs in exp.
                 {
-                expMissing++;
+                expMissing += slCount(mdbExpObjs);
                 mdbProcessedObs = slCat(mdbProcessedObs,mdbExpObjs);
                 mdbExpObjs = NULL;
+                encodeExpFree(&exp);
                 continue;
                 }
             }
@@ -2648,7 +2861,7 @@ while(mdbObjs != NULL)
                 printf("Experiment %s has %d objects based upon %d EDVs: [%s].\n",experimentId,slCount(mdbExpObjs),valsFound,dyStringContents(dyVars)); // Set the stage
             }
 
-        // Now we can walk through each obj in experiment and determine if it has the coorect expId
+        // Now we can walk through each obj in experiment and determine if it has the correct expId
         int foundId = FALSE;
         int errors = objsInExp;
         if (expMax < objsInExp)
@@ -2660,62 +2873,95 @@ while(mdbObjs != NULL)
             struct mdbObj *obj = slPopHead(&mdbExpObjs);
 
             { // NOTE: This list could expand but we expect only tables and files to be objs in an experiment
-                char *objType = mdbObjFindValue(obj,"objType");
-                assert(objType != NULL && (sameString(objType,"table") || sameString(objType,"file")));
+                char *objType = mdbObjFindValue(obj,MDB_OBJ_TYPE);
+                assert(objType != NULL && (sameString(objType,MDB_OBJ_TYPE_TABLE) || sameString(objType,MDB_OBJ_TYPE_FILE)));
                 }
 
             boolean updateObj = FALSE;
-            char *val = mdbObjFindValue(obj,EXP_ID_NAME);
+            char *val = mdbObjFindValue(obj,MDB_VAR_ENCODE_EXP_ID);
             if (val != NULL)
                 {
                 foundId = TRUE; // warn==1 will give only 1 exp wide error if no individual errors.  NOTE: would be nice if those with expId sorted to beginning, but can't have everything.
                 int thisId = atoi(val);
-                if (thisId == expId && expId != -1)
+                if (expId == ENCODE_EXP_IX_UNDEFINED || thisId != expId)
                     {
-                    errors--; // One less error
-                    if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
-                        printf("           %s obj='%s' has %s set.\n",experimentId,obj->obj,EXP_ID_NAME);
+                    updateObj = TRUE;  // Always an error!
+                    expMissing++;
+
+                    printf("    ERROR  %s %-60s has bad %s=%s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,val);
                     }
                 else
                     {
-                    updateObj = TRUE;
-                    if (warn > 0)
-                        printf("           %s obj='%s' has bad %s=%s.\n",experimentId,obj->obj,EXP_ID_NAME,val);
+                    char *acc = mdbObjFindValue(obj,MDB_VAR_DCC_ACCESSION); // FIXME: Add code to update accession to encodeExp
+                    if (updateAccession && !createExpIfNecessary && exp->accession == NULL)
+                        {
+                        exp->accession = needMem(16);
+                        safef(exp->accession, 16, "TEMP%06d", exp->ix); // Temporary since this is not an update but we want -test to work.
+                        }
+                    if (exp->accession != NULL && (acc == NULL || differentString(acc,exp->accession)))
+                        {
+                        updateObj = TRUE;
+                        accMissing++;
+
+                        if (acc != NULL) // Always an error
+                            printf("    ERROR  %s %-60s %s set, has wrong %s: %s.\n",experimentId,obj->obj,
+                                    MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION,acc);
+                        else if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
+                            printf("           %s %-60s %s set, needs %s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION);
+                        }
+                    else
+                        {
+                        errors--;       // One less error
+                        if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
+                            printf("           %s %-60s %s\n",experimentId,obj->obj,(exp->accession != NULL ? exp->accession : ""));
+                        }
                     }
                 }
             else
                 {
-                updateObj = (expId != -1);
+                if (expId != ENCODE_EXP_IX_UNDEFINED)
+                    {
+                    updateObj = TRUE;
+                    expMissing++;
+                    }
+
                 if ((foundId && warn > 0) || warn > 1)
-                    printf("           %s obj='%s' has no %s.\n",experimentId,obj->obj,EXP_ID_NAME);
+                    {
+                    if (updateObj)
+                        printf("           %s %-60s needs updating to mdb.\n",experimentId,obj->obj);
+                    else
+                        printf("           %s %s\n",experimentId,obj->obj); // missing
+                    }
                 }
 
             // This object needs to be updated.
             if (updateObj)
                 {
-                mdbObjSetVarInt(obj,EXP_ID_NAME,expId);
-                struct mdbObj *newObj = mdbObjCreate(obj->obj,EXP_ID_NAME, experimentId);
-                char buf[128];
-                safef(buf,sizeof(buf),"wgEncode%c%06d",(startsWith("mm",db)?'M':'H'),expId);
-                mdbObjSetVar(newObj,DCC_ACCESSION,buf);
+                mdbObjSetVarInt(obj,MDB_VAR_ENCODE_EXP_ID,expId);
+                struct mdbObj *newObj = mdbObjCreate(obj->obj,MDB_VAR_ENCODE_EXP_ID, experimentId);
+                assert(exp != NULL);
+                if (exp->accession != NULL)
+                    mdbObjSetVar(newObj,MDB_VAR_DCC_ACCESSION,exp->accession);
                 slAddHead(&mdbUpdateObjs,newObj);
                 }
             slAddHead(&mdbProcessedObs,obj);
             }
         // Done with one experiment
+        encodeExpFree(&exp);
 
-        if (!foundId && errors > 0)
-            {
-            expMissing++;
-            if (warn > 0)
-                printf("           %s all %d objects are missing an %s.\n",experimentId,objsInExp,EXP_ID_NAME);
-            }
+        if (!foundId && errors > 0 && warn > 0)
+            printf("           %s all %d objects are missing an %s.\n",experimentId,objsInExp,MDB_VAR_ENCODE_EXP_ID);
         }
     // Done with one composite
 
     if (expCount > 0)
-        printf("Composite '%s' has %d recognizable experiment%s with %d missing an %s.\n   objects/experiment: min:%d  max:%d  mean:%lf.\n",
-               compName,expCount,(expCount != 1?"s":""),expMissing,EXP_ID_NAME,expMin,expMax,((double)expObjsCount/expCount));
+        {
+        printf("Composite%s '%s' has %d recognizable experiment%s with %d objects needing %s",
+               (compositelessObj?"less set":""),compName,expCount,(expCount != 1?"s":""),expMissing,MDB_VAR_ENCODE_EXP_ID);
+        if (accMissing > 0)
+            printf(" and %d objects needing %s",accMissing,MDB_VAR_DCC_ACCESSION);
+        printf(" updated.\n   objects/experiment: min:%d  max:%d  mean:%lf.\n",expMin,expMax,((double)expObjsCount/expCount));
+        }
 
     if (edvSortOrder != NULL)
         freeMem(edvSortOrder);
@@ -2730,6 +2976,25 @@ dyStringFree(&dyVars);
 return mdbUpdateObjs;
 }
 
+boolean mdbObjIsEncode(struct mdbObj *mdb)
+// Return true if this metaDb object is for ENCODE
+{
+return mdbObjContains(mdb, MDB_VAR_PROJECT, MDB_VAL_ENCODE_PROJECT);
+
+// Could be more stringent:
+//return (   mdbObjContains(mdbObj, MDB_VAR_LAB,         NULL)
+//        && mdbObjContains(mdbObj, MDB_VAR_DATATYPE,    NULL)
+//        && mdbObjContains(mdbObj, MDB_VAR_ENCODE_SUBID,NULL));
+}
+
+boolean mdbObjInComposite(struct mdbObj *mdb, char *composite)
+// Return true if metaDb object is in specified composite.
+// If composite is NULL, always return true
+{
+if (composite == NULL || sameOk(composite, mdbObjFindValue(mdb, MDB_VAR_COMPOSITE)))
+    return TRUE;
+return FALSE;
+}
 
 // --------------- Free at last ----------------
 void mdbObjsFree(struct mdbObj **mdbObjsPtr)
@@ -2746,15 +3011,25 @@ if(mdbObjsPtr != NULL && *mdbObjsPtr != NULL)
         hashFree(&(mdbObj->varHash));
 
         // free all leaves
-        struct mdbVar *mdbVar = NULL;
-        while((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
-            mdbVarFree(&mdbVar);
+        mdbVarsFree(&(mdbObj->vars));
 
         // The rest of root
         freeMem(mdbObj->obj);
         freeMem(mdbObj);
         }
     freez(mdbObjsPtr);
+    }
+}
+
+void mdbVarsFree(struct mdbVar **mdbVarsPtr)
+// Frees one or more metadata vars and any val as well
+{
+struct mdbVar *mdbVar = NULL;
+while((mdbVar = slPopHead(mdbVarsPtr)) != NULL)
+    {
+    freeMem(mdbVar->val);
+    freeMem(mdbVar->var);
+    freez(&mdbVar);
     }
 }
 
@@ -2801,11 +3076,11 @@ AllocVar(mdbObj);
 mdbObj->obj     = cloneString(tdb->table);
 AllocVar(mdbObj->vars);
 mdbObj->vars->var = cloneString(MDB_OBJ_TYPE);
-mdbObj->vars->val = cloneString("table");
+mdbObj->vars->val = cloneString(MDB_OBJ_TYPE_TABLE);
 mdbObj->varHash = hashNew(0);
 hashAdd(mdbObj->varHash, mdbObj->vars->var, mdbObj->vars);
 mdbObj = mdbObjAddVarPairs(mdbObj,setting);
-mdbObjRemoveVars(mdbObj,"tableName"); // NOTE: Special hint that the tdb metadata is used since no mdb metadata is found
+mdbObjRemoveVars(mdbObj,MDB_VAR_TABLENAME); // NOTE: Special hint that the tdb metadata is used since no mdb metadata is found
 return mdbObj;
 }
 
@@ -2914,34 +3189,29 @@ struct dyString *dyTerms = dyStringNew(256);
 // Build list of terms as "var1=val1 var2=val2a,val2b,val2c var3=%val3%"
 for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
     {
-    if (isEmpty(((char *)(onePair->val)))) // NOTE: All the commas are needed to get the macro to do the right thing
+    if (isEmpty(((char *)(onePair->val)))) // NOTE: All the parens are needed to get the macro to do the right thing
         continue;
-    enum mdbCvSearchable searchBy = mdbCvSearchMethod(onePair->name);
-    if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByMultiSelect)  // multiSelect val will be filled with a comma delimited list
+    enum cvSearchable searchBy = cvSearchMethod(onePair->name);
+    if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)  // multiSelect val will be filled with a comma delimited list
         dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
-    else if (searchBy == cvsSearchByFreeText)                                      // If select is by free text then like
+    else if (searchBy == cvSearchByFreeText)                                      // If select is by free text then like
         dyStringPrintf(dyTerms,"%s=%%%s%% ",onePair->name,(char *)onePair->val);
-    else if (sameWord(onePair->name,"composite"))  // special case.  Not directly searchable by UI but indirectly and will show up here.
+    else if (sameWord(onePair->name,MDB_VAR_COMPOSITE))  // special case.  Not directly searchable by UI but indirectly and will show up here.
         dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
-    else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
+    else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
         {
         // TO BE IMPLEMENTED
-        // Requires new mdbObjSearch API and more than one (char *)onePair->val
-        warn("mdb search by date or number is not yet implemented.");
         }
     }
 // Be sure to include table or file in selections
 if (tables)
-    dyStringAppend(dyTerms,"objType=table ");
+    dyStringPrintf(dyTerms,"%s=%s ",MDB_OBJ_TYPE,MDB_OBJ_TYPE_TABLE);
 if (files)
-    dyStringAppend(dyTerms,"fileName=? ");
+    dyStringPrintf(dyTerms,"%s=? ",MDB_VAR_FILENAME);
 
 // Build the mdbByVals struct and then select all mdbObjs in one query
-struct mdbByVar *mdbByVars = mdbByVarsLineParse(dyStringContents(dyTerms));
-dyStringClear(dyTerms);
-char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
-struct mdbObj *mdbObjs = mdbObjsQueryByVars(conn,tableName,mdbByVars);
-
+struct mdbObj *mdbObjs = mdbObjsQueryByVarVals(conn,dyStringContents(dyTerms));
+dyStringFree(&dyTerms);
 return mdbObjs;
 }
 
@@ -2963,99 +3233,86 @@ mdbObjsFree(&mdbObjs);
 return mdbNames;
 }
 
-struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files)
+static void mdbSearchableQueryRestictForTablesOrFiles(struct dyString *dyQuery,char *tableName, char letter,boolean hasTableName, boolean hasFileName)
+// Append table and file restrictions onto an mdb query.
+// letter (e.g. 'A') should be used in original query to alias table name: "select A.val from metaDb A where A.val = 'fred'".
+{
+// A note about tables and files: objType=table may have fileNames associated, but objType=file will not have tableNames
+// While objType=table should have a var=tableName, this is redundant because the obj=tableName
+// So the lopsided 'exists' queries below are meant to be the most flexible/efficent
+
+assert(isalpha(letter) && isalpha(letter + 2)); // will need one or two sub-queries.
+char nextLtr = letter + 1;
+
+// We are only searching for objects that are of objType table or file. objType=composite are not search targets!
+if (hasTableName && !hasFileName) // objType=table may have fileNames associated, but objType=file will not have tableNames
+    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and %c.var='objType' and %c.val = '%s')",
+                    nextLtr,tableName,nextLtr,nextLtr,letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE);
+else // tables OR files (but not objType=composite)
+    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and %c.var='objType' and %c.val in ('%s','%s'))",
+                    nextLtr,tableName,nextLtr,nextLtr,letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE,MDB_OBJ_TYPE_FILE);
+
+nextLtr++;
+
+if (!hasTableName && hasFileName) // last of 3 possibilites objType either table or file but must have fileName var
+    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and %c.var in ('%s','%s'))",
+                   nextLtr,tableName,nextLtr,nextLtr,letter,nextLtr,MDB_VAR_FILENAME,MDB_VAR_FILEINDEX);
+}
+
+struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean hasTableName, boolean hasFileName)
 // Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
+// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
 {  // TODO: Change this to use normal mdb struct routines?
 struct slName *retVal;
 
-if (!tables && !files)
-    errAbort("mdbValSearch requests values for neither table nor file objects.\n");
+if (!hasTableName && !hasFileName)
+    errAbort("mdbValSearch requests vals associated with neither table nor files.\n");
 
 char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 
+char letter = 'A';
 struct dyString *dyQuery = dyStringNew(512);
 if (limit > 0)
-    dyStringPrintf(dyQuery,"select distinct LEFT(val,%d)",limit);
+    dyStringPrintf(dyQuery,"select distinct LEFT(%c.val,%d)",letter,limit);
 else
-    dyStringPrintf(dyQuery,"select distinct val");
+    dyStringPrintf(dyQuery,"select distinct %c.val",letter);
 
-dyStringPrintf(dyQuery," from %s l1 where l1.var='%s' ",tableName,var);
+dyStringPrintf(dyQuery," from %s %c where %c.var='%s'",tableName,letter,letter,var);
 
-if (!tables || !files)
-    dyStringPrintf(dyQuery,"and exists (select l2.obj from %s l2 where l2.obj = l1.obj and l2.var='objType' and l2.val='%s')",
-                   tableName,tables?"table":"file");
-dyStringAppend(dyQuery," order by val");
+mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName, letter, hasTableName, hasFileName);
+
+dyStringPrintf(dyQuery," order by %c.val",letter);
 
 retVal = sqlQuickList(conn, dyStringCannibalize(&dyQuery));
 slNameSortCase(&retVal);
 return retVal;
 }
 
-// TODO: decide to make this public or hide it away inside the one function so far that uses it.
-static char *cv_file()
-// return default location of cv.ra
-{
-static char filePath[PATH_LEN];
-char *root = hCgiRoot();
-if (root == NULL || *root == 0)
-    root = "/usr/local/apache/cgi-bin/"; // Make this check out sandboxes?
-//    root = "/cluster/home/tdreszer/kent/src/hg/makeDb/trackDb/cv/alpha/"; // Make this check out sandboxes?
-safef(filePath, sizeof(filePath), "%s/encode/cv.ra", root);
-if(!fileExists(filePath))
-    errAbort("Error: can't locate cv.ra; %s doesn't exist\n", filePath);
-return filePath;
-}
-
-const struct hash *mdbCvTermHash(char *term)
-// returns a hash of hashes of a term which should be defined in cv.ra
-// NOTE: in static memory: DO NOT FREE
-{
-static struct hash *cvHashOfHashOfHashes = NULL;
-if (sameString(term,"cell"))
-    term = "Cell Line";
-else if (sameString(term,"antibody"))
-    term = "Antibody";
-
-if (cvHashOfHashOfHashes == NULL)
-    cvHashOfHashOfHashes = hashNew(0);
-
-struct hash *cvTermHash = hashFindVal(cvHashOfHashOfHashes,term);
-// Establish cv hash of Term Types if it doesn't already exist
-if (cvTermHash == NULL)
-    {
-    cvTermHash = raReadWithFilter(cv_file(), "term","type",term);
-    if (cvTermHash != NULL)
-        hashAdd(cvHashOfHashOfHashes,term,cvTermHash);
-    }
-
-return cvTermHash;
-}
-
-struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags, boolean tables, boolean files)
+struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags, boolean hasTableName, boolean hasFileName)
 // Search the metaDb table for vals by var and returns val (as pair->name) and controlled vocabulary (cv) label
 // (if it exists) (as pair->val).  Can impose (non-zero) limit on returned string size of name.
-// if requested, return cv tag instead of mdb val.  If requested, limit to table objs or file objs
-// Return is case insensitive sorted on label (cv label or else val).
+// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
+// Return is case insensitive sorted on label (cv label or else val). If requested, return cv tag instead of mdb val.
 {  // TODO: Change this to use normal mdb struct routines?
-if (!tables && !files)
-    errAbort("mdbValSearch requests values for neither table nor file objects.\n");
+if (!hasTableName && !hasFileName)
+    errAbort("mdbValLabelSearch requests vals associated with neither table nor files.\n");
 
 char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 
+char letter = 'A';
 struct dyString *dyQuery = dyStringNew(512);
 if (limit > 0)
-    dyStringPrintf(dyQuery,"select distinct LEFT(val,%d)",limit);
+    dyStringPrintf(dyQuery,"select distinct LEFT(%c.val,%d)",letter,limit);
 else
-    dyStringPrintf(dyQuery,"select distinct val");
+    dyStringPrintf(dyQuery,"select distinct %c.val",letter);
 
-dyStringPrintf(dyQuery," from %s l1 where l1.var='%s' ",tableName,var);
+dyStringPrintf(dyQuery," from %s %c where %c.var='%s'",tableName,letter,letter,var);
 
-if (!tables || !files)
-    dyStringPrintf(dyQuery,"and exists (select l2.obj from %s l2 where l2.obj = l1.obj and l2.var='objType' and l2.val='%s')",
-                   tableName,tables?"table":"file");
+mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName,letter, hasTableName, hasFileName);
+//warn("%s",dyStringContents(dyQuery));
 
-struct hash *varHash = (struct hash *)mdbCvTermHash(var);
+struct hash *varHash = (struct hash *)cvTermHash(var);
 
 struct slPair *pairs = NULL;
 struct sqlResult *sr = sqlGetResult(conn, dyStringContents(dyQuery));
@@ -3070,10 +3327,10 @@ while ((row = sqlNextRow(sr)) != NULL)
         struct hash *valHash = hashFindVal(varHash,val);
         if (valHash != NULL)
             {
-            label = cloneString(hashOptionalVal(valHash,"label",row[0]));
+            label = cloneString(hashOptionalVal(valHash,CV_LABEL,row[0]));
             if (tags)
                 {
-                char *tag = hashFindVal(valHash,"tag");
+                char *tag = hashFindVal(valHash,CV_TAG);
                 if (tag != NULL)
                     val = tag;
                 }
@@ -3089,118 +3346,35 @@ slPairValSortCase(&pairs);
 return pairs;
 }
 
-const struct hash *mdbCvTermTypeHash()
-// returns a hash of hashes of mdb and controlled vocabulary (cv) term types
-// Those terms should contain label,description,searchable,cvDefined,hidden
-// NOTE: in static memory: DO NOT FREE
-{ // NOTE: "typeOfTerm" is specialized, so don't use mdbCvTermHash
-static struct hash *cvHashOfTermTypes = NULL;
-
-// Establish cv hash of Term Types if it doesn't already exist
-if (cvHashOfTermTypes == NULL)
-    {
-    cvHashOfTermTypes = raReadWithFilter(cv_file(), "term","type","typeOfTerm");
-    // Patch up an ugly inconsistency with 'cell'
-    struct hash *cellHash = hashRemove(cvHashOfTermTypes,"cellType");
-    if (cellHash)
-        {
-        hashAdd(cvHashOfTermTypes,"cell",cellHash);
-        hashReplace(cellHash, "term", cloneString("cell")); // spilling memory of 'cellType' val
-        }
-    struct hash *abHash = hashRemove(cvHashOfTermTypes,"Antibody");
-    if (abHash)
-        {
-        hashAdd(cvHashOfTermTypes,"antibody",abHash);
-        hashReplace(abHash, "term", cloneString("antibody")); // spilling memory of 'Antibody' val
-        }
-    }
-
-return cvHashOfTermTypes;
-}
-
-struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvDefined)
-// returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
-// TODO: change to return struct that includes searchable!
+struct slPair *mdbVarsSearchable(struct sqlConnection *conn, boolean hasTableName, boolean hasFileName)
+// returns a white list of mdb vars that actually exist in the current DB.
+// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
 {
-struct slPair *whitePairs = NULL;
+if (!hasTableName && !hasFileName)
+    errAbort("mdbVarsSearchable requests vals associated with neither table nor files.\n");
 
-// Get the list of term types from thew cv
-struct hash *termTypeHash = (struct hash *)mdbCvTermTypeHash();
-struct hashCookie hc = hashFirst(termTypeHash);
-struct hashEl *hEl;
-while ((hEl = hashNext(&hc)) != NULL)
+char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
+
+char letter = 'A';
+struct slPair *cvApproved = cvWhiteList(TRUE,FALSE);
+struct slPair *relevant = NULL;
+struct dyString *dyQuery = dyStringNew(256);
+while(cvApproved != NULL)
     {
-    char *setting = NULL;
-    struct hash *typeHash = (struct hash *)hEl->val;
-    //if (!includeHidden)
-        {
-        setting = hashFindVal(typeHash,"hidden");
-        if(SETTING_IS_ON(setting))
-            continue;
-        }
-    if (searchTracks)
-        {
-        setting = hashFindVal(typeHash,"searchable");
-        if (setting == NULL
-        || (differentWord(setting,"select") && differentWord(setting,"multiSelect") && differentWord(setting,"freeText")))
-           continue;
-        }
-    if (cvDefined)
-        {
-        setting = hashFindVal(typeHash,"cvDefined");
-        if(SETTING_NOT_ON(setting))
-            continue;
-        }
-    char *term  = hEl->name;
-    char *label = hashFindVal(typeHash,"label");
-    if (label == NULL)
-        label = term;
-    slPairAdd(&whitePairs, term, cloneString(label)); // Term gets cloned in slPairAdd
+    struct slPair *oneVar = slPopHead(&cvApproved);
+    dyStringClear(dyQuery);
+    dyStringPrintf(dyQuery, "select count(DISTINCT %c.val) from %s %c where %c.var = '%s'",letter,tableName,letter,letter,oneVar->name);
+
+    mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName,letter, hasTableName, hasFileName);
+    int count = sqlQuickNum(conn,dyStringContents(dyQuery));
+    //warn("%d %s",count,dyStringContents(dyQuery));
+
+    if(count > 1)  // If there is only one value then searching on that variable is useless!
+        slAddHead(&relevant, oneVar);
+    else
+        slPairFree(&oneVar);
     }
-if (whitePairs != NULL)
-    slPairValSortCase(&whitePairs);
-
-return whitePairs;
+dyStringFree(&dyQuery);
+slReverse(&relevant);
+return relevant;
 }
-
-enum mdbCvSearchable mdbCvSearchMethod(char *term)
-// returns whether the term is searchable // TODO: replace with mdbCvWhiteList() returning struct
-{
-// Get the list of term types from thew cv
-struct hash *termTypeHash = (struct hash *)mdbCvTermTypeHash();
-struct hash *termHash = hashFindVal(termTypeHash,term);
-if (termHash != NULL)
-    {
-    char *searchable = hashFindVal(termHash,"searchable");
-    if (searchable != NULL)
-        {
-        if (sameWord(searchable,"select"))
-            return cvsSearchBySingleSelect;
-        if (sameWord(searchable,"multiSelect"))
-            return cvsSearchByMultiSelect;
-        if (sameWord(searchable,"freeText"))
-            return cvsSearchByFreeText;
-        //if (sameWord(searchable,"date"))
-        //    return cvsSearchByDateRange;
-        //if (sameWord(searchable,"numeric"))
-        //    return cvsSearchByIntegerRange;
-        }
-    }
-return cvsNotSearchable;
-}
-
-const char *cvLabel(char *term)
-// returns cv label if term found or else just term
-{
-// Get the list of term types from thew cv
-struct hash *termTypeHash = (struct hash *)mdbCvTermTypeHash();
-struct hash *termHash = hashFindVal(termTypeHash,term);
-if (termHash != NULL)
-    {
-    char *label = hashFindVal(termHash,"label");
-    if (label != NULL)
-        return label;
-    }
-return term;
-}
-

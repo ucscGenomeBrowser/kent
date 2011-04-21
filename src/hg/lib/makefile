@@ -20,7 +20,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     cnpSharp2.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o \
     bedDetail.o \
-    customFactory.o customPp.o customTrack.o cutter.o cytoBand.o \
+    customFactory.o customPp.o customTrack.o cutter.o cv.o cytoBand.o \
     dbDb.o dbRIP.o dbSnpRs.o defaultDb.o delConrad2.o delHinds2.o \
     dgv.o dless.o dnaMotifSql.o dnaMarkovSql.o dnaProbe.o \
     dv.o dvBed.o dvXref2.o \
@@ -34,6 +34,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     encode/wgEncodeGencodePdb.o encode/wgEncodeGencodePubmed.o \
     encode/wgEncodeGencodeRefSeq.o encode/wgEncodeGencodeSource.o \
     encode/wgEncodeGencodeTranscriptSupport.o encode/wgEncodeGencodeUniProt.o \
+    encode/encodeExp.o \
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
     est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
@@ -77,7 +78,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     roughAli.o transMapStuff.o transMapInfo.o transMapGene.o transMapSrc.o \
     sage.o sageCounts.o sageExp.o samAlignment.o sample.o \
     sanger22extra.o sangerGene.o sangerGeneToWBGeneID.o  sargassoSeaXra.o \
-    scopDes.o scoredRef.o searchTracks.o sgdAbundance.o \
+    scopDes.o scoredRef.o search.o sgdAbundance.o \
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o \
     snp.o snp125.o snp125CodingCoordless.o snp132Ext.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o \
     snpUi.o snp125Exceptions.o snp125Ui.o softPromoter.o softberryHom.o \

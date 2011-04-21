@@ -1424,6 +1424,38 @@ type wig 0 1000
     longLabel Affymetrix HepG2 Minus Strand Short RNA (Whole Cell) Signal
     priority 4
 
+track ceuBcellComposite
+compositeTrack on
+shortLabel B-Cell Transcriptome
+longLabel B-Cell Transcriptome (RNA-Seq)
+group expression
+visibility hide
+noInherit on
+priority 301
+autoScale on
+html ceuBcellRNASeq
+type bed 3
+
+    track ceuBcellRNASeqBW
+    parent ceuBcellComposite
+    shortLabel B-Cell Coverage
+    longLabel B-Cell RNA-Seq Coverage
+    priority 1
+    type bigWig 0 716249
+    configurable on
+    autoScale on
+    html ceuBcellRNASeq
+    maxHeightPixels 200:100:20
+
+    track ceuBcellRNASeq
+    parent ceuBcellComposite
+    shortLabel B-Cell Junctions
+    longLabel B-Cell RNA-Seq Junctions
+    configurable on
+    html ceuBcellRNASeq
+    priority 2
+    type bed 12
+
 track stanfordNRSFSites
 shortLabel Stanf NRSF Sites
 longLabel Stanford Neuron-Restrictive Silencer Factor (NRSF/REST) ChIP-seq Sites

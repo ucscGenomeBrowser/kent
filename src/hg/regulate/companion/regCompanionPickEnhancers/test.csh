@@ -1,0 +1,2 @@
+#!/bin/tcsh -efx
+regCompanionPickEnhancers /hive/data/genomes/hg19/bed/wgEncodeReg/dnase/peaks/wgEncodeUwDnaseGm12878PkRep1.narrowPeak.gz /hive/data/genomes/hg19/bed/ucsc.12/ucscGenes.bed /hive/users/kent/regulate/companion/txn/normalized/Gm12878.bw /hive/users/kent/regulate/companion/tfbs/peaksOn7/peaks/spp.optimal.wgEncodeBroadHistoneGm12878CtcfStdAlnRep0_VS_wgEncodeBroadHistoneGm12878ControlStdAlnRep0.narrowPeak.gz /hive/users/kent/regulate/companion/histones/normalized/wgEncodeBroadHistoneGm12878H3k4me1NormSig.bw out.tab 

@@ -3176,3 +3176,136 @@ see doc/builds.txt for specific details.
     doSameSpeciesLiftOver.pl danRer5 danRer6 >& do.log & tail -f do.log
 
 ############################################################################
+# BUILD U MASS ChiP-Seq TRACKS (DONE 3/28/11, Fan)
+
+ssh hgwdev
+mkdir -p /hive/data/genomes/danRer5/bed/H3K4me
+cd /hive/data/genomes/danRer5/bed/H3K4me
+
+# Download the following files from http://lawsonlab.umassmed.edu/ChIP-SeqSupp.html:
+
+   Supplementary File 1 REV 24h_input_signal.wig
+   Supplementary File 2 REV 24h_ME1_signal.wig
+   Supplementary File 3 REV 24h_ME3_signal.wig
+   Supplementary File 4 REV 24h_ME1_hotspots.bed
+   Supplementary File 5 REV 24h_ME1_peaks.WIG
+   Supplementary File 6 REV 24h_ME3_hotspots.bed
+   Supplementary File 7 REV 24h_ME3_peaks.WIG
+
+# build UMassInput track
+
+cat 'Supplementary File 1 REV 24h_input_signal.wig'|sed -e 's/chrMT/chrM/g' >UMassInput.wig.input
+wigEncode UMassInput.wig.input UMassInput.wig UMassInput.wib
+# Converted UMassInput.wig.input, upper limit 500.00, lower limit 10.00
+
+ln -s /hive/data/genomes/danRer5/bed/H3K4me/UMassInput.wib /gbdb/danRer5/wib/UMassInput.wib
+
+hgLoadWiggle danRer5 UMassInput UMassInput.wig
+#WARNING: Exceeded Zv7_NA1024 size 99420 > 99329. dropping 10 data point(s)
+#WARNING: Exceeded Zv7_NA134 size 97140 > 97109. dropping 4 data point(s)
+#WARNING: Exceeded Zv7_NA2952 size 14610 > 14546. dropping 7 data point(s)
+#WARNING: Exceeded Zv7_NA3149 size 24520 > 24469. dropping 6 data point(s)
+#WARNING: Exceeded Zv7_NA3766 size 23600 > 23589. dropping 2 data point(s)
+#WARNING: Exceeded Zv7_NA7305 size 3820 > 3819. dropping 1 data point(s)
+#WARNING: Exceeded chrM size 16690 > 16596. dropping 10 data point(s)
+#WARNING: Exceeded chrM size 16720 > 16596. dropping 13 data point(s)
+
+# Build UMassME1 track
+
+cat 'Supplementary File 2 REV 24h_ME1_signal.wig'|sed -e 's/chrMT/chrM/g' >UMassME1.wig.input
+wigEncode UMassME1.wig.input UMassME1.wig UMassME1.wib
+# Converted UMassME1.wig.input, upper limit 404.00, lower limit 10.00
+
+ln -s /hive/data/genomes/danRer5/bed/H3K4me/UMassME1.wib /gbdb/danRer5/wib/UMassME1.wib
+
+hgLoadWiggle danRer5 UMassME1 UMassME1.wig
+#WARNING: Exceeded Zv7_NA1266 size 52350 > 52297. dropping 6 data point(s)
+#WARNING: Exceeded Zv7_NA1308 size 18360 > 18317. dropping 5 data point(s)
+#WARNING: Exceeded Zv7_NA1320 size 40410 > 40361. dropping 5 data point(s)
+#WARNING: Exceeded Zv7_NA1723 size 44750 > 44727. dropping 3 data point(s)
+#WARNING: Exceeded Zv7_NA1741 size 44070 > 44004. dropping 7 data point(s)
+#WARNING: Exceeded Zv7_NA1868 size 34760 > 34733. dropping 3 data point(s)
+#WARNING: Exceeded Zv7_NA2098 size 13950 > 13871. dropping 8 data point(s)
+#WARNING: Exceeded Zv7_NA2952 size 14640 > 14546. dropping 10 data point(s)
+#WARNING: Exceeded Zv7_NA3149 size 24520 > 24469. dropping 6 data point(s)
+#WARNING: Exceeded Zv7_NA3282 size 15540 > 15514. dropping 3 data point(s)
+#WARNING: Exceeded Zv7_NA3685 size 5030 > 5011. dropping 2 data point(s)
+#WARNING: Exceeded Zv7_NA3793 size 3860 > 3857. dropping 1 data point(s)
+#WARNING: Exceeded Zv7_NA4436 size 7570 > 7547. dropping 3 data point(s)
+#WARNING: Exceeded Zv7_NA4449 size 2260 > 2210. dropping 6 data point(s)
+#WARNING: Exceeded Zv7_NA5160 size 4560 > 4535. dropping 3 data point(s)
+#WARNING: Exceeded Zv7_NA6710 size 11900 > 11826. dropping 8 data point(s)
+#WARNING: Exceeded Zv7_NA6758 size 4590 > 4582. dropping 1 data point(s)
+#WARNING: Exceeded Zv7_NA7355 size 2680 > 2667. dropping 2 data point(s)
+#WARNING: Exceeded Zv7_NA7403 size 4870 > 4815. dropping 6 data point(s)
+#WARNING: Exceeded Zv7_NA7408 size 4180 > 4175. dropping 1 data point(s)
+
+# Build UMassME1Peak track
+
+cat 'Supplementary File 5 REV 24h_ME1_peaks.WIG'|sed -e 's/chrMT/chrM/g' >UMassME1Peak.wig.input
+wigEncode UMassME1Peak.wig.input UMassME1Peak.wig UMassME1Peak.wib
+# Converted UMassME1Peak.wig.input, upper limit 2510.00, lower limit 20.00
+
+ln -s /hive/data/genomes/danRer5/bed/H3K4me/UMassME1Peak.wib /gbdb/danRer5/wib/UMassME1Peak.wib
+
+hgLoadWiggle danRer5 UMassME1Peak UMassME1Peak.wig
+
+
+
+
+# Build UMassME3 track
+
+cat 'Supplementary File 3 REV 24h_ME3_signal.wig'|sed -e 's/chrMT/chrM/g' >UMassME3.wig.input
+wigEncode UMassME3.wig.input UMassME3.wig UMassME3.wib
+# Converted UMassME3.wig.input, upper limit 477.00, lower limit 10.00
+
+ln -s /hive/data/genomes/danRer5/bed/H3K4me/UMassME3.wib /gbdb/danRer5/wib/UMassME3.wib
+
+hgLoadWiggle danRer5 UMassME3 UMassME3.wig
+#WARNING: Exceeded Zv7_NA1024 size 99410 > 99329. dropping 9 data point(s)
+#WARNING: Exceeded Zv7_NA1266 size 52370 > 52297. dropping 8 data point(s)
+#WARNING: Exceeded Zv7_NA1308 size 18380 > 18317. dropping 7 data point(s)
+#WARNING: Exceeded Zv7_NA1417 size 8250 > 8219. dropping 4 data point(s)
+#WARNING: Exceeded Zv7_NA153 size 43460 > 43438. dropping 3 data point(s)
+#WARNING: Exceeded Zv7_NA1741 size 44020 > 44004. dropping 2 data point(s)
+#WARNING: Exceeded Zv7_NA1913 size 14430 > 14424. dropping 1 data point(s)
+#WARNING: Exceeded Zv7_NA2378 size 10240 > 10147. dropping 10 data point(s)
+#WARNING: Exceeded Zv7_NA2552 size 2110 > 2041. dropping 7 data point(s)
+#WARNING: Exceeded Zv7_NA2952 size 14640 > 14546. dropping 10 data point(s)
+#WARNING: Exceeded Zv7_NA3149 size 24580 > 24469. dropping 12 data point(s)
+#WARNING: Exceeded Zv7_NA3282 size 15630 > 15514. dropping 12 data point(s)
+#WARNING: Exceeded Zv7_NA4966 size 4270 > 4220. dropping 6 data point(s)
+#WARNING: Exceeded Zv7_NA5160 size 4560 > 4535. dropping 3 data point(s)
+#WARNING: Exceeded Zv7_NA6710 size 11900 > 11826. dropping 8 data point(s)
+#WARNING: Exceeded Zv7_NA7305 size 3850 > 3819. dropping 4 data point(s)
+#WARNING: Exceeded Zv7_NA7355 size 2760 > 2667. dropping 10 data point(s)
+#WARNING: Exceeded Zv7_NA7403 size 4870 > 4815. dropping 6 data point(s)
+#WARNING: Exceeded Zv7_NA7450 size 5410 > 5333. dropping 8 data point(s)
+#WARNING: Exceeded Zv7_NA7545 size 12030 > 11945. dropping 9 data point(s)
+#WARNING: Exceeded Zv7_NA78 size 146010 > 145973. dropping 4 data point(s)
+
+# Build UMassME3Peak track
+
+cat 'Supplementary File 7 REV 24h_ME3_peaks.WIG'|sed -e 's/chrMT/chrM/g' >UMassME3Peak.wig.input
+wigEncode UMassME3Peak.wig.input UMassME3Peak.wig UMassME3Peak.wib
+# Converted UMassME3Peak.wig.input, upper limit 6835.00, lower limit 16.00
+
+ln -s /hive/data/genomes/danRer5/bed/H3K4me/UMassME3Peak.wib /gbdb/danRer5/wib/UMassME3Peak.wib
+
+hgLoadWiggle danRer5 UMassME3Peak UMassME3Peak.wig
+
+# Build UMassME1Hotspot track
+
+cat 'Supplementary File 4 REV 24h_ME1_hotspots.bed' |grep -v 'hotspot' > UMassME1Hotspot.bed
+hgLoadBed danRer5 UMassME1Hotspot UMassME1Hotspot.bed
+# Loaded 41478 elements of size 5
+
+# Build UMassME3Hotspot track
+
+cat 'Supplementary File 6 REV 24h_ME3_hotspots.bed' |grep -v 'hotspot' > UMassME3Hotspot.bed
+hgLoadBed danRer5 UMassME3Hotspot UMassME3Hotspot.bed
+# Loaded 29033 elements of size 5
+
+
+
+

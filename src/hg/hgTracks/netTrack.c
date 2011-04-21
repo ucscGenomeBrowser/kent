@@ -78,7 +78,7 @@ static boolean rIsFull; /* Full display? */
 
 static char *netColorLastChrom;
 
-static void netColorClearCashe()
+static void netColorClearCache()
 {
 netColorLastChrom = "UNKNOWN";
 }
@@ -250,8 +250,8 @@ if (net != NULL)
     rHvg = hvg;
     rX = xOff;
 
-    /* Clear cashe. */
-    netColorClearCashe();
+    /* Clear cache. */
+    netColorClearCache();
 
     /* Compute a few other positional things for recursive routine. */
     rHeightPer = tg->heightPer;

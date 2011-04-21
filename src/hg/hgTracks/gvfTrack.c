@@ -76,15 +76,17 @@ else
 	bedCmpA = hashFindVal(nameHash, aParentName);
     if (bParentName != NULL)
 	bedCmpB = hashFindVal(nameHash, bParentName);
-    // no need to compare chrom here
-    int diff = ((bedCmpB->chromEnd - bedCmpB->chromStart) -
-		(bedCmpA->chromEnd - bedCmpA->chromStart));
-    if (diff == 0)
+    int diff = 0;
+    if (bedCmpA != NULL && bedCmpB != NULL)
 	{
-	diff = bedCmpA->chromStart - bedCmpB->chromStart;
+	// no need to compare chrom here
+	diff = ((bedCmpB->chromEnd - bedCmpB->chromStart) -
+		(bedCmpA->chromEnd - bedCmpA->chromStart));
 	if (diff == 0)
-	    diff = strcmp(bedCmpA->name, bedCmpB->name);
+	    diff = bedCmpA->chromStart - bedCmpB->chromStart;
 	}
+    if (diff == 0)
+	diff = strcmp(aParentName, bParentName);
     return diff;
     }
 }
@@ -119,4 +121,5 @@ bedMethods(tg);
 tg->canPack = TRUE;
 tg->loadItems = gvfLoad;
 tg->itemColor = gvfColor;
+tg->nextPrevExon = simpleBedNextPrevEdge;
 }

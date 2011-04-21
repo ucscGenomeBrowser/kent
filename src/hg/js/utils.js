@@ -1728,10 +1728,16 @@ function findTracksMdbVarChanged(obj)
         if ($('#advancedTab').length == 1 && $('#filesTab').length == 1) {
             $("select.mdbVar[name='hgt_mdbVar"+num+"'][value!='"+newVar+"']").val(newVar);
         }
+        var cgiVars = "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar;
+        if (document.URL.search('hgFileSearch') != -1)
+            cgiVars += "&fileSearch=1";
+        else
+            cgiVars += "&fileSearch=0";
+
         $.ajax({
                    type: "GET",
                    url: "../cgi-bin/hgApi",
-                   data: "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar,
+                   data: cgiVars,
                    trueSuccess: findTracksHandleNewMdbVals,
                    success: catchErrorOrDispatch,
                    error: errorHandler,

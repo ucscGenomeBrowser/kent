@@ -1,3 +1,8 @@
+metaObject wgEncodeUwChIPSeq
+objType composite
+composite wgEncodeUwChIPSeq
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeUwChIPSeqAlignmentsBjInput
 objType file
 antibody Input
@@ -552,28 +557,6 @@ setType exp
 subId 714
 view Alignments
 
-metaObject wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k4me1
-objType file
-antibody H3K4me1
-cell Caco-2
-composite wgEncodeUwChIPSeq
-controlId Caco-2/Input
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-29
-dateUnrestricted 2010-06-29
-fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k4me1.tagAlign.gz
-fragLength 350
-grant Stam
-lab UW
-labVersion Eland (GAPipeline-1.4)
-project wgEncode
-rank 1st
-replicate 1
-setType exp
-subId 597
-view Alignments
-
 metaObject wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k4me3
 objType file
 antibody H3K4me3
@@ -1018,28 +1001,6 @@ setType exp
 subId 715
 view Alignments
 
-metaObject wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k4me1
-objType file
-antibody H3K4me1
-cell HeLa-S3
-composite wgEncodeUwChIPSeq
-controlId HeLa-S3/Input
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-29
-dateUnrestricted 2010-06-29
-fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k4me1.tagAlign.gz
-fragLength 350
-grant Stam
-lab UW
-labVersion Eland (GAPipeline-1.4)
-project wgEncode
-rank 1st
-replicate 1
-setType exp
-subId 607
-view Alignments
-
 metaObject wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k4me3
 objType file
 antibody H3K4me3
@@ -1303,28 +1264,6 @@ rank 1st
 replicate 1
 setType exp
 subId 717
-view Alignments
-
-metaObject wgEncodeUwChIPSeqAlignmentsRep1HreH3k4me1
-objType file
-antibody H3K4me1
-cell HRE
-composite wgEncodeUwChIPSeq
-controlId HRE/Input
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-29
-dateUnrestricted 2010-06-29
-fileName wgEncodeUwChIPSeqAlignmentsRep1HreH3k4me1.tagAlign.gz
-fragLength 350
-grant Stam
-lab UW
-labVersion Eland (GAPipeline-1.4)
-project wgEncode
-rank 1st
-replicate 1
-setType exp
-subId 602
 view Alignments
 
 metaObject wgEncodeUwChIPSeqAlignmentsRep1HreH3k4me3
@@ -7480,27 +7419,6 @@ setType exp
 subId 714
 view RawData
 
-metaObject wgEncodeUwChIPSeqRawDataRep1Caco2H3k4me1
-objType file
-antibody H3K4me1
-cell Caco-2
-composite wgEncodeUwChIPSeq
-controlId Caco-2/Input
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-29
-dateUnrestricted 2010-06-29
-fileName wgEncodeUwChIPSeqRawDataRep1Caco2H3k4me1.fastq.gz
-fragLength 350
-grant Stam
-lab UW
-project wgEncode
-rank 1st
-replicate 1
-setType exp
-subId 597
-view RawData
-
 metaObject wgEncodeUwChIPSeqRawDataRep1Caco2H3k4me3
 objType file
 antibody H3K4me3
@@ -7926,27 +7844,6 @@ setType exp
 subId 715
 view RawData
 
-metaObject wgEncodeUwChIPSeqRawDataRep1Helas3H3k4me1
-objType file
-antibody H3K4me1
-cell HeLa-S3
-composite wgEncodeUwChIPSeq
-controlId HeLa-S3/Input
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-29
-dateUnrestricted 2010-06-29
-fileName wgEncodeUwChIPSeqRawDataRep1Helas3H3k4me1.fastq.gz
-fragLength 350
-grant Stam
-lab UW
-project wgEncode
-rank 1st
-replicate 1
-setType exp
-subId 607
-view RawData
-
 metaObject wgEncodeUwChIPSeqRawDataRep1Helas3H3k4me3
 objType file
 antibody H3K4me3
@@ -8200,27 +8097,6 @@ rank 1st
 replicate 1
 setType exp
 subId 717
-view RawData
-
-metaObject wgEncodeUwChIPSeqRawDataRep1HreH3k4me1
-objType file
-antibody H3K4me1
-cell HRE
-composite wgEncodeUwChIPSeq
-controlId HRE/Input
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-29
-dateUnrestricted 2010-06-29
-fileName wgEncodeUwChIPSeqRawDataRep1HreH3k4me1.fastq.gz
-fragLength 350
-grant Stam
-lab UW
-project wgEncode
-rank 1st
-replicate 1
-setType exp
-subId 602
 view RawData
 
 metaObject wgEncodeUwChIPSeqRawDataRep1HreH3k4me3
@@ -12531,4 +12407,4 @@ subId 407
 tableName wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
 view RawSignal
 
-# MAGIC: -1658623571
+# MAGIC: -720814594

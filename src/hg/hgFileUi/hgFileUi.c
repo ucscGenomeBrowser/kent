@@ -34,7 +34,7 @@ if (!ajax)
 printf("<B style='font-family:serif; font-size:200%%;'>%s</B>\n", tdb->longLabel);
 
 // If Composite, link to the hgTrackUi.  But if downloadsOnly then link to any superTrack.
-#define LINK_TO_PARENT "%s<B style='font-family:serif; font-size:100%%;'>(<A HREF='%s?%s=%u&c=%s&g=%s' title='Link to %s track settings'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>"
+#define LINK_TO_PARENT "%s<B style='font-family:serif;'>(<A HREF='%s?%s=%u&c=%s&g=%s' title='Link to %s track settings'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>\n"
 if (tdbIsComposite(tdb))
     {
     char *encodedTrackName = cgiEncode(tdb->track);
@@ -51,11 +51,19 @@ else if (tdb->parent) //Print link for parent track
 // NAVLINKS - Link to Description down below
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
-    printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
-    printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>Description&dArr;</A>");
-    printf("&nbsp;</span>");
+    printf("<span id='navDown' style='float:right; display:none;'>");
+    // First put up a button to go to File Search
+    printf("<A HREF='hgFileSearch?db=%s' TITLE='Search for other downloadable files ...'>File Search</A>&nbsp;&nbsp;&nbsp;",db);
+
+    // Now link to description
+    char *downArrow = "&dArr;";
+    enum browserType browser = cgiBrowser();
+    if (browser == btIE || browser == btFF)
+        downArrow = "&darr;";
+    printf("<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>Description%s</A>",downArrow);
+    printf("</span>");
     }
-puts("<BR><BR>");
+puts("<BR>");
 
 filesDownloadUi(db,cart,tdb);
 
@@ -95,6 +103,9 @@ getDbAndGenome(cart, &db, &ignored, NULL);
 char *chrom = cartUsualString(cart, "c", hDefaultChrom(db));
 
 // QUESTION: Do We need track list ???  trackHash ??? Can't we just get one track and no children
+// ANSWER: The way the code is set up now you will get the whole list. This is just to put all 
+// the logic for resolving loading parents and children in one place.  We do occassionally pay the 
+// price of a 200 millisecond delay because of it though - JK.
 trackHash = trackHashMakeWithComposites(db,chrom,&tdbList,FALSE);
 tdb = tdbForTrack(db, track,&tdbList);
 
@@ -113,6 +124,9 @@ if (!tdbIsComposite(tdb) && !tdbIsDownloadsOnly(tdb))
     }
 
 // QUESTION: Do we need superTrack?  If we have lnk to superTrack, then yes.
+// ANSWER: No, you shouldn't need to do this here.  The call that generated the
+// tdbList already took care of this.  -JK
+#ifdef UNNEEDED
 char *super = trackDbGetSupertrackName(tdb);
 if (super)
     {
@@ -122,6 +136,7 @@ if (super)
         trackDbSuperMemberSettings(tdb);
         }
     }
+#endif /* UNNEEDED */
 
 fileUi(cart, tdb, db, chrom, FALSE);
 

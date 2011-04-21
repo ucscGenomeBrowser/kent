@@ -2,12 +2,13 @@
 LIST=\
 wgEncodeAffyRnaChip.ra \
 wgEncodeBroadHistone.ra \
+wgEncodeBroadHmm.ra \
 wgEncodeBuOrchid.ra \
 wgEncodeGencode.ra \
 wgEncodeGisChiaPet.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaSeq.ra \
-wgEncodeHaibMethyl27.ra \
+wgEncodeHaibMethylArray.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibRnaSeq.ra\
 wgEncodeHaibTfbs.ra \

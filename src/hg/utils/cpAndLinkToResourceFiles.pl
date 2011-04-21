@@ -15,7 +15,16 @@ $msg
 
 Usage:
 
-cpAndLinkToResourceFiles.pl [-exclude=...] -destDir=... files
+cpAndLinkToResourceFiles.pl [OPTION] -destDir=dir -versionFile=file files
+
+Copy any modified static files to a directory in the apache DocumentRoot and create appropriately versioned softlinks.
+
+Options:
+
+     -destDir=dir          Directory where we copy files
+     -exclude=fileList     Comma-delimited list of files to exclude (useful if the files argument was created using "ls *.js")
+     -forceVersionNumbers  Force use of CGI versioned softlinks; useful for debugging in dev trees
+     -versionFile=file     Get CGI version from this header file
 END
 }
 

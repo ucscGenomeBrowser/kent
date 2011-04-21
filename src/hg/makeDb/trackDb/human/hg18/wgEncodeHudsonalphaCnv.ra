@@ -1,5 +1,4 @@
 track wgEncodeHudsonalphaCnv
-release beta,public
 compositeTrack on
 shortLabel Common Cell CNV
 longLabel ENCODE Common Cell Type Copy Number Variation, by Illumina 1M and CBS
@@ -24,50 +23,41 @@ type bed 9
     shortLabel Regions
     view Regions
     visibility dense
-    release beta,public
-        subTrack wgEncodeHudsonalphaCnv
+    subTrack wgEncodeHudsonalphaCnv
 
-        track wgEncodeHudsonalphaCnvRegionsGM12878
-        release beta,public
+        track wgEncodeHudsonalphaCnvRegionsGM12878V2
         subTrack wgEncodeHudsonalphaCnvViewRegions
         shortLabel GM12878 Regions
         longLabel ENCODE Copy Number Variation Regions (GM12878 cells)
         subGroups cellType=GM12878 view=Regions
         cell GM12878
         itemRgb on
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=GM12878 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsGM12878 fileName=wgEncodeHudsonalphaCnvRegionsGM12878.bed.gz subId=449
         priority 2
 
-        track wgEncodeHudsonalphaCnvRegionsHepG2
+        track wgEncodeHudsonalphaCnvRegionsHepG2V2
         shortLabel HepG2 Regions
         longLabel ENCODE Copy Number Variation Regions (HepG2 cells)
-        release beta,public
         subTrack wgEncodeHudsonalphaCnvViewRegions
         subGroups cellType=HepG2 view=Regions
         cell HepG2
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=HepG2 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsHepG2 fileName=wgEncodeHudsonalphaCnvRegionsHepG2.bed.gz subId=449
         priority 4
 
-        track wgEncodeHudsonalphaCnvRegionsK562
+        track wgEncodeHudsonalphaCnvRegionsK562V2
         shortLabel K562 Regions
         longLabel ENCODE Copy Number Variation Regions (K562 cells)
-        release beta,public
         subTrack wgEncodeHudsonalphaCnvViewRegions
         subGroups cellType=K562 view=Regions
         cell K562
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=K562 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsK562 fileName=wgEncodeHudsonalphaCnvRegionsK562.bed.gz subId=449
         priority 6
 
     track wgEncodeHudsonalphaCnvViewSignal
     shortLabel Signal
     view Signal
     visibility hide
-    release beta,public
-        subTrack wgEncodeHudsonalphaCnv
+    subTrack wgEncodeHudsonalphaCnv
     maxHeightPixels 100:32:16
 
         track wgEncodeHudsonalphaCnvSignalGM12878
-        release beta,public
         subTrack wgEncodeHudsonalphaCnvViewSignal
         shortLabel  GM12878 Signal
         longLabel ENCODE Copy Number Variation Signal (GM12878 cells)
@@ -76,10 +66,8 @@ type bed 9
         cell GM12878
         color 153,38,0
         priority 1
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=GM12878 view=Signal dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvSignalGM12878 fileName=wgEncodeHudsonalphaCnvSignalGM12878.bedGraph4.gz  subId=449
 
         track wgEncodeHudsonalphaCnvSignalHepG2
-        release beta,public
         subTrack wgEncodeHudsonalphaCnvViewSignal
         shortLabel  HepG2 Signal
         longLabel ENCODE Copy Number Variation Signal (HepG2 cells)
@@ -87,11 +75,9 @@ type bed 9
         cell HepG2
         color 189,0,157
         type bedGraph 4
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=HepG2 view=Signal dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvSignalHepG2 fileName=wgEncodeHudsonalphaCnvSignalHepG2.bedGraph4.gz subId=449
         priority 3
 
         track wgEncodeHudsonalphaCnvSignalK562
-        release beta,public
         subTrack wgEncodeHudsonalphaCnvViewSignal
         shortLabel  K562 Signal
         longLabel ENCODE Copy Number Variation Signal (K562 cells)
@@ -99,7 +85,6 @@ type bed 9
         cell K562
         color 46,0,184
         type bedGraph 4
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=K562 view=Signal dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvSignalK562 fileName=wgEncodeHudsonalphaCnvSignalK562.bedGraph4.gz subId=449
         priority 5
 
 

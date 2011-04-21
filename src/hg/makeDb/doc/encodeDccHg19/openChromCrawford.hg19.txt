@@ -3220,3 +3220,912 @@ ProgFib           y                y            y     y
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3378 reviewing
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3379 reviewing
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3496 reviewing
+
+2011-02-11 Adding new FAIRE submission to take place of revoked experiment.
+===========================================================================
+cd {pip}/3507
+e out/trackDb.ra
+
+# oops.  Notice origAssembly ion all of these
+cd {tdb}/hg19
+grep -v origAssembly wgEncodeOpenChromChip.ra > wgEncodeOpenChromChip.ra2     
+grep -v origAssembly wgEncodeOpenChromDnase.ra > wgEncodeOpenChromDnase.ra2
+grep -v origAssembly wgEncodeOpenChromFaire.ra > wgEncodeOpenChromFaire.ra2
+cp wgEncodeOpenChromChip.ra wgEncodeOpenChromChip.ra.bak     
+cp wgEncodeOpenChromDnase.ra wgEncodeOpenChromDnase.ra.bak
+cp wgEncodeOpenChromFaire.ra wgEncodeOpenChromFaire.ra.bak
+mv wgEncodeOpenChromChip.ra2 wgEncodeOpenChromChip.ra
+mv wgEncodeOpenChromDnase.ra2 wgEncodeOpenChromDnase.ra
+mv wgEncodeOpenChromFaire.ra2 wgEncodeOpenChromFaire.ra
+gdiff wgEncodeOpenChromChip.ra | grep -v origAssembly | grep -v \@\@ 
+gdiff wgEncodeOpenChromDnase.ra | grep -v origAssembly | grep -v \@\@ 
+gdiff wgEncodeOpenChromFaire.ra | grep -v origAssembly | grep -v \@\@ 
+git up, add, ci, up, push
+cp wgEncodeOpenChromSynth.ra wgEncodeOpenChromSynth.ra.bak
+grep -v origAssembly wgEncodeOpenChromSynth.ra.bak > wgEncodeOpenChromSynth.ra     
+gdiff wgEncodeOpenChromSynth.ra | grep -v origAssembly | grep -v \@\@ 
+
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/3507/out/trackDb.ra wgEncodeOpenChromFaire.ra
+
+# now metadata
+cd {pip}/3507
+e out/mdb.txt # no change needed
+mdbUpdate hg19 out/mdb.txt
+Read 5 metadata objects from hg19
+Affected 80 row(s) in hg19.metaDb_tdreszer
+
+# Check in changes:
+cd .. {hg19/metaDb/alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" > wgEncodeOpenChromFaire.ra
+gold wgEncodeOpenChromFaire.ra
+
+git: up, add, ci, up, push # for mdb
+cd ../../../../ (trackDb)
+make DBS=hg19; 
+# examine in browser
+git: up, add, ci, up, push # for trackDb
+make alpha DBS=hg19
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire cell=A459" | grep labVersion | sort | uniq
+labVersion fseq v 1.84, iff_generic_male
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=A549" -setVars="controlId=generic_male"
+
+cd {downloadsHg19}/wgEncodeOpenChromFaire/
+ll wgEncodeOpenChromFaireNhbe*
+Full set
+encodeDownloadsPage.pl -db=hg19 index.html
+# 231 files.  All have metadata  # 231 found in hgFileUi
+
+# dateSubmitted is wrong.  Should be original date submitted
+cd {tdb}/hg19/metaDb/alpha
+e wgEncodeOpenChromFaire.ra
+mdbUpdate hg19 wgEncodeOpenChromFaire.ra
+Using table named 'hg19.metaDb_tdreszer'.
+Read 179 metadata objects from hg19
+Affected 17 row(s) in hg19.metaDb_tdreszer
+git: up, add, ci, up, push # for mdb
+
+cd {downloadsHg19}/wgEncodeOpenChromFaire/
+ll wgEncodeOpenChromFaireNhbe*
+Full set
+encodeDownloadsPage.pl -db=hg19 index.html
+# 231 files.  All have CORRECT metadata  # 231 found in hgFileUi
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3507 displayed
+
+cd release1/
+ln ../wgEncodeOpenChromFaireNhbe* .
+# two errors on fastq's already there
+ls -1 wgEncodeOpenChromFaireNhbe* .
+# all are there
+cp ../index.html .
+cp ../files.txt .
+
+# need to update md5sum.txt but don't want to redo all md5sums
+cd ..
+ls -1 wgEncodeOpenChromFaireNhbe* . | grep -v fastq
+md5sum wgEncodeOpenChromFaireNhbeAlnRep1.bam > tmp.txt
+md5sum wgEncodeOpenChromFaireNhbeAlnRep1.bam.bai >> tmp.txt
+md5sum wgEncodeOpenChromFaireNhbeAlnRep2.bam >> tmp.txt
+md5sum wgEncodeOpenChromFaireNhbeAlnRep2.bam.bai >> tmp.txt
+md5sum wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig >> tmp.txt
+md5sum wgEncodeOpenChromFaireNhbePk.narrowPeak.gz >> tmp.txt
+md5sum wgEncodeOpenChromFaireNhbeSig.bigWig >> tmp.txt
+e tmp.txt md5sum.txt # add these md5sums to the md5sum file
+cp md5sum.txt release1/
+rm tmp.txt
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3507 approved
+
+cd {docsHg19}
+e wgEncodeOpenChromFaire.release1.notes # add in the tables and files manually
+
+# Update pushQ
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3507 reviewing
+
+2011-02-16 Update missing origAsembly as per Katrina's request
+==============================================================
+mdbUpdate hg19 table=metaDb_tdreszer -vars="composite=wgEncodeOpenChromChip origAssembly!=" -setVars="origAssembly=hg19"      
+Affected 62 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 table=metaDb_tdreszer -vars="composite=wgEncodeOpenChromDnase origAssembly!=" -setVars="origAssembly=hg19"
+Affected 131 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 table=metaDb_tdreszer -vars="composite=wgEncodeOpenChromFaire origAssembly!=" -setVars="origAssembly=hg19"
+Affected 86 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 table=metaDb_tdreszer -vars="composite=wgEncodeOpenChromSynth origAssembly!=" -setVars="origAssembly=hg19" -test
+Command would affected 0 row(s) in hg19.metaDb_tdreszer
+
+# check in
+mdbPrint hg19 -composite=wgEncodeOpenChromChip > wgEncodeOpenChromChip.ra
+objects:271  vars:5354
+mdbPrint hg19 -composite=wgEncodeOpenChromDnase > wgEncodeOpenChromDnase.ra
+objects:326  vars:5986
+mdbPrint hg19 -composite=wgEncodeOpenChromFaire > wgEncodeOpenChromFaire.ra
+objects:179  vars:3184
+gold wgEncodeOpenChromChip.ra 
+gold wgEncodeOpenChromDnase.ra
+gold wgEncodeOpenChromFaire.ra
+git up, add, ci, up, push
+
+make DBS=hg19; alpha
+
+cd {downloadsHg19}/wgEncodeOpenChromChip
+encodeDownloadsPage.pl -db=hg19 index.html
+cp index.html release1/
+cp files.txt release1/
+cd {downloadsHg19}/wgEncodeOpenChromDnase
+encodeDownloadsPage.pl -db=hg19 index.html
+cd {downloadsHg19}/wgEncodeOpenChromFaire
+encodeDownloadsPage.pl -db=hg19 index.html
+
+2011-02-25 Accounting for Kate
+==============================
+mdbUpdate hg19 -obj=wgEncodeOpenChromDnase -setVars="objType=composite composite=wgEncodeOpenChromDnase expVars=lab,dataType,cell,treatment"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromDnase -encodeExp
+Composite 'wgEncodeOpenChromDnase' has 47 recognizable experiments with 47 missing an expId.
+~/bin/x86_64/mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase view=Signal" -var=dataVersion -val="ENCODE Jan 2011%" -encodeExp
+Composite 'wgEncodeOpenChromDnase' has 21 recognizable experiments with 21 missing an expId.
+mdbPrint hg19 -composite=wgEncodeOpenChromDnase | grep subId | sort | uniq | wl
+66
+mdbPrint hg19 -composite=wgEncodeOpenChromDnase -var=dataVersion -val="ENCODE Jan 2011%" | grep subId | sort | uniq | wl
+21
+
+mdbUpdate hg19 -obj=wgEncodeOpenChromFaire -setVars="objType=composite composite=wgEncodeOpenChromFaire expVars=lab,dataType,cell,treatment"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromFaire -encodeExp
+Composite 'wgEncodeOpenChromFaire' has 26 recognizable experiments with 26 missing an expId.
+~/bin/x86_64/mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire view=Signal" -var=dataVersion -val="ENCODE Jan 2011%" -encodeExp
+Composite 'wgEncodeOpenChromFaire' has 12 recognizable experiments with 12 missing an expId.
+~/bin/x86_64/mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire view=Signal" -var=dataVersion -val="post ENCODE Jan 2011%" -encodeExp
+Composite 'wgEncodeOpenChromFaire' has 1 recognizable experiment with 1 missing an expId.
+mdbPrint hg19 -composite=wgEncodeOpenChromFaire | grep subId | sort | uniq | wl
+30
+mdbPrint hg19 -composite=wgEncodeOpenChromFaire -var=dataVersion -val="ENCODE Jan 2011%" | grep subId | sort | uniq | wl
+13
+mdbPrint hg19 -composite=wgEncodeOpenChromFaire -var=dataVersion -val="post ENCODE Jan 2011%" | grep subId | sort | uniq | wl
+1
+
+mdbUpdate hg19 -obj=wgEncodeOpenChromChip -setVars="objType=composite composite=wgEncodeOpenChromChip expVars=lab,dataType,cell,treatment,antibody"              
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromChip -encodeExp
+Composite 'wgEncodeOpenChromChip' has 46 recognizable experiments with 46 missing an expId.
+~/bin/x86_64/mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip view=Signal" -var=dataVersion -val="ENCODE Jan 2011%" -encodeExp
+~/bin/x86_64/mdbPrint hg19 -composite=wgEncodeOpenChromChip -var=dataVersion -val="ENCODE Jan 2011%" -encodeExp
+Composite 'wgEncodeOpenChromChip' has 11 recognizable experiments with 11 missing an expId.
+mdbPrint hg19 -composite=wgEncodeOpenChromChip | grep subId | sort | uniq | wl
+77
+mdbPrint hg19 -composite=wgEncodeOpenChromChip -var=dataVersion -val="ENCODE Jan 2011%" | grep subId | sort | uniq | wl
+12
+
+2011-02-25 Brian converted bigWigs
+==================================
+cd {downloadsHg19}/wgEncodeOpenChromChip
+ll wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
+-rw-rw-r-- 3 encodeteam protein 435027785 Oct 11 13:51 wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
+## There are three locations:
+# {downloadsHg19}/wgEncodeOpenChromChip
+# {downloadsHg19}/wgEncodeOpenChromChip/release1
+# submission dir.  Leave that one alone!
+ll /gbdb/hg19/bbi/wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig 
+/gbdb/hg19/bbi/wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig -> /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
+## Don't forget to make sure this is still intact
+
+# Lonk them to obsolete so nothing gets lost
+cd ../obsolete/wgEncodeOpenChromChip
+ln ../../wgEncodeOpenChromChip/*.bigWig .
+ll *.bigWig | wl
+80
+# Why 80 and not 75?
+ls -1 *.bigWig | sort > tmp.txt
+# same thing for new bigWigs
+kompare -c
+wgEncodeOpenChromChipGlioblaPol2BaseOverlapSignal.bigWig
+wgEncodeOpenChromChipGlioblaPol2Sig.bigWig
+wgEncodeOpenChromChipK562CtcfSig.bigWig
+wgEncodeOpenChromChipK562Pol2Sig.bigWig
+wgEncodeOpenChromChipMonocd14InputSig.bigWig
+
+cd ../../wgEncodeOpenChromChip/
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipFibroblCtcfSig.bigWig.new.bigWig                  wgEncodeOpenChromChipFibroblCtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipFibroblInputSig.bigWig.new.bigWig                 wgEncodeOpenChromChipFibroblInputSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGlioblaCtcfSig.bigWig.new.bigWig                  wgEncodeOpenChromChipGlioblaCtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGlioblaInputSig.bigWig.new.bigWig                 wgEncodeOpenChromChipGlioblaInputSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm12878CmycSig.bigWig.new.bigWig                  wgEncodeOpenChromChipGm12878CmycSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm12878CtcfBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipGm12878CtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm12878CtcfSig.bigWig.new.bigWig                  wgEncodeOpenChromChipGm12878CtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm12878InputSig.bigWig.new.bigWig                 wgEncodeOpenChromChipGm12878InputSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm12878Pol2Sig.bigWig.new.bigWig                  wgEncodeOpenChromChipGm12878Pol2Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm12891CtcfSig.bigWig.new.bigWig                  wgEncodeOpenChromChipGm12891CtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm12892CtcfSig.bigWig.new.bigWig                  wgEncodeOpenChromChipGm12892CtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm19238CtcfSig.bigWig.new.bigWig                  wgEncodeOpenChromChipGm19238CtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm19239CtcfSig.bigWig.new.bigWig                  wgEncodeOpenChromChipGm19239CtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipGm19240CtcfSig.bigWig.new.bigWig                  wgEncodeOpenChromChipGm19240CtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal.bigWig.new.bigWig     wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipH1hescCmycSig.bigWig.new.bigWig                   wgEncodeOpenChromChipH1hescCmycSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal.bigWig.new.bigWig     wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipH1hescCtcfSig.bigWig.new.bigWig                   wgEncodeOpenChromChipH1hescCtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal.bigWig.new.bigWig     wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipH1hescPol2Sig.bigWig.new.bigWig                   wgEncodeOpenChromChipH1hescPol2Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal.bigWig.new.bigWig     wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHelas3CmycSig.bigWig.new.bigWig                   wgEncodeOpenChromChipHelas3CmycSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal.bigWig.new.bigWig     wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHelas3CtcfSig.bigWig.new.bigWig                   wgEncodeOpenChromChipHelas3CtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHelas3InputSig.bigWig.new.bigWig                  wgEncodeOpenChromChipHelas3InputSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal.bigWig.new.bigWig     wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHelas3Pol2Sig.bigWig.new.bigWig                   wgEncodeOpenChromChipHelas3Pol2Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHepg2CmycSig.bigWig.new.bigWig                    wgEncodeOpenChromChipHepg2CmycSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHepg2CtcfSig.bigWig.new.bigWig                    wgEncodeOpenChromChipHepg2CtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHepg2InputSig.bigWig.new.bigWig                   wgEncodeOpenChromChipHepg2InputSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHepg2Pol2Sig.bigWig.new.bigWig                    wgEncodeOpenChromChipHepg2Pol2Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHuvecCmycSig.bigWig.new.bigWig                    wgEncodeOpenChromChipHuvecCmycSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHuvecCtcfSig.bigWig.new.bigWig                    wgEncodeOpenChromChipHuvecCtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHuvecInputSig.bigWig.new.bigWig                   wgEncodeOpenChromChipHuvecInputSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipHuvecPol2Sig.bigWig.new.bigWig                    wgEncodeOpenChromChipHuvecPol2Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipK562CmycBaseOverlapSignal.bigWig.new.bigWig       wgEncodeOpenChromChipK562CmycBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipK562CmycSig.bigWig.new.bigWig                     wgEncodeOpenChromChipK562CmycSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipK562CtcfBaseOverlapSignal.bigWig.new.bigWig       wgEncodeOpenChromChipK562CtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipK562InputSig.bigWig.new.bigWig                    wgEncodeOpenChromChipK562InputSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipK562Pol2BaseOverlapSignal.bigWig.new.bigWig       wgEncodeOpenChromChipK562Pol2BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal.bigWig.new.bigWig  wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipMcf7CmycEstroSig.bigWig.new.bigWig                wgEncodeOpenChromChipMcf7CmycEstroSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipMcf7CmycVehBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipMcf7CmycVehBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipMcf7CmycVehSig.bigWig.new.bigWig                  wgEncodeOpenChromChipMcf7CmycVehSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal.bigWig.new.bigWig       wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipMcf7CtcfEstroBaseOverlapSignal.bigWig.new.bigWig  wgEncodeOpenChromChipMcf7CtcfEstroBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipMcf7CtcfEstroSig.bigWig.new.bigWig                wgEncodeOpenChromChipMcf7CtcfEstroSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipMcf7CtcfSig.bigWig.new.bigWig                     wgEncodeOpenChromChipMcf7CtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipMcf7CtcfVehBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipMcf7CtcfVehBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipMcf7CtcfVehSig.bigWig.new.bigWig                  wgEncodeOpenChromChipMcf7CtcfVehSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipMcf7InputSig.bigWig.new.bigWig                    wgEncodeOpenChromChipMcf7InputSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal.bigWig.new.bigWig       wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipMcf7Pol2Sig.bigWig.new.bigWig                     wgEncodeOpenChromChipMcf7Pol2Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal.bigWig.new.bigWig       wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipNhekCtcfSig.bigWig.new.bigWig                     wgEncodeOpenChromChipNhekCtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipProgfibCtcfSig.bigWig.new.bigWig                  wgEncodeOpenChromChipProgfibCtcfSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipProgfibInputSig.bigWig.new.bigWig                 wgEncodeOpenChromChipProgfibInputSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromChip/wgEncodeOpenChromChipProgfibPol2Sig.bigWig.new.bigWig                  wgEncodeOpenChromChipProgfibPol2Sig.bigWig
+
+cd release1/
+ln ../*.bigWig .
+ln: creating hard link `./wgEncodeOpenChromChipProgfibPol2Sig.bigWig' to `../wgEncodeOpenChromChipProgfibPol2Sig.bigWig': File exists
+## Have to remove and then ln
+rm *.bigWig
+ln ../*.bigWig .
+ls -1 *.bigWig | wl
+80
+
+# Soft links okay?
+ll /gbdb/hg19/bbi/wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig 
+lrwxrwxrwx 1 encodeteam protein 140 Oct 13 06:06 /gbdb/hg19/bbi/wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig -> /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
+## Seen in browser
+### Question: 80 in dir, 75 converted, 85 displayed.  What is up with 5 under & 5 over counts?
+# 85 displayed is actually bad 'selecting' by hui.js when filterComp is involved (peaks being selected even though they are hidden)
+# Brian confirm sthat the 5 he didn't convert were already v4.  All is well.
+
+# update the md5sums
+cd ..
+encodeDownloadsPage.pl -db=hg19 -checksum index.html &
+cp md5sum.txt release1/
+
+
+2011-03-04 Brian converted more bigWigs
+=======================================
+cd {downloadsHg19}/wgEncodeOpenChromDnase
+ll wgEncodeOpenChromDnaseHepatocytesSig.bigWig
+-rw-rw-r-- 4 encodeteam protein 2041493918 Dec  5 10:37 wgEncodeOpenChromDnaseHepatocytesSig.bigWig
+## There are 4 locations:
+# {downloadsHg19}/wgEncodeOpenChromDnase
+# {downloadsHg19}/wgEncodeOpenChromDnase/release1
+# submission dir.  Leave that one alone!
+# And fourth ??  Brian probably
+ll /gbdb/hg19/bbi/wgEncodeOpenChromDnaseHepatocytesSig.bigWig
+lrwxrwxrwx 1 encodeteam protein 128 Dec  7 13:40 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseHepatocytesSig.bigWig -> /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHepatocytesSig.bigWig
+## Don't forget to make sure this is still intact
+
+# Link them to obsolete so nothing gets lost
+cd ../obsolete/wgEncodeOpenChromDnase
+ln ../../wgEncodeOpenChromDnase/*.bigWig .
+ll *.bigWig | wl
+94
+ls -1 *.bigWig | sort > tmp.txt
+
+cd ../../obsolete/wgEncodeOpenChromFaire
+ln ../../wgEncodeOpenChromFaire/*.bigWig .
+ll *.bigWig | wl
+50
+ls -1 *.bigWig | sort > tmp.txt
+
+cd /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/
+ll *.bigWig | wl
+90 
+# 4 are missing and should be accounted for
+ls -1 *.bigWig | sort > /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/obsolete/wgEncodeOpenChromDnase/tmpV4.txt
+cd /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/obsolete/wgEncodeOpenChromDnase/
+e tmpV4.txt # remove the .new.bigWigs
+kompare -c tmp.txt tmpV4.txt
+wgEncodeOpenChromDnaseUrotsaBaseOverlapSignal.bigWig
+wgEncodeOpenChromDnaseUrotsaSig.bigWig
+wgEncodeOpenChromDnaseUrotsaUt189BaseOverlapSignal.bigWig
+wgEncodeOpenChromDnaseUrotsaUt189Sig.bigWig
+# Should confirm that these are already v4
+
+cd /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/
+ll *.bigWig | wl
+38
+# 12 are missing and should be accounted for
+ls -1 *.bigWig | sort > /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/obsolete/wgEncodeOpenChromFaire/tmpV4.txt
+cd /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/obsolete/wgEncodeOpenChromFaire/
+e tmpV4.txt # remove the .new.bigWigs
+kompare -c tmp.txt tmpV4.txt &
+wgEncodeOpenChromFaireA549BaseOverlapSignal.bigWig
+wgEncodeOpenChromFaireA549Sig.bigWig
+wgEncodeOpenChromFaireHtr8BaseOverlapSignal.bigWig
+wgEncodeOpenChromFaireHtr8Sig.bigWig
+wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal.bigWig
+wgEncodeOpenChromFaireMcf7HypoxlacSig.bigWig
+wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
+wgEncodeOpenChromFaireNhbeSig.bigWig
+wgEncodeOpenChromFaireUrotsaBaseOverlapSignal.bigWig
+wgEncodeOpenChromFaireUrotsaSig.bigWig
+wgEncodeOpenChromFaireUrotsaUt189BaseOverlapSignal.bigWig
+wgEncodeOpenChromFaireUrotsaUt189Sig.bigWig
+# Should confirm that these are already v4
+
+cd ../../wgEncodeOpenChromDnase/ 
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnase8988tBaseOverlapSignal.bigWig.new.bigWig          wgEncodeOpenChromDnase8988tBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnase8988tSig.bigWig.new.bigWig                        wgEncodeOpenChromDnase8988tSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseA549BaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseA549BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseA549Sig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseA549Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseAosmcSerumfreeBaseOverlapSignal.bigWig.new.bigWig wgEncodeOpenChromDnaseAosmcSerumfreeBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseAosmcSerumfreeSig.bigWig.new.bigWig               wgEncodeOpenChromDnaseAosmcSerumfreeSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseChorionBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseChorionBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseChorionSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseChorionSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseCllBaseOverlapSignal.bigWig.new.bigWig            wgEncodeOpenChromDnaseCllBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseCllSig.bigWig.new.bigWig                          wgEncodeOpenChromDnaseCllSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseFibroblBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseFibroblBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseFibroblSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseFibroblSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseFibropBaseOverlapSignal.bigWig.new.bigWig         wgEncodeOpenChromDnaseFibropBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseFibropSig.bigWig.new.bigWig                       wgEncodeOpenChromDnaseFibropSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGlioblaBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGlioblaBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGlioblaSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGlioblaSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm12878BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm12878BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm12878Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm12878Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm12891BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm12891BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm12891Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm12891Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm12892BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm12892BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm12892Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm12892Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm18507BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm18507BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm18507Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm18507Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm19238BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm19238BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm19238Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm19238Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm19239BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm19239BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm19239Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm19239Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm19240BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm19240BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm19240Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm19240Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseH1hescBaseOverlapSignal.bigWig.new.bigWig         wgEncodeOpenChromDnaseH1hescBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseH1hescSig.bigWig.new.bigWig                       wgEncodeOpenChromDnaseH1hescSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseH9esBaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseH9esBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseH9esSig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseH9esSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHelas3BaseOverlapSignal.bigWig.new.bigWig         wgEncodeOpenChromDnaseHelas3BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal.bigWig.new.bigWig   wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHelas3Ifna4hSig.bigWig.new.bigWig                 wgEncodeOpenChromDnaseHelas3Ifna4hSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHelas3Sig.bigWig.new.bigWig                       wgEncodeOpenChromDnaseHelas3Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHepatocytesBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromDnaseHepatocytesBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHepatocytesSig.bigWig.new.bigWig                  wgEncodeOpenChromDnaseHepatocytesSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHepg2BaseOverlapSignal.bigWig.new.bigWig          wgEncodeOpenChromDnaseHepg2BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHepg2Sig.bigWig.new.bigWig                        wgEncodeOpenChromDnaseHepg2Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHmecBaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseHmecBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHmecSig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseHmecSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHpde6e6e7BaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromDnaseHpde6e6e7BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHpde6e6e7Sig.bigWig.new.bigWig                    wgEncodeOpenChromDnaseHpde6e6e7Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHsmmBaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseHsmmBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHsmmSig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseHsmmSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHsmmtBaseOverlapSignal.bigWig.new.bigWig          wgEncodeOpenChromDnaseHsmmtBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHsmmtSig.bigWig.new.bigWig                        wgEncodeOpenChromDnaseHsmmtSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHtr8BaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseHtr8BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHtr8Sig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseHtr8Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHuh75BaseOverlapSignal.bigWig.new.bigWig          wgEncodeOpenChromDnaseHuh75BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHuh75Sig.bigWig.new.bigWig                        wgEncodeOpenChromDnaseHuh75Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHuh7BaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseHuh7BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHuh7Sig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseHuh7Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHuvecBaseOverlapSignal.bigWig.new.bigWig          wgEncodeOpenChromDnaseHuvecBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHuvecSig.bigWig.new.bigWig                        wgEncodeOpenChromDnaseHuvecSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseIpsBaseOverlapSignal.bigWig.new.bigWig            wgEncodeOpenChromDnaseIpsBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseIpsSig.bigWig.new.bigWig                          wgEncodeOpenChromDnaseIpsSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseK562BaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseK562BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseK562Sig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseK562Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal.bigWig.new.bigWig     wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseLncapAndroSig.bigWig.new.bigWig                   wgEncodeOpenChromDnaseLncapAndroSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseLncapBaseOverlapSignal.bigWig.new.bigWig          wgEncodeOpenChromDnaseLncapBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseLncapSig.bigWig.new.bigWig                        wgEncodeOpenChromDnaseLncapSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMcf7BaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseMcf7BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMcf7Sig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseMcf7Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMedulloBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseMedulloBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMedulloSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseMedulloSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMelanoBaseOverlapSignal.bigWig.new.bigWig         wgEncodeOpenChromDnaseMelanoBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMelanoSig.bigWig.new.bigWig                       wgEncodeOpenChromDnaseMelanoSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMyometrBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseMyometrBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMyometrSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseMyometrSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseNhekBaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseNhekBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseNhekSig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseNhekSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseOsteoblBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseOsteoblBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseOsteoblSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseOsteoblSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnasePanisdBaseOverlapSignal.bigWig.new.bigWig         wgEncodeOpenChromDnasePanisdBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnasePanisdSig.bigWig.new.bigWig                       wgEncodeOpenChromDnasePanisdSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnasePanisletsBaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromDnasePanisletsBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnasePanisletsSig.bigWig.new.bigWig                    wgEncodeOpenChromDnasePanisletsSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnasePhteBaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnasePhteBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnasePhteSig.bigWig.new.bigWig                         wgEncodeOpenChromDnasePhteSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseProgfibBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseProgfibBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseProgfibSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseProgfibSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseStellateBaseOverlapSignal.bigWig.new.bigWig       wgEncodeOpenChromDnaseStellateBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseStellateSig.bigWig.new.bigWig                     wgEncodeOpenChromDnaseStellateSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseT47dBaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseT47dBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseT47dSig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseT47dSig.bigWig
+cd release1/
+rm *.bigWig
+ln ../*.bigWig .
+ls -1 *.bigWig | wl
+################################ Ouch!!  I did rm *.bigWig not in the release dir!!!
+ln release1/*.bigWig .
+ls -1 *.bigWig | wl
+94
+#### Atleast the old files are not lost.  Hopefully Brian can regen one more time.  Or perhaps there is a backup
+
+cd ../../wgEncodeOpenChromFaire/ 
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireAstrocyBaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromFaireAstrocyBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireAstrocySig.bigWig.new.bigWig                    wgEncodeOpenChromFaireAstrocySig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireGlioblaBaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromFaireGlioblaBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireGlioblaSig.bigWig.new.bigWig                    wgEncodeOpenChromFaireGlioblaSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireGm12878BaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromFaireGm12878BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireGm12878Sig.bigWig.new.bigWig                    wgEncodeOpenChromFaireGm12878Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireGm12891BaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromFaireGm12891BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireGm12891Sig.bigWig.new.bigWig                    wgEncodeOpenChromFaireGm12891Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireGm12892BaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromFaireGm12892BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireGm12892Sig.bigWig.new.bigWig                    wgEncodeOpenChromFaireGm12892Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireGm18507BaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromFaireGm18507BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireGm18507Sig.bigWig.new.bigWig                    wgEncodeOpenChromFaireGm18507Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireGm19239BaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromFaireGm19239BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireGm19239Sig.bigWig.new.bigWig                    wgEncodeOpenChromFaireGm19239Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireH1hescBaseOverlapSignal.bigWig.new.bigWig       wgEncodeOpenChromFaireH1hescBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireH1hescSig.bigWig.new.bigWig                     wgEncodeOpenChromFaireH1hescSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireHelas3BaseOverlapSignal.bigWig.new.bigWig       wgEncodeOpenChromFaireHelas3BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal.bigWig.new.bigWig wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireHelas3Ifna4hSig.bigWig.new.bigWig               wgEncodeOpenChromFaireHelas3Ifna4hSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireHelas3Ifng4hBaseOverlapSignal.bigWig.new.bigWig wgEncodeOpenChromFaireHelas3Ifng4hBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireHelas3Ifng4hSig.bigWig.new.bigWig               wgEncodeOpenChromFaireHelas3Ifng4hSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireHelas3Sig.bigWig.new.bigWig                     wgEncodeOpenChromFaireHelas3Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireHepg2BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromFaireHepg2BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireHepg2Sig.bigWig.new.bigWig                      wgEncodeOpenChromFaireHepg2Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireHuvecBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromFaireHuvecBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireHuvecSig.bigWig.new.bigWig                      wgEncodeOpenChromFaireHuvecSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireK562BaseOverlapSignal.bigWig.new.bigWig         wgEncodeOpenChromFaireK562BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireK562NabutBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromFaireK562NabutBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireK562NabutSig.bigWig.new.bigWig                  wgEncodeOpenChromFaireK562NabutSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal.bigWig.new.bigWig   wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireK562OhureaSig.bigWig.new.bigWig                 wgEncodeOpenChromFaireK562OhureaSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireK562Sig.bigWig.new.bigWig                       wgEncodeOpenChromFaireK562Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireMedulloBaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromFaireMedulloBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireMedulloSig.bigWig.new.bigWig                    wgEncodeOpenChromFaireMedulloSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireNhekBaseOverlapSignal.bigWig.new.bigWig         wgEncodeOpenChromFaireNhekBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFaireNhekSig.bigWig.new.bigWig                       wgEncodeOpenChromFaireNhekSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFairePanisletsBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromFairePanisletsBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromFaire/wgEncodeOpenChromFairePanisletsSig.bigWig.new.bigWig                  wgEncodeOpenChromFairePanisletsSig.bigWig
+cd release1/
+rm *.bigWig
+ln ../*.bigWig .
+ls -1 *.bigWig | wl
+50
+
+# Soft links okay?
+ll /gbdb/hg19/bbi/wgEncodeOpenChromDnaseGm12878Sig.bigWig 
+lrwxrwxrwx 1 encodeteam protein 124 Jan 11 16:24 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseGm12878Sig.bigWig -> /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm12878Sig.bigWig
+ll /gbdb/hg19/bbi/wgEncodeOpenChromFaireGm12878Sig.bigWig 
+lrwxrwxrwx 1 braney protein 110 Aug  4  2010 /gbdb/hg19/bbi/wgEncodeOpenChromFaireGm12878Sig.bigWig -> /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeOpenChromFaire/wgEncodeOpenChromFaireGm12878Sig.bigWig
+## Seen in browser
+
+# update the md5sums
+cd {down19}/wgEncodeOpenChromFaire/
+encodeDownloadsPage.pl -db=hg19 -checksum index.html &
+cp md5sum.txt release1/
+
+## Now redo DNase that I screwed up.
+
+cd /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/
+ll *.bigWig | wl
+90 
+
+cd {downhg19}/obsolete/wgEncodeOpenChromDnase
+# Yikes.  Someone removed the obsolete dir.
+cd {downhg19}
+mkdir obsolete
+cd obsolete
+mkdir wgEncodeOpenChromDnase
+cd wgEncodeOpenChromDnase/
+ln ../../wgEncodeOpenChromDnase/*.bigWig .
+ll *.bigWig | wl
+94
+
+cd ../../wgEncodeOpenChromDnase/ 
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnase8988tBaseOverlapSignal.bigWig.new.bigWig          wgEncodeOpenChromDnase8988tBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnase8988tSig.bigWig.new.bigWig                        wgEncodeOpenChromDnase8988tSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseA549BaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseA549BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseA549Sig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseA549Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseAosmcSerumfreeBaseOverlapSignal.bigWig.new.bigWig wgEncodeOpenChromDnaseAosmcSerumfreeBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseAosmcSerumfreeSig.bigWig.new.bigWig               wgEncodeOpenChromDnaseAosmcSerumfreeSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseChorionBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseChorionBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseChorionSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseChorionSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseCllBaseOverlapSignal.bigWig.new.bigWig            wgEncodeOpenChromDnaseCllBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseCllSig.bigWig.new.bigWig                          wgEncodeOpenChromDnaseCllSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseFibroblBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseFibroblBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseFibroblSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseFibroblSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseFibropBaseOverlapSignal.bigWig.new.bigWig         wgEncodeOpenChromDnaseFibropBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseFibropSig.bigWig.new.bigWig                       wgEncodeOpenChromDnaseFibropSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGlioblaBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGlioblaBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGlioblaSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGlioblaSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm12878BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm12878BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm12878Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm12878Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm12891BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm12891BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm12891Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm12891Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm12892BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm12892BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm12892Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm12892Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm18507BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm18507BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm18507Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm18507Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm19238BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm19238BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm19238Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm19238Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm19239BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm19239BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm19239Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm19239Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm19240BaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseGm19240BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseGm19240Sig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseGm19240Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseH1hescBaseOverlapSignal.bigWig.new.bigWig         wgEncodeOpenChromDnaseH1hescBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseH1hescSig.bigWig.new.bigWig                       wgEncodeOpenChromDnaseH1hescSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseH9esBaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseH9esBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseH9esSig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseH9esSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHelas3BaseOverlapSignal.bigWig.new.bigWig         wgEncodeOpenChromDnaseHelas3BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal.bigWig.new.bigWig   wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHelas3Ifna4hSig.bigWig.new.bigWig                 wgEncodeOpenChromDnaseHelas3Ifna4hSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHelas3Sig.bigWig.new.bigWig                       wgEncodeOpenChromDnaseHelas3Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHepatocytesBaseOverlapSignal.bigWig.new.bigWig    wgEncodeOpenChromDnaseHepatocytesBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHepatocytesSig.bigWig.new.bigWig                  wgEncodeOpenChromDnaseHepatocytesSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHepg2BaseOverlapSignal.bigWig.new.bigWig          wgEncodeOpenChromDnaseHepg2BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHepg2Sig.bigWig.new.bigWig                        wgEncodeOpenChromDnaseHepg2Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHmecBaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseHmecBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHmecSig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseHmecSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHpde6e6e7BaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromDnaseHpde6e6e7BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHpde6e6e7Sig.bigWig.new.bigWig                    wgEncodeOpenChromDnaseHpde6e6e7Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHsmmBaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseHsmmBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHsmmSig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseHsmmSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHsmmtBaseOverlapSignal.bigWig.new.bigWig          wgEncodeOpenChromDnaseHsmmtBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHsmmtSig.bigWig.new.bigWig                        wgEncodeOpenChromDnaseHsmmtSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHtr8BaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseHtr8BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHtr8Sig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseHtr8Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHuh75BaseOverlapSignal.bigWig.new.bigWig          wgEncodeOpenChromDnaseHuh75BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHuh75Sig.bigWig.new.bigWig                        wgEncodeOpenChromDnaseHuh75Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHuh7BaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseHuh7BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHuh7Sig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseHuh7Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHuvecBaseOverlapSignal.bigWig.new.bigWig          wgEncodeOpenChromDnaseHuvecBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseHuvecSig.bigWig.new.bigWig                        wgEncodeOpenChromDnaseHuvecSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseIpsBaseOverlapSignal.bigWig.new.bigWig            wgEncodeOpenChromDnaseIpsBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseIpsSig.bigWig.new.bigWig                          wgEncodeOpenChromDnaseIpsSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseK562BaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseK562BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseK562Sig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseK562Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal.bigWig.new.bigWig     wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseLncapAndroSig.bigWig.new.bigWig                   wgEncodeOpenChromDnaseLncapAndroSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseLncapBaseOverlapSignal.bigWig.new.bigWig          wgEncodeOpenChromDnaseLncapBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseLncapSig.bigWig.new.bigWig                        wgEncodeOpenChromDnaseLncapSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMcf7BaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseMcf7BaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMcf7Sig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseMcf7Sig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMedulloBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseMedulloBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMedulloSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseMedulloSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMelanoBaseOverlapSignal.bigWig.new.bigWig         wgEncodeOpenChromDnaseMelanoBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMelanoSig.bigWig.new.bigWig                       wgEncodeOpenChromDnaseMelanoSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMyometrBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseMyometrBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseMyometrSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseMyometrSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseNhekBaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseNhekBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseNhekSig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseNhekSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseOsteoblBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseOsteoblBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseOsteoblSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseOsteoblSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnasePanisdBaseOverlapSignal.bigWig.new.bigWig         wgEncodeOpenChromDnasePanisdBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnasePanisdSig.bigWig.new.bigWig                       wgEncodeOpenChromDnasePanisdSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnasePanisletsBaseOverlapSignal.bigWig.new.bigWig      wgEncodeOpenChromDnasePanisletsBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnasePanisletsSig.bigWig.new.bigWig                    wgEncodeOpenChromDnasePanisletsSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnasePhteBaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnasePhteBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnasePhteSig.bigWig.new.bigWig                         wgEncodeOpenChromDnasePhteSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseProgfibBaseOverlapSignal.bigWig.new.bigWig        wgEncodeOpenChromDnaseProgfibBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseProgfibSig.bigWig.new.bigWig                      wgEncodeOpenChromDnaseProgfibSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseStellateBaseOverlapSignal.bigWig.new.bigWig       wgEncodeOpenChromDnaseStellateBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseStellateSig.bigWig.new.bigWig                     wgEncodeOpenChromDnaseStellateSig.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseT47dBaseOverlapSignal.bigWig.new.bigWig           wgEncodeOpenChromDnaseT47dBaseOverlapSignal.bigWig
+mv /hive/users/braney/bigWigConvert.wgEncodeOpenChromDnase/wgEncodeOpenChromDnaseT47dSig.bigWig.new.bigWig                         wgEncodeOpenChromDnaseT47dSig.bigWig
+cd release1/
+rm *.bigWig
+ln ../*.bigWig .
+ls -1 *.bigWig | wl
+94
+
+# update the md5sums
+cd ..
+encodeDownloadsPage.pl -db=hg19 -checksum index.html &
+cp md5sum.txt release1/
+
+2011-03-15 Making bigWig for Terry's uniqueness tracks
+======================================================
+cd {pip}
+cd ../ftp/prod/tsfurey
+cp 2 to {downloads}/wgEncodeOpenChromDnase/supplemental
+
+tar -xzf duke_uniqueness_20.tgz
+cd align_20/
+cat chr1_20_freq.wig chr2_20_freq.wig chr3_20_freq.wig chr4_20_freq.wig chr5_20_freq.wig chr6_20_freq.wig chr7_20_freq.wig chr8_20_freq.wig chr9_20_freq.wig chr10_20_freq.wig chr11_20_freq.wig chr12_20_freq.wig chr13_20_freq.wig chr14_20_freq.wig chr15_20_freq.wig chr16_20_freq.wig chr17_20_freq.wig chr18_20_freq.wig chr19_20_freq.wig chr20_20_freq.wig chr21_20_freq.wig chr22_20_freq.wig chrX_20_freq.wig chrY_20_freq.wig chrM_20_freq.wig > allChrs_20_freq.wig
+wigToBigWig allChrs_20_freq.wig /hive/data/genomes/hg19/chrom.sizes wgEncodeDukeUniqueness20.bw &
+
+tar -xzf duke_uniqueness_35.tgz
+cd align_35/
+cat chr1_35_freq.wig chr2_35_freq.wig chr3_35_freq.wig chr4_35_freq.wig chr5_35_freq.wig chr6_35_freq.wig chr7_35_freq.wig chr8_35_freq.wig chr9_35_freq.wig chr10_35_freq.wig chr11_35_freq.wig chr12_35_freq.wig chr13_35_freq.wig chr14_35_freq.wig chr15_35_freq.wig chr16_35_freq.wig chr17_35_freq.wig chr18_35_freq.wig chr19_35_freq.wig chr20_35_freq.wig chr21_35_freq.wig chr22_35_freq.wig chrX_35_freq.wig chrY_35_freq.wig chrM_35_freq.wig > allChrs_35_freq.wig
+wigToBigWig allChrs_35_freq.wig /hive/data/genomes/hg19/chrom.sizes wgEncodeDukeUniqueness35.bw &
+hashMustFindVal: 'chrMT' not found
+e chrM_35_freq.wig
+cat chr1_35_freq.wig chr2_35_freq.wig chr3_35_freq.wig chr4_35_freq.wig chr5_35_freq.wig chr6_35_freq.wig chr7_35_freq.wig chr8_35_freq.wig chr9_35_freq.wig chr10_35_freq.wig chr11_35_freq.wig chr12_35_freq.wig chr13_35_freq.wig chr14_35_freq.wig chr15_35_freq.wig chr16_35_freq.wig chr17_35_freq.wig chr18_35_freq.wig chr19_35_freq.wig chr20_35_freq.wig chr21_35_freq.wig chr22_35_freq.wig chrX_35_freq.wig chrY_35_freq.wig chrM_35_freq.wig > allChrs_35_freq.wig
+wigToBigWig allChrs_35_freq.wig /hive/data/genomes/hg19/chrom.sizes wgEncodeDukeUniqueness35.bw &
+
+2011-03-18 Late changing statuses
+=================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1229 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1478 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1490 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1491 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1499 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1500 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1501 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1504 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1505 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1516 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1517 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1518 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1525 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1526 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1527 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1536 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1537 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1538 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1539 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1540 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1541 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1542 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1543 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1580 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1606 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1607 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1608 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1609 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1652 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1657 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1832 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1833 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1834 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2449 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2480 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2487 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2495 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2499 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2502 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2503 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2504 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2505 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2516 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3141 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3241 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3242 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3271 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3272 released
+
+2011-03-18 Resume attempting to load Mapability
+===============================================
+# In Terry's ftp dir, made bigwigs
+# No move everything there to make an archive
+# Mock up a DAF/DDF.  Of course I expect submission to fail so errors don't matter much
+
+tar -czf dukeExtras.tgz dukeExtraTracks.daf dukeExtraTracks.ddf ucsc/dukeUnique20.bw ucsc/dukeUnique35.bw dukeExcludeRegions.bed
+
+2011-03-28 Document what went down for validation by experiment docs
+====================================================================
+Terry submitted one tar and then we agreed upon a format: tar of tars submibmitted as downloadOnly view to sort with exp in downloads dir.
+Terry resubmitted: 3829, 3831, 3832
+### Problem: all the *.tgz's were converted to *.doc.gz by pipeline
+# Would be good to fix pipline before Terry submits more.
+Manually
+1) renamed all to *.tgz/gz
+2) gunzipped to *.tgz
+3) edited mdb.txt
+# loaded mdb, rebuilt index.html: tgzs show up as they ought!
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3829 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3829 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3831 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3831 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3832 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3832 approved
+
+2011-03-29 Resume attempting to load Mapability (again)
+=======================================================
+# submitted 3840
+# took a few rounds to get the daf/ddf right
+cd out
+mdbUpdate hg19 mdb.txt
+e trackDb.ra
+# make a wgEncodeMapability.new.ra and wgEncodeMapability.new.html
+
+# standardize this as if a normal Terry submission:
+select id,name,status,user_id from projects where id = 3840;
+| 3840 | uniqTest | loaded |       9 | 
+update projects set name = "DNCT Uniqueness and Excluded 2011-03-28" where id = 3840;
+update projects set user_id = 17 where id = 3840;
+
+select id,name,status,user_id from projects where id = 3840;
++------+-----------------------------------------+--------+---------+
+| id   | name                                    | status | user_id |
++------+-----------------------------------------+--------+---------+
+| 3840 | DNCT Uniqueness and Excluded 2011-03-28 | loaded |      17 | 
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3840 displayed
+
+ 
+2011-04-20 Experimentify
+========================
+cd trackDb/human/hg19/metaDb/alpha
+
+mdbPrint hg19 -composite=%OpenChromCh% -experimentify > tmp.txt
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+objects:278  vars:5459
+
+Experiment 1128 has 2 objects based upon 4 EDVs: [lab=UT-A dataType=ChipSeq cell=Fibrobl treatment=None antibody=Input].
+           1128 wgEncodeOpenChromChipFibroblInputAln needs updating to mdb.
+           1128 wgEncodeOpenChromChipFibroblInputSig needs updating to mdb.
+           1128 all 2 objects are missing an expId.
+           No fastq
+### Modeled?
+Experiment 593 has 2 objects based upon 4 EDVs: [lab=UT-A dataType=ChipSeq cell=ProgFib treatment=None antibody=Input].
+           593 wgEncodeOpenChromChipProgfibInputAln needs updating to mdb.
+           593 wgEncodeOpenChromChipProgfibInputSig needs updating to mdb.
+           593 all 2 objects are missing an expId.
+           No fastq
+### Modeled?
+Experiment 599 has 2 objects based upon 4 EDVs: [lab=UT-A dataType=ChipSeq cell=MCF-7 treatment=None antibody=c-Myc].
+           599 wgEncodeOpenChromChipMcf7CmycRawDataRep1 needs updating to mdb.
+           599 wgEncodeOpenChromChipMcf7CmycRawDataRep2 needs updating to mdb.
+           599 all 2 objects are missing an expId.
+           2 fastq's and also Estro and Veh exps.
+### Extras, but no related           
+           
+mdbUpdate hg19 -composite=%OpenChromCh% -encodeExp=std -test    
+Composite 'wgEncodeOpenChromChip' has 46 recognizable experiments with 46 missing an expId.
+   objects/experiment: min:2  max:10  mean:6.021739.
+Found 277 of 278 object(s) would have their experiment ID updated.
+Command would affected 492 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromCh% -encodeExp=std      
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromChip' has 46 recognizable experiments with 46 missing an expId.
+   objects/experiment: min:2  max:10  mean:6.021739.
+Affected 492 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromCh% -encodeExp=std -accession -test
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromChip' has 46 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:2  max:10  mean:6.021739.
+Found 62 of 278 object(s) would have their experiment ID updated.
+Command would affected 62 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromCh% -encodeExp=std -accession      
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromChip' has 46 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:2  max:10  mean:6.021739.
+Affected 62 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -composite=wgEncodeOpenChromChip > wgEncodeOpenChromChip.ra
+
+gold wgEncodeOpenChromChip.ra
+
+mdbPrint hg19 -composite=%OpenChromDnase -experimentify > tmp.txt
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+objects:329  vars:5997
+           
+mdbUpdate hg19 -composite=%OpenChromDnase -encodeExp=std -test    
+Composite 'wgEncodeOpenChromDnase' has 47 recognizable experiments with 47 missing an expId.
+   objects/experiment: min:5  max:14  mean:6.978723.
+Found 328 of 329 object(s) would have their experiment ID updated.
+Command would affected 519 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromDnase -encodeExp=std      
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromDnase' has 47 recognizable experiments with 47 missing an expId.
+   objects/experiment: min:5  max:14  mean:6.978723.
+Affected 519 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromDnase -encodeExp=std -accession -test
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromDnase' has 47 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:5  max:14  mean:6.978723.
+Found 137 of 329 object(s) would have their experiment ID updated.
+Command would affected 137 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromDnase -encodeExp=std -accession      
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromDnase' has 47 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:5  max:14  mean:6.978723.
+Affected 137 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -composite=wgEncodeOpenChromDnase > wgEncodeOpenChromDnase.ra
+
+gold wgEncodeOpenChromDnase.ra
+
+mdbPrint hg19 -composite=%OpenChromFaire -experimentify > tmp.txt
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+objects:182  vars:3215
+           
+mdbUpdate hg19 -composite=%OpenChromFaire -encodeExp=std -test    
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromFaire' has 25 recognizable experiments with 25 missing an expId.
+   objects/experiment: min:5  max:10  mean:7.240000.
+Found 181 of 182 object(s) would have their experiment ID updated.
+Command would affected 276 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromFaire -encodeExp=std      
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromFaire' has 25 recognizable experiments with 25 missing an expId.
+   objects/experiment: min:5  max:10  mean:7.240000.
+Affected 276 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromFaire -encodeExp=std -accession -test
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromFaire' has 25 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:5  max:10  mean:7.240000.
+Found 86 of 182 object(s) would have their experiment ID updated.
+Command would affected 86 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%OpenChromFaire -encodeExp=std -accession      
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeOpenChromFaire' has 25 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:5  max:10  mean:7.240000.
+Affected 86 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -composite=wgEncodeOpenChromFaire > wgEncodeOpenChromFaire.ra
+Using table named 'hg19.metaDb_tdreszer'.
+objects:182  vars:3577
+
+gold wgEncodeOpenChromFaire.ra
+
+gold, gadd, gci, gup,gpush
+
+
+

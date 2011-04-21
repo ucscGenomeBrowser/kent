@@ -513,4 +513,247 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #	in that pushQ entry walk through each entry and see if the
     #	sizes will set properly
 
+##########################################################################
+#  BLATSERVERS ENTRY (DONE 2011-03-23 - Chin)
+#       After getting a blat server assigned by the Blat Server Gods,
+#   
+# blat13
+# trans port 17828
+# untrans port 17829
+
+    
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("melGal1", "blat13", "17828", "1", "0"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("melGal1", "blat13", "17829", "0", "1");' \
+            hgcentraltest
+    #   test it with some sequence
+#########################################################################
+#  SWAP melGal1 lastz (DONE - 2011-03-24 - Chin)
+    #   original alignment
+    cat fb.galGal3.chainMelGal1Link.txt
+    # 924755061 bases of 1042591351 (88.698%) in intersection
+
+    #   and the swap
+    mkdir /hive/data/genomes/melGal1/bed/blastz.galGal3.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.galGal3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/galGal3/bed/lastzMelGal1.2011-03-24/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    # real    38m4.406s
+    cat fb.melGal1.chainGalGal3Link.txt
+    # 874579772 bases of 935922386 (93.446%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET  Turkey vs Zebra Fish taeGut1 (DONE - 2011-03-28 - Chin)
+    mkdir /hive/data/genomes/melGal1/bed/lastzTaeGut1.2011-03-28
+    cd /hive/data/genomes/melGal1/bed/lastzTaeGut1.2011-03-28
+
+    cat << '_EOF_' > DEF
+# Zebra Finch vs Turkey
+
+# TARGET: Turkey melGal1
+SEQ1_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ1_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Zebra Finch  taeGut1 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/taeGut1/taeGut1.2bit
+SEQ2_LEN=/scratch/data/taeGut1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melGal1/bed/lastzTaeGut1.2011-03-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+    # Elapsed time: 400m22s
+    cat fb.melGal1.chainTaeGut1Link.txt
+    # 671105409 bases of 935922386 (71.705%) in intersection
+    cd  /hive/data/genomes/melGal1/bed
+    ln -s lastzTaeGut1.2011-03-28 lastz.taeGut1
+
+    #   running the swap 
+    mkdir /hive/data/genomes/taeGut1/bed/blastz.melGal1.swap
+    cd /hive/data/genomes/taeGut1/bed/blastz.melGal1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/melGal1/bed/lastzTaeGut1.2011-03-28/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real   36m7.017s 
+    cat fb.taeGut1.chainMelGal1Link.txt
+    #   795001886 bases of 1222864691 (65.011%) in intersection
+    cd /hive/data/genomes/taeGut1/bed
+    ln -s blastz.melGal1.swap lastz.melGal1
+
+#########################################################################
+#  SWAP hg19 lastz (DONE - 201i1-03-28 - Chin)
+    #   original alignment
+    cat fb.hg19.chainMelGal1Link.txt
+    #   76647912 bases of 2897316137 (2.645%) in intersection
+
+    #   and the swap
+    mkdir /hive/data/genomes/melGal1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzMelGal1.2011-03-28/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    6m51.280s
+    cat fb.melGal1.chainHg19Link.txt
+    #   62120143 bases of 935922386 (6.637%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+#  SWAP mm9 lastz (DONE - 201i1-03-28 - Chin)
+    #   original alignment
+    cat fb.mm9.chainMelGal1Link.txt
+    #   62597891 bases of 2620346127 (2.389%) in intersection
+
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    6m49.871s
+    cat fb.melGal1.chainMm9Link.txt
+    #   50649368 bases of 935922386 (5.412%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.mm9.swap lastz.mm9
+
+#########################################################################
+#  SWAP monDom5  lastz (DONE -  2011-03-30 - Chin)
+    #   original alignment
+    cat fb.monDom5.chainMelGal1Link.txt
+    #   79077534 bases of 3501660299 (2.258%) in intersection
+
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzMelGal1.2011-03-30/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   Elapsed time: 10m15s
+    cat fb.melGal1.chainMonDom5Link.txt
+    #   64933013 bases of 935922386 (6.938%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s lastz.monDom5.swap lastz.monDom5
+
+#########################################################################
+# BLASTZ/CHAIN/NET  Turkey vs Xenopus xenTro2 (DONE - 2011-04-02 - Chin)
+    mkdir /hive/data/genomes/melGal1/bed/lastzXenTro2.2011-04-02
+    cd /hive/data/genomes/melGal1/bed/lastzXenTro2.2011-04-02
+
+    cat << '_EOF_' > DEF
+# Xenopus vs Turkey
+
+# TARGET: Turkey melGal1
+SEQ1_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ1_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Xenopus  xenTro2 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/xenTro2/xenTro2.2bit
+SEQ2_LEN=/scratch/data/xenTro2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/melGal1/bed/lastzXenTro2.2011-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs 
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+    # real    288m3.884s
+    cat fb.melGal1.chainXenTro2Link.txt
+    # 36288270 bases of 935922386 (3.877%) in intersection
+    cd  /hive/data/genomes/melGal1/bed
+    ln -s lastzXenTro2.2011-04-02 lastz.xenTro2
+    
+    #   running the swap 
+    mkdir /hive/data/genomes/xenTro2/bed/blastz.melGal1.swap
+    cd /hive/data/genomes/xenTro2/bed/blastz.melGal1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/melGal1/bed/lastzXenTro2.2011-04-02/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    3m40.138s
+    cat fb.xenTro2.chainMelGal1Link.txt
+    #   41967849 bases of 1359412157 (3.087%) in intersection
+    cd /hive/data/genomes/xenTro2/bed
+    ln -s blastz.melGal1.swap lastz.melGal1
+
+#######################################################################
+# lastz swap from danRer7 (DONE - 2011-04-02 - Chin)
+    # original alignment to danRer7
+    cd /hive/data/genomes/danRer7/bed/lastzMelGal1.2011-04-01
+    cat fb.danRer7.chainMelGal1Link.txt
+    #   35772051 bases of 1409770109 (2.537%) in intersection
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/danRer7/bed/lastzMelGal1.2011-04-01/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    3m28.672s
+    cat fb.melGal1.chainDanRer7Link.txt
+    #   25141503 bases of 935922386 (2.686%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.danRer7.swap lastz.danRer7
+
+#######################################################################
+# lastz swap from rn4 (DONE - 2011-04-04 - Chin)
+    # original alignment to rn4
+    cd /hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30
+    cat fb.mm9.chainMelGal1Link.txt
+    #   62597891 bases of 2620346127 (2.389%) in intersection
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    6m49.871s
+    cat fb.melGal1.chainMm9Link.txt
+    #   50649368 bases of 935922386 (5.412%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.mm9.swap lastz.mm9
+
+
 ############################################################################

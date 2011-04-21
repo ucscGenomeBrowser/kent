@@ -54,7 +54,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 #include "suggest.h"
-#include "searchTracks.h"
+#include "search.h"
 #include "errCatch.h"
 
 static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
@@ -103,7 +103,6 @@ boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug
 int imagePixelHeight = 0;
 boolean dragZooming = TRUE;
 struct hash *oldVars = NULL;
-// #define NEW_JQUERY 1          // temporary define turn on to test new jQuery (1.5) and jQuery UI (1.8)
 
 boolean hideControls = FALSE;		/* Hide all controls? */
 boolean trackImgOnly = FALSE;           /* caller wants just the track image and track table html */
@@ -403,11 +402,8 @@ if (!IS_KNOWN(track->remoteDataSource))
     //    if (!startsWith("/gbdb/",track->bbiFile->fileName))
     //        SET_TO_YES(track->remoteDataSource);
     //    }
-    if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type))
-        {
-        SET_TO_YES(track->remoteDataSource);
-        }
-    else if (startsWithWord("bam",track->tdb->type))
+    if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type) ||
+	startsWithWord("bam",track->tdb->type) || startsWithWord("vcfTabix", track->tdb->type))
         {
         SET_TO_YES(track->remoteDataSource);
         }
@@ -2023,7 +2019,7 @@ for (track = trackList; track != NULL; track = track->next)
 
             // subtrack vis can be explicit or inherited from composite/view.  Then it could be limited because of pixel height
             limitedVisFromComposite(subtrack);
-            assert(subtrack->limitedVisSet);
+            //assert(subtrack->limitedVisSet); // This is no longer a valid assertion, since visible track with no items items will not have limitedVisSet
 
             if (subtrack->limitedVis != tvHide)
                 {
@@ -2961,11 +2957,11 @@ char *ctMapItemName(struct track *tg, void *item)
 /* Return composite item name for custom tracks. */
 {
 char *itemName = tg->itemName(tg, item);
-static char buf[256];
+static char buf[512];
 if (strlen(itemName) > 0)
-  sprintf(buf, "%s %s", ctFileName, itemName);
+    safef(buf, sizeof(buf), "%s %s", ctFileName, itemName);
 else
-  sprintf(buf, "%s NoItemName", ctFileName);
+    safef(buf, sizeof(buf), "%s NoItemName", ctFileName);
 return buf;
 }
 
@@ -3142,6 +3138,15 @@ else if (sameString(type, "bam"))
     hashAdd(tdb->settingsHash, INDEL_QUERY_INSERT, cloneString("on"));
     hashAdd(tdb->settingsHash, INDEL_POLY_A, cloneString("on"));
     hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
+    }
+else if (sameString(type, "vcfTabix"))
+    {
+    tg = trackFromTrackDb(tdb);
+    tg->customPt = ct;
+    vcfTabixMethods(tg);
+    if (trackShouldUseAjaxRetrieval(tg))
+        tg->loadItems = dontLoadItems;
+    tg->mapItemName = ctMapItemName;
     }
 else if (sameString(type, "makeItems"))
     {
@@ -3562,18 +3567,22 @@ if (!psOutput)
             printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd);
             hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
             }
+        else if (sameWord(database,"oryCun2") || sameWord(database,"anoCar2") || sameWord(database,"calJac3"))
+            {
+            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
+            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
+            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+            }
         else if (ensVersionString[0])
             {
             char *archive = NULL;
             if (ensDateReference[0] && differentWord("current", ensDateReference))
                 archive = cloneString(ensDateReference);
             /*  Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
-            if (sameWord(database,"oryCun2") || isUnknownChrom(database, chromName))
+            if (isUnknownChrom(database, chromName))
                 {
                 //	which table to check
                 char *ctgPos = "ctgPos";
-                if (sameWord(database,"oryCun2"))
-                    ctgPos = "ctgPos2";
 
                 if (sameWord(database,"fr2"))
                     fr2ScaffoldEnsemblLink(archive);
@@ -4624,7 +4633,10 @@ if (!hideControls)
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	if(dragZooming && assemblySupportsGeneSuggest(database))
-            hWrites(" <a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a> <input type='text' size='8' name='hgt.suggest' id='suggest'>\n");
+            hPrintf(" <a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a> "
+                    "<input type='text' size='8' name='hgt.suggest' id='suggest'>\n"
+                    "<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database)
+                    );
 	hWrites(" ");
 	hButtonWithOnClick("hgt.jump", "jump", NULL, "jumpButtonOnClick()");
 	hOnClickButton(clearButtonJavascript,"clear");

@@ -2064,4 +2064,155 @@ chainOne $(path1)
     # which is the URL to the bb file, a single row:
     # http://genomewiki.ucsc.edu/images/8/85/Hg19.ncbiIncidentDb.bb
 
+
+#########################################################################
+# LASTZ Turkey MelGal1 ( DONE - 2011-04-01 - Chin)
+    mkdir /hive/data/genomes/danRer7/bed/lastzMelGal1.2011-04-01
+    cd /hive/data/genomes/danRer7/bed/lastzMelGal1.2011-04-01
+
+    cat << '_EOF_' > DEF
+# Turkey vs Zebrafish
+
+# TARGET: Zebrafish danRer7
+SEQ1_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ1_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Turkey melGal1 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/danRer7/bed/lastzMelGal1.2011-04-01
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # note: No -syntenicNet option below.
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+    # real    179m52.632s 
+    cat fb.danRer7.chainMelGal1Link.txt
+    #   35772051 bases of 1409770109 (2.537%) in intersection
+    cd /hive/data/genomes/danRer7/bed
+    ln -s lastzMelGal1.2011-04-01 lastz.melGal1
+
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/danRer7/bed/lastzMelGal1.2011-04-01/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    3m28.672s
+    cat fb.melGal1.chainDanRer7Link.txt
+    #   25141503 bases of 935922386 (2.686%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.danRer7.swap lastz.danRer7
 #############################################################################
+# BUILD U MASS ChiP-Seq TRACKS (DONE 4/19/11, Fan)
+
+ssh hgwdev
+mkdir -p /hive/data/genomes/danRer7/bed/H3K4me
+cd /hive/data/genomes/danRer7/bed/H3K4me
+
+# Download the following files from http://lawsonlab.umassmed.edu/ChIP-SeqSupp.html:
+
+wget --timestamping "http://lawsonlab.umassmed.edu/UCSC/Zv9_tracks/24h_input_signal_Zv9.WIG"
+wget --timestamping "http://lawsonlab.umassmed.edu/UCSC/Zv9_tracks/24h_me1_signal_Zv9.WIG"
+wget --timestamping "http://lawsonlab.umassmed.edu/UCSC/Zv9_tracks/24h_me3_signal_Zv9.WIG"
+wget --timestamping "http://lawsonlab.umassmed.edu/UCSC/Zv9_tracks/24h_me1_peaks_Zv9.WIG"
+wget --timestamping "http://lawsonlab.umassmed.edu/UCSC/Zv9_tracks/24h_me1_hotspots_Zv9.bed"
+wget --timestamping "http://lawsonlab.umassmed.edu/UCSC/Zv9_tracks/24h_me3_peaks_Zv9.WIG"
+wget --timestamping "http://lawsonlab.umassmed.edu/UCSC/Zv9_tracks/24h_me3_hotspots_Zv9.bed"
+
+# build UMassInput track
+
+cat '24h_input_signal_Zv9.WIG'|sed -e 's/chrMT/chrM/g' >UMassInput.wig.input
+wigEncode UMassInput.wig.input UMassInput.wig UMassInput.wib
+# Converted UMassInput.wig.input, upper limit 537.00, lower limit 10.00
+
+mkdir /gbdb/danRer7/wib/
+ln -s /hive/data/genomes/danRer7/bed/H3K4me/UMassInput.wib /gbdb/danRer7/wib/UMassInput.wib
+
+hgLoadWiggle danRer7 UMassInput UMassInput.wig
+#WARNING: Exceeded Zv9_NA205 size 14440 > 14336. dropping 11 data point(s)
+#WARNING: Exceeded Zv9_NA648 size 16200 > 16134. dropping 7 data point(s)
+#WARNING: Exceeded chr3 size 63268980 > 63268876. dropping 11 data point(s)
+#WARNING: Exceeded chrM size 16730 > 16596. dropping 14 data point(s)
+
+# Build UMassME1 track
+
+cat '24h_me1_signal_Zv9.WIG'|sed -e 's/chrMT/chrM/g' >UMassME1.wig.input
+wigEncode UMassME1.wig.input UMassME1.wig UMassME1.wib
+# Converted UMassME1.wig.input, upper limit 406.00, lower limit 10.00
+
+ln -s /hive/data/genomes/danRer7/bed/H3K4me/UMassME1.wib /gbdb/danRer7/wib/UMassME1.wib
+
+hgLoadWiggle danRer7 UMassME1 UMassME1.wig
+#WARNING: Exceeded Zv9_NA205 size 14400 > 14336. dropping 7 data point(s)
+#WARNING: Exceeded Zv9_NA648 size 16220 > 16134. dropping 9 data point(s)
+#WARNING: Exceeded Zv9_NA796 size 3350 > 3298. dropping 6 data point(s)
+#WARNING: Exceeded Zv9_NA933 size 3040 > 3012. dropping 3 data point(s)
+#WARNING: Exceeded Zv9_NA949 size 3090 > 3033. dropping 6 data point(s)
+#WARNING: Exceeded Zv9_NA957 size 2920 > 2866. dropping 6 data point(s)
+#WARNING: Exceeded Zv9_NA967 size 6710 > 6697. dropping 2 data point(s)
+#WARNING: Exceeded chr3 size 63268980 > 63268876. dropping 11 data point(s)
+
+# Build UMassME1Peak track
+
+cat '24h_me1_peaks_Zv9.WIG'|sed -e 's/chrMT/chrM/g' >UMassME1Peak.wig.input
+wigEncode UMassME1Peak.wig.input UMassME1Peak.wig UMassME1Peak.wib
+# Converted UMassME1Peak.wig.input, upper limit 1599.00, lower limit 11.00
+
+ln -s /hive/data/genomes/danRer7/bed/H3K4me/UMassME1Peak.wib /gbdb/danRer7/wib/UMassME1Peak.wib
+
+hgLoadWiggle danRer7 UMassME1Peak UMassME1Peak.wig
+
+# Build UMassME3 track
+
+cat '24h_me3_signal_Zv9.WIG'|sed -e 's/chrMT/chrM/g' >UMassME3.wig.input
+wigEncode UMassME3.wig.input UMassME3.wig UMassME3.wib
+# Converted UMassME3.wig.input, upper limit 409.00, lower limit 10.00
+
+ln -s /hive/data/genomes/danRer7/bed/H3K4me/UMassME3.wib /gbdb/danRer7/wib/UMassME3.wib
+
+hgLoadWiggle danRer7 UMassME3 UMassME3.wig
+#WARNING: Exceeded Zv9_NA205 size 14440 > 14336. dropping 11 data point(s)
+#WARNING: Exceeded Zv9_NA648 size 16230 > 16134. dropping 10 data point(s)
+#WARNING: Exceeded Zv9_NA845 size 60950 > 60897. dropping 6 data point(s)
+#WARNING: Exceeded Zv9_NA850 size 26100 > 25985. dropping 12 data point(s)
+#WARNING: Exceeded Zv9_NA957 size 2870 > 2866. dropping 1 data point(s)
+#WARNING: Exceeded Zv9_NA959 size 1190 > 1142. dropping 5 data point(s)
+#WARNING: Exceeded chr3 size 63268980 > 63268876. dropping 11 data point(s)
+
+# Build UMassME3Peak track
+
+cat '24h_me3_peaks_Zv9.WIG'|sed -e 's/chrMT/chrM/g' >UMassME3Peak.wig.input
+wigEncode UMassME3Peak.wig.input UMassME3Peak.wig UMassME3Peak.wib
+# Converted UMassME3Peak.wig.input, upper limit 3749.00, lower limit 14.00
+
+ln -s /hive/data/genomes/danRer7/bed/H3K4me/UMassME3Peak.wib /gbdb/danRer7/wib/UMassME3Peak.wib
+
+hgLoadWiggle danRer7 UMassME3Peak UMassME3Peak.wig
+
+# Build UMassME1Hotspot track
+
+cat '24h_me1_hotspots_Zv9.bed' |grep -v 'hotspot' > UMassME1Hotspot.bed
+hgLoadBed danRer7 UMassME1Hotspot UMassME1Hotspot.bed
+# Loaded 65585 elements of size 5
+
+# Build UMassME3Hotspot track
+
+cat '24h_me3_hotspots_Zv9.bed' |grep -v 'hotspot' > UMassME3Hotspot.bed
+hgLoadBed danRer7 UMassME3Hotspot UMassME3Hotspot.bed
+# Loaded 27546 elements of size 5
+############################################################################

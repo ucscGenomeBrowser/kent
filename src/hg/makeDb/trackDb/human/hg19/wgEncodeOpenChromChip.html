@@ -38,13 +38,14 @@ poor sequence alignability.
 </P>
 <P>Other <B><em>Open Chromatin</em></B> track sets:
 <UL>
-<LI>Data for the DNaseI HS experiments can be previewed in
-<A HREF="http://genome-preview.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</A>.
-<LI>Data for the FAIRE experiments can be previewed in
-<A HREF="http://genome-preview.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">UNC FAIRE</A>.
+<LI>Data for the DNaseI HS experiments can be found in
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</A>.
+<LI>Data for the FAIRE experiments can be found in
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">UNC FAIRE</A>.
 <LI>A syntheseis of all the open chromatin assays for select cell lines can
 be previewed in
-<A HREF="http://genome-preview.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth">Open Chrom Synth</a>.
+<A HREF="http://genome-preview.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth"
+target=_blank>Open Chrom Synth</a>.
 </UL>
 
 <H2> Display Conventions and Configuration </H2>
@@ -89,6 +90,7 @@ sequences from all replicates.  For each sequence, the aligned read is
 extended 5 bp in both directions from its 5' aligned end where DNase cut
 the DNA.  The score at each base pair represents the number of
 extended fragments that overlap the base pair.</DD>
+</DL>
 </P>
 <P>Peaks and signals displayed in this track are the results of pooled replicates. The raw
 sequence and alignment files for each replicate are available for
@@ -118,10 +120,10 @@ ENCODE tiling arrays (1&#37; of the genome) along with the input DNA as referenc
 <P>DNA fragments isolated by ChIP are 100-200 bp in length, with the average
 length being 134 bp.  Sequences from each experiment were aligned to the
 genome using BWA (Li <em>et al.</em>, 2010) for the GRCh37 (hg19) assembly.
-<DIV style='position:relative; left:25px;'><DT>The command used for these alignments was:</DT>
+<DIV style='position:relative; left:25px;'><DL><DT>The command used for these alignments was:</DT>
 <DD><code>&gt; bwa aln -t 8 genome.fa s_1.sequence.txt.bfq &gt; s_1.sequence.txt.sai</code></DD>
 <DT>Where genome.fa is the whole genome sequence and s_1.sequence.txt.bfq is one lane
-of sequences convert into the required bfq format.</DT></DIV>
+of sequences convert into the required bfq format.</DT></DL></DIV>
 </P>
 <P>Sequences from multiple lanes
 are combined for a single replicate using the bwa samse command, and converted
@@ -147,7 +149,8 @@ directly for other cell lines. Instead, a general background model was derived
 from the available Input data sets. This should provide corrections for
 sequencing biases and alignment artifacts, but will not correct for cell
 type specific copy number changes.
-<DIV style='position:relative; left:25px;'><DT>The exact command used for this step is:</DT>
+<DIV style='position:relative; left:25px;'>
+<DL><DT>The exact command used for this step is:</DT>
 <DT>CTCF:</DT>
 <DD><code>&gt; fseq -l 300 -v -b &lt;bff files&gt; -p &lt;iff files&gt; aligments.bed</code></DD>
 <DT>c-Myc:</DT>
@@ -156,7 +159,7 @@ type specific copy number changes.
 <DD><code>&gt; fseq -l 800 -v -b &lt;bff files&gt; -p &lt;iff files&gt; aligments.bed</code></DD>
 <DT>Where the (bff files) are the background files based on alignability, the
 (iff files) are the background files based on the Input experiments,
-and alignments.bed are a bed file of filtered sequence alignments.</DT></DIV>
+and alignments.bed are a bed file of filtered sequence alignments.</DT></DL></DIV>
 </P>
 <P>Discrete ChIP sites (peaks) were identified from ChIP-seq F-seq
 density signal.  Significant regions were determined by fitting the

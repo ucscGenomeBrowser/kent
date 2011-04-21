@@ -13,7 +13,7 @@
 #include "hgConfig.h"
 #include "jsHelper.h"
 #include "imageV2.h"
-#include "searchTracks.h"
+#include "search.h"
 
 #define DOWNLOADS_ONLY_TRACKS_INCLUDED
 #ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
@@ -333,6 +333,67 @@ for (group = groupList; group != NULL; group = group->next)
     }
 }
 
+#ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
+static int addDownloadOnlyTracks(char *db,struct group **pGroupList,struct track **pTrackList)
+// Download only tracks are not normaly incorporated into the grou and track lists
+{
+int count = 0;
+struct track *track = NULL;
+struct group *group = NULL;
+struct trackDb *tdbList = hTrackDb(db);
+struct trackDb *tdb = tdbList;
+for(;tdb != NULL; tdb = tdb->next)
+    {
+    if (!tdbIsDownloadsOnly(tdb)
+    || tdbIsFolderContent(tdb)
+    || tdbIsCompositeChild(tdb))
+        continue;
+
+    // Must find group
+    if (tdb->grp == NULL)
+        continue;
+
+    for (group = *pGroupList;group != NULL; group = group->next)
+        {
+        if (sameWord(group->name,tdb->grp))
+            break;
+        }
+    if (group == NULL)
+        continue;
+
+    // Make the track
+    track = trackFromTrackDb(tdb);
+    track->group = group;
+    track->groupName = cloneString(group->name);  // Don't even bother looking in cart.  That junk should be thrown out, now that we have dragReorder
+    slAddHead(pTrackList,track);
+    count++;
+    }
+
+if (count > 0)
+    {
+    // Going to have to make all new group->trackLists
+    slSort(pGroupList, gCmpPriority);
+    for (group = *pGroupList;group != NULL; group = group->next)
+        slFreeList(&group->trackList);
+
+    // Sort the tracks anew and add each on into it's group.
+    slSort(pTrackList, tgCmpPriority);
+    for (track = *pTrackList; track != NULL; track = track->next)
+        {
+        struct trackRef *tr;
+        AllocVar(tr);
+        tr->track = track;
+        slAddHead(&track->group->trackList, tr);
+        }
+
+    /* Straighten things out, clean up, and go home. */
+    for (group = *pGroupList;group != NULL; group = group->next)
+        slReverse(&group->trackList);
+    }
+return count;
+}
+#endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
+
 void configPageSetTrackVis(int vis)
 /* Do config page after setting track visibility. If vis is -2, then visibility
  * is unchanged.  If -1 then set visibility to default, otherwise it should
@@ -349,6 +410,10 @@ withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 /* Get track list and group them. */
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
 trackList = getTrackList(&groupList, vis);
+
+#ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
+addDownloadOnlyTracks(database,&groupList,&trackList);
+#endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
 
 /* The ideogram for some reason is considered a track.
  * We don't really want to process it as one though, so

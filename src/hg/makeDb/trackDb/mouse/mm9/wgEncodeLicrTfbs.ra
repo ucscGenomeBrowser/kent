@@ -4,7 +4,7 @@ shortLabel LICR TFBS
 longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line BMarrow=BoneMarrow Cbellum=Cerebellum Cortex=Cortex
+subGroup2 cellType Cell_Line BMarrow=BoneMarrow Cbellum=Cerebellum Cortex=Cortex Heart=Heart Kidney=Kidney Liver=Liver Lung=Lung
 subGroup3 factor Factor CTCF=CTCF POL2=Pol2 Input=Input
 subGroup4 sex Sex M=M
 subGroup5 age Age adult8wks=adult-8wks
@@ -22,7 +22,6 @@ noInherit on
 
 	#####Peak Tracks###########
 	track wgEncodeLicrTfbsViewPeaks
-	release alpha
 	shortLabel Peaks
 	view Peaks
 	visibility dense
@@ -36,7 +35,6 @@ noInherit on
 	qValueFilterLimits 0:300
 
 		track wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk
-		release alpha
 		parent wgEncodeLicrTfbsViewPeaks off
 		shortLabel BoneMarrow CTCF Pk
 		longLabel ENCODE LICR TFBS Peaks (CTCF in BoneMarrow cells)
@@ -47,7 +45,6 @@ noInherit on
 
 
 		track wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdPk
-		release alpha
 		parent wgEncodeLicrTfbsViewPeaks off
 		shortLabel BoneMarrow Pol2 Pk
 		longLabel ENCODE LICR TFBS Peaks (Pol2 in BoneMarrow cells)
@@ -57,7 +54,6 @@ noInherit on
 		# subId=3391 dateSubmitted=2011-01-19
 
 		track wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdPk
-		release alpha
 		parent wgEncodeLicrTfbsViewPeaks off
 		shortLabel Cerebellum CTCF Pk
 		longLabel ENCODE LICR TFBS Peaks (CTCF in Cerebellum cells)
@@ -67,7 +63,6 @@ noInherit on
 		# subId=3393 dateSubmitted=2011-01-19
 
 		track wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdPk
-		release alpha
 		parent wgEncodeLicrTfbsViewPeaks off
 		shortLabel Cortex CTCF Pk
 		longLabel ENCODE LICR TFBS Peaks (CTCF in Cortex cells)
@@ -78,7 +73,6 @@ noInherit on
 
 
 		track wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdPk
-		release alpha
 		parent wgEncodeLicrTfbsViewPeaks off
 		shortLabel Cortex Pol2 Pk
 		longLabel ENCODE LICR TFBS Peaks (Pol2 in Cortex cells)
@@ -87,9 +81,71 @@ noInherit on
 		color 153,38,0
 		# subId=3406 dateSubmitted=2011-01-20
 
+		track wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdPk
+		parent wgEncodeLicrTfbsViewPeaks off
+		shortLabel Cerebellum Pol2 Pk
+		longLabel ENCODE LICR TFBS Peaks (Pol2 in Cerebellum cells)
+		subGroups view=Peaks age=adult8wks factor=POL2 cellType=Cbellum control=std sex=M strain=C57BL6
+		type broadPeak
+		color 153,38,0
+		# subId=3811 dateSubmitted=2011-03-07
+
+		track wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdPk
+		parent wgEncodeLicrTfbsViewPeaks off
+		shortLabel Heart CTCF Pk
+		longLabel ENCODE LICR TFBS Peaks (CTCF in Heart cells)
+		subGroups view=Peaks age=adult8wks factor=CTCF cellType=Heart control=std sex=M strain=C57BL6
+		type broadPeak
+		color 153,38,0
+		# subId=3884 dateSubmitted=2011-04-12
+
+		track wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdPk
+		parent wgEncodeLicrTfbsViewPeaks off
+		shortLabel Kidney Pol2 Pk
+		longLabel ENCODE LICR TFBS Peaks (Pol2 in Kidney cells)
+		subGroups view=Peaks age=adult8wks factor=POL2 cellType=Kidney control=std sex=M strain=C57BL6
+		type broadPeak
+		color 153,38,0
+		# subId=3880 dateSubmitted=2011-04-12
+
+		track wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdPk
+		parent wgEncodeLicrTfbsViewPeaks off
+		shortLabel Kidney CTCF Pk
+		longLabel ENCODE LICR TFBS Peaks (CTCF in Kidney cells)
+		subGroups view=Peaks age=adult8wks factor=CTCF cellType=Kidney control=std sex=M strain=C57BL6
+		type broadPeak
+		color 153,38,0
+		# subId=3878 dateSubmitted=2011-04-07
+
+		track wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdPk
+		parent wgEncodeLicrTfbsViewPeaks off
+		shortLabel Heart Pol2 Pk
+		longLabel ENCODE LICR TFBS Peaks (Pol2 in Heart cells)
+		subGroups view=Peaks age=adult8wks factor=POL2 cellType=Heart control=std sex=M strain=C57BL6
+		type broadPeak
+		color 153,38,0
+		# subId=2792 dateSubmitted=2011-04-14
+
+		track wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdPk
+		parent wgEncodeLicrTfbsViewPeaks off
+		shortLabel Liver Pol2 Pk
+		longLabel ENCODE LICR TFBS Peaks (Pol2 in Liver cells)
+		subGroups view=Peaks age=adult8wks factor=POL2 cellType=Liver control=std sex=M strain=C57BL6
+		type broadPeak
+		color 153,38,0
+		# subId=3883 dateSubmitted=2011-04-13
+
+        track wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdPk
+        parent wgEncodeLicrTfbsViewPeaks off
+        shortLabel Lung Pol2 Pk
+        longLabel ENCODE LICR TFBS Peaks (Pol2 in Lung cells)
+        subGroups view=Peaks age=adult8wks factor=POL2 cellType=Lung control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=3888 dateSubmitted=2011-04-15
+
 	#######	Signal Tracks###########
 	track wgEncodeLicrTfbsViewSignal
-	release alpha
 	shortLabel Signal
 	view Signal
 	visibility full
@@ -101,7 +157,6 @@ noInherit on
 	windowingFunction mean
 
 		track wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdSig
-		release alpha
 		parent wgEncodeLicrTfbsViewSignal off
 		shortLabel BoneMarrow CTCF Sig
 		longLabel ENCODE LICR TFBS Signal (CTCF in BoneMarrow cells)
@@ -112,7 +167,6 @@ noInherit on
 
 
 		track wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig
-		release alpha
 		parent wgEncodeLicrTfbsViewSignal off
 		shortLabel Cerebellum Input Sig
 		longLabel ENCODE LICR TFBS Signal (Input in Cerebellum cells)
@@ -122,7 +176,6 @@ noInherit on
 		# subId=3275 dateSubmitted=2011-01-18
 
 		track wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig
-		release alpha
 		parent wgEncodeLicrTfbsViewSignal off
 		shortLabel BoneMarrow Pol2 Sig
 		longLabel ENCODE LICR TFBS Signal (Pol2 in BoneMarrow cells)
@@ -132,7 +185,6 @@ noInherit on
 		# subId=3391 dateSubmitted=2011-01-19
 
 		track wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdSig
-		release alpha
 		parent wgEncodeLicrTfbsViewSignal off
 		shortLabel Cerebellum CTCF Sig
 		longLabel ENCODE LICR TFBS Signal (CTCF in Cerebellum cells)
@@ -142,7 +194,6 @@ noInherit on
 		# subId=3393 dateSubmitted=2011-01-19
 
 		track wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdSig
-		release alpha
 		parent wgEncodeLicrTfbsViewSignal off
 		shortLabel Cortex CTCF Sig
 		longLabel ENCODE LICR TFBS Signal (CTCF in Cortex cells)
@@ -153,7 +204,6 @@ noInherit on
 
 
 		track wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdSig
-		release alpha
 		parent wgEncodeLicrTfbsViewSignal off
 		shortLabel Cortex Input Sig
 		longLabel ENCODE LICR TFBS Signal (Input in Cortex cells)
@@ -163,7 +213,6 @@ noInherit on
 		# subId=3398 dateSubmitted=2011-01-20
 
 		track wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdSig
-		release alpha
 		parent wgEncodeLicrTfbsViewSignal off
 		shortLabel Cortex Pol2 Sig
 		longLabel ENCODE LICR TFBS Signal (Pol2 in Cortex cells)
@@ -171,4 +220,67 @@ noInherit on
 		type bigWig 0.110000 40.849998
 		color 153,38,0
 		# subId=3406 dateSubmitted=2011-01-20
+
+		track wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdSig
+		parent wgEncodeLicrTfbsViewSignal off
+		shortLabel Cerebellum Pol2 Sig
+		longLabel ENCODE LICR TFBS Signal (Pol2 in Cerebellum cells)
+		subGroups view=Signal age=adult8wks factor=POL2 cellType=Cbellum control=std sex=M strain=C57BL6
+		type bigWig 0.150000 52.380001
+		color 153,38,0
+		# subId=3811 dateSubmitted=2011-03-07
+
+		track wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdSig
+		parent wgEncodeLicrTfbsViewSignal off
+		shortLabel Heart CTCF Sig
+		longLabel ENCODE LICR TFBS Signal (CTCF in Heart cells)
+		subGroups view=Signal age=adult8wks factor=CTCF cellType=Heart control=std sex=M strain=C57BL6
+		type bigWig 0.120000 52.910000
+		color 153,38,0
+		# subId=3884 dateSubmitted=2011-04-12
+
+		track wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdSig
+		parent wgEncodeLicrTfbsViewSignal off
+		shortLabel Kidney Pol2 Sig
+		longLabel ENCODE LICR TFBS Signal (Pol2 in Kidney cells)
+		subGroups view=Signal age=adult8wks factor=POL2 cellType=Kidney control=std sex=M strain=C57BL6
+		type bigWig 0.140000 40.459999
+		color 153,38,0
+		# subId=3880 dateSubmitted=2011-04-12
+
+		track wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdSig
+		parent wgEncodeLicrTfbsViewSignal off
+		shortLabel Kidney CTCF Sig
+		longLabel ENCODE LICR TFBS Signal (CTCF in Kidney cells)
+		subGroups view=Signal age=adult8wks factor=CTCF cellType=Kidney control=std sex=M strain=C57BL6
+		type bigWig 0.150000 51.889999
+		color 153,38,0
+		# subId=3878 dateSubmitted=2011-04-07
+
+		track wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdSig
+		parent wgEncodeLicrTfbsViewSignal off
+		shortLabel Heart Pol2 Sig
+		longLabel ENCODE LICR TFBS Signal (Pol2 in Heart cells)
+		subGroups view=Signal age=adult8wks factor=POL2 cellType=Heart control=std sex=M strain=C57BL6
+		type bigWig 0.150000 50.889999
+		color 153,38,0
+		# subId=2792 dateSubmitted=2011-04-14
+
+		track wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdSig
+		parent wgEncodeLicrTfbsViewSignal off
+		shortLabel Liver Pol2 Sig
+		longLabel ENCODE LICR TFBS Signal (Pol2 in Liver cells)
+		subGroups view=Signal age=adult8wks factor=POL2 cellType=Liver control=std sex=M strain=C57BL6
+		type bigWig 0.160000 45.200001
+		color 153,38,0
+		# subId=3883 dateSubmitted=2011-04-13
+
+        track wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel Lung Pol2 Sig
+        longLabel ENCODE LICR TFBS Signal (Pol2 in Lung cells)
+        subGroups view=Signal age=adult8wks factor=POL2 cellType=Lung control=std sex=M strain=C57BL6
+        type bigWig 0.120000 48.990002
+        color 153,38,0
+        # subId=3888 dateSubmitted=2011-04-15
 

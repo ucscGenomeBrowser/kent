@@ -1207,6 +1207,7 @@ $(document).ready(function()
                                                 source: ajaxGet(function () {return db;}, new Object, true),
                                                 select: function (event, ui) {
                                                         setPosition(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
+                                                        makeSureSuggestTrackIsVisible();
                                                         // jQuery('body').css('cursor', 'wait');
                                                         // document.TrackHeaderForm.submit();
                                                     }
@@ -1219,6 +1220,7 @@ $(document).ready(function()
                                                 ajax_get: ajaxGet(function () {return db;}, new Object, false),
                                                 callback: function (obj) {
                                                     setPosition(obj.id, commify(getSizeFromCoordinates(obj.id)));
+                                                    makeSureSuggestTrackIsVisible();
                                                     // jQuery('body').css('cursor', 'wait');
                                                     // document.TrackHeaderForm.submit();
                                                 }
@@ -1700,30 +1702,6 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
             reloadFloatingItem();
             updateTrackImg(id, "hgt.transparentImage=0", "");
         }
-    } else if (cmd == 'locateItem') {
-        // currently experimental
-        // o["Locate item" ] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "locateItem"); return true; }};
-        $('#hgLookupDialog').dialog({
-                               resizable: false,
-                               height: 'auto',
-                               width: 'auto',
-                               modal: true,
-                               closeOnEscape: true,
-                               autoOpen: false,
-                               buttons: { "OK": function() {
-                                              $(this).dialog("close");
-                                          }}
-                                    });
-        // this doesn't work (not sure why).
-        $('input#itemLookupSuggest').autocomplete({
-            delay: 500,
-            minLength: 2,
-            source: ajaxGet(function () {return db;}, new Object),
-            select: function (event, ui) {
-                setPosition(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
-            }
-            });
-        $('#hgLookupDialog').dialog('open');
     } else {   // if( cmd in 'hide','dense','squish','pack','full','show' )
         // Change visibility settings:
         //
@@ -2121,10 +2099,12 @@ function hgTrackUiPopCfgOk(popObj, trackName)
                 updateVisibility(trackName, newVis);
             }
             var urlData = varHashToQueryString(changedVars);
-            if(mapIsUpdateable) {
-                updateTrackImg(trackName,urlData,"");
-            } else {
-                window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
+            if(urlData.length > 0) {
+                if(mapIsUpdateable) {
+                    updateTrackImg(trackName,urlData,"");
+                } else {
+                    window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
+                }
             }
         }
     }
@@ -2445,6 +2425,31 @@ function updateVisibility(track, visibility)
         rec.localVisibility = visibility;
     }
     return selectUpdated;
+}
+
+function getVisibility(track)
+{
+// return current visibility for given track
+    var rec = trackDbJson[track];
+    if(rec) {
+        if(rec.localVisibility) {
+            return rec.localVisibility;
+        } else {
+            return visibilityStrsOrder[rec.visibility];
+        }
+    } else {
+        return null;
+    }
+}
+
+function makeSureSuggestTrackIsVisible()
+{
+// make sure to show knownGene/refGene track is in at least pack (redmine #3484).
+    var track = $("#suggestTrack").val();
+    if(track != null && getVisibility(track) != "full") {
+        updateVisibility(track, 'pack');
+        $("<input type='hidden' name='" + track + "'value='pack'>").appendTo($(document.TrackHeaderForm));
+    }
 }
 
 function reloadFloatingItem()

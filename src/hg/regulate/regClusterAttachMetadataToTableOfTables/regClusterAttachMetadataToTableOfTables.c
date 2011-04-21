@@ -26,7 +26,7 @@ static struct optionSpec options[] = {
 };
 
 boolean getMetaFromMetaDb(struct sqlConnection *conn,
-	char *obj, char **retCell, char **retAntibody, char **retTreatment)
+	char *obj, char **retCell, char **retAntibody, char **retTreatment, char **retLab)
 /* Look in metadata for object and return cell, antibody and treatment from it. */
 {
 char query[256];
@@ -36,6 +36,8 @@ safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='anti
 *retAntibody = sqlQuickString(conn, query);
 safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='treatment'", obj);
 *retTreatment = sqlQuickString(conn, query);
+safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='lab'", obj);
+*retLab = sqlQuickString(conn, query);
 return *retCell != NULL || *retAntibody != NULL || *retTreatment != NULL;
 }
 
@@ -53,16 +55,20 @@ for (;;)
     }
 }
 
-void getMetaFromObjName(char *obj, char **retCell, char **retAntibody, char **retTreatment)
+void getMetaFromObjName(char *obj, char **retCell, char **retAntibody, char **retTreatment,
+	char **retLab)
 /* Look in metadata for object and return cell, antibody and treatment from it. */
 {
-char *cell = NULL, *antibody = NULL, *treatment = NULL;
+char *cell = NULL, *antibody = NULL, *treatment = NULL, *lab = NULL;
 
 /* Skip past first bits. */
 char *pattern = "wgEncodeHaibTfbs";
 int patLen = strlen(pattern);
 if (!startsWith(pattern, obj))
    errAbort("getMetaFromObjName can't handle %s since it doesn't begin with %s", obj, pattern);
+
+/* If we are wgEncodeHaib prefix then we must be HudsonAlpha */
+lab = "HudsonAlpha";
 
 /* Rely on CamelCasing to pick out cell/antibody/treatment. */
 char *cellStart = obj+patLen;
@@ -85,6 +91,8 @@ else if (sameString(cellId, "Hepg2"))
     cell = "HepG2";
 else if (sameString(cellId, "K562"))
     cell = "K562";
+else if (sameString(cellId, "A549"))
+    cell = "A549";
 else
     errAbort("Unrecognized cellId %s in %s", cellId, obj);
 
@@ -149,9 +157,9 @@ while (lineFileRow(lf, row))
     {
     /* Get object ID and attempt to find basic experimental variables from metadata. */
     char *obj = row[6];
-    char *cell = NULL, *antibody=NULL, *treatment=NULL;
-    if (!getMetaFromMetaDb(conn, obj, &cell, &antibody, &treatment))
-        getMetaFromObjName(obj, &cell, &antibody, &treatment);
+    char *cell = NULL, *antibody=NULL, *treatment=NULL, *lab = NULL;
+    if (!getMetaFromMetaDb(conn, obj, &cell, &antibody, &treatment, &lab))
+        getMetaFromObjName(obj, &cell, &antibody, &treatment, &lab);
 
     /* Write out first fields unchanged, and append our new fields. */
     int i;
@@ -162,6 +170,7 @@ while (lineFileRow(lf, row))
     if (treatment == NULL)
         treatment = "None";
     fprintf(f, "%s\n", treatment);
+    fprintf(f, "%s\n", naForNull(lab));
     }
 
 /* Clean up and go home. */

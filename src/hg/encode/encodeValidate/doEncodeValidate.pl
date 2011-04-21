@@ -327,6 +327,7 @@ our %formatCheckers = (
     shortFrags => \&validateBed,
     bedLogR => \&validateBed,
     bedRnaElements => \&validateBed,
+    bedRrbs => \&validateBed,
     txt  => \&validateFreepass,
     );
 
@@ -1297,6 +1298,56 @@ sub validationSettings {
     return 0;
 }
 
+sub makeDownloadTargetFileName {
+# Make the target filename out of tableName, type and source file format
+    my ($tablename, $type, $srcFilesRef) = @_;
+    my @srcFiles = @{$srcFilesRef};
+    HgAutomate::verbose(2, "makeDownloadTargetFileName ( $tablename, $type )\n");
+
+    if (@srcFiles > 1) {
+        if (($type eq "bam") || ($type eq "bigWig") || ($type eq "bigBed")) {
+            die "Cannot concatenate '$type' files";
+        }
+    }
+
+    my $target;
+    if (($type eq "bam") || ($type eq "bigWig"))  {
+        $target = "$tablename.$type";
+
+    } else {
+
+        my $fileType = $type;
+        $fileType = "bed" if ($type =~ /^bed /);
+
+        if (@srcFiles > 1) {
+                if (($type eq "fastq") || ($type eq "doc")) {
+                $target = "$tablename.$fileType.tgz"; # will want to tar these
+            } else {
+                $target = "$tablename.$fileType.gz";  # will cat and gz these
+            }
+        } else {
+            my $srcFile  = $srcFiles[0];
+
+            # Special effort for single docs which will have the suffix they came in with
+            if ($type eq "doc") {
+                my @fileNameParts = split(/\./,$srcFile);
+                if (@fileNameParts > 1) {
+                    shift( @fileNameParts ); # Throw away the root
+                    $fileType = join(".", @fileNameParts);
+                }
+            }
+
+            if (Encode::isTarZipped($srcFile)) {
+                $target = "$tablename.$fileType.tgz";
+            } else {
+                $target = "$tablename.$fileType.gz";
+            }
+        }
+    }
+    $target =~ s/ //g;  # removes spaces which should already be gone!
+    return $target;
+}
+
 ############################################################################
 # Main
 
@@ -1452,12 +1503,12 @@ if (defined($daf->{variables})) {
 
 # make replicate column required when appropriate.
 my $hasReplicates = 0;
-my $maxOrder = 0;
+#my $maxOrder = 0; Removing order for view level as this is not being used for prioritization
 for my $view (keys %{$daf->{TRACKS}}) {
     $hasReplicates += $daf->{TRACKS}{$view}{hasReplicates};
-    if($daf->{TRACKS}{$view}{order} > $maxOrder) {
-        $maxOrder = $daf->{TRACKS}{$view}{order}
-    }
+#    if($daf->{TRACKS}{$view}{order} > $maxOrder) {
+#        $maxOrder = $daf->{TRACKS}{$view}{order}
+#    }
 }
 
 if($hasReplicates) {
@@ -1665,8 +1716,9 @@ if(!@errors) {
             # Make a list of the PlusRawSignal/MinusRawSignal or RawSignals we are going to have to make
             my @newViews = ();
             #push @newViews, "RawSignal" if $daf->{TRACKS}{RawSignal}{order};  ## No longer create RawSignals
-            push @newViews, "PlusRawSignal" if $daf->{TRACKS}{PlusRawSignal}{order};
-            push @newViews, "MinusRawSignal" if $daf->{TRACKS}{MinusRawSignal}{order};
+			# Code is never triggered, but if triggered we no longer use the order field for track prioritization.
+			#push @newViews, "PlusRawSignal" if $daf->{TRACKS}{PlusRawSignal}{order};
+			#push @newViews, "MinusRawSignal" if $daf->{TRACKS}{MinusRawSignal}{order};
 
             foreach my $newView (@newViews) #loop around making them
             {
@@ -1861,6 +1913,13 @@ foreach my $ddfLine (@ddfLines) {
             $metadata .= " controlId=$controlId";
         }
     }
+	# Extend meta-data for mouse to input sex,strain and age information from CV without labs needing to input
+	# meta-data in DDF for cell lines and primary cell lines.
+	if( ($daf->{assembly} eq 'mm9') && ($terms{'Cell Line'}->{$ddfLine->{cell}}->{'category'} ne 'Tissue')) {
+	   $metadata .= " sex=$terms{'Cell Line'}->{$ddfLine->{cell}}->{'sex'}" if !$ddfLine->{sex};
+	   $metadata .= " strain=$terms{'Cell Line'}->{$ddfLine->{cell}}->{'strain'}" if !$ddfLine->{strain};
+	   $metadata .= " age=$terms{'Cell Line'}->{$ddfLine->{cell}}->{'age'}" if !$ddfLine->{age};
+	}
     $metadata .= " view=$view";
     $metadata .= " replicate=$ddfLine->{replicate}" if $ddfLine->{replicate} && $daf->{TRACKS}{$view}{hasReplicates};
     $metadata .= " labVersion=$ddfLine->{labVersion}" if $ddfLine->{labVersion};
@@ -1959,7 +2018,7 @@ foreach my $ddfLine (@ddfLines) {
             $pushQDescription = "$hash{'cell'}";
             $shortSuffix = "$hash{'cell'}";
             $longSuffix = "in $hash{'cell'} cells";
-            $tier1 = 1 if ($hash{'cell'} eq 'GM12878' || $hash{'cell'} eq 'K562');
+            $tier1 = 1 if ($hash{'cell'} eq 'GM12878' || $hash{'cell'} eq 'K562' || $hash{'cell'} eq 'H1hESC');
         } else {
 	    warn "Warning: variables undefined for pushQDescription,shortSuffix,longSuffix\n";
     	}
@@ -2089,6 +2148,13 @@ foreach my $ddfLine (@ddfLines) {
         }
     }
 
+    my $targetFile = makeDownloadTargetFileName($tableName, $type, \@{$ddfLine->{files}} );
+    my $downloadDir = Encode::downloadDir($daf);
+    if(!$opt_allowReloads) {
+        if(-e "$downloadDir/$targetFile") {
+            die "view '$view' has already been loaded as file '$downloadDir/$targetFile'\nPlease contact your wrangler if you need to reload this data\n";
+        }
+    }
     # XXXX Move the decision about which views have tracks into the DAF?
     # Already this is used in 2 places so made it a function,
     # would be better in the DAF except we'd have to go change all the DAFs :(
@@ -2101,6 +2167,7 @@ foreach my $ddfLine (@ddfLines) {
     if(!$downloadOnly) {
         $metadata .= " tableName=$tableName";
     }
+    print MDB_TXT sprintf("metadata %s fileName=%s\n", $metadata, $targetFile);
 
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "view $view\n";
@@ -2116,25 +2183,8 @@ foreach my $ddfLine (@ddfLines) {
     print LOADER_RA "files @{$ddfLine->{files}}\n";
     print LOADER_RA "downloadOnly $downloadOnly\n";
     print LOADER_RA "pushQDescription $pushQDescription\n";
+    print LOADER_RA "targetFile $targetFile\n";
     print LOADER_RA "\n";
-
-    if ($type eq "bam") {
-        # print out metadata for bam file
-        my $metaextra = " fileName=$tableName.$fileType";
-        print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
-
-        # print out metadata for bai file
-        # turns out we probably don't need this.
-        # $metaextra = " fileName=$tableName.$fileType.bai";
-        # print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
-    } elsif ($type eq "bigWig") {
-        my $metaextra = " fileName=$tableName.$fileType";
-        print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
-    } else {
-        $fileType = "bed" if ($type =~ /^bed /);
-        my $metaextra = " fileName=$tableName.$fileType.gz";
-        print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
-    }
 
     if($downloadOnly || ($type eq "wig" && !grep(/$Encode::autoCreatedPrefix/, @{$ddfLine->{files}}))) {
         # adds entries to README.txt for download only files AND wig data (excepting wig data generated by us)
@@ -2151,7 +2201,6 @@ foreach my $ddfLine (@ddfLines) {
     }
     if(!$downloadOnly) {
         print TRACK_RA "        track $tableName\n";
-        print TRACK_RA "        release alpha\n";
         if ($tier1 eq 1) {
             # default to only Tier1 subtracks visible.  Wrangler should review if this is
             #   correct for the track
@@ -2224,38 +2273,6 @@ if($submitPath =~ /(\d+)$/) {
              $daf->{assembly}, $daf->{lab}, $daf->{dataType}, $compositeTrack, $id);
     }
 }
-
-my @cmds;
-# push @cmds, "docIdSubmitDir encpipeline_beta $submitPath  /hive/groups/encode/dcc/pipeline/downloads/betaDocId";
-push @cmds, "docIdSubmitDir encpipeline_prod $submitPath  /hive/groups/encode/dcc/pipeline/downloads/docId";
-my $safe = SafePipe->new(CMDS => \@cmds,  DEBUG => $opt_verbose - 1);
-if(my $err = $safe->exec()) {
-    my $err = $safe->stderr();
-    printf "Could not submit to docId system: " . $err;
-    exit 1;
-}
-
-# commenting this out until we decide to roll-out name changes
-
-# undef(@cmds);
-# push @cmds, "mv $submitPath/out/trackDb.ra  $submitPath/out/trackDb.ra.preDocId; sed -f $submitPath/out/edit.sed $submitPath/out/trackDb.ra.preDocId" ;
-
-# $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "$submitPath/out/trackDb.ra",  DEBUG => $opt_verbose - 1);
-# if(my $err = $safe->exec()) {
-#    my $err = $safe->stderr();
-#    printf "Could not edit trackDb.ra " . $err;
-#    exit 1;
-#}
-
-#undef(@cmds);
-#push @cmds, "mv $submitPath/out/load.ra  $submitPath/out/load.ra.preDocId; sed -f $submitPath/out/edit.sed $submitPath/out/load.ra.preDocId";
-
-#$safe = SafePipe->new(CMDS => \@cmds, STDOUT => "$submitPath/out/load.ra",  DEBUG => $opt_verbose - 1);
-#if(my $err = $safe->exec()) {
-#    my $err = $safe->stderr();
-#    printf "Could not edit load.ra " . $err;
-#    exit 1;
-#}
 
 $time0=$timeStart;
 doTime("done. ") if $opt_timing;

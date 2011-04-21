@@ -1,3 +1,8 @@
+metaObject wgEncodePsuHistone
+objType composite
+composite wgEncodePsuHistone
+expVars lab,dataType,cell,antbody
+
 metaObject wgEncodePsuHistoneG1eH3k4me1ME0S129InputAlnRep1
 objType file
 age E0
@@ -598,4 +603,4 @@ strain 129
 subId 3041
 view RawData
 
-# MAGIC: 853088954
+# MAGIC: -846717121

@@ -705,14 +705,24 @@ static void doMapBoxPerRow(struct track *tg,
 {
 int fontHeight = mgFontLineHeight(font);
 int numRows = tg->height / fontHeight;
+struct customTrack *ct = tg->customPt;
+char itemBuffer[1024];
+
+if (ct)
+    // this should have the trash file name instead of spacer
+    // but the click handler doesn't use it anyway
+    safef(itemBuffer, sizeof itemBuffer, "%s %s","spacer","zoom in");
+else
+    safef(itemBuffer, sizeof itemBuffer, "zoom in");
 
 while(numRows--)
     {
     char buffer[1024];
+
     safef(buffer, sizeof buffer, 
 	"Too many items in display.  Zoom in to click on items. (%d)",numRows);
     mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, fontHeight,
-	tg->track, "zoom in", 
+	tg->track, itemBuffer,
 	buffer);
     yOff += fontHeight;
     }
@@ -877,16 +887,15 @@ static void bamWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	MgFont *font, Color color, enum trackVisibility vis)
 {
 /* Allocate predraw area. */
-int preDrawZero, preDrawSize;
-struct preDrawContainer *preDrawList = NULL;
 struct bamWigTrackData *bwData;
 double scale = (double)width/(winEnd - winStart);
 
+struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(width);
 AllocVar(bwData);
-bwData->preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
+bwData->preDraw = pre->preDraw;
 bwData->scale = scale;
 bwData->width = width;
-bwData->preDrawZero = preDrawZero;
+bwData->preDrawZero = pre->preDrawZero;
 
 char posForBam[512];
 safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
@@ -897,6 +906,7 @@ tg->customPt = NULL;
 bamFetch(fileName, posForBam, countBam, bwData, NULL);
 
 /* fill in rest of predraw */
+int preDrawZero = pre->preDrawZero;
 int i;
 for (i=0; i<width; ++i)
     {
@@ -907,11 +917,9 @@ for (i=0; i<width; ++i)
     pe->sumSquares = (pe->count * pe->count)/scale;
     }
 
-AllocVar(preDrawList);
-preDrawList->preDraw = bwData->preDraw;
 /* Call actual graphing routine. */
 wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	       preDrawList, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+	       pre, pre->preDrawZero, pre->preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
 
 }
 
@@ -944,35 +952,10 @@ hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message
 }
 
 void bamMethods(struct track *track)
-/* Methods for BAM alignment files. */
+/* Methods for BAM alignment files, in absence of USE_BAM (samtools lib). */
 {
-linkedFeaturesMethods(track);
-track->loadItems = dontLoadItems;
+messageLineMethods(track);
 track->drawItems = drawUseBamWarning;
-// Following few lines taken from hgTracks.c getTrackList, because this is called earlier
-// but needs to know track vis from tdb+cart:
-char *s = cartOptionalString(cart, track->track);
-if (cgiOptionalString("hideTracks"))
-    {
-    s = cgiOptionalString(track->track);
-    if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
-	{
-	cartSetString(cart, track->track, s);
-	}
-    }
-// end stuff copied from hgTracks.c
-enum trackVisibility trackVis = track->tdb->visibility;
-if (s != NULL)
-    trackVis = hTvFromString(s);
-if (trackVis != tvHide)
-    {
-    track->visibility = tvDense;
-    track->limitedVis = tvDense;
-    track->limitedVisSet = TRUE;
-    }
-track->nextItemButtonable = track->nextExonButtonable = FALSE;
-track->nextPrevItem = NULL;
-track->nextPrevExon = NULL;
 }
 
 void bamWigMethods(struct track *track, struct trackDb *tdb, 

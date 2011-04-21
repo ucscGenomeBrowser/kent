@@ -480,6 +480,7 @@ enum wiggleSmoothingEnum {
    wiggleSmoothing14 = 13,
    wiggleSmoothing15 = 14,
    wiggleSmoothing16 = 15,
+   wiggleSmoothingMax = 16,	/* Not an option, but lets us keep track of memory to use */
 };
 
 enum wiggleSmoothingEnum wiggleSmoothingStringToEnum(char *string);
@@ -900,6 +901,9 @@ char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct tra
 /* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
 
+char *controlledVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix);
+// returns allocated string of HTML link to controlled vocabulary term
+
 char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean
         showLongLabel,boolean showShortLabel, struct hash *trackHash);
 /* If metadata from metaDb exists, return string of html with table definition */
@@ -1062,6 +1066,10 @@ void bamCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, b
 /* BAM: short-read-oriented alignment file format. */
 
 boolean tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
+/* Updates the tdb->priority from cart then sorts the list anew.
+   Returns TRUE if priorities obtained from cart */
+
+boolean tdbRefSortPrioritiesFromCart(struct cart *cart, struct slRef **tdbRefList);
 /* Updates the tdb->priority from cart then sorts the list anew.
    Returns TRUE if priorities obtained from cart */
 

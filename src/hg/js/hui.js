@@ -369,6 +369,9 @@ function matChkBoxNormalize(matCB)
         subCBs = objsFilterByClasses(subCBs,"not",arguments[1]);
     }
 
+    // Only look at visible views
+    subCBs = $(subCBs).not(":disabled");
+
     if(subCBs.length > 0) {
         var CBsChecked = subCBs.filter(":checked");
         if(!isABC) {
@@ -421,13 +424,18 @@ function matCbFindFromSubCb(subCB)
 {
 // returns the one matCB associated with a subCB (or undefined)
     var classList =  $( subCB ).attr("class").split(" ");
-    classes = '.' + classList.slice(1,3).join('.');   // How to get only X and Y classes?  Assume they are the first 2 ("subCB GM12878 H3K4me3 rep1 p1" we only want ".GM12878.H3K4me3")
-    // At this point classes has been converted from "subCB 1GM12878 CTCF rep1 cHot" to ".1GM12878.CTCF"
-    var matCB = $("input.matCB"+classes); // NOte, this works for filtering multiple classes because we want AND
+    // we need one or 2 classes, depending upon how many dimensions in matrix (e.g. "subDB GM10847 NFKB aNone IGGrab Signal")
+    classList = aryRemove(classList,"subCB");
+    var classes = classList.slice(0,2).join('.');   // How to get only X and Y classes?  Assume they are the first 2
+    var matCB = $("input.matCB."+classes); // Note, this works for filtering multiple classes because we want AND
     if(matCB.length == 1)
         return matCB;
-    else
-        return undefined;
+
+    matCB = $("input.matCB."+classList[0]); // No hit so this must be a 1D matrix
+    if(matCB.length == 1)
+        return matCB;
+
+    return undefined;
 }
 
 function matAbcCBfindFromSubCb(subCB)
@@ -1016,29 +1024,30 @@ function navigationLinksSetup()
   // If they exist, then they need to be well placed to fit window dimensions
 
     // Put navigation links in top corner
-    var navDown = $("span#navDown");
-    if(navDown != undefined) {
+    var navDown = $("#navDown");
+    if(navDown != undefined && navDown.length > 0) {
+        navDown = navDown[0];
         var winWidth = ($(window).width() - 30) + "px"; // Room for borders
         $('.windowSize').css({maxWidth: winWidth,width: winWidth});
-        var sectTtl = $("#sectTtl").parents("td");
-        if(sectTtl != undefined) {
+        var sectTtl = $("#sectTtl").parent("td");
+        if(sectTtl != undefined && sectTtl.length > 0) {
+            sectTtl = sectTtl[0];
             $(sectTtl).css({clear: 'none'});
             if($.browser.msie)
                 $(sectTtl).prepend($(navDown));
             else
                 $(sectTtl).append($(navDown));
         }
-        $(navDown).css({display:''});
+        $(navDown).css({float:'right'})
         $(navDown).show();
     }
 
     // Decide if top links are needed
     var navUp = $('span.navUp');
-    if($(navUp) != undefined && $(navUp).length > 0) {
+    if(navUp != undefined && navUp.length > 0) {
         $(navUp).each(function(i) {
             var offset = $(this).parent().offset();
             if(offset.top  > $(window).height()) {
-                $(this).css({display:''});
                 $(this).show();
             }
         });

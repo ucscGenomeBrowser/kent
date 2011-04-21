@@ -1,0 +1,125 @@
+metaObject wgEncodeSydhRnaSeqMelDmso20PolyaAlnRep1
+objType table
+cell MEL
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-16
+dateUnrestricted 2011-12-16
+fileName wgEncodeSydhRnaSeqMelDmso20PolyaAlnRep1.bam
+grant Snyder
+lab Stanford
+origAssembly mm9
+project wgEncode
+replicate 1
+rnaExtract polyA
+seqPlatform Illumina_GA2x
+subId 3764
+tableName wgEncodeSydhRnaSeqMelDmso20PolyaAlnRep1
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhRnaSeqMelDmso20PolyaRawDataRep1
+objType file
+cell MEL
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-16
+dateUnrestricted 2011-12-16
+fileName wgEncodeSydhRnaSeqMelDmso20PolyaRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+origAssembly mm9
+project wgEncode
+replicate 1
+rnaExtract polyA
+seqPlatform Illumina_GA2x
+subId 3764
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhRnaSeqMelDmso20PolyaSigRep1
+objType table
+cell MEL
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-16
+dateUnrestricted 2011-12-16
+fileName wgEncodeSydhRnaSeqMelDmso20PolyaSigRep1.bigWig
+grant Snyder
+lab Stanford
+origAssembly mm9
+project wgEncode
+replicate 1
+rnaExtract polyA
+seqPlatform Illumina_GA2x
+subId 3764
+tableName wgEncodeSydhRnaSeqMelDmso20PolyaSigRep1
+treatment DMSO_2.0pct
+view Signal
+
+metaObject wgEncodeSydhRnaSeqMelPolyaAlnRep1
+objType table
+cell MEL
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-12-21
+fileName wgEncodeSydhRnaSeqMelPolyaAlnRep1.bam
+grant Snyder
+lab Stanford
+origAssembly mm9
+project wgEncode
+replicate 1
+rnaExtract polyA
+seqPlatform Illumina_GA2x
+subId 3818
+tableName wgEncodeSydhRnaSeqMelPolyaAlnRep1
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhRnaSeqMelPolyaRawDataRep1
+objType file
+cell MEL
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-12-21
+fileName wgEncodeSydhRnaSeqMelPolyaRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+origAssembly mm9
+project wgEncode
+replicate 1
+rnaExtract polyA
+seqPlatform Illumina_GA2x
+subId 3818
+treatment None
+view RawData
+
+metaObject wgEncodeSydhRnaSeqMelPolyaSigRep1
+objType table
+cell MEL
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-21
+dateUnrestricted 2011-12-21
+fileName wgEncodeSydhRnaSeqMelPolyaSigRep1.bigWig
+grant Snyder
+lab Stanford
+origAssembly mm9
+project wgEncode
+replicate 1
+rnaExtract polyA
+seqPlatform Illumina_GA2x
+subId 3818
+tableName wgEncodeSydhRnaSeqMelPolyaSigRep1
+treatment None
+view Signal
+
+# MAGIC: -1897838266

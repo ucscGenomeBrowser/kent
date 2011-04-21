@@ -44,7 +44,7 @@ sed -i -e "s/-DJK_WARN//g" make.compile.log
 sed -i -e "s/-Werror//g" make.compile.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
-set res = `/bin/egrep -i "error|warn" make.compile.log`
+set res = `/bin/egrep -i "error|warn" make.compile.log | grep -v bigWarn`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
     echo "errs found: [${0}: `date`]"

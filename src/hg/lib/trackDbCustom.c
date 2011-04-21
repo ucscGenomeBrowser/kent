@@ -211,7 +211,8 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
 		   sameString("bam", s) || sameString("bedDetail", s) ||
-		   sameString("bed8Attrs", s) || sameString("gvf", s));
+		   sameString("bed8Attrs", s) || sameString("gvf", s) ||
+		   sameString("vcfTabix", s));
 freeMem(t);
 return canPack;
 }
@@ -284,15 +285,15 @@ for (;;)
 	{
         char *subRelease;
 
-	if (!lineFileNext(lf, &line, NULL))
-	   {
+	if (!lineFileNextFull(lf, &line, NULL, NULL, NULL))
+            { // NOTE: lineFileNextFull joins continuation lines
 	   done = TRUE;
 	   break;
 	   }
 	line = skipLeadingSpaces(line);
         if (startsWithWord("track", line))
             {
-            lineFileReuse(lf);
+            lineFileReuseFull(lf); // NOTE: only works with previous lineFileNextFull call
             break;
             }
         else if ((incFile = trackDbInclude(raFile, line, &subRelease)) != NULL)
@@ -313,28 +314,28 @@ for (;;)
     slAddHead(&btList, bt);
     for (;;)
         {
-	/* Break at blank line or EOF. */
-	if (!lineFileNext(lf, &line, NULL))
-	    break;
-	line = skipLeadingSpaces(line);
-	if (line == NULL || line[0] == 0)
-	    break;
+        /* Break at blank line or EOF. */
+        if (!lineFileNextFull(lf, &line, NULL, NULL, NULL))  // NOTE: joins continuation lines
+            break;
+        line = skipLeadingSpaces(line);
+        if (line == NULL || line[0] == 0)
+            break;
 
-	/* Skip comments. */
-	if (line[0] == '#')
-	    continue;
+        /* Skip comments. */
+        if (line[0] == '#')
+            continue;
 
-	/* Parse out first word and decide what to do. */
-	word = nextWord(&line);
-	if (line == NULL)
-	    errAbort("No value for %s line %d of %s", word, lf->lineIx, lf->fileName);
-	line = trimSpaces(line);
-	trackDbUpdateOldTag(&word, &line);
+        /* Parse out first word and decide what to do. */
+        word = nextWord(&line);
+        if (line == NULL)
+            errAbort("No value for %s line %d of %s", word, lf->lineIx, lf->fileName);
+        line = trimSpaces(line);
+        trackDbUpdateOldTag(&word, &line);
         if (releaseTag && sameString(word, "release"))
             errAbort("Release tag %s in stanza with include override %s, line %d of %s",
                 line, releaseTag, lf->lineIx, lf->fileName);
-	trackDbAddInfo(bt, word, line, lf);
-	}
+        trackDbAddInfo(bt, word, line, lf);
+        }
     if (releaseTag)
         trackDbAddRelease(bt, releaseTag);
     }
@@ -593,9 +594,21 @@ tdbMarkAsSuperTrackChild(tdb);
 if(tdb->parent)
     {
     tdbMarkAsSuperTrack(tdb->parent);
-    refAddUnique(&(tdb->parent->children),tdb);
     }
 freeMem(stInfo);
+}
+
+char *maybeSkipHubPrefix(char *track)
+{
+if (!startsWith("hub_", track))
+    return track;
+
+char *nextUnderBar = strchr(track + sizeof "hub_", '_');
+
+if (nextUnderBar)
+    return nextUnderBar + 1;
+
+return track;
 }
 
 void trackDbSuperMarkup(struct trackDb *tdbList)
@@ -616,8 +629,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         tdbMarkAsSuperTrack(tdb);
         tdb->isShow = stInfo->isShow;
         if (!hashLookup(superHash, tdb->track))
-            hashAdd(superHash, tdb->track, tdb);
-        tdb->children = NULL; // assertable?
+            hashAdd(superHash, maybeSkipHubPrefix(tdb->track), tdb);
         }
     freeMem(stInfo);
     }
@@ -744,14 +756,14 @@ char *trackDbSettingByView(struct trackDb *tdb, char *name)
 {
 if (tdb->parent == NULL)
     return NULL;
-return trackDbSettingClosestToHome(tdb->parent, name);
+return trackDbSetting(tdb->parent, name);
 }
 
 
 char *trackDbSettingClosestToHomeOrDefault(struct trackDb *tdb, char *name, char *defaultVal)
 /* Look for a trackDb setting (or default) from lowest level on up chain of parents. */
 {
-char *trackSetting = trackDbSettingClosestToHome(tdb,name);
+char *trackSetting = trackDbSetting(tdb,name);
 if(trackSetting == NULL)
     trackSetting = defaultVal;
 return trackSetting;
@@ -760,7 +772,7 @@ return trackSetting;
 boolean trackDbSettingClosestToHomeOn(struct trackDb *tdb, char *name)
 /* Return true if a tdb setting closest to home is "on" "true" or "enabled". */
 {
-char *setting = trackDbSettingClosestToHome(tdb,name);
+char *setting = trackDbSetting(tdb,name);
 return  (setting && (   sameWord(setting,"on")
                      || sameWord(setting,"true")
                      || sameWord(setting,"enabled")

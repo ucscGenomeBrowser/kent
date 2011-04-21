@@ -67,7 +67,7 @@ set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$melGal,$ci,$dan
 set wgs $rn,$panTro,$galGal,$melGal,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryCun,$oryLat,$calJac,$cavPor,$taeGut,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal
 
 # Define organism databases for which we build a xenoRefGene track:
-set xrg $panTro,$galGal,$melGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,danRer7,$aplCal,$ailMel,$loxAfr,$haeCon,$melInc,$melHap,$bruMal
+set xrg $panTro,$galGal,$melGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,danRer7,$aplCal,$ailMel,$oviAri,$loxAfr,$haeCon,$melInc,$melHap,$bruMal
 
 # Define organism databases for which we host the vegaGenes
 set vegaGeneDbs hg18,hg19,mm9
@@ -3248,6 +3248,7 @@ tablesIgnored hg18
     numtSMitochondrionChrPlacement
 
 tablesIgnored hg19
+    affyExonProbe%
     altSeqHaplotypes
     altSeqLiftOverPsl
     altSeqPatches
