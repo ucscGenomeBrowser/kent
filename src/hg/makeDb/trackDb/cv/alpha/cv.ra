@@ -8027,7 +8027,7 @@ label Alignments
 description Alignments
 
 term Base_Overlap_Signal
-tag  ????
+tag  baOvrlpSig
 type view
 label Base_Overlap_Signal
 description Base_Overlap_Signal
@@ -8761,9 +8761,9 @@ term BioChain
 tag BioChain
 type lab
 label BioChain
-description
+description The BioChain subset of HudsonAlpha
 labInst BioChain
-labPi
+labPi Myers
 labPiFull
 grantPi
 organism human
