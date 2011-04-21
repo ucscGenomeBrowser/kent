@@ -32663,7 +32663,7 @@ lab HudsonAlpha
 labExpId SL14
 origAssembly hg18
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType exp
 subId 7
@@ -33008,7 +33008,7 @@ lab HudsonAlpha
 labExpId SL167
 origAssembly hg18
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType exp
 subId 7
@@ -35625,4 +35625,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 696266797
+# MAGIC: 696266807

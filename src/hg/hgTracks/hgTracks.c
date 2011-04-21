@@ -3567,7 +3567,7 @@ if (!psOutput)
             printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd);
             hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
             }
-        else if (sameWord(database,"anoCar2"))
+        else if (sameWord(database,"anoCar2") || sameWord(database,"calJac3"))
             {
             hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
             printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);

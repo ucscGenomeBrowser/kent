@@ -117,7 +117,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileIndex wgEncodeUwDgfGm06990Aln.bam.bai
 fileName wgEncodeUwDgfGm06990Aln.bam
 geoSampleAccession GSM646568
 grant Stam
@@ -620,7 +619,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileIndex wgEncodeUwDgfHepg2Aln.bam.bai
 fileName wgEncodeUwDgfHepg2Aln.bam
 geoSampleAccession GSM646559
 grant Stam
@@ -1410,7 +1408,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileIndex wgEncodeUwDgfK562Aln.bam.bai
 fileName wgEncodeUwDgfK562Aln.bam
 geoSampleAccession GSM646567
 grant Stam
@@ -1992,7 +1989,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileIndex wgEncodeUwDgfSknshraAln.bam.bai
 fileName wgEncodeUwDgfSknshraAln.bam
 geoSampleAccession GSM646566
 grant Stam
@@ -2108,7 +2104,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
-fileIndex wgEncodeUwDgfTh1Aln.bam.bai
 fileName wgEncodeUwDgfTh1Aln.bam
 geoSampleAccession GSM646569
 grant Stam
@@ -2215,4 +2210,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: 658779939
+# MAGIC: -204558847

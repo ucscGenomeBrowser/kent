@@ -219,7 +219,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
             struct hash *cvTerm = hashFindVal(cvTermTypes,mdbVar->var);
             if (cvTerm != NULL)
                 {
-                if(SETTING_NOT_ON(hashFindVal(cvTerm,CV_TOT_HIDDEN)))  // NULL is not on
+                if(!cvTermIsHidden(mdbVar->var))
                     {
                     char *label=hashFindVal(cvTerm,CV_LABEL);
                     if (label == NULL)
