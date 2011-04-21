@@ -14,25 +14,25 @@
 #
 # Human cell types, template below
 # --------------------------
-# term (human-readable cell type name)
-# tag (machine-readable cell type name, no special characters)
-# type (informs pipeline code of stanza type.  Should always be Cell Line)
-# organism (used in many ways.  Should correspond to a "type organism" stanza)
-# description (human-readable description of cell type, for cell type cellTypes.html)
-# tissue (general tissue type, for categorizing cell types)
-# vendorName (name of vendor or lab that provides these cells)
-# vendorId (the ID of the cell type in the vendor's catalog)
-# orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html)
-# karyotype (optional human-readable karyotype, for .html page)
-# lineage (optional human-readable source of cell lines, e.g. 18 year old male)
-# termId (ID for best term in the BTO.  Optional but encouraged. Shown in cellTypes.html)
-# termUrl (URL for term in the ontology. Links with termId on cellTypes.html)
-# color (specifies color code for track data of this cell type, rgb values)
-# sex (used in documentation and validation.  Should correspond to a "type sex" stanza)
+# term (human-readable cell type name. required)
+# tag (machine-readable cell type name, no special characters. required)
+# type (informs pipeline code of stanza type.  Should always be Cell Line. Required)
+# organism (used in many ways.  Should correspond to a "type organism" stanza. required)
+# description (human-readable description of cell type, for cell type cellTypes.html. required)
+# tissue (general tissue type, for categorizing cell types.  optional)
+# vendorName (name of vendor or lab that provides these cells. required)
+# vendorId (the ID of the cell type in the vendor's catalog. optional)
+# orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html. required)
+# karyotype (optional human-readable karyotype, for .html page. optional)
+# lineage (optional human-readable source of cell lines, e.g. 18 year old male. optional)
+# termId (ID for best term in the BTO.  Optional but encouraged. Shown in cellTypes.html. optional)
+# termUrl (URL for term in the ontology. Links with termId on cellTypes.html. optiona)
+# color (specifies color code for track data of this cell type, rgb values. optional)
+# sex (used in documentation and validation.  Should correspond to a "type sex" stanza. required)
 # tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.
-#       Should correspond to a "type tier" stanza)
-# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
-# category: (T for tissue, L for cell line, or P for primary cells.  Not used in human)
+#       Should correspond to a "type tier" stanza. required)
+# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
+# category: (T for tissue, L for cell line, or P for primary cells.  Not used in human. optional)
 
 
 
@@ -3484,6 +3484,28 @@ protocol UW_Stam:WI38_Stam_protocol.pdf
 
 
 ### Mouse Cell Lines
+# Human cell types, template below
+# --------------------------
+# term (human-readable cell type name. required)
+# tag (machine-readable cell type name, no special characters. required)
+# type (informs pipeline code of stanza type.  Should always be Cell Line. Required)
+# organism (used in many ways.  Should correspond to a "type organism" stanza. required)
+# description (human-readable description of cell type, for cell type cellTypes.html. required)
+# tissue (general tissue type, for categorizing cell types.  optional)
+# age (should correspond to a "type age". optional)
+# strain (should correspond to a "type strain". optional)
+# vendorName (name of vendor or lab that provides these cells. required)
+# vendorId (the ID of the cell type in the vendor's catalog. optional)
+# orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html. required)
+# karyotype (optional human-readable karyotype, for .html page. optional)
+# lineage (optional human-readable source of cell lines, e.g. 18 year old male. optional)
+# termId (ID for best ontology term.  Optional but encouraged. Shown in cellTypes.html. optional)
+# termUrl (URL for term in the ontology. Links with termId on cellTypes.html. optiona)
+# color (specifies color code for track data of this cell type, rgb values. optional)
+# sex (used in documentation and validation.  Should correspond to a "type sex" stanza. required)
+# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
+# category: (T for tissue, L for cell line, or P for primary cells.  optional)
+# tier is NOT used in mouse
 term 3134
 tag 3134
 type Cell Line
