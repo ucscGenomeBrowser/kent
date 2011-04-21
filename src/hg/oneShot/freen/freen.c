@@ -19,12 +19,9 @@ errAbort("freen - test some hairbrained thing.\n"
 void freen(char *track)
 /* Test some hair-brained thing. */
 {
-struct correlate *c = correlateNew();
-int i;
-for (i=0; i<6; ++i)
-    correlateNext(c, i&1, 1-(i&1));
-correlateNext(c, 4, 4);
-printf("1 in 7 correlation is %g\n", correlateResult(c));
+uglyTime(NULL);
+int fd = mustOpenFd(track, O_RDONLY);
+uglyTime("Opened %s to %d\n", track, fd);
 }
 
 int main(int argc, char *argv[])
