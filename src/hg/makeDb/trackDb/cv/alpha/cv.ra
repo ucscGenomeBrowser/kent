@@ -1252,8 +1252,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10847
 vendorName Coriell
 vendorId GM10847
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1272,8 +1272,8 @@ lineage CEPH/Utah - European Caucasion - Male; Epstein-Barr Virus
 #)lineage mesoderm
 karyotype relatively normal
 #)karyotype does not match edits. edit: unknown
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex M
 tier 3
 protocol UW_Stam:GM12801_Stam_protocol.pdf
@@ -1471,8 +1471,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM15510
 vendorName Coriell
 vendorId GM15510
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex U
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1488,8 +1488,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18505
 vendorName Coriell
 vendorId GM18505
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1525,8 +1525,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18526
 vendorName Coriell
 vendorId GM18526
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1542,8 +1542,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18951
 vendorName Coriell
 vendorId GM18951
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1559,8 +1559,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19099
 vendorName Coriell
 vendorId GM19099
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1576,8 +1576,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19193
 vendorName Coriell
 vendorId GM19193
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1690,7 +1690,7 @@ tag H9ESAFPPlus
 type Cell Line
 organism Human
 description H9 AFP+ human ESCells-derived
-#)description Provisional human Embryonic Stem Cell (hESC) H9  human ESCells-derived Treatment: H9 AFP+ 
+#)description Provisional human Embryonic Stem Cell (hESC) H9  human ESCells-derived Treatment: H9 AFP+
 tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -1707,7 +1707,7 @@ tag H9ESAFPMinus
 type Cell Line
 organism Human
 description H9 AFP- human ESCells-derived
-#)description Provisional human Embryonic Stem Cell (hESC) H9  human ESCells-derived Treatment: H9 AFP- 
+#)description Provisional human Embryonic Stem Cell (hESC) H9  human ESCells-derived Treatment: H9 AFP-
 tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -2801,6 +2801,7 @@ organism Human
 tissue Myometrium
 description Myometrial cells
 vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, PA)
+orderUrl http://www.mwrif.org/188/condon-jeyasuria-lab
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
 termId BTO:0000907
 sex F
@@ -8350,20 +8351,6 @@ type dataType
 label ChIA-pet
 description ChIA-pet
 
-# TODO: retire this ?  (11/3/10)
-term LongRnaSeq
-tag longRnaSeq
-type dataType
-label RNA-seq
-description RNA sequencing: long RNAs
-
-# TODO: retire this ?  (11/3/10)
-term RnaSeqPolyA
-tag rnaSeqPolya
-type dataType
-label RNA-seq
-description RNA sequencing: polyA+ RNA
-
 term Orchid
 tag orchid
 type dataType
@@ -8428,6 +8415,20 @@ tag rnaSeq
 type dataType
 label RNA-seq
 description Sequencing analysis of RNA expression
+
+#GeneST and Tiling are flavors of the RIP-chip.  
+#They need separate dataTypes for the experiment table to work
+term GeneSt 
+tag  GeneSt 
+type dataType
+label RIP-chip Gene ST
+description Provisional RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays 
+
+term Tiling 
+tag  Tiling 
+type dataType
+label RIP-chip Tiling Array
+description Provisional RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays 
 
 term RipChip
 tag  ripChip
@@ -9343,7 +9344,8 @@ projectName UNC-Giddings
 #
 #    cvDefined [no/yes]  DEFAULT: NO.  Yes when every possible value must be in cv.ra
 #
-#       hidden [no/yes]  DEFAULT: NO.  Yes when users should not see this internal metadata.
+#       hidden [no/yes/beta,public]  DEFAULT: no.  Yes when users should not see this internal metadata.
+#              use comma delimited list of alpha,beta,public to restrict visibility from certain machines.
 #
 #     validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values.  ENFORCED by mdbPrint -validate
 #           cv: must be defined term in cv (e.g. cell=GM12878).  "cv or None" indicates that "None is also acceptable.
@@ -9523,11 +9525,11 @@ validate date # nine months more than dateSubmitted
 
 term dccAccession
 type typeOfTerm
-label ENCODE DCC Accession
-description The accession number provided by the ENCODE Data Coordination Center.
+label UCSC Accession
+description The accession number provided by the UCSC Genome Browser.
 searchable freeText
 cvDefined no
-validate regex: ^wgEncode[H,E][0-9]*$
+validate regex: ^wgEncodeE[H,E][0-9]*$
 priority 312
 
 term dccInternalNotes
@@ -9568,6 +9570,7 @@ label Experiment ID
 description The ENCODE DCC experiment identification number.
 searchable freeText
 cvDefined no
+hidden beta,public
 validate integer
 priority 100
 
@@ -10006,7 +10009,7 @@ label Tissue Source Type
 description Source of tissue from either an indiviual organism or pooled set of organisms (Provisional)
 searchable multiSelect
 cvDefined yes
-validate cv 
+validate cv
 priority 470
 
 # term type

@@ -1643,7 +1643,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-fileIndex wgEncodeUwTfbsBjCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsBjCtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -1667,7 +1666,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-19
-fileIndex wgEncodeUwTfbsBjCtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsBjCtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -1878,7 +1876,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsBjInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsBjInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -1947,7 +1944,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-fileIndex wgEncodeUwTfbsCaco2CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsCaco2CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -1971,7 +1967,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-fileIndex wgEncodeUwTfbsCaco2CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsCaco2CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -2179,7 +2174,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsCaco2InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsCaco2InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -2248,7 +2242,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
 dateUnrestricted 2010-03-29
-fileIndex wgEncodeUwTfbsGm06990CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm06990CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -2272,7 +2265,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileIndex wgEncodeUwTfbsGm06990CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm06990CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -2481,7 +2473,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsGm06990InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm06990InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -2550,7 +2541,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileIndex wgEncodeUwTfbsGm12801CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12801CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -2667,7 +2657,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsGm12801InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12801InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -2736,7 +2725,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileIndex wgEncodeUwTfbsGm12864CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12864CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -2760,7 +2748,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileIndex wgEncodeUwTfbsGm12864CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12864CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -2968,7 +2955,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsGm12864InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12864InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -3037,7 +3023,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileIndex wgEncodeUwTfbsGm12865CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12865CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -3061,7 +3046,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileIndex wgEncodeUwTfbsGm12865CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12865CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -3269,7 +3253,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsGm12865InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12865InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -3338,7 +3321,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileIndex wgEncodeUwTfbsGm12872CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12872CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -3362,7 +3344,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileIndex wgEncodeUwTfbsGm12872CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12872CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -3570,7 +3551,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsGm12872InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12872InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -3639,7 +3619,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileIndex wgEncodeUwTfbsGm12873CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12873CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -3663,7 +3642,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileIndex wgEncodeUwTfbsGm12873CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12873CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -3871,7 +3849,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsGm12873InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12873InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -3940,7 +3917,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileIndex wgEncodeUwTfbsGm12874CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12874CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -3964,7 +3940,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileIndex wgEncodeUwTfbsGm12874CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12874CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -4172,7 +4147,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsGm12874InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12874InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -4241,7 +4215,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileIndex wgEncodeUwTfbsGm12875CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12875CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -4265,7 +4238,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileIndex wgEncodeUwTfbsGm12875CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12875CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -4473,7 +4445,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsGm12875InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12875InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -4542,7 +4513,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileIndex wgEncodeUwTfbsGm12878CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12878CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -4566,7 +4536,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileIndex wgEncodeUwTfbsGm12878CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12878CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -4775,7 +4744,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsGm12878InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12878InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -6268,7 +6236,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileIndex wgEncodeUwTfbsHek293CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHek293CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -6292,7 +6259,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileIndex wgEncodeUwTfbsHek293CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsHek293CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -6501,7 +6467,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsHek293InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHek293InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -6570,7 +6535,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileIndex wgEncodeUwTfbsHelas3CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHelas3CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -6594,7 +6558,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
-fileIndex wgEncodeUwTfbsHelas3CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsHelas3CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -6802,7 +6765,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsHelas3InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHelas3InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -6871,7 +6833,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-fileIndex wgEncodeUwTfbsHepg2CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHepg2CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -6895,7 +6856,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-fileIndex wgEncodeUwTfbsHepg2CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsHepg2CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -7105,7 +7065,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsHepg2InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHepg2InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -7174,7 +7133,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileIndex wgEncodeUwTfbsHl60CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHl60CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -7291,7 +7249,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsHl60InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHl60InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -7360,7 +7317,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileIndex wgEncodeUwTfbsHmecCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHmecCtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -7476,7 +7432,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsHmecInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHmecInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -8415,7 +8370,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileIndex wgEncodeUwTfbsHreCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHreCtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -8439,7 +8393,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileIndex wgEncodeUwTfbsHreCtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsHreCtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -8647,7 +8600,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsHreInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHreInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -8894,7 +8846,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileIndex wgEncodeUwTfbsHuvecCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHuvecCtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -8918,7 +8869,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileIndex wgEncodeUwTfbsHuvecCtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsHuvecCtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -9127,7 +9077,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsHuvecInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHuvecInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -9328,7 +9277,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileIndex wgEncodeUwTfbsK562CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsK562CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -9352,7 +9300,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileIndex wgEncodeUwTfbsK562CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsK562CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -9561,7 +9508,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsK562InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsK562InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -9828,7 +9774,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileIndex wgEncodeUwTfbsNhekCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsNhekCtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -9852,7 +9797,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileIndex wgEncodeUwTfbsNhekCtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsNhekCtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -10061,7 +10005,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsNhekInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsNhekInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -10130,7 +10073,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileIndex wgEncodeUwTfbsSaecCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsSaecCtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -10154,7 +10096,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileIndex wgEncodeUwTfbsSaecCtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsSaecCtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -10362,7 +10303,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsSaecInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsSaecInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -10431,7 +10371,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileIndex wgEncodeUwTfbsSknshraCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsSknshraCtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -10455,7 +10394,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-23
 dateUnrestricted 2010-07-22
-fileIndex wgEncodeUwTfbsSknshraCtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsSknshraCtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -10663,7 +10601,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsSknshraInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsSknshraInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -10732,7 +10669,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-fileIndex wgEncodeUwTfbsWerirb1CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsWerirb1CtcfStdAlnRep1.bam
 grant Stam
 lab UW
@@ -10756,7 +10692,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-fileIndex wgEncodeUwTfbsWerirb1CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsWerirb1CtcfStdAlnRep2.bam
 grant Stam
 lab UW
@@ -10966,7 +10901,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwTfbsWerirb1InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsWerirb1InputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -11023,4 +10957,4 @@ subId 1320
 tableName wgEncodeUwTfbsWerirb1InputStdRawRep1
 view RawSignal
 
-# MAGIC: 1902310471
+# MAGIC: 52787218
