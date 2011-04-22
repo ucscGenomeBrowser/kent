@@ -1593,18 +1593,6 @@ track snp131NonClinical override
 snpSeqFile /gbdb/hg19/snp/snp131.fa
 
 track snp131 override
-release beta,public
-chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp131CodingDbSnp,
-codingAnnoLabel_snp131CodingDbSnp dbSNP
-
-track snp131 override
-release alpha
-visibility hide
 chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2
@@ -2371,3 +2359,14 @@ visibility hide
 spectrum on
 type netAlign hg19 chainSelf
 otherDb hg19
+
+track allHg19RS_BW
+shortLabel GERP
+longLabel GERP scores for mammalian alignments
+group compGeno
+visibility hide
+priority 105
+type bigWig -15 7
+autoScale on
+maxHeightPixels 128:64:20
+

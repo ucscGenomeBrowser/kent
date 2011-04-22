@@ -4954,3 +4954,79 @@ e wgEncodeBroadHmm.release1.notes # make sure it looks okay
 
 # standardized liftOver message in description.
 # added to pushQ
+
+2011-04-20 Experimentify
+========================
+cd trackDb/human/hg19/metaDb/alpha
+mdbPrint hg19 -composite=%BroadHist% -experimentify > tmp.txt
+
+mdbUpdate hg19 -composite=%BroadHist% -encodeExp=std -test     
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeBroadHistone' has 151 recognizable experiments with 151 missing an expId.
+   objects/experiment: min:3  max:8  mean:6.158940.
+Found 930 of 931 object(s) would have their experiment ID updated.
+mdbUpdate hg19 -composite=%BroadHist% -encodeExp=std      
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeBroadHistone' has 151 recognizable experiments with 151 missing an expId.
+   objects/experiment: min:3  max:8  mean:6.158940.
+Affected 1470 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%BroadHist% -encodeExp=std -accession
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeBroadHistone' has 151 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:3  max:8  mean:6.158940.
+Affected 390 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -composite=wgEncodeBroadHistone > wgEncodeBroadHistone.ra
+Using table named 'hg19.metaDb_tdreszer'.
+objects:931  vars:21087
+
+gold, gadd, gci, gup,gpush
+
+mdbPrint hg19 -composite=%BroadHmm -experimentify > tmp.txt
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+objects:10  vars:147
+
+mdbUpdate hg19 -composite=%BroadHmm -encodeExp=std -test               
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeBroadHmm' has 9 recognizable experiments with 9 missing an expId.
+   objects/experiment: min:1  max:1  mean:1.000000.
+Found 9 of 10 object(s) would have their experiment ID updated.
+Command would affected 18 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%BroadHmm -encodeExp=std
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeBroadHmm' has 9 recognizable experiments with 9 missing an expId.
+   objects/experiment: min:1  max:1  mean:1.000000.
+Affected 18 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%BroadHmm -encodeExp=std -accession -test
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeBroadHmm' has 9 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:1  max:1  mean:1.000000.
+No Experiment ID updates were discovered in 10 object(s).
+Command would affected 0 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -composite=%BroadHmm -encodeExp=std -accession
+Using hgFixed.encodeExp
+Using table named 'hg19.metaDb_tdreszer'.
+Composite 'wgEncodeBroadHmm' has 9 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:1  max:1  mean:1.000000.
+No Experiment ID updates were discovered in 10 object(s).
+Affected 0 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -composite=wgEncodeBroadHmm > wgEncodeBroadHmm.ra
+Using table named 'hg19.metaDb_tdreszer'.
+objects:10  vars:165
+
+gold wgEncodeBroadHmm.ra
+
+gold, gadd, gci, gup,gpush
+

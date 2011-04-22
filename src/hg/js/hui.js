@@ -424,13 +424,18 @@ function matCbFindFromSubCb(subCB)
 {
 // returns the one matCB associated with a subCB (or undefined)
     var classList =  $( subCB ).attr("class").split(" ");
-    var classes = '.' + classList.slice(1,classList.length - 1).join('.');   // How to get only X and Y classes?  Assume they are the first 2 ("subCB GM12878 H3K4me3 rep1 p1" we only want ".GM12878.H3K4me3")
-    // At this point classes has been converted from "subCB 1GM12878 CTCF rep1 cHot" to ".1GM12878.CTCF"
-    var matCB = $("input.matCB"+classes); // NOte, this works for filtering multiple classes because we want AND
+    // we need one or 2 classes, depending upon how many dimensions in matrix (e.g. "subDB GM10847 NFKB aNone IGGrab Signal")
+    classList = aryRemove(classList,"subCB");
+    var classes = classList.slice(0,2).join('.');   // How to get only X and Y classes?  Assume they are the first 2
+    var matCB = $("input.matCB."+classes); // Note, this works for filtering multiple classes because we want AND
     if(matCB.length == 1)
         return matCB;
-    else
-        return undefined;
+
+    matCB = $("input.matCB."+classList[0]); // No hit so this must be a 1D matrix
+    if(matCB.length == 1)
+        return matCB;
+
+    return undefined;
 }
 
 function matAbcCBfindFromSubCb(subCB)
