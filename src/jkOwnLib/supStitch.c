@@ -785,6 +785,11 @@ while (ffList != NULL)
 
     bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
+    if (!bestPath)
+	{
+	ffFreeAli(&ffList);
+	break;
+	}
     bestPath = ffMergeHayOverlaps(bestPath);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
     bestPath = forceMonotonic(bestPath, qSeq, genoSeq, stringency,
