@@ -1040,7 +1040,11 @@ TMPDIR=/scratch/tmp
 #####################################################################
 ## 13-Way Multiz (DONE - 2010-02-23 - Hiram)
 ##  (Redo mafSplit and all steps followed working 2010-05-23 - Chin)
+## Re-work 13-Way Multiz: (DONE 2011-04-19 - Chin)
+## See redmine track #162 for more detail
 
+    mv  /hive/data/genomes/calJac3/bed/multiz13way \
+        /hive/data/genomes/calJac3/bed/multiz13way.2010-05-23
     mkdir /hive/data/genomes/calJac3/bed/multiz13way
     cd /hive/data/genomes/calJac3/bed/multiz13way
 
@@ -1049,6 +1053,10 @@ TMPDIR=/scratch/tmp
       --rename="calJac1 -> calJac3 ; gorGor1 -> gorGor2 " \
 /hive/data/genomes/hg19/bed/multiz46way/fixedTree/46wayFixed.nh  > 13way.nh
 
+    # Note: 
+    # The rearrangement was not correct, the 13way.nh produced by tree_doctor can be used directly
+    # for the multiz alignment without distance data. The distance will be generated (by 4d) 
+    # and used in the phastCon and phyloP steps.
     #	rearrange calJac3 to the top, get some help from tree_doctor:
     /cluster/bin/phast/tree_doctor --name-ancestors --reroot calJac3 \
         --with-branch 13way.nh
@@ -1074,16 +1082,41 @@ gorGor2:0.009411):0.009942):0.014256,
 (canFam2:0.193569,monDom5:0.581923):0.020666):0.019992):0.011307):0.056911)
 :0.000001);
 
+    # Use 13way.nh directly
+    cat 13way.nh
+((((((((((hg19:0.006591,panTro2:0.006639):0.002184,gorGor2:0.009411):0.009942,ponAbe2:0.018342):0.014256,(rheMac2:0.036199,papHam1:0.040000):0.021496):0.010000,calJac3:0.066389):0.056911,tarSyr1:0.135169):0.011307,(micMur1:0.091452,otoGar1:0.128984):0.035463):0.019992,mm9:0.352605):0.020666,canFam2:0.193569):0.156024,monDom5:0.425899);
+
     #	Use this specification in the phyloGif tool after changing the names:
     /cluster/bin/phast/tree_doctor \
 --rename="calJac3 -> Marmoset ; ponAbe2 -> Orangutan ; hg19 -> Human ; panTro2 -> Chimp ; gorGor2 -> Gorilla ; rheMac2 -> Rhesus ; papHam1 -> Baboon ; tarSyr1 -> Tarsier ; micMur1 -> Mouse_lemur ; otoGar1 -> Bushbaby ; canFam2 -> Dog ; mm9 -> Mouse ; monDom5 -> Opossum " 13way.nh
-    #	http://genome.ucsc.edu/cgi-bin/phyloGif
-    #	to obtain a gif image for htdocs/images/phylo/calJac3_13way.gif
+    
+    # use the tree provided by Bob K. for display:
+    cat << '_EOF_' > commonNames.13way.nh
+((((((Marmoset,((((Human,Chimp),Gorilla),Orangutan), 
+(Baboon,Rhesus))),Tarsier),
+(MouseLemur, Bushbaby)),Mouse),Dog),Opossum);
+'_EOF_'
+    # << happy emacs
 
-    /cluster/bin/phast/all_dists 13way.nh > 13way.distances.txt
+    #	use http://genome.ucsc.edu/cgi-bin/phyloGif
+    #   to generate calJac3_13way.png image and copy over to
+    #   htdocs/images/phylo/
+    cp calJac3_13way.png /usr/local/apache/htdocs/images/phylo
+    #	Note the old a gif image for htdocs/images/phylo/calJac3_13way.gif 
+    #   is wrong, remove it
+    #   rm /usr/local/apache/htdocs/images/phylo/calJac3_13way.gif
+
+    /cluster/bin/phast/all_dists 13way.nh > 13way.distances.tmp
+    # swap the calJac3 from field 2 to field 1
+    cat 13way.distances.tmp | \
+     awk '{if ($2 == "calJac3") print $2, "  " $1, $3; else print $0;}' | \ 
+     sort > 13way.distances.txt
     # make sure all symlinks lastz.DB -> lastzDb-date
     #	exist here and at the swap locations, the perl script expects this
     #	in order to find featureBits numbers.
+    #   This is for our own bookkeeping business so we can 
+    #   determine what is done. If there is any zero in the table,
+    #   then, we miss some steps such as no chain/net for a calJac3 to hg19.
     #	Use 13way.distances.txt to create the table below
     #	with this perl script:
 
@@ -1138,25 +1171,36 @@ close (FH);
     chmod +x ./sizeStats.pl
     ./sizeStats.pl
 
-# 01  0.1090 - Orangutan ponAbe2   (% 71.893) (% 67.448)
-# 02  0.1094 - Human hg19          (% 73.768) (% 70.654)
-# 03  0.1094 - Chimp panTro2       (% 72.304) (% 69.302)
-# 04  0.1100 - Gorilla gorGor2     (% 76.343) (% 75.481)
-# 05  0.1341 - Rhesus rheMac2      (% 69.625) (% 70.711)
-# 06  0.1379 - Baboon papHam1      (% 70.053) (% 69.607)
-# 07  0.2585 - Tarsier tarSyr1     (% 46.729) (N/A)
-# 08  0.2615 - Mouse lemur micMur1 (% 45.726) (% 67.145)
-# 09  0.2991 - Bushbaby otoGar1    (% 42.743) (% 58.837)
-# 10  0.3688 - Dog canFam2         (% 50.766) (% 57.162)
-# 11  0.5072 - Mouse mm9           (% 31.310) (% 32.815)
-# 12  0.7572 - Opossum monDom5     (%  7.906) (%  6.174)
+# 01  0.1090 - Orangutan ponAbe2        (% 71.893) (% 67.448)
+# 02  0.1094 - Human hg19       (% 73.768) (% 70.654)
+# 03  0.1094 - Chimp panTro2    (% 72.304) (% 69.302)
+# 04  0.1100 - Gorilla gorGor2  (% 76.343) (N/A)
+# 05  0.1341 - Rhesus rheMac2   (% 69.625) (% 70.711)
+# 06  0.1379 - Baboon papHam1   (% 70.053) (% 69.607)
+# 07  0.2585 - Tarsier tarSyr1  (% 46.729) (N/A)
+# 08  0.2615 - Mouse lemur micMur1      (% 45.726) (% 67.145)
+# 09  0.2991 - Bushbaby otoGar1 (% 42.743) (% 58.837)
+# 10  0.3688 - Dog canFam2      (% 50.766) (% 57.162)
+# 11  0.5072 - Mouse mm9        (% 31.310) (% 32.815)
+# 12  0.7572 - Opossum monDom5  (% 7.906) (% 6.174)
+
+
 
     # create species list and stripped down tree for autoMZ
-    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
-	13way.nh > tmp.nh
-    echo `cat tmp.nh` > tree-commas.nh
-    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
-    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+    # Note: the 13way.nh can not be used directly becasue calJac3 is
+    #       not on top. Insted use commonNames.13way.nh provided by Bob
+    #       to create species list and stripped down tree.
+    # sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+    #	13way.nh > tmp.nh
+    sed -e 's/Marmoset/calJac3/' -e 's/Orangutan/ponAbe2/'  \
+     -e 's/Human/hg19/'  -e 's/Chimp/panTro2/'      \
+     -e 's/Gorilla/gorGor2/'  -e 's/Rhesus/rheMac2/'     \
+     -e 's/Baboon/papHam1/'   -e 's/Tarsier/tarSyr1/'    \
+     -e 's/MouseLemur/micMur1/' -e 's/Bushbaby/otoGar1/'   \
+     -e 's/Dog/canFam2/'     -e 's/Mouse/mm9/' \
+     -e 's/Opossum/monDom5/'   \
+         commonNames.13way.nh  | sed 's/ //g; s/,/ /g; s/;//g;'   > tree.nh
+    sed 's/[()]//g; s/,/ /g; s/;//g;' tree.nh > species.list
 
     #	collect the single whole mafs into one place for splitting:
     mkdir singleMafs
@@ -1176,13 +1220,13 @@ close (FH);
 
     mkdir /hive/data/genomes/calJac3/bed/multiz13way/splitMaf
     cd /hive/data/genomes/calJac3/bed/multiz13way/splitMaf
-    for D in gorGor2 tarSyr1 papHam1 otoGar1 micMur1
+    for D in tarSyr1 papHam1 otoGar1 micMur1
 do
     mkdir ${D}
     mafSplit -useHashedName=8 -byTarget /dev/null ${D}/ \
         ../singleMafs/calJac3.${D}.rbest.maf.gz
 done
-for D in ponAbe2 hg19 panTro2 rheMac2 mm9 canFam2 monDom5
+for D in gorGor2 ponAbe2 hg19 panTro2 rheMac2 mm9 canFam2 monDom5
 do
     mkdir ${D}
     mafSplit -useHashedName=8 -byTarget /dev/null ${D}/ \
@@ -1190,11 +1234,13 @@ do
 done
 
     cd /hive/data/genomes/calJac3/bed/multiz13way
+    mkdir run 
     mkdir penn
     cp -p /cluster/bin/penn/multiz.2008-11-25/multiz penn 
     cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn 
     cp -p /cluster/bin/penn/multiz.2008-11-25/autoMZ penn 
 
+    cd /hive/data/genomes/calJac3/bed/multiz13way/run
     #	set the db and pairs directories here
     cat > autoMultiz.csh << '_EOF_'
 #!/bin/csh -ef
@@ -1243,13 +1289,22 @@ popd > /dev/null
 '_EOF_'
 # << happy emacs
 
+    ssh swarm
+    cd /hive/data/genomes/calJac3/bed/multiz13way/run
+    mkdir maf
     find ../splitMaf -type f | grep "/[0-9][0-9][0-9].maf" \
 	| xargs -L 1 basename | sort -u > chr.part.list
     gensub2 chr.part.list single template jobList
-    mkdir maf
     para -ram=8g create jobList
-
+    # para try check time push stuff
     #	put the split mafs back together into a single result
+# Completed: 256 of 256 jobs
+# CPU time in finished jobs:     312697s    5211.62m    86.86h    3.62d  0.010 y
+# IO & Wait Time:                 23882s     398.03m     6.63h    0.28d  0.001 y
+# Average job time:                1315s      21.91m     0.37h    0.02d
+# Longest finished job:           25624s     427.07m     7.12h    0.30d
+# Submission to last job:         25750s     429.17m     7.15h    0.30d
+
     ssh hgwdev
     cd  /hive/data/genomes/calJac3/bed/multiz13way/run
 
@@ -1260,9 +1315,13 @@ do
 done
     tail -q -n 1 maf/000.maf >> calJac3.13way.maf
 
-    # split the /hive/data/genomes/calJac3/bed/multiz13way/run
-     calJac3.13way.maf to other folder with fullName for phastCons
-    # load tables for a look
+# -rw-rw-r-- 1 30553880367 Apr 21 09:40 calJac3.13way.maf
+
+    #split the /hive/data/genomes/calJac3/bed/multiz13way/run/calJac3.13way.maf 
+    # to other folder with fullName for phastCons (???? tbd???)
+
+    # load into database
+    ssh hgwdev
     mkdir -p /gbdb/calJac3/multiz13way/maf
     cd /hive/data/genomes/calJac3/bed/multiz13way/run
     ln -s `pwd`/calJac3.13way.maf \
@@ -1270,23 +1329,33 @@ done
 
     # this generates an immense multiz13way.tab file in the directory
     #	where it is running.  Best to run this over in scratch.
-    cd /data/tmp
+    cd /scratch/tmp
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/calJac3/multiz13way/maf calJac3 multiz13way
-    #   Loading multiz13way into database
-    #   Loaded 27583585 mafs in 257 files from /gbdb/calJac3/multiz13way/maf
-    #   real    34m38.042s
+    # Indexing and tabulating /gbdb/calJac3/multiz13way/maf/multiz13way.maf
+    # Loading multiz13way into database
+    # Loaded 13258003 mafs in 1 files from /gbdb/calJac3/multiz13way/maf
+    # real    16m48.119s
 
     # load summary table
     time nice -n +19 cat /gbdb/calJac3/multiz13way/maf/*.maf \
 	| hgLoadMafSummary calJac3 -minSize=30000 -verbose=2 \
 		-mergeGap=1500 -maxSize=200000  multiz13waySummary stdin
-    #   Created 4661062 summary blocks from 199318324 components 
-    #   and 27583585 mafs from stdin
-    #   Loading into calJac3 table multiz13waySummary...
-    #   Loading complete
-    #   real    38m46.339s
+    # Indexing and tabulating stdin
+    # Created 2327841 summary blocks from 99934514 components 
+    # and 13258003 mafs from stdin
+    # Loading into calJac3 table multiz13waySummary...
+    # Loading complete
+    # real    16m7.795s
 
+    wc -l multiz13way*.tab
+    # 13258003 multiz13way.tab
+    #  2327841 multiz13waySummary.tab
+    # 15585844 total
+    rm  multiz13way*.tab
+
+############################################################################
+# GAP ANNOTATE MULTIZ13WAY MAF AND LOAD TABLES (DONE  2011-04-21 - Chin)
     # Gap Annotation (DONE 2010-05-12 - chin)
     # prepare bed files with gap info
     mkdir /hive/data/genomes/calJac3/bed/multiz13way/anno
@@ -1320,10 +1389,14 @@ do
     echo ${DB}.len  >> sizes
 done
 
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
     #   the annotation step requires large memory, run on memk nodes
     ssh memk
     cd /hive/data/genomes/calJac3/bed/multiz13way/anno/run
     ls ../../run/maf | sed -e "s/.maf//" > chr.list
+
     cat << '_EOF_' > template
 #LOOP
 ./anno.csh $(root1) {check out line+ ../maf/$(root1).maf}
@@ -1347,13 +1420,13 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/calJac3/calJac3.2bit $outMaf
     #   specify lots of ram to get one job per node
     para -ram=30g push
     #   
-    #  para check
-    #  256 jobs in batch
-    #  0 jobs (including everybody's) in Parasol queue or running.
-    #  Checking finished jobs
-    #  ...
-    #  ranOk: 256
-    #  total jobs in batch: 256
+    #  para check para time ...
+    # Completed: 256 of 256 jobs
+    # CPU time in finished jobs:   4318s      71.96m     1.20h    0.05d  0.000 y
+    # IO & Wait Time:              1365s      22.75m     0.38h    0.02d  0.000 y
+    # Average job time:              22s       0.37m     0.01h    0.00d
+    # Longest finished job:         361s       6.02m     0.10h    0.00d
+    # Submission to last job:       830s      13.83m     0.23h    0.01d
 
 
     ssh hgwdev
@@ -1367,18 +1440,24 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/calJac3/calJac3.2bit $outMaf
     cd /data/tmp
     time nice -n +19 hgLoadMaf \
         -pathPrefix=/gbdb/calJac3/multiz13way/maf calJac3 multiz13way
-    #  Loaded 14259674 mafs in 256 files from /gbdb/calJac3/multiz13way/maf
-    #  real    15m41.804s
+    # Indexing and tabulating /gbdb/calJac3/multiz13way/maf/000.maf
+    #    .... .... ....
+    # Indexing and tabulating /gbdb/calJac3/multiz13way/maf/254.maf
+    # Indexing and tabulating /gbdb/calJac3/multiz13way/maf/255.maf
+    # Loading multiz13way into database
+    # Loaded 14063411 mafs in 256 files from /gbdb/calJac3/multiz13way/maf
+    # real    21m56.822s
+
 
     time nice -n +19 cat /gbdb/calJac3/multiz13way/maf/*.maf \
         | hgLoadMafSummary calJac3 -minSize=30000 -mergeGap=1500 \
                  -maxSize=200000  multiz13waySummary stdin
-    #   Indexing and tabulating stdin
-    #   Created 2330531 summary blocks from 99659162 components 
-    #   and 14259674 mafs from stdin
-    #   Loading into calJac3 table multiz13waySummary...
-    #   Loading complete
-    #   real    17m17.229s
+    # Indexing and tabulating stdin
+    # Created 2327841 summary blocks from 99934514 components 
+    # and 14063411 mafs from stdin
+    # Loading into calJac3 table multiz13waySummary...
+    # Loading complete
+    # real    28m34.395s
 
     #   by loading this into the table multiz13waySummary, it will
     #   replace
@@ -1387,16 +1466,15 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/calJac3/calJac3.2bit $outMaf
     #   -rw-rw-r-- 1 727501509 May 11 16:48 multiz13way.tab
     #   -rw-rw-r-- 1 113079736 May 12 08:57 multiz13waySummary.tab
     wc -l multiz13way*.tab
-    #    14259674 multiz13way.tab
-    #     2330531 multiz13waySummary.tab
-    #    16590205 total
+    #    14063411 multiz13way.tab
+    #     2327841 multiz13waySummary.tab
+    #    16391252 total
     rm multiz13way*.tab
-
 
     # re-do the multiz13way.maf (DONE 2011-02-23 - Chin)
     ssh hgwdev
-    rm -fr /gbdb/calJac3/multiz13way/maf
-    mkdir /gbdb/calJac3/multiz13way/maf
+    # rm -fr /gbdb/calJac3/multiz13way/maf extFiles got them already
+    # mkdir /gbdb/calJac3/multiz13way/maf  
     cd /hive/data/genomes/calJac3/bed/multiz13way/anno
     grep "^##maf version" maf/000.maf \
         | sort -u > calJac3.anno.13way.maf
@@ -1417,9 +1495,9 @@ done >> calJac3.anno.13way.maf
                 calJac3 multiz13way
     # Indexing and tabulating /gbdb/calJac3/multiz13way/anno/multiz13way.maf
     # Loading multiz13way into database
-    # Loaded 14259674 mafs in 1 files from /gbdb/calJac3/multiz13way/anno
+    # Loaded 14063411 mafs in 1 files from /gbdb/calJac3/multiz13way/anno
     # 
-    # real    25m49.362s
+    # real    31m3.796s
 
     hgLoadMafSummary calJac3 -minSize=30000 -mergeGap=1500 \
         -maxSize=200000  multiz13waySummary \
@@ -1436,6 +1514,20 @@ done >> calJac3.anno.13way.maf
     #   link:
     rm /gbdb/calJac3/multiz13way/maf/multiz13way.maf
     rmdir /gbdb/calJac3/multiz13way/maf
+
+    # Clean up the extFile table 
+    # remove entries with path like:  /gbdb/calJac3/multiz13way/maf/255.maf 
+    # hgsql -e "delete from extFile  where path like
+    # '/gbdb/calJac3/multiz13way/maf/%';" calJac3
+   #  hgsql -e "select path from extFile;" calJac3
+    # +------------------------------------------------+
+    # | path                                           |
+    # +------------------------------------------------+
+    # | /gbdb/calJac3/multiz8way/multiz8way.maf        | 
+    # | /gbdb/calJac3/multiz13way/anno/multiz13way.maf | 
+    # +------------------------------------------------+
+
+
 
 #####################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2010-04-01 - Hiram)

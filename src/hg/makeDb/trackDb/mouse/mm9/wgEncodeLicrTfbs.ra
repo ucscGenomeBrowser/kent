@@ -166,14 +166,14 @@ noInherit on
 		# subId=3157 dateSubmitted=2011-01-05
 
 
-		track wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig
-		parent wgEncodeLicrTfbsViewSignal off
-		shortLabel Cerebellum Input Sig
-		longLabel ENCODE LICR TFBS Signal (Input in Cerebellum cells)
-		subGroups view=Signal age=adult8wks factor=Input cellType=Cbellum control=std sex=M strain=C57BL6
-		type bigWig 0.140000 41.009998
-		color 153,38,0
-		# subId=3275 dateSubmitted=2011-01-18
+        track wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel Cerebellum Input Sig
+        longLabel ENCODE LICR TFBS Signal (Input in Cerebellum cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=Cbellum control=std sex=M strain=C57BL6
+        type bigWig 0.140000 41.009998
+        color 153,38,0
+        # subId=3921 dateSubmitted=2011-04-22
 
 		track wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal off
@@ -283,4 +283,13 @@ noInherit on
         type bigWig 0.120000 48.990002
         color 153,38,0
         # subId=3888 dateSubmitted=2011-04-15
+
+        track wgEncodeLicrTfbsBmarrowInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel BoneMarrow Input Sig
+        longLabel ENCODE LICR TFBS Signal (Input in BoneMarrow cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=BMarrow control=std sex=M strain=C57BL6
+        type bigWig 0.150000 34.869999
+        color 153,38,0
+        # subId=3920 dateSubmitted=2011-04-22
 
