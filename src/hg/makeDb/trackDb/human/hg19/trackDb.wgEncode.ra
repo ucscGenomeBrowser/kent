@@ -164,7 +164,8 @@ include wgEncodeUchicagoTfbs.ra
 include wgEncodeSunyAlbanyGeneSt.ra alpha,beta
 
 # SUNY Tiling Array (wrangler: cricket)
-include wgEncodeSunyAlbanyTiling.ra
+include wgEncodeSunyAlbanyTiling.ra beta,public
+include wgEncodeSunyAlbanyTiling.new.ra alpha
 
 # SUNY SwitchGear (wrangler: cricket)
 include wgEncodeSunySwitchgear.ra alpha
