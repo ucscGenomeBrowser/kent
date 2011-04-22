@@ -277,11 +277,8 @@ char *encodeExp = NULL;
 if (optionExists("experimentify"))
     {
     encodeExp = optionVal("encodeExp","encodeExp");
-    if (strlen(encodeExp) == 0)
-        errAbort("encodeExp table will be ?\n");
-    if  (sameWord("std",encodeExp))
+    if (strlen(encodeExp) == 0 || sameWord("std",encodeExp))
         encodeExp = "encodeExp";
-    verbose(0, "Using hgFixed.%s\n",encodeExp);
     }
 else if (optionExists("encodeExp"))
     errAbort("-encodeExp option requires -experimentify option.\n");
@@ -334,8 +331,11 @@ if(table == NULL)
     table = mdbTableName(conn,TRUE); // Look for sandBox name first
     if(table == NULL)
         errAbort("TABLE NOT FOUND: '%s.%s'.\n",db,MDB_DEFAULT_NAME);
-    verbose(1, "Using table named '%s.%s'.\n",db,table);
     }
+if (encodeExp != NULL)
+    verbose(1, "Using tables named '%s.%s' and 'hgFixed.%s'.\n",db,table,encodeExp);
+else
+    verbose(1, "Using table named '%s.%s'.\n",db,table);
 
 if(byVar)
     {
