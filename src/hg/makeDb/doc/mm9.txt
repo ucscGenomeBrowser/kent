@@ -11739,4 +11739,189 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/melGal1/bed
     ln -s blastz.mm9.swap lastz.mm9
 
+############################################################################
+# Nuclear Lamina (woring 2011-04-04 - Chin)
+# The track is based on:
+# "Molecular maps of the reorganization of genome-nuclear lamina 
+# interactions during differentiation"
+# Peric-Hupkes D, Meuleman W, Pagie L, Bruggeman SW et al. 
+# Mol Cell 2010 May 28;38(4):603-13. PMID: 20513434
+# GEO Accession Series GSE17051
+# Main Contact: 
+# Bas van Steensel
+# Division of Gene Regulation, room B4.042
+# Netherlands Cancer Institute
+# Plesmanlaan 121
+# 1066 CX Amsterdam
+# The Netherlands
+# Phone +31.20.5122040
+# http://research.nki.nl/vansteensellab
+
+    # Download data
+    mkdir /hive/data/outside/vansteensel
+    cd /hive/data/outside/vansteensel
+    # Raw GEO data
+    wget --timestamping \
+      ftp://ftp.ncbi.nih.gov/pub/geo/DATA/supplementary/series/GSE17051/GSE17051_RAW.tar
+    # SOFT formatted family file(s)
+     wget --timestamping \
+       ftp://ftp.ncbi.nih.gov/pub/geo/DATA/SOFT/by_series/GSE17051/GSE17051_family.soft.gz
+    # MINiML formatted family file(s) 
+    wget --timestamping \
+      ftp://ftp.ncbi.nih.gov/pub/geo/DATA/MINiML/by_series/GSE17051/GSE17051_family.xml.tgz
+    # Series Matrix File(s)
+    wget --timestamping \
+      ftp://ftp.ncbi.nih.gov/pub/geo/DATA/SeriesMatrix/GSE17051/GSE17051_series_matrix.txt.gz
+
+    # wiggle data from vansteensel lab:
+    # Embryonic Stem Cells
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/ES.gff.gz
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/ES.wig.gz
+    # Neuronal Precursor Cells
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/NP.gff.gz
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/NP.wig.gz
+    # Astrocytes
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/AC.gff.gz
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/AC.wig.gz
+    # NIH3T3 Cells
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/EF.gff.gz
+     wget --timestamping \
+        http://bioinformatics.nki.nl/~meuleman/EF.wig.gz
+
+    mkdir /hive/data/genomes/mm9/bed/nuclearLamina
+    cd /hive/data/genomes/mm9/bed/nuclearLamina
+    cp /hive/data/outside/vansteensel/*.gff.gz .
+    cp /hive/data/outside/vansteensel/*.wig.gz .
+    gunzip *.gz
+
+    # The wiggle files contain 51 set of duplicates (all on chr18), 
+    # Per data provider's instruction, fixed them by taking
+    # the average.
+    cat << '_EOF_' > quickCheckWig.pl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+my $chrom;
+my $curPos;
+my $curValue;
+my $prevPos;
+my $prevValue;
+my $lineNum = 0;
+my $tf1;
+my $tf2;
+
+open(FH, $ARGV[0]) or die("Error: cannot open file '$ARGV[0]'\n");
+while (my $line = <FH>) {
+    $lineNum += 1;   
+    if ($line =~ m/^browser/ ) {
+        next;
+    } elsif ($line =~ m/track/ ) {
+        next;
+    } elsif ($line =~ m/^variableStep/ ) {
+      ($tf1, $chrom, $tf2) = split('\s+', $line, 3);
+      $chrom =~ s/^chrom=//;
+      $curPos=0;
+      $curValue=0;      
+      $prevPos=0;
+      $prevValue=0;
+      next;
+    } elsif ($line =~ m/^[0-9]/ ) {
+	$prevPos = $curPos;
+	$prevValue = $curValue;
+        ($curPos, $curValue)=split('\s+', $line, 2);
+	$curValue =~ s/\n//;
+	$prevValue = $curValue;
+        if ($curPos == $prevPos)  {
+          printf("Duplicate %s %s on %s at line # %s \n", $curPos, $curValue, $chrom, $lineNum);
+	  next;   
+	}   
+    }
+} 
+   
+close (FH);
+'_EOF_'
+    #<< happy emacs
+    chmod +x quickCheckWig.pl
+    # check for duplicates in wiggles
+for WIG in AC EF ES NP
+do 
+./quickCheckWig.pl ${WIG}.wig > ${WIG}.dup.list 2>&1
+done
+
+    cat << '_EOF_' > fixDupWig.pl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+my $chrom;
+my $curPos;
+my $curValue;
+my $prevPos;
+my $prevValue;
+my $tf1;
+my $tf2;
+sub resetAll {
+  $curPos=0;
+  $curValue=0;
+  $prevPos=0;
+  $prevValue=0;
+}
+my $lineNum = 0;
+my $prtPos=0;
+my $prtValue=0;
+resetAll();
+open(FH, $ARGV[0]) or die("Error: cannot open file '$ARGV[0]'\n");
+while (my $line = <FH>) {
+    $lineNum += 1;   
+    if ($line =~ m/^browser/ ) {
+	printf("%s", $line);
+        next;
+    } elsif ($line =~ m/track/ ) {
+        printf("%s", $line);
+        next;
+    } elsif ($line =~ m/^variableStep/ ) {
+      #  get chrom number  
+      ($tf1, $chrom, $tf2) = split('\s+', $line, 3);
+      $chrom =~ s/^chrom=//;
+      &resetAll();      
+      printf  ("%s",$line);
+      next;
+    } elsif ($line =~ m/^[0-9]/ ) {
+        chomp($line);
+        ($curPos, $curValue)=split('\s+', $line, 2);
+        if ($prevPos == 0) {
+          $prevPos = $curPos;
+          $prevValue = $curValue;
+	  next;
+	} elsif ($prevPos == $curPos) {
+	  $prevValue=($prevValue+$curValue)/2;
+	 next;
+        } else {
+	 printf("%s\t%s\n", $prevPos, $prevValue);
+          $prevPos=$curPos;
+          $prevValue=$curValue;
+	}
+   }	
+} 
+close (FH);
+'_EOF_'
+    #<< happy emacs
+    chmod +x fixDupWig.pl
+
+    # fix duplicates in wiggles by takig average of duplicates
+for WIG in AC EF ES NP
+do
+./fixDupWig.pl ${WIG}.wig > ${WIG}_Fixed.wig
+done
+
+   # tested by loading **_Fixed.wig as customer tracks
+
+
 #########################################################################
