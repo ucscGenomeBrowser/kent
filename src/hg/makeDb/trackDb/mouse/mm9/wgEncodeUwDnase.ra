@@ -25,15 +25,16 @@ shortLabel UW DNaseI HS
 longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line 3134=3134 416B=416B BCellCD19p=B-cell_(CD19+) Cerebellum=Cerebellum Cerebrum=Cerebrum ESCJ7=ES-CJ7 Fibroblast=Fibroblast Kidney=Kidney Liver=Liver Lung=Lung MEL=MEL TNaive=T-Naive WholeBrain=Whole_Brain
+subGroup2 cellType Cell_Line 3134=3134 416B=416B BCellCD19p=B-cell_(CD19+) Cerebellum=Cerebellum Cerebrum=Cerebrum ESCJ7=ES-CJ7 Fibroblast=Fibroblast Heart=Heart Kidney=Kidney Liver=Liver Lung=Lung MEL=MEL TNaive=T-Naive WholeBrain=Whole_Brain
 subGroup3 strain Strain B6D2F1J=B6D2F1/J C57BL6=C57BL/6 RIII=RIII S129=129 UKN=Unknown
 subGroup4 sex Sex M=M
 subGroup5 age Age adult8wks=adult-8wks E0=E0 E14half=E14.5 immortal=immortalized
-subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6 rep7=7 rep8=8 rep9=9
+subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6 rep7=7 rep8=8 rep9=9 rep10=10
 dimensions dimensionX=cellType dimensionY=age dimensionA=strain dimensionB=rep
 dimensionAchecked C57BL6,S129,UKN
 dimensionBchecked rep1
 sortOrder cellType=+ strain=+ age=+ sex=+ rep=+ view=+
+fileSortOrder cell=Cell_Line strain=Strain sex=Sex age=Age replicate=Replicate view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain age=age sex=sex
 dragAndDrop subTracksi
 noInherit on
@@ -349,6 +350,120 @@ wgEncode 1
 		color 153,38,0
 		# subId=2016 dateSubmitted=2010-07-24
 
+        track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep1
+        parent wgEncodeUwDnaseViewHotspots off
+        shortLabel T-Naive 1
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in T-Naive cells)
+        subGroups view=Hotspots age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep1
+        type broadPeak
+        color 153,38,0
+        # subId=3890 dateSubmitted=2011-04-18
+
+        track wgEncodeUwDnaseLungC57bl6MAdult8wksHotspotsRep1
+        parent wgEncodeUwDnaseViewHotspots off
+        shortLabel Lung 1
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in Lung cells)
+        subGroups view=Hotspots age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep1
+        type broadPeak
+        color 153,38,0
+        # subId=3906 dateSubmitted=2011-04-19
+
+        track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep1
+        parent wgEncodeUwDnaseViewHotspots off
+        shortLabel B-cell_(CD19+) 1
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in B-cell_(CD19+) cells)
+        subGroups view=Hotspots age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep1
+        type broadPeak
+        color 153,38,0
+        # subId=3891 dateSubmitted=2011-04-19
+
+        track wgEncodeUwDnaseHeartC57bl6MAdult8wksHotspotsRep1
+        parent wgEncodeUwDnaseViewHotspots off
+        shortLabel Heart 1
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in Heart cells)
+        subGroups view=Hotspots age=adult8wks cellType=Heart sex=M strain=C57BL6 rep=rep1
+        type broadPeak
+        color 153,38,0
+        # subId=3912 dateSubmitted=2011-04-19
+
+        track wgEncodeUwDnaseKidneyC57bl6MAdult8wksHotspotsRep2
+        parent wgEncodeUwDnaseViewHotspots off
+        shortLabel Kidney 2
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in Kidney cells)
+        subGroups view=Hotspots age=adult8wks cellType=Kidney sex=M strain=C57BL6 rep=rep2
+        type broadPeak
+        color 153,38,0
+        # subId=3900 dateSubmitted=2011-04-19
+
+        track wgEncodeUwDnaseCbellumC57bl6MAdult8wksHotspotsRep2
+        parent wgEncodeUwDnaseViewHotspots off
+        shortLabel Cerebellum 2
+        longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in Cerebellum cells)
+        subGroups view=Hotspots age=adult8wks cellType=Cerebellum sex=M strain=C57BL6 rep=rep2
+        type broadPeak
+        color 153,38,0
+        # subId=3910 dateSubmitted=2011-04-19
+
+        #track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep7
+        #parent wgEncodeUwDnaseViewHotspots off
+        #shortLabel WholeBrain 7
+        #longLabel ENCODE UW DNaseI HS Hotspots Replicate 7 (in WholeBrain cells)
+        #subGroups view=Hotspots age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep7
+        #type broadPeak
+        #color 153,38,0
+        # subId=3901 dateSubmitted=2011-04-19
+        #display no
+
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep10
+        #parent wgEncodeUwDnaseViewHotspots off
+        #shortLabel Liver 10
+        #longLabel ENCODE UW DNaseI HS Hotspots Replicate 10 (in Liver cells)
+        #subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep10
+        #type broadPeak
+        #color 153,38,0
+        # subId=3905 dateSubmitted=2011-04-19
+        #display no
+
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep4
+        #parent wgEncodeUwDnaseViewHotspots off
+        #shortLabel Liver 4
+        #longLabel ENCODE UW DNaseI HS Hotspots Replicate 4 (in Liver cells)
+        #subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep4
+        #type broadPeak
+        #color 153,38,0
+        # subId=3902 dateSubmitted=2011-04-19
+        #display no
+
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep5
+        #parent wgEncodeUwDnaseViewHotspots off
+        #shortLabel Liver 5
+        #longLabel ENCODE UW DNaseI HS Hotspots Replicate 5 (in Liver cells)
+        #subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep5
+        #type broadPeak
+        #color 153,38,0
+        # subId=3903 dateSubmitted=2011-04-19
+        #display no
+
+        #track wgEncodeUwDnaseLungC57bl6MAdult8wksHotspotsRep3
+        #parent wgEncodeUwDnaseViewHotspots off
+        #shortLabel Lung 3
+        #longLabel ENCODE UW DNaseI HS Hotspots Replicate 3 (in Lung cells)
+        #subGroups view=Hotspots age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep3
+        #type broadPeak
+        #color 153,38,0
+        # subId=3907 dateSubmitted=2011-04-19
+        #display no
+
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep6
+        #parent wgEncodeUwDnaseViewHotspots off
+        #shortLabel Liver 6
+        #longLabel ENCODE UW DNaseI HS Hotspots Replicate 6 (in Liver cells)
+        #subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep6
+        #type broadPeak
+        #color 153,38,0
+        # subId=3904 dateSubmitted=2011-04-19
+        #display no
+
 	track wgEncodeUwDnaseViewPeaks
 	shortLabel Peaks
 	view Peaks
@@ -657,6 +772,119 @@ wgEncode 1
 		color 153,38,0
 		# subId=2016 dateSubmitted=2010-07-24
 
+        track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep1
+        parent wgEncodeUwDnaseViewPeaks off
+        shortLabel T-Naive Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in T-Naive cells)
+        subGroups view=Peaks age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep1
+        type narrowPeak
+        color 153,38,0
+        # subId=3890 dateSubmitted=2011-04-18
+
+        track wgEncodeUwDnaseLungC57bl6MAdult8wksPkRep1
+        parent wgEncodeUwDnaseViewPeaks off
+        shortLabel Lung Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in Lung cells)
+        subGroups view=Peaks age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep1
+        type narrowPeak
+        color 153,38,0
+        # subId=3906 dateSubmitted=2011-04-19
+
+        track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep1
+        parent wgEncodeUwDnaseViewPeaks off
+        shortLabel B-cell_(CD19+) Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in B-cell_(CD19+) cells)
+        subGroups view=Peaks age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep1
+        type narrowPeak
+        color 153,38,0
+        # subId=3891 dateSubmitted=2011-04-19
+
+        track wgEncodeUwDnaseHeartC57bl6MAdult8wksPkRep1
+        parent wgEncodeUwDnaseViewPeaks off
+        shortLabel Heart Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in Heart cells)
+        subGroups view=Peaks age=adult8wks cellType=Heart sex=M strain=C57BL6 rep=rep1
+        type narrowPeak
+        color 153,38,0
+        # subId=3912 dateSubmitted=2011-04-19
+
+        track wgEncodeUwDnaseKidneyC57bl6MAdult8wksPkRep2
+        parent wgEncodeUwDnaseViewPeaks off
+        shortLabel Kidney Pk 2
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in Kidney cells)
+        subGroups view=Peaks age=adult8wks cellType=Kidney sex=M strain=C57BL6 rep=rep2
+        type narrowPeak
+        color 153,38,0
+        # subId=3900 dateSubmitted=2011-04-19
+
+        track wgEncodeUwDnaseCbellumC57bl6MAdult8wksPkRep2
+        parent wgEncodeUwDnaseViewPeaks off
+        shortLabel Cerebellum Pk 2
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in Cerebellum cells)
+        subGroups view=Peaks age=adult8wks cellType=Cerebellum sex=M strain=C57BL6 rep=rep2
+        type narrowPeak
+        color 153,38,0
+        # subId=3910 dateSubmitted=2011-04-19
+
+        #track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep7
+        #parent wgEncodeUwDnaseViewPeaks off
+        #shortLabel WholeBrain Pk 7
+        #longLabel ENCODE UW DNaseI HS Peaks Replicate 7 (in WholeBrain cells)
+        #subGroups view=Peaks age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep7
+        #type narrowPeak
+        #color 153,38,0
+        # subId=3901 dateSubmitted=2011-04-19
+        #display no
+	
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep10
+        #parent wgEncodeUwDnaseViewPeaks off
+        #shortLabel Liver Pk 10
+        #longLabel ENCODE UW DNaseI HS Peaks Replicate 10 (in Liver cells)
+        #subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep10
+        #type narrowPeak
+        #color 153,38,0
+        # subId=3905 dateSubmitted=2011-04-19 
+        #display no
+
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep4
+        #parent wgEncodeUwDnaseViewPeaks off
+        #shortLabel Liver Pk 4
+        #longLabel ENCODE UW DNaseI HS Peaks Replicate 4 (in Liver cells)
+        #subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep4
+        #type narrowPeak
+        #color 153,38,0
+        # subId=3902 dateSubmitted=2011-04-19
+        #display no
+		
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep5
+        #parent wgEncodeUwDnaseViewPeaks off
+        #shortLabel Liver Pk 5
+        #longLabel ENCODE UW DNaseI HS Peaks Replicate 5 (in Liver cells)
+        #subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep5
+        #type narrowPeak
+        #color 153,38,0
+        # subId=3903 dateSubmitted=2011-04-19
+        #display no
+		
+        #track wgEncodeUwDnaseLungC57bl6MAdult8wksPkRep3
+        #parent wgEncodeUwDnaseViewPeaks off
+        #shortLabel Lung Pk 3
+        #longLabel ENCODE UW DNaseI HS Peaks Replicate 3 (in Lung cells)
+        #subGroups view=Peaks age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep3
+        #type narrowPeak
+        #color 153,38,0
+        # subId=3907 dateSubmitted=2011-04-19
+        #display no
+
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep6
+        #parent wgEncodeUwDnaseViewPeaks off
+        #shortLabel Liver Pk 6
+        #longLabel ENCODE UW DNaseI HS Peaks Replicate 6 (in Liver cells)
+        #subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep6
+        #type narrowPeak
+        #color 153,38,0
+        # subId=3904 dateSubmitted=2011-04-19
+        #display no
 
 	track wgEncodeUwDnaseViewRawSignal
 	shortLabel Raw Signal
@@ -968,5 +1196,118 @@ wgEncode 1
 		color 153,38,0
 		# subId=2016 dateSubmitted=2010-07-24
 
+        track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep1
+        parent wgEncodeUwDnaseViewRawSignal off
+        shortLabel T-Naive Raw 1
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in T-Naive cells)
+        subGroups view=RawSignal age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 87148.000000
+        color 153,38,0
+        # subId=3890 dateSubmitted=2011-04-18
+
+        track wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep1
+        parent wgEncodeUwDnaseViewRawSignal off
+        shortLabel Lung Raw 1
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Lung cells)
+        subGroups view=RawSignal age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 33112.000000
+        color 153,38,0
+        # subId=3906 dateSubmitted=2011-04-19
+
+        track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep1
+        parent wgEncodeUwDnaseViewRawSignal off
+        shortLabel B-cell_(CD19+) Raw 1
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in B-cell_(CD19+) cells)
+        subGroups view=RawSignal age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 84233.000000
+        color 153,38,0
+        # subId=3891 dateSubmitted=2011-04-19
+
+        track wgEncodeUwDnaseHeartC57bl6MAdult8wksRawRep1
+        parent wgEncodeUwDnaseViewRawSignal off
+        shortLabel Heart Raw 1
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Heart cells)
+        subGroups view=RawSignal age=adult8wks cellType=Heart sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 35686.000000
+        color 153,38,0
+        # subId=3912 dateSubmitted=2011-04-19
+
+        track wgEncodeUwDnaseKidneyC57bl6MAdult8wksRawRep2
+        parent wgEncodeUwDnaseViewRawSignal off
+        shortLabel Kidney Raw 2
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in Kidney cells)
+        subGroups view=RawSignal age=adult8wks cellType=Kidney sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 39287.000000
+        color 153,38,0
+        # subId=3900 dateSubmitted=2011-04-19
+
+        track wgEncodeUwDnaseCbellumC57bl6MAdult8wksRawRep2
+        parent wgEncodeUwDnaseViewRawSignal off
+        shortLabel Cerebellum Raw 2
+        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in Cerebellum cells)
+        subGroups view=RawSignal age=adult8wks cellType=Cerebellum sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 19240.000000
+        color 153,38,0
+        # subId=3910 dateSubmitted=2011-04-19
+
+        #track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep7
+        #parent wgEncodeUwDnaseViewRawSignal off
+        #shortLabel WholeBrain Raw 7
+        #longLabel ENCODE UW DNaseI HS Raw Signal Replicate 7 (in WholeBrain cells)
+        #subGroups view=RawSignal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep7
+        #type bigWig 1.000000 59323.000000
+        #color 153,38,0
+        # subId=3901 dateSubmitted=2011-04-19
+        #display no
+
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep10
+        #parent wgEncodeUwDnaseViewRawSignal off
+        #shortLabel Liver Raw 10
+        #longLabel ENCODE UW DNaseI HS Raw Signal Replicate 10 (in Liver cells)
+        #subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep10
+        #type bigWig 1.000000 67587.000000
+        #color 153,38,0
+        # subId=3905 dateSubmitted=2011-04-19
+        #display no
+
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep4
+        #parent wgEncodeUwDnaseViewRawSignal off
+        #shortLabel Liver Raw 4
+        #longLabel ENCODE UW DNaseI HS Raw Signal Replicate 4 (in Liver cells)
+        #subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep4
+        #type bigWig 1.000000 34957.000000
+        #color 153,38,0
+        # subId=3902 dateSubmitted=2011-04-19
+        #display no
+
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep5
+        #parent wgEncodeUwDnaseViewRawSignal off
+        #shortLabel Liver Raw 5
+        #longLabel ENCODE UW DNaseI HS Raw Signal Replicate 5 (in Liver cells)
+        #subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep5
+        #type bigWig 1.000000 20383.000000
+        #color 153,38,0
+        # subId=3903 dateSubmitted=2011-04-19
+        #display no
+
+        #track wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep3
+        #parent wgEncodeUwDnaseViewRawSignal off
+        #shortLabel Lung Raw 3
+        #longLabel ENCODE UW DNaseI HS Raw Signal Replicate 3 (in Lung cells)
+        #subGroups view=RawSignal age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep3
+        #type bigWig 1.000000 29892.000000
+        #color 153,38,0
+        # subId=3907 dateSubmitted=2011-04-19
+        #display no		
+
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep6
+        #parent wgEncodeUwDnaseViewRawSignal off
+        #shortLabel Liver Raw 6
+        #longLabel ENCODE UW DNaseI HS Raw Signal Replicate 6 (in Liver cells)
+        #subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep6
+        #type bigWig 1.000000 18306.000000
+        #color 153,38,0
+        # subId=3904 dateSubmitted=2011-04-19
+        #display no
 
 

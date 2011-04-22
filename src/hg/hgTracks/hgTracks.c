@@ -3567,18 +3567,22 @@ if (!psOutput)
             printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd);
             hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
             }
+        else if (sameWord(database,"oryCun2") || sameWord(database,"anoCar2") || sameWord(database,"calJac3"))
+            {
+            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
+            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
+            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+            }
         else if (ensVersionString[0])
             {
             char *archive = NULL;
             if (ensDateReference[0] && differentWord("current", ensDateReference))
                 archive = cloneString(ensDateReference);
             /*  Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
-            if (sameWord(database,"oryCun2") || isUnknownChrom(database, chromName))
+            if (isUnknownChrom(database, chromName))
                 {
                 //	which table to check
                 char *ctgPos = "ctgPos";
-                if (sameWord(database,"oryCun2"))
-                    ctgPos = "ctgPos2";
 
                 if (sameWord(database,"fr2"))
                     fr2ScaffoldEnsemblLink(archive);
