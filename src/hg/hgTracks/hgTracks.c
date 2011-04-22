@@ -3524,30 +3524,10 @@ if (!psOutput)
         }
     }
 
-/* see if hgFixed.trackVersion exists */
-boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
 char ensVersionString[256];
 char ensDateReference[256];
-ensVersionString[0] = 0;
-ensDateReference[0] = 0;
-if (trackVersionExists)
-    {
-    struct sqlConnection *conn = hAllocConn("hgFixed");
-    char query[256];
-    safef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' order by updateTime DESC limit 1", database);
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row;
-
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        safef(ensVersionString, sizeof(ensVersionString), "Ensembl %s",
-                row[0]);
-        safef(ensDateReference, sizeof(ensDateReference), "%s",
-                row[1]);
-        }
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    }
+ensGeneTrackVersion(database, ensVersionString, ensDateReference,
+    sizeof(ensVersionString));
 
 if (!psOutput)
     {
