@@ -2714,7 +2714,7 @@ if (!ajax)
         grpFreeList(&grps);
         }
     }
-    puts("<BR><BR>");
+puts("<BR><BR>");
 
 if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
