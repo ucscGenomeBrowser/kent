@@ -16,4 +16,8 @@ char *ensOrgNameFromScientificName(char *scientificName);
 #define UCSC_TO_ENSEMBL "ucscToEnsembl"
 #define ENSEMBL_LIFT "ensemblLift"
 
+void ensGeneTrackVersion(char *database, char *ensVersionString,
+    char *ensDateReference, int stringSize);
+/* check for trackVersion table and find Ensembl version */
+
 #endif /* ENSFACE_H */

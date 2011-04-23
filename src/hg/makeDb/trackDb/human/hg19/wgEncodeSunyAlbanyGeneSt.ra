@@ -246,7 +246,7 @@ noInherit on
 
 	track wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
 	parent wgEncodeSunyAlbanyGeneStView off
-	shortLabel H1-hESC ripInput
+	shortLabel H1-hESC RIP-Input
 	longLabel H1-hESC RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna factor=ripInput cellType=H1hESC
         origAssembly hg18

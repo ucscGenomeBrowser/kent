@@ -868,4 +868,29 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
+
+############################################################################
+# construct liftOver to anoCar2 (DONE - 2011-02-22 - Hiram) 
+    mkdir /hive/data/genomes/anoCar1/bed/blat.anoCar2.2011-04-20
+    cd /hive/data/genomes/anoCar1/bed/blat.anoCar2.2011-04-20
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-debug -dbHost=hgwdev -workhorse=hgwdev anoCar1 anoCar2 > do.log 2>&1
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev anoCar1 anoCar2 > do.log 2>&1
+    #	hgwdev broken down, reboot
+    #	continuing manually to complete the net step
+    cd /hive/data/genomes/anoCar1/bed/blat.anoCar2.2011-04-20/run.chain
+    time ./doNet.csh > net.log 2>&1
+    cd /hive/data/genomes/anoCar1/bed/blat.anoCar2.2011-04-20
+    time doSameSpeciesLiftOver.pl -continue=load  -buildDir=`pwd` \
+	-bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev anoCar1 anoCar2 > load.log 2>&1
+    #	real    2m40.093s
+
+    # verify this file exists:
+    #	/gbdb/anoCar1/liftOver/anoCar1ToAnoCar2.over.chain.gz
+    # and try out the conversion on genome-test from anoCar1 to anoCar2 
+
 ############################################################################
