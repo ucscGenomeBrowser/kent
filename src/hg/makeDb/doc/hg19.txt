@@ -9120,6 +9120,10 @@ TMPDIR=/scratch/tmp
       cd /hive/data/genomes/hg19/bed/wgEncodeReg/txn
       rm pooled/*.bedGraph normalized/*.bedGraph
 
+      # Make metadata: (forgive the long line)
+      mdbQuery out=ra "select * from hg19 where obj='wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2'" \
+      | sed 's/SigRep1V2/SigPooled/g' | grep -v ^replicate \
+      > ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/wgEncodeReg.ra
 
 
 
