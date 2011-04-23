@@ -12,8 +12,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001213
-expId 1213
 fileName wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -34,8 +32,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001214
-expId 1214
 fileName wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -56,8 +52,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001215
-expId 1215
 fileName wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -78,8 +72,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001216
-expId 1216
 fileName wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -100,8 +92,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001219
-expId 1219
 fileName wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -122,8 +112,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001217
-expId 1217
 fileName wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -144,8 +132,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001218
-expId 1218
 fileName wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -166,8 +152,6 @@ dataType GeneSt
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
-dccAccession wgEncodeEH001234
-expId 1234
 fileName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -187,8 +171,6 @@ dataType GeneSt
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
-dccAccession wgEncodeEH001236
-expId 1236
 fileName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -208,8 +190,6 @@ dataType GeneSt
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
-dccAccession wgEncodeEH001235
-expId 1235
 fileName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -229,8 +209,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-dccAccession wgEncodeEH001227
-expId 1227
 fileName wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -251,8 +229,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-dccAccession wgEncodeEH001228
-expId 1228
 fileName wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -273,8 +249,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001220
-expId 1220
 fileName wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -295,8 +269,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-dccAccession wgEncodeEH001229
-expId 1229
 fileName wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -317,8 +289,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-dccAccession wgEncodeEH001230
-expId 1230
 fileName wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -339,8 +309,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-dccAccession wgEncodeEH001231
-expId 1231
 fileName wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -361,8 +329,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001221
-expId 1221
 fileName wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -383,8 +349,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-dccAccession wgEncodeEH001232
-expId 1232
 fileName wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -405,8 +369,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-dccAccession wgEncodeEH001233
-expId 1233
 fileName wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -427,8 +389,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001222
-expId 1222
 fileName wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -449,8 +409,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001223
-expId 1223
 fileName wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -471,8 +429,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001226
-expId 1226
 fileName wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -493,8 +449,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001224
-expId 1224
 fileName wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -515,8 +469,6 @@ dataType GeneSt
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-dccAccession wgEncodeEH001225
-expId 1225
 fileName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -528,4 +480,4 @@ subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 1525871409
+# MAGIC: 1719039977

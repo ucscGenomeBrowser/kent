@@ -12078,7 +12078,26 @@ track->track = cloneString(tdb->track);
 track->table = cloneString(tdb->table);
 track->visibility = tdb->visibility;
 track->shortLabel = cloneString(tdb->shortLabel);
-track->longLabel = cloneString(tdb->longLabel);
+if (sameWord(tdb->track, "ensGene"))
+    {
+    char ensVersionString[256];
+    char ensDateReference[256];
+    ensGeneTrackVersion(database, ensVersionString, ensDateReference,
+	sizeof(ensVersionString));
+    if (ensVersionString[0])
+	{
+	char longLabel[256];
+	if (ensDateReference[0] && differentWord("current", ensDateReference))
+	    safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - archive %s - %s", ensVersionString, ensDateReference);
+	else
+	    safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - %s", ensVersionString);
+	track->longLabel = cloneString(longLabel);
+	}
+    else
+	track->longLabel = cloneString(tdb->longLabel);
+    }
+else
+    track->longLabel = cloneString(tdb->longLabel);
 track->color.r = tdb->colorR;
 track->color.g = tdb->colorG;
 track->color.b = tdb->colorB;

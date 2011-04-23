@@ -14,25 +14,25 @@
 #
 # Human cell types, template below
 # --------------------------
-# term (human-readable cell type name)
-# tag (machine-readable cell type name, no special characters)
-# type (informs pipeline code of stanza type.  Should always be Cell Line)
-# organism (used in many ways.  Should correspond to a "type organism" stanza)
-# description (human-readable description of cell type, for cell type cellTypes.html)
-# tissue (general tissue type, for categorizing cell types)
-# vendorName (name of vendor or lab that provides these cells)
-# vendorId (the ID of the cell type in the vendor's catalog)
-# orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html)
-# karyotype (optional human-readable karyotype, for .html page)
-# lineage (optional human-readable source of cell lines, e.g. 18 year old male)
-# termId (ID for best term in the BTO.  Optional but encouraged. Shown in cellTypes.html)
-# termUrl (URL for term in the ontology. Links with termId on cellTypes.html)
-# color (specifies color code for track data of this cell type, rgb values)
-# sex (used in documentation and validation.  Should correspond to a "type sex" stanza)
+# term (human-readable cell type name. required)
+# tag (machine-readable cell type name, no special characters. required)
+# type (informs pipeline code of stanza type.  Should always be Cell Line. Required)
+# organism (used in many ways.  Should correspond to a "type organism" stanza. required)
+# description (human-readable description of cell type, for cell type cellTypes.html. required)
+# tissue (general tissue type, for categorizing cell types.  optional)
+# vendorName (name of vendor or lab that provides these cells. required)
+# vendorId (the ID of the cell type in the vendor's catalog. optional)
+# orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html. required)
+# karyotype (optional human-readable karyotype, for .html page. optional)
+# lineage (optional human-readable source of cell lines, e.g. 18 year old male. optional)
+# termId (ID for best term in the BTO.  Optional but encouraged. Shown in cellTypes.html. optional)
+# termUrl (URL for term in the ontology. Links with termId on cellTypes.html. optiona)
+# color (specifies color code for track data of this cell type, rgb values. optional)
+# sex (used in documentation and validation.  Should correspond to a "type sex" stanza. required)
 # tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.
-#       Should correspond to a "type tier" stanza)
-# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
-# category: (T for tissue, L for cell line, or P for primary cells.  Not used in human)
+#       Should correspond to a "type tier" stanza. required)
+# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
+# category: (T for tissue, L for cell line, or P for primary cells.  Not used in human. optional)
 
 
 
@@ -3484,6 +3484,28 @@ protocol UW_Stam:WI38_Stam_protocol.pdf
 
 
 ### Mouse Cell Lines
+# Human cell types, template below
+# --------------------------
+# term (human-readable cell type name. required)
+# tag (machine-readable cell type name, no special characters. required)
+# type (informs pipeline code of stanza type.  Should always be Cell Line. Required)
+# organism (used in many ways.  Should correspond to a "type organism" stanza. required)
+# description (human-readable description of cell type, for cell type cellTypes.html. required)
+# tissue (general tissue type, for categorizing cell types.  optional)
+# age (should correspond to a "type age". optional)
+# strain (should correspond to a "type strain". optional)
+# vendorName (name of vendor or lab that provides these cells. required)
+# vendorId (the ID of the cell type in the vendor's catalog. optional)
+# orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html. required)
+# karyotype (optional human-readable karyotype, for .html page. optional)
+# lineage (optional human-readable source of cell lines, e.g. 18 year old male. optional)
+# termId (ID for best ontology term.  Optional but encouraged. Shown in cellTypes.html. optional)
+# termUrl (URL for term in the ontology. Links with termId on cellTypes.html. optiona)
+# color (specifies color code for track data of this cell type, rgb values. optional)
+# sex (used in documentation and validation.  Should correspond to a "type sex" stanza. required)
+# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
+# category: (T for tissue, L for cell line, or P for primary cells.  optional)
+# tier is NOT used in mouse
 term 3134
 tag 3134
 type Cell Line
@@ -8005,7 +8027,7 @@ label Alignments
 description Alignments
 
 term Base_Overlap_Signal
-tag  ????
+tag  baOvrlpSig
 type view
 label Base_Overlap_Signal
 description Base_Overlap_Signal
@@ -8422,13 +8444,13 @@ term GeneSt
 tag  GeneSt 
 type dataType
 label RIP-chip Gene ST
-description Provisional RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays 
+description RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays 
 
 term Tiling 
 tag  Tiling 
 type dataType
 label RIP-chip Tiling Array
-description Provisional RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays 
+description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays 
 
 term RipChip
 tag  ripChip
@@ -8638,14 +8660,14 @@ description tier 3
 
 ## Tissue Sourced (Used for Mouse cell)
 term Individual
-tag Individual
+tag Indiv
 type tissueSourceType
-description Tissue obtained from an individual (Provisional)
+description Tissue obtained from an individual 
 
 term Pooled
-tag Pooled
+tag Pool
 type tissueSourceType
-description Tissue obtained from pooling samples from various sample organisms (Provisional)
+description Tissue obtained from pooling samples from various sample organisms 
 
 #Venkat: Trial to add seqPlatform for use for GEO submissions
 #Uses the GEO terms to be conistent and help with GEO submissions
@@ -8739,9 +8761,9 @@ term BioChain
 tag BioChain
 type lab
 label BioChain
-description
+description The BioChain subset of HudsonAlpha
 labInst BioChain
-labPi
+labPi Myers
 labPiFull
 grantPi
 organism human
@@ -8878,8 +8900,7 @@ term Caltech
 tag Caltech
 type lab
 label Wold - California Institute of Technology
-description PROVISIONAL Wold - California Institute of Technology
-#I took out the Wold at the request of Kate
+description Wold - California Institute of Technology
 grantInst California Institute of Technology (Wold Lab)
 labPi Wold
 labPiFull Barbara Wold
