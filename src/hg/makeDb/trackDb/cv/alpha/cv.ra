@@ -975,7 +975,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) BG02
 karyotype XY euploid
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Moreover, vendor states karyotype as "normal" (under BG02)
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
@@ -992,7 +992,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) BG02
 karyotype XY euploid
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Moreover, vendor states karyotype as "normal" (under BG02)
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
@@ -1234,7 +1234,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM06990&P
 lineage CEPH/Utah - European Caucasion; Epstein-Barr Virus
 #)lineage mesoderm
 karyotype relatively normal
-#)karyotype does not match edits. edit: normal
+#)karyotype does not match edits. edit: normal. Vendor does not explicitly state karyotype info.
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
@@ -1271,7 +1271,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12801&P
 lineage CEPH/Utah - European Caucasion - Male; Epstein-Barr Virus
 #)lineage mesoderm
 karyotype relatively normal
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Can't find vendor info.
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex M
@@ -1287,7 +1287,7 @@ description B-Lymphocyte
 tissue Blood
 #)lineage mesoderm
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Can't find vendor info.
 vendorName Coriell
 vendorId GM12864
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12864&PgId=166
@@ -1306,7 +1306,7 @@ description B-Lymphocyte
 tissue Blood
 #)lineage mesoderm
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Female
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Can't find vendor info.
 vendorName Coriell
 vendorId GM12865
 orderUrl http://ccr.coriell.org/sections/Search/Sample_Detail.aspx?Ref=GM12865&PgId=166
@@ -1325,7 +1325,7 @@ description B-Lymphocyte
 tissue Blood
 #)lineage mesoderm
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Can't find vendor info.
 vendorName Coriell
 vendorId GM12872
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12872&PgId=166
@@ -1344,7 +1344,7 @@ description B-Lymphocyte
 tissue Blood
 #)lineage mesoderm
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Female
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Vendor does not explicitly state.
 vendorName Coriell
 vendorId GM12873
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12873&PgId=166
@@ -1363,7 +1363,7 @@ description B-Lymphocyte
 tissue Blood
 #)lineage mesoderm
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Vendor does not explicitly state.
 vendorName Coriell
 vendorId GM12874
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12874&PgId=166
@@ -1661,7 +1661,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
 karyotype XX euploid
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. 
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2468,7 +2468,6 @@ description HT-1080 is an epithelial cell line derived from a fibrosarcoma.
 tissue Epithelium
 #)lineage mesoderm
 karyotype pseudo-diploid male with a modal chromosome number of 46. There are numerous chromosome abnormalities.
-#)karyotype does not match edits. edit: cancer
 vendorName ATCC
 vendorId CCL­121
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-121&Template=cellBiology
@@ -2489,7 +2488,7 @@ vendorName ATCC
 vendorId HTB-11
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
 karyotype hyperdiploid female with a modal chromosome number of 47
-#)karyotype does not match edits. edit: cancer
+#)karyotype does not match edits. edit: cancer. Vendor info matches original, except vendor has extra information.
 termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
 sex F
@@ -2737,7 +2736,6 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage mammary gland Derived from metastatic site: pleural effusion
 #)lineage ectoderm
 karyotype Cancer: The cell line is aneuploid female (modal number = 64, range = 52 to 68), with chromosome counts in the near-triploid range. Normal chromosomes N8 and N15 were absent.
-#)karyotype does not match edits. edit: cancer
 termId BTO:0000815
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000815
 sex F
@@ -2970,8 +2968,7 @@ vendorName ATCC
 vendorId CRL-1469
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1469&Template=cellBiology
 lineage
-karyotype cancer, male
-#)karyotype does not match edits. edit: cancer
+karyotype cancer
 termId BTO:0000304
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000304
 sex M
@@ -3304,7 +3301,6 @@ organism Human
 description T98G is a fibroblast cell line derived from a glioblastoma multiforme.
 #)description Provisional Fibroblast cell line  Derived from a glioblastoma multiforme.
 karyotype hyper-pentaploid male with a modal chromosome number around 128 to 132. There are numerous chromosome abnormalities and marker chromosomes.
-#)karyotype does not match edits. edit: cancer
 tissue Brain
 #)lineage mesoderm
 vendorName ATCC
@@ -3329,7 +3325,7 @@ tissue Epithelium
 lineage Passage 2 primary, non-immortalized, human trachea and bronchial epithelial cells. Donor: 21 y.o. male
 #)lineage endoderm
 karyotype unknown, presumed normal diploid
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Vendor says it's a pseudodiploid human cell line.
 termId BTO:0001389 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001389
 sex M
@@ -3418,7 +3414,6 @@ vendorName ATCC
 vendorId HTB-14
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-14&Template=cellBiology
 karyotype hypodiploid female with a modal chromosome number of 44 in 48% of cells and a 5.9% rate of higher ploidy
-#)karyotype does not match edits. edit: cancer
 termId BTO:0002036
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036
 sex F
@@ -3438,8 +3433,7 @@ vendorId HTB-96
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-96&Template=cellBiology
 lineage J. Ponten and E. Saksela derived this line (originally 2T) in 1964 from a moderately differentiated sarcoma of the tibia of a 15 year old girl. Viruses were not detected during co-cultivation with WI-38 cells or in CF tests against SV40, RSV or adenoviruses. Mycoplasma contamination was detected and eliminated in 1972.
 #)lineage mesoderm
-karyotype Cancer
-#)karyotype does not match edits. edit: cancer
+karyotype cancer
 termId BTO:0000970
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000970
 sex F
@@ -8385,11 +8379,11 @@ type dataType
 label Mapability
 description Uniqueness of n-mer sequence fragments across the genome
 
-term Methyl27
-tag methyl27
+term MethylArray
+tag methylarray
 type dataType
-label Methyl 27
-description Methyl 27
+label Methyl Array
+description Provisional Methyl Bead Array
 
 term MethylSeq
 tag methylseq
