@@ -21,7 +21,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1
 treatment DEX_100nM
@@ -45,7 +45,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep2
 treatment DEX_100nM
@@ -69,7 +69,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 treatment DEX_100nM
 view RawData
@@ -92,7 +92,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 treatment DEX_100nM
 view RawData
@@ -115,7 +115,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep1
 treatment DEX_100nM
@@ -139,7 +139,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep2
 treatment DEX_100nM
@@ -163,7 +163,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 treatment DEX_100nM
 view TranscriptGencV3c
@@ -186,7 +186,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 treatment DEX_100nM
 view TranscriptGencV3c
@@ -209,7 +209,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1
 treatment DEX_100pM
@@ -233,7 +233,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep2
 treatment DEX_100pM
@@ -257,7 +257,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_100pM
 view RawData
@@ -280,7 +280,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_100pM
 view RawData
@@ -303,7 +303,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep1
 treatment DEX_100pM
@@ -327,7 +327,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep2
 treatment DEX_100pM
@@ -351,7 +351,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3274
 treatment DEX_100pM
 view TranscriptGencV3c
@@ -374,7 +374,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_100pM
 view TranscriptGencV3c
@@ -397,7 +397,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1
 treatment DEX_1nM
@@ -421,7 +421,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep2
 treatment DEX_1nM
@@ -445,7 +445,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_1nM
 view RawData
@@ -468,7 +468,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_1nM
 view RawData
@@ -491,7 +491,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep1
 treatment DEX_1nM
@@ -515,7 +515,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep2
 treatment DEX_1nM
@@ -539,7 +539,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_1nM
 view TranscriptGencV3c
@@ -562,7 +562,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_1nM
 view TranscriptGencV3c
@@ -585,7 +585,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1
 treatment DEX_500pM
@@ -609,7 +609,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep2
 treatment DEX_500pM
@@ -633,7 +633,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_500pM
 view RawData
@@ -656,7 +656,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_500pM
 view RawData
@@ -679,7 +679,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep1
 treatment DEX_500pM
@@ -703,7 +703,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep2
 treatment DEX_500pM
@@ -727,7 +727,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_500pM
 view TranscriptGencV3c
@@ -750,7 +750,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_500pM
 view TranscriptGencV3c
@@ -773,7 +773,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1
 treatment DEX_5nM
@@ -797,7 +797,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep2
 treatment DEX_5nM
@@ -821,7 +821,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_5nM
 view RawData
@@ -844,7 +844,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_5nM
 view RawData
@@ -867,7 +867,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep1
 treatment DEX_5nM
@@ -891,7 +891,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep2
 treatment DEX_5nM
@@ -915,7 +915,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_5nM
 view TranscriptGencV3c
@@ -938,7 +938,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment DEX_5nM
 view TranscriptGencV3c
@@ -961,7 +961,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1
 treatment EtOH_0.02pct
@@ -985,7 +985,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep2
 treatment EtOH_0.02pct
@@ -1009,7 +1009,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 3
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep3
 treatment EtOH_0.02pct
@@ -1033,7 +1033,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 4
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep4
 treatment EtOH_0.02pct
@@ -1057,7 +1057,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 treatment EtOH_0.02pct
 view RawData
@@ -1080,7 +1080,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 treatment EtOH_0.02pct
 view RawData
@@ -1103,7 +1103,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 3
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment EtOH_0.02pct
 view RawData
@@ -1126,7 +1126,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 4
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment EtOH_0.02pct
 view RawData
@@ -1149,7 +1149,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep1
 treatment EtOH_0.02pct
@@ -1173,7 +1173,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep2
 treatment EtOH_0.02pct
@@ -1197,7 +1197,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 3
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep3
 treatment EtOH_0.02pct
@@ -1221,7 +1221,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 4
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep4
 treatment EtOH_0.02pct
@@ -1245,7 +1245,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 treatment EtOH_0.02pct
 view TranscriptGencV3c
@@ -1268,7 +1268,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 1849
 treatment EtOH_0.02pct
 view TranscriptGencV3c
@@ -1291,7 +1291,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 3
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment EtOH_0.02pct
 view TranscriptGencV3c
@@ -1314,7 +1314,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 4
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2974
 treatment EtOH_0.02pct
 view TranscriptGencV3c
@@ -1337,7 +1337,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep1
 treatment None
@@ -1361,7 +1361,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep2
 treatment None
@@ -1385,7 +1385,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 treatment None
 view RawData
@@ -1408,7 +1408,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 treatment None
 view RawData
@@ -1431,7 +1431,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqBe2cShortpolyaRawRep1
 treatment None
@@ -1455,7 +1455,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqBe2cShortpolyaRawRep2
 treatment None
@@ -1479,7 +1479,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep1
 treatment None
@@ -1503,7 +1503,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep2
 treatment None
@@ -1527,7 +1527,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1
 treatment BPA_100nM_4hr
@@ -1551,7 +1551,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep2
 treatment BPA_100nM_4hr
@@ -1575,7 +1575,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 treatment BPA_100nM_4hr
 view RawData
@@ -1598,7 +1598,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 treatment BPA_100nM_4hr
 view RawData
@@ -1621,7 +1621,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep1
 treatment BPA_100nM_4hr
@@ -1645,7 +1645,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep2
 treatment BPA_100nM_4hr
@@ -1669,7 +1669,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 treatment BPA_100nM_4hr
 view TranscriptGencV3c
@@ -1692,7 +1692,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 treatment BPA_100nM_4hr
 view TranscriptGencV3c
@@ -1715,7 +1715,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep1
 treatment DMSO_4hr
@@ -1739,7 +1739,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep2
 treatment DMSO_4hr
@@ -1763,7 +1763,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 treatment DMSO_4hr
 view RawData
@@ -1786,7 +1786,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 treatment DMSO_4hr
 view RawData
@@ -1809,7 +1809,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep1
 treatment DMSO_4hr
@@ -1833,7 +1833,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep2
 treatment DMSO_4hr
@@ -1857,7 +1857,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 treatment DMSO_4hr
 view TranscriptGencV3c
@@ -1880,7 +1880,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 treatment DMSO_4hr
 view TranscriptGencV3c
@@ -1903,7 +1903,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1
 treatment Estradiol_10nM_4hr
@@ -1927,7 +1927,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep2
 treatment Estradiol_10nM_4hr
@@ -1951,7 +1951,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Estradiol_10nM_4hr
 view RawData
@@ -1974,7 +1974,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Estradiol_10nM_4hr
 view RawData
@@ -1997,7 +1997,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep1
 treatment Estradiol_10nM_4hr
@@ -2021,7 +2021,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep2
 treatment Estradiol_10nM_4hr
@@ -2045,7 +2045,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Estradiol_10nM_4hr
 view TranscriptGencV3c
@@ -2068,7 +2068,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Estradiol_10nM_4hr
 view TranscriptGencV3c
@@ -2091,7 +2091,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep1
 treatment Genistein_100nM_4hr
@@ -2115,7 +2115,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep2
 treatment Genistein_100nM_4hr
@@ -2139,7 +2139,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Genistein_100nM_4hr
 view RawData
@@ -2162,7 +2162,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Genistein_100nM_4hr
 view RawData
@@ -2185,7 +2185,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep1
 treatment Genistein_100nM_4hr
@@ -2209,7 +2209,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep2
 treatment Genistein_100nM_4hr
@@ -2233,7 +2233,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Genistein_100nM_4hr
 view TranscriptGencV3c
@@ -2256,7 +2256,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Genistein_100nM_4hr
 view TranscriptGencV3c
@@ -2279,7 +2279,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep1
 treatment None
@@ -2303,7 +2303,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep2
 treatment None
@@ -2327,7 +2327,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 treatment None
 view RawData
@@ -2350,7 +2350,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 treatment None
 view RawData
@@ -2373,7 +2373,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep1
 treatment None
@@ -2397,7 +2397,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep2
 treatment None
@@ -2421,7 +2421,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV3Rep1
 treatment None
@@ -2445,7 +2445,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV3Rep2
 treatment None
@@ -2469,7 +2469,7 @@ origAssembly hg18
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3868
 tableName wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep1
 treatment None
@@ -2493,7 +2493,7 @@ origAssembly hg18
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3868
 tableName wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep2
 treatment None
@@ -2517,7 +2517,7 @@ origAssembly hg18
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3868
 treatment None
 view RawData
@@ -2540,7 +2540,7 @@ origAssembly hg18
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3868
 treatment None
 view RawData
@@ -2563,7 +2563,7 @@ origAssembly hg18
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3868
 tableName wgEncodeHaibRnaSeqJurkatShortpolyaRawRep2
 treatment None
@@ -2587,7 +2587,7 @@ origAssembly hg18
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3868
 tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep1
 treatment None
@@ -2611,7 +2611,7 @@ origAssembly hg18
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3868
 tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep2
 treatment None
@@ -2635,7 +2635,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep1
 treatment None
@@ -2659,7 +2659,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep2
 treatment None
@@ -2683,7 +2683,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 treatment None
 view RawData
@@ -2706,7 +2706,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 treatment None
 view RawData
@@ -2729,7 +2729,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep1
 treatment None
@@ -2753,7 +2753,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep2
 treatment None
@@ -2777,7 +2777,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep1
 treatment None
@@ -2801,7 +2801,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep2
 treatment None
@@ -2825,7 +2825,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep1
 treatment None
@@ -2849,7 +2849,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep2
 treatment None
@@ -2873,7 +2873,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 treatment None
 view RawData
@@ -2896,7 +2896,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 treatment None
 view RawData
@@ -2919,7 +2919,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep1
 treatment None
@@ -2943,7 +2943,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep2
 treatment None
@@ -2967,7 +2967,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep1
 treatment None
@@ -2991,7 +2991,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep2
 treatment None
@@ -3015,7 +3015,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 tableName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1
 treatment BPA_100nM_4hr
@@ -3039,7 +3039,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 tableName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep2
 treatment BPA_100nM_4hr
@@ -3063,7 +3063,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 treatment BPA_100nM_4hr
 view RawData
@@ -3086,7 +3086,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 treatment BPA_100nM_4hr
 view RawData
@@ -3109,7 +3109,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 tableName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep1
 treatment BPA_100nM_4hr
@@ -3133,7 +3133,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 tableName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep2
 treatment BPA_100nM_4hr
@@ -3157,7 +3157,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 treatment BPA_100nM_4hr
 view TranscriptGencV3c
@@ -3180,7 +3180,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2976
 treatment BPA_100nM_4hr
 view TranscriptGencV3c
@@ -3203,7 +3203,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrAlnRep1
 treatment DMSO_4hr
@@ -3227,7 +3227,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrAlnRep2
 treatment DMSO_4hr
@@ -3251,7 +3251,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment DMSO_4hr
 view RawData
@@ -3274,7 +3274,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment DMSO_4hr
 view RawData
@@ -3297,7 +3297,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrRawRep1
 treatment DMSO_4hr
@@ -3321,7 +3321,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrRawRep2
 treatment DMSO_4hr
@@ -3345,7 +3345,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment DMSO_4hr
 view TranscriptGencV3c
@@ -3368,7 +3368,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment DMSO_4hr
 view TranscriptGencV3c
@@ -3391,7 +3391,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1
 treatment Estradiol_10nM_4hr
@@ -3415,7 +3415,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2
 treatment Estradiol_10nM_4hr
@@ -3439,7 +3439,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Estradiol_10nM_4hr
 view RawData
@@ -3462,7 +3462,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Estradiol_10nM_4hr
 view RawData
@@ -3485,7 +3485,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep1
 treatment Estradiol_10nM_4hr
@@ -3509,7 +3509,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep2
 treatment Estradiol_10nM_4hr
@@ -3533,7 +3533,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Estradiol_10nM_4hr
 view TranscriptGencV3c
@@ -3556,7 +3556,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Estradiol_10nM_4hr
 view TranscriptGencV3c
@@ -3579,7 +3579,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep1
 treatment Genistein_100nM_4hr
@@ -3603,7 +3603,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep2
 treatment Genistein_100nM_4hr
@@ -3627,7 +3627,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Genistein_100nM_4hr
 view RawData
@@ -3650,7 +3650,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Genistein_100nM_4hr
 view RawData
@@ -3673,7 +3673,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep1
 treatment Genistein_100nM_4hr
@@ -3697,7 +3697,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 tableName wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep2
 treatment Genistein_100nM_4hr
@@ -3721,7 +3721,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Genistein_100nM_4hr
 view TranscriptGencV3c
@@ -3744,7 +3744,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 2975
 treatment Genistein_100nM_4hr
 view TranscriptGencV3c
@@ -3767,7 +3767,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqU87ShortpolyaAlnRep1
 treatment None
@@ -3791,7 +3791,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqU87ShortpolyaAlnRep2
 treatment None
@@ -3815,7 +3815,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 treatment None
 view RawData
@@ -3838,7 +3838,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 treatment None
 view RawData
@@ -3861,7 +3861,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqU87ShortpolyaRawRep1
 treatment None
@@ -3885,7 +3885,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqU87ShortpolyaRawRep2
 treatment None
@@ -3909,7 +3909,7 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep1
 treatment None
@@ -3933,10 +3933,10 @@ origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
-rnaExtract shortPolyA
+rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep2
 treatment None
 view TranscriptGencV3
 
-# MAGIC: -1699029125
+# MAGIC: 1895227387
