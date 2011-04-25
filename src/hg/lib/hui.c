@@ -347,7 +347,7 @@ char *wrapWhiteFont(char *s)
 /* Write white font around s */
 {
 static char buf[256];
-safef(buf, sizeof(buf), "<FONT COLOR=\"#FFFFFF\">%s</FONT>", s);
+safef(buf, sizeof(buf), "<span style='color:#FFFFFF;'>%s</span>", s);
 return buf;
 }
 
@@ -3889,7 +3889,7 @@ if (sortOrder != NULL)
     cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
     printf("all</B>");
     if (slCount(subtrackRefList) > 5)
-        printf("&nbsp;&nbsp;&nbsp;&nbsp;(<FONT class='subCBcount'></font>)");
+        printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
     makeTopLink(parentTdb);
     printf("</td></tr></table>");
     }
@@ -3942,7 +3942,7 @@ else
     cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
     printf("all</B>");
     if (slCount(subtrackRefList) > 5)
-        printf("&nbsp;&nbsp;&nbsp;&nbsp;(<FONT class='subCBcount'></font>)");
+        printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
     puts("</TD>");
     columnCount = colspan;
     }
@@ -4283,7 +4283,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 puts("</TBODY><TFOOT></TFOOT>");
 puts("</TABLE>");
 if (slCount(subtrackRefList) > 5)
-    puts("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='subCBcount'></font>");
+    puts("&nbsp;&nbsp;&nbsp;&nbsp;<span class='subCBcount'></span>");
 puts("<P>");
 if (!primarySubtrack)
     puts("<script type='text/javascript'>matInitializeMatrix();</script>");
@@ -6055,8 +6055,8 @@ int ix;
 char varName[SMALLBUF];
 char classes[SMALLBUF];
 char javascript[JBUFSIZE];
-#define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A id='a_cfg_%s' HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"%s Configuration\">%s</A><INPUT TYPE=HIDDEN NAME='%s.%s.showCfg' value='%s'></B>\n"
-#define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(name),(name),(title),(title),(tbl),(name),((open)?"on":"off"))
+#define CFG_LINK  "<B><A HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"%s Configuration\">%s</A><INPUT TYPE=HIDDEN NAME='%s.%s.showCfg' value='%s'></B>"
+#define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(title),(title),(tbl),(name),((open)?"on":"off"))
 
 members_t *membersOfView = subgroupMembersGet(parentTdb,"view");
 if(membersOfView == NULL)
@@ -6090,8 +6090,8 @@ for (ix = 0; ix < membersOfView->count; ix++)
     }
 
 toLowerN(membersOfView->groupTitle, 1);
-printf("<B>Select %s </B>(<A HREF=\"../goldenPath/help/multiView.html\" title='Help on views' TARGET=_BLANK>help</A>):<BR>\n", membersOfView->groupTitle);
-puts("<TABLE><TR align=\"LEFT\">");
+printf("<B>Select %s</B> (<A HREF='../goldenPath/help/multiView.html' title='Help on views' TARGET=_BLANK>help</A>):\n", membersOfView->groupTitle);
+printf("<TABLE><TR style='text-align:left;'>\n");
 // Make row of vis drop downs
 for (ix = 0; ix < membersOfView->count; ix++)
     {
@@ -6105,7 +6105,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
             MAKE_CFG_LINK(membersOfView->tags[ix],membersOfView->titles[ix],parentTdb->track,(firstOpened == ix));
             }
         else
-            printf("<B>%s</B>\n",membersOfView->titles[ix]);
+            printf("<B>%s</B>",membersOfView->titles[ix]);
         puts("</TD>");
 
         safef(varName, sizeof(varName), "%s.%s.vis", parentTdb->track, viewName);
@@ -6955,7 +6955,7 @@ printf("<div id='popit' style='display: none'></div>");
 cgiMakeHiddenVar("db", db);
 printf("<input type=HIDDEN id='track' value='%s';</input>\n",tdb->track);
 #endif
-puts("<P>");
+puts("<BR>");
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
     {
     if(primarySubtrack)

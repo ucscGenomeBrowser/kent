@@ -5,7 +5,7 @@ expVars lab,dataType,cell,antibody
 
 metaObject wgEncodeBroadHistoneGm12878ControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeBroadHistone
 control std
@@ -15,8 +15,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
-dccAccession wgEncodeEH000990
-expId 990
+dccAccession wgEncodeEH000037
+expId 37
 fileIndex wgEncodeBroadHistoneGm12878ControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneGm12878ControlStdAlnRep1.bam
 grant Bernstein
@@ -31,7 +31,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneGm12878ControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeBroadHistone
 control std
@@ -41,8 +41,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
-dccAccession wgEncodeEH000990
-expId 990
+dccAccession wgEncodeEH000037
+expId 37
 fileIndex wgEncodeBroadHistoneGm12878ControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneGm12878ControlStdAlnRep2.bam
 grant Bernstein
@@ -57,7 +57,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneGm12878ControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeBroadHistone
 control std
@@ -66,8 +66,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000990
-expId 990
+dccAccession wgEncodeEH000037
+expId 37
 fileName wgEncodeBroadHistoneGm12878ControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -81,7 +81,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneGm12878ControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeBroadHistone
 control std
@@ -90,8 +90,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-dccAccession wgEncodeEH000990
-expId 990
+dccAccession wgEncodeEH000037
+expId 37
 fileName wgEncodeBroadHistoneGm12878ControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -105,7 +105,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneGm12878ControlStdSig
 objType table
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeBroadHistone
 control std
@@ -115,8 +115,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
-dccAccession wgEncodeEH000990
-expId 990
+dccAccession wgEncodeEH000037
+expId 37
 fileName wgEncodeBroadHistoneGm12878ControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -1945,7 +1945,7 @@ view Signal
 
 metaObject wgEncodeBroadHistoneH1hescControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell H1-hESC
 composite wgEncodeBroadHistone
 control std
@@ -1955,8 +1955,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000993
-expId 993
+dccAccession wgEncodeEH000088
+expId 88
 fileIndex wgEncodeBroadHistoneH1hescControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneH1hescControlStdAlnRep1.bam
 grant Bernstein
@@ -1971,7 +1971,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell H1-hESC
 composite wgEncodeBroadHistone
 control std
@@ -1981,8 +1981,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000993
-expId 993
+dccAccession wgEncodeEH000088
+expId 88
 fileIndex wgEncodeBroadHistoneH1hescControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneH1hescControlStdAlnRep2.bam
 grant Bernstein
@@ -1997,7 +1997,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell H1-hESC
 composite wgEncodeBroadHistone
 control std
@@ -2006,8 +2006,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000993
-expId 993
+dccAccession wgEncodeEH000088
+expId 88
 fileName wgEncodeBroadHistoneH1hescControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -2021,7 +2021,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneH1hescControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell H1-hESC
 composite wgEncodeBroadHistone
 control std
@@ -2030,8 +2030,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000993
-expId 993
+dccAccession wgEncodeEH000088
+expId 88
 fileName wgEncodeBroadHistoneH1hescControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -2045,7 +2045,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneH1hescControlStdSig
 objType table
-antibody Control
+antibody Input
 cell H1-hESC
 composite wgEncodeBroadHistone
 control std
@@ -2055,8 +2055,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000993
-expId 993
+dccAccession wgEncodeEH000088
+expId 88
 fileName wgEncodeBroadHistoneH1hescControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -3410,7 +3410,7 @@ view Signal
 
 metaObject wgEncodeBroadHistoneHelas3ControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
@@ -3420,8 +3420,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH001013
-expId 1013
 fileIndex wgEncodeBroadHistoneHelas3ControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep1.bam
 grant Bernstein
@@ -3436,7 +3434,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3ControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
@@ -3446,8 +3444,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH001013
-expId 1013
 fileIndex wgEncodeBroadHistoneHelas3ControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep2.bam
 grant Bernstein
@@ -3462,7 +3458,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3ControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
@@ -3471,8 +3467,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH001013
-expId 1013
 fileName wgEncodeBroadHistoneHelas3ControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -3486,7 +3480,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHelas3ControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
@@ -3495,8 +3489,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH001013
-expId 1013
 fileName wgEncodeBroadHistoneHelas3ControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -3510,7 +3502,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHelas3ControlStdSig
 objType table
-antibody Control
+antibody Input
 cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
@@ -3520,8 +3512,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH001013
-expId 1013
 fileName wgEncodeBroadHistoneHelas3ControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -5018,7 +5008,7 @@ view Signal
 
 metaObject wgEncodeBroadHistoneHepg2ControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeBroadHistone
 control std
@@ -5028,8 +5018,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000992
-expId 992
+dccAccession wgEncodeEH000084
+expId 84
 fileIndex wgEncodeBroadHistoneHepg2ControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep1.bam
 grant Bernstein
@@ -5044,7 +5034,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2ControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeBroadHistone
 control std
@@ -5054,8 +5044,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000992
-expId 992
+dccAccession wgEncodeEH000084
+expId 84
 fileIndex wgEncodeBroadHistoneHepg2ControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep2.bam
 grant Bernstein
@@ -5070,7 +5060,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2ControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeBroadHistone
 control std
@@ -5079,8 +5069,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000992
-expId 992
+dccAccession wgEncodeEH000084
+expId 84
 fileName wgEncodeBroadHistoneHepg2ControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -5094,7 +5084,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHepg2ControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeBroadHistone
 control std
@@ -5103,8 +5093,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000992
-expId 992
+dccAccession wgEncodeEH000084
+expId 84
 fileName wgEncodeBroadHistoneHepg2ControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -5118,7 +5108,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHepg2ControlStdSig
 objType table
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeBroadHistone
 control std
@@ -5128,8 +5118,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000992
-expId 992
+dccAccession wgEncodeEH000084
+expId 84
 fileName wgEncodeBroadHistoneHepg2ControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -6632,7 +6622,7 @@ view Signal
 
 metaObject wgEncodeBroadHistoneHmecControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell HMEC
 composite wgEncodeBroadHistone
 control std
@@ -6642,8 +6632,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000994
-expId 994
+dccAccession wgEncodeEH000093
+expId 93
 fileIndex wgEncodeBroadHistoneHmecControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneHmecControlStdAlnRep1.bam
 grant Bernstein
@@ -6658,7 +6648,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHmecControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell HMEC
 composite wgEncodeBroadHistone
 control std
@@ -6668,8 +6658,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000994
-expId 994
+dccAccession wgEncodeEH000093
+expId 93
 fileIndex wgEncodeBroadHistoneHmecControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneHmecControlStdAlnRep2.bam
 grant Bernstein
@@ -6684,7 +6674,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHmecControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell HMEC
 composite wgEncodeBroadHistone
 control std
@@ -6693,8 +6683,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
-dccAccession wgEncodeEH000994
-expId 994
+dccAccession wgEncodeEH000093
+expId 93
 fileName wgEncodeBroadHistoneHmecControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -6708,7 +6698,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHmecControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell HMEC
 composite wgEncodeBroadHistone
 controlId HMEC/Input
@@ -6716,8 +6706,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
-dccAccession wgEncodeEH000994
-expId 994
+dccAccession wgEncodeEH000093
+expId 93
 fileName wgEncodeBroadHistoneHmecControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -6731,7 +6721,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHmecControlStdSig
 objType table
-antibody Control
+antibody Input
 cell HMEC
 composite wgEncodeBroadHistone
 control std
@@ -6741,8 +6731,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000994
-expId 994
+dccAccession wgEncodeEH000093
+expId 93
 fileName wgEncodeBroadHistoneHmecControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -8094,7 +8084,7 @@ view Signal
 
 metaObject wgEncodeBroadHistoneHsmmControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell HSMM
 composite wgEncodeBroadHistone
 control std
@@ -8104,8 +8094,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000996
-expId 996
+dccAccession wgEncodeEH000119
+expId 119
 fileIndex wgEncodeBroadHistoneHsmmControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneHsmmControlStdAlnRep1.bam
 grant Bernstein
@@ -8120,7 +8110,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell HSMM
 composite wgEncodeBroadHistone
 control std
@@ -8130,8 +8120,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000996
-expId 996
+dccAccession wgEncodeEH000119
+expId 119
 fileIndex wgEncodeBroadHistoneHsmmControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneHsmmControlStdAlnRep2.bam
 grant Bernstein
@@ -8146,7 +8136,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell HSMM
 composite wgEncodeBroadHistone
 control std
@@ -8155,8 +8145,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000996
-expId 996
+dccAccession wgEncodeEH000119
+expId 119
 fileName wgEncodeBroadHistoneHsmmControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -8170,7 +8160,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHsmmControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell HSMM
 composite wgEncodeBroadHistone
 control std
@@ -8179,8 +8169,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-dccAccession wgEncodeEH000996
-expId 996
+dccAccession wgEncodeEH000119
+expId 119
 fileName wgEncodeBroadHistoneHsmmControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -8194,7 +8184,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHsmmControlStdSig
 objType table
-antibody Control
+antibody Input
 cell HSMM
 composite wgEncodeBroadHistone
 control std
@@ -8204,8 +8194,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000996
-expId 996
+dccAccession wgEncodeEH000119
+expId 119
 fileName wgEncodeBroadHistoneHsmmControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -10000,7 +9990,7 @@ view Signal
 
 metaObject wgEncodeBroadHistoneHsmmtControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell HSMMtube
 composite wgEncodeBroadHistone
 control std
@@ -10010,8 +10000,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH001001
-expId 1001
 fileIndex wgEncodeBroadHistoneHsmmtControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneHsmmtControlStdAlnRep1.bam
 grant Bernstein
@@ -10026,7 +10014,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell HSMMtube
 composite wgEncodeBroadHistone
 control std
@@ -10036,8 +10024,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH001001
-expId 1001
 fileIndex wgEncodeBroadHistoneHsmmtControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneHsmmtControlStdAlnRep2.bam
 grant Bernstein
@@ -10052,7 +10038,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell HSMMtube
 composite wgEncodeBroadHistone
 control std
@@ -10061,8 +10047,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH001001
-expId 1001
 fileName wgEncodeBroadHistoneHsmmtControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -10076,7 +10060,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHsmmtControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell HSMMtube
 composite wgEncodeBroadHistone
 control std
@@ -10085,8 +10069,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH001001
-expId 1001
 fileName wgEncodeBroadHistoneHsmmtControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -10100,7 +10082,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHsmmtControlStdSig
 objType table
-antibody Control
+antibody Input
 cell HSMMtube
 composite wgEncodeBroadHistone
 control std
@@ -10110,8 +10092,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH001001
-expId 1001
 fileName wgEncodeBroadHistoneHsmmtControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -11614,7 +11594,7 @@ view Signal
 
 metaObject wgEncodeBroadHistoneHuvecControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell HUVEC
 composite wgEncodeBroadHistone
 control std
@@ -11624,8 +11604,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH001011
-expId 1011
+dccAccession wgEncodeEH000060
+expId 60
 fileIndex wgEncodeBroadHistoneHuvecControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneHuvecControlStdAlnRep1.bam
 grant Bernstein
@@ -11640,7 +11620,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell HUVEC
 composite wgEncodeBroadHistone
 control std
@@ -11650,8 +11630,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH001011
-expId 1011
+dccAccession wgEncodeEH000060
+expId 60
 fileIndex wgEncodeBroadHistoneHuvecControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneHuvecControlStdAlnRep2.bam
 grant Bernstein
@@ -11666,7 +11646,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecControlStdAlnRep3
 objType file
-antibody Control
+antibody Input
 cell HUVEC
 composite wgEncodeBroadHistone
 control std
@@ -11676,8 +11656,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
-dccAccession wgEncodeEH001011
-expId 1011
+dccAccession wgEncodeEH000060
+expId 60
 fileIndex wgEncodeBroadHistoneHuvecControlStdAlnRep3.bam.bai
 fileName wgEncodeBroadHistoneHuvecControlStdAlnRep3.bam
 grant Bernstein
@@ -11692,7 +11672,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell HUVEC
 composite wgEncodeBroadHistone
 control std
@@ -11701,8 +11681,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
-dccAccession wgEncodeEH001011
-expId 1011
+dccAccession wgEncodeEH000060
+expId 60
 fileName wgEncodeBroadHistoneHuvecControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -11716,7 +11696,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHuvecControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell HUVEC
 composite wgEncodeBroadHistone
 control std
@@ -11725,8 +11705,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
-dccAccession wgEncodeEH001011
-expId 1011
+dccAccession wgEncodeEH000060
+expId 60
 fileName wgEncodeBroadHistoneHuvecControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -11740,7 +11720,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHuvecControlStdRawDataRep3
 objType file
-antibody Control
+antibody Input
 cell HUVEC
 composite wgEncodeBroadHistone
 control std
@@ -11749,8 +11729,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
-dccAccession wgEncodeEH001011
-expId 1011
+dccAccession wgEncodeEH000060
+expId 60
 fileName wgEncodeBroadHistoneHuvecControlStdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
@@ -11764,7 +11744,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHuvecControlStdSig
 objType table
-antibody Control
+antibody Input
 cell HUVEC
 composite wgEncodeBroadHistone
 control std
@@ -11774,8 +11754,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH001011
-expId 1011
+dccAccession wgEncodeEH000060
+expId 60
 fileName wgEncodeBroadHistoneHuvecControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -13876,7 +13856,7 @@ view Signal
 
 metaObject wgEncodeBroadHistoneK562ControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeBroadHistone
 control std
@@ -13886,8 +13866,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH001025
-expId 1025
+dccAccession wgEncodeEH000052
+expId 52
 fileIndex wgEncodeBroadHistoneK562ControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneK562ControlStdAlnRep1.bam
 grant Bernstein
@@ -13902,7 +13882,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneK562ControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeBroadHistone
 control std
@@ -13911,8 +13891,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
-dccAccession wgEncodeEH001025
-expId 1025
+dccAccession wgEncodeEH000052
+expId 52
 fileName wgEncodeBroadHistoneK562ControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -13926,7 +13906,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneK562ControlStdSig
 objType table
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeBroadHistone
 control std
@@ -13936,8 +13916,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH001025
-expId 1025
+dccAccession wgEncodeEH000052
+expId 52
 fileName wgEncodeBroadHistoneK562ControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -15961,7 +15941,7 @@ view Signal
 
 metaObject wgEncodeBroadHistoneNhaControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell NH-A
 composite wgEncodeBroadHistone
 control std
@@ -15971,8 +15951,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
-dccAccession wgEncodeEH001027
-expId 1027
 fileIndex wgEncodeBroadHistoneNhaControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneNhaControlStdAlnRep1.bam
 grant Bernstein
@@ -15987,7 +15965,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneNhaControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell NH-A
 composite wgEncodeBroadHistone
 control std
@@ -15997,8 +15975,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
-dccAccession wgEncodeEH001027
-expId 1027
 fileIndex wgEncodeBroadHistoneNhaControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneNhaControlStdAlnRep2.bam
 grant Bernstein
@@ -16013,7 +15989,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneNhaControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell NH-A
 composite wgEncodeBroadHistone
 control std
@@ -16022,8 +15998,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH001027
-expId 1027
 fileName wgEncodeBroadHistoneNhaControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -16037,7 +16011,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneNhaControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell NH-A
 composite wgEncodeBroadHistone
 control std
@@ -16046,8 +16020,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH001027
-expId 1027
 fileName wgEncodeBroadHistoneNhaControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -16061,7 +16033,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneNhaControlStdSig
 objType table
-antibody Control
+antibody Input
 cell NH-A
 composite wgEncodeBroadHistone
 control std
@@ -16071,8 +16043,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
-dccAccession wgEncodeEH001027
-expId 1027
 fileName wgEncodeBroadHistoneNhaControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -16981,7 +16951,7 @@ view Signal
 
 metaObject wgEncodeBroadHistoneNhdfadControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell NHDF-Ad
 composite wgEncodeBroadHistone
 control std
@@ -16990,8 +16960,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
-dccAccession wgEncodeEH001055
-expId 1055
 fileIndex wgEncodeBroadHistoneNhdfadControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneNhdfadControlStdAlnRep1.bam
 grant Bernstein
@@ -17005,7 +16973,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneNhdfadControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell NHDF-Ad
 composite wgEncodeBroadHistone
 control std
@@ -17014,8 +16982,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
-dccAccession wgEncodeEH001055
-expId 1055
 fileIndex wgEncodeBroadHistoneNhdfadControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneNhdfadControlStdAlnRep2.bam
 grant Bernstein
@@ -17029,7 +16995,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneNhdfadControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell NHDF-Ad
 composite wgEncodeBroadHistone
 control std
@@ -17038,8 +17004,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
-dccAccession wgEncodeEH001055
-expId 1055
 fileName wgEncodeBroadHistoneNhdfadControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -17053,7 +17017,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneNhdfadControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell NHDF-Ad
 composite wgEncodeBroadHistone
 control std
@@ -17062,8 +17026,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
-dccAccession wgEncodeEH001055
-expId 1055
 fileName wgEncodeBroadHistoneNhdfadControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -17077,7 +17039,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneNhdfadControlStdSig
 objType table
-antibody Control
+antibody Input
 cell NHDF-Ad
 composite wgEncodeBroadHistone
 control std
@@ -17086,8 +17048,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
-dccAccession wgEncodeEH001055
-expId 1055
 fileName wgEncodeBroadHistoneNhdfadControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -18101,7 +18061,7 @@ view Signal
 
 metaObject wgEncodeBroadHistoneNhekControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell NHEK
 composite wgEncodeBroadHistone
 control std
@@ -18111,8 +18071,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000991
-expId 991
+dccAccession wgEncodeEH000072
+expId 72
 fileIndex wgEncodeBroadHistoneNhekControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneNhekControlStdAlnRep1.bam
 grant Bernstein
@@ -18127,7 +18087,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneNhekControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell NHEK
 composite wgEncodeBroadHistone
 control std
@@ -18137,8 +18097,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000991
-expId 991
+dccAccession wgEncodeEH000072
+expId 72
 fileIndex wgEncodeBroadHistoneNhekControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneNhekControlStdAlnRep2.bam
 grant Bernstein
@@ -18153,7 +18113,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneNhekControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell NHEK
 composite wgEncodeBroadHistone
 control std
@@ -18162,8 +18122,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
-dccAccession wgEncodeEH000991
-expId 991
+dccAccession wgEncodeEH000072
+expId 72
 fileName wgEncodeBroadHistoneNhekControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -18177,7 +18137,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneNhekControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell NHEK
 composite wgEncodeBroadHistone
 control std
@@ -18186,8 +18146,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-dccAccession wgEncodeEH000991
-expId 991
+dccAccession wgEncodeEH000072
+expId 72
 fileName wgEncodeBroadHistoneNhekControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -18201,7 +18161,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneNhekControlStdSig
 objType table
-antibody Control
+antibody Input
 cell NHEK
 composite wgEncodeBroadHistone
 control std
@@ -18211,8 +18171,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000991
-expId 991
+dccAccession wgEncodeEH000072
+expId 72
 fileName wgEncodeBroadHistoneNhekControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -20364,7 +20324,7 @@ view Signal
 
 metaObject wgEncodeBroadHistoneNhlfControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell NHLF
 composite wgEncodeBroadHistone
 control std
@@ -20374,8 +20334,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000995
-expId 995
+dccAccession wgEncodeEH000105
+expId 105
 fileIndex wgEncodeBroadHistoneNhlfControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneNhlfControlStdAlnRep1.bam
 grant Bernstein
@@ -20390,7 +20350,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell NHLF
 composite wgEncodeBroadHistone
 control std
@@ -20400,8 +20360,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000995
-expId 995
+dccAccession wgEncodeEH000105
+expId 105
 fileIndex wgEncodeBroadHistoneNhlfControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneNhlfControlStdAlnRep2.bam
 grant Bernstein
@@ -20416,7 +20376,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell NHLF
 composite wgEncodeBroadHistone
 control std
@@ -20425,8 +20385,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000995
-expId 995
+dccAccession wgEncodeEH000105
+expId 105
 fileName wgEncodeBroadHistoneNhlfControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -20440,7 +20400,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneNhlfControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell NHLF
 composite wgEncodeBroadHistone
 control std
@@ -20449,8 +20409,8 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000995
-expId 995
+dccAccession wgEncodeEH000105
+expId 105
 fileName wgEncodeBroadHistoneNhlfControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -20464,7 +20424,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneNhlfControlStdSig
 objType table
-antibody Control
+antibody Input
 cell NHLF
 composite wgEncodeBroadHistone
 control std
@@ -20474,8 +20434,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-dccAccession wgEncodeEH000995
-expId 995
+dccAccession wgEncodeEH000105
+expId 105
 fileName wgEncodeBroadHistoneNhlfControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -21829,7 +21789,7 @@ view Signal
 
 metaObject wgEncodeBroadHistoneOsteoblControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell Osteobl
 composite wgEncodeBroadHistone
 control std
@@ -21838,8 +21798,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
-dccAccession wgEncodeEH001056
-expId 1056
 fileIndex wgEncodeBroadHistoneOsteoblControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneOsteoblControlStdAlnRep1.bam
 grant Bernstein
@@ -21853,7 +21811,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneOsteoblControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell Osteobl
 composite wgEncodeBroadHistone
 control std
@@ -21862,8 +21820,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
-dccAccession wgEncodeEH001056
-expId 1056
 fileIndex wgEncodeBroadHistoneOsteoblControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneOsteoblControlStdAlnRep2.bam
 grant Bernstein
@@ -21877,7 +21833,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneOsteoblControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell Osteobl
 composite wgEncodeBroadHistone
 control std
@@ -21886,8 +21842,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
-dccAccession wgEncodeEH001056
-expId 1056
 fileName wgEncodeBroadHistoneOsteoblControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -21901,7 +21855,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneOsteoblControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell Osteobl
 composite wgEncodeBroadHistone
 control std
@@ -21910,8 +21864,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
-dccAccession wgEncodeEH001056
-expId 1056
 fileName wgEncodeBroadHistoneOsteoblControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -21925,7 +21877,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneOsteoblControlStdSig
 objType table
-antibody Control
+antibody Input
 cell Osteobl
 composite wgEncodeBroadHistone
 control std
@@ -21934,8 +21886,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
-dccAccession wgEncodeEH001056
-expId 1056
 fileName wgEncodeBroadHistoneOsteoblControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -22947,4 +22897,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: 1153895533
+# MAGIC: 1506127988
