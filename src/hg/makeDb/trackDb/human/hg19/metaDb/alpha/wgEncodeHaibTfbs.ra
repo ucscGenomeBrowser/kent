@@ -12423,29 +12423,6 @@ tableName wgEncodeHaibTfbsGm12891Yy1sc281V0416101RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsGm12892ControlPcr1xAlnRep2
-objType file
-antibody Control
-cell GM12892
-composite wgEncodeHaibTfbs
-controlId SL818
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-04-18
-dateSubmitted 2011-01-05
-dateUnrestricted 2011-10-05
-fileName wgEncodeHaibTfbsGm12892ControlPcr1xAlnRep2.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL818
-project wgEncode
-protocol PCR1x
-replicate 2
-setType input
-subId 3877
-treatment None
-view Alignments
-
 metaObject wgEncodeHaibTfbsGm12892ControlV0416101AlnRep1
 objType file
 antibody Control
@@ -12453,8 +12430,8 @@ cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL1783
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-05-12
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-25
 dateSubmitted 2010-01-1
 dateUnrestricted 2011-02-12
 fileIndex wgEncodeHaibTfbsGm12892ControlV0416101AlnRep1.bam.bai
@@ -12467,7 +12444,7 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType input
-subId 1189
+subId 3922
 treatment None
 view Alignments
 
@@ -12524,8 +12501,8 @@ cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL818
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-07
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-25
 dateSubmitted 2010-05-31
 dateUnrestricted 2011-03-03
 fileIndex wgEncodeHaibTfbsGm12892ControlV0416102AlnRep1.bam.bai
@@ -12535,10 +12512,10 @@ lab HudsonAlpha
 labExpId SL818
 origAssembly hg18
 project wgEncode
-protocol v04161022
+protocol v041610.2
 replicate 1
 setType input
-subId 1225
+subId 3922
 treatment None
 view Alignments
 
@@ -22990,6 +22967,29 @@ tableName wgEncodeHaibTfbsHepg2Pol2Pcr2xPkRep2
 treatment None
 view Peaks
 
+metaObject wgEncodeHaibTfbsHepg2Pol2Pcr2xRawDataRep1
+objType file
+antibody Pol2
+cell HepG2
+composite wgEncodeHaibTfbs
+controlId SL294
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-25
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
+fileName wgEncodeHaibTfbsHepg2Pol2Pcr2xRawDataRep1.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL348
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+subId 3922
+treatment None
+view RawData
+
 metaObject wgEncodeHaibTfbsHepg2Pol2Pcr2xRawDataRep2
 objType file
 antibody Pol2
@@ -32860,7 +32860,8 @@ cell SK-N-MC
 composite wgEncodeHaibTfbs
 controlId SL1714
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-04-25
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileIndex wgEncodeHaibTfbsSknmcControlV0416101AlnRep1.bam.bai
@@ -32872,7 +32873,7 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType input
-subId 1189
+subId 3922
 treatment None
 view Alignments
 
@@ -35625,4 +35626,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 696266807
+# MAGIC: -2056389386
