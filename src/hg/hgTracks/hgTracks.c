@@ -384,12 +384,6 @@ freeMem(encodedMapName);
 return(cloneString(buf));
 }
 
-void smallBreak()
-/* Draw small horizontal break */
-{
-hPrintf("<FONT SIZE=1><BR></FONT>\n");
-}
-
 #ifdef REMOTE_TRACK_AJAX_CALLBACK
 static boolean trackUsesRemoteData(struct track *track)
 /* returns TRUE is this track has a remote datasource */
@@ -4520,7 +4514,7 @@ if (!hideControls)
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
     freezeName = "Unknown";
-    hPrintf("<FONT SIZE=5><B>");
+    hPrintf("<span style='font-size:x-large;'><B>");
     if (startsWith("zoo",database) )
 	{
 	hPrintf("%s %s on %s June 2002 Assembly %s target1",
@@ -4543,7 +4537,7 @@ if (!hideControls)
 			organization, browserName, organism, freezeName, database);
 	    }
 	}
-    hPrintf("</B></FONT><BR>\n");
+    hPrintf("</B></span><BR>\n");
 
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
     hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
@@ -4623,9 +4617,9 @@ if (!hideControls)
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
 	hWrites(" ");
 	hButton("hgTracksConfigPage", "configure");
-        //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</B></EM></A></FONT>\n");
+        //hPrintf("&nbsp;&nbsp;<span style='font-size:small;'><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</B></EM></A></span>\n");
 	if (survey && differentWord(survey, "off"))
-	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"%s\" TARGET=_BLANK><EM><B>%s</B></EM></A></FONT>\n", survey, surveyLabel ? surveyLabel : "Take survey");
+	    hPrintf("&nbsp;&nbsp;<span style='font-size:small;'><A STYLE=\"background-color:yellow;\" HREF=\"%s\" TARGET=_BLANK><EM><B>%s</B></EM></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
 	// info for drag selection javascript
 	hPrintf("<input type='hidden' id='hgt.winStart' name='winStart' value='%d'>\n", winStart);
 	hPrintf("<input type='hidden' id='hgt.winEnd' name='winEnd' value='%d'>\n", winEnd);
@@ -4714,7 +4708,6 @@ if (!hideControls)
     hPrintf("</TD>");
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TR></TABLE>\n");
-    // smallBreak();
 
     /* Display bottom control panel. */
 

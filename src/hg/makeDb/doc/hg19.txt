@@ -15595,3 +15595,25 @@ liftUp /hive/data/genomes/hg19/jkStuff/ens.62.lft
 'update trackVersion set dateReference="current" where db="hg19" AND version=62;' hgFixed
 
 ############################################################################
+# BUILD hg19 GERP TRACK (DONE 4/25/11, Fan)
+
+ssh hgwdev
+mkdir /hive/data/genomes/hg19/bed/gerp
+cd /hive/data/genomes/hg19/bed/gerp
+
+# place the wig data file, All_hg19_RS.wig, here.
+
+ulimit -d 180000000
+ulimit -v 180000000
+
+wigToBigWig All_hg19_RS.wig /hive/data/genomes/hg19/chrom.sizes All_hg19_RS.bw
+
+ln -s `pwd`/All_hg19_RS.bw /gbdb/hg19/bbi/All_hg19_RS.bw
+
+hgsql hg19 -e 'drop table if exists allHg19RS_BW; \
+               create table allHg19RS_BW (fileName varchar(255) not null); \
+	       insert into allHg19RS_BW values ("/gbdb/hg19/bbi/All_hg19_RS.bw");'
+
+# create corresponding trackDb.ra section and html description page.
+
+###################################################################
