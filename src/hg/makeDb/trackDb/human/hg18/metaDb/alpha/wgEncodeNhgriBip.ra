@@ -8,10 +8,10 @@ dateUnrestricted 2010-01-27
 expVars lab,dataType
 fileName wgEncodeNhgriBip.hg18.bed8.gz
 grant Elnitski
-lab NHGRI
+lab NHGRI-Elnitski
 project wgEncode
 species hg18
 subId 294
 tableName wgEncodeNhgriBip
 
-# MAGIC: -709011534
+# MAGIC: 1846033510

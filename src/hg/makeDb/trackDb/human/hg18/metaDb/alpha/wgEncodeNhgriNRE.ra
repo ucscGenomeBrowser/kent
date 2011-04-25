@@ -13,7 +13,7 @@ dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
 fileName wgEncodeNhgriNREEnhancerBlockersK562Ggamma.bed6.gz
 grant Elnitski
-lab NHGRI
+lab NHGRI-Elnitski
 project wgEncode
 promoter G-gamma
 subId 100
@@ -30,7 +30,7 @@ dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
 fileName wgEncodeNhgriNREEnhancerBlockersK562Sv40.bed6.gz
 grant Elnitski
-lab NHGRI
+lab NHGRI-Elnitski
 project wgEncode
 promoter SV40
 subId 100
@@ -47,7 +47,7 @@ dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
 fileName wgEncodeNhgriNRESilencersK562Ggamma.bed6.gz
 grant Elnitski
-lab NHGRI
+lab NHGRI-Elnitski
 project wgEncode
 promoter G-gamma
 subId 100
@@ -64,11 +64,11 @@ dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
 fileName wgEncodeNhgriNRESilencersK562Sv40.bed6.gz
 grant Elnitski
-lab NHGRI
+lab NHGRI-Elnitski
 project wgEncode
 promoter SV40
 subId 100
 tableName wgEncodeNhgriNRESilencersK562Sv40
 view Silencers
 
-# MAGIC: -322477415
+# MAGIC: 1307768169

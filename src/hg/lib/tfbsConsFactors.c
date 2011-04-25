@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "tfbsConsFactors.h"
 
-static char const rcsid[] = "$Id: tfbsConsFactors.c,v 1.1 2004/12/06 17:54:42 braney Exp $";
+static char const rcsid[] = "$Id:$";
 
 void tfbsConsFactorsStaticLoad(char **row, struct tfbsConsFactors *ret)
 /* Load a row from tfbsConsFactors table into ret.  The contents of ret will
@@ -17,9 +17,9 @@ void tfbsConsFactorsStaticLoad(char **row, struct tfbsConsFactors *ret)
 
 ret->name = row[0];
 ret->ac = row[1];
-strcpy(ret->species, row[2]);
-strcpy(ret->factor, row[3]);
-strcpy(ret->id, row[4]);
+safecpy(ret->species, sizeof(ret->species), row[2]);
+safecpy(ret->factor, sizeof(ret->factor), row[3]);
+safecpy(ret->id, sizeof(ret->id), row[4]);
 }
 
 struct tfbsConsFactors *tfbsConsFactorsLoad(char **row)
@@ -31,9 +31,9 @@ struct tfbsConsFactors *ret;
 AllocVar(ret);
 ret->name = cloneString(row[0]);
 ret->ac = cloneString(row[1]);
-strcpy(ret->species, row[2]);
-strcpy(ret->factor, row[3]);
-strcpy(ret->id, row[4]);
+safecpy(ret->species, sizeof(ret->species), row[2]);
+safecpy(ret->factor, sizeof(ret->factor), row[3]);
+safecpy(ret->id, sizeof(ret->id), row[4]);
 return ret;
 }
 

@@ -150,12 +150,13 @@ if (withHtmlHeader)
     {
     char *newString, *ptr1, *ptr2;
 
-#define TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
+//#define TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
 #ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 #else///ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
-    // FIXME: This should be done and fixes atleast one IE problem (use of :hover CSS pseudoclass)
-    puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
+    puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">");
+    // Strict would be nice since it fixes atleast one IE problem (use of :hover CSS pseudoclass)
+    //puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
 #endif///ndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     puts(
 	"<HTML>" "\n"
@@ -222,6 +223,18 @@ if (withLogo)
 /* Put up the hot links bar. */
 if (isGisaid)
     {
+#ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
+
+    printf("<TABLE WIDTH='100%%' class='topBlueBar' BORDER='0' CELLSPACING='0' CELLPADDING='2'><TR>\n");
+    printf("<TD><A HREF='../index.html' class='topbar'>Home</A></TD>\n");                           // Home
+    if (haveBlat)
+        printf("<TD><A HREF='../cgi-bin/hgBlat?command=start' class='topbar'>Blat</A></TD>\n");     // Blat
+    printf("<TD><A HREF='../cgi-bin/gisaidSample' class='topbar'>Sample View</A></TD>\n");          // Subject  View
+    printf("<TD><A HREF='../cgi-bin/hgTracks%s' class='topbar'>Sequence View</A></TD>\n",uiState);  // Sequence View
+    printf("<TD><A HREF='../cgi-bin/gisaidTable' class='topbar'>Table View</A></TD>\n");            // Table View
+    printf("<TD style='width:80%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
+
+#else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
     printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 
@@ -256,9 +269,26 @@ if (isGisaid)
 */
     printf("</TR></TABLE>");
     printf("</TD></TR></TABLE>\n");
+#endif///def TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     }
 else if (isGsid)
     {
+#ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
+
+    printf("<TABLE class='topBlueBar' BORDER='0' CELLSPACING='0' CELLPADDING='2'><TR>\n");
+    printf("<TD><A HREF='../index.html' class='topbar'>Home</A></TD>\n");                                               // Home
+    if (haveBlat)
+        printf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgBlat?command=start' class='topbar'>Blat</A></TD>\n");            // Blat
+    printf("<TD><A HREF='../cgi-bin/gsidSubj' class='topbar'>Subject View</A></TD>\n");                                 // Subject View
+    printf("<TD><A HREF='../cgi-bin/hgTracks%s' class='topbar'>Sequence View</A></TD>\n",uiState);                      // Sequence View
+    printf("<TD><A HREF='../cgi-bin/gsidTable' class='topbar'>Table View</A></TD>\n");                                  // Table View
+    if (endsWith(scriptName, "hgBlat"))
+        printf("<TD><A HREF='/goldenPath/help/gsidTutorial.html#BLAT' TARGET=_blank class='topbar'>Help</A></TD>\n");   // Help
+    else
+        printf("<TD><A HREF='/goldenPath/help/sequenceViewHelp.html' TARGET=_blank class='topbar'>Help</A></TD>\n");    // Help
+    printf("<TD style='width:80%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
+
+#else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
     printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 
@@ -291,9 +321,105 @@ else if (isGsid)
 	}
     printf("</TR></TABLE>");
     printf("</TD></TR></TABLE>\n");
+#endif///def TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     }
 else if (dbIsFound)
     {
+#ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
+
+    puts("<!-- +++++++++++++++++++++ HOTLINKS BAR +++++++++++++++++++ -->\n<TR><TD COLSPAN=3 HEIGHT=40>");
+    puts("<TABLE class='topBlueBar' BORDER='0' CELLSPACING='0' CELLPADDING='2'><TR>");
+
+    if (isEncode)
+        printf("<TD><A HREF='../encode/' class='topbar'>Home</A></TD>\n");
+    else
+        {
+        printf("<TD><A HREF='../index.html%s' class='topbar'>Home</A></TD>\n", uiState);
+        if (isGsid)
+            printf("<TD><A HREF='../cgi-bin/gsidSubj%s' class='topbar'>Subject View</A></TD>\n",uiState);
+        else
+            printf("<TD><A HREF='../cgi-bin/hgGateway%s' class='topbar'>Genomes</A></TD>\n",uiState);
+
+        if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
+            endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgTrackUi") ||
+            endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
+            endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
+            printf("<TD><A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>Genome Browser</A></TD>\n",uiState,TRACK_SEARCH);
+
+        if (haveBlat && !endsWith(scriptName, "hgBlat"))
+            printf("<TD><A HREF='../cgi-bin/hgBlat?command=start%s%s' class='topbar'>Blat</A></TD>\n",theCart ? "&" : "", uiState+1 );
+        }
+
+    if (!isGsid && !hIsCgbServer())  // disable TB for both GSID and CGB servers
+        {
+        char *table = (theCart == NULL ? NULL :
+                    (endsWith(scriptName, "hgGene") ?
+                        cartOptionalString(theCart, "hgg_type") :
+                        cartOptionalString(theCart, "g")));
+        if (table && theCart &&
+            (endsWith(scriptName, "hgc") || endsWith(scriptName, "hgTrackUi") ||
+            endsWith(scriptName, "hgGene")))
+            {
+            struct trackDb *tdb = hTrackDbForTrack(db, table);
+            if (tdb != NULL)
+                printf("<TD><A HREF='../cgi-bin/hgTables%s&hgta_doMainPage=1&hgta_group=%s&hgta_track=%s&hgta_table=%s' class='topbar'>",
+                    uiState, tdb->grp, tdb->track, tdb->table);
+            else
+                printf("<TD><A HREF='../cgi-bin/hgTables%s&hgta_doMainPage=1' class='topbar'>", uiState);
+            trackDbFree(&tdb);
+            }
+        else
+            printf("<TD><A HREF='../cgi-bin/hgTables%s%shgta_doMainPage=1' class='topbar'>",
+                uiState, theCart ? "&" : "?" );
+        printf("Tables</A></TD>\n");
+        }
+
+    if (!endsWith(scriptName, "hgNear") && db != NULL && hgNearOk(db)) //  possible to make this conditional: if (db != NULL && hgNearOk(db))
+        {
+        if (isGsid)
+            printf("<TD><A HREF='../cgi-bin/gsidTable%s' class='topbar'>Table View</A></TD>\n",uiState);
+        else
+            printf("<TD><A HREF='../cgi-bin/hgNear%s' class='topbar'>Gene Sorter</A></TD>\n",uiState);
+        }
+    if ((!endsWith(scriptName, "hgPcr")) && (db == NULL || hgPcrOk(db)))
+        printf("<TD><A HREF='../cgi-bin/hgPcr%s' class='topbar'>PCR</A></TD>\n",uiState);
+    if (endsWith(scriptName, "hgGenome"))
+        printf("<TD><A HREF='../cgi-bin/hgGenome%s&hgGenome_doPsOutput=on' class='topbar'>PDF/PS</A></TD>\n",uiState);
+    if (endsWith(scriptName, "hgHeatmap"))
+        printf("<TD><A HREF='../cgi-bin/hgHeatmap%s&hgHeatmap_doPsOutput=on' class='topbar'>PDF/PS</A></TD>\n",uiState);
+#ifndef GBROWSE
+    if (wikiLinkEnabled() && !endsWith(scriptName, "hgSession"))
+        printf("<TD><A HREF='../cgi-bin/hgSession%s%shgS_doMainPage=1' class='topbar'>Session</A></TD>\n",uiState, theCart ? "&" : "?" );
+#endif /* GBROWSE */
+    if (!isGsid)
+        printf("<TD><A HREF='../FAQ/' class='topbar'>FAQ</A></TD>");
+    if (!isGsid)
+        {
+        if (endsWith(scriptName, "hgBlat"))
+            printf("<TD><A HREF='../goldenPath/help/hgTracksHelp.html#BLATAlign'");
+        else if (endsWith(scriptName, "hgText"))
+            printf("<TD><A HREF='../goldenPath/help/hgTextHelp.html'");
+        else if (endsWith(scriptName, "hgNear"))
+            printf("<TD><A HREF='../goldenPath/help/hgNearHelp.html'");
+        else if (endsWith(scriptName, "hgTables"))
+            printf("<TD><A HREF='../goldenPath/help/hgTablesHelp.html'");
+        else if (endsWith(scriptName, "hgGenome"))
+            printf("<TD><A HREF='../goldenPath/help/hgGenomeHelp.html'");
+        else if (endsWith(scriptName, "hgSession"))
+            printf("<TD><A HREF='../goldenPath/help/hgSessionHelp.html'");
+        else if (endsWith(scriptName, "pbGateway"))
+            printf("<TD><A HREF='../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml'");
+        else if (endsWith(scriptName, "hgVisiGene"))
+            printf("<TD><A HREF='../goldenPath/help/hgTracksHelp.html#VisiGeneHelp'");
+        else
+            printf("<TD><A HREF='../goldenPath/help/hgTracksHelp.html'");
+        printf(" class='topbar'>Help</A></TD>\n");
+        }
+    }
+    printf("<TD style='width:80%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
+    puts("</TD></TR>\n");
+
+#else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     puts(
        "<!-- +++++++++++++++++++++ HOTLINKS BAR +++++++++++++++++++ -->" "\n"
        "<TR><TD COLSPAN=3 HEIGHT=40 >" "\n"
@@ -339,7 +465,7 @@ else
 		theCart ? "&" : "", uiState+1 );
     	puts("           Blat</A> ");
 	}
-}
+    }
     {
     char *table = (theCart == NULL ? NULL :
 		   (endsWith(scriptName, "hgGene") ?
@@ -445,6 +571,7 @@ puts("</font></TD>" "\n"
      "</TD></TR>	" "\n"
      "" "\n"
      );
+#endif///def TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
 
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
