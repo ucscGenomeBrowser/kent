@@ -3538,6 +3538,25 @@ color 153,38,0
 sex M
 protocol UW(Stam):416B_Stam_protocol.pdf
 
+term A20
+tag A20
+type Cell Line
+organism Mouse
+tissue Blood
+category Cell Line
+description B cell lymphoma line derived from a spontaneous reticulum cell neoplasm (Provisional)
+age immortalized
+strain BALB/cAnN 
+vendorName ATCC
+vendorId TIB-208
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-208&Template=cellBiology
+termId 7069
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
+color 153,38,0
+sex M
+protocol UW(Stam):A20_Stam_protocol.pdf
+
+
 term AtT-20
 tag AtT20
 type Cell Line
@@ -3559,8 +3578,8 @@ tag BCellCD19p
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
-description B Cell , CD19+
+category Primary Cells
+description B Cell , CD19+ (Provisional: updated category from cell line to Primary Cells)
 age immortalized
 strain C57BL/6
 vendorName
@@ -3679,6 +3698,20 @@ color 153,38,0
 sex U
 protocol LICR(Ren):Cortex_Ren_protocol.pdf
 
+term FatPad
+tag Fat
+type Cell Line
+organism Mouse
+tissue Adipose
+category Tissue
+description Adipose tissue (Provisional) 
+vendorName UW lab
+termId 7108
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7108
+color 153,38,0
+sex U
+protocol UW(Stam):Tissue_Stam_protocol.pdf
+
 term Fibroblast
 tag Fibroblast
 type Cell Line
@@ -3692,7 +3725,6 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
 protocol UW(Stam):Fibroblast_Stam_protocol.pdf
-
 
 term G1E
 tag G1E
@@ -3876,6 +3908,25 @@ color 153,38,0
 sex U
 #protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
 
+term NIH-3T3
+tag NIH3T3
+type Cell Line
+organism Mouse
+tissue Blood
+category Cell Line
+description fibroblast (Provisional) 
+age immortalized
+strain NIH/Swiss
+vendorName ATCC
+vendorId CRL-1658
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1658&Template=cellBiology
+termId 7146
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7146
+color 153,38,0
+sex M
+protocol UW(Stam):NIH-3T3_Stam_protocol.pdf
+
+
 # shortened term
 term OlfactBulb
 tag OlfactoryBulb
@@ -3982,14 +4033,28 @@ tag TNaive
 type Cell Line
 organism Mouse
 tissue Blood
-category Tissue
-description Naive T cells: CD4+, CD25-
+category Primary Cells
+description Naive T cells: CD4+, CD25- (Provisional: updated category from cell line to Primary Cells)
 vendorName UW lab
 termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 153,38,0
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
+
+term TReg
+tag TReg
+type Cell Line
+organism Mouse
+tissue Blood
+category Primary Cells
+description Regulatory T cells CD4+,CD25+
+vendorName UW lab
+termId 
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+color 153,38,0
+sex U
+protocol UW(Stam):TReg_Stam_protocol.pdf
 
 term WholeBrain
 tag WholeBrain
@@ -8519,6 +8584,11 @@ tag B6D2F1J
 type strain
 description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1.
 
+term BALB/cAnN
+tag BALBCANN
+type strain
+description ccMyeloma high incidence H2d (Provisional) 
+
 term C3H
 tag C3H
 type strain
@@ -8528,6 +8598,11 @@ term C57BL/6
 tag C57BL6
 type strain
 description C57 black 6, the most common inbred strain of laboratory mouse
+
+term NIH/Swiss
+tag NIHS
+type strain
+description An outbred Swiss mouse  used as a general-purpose stock. Used extensively for pertussis HSF testing.(Provisional)
 
 term RIII
 tag RIII
