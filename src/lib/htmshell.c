@@ -389,7 +389,7 @@ if (printDocType)
 #ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", f);
 #else///ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
-    fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">");
+    fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">",f);
     // Strict would be nice since it fixes atleast one IE problem (use of :hover CSS pseudoclass)
     //fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n",f);
 #endif///ndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
