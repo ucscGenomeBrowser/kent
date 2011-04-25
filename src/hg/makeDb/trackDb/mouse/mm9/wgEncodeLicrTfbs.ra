@@ -153,6 +153,15 @@ noInherit on
         color 153,38,0
         # subId=3923 dateSubmitted=2011-04-25
 
+        track wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdPk
+        parent wgEncodeLicrTfbsViewPeaks off
+        shortLabel Liver CTCF Pk
+        longLabel ENCODE LICR TFBS Peaks (CTCF in Liver cells)
+        subGroups view=Peaks age=adult8wks factor=CTCF cellType=Liver control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=3925 dateSubmitted=2011-04-25
+
 	#######	Signal Tracks###########
 	track wgEncodeLicrTfbsViewSignal
 	shortLabel Signal
@@ -337,4 +346,22 @@ noInherit on
         type bigWig 0.150000 39.330002
         color 153,38,0
         # subId=3924 dateSubmitted=2011-04-25
+
+        track wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel Liver CTCF Sig
+        longLabel ENCODE LICR TFBS Signal (CTCF in Liver cells)
+        subGroups view=Signal age=adult8wks factor=CTCF cellType=Liver control=std sex=M strain=C57BL6
+        type bigWig 0.110000 52.470001
+        color 153,38,0
+        # subId=3925 dateSubmitted=2011-04-25
+
+        track wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel Liver Input Sig
+        longLabel ENCODE LICR TFBS Signal (Input in Liver cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=Liver control=std sex=M strain=C57BL6
+        type bigWig 0.130000 65.070000
+        color 153,38,0
+        # subId=3926 dateSubmitted=2011-04-25
 
