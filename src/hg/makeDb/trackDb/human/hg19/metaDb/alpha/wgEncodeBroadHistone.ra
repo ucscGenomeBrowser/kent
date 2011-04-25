@@ -3420,6 +3420,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH001013
+expId 1013
 fileIndex wgEncodeBroadHistoneHelas3ControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep1.bam
 grant Bernstein
@@ -3444,6 +3446,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH001013
+expId 1013
 fileIndex wgEncodeBroadHistoneHelas3ControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep2.bam
 grant Bernstein
@@ -3467,6 +3471,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
+dccAccession wgEncodeEH001013
+expId 1013
 fileName wgEncodeBroadHistoneHelas3ControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -3489,6 +3495,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
+dccAccession wgEncodeEH001013
+expId 1013
 fileName wgEncodeBroadHistoneHelas3ControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -3512,6 +3520,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH001013
+expId 1013
 fileName wgEncodeBroadHistoneHelas3ControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -15951,6 +15961,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001027
+expId 1027
 fileIndex wgEncodeBroadHistoneNhaControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneNhaControlStdAlnRep1.bam
 grant Bernstein
@@ -15975,6 +15987,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001027
+expId 1027
 fileIndex wgEncodeBroadHistoneNhaControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneNhaControlStdAlnRep2.bam
 grant Bernstein
@@ -15998,6 +16012,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
+dccAccession wgEncodeEH001027
+expId 1027
 fileName wgEncodeBroadHistoneNhaControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -16020,6 +16036,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
+dccAccession wgEncodeEH001027
+expId 1027
 fileName wgEncodeBroadHistoneNhaControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -16043,6 +16061,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001027
+expId 1027
 fileName wgEncodeBroadHistoneNhaControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -16960,6 +16980,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+dccAccession wgEncodeEH001055
+expId 1055
 fileIndex wgEncodeBroadHistoneNhdfadControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneNhdfadControlStdAlnRep1.bam
 grant Bernstein
@@ -16982,6 +17004,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+dccAccession wgEncodeEH001055
+expId 1055
 fileIndex wgEncodeBroadHistoneNhdfadControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneNhdfadControlStdAlnRep2.bam
 grant Bernstein
@@ -17004,6 +17028,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+dccAccession wgEncodeEH001055
+expId 1055
 fileName wgEncodeBroadHistoneNhdfadControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -17026,6 +17052,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+dccAccession wgEncodeEH001055
+expId 1055
 fileName wgEncodeBroadHistoneNhdfadControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -17048,6 +17076,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+dccAccession wgEncodeEH001055
+expId 1055
 fileName wgEncodeBroadHistoneNhdfadControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -21798,6 +21828,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+dccAccession wgEncodeEH001056
+expId 1056
 fileIndex wgEncodeBroadHistoneOsteoblControlStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneOsteoblControlStdAlnRep1.bam
 grant Bernstein
@@ -21820,6 +21852,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+dccAccession wgEncodeEH001056
+expId 1056
 fileIndex wgEncodeBroadHistoneOsteoblControlStdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneOsteoblControlStdAlnRep2.bam
 grant Bernstein
@@ -21842,6 +21876,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+dccAccession wgEncodeEH001056
+expId 1056
 fileName wgEncodeBroadHistoneOsteoblControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -21864,6 +21900,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+dccAccession wgEncodeEH001056
+expId 1056
 fileName wgEncodeBroadHistoneOsteoblControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -21886,6 +21924,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
+dccAccession wgEncodeEH001056
+expId 1056
 fileName wgEncodeBroadHistoneOsteoblControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -22897,4 +22937,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: 1506127988
+# MAGIC: 2060981014
