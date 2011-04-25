@@ -21,6 +21,7 @@ wgEncodeOpenChromFaire.ra \
 wgEncodeSunyAlbanyGeneSt.ra \
 wgEncodeOpenChromDnase.ra\
 wgEncodeBuOrchid.ra \
+wgEncodeOpenChromSynth.ra \
 
 include ../../../../makefile.metaDb
 

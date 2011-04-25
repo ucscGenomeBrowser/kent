@@ -34,7 +34,9 @@ This track is initially released with a single view:
 <DT><i>RBP Assoc RNA</i>
 <DD>
 This view shows the genomic location of the mRNA transcripts associated with RNA Binding 
-Proteins as determined by the Affymetrix GeneChip® Human Gne 1.0 ST Array probes.
+Proteins as determined by the Affymetrix GeneChip&reg; Human Gne 1.0 ST Array probes.
+Items are shaded by p-value using the formula (maxPossibleScore-((maxPossibleScore/cutOffValue)*pValue))
+so that items with lower p-values (more significant expression levels) are shaded darker.
 </DL>
 Instructions for configuring multi-view tracks are
 
@@ -43,48 +45,33 @@ Instructions for configuring multi-view tracks are
 <H2>Methods</H2>
 <P>RBP-mRNA complexes were purified from cells grown according to the approved
 <A HREF="../../ENCODE/protocols/cell">ENCODE cell culture protocols</A>.
+Antibodies specific to the RNA Binding Protein (RBP) in question were first coated onto protein A/G containing 
+magnetic beads and then used to immunoprecipitate the targeted, endogenously-formed mRNP complexes. Antibody-coated
+beads were incubated/tumbled with cell lysate overnight in the cold followed by extensive rinsing and subsequent 
+purification of associated RNA using Phenol/Chloroform extraction and ethanol precipitation.
 The associated transcripts were identified using GeneChip&reg; Human Gene 1.0 ST Arrays.
 Arrays were analyzed using Agilent's GeneSpringGX software (version 11.0).
 </P>
 <P>
-Arrays for RIP-Input were summarized by applying the Iterative PLIER16 algorithm using quantile normalization.
-Probesets whose normalized expression levels fell within the  18 to 98 percentile in at least two of the three replicates
-were retained for further analysis.  These probesets were then subjected to a TTest against zero and a p-value
-cutoff of .05 was applied.  The Benjamini-Hochberg false discovery rate algorithm was applied and a corrected
-p-value is also provided.
+Arrays were analyzed a group at a time by applying the Iterative PLIER16 algorithm using quantile normalization.
+Probesets whose normalized expression levels (signal value) fell within the  18 to 98 percentile in at least two of the three replicates
+were retained for further analysis.  A TTest (T7-Tag and RIP-Input) or a oneway ANOVA (samples and controls)
+was applied to these probesets and a p-value cutoff of .05 was applied.  The Benjamini-Hochberg false discovery rate 
+algorithm was then applied to generate corrected p-values, also known as q-values.
 </P>
+
 <P>
-Arrays for T7Tag (background/negative control) RIPs were summarized with those for RIP-inputs using the PLIER16 Iterative
-algorithm with quantile normalization.  Probesets whose normalized expression levels fell within the 18 to 98 percentile in at
-least two of three replicates in either group (RIP-inputs or T7Tag RIPs) were retained for further analysis.  Probesets
-were then filtered for those that showed a minimum 2 fold increase of expression in T7Tag versus total.  An unpaired TTest
-was applied to these probesets and a p-value cutoff of .05 was applied.  The Benjamini-Hochberg false discovery rate
-algorithm was applied and a corrected p-value is also provided.
-</P>
-<P>
-Arrays for treatment RIP samples were summarized together with those for RIP-inputs and T7Tag RIPs.  Again, this was done using
-Iterative PLIER16 with quantile normalization. Probesets whose normalized expression levels fell within the 18 to 98 percentile in at
-least two of three replicates in any group (treatment RIPs, RIP-inputs or T7Tag RIPs) were retained for further analysis.
-</p>
-<p>
-A list of probesets was produced of those that showed a minimum 2 fold increase of expression in treatment over total.
-A oneway ANOVA was applied and a p-value cutoff of .05 was applied.  The Benjamini-Hochberg false discovery rate algorithm was applied
-and a corrected p-value is also provided.
-</p>
-<p>
+The RIP-Input was summarized first and selected probesets were retained for further anaylsis.
+ Next, the arrays for T7Tag (background/negative control) RIPs were summarized with those retained RIP-input probesets.
+ Probesets that fit the above criteria for either group (RIP-Input or T7Tag)
+were then filtered for those that showed a minimum 2 fold increase of expression in T7Tag versus RIP-Input.
+Finally, 
+arrays for treatment RIP samples were summarized together with those for RIP-inputs and T7Tag RIPs.   Probesets that fit the above 
+criteria for any group (RIP-Input or T7Tag or samples) were
+then filtered for probesets that showed a minimum 2 fold increase of expression in treatment over total.
 A similar list was produced for probesets showing the same enrichment in the T7Tag RIP set.  Probesets which appeared in both
-treatment and negative control at these cutoff stringencies were subtracted from the treatment results as background noise, yielding the
-final result data track.
+treatment and negative control at these cutoff stringencies were subtracted from the treatment results as background noise, yielding the final data track.
 </P>
-
-
-
-
-<P>For additional RIP methods detail, see
-Tenenbaum <EM>et al.</EM> 2002; Baroni <EM>et al.</EM> 2008; Penalva
-<EM>et al.</EM> 2004, below.
-
-
 
 <H2>Verification</H2>
 <P>
@@ -116,10 +103,6 @@ Contact:
 
 <H2>References</H2>
 
-
-
-</P>
-
 <P>Baroni TE, Chittur SV, George AD, Tenenbaum SA.
 <A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/18369977">
 Advances in RIP-chip analysis : RNA-binding protein
@@ -131,6 +114,18 @@ immunoprecipitation-microarray profiling</A>.
 <A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/17114943">
 MicroRNA modulation of RNA-binding protein regulatory elements</A>.
 <EM>RNA Biol</EM>. 2006;3(2):57-9. Epub 2006 Apr 1.
+</P>
+
+<P>Jain R, Devine T, George AD, Chittur SV, Baroni TE, Penalva LO, Tenenbaum SA.
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/21125495">
+RNA-Binding Protein Immunoprecipitation-Microarray (Chip) Profiling</A>.
+<EM>Methods Mol Biol</EM>. 2011;703:247-63
+</P>
+
+<P>Jayaseelan S, Doyle F, Currenti S, Tenenbaum SA.
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/21431755">
+RIP: An mRNA Localization Technique</A>.
+<EM>Methods Mol Biol</EM>. 2011;714:407-422.
 </P>
 
 <P>Keene JD, Tenenbaum SA.
@@ -150,6 +145,15 @@ Gene expression analysis of messenger RNP complexes</A>.
 Ribonomics: identifying mRNA subsets in mRNP complexes using
 antibodies to RNA-binding proteins and genomic arrays</A>.
 <EM>Methods</EM>. 2002 Feb;26(2):191-8.
+</P>
+
+Identifying mRNA subsets in messenger ribonucleoprotein complexes by using cDNA arrays.
+<P>Tenenbaum SA, Carson CC, Lager PJ, Keene JD.
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/11121017">
+Identifying mRNA subsets in messenger ribonucleoprotein complexes by using cDNA arrays</A>.
+<EM>Proc Natl Acad Sci U S A.</EM> 2000 Dec 19;97(26):14085-90.
+</P>
+
 
 
 <H2> Data Release Policy </H2>

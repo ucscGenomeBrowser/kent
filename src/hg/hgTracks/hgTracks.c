@@ -3524,30 +3524,10 @@ if (!psOutput)
         }
     }
 
-/* see if hgFixed.trackVersion exists */
-boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
 char ensVersionString[256];
 char ensDateReference[256];
-ensVersionString[0] = 0;
-ensDateReference[0] = 0;
-if (trackVersionExists)
-    {
-    struct sqlConnection *conn = hAllocConn("hgFixed");
-    char query[256];
-    safef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' order by updateTime DESC limit 1", database);
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row;
-
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        safef(ensVersionString, sizeof(ensVersionString), "Ensembl %s",
-                row[0]);
-        safef(ensDateReference, sizeof(ensDateReference), "%s",
-                row[1]);
-        }
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    }
+ensGeneTrackVersion(database, ensVersionString, ensDateReference,
+    sizeof(ensVersionString));
 
 if (!psOutput)
     {
@@ -3567,7 +3547,7 @@ if (!psOutput)
             printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd);
             hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
             }
-        else if (sameWord(database,"anoCar2") || sameWord(database,"calJac3"))
+        else if (sameWord(database,"oryCun2") || sameWord(database,"anoCar2") || sameWord(database,"calJac3"))
             {
             hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
             printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
@@ -3579,12 +3559,10 @@ if (!psOutput)
             if (ensDateReference[0] && differentWord("current", ensDateReference))
                 archive = cloneString(ensDateReference);
             /*  Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
-            if (sameWord(database,"oryCun2") || isUnknownChrom(database, chromName))
+            if (isUnknownChrom(database, chromName))
                 {
                 //	which table to check
                 char *ctgPos = "ctgPos";
-                if (sameWord(database,"oryCun2"))
-                    ctgPos = "ctgPos2";
 
                 if (sameWord(database,"fr2"))
                     fr2ScaffoldEnsemblLink(archive);
