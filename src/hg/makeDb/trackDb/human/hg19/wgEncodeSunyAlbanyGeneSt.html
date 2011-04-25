@@ -35,8 +35,8 @@ This track is initially released with a single view:
 <DD>
 This view shows the genomic location of the mRNA transcripts associated with RNA Binding 
 Proteins as determined by the Affymetrix GeneChip&reg; Human Gne 1.0 ST Array probes.
-Items are shaded by p-value using the formula (maxPossibleScore-((maxPosiibleScore/cutOffValue)*pValue)),
-so that expression levels with lower p-value are shaded darker.
+Items are shaded by p-value using the formula (maxPossibleScore-((maxPossibleScore/cutOffValue)*pValue))
+so that items with lower p-values (more significant expression levels) are shaded darker.
 </DL>
 Instructions for configuring multi-view tracks are
 
@@ -54,15 +54,15 @@ Arrays were analyzed using Agilent's GeneSpringGX software (version 11.0).
 </P>
 <P>
 Arrays were analyzed a group at a time by applying the Iterative PLIER16 algorithm using quantile normalization.
-Probesets whose normalized expression levels signal value) fell within the  18 to 98 percentile in at least two of the three replicates
+Probesets whose normalized expression levels (signal value) fell within the  18 to 98 percentile in at least two of the three replicates
 were retained for further analysis.  A TTest (T7-Tag and RIP-Input) or a oneway ANOVA (samples and controls)
 was applied to these probesets and a p-value cutoff of .05 was applied.  The Benjamini-Hochberg false discovery rate 
-algorithm was applied to generate a corrected p-values, also known as q-values.
+algorithm was then applied to generate corrected p-values, also known as q-values.
 </P>
 
 <P>
 The RIP-Input was summarized first and selected probesets were retained for further anaylsis.
- Next the arrays for T7Tag (background/negative control) RIPs were summarized with those retained RIP-input probesets.
+ Next, the arrays for T7Tag (background/negative control) RIPs were summarized with those retained RIP-input probesets.
  Probesets that fit the above criteria for either group (RIP-Input or T7Tag)
 were then filtered for those that showed a minimum 2 fold increase of expression in T7Tag versus RIP-Input.
 Finally, 
