@@ -29,8 +29,9 @@ noInherit on
     pValueFilter 0.0
     pValueFilterLimits 0:0.5
     scoreFilter 2
-    scoreFilterLimits 1:800
-    minGrayLevel 11%
+    scoreFilterLimits 1:1000
+    scoreMin 0
+    #minGrayLevel 11%
     type broadPeak
 
 
