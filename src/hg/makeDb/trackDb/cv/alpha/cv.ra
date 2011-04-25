@@ -8379,11 +8379,11 @@ type dataType
 label Mapability
 description Uniqueness of n-mer sequence fragments across the genome
 
-term Methyl27
-tag methyl27
+term MethylArray
+tag methylarray
 type dataType
-label Methyl 27
-description Methyl 27
+label Methyl Array
+description Provisional Methyl Bead Array
 
 term MethylSeq
 tag methylseq
