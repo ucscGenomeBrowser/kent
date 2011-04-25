@@ -1651,6 +1651,7 @@ update dbDb set description="March 2009 (WUGSC 3.2/calJac3)" where name="calJac3
 ## Annotate 13-way multiple alignment with gene annotations
 ##       (DONE - 2010-05-17 - Chin)
 ##       use ensGene for calJac3 (DONE - 2010-07-22 - Chin)
+##  Re-work (DONE 2011-04-22 - Chin)
     # Gene frames
     ## survey all genomes to see what type of gene track to use
     ssh hgwdev
@@ -1666,7 +1667,7 @@ foreach db (`cat ../species.list`)
     set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
     foreach table ($tables)
         if ($table == "ensGene" || $table == "refGene" || $table == "mgcGenes" || \
-            $table == "knownGene" || $table == "xenoRefGene" ) then
+            $table == "knownGene" || $table == "xenoRefGene" || $table == "nscanGene" ) then
                 set count = `hgsql $db -N -e "select count(*) from $table"`
                 echo -n "${table}: ${count}, "
         endif
@@ -1687,20 +1688,19 @@ end
     chmod +x ./showGenes.csh
 
     ./showGenes.csh
-    # calJac3: ensGene: 53051, nscanGene: 28723, refGene: 9, xenoRefGene: 241897, Mrnas: 3739
-    # ponAbe2: ensGene: 31566, nscanGene: 23499, refGene: 3466, xenoRefGene: 231218, Mrnas: 0
-    # hg19: ensGene: 151222, knownGene: 77614, mgcGenes: 31354, nscanGene: 67448, refGene: 36557, xenoRefGene: 130754, Mrnas: 288234
-    # panTro2: ensGene: 41488, nscanGene: 22251, refGene: 847, xenoRefGene: 224011, Mrnas: 1644
-    # gorGor2: xenoRefGene: 230153, Mrnas: 1
-    # rheMac2: ensGene: 42820, nscanGene: 22003, refGene: 1019, xenoRefGene: 293269, Mrnas: 5512
-    # papHam1: xenoRefGene: 256814, Mrnas: 70
+    # calJac3: ensGene: 55137, nscanGene: 28723, refGene: 53, xenoRefGene: 252282, Mrnas: 3789
+    # hg19: ensGene: 167071, knownGene: 77614, mgcGenes: 31354, nscanGene: 67448, refGene: 38868, xenoRefGene: 136935, Mrnas: 295362
+    # panTro2: ensGene: 41488, nscanGene: 22251, refGene: 1457, xenoRefGene: 233381, Mrnas: 2257
+    # gorGor2: xenoRefGene: 240083, Mrnas: 1
+    # ponAbe2: ensGene: 31566, nscanGene: 23499, refGene: 3549, xenoRefGene: 241018, Mrnas: 0
+    # papHam1: xenoRefGene: 267869, Mrnas: 71
+    # rheMac2: ensGene: 42820, nscanGene: 22003, refGene: 2563, xenoRefGene: 303624, Mrnas: 7297
     # tarSyr1: ensGene: 45832, Mrnas: 8
-    # micMur1: ensGene: 37458, Mrnas: 43
-    # otoGar1: ensGene: 36560, Mrnas: 0
-    # mm9: ensGene: 84869, knownGene: 54042, mgcGenes: 26582, nscanGene: 21895, refGene: 27373, xenoRefGene: 126474, Mrnas: 259268
-    # canFam2: ensGene: 30914, nscanGene: 24615, refGene: 1048, xenoRefGene: 216324, Mrnas: 3236
-    # monDom5: ensGene: 35113, nscanGene: 45946, refGene: 394, xenoRefGene: 219198, Mrnas: 1628
-
+    # micMur1: ensGene: 37458, Mrnas: 53
+    # otoGar1: ensGene: 36560, Mrnas: 1
+    # mm9: ensGene: 93805, knownGene: 55419, mgcGenes: 26707, nscanGene: 21895, refGene: 28429, xenoRefGene: 132694, Mrnas: 261336
+    # canFam2: ensGene: 30914, nscanGene: 24615, refGene: 1205, xenoRefGene: 225414, Mrnas: 3476
+    # monDom5: ensGene: 35113, nscanGene: 45946, refGene: 467, xenoRefGene: 228506, Mrnas: 1719
 
     #   rearrange that output to create 3 sections:
     #1. knownGenes: hg19 mm9
@@ -1754,33 +1754,33 @@ done
 
 
    time (cat  ../run/maf/*.maf | nice -n +19 genePredToMafFrames calJac3 stdin stdout calJac3 genes/calJac3.gp.gz mm9 genes/mm9.gp.gz hg19 genes/hg19.gp.gz rheMac2 genes/rheMac2.gp.gz ponAbe2 genes/ponAbe2.gp.gz panTro2 genes/panTro2.gp.gz canFam2 genes/canFam2.gp.gz  monDom5 genes/monDom5.gp.gz tarSyr1 genes/tarSyr1.gp.gz micMur1 genes/micMur1.gp.gz otoGar1 genes/otoGar1.gp.gz papHam1 genes/papHam1.gp.gz gorGor2 genes/gorGor2.gp.gz | gzip > multiz13way.mafFrames.gz) > frames.log 2>&1
-    # real    9m41.993s
+    # real    13m24.975s 
 
     zcat multiz13way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
-    # 159735 tarSyr1
-    # 193983 calJac3
-    # 202861 panTro2
-    # 203073 rheMac2
-    # 205358 ponAbe2
-    # 205679 hg19
-    # 206899 micMur1
-    # 211692 monDom5
-    # 211778 papHam1
-    # 213918 otoGar1
-    # 217990 gorGor2
-    # 233938 mm9
-    # 240194 canFam2
+    # 157578 tarSyr1
+    # 197768 calJac3
+    # 200391 monDom5
+    # 202695 panTro2
+    # 202823 rheMac2
+    # 205084 micMur1
+    # 205185 ponAbe2
+    # 205490 hg19
+    # 212293 otoGar1
+    # 212325 papHam1
+    # 220393 gorGor2
+    # 229058 mm9
+    # 232951 canFam2
 
     #   load the resulting file
     ssh hgwdev
     cd /cluster/data/calJac3/bed/multiz13way/frames
     time nice -n +19 hgLoadMafFrames calJac3 multiz13wayFrames \
         multiz13way.mafFrames.gz
-    #   real    0m29.735s
+    #   real    0m27.783s
     # check it:
     hgsql -N -e "select src from  multiz13wayFrames;" calJac3 \
       | sort | uniq -c | grep calJac3
-    # 193983 calJac3
+    # 197768 calJac3
 
     #   enable the trackDb entries:
 # frames multiz13wayFrames
@@ -1788,6 +1788,7 @@ done
 
 #############################################################################
 ## create upstream refGene maf files
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf
     cd /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf
     # bash script
 #!/bin/sh
@@ -1802,6 +1803,13 @@ do
         | gzip -c > upstream${S}.maf.gz
     echo "done upstream${S}.maf.gz"
 done
+    # making upstream1000.maf
+    # done upstream1000.maf.gz
+    # making upstream2000.maf
+    # done upstream2000.maf.gz
+    # making upstream5000.maf
+    # done upstream5000.maf.gz
+
     # maf files
     cp -p /hive/data/genomes/calJac3/bed/multiz13way/run/calJac3.13way.maf .
     gzip calJac3.13way.maf
@@ -1812,9 +1820,8 @@ done
 
     # download stuff
     cd /hive/data/genomes/calJac3/bed/multiz13way
-    /cluster/bin/phast/tree_doctor --rename \
-"calJac3->marmoset; hg19->human; papHam1->Baboon; otoGar1->Bushbaby; panTro2->Chimp; canFam2->Dog; gorGor2->Gorilla; mm9->Mouse; monDom5->Opossum; ponAbe2->Orangutan; rheMac2->Rhesus; micMur1->Mouse lemur; tarSyr1->Tarsier" \
-    13way.nh > commonNames.13way.nh
+    cp 13way.nh 13way.nh.original
+    cp tree.nh 13way.nh
     cp 13way.nh downloads/.
     cp commonNames.13way.nh downloads/.
     # create /hive/data/genomes/calJac3/bed/multiz13way/downloads/README.txt

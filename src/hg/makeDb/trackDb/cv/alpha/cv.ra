@@ -8440,14 +8440,14 @@ description Sequencing analysis of RNA expression
 
 #GeneST and Tiling are flavors of the RIP-chip.  
 #They need separate dataTypes for the experiment table to work
-term GeneSt 
-tag  GeneSt 
+term RipGeneSt 
+tag  RipGeneSt 
 type dataType
 label RIP-chip Gene ST
 description RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays 
 
-term Tiling 
-tag  Tiling 
+term RipTiling 
+tag  RipTiling 
 type dataType
 label RIP-chip Tiling Array
 description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays 
