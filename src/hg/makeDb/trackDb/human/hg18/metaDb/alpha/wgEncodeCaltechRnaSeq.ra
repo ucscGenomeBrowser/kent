@@ -1,7 +1,7 @@
 metaObject wgEncodeCaltechRnaSeq
 objType composite
 composite wgEncodeCaltechRnaSeq
-expVars lab,dataType, cell,localization,readType,insertLength
+expVars lab,dataType,cell,readType,insertLength
 geoSeries GSE23316
 
 metaObject wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32
@@ -6731,4 +6731,4 @@ subId 1065
 tableName wgEncodeCaltechRnaSeqSplicesRep5H1hescCellPapBb2R2x75
 view Splices
 
-# MAGIC: -801054170
+# MAGIC: -801055535
