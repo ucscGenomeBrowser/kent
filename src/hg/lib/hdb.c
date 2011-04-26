@@ -2479,6 +2479,32 @@ if (conn)
 return dbList;
 }
 
+struct hash *hDbDbHash()
+/* The hashed-up version of the entire dbDb table, keyed on the db */
+/* this is likely better to use than hArchiveOrganism if it's likely to be */
+/* repeatedly called */
+{
+struct hash *dbDbHash = newHash(16);
+struct dbDb *list = hDbDbList();
+struct dbDb *dbdb;
+for (dbdb = list; dbdb != NULL; dbdb = dbdb->next)
+    hashAdd(dbDbHash, dbdb->name, dbdb);
+return dbDbHash; 
+}
+
+struct hash *hDbDbAndArchiveHash()
+/* hDbDbHash() plus the dbDb rows from the archive table */
+{
+struct hash *dbDbHash = newHash(16);
+struct dbDb *archList = hArchiveDbDbList();
+struct dbDb *list = hDbDbList();
+struct dbDb *bothList = slCat(list, archList);
+struct dbDb *dbdb;
+for (dbdb = bothList; dbdb != NULL; dbdb = dbdb->next)
+    hashAdd(dbDbHash, dbdb->name, dbdb);
+return dbDbHash; 
+}
+
 int hDbDbCmpOrderKey(const void *va, const void *vb)
 /* Compare to sort based on order key */
 {
@@ -4188,7 +4214,7 @@ struct liftOverChain *chainList = NULL, *chain;
 struct hash *hash = newHash(0), *dbNameHash = newHash(3);
 
 /* Get list of all liftOver chains in central database */
-chainList = liftOverChainListFiltered();
+chainList = liftOverChainList();
 
 /* Create hash of databases having liftOver chains from this database */
 for (chain = chainList; chain != NULL; chain = chain->next)
@@ -4198,7 +4224,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     }
 
 /* Get list of all current and archived databases */
-regDb = hDbDbListDeadOrAlive();
+regDb = hDbDbList();
 archDb = hArchiveDbDbList();
 allDbList = slCat(regDb, archDb);
 
