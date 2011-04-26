@@ -5937,11 +5937,11 @@ noInherit on
         type bigWig 0.216637 169.572006
         # subId=3035 dateSubmitted=2011-01-20
 
-        track wgEncodeHaibTfbsPanc1ControlPcr1xRawRep2
+        track wgEncodeHaibTfbsPanc1ControlPcr2xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel PANC-1 Control Raw 2
         longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Control in PANC-1 cells)
-        subGroups view=RawSignal factor=zControl cellType=PANC1 protocol=PCR1x treatment=None rep=rep2
+        subGroups view=RawSignal factor=zControl cellType=PANC1 protocol=PCR2x treatment=None rep=rep2
         type bigWig 0.096728 549.244995
         # subId=3035 dateSubmitted=2011-01-20
 

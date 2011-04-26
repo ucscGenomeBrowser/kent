@@ -782,3 +782,83 @@ priority 105
 type bigWig -10 5
 autoScale on
 maxHeightPixels 128:64:20
+
+
+
+# laminB1 supertrack
+
+        track laminB1Super
+        superTrack on
+        shortLabel NKI Nuc Lamina
+        longLabel NKI Nuclear Lamina Associated Domains (LaminB1 DamID)
+        group regulation
+        priority 300
+
+#ES
+track laminB1_ES
+superTrack laminB1Super dense
+shortLabel LaminB1 ES
+longLabel NKI LaminB1 (DamID of LaminB1 in mouse Embryonic Stem cells, log2-ratio)
+group regulation
+priority 310
+visibility hide
+color 255, 125, 0
+maxHeightPixels 100:40:11
+autoScale Off
+windowingFunction mean
+smoothingWindow 2
+type wig -5.572 4.617
+spanList 60
+viewLimits -2:2
+
+#NP
+track laminB1_NP
+superTrack laminB1Super dense
+shortLabel LaminB1 NP
+longLabel NKI LaminB1 (DamID of LaminB1 in mouse Neuro Progenitor cells, log2-ratio)
+group regulation
+priority 320
+visibility hide
+color 0,0,255
+maxHeightPixels 100:40:11
+autoScale Off
+windowingFunction mean
+smoothingWindow 2
+type wig -5.998 4.292 
+spanList 60
+viewLimits -2:2
+
+#AC
+track laminB1_AC
+superTrack laminB1Super dense
+shortLabel LaminB1 AC
+longLabel NKI LaminB1 (DamID of LaminB1 in mouse Astrocytes, log2-ratio)
+group regulation
+priority 330
+visibility hide
+color 255,0,255
+maxHeightPixels 100:40:11
+autoScale Off
+windowingFunction mean
+smoothingWindow 2
+type wig -5.742 4.293
+spanList 60
+viewLimits -2:2
+
+#EF
+track laminB1_EF
+superTrack laminB1Super dense
+shortLabel LaminB1 EF
+longLabel NKI LaminB1 (DamID of LaminB1 in mouse Embryonic Fibroblasts, log2-ratio)
+group regulation
+priority 340
+visibility hide
+color 0,255, 0
+maxHeightPixels 100:40:11
+autoScale Off
+windowingFunction mean
+smoothingWindow 2
+type wig -5.444 4.922
+spanList 60
+viewLimits -2:2
+

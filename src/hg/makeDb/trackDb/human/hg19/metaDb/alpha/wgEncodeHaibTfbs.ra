@@ -32117,29 +32117,6 @@ tableName wgEncodeHaibTfbsK562Zbtb7asc34508V0416101RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsPanc1ControlPcr1xRawRep2
-objType table
-antibody Control
-cell PANC-1
-composite wgEncodeHaibTfbs
-controlId SL523
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-20
-dateUnrestricted 2011-10-20
-fileName wgEncodeHaibTfbsPanc1ControlPcr1xRawRep2.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL523
-project wgEncode
-protocol PCR1x
-replicate 2
-setType input
-subId 3035
-tableName wgEncodeHaibTfbsPanc1ControlPcr1xRawRep2
-treatment None
-view RawSignal
-
 metaObject wgEncodeHaibTfbsPanc1ControlPcr2xAlnRep1
 objType file
 antibody Control
@@ -32205,6 +32182,29 @@ replicate 1
 setType input
 subId 3026
 tableName wgEncodeHaibTfbsPanc1ControlPcr2xRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeHaibTfbsPanc1ControlPcr2xRawRep2
+objType table
+antibody Control
+cell PANC-1
+composite wgEncodeHaibTfbs
+controlId SL523
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeHaibTfbsPanc1ControlPcr2xRawRep2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL523
+project wgEncode
+protocol PCR2x
+replicate 2
+setType input
+subId 3035
+tableName wgEncodeHaibTfbsPanc1ControlPcr2xRawRep2
 treatment None
 view RawSignal
 
@@ -35626,4 +35626,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -2056389386
+# MAGIC: -982516482
