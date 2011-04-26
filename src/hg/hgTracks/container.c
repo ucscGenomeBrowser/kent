@@ -16,7 +16,10 @@ void containerLoadItems(struct track *track)
 {
 struct track *subtrack;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    subtrack->loadItems(subtrack);
+    {
+    if (isSubtrackVisible(subtrack))
+	subtrack->loadItems(subtrack);
+    }
 }
 
 static void containerFree(struct track *track)
