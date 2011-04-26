@@ -11925,7 +11925,8 @@ done
 
 
 #########################################################################
-# LASTZ Lizard AnoCar2 (DONE - 2011-04-19 - Hiram)
+# LASTZ Lizard AnoCar2 (DONE - 2011-04-25 - Hiram)
+    # XXX FYI: the date on this directory is incorrect, it was done 04-25
     mkdir /hive/data/genomes/mm9/bed/lastzAnoCar2.2011-04-19
     cd /hive/data/genomes/mm9/bed/lastzAnoCar2.2011-04-19
 
@@ -11962,10 +11963,9 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
 	-bigClusterHub=swarm -qRepeats=windowmaskerSdust > do.log 2>&1 &
-XXX - running - Mon Apr 25 13:36:57 PDT 2011
-    #	real    195m52.809s
+    #	real    289m10.549s
     cat fb.mm9.chainAnoCar2Link.txt 
-    #	102917023 bases of 2897316137 (3.552%) in intersection
+    #	88067954 bases of 2620346127 (3.361%) in intersection
 
     #	running the swap - DONE - 2011-04-19
     mkdir /hive/data/genomes/anoCar2/bed/blastz.mm9.swap
@@ -11975,9 +11975,9 @@ XXX - running - Mon Apr 25 13:36:57 PDT 2011
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-syntenicNet -swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
-    #	real    20m45.683s
+    #	real    14m28.747s
     cat fb.anoCar2.chainMm9Link.txt 
-    #	88296392 bases of 1701353770 (5.190%) in intersection
+    #	84738440 bases of 1701353770 (4.981%) in intersection
 
 ##############################################################################
 # BUILD mm9 GERP TRACK (DONE 4/25/11, Fan)
