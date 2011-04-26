@@ -486,14 +486,14 @@ html hg19primateChainNet
     subTrack primateChainNet
     spectrum on
 
-        track chainPanTro2
+        track chainPanTro3
     #replaces record chainPanTro2 in parent dir missing/extra release
         subTrack primateChainNetViewchain on
         subGroups view=chain species=aChimp clade=aHom
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain panTro2
-        otherDb panTro2
+        type chain panTro3
+        otherDb panTro3
 
         track chainGorGor1
     #replaces record chainGorGor1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
@@ -570,14 +570,14 @@ html hg19primateChainNet
     visibility dense
     subTrack primateChainNet
 
-        track netPanTro2
+        track netPanTro3
     #replaces record netPanTro2 in parent dir missing/extra release
         subTrack primateChainNetViewnet on 
         subGroups view=net species=aChimp clade=aHom
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign panTro2 chainPanTro2
-        otherDb panTro2
+        type netAlign panTro3 chainPanTro3
+        otherDb panTro3
 
         track netGorGor1
     #replaces record netGorGor1 in parent dir missing/extra group,priority,visibility,spectrum

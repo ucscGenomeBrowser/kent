@@ -11980,3 +11980,25 @@ XXX - running - Mon Apr 25 13:36:57 PDT 2011
     #	88296392 bases of 1701353770 (5.190%) in intersection
 
 ##############################################################################
+# BUILD mm9 GERP TRACK (DONE 4/25/11, Fan)
+
+ssh hgwdev
+mkdir /hive/data/genomes/mm9/bed/gerp
+cd /hive/data/genomes/mm9/bed/gerp
+
+# place the wig data file, All_mm9_RS.wig, here.
+
+ulimit -d 180000000
+ulimit -v 180000000
+
+wigToBigWig All_mm9_RS.wig /hive/data/genomes/mm9/chrom.sizes All_mm9_RS.bw
+
+ln -s `pwd`/All_mm9_RS.bw /gbdb/mm9/bbi/All_mm9_RS.bw
+
+hgsql mm9 -e 'drop table if exists allMm9RS_BW; \
+              create table allMm9RS_BW (fileName varchar(255) not null); \
+	                    insert into allMm9RS_BW values ("/gbdb/mm9/bbi/All_mm9_RS.bw");'
+
+# create corresponding trackDb.ra section and html description page.
+
+##############################################################################
