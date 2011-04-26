@@ -3,7 +3,7 @@
 track wgEncodeReg
 superTrack on show
 shortLabel ENCODE Regulation
-longLabel ENCODE Integrated Regulation
+longLabel Integrated Regulation from ENCODE
 wgEncode 1
 group regulation
 priority 1
@@ -86,7 +86,7 @@ canPack On
     noInherit on
     type bigWig 0 10000
     superTrack wgEncodeReg full
-    shortLabel Overlayed H3K4Me1
+    shortLabel Layered H3K4Me1
     longLabel H3K4Me1 Mark (Often Found Near Regulatory Elements) on 7 cell lines from ENCODE
     visibility full
     viewLimits 0:50
@@ -157,7 +157,7 @@ canPack On
     noInherit on
     type bigWig 0 10000
     superTrack wgEncodeReg full
-    shortLabel Overlayed H3K4Me3
+    shortLabel Layered H3K4Me3
     longLabel H3K4Me3 Mark (Often Found Near Promoters) on 7 cell lines from ENCODE
     visibility full
     viewLimits 0:100
@@ -228,7 +228,7 @@ canPack On
     noInherit on
     type bigWig 0 10000
     superTrack wgEncodeReg hide
-    shortLabel Overlayed H3K27Ac
+    shortLabel Layered H3K27Ac
     longLabel H3K27Ac Mark (Often Found Near Regulatory Elements) on 7 cell lines from ENCODE
     visibility hide
     viewLimits 0:50
@@ -297,7 +297,7 @@ canPack On
 
     track wgEncodeRegDnaseClustered
     shortLabel DNase Clusters
-    longLabel ENCODE Digital DNaseI Hypersensitivity Clusters
+    longLabel Digital DNaseI Hypersensitivity Clusters from ENCODE
     type bed 5 .
     superTrack wgEncodeReg dense
     inputTrackTable wgEncodeRegDnaseClusteredInputs
@@ -308,7 +308,7 @@ canPack On
 
     track wgEncodeRegTfbsClustered
     shortLabel Txn Factor ChIP
-    longLabel ENCODE Transcription Factor ChIP-seq
+    longLabel Transcription Factor ChIP-seq from ENCODE
     type factorSource
     superTrack wgEncodeReg dense
     sourceTable wgEncodeRegTfbsCells
