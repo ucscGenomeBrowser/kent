@@ -1,3 +1,7 @@
+.topBlueBar {   font-family: arial, Geneva, Helvetica, san-serif; font-size: 15px; text-decoration: none; font-weight: bold;
+                color: #D9E4F8; background-color:#2636D1; border: 1px solid black; height:28px; width:100%;
+                text-align:center; vertical-align:middle; white-space:nowrap; padding: 0px 10px;}
+
 /* CLASS DECLARATIONS TO MAKE NETSCAPE HAPPY */
 .topbar {	font-family: arial, Geneva, Helvetica, san-serif; font-size: 15px; text-decoration: none; font-weight: bold; color: #D9E4F8; }
 .leftbar { text-decoration: none; font-family: arial, san-serif; color: #FDFCEA; font-size: 10pt; font-weight: 600; }

@@ -434,7 +434,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortAln
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -460,7 +460,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -486,7 +486,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -512,7 +512,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortRawData
 objType file
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -750,7 +750,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortAln
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -776,7 +776,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -802,7 +802,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -828,7 +828,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortRawData
 objType file
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -852,7 +852,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1092,7 +1092,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1118,7 +1118,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1144,7 +1144,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1170,7 +1170,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortRawData
 objType file
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1194,7 +1194,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3170,7 +3170,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortAln
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3196,7 +3196,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3222,7 +3222,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3248,7 +3248,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortRawData
 objType file
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3272,7 +3272,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3512,7 +3512,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortAln
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3538,7 +3538,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3564,7 +3564,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3590,7 +3590,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortRawData
 objType file
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3614,7 +3614,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3854,7 +3854,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortAln
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3880,7 +3880,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3906,7 +3906,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3932,7 +3932,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortRawData
 objType file
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3956,7 +3956,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4196,7 +4196,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortAln
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4222,7 +4222,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4248,7 +4248,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4274,7 +4274,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortRawData
 objType file
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4298,7 +4298,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4538,7 +4538,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4564,7 +4564,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4590,7 +4590,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4616,7 +4616,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortRawData
 objType file
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4640,7 +4640,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4880,7 +4880,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortAln
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4906,7 +4906,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4932,7 +4932,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4958,7 +4958,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortRawData
 objType file
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4982,7 +4982,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq

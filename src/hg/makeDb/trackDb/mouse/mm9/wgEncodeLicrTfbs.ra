@@ -144,6 +144,24 @@ noInherit on
         color 153,38,0
         # subId=3888 dateSubmitted=2011-04-15
 
+        track wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdPk
+        parent wgEncodeLicrTfbsViewPeaks off
+        shortLabel Lung CTCF Pk
+        longLabel ENCODE LICR TFBS Peaks (CTCF in Lung cells)
+        subGroups view=Peaks age=adult8wks factor=CTCF cellType=Lung control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=3923 dateSubmitted=2011-04-25
+
+        track wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdPk
+        parent wgEncodeLicrTfbsViewPeaks off
+        shortLabel Liver CTCF Pk
+        longLabel ENCODE LICR TFBS Peaks (CTCF in Liver cells)
+        subGroups view=Peaks age=adult8wks factor=CTCF cellType=Liver control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=3925 dateSubmitted=2011-04-25
+
 	#######	Signal Tracks###########
 	track wgEncodeLicrTfbsViewSignal
 	shortLabel Signal
@@ -292,4 +310,58 @@ noInherit on
         type bigWig 0.150000 34.869999
         color 153,38,0
         # subId=3920 dateSubmitted=2011-04-22
+
+        track wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel Heart Input Sig
+        longLabel ENCODE LICR TFBS Signal (Input in Heart cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=Heart control=std sex=M strain=C57BL6
+        type bigWig 0.140000 73.459999
+        color 153,38,0
+        # subId=2791 dateSubmitted=2011-04-25
+
+        track wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel Kidney Input Sig
+        longLabel ENCODE LICR TFBS Signal (Input in Kidney cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=Kidney control=std sex=M strain=C57BL6
+        type bigWig 0.140000 51.650002
+        color 153,38,0
+        # subId=3004 dateSubmitted=2011-04-24
+
+        track wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel Lung CTCF Sig
+        longLabel ENCODE LICR TFBS Signal (CTCF in Lung cells)
+        subGroups view=Signal age=adult8wks factor=CTCF cellType=Lung control=std sex=M strain=C57BL6
+        type bigWig 0.160000 34.049999
+        color 153,38,0
+        # subId=3923 dateSubmitted=2011-04-25
+
+        track wgEncodeLicrTfbsLungInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel Lung Input Sig
+        longLabel ENCODE LICR TFBS Signal (Input in Lung cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=Lung control=std sex=M strain=C57BL6
+        type bigWig 0.150000 39.330002
+        color 153,38,0
+        # subId=3924 dateSubmitted=2011-04-25
+
+        track wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel Liver CTCF Sig
+        longLabel ENCODE LICR TFBS Signal (CTCF in Liver cells)
+        subGroups view=Signal age=adult8wks factor=CTCF cellType=Liver control=std sex=M strain=C57BL6
+        type bigWig 0.110000 52.470001
+        color 153,38,0
+        # subId=3925 dateSubmitted=2011-04-25
+
+        track wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel Liver Input Sig
+        longLabel ENCODE LICR TFBS Signal (Input in Liver cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=Liver control=std sex=M strain=C57BL6
+        type bigWig 0.130000 65.070000
+        color 153,38,0
+        # subId=3926 dateSubmitted=2011-04-25
 
