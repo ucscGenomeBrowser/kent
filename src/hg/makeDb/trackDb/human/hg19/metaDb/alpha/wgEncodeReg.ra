@@ -1,6 +1,6 @@
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200SigPooled
 cell GM12878
-composite wgEncodeCaltechRnaSeq
+composite wgEncodeRegTxn
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
@@ -22,7 +22,7 @@ view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200SigPooled
 cell H1-hESC
-composite wgEncodeCaltechRnaSeq
+composite wgEncodeRegTxn
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
@@ -44,7 +44,7 @@ view Signal
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200SigPooled
 cell HSMM
-composite wgEncodeCaltechRnaSeq
+composite wgEncodeRegTxn
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
@@ -66,7 +66,7 @@ view Signal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200SigPooled
 cell HUVEC
-composite wgEncodeCaltechRnaSeq
+composite wgEncodeRegTxn
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
@@ -88,7 +88,7 @@ view Signal
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200SigPooled
 cell K562
-composite wgEncodeCaltechRnaSeq
+composite wgEncodeRegTxn
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
@@ -110,7 +110,7 @@ view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200SigPooled
 cell NHEK
-composite wgEncodeCaltechRnaSeq
+composite wgEncodeRegTxn
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
@@ -132,7 +132,7 @@ view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200SigPooled
 cell NHLF
-composite wgEncodeCaltechRnaSeq
+composite wgEncodeRegTxn
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
