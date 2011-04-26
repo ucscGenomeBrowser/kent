@@ -5,6 +5,7 @@ shortLabel BU ORChID
 longLabel ORChID Predicted DNA Cleavage Sites from ENCODE/Boston Univ (Tullius lab)
 group map
 subGroup1 view Views Signal=Signal
+fileSortOrder tableName=Version view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder view=+
 controlledVocabulary encode/cv.ra 
 priority 0
@@ -22,12 +23,11 @@ noInherit on
     viewLimits 0:0.4
     autoScale on
     transformFunc NONE
-    windowingFunction mean 
+    windowingFunction mean+whiskers
     smoothingWindow 7
     type bigWig -1 2 
 
         track wgEncodeBuOrchidV1
-        release alpha
         parent wgEncodeBuOrchidSignalView
         shortLabel ORChID V1
         longLabel OH Radical Cleavage Intensity Database (ORChID) V1 from ENCODE/Boston Univ
@@ -36,7 +36,6 @@ noInherit on
         # subId=3118 dateSubmitted=2011-01-03
 
         track wgEncodeBuOrchidV2
-        release alpha
         parent wgEncodeBuOrchidSignalView
         shortLabel ORChID V2
         longLabel OH Radical Cleavage Intensity Database (ORChID) V2 from ENCODE/Boston Univ

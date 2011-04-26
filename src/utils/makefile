@@ -29,6 +29,7 @@ test:
 	cd twoBitToFa && ${MAKE} test
 	cd twoBitInfo && ${MAKE} test
 	cd pslLiftSubrangeBlat && ${MAKE} test
+	cd bedGeneParts && ${MAKE} test
 
 clean:
 	@for D in $(USE_DIRS) x; do \

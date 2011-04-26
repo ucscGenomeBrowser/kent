@@ -185,7 +185,7 @@ if(showShortLabel)
 struct hash *cvTermTypes = (struct hash *)cvTermTypeHash();
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
-mdbObjRemoveVars(mdbObj,MDB_OBJ_TYPE_COMPOSITE " " MDB_VAR_PROJECT " " MDB_OBJ_TYPE); // Don't bother showing these (NOTE: composite,objType should be added to cv.ra typeOfTerms as hidden)
+mdbObjRemoveVars(mdbObj,MDB_OBJ_TYPE_COMPOSITE " " MDB_VAR_PROJECT " " MDB_OBJ_TYPE " " MDB_VAR_MD5SUM); // Don't bother showing these (NOTE: composite,objType should be added to cv.ra typeOfTerms as hidden)
 mdbObjRemoveHiddenVars(mdbObj);
 mdbObjReorderByCv(mdbObj,FALSE);// Use cv defined order for visible vars
 struct mdbVar *mdbVar;
@@ -194,9 +194,22 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     if ((sameString(mdbVar->var,MDB_VAR_FILENAME) || sameString(mdbVar->var,MDB_VAR_FILEINDEX) )
     && trackDbSettingClosestToHome(tdb,MDB_VAL_ENCODE_PROJECT) != NULL)
         {
-        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>",mdbVar->var);
-
+        dyStringPrintf(dyTable,"<tr valign='top'><td align='right' nowrap><i>%s:</i></td><td nowrap>",mdbVar->var);
+//#define NO_FILENAME_LISTS
+#ifdef NO_FILENAME_LISTS
         dyStringAppend(dyTable,htmlStringForDownloadsLink(db, tdb, mdbVar->val, TRUE, trackHash));
+#else///ifndef NO_FILENAME_LISTS
+
+        struct slName *fileSet = slNameListFromComma(mdbVar->val);
+        while (fileSet != NULL)
+            {
+            struct slName *file = slPopHead(&fileSet);
+            dyStringAppend(dyTable,htmlStringForDownloadsLink(db, tdb, file->name, TRUE, trackHash));
+            if (fileSet != NULL)
+                dyStringAppend(dyTable,"<BR>");
+            slNameFree(&file);
+            }
+#endif///ndef NO_FILENAME_LISTS
         dyStringAppend(dyTable,"</td></tr>");
         }
     else
@@ -206,7 +219,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
             struct hash *cvTerm = hashFindVal(cvTermTypes,mdbVar->var);
             if (cvTerm != NULL)
                 {
-                if(SETTING_NOT_ON(hashFindVal(cvTerm,CV_TOT_HIDDEN)))  // NULL is not on
+                if(!cvTermIsHidden(mdbVar->var))
                     {
                     char *label=hashFindVal(cvTerm,CV_LABEL);
                     if (label == NULL)
@@ -334,7 +347,7 @@ char *wrapWhiteFont(char *s)
 /* Write white font around s */
 {
 static char buf[256];
-safef(buf, sizeof(buf), "<FONT COLOR=\"#FFFFFF\">%s</FONT>", s);
+safef(buf, sizeof(buf), "<span style='color:#FFFFFF;'>%s</span>", s);
 return buf;
 }
 
@@ -3876,7 +3889,7 @@ if (sortOrder != NULL)
     cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
     printf("all</B>");
     if (slCount(subtrackRefList) > 5)
-        printf("&nbsp;&nbsp;&nbsp;&nbsp;(<FONT class='subCBcount'></font>)");
+        printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
     makeTopLink(parentTdb);
     printf("</td></tr></table>");
     }
@@ -3929,7 +3942,7 @@ else
     cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
     printf("all</B>");
     if (slCount(subtrackRefList) > 5)
-        printf("&nbsp;&nbsp;&nbsp;&nbsp;(<FONT class='subCBcount'></font>)");
+        printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
     puts("</TD>");
     columnCount = colspan;
     }
@@ -4270,7 +4283,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 puts("</TBODY><TFOOT></TFOOT>");
 puts("</TABLE>");
 if (slCount(subtrackRefList) > 5)
-    puts("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='subCBcount'></font>");
+    puts("&nbsp;&nbsp;&nbsp;&nbsp;<span class='subCBcount'></span>");
 puts("<P>");
 if (!primarySubtrack)
     puts("<script type='text/javascript'>matInitializeMatrix();</script>");
@@ -6042,8 +6055,8 @@ int ix;
 char varName[SMALLBUF];
 char classes[SMALLBUF];
 char javascript[JBUFSIZE];
-#define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A id='a_cfg_%s' HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"%s Configuration\">%s</A><INPUT TYPE=HIDDEN NAME='%s.%s.showCfg' value='%s'></B>\n"
-#define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(name),(name),(title),(title),(tbl),(name),((open)?"on":"off"))
+#define CFG_LINK  "<B><A HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"%s Configuration\">%s</A><INPUT TYPE=HIDDEN NAME='%s.%s.showCfg' value='%s'></B>"
+#define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(title),(title),(tbl),(name),((open)?"on":"off"))
 
 members_t *membersOfView = subgroupMembersGet(parentTdb,"view");
 if(membersOfView == NULL)
@@ -6077,8 +6090,8 @@ for (ix = 0; ix < membersOfView->count; ix++)
     }
 
 toLowerN(membersOfView->groupTitle, 1);
-printf("<B>Select %s </B>(<A HREF=\"../goldenPath/help/multiView.html\" title='Help on views' TARGET=_BLANK>help</A>):<BR>\n", membersOfView->groupTitle);
-puts("<TABLE><TR align=\"LEFT\">");
+printf("<B>Select %s</B> (<A HREF='../goldenPath/help/multiView.html' title='Help on views' TARGET=_BLANK>help</A>):\n", membersOfView->groupTitle);
+printf("<TABLE><TR style='text-align:left;'>\n");
 // Make row of vis drop downs
 for (ix = 0; ix < membersOfView->count; ix++)
     {
@@ -6092,7 +6105,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
             MAKE_CFG_LINK(membersOfView->tags[ix],membersOfView->titles[ix],parentTdb->track,(firstOpened == ix));
             }
         else
-            printf("<B>%s</B>\n",membersOfView->titles[ix]);
+            printf("<B>%s</B>",membersOfView->titles[ix]);
         puts("</TD>");
 
         safef(varName, sizeof(varName), "%s.%s.vis", parentTdb->track, viewName);
@@ -6942,7 +6955,7 @@ printf("<div id='popit' style='display: none'></div>");
 cgiMakeHiddenVar("db", db);
 printf("<input type=HIDDEN id='track' value='%s';</input>\n",tdb->track);
 #endif
-puts("<P>");
+puts("<BR>");
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
     {
     if(primarySubtrack)

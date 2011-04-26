@@ -19,7 +19,7 @@ set db = hg19
 set xdb = mm9
 set Xdb = Mm9
 set ydb = canFam2
-set zdb = rn4
+set zdb = rheMac2
 set spDb = sp101005
 set pbDb = proteins100331
 set ratDb = rn4
@@ -106,6 +106,7 @@ if (0) then  # BRACKET
 #	to find the next section that is running.
 
 
+
 # Get Genbank info
 txGenbankData $db
 # creates the files:
@@ -142,8 +143,10 @@ endif
 if ($db =~ hg* && \
   `hgsql -N $db -e "show tables;" | grep -E -c "tRNAs|chromInfo"` == 2) then
     hgsql -N $db -e "select chrom,chromStart,chromEnd,name,score,strand,chromStart,chromEnd,"0","1",chromEnd-chromStart,"0" from tRNAs" > trna.bed 
+    bedToPsl $genomes/$db/chrom.sizes trna.bed trna.psl
 else
     echo -n "" > trna.bed
+    echo -n "" > trna.psl
     echo -n "" > refToCcds.tab
 endif
 
@@ -157,6 +160,9 @@ netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 mkdir -p rfam
 pslToBed ${rfam}/${db}/Rfam.human.bestHits.psl rfam/rfam.all.bed
 bedIntersect -aHitAny rfam/rfam.all.bed ${db}.${xdb}.syn.bed rfam/rfam.syntenic.bed
+cat rfam/rfam.syntenic.bed |awk '{ print $4}' > rfam/rfam.syntenic.hits.txt
+pslSomeRecords ${rfam}/${db}/Rfam.human.bestHits.psl \
+    rfam/rfam.syntenic.hits.txt  rfam/rfam.syntenic.psl
 
  
 # Create directories full of alignments split by chromosome.
@@ -280,16 +286,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 end
 
 
-#
-# A good time for testing.  Uncomment the lines (not all at once) to 
-# compare the line count for files just built in the current version
-# and the previous version
-#
-# mkdir -p $testingDir
-# $scriptDir/compareModifiedFileSizes.csh \
-#       $testingDir new.graph.wc.txt $oldGeneDir old.graph.wc.txt
-
-
 # Setup other species dir
 mkdir -p $dir/$xdb
 cd $dir/$xdb
@@ -312,18 +308,8 @@ foreach c (`awk '{print $1;}' $genomes/$xdb/chrom.sizes`)
 end
 
 
-#
-# testing suggestion: uncomment below
-# mkdir -p $testingDir
-# compareModifiedFileSizes.csh $testingDir \
-#       new.otherTxg.wc.txt $oldGeneDir  old.otherTxg.wc.txt
-#
-
-
-
 # Clean up all but final other.txg
 rm -r est mrna refSeq
-
 
 # Unpack chains and nets, apply synteny filter and split by chromosome
 # Takes 5 minutes.  Make up phony empty nets for ones that are empty after
@@ -338,6 +324,7 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
         echo -n > $c.net
     endif
 end
+
 
 # Make txOrtho directory and a para spec file
 cd $dir
@@ -377,17 +364,21 @@ foreach f (*.txg)
 end
 cd ..
 
+
+
+
 # Do txOrtho parasol run on iServer (high RAM) cluster
 ssh $ramFarm "cd $dir/txOrtho; gensub2 toDoList single template jobList"
 ssh $ramFarm "cd $dir/txOrtho; para make jobList"
 ssh $ramFarm "cd $dir/txOrtho; para time > run.time"
 cat txOrtho/run.time
-# Completed: 34 of 34 jobs
-# CPU time in finished jobs:       1739s      28.99m     0.48h    0.02d  0.000 y
-# IO & Wait Time:                   397s       6.61m     0.11h    0.00d  0.000 y
-# Average job time:                  63s       1.05m     0.02h    0.00d
-# Longest finished job:             156s       2.60m     0.04h    0.00d
-# Submission to last job:           170s       2.83m     0.05h    0.00d
+# Completed: 194 of 194 jobs
+# CPU time in finished jobs:      43309s     721.81m    12.03h    0.50d  0.001 y
+# IO & Wait Time:                  2977s      49.62m     0.83h    0.03d  0.000 y
+# Average job time:                 239s       3.98m     0.07h    0.00d
+# Longest finished job:            2148s      35.80m     0.60h    0.02d
+# Submission to last job:         55348s     922.47m    15.37h    0.64d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 
 # Filter out some duplicate edges. These are legitimate from txOrtho's point
@@ -438,10 +429,8 @@ end
 
 
 #
-# testing suggestion: uncomment below
-# mkdir -p $testingDir
-# compareModifiedFileSizes.csh $testingDir \
-#       new.evidence.wc.txt $oldGeneDir  old.evidence.wc.txt
+# special testing suggestion: uncomment below
+# compareModifiedFileSizes.csh . $oldGeneDir 
 # cut -f1-3,5 graphWithEvidence/chr22.txg > $testingDir/chr22.graph.bounds.new
 # cut -f1-3,5 $oldGeneDir/graphWithEvidence/chr22.txg > $testingDir/chr22.graph.bounds.old
 # checkRandomLinesExist.py -s $testingDir/chr22.graph.bounds.old \
@@ -493,8 +482,7 @@ faSplit sequence txWalk.fa 200 txFaSplit/
 # compare the line count for files just built in the current version
 # and the previous version
 #
-# mkdir -p $testingDir
-# compareModifiedFileSizes.csh $testingDir . $oldGeneDir faSplit.wc.txt 
+# compareModifiedFileSizes.csh . $oldGeneDir
 # # Check that most of the old alt events are still there
 # checkRandomLinesExist.py -d $oldGeneDir/altSplice.bed -s ./altSplice.bed
 # # check that most of the old txWalk bed entries overlap some new entry
@@ -502,6 +490,7 @@ faSplit sequence txWalk.fa 200 txFaSplit/
 #    $testingDir/txWalk.intersect.bed
 # wc $testingDir/txWalk.intersect.bed
 #
+
 
 
 # Fetch human protein set and table that describes if curated or not.
@@ -546,17 +535,13 @@ ssh $cpuFarm "cd $dir/blat/rna; gensub2 toDoList single template jobList"
 ssh $cpuFarm "cd $dir/blat/rna; para make jobList"
 
 ssh $cpuFarm "cd $dir/blat/rna; para time > run.time"
-cat blat/rna/run.time
 # Completed: 194 of 194 jobs
-# CPU time in finished jobs:      36382s     606.37m    10.11h    0.42d  0.001 y
-# IO & Wait Time:                  2549s      42.48m     0.71h    0.03d  0.000 y
-# Average job time:                 201s       3.34m     0.06h    0.00d
-# Longest finished job:            2081s      34.68m     0.58h    0.02d
-# Submission to last job:          2096s      34.93m     0.58h    0.02d
-
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
+# CPU time in finished jobs:      43309s     721.81m    12.03h    0.50d  0.001 y
+# IO & Wait Time:                  2977s      49.62m     0.83h    0.03d  0.000 y
+# Average job time:                 239s       3.98m     0.07h    0.00d
+# Longest finished job:            2148s      35.80m     0.60h    0.02d
+# Submission to last job:         55348s     922.47m    15.37h    0.64d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 
 # Set up blat jobs for proteins vs. translated txWalk transcripts
@@ -617,9 +602,8 @@ pslCat -nohead protein/raw/ref*.psl | sort -k 10 | \
 	pslReps -noIntrons -nohead -nearTop=0.02  -ignoreSize -minAli=0.85 stdin protein/refSeq.psl /dev/null
 pslCat -nohead protein/raw/uni*.psl | sort -k 10 | \
 	pslReps -noIntrons -nohead -nearTop=0.02  -minAli=0.85 stdin protein/uniProt.psl /dev/null
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 rm -r protein/raw
+
 
 
 cd $dir
@@ -634,8 +618,6 @@ foreach c (`cut -f1 $genomes/$db/chrom.sizes`)
 	   | mafSpeciesSubset stdin ourOrgs.txt txWalk/$c.maf -keepFirst
     endif
 end
-
-#breakpoint
 
 cd $dir
 
@@ -657,15 +639,18 @@ txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
 	cdsEvidence/uniProt.tce -uniStatus=uniCurated.tab \
 	-unmapped=cdsEvidence/uniProt.unmapped -source=trembl
 
+
 txCdsEvFromBed ccds.bed ccds txWalk.bed ../../$db.2bit cdsEvidence/ccds.tce
 cat cdsEvidence/*.tce | sort  > unweighted.tce
-
-#breakpoint
 
 # Merge back in antibodies
 cat txWalk.bed antibody.bed > abWalk.bed
 sequenceForBed -db=$db -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName > antibody.fa
 cat txWalk.fa antibody.fa > abWalk.fa
+
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
 
 # Pick ORFs, make genes
 cat refToPep.tab refToCcds.tab | \
@@ -676,10 +661,9 @@ txCdsToGene abWalk.bed abWalk.fa pick.tce pick.gtf pick.fa \
 	-bedOut=pick.bed -exceptions=abWalk.exceptions
 # Create gene info table. Takes 8 seconds
 cat mrna/*.unusual refSeq/*.unusual | awk '$5=="flip" {print $6;}' > all.flip
-cat mrna/*.psl refSeq/*.psl | txInfoAssemble pick.bed pick.tce cdsEvidence/txCdsPredict.tce \
+cat mrna/*.psl refSeq/*.psl rfam/*psl trna.psl \
+      | txInfoAssemble pick.bed pick.tce cdsEvidence/txCdsPredict.tce \
 	altSplice.bed abWalk.exceptions sizePolyA.tab stdin all.flip prelim.info
-
-#breakpoint
 
 # Cluster purely based on CDS (in same frame). Takes 1 second
 txCdsCluster pick.bed pick.cluster
@@ -701,7 +685,10 @@ awk '$2 != "nearCodingJunk"' separated.info > weeded.info
 awk '$2 == "nearCodingJunk" {print $1}' separated.info > weeds.lst
 cat coding.bed nearCoding.bed antisense.bed uncoding.bed | sort -k1,1 -k2,3n >weeded.bed
 
-#breakpoint
+compareModifiedFileSizes . $oldGenesDir
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 # Make up a little alignment file for the ones that got tweaked.
 sed -r 's/.*NM_//' weededCds.tweaked | awk '{printf("NM_%s\n", $1);}' > tweakedNm.lst

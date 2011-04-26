@@ -137,6 +137,9 @@ if(isNameAtCompositeLevel(tdb,name))
     }
 }
 
+void wigFetchMinMaxYWithCart(struct cart *theCart, struct trackDb *tdb, char *name,
+			     double *retMin, double *retMax, double *retAbsMin, double *retAbsMax,
+			     int wordCount, char **words)
 /*****************************************************************************
  *	Min, Max Y viewing limits
  *	Absolute limits are defined on the trackDb type line for wiggle,
@@ -145,9 +148,6 @@ if(isNameAtCompositeLevel(tdb,name))
  *	Default opening display limits are optionally defined with the
  *		defaultViewLimits or viewLimits declaration from trackDb
  *****************************************************************************/
-void wigFetchMinMaxYWithCart(struct cart *theCart, struct trackDb *tdb, char *name,
-			     double *retMin, double *retMax, double *retAbsMin, double *retAbsMax,
-			     int wordCount, char **words)
 {
 boolean isBedGraph = (wordCount == 0 || sameString(words[0],"bedGraph"));
 // Determine absolute min and max.  Someday hgTrackDb will enforce inclusion of data
@@ -261,13 +261,13 @@ if (cartMinStr && cartMaxStr)
     }
 }	/*	void wigFetchMinMaxYWithCart()	*/
 
+void wigFetchMinMaxPixelsWithCart(struct cart *theCart, struct trackDb *tdb, char *name,int *Min, int *Max, int *Default)
 /*	Min, Max, Default Pixel height of track
  *	Limits may be defined in trackDb with the maxHeightPixels string,
  *	Or user requested limits are defined in the cart.
  *	And default opening display limits may optionally be defined with the
  *		maxHeightPixels declaration from trackDb
  *****************************************************************************/
-void wigFetchMinMaxPixelsWithCart(struct cart *theCart, struct trackDb *tdb, char *name,int *Min, int *Max, int *Default)
 {
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 char *heightPer = NULL; /*	string from cart	*/
@@ -355,6 +355,8 @@ defaultHeight = max(minHeightPixels, defaultHeight);
 freeMem(tdbDefault);
 }	/* void wigFetchMinMaxPixelsWithCart()	*/
 
+static char *wigCheckBinaryOption(struct trackDb *tdb, char *Default,
+    char *notDefault, char *tdbString, char *secondTdbString)
 /*	A common operation for binary options (two values possible)
  *	check for trackDb.ra, then tdb->settings values
  *	return one of the two possibilities if found
@@ -362,8 +364,6 @@ freeMem(tdbDefault);
  *		early naming conventions changing over time resulting in
  *		two possible names for the same thing ...)
  */
-static char *wigCheckBinaryOption(struct trackDb *tdb, char *Default,
-    char *notDefault, char *tdbString, char *secondTdbString)
 {
 char *tdbDefault = trackDbSettingClosestToHomeOrDefault(tdb, tdbString, "NONE");
 char *ret;
@@ -406,9 +406,9 @@ else
 return(cloneString(ret));
 }
 
-/*	transformFunc - none by default **********************************/
 enum wiggleGridOptEnum wigFetchTransformFuncWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name,char **optString)
+/*	transformFunc - none by default **********************************/
 {
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 char *transformFunc;
@@ -431,9 +431,9 @@ if (transformFunc)
 return(ret);
 }
 
-/*	alwaysZero - off by default **********************************/
 enum wiggleGridOptEnum wigFetchAlwaysZeroWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name,char **optString)
+/*	alwaysZero - off by default **********************************/
 {
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 char *alwaysZero;
@@ -456,9 +456,9 @@ if (alwaysZero)
 return(ret);
 }
 
-/*	horizontalGrid - off by default **********************************/
 enum wiggleGridOptEnum wigFetchHorizontalGridWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name,char **optString)
+/*	horizontalGrid - off by default **********************************/
 {
 char *Default = wiggleGridEnumToString(wiggleHorizontalGridOff);
 char *notDefault = wiggleGridEnumToString(wiggleHorizontalGridOn);
@@ -480,9 +480,9 @@ freeMem(horizontalGrid);
 return(ret);
 }	/*	enum wiggleGridOptEnum wigFetchHorizontalGridWithCart()	*/
 
-/******	autoScale - off by default ***************************************/
 enum wiggleScaleOptEnum wigFetchAutoScaleWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
+/******	autoScale - off by default ***************************************/
 {
 char *autoString = wiggleScaleEnumToString(wiggleScaleAuto);
 char *manualString = wiggleScaleEnumToString(wiggleScaleManual);
@@ -523,9 +523,9 @@ freeMem(autoScale);
 return(ret);
 }	/*	enum wiggleScaleOptEnum wigFetchAutoScaleWithCart()	*/
 
-/******	graphType - line(points) or bar graph *****************************/
 enum wiggleGraphOptEnum wigFetchGraphTypeWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
+/******	graphType - line(points) or bar graph *****************************/
 {
 char *Default = wiggleGraphEnumToString(wiggleGraphBar);
 char *notDefault = wiggleGraphEnumToString(wiggleGraphPoints);
@@ -547,9 +547,9 @@ freeMem(graphType);
 return(ret);
 }	/*	enum wiggleGraphOptEnum wigFetchGraphTypeWithCart()	*/
 
-/******	windowingFunction - Whiskers by default **************************/
 enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
+/******	windowingFunction - Whiskers by default **************************/
 {
 char *Default = wiggleWindowingEnumToString(wiggleWindowingWhiskers);
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
@@ -598,9 +598,9 @@ freeMem(windowingFunction);
 return(ret);
 }	/*	enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart() */
 
-/******	smoothingWindow - OFF by default **************************/
 enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
+/******	smoothingWindow - OFF by default **************************/
 {
 char * Default = wiggleSmoothingEnumToString(wiggleSmoothingOff);
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
@@ -645,9 +645,9 @@ freeMem(smoothingWindow);
 return(ret);
 }	/*	enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart()	*/
 
-/*	yLineMark - off by default **********************************/
 enum wiggleYLineMarkEnum wigFetchYLineMarkWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
+/*	yLineMark - off by default **********************************/
 {
 char *Default = wiggleYLineMarkEnumToString(wiggleYLineMarkOff);
 char *notDefault = wiggleYLineMarkEnumToString(wiggleYLineMarkOn);
@@ -669,12 +669,12 @@ freeMem(yLineMark);
 return(ret);
 }	/*	enum wiggleYLineMarkEnum wigFetchYLineMarkWithCart()	*/
 
+void wigFetchYLineMarkValueWithCart(struct cart *theCart,struct trackDb *tdb, char *name, double *tDbYMark )
 /*	y= marker line value
  *	User requested value is defined in the cart
  *	A Default value can be defined as
  *		yLineMark declaration from trackDb
  *****************************************************************************/
-void wigFetchYLineMarkValueWithCart(struct cart *theCart,struct trackDb *tdb, char *name, double *tDbYMark )
 {
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 char *yLineMarkValue = NULL;  /*	string from cart	*/
@@ -719,6 +719,8 @@ if (tDbYMark)
 freeMem(tdbDefault);
 }	/*	void wigFetchYLineMarkValueWithCart()	*/
 
+void wigFetchMinMaxLimitsWithCart(struct cart *theCart, struct trackDb *tdb, char *name,
+    double *min, double *max,double *tDbMin, double *tDbMax)
 /*****************************************************************************
  *	Min, Max Y viewing limits
  *	Absolute limits are defined by minLimit, maxLimit in the trackDb
@@ -729,8 +731,21 @@ freeMem(tdbDefault);
  *		or viewLimits from custom tracks
  *		(both identifiers work from either custom or trackDb)
  *****************************************************************************/
-void wigFetchMinMaxLimitsWithCart(struct cart *theCart, struct trackDb *tdb, char *name,
-    double *min, double *max,double *tDbMin, double *tDbMax)
 {
 wigFetchMinMaxYWithCart(theCart,tdb,name,min,max,tDbMin,tDbMax,0,NULL);
 }	/*	void wigFetchMinMaxYWithCart()	*/
+
+char *wigFetchAggregateValWithCart(struct cart *cart, struct trackDb *tdb)
+/* Return aggregate value for track. */
+{
+return cartOrTdbString(cart, tdb, "aggregate", WIG_AGGREGATE_TRANSPARENT);
+}
+
+boolean wigIsOverlayTypeAggregate(char *aggregate)
+/* Return TRUE if aggregater type is one of the overlay ones. */
+{
+if (aggregate == NULL)
+    return FALSE;
+return differentString(aggregate, WIG_AGGREGATE_NONE);
+}
+

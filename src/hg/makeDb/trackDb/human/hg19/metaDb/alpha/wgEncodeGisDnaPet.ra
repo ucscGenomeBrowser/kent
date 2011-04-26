@@ -216,7 +216,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
-fileIndex wgEncodeGisDnaPetGm12878F10kAln.bam.bai
 fileName wgEncodeGisDnaPetGm12878F10kAln.bam
 fragSize 10k
 grant Gingeras
@@ -236,7 +235,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
-fileIndex wgEncodeGisDnaPetGm12878F1kAln.bam.bai
 fileName wgEncodeGisDnaPetGm12878F1kAln.bam
 fragSize 1k
 grant Gingeras
@@ -256,7 +254,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
-fileIndex wgEncodeGisDnaPetGm12878F5kAln.bam.bai
 fileName wgEncodeGisDnaPetGm12878F5kAln.bam
 fragSize 5k
 grant Gingeras
@@ -480,7 +477,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
-fileIndex wgEncodeGisDnaPetK562F10kAln.bam.bai
 fileName wgEncodeGisDnaPetK562F10kAln.bam
 fragSize 10k
 grant Gingeras
@@ -500,7 +496,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
-fileIndex wgEncodeGisDnaPetK562F1kAln.bam.bai
 fileName wgEncodeGisDnaPetK562F1kAln.bam
 fragSize 1k
 grant Gingeras
@@ -520,7 +515,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2010-04-05
 dateUnrestricted 2011-01-05
-fileIndex wgEncodeGisDnaPetK562F20kAln.bam.bai
 fileName wgEncodeGisDnaPetK562F20kAln.bam
 fragSize 20k
 grant Gingeras
@@ -599,4 +593,4 @@ project wgEncode
 subId 761
 view FastqRd2
 
-# MAGIC: 1722605736
+# MAGIC: -1637048581

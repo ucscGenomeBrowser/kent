@@ -244,6 +244,12 @@ extern void wigFetchYLineMarkValueWithCart(struct cart *cart,struct trackDb *tdb
         wigFetchYLineMarkValueWithCart(cart,(tdb),(tdb)->track,(tDbYMark))
 /* return value for the y line marker to be drawn   */
 
+char *wigFetchAggregateValWithCart(struct cart *cart, struct trackDb *tdb);
+/* Return aggregate value for track. */
+
+boolean wigIsOverlayTypeAggregate(char *aggregate);
+/* Return TRUE if aggregater type is one of the overlay ones. */
+
 int *wiggleSpanList(struct sqlConnection *conn, struct trackDb *tdb);
 /******	spanList - fetch list of spans from trackDb *********************/
 
@@ -273,6 +279,7 @@ int *wiggleSpanList(struct sqlConnection *conn, struct trackDb *tdb);
 #define YLINEMARK "yLineMark"
 #define SPANLIST "spanList"
 #define	MAX_SPAN_COUNT	128
+#define MAX_SMOOTHING 16
 
 /*	compute the data value give the bin	*/
 /*

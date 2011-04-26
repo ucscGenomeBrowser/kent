@@ -207,13 +207,15 @@ priority 300
     color 58,119,40
 
 # BROAD Histone (wrangler: Vankat, assisted by Tim)
-include wgEncodeBroadChipSeq.ra
+include wgEncodeBroadChipSeq.new.ra alpha
+include wgEncodeBroadChipSeq.ra beta,public
 
 # BROAD Chromatin modelling by HMM HMM (wrangler: Tim)
 include wgEncodeBroadHmm.ra
 
 # Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
-include wgEncodeChromatinMap.ra
+include wgEncodeChromatinMap.new.ra alpha
+include wgEncodeChromatinMap.ra beta,public
 
 
 # Mapability - Cross lab special track (wrangler: tdreszer)

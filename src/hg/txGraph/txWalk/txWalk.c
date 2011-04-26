@@ -344,7 +344,9 @@ if (doDefrag)
     int size = hashIntValDefault(sizeHash, source->accession, 0);
     if (!size)
 	{
-	if (!sameString(source->type, "ccds"))
+	if (!sameString(source->type, "ccds")
+	    && !sameString(source->type, "rfam")
+	    && !sameString(source->type, "trna"))
 	    verbose(1, "%s not in sizes tab file\n", source->accession);
 	}
     if (totalSize < size * defragSize)

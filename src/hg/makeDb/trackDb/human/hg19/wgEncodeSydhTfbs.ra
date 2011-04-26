@@ -377,7 +377,7 @@ wgEncode 1
         type narrowPeak
         # subId=2129 dateSubmitted=2010-08-26
 
-        track wgEncodeSydhTfbsGm12878Nfe2hStdPk
+        track wgEncodeSydhTfbsGm12878Nfe2sc22827StdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 NF-E2_(SC-22827) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (NF-E2_(SC-22827) in GM12878 cells)
@@ -385,6 +385,7 @@ wgEncode 1
         type narrowPeak
         color 153,38,0
         # subId=2130 dateSubmitted=2010-09-03
+        # was wgEncodeSydhTfbsGm12878Nfe2hStdPk cricket Tue Apr 19 11:00:13 2011
 
         track wgEncodeSydhTfbsPbdeGata1UcdPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -402,7 +403,7 @@ wgEncode 1
         type narrowPeak
         # subId=2485 dateSubmitted=2010-10-13
 
-        track wgEncodeSydhTfbsHelas3Rfx5n494IggrabPk
+        track wgEncodeSydhTfbsHelas3Rfx5200401194IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 RFX5_(200-401-194) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (RFX5_(200-401-194) in HeLa-S3 cells)
@@ -410,8 +411,9 @@ wgEncode 1
         type narrowPeak
         color 0,119,158
         # subId=2517 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsHelas3Rfx5n494IggrabPk cricket Tue Apr 19 11:00:17 2011
 
-        track wgEncodeSydhTfbsGm12878Rfx5n494IggmusPk
+        track wgEncodeSydhTfbsGm12878Rfx5200401194IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 RFX5_(200-401-194) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (RFX5_(200-401-194) in GM12878 cells)
@@ -419,8 +421,9 @@ wgEncode 1
         type narrowPeak
         color 153,38,0
         # subId=2518 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsGm12878Rfx5n494IggmusPk cricket Tue Apr 19 11:00:15 2011
 
-        track wgEncodeSydhTfbsHelas3Prdm1vIggrabPk
+        track wgEncodeSydhTfbsHelas3Prdm19115IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 PRDM1_(9115) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (PRDM1_(9115) in HeLa-S3 cells)
@@ -428,8 +431,9 @@ wgEncode 1
         type narrowPeak
         color 0,119,158
         # subId=2519 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsHelas3Prdm1vIggrabPk cricket Tue Apr 19 11:00:14 2011
 
-        track wgEncodeSydhTfbsK562Chd21250IggrabPk
+        track wgEncodeSydhTfbsK562Chd2ab68301IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 CHD2_(AB68301) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CHD2_(AB68301) in K562 cells)
@@ -437,8 +441,9 @@ wgEncode 1
         type narrowPeak
         color 46,0,184
         # subId=2520 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsK562Chd21250IggrabPk cricket Tue Apr 19 11:00:05 2011
 
-        track wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabPk
+        track wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 GTF2F1_(AB28179) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (GTF2F1_(AB28179) in HeLa-S3 cells)
@@ -446,6 +451,7 @@ wgEncode 1
         type narrowPeak
         color 0,119,158
         # subId=2521 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabPk cricket Tue Apr 19 11:00:07 2011
 
         track wgEncodeSydhTfbsHelas3Usf2IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -456,7 +462,7 @@ wgEncode 1
         color 0,119,158
         # subId=2522 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsGm12878P300n15StdPk
+        track wgEncodeSydhTfbsGm12878P300sc584sc584StdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 p300_(SC-584) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (p300_(SC-584) in GM12878 cells)
@@ -464,6 +470,7 @@ wgEncode 1
         type narrowPeak
         color 153,38,0
         # subId=2523 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsGm12878P300n15StdPk cricket Tue Apr 19 11:00:22 2011
 
         track wgEncodeSydhTfbsGm12878Irf3StdPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -483,7 +490,7 @@ wgEncode 1
         color 153,38,0
         # subId=2525 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsHelas3Brca1cIggrabPk
+        track wgEncodeSydhTfbsHelas3Brca1a300IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 BRCA1_(A300-000A) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BRCA1_(A300-000A) in HeLa-S3 cells)
@@ -491,8 +498,9 @@ wgEncode 1
         type narrowPeak
         color 0,119,158
         # subId=2526 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsHelas3Brca1cIggrabPk cricket Tue Apr 19 11:00:00 2011
 
-        track wgEncodeSydhTfbsHelas3P300n15IggrabPk
+        track wgEncodeSydhTfbsHelas3P300sc584sc584IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 p300_(SC-584) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (p300_(SC-584) in HeLa-S3 cells)
@@ -500,6 +508,7 @@ wgEncode 1
         type narrowPeak
         color 0,119,158
         # subId=2527 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsHelas3P300n15IggrabPk cricket Tue Apr 19 11:00:23 2011
 
         track wgEncodeSydhTfbsGm12878Stat3IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -528,7 +537,7 @@ wgEncode 1
         color 46,0,184
         # subId=2532 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsK562Mxi1bhlhIggrabPk
+        track wgEncodeSydhTfbsK562Mxi1af4185IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 Mxi1_(AF4185) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Mxi1_(AF4185) in K562 cells)
@@ -536,8 +545,9 @@ wgEncode 1
         type narrowPeak
         color 46,0,184
         # subId=2533 dateSubmitted=2010-10-27
+        # was wgEncodeSydhTfbsK562Mxi1bhlhIggrabPk cricket Tue Apr 19 11:00:11 2011
 
-        track wgEncodeSydhTfbsK562Gtf2f1rapIggrabPk
+        track wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 GTF2F1_(AB28179) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (GTF2F1_(AB28179) in K562 cells)
@@ -545,6 +555,7 @@ wgEncode 1
         type narrowPeak
         color 46,0,184
         # subId=2534 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsK562Gtf2f1rapIggrabPk cricket Tue Apr 19 11:00:09 2011
 
         track wgEncodeSydhTfbsK562CebpbIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -572,7 +583,7 @@ wgEncode 1
         type narrowPeak
         # subId=2537 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsK562P300f4IggrabPk
+        track wgEncodeSydhTfbsK562P300sc584sc48343IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 p300_(SC-48343) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (p300_(SC-48343) in K562 cells)
@@ -580,6 +591,7 @@ wgEncode 1
         type narrowPeak
         color 46,0,184
         # subId=2769 dateSubmitted=2010-10-27
+        # was wgEncodeSydhTfbsK562P300f4IggrabPk cricket Tue Apr 19 11:00:20 2011
 
         track wgEncodeSydhTfbsH1hescCtbp2UcdPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -622,7 +634,7 @@ wgEncode 1
         type narrowPeak
         # subId=2768 dateSubmitted=2010-10-27
 
-        track wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabPk
+        track wgEncodeSydhTfbsHelas3Mxi1af4185IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 Mxi1_(AF4185) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Mxi1_(AF4185) in HeLa-S3 cells)
@@ -630,6 +642,7 @@ wgEncode 1
         type narrowPeak
         color 0,119,158
         # subId=2770 dateSubmitted=2010-10-27
+        # was wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabPk cricket Tue Apr 19 11:00:10 2011
 
         track wgEncodeSydhTfbsHek293bElk4UcdPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -689,7 +702,7 @@ wgEncode 1
         color 189,0,157
         # subId=3875 dateSubmitted=2011-04-04
 
-        track wgEncodeSydhTfbsGm12878Chd21250IggmusPk
+        track wgEncodeSydhTfbsGm12878Chd2ab68301IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 CHD2_(AB68301) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CHD2_(AB68301) in GM12878 cells)
@@ -697,6 +710,7 @@ wgEncode 1
         type narrowPeak
         color 153,38,0
         # subId=3312 dateSubmitted=2011-01-18
+        # was wgEncodeSydhTfbsGm12878Chd21250IggmusPk cricket Tue Apr 19 11:00:02 2011
 
         track wgEncodeSydhTfbsGm12878Ebf1sc137065StdPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -734,7 +748,7 @@ wgEncode 1
         color 0,119,158
         # subId=3318 dateSubmitted=2011-01-18
 
-        track wgEncodeSydhTfbsHepg2Chd21250IggrabPk
+        track wgEncodeSydhTfbsHepg2Chd2ab68301IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2 CHD2_(AB68301) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CHD2_(AB68301) in HepG2 cells)
@@ -742,6 +756,7 @@ wgEncode 1
         type narrowPeak
         color 189,0,157
         # subId=3319 dateSubmitted=2011-01-18
+        # was wgEncodeSydhTfbsHepg2Chd21250IggrabPk cricket Tue Apr 19 11:00:03 2011
 
         track wgEncodeSydhTfbsHepg2Maffm8194IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -761,7 +776,7 @@ wgEncode 1
         color 189,0,157
         # subId=3321 dateSubmitted=2011-01-18
 
-        track wgEncodeSydhTfbsHepg2Rfx5n494IggrabPk
+        track wgEncodeSydhTfbsHepg2Rfx5200401194IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2 RFX5_(200-401-194) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (RFX5_(200-401-194) in HepG2 cells)
@@ -769,6 +784,7 @@ wgEncode 1
         type narrowPeak
         color 189,0,157
         # subId=3322 dateSubmitted=2011-01-18
+        # was wgEncodeSydhTfbsHepg2Rfx5n494IggrabPk cricket Tue Apr 19 11:00:19 2011
 
         track wgEncodeSydhTfbsK562Mafkab50322IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -797,7 +813,7 @@ wgEncode 1
         color 0,107,27
         # subId=3326 dateSubmitted=2011-01-18
 
-        track wgEncodeSydhTfbsH1hescRfx5n494IggrabPk
+        track wgEncodeSydhTfbsH1hescRfx5200401194IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel H1-hESC RFX5_(200-401-194) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (RFX5_(200-401-194) in H1-hESC cells)
@@ -805,6 +821,7 @@ wgEncode 1
         type narrowPeak
         color 0,107,27
         # subId=3327 dateSubmitted=2011-01-18
+        # was wgEncodeSydhTfbsH1hescRfx5n494IggrabPk cricket Tue Apr 19 11:00:16 2011
 
         track wgEncodeSydhTfbsH1hescRad21IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -851,7 +868,7 @@ wgEncode 1
         color 0,107,27
         # subId=3392 dateSubmitted=2011-01-19
 
-        track wgEncodeSydhTfbsGm12878Ctcfc20StdPk
+        track wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 CTCF_(SC-15914) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (CTCF_(SC-15914) in GM12878 cells)
@@ -859,6 +876,7 @@ wgEncode 1
         type narrowPeak
         color 153,38,0
         # subId=3403 dateSubmitted=2011-01-20
+        # was wgEncodeSydhTfbsGm12878Ctcfc20StdPk cricket Tue Apr 19 11:00:06 2011
 
         track wgEncodeSydhTfbsGm12878Stat1StdPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -886,7 +904,7 @@ wgEncode 1
         type narrowPeak
         # subId=3249 dateSubmitted=2011-01-24
 
-        track wgEncodeSydhTfbsGm12878Brca1cIggmusPk
+        track wgEncodeSydhTfbsGm12878Brca1a300IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 BRCA1_(A300-000A) Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (BRCA1_(A300-000A) in GM12878 cells)
@@ -894,6 +912,7 @@ wgEncode 1
         type narrowPeak
         color 153,38,0
         # subId=3311 dateSubmitted=2011-01-18
+        # was wgEncodeSydhTfbsGm12878Brca1cIggmusPk cricket Tue Apr 19 10:59:59 2011
 
         track wgEncodeSydhTfbsGm12878Nrf1IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -1720,7 +1739,7 @@ wgEncode 1
         type bigWig 1.000000 12674.000000
         # subId=2129 dateSubmitted=2010-08-26
 
-        track wgEncodeSydhTfbsGm12878Nfe2hStdSig
+        track wgEncodeSydhTfbsGm12878Nfe2sc22827StdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 NF-E2_(SC-22827) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NF-E2_(SC-22827) in GM12878 cells)
@@ -1728,6 +1747,7 @@ wgEncode 1
         type bigWig 1.000000 4981.000000
         color 153,38,0
         # subId=2130 dateSubmitted=2010-09-03
+        # was wgEncodeSydhTfbsGm12878Nfe2hStdSig cricket Tue Apr 19 11:00:13 2011
 
         track wgEncodeSydhTfbsPbdeGata1UcdSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -1746,7 +1766,7 @@ wgEncode 1
         type bigWig 1.000000 106654.000000
         # subId=2485 dateSubmitted=2010-10-13
 
-        track wgEncodeSydhTfbsHelas3Rfx5n494IggrabSig
+        track wgEncodeSydhTfbsHelas3Rfx5200401194IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 RFX5_(200-401-194) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (RFX5_(200-401-194) in HeLa-S3 cells)
@@ -1754,8 +1774,9 @@ wgEncode 1
         type bigWig 1.000000 30385.000000
         color 0,119,158
         # subId=2517 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsHelas3Rfx5n494IggrabSig cricket Tue Apr 19 11:00:18 2011
 
-        track wgEncodeSydhTfbsGm12878Rfx5n494IggmusSig
+        track wgEncodeSydhTfbsGm12878Rfx5200401194IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 RFX5_(200-401-194) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (RFX5_(200-401-194) in GM12878 cells)
@@ -1763,8 +1784,9 @@ wgEncode 1
         type bigWig 1.000000 12822.000000
         color 153,38,0
         # subId=2518 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsGm12878Rfx5n494IggmusSig cricket Tue Apr 19 11:00:15 2011
 
-        track wgEncodeSydhTfbsHelas3Prdm1vIggrabSig
+        track wgEncodeSydhTfbsHelas3Prdm19115IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 PRDM1_(9115) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (PRDM1_(9115) in HeLa-S3 cells)
@@ -1772,8 +1794,9 @@ wgEncode 1
         type bigWig 1.000000 11961.000000
         color 0,119,158
         # subId=2519 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsHelas3Prdm1vIggrabSig cricket Tue Apr 19 11:00:14 2011
 
-        track wgEncodeSydhTfbsK562Chd21250IggrabSig
+        track wgEncodeSydhTfbsK562Chd2ab68301IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 CHD2_(AB68301) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CHD2_(AB68301) in K562 cells)
@@ -1781,8 +1804,9 @@ wgEncode 1
         type bigWig 1.000000 18423.000000
         color 46,0,184
         # subId=2520 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsK562Chd21250IggrabSig cricket Tue Apr 19 11:00:05 2011
 
-        track wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabSig
+        track wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 GTF2F1_(AB28179) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GTF2F1_(AB28179) in HeLa-S3 cells)
@@ -1790,6 +1814,7 @@ wgEncode 1
         type bigWig 1.000000 10280.000000
         color 0,119,158
         # subId=2521 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabSig cricket Tue Apr 19 11:00:08 2011
 
         track wgEncodeSydhTfbsHelas3Usf2IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -1800,7 +1825,7 @@ wgEncode 1
         color 0,119,158
         # subId=2522 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsGm12878P300n15StdSig
+        track wgEncodeSydhTfbsGm12878P300sc584sc584StdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 p300_(SC-584) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (p300_(SC-584) in GM12878 cells)
@@ -1808,6 +1833,7 @@ wgEncode 1
         type bigWig 1.000000 20108.000000
         color 153,38,0
         # subId=2523 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsGm12878P300n15StdSig cricket Tue Apr 19 11:00:22 2011
 
         track wgEncodeSydhTfbsGm12878Irf3StdSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -1827,7 +1853,7 @@ wgEncode 1
         color 153,38,0
         # subId=2525 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsHelas3Brca1cIggrabSig
+        track wgEncodeSydhTfbsHelas3Brca1a300IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 BRCA1_(A300-000A) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRCA1_(A300-000A) in HeLa-S3 cells)
@@ -1835,8 +1861,9 @@ wgEncode 1
         type bigWig 1.000000 16340.000000
         color 0,119,158
         # subId=2526 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsHelas3Brca1cIggrabSig cricket Tue Apr 19 11:00:01 2011
 
-        track wgEncodeSydhTfbsHelas3P300n15IggrabSig
+        track wgEncodeSydhTfbsHelas3P300sc584sc584IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 p300_(SC-584) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (p300_(SC-584) in HeLa-S3 cells)
@@ -1844,6 +1871,7 @@ wgEncode 1
         type bigWig 1.000000 10065.000000
         color 0,119,158
         # subId=2527 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsHelas3P300n15IggrabSig cricket Tue Apr 19 11:00:23 2011
 
         track wgEncodeSydhTfbsGm12878Stat3IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -1872,7 +1900,7 @@ wgEncode 1
         color 46,0,184
         # subId=2532 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsK562Mxi1bhlhIggrabSig
+        track wgEncodeSydhTfbsK562Mxi1af4185IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 Mxi1_(AF4185) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Mxi1_(AF4185) in K562 cells)
@@ -1880,8 +1908,9 @@ wgEncode 1
         type bigWig 1.000000 15465.000000
         color 46,0,184
         # subId=2533 dateSubmitted=2010-10-27
+        # was wgEncodeSydhTfbsK562Mxi1bhlhIggrabSig cricket Tue Apr 19 11:00:12 2011
 
-        track wgEncodeSydhTfbsK562Gtf2f1rapIggrabSig
+        track wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 GTF2F1_(AB28179) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GTF2F1_(AB28179) in K562 cells)
@@ -1889,6 +1918,7 @@ wgEncode 1
         type bigWig 1.000000 15471.000000
         color 46,0,184
         # subId=2534 dateSubmitted=2010-10-20
+        # was wgEncodeSydhTfbsK562Gtf2f1rapIggrabSig cricket Tue Apr 19 11:00:09 2011
 
         track wgEncodeSydhTfbsK562CebpbIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -1916,7 +1946,7 @@ wgEncode 1
         type bigWig 1.000000 20271.000000
         # subId=2537 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsK562P300f4IggrabSig
+        track wgEncodeSydhTfbsK562P300sc584sc48343IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 p300_(SC-48343) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (p300_(SC-48343) in K562 cells)
@@ -1924,6 +1954,7 @@ wgEncode 1
         type bigWig 1.000000 12521.000000
         color 46,0,184
         # subId=2769 dateSubmitted=2010-10-27
+        # was wgEncodeSydhTfbsK562P300f4IggrabSig cricket Tue Apr 19 11:00:21 2011
 
         track wgEncodeSydhTfbsH1hescCtbp2UcdSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -1967,7 +1998,7 @@ wgEncode 1
         type bigWig 1.000000 59340.000000
         # subId=2768 dateSubmitted=2010-10-27
 
-        track wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabSig
+        track wgEncodeSydhTfbsHelas3Mxi1af4185IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Mxi1_(AF4185) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Mxi1_(AF4185) in HeLa-S3 cells)
@@ -1975,6 +2006,7 @@ wgEncode 1
         type bigWig 1.000000 10659.000000
         color 0,119,158
         # subId=2770 dateSubmitted=2010-10-27
+        # was wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabSig cricket Tue Apr 19 11:00:11 2011
 
         track wgEncodeSydhTfbsGm10847InputIggmusSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3539,7 +3571,7 @@ wgEncode 1
         color 189,0,157
         # subId=3875 dateSubmitted=2011-04-04
 
-        track wgEncodeSydhTfbsGm12878Chd21250IggmusSig
+        track wgEncodeSydhTfbsGm12878Chd2ab68301IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 CHD2_(AB68301) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CHD2_(AB68301) in GM12878 cells)
@@ -3547,6 +3579,7 @@ wgEncode 1
         type bigWig 1.000000 8305.000000
         color 153,38,0
         # subId=3312 dateSubmitted=2011-01-18
+        # was wgEncodeSydhTfbsGm12878Chd21250IggmusSig cricket Tue Apr 19 11:00:02 2011
 
         track wgEncodeSydhTfbsGm12878Ebf1sc137065StdSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3584,7 +3617,7 @@ wgEncode 1
         color 0,119,158
         # subId=3318 dateSubmitted=2011-01-18
 
-        track wgEncodeSydhTfbsHepg2Chd21250IggrabSig
+        track wgEncodeSydhTfbsHepg2Chd2ab68301IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 CHD2_(AB68301) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CHD2_(AB68301) in HepG2 cells)
@@ -3592,6 +3625,7 @@ wgEncode 1
         type bigWig 1.000000 19697.000000
         color 189,0,157
         # subId=3319 dateSubmitted=2011-01-18
+        # was wgEncodeSydhTfbsHepg2Chd21250IggrabSig cricket Tue Apr 19 11:00:04 2011
 
         track wgEncodeSydhTfbsHepg2Maffm8194IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3611,7 +3645,7 @@ wgEncode 1
         color 189,0,157
         # subId=3321 dateSubmitted=2011-01-18
 
-        track wgEncodeSydhTfbsHepg2Rfx5n494IggrabSig
+        track wgEncodeSydhTfbsHepg2Rfx5200401194IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 RFX5_(200-401-194) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (RFX5_(200-401-194) in HepG2 cells)
@@ -3619,6 +3653,7 @@ wgEncode 1
         type bigWig 1.000000 21235.000000
         color 189,0,157
         # subId=3322 dateSubmitted=2011-01-18
+        # was wgEncodeSydhTfbsHepg2Rfx5n494IggrabSig cricket Tue Apr 19 11:00:20 2011
 
         track wgEncodeSydhTfbsK562Mafkab50322IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3656,7 +3691,7 @@ wgEncode 1
         color 0,107,27
         # subId=3326 dateSubmitted=2011-01-18
 
-        track wgEncodeSydhTfbsH1hescRfx5n494IggrabSig
+        track wgEncodeSydhTfbsH1hescRfx5200401194IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC RFX5_(200-401-194) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (RFX5_(200-401-194) in H1-hESC cells)
@@ -3664,6 +3699,7 @@ wgEncode 1
         type bigWig 1.000000 15995.000000
         color 0,107,27
         # subId=3327 dateSubmitted=2011-01-18
+        # was wgEncodeSydhTfbsH1hescRfx5n494IggrabSig cricket Tue Apr 19 11:00:17 2011
 
         track wgEncodeSydhTfbsH1hescRad21IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3710,7 +3746,7 @@ wgEncode 1
         color 0,107,27
         # subId=3392 dateSubmitted=2011-01-19
 
-        track wgEncodeSydhTfbsGm12878Ctcfc20StdSig
+        track wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 CTCF_(SC-15914) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CTCF_(SC-15914) in GM12878 cells)
@@ -3718,6 +3754,7 @@ wgEncode 1
         type bigWig 1.000000 7505.000000
         color 153,38,0
         # subId=3403 dateSubmitted=2011-01-20
+        # was wgEncodeSydhTfbsGm12878Ctcfc20StdSig cricket Tue Apr 19 11:00:07 2011
 
         track wgEncodeSydhTfbsGm12878Stat1StdSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -3745,7 +3782,7 @@ wgEncode 1
         type bigWig 1.000000 10229.000000
         # subId=3249 dateSubmitted=2011-01-24
 
-        track wgEncodeSydhTfbsGm12878Brca1cIggmusSig
+        track wgEncodeSydhTfbsGm12878Brca1a300IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 BRCA1_(A300-000A) Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRCA1_(A300-000A) in GM12878 cells)
@@ -3753,6 +3790,7 @@ wgEncode 1
         type bigWig 1.000000 12366.000000
         color 153,38,0
         # subId=3311 dateSubmitted=2011-01-18
+        # was wgEncodeSydhTfbsGm12878Brca1cIggmusSig cricket Tue Apr 19 11:00:00 2011
 
         track wgEncodeSydhTfbsGm12878Nrf1IggmusSig
         parent wgEncodeSydhTfbsViewSignal off

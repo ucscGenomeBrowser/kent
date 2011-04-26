@@ -353,3 +353,94 @@ html danRer7multipleChainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign hg19 chainHg19
         otherDb hg19
+
+track UMassChIP-SeqSuper
+superTrack on
+shortLabel UMass ChIP-Seq
+longLabel U Mass ChIP-Seq
+group map
+visibility full
+
+    track UMassInput
+    superTrack UMassChIP-SeqSuper full
+    shortLabel UMass ChIP-Seq
+    longLabel U Mass ChIP-Seq Input Signal at 24 hours Post Fertilization
+    priority 1
+    type wig 0 100
+    maxHeightPixels 128:64:16
+    autoScale off
+    html UMassChIP-Seq
+    visibility full
+
+    track UMassME1
+    superTrack UMassChIP-SeqSuper full
+    shortLabel UMassME1
+    longLabel U Mass ChIP-Seq H3K4me1 Binding at 24 hours Post Fertilization
+    color 255,0,0
+    group map
+    priority 2
+    maxHeightPixels 128:64:16
+    type wig 0 100
+    autoScale off
+    html UMassChIP-Seq
+    visibility full
+
+    track UMassME1Peak
+    superTrack UMassChIP-SeqSuper full
+    shortLabel UMassME1Peak
+    longLabel U Mass ChIP-Seq H3K4me1 Binding Peaks at 24 hours Post Fertilization
+    group map
+    priority 3
+    maxHeightPixels 128:64:16
+    color 255,0,0
+    autoScale off
+    html UMassChIP-Seq
+    visibility full
+    type wig 0 100
+
+    track UMassME3
+    superTrack UMassChIP-SeqSuper full
+    shortLabel UMassME3
+    longLabel U Mass ChIP-Seq H3K4me3 Binding at 24 hours Post Fertilization
+    group map
+    priority 4
+    maxHeightPixels 128:64:16
+    color 0,0,255
+    visibility full
+    autoScale off
+    html UMassChIP-Seq
+    type wig 0 100
+
+    track UMassME3Peak
+    superTrack UMassChIP-SeqSuper full
+    shortLabel UMassME3Peak
+    longLabel U Mass ChIP-Seq H3K4me3 Binding Peaks at 24 hours Post Fertilization
+    group map
+    priority 5
+    maxHeightPixels 128:64:16
+    color 0,0,255
+    visibility full
+    autoScale off
+    html UMassChIP-Seq
+    type wig 0 100
+
+    track UMassME1Hotspot
+    superTrack UMassChIP-SeqSuper pack
+    shortLabel UMassME1Hotspot
+    longLabel U Mass ChIP-Seq H3K4me1 Binding Hot Spots at 24 hours Post Fertilization
+    group map
+    priority 5.5
+    html UMassChIP-Seq
+    visibility pack
+    type bed 5
+
+    track UMassME3Hotspot
+    superTrack UMassChIP-SeqSuper pack
+    shortLabel UMassME3Hotspot
+    longLabel U Mass ChIP-Seq H3K4me3 Binding Hot Spots at 24 hours Post Fertilization
+    group map
+    priority 5.6
+    html UMassChIP-Seq
+    visibility pack
+    type bed 5
+

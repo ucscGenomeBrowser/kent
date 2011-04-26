@@ -16,7 +16,6 @@ canPack On
     superTrack wgEncodeReg hide
     shortLabel Transcription
     longLabel Transcription Levels Assayed by RNA-seq on 7 Cell Lines from ENCODE
-    configurable on
     visibility full
     maxHeightPixels 100:30:11
     showSubtrackColorOnUi on
@@ -26,7 +25,7 @@ canPack On
     priority 1.1
     dragAndDrop subTracks
 
-        track wgEncodeRegTxnGm12878
+	track wgEncodeCaltechRnaSeqGm12878R2x75Il200SigPooled
 	table wgEncodeCaltechRnaSeqGm12878R2x75Il200SigPooled
 	shortLabel Gm12878
 	longLabel Transcription of Gm12878 cells from ENCODE
@@ -34,7 +33,7 @@ canPack On
         type bigWig 0 65534
 	color 255,128,128
 
-	track wgEncodeRegTxnH1hesc
+	track wgEncodeCaltechRnaSeqH1hescR2x75Il200SigPooled
 	table wgEncodeCaltechRnaSeqH1hescR2x75Il200SigPooled
 	shortLabel H1-hESC
 	longLabel Transcription of H1-hESC cells from ENCODE
@@ -42,7 +41,7 @@ canPack On
         type bigWig 0 65177
 	color 255,212,128
 
-	track wgEncodeRegTxnHsmm
+	track wgEncodeCaltechRnaSeqHsmmR2x75Il200SigPooled
 	table wgEncodeCaltechRnaSeqHsmmR2x75Il200SigPooled
 	shortLabel HSMM
 	longLabel Transcription of HSMM cells from ENCODE
@@ -50,7 +49,7 @@ canPack On
         type bigWig 0 65503
 	color 120,235,204
 
-	track wgEncodeRegTxnHuvec
+	track wgEncodeCaltechRnaSeqHuvecR2x75Il200SigPooled
 	table wgEncodeCaltechRnaSeqHuvecR2x75Il200SigPooled
 	shortLabel HUVEC
 	longLabel Transcription of HUVEC cells from ENCODE
@@ -58,7 +57,7 @@ canPack On
         type bigWig 0 65535
 	color 128,212,255
 
-	track wgEncodeRegTxnK562
+	track wgEncodeCaltechRnaSeqK562R2x75Il200SigPooled
 	table wgEncodeCaltechRnaSeqK562R2x75Il200SigPooled
 	shortLabel K562
 	longLabel Transcription of K562 cells from ENCODE
@@ -66,7 +65,7 @@ canPack On
         type bigWig 0 65528
 	color 128,128,255
 
-	track wgEncodeRegTxnNhek
+	track wgEncodeCaltechRnaSeqNhekR2x75Il200SigPooled
 	table wgEncodeCaltechRnaSeqNhekR2x75Il200SigPooled
 	shortLabel NHEK
 	longLabel Transcription of NHEK cells from ENCODE
@@ -74,7 +73,7 @@ canPack On
 	type bigWig 0 65534
 	color 212,128,255
 
-	track wgEncodeRegTxnNhlf
+	track wgEncodeCaltechRnaSeqNhlfR2x75Il200SigPooled
 	table wgEncodeCaltechRnaSeqNhlfR2x75Il200SigPooled
 	shortLabel NHLF
 	longLabel Transcription of NHLF cells from ENCODE
@@ -89,7 +88,6 @@ canPack On
     superTrack wgEncodeReg full
     shortLabel Overlayed H3K4Me1
     longLabel H3K4Me1 Mark (Often Found Near Regulatory Elements) on 7 cell lines from ENCODE
-    configurable on
     visibility full
     viewLimits 0:50
     maxHeightPixels 100:30:11
@@ -161,7 +159,6 @@ canPack On
     superTrack wgEncodeReg full
     shortLabel Overlayed H3K4Me3
     longLabel H3K4Me3 Mark (Often Found Near Promoters) on 7 cell lines from ENCODE
-    configurable on
     visibility full
     viewLimits 0:100
     maxHeightPixels 100:30:11
@@ -233,7 +230,6 @@ canPack On
     superTrack wgEncodeReg hide
     shortLabel Overlayed H3K27Ac
     longLabel H3K27Ac Mark (Often Found Near Regulatory Elements) on 7 cell lines from ENCODE
-    configurable on
     visibility hide
     viewLimits 0:50
     maxHeightPixels 100:30:11

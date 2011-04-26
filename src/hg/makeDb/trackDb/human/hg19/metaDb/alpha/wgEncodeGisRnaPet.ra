@@ -622,7 +622,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
-fileIndex wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam.bai
 fileName wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
@@ -745,7 +744,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
-fileIndex wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam.bai
 fileName wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam
 grant Gingeras
 lab GIS
@@ -2037,4 +2035,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSignal
 
-# MAGIC: -621362568
+# MAGIC: 1144737034

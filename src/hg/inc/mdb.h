@@ -115,6 +115,7 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 #define MDB_VAR_CONTROL         CV_TERM_CONTROL
 #define MDB_VAR_TABLENAME       "tableName"
 #define MDB_VAR_FILENAME        "fileName"
+#define MDB_VAR_MD5SUM          "md5sum"
 #define MDB_VAR_FILEINDEX       "fileIndex"
 #define MDB_VAR_DCC_ACCESSION   "dccAccession"
 #define MDB_VAR_PROJECT         "project"

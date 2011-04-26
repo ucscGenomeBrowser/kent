@@ -984,7 +984,10 @@ if (!(isWig||isBedGr||isBam))
 		cartUsualString(cart, name, logOpMenu[0]));
     hPrintf(" Free-form query: ");
     name = filterFieldVarName(db, rootTable, "", filterRawQueryVar);
-    cgiMakeTextVar(name, cartUsualString(cart, name, ""), 50);
+    char *val = cartUsualString(cart, name, "");
+    // escape double quotes to avoid HTML parse trouble in the text input.
+    val = htmlEncodeText(val, FALSE);
+    cgiMakeTextVar(name, val, 50);
     hPrintf("</TD></TR></TABLE>\n");
     }
 

@@ -5,6 +5,7 @@
 #include "options.h"
 #include "basicBed.h"
 
+
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
 int proStart = -100;
@@ -18,7 +19,7 @@ errAbort(
   "usage:\n"
   "   bedGeneParts part in.bed out.bed\n"
   "Where part is either 'exons' or 'firstExon' or 'introns' or 'promoter' or 'firstCodingSplice'\n"
-  "or secondCodingSplice\n"
+  "or 'secondCodingSplice'\n"
   "options:\n"
   "   -proStart=NN - start of promoter relative to txStart, default %d\n"
   "   -proEnd=NN - end of promoter relative to txStart, default %d\n"

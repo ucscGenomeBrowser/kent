@@ -2,8 +2,8 @@ table tfbsConsFactors
 "tfbsConsFactors Data"
     (
     string name;       "Name of item"
-    string ac;         "gene-regulation.com AC"
-    char[6] species;   "common name, scientific name"
-    char[64] factor;   "factor "
-    char[25] id;       "id"
+    string ac;         "Gene-regulation.com AC"
+    char[6] species;   "Common name"
+    char[64] factor;   "Factor "
+    char[25] id;       "SwissProt ID"
     )

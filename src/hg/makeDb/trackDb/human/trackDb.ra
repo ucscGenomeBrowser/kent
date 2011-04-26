@@ -4182,3 +4182,9 @@ termRegex rs[0-9]+
 searchPriority 12.991
 padding 250
 
+searchTable iscaRetrospective
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex [ne]ss?v[0-9]+
+searchPriority 20

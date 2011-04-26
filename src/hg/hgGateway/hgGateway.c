@@ -72,13 +72,13 @@ puts(
 "<CENTER>"
 "<TABLE BGCOLOR=\"#FFFEE8\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
 "<TR><TD>\n"
-"<CENTER><FONT SIZE=\"2\">\n"
+"<CENTER><span style='font-size:small;'>\n"
 "The UCSC Genome Browser was created by the \n"
 "<A HREF=\"../staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
 "<BR>"
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
-"</FONT></CENTER>\n"
+"</span></CENTER>\n"
 "</TD></TR></TABLE></CENTER>\n"
 );
 
@@ -171,7 +171,7 @@ puts(
 #define SURVEY 1
 #ifdef SURVEY
 if (survey && differentWord(survey, "off"))
-    printf("&nbsp;&nbsp;&nbsp;<FONT STYLE=\"background-color:yellow;\"><A HREF=\"%s\" TARGET=_BLANK><EM><B>%s</EM></B></A></FONT>", survey, surveyLabel ? surveyLabel : "Take survey");
+    printf("&nbsp;&nbsp;&nbsp;<span style='background-color:yellow;><A HREF=\"%s\" TARGET=_BLANK><EM><B>%s</EM></B></A></span>", survey, surveyLabel ? surveyLabel : "Take survey");
 #endif
 
 puts(

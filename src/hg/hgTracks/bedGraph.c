@@ -134,10 +134,13 @@ wigDebugPrint("bedGraphFreeItems");
 #endif
 }
 
-static void bedGraphDrawItems(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis)
+struct preDrawContainer *bedGraphLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
+/* Do bits that load the predraw buffer tg->preDrawContainer. */
 {
+/* Just need to do this once... */
+if (tg->preDrawContainer)
+    return tg->preDrawContainer;
+
 struct bedGraphItem *wi;
 double pixelsPerBase = scaleForPixels(width);
 double basesPerPixel = 1.0;
@@ -145,9 +148,13 @@ int i;				/* an integer loop counter	*/
 if (pixelsPerBase > 0.0)
     basesPerPixel = 1.0 / pixelsPerBase;
 
-/*	walk through all the data and prepare the preDraw array	*/
-int preDrawZero, preDrawSize;
-struct preDrawElement *preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
+/* Allocate predraw and save it and related info in the track. */
+struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(width);
+struct preDrawElement *preDraw = pre->preDraw;	/* to accumulate everything in prep for draw */
+int preDrawZero = pre->preDrawZero;		/* location in preDraw where screen starts */
+int preDrawSize = pre->preDrawSize;		/* size of preDraw array */
+
+/*	walk through all the data fill in the preDraw array	*/
 for (wi = tg->items; wi != NULL; wi = wi->next)
     {
     double dataValue = wi->dataValue;	/* the data value to graph */
@@ -188,7 +195,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		}
 	    }
 	}
-	else
+    else
 	{	/*	only one pixel for this block of data */
 	int xCoord = preDrawZero + x1;
 	/*	if the point falls within our array, record it.
@@ -208,21 +215,21 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	    }
 	}
     }	/*	for (wi = tg->items; wi != NULL; wi = wi->next)	*/
+return pre;
+}
 
-/*	now we are ready to draw.  Each element in the preDraw[] array
- *	cooresponds to a single pixel on the screen
- */
-
-struct preDrawContainer *preDrawContainer;
-AllocVar(preDrawContainer);
-preDrawContainer->preDraw = preDraw;
-wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	       preDrawContainer, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
-
-freeMem(preDrawContainer);
-freeMem(preDraw);
-}	/*	bedGraphDrawItems()	*/
-
+static void bedGraphDrawItems(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis)
+{
+struct preDrawContainer *pre = bedGraphLoadPreDraw(tg, seqStart, seqEnd, width);
+if (pre != NULL)
+    {
+    wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+		   pre, pre->preDrawZero, pre->preDrawSize, 
+		   &tg->graphUpperLimit, &tg->graphLowerLimit);
+    }
+}
 
 /*
  *	WARNING ! - track->visibility is merely the default value
@@ -237,17 +244,17 @@ struct wigCartOptions *wigCart = wigCartOptionsNew(cart, tdb, wordCount, words);
 wigCart->bedGraph = TRUE;	/*	signal to left labels	*/
 switch (wordCount)
     {
-	case 2:
-	    wigCart->graphColumn = atoi(words[1]);
-	    /*	protect against nonsense values	*/
-	    if ( (wigCart->graphColumn < 2) ||
-		(wigCart->graphColumn > 100) )
-		wigCart->graphColumn = 5; /* default score column */
-
-	    break;
-	default:
+    case 2:
+	wigCart->graphColumn = atoi(words[1]);
+	/*	protect against nonsense values	*/
+	if ( (wigCart->graphColumn < 2) ||
+	    (wigCart->graphColumn > 100) )
 	    wigCart->graphColumn = 5; /* default score column */
-	    break;
+
+	break;
+    default:
+	wigCart->graphColumn = 5; /* default score column */
+	break;
     } 
 
 track->minRange = wigCart->minY;
@@ -269,6 +276,7 @@ track->mapsSelf = TRUE;
 track->extraUiData = (void *) wigCart;
 track->colorShades = shadesOfGray;
 track->drawLeftLabels = wigLeftLabels;
+track->loadPreDraw = bedGraphLoadPreDraw;
 /*	the lfSubSample type makes the image map function correctly */
 track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 

@@ -34,7 +34,7 @@ subGroup2 cellType Cell_Line K562=K562&nbsp;(Tier_1)
 subGroup3 factor Factor eHDAC8=HDAC8 eNR4A1=NR4A1 eFOS=FOS eJunB=JunB eJunD=JunD eGATA2=GATA2
 subGroup4 control Control ControlGATA2=Control_eGFP-GATA2 ControlFOS=Control_eGFP-FOS Control=Control ControlHDAC8=Control_eGFP-HDAC8 ControlNR4A1=Control_eGFP-NR4A1 ControlJunD=Control_eGFP-JunD ControlJunB=Control_eGFP-JunB
 dimensions dimensionX=cellType dimensionY=factor 
-sortOrder cellType=+ factor=+ control=+ view=+
+sortOrder cellType=+ factor=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target control=Control replicate=Rep  view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
@@ -63,7 +63,7 @@ noInherit on
         parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 FOS/GFP Pk
         longLabel K562 FOS TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago 
-        subGroups view=Peaks factor=eFOS cellType=K562 control=Control
+        subGroups view=Peaks factor=eFOS cellType=K562 control=ControlFOS
         type narrowPeak
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -73,7 +73,7 @@ noInherit on
         parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 GATA2/GFP Pk
         longLabel K562 GATA2 TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
-        subGroups view=Peaks factor=eGATA2 cellType=K562 control=Control
+        subGroups view=Peaks factor=eGATA2 cellType=K562 control=ControlGATA2
         type narrowPeak
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -83,7 +83,7 @@ noInherit on
         parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 HDAC8/GFP Pk
         longLabel K562 HDAC8 TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
-        subGroups view=Peaks factor=eHDAC8 cellType=K562 control=Control
+        subGroups view=Peaks factor=eHDAC8 cellType=K562 control=ControlHDAC8
         type narrowPeak
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -93,7 +93,7 @@ noInherit on
         parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 JunB/GFP Pk
         longLabel K562 JunB TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
-        subGroups view=Peaks factor=eJunB cellType=K562 control=Control
+        subGroups view=Peaks factor=eJunB cellType=K562 control=ControlJunB
         type narrowPeak
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -103,7 +103,7 @@ noInherit on
         parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 JunD/GFP Pk
         longLabel K562 JunD TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
-        subGroups view=Peaks factor=eJunD cellType=K562 control=Control
+        subGroups view=Peaks factor=eJunD cellType=K562 control=ControlJunD
         type narrowPeak
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -113,7 +113,7 @@ noInherit on
         parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 NR4A1/GFP Pk
         longLabel K562 NR4A1 TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
-        subGroups view=Peaks factor=eNR4A1 cellType=K562 control=Control
+        subGroups view=Peaks factor=eNR4A1 cellType=K562 control=ControlNR4A1
         type narrowPeak
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -136,7 +136,7 @@ noInherit on
         parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 FOS/GFP Sg
         longLabel K562 FOS TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
-        subGroups view=Signal factor=eFOS cellType=K562 control=Control
+        subGroups view=Signal factor=eFOS cellType=K562 control=ControlFOS
         type bigWig -19284.970703 7497.709473
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -146,7 +146,7 @@ noInherit on
         parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 GATA2/GFP Sg
         longLabel K562 GATA2 TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
-        subGroups view=Signal factor=eGATA2 cellType=K562 control=Control
+        subGroups view=Signal factor=eGATA2 cellType=K562 control=ControlGATA2
         type bigWig -3732.796387 6083.967285
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -156,7 +156,7 @@ noInherit on
         parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 HDAC8/GFP Sg
         longLabel K562 HDAC8 TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
-        subGroups view=Signal factor=eHDAC8 cellType=K562 control=Control
+        subGroups view=Signal factor=eHDAC8 cellType=K562 control=ControlHDAC8
         type bigWig -3635.416016 7391.409180
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -166,7 +166,7 @@ noInherit on
         parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 JunB/GFP Sg
         longLabel K562 JunB TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
-        subGroups view=Signal factor=eJunB cellType=K562 control=Control
+        subGroups view=Signal factor=eJunB cellType=K562 control=ControlJunB
         type bigWig -11520.261719 17224.816406
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -176,7 +176,7 @@ noInherit on
         parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 JunD/GFP Sg
         longLabel K562 JunD TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
-        subGroups view=Signal factor=eJunD cellType=K562 control=Control
+        subGroups view=Signal factor=eJunD cellType=K562 control=ControlJunD
         type bigWig -4305.450684 19676.619141
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -186,7 +186,7 @@ noInherit on
         parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 NR4A1/GFP Sg
         longLabel K562 NR4A1 TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
-        subGroups view=Signal factor=eNR4A1 cellType=K562 control=Control
+        subGroups view=Signal factor=eNR4A1 cellType=K562 control=ControlNR4A1
         type bigWig -2001.193604 1318.283081
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27

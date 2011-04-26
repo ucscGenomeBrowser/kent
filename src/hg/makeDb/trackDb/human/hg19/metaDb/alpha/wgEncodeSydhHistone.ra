@@ -14,7 +14,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileIndex wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -36,7 +35,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileIndex wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -146,7 +144,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
-fileIndex wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -168,7 +165,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
-fileIndex wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -276,7 +272,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileIndex wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -298,7 +293,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileIndex wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -408,7 +402,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileIndex wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -430,7 +423,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileIndex wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -541,7 +533,6 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
-fileIndex wgEncodeSydhHistoneK562bInputUcdAln.bam.bai
 fileName wgEncodeSydhHistoneK562bInputUcdAln.bam
 grant Snyder
 lab UCD
@@ -611,7 +602,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileIndex wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -633,7 +623,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileIndex wgEncodeSydhHistoneNt2d1H3k27me3BUcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k27me3BUcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -743,7 +732,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileIndex wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -765,7 +753,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileIndex wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -875,7 +862,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileIndex wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -897,7 +883,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileIndex wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -1005,7 +990,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileIndex wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -1027,7 +1011,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileIndex wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -1137,7 +1120,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileIndex wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -1159,7 +1141,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileIndex wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -1269,7 +1250,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileIndex wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep1.bam
 grant Snyder
 lab UCD
@@ -1291,7 +1271,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileIndex wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep2.bam
 grant Snyder
 lab UCD
@@ -1401,7 +1380,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileIndex wgEncodeSydhHistoneNt2d1InputUcdAln.bam.bai
 fileName wgEncodeSydhHistoneNt2d1InputUcdAln.bam
 grant Snyder
 lab UCD
@@ -1727,7 +1705,6 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileIndex wgEncodeSydhHistoneU2osInputUcdAln.bam.bai
 fileName wgEncodeSydhHistoneU2osInputUcdAln.bam
 grant Snyder
 lab UCD
@@ -1782,4 +1759,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 884039648
+# MAGIC: 1291100036

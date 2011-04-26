@@ -480,6 +480,7 @@ enum wiggleSmoothingEnum {
    wiggleSmoothing14 = 13,
    wiggleSmoothing15 = 14,
    wiggleSmoothing16 = 15,
+   wiggleSmoothingMax = 16,	/* Not an option, but lets us keep track of memory to use */
 };
 
 enum wiggleSmoothingEnum wiggleSmoothingStringToEnum(char *string);

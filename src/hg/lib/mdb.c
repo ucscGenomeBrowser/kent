@@ -1006,9 +1006,8 @@ struct mdbVar *mdbVar;
 int count = 0;
 
 if(tableName == NULL)
-    tableName = MDB_DEFAULT_NAME;
-
-if(!sqlTableExists(conn,tableName))
+    tableName = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+else if(!sqlTableExists(conn,tableName))
     errAbort("mdbObjsSetToDb attempting to update non-existent table named '%s'.\n",tableName);
 
 for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
@@ -1115,9 +1114,8 @@ int mdbObjsLoadToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *md
 int count = 0;
 
 if (tableName == NULL)
-    tableName = MDB_DEFAULT_NAME;
-
-if (!sqlTableExists(conn,tableName))
+    tableName = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+else if (!sqlTableExists(conn,tableName))
     errAbort("mdbObjsLoadToDb attempting to load non-existent table named '%s'.\n",tableName);
 
 assert(mdbObjs != NULL);  // If this is the case, then be vocal
@@ -1155,9 +1153,8 @@ struct mdbObj *mdbObjQuery(struct sqlConnection *conn,char *table,struct mdbObj 
     boolean buildHash = TRUE;
 
     if(table == NULL)
-        table = MDB_DEFAULT_NAME;
-
-    if(!sqlTableExists(conn,table))
+        table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+    else if(!sqlTableExists(conn,table))
         return NULL;
 
     struct dyString *dy = newDyString(4096);
@@ -1226,8 +1223,8 @@ struct mdbByVar *mdbByVarsQuery(struct sqlConnection *conn,char *table,struct md
 //  select obj,var,val where (var= [and val in (val1,val2)]) or (var= [and val in (val1,val2)]) order by var,val,obj
 
     if(table == NULL)
-        table = MDB_DEFAULT_NAME;
-    if(!sqlTableExists(conn,table))
+            table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+    else if(!sqlTableExists(conn,table))
         return NULL;
 
     struct dyString *dy = newDyString(4096);
@@ -1329,8 +1326,8 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 //                                                           AND EXISTS (SELECT T3.obj FROM metaDb T3 WHERE T3.obj = T1.obj AND T3.var = 'cell' AND T3.val != 'GM12878') ORDER BY T1.obj, T1.var;
 
     if(table == NULL)
-        table = MDB_DEFAULT_NAME;
-    if(!sqlTableExists(conn,table))
+        table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+    else if(!sqlTableExists(conn,table))
         return NULL;
 
     struct dyString *dy = newDyString(4096);
@@ -1919,7 +1916,7 @@ struct slPair *cvVars = NULL;
 for (el = elList; el != NULL; el = el->next)
     {
     struct hash *varHash = el->val;
-    if (includeHidden || SETTING_NOT_ON(hashFindVal(varHash, CV_TOT_HIDDEN))) // Skip the hidden ones
+    if (includeHidden || !cvTermIsHidden(el->name)) // Skip the hidden ones
         {
         char *priority = hashFindVal(varHash, CV_TOT_PRIORITY);
         if (priority != NULL) // If there is no priority it will randomly fall to the back of the list
@@ -2076,12 +2073,8 @@ struct dyString *dyRemoveVars = dyStringNew(256);
 
 for (el = elList; el != NULL; el = el->next)
     {
-    struct hash *varHash = el->val;
-    if (SETTING_IS_ON(hashFindVal(varHash, CV_TOT_HIDDEN)))
-        {
-        assert(cvSearchMethod(el->name) == cvNotSearchable);  // Good idea to assert but cv.ra is a user updatable file
+    if (cvTermIsHidden(el->name))
         dyStringPrintf(dyRemoveVars,"%s ",el->name);
-        }
     }
 hashElFreeList(&elList);
 
@@ -2778,7 +2771,8 @@ while(mdbObjs != NULL)
 
     // Walk through objs for an exp as defined by EDVs
     int expCount=0;     // Count of experiments in composite
-    int expMissing=0;   // Count of experiments with missing expId
+    int expMissing=0;   // Count of objects with missing expId
+    int accMissing=0;   // Count of objects with missing accessions
     int expObjsCount=0; // Total of all experimental object accoss the composite
     int expMax=0;       // Largest experiment (in number of objects)
     int expMin=999;     // Smallest experiment (in number of objects)
@@ -2831,8 +2825,10 @@ while(mdbObjs != NULL)
         char experimentId[128];
         int expId = ENCODE_EXP_IX_UNDEFINED;
         struct encodeExp *exp = encodeExpGetByMdbVarsFromTable(db, edvVarVals, expTable);
-        if (exp == NULL && createExpIfNecessary)
-            exp = encodeExpGetOrCreateByMdbVarsFromTable(db, edvVarVals, expTable);
+        // --------- BLOCK creation of expIds, at least during rollout of encodeExp
+        // BLOCKED if (exp == NULL && createExpIfNecessary)
+        // BLOCKED     exp = encodeExpGetOrCreateByMdbVarsFromTable(db, edvVarVals, expTable);
+        // --------- BLOCK creation of expIds, at least during rollout of encodeExp
         mdbVarsFree(&edvVarVals); // No longer needed
 
         // Make sure the accession is set if requested.
@@ -2851,7 +2847,7 @@ while(mdbObjs != NULL)
                 //printf("Experiment %s EDV: [%s] is not defined in %s table. Remaining:%d and %d\n",experimentId,dyStringContents(dyVars),EXPERIMENTS_TABLE,slCount(mdbCompositeObjs),slCount(mdbObjs));
             if (warn < 2) // From mdbUpdate (warn=1), just interested in testing waters.  From mdbPrint (warn=2) list all objs in exp.
                 {
-                expMissing++;
+                expMissing += slCount(mdbExpObjs);
                 mdbProcessedObs = slCat(mdbProcessedObs,mdbExpObjs);
                 mdbExpObjs = NULL;
                 encodeExpFree(&exp);
@@ -2889,40 +2885,50 @@ while(mdbObjs != NULL)
                 int thisId = atoi(val);
                 if (expId == ENCODE_EXP_IX_UNDEFINED || thisId != expId)
                     {
-                    updateObj = TRUE;
-                    if (warn > 0)
-                        printf("           %s %s has bad %s=%s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,val);
+                    updateObj = TRUE;  // Always an error!
+                    expMissing++;
+
+                    printf("    ERROR  %s %-60s has bad %s=%s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,val);
                     }
                 else
                     {
                     char *acc = mdbObjFindValue(obj,MDB_VAR_DCC_ACCESSION); // FIXME: Add code to update accession to encodeExp
+                    if (updateAccession && !createExpIfNecessary && exp->accession == NULL)
+                        {
+                        exp->accession = needMem(16);
+                        safef(exp->accession, 16, "TEMP%06d", exp->ix); // Temporary since this is not an update but we want -test to work.
+                        }
                     if (exp->accession != NULL && (acc == NULL || differentString(acc,exp->accession)))
                         {
                         updateObj = TRUE;
-                        if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
-                            {
-                            if (acc == NULL)
-                                printf("           %s %s %s set, needs %s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION);
-                            else
-                                printf("           %s %s %s set, has wrong %s: %s.\n",experimentId,obj->obj,
-                                       MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION,exp->accession);
-                            }
+                        accMissing++;
+
+                        if (acc != NULL) // Always an error
+                            printf("    ERROR  %s %-60s %s set, has wrong %s: %s.\n",experimentId,obj->obj,
+                                    MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION,acc);
+                        else if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
+                            printf("           %s %-60s %s set, needs %s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION);
                         }
                     else
                         {
                         errors--;       // One less error
                         if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
-                            printf("           %s %s %s\n",experimentId,obj->obj,(exp->accession != NULL ? exp->accession : ""));
+                            printf("           %s %-60s %s\n",experimentId,obj->obj,(exp->accession != NULL ? exp->accession : ""));
                         }
                     }
                 }
             else
                 {
-                updateObj = (expId != ENCODE_EXP_IX_UNDEFINED);
+                if (expId != ENCODE_EXP_IX_UNDEFINED)
+                    {
+                    updateObj = TRUE;
+                    expMissing++;
+                    }
+
                 if ((foundId && warn > 0) || warn > 1)
                     {
                     if (updateObj)
-                        printf("           %s %s needs updating to mdb.\n",experimentId,obj->obj);
+                        printf("           %s %-60s needs updating to mdb.\n",experimentId,obj->obj);
                     else
                         printf("           %s %s\n",experimentId,obj->obj); // missing
                     }
@@ -2943,18 +2949,19 @@ while(mdbObjs != NULL)
         // Done with one experiment
         encodeExpFree(&exp);
 
-        if (!foundId && errors > 0)
-            {
-            expMissing++;
-            if (warn > 0)
-                printf("           %s all %d objects are missing an %s.\n",experimentId,objsInExp,MDB_VAR_ENCODE_EXP_ID);
-            }
+        if (!foundId && errors > 0 && warn > 0)
+            printf("           %s all %d objects are missing an %s.\n",experimentId,objsInExp,MDB_VAR_ENCODE_EXP_ID);
         }
     // Done with one composite
 
     if (expCount > 0)
-        printf("Composite%s '%s' has %d recognizable experiment%s with %d missing an %s.\n   objects/experiment: min:%d  max:%d  mean:%lf.\n",
-               (compositelessObj?"less set":""),compName,expCount,(expCount != 1?"s":""),expMissing,MDB_VAR_ENCODE_EXP_ID,expMin,expMax,((double)expObjsCount/expCount));
+        {
+        printf("Composite%s '%s' has %d recognizable experiment%s with %d objects needing %s",
+               (compositelessObj?"less set":""),compName,expCount,(expCount != 1?"s":""),expMissing,MDB_VAR_ENCODE_EXP_ID);
+        if (accMissing > 0)
+            printf(" and %d objects needing %s",accMissing,MDB_VAR_DCC_ACCESSION);
+        printf(" updated.\n   objects/experiment: min:%d  max:%d  mean:%lf.\n",expMin,expMax,((double)expObjsCount/expCount));
+        }
 
     if (edvSortOrder != NULL)
         freeMem(edvSortOrder);

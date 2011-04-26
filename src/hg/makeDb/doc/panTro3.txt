@@ -1367,25 +1367,18 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     wget -O 46way.nh \
 http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
 
-# ((Zebrafish,
-# (Stickleback,
-# Tetraodon)),
-# (X_tropicalis,
-# (Mouse,
-# Human))) 
-
-panTro3
-hg19
-ponAbe2
-rheMac2
-calJac3
-equCab2
-canFam2
-mm9
-rn4
-monDom5
-galGal3
-danRer7
+# panTro3
+# hg19
+# ponAbe2
+# rheMac2
+# calJac3
+# equCab2
+# canFam2
+# mm9
+# rn4
+# monDom5
+# galGal3
+# danRer7
 
 
     #	All distances remain as specified in the 46way.nh
@@ -2481,7 +2474,9 @@ rmdir --ignore-fail-on-non-empty $cons/tmp
     time (zcat downloads/phyloP12way.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/panTro3/chrom.sizes \
 	phyloP12way.bw) > bigWig.log 2>&1 &
-    #	real    40m59.146s
+    egrep "real|VmPeak" bigWig.log
+    # pid=6982: VmPeak:     31261764 kB
+    #	real    37m7.950s
 
     bigWigInfo phyloP12way.bw 
 # version: 4
@@ -2592,7 +2587,9 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     time (zcat downloads/phyloP12wayPrimate.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/panTro3/chrom.sizes \
 	    phyloP12wayPrimate.bw) > bigWig.log 2>&1 &
-    #	real    38m19.818s
+    egrep "real|VmPeak" bigWig.log
+    # pid=6954: VmPeak:     31261760 kB
+    #	real    35m35.006s
 
     bigWigInfo phyloP12wayPrimate.bw 
 # version: 4

@@ -773,3 +773,12 @@ type bed 6 .
 urlLabel TargetScan link:
 url http://www.targetscan.org/cgi-bin/targetscan/mmu_50/view_gene.cgi?gs=$P&taxid=10090&members=$p&showcnc=1
 
+track allMm9RS_BW
+shortLabel GERP
+longLabel GERP scores for mammalian alignments
+group compGeno
+visibility hide
+priority 105
+type bigWig -10 5
+autoScale on
+maxHeightPixels 128:64:20

@@ -434,7 +434,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortAln
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -443,7 +443,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccRep 1
-fileIndex wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam
 geoSampleAccession GSM605625
 grant Gingeras
@@ -461,7 +460,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -487,7 +486,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -513,7 +512,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortRawData
 objType file
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -751,7 +750,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortAln
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -760,7 +759,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccRep 1
-fileIndex wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam
 geoSampleAccession GSM605627
 grant Gingeras
@@ -778,7 +776,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -804,7 +802,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -830,7 +828,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortRawData
 objType file
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -854,7 +852,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1094,7 +1092,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1103,7 +1101,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccRep 1
-fileIndex wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam
 geoSampleAccession GSM605633
 grant Gingeras
@@ -1121,7 +1118,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1147,7 +1144,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1173,7 +1170,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortRawData
 objType file
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1197,7 +1194,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3173,7 +3170,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortAln
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3182,7 +3179,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccRep 1
-fileIndex wgEncodeCshlShortRnaSeqK562CellShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562CellShortAln.bam
 geoSampleAccession GSM605630
 grant Gingeras
@@ -3200,7 +3196,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3226,7 +3222,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3252,7 +3248,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortRawData
 objType file
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3276,7 +3272,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3516,7 +3512,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortAln
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3525,7 +3521,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccRep 1
-fileIndex wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam
 geoSampleAccession GSM605632
 grant Gingeras
@@ -3543,7 +3538,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3569,7 +3564,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3595,7 +3590,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortRawData
 objType file
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3619,7 +3614,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3859,7 +3854,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortAln
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3868,7 +3863,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccRep 1
-fileIndex wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam
 geoSampleAccession GSM605629
 grant Gingeras
@@ -3886,7 +3880,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3912,7 +3906,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3938,7 +3932,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortRawData
 objType file
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3962,7 +3956,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4202,7 +4196,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortAln
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4211,7 +4205,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccRep 1
-fileIndex wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam
 geoSampleAccession GSM605628
 grant Gingeras
@@ -4229,7 +4222,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4255,7 +4248,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4281,7 +4274,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortRawData
 objType file
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4305,7 +4298,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4545,7 +4538,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4554,7 +4547,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccRep 1
-fileIndex wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam
 geoSampleAccession GSM605634
 grant Gingeras
@@ -4572,7 +4564,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4598,7 +4590,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4624,7 +4616,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortRawData
 objType file
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4648,7 +4640,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4888,7 +4880,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortAln
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4897,7 +4889,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccRep 1
-fileIndex wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam
 geoSampleAccession GSM605635
 grant Gingeras
@@ -4915,7 +4906,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4941,7 +4932,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4967,7 +4958,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortRawData
 objType file
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4991,7 +4982,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags
 objType table
-attic aux
+attic auxExp
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5239,7 +5230,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccRep 1
-fileIndex wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam
 geoSampleAccession GSM605631
 grant Gingeras
@@ -6220,7 +6210,6 @@ dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccRep 1
-fileIndex wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam
 geoSampleAccession GSM605626
 grant Gingeras
@@ -6523,4 +6512,4 @@ rnaExtract shortTotal
 subId 3377
 view RawData
 
-# MAGIC: 518437703
+# MAGIC: 707831377

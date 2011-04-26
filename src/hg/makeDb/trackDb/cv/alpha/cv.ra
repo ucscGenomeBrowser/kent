@@ -14,25 +14,25 @@
 #
 # Human cell types, template below
 # --------------------------
-# term (human-readable cell type name)
-# tag (machine-readable cell type name, no special characters)
-# type (informs pipeline code of stanza type.  Should always be Cell Line)
-# organism (used in many ways.  Should correspond to a "type organism" stanza)
-# description (human-readable description of cell type, for cell type cellTypes.html)
-# tissue (general tissue type, for categorizing cell types)
-# vendorName (name of vendor or lab that provides these cells)
-# vendorId (the ID of the cell type in the vendor's catalog)
-# orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html)
-# karyotype (optional human-readable karyotype, for .html page)
-# lineage (optional human-readable source of cell lines, e.g. 18 year old male)
-# termId (ID for best term in the BTO.  Optional but encouraged. Shown in cellTypes.html)
-# termUrl (URL for term in the ontology. Links with termId on cellTypes.html)
-# color (specifies color code for track data of this cell type, rgb values)
-# sex (used in documentation and validation.  Should correspond to a "type sex" stanza)
+# term (human-readable cell type name. required)
+# tag (machine-readable cell type name, no special characters. required)
+# type (informs pipeline code of stanza type.  Should always be Cell Line. Required)
+# organism (used in many ways.  Should correspond to a "type organism" stanza. required)
+# description (human-readable description of cell type, for cell type cellTypes.html. required)
+# tissue (general tissue type, for categorizing cell types.  optional)
+# vendorName (name of vendor or lab that provides these cells. required)
+# vendorId (the ID of the cell type in the vendor's catalog. optional)
+# orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html. required)
+# karyotype (optional human-readable karyotype, for .html page. optional)
+# lineage (optional human-readable source of cell lines, e.g. 18 year old male. optional)
+# termId (ID for best term in the BTO.  Optional but encouraged. Shown in cellTypes.html. optional)
+# termUrl (URL for term in the ontology. Links with termId on cellTypes.html. optiona)
+# color (specifies color code for track data of this cell type, rgb values. optional)
+# sex (used in documentation and validation.  Should correspond to a "type sex" stanza. required)
 # tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.
-#       Should correspond to a "type tier" stanza)
-# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
-# category: (T for tissue, L for cell line, or P for primary cells.  Not used in human)
+#       Should correspond to a "type tier" stanza. required)
+# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
+# category: (T for tissue, L for cell line, or P for primary cells.  Not used in human. optional)
 
 
 
@@ -975,7 +975,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) BG02
 karyotype XY euploid
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Moreover, vendor states karyotype as "normal" (under BG02)
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
@@ -992,7 +992,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) BG02
 karyotype XY euploid
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Moreover, vendor states karyotype as "normal" (under BG02)
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
@@ -1234,7 +1234,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM06990&P
 lineage CEPH/Utah - European Caucasion; Epstein-Barr Virus
 #)lineage mesoderm
 karyotype relatively normal
-#)karyotype does not match edits. edit: normal
+#)karyotype does not match edits. edit: normal. Vendor does not explicitly state karyotype info.
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
@@ -1252,8 +1252,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10847
 vendorName Coriell
 vendorId GM10847
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1271,9 +1271,9 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12801&P
 lineage CEPH/Utah - European Caucasion - Male; Epstein-Barr Virus
 #)lineage mesoderm
 karyotype relatively normal
-#)karyotype does not match edits. edit: unknown
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+#)karyotype does not match edits. edit: unknown. Can't find vendor info.
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex M
 tier 3
 protocol UW_Stam:GM12801_Stam_protocol.pdf
@@ -1287,7 +1287,7 @@ description B-Lymphocyte
 tissue Blood
 #)lineage mesoderm
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Can't find vendor info.
 vendorName Coriell
 vendorId GM12864
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12864&PgId=166
@@ -1306,7 +1306,7 @@ description B-Lymphocyte
 tissue Blood
 #)lineage mesoderm
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Female
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Can't find vendor info.
 vendorName Coriell
 vendorId GM12865
 orderUrl http://ccr.coriell.org/sections/Search/Sample_Detail.aspx?Ref=GM12865&PgId=166
@@ -1325,7 +1325,7 @@ description B-Lymphocyte
 tissue Blood
 #)lineage mesoderm
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Can't find vendor info.
 vendorName Coriell
 vendorId GM12872
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12872&PgId=166
@@ -1344,7 +1344,7 @@ description B-Lymphocyte
 tissue Blood
 #)lineage mesoderm
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Female
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Vendor does not explicitly state.
 vendorName Coriell
 vendorId GM12873
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12873&PgId=166
@@ -1363,7 +1363,7 @@ description B-Lymphocyte
 tissue Blood
 #)lineage mesoderm
 karyotype CEPH/UTAH PEDIGREE 1459, Epstein-Barr Virus, Male
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Vendor does not explicitly state.
 vendorName Coriell
 vendorId GM12874
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12874&PgId=166
@@ -1471,8 +1471,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM15510
 vendorName Coriell
 vendorId GM15510
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex U
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1488,8 +1488,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18505
 vendorName Coriell
 vendorId GM18505
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1525,8 +1525,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18526
 vendorName Coriell
 vendorId GM18526
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1542,8 +1542,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18951
 vendorName Coriell
 vendorId GM18951
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1559,8 +1559,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19099
 vendorName Coriell
 vendorId GM19099
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1576,8 +1576,8 @@ tissue Blood
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19193
 vendorName Coriell
 vendorId GM19193
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -1661,7 +1661,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
 karyotype XX euploid
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. 
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -1690,7 +1690,7 @@ tag H9ESAFPPlus
 type Cell Line
 organism Human
 description H9 AFP+ human ESCells-derived
-#)description Provisional human Embryonic Stem Cell (hESC) H9  human ESCells-derived Treatment: H9 AFP+ 
+#)description Provisional human Embryonic Stem Cell (hESC) H9  human ESCells-derived Treatment: H9 AFP+
 tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -1707,7 +1707,7 @@ tag H9ESAFPMinus
 type Cell Line
 organism Human
 description H9 AFP- human ESCells-derived
-#)description Provisional human Embryonic Stem Cell (hESC) H9  human ESCells-derived Treatment: H9 AFP- 
+#)description Provisional human Embryonic Stem Cell (hESC) H9  human ESCells-derived Treatment: H9 AFP-
 tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -2468,7 +2468,6 @@ description HT-1080 is an epithelial cell line derived from a fibrosarcoma.
 tissue Epithelium
 #)lineage mesoderm
 karyotype pseudo-diploid male with a modal chromosome number of 46. There are numerous chromosome abnormalities.
-#)karyotype does not match edits. edit: cancer
 vendorName ATCC
 vendorId CCL­121
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-121&Template=cellBiology
@@ -2489,7 +2488,7 @@ vendorName ATCC
 vendorId HTB-11
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
 karyotype hyperdiploid female with a modal chromosome number of 47
-#)karyotype does not match edits. edit: cancer
+#)karyotype does not match edits. edit: cancer. Vendor info matches original, except vendor has extra information.
 termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
 sex F
@@ -2737,7 +2736,6 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage mammary gland Derived from metastatic site: pleural effusion
 #)lineage ectoderm
 karyotype Cancer: The cell line is aneuploid female (modal number = 64, range = 52 to 68), with chromosome counts in the near-triploid range. Normal chromosomes N8 and N15 were absent.
-#)karyotype does not match edits. edit: cancer
 termId BTO:0000815
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000815
 sex F
@@ -2801,6 +2799,7 @@ organism Human
 tissue Myometrium
 description Myometrial cells
 vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, PA)
+orderUrl http://www.mwrif.org/188/condon-jeyasuria-lab
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
 termId BTO:0000907
 sex F
@@ -2969,8 +2968,7 @@ vendorName ATCC
 vendorId CRL-1469
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1469&Template=cellBiology
 lineage
-karyotype cancer, male
-#)karyotype does not match edits. edit: cancer
+karyotype cancer
 termId BTO:0000304
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000304
 sex M
@@ -3303,7 +3301,6 @@ organism Human
 description T98G is a fibroblast cell line derived from a glioblastoma multiforme.
 #)description Provisional Fibroblast cell line  Derived from a glioblastoma multiforme.
 karyotype hyper-pentaploid male with a modal chromosome number around 128 to 132. There are numerous chromosome abnormalities and marker chromosomes.
-#)karyotype does not match edits. edit: cancer
 tissue Brain
 #)lineage mesoderm
 vendorName ATCC
@@ -3328,7 +3325,7 @@ tissue Epithelium
 lineage Passage 2 primary, non-immortalized, human trachea and bronchial epithelial cells. Donor: 21 y.o. male
 #)lineage endoderm
 karyotype unknown, presumed normal diploid
-#)karyotype does not match edits. edit: unknown
+#)karyotype does not match edits. edit: unknown. Vendor says it's a pseudodiploid human cell line.
 termId BTO:0001389 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001389
 sex M
@@ -3417,7 +3414,6 @@ vendorName ATCC
 vendorId HTB-14
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-14&Template=cellBiology
 karyotype hypodiploid female with a modal chromosome number of 44 in 48% of cells and a 5.9% rate of higher ploidy
-#)karyotype does not match edits. edit: cancer
 termId BTO:0002036
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036
 sex F
@@ -3437,8 +3433,7 @@ vendorId HTB-96
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-96&Template=cellBiology
 lineage J. Ponten and E. Saksela derived this line (originally 2T) in 1964 from a moderately differentiated sarcoma of the tibia of a 15 year old girl. Viruses were not detected during co-cultivation with WI-38 cells or in CF tests against SV40, RSV or adenoviruses. Mycoplasma contamination was detected and eliminated in 1972.
 #)lineage mesoderm
-karyotype Cancer
-#)karyotype does not match edits. edit: cancer
+karyotype cancer
 termId BTO:0000970
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000970
 sex F
@@ -3483,6 +3478,28 @@ protocol UW_Stam:WI38_Stam_protocol.pdf
 
 
 ### Mouse Cell Lines
+# Human cell types, template below
+# --------------------------
+# term (human-readable cell type name. required)
+# tag (machine-readable cell type name, no special characters. required)
+# type (informs pipeline code of stanza type.  Should always be Cell Line. Required)
+# organism (used in many ways.  Should correspond to a "type organism" stanza. required)
+# description (human-readable description of cell type, for cell type cellTypes.html. required)
+# tissue (general tissue type, for categorizing cell types.  optional)
+# age (should correspond to a "type age". optional)
+# strain (should correspond to a "type strain". optional)
+# vendorName (name of vendor or lab that provides these cells. required)
+# vendorId (the ID of the cell type in the vendor's catalog. optional)
+# orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html. required)
+# karyotype (optional human-readable karyotype, for .html page. optional)
+# lineage (optional human-readable source of cell lines, e.g. 18 year old male. optional)
+# termId (ID for best ontology term.  Optional but encouraged. Shown in cellTypes.html. optional)
+# termUrl (URL for term in the ontology. Links with termId on cellTypes.html. optiona)
+# color (specifies color code for track data of this cell type, rgb values. optional)
+# sex (used in documentation and validation.  Should correspond to a "type sex" stanza. required)
+# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
+# category: (T for tissue, L for cell line, or P for primary cells.  optional)
+# tier is NOT used in mouse
 term 3134
 tag 3134
 type Cell Line
@@ -3497,7 +3514,7 @@ termId 7035
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
 color 153,38,0
 sex M
-protocol
+protocol UW(Stam):3134_Stam_protocol.pdf
 
 term 416B
 tag 416B
@@ -3514,6 +3531,25 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
 color 153,38,0
 sex M
 protocol UW(Stam):416B_Stam_protocol.pdf
+
+term A20
+tag A20
+type Cell Line
+organism Mouse
+tissue Blood
+category Cell Line
+description B cell lymphoma line derived from a spontaneous reticulum cell neoplasm (Provisional)
+age immortalized
+strain BALB/cAnN 
+vendorName ATCC
+vendorId TIB-208
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-208&Template=cellBiology
+termId 7069
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
+color 153,38,0
+sex M
+protocol UW(Stam):A20_Stam_protocol.pdf
+
 
 term AtT-20
 tag AtT20
@@ -3536,8 +3572,8 @@ tag BCellCD19p
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
-description B Cell , CD19+
+category Primary Cells
+description B Cell , CD19+ (Provisional: updated category from cell line to Primary Cells)
 age immortalized
 strain C57BL/6
 vendorName
@@ -3545,7 +3581,7 @@ termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 153,38,0
 sex M
-protocol
+protocol UW(Stam):bCellCd19_Stam_protocol.pdf
 
 term BoneMarrow
 tag BMarrow
@@ -3656,6 +3692,20 @@ color 153,38,0
 sex U
 protocol LICR(Ren):Cortex_Ren_protocol.pdf
 
+term FatPad
+tag Fat
+type Cell Line
+organism Mouse
+tissue Adipose
+category Tissue
+description Adipose tissue (Provisional) 
+vendorName UW lab
+termId 7108
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7108
+color 153,38,0
+sex U
+protocol UW(Stam):Tissue_Stam_protocol.pdf
+
 term Fibroblast
 tag Fibroblast
 type Cell Line
@@ -3669,7 +3719,6 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
 protocol UW(Stam):Fibroblast_Stam_protocol.pdf
-
 
 term G1E
 tag G1E
@@ -3853,6 +3902,25 @@ color 153,38,0
 sex U
 #protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
 
+term NIH-3T3
+tag NIH3T3
+type Cell Line
+organism Mouse
+tissue Blood
+category Cell Line
+description fibroblast (Provisional) 
+age immortalized
+strain NIH/Swiss
+vendorName ATCC
+vendorId CRL-1658
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1658&Template=cellBiology
+termId 7146
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7146
+color 153,38,0
+sex M
+protocol UW(Stam):NIH-3T3_Stam_protocol.pdf
+
+
 # shortened term
 term OlfactBulb
 tag OlfactoryBulb
@@ -3959,14 +4027,28 @@ tag TNaive
 type Cell Line
 organism Mouse
 tissue Blood
-category Tissue
-description Naive T cells: CD4+, CD25-
+category Primary Cells
+description Naive T cells: CD4+, CD25- (Provisional: updated category from cell line to Primary Cells)
 vendorName UW lab
 termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 153,38,0
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
+
+term TReg
+tag TReg
+type Cell Line
+organism Mouse
+tissue Blood
+category Primary Cells
+description Regulatory T cells CD4+,CD25+
+vendorName UW lab
+termId 
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+color 153,38,0
+sex U
+protocol UW(Stam):TReg_Stam_protocol.pdf
 
 term WholeBrain
 tag WholeBrain
@@ -8004,7 +8086,7 @@ label Alignments
 description Alignments
 
 term Base_Overlap_Signal
-tag  ????
+tag  baOvrlpSig
 type view
 label Base_Overlap_Signal
 description Base_Overlap_Signal
@@ -8350,20 +8432,6 @@ type dataType
 label ChIA-pet
 description ChIA-pet
 
-# TODO: retire this ?  (11/3/10)
-term LongRnaSeq
-tag longRnaSeq
-type dataType
-label RNA-seq
-description RNA sequencing: long RNAs
-
-# TODO: retire this ?  (11/3/10)
-term RnaSeqPolyA
-tag rnaSeqPolya
-type dataType
-label RNA-seq
-description RNA sequencing: polyA+ RNA
-
 term Orchid
 tag orchid
 type dataType
@@ -8376,11 +8444,11 @@ type dataType
 label Mapability
 description Uniqueness of n-mer sequence fragments across the genome
 
-term Methyl27
-tag methyl27
+term MethylArray
+tag methylarray
 type dataType
-label Methyl 27
-description Methyl 27
+label Methyl Array
+description Provisional Methyl Bead Array
 
 term MethylSeq
 tag methylseq
@@ -8428,6 +8496,20 @@ tag rnaSeq
 type dataType
 label RNA-seq
 description Sequencing analysis of RNA expression
+
+#GeneST and Tiling are flavors of the RIP-chip.  
+#They need separate dataTypes for the experiment table to work
+term RipGeneSt 
+tag  RipGeneSt 
+type dataType
+label RIP-chip Gene ST
+description RIP-Chip on Affymetrix GeneChipÂ® Human Gene 1.0 ST Arrays 
+
+term RipTiling 
+tag  RipTiling 
+type dataType
+label RIP-chip Tiling Array
+description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays 
 
 term RipChip
 tag  ripChip
@@ -8496,6 +8578,11 @@ tag B6D2F1J
 type strain
 description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1.
 
+term BALB/cAnN
+tag BALBCANN
+type strain
+description ccMyeloma high incidence H2d (Provisional) 
+
 term C3H
 tag C3H
 type strain
@@ -8505,6 +8592,11 @@ term C57BL/6
 tag C57BL6
 type strain
 description C57 black 6, the most common inbred strain of laboratory mouse
+
+term NIH/Swiss
+tag NIHS
+type strain
+description An outbred Swiss mouse  used as a general-purpose stock. Used extensively for pertussis HSF testing.(Provisional)
 
 term RIII
 tag RIII
@@ -8637,14 +8729,14 @@ description tier 3
 
 ## Tissue Sourced (Used for Mouse cell)
 term Individual
-tag Individual
+tag Indiv
 type tissueSourceType
-description Tissue obtained from an individual (Provisional)
+description Tissue obtained from an individual 
 
 term Pooled
-tag Pooled
+tag Pool
 type tissueSourceType
-description Tissue obtained from pooling samples from various sample organisms (Provisional)
+description Tissue obtained from pooling samples from various sample organisms 
 
 #Venkat: Trial to add seqPlatform for use for GEO submissions
 #Uses the GEO terms to be conistent and help with GEO submissions
@@ -8738,9 +8830,9 @@ term BioChain
 tag BioChain
 type lab
 label BioChain
-description
+description The BioChain subset of HudsonAlpha
 labInst BioChain
-labPi
+labPi Myers
 labPiFull
 grantPi
 organism human
@@ -8877,8 +8969,7 @@ term Caltech
 tag Caltech
 type lab
 label Wold - California Institute of Technology
-description PROVISIONAL Wold - California Institute of Technology
-#I took out the Wold at the request of Kate
+description Wold - California Institute of Technology
 grantInst California Institute of Technology (Wold Lab)
 labPi Wold
 labPiFull Barbara Wold
@@ -9343,7 +9434,8 @@ projectName UNC-Giddings
 #
 #    cvDefined [no/yes]  DEFAULT: NO.  Yes when every possible value must be in cv.ra
 #
-#       hidden [no/yes]  DEFAULT: NO.  Yes when users should not see this internal metadata.
+#       hidden [no/yes/beta,public]  DEFAULT: no.  Yes when users should not see this internal metadata.
+#              use comma delimited list of alpha,beta,public to restrict visibility from certain machines.
 #
 #     validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values.  ENFORCED by mdbPrint -validate
 #           cv: must be defined term in cv (e.g. cell=GM12878).  "cv or None" indicates that "None is also acceptable.
@@ -9523,11 +9615,11 @@ validate date # nine months more than dateSubmitted
 
 term dccAccession
 type typeOfTerm
-label ENCODE DCC Accession
-description The accession number provided by the ENCODE Data Coordination Center.
+label UCSC Accession
+description The accession number provided by the UCSC Genome Browser.
 searchable freeText
 cvDefined no
-validate regex: ^wgEncode[H,E][0-9]*$
+validate regex: ^wgEncodeE[H,E][0-9]*$
 priority 312
 
 term dccInternalNotes
@@ -9568,6 +9660,7 @@ label Experiment ID
 description The ENCODE DCC experiment identification number.
 searchable freeText
 cvDefined no
+hidden beta,public
 validate integer
 priority 100
 
@@ -10006,7 +10099,7 @@ label Tissue Source Type
 description Source of tissue from either an indiviual organism or pooled set of organisms (Provisional)
 searchable multiSelect
 cvDefined yes
-validate cv 
+validate cv
 priority 470
 
 # term type
