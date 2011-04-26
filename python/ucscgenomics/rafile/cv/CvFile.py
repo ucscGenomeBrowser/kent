@@ -16,7 +16,7 @@ class CvFile(RaFile):
         print type
 
         # this will become a 30 case if-else block if I do it this way,
-        # should I maybe use a dictionary or something?
+        # I'll probably create a dictionary for this.
         if type == 'Cell Line':
             entry = HumanStanza()
         else:
@@ -42,9 +42,6 @@ class CvStanza(RaStanza):
 
         for key in ('term', 'tag', 'type', 'description'):
             if not key in self.keys() or self[key] == '':
-                # I'm still not quite sure what to do with errors. Do you
-                # still want to raise exceptions and then catch them into
-                # some list-type structure?
                 print 'bad ' + key
 
 
@@ -66,17 +63,13 @@ class HumanStanza(CvStanza):
         CvStanza.__init__(self)
 
     def validate(self, ra):
-        CvStanza.validate(self, ra)
         print 'HumanStanza.validate(' + self.name + ')'
 
-        # I had to copy term, tag, type, desc into the necessary fields
-        # to make the check for extraneous keys work. This means that the
-        # base CvStanza.validate() is redundant. Should I remove it?
         necessary = ('term', 'tag', 'type', 'description', 'organism', 'vendorName', 'orderUrl', 'sex', 'tier')
         optional = ('tissue', 'vendorId', 'karyotype', 'lineage', 'termId', 'termUrl', 'color', 'protocol', 'category')
 
         # the following 3 codeblocks I can see being reused a lot.
-        # Should I make them subs in CvStanza, perhaps?
+        # Should I make them subs in CvStanza?
 
         for key in necessary:
             if not key in self.keys() or self[key] == '':
