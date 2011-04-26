@@ -154,7 +154,11 @@ if (withHtmlHeader)
 #ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 #else///ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
-    puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">");
+    char *browserVersion;
+    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion != '8')
+        puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
+    else
+        puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">");
     // Strict would be nice since it fixes atleast one IE problem (use of :hover CSS pseudoclass)
     //puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
 #endif///ndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
