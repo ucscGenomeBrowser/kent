@@ -27,8 +27,8 @@
             // initially hidden
             wrapper.css({
                 position: 'absolute',
-                left: "-3300",
-                top: "-3300px",
+                left: "-33000px",
+                top: "-33000px",
                 width: '100px',
                 height: '100px'
             });
