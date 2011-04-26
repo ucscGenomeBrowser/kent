@@ -649,8 +649,16 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
             val = cloneString(words[thisWord]);
         if (val != NULL)
             {
+            // Strip any single or double quotes first.
+            char *end = val + strlen(val) - 1;
+            if ((*val == '"'  && *end == '"')
+            ||  (*val == '\'' && *end == '\''))
+                {
+                *end = '\0';
+                val++;
+                }
             // handle comma separated list of vals (if unquoted)
-            if (val[0] != '\'' && val[0] != '"' && strchr(val,',') != NULL)
+            if (strchr(val,',') != NULL)
                 {
                 char * aVal = NULL;
                 while((aVal = cloneNextWordByDelimiter(&val,',')) != NULL)
@@ -1010,6 +1018,11 @@ if(tableName == NULL)
 else if(!sqlTableExists(conn,tableName))
     errAbort("mdbObjsSetToDb attempting to update non-existent table named '%s'.\n",tableName);
 
+// Table specific lock (over-cautious, since most work is done on sandbox tables)
+char lock[64];
+safef(lock,sizeof lock,"lock_%s",tableName);
+sqlGetLock(conn, lock);
+
 for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
     {
     // Handle delete requests first
@@ -1105,6 +1118,7 @@ for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
         count++;
         }
     }
+sqlReleaseLock(conn, lock);
 return count;
 }
 
@@ -3193,7 +3207,12 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
         continue;
     enum cvSearchable searchBy = cvSearchMethod(onePair->name);
     if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)  // multiSelect val will be filled with a comma delimited list
-        dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
+        {
+        if (strchr((char *)onePair->val,' '))
+            dyStringPrintf(dyTerms,"%s=\"%s\" ",onePair->name,(char *)onePair->val);
+        else
+            dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
+        }
     else if (searchBy == cvSearchByFreeText)                                      // If select is by free text then like
         dyStringPrintf(dyTerms,"%s=%%%s%% ",onePair->name,(char *)onePair->val);
     else if (sameWord(onePair->name,MDB_VAR_COMPOSITE))  // special case.  Not directly searchable by UI but indirectly and will show up here.
