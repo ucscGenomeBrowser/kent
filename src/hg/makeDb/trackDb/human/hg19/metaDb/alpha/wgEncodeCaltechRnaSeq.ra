@@ -3,7 +3,7 @@ objType composite
 composite wgEncodeCaltechRnaSeq
 expVars lab,dataType,cell,readType,insertLength
 
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep1V2
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
@@ -11,9 +11,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -23,10 +22,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3448
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep1V2
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep2V2
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
@@ -34,9 +33,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -46,10 +44,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3449
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep2V2
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaFastqRep1
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep1
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
@@ -58,9 +56,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaFastqRep1.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm NA
@@ -72,7 +69,7 @@ rnaExtract longPolyA
 subId 1874
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaFastqRep2
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
@@ -81,9 +78,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaFastqRep2.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep2.fastq.gz
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm NA
@@ -95,7 +91,7 @@ rnaExtract longPolyA
 subId 1874
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
@@ -103,9 +99,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -116,10 +111,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3514
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3
 view MinusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep2V3
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
@@ -127,9 +122,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep2V3.bigWig
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -140,10 +134,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3515
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep2V3
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3
 view MinusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
@@ -151,9 +145,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -164,10 +157,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3514
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3
 view PlusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep2V3
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
@@ -175,9 +168,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep2V3.bigWig
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -188,10 +180,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3515
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep2V3
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3
 view PlusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep1V2
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
@@ -199,9 +191,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -211,10 +202,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3448
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep1V2
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2
 view Splices
 
-metaObject wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep2V2
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
@@ -222,9 +213,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -234,7 +224,7 @@ replicate 2
 rnaExtract longPolyA
 subId 3449
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep2V2
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2
@@ -2367,7 +2357,7 @@ subId 3744
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep1V2
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
@@ -2375,9 +2365,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -2387,10 +2376,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3450
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep1V2
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep2V2
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
@@ -2398,9 +2387,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -2410,10 +2398,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3451
 submittedDataVersion V2 - A better mapping technique
-tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep2V2
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaFastqRep1
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
@@ -2422,9 +2410,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaFastqRep1.fastq.gz
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm NA
@@ -2436,7 +2423,7 @@ rnaExtract longPolyA
 subId 1633
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaFastqRep2
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep2
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
@@ -2445,9 +2432,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaFastqRep2.fastq.gz
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep2.fastq.gz
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm NA
@@ -2459,7 +2445,7 @@ rnaExtract longPolyA
 subId 1874
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
@@ -2467,9 +2453,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -2480,10 +2465,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3516
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3
 view MinusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep2V3
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
@@ -2491,9 +2476,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep2V3.bigWig
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -2504,10 +2488,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3520
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep2V3
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3
 view MinusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
@@ -2515,9 +2499,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -2528,10 +2511,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3516
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3
 view PlusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep2V3
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
@@ -2539,9 +2522,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep2V3.bigWig
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -2552,10 +2534,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3520
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep2V3
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3
 view PlusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep1V2
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
@@ -2563,9 +2545,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -2575,10 +2556,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3450
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep1V2
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2
 view Splices
 
-metaObject wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep2V2
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
@@ -2586,9 +2567,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -2598,7 +2578,7 @@ replicate 2
 rnaExtract longPolyA
 subId 3451
 submittedDataVersion V2 - A better mapping technique
-tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep2V2
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2
@@ -4517,7 +4497,7 @@ subId 3583
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep1V2
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
@@ -4525,9 +4505,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -4537,10 +4516,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3452
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep1V2
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep2V2
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
@@ -4548,9 +4527,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -4560,10 +4538,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3453
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep2V2
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaFastqRep1
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep1
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
@@ -4572,9 +4550,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaFastqRep1.fastq.gz
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm NA
@@ -4586,7 +4563,7 @@ rnaExtract longPolyA
 subId 1634
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaFastqRep2
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep2
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
@@ -4595,9 +4572,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaFastqRep2.fastq.gz
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep2.fastq.gz
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm NA
@@ -4609,7 +4585,7 @@ rnaExtract longPolyA
 subId 1635
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
@@ -4617,9 +4593,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -4630,10 +4605,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3518
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3
 view MinusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep2V3
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
@@ -4641,9 +4616,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep2V3.bigWig
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -4654,10 +4628,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3519
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep2V3
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3
 view MinusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
@@ -4665,9 +4639,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -4678,10 +4651,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3518
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3
 view PlusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep2V3
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
@@ -4689,9 +4662,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep2V3.bigWig
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -4702,10 +4674,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3519
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep2V3
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3
 view PlusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep1V2
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
@@ -4713,9 +4685,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -4725,10 +4696,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3452
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep1V2
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2
 view Splices
 
-metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep2V2
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
@@ -4736,9 +4707,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -4748,7 +4718,7 @@ replicate 2
 rnaExtract longPolyA
 subId 3453
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep2V2
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2
@@ -5303,7 +5273,7 @@ subId 3589
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep1V2
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
@@ -5311,9 +5281,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -5323,10 +5292,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3454
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep1V2
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep2V2
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
@@ -5334,9 +5303,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -5346,10 +5314,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3455
 submittedDataVersion V2 - A better mapping technique
-tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep2V2
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaFastqRep1
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep1
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
@@ -5358,9 +5326,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaFastqRep1.fastq.gz
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm NA
@@ -5372,7 +5339,7 @@ rnaExtract longPolyA
 subId 1636
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaFastqRep2
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep2
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
@@ -5381,9 +5348,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaFastqRep2.fastq.gz
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep2.fastq.gz
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm NA
@@ -5395,7 +5361,7 @@ rnaExtract longPolyA
 subId 1638
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
@@ -5403,9 +5369,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -5416,10 +5381,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3521
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3
 view MinusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep2V3
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
@@ -5427,9 +5392,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep2V3.bigWig
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -5440,10 +5404,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3522
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep2V3
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3
 view MinusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
@@ -5451,9 +5415,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -5464,10 +5427,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3521
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3
 view PlusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep2V3
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
@@ -5475,9 +5438,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep2V3.bigWig
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -5488,10 +5450,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3522
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep2V3
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3
 view PlusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep1V2
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
@@ -5499,9 +5461,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -5511,10 +5472,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3454
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep1V2
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2
 view Splices
 
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep2V2
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
@@ -5522,9 +5483,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -5534,7 +5494,7 @@ replicate 2
 rnaExtract longPolyA
 subId 3455
 submittedDataVersion V2 - A better mapping technique
-tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep2V2
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2
@@ -6637,7 +6597,7 @@ subId 3585
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep1V2
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
@@ -6645,9 +6605,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -6657,10 +6616,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3456
 submittedDataVersion V2 - A better mapping technique
-tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep1V2
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep2V2
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
@@ -6668,9 +6627,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -6680,10 +6638,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3457
 submittedDataVersion V2 - A better mapping technique
-tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep2V2
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaFastqRep1
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep1
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
@@ -6692,9 +6650,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaFastqRep1.fastq.gz
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm NA
@@ -6706,7 +6663,7 @@ rnaExtract longPolyA
 subId 1639
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaFastqRep2
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep2
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
@@ -6715,9 +6672,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaFastqRep2.fastq.gz
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep2.fastq.gz
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm NA
@@ -6729,7 +6685,7 @@ rnaExtract longPolyA
 subId 1645
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
@@ -6737,9 +6693,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -6750,10 +6705,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3517
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3
 view MinusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep2V3
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
@@ -6761,9 +6716,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep2V3.bigWig
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -6774,10 +6728,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3513
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep2V3
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3
 view MinusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
@@ -6785,9 +6739,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -6798,10 +6751,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3517
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3
 view PlusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep2V3
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
@@ -6809,9 +6762,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep2V3.bigWig
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -6822,10 +6774,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3513
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep2V3
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3
 view PlusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep1V2
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
@@ -6833,9 +6785,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -6845,10 +6796,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3456
 submittedDataVersion V2 - A better mapping technique
-tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep1V2
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2
 view Splices
 
-metaObject wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep2V2
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
@@ -6856,9 +6807,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -6868,7 +6818,7 @@ replicate 2
 rnaExtract longPolyA
 subId 3457
 submittedDataVersion V2 - A better mapping technique
-tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep2V2
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2
@@ -7423,7 +7373,7 @@ subId 3587
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep1V2
+metaObject wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
@@ -7431,9 +7381,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
-fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -7443,10 +7392,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3458
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep1V2
+tableName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep2V2
+metaObject wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
@@ -7454,9 +7403,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -7466,10 +7414,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3459
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep2V2
+tableName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaFastqRep1
+metaObject wgEncodeCaltechRnaSeqK562R1x75dFastqRep1
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
@@ -7478,9 +7426,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaFastqRep1.fastq.gz
+fileName wgEncodeCaltechRnaSeqK562R1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm NA
@@ -7492,7 +7439,7 @@ rnaExtract longPolyA
 subId 1874
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaFastqRep2
+metaObject wgEncodeCaltechRnaSeqK562R1x75dFastqRep2
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
@@ -7501,9 +7448,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaFastqRep2.fastq.gz
+fileName wgEncodeCaltechRnaSeqK562R1x75dFastqRep2.fastq.gz
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm NA
@@ -7515,7 +7461,7 @@ rnaExtract longPolyA
 subId 1646
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
@@ -7523,9 +7469,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -7536,10 +7481,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3523
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3
 view MinusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep2V3
+metaObject wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
@@ -7547,9 +7492,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep2V3.bigWig
+fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -7560,10 +7504,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3524
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep2V3
+tableName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3
 view MinusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
@@ -7571,9 +7515,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -7584,10 +7527,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3523
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3
 view PlusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep2V3
+metaObject wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
@@ -7595,9 +7538,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep2V3.bigWig
+fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -7608,10 +7550,10 @@ replicate 2
 rnaExtract longPolyA
 subId 3524
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep2V3
+tableName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3
 view PlusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep1V2
+metaObject wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
@@ -7619,9 +7561,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
-fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -7631,10 +7572,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3458
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep1V2
+tableName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2
 view Splices
 
-metaObject wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep2V2
+metaObject wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
@@ -7642,9 +7583,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -7654,7 +7594,7 @@ replicate 2
 rnaExtract longPolyA
 subId 3459
 submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep2V2
+tableName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2
@@ -8976,7 +8916,7 @@ subId 3598
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqNhekR1x75dIlnaAlignsRep1V2
+metaObject wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
@@ -8984,9 +8924,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
-fileName wgEncodeCaltechRnaSeqNhekR1x75dIlnaAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -8996,10 +8935,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3460
 submittedDataVersion V2 - A better mapping technique
-tableName wgEncodeCaltechRnaSeqNhekR1x75dIlnaAlignsRep1V2
+tableName wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2
 view Alignments
 
-metaObject wgEncodeCaltechRnaSeqNhekR1x75dIlnaFastqRep1
+metaObject wgEncodeCaltechRnaSeqNhekR1x75dFastqRep1
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
@@ -9008,9 +8947,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqNhekR1x75dIlnaFastqRep1.fastq.gz
+fileName wgEncodeCaltechRnaSeqNhekR1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm NA
@@ -9022,7 +8960,7 @@ rnaExtract longPolyA
 subId 1483
 view Fastq
 
-metaObject wgEncodeCaltechRnaSeqNhekR1x75dIlnaMinusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
@@ -9030,9 +8968,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-15
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqNhekR1x75dIlnaMinusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -9043,10 +8980,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3525
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqNhekR1x75dIlnaMinusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3
 view MinusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqNhekR1x75dIlnaPlusSignalRep1V3
+metaObject wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
@@ -9054,9 +8991,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-15
 dateUnrestricted 2011-11-14
-fileName wgEncodeCaltechRnaSeqNhekR1x75dIlnaPlusSignalRep1V3.bigWig
+fileName wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -9067,10 +9003,10 @@ replicate 1
 rnaExtract longPolyA
 subId 3525
 submittedDataVersion V3 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqNhekR1x75dIlnaPlusSignalRep1V3
+tableName wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3
 view PlusRawSignal
 
-metaObject wgEncodeCaltechRnaSeqNhekR1x75dIlnaSplicesRep1V2
+metaObject wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
@@ -9078,9 +9014,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
-fileName wgEncodeCaltechRnaSeqNhekR1x75dIlnaSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam
 grant Myers
-insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -9090,7 +9025,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3460
 submittedDataVersion V2 - A better mapping technique
-tableName wgEncodeCaltechRnaSeqNhekR1x75dIlnaSplicesRep1V2
+tableName wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2
@@ -10191,4 +10126,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: 2080105613
+# MAGIC: 1441247161

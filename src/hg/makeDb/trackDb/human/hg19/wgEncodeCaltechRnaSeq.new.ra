@@ -46,7 +46,7 @@ html wgEncodeCaltechRnaSeq.new
 	showDiffBasesMaxZoom 100
 	maxWindowToDraw 1000000
 
-		track wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep1V2
+		track wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2
 		parent wgEncodeCaltechRnaSeqViewSplices off
 		shortLabel HeLa-S3 1
 		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 1 (in HeLa-S3 cells)
@@ -54,8 +54,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		color 0,119,158
 		# subId=3452 dateSubmitted=2011-01-22
+		# was wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep1V2 cricket Tue Apr 26 12:30:26 2011
 
-		track wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep2V2
+		track wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2
 		parent wgEncodeCaltechRnaSeqViewSplices off
 		shortLabel HeLa-S3 2
 		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 2 (in HeLa-S3 cells)
@@ -63,8 +64,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		color 0,119,158
 		# subId=3453 dateSubmitted=2011-01-22
+		# was wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep2V2 cricket Tue Apr 26 12:30:26 2011
 
-		track wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep1V2
+		track wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2
 		parent wgEncodeCaltechRnaSeqViewSplices off
 		shortLabel HepG2 1
 		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 1 (in HepG2 cells)
@@ -72,8 +74,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		color 189,0,157
 		# subId=3454 dateSubmitted=2011-01-22
+		# was wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep1V2 cricket Tue Apr 26 12:30:26 2011
 
-		track wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep2V2
+		track wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2
 		parent wgEncodeCaltechRnaSeqViewSplices
 		shortLabel K562 2
 		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 2 (in K562 cells)
@@ -81,8 +84,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		color 46,0,184
 		# subId=3459 dateSubmitted=2011-01-22
+		# was wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep2V2 cricket Tue Apr 26 12:30:29 2011
 
-		track wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep2V2
+		track wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2
 		parent wgEncodeCaltechRnaSeqViewSplices
 		shortLabel GM12878 2
 		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 2 (in GM12878 cells)
@@ -90,8 +94,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		color 153,38,0
 		# subId=3449 dateSubmitted=2011-01-22
+		# was wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep2V2 cricket Tue Apr 26 12:30:23 2011
 
-		track wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep1V2
+		track wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2
 		parent wgEncodeCaltechRnaSeqViewSplices off
 		shortLabel H1-hESC 1
 		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 1 (in H1-hESC cells)
@@ -99,8 +104,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		color 0,107,27
 		# subId=3450 dateSubmitted=2011-01-22
+		# was wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep1V2 cricket Tue Apr 26 12:30:24 2011
 
-		track wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep2V2
+		track wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2
 		parent wgEncodeCaltechRnaSeqViewSplices off
 		shortLabel HUVEC 2
 		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 2 (in HUVEC cells)
@@ -108,8 +114,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		color 224,75,0
 		# subId=3457 dateSubmitted=2011-01-21
+		# was wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep2V2 cricket Tue Apr 26 12:30:28 2011
 
-		track wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep2V2
+		track wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2
 		parent wgEncodeCaltechRnaSeqViewSplices off
 		shortLabel H1-hESC 2
 		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 2 (in H1-hESC cells)
@@ -117,8 +124,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		color 0,107,27
 		# subId=3451 dateSubmitted=2011-01-21
+		# was wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep2V2 cricket Tue Apr 26 12:30:24 2011
 
-		track wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep2V2
+		track wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2
 		parent wgEncodeCaltechRnaSeqViewSplices off
 		shortLabel HepG2 2
 		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 2 (in HepG2 cells)
@@ -126,8 +134,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		color 189,0,157
 		# subId=3455 dateSubmitted=2011-01-21
+		# was wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep2V2 cricket Tue Apr 26 12:30:26 2011
 
-		track wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep1V2
+		track wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2
 		parent wgEncodeCaltechRnaSeqViewSplices off
 		shortLabel HUVEC 1
 		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 1 (in HUVEC cells)
@@ -135,8 +144,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		color 224,75,0
 		# subId=3456 dateSubmitted=2011-01-21
+		# was wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep1V2 cricket Tue Apr 26 12:30:27 2011
 
-		track wgEncodeCaltechRnaSeqNhekR1x75dIlnaSplicesRep1V2
+		track wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2
 		parent wgEncodeCaltechRnaSeqViewSplices off
 		shortLabel NHEK 1
 		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 1 (in NHEK cells)
@@ -144,8 +154,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		color 179,0,134
 		# subId=3460 dateSubmitted=2011-01-21
+		# was wgEncodeCaltechRnaSeqNhekR1x75dIlnaSplicesRep1V2 cricket Tue Apr 26 12:30:29 2011
 
-		track wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep1V2
+		track wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2
 		parent wgEncodeCaltechRnaSeqViewSplices
 		shortLabel GM12878 1
 		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 1 (in GM12878 cells)
@@ -153,8 +164,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		color 153,38,0
 		# subId=3448 dateSubmitted=2011-01-22
+		# was wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep1V2 cricket Tue Apr 26 12:30:23 2011
 
-		track wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep1V2
+		track wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2
 		parent wgEncodeCaltechRnaSeqViewSplices
 		shortLabel K562 1
 		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 1 (in K562 cells)
@@ -162,6 +174,7 @@ html wgEncodeCaltechRnaSeq.new
 		type bam
 		color 46,0,184
 		# subId=3458 dateSubmitted=2011-01-21
+		# was wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep1V2 cricket Tue Apr 26 12:30:29 2011
 
 		track wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2
 		parent wgEncodeCaltechRnaSeqViewSplices off
@@ -456,7 +469,7 @@ html wgEncodeCaltechRnaSeq.new
 	showDiffBasesMaxZoom 100
 	maxWindowToDraw 1000000
 
-        track wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep1V2
+        track wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HeLa-S3 1
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in HeLa-S3 cells)
@@ -464,8 +477,9 @@ html wgEncodeCaltechRnaSeq.new
         type bam
         color 0,119,158
         # subId=3452 dateSubmitted=2011-01-22
+        # was wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep1V2 cricket Tue Apr 26 12:30:25 2011
 
-        track wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep2V2
+        track wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HeLa-S3 2
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in HeLa-S3 cells)
@@ -473,8 +487,9 @@ html wgEncodeCaltechRnaSeq.new
         type bam
         color 0,119,158
         # subId=3453 dateSubmitted=2011-01-22
+        # was wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep2V2 cricket Tue Apr 26 12:30:25 2011
 
-        track wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep1V2
+        track wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HepG2 1
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in HepG2 cells)
@@ -482,8 +497,9 @@ html wgEncodeCaltechRnaSeq.new
         type bam
         color 189,0,157
         # subId=3454 dateSubmitted=2011-01-22
+        # was wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep1V2 cricket Tue Apr 26 12:30:26 2011
 
-        track wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep2V2
+        track wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns
         shortLabel K562 2
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in K562 cells)
@@ -491,8 +507,9 @@ html wgEncodeCaltechRnaSeq.new
         type bam
         color 46,0,184
         # subId=3459 dateSubmitted=2011-01-22
+        # was wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep2V2 cricket Tue Apr 26 12:30:28 2011
 
-        track wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep2V2
+        track wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns
         shortLabel GM12878 2
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in GM12878 cells)
@@ -500,8 +517,9 @@ html wgEncodeCaltechRnaSeq.new
         type bam
         color 153,38,0
         # subId=3449 dateSubmitted=2011-01-22
+        # was wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep2V2 cricket Tue Apr 26 12:30:22 2011
 
-        track wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep1V2
+        track wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns on 
         shortLabel H1-hESC 1
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in H1-hESC cells)
@@ -509,8 +527,9 @@ html wgEncodeCaltechRnaSeq.new
         type bam
         color 0,107,27
         # subId=3450 dateSubmitted=2011-01-22
+        # was wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep1V2 cricket Tue Apr 26 12:30:23 2011
 
-        track wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep2V2
+        track wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HUVEC 2
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in HUVEC cells)
@@ -518,8 +537,9 @@ html wgEncodeCaltechRnaSeq.new
         type bam
         color 224,75,0
         # subId=3457 dateSubmitted=2011-01-21
+        # was wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep2V2 cricket Tue Apr 26 12:30:27 2011
 
-        track wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep2V2
+        track wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel H1-hESC 2
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in H1-hESC cells)
@@ -527,8 +547,9 @@ html wgEncodeCaltechRnaSeq.new
         type bam
         color 0,107,27
         # subId=3451 dateSubmitted=2011-01-21
+        # was wgEncodeCaltechRnaSeqH1hescR1x75dIlnaAlignsRep2V2 cricket Tue Apr 26 12:30:24 2011
 
-        track wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep2V2
+        track wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HepG2 2
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in HepG2 cells)
@@ -536,8 +557,9 @@ html wgEncodeCaltechRnaSeq.new
         type bam
         color 189,0,157
         # subId=3455 dateSubmitted=2011-01-21
+        # was wgEncodeCaltechRnaSeqHepg2R1x75dIlnaAlignsRep2V2 cricket Tue Apr 26 12:30:26 2011
 
-        track wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep1V2
+        track wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HUVEC 1
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in HUVEC cells)
@@ -545,8 +567,9 @@ html wgEncodeCaltechRnaSeq.new
         type bam
         color 224,75,0
         # subId=3456 dateSubmitted=2011-01-21
+        # was wgEncodeCaltechRnaSeqHuvecR1x75dIlnaAlignsRep1V2 cricket Tue Apr 26 12:30:27 2011
 
-        track wgEncodeCaltechRnaSeqNhekR1x75dIlnaAlignsRep1V2
+        track wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel NHEK 1
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in NHEK cells)
@@ -554,8 +577,9 @@ html wgEncodeCaltechRnaSeq.new
         type bam
         color 179,0,134
         # subId=3460 dateSubmitted=2011-01-21
+        # was wgEncodeCaltechRnaSeqNhekR1x75dIlnaAlignsRep1V2 cricket Tue Apr 26 12:30:29 2011
 
-        track wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep1V2
+        track wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns
         shortLabel GM12878 1
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in GM12878 cells)
@@ -563,8 +587,9 @@ html wgEncodeCaltechRnaSeq.new
         type bam
         color 153,38,0
         # subId=3448 dateSubmitted=2011-01-22
+        # was wgEncodeCaltechRnaSeqGm12878R1x75dIlnaAlignsRep1V2 cricket Tue Apr 26 12:30:22 2011
 
-        track wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep1V2
+        track wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns
         shortLabel K562 1
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in K562 cells)
@@ -572,6 +597,7 @@ html wgEncodeCaltechRnaSeq.new
         type bam
         color 46,0,184
         # subId=3458 dateSubmitted=2011-01-21
+        # was wgEncodeCaltechRnaSeqK562R1x75dIlnaAlignsRep1V2 cricket Tue Apr 26 12:30:28 2011
 
         track wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
@@ -893,7 +919,7 @@ html wgEncodeCaltechRnaSeq.new
 	viewLimits -15:0
         windowingFunction mean+whiskers
 
-		track wgEncodeCaltechRnaSeqNhekR1x75dIlnaMinusSignalRep1V3
+		track wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewMinusSignal off
 		shortLabel NHEK 1
 		longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 1 (in NHEK cells)
@@ -901,8 +927,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig -131584.500000 -0.023810
 		color 179,0,134
 		# subId=3525 dateSubmitted=2011-02-15
+		# was wgEncodeCaltechRnaSeqNhekR1x75dIlnaMinusSignalRep1V3 cricket Tue Apr 26 12:30:29 2011
 
-		track wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep2V3
+		track wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3
 		parent wgEncodeCaltechRnaSeqViewMinusSignal
 		shortLabel K562 2
 		longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 2 (in K562 cells)
@@ -910,8 +937,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig -26085.132812 -0.020000
 		color 46,0,184
 		# subId=3524 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep2V3 cricket Tue Apr 26 12:30:28 2011
 
-		track wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep1V3
+		track wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewMinusSignal
 		shortLabel K562 1
 		longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 1 (in K562 cells)
@@ -919,8 +947,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig -26571.000000 -0.020000
 		color 46,0,184
 		# subId=3523 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqK562R1x75dIlnaMinusSignalRep1V3 cricket Tue Apr 26 12:30:28 2011
 
-		track wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep2V3
+		track wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3
 		parent wgEncodeCaltechRnaSeqViewMinusSignal off
 		shortLabel HepG2 2
 		longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 2 (in HepG2 cells)
@@ -928,8 +957,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig -119619.500000 -0.025000
 		color 189,0,157
 		# subId=3522 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep2V3 cricket Tue Apr 26 12:30:26 2011
 
-		track wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep2V3
+		track wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3
 		parent wgEncodeCaltechRnaSeqViewMinusSignal off
 		shortLabel H1-hESC 2
 		longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 2 (in H1-hESC cells)
@@ -937,8 +967,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig -106818.500000 -0.023810
 		color 0,107,27
 		# subId=3520 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep2V3 cricket Tue Apr 26 12:30:24 2011
 
-		track wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep1V3
+		track wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewMinusSignal off
 		shortLabel HepG2 1
 		longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 1 (in HepG2 cells)
@@ -946,8 +977,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig -119619.500000 -0.025000
 		color 189,0,157
 		# subId=3521 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqHepg2R1x75dIlnaMinusSignalRep1V3 cricket Tue Apr 26 12:30:26 2011
 
-		track wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep2V3
+		track wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3
 		parent wgEncodeCaltechRnaSeqViewMinusSignal off
 		shortLabel HeLa-S3 2
 		longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 2 (in HeLa-S3 cells)
@@ -955,8 +987,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig -31520.000000 -0.020000
 		color 0,119,158
 		# subId=3519 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep2V3 cricket Tue Apr 26 12:30:25 2011
 
-		track wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep1V3
+		track wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewMinusSignal off
 		shortLabel HeLa-S3 1
 		longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 1 (in HeLa-S3 cells)
@@ -964,8 +997,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig -23652.000000 -0.021277
 		color 0,119,158
 		# subId=3518 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep1V3 cricket Tue Apr 26 12:30:25 2011
 
-		track wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep1V3
+		track wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewMinusSignal off
 		shortLabel HUVEC 1
 		longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 1 (in HUVEC cells)
@@ -973,8 +1007,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig -132877.000000 -0.023810
 		color 224,75,0
 		# subId=3517 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep1V3 cricket Tue Apr 26 12:30:27 2011
 
-		track wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep1V3
+		track wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewMinusSignal on 
 		shortLabel H1-hESC 1
 		longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 1 (in H1-hESC cells)
@@ -982,8 +1017,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig -46057.500000 -0.020000
 		color 0,107,27
 		# subId=3516 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqH1hescR1x75dIlnaMinusSignalRep1V3 cricket Tue Apr 26 12:30:24 2011
 
-		track wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep2V3
+		track wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3
 		parent wgEncodeCaltechRnaSeqViewMinusSignal
 		shortLabel GM12878 2
 		longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 2 (in GM12878 cells)
@@ -991,8 +1027,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig -54739.332031 -0.022222
 		color 153,38,0
 		# subId=3515 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep2V3 cricket Tue Apr 26 12:30:23 2011
 
-		track wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep1V3
+		track wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewMinusSignal
 		shortLabel GM12878 1
 		longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 1 (in GM12878 cells)
@@ -1000,8 +1037,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig -39344.699219 -0.020000
 		color 153,38,0
 		# subId=3514 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqGm12878R1x75dIlnaMinusSignalRep1V3 cricket Tue Apr 26 12:30:23 2011
 
-		track wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep2V3
+		track wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3
 		parent wgEncodeCaltechRnaSeqViewMinusSignal off
 		shortLabel HUVEC 2
 		longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 2 (in HUVEC cells)
@@ -1009,6 +1047,7 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig -37533.500000 -0.025000
 		color 224,75,0
 		# subId=3513 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqHuvecR1x75dIlnaMinusSignalRep2V3 cricket Tue Apr 26 12:30:27 2011
 
 	track wgEncodeCaltechRnaSeqViewPlusSignal
 	shortLabel Plus Raw Signal
@@ -1022,7 +1061,7 @@ html wgEncodeCaltechRnaSeq.new
         autoScale off
         windowingFunction mean+whiskers
 
-		track wgEncodeCaltechRnaSeqNhekR1x75dIlnaPlusSignalRep1V3
+		track wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewPlusSignal off
 		shortLabel NHEK 1
 		longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 1 (in NHEK cells)
@@ -1030,8 +1069,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 0.025000 263551.000000
 		color 179,0,134
 		# subId=3525 dateSubmitted=2011-02-15
+		# was wgEncodeCaltechRnaSeqNhekR1x75dIlnaPlusSignalRep1V3 cricket Tue Apr 26 12:30:29 2011
 
-		track wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep2V3
+		track wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3
 		parent wgEncodeCaltechRnaSeqViewPlusSignal
 		shortLabel K562 2
 		longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 2 (in K562 cells)
@@ -1039,8 +1079,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 0.018519 43891.699219
 		color 46,0,184
 		# subId=3524 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep2V3 cricket Tue Apr 26 12:30:28 2011
 
-		track wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep1V3
+		track wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewPlusSignal
 		shortLabel K562 1
 		longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 1 (in K562 cells)
@@ -1048,8 +1089,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 0.018519 59416.500000
 		color 46,0,184
 		# subId=3523 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqK562R1x75dIlnaPlusSignalRep1V3 cricket Tue Apr 26 12:30:28 2011
 
-		track wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep2V3
+		track wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3
 		parent wgEncodeCaltechRnaSeqViewPlusSignal off
 		shortLabel HepG2 2
 		longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 2 (in HepG2 cells)
@@ -1057,8 +1099,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 0.025000 112928.000000
 		color 189,0,157
 		# subId=3522 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep2V3 cricket Tue Apr 26 12:30:26 2011
 
-		track wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep2V3
+		track wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3
 		parent wgEncodeCaltechRnaSeqViewPlusSignal off
 		shortLabel H1-hESC 2
 		longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 2 (in H1-hESC cells)
@@ -1066,8 +1109,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 0.018519 42717.417969
 		color 0,107,27
 		# subId=3520 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep2V3 cricket Tue Apr 26 12:30:24 2011
 
-		track wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep1V3
+		track wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewPlusSignal off
 		shortLabel HepG2 1
 		longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 1 (in HepG2 cells)
@@ -1075,8 +1119,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 0.025000 112928.000000
 		color 189,0,157
 		# subId=3521 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqHepg2R1x75dIlnaPlusSignalRep1V3 cricket Tue Apr 26 12:30:26 2011
 
-		track wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep2V3
+		track wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3
 		parent wgEncodeCaltechRnaSeqViewPlusSignal off
 		shortLabel HeLa-S3 2
 		longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 2 (in HeLa-S3 cells)
@@ -1084,8 +1129,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 0.025000 42784.000000
 		color 0,119,158
 		# subId=3519 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep2V3 cricket Tue Apr 26 12:30:25 2011
 
-		track wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep1V3
+		track wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewPlusSignal off
 		shortLabel HeLa-S3 1
 		longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 1 (in HeLa-S3 cells)
@@ -1093,8 +1139,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 0.015625 51041.000000
 		color 0,119,158
 		# subId=3518 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqHelas3R1x75dIlnaPlusSignalRep1V3 cricket Tue Apr 26 12:30:25 2011
 
-		track wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep1V3
+		track wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewPlusSignal off
 		shortLabel HUVEC 1
 		longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 1 (in HUVEC cells)
@@ -1102,8 +1149,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 0.025000 83835.000000
 		color 224,75,0
 		# subId=3517 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep1V3 cricket Tue Apr 26 12:30:27 2011
 
-		track wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep1V3
+		track wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewPlusSignal off
 		shortLabel H1-hESC 1
 		longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 1 (in H1-hESC cells)
@@ -1111,8 +1159,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 0.025000 29574.000000
 		color 0,107,27
 		# subId=3516 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqH1hescR1x75dIlnaPlusSignalRep1V3 cricket Tue Apr 26 12:30:24 2011
 
-		track wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep2V3
+		track wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3
 		parent wgEncodeCaltechRnaSeqViewPlusSignal
 		shortLabel GM12878 2
 		longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 2 (in GM12878 cells)
@@ -1120,8 +1169,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 0.005155 101056.335938
 		color 153,38,0
 		# subId=3515 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep2V3 cricket Tue Apr 26 12:30:23 2011
 
-		track wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep1V3
+		track wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3
 		parent wgEncodeCaltechRnaSeqViewPlusSignal
 		shortLabel GM12878 1
 		longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 1 (in GM12878 cells)
@@ -1129,8 +1179,9 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 0.020000 68924.781250
 		color 153,38,0
 		# subId=3514 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqGm12878R1x75dIlnaPlusSignalRep1V3 cricket Tue Apr 26 12:30:23 2011
 
-		track wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep2V3
+		track wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3
 		parent wgEncodeCaltechRnaSeqViewPlusSignal off
 		shortLabel HUVEC 2
 		longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 2 (in HUVEC cells)
@@ -1138,6 +1189,7 @@ html wgEncodeCaltechRnaSeq.new
 		type bigWig 0.025000 32384.500000
 		color 224,75,0
 		# subId=3513 dateSubmitted=2011-02-14
+		# was wgEncodeCaltechRnaSeqHuvecR1x75dIlnaPlusSignalRep2V3 cricket Tue Apr 26 12:30:27 2011
 
 	track wgEncodeCaltechRnaSeqViewSignal
 	shortLabel Signal
