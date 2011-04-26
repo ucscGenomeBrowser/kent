@@ -391,7 +391,7 @@ if (printDocType)
     fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", f);
 #else///ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     char *browserVersion;
-    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion != '8')
+    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
         fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", f);
     else
         fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">",f);
