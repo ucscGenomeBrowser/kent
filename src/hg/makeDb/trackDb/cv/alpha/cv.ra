@@ -3538,7 +3538,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description B cell lymphoma line derived from a spontaneous reticulum cell neoplasm (Provisional)
+description B cell lymphoma line derived from a spontaneous reticulum cell neoplasm 
 age immortalized
 strain BALB/cAnN 
 vendorName ATCC
@@ -3573,7 +3573,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Primary Cells
-description B Cell , CD19+ (Provisional: updated category from cell line to Primary Cells)
+description B Cell , CD19+ 
 age immortalized
 strain C57BL/6
 vendorName
@@ -3698,7 +3698,7 @@ type Cell Line
 organism Mouse
 tissue Adipose
 category Tissue
-description Adipose tissue (Provisional) 
+description Adipose tissue 
 vendorName UW lab
 termId 7108
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7108
@@ -3908,7 +3908,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description fibroblast (Provisional) 
+description fibroblast 
 age immortalized
 strain NIH/Swiss
 vendorName ATCC
@@ -4028,7 +4028,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Primary Cells
-description Naive T cells: CD4+, CD25- (Provisional: updated category from cell line to Primary Cells)
+description Naive T cells: CD4+, CD25- 
 vendorName UW lab
 termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
@@ -8448,7 +8448,7 @@ term MethylArray
 tag methylarray
 type dataType
 label Methyl Array
-description Provisional Methyl Bead Array
+description Methyl Bead Array
 
 term MethylSeq
 tag methylseq
@@ -8596,7 +8596,7 @@ description C57 black 6, the most common inbred strain of laboratory mouse
 term NIH/Swiss
 tag NIHS
 type strain
-description An outbred Swiss mouse  used as a general-purpose stock. Used extensively for pertussis HSF testing.(Provisional)
+description An outbred Swiss mouse  used as a general-purpose stock. Used extensively for pertussis HSF testing.
 
 term RIII
 tag RIII
@@ -10096,7 +10096,7 @@ priority 180
 term tissueSourceType
 type typeOfTerm
 label Tissue Source Type
-description Source of tissue from either an indiviual organism or pooled set of organisms (Provisional)
+description Source of tissue from either an indiviual organism or pooled set of organisms 
 searchable multiSelect
 cvDefined yes
 validate cv
