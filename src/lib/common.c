@@ -153,7 +153,7 @@ for (i=0; i<length; ++i)
 /** List managing routines. */
 
 /* Count up elements in list. */
-int slCount(void *list)
+int slCount(const void *list)
 {
 struct slList *pt = (struct slList *)list;
 int len = 0;
