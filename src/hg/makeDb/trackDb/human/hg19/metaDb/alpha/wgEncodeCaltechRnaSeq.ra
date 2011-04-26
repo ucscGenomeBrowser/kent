@@ -237,6 +237,52 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dIlnaSplicesRep2V2
 view Splices
 
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3416
+submittedDataVersion V2 - A better mapping technique
+tableName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 3463
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2
+view Alignments
+
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep1V3
 objType file
 cell GM12878
@@ -513,52 +559,6 @@ subId 3575
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
-metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200PairedRep1V2
-objType table
-cell GM12878
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3416
-submittedDataVersion V2 - A better mapping technique
-tableName wgEncodeCaltechRnaSeqGm12878R2x75Il200PairedRep1V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200PairedRep2V2
-objType table
-cell GM12878
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200PairedRep2V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 3463
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqGm12878R2x75Il200PairedRep2V2
-view Alignments
-
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2
 objType table
 cell GM12878
@@ -789,6 +789,29 @@ subId 3575
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam
+grant Myers
+insertLength 400
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 3461
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2
+view Alignments
+
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400ExonsGencV3cRep2V3
 objType file
 cell GM12878
@@ -927,29 +950,6 @@ subId 3532
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
-metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400PairedRep2V2
-objType table
-cell GM12878
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400PairedRep2V2.bam
-grant Myers
-insertLength 400
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 3461
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqGm12878R2x75Il400PairedRep2V2
-view Alignments
-
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400SigRep2V2
 objType table
 cell GM12878
@@ -1065,6 +1065,48 @@ subId 3532
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2
+objType table
+cell GM12891
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+subId 3436
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2
+objType table
+cell GM12891
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-14
+dateUnrestricted 2011-12-14
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 3437
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2
+view Alignments
+
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep1V3
 objType file
 cell GM12891
@@ -1132,7 +1174,7 @@ rnaExtract longPolyA
 subId 3436
 view FastqRd1
 
-metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2V2
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2
 objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
@@ -1140,7 +1182,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2V2.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -1173,7 +1215,7 @@ rnaExtract longPolyA
 subId 3436
 view FastqRd2
 
-metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2V2
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2
 objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
@@ -1181,7 +1223,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2V2.fastq.gz
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -1328,48 +1370,6 @@ rnaExtract longPolyA
 subId 3665
 submittedDataVersion V3 - New Elements Formats
 view Junctions
-
-metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep1V2
-objType table
-cell GM12891
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-subId 3436
-submittedDataVersion V2 - A better mapping
-tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep1V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep2V2
-objType table
-cell GM12891
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-14
-dateUnrestricted 2011-12-14
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep2V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-subId 3437
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep2V2
-view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2
 objType table
@@ -1592,6 +1592,69 @@ rnaExtract longPolyA
 subId 3665
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
+
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2
+objType table
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+subId 3441
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2
+objType table
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 3438
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2
+objType table
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 3
+subId 3439
+submittedDataVersion V2 - A better mapping
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -1976,69 +2039,6 @@ replicate 3
 subId 3744
 submittedDataVersion V3 - New Elements Formats
 view Junctions
-
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep1V2
-objType table
-cell GM12892
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-subId 3441
-submittedDataVersion V2 - A better mapping
-tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep1V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep2V2
-objType table
-cell GM12892
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep2V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-subId 3438
-submittedDataVersion V2 - A better mapping
-tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep2V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep3V2
-objType table
-cell GM12892
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep3V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 3
-subId 3439
-submittedDataVersion V2 - A better mapping
-tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep3V2
-view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1V2
 objType table
@@ -2601,6 +2601,98 @@ submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dIlnaSplicesRep2V2
 view Splices
 
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3464
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 3409
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 3
+rnaExtract longPolyA
+subId 3417
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 4
+rnaExtract longPolyA
+subId 3410
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2
+view Alignments
+
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep1V3
 objType file
 cell H1-hESC
@@ -3153,98 +3245,6 @@ subId 3581
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep1V2
-objType table
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3464
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep1V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep2V2
-objType table
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep2V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 3409
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep2V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep3V2
-objType table
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep3V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 3
-rnaExtract longPolyA
-subId 3417
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep3V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep4V2
-objType table
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep4V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 4
-rnaExtract longPolyA
-subId 3410
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep4V2
-view Alignments
-
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2
 objType table
 cell H1-hESC
@@ -3705,6 +3705,27 @@ subId 3581
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam
+grant Myers
+insertLength 400
+lab Caltech
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+subId 3462
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2
+view Alignments
+
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400ExonsGencV3cRep1V3
 objType file
 cell H1-hESC
@@ -3843,27 +3864,6 @@ subId 3571
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
-metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400PairedRep1V2
-objType table
-cell H1-hESC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400PairedRep1V2.bam
-grant Myers
-insertLength 400
-lab Caltech
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-subId 3462
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqH1hescR2x75Il400PairedRep1V2
-view Alignments
-
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400SigRep1V2
 objType table
 cell H1-hESC
@@ -3974,6 +3974,51 @@ rnaExtract longPolyA
 subId 3571
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
+
+metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2
+objType table
+cell HCT-116
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3474
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2
+objType table
+cell HCT-116
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-12
+dateUnrestricted 2011-11-11
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+md5sum 6ded65a8d81d53743b63158b70893549
+project wgEncode
+readType 2x75
+replicate 2
+subId 3475
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -4245,51 +4290,6 @@ subId 3583
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
-metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200PairedRep1V2
-objType table
-cell HCT-116
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3474
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHct116R2x75Il200PairedRep1V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200PairedRep2V2
-objType table
-cell HCT-116
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-12
-dateUnrestricted 2011-11-11
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200PairedRep2V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-mapAlgorithm TH1014
-md5sum 6ded65a8d81d53743b63158b70893549
-project wgEncode
-readType 2x75
-replicate 2
-subId 3475
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHct116R2x75Il200PairedRep2V2
-view Alignments
-
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2
 objType table
 cell HCT-116
@@ -4492,27 +4492,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3582
 submittedDataVersion V3 - New Elements Formats
-view TranscriptGencV3c
-
-metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep2V2
-objType file
-cell HCT-116
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-12
-dateUnrestricted 2011-11-11
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep2V2.gtf.gz
-grant Myers
-insertLength 200
-lab Caltech
-mapAlgorithm TH1014
-md5sum ec73cfff4337182ac8134e0c2b0a4154
-project wgEncode
-readType 2x75
-replicate 2
-subId 3475
-submittedDataVersion V2 - A better mapping technique.
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep2V3
@@ -4771,6 +4750,52 @@ subId 3453
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dIlnaSplicesRep2V2
 view Splices
+
+metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3418
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 3465
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -5047,52 +5072,6 @@ rnaExtract longPolyA
 subId 3589
 submittedDataVersion V3 - New Elements Formats
 view Junctions
-
-metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200PairedRep1V2
-objType table
-cell HeLa-S3
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3418
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHelas3R2x75Il200PairedRep1V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200PairedRep2V2
-objType table
-cell HeLa-S3
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200PairedRep2V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 3465
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHelas3R2x75Il200PairedRep2V2
-view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2
 objType table
@@ -5558,6 +5537,52 @@ submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dIlnaSplicesRep2V2
 view Splices
 
+metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3466
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 3467
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2
+view Alignments
+
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep1V3
 objType file
 cell HepG2
@@ -5834,52 +5859,6 @@ subId 3591
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
-metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200PairedRep1V2
-objType table
-cell HepG2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3466
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHepg2R2x75Il200PairedRep1V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200PairedRep2V2
-objType table
-cell HepG2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200PairedRep2V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 3467
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHepg2R2x75Il200PairedRep2V2
-view Alignments
-
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2
 objType table
 cell HepG2
@@ -6109,6 +6088,52 @@ rnaExtract longPolyA
 subId 3591
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2
+objType table
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3468
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2
+objType table
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 3469
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -6381,52 +6406,6 @@ rnaExtract longPolyA
 subId 3585
 submittedDataVersion V3 - New Elements Formats
 view Junctions
-
-metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200PairedRep1V2
-objType table
-cell HSMM
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3468
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHsmmR2x75Il200PairedRep1V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200PairedRep2V2
-objType table
-cell HSMM
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200PairedRep2V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 3469
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHsmmR2x75Il200PairedRep2V2
-view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2
 objType table
@@ -6892,6 +6871,52 @@ submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dIlnaSplicesRep2V2
 view Splices
 
+metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3470
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 3471
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2
+view Alignments
+
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep1V3
 objType file
 cell HUVEC
@@ -7167,52 +7192,6 @@ rnaExtract longPolyA
 subId 3587
 submittedDataVersion V3 - New Elements Formats
 view Junctions
-
-metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200PairedRep1V2
-objType table
-cell HUVEC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3470
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHuvecR2x75Il200PairedRep1V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200PairedRep2V2
-objType table
-cell HUVEC
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200PairedRep2V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 3471
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHuvecR2x75Il200PairedRep2V2
-view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2
 objType table
@@ -7678,6 +7657,52 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dIlnaSplicesRep2V2
 view Splices
 
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3419
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 3472
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2
+view Alignments
+
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep1V3
 objType file
 cell K562
@@ -7952,52 +7977,6 @@ subId 3593
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
-metaObject wgEncodeCaltechRnaSeqK562R2x75Il200PairedRep1V2
-objType table
-cell K562
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3419
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqK562R2x75Il200PairedRep1V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqK562R2x75Il200PairedRep2V2
-objType table
-cell K562
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200PairedRep2V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 3472
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqK562R2x75Il200PairedRep2V2
-view Alignments
-
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2
 objType table
 cell K562
@@ -8227,6 +8206,72 @@ rnaExtract longPolyA
 subId 3593
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2
+objType table
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+subId 3414
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2
+objType table
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 3412
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2
+objType table
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-12
+dateUnrestricted 2011-11-11
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+mapAlgorithm TH1014
+md5sum d30e635c48943bd85ad061bd5eb7294b
+project wgEncode
+readType 2x75
+replicate 3
+subId 3478
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -8592,72 +8637,6 @@ subId 3598
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200PairedRep1V2
-objType table
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-subId 3414
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200PairedRep1V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200PairedRep2V2
-objType table
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200PairedRep2V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 3412
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200PairedRep2V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200PairedRep3V2
-objType table
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-12
-dateUnrestricted 2011-11-11
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200PairedRep3V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-mapAlgorithm TH1014
-md5sum d30e635c48943bd85ad061bd5eb7294b
-project wgEncode
-readType 2x75
-replicate 3
-subId 3478
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200PairedRep3V2
-view Alignments
-
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2
 objType table
 cell MCF-7
@@ -8974,27 +8953,6 @@ subId 3597
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep3V2
-objType file
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-12
-dateUnrestricted 2011-11-11
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep3V2.gtf.gz
-grant Myers
-insertLength 200
-lab Caltech
-mapAlgorithm TH1014
-md5sum dda60b7b5620b5a2f74d5dd44555a3ea
-project wgEncode
-readType 2x75
-replicate 3
-subId 3478
-submittedDataVersion V2 - A better mapping technique.
-view TranscriptGencV3c
-
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep3V3
 objType file
 cell MCF-7
@@ -9134,6 +9092,52 @@ subId 3460
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqNhekR1x75dIlnaSplicesRep1V2
 view Splices
+
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3473
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 3411
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -9409,52 +9413,6 @@ subId 3600
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
-metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200PairedRep1V2
-objType table
-cell NHEK
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3473
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqNhekR2x75Il200PairedRep1V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200PairedRep2V2
-objType table
-cell NHEK
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200PairedRep2V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 3411
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqNhekR2x75Il200PairedRep2V2
-view Alignments
-
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2
 objType table
 cell NHEK
@@ -9684,6 +9642,52 @@ rnaExtract longPolyA
 subId 3600
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2
+objType table
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3413
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2
+objType table
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 3440
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2
+view Alignments
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200ExonsGencV3cRep1V3
 objType file
@@ -9957,52 +9961,6 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
-metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200PairedRep1V2
-objType table
-cell NHLF
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200PairedRep1V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3413
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqNhlfR2x75Il200PairedRep1V2
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200PairedRep2V2
-objType table
-cell NHLF
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200PairedRep2V2.bam
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-project wgEncode
-readType 2x75
-replicate 2
-rnaExtract longPolyA
-subId 3440
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqNhlfR2x75Il200PairedRep2V2
-view Alignments
-
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2
 objType table
 cell NHLF
@@ -10233,4 +10191,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: -1612911373
+# MAGIC: 2080105613
