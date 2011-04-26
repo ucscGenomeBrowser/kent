@@ -28,7 +28,7 @@ class RaFile(OrderedDict):
             line = line.strip()
 
             if len(stanza) == 0 and (line.startswith('#') or line == ''):
-                self._OrderedDict__ordering.append(line)
+                OrderedDict.append(self, line)
                 continue
 
             if line != '':
@@ -55,7 +55,7 @@ class RaFile(OrderedDict):
 
    
     def readStanza(self, stanza):
-        entry = RaEntry()
+        entry = RaStanza()
         val1, val2 = entry.readStanza(stanza)
         return val1, val2, entry
 
@@ -94,7 +94,7 @@ class RaFile(OrderedDict):
         return str
 
 
-class RaEntry(OrderedDict):
+class RaStanza(OrderedDict):
     """
     Holds an individual entry in the RaFile.
     """
@@ -138,7 +138,8 @@ class RaEntry(OrderedDict):
         """ 
 
         if line.startswith('#') or line == '':
-            self._OrderedDict__ordering.append(line)
+            OrderedDict.append(self, line)
+            #self._OrderedDict__ordering.append(line)
         else:
            raKey = line.split(' ', 1)[0]
            raVal = ''
