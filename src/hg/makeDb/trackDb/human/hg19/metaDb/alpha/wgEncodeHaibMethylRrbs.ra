@@ -1574,6 +1574,7 @@ view RawData
 
 metaObject wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep1
 objType table
+attic auxExp
 cell BC_Skeletal_Muscle_H12817N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -1595,6 +1596,7 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep2
 objType table
+attic auxExp
 cell BC_Skeletal_Muscle_H12817N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -3682,6 +3684,7 @@ view RawData
 
 metaObject wgEncodeHaibMethylRrbsHek293UwSitesRep1
 objType table
+attic auxExp
 cell HEK293
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -3704,6 +3707,7 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsHek293UwSitesRep2
 objType table
+attic auxExp
 cell HEK293
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -4008,7 +4012,7 @@ view RawData
 
 metaObject wgEncodeHaibMethylRrbsHepg2HaibSitesRep1
 objType table
-attic aux
+attic auxExp
 cell HepG2
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -4031,7 +4035,7 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsHepg2HaibSitesRep2
 objType table
-attic aux
+attic auxExp
 cell HepG2
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5457,6 +5461,7 @@ view RawData
 
 metaObject wgEncodeHaibMethylRrbsLncapDukeSitesRep1
 objType table
+attic auxExp
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5478,6 +5483,7 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsLncapDukeSitesRep2
 objType table
+attic auxExp
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5943,7 +5949,7 @@ view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf7StanfordSitesRep1
 objType table
-attic aux
+attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5966,7 +5972,7 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7StanfordSitesRep2
 objType table
-attic aux
+attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -6027,7 +6033,7 @@ view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf7UwSitesRep1
 objType table
-attic aux
+attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -6050,7 +6056,7 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7UwSitesRep2
 objType table
-attic aux
+attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -6724,6 +6730,7 @@ view RawData
 
 metaObject wgEncodeHaibMethylRrbsNt2d1UwSitesRep1
 objType table
+attic auxExp
 cell NT2-D1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -6746,6 +6753,7 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsNt2d1UwSitesRep2
 objType table
+attic auxExp
 cell NT2-D1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -8178,4 +8186,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 1048517231
+# MAGIC: 1050733773

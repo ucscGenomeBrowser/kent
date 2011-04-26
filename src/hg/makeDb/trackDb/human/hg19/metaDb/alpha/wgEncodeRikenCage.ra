@@ -4753,6 +4753,7 @@ view TSS
 metaObject wgEncodeRikenCageK562CytosolPapAln
 objType table
 bioRep Generation 0
+attic auxExp
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -4828,6 +4829,7 @@ view Alignments
 metaObject wgEncodeRikenCageK562CytosolPapMinusClusters
 objType table
 bioRep Generation 0
+attic auxExp
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -4903,6 +4905,7 @@ view MinusRawSignal
 metaObject wgEncodeRikenCageK562CytosolPapPlusClusters
 objType table
 bioRep Generation 0
+attic auxExp
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -5071,6 +5074,7 @@ view TSS
 metaObject wgEncodeRikenCageK562NucleolusTotalAlnRep1
 objType table
 bioRep Generation 0
+attic auxExp
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -5096,6 +5100,7 @@ view Alignments
 metaObject wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1
 objType table
 bioRep Generation 0
+attic auxExp
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -5121,6 +5126,7 @@ view MinusRawSignal
 metaObject wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1
 objType table
 bioRep Generation 0
+attic auxExp
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -5815,6 +5821,7 @@ view Alignments
 metaObject wgEncodeRikenCageMcf7CellPapAlnRep2
 objType table
 bioRep 016C
+attic auxExp
 cell MCF-7
 composite wgEncodeRikenCage
 dataType Cage
@@ -6323,6 +6330,7 @@ view Alignments
 metaObject wgEncodeRikenCageNhekCytosolPapAlnRep4
 objType table
 bioRep 028C
+attic auxExp
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
@@ -6850,6 +6858,7 @@ view TSS
 metaObject wgEncodeRikenCageSknshraCellPapAlnRep1
 objType table
 bioRep 019WC
+attic auxExp
 cell SK-N-SH_RA
 composite wgEncodeRikenCage
 dataType Cage
@@ -6875,6 +6884,7 @@ view Alignments
 metaObject wgEncodeRikenCageSknshraCellPapAlnRep2
 objType table
 bioRep 020WC
+attic auxExp
 cell SK-N-SH_RA
 composite wgEncodeRikenCage
 dataType Cage
@@ -6900,6 +6910,7 @@ view Alignments
 metaObject wgEncodeRikenCageSknshraCellPapMinusClustersRep2
 objType table
 bioRep 020WC
+attic auxExp
 cell SK-N-SH_RA
 composite wgEncodeRikenCage
 dataType Cage
@@ -6925,6 +6936,7 @@ view MinusRawSignal
 metaObject wgEncodeRikenCageSknshraCellPapPlusClustersRep2
 objType table
 bioRep 020WC
+attic auxExp
 cell SK-N-SH_RA
 composite wgEncodeRikenCage
 dataType Cage
