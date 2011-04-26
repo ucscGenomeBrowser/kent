@@ -4746,6 +4746,25 @@ subId 3830
 treatment None
 view RawData
 
+metaObject wgEncodeHaibMethylRrbsHsmmDukeRawDataRep3
+objType file
+cell HSMM
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-19
+dateUnrestricted 2012-01-19
+fileName wgEncodeHaibMethylRrbsHsmmDukeRawDataRep3.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL1914
+obtainedBy Duke
+project wgEncode
+replicate 3
+subId 3919
+treatment None
+view RawData
+
 metaObject wgEncodeHaibMethylRrbsHsmmDukeSitesRep1
 objType table
 cell HSMM
@@ -8186,4 +8205,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 1050733773
+# MAGIC: 660166983

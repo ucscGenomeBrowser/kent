@@ -85,13 +85,8 @@ puts(
 puts(
 "<FORM ACTION='../cgi-bin/hgTracks' NAME='mainForm' METHOD='GET' style='display:inline;'>\n"
 "<center>"
-"<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
-"<tr><td>\n"
-"<table BGCOLOR=\"FEFDEF\" BORDERCOLOR=\"CCCC99\" BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"
-"<tr><td>\n"
-"<table bgcolor=\"fffef3\" border=0>\n"
-"<tr>\n"
-"<td>\n");
+"<table style='background-color:#FFFEF3; border: 1px solid #CCCC99;'>\n"
+"<tr><td>\n");
 
 puts("<table><tr>");
 if (gotClade)
@@ -171,7 +166,7 @@ puts(
 #define SURVEY 1
 #ifdef SURVEY
 if (survey && differentWord(survey, "off"))
-    printf("&nbsp;&nbsp;&nbsp;<span style='background-color:yellow;><A HREF=\"%s\" TARGET=_BLANK><EM><B>%s</EM></B></A></span>", survey, surveyLabel ? surveyLabel : "Take survey");
+    printf("&nbsp;&nbsp;&nbsp;<span style='background-color:yellow;'><A HREF=\"%s\" TARGET=_BLANK><EM><B>%s</EM></B></A></span>", survey, surveyLabel ? surveyLabel : "Take survey");
 #endif
 
 puts(
@@ -228,8 +223,6 @@ puts("</TD>");
 puts("</TR></TABLE>");
 
 puts("</center>\n"
-"</td></tr></table>\n"
-"</td></tr></table>\n"
 "</td></tr></table>\n"
 );
 puts("</center>");
