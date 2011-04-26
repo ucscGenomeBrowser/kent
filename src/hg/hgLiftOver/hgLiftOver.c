@@ -28,6 +28,7 @@ static char const rcsid[] = "$Id: hgLiftOver.c,v 1.62 2009/07/14 20:17:30 markd 
 #define HGLFT_TODB_VAR   "hglft_toDb"           /* TO assembly */
 #define HGLFT_ERRORHELP_VAR "hglft_errorHelp"      /* Print explanatory text */
 #define HGLFT_REFRESHONLY_VAR "hglft_doRefreshOnly"      /* Just refresh drop-down lists */
+#define HGLFT_LAST_CHAIN "hglft_lastChain"
 
 /* liftOver options: */
 #define HGLFT_MINMATCH "hglft_minMatch"          
@@ -53,11 +54,21 @@ HGLFT_REFRESHONLY_VAR
 ".value = 1;"
 "document.mainForm.submit();\"";
 
-void webMain(struct liftOverChain *chain, boolean multiple)
+char *chainStringVal(struct liftOverChain *chain)
+/* keep the last chain in memory in this format */
+{
+char chainS[64];
+safef(chainS, sizeof(chainS), "%s.%s", chain->fromDb, chain->toDb);
+return cloneString(chainS);
+}
+
+void webMain(struct liftOverChain *chain, boolean multiple, boolean keepSettings, int minSizeQ, 
+	     int minChainT, float minBlocks, float minMatch, boolean fudgeThick)
 /* set up page for entering data */
 {
 struct dbDb *dbList;
 char *fromOrg = hArchiveOrganism(chain->fromDb), *toOrg = hArchiveOrganism(chain->toDb);
+char *chainString = chainStringVal(chain);
 cgiParagraph(
     "This tool converts genome coordinates and genome annotation files "
     "between assemblies.&nbsp;&nbsp;"
@@ -120,7 +131,7 @@ cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 cgiTableField("Minimum ratio of bases that must remap:");
 cgiSimpleTableFieldStart();
-cgiMakeDoubleVar(HGLFT_MINMATCH,chain->minMatch,6);
+cgiMakeDoubleVar(HGLFT_MINMATCH, (keepSettings) ? minMatch : chain->minMatch,6);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -142,14 +153,14 @@ cgiTableRowEnd();
 cgiSimpleTableRowStart();
 cgiTableField("&nbsp;&nbsp;Minimum hit size in query:");
 cgiSimpleTableFieldStart();
-cgiMakeIntVar(HGLFT_MINSIZEQ,chain->minSizeQ,4);
+cgiMakeIntVar(HGLFT_MINSIZEQ,(keepSettings) ? minSizeQ : chain->minSizeQ,4);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiTableField("&nbsp;&nbsp;Minimum chain size in target:");
 cgiSimpleTableFieldStart();
-cgiMakeIntVar(HGLFT_MINCHAINT,chain->minChainT,4);
+cgiMakeIntVar(HGLFT_MINCHAINT,(keepSettings) ? minChainT : chain->minChainT,4);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -164,14 +175,14 @@ cgiTableRowEnd();
 cgiSimpleTableRowStart();
 cgiTableField("Min ratio of alignment blocks or exons that must map:");
 cgiSimpleTableFieldStart();
-cgiMakeDoubleVar(HGLFT_MINBLOCKS,chain->minBlocks,6);
+cgiMakeDoubleVar(HGLFT_MINBLOCKS,(keepSettings) ? minBlocks : chain->minBlocks,6);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiTableField("If thickStart/thickEnd is not mapped, use the closest mapped base:");
 cgiSimpleTableFieldStart();
-cgiMakeCheckBox(HGLFT_FUDGETHICK,(chain->fudgeThick[0]=='Y') ? TRUE : FALSE);
+cgiMakeCheckBox(HGLFT_FUDGETHICK,(keepSettings) ? fudgeThick : (chain->fudgeThick[0]=='Y'));
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -219,6 +230,7 @@ cgiTableRowEnd();
 cgiTableEnd();
 printf("<input type=\"hidden\" name=\"%s\" value=\"0\">\n",
                         HGLFT_REFRESHONLY_VAR);
+printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", HGLFT_LAST_CHAIN, chainString);
 puts("</FORM>\n");
 
 cartSaveSession(cart);
@@ -336,6 +348,9 @@ int fromRank = hashIntValDefault(dbRank, chain->fromDb, 0);  /* values up to app
 int toRank = hashIntValDefault(dbRank, chain->toDb, 0);
 int maxRank = hashIntVal(dbRank, "maxRank"); 
 
+if (!chainFromOrg || !chainToOrg)
+    return 0;
+
 if (sameOk(fromOrg,chainFromOrg) &&
     sameOk(fromDb,chain->fromDb) && 
     sameOk(toOrg,chainToOrg) &&
@@ -415,17 +430,17 @@ return choice;
 void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
-/* struct liftOverChain *chainList = NULL, *chain; */
 char *userData;
-/* char *dataFile; */
 char *organism;
 char *db;
 float minBlocks, minMatch;
 boolean multiple, fudgeThick;
 int minSizeQ, minChainT;
 boolean refreshOnly = FALSE;
+boolean keepSettings = FALSE;
+char *thisChain = NULL;
+char *lastChain = NULL;
 
-/* char *err = NULL; */
 struct liftOverChain *chainList = NULL, *choice;
 
 cart = theCart;
@@ -434,7 +449,6 @@ if (cgiOptionalString(HGLFT_ERRORHELP_VAR))
     {
     puts("<PRE>");
     puts(liftOverErrHelp());
-    //system("/usr/bin/cal");
     puts("</PRE>");
     return;
     }
@@ -453,6 +467,7 @@ getDbAndGenome(cart, &db, &organism, oldVars);
 chainList = liftOverChainList();
 
 choice = defaultChoices(chainList, db);
+thisChain = chainStringVal(choice);
 if (choice == NULL)
     errAbort("Sorry, no conversions available from this assembly\n");
 
@@ -463,8 +478,11 @@ minMatch = cartCgiUsualDouble(cart, HGLFT_MINMATCH, choice->minMatch);
 fudgeThick = cartCgiUsualBoolean(cart, HGLFT_FUDGETHICK, (choice->fudgeThick[0]=='Y') ? TRUE : FALSE);
 multiple = cartCgiUsualBoolean(cart, HGLFT_MULTIPLE, (choice->multiple[0]=='Y') ? TRUE : FALSE);
 refreshOnly = cartCgiUsualInt(cart, HGLFT_REFRESHONLY_VAR, 0);
+lastChain = cartCgiUsualString(cart, HGLFT_LAST_CHAIN, NULL);
+if (lastChain && thisChain && sameString(lastChain, thisChain))
+    keepSettings = TRUE;
 
-webMain(choice, multiple);
+webMain(choice, multiple, keepSettings, minSizeQ, minChainT, minBlocks, minMatch, fudgeThick);
 liftOverChainFreeList(&chainList);
 
 if (!refreshOnly && userData != NULL && userData[0] != '\0')
