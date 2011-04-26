@@ -454,7 +454,7 @@ if (sortOrder != NULL)
                (count >= 1 ? "categories and ":""),FILTERBY_HELP_LINK);
         printf("%s\n",dyStringContents(dyFilters));
         printf("</tr></table>\n");
-        printf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
+        printf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
         }
     dyStringFree(&dyFilters);
     }

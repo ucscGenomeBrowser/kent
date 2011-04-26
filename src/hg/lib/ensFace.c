@@ -136,3 +136,28 @@ else
 return dy;
 }
 
+void ensGeneTrackVersion(char *database, char *ensVersionString,
+    char *ensDateReference, int stringSize)
+/* check for trackVersion table and find Ensembl version */
+{
+/* see if hgFixed.trackVersion exists */
+boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
+ensVersionString[0] = 0;
+ensDateReference[0] = 0;
+if (trackVersionExists)
+    {
+    struct sqlConnection *conn = hAllocConn("hgFixed");
+    char query[256];
+    safef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' order by updateTime DESC limit 1", database);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	safef(ensVersionString, stringSize, "Ensembl %s", row[0]);
+	safef(ensDateReference, stringSize, "%s", row[1]);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+}

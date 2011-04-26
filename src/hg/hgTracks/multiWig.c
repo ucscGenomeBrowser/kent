@@ -76,8 +76,11 @@ if (wigCart->autoScale)
     struct slRef *refList = NULL;
     for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
         {
-	struct preDrawContainer *pre = subtrack->loadPreDraw(subtrack, seqStart, seqEnd, width);
-	refAdd(&refList, pre);
+	if (isSubtrackVisible(subtrack))
+	    {
+	    struct preDrawContainer *pre = subtrack->loadPreDraw(subtrack, seqStart, seqEnd, width);
+	    refAdd(&refList, pre);
+	    }
 	}
     double minVal, maxVal;
     minMaxVals(refList, &minVal, &maxVal);

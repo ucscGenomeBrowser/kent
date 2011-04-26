@@ -17,6 +17,40 @@ grep "_62" EnsGeneAutomate.pm  | grep "=>" | awk '{print $1}' \
 'update trackVersion set dateReference="current" where version="62";' hgFixed
 
 ############################################################################
+#  hg19 - Human - Ensembl Genes version 62  (DONE - 2011-04-22 - hiram)
+    # This human gene set need a lot of work to get the name translation
+    #	to work again.  The contig names have changed in Ensembl for this
+    #	version and they defined genes on patch sequence that UCSC does not
+    #	include
+    ssh hgwdev
+    cd /hive/data/genomes/hg19
+    cat << '_EOF_' > hg19.ensGene.ra
+# required db variable
+db hg19
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+# delete commands take out genes that are only in patch sequence
+nameTranslation 's/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; /^GL3.*/d; /^HSCHR[1-5]/d; /^HSCHR[7-9]/d; /^HG/d'
+# optionally update the knownToEnsembl table after ensGene updated
+knownToEnsembl yes
+# optional haplotype lift-down from Ensembl full chrom coordinates
+#       to UCSC simple haplotype coordinates
+haplotypeLift /hive/data/genomes/hg19/jkStuff/ensGene.haplotype.lift
+# Ensembl 62 has new sequence names for some of the random bits
+liftUp /hive/data/genomes/hg19/jkStuff/ens.62.lft
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=62 hg19.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/ensGene.62
+    featureBits hg19 ensGene
+    # 109947258 bases of 2897316137 (3.795%) in intersection
+
+    hgsql -e \
+'update trackVersion set dateReference="current" where db="hg19" AND version=62;' hgFixed
+
+############################################################################
 #  susScr2 - Pig - lifted susScr1 v62 genes to susScr2 (DONE - 2011-04-21 - Hiram)
     mkdir /hive/data/genomes/susScr2/bed/ensGene.62
     cd /hive/data/genomes/susScr2/bed/ensGene.62

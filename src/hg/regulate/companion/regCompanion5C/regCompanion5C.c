@@ -213,10 +213,10 @@ for (pm = pmList; pm != NULL; pm = pm->next)
         for (j=0; j<pm->colCount; ++j)
 	   {
 	   struct pairItem *colItem = pm->colItems[j];
-	   if (sameString(colItem->chrom, rowItem->chrom))
+	   if (sameString(colItem->chrom, rowChrom))
 	       {
 	       double x = pm->matrix[i][j];
-	       if (x > threshold)
+	       if (x >= threshold)
 		    {
 		    struct pairItem *startItem, *endItem;
 		    if (rowItem->chromStart < colItem->chromStart)

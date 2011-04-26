@@ -4,7 +4,7 @@
 
 static char const rcsid[] = "$Id: suggest.c,v 1.3 2010/02/06 03:21:00 larrym Exp $";
 
-static char *connGeneSuggestTable(struct sqlConnection *conn)
+char *connGeneSuggestTable(struct sqlConnection *conn)
 // return name of gene suggest table if this connection has tables to support gene autocompletion, NULL otherwise
 {
 if(sqlTableExists(conn, "knownCanonical"))

@@ -65,7 +65,6 @@ maxWindowToDraw 1000000
 itemRgb on
 noInherit on
 origAssembly hg19
-html wgEncodeHaibMethylRrbs.new
 
     track wgEncodeHaibRrbsViewSites
     shortLabel Sites 

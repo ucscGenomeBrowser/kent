@@ -12,10 +12,10 @@ struct tfbsConsFactors
     {
     struct tfbsConsFactors *next;  /* Next in singly linked list. */
     char *name;	/* Name of item */
-    char *ac;	/* gene-regulation.com AC */
-    char species[7];	/* common name, scientific name */
-    char factor[65];	/* factor  */
-    char id[26];	/* id */
+    char *ac;	/* Gene-regulation.com AC */
+    char species[7];	/* Common name */
+    char factor[65];	/* Factor  */
+    char id[26];	/* SwissProt ID */
     };
 
 void tfbsConsFactorsStaticLoad(char **row, struct tfbsConsFactors *ret);

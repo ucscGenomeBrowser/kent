@@ -29,8 +29,9 @@ noInherit on
     pValueFilter 0.0
     pValueFilterLimits 0:0.5
     scoreFilter 2
-    scoreFilterLimits 1:800
-    minGrayLevel 11%
+    scoreFilterLimits 1:1000
+    scoreMin 0
+    #minGrayLevel 11%
     type broadPeak
 
 
@@ -246,7 +247,7 @@ noInherit on
 
 	track wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
 	parent wgEncodeSunyAlbanyGeneStView off
-	shortLabel H1-hESC ripInput
+	shortLabel H1-hESC RIP-Input
 	longLabel H1-hESC RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups view=RbpAssocRna factor=ripInput cellType=H1hESC
         origAssembly hg18

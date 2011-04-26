@@ -1,3 +1,7 @@
+.topBlueBar {   font-family: arial, Geneva, Helvetica, san-serif; font-size: 15px; text-decoration: none; font-weight: bold;
+                color: #D9E4F8; background-color:#2636D1; border: 1px solid black; height:28px; width:100%;
+                text-align:center; vertical-align:middle; white-space:nowrap; padding: 0px 10px;}
+
 /* CLASS DECLARATIONS TO MAKE NETSCAPE HAPPY */
 .topbar {	font-family: arial, Geneva, Helvetica, san-serif; font-size: 15px; text-decoration: none; font-weight: bold; color: #D9E4F8; }
 .leftbar { text-decoration: none; font-family: arial, san-serif; color: #FDFCEA; font-size: 10pt; font-weight: 600; }
@@ -37,6 +41,12 @@ A:hover.toc { text-decoration: none; color: #6666FF; }
 A:link IMG { border-width: 0px; padding: 0px; margin: 0px;}
 A:visited IMG { border-width: 0px; padding: 0px; margin: 0px;}
 A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
+
+/* A toggle bar can be seen in hgTracks, under the image groups that can be opened and closed. */
+.blueToggleBar {font-weight: bold; color:#FFFFFF; background-color:#536ED3; height:28px; width:100%;
+                text-align:center; vertical-align:middle; white-space:nowrap;}
+.toggleButton  {height: 16px; width: 16px; vertical-align:middle;}
+
 
 
 /* OVERALL DEFINITIONS */

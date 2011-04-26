@@ -39,6 +39,7 @@
 #include "dgv.h"
 #include "transMapStuff.h"
 #include "bbiFile.h"
+#include "ensFace.h"
 
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
@@ -1969,8 +1970,8 @@ tnfgVis = hTvFromString(visString);
 printf("<b>Transfrags Display Mode: </b>");
 hTvDropDown("hgt.affyPhase2.tnfg", tnfgVis, TRUE);
 
-wigCfgUi(cart,tdb,tdb->track,"<u>Graph Plotting options:</u>",FALSE);
-printf("<p><b><u>View/Hide individual cell lines:</u></b>");
+wigCfgUi(cart,tdb,tdb->track,"<span style='text-decoration:underline;'>Graph Plotting options:</span>",FALSE);
+printf("<p><b><span style='text-decoration:underline;'>View/Hide individual cell lines:</span></b>");
 }
 
 void humMusUi(struct trackDb *tdb, int optionNum )
@@ -2357,7 +2358,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     printf("<TD>%s", tdb->longLabel);
     char *dataVersion = trackDbSetting(tdb, "dataVersion");
     if (dataVersion)
-        printf("&nbsp&nbsp;<EM><FONT COLOR=#666666 SIZE=-1>%s</FONT></EM>", dataVersion);
+        printf("&nbsp&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
     printf("</TD></TR>");
     }
 printf("</TABLE>");
@@ -2615,7 +2616,7 @@ if (!ajax)
 
 #ifdef UNUSED
 static void findSuperChildrenAndSettings(struct trackDb *tdbList, struct trackDb *super)
-/* Find the tracks that have super as a parent and stuff references to them on 
+/* Find the tracks that have super as a parent and stuff references to them on
  * super's children list. Also do some visibility and parentName futzing. */
 {
 struct trackDb *tdb;
@@ -2686,6 +2687,26 @@ if(tdbIsContainer(tdb))
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
+if (sameWord(tdb->track,"ensGene"))
+    {
+    char ensVersionString[256];
+    char ensDateReference[256];
+    char longLabel[256];
+    ensGeneTrackVersion(database, ensVersionString, ensDateReference,
+        sizeof(ensVersionString));
+    if (ensVersionString[0])
+        {
+        if (ensDateReference[0] && differentWord("current", ensDateReference))
+            safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - archive %s - %s", ensVersionString, ensDateReference);
+        else
+            safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - %s", ensVersionString);
+        }
+    else
+        safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
+
+    printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+    }
+else
 printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
 /* Print link for parent track */
