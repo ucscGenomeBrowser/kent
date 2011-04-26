@@ -2162,7 +2162,7 @@ function handleTrackUi(response, status)
 
         // -- popup.ready() -- Here is the place to do things that might otherwise go into a $('#pop').ready() routine!
         $('#hgTrackUiDialog').find('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
-            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy') });
+            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy'), maxDropHeight: filterByMaxHeight(this) });
         });
     }
     $('#hgTrackUiDialog').dialog({

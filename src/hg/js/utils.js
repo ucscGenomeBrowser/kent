@@ -1771,7 +1771,7 @@ function findTracksHandleNewMdbVals(response, status)
         }
         $(td).find('.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
             if (usesFilterBy) {
-                $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });
+                $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
             } else {
                 $(this).attr("multiple",false);
                 $(this).removeClass('filterBy');
@@ -1799,7 +1799,7 @@ function findTracksMdbValChanged(obj)
                 if ($(this).hasClass('filterBy')) {
                     //$(this).dropdownchecklist("refresh");  // requires v1.1
                     $(this).dropdownchecklist("destroy");
-                    $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });
+                    $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
                 }
             });
         }
@@ -1970,6 +1970,19 @@ function findTracksClearFound()
     return false;
 }
 
+function filterByMaxHeight(multiSel)
+{
+    var pos = $(multiSel).closest(':visible').offset().top + 30;
+    if (pos <= 0)
+        pos = 260;
+    var maxHeight = $(window).height() - pos;
+//    var maxHeight = $(window).height() - 260;
+    var selHeight = $(multiSel).children().length * 21;
+    if (maxHeight > selHeight)
+        maxHeight = selHeight;
+    return maxHeight;
+}
+
 function findTracksClear()
 {// Clear found tracks and all input controls
     findTracksClearFound();
@@ -1977,9 +1990,9 @@ function findTracksClear()
     //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
     $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
     $('select.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
-          //$(this).dropdownchecklist("refresh");  // requires v1.1
-          $(this).dropdownchecklist("destroy");
-          $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });
+        //$(this).dropdownchecklist("refresh");  // requires v1.1
+        $(this).dropdownchecklist("destroy");
+        $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
     });
 
     $('select.groupSearch').attr('selectedIndex',0);
