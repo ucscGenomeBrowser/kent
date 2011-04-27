@@ -624,24 +624,22 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
 	-bigClusterHub=swarm -tRepeats=windowmaskerSdust \
 	-qRepeats=windowmaskerSdust > do.log 2>&1 &
-XXX - running - Tue Apr 26 16:33:09 PDT 2011
+    #	real    277m57.896s
+    cat fb.anoCar2.chainGasAcu1Link.txt 
+    #	53478872 bases of 1701353770 (3.143%) in intersection
 
-    ## measuring
-    time nice -n +19 featureBits gasAcu1 chainAnoCar1Link \
-	> fb.gasAcu1.chainAnoCar1Link.txt 2>&1
-    #	56386298 bases of 446627861 (12.625%) in intersection
-
-    ## swap documented in anoCar1.txt
-    time doBlastzChainNet.pl -verbose=2 \
-	/cluster/data/gasAcu1/bed/blastz.anoCar1.2007-02-19/DEF \
-	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
-	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
-	-swap > swap.log 2>&1 &
-
-    time nice -n +19 featureBits anoCar1 chainGasAcu1Link \
-	> fb.anoCar1.chainGasAcu1Link.txt 2>&1  
-    #	real    1m14.245s
-    #	54464074 bases of 1741478929 (3.127%) in intersection
+    ## and running the swap
+    mkdir /hive/data/genomes/gasAcu1/bed/blastz.anoCar2.swap
+    cd /hive/data/genomes/gasAcu1/bed/blastz.anoCar2.swap
+    time nice -n +25 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/anoCar2/bed/lastzGasAcu1.2011-04-26/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
+	-bigClusterHub=swarm -tRepeats=windowmaskerSdust \
+	-swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
+    #	real    15m28.724s
+    cat fb.gasAcu1.chainAnoCar2Link.txt 
+    #	55990919 bases of 446627861 (12.536%) in intersection
 
 #######################################################################
 ## LASTZ Platypus OrnAna1 - (DONE - 2011-04-26 - Hiram)
@@ -679,23 +677,20 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
 	-bigClusterHub=swarm -tRepeats=windowmaskerSdust > do.log 2>&1 &
-XXX - running - Tue Apr 26 16:33:09 PDT 2011
+    #	real    632m47.014s
+    cat fb.anoCar2.chainOrnAna1Link.txt 
+    #	77594222 bases of 1701353770 (4.561%) in intersection
 
-    ## measuring
-    time nice -n +19 featureBits ornAna1 chainAnoCar1Link \
-	> fb.ornAna1.chainAnoCar1Link.txt 2>&1
-    #	56386298 bases of 446627861 (12.625%) in intersection
-
-    ## swap documented in anoCar1.txt
-    time doBlastzChainNet.pl -verbose=2 \
-	/cluster/data/ornAna1/bed/blastz.anoCar1.2007-02-19/DEF \
-	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
-	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
-	-swap > swap.log 2>&1 &
-
-    time nice -n +19 featureBits anoCar1 chainOrnAna1Link \
-	> fb.anoCar1.chainOrnAna1Link.txt 2>&1  
-    #	real    1m14.245s
-    #	54464074 bases of 1741478929 (3.127%) in intersection
+    ## running the swap
+    mkdir /hive/data/genomes/ornAna1/bed/blastz.anoCar2.swap
+    cd /hive/data/genomes/ornAna1/bed/blastz.anoCar2.swap
+    time nice -n +25 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/anoCar2/bed/lastzOrnAna1.2011-04-26/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
+	-swap -bigClusterHub=swarm -tRepeats=windowmaskerSdust > swap.log 2>&1 &
+    #	real    40m51.778s
+    cat fb.ornAna1.chainAnoCar2Link.txt 
+    #	75402821 bases of 1842236818 (4.093%) in intersection
 
 #######################################################################
