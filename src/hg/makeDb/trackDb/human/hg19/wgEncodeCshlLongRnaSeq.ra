@@ -15,7 +15,7 @@ subGroup4 rnaExtract RNA_Extract pAP=PolyA+ pAM=PolyA- total=Total_RNA
 subGroup5 rep Rep rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 Pooled=Pooled 
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract dimensionA=rep
 sortOrder view=- cellType=+ localization=+ rnaExtract=+ rep=+
-fileSortOrder cell=Cell_Line   localization=Localization rnaExtract=RNA<BR>Extract view=View dccRep=UCSC<BR>Rep replicate=Lab<BR>Rep bioRep=Cross_Lab<BR>Replicate labProtocolId=<i>Protocol<BR>ID</i> labExpId=Lab<BR>Exp_ID origAssembly=Original<BR>Assembly fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line labProtocolId=<i>Protocol<BR>ID</i>  localization=Localization rnaExtract=RNA<BR>Extract view=View dccRep=UCSC<BR>Replicate replicate=Lab<BR>Replicate bioRep=Cross_Lab<BR>BioReplicate labExpId=Lab<BR>Exp_ID geoSampleAccession=GEO_Accession origAssembly=Original<BR>Assembly fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum attic=Attic
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 dimensionZchecked pAP,pAM,total
