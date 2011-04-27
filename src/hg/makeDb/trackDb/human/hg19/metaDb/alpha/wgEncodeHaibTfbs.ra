@@ -290,7 +290,7 @@ dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xDex100nmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
-labExpId SL1077
+labExpId SL1024
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -313,7 +313,7 @@ dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xDex100nmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
-labExpId SL1204
+labExpId SL1077
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -336,7 +336,7 @@ dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xDex100nmPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
-labExpId SL1077
+labExpId SL1024
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -360,7 +360,7 @@ dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xDex100nmPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
-labExpId SL1204
+labExpId SL1077
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -384,7 +384,7 @@ dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xDex100nmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
-labExpId SL1077
+labExpId SL1024
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -407,7 +407,7 @@ dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xDex100nmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
-labExpId SL1204
+labExpId SL1077
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -430,7 +430,7 @@ dateUnrestricted 2011-08-28
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xDex100nmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
-labExpId SL1077
+labExpId SL1024
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -454,7 +454,7 @@ dateUnrestricted 2011-08-28
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xDex100nmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
-labExpId SL1204
+labExpId SL1077
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -478,7 +478,7 @@ dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xEtoh02AlnRep1.bam
 grant Myers
 lab HudsonAlpha
-labExpId SL1078
+labExpId SL1025
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -501,7 +501,7 @@ dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xEtoh02AlnRep2.bam
 grant Myers
 lab HudsonAlpha
-labExpId SL1205
+labExpId SL1078
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -524,7 +524,7 @@ dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xEtoh02PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
-labExpId SL1078
+labExpId SL1025
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -548,7 +548,7 @@ dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xEtoh02PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
-labExpId SL1205
+labExpId SL1078
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -572,7 +572,7 @@ dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xEtoh02RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
-labExpId SL1078
+labExpId SL1025
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -595,7 +595,7 @@ dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xEtoh02RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
-labExpId SL1205
+labExpId SL1078
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -618,7 +618,7 @@ dateUnrestricted 2011-08-28
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xEtoh02RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
-labExpId SL1078
+labExpId SL1025
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -642,7 +642,7 @@ dateUnrestricted 2011-08-28
 fileName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xEtoh02RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
-labExpId SL1205
+labExpId SL1078
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -35626,4 +35626,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -982516482
+# MAGIC: -982516674
