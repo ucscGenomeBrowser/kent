@@ -247,8 +247,8 @@ else
     while (s != NULL && s[0] != 0)
 	{
 	e = strchr(s, ',');
-	if (e == NULL && slNameInList(snp125ValidFilter, s))
-	    return TRUE;
+	if (e == NULL)
+	    return slNameInList(snp125ValidFilter, s);
 	else
 	    {
 	    safencpy(val, sizeof(val), s, e-s);
