@@ -45,6 +45,9 @@ priority 240.3
 track chainNetDanRer4 override
 priority 240.3
 
+track chainNetAnoCar2 override
+priority 260.3
+
 track chainNetAnoCar1 override
 priority 260.3
 
