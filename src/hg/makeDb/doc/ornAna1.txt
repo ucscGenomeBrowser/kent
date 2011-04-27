@@ -1478,4 +1478,24 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
+
+############################################################################
+# lastz Lizard swap anoCar2 (DONE - 2011-04-27 - Hiram)
+    # the original alignment
+    cd /cluster/data/anoCar2/bed/lastzOrnAna1.2011-04-26
+    cat fb.anoCar2.chainOrnAna1Link.txt 
+    #	77594222 bases of 1701353770 (4.561%) in intersection
+
+    ## running the swap
+    mkdir /hive/data/genomes/ornAna1/bed/blastz.anoCar2.swap
+    cd /hive/data/genomes/ornAna1/bed/blastz.anoCar2.swap
+    time nice -n +25 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/anoCar2/bed/lastzOrnAna1.2011-04-26/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
+	-swap -bigClusterHub=swarm -tRepeats=windowmaskerSdust > swap.log 2>&1 &
+    #	real    40m51.778s
+    cat fb.ornAna1.chainAnoCar2Link.txt 
+    #	75402821 bases of 1842236818 (4.093%) in intersection
+
 ############################################################################
