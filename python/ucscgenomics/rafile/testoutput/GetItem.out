@@ -1,0 +1,13 @@
+========Expected========
+key1 valA
+key2 valB
+#another comment
+key3 valC
+
+=========Output=========
+key1 valA
+key2 valB
+#another comment
+key3 valC
+
+========================
