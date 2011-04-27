@@ -1971,12 +1971,21 @@ function findTracksClearFound()
 }
 
 function filterByMaxHeight(multiSel)
-{
+{   // Setting a max hieght to scroll dropdownchecklists but
+    // multiSel is hidden when this is done, so it's position and height must be estimated.
     var pos = $(multiSel).closest(':visible').offset().top + 30;
     if (pos <= 0)
         pos = 260;
+
+    // Special mess since the filterBy's on non-current tabs will calculate pos badly.
+    var tabbed = $('input#currentTab');
+    if (tabbed != undefined) {
+        var tabDiv = $(multiSel).parents('div#'+ $(tabbed).attr('value'));
+        if (tabDiv == null || tabDiv == undefined || $(tabDiv).length == 0) {
+            pos = 360;
+        }
+    }
     var maxHeight = $(window).height() - pos;
-//    var maxHeight = $(window).height() - 260;
     var selHeight = $(multiSel).children().length * 21;
     if (maxHeight > selHeight)
         maxHeight = selHeight;

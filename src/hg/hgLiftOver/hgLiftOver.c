@@ -22,13 +22,13 @@ static char const rcsid[] = "$Id: hgLiftOver.c,v 1.62 2009/07/14 20:17:30 markd 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
 #define HGLFT_DATAFILE_VAR "hglft_dataFile"     /* file of data to convert */
-#define HGLFT_DATAFORMAT_VAR "hglft_dataFormat" /* format of data to convert */
 #define HGLFT_FROMORG_VAR "hglft_fromOrg"         /* FROM organism */
 #define HGLFT_FROMDB_VAR "hglft_fromDb"         /* FROM assembly */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
 #define HGLFT_TODB_VAR   "hglft_toDb"           /* TO assembly */
 #define HGLFT_ERRORHELP_VAR "hglft_errorHelp"      /* Print explanatory text */
 #define HGLFT_REFRESHONLY_VAR "hglft_doRefreshOnly"      /* Just refresh drop-down lists */
+#define HGLFT_LAST_CHAIN "hglft_lastChain"
 
 /* liftOver options: */
 #define HGLFT_MINMATCH "hglft_minMatch"          
@@ -42,16 +42,6 @@ static char const rcsid[] = "$Id: hgLiftOver.c,v 1.62 2009/07/14 20:17:30 markd 
 struct cart *cart;	        /* CGI and other variables */
 struct hash *oldVars = NULL;
 
-/* Data Formats */
-#define POSITION_FORMAT "Position"
-#define BED_FORMAT      "BED"
-#define WIGGLE_FORMAT   "Wiggle"
-
-char *formatList[] = 
-        {BED_FORMAT, POSITION_FORMAT, 0};
-
-#define DEFAULT_FORMAT  "BED"
-
 /* Filename prefix */
 #define HGLFT   "hglft"
 
@@ -64,11 +54,21 @@ HGLFT_REFRESHONLY_VAR
 ".value = 1;"
 "document.mainForm.submit();\"";
 
-void webMain(struct liftOverChain *chain, char *dataFormat, boolean multiple)
+char *chainStringVal(struct liftOverChain *chain)
+/* keep the last chain in memory in this format */
+{
+char chainS[64];
+safef(chainS, sizeof(chainS), "%s.%s", chain->fromDb, chain->toDb);
+return cloneString(chainS);
+}
+
+void webMain(struct liftOverChain *chain, boolean multiple, boolean keepSettings, int minSizeQ, 
+	     int minChainT, float minBlocks, float minMatch, boolean fudgeThick)
 /* set up page for entering data */
 {
 struct dbDb *dbList;
 char *fromOrg = hArchiveOrganism(chain->fromDb), *toOrg = hArchiveOrganism(chain->toDb);
+char *chainString = chainStringVal(chain);
 cgiParagraph(
     "This tool converts genome coordinates and genome annotation files "
     "between assemblies.&nbsp;&nbsp;"
@@ -131,7 +131,7 @@ cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 cgiTableField("Minimum ratio of bases that must remap:");
 cgiSimpleTableFieldStart();
-cgiMakeDoubleVar(HGLFT_MINMATCH,chain->minMatch,6);
+cgiMakeDoubleVar(HGLFT_MINMATCH, (keepSettings) ? minMatch : chain->minMatch,6);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -140,7 +140,7 @@ cgiTableField("&nbsp;");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("BED 4 to BED 6 Options");
+cgiTableField("<B>BED 4 to BED 6 Options</B>");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
@@ -153,14 +153,14 @@ cgiTableRowEnd();
 cgiSimpleTableRowStart();
 cgiTableField("&nbsp;&nbsp;Minimum hit size in query:");
 cgiSimpleTableFieldStart();
-cgiMakeIntVar(HGLFT_MINSIZEQ,chain->minSizeQ,4);
+cgiMakeIntVar(HGLFT_MINSIZEQ,(keepSettings) ? minSizeQ : chain->minSizeQ,4);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiTableField("&nbsp;&nbsp;Minimum chain size in target:");
 cgiSimpleTableFieldStart();
-cgiMakeIntVar(HGLFT_MINCHAINT,chain->minChainT,4);
+cgiMakeIntVar(HGLFT_MINCHAINT,(keepSettings) ? minChainT : chain->minChainT,4);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -169,36 +169,23 @@ cgiTableField("&nbsp;");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("BED 12 Options");
+cgiTableField("<B>BED 12 Options</B>");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiTableField("Min ratio of alignment blocks or exons that must map:");
 cgiSimpleTableFieldStart();
-cgiMakeDoubleVar(HGLFT_MINBLOCKS,chain->minBlocks,6);
+cgiMakeDoubleVar(HGLFT_MINBLOCKS,(keepSettings) ? minBlocks : chain->minBlocks,6);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiTableField("If thickStart/thickEnd is not mapped, use the closest mapped base:");
 cgiSimpleTableFieldStart();
-cgiMakeCheckBox(HGLFT_FUDGETHICK,(chain->fudgeThick[0]=='Y') ? TRUE : FALSE);
+cgiMakeCheckBox(HGLFT_FUDGETHICK,(keepSettings) ? fudgeThick : (chain->fudgeThick[0]=='Y'));
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
-cgiTableEnd();
-
-/* next row -- file format menu */
-cgiParagraph(
-         "&nbsp;For descriptions of the supported data formats, see the bottom of this page.");
-cgiSimpleTableStart();
-cgiSimpleTableRowStart();
-cgiTableField("Data Format: ");
-cgiSimpleTableFieldStart();
-cgiMakeDropList(HGLFT_DATAFORMAT_VAR, 
-                formatList, sizeof(formatList)/sizeof (char*) - 1, dataFormat);
-cgiTableFieldEnd();
-cgiTableRowEnd();
 cgiTableEnd();
 
 /* text box and two buttons (submit, reset) */
@@ -243,6 +230,7 @@ cgiTableRowEnd();
 cgiTableEnd();
 printf("<input type=\"hidden\" name=\"%s\" value=\"0\">\n",
                         HGLFT_REFRESHONLY_VAR);
+printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", HGLFT_LAST_CHAIN, chainString);
 puts("</FORM>\n");
 
 cartSaveSession(cart);
@@ -346,16 +334,22 @@ cgiParagraph(
 
 double scoreLiftOverChain(struct liftOverChain *chain,
     char *fromOrg, char *fromDb, char *toOrg, char *toDb,
-    char *cartOrg, char *cartDb, struct hash *dbRank )
+    char *cartOrg, char *cartDb, struct hash *dbRank, 
+    struct hash *dbHash)
 /* Score the chain in terms of best match for cart settings */
 {
 double score = 0;
+struct dbDb *chainFromDbDb = hashFindVal(dbHash, chain->fromDb);
+struct dbDb *chainToDbDb = hashFindVal(dbHash, chain->toDb);
 
-char *chainFromOrg = hArchiveOrganism(chain->fromDb);
-char *chainToOrg = hArchiveOrganism(chain->toDb);
+char *chainFromOrg = (chainFromDbDb) ? chainFromDbDb->organism : NULL;
+char *chainToOrg = (chainToDbDb) ? chainToDbDb->organism : NULL;
 int fromRank = hashIntValDefault(dbRank, chain->fromDb, 0);  /* values up to approx. #assemblies */
 int toRank = hashIntValDefault(dbRank, chain->toDb, 0);
 int maxRank = hashIntVal(dbRank, "maxRank"); 
+
+if (!chainFromOrg || !chainToOrg)
+    return 0;
 
 if (sameOk(fromOrg,chainFromOrg) &&
     sameOk(fromDb,chain->fromDb) && 
@@ -398,6 +392,7 @@ struct liftOverChain *defaultChoices(struct liftOverChain *chainList,
 char *fromOrg, *fromDb, *toOrg, *toDb, *cartOrg;
 struct liftOverChain *choice = NULL;  
 struct hash *dbRank = hGetDatabaseRank();
+struct hash *dbDbHash = hDbDbAndArchiveHash();
 double bestScore = -1;
 struct liftOverChain *this = NULL;
 
@@ -421,13 +416,13 @@ if (sameWord(cartDb,"0"))
 
 for (this = chainList; this != NULL; this = this->next)
     {
-    double score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, cartOrg, cartDb, dbRank);
+    double score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, cartOrg, cartDb, dbRank, dbDbHash);
     if (score > bestScore)
 	{
 	choice = this;
 	bestScore = score;
 	}
-    }  
+    }
 
 return choice;
 }
@@ -435,18 +430,17 @@ return choice;
 void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
-/* struct liftOverChain *chainList = NULL, *chain; */
 char *userData;
-/* char *dataFile; */
-char *dataFormat;
 char *organism;
 char *db;
 float minBlocks, minMatch;
 boolean multiple, fudgeThick;
 int minSizeQ, minChainT;
 boolean refreshOnly = FALSE;
+boolean keepSettings = FALSE;
+char *thisChain = NULL;
+char *lastChain = NULL;
 
-/* char *err = NULL; */
 struct liftOverChain *chainList = NULL, *choice;
 
 cart = theCart;
@@ -455,7 +449,6 @@ if (cgiOptionalString(HGLFT_ERRORHELP_VAR))
     {
     puts("<PRE>");
     puts(liftOverErrHelp());
-    //system("/usr/bin/cal");
     puts("</PRE>");
     return;
     }
@@ -467,14 +460,14 @@ if (cartOptionalString(cart, "SubmitFile"))
     userData = cartOptionalString(cart, HGLFT_DATAFILE_VAR);
 else
     userData = cartOptionalString(cart, HGLFT_USERDATA_VAR);
-dataFormat = cartCgiUsualString(cart, HGLFT_DATAFORMAT_VAR, DEFAULT_FORMAT);
 cartWebStart(cart, NULL, "Lift Genome Annotations");
 
 getDbAndGenome(cart, &db, &organism, oldVars);
 
-chainList = liftOverChainListFiltered();
+chainList = liftOverChainList();
 
 choice = defaultChoices(chainList, db);
+thisChain = chainStringVal(choice);
 if (choice == NULL)
     errAbort("Sorry, no conversions available from this assembly\n");
 
@@ -485,8 +478,11 @@ minMatch = cartCgiUsualDouble(cart, HGLFT_MINMATCH, choice->minMatch);
 fudgeThick = cartCgiUsualBoolean(cart, HGLFT_FUDGETHICK, (choice->fudgeThick[0]=='Y') ? TRUE : FALSE);
 multiple = cartCgiUsualBoolean(cart, HGLFT_MULTIPLE, (choice->multiple[0]=='Y') ? TRUE : FALSE);
 refreshOnly = cartCgiUsualInt(cart, HGLFT_REFRESHONLY_VAR, 0);
+lastChain = cartCgiUsualString(cart, HGLFT_LAST_CHAIN, NULL);
+if (lastChain && thisChain && sameString(lastChain, thisChain))
+    keepSettings = TRUE;
 
-webMain(choice, dataFormat, multiple);
+webMain(choice, multiple, keepSettings, minSizeQ, minChainT, minBlocks, minMatch, fudgeThick);
 liftOverChainFreeList(&chainList);
 
 if (!refreshOnly && userData != NULL && userData[0] != '\0')
@@ -524,31 +520,16 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
         errAbort("ERROR: Can't convert from %s to %s: no chain file loaded",
                                 fromDb, toDb);
     readLiftOverMap(chainFile, chainHash);
-    if (sameString(dataFormat, WIGGLE_FORMAT))
-        /* TODO: implement Wiggle */
-	{}
-    else if (sameString(dataFormat, POSITION_FORMAT))
-	{
-	ct = liftOverPositions(oldTn.forCgi, chainHash, 
-			minMatch, minBlocks, 0, minSizeQ,
-			minChainT, 0, 
-			fudgeThick, mapped, unmapped, FALSE, NULL, &errCt);
-
-	
-        }
-    else if (sameString(dataFormat, BED_FORMAT))
-        {
-        ct = liftOverBed(oldTn.forCgi, chainHash, 
+    ct = liftOverBedOrPositions(oldTn.forCgi, chainHash, 
 			minMatch, minBlocks, 0, minSizeQ,
 			minChainT, 0,
 			fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
-        }
-    else
+    if (ct == -1)
         /* programming error */
-        errAbort("ERROR: Unsupported data format: %s\n", dataFormat);
+        errAbort("ERROR: Unsupported data format.\n");
 
     webNewSection("Results");
-    if (ct)
+    if (ct > 0)
         {
         /* some records succesfully converted */
         cgiParagraph("");
@@ -573,12 +554,9 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
         lineFileClose(&errFile);
         puts("</PRE></BLOCKQUOTE>\n");
         }
-    if (sameString(dataFormat, POSITION_FORMAT) && multiple)
-	{
-        puts("<BLOCKQUOTE><PRE>\n");
-        puts("Note: multiple checkbox ignored since it is not supported for position format.");
-        puts("</PRE></BLOCKQUOTE>\n");
-	}
+    puts("<BLOCKQUOTE><PRE>\n");
+    puts("Note: &quot;multiple&quot; option is not supported for position format.");
+    puts("</PRE></BLOCKQUOTE>\n");
 
     webParamsUsed(minMatch, multiple, minSizeQ, minChainT, minBlocks, fudgeThick);
 
