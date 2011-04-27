@@ -3069,13 +3069,14 @@ else
 boolean hHostHasPrefix(char *prefix)
 /* Return TRUE if this is running on web-server with host name prefix */
 {
+char host[256];
 if (prefix == NULL)
     return FALSE;
 
 char *httpHost = getenv("HTTP_HOST");
-if (httpHost == NULL)
+if (httpHost == NULL && !gethostname(host, sizeof(host)))
     // make sure this works when CGIs are run from the command line.
-    httpHost = getenv("HOST");
+    httpHost = host;
 
 if (httpHost == NULL)
     return FALSE;
