@@ -588,7 +588,7 @@ webIncludeResourceFile("ui.dropdownchecklist.css");
 //jsIncludeFile("ui.core.js",NULL);   // NOTE: This appears to be not needed as long as jquery-ui.js comes before ui.dropdownchecklist.js
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
 // This line is needed to get the multi-selects initialized
-hPrintf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
+hPrintf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
 
 struct group *group;
 char *groups[128];

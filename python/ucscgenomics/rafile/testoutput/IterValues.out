@@ -1,0 +1,41 @@
+========Expected========
+key1 valA
+key2 valB
+#another comment
+key3 valC
+
+key1 valD
+#comment4
+key2 valE
+key3 valF
+
+key1 valG
+key2 valH
+key3 valI
+#more comments
+
+key1 valJ
+key2 valK
+key3 valL
+
+=========Output=========
+key1 valA
+key2 valB
+#another comment
+key3 valC
+
+key1 valD
+#comment4
+key2 valE
+key3 valF
+
+key1 valG
+key2 valH
+key3 valI
+#more comments
+
+key1 valJ
+key2 valK
+key3 valL
+
+========================

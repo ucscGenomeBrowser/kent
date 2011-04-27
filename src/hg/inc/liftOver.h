@@ -53,6 +53,15 @@ int liftOverPositions(char *fileName, struct hash *chainHash,
 /* Create bed file from positions (chrom:start-end) and lift.
  * Return the number of records successfully converted */
 
+int liftOverBedOrPositions(char *fileName, struct hash *chainHash, 
+                        double minMatch,  double minBlocks, 
+                        int minSizeT, int minSizeQ,
+                        int minChainT, int minChainQ,
+		        bool fudgeThick, FILE *mapped, FILE *unmapped, 
+			   bool multiple, char *chainTable, int *errCt);
+/* Sniff the first line of the file, and determine whether it's a */
+/* bed, a positions file, or neither. */
+
 char *liftOverRemapRange(struct hash *chainHash, double minRatio,
 			char *chrom, int s, int e, char strand, double minMatch,
 			 char **retChrom, int *retStart, int *retEnd, char *retStrand);
