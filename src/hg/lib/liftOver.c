@@ -1209,7 +1209,7 @@ int liftOverBedOrPositions(char *fileName, struct hash *chainHash,
 /* Sniff the first line of the file, and determine whether it's a */
 /* bed, a positions file, or neither. */
 {
-struct lineFile *lf = lineFileOpen(fileName, "TRUE");
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line = NULL;
 char *chrom, *start, *end;
 boolean isPosition = FALSE;
