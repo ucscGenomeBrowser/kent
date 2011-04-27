@@ -1672,3 +1672,23 @@ see doc/builds.txt for specific details.
 
 
 #######################################################################
+# lastz swap from anoCar2 (DONE - 2011-04-26 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/anoCar2/bed/lastzXenTro2.2011-04-25
+    cat fb.anoCar2.chainXenTro2Link.txt 
+    #	85962319 bases of 1701353770 (5.053%) in intersection
+
+    #	running the swap - DONE - 2011-04-26
+    mkdir /hive/data/genomes/xenTro2/bed/blastz.anoCar2.swap
+    cd /hive/data/genomes/xenTro2/bed/blastz.anoCar2.swap
+    time nice -n +25 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/anoCar2/bed/lastzXenTro2.2011-04-25/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-syntenicNet -swap -qRepeats=windowmaskerSdust \
+	-tRepeats=windowmaskerSdust > swap.log 2>&1 &
+    #	real    29m36.856s
+    cat fb.xenTro2.chainAnoCar2Link.txt 
+    #	91934327 bases of 1359412157 (6.763%) in intersection
+
+##############################################################################

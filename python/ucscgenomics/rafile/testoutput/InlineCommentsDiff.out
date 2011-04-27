@@ -1,0 +1,27 @@
+========Expected========
+#comment1
+#comment2
+
+key1 valA
+key2 valB #inline comment 1
+key3 valC
+
+#comment3
+key1 valD
+key2 valE
+key3 valF #inline comment 2
+
+=========Output=========
+#comment1
+#comment2
+
+key1 valA
+key2 valB #inline comment 1
+key3 valC
+
+#comment3
+key1 valD
+key2 valE
+key3 valF #inline comment 2
+
+========================

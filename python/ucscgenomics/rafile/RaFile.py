@@ -1,16 +1,17 @@
 import sys
 import re
-import OrderedDict
+from OrderedDict import *
 
-class RaFile(OrderedDict.OrderedDict):
+class RaFile(OrderedDict):
     """
     Stores an Ra file in a set of entries, one for each stanza in the file.
     """
 
-    def __init__(self, entryType):
-       self.__entryType = entryType 
-       OrderedDict.OrderedDict.__init__(self)
- 
+    def __init__(self, filePath=''):
+        OrderedDict.__init__(self)
+        if filePath != '':
+            self.read(filePath) 
+
     def read(self, filePath):
         """
         Reads an rafile stanza by stanza, and internalizes it.
@@ -18,7 +19,7 @@ class RaFile(OrderedDict.OrderedDict):
 
         file = open(filePath, 'r')
 
-        entry = self.__entryType()
+        #entry = self.__entryType()
         stanza = list()
         keyValue = ''
 
@@ -26,17 +27,17 @@ class RaFile(OrderedDict.OrderedDict):
  
             line = line.strip()
 
-            if len(stanza) == 0 and line.startswith('#'):
-                self._OrderedDict__ordering.append(line)
+            if len(stanza) == 0 and (line.startswith('#') or line == ''):
+                OrderedDict.append(self, line)
                 continue
 
             if line != '':
                 stanza.append(line)
             elif len(stanza) > 0:
                if keyValue == '':
-                   keyValue, name = entry.readStanza(stanza)
+                   keyValue, name, entry = self.readStanza(stanza)
                else:
-                   testKey, name = entry.readStanza(stanza)
+                   testKey, name, entry = self.readStanza(stanza)
                    if keyValue != testKey:
                        raise KeyError('Inconsistent Key ' + testKey)
        
@@ -44,7 +45,7 @@ class RaFile(OrderedDict.OrderedDict):
                    raise KeyError('Duplicate Key ' + name)
 
                self[name] = entry
-               entry = self.__entryType()
+               #entry = self.__entryType()
                stanza = list()
 
         if len(stanza) > 0:
@@ -52,16 +53,32 @@ class RaFile(OrderedDict.OrderedDict):
 
         file.close()
 
+   
+    def readStanza(self, stanza):
+        entry = RaStanza()
+        val1, val2 = entry.readStanza(stanza)
+        return val1, val2, entry
+
+
+    def iter(self):
+        pass
+
+
+    def iterkeys(self):
+        for item in self._OrderedDict__ordering:
+            if not(item.startswith('#') or item == ''):
+                yield item
+
 
     def itervalues(self):
-        for items in self._OrderedDict.__ordering(self):
-            if not item.startswith('#'):
+        for item in self._OrderedDict__ordering:
+            if not (item.startswith('#') or item == ''):
                 yield self[item]
 
 
     def iteritems(self):
         for item in self._OrderedDict__ordering:
-            if not item.startswith('#'):
+            if not (item.startswith('#') or item == ''):
                 yield item, self[item]
             else:
                 yield [item]
@@ -77,10 +94,19 @@ class RaFile(OrderedDict.OrderedDict):
         return str
 
 
-class RaEntry(OrderedDict.OrderedDict):
+class RaStanza(OrderedDict):
     """
     Holds an individual entry in the RaFile.
     """
+
+    def __init__(self):
+        self._name = ''
+        OrderedDict.__init__(self)
+  
+    @property 
+    def name(self):
+        return self._name
+
 
     def readStanza(self, stanza):
         """
@@ -102,24 +128,56 @@ class RaEntry(OrderedDict.OrderedDict):
         if len(line.split(' ', 1)) != 2:
             raise ValueError()
 
-        return map(str.strip, line.split(' ', 1))
-
+        names = map(str.strip, line.split(' ', 1))
+        self._name = names[1]
+        return names
 
     def __readLine(self, line):
         """
         Reads a single line from the stanza, extracting the key-value pair
         """ 
 
-        if line.startswith('#'):
-            raise KeyError('Comment in the middle of a stanza')
+        if line.startswith('#') or line == '':
+            OrderedDict.append(self, line)
+            #self._OrderedDict__ordering.append(line)
+        else:
+           raKey = line.split(' ', 1)[0]
+           raVal = ''
+           if (len(line.split(' ', 1)) == 2):
+               raVal = line.split(' ', 1)[1]
+           #raKey, raVal = map(str, line.split(' ', 1))
+           self[raKey] = raVal
 
-        raKey, raVal = map(str, line.split(' ', 1))
-        self[raKey] = raVal
+
+    def iter(self):
+        pass
+
+
+    def iterkeys(self):
+        for item in self._OrderedDict__ordering:
+            if not (item.startswith('#') or item == ''):
+                yield item
+
+
+    def itervalues(self):
+        for item in self._OrderedDict__ordering:
+            if not (item.startswith('#') or item == ''):
+                yield self[item]
+
+
+    def iteritems(self):
+        for item in self._OrderedDict__ordering:
+            if not (item.startswith('#') or item == ''):
+                yield item, self[item]
 
 
     def __str__(self):
         str = ''
         for key in self:
-            str = str + key + ' ' + self[key] + '\n'
+            if key.startswith('#'):
+                str += key + '\n'
+            else:
+                str += key + ' ' + self[key] + '\n'
+
         return str
 

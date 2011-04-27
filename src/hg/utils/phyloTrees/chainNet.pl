@@ -73,11 +73,9 @@ while (my $line = <FH>) {
 	    $priority -= $newAssemblyOffset;
 	    $priorities{lcfirst($line)} = $priority;
 	    $priority += $newAssemblyOffset;
-printf STDERR "DBG: newAssembly: $priority $line\n";
 	} else {
 	    $priorities{lcfirst($line)} = $priority;
 	    $priority += $offsetNway;
-printf STDERR "DBG: not newAssembly: $priority $line\n";
         }
     }
 }
