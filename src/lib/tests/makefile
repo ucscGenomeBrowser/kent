@@ -12,7 +12,7 @@ BIN_DIR = bin/${MACHTYPE}
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
-    ${TABIX_TESTS}
+    ${TABIX_TESTS} hacTreeTest
 	rm -r output fetchUrlTest
 	@echo tested all
 
@@ -281,6 +281,17 @@ vcfParseOldV3:
 ${BIN_DIR}/vcfParseTest: vcfParseTest.o ${MYLIBS}
 	${MKDIR} ${BIN_DIR}
 	${CC} ${COPT} -o ${BIN_DIR}/vcfParseTest vcfParseTest.o ${MYLIBS} ${L}
+
+
+# hacTree:
+hacTreeTester=${BIN_DIR}/hacTreeTest
+hacTreeTest: ${hacTreeTester} mkdirs
+	${hacTreeTester} input/$@.txt output/$@.out
+	diff expected/$@.out output/$@.out
+
+${BIN_DIR}/hacTreeTest: hacTreeTest.o ${MYLIBS}
+	${MKDIR} ${BIN_DIR}
+	${CC} ${COPT} -o ${BIN_DIR}/hacTreeTest hacTreeTest.o ${MYLIBS} ${L}
 
 
 clean:
