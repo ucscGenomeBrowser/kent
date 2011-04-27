@@ -776,7 +776,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageGm12878CytosolPamTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -896,7 +896,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageGm12878NucleolusTotalTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -1013,7 +1013,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageGm12878NucleusPamTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -1456,7 +1456,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 2
 fileName wgEncodeRikenCageH1hescCytosolPapTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -1578,7 +1578,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 2
 fileName wgEncodeRikenCageH1hescNucleusPapTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -1918,7 +1918,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageHelas3CytosolPamTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -2138,7 +2138,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 2
 fileName wgEncodeRikenCageHelas3CytosolPapTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -2257,7 +2257,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageHelas3NucleolusTotalTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -2699,7 +2699,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageHepg2CellPapTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -2823,7 +2823,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageHepg2CytosolPamTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -3164,7 +3164,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageHepg2NucleolusTotalTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -3287,7 +3287,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageHepg2NucleusPamTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -3852,7 +3852,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageHuvecCytosolPamTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -4638,7 +4638,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageK562ChromatinTotalTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -4786,7 +4786,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageK562CytosolPamTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -5232,7 +5232,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageK562NucleolusTotalTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -5355,7 +5355,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageK562NucleoplasmTotalTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -5500,7 +5500,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageK562NucleusPamTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -5844,7 +5844,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageK562PolysomePamTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -6360,7 +6360,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageNhekCytosolPamTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -6655,7 +6655,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageNhekNucleusPamTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -6776,7 +6776,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageNhekNucleusPapTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -6925,7 +6925,7 @@ dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-02
 dateUnrestricted 2011-12-02
-dccRep Pooled
+dccRep 1
 fileName wgEncodeRikenCageProstateCellPamTSS.gtf.gz
 grant Gingeras
 lab RIKEN
@@ -7113,4 +7113,4 @@ rnaExtract longPolyA
 subId 3804
 view TSS
 
-# MAGIC: -714096482
+# MAGIC: -716860731
