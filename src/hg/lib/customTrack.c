@@ -557,6 +557,9 @@ for (track = trackList; track != NULL; track = track->next)
         {
         /* HACK ALERT - calling private method function in customFactory.c */
         track->maxChromName = hGetMinIndexLength(genomeDb); /* for the loaders */
+#ifdef PROGRESS_METER
+	track->progressFile = 0;
+#endif
         wigLoaderEncoding(track, track->wigAscii, ctDbUseAll());
         ctAddToSettings(track, "tdbType", track->tdb->type);
         ctAddToSettings(track, "wibFile", track->wibFile);
