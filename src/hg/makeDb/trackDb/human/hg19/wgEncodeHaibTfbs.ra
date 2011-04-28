@@ -1185,14 +1185,6 @@ noInherit on
         type broadPeak
         # subId=1848 dateSubmitted=2010-08-06
 
-        track wgEncodeHaibTfbsA549GrPcr2xEtoh02PkRep2
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549  GR     Pk 2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (GR in A549 cells)
-        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR2x treatment=ETOH02 rep=rep2
-        type broadPeak
-        # subId=1848 dateSubmitted=2010-08-06
-
         track wgEncodeHaibTfbsHtb11NrsfPcr2xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel HTB11 NRSF   Pk 1
@@ -2435,15 +2427,6 @@ noInherit on
         color 46,0,184
         # subId=3444 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsK562Taf7sq8V0416101PkRep1 cricket Tue Apr 19 10:32:50 2011
-
-        track wgEncodeHaibTfbsGm12878Sin3ak20V0416101PkRep3
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM12878 Sin3Ak-20 Pk 3
-        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 3 (Sin3Ak-20 in GM12878 cells)
-        subGroups view=Peaks factor=SIN3AK20 cellType=GM12878 protocol=V0416101 treatment=None rep=rep3
-        type broadPeak
-        color 153,38,0
-        # subId=3445 dateSubmitted=2011-01-21
 
         track wgEncodeHaibTfbsHepg2Foxa2sc6554V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -5654,15 +5637,6 @@ noInherit on
         color 46,0,184
         # subId=3444 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsK562Taf7sq8V0416101RawRep1 cricket Tue Apr 19 10:32:51 2011
-
-        track wgEncodeHaibTfbsGm12878Sin3ak20V0416101RawRep3
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM12878 Sin3Ak-20 Raw 3
-        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 3 (Sin3Ak-20 in GM12878 cells)
-        subGroups view=RawSignal factor=SIN3AK20 cellType=GM12878 protocol=V0416101 treatment=None rep=rep3
-        type bigWig 0.211426 1435.739990
-        color 153,38,0
-        # subId=3445 dateSubmitted=2011-01-21
 
         track wgEncodeHaibTfbsGm12878ControlV0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off

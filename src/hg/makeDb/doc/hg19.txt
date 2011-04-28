@@ -8964,23 +8964,22 @@ TMPDIR=/scratch/tmp
       mkdir dnase
       cd dnase
       mkdir peaks
-      cd peaks
-      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeUwDnase/*.narrowPeak.gz .
+      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeUwDnase/*.narrowPeak.gz peaks
 
       # Process these into clusters in a bed file and load clusters into
       # table.
       /bin/ls -1 peaks/*.narrowPeak.gz > peak.lst
       regClusterMakeTableOfTables uw02 peak.lst peak.table
       regCluster peak.table /dev/null peak.bed
-      awk '$4 > 1 || $5 >= 100' peak.bed > wgEncodeRegDnaseClustered.bed
+      awk '$4 > 1 && $5 >= 100' peak.bed > wgEncodeRegDnaseClustered.bed
       hgLoadBed hg19 wgEncodeRegDnaseClustered wgEncodeRegDnaseClustered.bed
 
       # Make wgEncodeRegDnaseClusteredInput table.  Start with mdbQuery, and
       # then do some massaging since not completely in sync with file list.
-      mdbQuery out=tab "select obj,cell,antibody,treatment from hg19 where obj like 'wgEncodeUwDnase%' and view='Peaks'" | sed 's/n\/a/None/' > inputMdb.tab
+      mdbQuery out=tab "select obj,cell,treatment,replicate,lab,dateUnrestricted from hg19 where obj like 'wgEncodeUwDnase%' and view='Peaks'" | sed 's/n\/a/None/' > inputMdb.tab
       cut -f 1 peak.table | sed 's/\.narrowPeak\.gz//' | sed 's/peaks\///' > inputs.lst
       weedLines inputs.lst inputMdb.tab inputs.tab -invert -weeded=weeded.tab
-      hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable2.sql inputs.tab
+      hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredInputs ~/kent/src/hg/lib/clusterInputDnase.sql inputs.tab
 
       # Make transcription factor binding site clusters.  Start with Anshul's
       # nice uniform peak calls, downloaded from 

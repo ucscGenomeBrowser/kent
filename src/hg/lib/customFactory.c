@@ -1689,10 +1689,30 @@ if (dbRequested)
     int c;  /* fgetc and fputc work with int. char type cannot represent EOF properly. */
     int fputcErr = 0;
 
+#ifdef PROGRESS_METER
+    FILE *progress = 0;
+    unsigned long long bytesWritten = 0;
+    if (track->progressFile)
+	{
+fprintf(stderr, "DBG: open: '%llu' -> '%llu'\n", (unsigned long long)track, (unsigned long long)track->progressFile);
+	progress = mustOpen(track->progressFile, "w");
+	fprintf(progress, "%s\n", wigAscii);
+	}
+#endif
     unlink(wigAscii);/* stays open, disappears when close or pipe fail */
     while ((c = fgetc(in)) != EOF && fputcErr != EOF)
+	{
 	fputcErr = fputc(c, out);
+#ifdef PROGRESS_METER
+	++bytesWritten;
+	if (0 == (bytesWritten % 10))
+	    fprintf(progress, "%llu\n", bytesWritten);
+#endif
+	}
     carefulClose(&in);
+#ifdef PROGRESS_METER
+    carefulClose(&progress);
+#endif
     fflush(out);		/* help see error from loader failure */
 #if 0  // enable this for help debugging
     fprintf(stderr, "%s\n", pipelineDesc(dataPipe));
@@ -1753,6 +1773,9 @@ struct hash *settings = track->tdb->settingsHash;
 
 track->dbTrackType = cloneString(fac->name);
 track->wiggle = TRUE;
+#ifdef PROGRESS_METER
+track->progressFile = 0;
+#endif
 
 /* If wibFile setting already exists, then we are reloading, not loading.
  * Just make sure files still exist. */
@@ -1787,6 +1810,13 @@ else
     char *wigAscii = cloneString(track->wibFile);
     chopSuffix(wigAscii);
     strcat(wigAscii, ".wia");
+
+#ifdef PROGRESS_METER
+    /* Don't add progressFile to settings - not needed. */
+    trashDirFile(&tn, "progress", "wig", ".txt");
+    track->progressFile = cloneString(tn.forCgi);
+fprintf(stderr, "DBG: setting progressFile: '%s'\n", track->progressFile);
+#endif
 
     /* Actually create wigAscii file. */
     f = mustOpen(wigAscii, "w");
@@ -2318,6 +2348,10 @@ if (NULL == tdb->type)
 track->genomeDb = cloneString(genomeDb);
 track->dbTrackType = hashFindVal(hash, "dbTrackType");
 track->dbTableName = hashFindVal(hash, "dbTableName");
+#ifdef PROGRESS_METER
+fprintf(stderr, "DBG: setting progressFile to 0 '%llu' -> '%llu'\n", (unsigned long long)track, (unsigned long long)track->progressFile);
+track->progressFile = 0;
+#endif
 if (track->dbTableName)
     {
     track->dbDataLoad = TRUE;

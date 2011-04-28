@@ -5,6 +5,7 @@ expVars lab,dataType,cell,localization,rnaExtract
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapAlnRep1
 objType table
+bioRep gen0105C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -15,6 +16,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId crg-8
+labProtocolId gen0105C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -26,6 +29,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapAlnRep2
 objType table
+bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -36,6 +40,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapAlnRep2.bam
 grant Gingeras
 lab GIS
+labExpId IHG024
+labProtocolId gen0107C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -47,6 +53,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapClustersRep1
 objType table
+bioRep gen0105C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -57,6 +64,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetGm12878CytosolPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId crg-8
+labProtocolId gen0105C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -68,6 +77,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapClustersRep2
 objType table
+bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -78,6 +88,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetGm12878CytosolPapClustersRep2.bed12.gz
 grant Gingeras
 lab GIS
+labExpId IHG024
+labProtocolId gen0107C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -89,6 +101,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep1
 objType file
+bioRep gen0105C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -98,6 +111,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-8
+labProtocolId gen0105C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -108,6 +123,7 @@ view FastqRd1
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep2
 objType file
+bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -117,6 +133,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab GIS
+labExpId IHG024
+labProtocolId gen0107C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -127,6 +145,7 @@ view FastqRd1
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep1
 objType file
+bioRep gen0105C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -136,6 +155,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-8
+labProtocolId gen0105C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -146,6 +167,7 @@ view FastqRd2
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep2
 objType file
+bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -155,6 +177,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab GIS
+labExpId IHG024
+labProtocolId gen0107C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -165,6 +189,7 @@ view FastqRd2
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1
 objType table
+bioRep gen0105C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -175,6 +200,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-8
+labProtocolId gen0105C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -186,6 +213,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2
 objType table
+bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -196,6 +224,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2.bigWig
 grant Gingeras
 lab GIS
+labExpId IHG024
+labProtocolId gen0107C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -207,6 +237,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1
 objType table
+bioRep gen0105C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -217,6 +248,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-8
+labProtocolId gen0105C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -228,6 +261,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2
 objType table
+bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -238,6 +272,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2.bigWig
 grant Gingeras
 lab GIS
+labExpId IHG024
+labProtocolId gen0107C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -249,6 +285,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetGm12878NucleusPapAlnRep1
 objType table
+bioRep gen0111N
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -259,6 +296,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878NucleusPapAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId crg-11
+labProtocolId gen0111N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -270,6 +309,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetGm12878NucleusPapClustersRep1
 objType table
+bioRep gen0111N
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -280,6 +320,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetGm12878NucleusPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId crg-11
+labProtocolId gen0111N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -291,6 +333,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetGm12878NucleusPapFastqRd1Rep1
 objType file
+bioRep gen0111N
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -300,6 +343,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetGm12878NucleusPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-11
+labProtocolId gen0111N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -310,6 +355,7 @@ view FastqRd1
 
 metaObject wgEncodeGisRnaPetGm12878NucleusPapFastqRd2Rep1
 objType file
+bioRep gen0111N
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -319,6 +365,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetGm12878NucleusPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-11
+labProtocolId gen0111N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -329,6 +377,7 @@ view FastqRd2
 
 metaObject wgEncodeGisRnaPetGm12878NucleusPapMinusRawSigRep1
 objType table
+bioRep gen0111N
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -339,6 +388,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878NucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-11
+labProtocolId gen0111N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -350,6 +401,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetGm12878NucleusPapPlusRawSigRep1
 objType table
+bioRep gen0111N
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -360,6 +412,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878NucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-11
+labProtocolId gen0111N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -371,6 +425,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetHepg2CytosolPapAlnRep1
 objType table
+bioRep gen0126C
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -381,6 +436,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2CytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId crg-29
+labProtocolId gen0126C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -392,6 +449,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetHepg2CytosolPapClustersRep1
 objType table
+bioRep gen0126C
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -402,6 +460,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHepg2CytosolPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId crg-29
+labProtocolId gen0126C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -413,6 +473,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetHepg2CytosolPapFastqRd1Rep1
 objType file
+bioRep gen0126C
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -422,6 +483,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetHepg2CytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-29
+labProtocolId gen0126C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -432,6 +495,7 @@ view FastqRd1
 
 metaObject wgEncodeGisRnaPetHepg2CytosolPapFastqRd2Rep1
 objType file
+bioRep gen0126C
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -441,6 +505,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetHepg2CytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-29
+labProtocolId gen0126C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -451,6 +517,7 @@ view FastqRd2
 
 metaObject wgEncodeGisRnaPetHepg2CytosolPapMinusRawSigRep1
 objType table
+bioRep gen0126C
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -461,6 +528,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-29
+labProtocolId gen0126C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -472,6 +541,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetHepg2CytosolPapPlusRawSigRep1
 objType table
+bioRep gen0126C
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -482,6 +552,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2CytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-29
+labProtocolId gen0126C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -493,6 +565,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetHepg2NucleusPapAlnRep1
 objType table
+bioRep gen0129N
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -503,6 +576,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2NucleusPapAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId crg-30
+labProtocolId gen0129N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -514,6 +589,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetHepg2NucleusPapClustersRep1
 objType table
+bioRep gen0129N
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -524,6 +600,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHepg2NucleusPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId crg-30
+labProtocolId gen0129N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -535,6 +613,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetHepg2NucleusPapFastqRd1Rep1
 objType file
+bioRep gen0129N
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -544,6 +623,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetHepg2NucleusPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-30
+labProtocolId gen0129N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -554,6 +635,7 @@ view FastqRd1
 
 metaObject wgEncodeGisRnaPetHepg2NucleusPapFastqRd2Rep1
 objType file
+bioRep gen0129N
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -563,6 +645,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetHepg2NucleusPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-30
+labProtocolId gen0129N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -573,6 +657,7 @@ view FastqRd2
 
 metaObject wgEncodeGisRnaPetHepg2NucleusPapMinusRawSigRep1
 objType table
+bioRep gen0129N
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -583,6 +668,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2NucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-30
+labProtocolId gen0129N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -594,6 +681,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetHepg2NucleusPapPlusRawSigRep1
 objType table
+bioRep gen0129N
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -604,6 +692,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2NucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-30
+labProtocolId gen0129N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -615,6 +705,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetHuvecCytosolPapAlnRep1
 objType table
+bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -625,6 +716,8 @@ dateUnrestricted 2010-09-04
 fileName wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId RHH004
+labProtocolId gen0117C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -636,6 +729,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetHuvecCytosolPapClustersRep1
 objType table
+bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -646,6 +740,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHuvecCytosolPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId RHH004
+labProtocolId gen0117C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -657,6 +753,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetHuvecCytosolPapFastqRd1Rep1
 objType file
+bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -666,6 +763,8 @@ dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetHuvecCytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId RHH004
+labProtocolId gen0117C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -676,6 +775,7 @@ view FastqRd1
 
 metaObject wgEncodeGisRnaPetHuvecCytosolPapFastqRd2Rep1
 objType file
+bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -685,6 +785,8 @@ dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetHuvecCytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId RHH004
+labProtocolId gen0117C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -695,6 +797,7 @@ view FastqRd2
 
 metaObject wgEncodeGisRnaPetHuvecCytosolPapMinusRawSigRep1
 objType table
+bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -705,6 +808,8 @@ dateUnrestricted 2010-09-04
 fileName wgEncodeGisRnaPetHuvecCytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId RHH004
+labProtocolId gen0117C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -716,6 +821,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetHuvecCytosolPapPlusRawSigRep1
 objType table
+bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -726,6 +832,8 @@ dateUnrestricted 2010-09-04
 fileName wgEncodeGisRnaPetHuvecCytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId RHH004
+labProtocolId gen0117C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -737,6 +845,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetHuvecNucleusPapAlnRep1
 objType table
+bioRep gen0118N
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -747,6 +856,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId RHH001
+labProtocolId gen0118N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -758,6 +869,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetHuvecNucleusPapClustersRep1
 objType table
+bioRep gen0118N
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -768,6 +880,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHuvecNucleusPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId RHH001
+labProtocolId gen0118N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -779,6 +893,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetHuvecNucleusPapFastqRd1Rep1
 objType file
+bioRep gen0118N
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -788,6 +903,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetHuvecNucleusPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId RHH001
+labProtocolId gen0118N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -798,6 +915,7 @@ view FastqRd1
 
 metaObject wgEncodeGisRnaPetHuvecNucleusPapFastqRd2Rep1
 objType file
+bioRep gen0118N
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -807,6 +925,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetHuvecNucleusPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId RHH001
+labProtocolId gen0118N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -817,6 +937,7 @@ view FastqRd2
 
 metaObject wgEncodeGisRnaPetHuvecNucleusPapMinusRawSigRep1
 objType table
+bioRep gen0118N
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -827,6 +948,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHuvecNucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId RHH001
+labProtocolId gen0118N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -838,6 +961,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetHuvecNucleusPapPlusRawSigRep1
 objType table
+bioRep gen0118N
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -848,6 +972,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHuvecNucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId RHH001
+labProtocolId gen0118N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -859,6 +985,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetK562ChromatinTotalAlnRep1
 objType table
+bioRep gen0135CH
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -869,6 +996,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562ChromatinTotalAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId crg-46
+labProtocolId gen0135CHtpet
 localization chromatin
 origAssembly hg18
 project wgEncode
@@ -880,6 +1009,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetK562ChromatinTotalClustersRep1
 objType table
+bioRep gen0135CH
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -890,6 +1020,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562ChromatinTotalClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId crg-46
+labProtocolId gen0135CHtpet
 localization chromatin
 origAssembly hg18
 project wgEncode
@@ -901,6 +1033,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetK562ChromatinTotalFastqRep1
 objType file
+bioRep gen0135CH
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -910,15 +1043,19 @@ dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetK562ChromatinTotalFastqRep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-46
+labProtocolId gen0135CHtpet
 localization chromatin
 origAssembly hg18
 project wgEncode
+replicate 1
 rnaExtract total
 subId 841
 view RawData
 
 metaObject wgEncodeGisRnaPetK562ChromatinTotalMinusRawSigRep1
 objType table
+bioRep gen0135CH
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -929,6 +1066,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562ChromatinTotalMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-46
+labProtocolId gen0135CHtpet
 localization chromatin
 origAssembly hg18
 project wgEncode
@@ -940,6 +1079,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetK562ChromatinTotalPlusRawSigRep1
 objType table
+bioRep gen0135CH
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -950,6 +1090,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562ChromatinTotalPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-46
+labProtocolId gen0135CHtpet
 localization chromatin
 origAssembly hg18
 project wgEncode
@@ -961,6 +1103,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetK562CytosolPapAlnRep1
 objType table
+bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -971,6 +1114,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId crg-47
+labProtocolId gen0138C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -982,6 +1127,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetK562CytosolPapAlnRep2
 objType table
+bioRep gen0140C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -992,6 +1138,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapAlnRep2.bam
 grant Gingeras
 lab GIS
+labExpId IHK009010015
+labProtocolId gen0140C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1003,6 +1151,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetK562CytosolPapClustersRep1
 objType table
+bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1013,6 +1162,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562CytosolPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId crg-47
+labProtocolId gen0138C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1024,6 +1175,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetK562CytosolPapClustersRep2
 objType table
+bioRep gen0140C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1034,6 +1186,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562CytosolPapClustersRep2.bed12.gz
 grant Gingeras
 lab GIS
+labExpId IHK009010015
+labProtocolId gen0140C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1045,6 +1199,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetK562CytosolPapFastaRd1Rep2
 objType file
+bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1054,16 +1209,19 @@ dateUnrestricted 2011-01-13
 fileName wgEncodeGisRnaPetK562CytosolPapFastaRd1Rep2.fasta.gz
 grant Gingeras
 lab GIS
+labExpId crg-47
+labProtocolId gen0138C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
-replicate 1
+replicate 2
 rnaExtract longPolyA
 subId 1169
 view FastaRd1
 
 metaObject wgEncodeGisRnaPetK562CytosolPapFastaRd2Rep2
 objType file
+bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1073,6 +1231,8 @@ dateUnrestricted 2011-01-13
 fileName wgEncodeGisRnaPetK562CytosolPapFastaRd2Rep2.fasta.gz
 grant Gingeras
 lab GIS
+labExpId crg-47
+labProtocolId gen0138C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1083,6 +1243,7 @@ view FastaRd2
 
 metaObject wgEncodeGisRnaPetK562CytosolPapFastqRd1Rep1
 objType file
+bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1092,6 +1253,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetK562CytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-47
+labProtocolId gen0138C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1102,6 +1265,7 @@ view FastqRd1
 
 metaObject wgEncodeGisRnaPetK562CytosolPapFastqRd2Rep1
 objType file
+bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1111,6 +1275,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetK562CytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-47
+labProtocolId gen0138C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1121,6 +1287,7 @@ view FastqRd2
 
 metaObject wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep1
 objType table
+bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1131,6 +1298,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-47
+labProtocolId gen0138C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1142,6 +1311,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep2
 objType table
+bioRep gen0140C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1152,6 +1322,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep2.bigWig
 grant Gingeras
 lab GIS
+labExpId IHK009010015
+labProtocolId gen0140C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1163,6 +1335,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep1
 objType table
+bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1173,6 +1346,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-47
+labProtocolId gen0138C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1184,6 +1359,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep2
 objType table
+bioRep gen0140C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1194,6 +1370,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep2.bigWig
 grant Gingeras
 lab GIS
+labExpId IHK009010015
+labProtocolId gen0140C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1205,6 +1383,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetK562NucleolusTotalAlnRep1
 objType table
+bioRep gen0145NL
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1215,6 +1394,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleolusTotalAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId crg-49
+labProtocolId gen0145NLtpet
 localization nucleolus
 origAssembly hg18
 project wgEncode
@@ -1226,6 +1407,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetK562NucleolusTotalClustersRep1
 objType table
+bioRep gen0145NL
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1236,6 +1418,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562NucleolusTotalClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId crg-49
+labProtocolId gen0145NLtpet
 localization nucleolus
 origAssembly hg18
 project wgEncode
@@ -1247,6 +1431,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetK562NucleolusTotalFastqRd1Rep1
 objType file
+bioRep gen0145NL
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1256,15 +1441,19 @@ dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetK562NucleolusTotalFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-49
+labProtocolId gen0145NLtpet
 localization nucleolus
 origAssembly hg18
 project wgEncode
+replicate 1
 rnaExtract total
 subId 841
 view FastqRd1
 
 metaObject wgEncodeGisRnaPetK562NucleolusTotalFastqRd2Rep1
 objType file
+bioRep gen0145NL
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1274,15 +1463,19 @@ dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetK562NucleolusTotalFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-49
+labProtocolId gen0145NLtpet
 localization nucleolus
 origAssembly hg18
 project wgEncode
+replicate 1
 rnaExtract total
 subId 841
 view FastqRd2
 
 metaObject wgEncodeGisRnaPetK562NucleolusTotalMinusRawSigRep1
 objType table
+bioRep gen0145NL
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1293,6 +1486,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleolusTotalMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-49
+labProtocolId gen0145NLtpet
 localization nucleolus
 origAssembly hg18
 project wgEncode
@@ -1304,6 +1499,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetK562NucleolusTotalPlusRawSigRep1
 objType table
+bioRep gen0145NL
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1314,6 +1510,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleolusTotalPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-49
+labProtocolId gen0145NLtpet
 localization nucleolus
 origAssembly hg18
 project wgEncode
@@ -1325,6 +1523,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1
 objType table
+bioRep gen0148NP
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1335,6 +1534,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId crg-50
+labProtocolId gen0148NPtpet
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
@@ -1346,6 +1547,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetK562NucleoplasmTotalClustersRep1
 objType table
+bioRep gen0148NP
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1356,6 +1558,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId crg-50
+labProtocolId gen0148NPtpet
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
@@ -1367,6 +1571,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetK562NucleoplasmTotalFastqRep1
 objType file
+bioRep gen0148NP
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1376,15 +1581,19 @@ dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalFastqRep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-50
+labProtocolId gen0148NPtpet
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
+replicate 1
 rnaExtract total
 subId 841
 view RawData
 
 metaObject wgEncodeGisRnaPetK562NucleoplasmTotalMinusRawSigRep1
 objType table
+bioRep gen0148NP
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1395,6 +1604,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-50
+labProtocolId gen0148NPtpet
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
@@ -1406,6 +1617,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetK562NucleoplasmTotalPlusRawSigRep1
 objType table
+bioRep gen0148NP
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1416,6 +1628,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-50
+labProtocolId gen0148NPtpet
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
@@ -1427,6 +1641,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetK562NucleusPapAlnRep1
 objType table
+bioRep gen0150N
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1437,6 +1652,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleusPapAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId crg-51
+labProtocolId gen0150N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1448,6 +1665,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetK562NucleusPapClustersRep1
 objType table
+bioRep gen0150N
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1458,6 +1676,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562NucleusPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId crg-51
+labProtocolId gen0150N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1469,6 +1689,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetK562NucleusPapFastqRd1Rep1
 objType file
+bioRep gen0150N
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1478,6 +1699,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetK562NucleusPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-51
+labProtocolId gen0150N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1488,6 +1711,7 @@ view FastqRd1
 
 metaObject wgEncodeGisRnaPetK562NucleusPapFastqRd2Rep1
 objType file
+bioRep gen0150N
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1497,6 +1721,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetK562NucleusPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-51
+labProtocolId gen0150N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1507,6 +1733,7 @@ view FastqRd2
 
 metaObject wgEncodeGisRnaPetK562NucleusPapMinusRawSigRep1
 objType table
+bioRep gen0150N
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1517,6 +1744,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-51
+labProtocolId gen0150N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1528,6 +1757,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetK562NucleusPapPlusRawSigRep1
 objType table
+bioRep gen0150N
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1538,6 +1768,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-51
+labProtocolId gen0150N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1549,6 +1781,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetK562PolysomePapAlnRep1
 objType table
+bioRep gen0153P
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1559,6 +1792,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562PolysomePapAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId crg-52
+labProtocolId gen0153P+pet
 localization polysome
 origAssembly hg18
 project wgEncode
@@ -1570,6 +1805,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetK562PolysomePapClustersRep1
 objType table
+bioRep gen0153P
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1580,6 +1816,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562PolysomePapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId crg-52
+labProtocolId gen0153P+pet
 localization polysome
 origAssembly hg18
 project wgEncode
@@ -1591,6 +1829,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetK562PolysomePapFastqRd1Rep1
 objType file
+bioRep gen0153P
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1600,6 +1839,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetK562PolysomePapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-52
+labProtocolId gen0153P+pet
 localization polysome
 origAssembly hg18
 project wgEncode
@@ -1610,6 +1851,7 @@ view FastqRd1
 
 metaObject wgEncodeGisRnaPetK562PolysomePapFastqRd2Rep1
 objType file
+bioRep gen0153P
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1619,6 +1861,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetK562PolysomePapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-52
+labProtocolId gen0153P+pet
 localization polysome
 origAssembly hg18
 project wgEncode
@@ -1629,6 +1873,7 @@ view FastqRd2
 
 metaObject wgEncodeGisRnaPetK562PolysomePapMinusRawSigRep1
 objType table
+bioRep gen0153P
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1639,6 +1884,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562PolysomePapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-52
+labProtocolId gen0153P+pet
 localization polysome
 origAssembly hg18
 project wgEncode
@@ -1650,6 +1897,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetK562PolysomePapPlusRawSigRep1
 objType table
+bioRep gen0153P
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1660,6 +1908,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562PolysomePapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-52
+labProtocolId gen0153P+pet
 localization polysome
 origAssembly hg18
 project wgEncode
@@ -1671,6 +1921,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetNhekCytosolPapAlnRep1
 objType table
+bioRep gen0156C
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1681,6 +1932,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekCytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId IHN011
+labProtocolId gen0156C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1692,6 +1945,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetNhekCytosolPapClustersRep1
 objType table
+bioRep gen0156C
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1702,6 +1956,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetNhekCytosolPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId IHN011
+labProtocolId gen0156C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1713,6 +1969,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetNhekCytosolPapFastqRd1Rep1
 objType file
+bioRep gen0156C
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1722,6 +1979,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetNhekCytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId IHN011
+labProtocolId gen0156C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1732,6 +1991,7 @@ view FastqRd1
 
 metaObject wgEncodeGisRnaPetNhekCytosolPapFastqRd2Rep1
 objType file
+bioRep gen0156C
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1741,6 +2001,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetNhekCytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId IHN011
+labProtocolId gen0156C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1751,6 +2013,7 @@ view FastqRd2
 
 metaObject wgEncodeGisRnaPetNhekCytosolPapMinusRawSigRep1
 objType table
+bioRep gen0156C
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1761,6 +2024,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekCytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId IHN011
+labProtocolId gen0156C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1772,6 +2037,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetNhekCytosolPapPlusRawSigRep1
 objType table
+bioRep gen0156C
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1782,6 +2048,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekCytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId IHN011
+labProtocolId gen0156C+pet
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1793,6 +2061,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetNhekNucleusPapAlnRep1
 objType table
+bioRep gen0158N
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1803,6 +2072,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekNucleusPapAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId IHN012
+labProtocolId gen0158N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1814,6 +2085,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetNhekNucleusPapClustersRep1
 objType table
+bioRep gen0158N
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1824,6 +2096,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetNhekNucleusPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId IHN012
+labProtocolId gen0158N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1835,6 +2109,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetNhekNucleusPapFastqRd1Rep1
 objType file
+bioRep gen0158N
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1844,6 +2119,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetNhekNucleusPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId IHN012
+labProtocolId gen0158N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1854,6 +2131,7 @@ view FastqRd1
 
 metaObject wgEncodeGisRnaPetNhekNucleusPapFastqRd2Rep1
 objType file
+bioRep gen0158N
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1863,6 +2141,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetNhekNucleusPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId IHN012
+labProtocolId gen0158N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1873,6 +2153,7 @@ view FastqRd2
 
 metaObject wgEncodeGisRnaPetNhekNucleusPapMinusRawSigRep1
 objType table
+bioRep gen0158N
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1883,6 +2164,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekNucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId IHN012
+labProtocolId gen0158N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1894,6 +2177,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetNhekNucleusPapPlusRawSigRep1
 objType table
+bioRep gen0158N
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1904,6 +2188,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekNucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId IHN012
+labProtocolId gen0158N+pet
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1915,6 +2201,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaPetProstateCellPapAlnRep1
 objType table
+bioRep gen0160WC
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1925,6 +2212,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetProstateCellPapAlnRep1.bam
 grant Gingeras
 lab GIS
+labExpId crg-62
+labProtocolId gen0160WC+pet
 localization cell
 origAssembly hg18
 project wgEncode
@@ -1936,6 +2225,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaPetProstateCellPapClustersRep1
 objType table
+bioRep gen0160WC
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1946,6 +2236,8 @@ dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetProstateCellPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
+labExpId crg-62
+labProtocolId gen0160WC+pet
 localization cell
 origAssembly hg18
 project wgEncode
@@ -1957,6 +2249,7 @@ view Clusters
 
 metaObject wgEncodeGisRnaPetProstateCellPapFastqRd1Rep1
 objType file
+bioRep gen0160WC
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1966,6 +2259,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetProstateCellPapFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-62
+labProtocolId gen0160WC+pet
 localization cell
 origAssembly hg18
 project wgEncode
@@ -1976,6 +2271,7 @@ view FastqRd1
 
 metaObject wgEncodeGisRnaPetProstateCellPapFastqRd2Rep1
 objType file
+bioRep gen0160WC
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -1985,6 +2281,8 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetProstateCellPapFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab GIS
+labExpId crg-62
+labProtocolId gen0160WC+pet
 localization cell
 origAssembly hg18
 project wgEncode
@@ -1995,6 +2293,7 @@ view FastqRd2
 
 metaObject wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1
 objType table
+bioRep gen0160WC
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -2005,6 +2304,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-62
+labProtocolId gen0160WC+pet
 localization cell
 origAssembly hg18
 project wgEncode
@@ -2016,6 +2317,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 objType table
+bioRep gen0160WC
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
@@ -2026,6 +2328,8 @@ dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
+labExpId crg-62
+labProtocolId gen0160WC+pet
 localization cell
 origAssembly hg18
 project wgEncode
@@ -2035,4 +2339,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSignal
 
-# MAGIC: 1144737034
+# MAGIC: -1547878867
