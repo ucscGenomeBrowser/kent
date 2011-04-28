@@ -5,7 +5,7 @@ longLabel Histone Modifications by ChIP-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line BMarrow=BoneMarrow Cbellum=Cerebellum Cortex=Cortex Heart=Heart Kidney=Kidney Liver=Liver Lung=Lung
-subGroup3 factor Factor H3K4me1=H3K4me1 H3K4me3=H3K4me3
+subGroup3 factor Factor H3K4me1=H3K4me1 H3K4me3=H3K4me3 Input=Input
 subGroup4 sex Sex M=M
 subGroup5 age Age adult8wks=adult-8wks
 subGroup6 strain Strain C57BL6=C57BL/6
@@ -299,4 +299,67 @@ noInherit on
         type bigWig 0.130000 25.240000
         color 153,38,0
         # subId=3886 dateSubmitted=2011-04-15
+
+        track wgEncodeLicrHistoneBmarrowInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel BoneMarrow Input Sig
+        longLabel ENCODE LICR Histone Signal (Input in BoneMarrow cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=BMarrow control=std sex=M strain=C57BL6
+        type bigWig 0.150000 34.869999
+        color 153,38,0
+        # subId=3928 dateSubmitted=2011-04-27
+
+        track wgEncodeLicrHistoneCbellumInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel Cerebellum Input Sig
+        longLabel ENCODE LICR Histone Signal (Input in Cerebellum cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=Cbellum control=std sex=M strain=C57BL6
+        type bigWig 0.140000 41.009998
+        color 153,38,0
+        # subId=3929 dateSubmitted=2011-04-27
+
+        track wgEncodeLicrHistoneCortexInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel Cortex Input Sig
+        longLabel ENCODE LICR Histone Signal (Input in Cortex cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=Cortex control=std sex=M strain=C57BL6
+        type bigWig 0.130000 61.080002
+        color 153,38,0
+        # subId=3930 dateSubmitted=2011-04-27
+
+        track wgEncodeLicrHistoneHeartInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel Heart Input Sig
+        longLabel ENCODE LICR Histone Signal (Input in Heart cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=Heart control=std sex=M strain=C57BL6
+        type bigWig 0.140000 73.459999
+        color 153,38,0
+        # subId=3931 dateSubmitted=2011-04-27
+
+        track wgEncodeLicrHistoneKidneyInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel Kidney Input Sig
+        longLabel ENCODE LICR Histone Signal (Input in Kidney cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=Kidney control=std sex=M strain=C57BL6
+        type bigWig 0.140000 51.650002
+        color 153,38,0
+        # subId=3932 dateSubmitted=2011-04-27
+
+        track wgEncodeLicrHistoneLiverInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel Liver Input Sig
+        longLabel ENCODE LICR Histone Signal (Input in Liver cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=Liver control=std sex=M strain=C57BL6
+        type bigWig 0.130000 65.070000
+        color 153,38,0
+        # subId=3933 dateSubmitted=2011-04-27
+
+        track wgEncodeLicrHistoneLungInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel Lung Input Sig
+        longLabel ENCODE LICR Histone Signal (Input in Lung cells)
+        subGroups view=Signal age=adult8wks factor=Input cellType=Lung control=std sex=M strain=C57BL6
+        type bigWig 0.150000 39.330002
+        color 153,38,0
+        # subId=3934 dateSubmitted=2011-04-27
 

@@ -274,7 +274,7 @@ if ((ra = hashFindVal(hashOfHash, name)) == NULL)
  * blank line or end of file. */
 for (;;)
     {
-    if (!lineFileNext(lf, &line, NULL))
+    if (!lineFileNextFull(lf, &line, NULL,NULL,NULL))
         break;
     line = skipLeadingSpaces(line);
     if (line[0] == 0)

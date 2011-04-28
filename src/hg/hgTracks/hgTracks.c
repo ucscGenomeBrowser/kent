@@ -4799,27 +4799,18 @@ if (!hideControls)
 	    hPrintf("<TR>");
 	    cg->rowOpen = TRUE;
 	    if (!hIsGsidServer())
-		{
-		hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>",
-		    MAX_CONTROL_COLUMNS);
-		}
+                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
 	    else
-		{
-		hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>",
-		    MAX_CONTROL_COLUMNS-1);
-		}
-	    hPrintf("<table width='100%%'><tr><td align='left'>");
-	    hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-	    hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'><IMG height='18' width='18' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue' title='%s this group'></A>&nbsp;&nbsp;",
-		    hgTracksName(), cartSidUrlString(cart),
-		    collapseGroupVar(group->name),
-		    otherState, group->name,
-		    group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
-	    hPrintf("</td><td align='center' width='100%%'>\n");
-	    hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
-	    hPrintf("</td><td align='right'>\n");
-	    hPrintf("<input type='submit' name='hgt.refresh' value='refresh' title='Update image with your changes'>\n");
-	    hPrintf("</td></tr></table></th>\n");
+                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS-1);
+
+            hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
+            hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
+            hPrintf("<IMG class='toggleButton' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue' title='%s this group'>&nbsp;&nbsp;",
+                    group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+            hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
+            hPrintf("</td><td style='text-align:right;'>\n");
+            hPrintf("<input type='submit' name='hgt.refresh' value='refresh' title='Update image with your changes'>\n");
+            hPrintf("</td></tr></table></th>\n");
 	    controlGridEndRow(cg);
 
 	    /* First track group that is not custom track group gets ruler,

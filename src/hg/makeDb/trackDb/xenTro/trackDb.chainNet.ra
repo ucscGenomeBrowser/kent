@@ -1,5 +1,8 @@
 #	"$Id: trackDb.chainNet.ra,v 1.12 2010/02/09 02:16:18 rhead Exp $";
 
+track chainNetAnoCar2 override
+priority 210.3
+
 track chainNetAnoCar1 override
 priority 210.3
 

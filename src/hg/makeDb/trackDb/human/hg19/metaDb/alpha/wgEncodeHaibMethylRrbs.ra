@@ -3645,6 +3645,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHek293UwRawDataRep1
+attic auxExp
 objType file
 cell HEK293
 composite wgEncodeHaibMethylRrbs
@@ -3664,6 +3665,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsHek293UwRawDataRep2
+attic auxExp
 objType file
 cell HEK293
 composite wgEncodeHaibMethylRrbs
@@ -3706,6 +3708,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHek293UwSitesRep2
+attic auxExp
 objType table
 attic auxExp
 cell HEK293
@@ -3973,6 +3976,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHepg2HaibRawDataRep1
+attic auxExp
 objType file
 cell HepG2
 composite wgEncodeHaibMethylRrbs
@@ -3992,6 +3996,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsHepg2HaibRawDataRep2
+attic auxExp
 objType file
 cell HepG2
 composite wgEncodeHaibMethylRrbs
@@ -4746,6 +4751,26 @@ subId 3830
 treatment None
 view RawData
 
+metaObject wgEncodeHaibMethylRrbsHsmmDukeRawDataRep3
+attic auxExp
+objType file
+cell HSMM
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-19
+dateUnrestricted 2012-01-19
+fileName wgEncodeHaibMethylRrbsHsmmDukeRawDataRep3.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL1914
+obtainedBy Duke
+project wgEncode
+replicate 3
+subId 3919
+treatment None
+view RawData
+
 metaObject wgEncodeHaibMethylRrbsHsmmDukeSitesRep1
 objType table
 cell HSMM
@@ -4791,6 +4816,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHsmmDukeSitesRep3
+attic auxExp
 objType table
 cell HSMM
 composite wgEncodeHaibMethylRrbs
@@ -4850,6 +4876,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsHsmmtDukeRawDataRep3
+attic auxExp
 objType file
 cell HSMMtube
 composite wgEncodeHaibMethylRrbs
@@ -4913,6 +4940,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3
+attic auxExp
 objType table
 cell HSMMtube
 composite wgEncodeHaibMethylRrbs
@@ -5033,6 +5061,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsHtr8DukeRawDataRep3
+attic auxExp
 objType file
 cell HTR8svn
 composite wgEncodeHaibMethylRrbs
@@ -5073,6 +5102,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHtr8DukeSitesRep3
+attic auxExp
 objType table
 cell HTR8svn
 composite wgEncodeHaibMethylRrbs
@@ -5422,6 +5452,7 @@ treatment androgen
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsLncapDukeRawDataRep1
+attic auxExp
 objType file
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
@@ -5441,6 +5472,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsLncapDukeRawDataRep2
+attic auxExp
 objType file
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
@@ -5622,6 +5654,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesStanfordRawDataRep3
+attic auxExp
 objType file
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
@@ -5685,6 +5718,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep3
+attic auxExp
 objType table
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
@@ -5744,6 +5778,7 @@ treatment TAM_1uM_36hr
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordRawDataRep3
+attic auxExp
 objType file
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
@@ -5807,6 +5842,7 @@ treatment TAM_1uM_36hr
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3
+attic auxExp
 objType table
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
@@ -5910,6 +5946,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7StanfordRawDataRep1
+attic auxExp
 objType file
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
@@ -5929,6 +5966,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf7StanfordRawDataRep2
+attic auxExp
 objType file
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
@@ -5994,6 +6032,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7UwRawDataRep1
+attic auxExp
 objType file
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
@@ -6013,6 +6052,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf7UwRawDataRep2
+attic auxExp
 objType file
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
@@ -6116,6 +6156,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMelanoDukeRawDataRep3
+attic auxExp
 objType file
 cell Melano
 composite wgEncodeHaibMethylRrbs
@@ -6179,6 +6220,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMelanoSitesRep3
+attic auxExp
 objType table
 cell Melano
 composite wgEncodeHaibMethylRrbs
@@ -6691,6 +6733,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsNt2d1UwRawDataRep1
+attic auxExp
 objType file
 cell NT2-D1
 composite wgEncodeHaibMethylRrbs
@@ -6710,6 +6753,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsNt2d1UwRawDataRep2
+attic auxExp
 objType file
 cell NT2-D1
 composite wgEncodeHaibMethylRrbs
@@ -7014,6 +7058,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanc1UwRawDataRep1
+attic auxExp
 objType file
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
@@ -7033,6 +7078,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsPanc1UwRawDataRep2
+attic auxExp
 objType file
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
@@ -7052,6 +7098,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsPanc1UwSitesRep1
+attic auxExp
 objType table
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
@@ -7072,6 +7119,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanc1UwSitesRep2
+attic auxExp
 objType table
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
@@ -7130,6 +7178,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep3
+attic auxExp
 objType file
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
@@ -7149,6 +7198,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep4
+attic auxExp
 objType file
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
@@ -7168,6 +7218,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep5
+attic auxExp
 objType file
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
@@ -7231,6 +7282,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanisletsSitesRep3
+attic auxExp
 objType table
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
@@ -7253,6 +7305,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanisletsSitesRep4
+attic auxExp
 objType table
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
@@ -7275,6 +7328,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanisletsSitesRep5
+attic auxExp
 objType table
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
@@ -8186,4 +8240,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 1050733773
+# MAGIC: 660166983
