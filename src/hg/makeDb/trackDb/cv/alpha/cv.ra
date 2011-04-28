@@ -8775,6 +8775,12 @@ type seqPlatform
 description Illumina Genome Analyzer IIx
 # Matches GA2x that Kate initally indicated as the term
 
+term Illumina_HiSeq_2000
+tag IlluminaHiSeq2
+geo Illumina HiSeq 2000
+type seqPlatform
+description Illumina HiSeq 2000 (Provisional)
+
 term 454_GS
 tag 454GS
 geo 454 GS
