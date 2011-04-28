@@ -206,9 +206,19 @@ else
 	if (isSubtrackVisible(subtrack))
 	    {
 	    int height = subtrack->totalHeight(subtrack, vis);
-	    wigLeftAxisLabels(subtrack, seqStart, seqEnd, hvg, xOff, y, width, height, withCenterLabels,
-	    	font, subtrack->ixColor, vis, subtrack->shortLabel, subtrack->graphUpperLimit,
-		subtrack->graphLowerLimit, TRUE);
+	    if (vis == tvDense)
+	        {
+		/* Avoid wigLeftAxisLabels here because it will repeatedly add center label 
+		 * offsets, and in dense mode we will only draw the one label. */
+		hvGfxTextRight(hvg, xOff, y, width - 1, height, subtrack->ixColor, font, 
+			subtrack->shortLabel);
+		}
+	    else
+		{
+		wigLeftAxisLabels(subtrack, seqStart, seqEnd, hvg, xOff, y, width, height, 
+			withCenterLabels, font, subtrack->ixColor, vis, subtrack->shortLabel, 
+			subtrack->graphUpperLimit, subtrack->graphLowerLimit, TRUE);
+		}
 	    y += height+1;
 	    }
 	}
