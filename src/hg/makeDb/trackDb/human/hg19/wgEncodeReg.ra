@@ -301,7 +301,9 @@ canPack On
     type bed 5 .
     superTrack wgEncodeReg dense
     inputTrackTable wgEncodeRegDnaseClusteredInputs
-    inputTracksSubgroupDisplay cellType treatment rep
+    #inputTracksSubgroupDisplay cellType treatment rep
+    inputTableFieldDisplay cellType treatment replicate lab dateUnrestricted
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     visibility dense
     useScore 1
     priority 1.6

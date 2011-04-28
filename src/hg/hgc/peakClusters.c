@@ -23,6 +23,7 @@
 #include "encode/encodePeak.h"
 #include "expRecord.h"
 #include "bed6FloatScore.h"
+#include "ra.h"
 #include "txCluster.h"
 
 char *findGroupTagVal(struct trackDb *tdb, char *tag)
@@ -143,15 +144,156 @@ sqlFreeResult(&sr);
 return result;
 }
 
-static void printClusterTableHits(struct bed *cluster, struct sqlConnection *conn,
+static double getSignalAt(char *table, struct bed *cluster)
+/* Get (average) signal from table entries that overlap cluster */
+{
+struct sqlConnection *conn = hAllocConn(database);
+int rowOffset;
+int sqlFieldColumn(struct sqlResult *sr, char *colName);
+struct sqlResult *sr = hRangeQuery(conn, table, cluster->chrom, cluster->chromStart, 
+	cluster->chromEnd, NULL, &rowOffset);
+int signalCol = sqlFieldColumn(sr, "signalValue");
+if (signalCol < 0)
+    internalErr();
+int count = 0;
+double sum = 0;
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    count += 1;
+    sum += sqlDouble(row[signalCol]);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+
+if (count > 0)
+    return sum/count;
+else
+    return 0;
+}
+
+static void printControlledVocabFields(char **row, int fieldCount, 
+	struct slName *fieldList, char *vocabFile, struct hash *vocabHash)
+/* Print out fields from row, linking them to controlled vocab if need be. */
+{
+int i;
+struct slName *field;
+for (i=0, field = fieldList; i<fieldCount; ++i, field = field->next)
+    {
+    char *fieldVal = row[i];
+    if (vocabFile && hashLookup(vocabHash, field->name))
+	{
+	char *link = controlledVocabLink(vocabFile, "term", 
+		fieldVal, fieldVal, fieldVal, "");
+	webPrintLinkCell(link);
+	}
+    else
+	webPrintLinkCell(fieldVal);
+    }
+}
+
+struct hash *getVocabHash(char *fileName)
+/* Get vocabulary term hash */
+{
+struct hash *hash = raTagVals(fileName, "type");
+hashAdd(hash, "cellType", NULL);	/* Will the kludge never end, no, never! */
+return hash;
+}
+
+static void printPeakClusterTableHits(struct bed *cluster, struct sqlConnection *conn,
+	char *inputTrackTable, struct slName *fieldList, char *vocab)
+/* Put out a lines in an html table that shows assayed sources that have hits in this
+ * cluster, or if invert is set, that have misses. */
+{
+char *vocabFile = NULL;
+struct hash *vocabHash = NULL;
+if (vocab)
+    {
+    vocabFile = cloneFirstWord(vocab);
+    vocabHash = getVocabHash(vocabFile);
+    }
+
+/* Make the SQL query to get the table and all other fields we want to show
+ * from inputTrackTable. */
+struct dyString *query = dyStringNew(0);
+dyStringPrintf(query, "select tableName");
+struct slName *field;
+for (field = fieldList; field != NULL; field = field->next)
+    dyStringPrintf(query, ",%s", field->name);
+dyStringPrintf(query, " from %s", inputTrackTable);
+
+int displayNo = 0;
+int fieldCount = slCount(fieldList);
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    double signal = getSignalAt(row[0], cluster);
+    if (signal != 0)
+	{
+	printf("</TR><TR>\n");
+	webPrintIntCell(++displayNo);
+	webPrintDoubleCell(signal);
+	printControlledVocabFields(row+1, fieldCount, fieldList, vocabFile, vocabHash);
+	}
+    }
+sqlFreeResult(&sr);
+freez(&vocabFile);
+dyStringFree(&query);
+}
+
+static void printPeakClusterInputs(struct sqlConnection *conn,
+	char *inputTrackTable, struct slName *fieldList, char *vocab)
+/* Print out all input tables for clustering. */
+{
+char *vocabFile = NULL;
+struct hash *vocabHash = NULL;
+if (vocab)
+    {
+    vocabFile = cloneFirstWord(vocab);
+    vocabHash = getVocabHash(vocabFile);
+    }
+
+/* Make the SQL query to get the table and all other fields we want to show
+ * from inputTrackTable. */
+struct dyString *query = dyStringNew(0);
+dyStringPrintf(query, "select tableName");
+struct slName *field;
+for (field = fieldList; field != NULL; field = field->next)
+    dyStringPrintf(query, ",%s", field->name);
+dyStringPrintf(query, " from %s", inputTrackTable);
+
+int displayNo = 0;
+int fieldCount = slCount(fieldList);
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    printf("</TR><TR>\n");
+    webPrintIntCell(++displayNo);
+    printControlledVocabFields(row+1, fieldCount, fieldList, vocabFile, vocabHash);
+    }
+
+
+sqlFreeResult(&sr);
+freez(&vocabFile);
+dyStringFree(&query);
+}
+
+static void printFactorSourceTableHits(struct bed *cluster, struct sqlConnection *conn,
 	char *sourceTable, char *inputTrackTable, 
 	struct slName *fieldList, boolean invert, char *vocab)
 /* Put out a lines in an html table that shows assayed sources that have hits in this
  * cluster, or if invert is set, that have misses. */
 {
 char *vocabFile = NULL;
+struct hash *vocabHash = NULL;
 if (vocab)
+    {
     vocabFile = cloneFirstWord(vocab);
+    vocabHash = getVocabHash(vocabFile);
+    }
+
 /* Make the monster SQL query to get all assays*/
 struct dyString *query = dyStringNew(0);
 dyStringPrintf(query, "select %s.id,%s.name", sourceTable, sourceTable);
@@ -217,22 +359,39 @@ void doPeakClusterListItemsAssayed()
 /* Put up a page that shows all experiments associated with a cluster track. */
 {
 struct trackDb *clusterTdb = tdbForTableArg();
-struct slName *matchTrackList = findMatchingSubtracks(clusterTdb);
-struct slName *matchTrack;
-
 cartWebStart(cart, database, "List of items assayed in %s", clusterTdb->shortLabel);
+struct sqlConnection *conn = hAllocConn(database);
 
-char *inputTracksSubgroupDisplay = trackDbRequiredSetting(clusterTdb, "inputTracksSubgroupDisplay");
-struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
+char *inputTracksSubgroupDisplay = trackDbSetting(clusterTdb, "inputTracksSubgroupDisplay");
+char *inputTableFieldDisplay = trackDbSetting(clusterTdb, "inputTableFieldDisplay");
 webPrintLinkTableStart();
-printClusterTableHeader(displayGroupList, FALSE, TRUE, FALSE);
-int rowIx = 0;
-for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->next)
+if (inputTracksSubgroupDisplay)
     {
-    struct trackDb *tdb = hashFindVal(trackHash, matchTrack->name);
-    showOnePeakOrMiss(tdb, clusterTdb, NULL, displayGroupList, &rowIx);
+    struct slName *matchTrackList = findMatchingSubtracks(clusterTdb);
+    struct slName *matchTrack;
+
+    struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
+    printClusterTableHeader(displayGroupList, FALSE, TRUE, FALSE);
+    int rowIx = 0;
+    for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->next)
+	{
+	struct trackDb *tdb = hashFindVal(trackHash, matchTrack->name);
+	showOnePeakOrMiss(tdb, clusterTdb, NULL, displayGroupList, &rowIx);
+	}
     }
+else if (inputTableFieldDisplay)
+    {
+    struct slName *fieldList = stringToSlNames(inputTableFieldDisplay);
+    printClusterTableHeader(fieldList, FALSE, FALSE, FALSE);
+    char *vocab = trackDbSetting(clusterTdb, "controlledVocabulary");
+    char *inputTrackTable = trackDbRequiredSetting(clusterTdb, "inputTrackTable");
+    printPeakClusterInputs(conn, inputTrackTable, fieldList, vocab);
+    }
+else
+    errAbort("Missing required trackDb setting %s or %s for track %s",
+	"inputTracksSubgroupDisplay", "inputTableFieldDisplay", clusterTdb->track);
 webPrintLinkTableEnd();
+hFreeConn(&conn);
 cartWebEnd();
 }
 
@@ -261,28 +420,53 @@ sqlFreeResult(&sr);
 if (cluster != NULL)
     {
     /* Get list of subgroups to display */
-    char *inputTracksSubgroupDisplay = trackDbRequiredSetting(tdb, "inputTracksSubgroupDisplay");
-    struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
+    char *inputTracksSubgroupDisplay = trackDbSetting(tdb, "inputTracksSubgroupDisplay");
+    char *inputTableFieldDisplay = trackDbSetting(tdb, "inputTableFieldDisplay");
+    if (inputTracksSubgroupDisplay != NULL)
+	{
+	struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
 
-    /* Get list of tracks that match criteria. */
-    struct slName *matchTrackList = findMatchingSubtracks(tdb);
-    struct slName *matchTrack;
+	/* Get list of tracks that match criteria. */
+	struct slName *matchTrackList = findMatchingSubtracks(tdb);
+	struct slName *matchTrack;
 
-    /* Print out some information about the cluster overall. */
-    printf("<B>Items in Cluster:</B> %s of %d<BR>\n", cluster->name, slCount(matchTrackList));
-    printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
-    printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
+	/* Print out some information about the cluster overall. */
+	printf("<B>Items in Cluster:</B> %s of %d<BR>\n", cluster->name, slCount(matchTrackList));
+	printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
+	printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
 
-    /* In a new section put up list of hits. */
-    webNewSection("List of Items in Cluster");
-    webPrintLinkTableStart();
-    printClusterTableHeader(displayGroupList, FALSE, TRUE, TRUE);
-    int rowIx = 0;
-    for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->next)
-        {
-	showMatchingTrack(matchTrack->name, cluster, conn, tdb, displayGroupList,
-		FALSE, &rowIx);
+	/* In a new section put up list of hits. */
+	webNewSection("List of Items in Cluster");
+	webPrintLinkTableStart();
+	printClusterTableHeader(displayGroupList, FALSE, TRUE, TRUE);
+	int rowIx = 0;
+	for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->next)
+	    {
+	    showMatchingTrack(matchTrack->name, cluster, conn, tdb, displayGroupList,
+		    FALSE, &rowIx);
+	    }
 	}
+    else if (inputTableFieldDisplay != NULL)
+        {
+	struct slName *fieldList = stringToSlNames(inputTableFieldDisplay);
+	char *vocab = trackDbSetting(tdb, "controlledVocabulary");
+	char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
+
+	/* Print out some information about the cluster overall. */
+	printf("<B>Items in Cluster:</B> %s of %d<BR>\n", cluster->name, 
+	    sqlRowCount(conn, inputTrackTable));
+	printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
+	printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
+
+	/* In a new section put up list of hits. */
+	webNewSection("List of Items in Cluster");
+	webPrintLinkTableStart();
+	printClusterTableHeader(fieldList, FALSE, FALSE, TRUE);
+	printPeakClusterTableHits(cluster, conn, inputTrackTable, fieldList, vocab);
+	}
+    else
+	errAbort("Missing required trackDb setting %s or %s for track %s",
+	    "inputTracksSubgroupDisplay", "inputTableFieldDisplay", tdb->track);
     webPrintLinkTableEnd();
     }
 printf("<A HREF=\"%s&g=htcListItemsAssayed&table=%s\" TARGET_blank>", hgcPathAndSettings(),
@@ -458,14 +642,14 @@ if (cluster != NULL)
 	webNewSection("List of %s Items in Cluster", cluster->name);
 	webPrintLinkTableStart();
 	printClusterTableHeader(fieldList, TRUE, FALSE, TRUE);
-	printClusterTableHits(cluster, conn, sourceTable, 
+	printFactorSourceTableHits(cluster, conn, sourceTable, 
 		inputTrackTable, fieldList, FALSE, vocab);
 	webPrintLinkTableEnd();
 
 	webNewSection("List of cells assayed with %s but without hits in cluster", cluster->name);
 	webPrintLinkTableStart();
 	printClusterTableHeader(fieldList, TRUE, FALSE, FALSE);
-	printClusterTableHits(cluster, conn, sourceTable, 
+	printFactorSourceTableHits(cluster, conn, sourceTable, 
 		inputTrackTable, fieldList, TRUE, vocab);
 	webPrintLinkTableEnd();
 	}
