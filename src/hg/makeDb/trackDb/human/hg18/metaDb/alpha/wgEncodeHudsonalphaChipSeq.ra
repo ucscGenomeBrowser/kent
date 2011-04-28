@@ -120,7 +120,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1A549CtcfPcr1xDexa
 objType file
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/DEX_100nM/Input/PCR1x
@@ -143,7 +143,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1A549CtcfPcr1xEtoh02
 objType file
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/EtOH/Input/PCR1x
@@ -2337,7 +2337,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2A549CtcfPcr1xDexa
 objType file
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/DEX_100nM/Input/PCR1x
@@ -2360,7 +2360,7 @@ view Alignments
 
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2A549CtcfPcr1xEtoh02
 objType file
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/EtOH/Input/PCR1x
@@ -4508,7 +4508,7 @@ view Peaks
 
 metaObject wgEncodeHudsonalphaChipSeqPeaksRep1A549CtcfPcr1xDexa
 objType table
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/DEX_100nM/Input/PCR1x
@@ -4532,7 +4532,7 @@ view Peaks
 
 metaObject wgEncodeHudsonalphaChipSeqPeaksRep1A549CtcfPcr1xEtoh02
 objType table
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/EtOH/Input/PCR1x
@@ -6426,7 +6426,7 @@ view Peaks
 
 metaObject wgEncodeHudsonalphaChipSeqPeaksRep2A549CtcfPcr1xDexa
 objType table
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/DEX_100nM/Input/PCR1x
@@ -6450,7 +6450,7 @@ view Peaks
 
 metaObject wgEncodeHudsonalphaChipSeqPeaksRep2A549CtcfPcr1xEtoh02
 objType table
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/EtOH/Input/PCR1x
@@ -8325,7 +8325,7 @@ view Peaks
 
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep1A549CtcfPcr1xDexa
 objType file
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/DEX_100nM/Input/PCR1x
@@ -8347,7 +8347,7 @@ view RawData
 
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep1A549CtcfPcr1xEtoh02
 objType file
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/EtOH/Input/PCR1x
@@ -9930,7 +9930,7 @@ view RawData
 
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep2A549CtcfPcr1xDexa
 objType file
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/DEX_100nM/Input/PCR1x
@@ -9952,7 +9952,7 @@ view RawData
 
 metaObject wgEncodeHudsonalphaChipSeqRawDataRep2A549CtcfPcr1xEtoh02
 objType file
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/EtOH/Input/PCR1x
@@ -11669,7 +11669,7 @@ view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xDexa
 objType table
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/DEX_100nM/Input/PCR1x
@@ -11692,7 +11692,7 @@ view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xEtoh02
 objType table
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/EtOH/Input/PCR1x
@@ -13887,7 +13887,7 @@ view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xDexa
 objType table
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/DEX_100nM/Input/PCR1x
@@ -13910,7 +13910,7 @@ view RawSignal
 
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xEtoh02
 objType table
-antibody CTCF
+antibody CTCF_(SC-5916)
 cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId A549/EtOH/Input/PCR1x
@@ -16034,4 +16034,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: -1064906760
+# MAGIC: 778318952
