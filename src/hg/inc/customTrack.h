@@ -56,6 +56,9 @@ struct customTrack
     char *groupName;		/* Group name if any. */
     struct bbiFile *bbiFile;	/* Handle for bigWig/bigBed file. */
     char *networkErrMsg;        /* Network error message */
+#ifdef PROGRESS_METER
+    char *progressFile;         /* name of download progress file in trash */
+#endif
     };
 
 /* cart/cgi variables */
