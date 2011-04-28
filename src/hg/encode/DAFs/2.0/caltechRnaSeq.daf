@@ -24,14 +24,14 @@ dafVersion        2.0
 
 # Lab and general info
 grant             Myers
-lab               Caltech(Wold)
+lab               Caltech
 dataType          RnaSeq
 compositeSuffix   CaltechRnaSeq
 group             expression
 variables         cell,readType,mapAlgorithm,insertLength,treatment
 assembly          hg19
 
-validationSettings validateFiles.fastq:mmCheckOneInN=10;validateFiles.bam:bamPercent=99,mismatches=6
+validationSettings validateFiles.fastq:mmCheckOneInN=10;validateFiles.bam:bamPercent=98,mismatches=6
 
 # Track/view definition
 
