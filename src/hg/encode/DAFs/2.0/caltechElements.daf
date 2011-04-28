@@ -1,4 +1,4 @@
-# Data Agreement File $Revision: 1.5 $
+# Data Agreement File $Revision: 1.6 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -24,11 +24,11 @@ dafVersion        2.0
 
 # Lab and general info
 grant             Myers
-lab               Caltech(Wold)
+lab               Caltech
 dataType          RnaSeq
 compositeSuffix   CaltechRnaSeq
 group             expression
-variables         cell,readType,insertLength
+variables         cell,readType,insertLength,treatment
 assembly          hg19
 dataVersion       3
 dataVersionComment New Elements Formats
