@@ -115,10 +115,10 @@ loadDbTracks() {
     eval $cmd
     if [ -z "$strict" -a -f $dbpath/description.html ] ; then
 	if [ "X${UNAME_N}Y" = "XhgwdevY" ]; then
-	    if [ ! -L /gbdb/$db/html -a -d /cluster/data/$db/html ]; then
+	    if [ ! -L /gbdb/$db/html -a -d /hive/data/genomes/$db/html ]; then
 		rm -f /gbdb/$db/html/description.html
 		rmdir /gbdb/$db/html
-		ln -s /cluster/data/$db/html /gbdb/$db/html
+		ln -s /hive/data/genomes/$db/html /gbdb/$db/html
 	    fi
 	    if [ -f /gbdb/$db/html/description.html ]; then
 		rm -f /gbdb/$db/html/description.html

@@ -16,7 +16,7 @@ priority 0
 wgEncode 1
 type bed 9 + 
 itemRgb on
-visibility dense
+visibility hide
 canPack On
 extraFields logR=[f]LogR_Value
 scoreFilter 0
