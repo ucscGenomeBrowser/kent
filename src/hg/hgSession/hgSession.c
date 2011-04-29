@@ -700,9 +700,8 @@ if (helList != NULL)
 	}
     dyStringPrintf(dyMessage,
 		   "Custom tracks are subject to an expiration policy described in the "
-		   "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_BLANK>custom "
-		   "track documentation</A>.  In order to keep a custom track from expiring, "
-		   "you can periodically view the custom track in the genome browser.</P>");
+		   "<A HREF=\"../goldenPath/help/hgSessionHelp.html#CTs\" TARGET=_BLANK>"
+		   "Session documentation</A>.</P>");
     slNameFreeList(&liveDbList);
     slNameFreeList(&expiredDbList);
     }
@@ -730,10 +729,9 @@ if (isNotEmpty(ss))
 		"previously saved BLAT results, so it may not appear as "
 		"originally intended.  ");
     dyStringPrintf(dyMessage,
-		   "BLAT results are subject to the same expiration policy as "
-		   "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_BLANK>custom "
-		   "tracks</A>.  In order to keep BLAT results from expiring, you can "
-		   "periodically view them in the genome browser.</P>");
+		   "BLAT results are subject to an "
+		   "<A HREF=\"../goldenPath/help/hgSessionHelp.html#CTs\" TARGET=_BLANK>"
+		   "expiration policy</A>.");
     }
 }
 
