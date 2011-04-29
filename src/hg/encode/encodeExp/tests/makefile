@@ -4,7 +4,7 @@ PROG = ../encodeExp
 
 TABLE = encodeExpTest_${USER}
 
-test: addTest accTest showTest idTest
+test: copyTest removeTest addTest accTest showTest idTest renameTest 
 	echo tested all
 	@#-rm -rf output
 
@@ -20,7 +20,16 @@ accTest:
 	${PROG} add input/addTest.in.ra -table=${TABLE}
 	${PROG} acc 2 -table=${TABLE}
 	${PROG} acc 3 -table=${TABLE}
-	${PROG} revoke 3 -table=${TABLE}
+	sleep 1
+	${PROG} deacc 3 -table=${TABLE}
+	${PROG} dump output/$@.out.ra -table=${TABLE}
+	@grep -v updateTime output/$@.out.ra | diff - expected/$@.out.ra
+
+removeTest:
+	${MAKE} setup
+	${PROG} add input/addTest.in.ra -table=${TABLE}
+	sleep 1
+	${PROG} remove 2 "bad experiment" -table=${TABLE}
 	${PROG} dump output/$@.out.ra -table=${TABLE}
 	@grep -v updateTime output/$@.out.ra | diff - expected/$@.out.ra
 
@@ -32,6 +41,20 @@ showTest:
 	${PROG} show 3 -table=${TABLE} >> output/$@.out.ra
 	@grep -v updateTime output/$@.out.ra | diff - expected/$@.out.ra
 
+copyTest:
+	${MAKE} setup
+	${PROG} add input/addTest.in.ra -table=${TABLE}
+	${PROG} copy -table=${TABLE} ${TABLE}Copy
+	${PROG} dump output/$@.out.ra -table=${TABLE}Copy
+	@grep -v updateTime output/$@.out.ra | diff - expected/$@.out.ra
+
+renameTest:
+	${MAKE} setup
+	${PROG} add input/addTest.in.ra -table=${TABLE}
+	${PROG} copy -table=${TABLE} ${TABLE}Renamed
+	${PROG} dump output/$@.out.ra -table=${TABLE}Renamed
+	@grep -v updateTime output/$@.out.ra | diff - expected/$@.out.ra
+
 idTest:
 	${MAKE} setup
 	${PROG} add input/addTest.in.ra -table=${TABLE}
@@ -41,6 +64,8 @@ idTest:
 
 clean:
 	${PROG} drop -table=${TABLE}
+	${PROG} drop -table=${TABLE}Copy
+	${PROG} drop -table=${TABLE}Renamed
 	@rm -rf output
 
 setup:
