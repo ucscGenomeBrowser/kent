@@ -4560,7 +4560,7 @@ if (!hideControls)
     topButton("hgt.out1", ZOOM_1PT5X);
     topButton("hgt.out2", ZOOM_3X);
     topButton("hgt.out3", ZOOM_10X);
-    hWrites("<BR>\n");
+    hWrites("<div style='height:1em;'></div>\n");
 #endif//ndef USE_NAVIGATION_LINKS
 
     if (showTrackControls)
@@ -5488,7 +5488,7 @@ else
     chromInfoRowsNonChrom(1000);
 
 hTableEnd();
-puts("</P><BR>");
+puts("</P><div style='height:.9em;'></div>");
 
 hgPositionsHelpHtml(organism, database);
 puts("</FORM>");
