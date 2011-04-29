@@ -9514,6 +9514,17 @@ cvDefined yes
 validate cv or control
 priority 190
 
+term attic   
+type typeOfTerm
+label Is this auxillary data
+description  Provisional This indicates the status of a file in the attic or not.  It is an internal piece of metaData.  
+searchable no
+cvDefined no
+#It probably should be cv defined, but Venkat will need to define the terms
+validate 
+priority 190
+hidden yes
+
 term bioRep
 type typeOfTerm
 label  Transcriptome Bio-Replicate ID
