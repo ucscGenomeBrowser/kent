@@ -3023,6 +3023,18 @@ sex M
 tier 3
 protocol SYDH_TFBS(Farnham):PBDE_Farnham_protocol.pdf
 
+term PBMC
+tag PBMC
+organism human
+description Peripheral blood mononuclear cells (Provisional)
+tissue Blood
+vendorName PBMC cells provided by E. Bresnick, UW Madison
+termId BTO:0001025
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
+sex M
+tier 3
+protocol SYDH_TFBS(Farnham):PBMC_Farnham_protocol.pdf
+
 term PFSK-1
 tag PFSK1
 type Cell Line
@@ -8774,6 +8786,12 @@ geo Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIx
 # Matches GA2x that Kate initally indicated as the term
+
+term Illumina_HiSeq_2000
+tag IlluminaHiSeq2
+geo Illumina HiSeq 2000
+type seqPlatform
+description Illumina HiSeq 2000 (Provisional)
 
 term 454_GS
 tag 454GS

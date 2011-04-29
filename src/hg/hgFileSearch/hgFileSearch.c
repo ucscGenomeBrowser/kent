@@ -341,6 +341,7 @@ if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
 
 printf("</form>\n");
 printf("</div>"); // Restricts to max-width:1000px;
+puts("<div style='height:.8em;'></div>");
 
 if (measureTiming)
     uglyTime("Rendered tabs");
@@ -442,8 +443,8 @@ jsIncludeFile("ui.dropdownchecklist.js",NULL);
 jsIncludeFile("utils.js",NULL);
 
 // This line is needed to get the multi-selects initialized
-//printf("<script type='text/javascript'>$(document).ready(function() { setTimeout('updateMetaDataHelpLinks(0);',50);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
-printf("<script type='text/javascript'>$(document).ready(function() { updateMetaDataHelpLinks(0);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
+//printf("<script type='text/javascript'>$(document).ready(function() { setTimeout('updateMetaDataHelpLinks(0);',50);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
+printf("<script type='text/javascript'>$(document).ready(function() { updateMetaDataHelpLinks(0);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
 
 doFileSearch(db,organism,cart,tdbList);
 

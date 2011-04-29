@@ -32,7 +32,9 @@ Following the instructions in scripts/README
 	CentOS Linux on Intel or AMD Opteron environment.
 	Other users do report successful operation on other systems.
 
-	Other variables to be set: USE_BAM  USE_SSL
+        Depending upon what libraries you have installed locally, you may want
+        to  set one or more of these variables: USE_SSL, USE_BAM, USE_TABIX.
+
 	See also:
 	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
 
