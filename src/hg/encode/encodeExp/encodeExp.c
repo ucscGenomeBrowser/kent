@@ -20,6 +20,7 @@ errAbort(
   "encodeExp - manage ENCODE Experiments table (hgFixed:encodeExp)\n"
   "usage:\n"
   "   encodeExp <action> [arg]\n"
+  "\n"
   "actions:\n"
   "   add <exp.ra>		add experiments to table from file\n"
   "   acc <id>		add accession to experiment (approve it)\n"
@@ -29,20 +30,20 @@ errAbort(
   "   find <db> <exp.ra>	find unassigned experiments in metaDb and create .ra to file\n"
   "   id human|mouse <lab> <dataType> <cellType> [<vars>]\n"
   "			return id for experiment (vars as 'var1:val1 var2:val2')\n"
-  "management actions\n"
-  "   create 		create table (default \'%s\')\n"
-  "   drop 		drop table (default \'%s\') \n"
-  "   rename <newName> 	rename (default \'%s\') table and update triggers\n"
-  "   restore <exp.ra>	restore table from .ra file (default \'%s\')\n"
-  "   copy <newName>	copy table and add update triggers\n"
-  "   deacc <id>	deaccession experiment (remove accession, leave in table)\n"
+  "management actions: (default table \'%s\')\n"
+  "   create 		create table\n"
+  "   drop 		drop table\n"
+  "   rename <newName> 	rename table and update triggers\n"
+  "   restore <exp.ra>	restore table from .ra file\n"
   "   remove <id> <why>	remove experiment (deletes from table)\n"
+  "   copy <newName>	copy table and add update triggers\n"
+  "   deacc <id>		deaccession experiment (remove accession, leave in table)\n"
+  "\n"
   "options:\n"
   "   -composite	limit to specified composite track (affects find)\n"
   "   -mdb		specify metaDb table name (default \'%s\') - for test use \n"
   "   -table	specify experiment table name (default \'%s\')\n",
-  encodeExpTableNew, encodeExpTableNew, encodeExpTableNew, encodeExpTableNew, 
-  MDB_DEFAULT_NAME, ENCODE_EXP_TABLE
+  encodeExpTableNew, MDB_DEFAULT_NAME, ENCODE_EXP_TABLE
   );
 }
 
@@ -399,6 +400,9 @@ char *command = argv[1];
 table = optionVal("table", (sameString(command, "create") || 
                             sameString(command, "drop") ||
                             sameString(command, "restore") ||
+                            sameString(command, "remove") ||
+                            sameString(command, "deacc") ||
+                            sameString(command, "copy") ||
                             sameString(command, "rename")) ?
                         encodeExpTableNew: ENCODE_EXP_TABLE);
 mdb = optionVal("mdb", MDB_DEFAULT_NAME);
