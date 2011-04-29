@@ -29,7 +29,7 @@ shortLabel LICR Histone
 longLabel Histone Modifications by ChIP-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line BMarrow=Bone_Marrow Cbellum=Cerebellum Cortex=Cortex Heart=Heart Kidney=Kidney Liver=Liver Lung=Lung
+subGroup2 cellType Cell_Line BMarrow=Bone_Marrow Cbellum=Cerebellum Cortex=Cortex Heart=Heart Kidney=Kidney Liver=Liver Lung=Lung MEF=MEF
 subGroup3 factor Factor H3K4me1=H3K4me1 H3K4me3=H3K4me3 Input=Input
 subGroup4 sex Sex M=M
 subGroup5 age Age adult8wks=adult-8wks
@@ -187,6 +187,24 @@ noInherit on
         type broadPeak
         color 153,38,0
         # subId=3886 dateSubmitted=2011-04-15
+
+        track wgEncodeLicrHistoneMefH3k4me3MAdult8wksC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks 
+        shortLabel MEF H3K4me3 Pk
+        longLabel MEF H3K4me3 Histone Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=adult8wks factor=H3K4me3 cellType=MEF control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=4005 dateSubmitted=2011-04-29
+
+        track wgEncodeLicrHistoneMefH3k4me1MAdult8wksC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks 
+        shortLabel MEF H3K4me1 Pk
+        longLabel MEF H3K4me1 Histone Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=adult8wks factor=H3K4me1 cellType=MEF control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=4001 dateSubmitted=2011-04-28
 
 	#######	Signal Tracks###########
 	track wgEncodeLicrHistoneViewSignal
@@ -388,4 +406,31 @@ noInherit on
         type bigWig 0.150000 39.330002
         color 153,38,0
         # subId=3934 dateSubmitted=2011-04-27
+
+        track wgEncodeLicrHistoneMefInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel MEF Input Sig
+        longLabel MEF Input Histone Histone Modifications by ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=adult8wks factor=Input cellType=MEF control=std sex=M strain=C57BL6
+        type bigWig 0.140000 50.770000
+        color 153,38,0
+        # subId=4008 dateSubmitted=2011-04-29
+
+        track wgEncodeLicrHistoneMefH3k4me3MAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal 
+        shortLabel MEF H3K4me3 Sig
+        longLabel MEF H3K4me3 Histone Histone Modifications by ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=MEF control=std sex=M strain=C57BL6
+        type bigWig 0.130000 71.599998
+        color 153,38,0
+        # subId=4005 dateSubmitted=2011-04-29
+
+        track wgEncodeLicrHistoneMefH3k4me1MAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal 
+        shortLabel MEF H3K4me1 Sig
+        longLabel MEF H3K4me1 Histone Histone Modifications by ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=MEF control=std sex=M strain=C57BL6
+        type bigWig 0.110000 21.290001
+        color 153,38,0
+        # subId=4001 dateSubmitted=2011-04-28
 

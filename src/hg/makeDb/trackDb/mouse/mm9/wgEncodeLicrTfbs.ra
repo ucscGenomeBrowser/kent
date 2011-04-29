@@ -28,7 +28,7 @@ shortLabel LICR TFBS
 longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line BMarrow=Bone_Marrow Cbellum=Cerebellum Cortex=Cortex Heart=Heart Kidney=Kidney Liver=Liver Lung=Lung
+subGroup2 cellType Cell_Line BMarrow=Bone_Marrow Cbellum=Cerebellum Cortex=Cortex Heart=Heart Kidney=Kidney Liver=Liver Lung=Lung MEF=MEF Spleen=Spleen
 subGroup3 factor Factor CTCF=CTCF POL2=Pol2 Input=Input
 subGroup4 sex Sex M=M
 subGroup5 age Age adult8wks=adult-8wks
@@ -186,6 +186,33 @@ noInherit on
         type broadPeak
         color 153,38,0
         # subId=3925 dateSubmitted=2011-04-25
+
+        track wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdPk
+        parent wgEncodeLicrTfbsViewPeaks 
+        shortLabel MEF Pol2 Pk
+        longLabel MEF Pol2 TFBS TFBS ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=adult8wks factor=POL2 cellType=MEF control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=4010 dateSubmitted=2011-04-29
+
+        track wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdPk
+        parent wgEncodeLicrTfbsViewPeaks 
+        shortLabel Spleen CTCF Pk
+        longLabel Spleen CTCF TFBS TFBS ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=adult8wks factor=CTCF cellType=Spleen control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=3999 dateSubmitted=2011-04-29
+
+        track wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdPk
+        parent wgEncodeLicrTfbsViewPeaks 
+        shortLabel MEF CTCF Pk
+        longLabel MEF CTCF TFBS TFBS ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=adult8wks factor=CTCF cellType=MEF control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=4000 dateSubmitted=2011-04-28
 
 	#######	Signal Tracks###########
 	track wgEncodeLicrTfbsViewSignal
@@ -389,4 +416,40 @@ noInherit on
         type bigWig 0.130000 65.070000
         color 153,38,0
         # subId=3926 dateSubmitted=2011-04-25
+
+        track wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal 
+        shortLabel MEF Pol2 Sig
+        longLabel MEF Pol2 TFBS TFBS ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=adult8wks factor=POL2 cellType=MEF control=std sex=M strain=C57BL6
+        type bigWig 0.110000 40.720001
+        color 153,38,0
+        # subId=4010 dateSubmitted=2011-04-29
+
+        track wgEncodeLicrTfbsMefInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel MEF Input Sig
+        longLabel MEF Input TFBS TFBS ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=adult8wks factor=Input cellType=MEF control=std sex=M strain=C57BL6
+        type bigWig 0.140000 50.770000
+        color 153,38,0
+        # subId=4009 dateSubmitted=2011-04-29
+
+        track wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal 
+        shortLabel Spleen CTCF Sig
+        longLabel Spleen CTCF TFBS TFBS ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=adult8wks factor=CTCF cellType=Spleen control=std sex=M strain=C57BL6
+        type bigWig 0.200000 53.349998
+        color 153,38,0
+        # subId=3999 dateSubmitted=2011-04-29
+
+        track wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal 
+        shortLabel MEF CTCF Sig
+        longLabel MEF CTCF TFBS TFBS ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=adult8wks factor=CTCF cellType=MEF control=std sex=M strain=C57BL6
+        type bigWig 0.160000 68.889999
+        color 153,38,0
+        # subId=4000 dateSubmitted=2011-04-28
 
