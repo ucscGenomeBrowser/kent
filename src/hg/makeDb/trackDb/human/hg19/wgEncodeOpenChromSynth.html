@@ -67,9 +67,9 @@ color-coded for each cell type as follows:
 <li><b>Black</b>:
 Regions identified as peaks by both the DNaseI HS assay<!-- described here--> and
 FAIRE assay<!-- described here-->.  Peaks for DNaseI HS have
-p-values <code>&#60; 0.05</code> (<code>-log<sub>10</sub>(p-value) &#62; 1.3</code>)
+p-values <code>&lt; 0.01</code> (<code>-log<sub>10</sub>(p-value) &gt; 2</code>)
 and peaks for FAIRE have
-p-values <code>&#60; 0.1</code> (<code>-log<sub>10</sub>(p-value) &#62; 1.0</code>).</li></DD>
+p-values <code>&lt; 0.01</code> (<code>-log<sub>10</sub>(p-value) &gt; 2</code>).</li></DD>
 </ul>
 <br />
 <DT><B>Open Chromatin</B>, OC Code = 2, 3 or 4:</DT>
@@ -78,7 +78,7 @@ p-values <code>&#60; 0.1</code> (<code>-log<sub>10</sub>(p-value) &#62; 1.0</cod
 Regions not identified as peaks in both DNaseI HS and FAIRE, but for which
 the combination of p-values from these assays using Fisher's combined
 probability test results in a
-p-value <code>&#60; 0.05</code> (<code>-log<sub>10</sub>(p-value) &#62; 1.3</code>).</li></DD>
+p-value <code>&lt; 0.01</code> (<code>-log<sub>10</sub>(p-value) &gt; 2</code>).</li></DD>
 </ul>
 <br />
 <DT><B>DNase</B>, OC Code = 2:</DT>
@@ -86,7 +86,7 @@ p-value <code>&#60; 0.05</code> (<code>-log<sub>10</sub>(p-value) &#62; 1.3</cod
 <li><b><span style='color: #009900;'>Green</span></b> (low significance):
 Regions identified by DNaseI HS as peaks and not identified by FAIRE as
 peaks, and with a Fisher's combined DNaseI HS and FAIRE
-p-value <code>&#62; 0.05</code> (<code>-log<sub>10</sub>(p-value) &#60; 1.3</code>).</li>
+p-value <code>&gt;= 0.01</code> (<code>-log<sub>10</sub>(p-value) &lt;= 2</code>).</li>
 <li><b><span style='color: #0000FF;'>Blue</b></span> (high significance):
 see Open Chromatin above.</li></DD>
 </ul>
@@ -96,7 +96,7 @@ see Open Chromatin above.</li></DD>
 <li><b><span style='color: #990000;'>Dark Red</span></b> (low significance):
 Regions identified by FAIRE as peaks and not identified by DNaseI HS as
 peaks, and with a Fisher's combined DNaseI HS and FAIRE
-p-value <code>&#62; 0.05</code> (<code>-log<sub>10</sub>(p-value) &#60; 1.3</code>).</li>
+p-value <code>&gt;= 0.01</code> (<code>-log<sub>10</sub>(p-value) &lt;= 2</code>).</li>
 <li><b><span style='color: #0000FF;'>Blue</b></span> (high significance):
 see Open Chromatin above.</li></DD>
 </ul>
@@ -107,7 +107,7 @@ see Open Chromatin above.</li></DD>
 Regions identified by ChIP-seq as peaks indicating binding sites for one
 or more of RNA Pol II, CTCF, and c-Myc described here and not identified by
 DNaseI HS or FAIRE as peaks. Peaks for ChIP-seq have
-p-values <code>&#60; 0.05</code> (<code>-log<sub>10</sub>(p-value) > 1.3</code>).
+p-values <code>&lt; 0.01</code> (<code>-log<sub>10</sub>(p-value) &gt; 2</code>).
 For RNA Pol II, only sites that overlap annotated transcription start sites
 by the UCSC Genes track are considered.
 <li><b><span style='color: #0000FF;'>Blue</b></span> (high significance):
@@ -139,6 +139,9 @@ using the formula:</P>
 where <B><code style='font-size:1.2em;'>p<sub>i</sub></code></B> are the p-values calculated for DNaseI HS
 and FAIRE.  <B><code style='font-size:1.2em;'>X<sup>2</sup></code></B> follows a chi-squared distribution,
 thus a combined p-value can be assigned to this test statistic.
+</P>
+<P>To facilitate analyses, an <em>Open Chromatin Code (OC Code)</em> has been
+assigned for each region as described in the <em>Display Conventions and Configuration</em> section above.
 </P>
 <P>All signal values, <code>-log<sub>10</sub></code>(p-values), and the OC Code is
 displayed on the detail description page for each element and is available in the
