@@ -210,7 +210,7 @@ for (ref = list; ref != NULL; ref = ref->next)
     fprintf(f, "%s\t%d\t%d\t", chrom, range->start, range->end);
     fprintf(f, "%s\t", factor->factor);
     fprintf(f, "%d\t", round(maxLevel));	/* score */
-    fprintf(f, "+\t");  /* strand.... */
+    fprintf(f, ".\t");  /* strand.... */
     fprintf(f, "%d\t%d\t", range->start, range->end);
     fprintf(f, "0\t");  /* itemRgb */
     fprintf(f, "1\t");  /* block count */
