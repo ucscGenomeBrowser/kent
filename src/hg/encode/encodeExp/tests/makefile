@@ -4,7 +4,7 @@ PROG = ../encodeExp
 
 TABLE = encodeExpTest_${USER}
 
-test: copyTest removeTest addTest accTest showTest idTest renameTest 
+test: copyTest removeTest addTest accTest showTest idTest renameTest restoreTest
 	echo tested all
 	@#-rm -rf output
 
@@ -30,6 +30,22 @@ removeTest:
 	${PROG} add input/addTest.in.ra -table=${TABLE}
 	sleep 1
 	${PROG} remove 2 "bad experiment" -table=${TABLE}
+	${PROG} dump output/$@.out.ra -table=${TABLE}
+	@grep -v updateTime output/$@.out.ra | diff - expected/$@.out.ra
+
+restoreTest:
+	${MAKE} setup
+	${PROG} add input/$@.in.ra -table=${TABLE}
+	sleep 1
+	${PROG} remove 1 "bad experiment 1" -table=${TABLE}
+	${PROG} remove 4 "bad experiment 2" -table=${TABLE}
+	${PROG} remove 5 "bad experiment 3" -table=${TABLE}
+	${PROG} remove 7 "bad experiment 4" -table=${TABLE}
+	${PROG} remove 8 "bad experiment 5" -table=${TABLE}
+	${PROG} dump output/$@.tmp.ra -table=${TABLE}
+	${PROG} drop -table=${TABLE}
+	${PROG} create -table=${TABLE}
+	${PROG} restore -table=${TABLE} output/$@.tmp.ra
 	${PROG} dump output/$@.out.ra -table=${TABLE}
 	@grep -v updateTime output/$@.out.ra | diff - expected/$@.out.ra
 

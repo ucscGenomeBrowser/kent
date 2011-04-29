@@ -393,7 +393,7 @@ else
     errAbort("Invalid SQL trigger action: %s", action);
 dy = dyStringCreate(
     "CREATE TRIGGER %s_%s AFTER %s ON %s FOR EACH ROW INSERT INTO %s%s VALUES \n"
-    "(%s.ix, %s.organism, %s.lab, %s.dataType, %s.cellType, %s.expVars, %s.accession, NOW(), '%c', USER())",
+    "(%s.ix, %s.organism, %s.lab, %s.dataType, %s.cellType, %s.expVars, %s.accession, NOW(), '%c', USER(), '')",
         tableName, action, action, tableName,
         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX,
         which, which, which, which, which, which, which, toupper(action[0]));
@@ -466,6 +466,10 @@ safef(buf, sizeof buf, "%s%s", tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
 sqlDropTable(conn, buf);
 }
 
+#define ENCODE_EXP_HISTORY_FIELD_WHAT   "action"
+#define ENCODE_EXP_HISTORY_FIELD_WHO    "changedBy"
+#define ENCODE_EXP_HISTORY_FIELD_WHY    "why"
+
 void encodeExpTableCreate(struct sqlConnection *conn, char *tableName)
 /* Create an encodeExp table */
 {
@@ -473,19 +477,23 @@ struct dyString *dy;
 dy = dyStringCreate(sqlCreate, tableName);
 sqlRemakeTable(conn, tableName, dyStringCannibalize(&dy));
 
-/* Create history table -- a clone with 2 additional columns (action, changedBy).
+/* Create history table -- a clone with 3 additional columns (action, changedBy, why).
+ * 'why' is only required for deletes
  * Remove auto-inc attribute on ix, and use ix and updateTime as primary key  */
 dy = dyStringCreate("CREATE TABLE %s%s LIKE %s",
                 tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, tableName);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN action CHAR(1) DEFAULT ''",
-                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
+dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN %s CHAR(1) DEFAULT ''",
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_HISTORY_FIELD_WHAT);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN changedBy VARCHAR(77) NOT NULL",
-                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
+dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN %s VARCHAR(77) NOT NULL",
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_HISTORY_FIELD_WHO);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s MODIFY COLUMN ix INT DEFAULT 0",
-                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
+dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN %s VARCHAR(255) NOT NULL",
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_HISTORY_FIELD_WHY);
+sqlUpdate(conn, dyStringCannibalize(&dy));
+dy = dyStringCreate("ALTER TABLE %s%s MODIFY COLUMN %s INT DEFAULT 0",
+                        tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_FIELD_IX);
 sqlUpdate(conn, dyStringCannibalize(&dy));
 dy = dyStringCreate("ALTER TABLE %s%s DROP PRIMARY KEY",
                         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
@@ -498,31 +506,32 @@ sqlUpdate(conn, dyStringCannibalize(&dy));
 encodExpAddTriggers(conn, tableName);
 }
 
-static void encodeExpAddUserToLatestHistory(struct sqlConnection *conn, char *table, int id)
+static void encodeExpAddToLatestHistory(struct sqlConnection *conn, char *table, int id, char *field, char *value)
+/* Add user name to history table record */
 {
-/* Add user name to history table record, limiting by id if non-zero */
 struct dyString *dy = dyStringCreate(
         "select max(updateTime) from %s%s where %s='%d'",
                         table, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_FIELD_IX, id);
 verbose(3, "%s\n", dy->string);
 char *updateTime = sqlQuickString(conn, dyStringCannibalize(&dy));
 dy = dyStringCreate(
-        "update %s%s set changedBy='%s' where updateTime = '%s'",
-                        table, ENCODE_EXP_HISTORY_TABLE_SUFFIX, getlogin(), updateTime);
+        "update %s%s set %s='%s' where updateTime = '%s'",
+                        table, ENCODE_EXP_HISTORY_TABLE_SUFFIX, field, value, updateTime);
 verbose(3, "%s\n", dy->string);
 sqlUpdate(conn, dyStringCannibalize(&dy));
 }
 
-#ifdef WHY
-static void encodeExpAddWhyToLatestHistory(struct sqlConnection *conn, char *table, int id, char *why)
+static void encodeExpAddUserToLatestHistory(struct sqlConnection *conn, char *table, int id)
+/* Add user name to history table record */
 {
-/* Add comment to history table record */
-struct dyString *dy = dyStringCreate(
-        "update %s%s set why='%s' where updateTime = max(updateTime)",
-                        table, ENCODE_EXP_HISTORY_TABLE_SUFFIX, why, table);
-sqlUpdate(conn, dyStringCannibalize(&dy));
+encodeExpAddToLatestHistory(conn, table, id, ENCODE_EXP_HISTORY_FIELD_WHO, getlogin());
 }
-#endif
+
+static void encodeExpAddWhyToLatestHistory(struct sqlConnection *conn, char *table, int id, char *why)
+/* Add comment to history table record */
+{
+encodeExpAddToLatestHistory(conn, table, id, ENCODE_EXP_HISTORY_FIELD_WHY, why);
+}
 
 static void encodeExpSaveToDbMayBeEscaped(struct sqlConnection *conn, struct encodeExp *el, char *tableName, int updateSize, boolean escaped)
 /* Save encodeExp as a row to the table specified by tableName.
@@ -868,7 +877,7 @@ if (encodeExpSame(exp, exp2))
     sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
     sqlUpdate(conn, query);
     encodeExpAddUserToLatestHistory(conn, tableName, exp->ix);
-    // TODO encodeExpAddWhyToLatestHistory(conn, tableName, exp->ix, why);
+    encodeExpAddWhyToLatestHistory(conn, tableName, exp->ix, why);
     sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
     }
 }
