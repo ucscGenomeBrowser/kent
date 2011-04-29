@@ -341,6 +341,7 @@ if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
 
 printf("</form>\n");
 printf("</div>"); // Restricts to max-width:1000px;
+puts("<div style='height:.8em;'></div>");
 
 if (measureTiming)
     uglyTime("Rendered tabs");
