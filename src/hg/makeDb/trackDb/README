@@ -631,15 +631,20 @@ Some settings used by various tracks:
       the user on the hgTrackUi page.
     o inputTrackTable - for tracks that are type factorSource or otherwise created
       by clustering or aggregating data found in other tracks.  This names a table
-      that is in three column format - first the input track name, then the source
-      name (cell line etc) if any, then the factor name if any.
+      that includes in it's first column the input track name.  For factorSource
+      the second column should be the the source name (cell line etc) if any, 
+      and the third should be the factor name if any.  The second and third columns
+      are optional for other track types. In general though the most important few
+      metadata fields should be included as columns, and these should be listed in
+      the inputTableFieldDisplay tag described below.
     o inputTableFieldDisplay - used with inputTrackTable.  Countains a list of the
       fields from that table to display as columns in the details display table.
     o inputTracksSubgroupDisplay - used with inputTrackTable.  One and only one of
       inputTableFieldsDisplay or inputTracksSubgroupDisplay should be used. If present
       this tag contains a list of group types (just the left size of the var=val pairs
       in the subGroupN line of the parent) to display as columns in the details
-      display table.
+      display table. DEPRECIATED - this tends to cause the clusters to break when
+      there is any data churn.  Use inputTableFieldDisplay instead.
     o showSubtrackColorOnUi - used with tracks that include other tracks.  When UI shows
       a table of tracks and this is set, a small patch of color indicating the track color
       is part of the table.
