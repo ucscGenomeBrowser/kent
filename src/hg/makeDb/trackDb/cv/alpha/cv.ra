@@ -3023,6 +3023,18 @@ sex M
 tier 3
 protocol SYDH_TFBS(Farnham):PBDE_Farnham_protocol.pdf
 
+term PBMC
+tag PBMC
+organism human
+description Peripheral blood mononuclear cells (Provisional)
+tissue Blood
+vendorName PBMC cells provided by E. Bresnick, UW Madison
+termId BTO:0001025
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
+sex M
+tier 3
+protocol SYDH_TFBS(Farnham):PBMC_Farnham_protocol.pdf
+
 term PFSK-1
 tag PFSK1
 type Cell Line
