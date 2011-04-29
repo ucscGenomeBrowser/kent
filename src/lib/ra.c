@@ -387,3 +387,22 @@ if (hashNumEntries(bigHash) == 0)
 return bigHash;
 }
 
+struct hash *raTagVals(char *fileName, char *tag)
+/* Return a hash of all values of given tag seen in any stanza of ra file. */
+{
+struct hash *hash = hashNew(0);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+while (lineFileNextFullReal(lf, &line))
+    {
+    char *word = nextWord(&line);
+    if (sameString(word, tag))
+        {
+	char *val = trimSpaces(line);
+	if (!hashLookup(hash, val))
+	    hashAdd(hash, val, NULL);
+	}
+    }
+lineFileClose(&lf);
+return hash;
+}

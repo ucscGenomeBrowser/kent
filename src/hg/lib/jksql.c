@@ -936,6 +936,19 @@ if (sqlTableExists(sc, table))
     }
 }
 
+void sqlCopyTable(struct sqlConnection *sc, char *table1, char *table2)
+/* Copy table1 to table2 */
+{
+char query[256];
+
+if (table1 == NULL || table2 == NULL)
+    return;
+safef(query, sizeof(query), "create table %s like %s", table2, table1);
+sqlUpdate(sc, query);
+safef(query, sizeof(query), "insert into %s select * from  %s", table2, table1);
+sqlUpdate(sc, query);
+}
+
 void sqlGetLock(struct sqlConnection *sc, char *name)
 /* Sets an advisory lock on the process for 1000s returns 1 if successful,*/
 /* 0 if name already locked or NULL if error occurred */
