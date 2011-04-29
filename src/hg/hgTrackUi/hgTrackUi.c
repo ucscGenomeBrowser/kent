@@ -2876,7 +2876,7 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     printPennantIconNote(tdb);
 
     puts(tdb->html);
-    printf("</td><td>");
+    printf("</td><td><div style='height:.7em;'></div>");
     makeTopLink(tdb);
     printf("&nbsp</td></tr><tr valign='bottom'><td colspan=2>");
     makeTopLink(tdb);
