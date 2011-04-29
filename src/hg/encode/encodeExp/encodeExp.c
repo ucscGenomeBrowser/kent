@@ -20,18 +20,25 @@ errAbort(
   "encodeExp - manage ENCODE Experiments table (hgFixed:encodeExp)\n"
   "usage:\n"
   "   encodeExp <action> [arg]\n"
+  "\n"
   "actions:\n"
-  "   create 		create table (default \'%s\')\n"
   "   add <exp.ra>		add experiments to table from file\n"
   "   acc <id>		add accession to experiment (approve it)\n"
-  "   revoke <id>		remove accession to experiment (revoke it)\n"
   "   show <id>		print experiment to stdout\n"
-  "   history <id>      show changes to experiment entry\n"
   "   dump <exp.ra>	output experiment table to file\n"
+  "   history [<id>]	show changes to experiment entry\n"
   "   find <db> <exp.ra>	find unassigned experiments in metaDb and create .ra to file\n"
   "   id human|mouse <lab> <dataType> <cellType> [<vars>]\n"
   "			return id for experiment (vars as 'var1:val1 var2:val2')\n"
-  "   rename <newTable> rename table and update triggers\n"
+  "management actions: (default table \'%s\')\n"
+  "   create 		create table\n"
+  "   drop 		drop table\n"
+  "   rename <newName> 	rename table and update triggers\n"
+  "   restore <exp.ra>	restore table from .ra file\n"
+  "   remove <id> <why>	remove experiment (deletes from table)\n"
+  "   copy <newName>	copy table and add update triggers\n"
+  "   deacc <id>		deaccession experiment (remove accession, leave in table)\n"
+  "\n"
   "options:\n"
   "   -composite	limit to specified composite track (affects find)\n"
   "   -mdb		specify metaDb table name (default \'%s\') - for test use \n"
@@ -51,6 +58,7 @@ struct sqlConnection *connExp = NULL;
 char *composite = NULL, *mdb = NULL, *table = NULL;
 char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *expVars = NULL;
 char *newTable = NULL;
+char *why = NULL;
 
 static struct hash *expKeyHashFromTable(struct sqlConnection *conn, char *table)
 /* create hash of keys for existing experiments so we can distinguish new ones */
@@ -67,14 +75,14 @@ while ((exp = slPopHead(&exps)) != NULL)
 return hash;
 }
 
-void expCreate()
+void expCreateTable()
 /* Create table and history */
 {
 verbose(1, "Creating table \'%s\'\n", table);
 encodeExpTableCreate(connExp, table);
 }
 
-void expDrop()
+void expDropTable()
 /* Drop table and history*/
 {
 verbose(1, "Dropping table \'%s\'\n", table);
@@ -108,6 +116,61 @@ while ((ra = raNextRecord(lf)) != NULL)
     }
 }
 
+void expRestoreTable(char *file)
+/* Fill empty table with experiments in .ra file with id's */
+{
+struct hash *ra = NULL;
+struct lineFile *lf = lineFileOpen(file, TRUE);
+struct encodeExp *exp;
+int ix = 1;
+int expId;
+char *accession;
+char *key;
+
+verbose(1, "Restoring experiments from file \'%s\' to table \'%s\'\n", file, table);
+if (sqlRowCount(connExp, table) != 0)
+    errAbort("ERROR: table for restore must exist and be empty");
+
+while ((ra = raNextRecord(lf)) != NULL)
+    {
+    exp = encodeExpFromRa(ra);
+
+    /* save accession and id as we may stomp on these for to-delete experiments */
+    accession = cloneString(exp->lab);
+    expId = exp->ix;
+
+    key = encodeExpKey(exp);
+    while (ix < expId)
+        {
+        exp->accession = "DELETED";
+        exp->ix = ix;
+        verbose(3, "Adding row for deleted experiment %d\n", ix);
+        encodeExpAdd(connExp, table, exp);
+        ix++;
+        }
+    /* restore accession and id */
+    exp->accession = accession;
+    exp->ix = expId;
+    encodeExpAdd(connExp, table, exp);
+    verbose(3, "Adding row for experiment %d: %s\n", ix, key);
+    ix++;
+    }
+verbose(1, "To complete restore, delete rows where accession=DELETED\n");
+}
+
+void expRenameTable()
+/* Rename table and update history table triggers */
+{
+encodeExpTableRename(connExp, table, newTable);
+}
+
+void expCopyTable()
+/* Rename table and update history table triggers */
+{
+verbose(1, "Copying table %s to %s\n", table, newTable);
+encodeExpTableCopy(connExp, table, newTable);
+}
+
 void expAcc(int id)
 /* Add accession to an existing experiment (approve it)*/
 {
@@ -115,19 +178,27 @@ char *acc = encodeExpAddAccession(connExp, table, id);
 verbose(1, "Added accession: %s\n", acc);
 }
 
-void expRevoke(int id)
-/* Remove accession to an existing experiment (revoke it)*/
+void expDeacc(int id)
+/* Decession an experiment (remove accession but leave in table)*/
 {
 encodeExpRemoveAccession(connExp, table, id);
-verbose(1, "Revoked accession from id: %d\n", id);
+verbose(1, "Removed accession from id: %d\n", id);
+}
+
+void expRemove(int id, char *why)
+/* Remove an experiment (delete from table) */
+{
+struct encodeExp *exp = encodeExpGetByIdFromTable(connExp, table, id);
+if (exp == NULL)
+    errAbort("Id %d not found in experiment table %s", id, table);
+encodeExpRemove(connExp, table, exp, why);
+verbose(1, "Deleted experiment id %d\n", id);
 }
 
 void expShow(int id)
 /* Print experiment in .ra format to stdout */
 {
-struct encodeExp *exp;
-
-exp = encodeExpGetByIdFromTable(connExp, table, id);
+struct encodeExp *exp = encodeExpGetByIdFromTable(connExp, table, id);
 if (exp == NULL)
     errAbort("Id %d not found in experiment table %s", id, table);
 encodeExpToRaFile(exp, stdout);
@@ -140,8 +211,10 @@ void expHistory(int id)
 
 int i;
 char **row;
-struct dyString *dy = dyStringCreate("select * from %sHistory where ix = %d order by updateTime",
-                                        table, id);
+struct dyString *dy = dyStringCreate("select * from %sHistory", table);
+if (id != 0)
+    dyStringPrintf(dy, " where %s=%d ", ENCODE_EXP_FIELD_IX, id);
+dyStringPrintf(dy, " order by updateTime, %s", ENCODE_EXP_FIELD_IX);
 struct sqlResult *sr = sqlGetResult(connExp, dyStringCannibalize(&dy));
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -265,12 +338,6 @@ if (count > 1)
 printf("%d\n", exps->ix);
 }
 
-void expRenameTable()
-/* Rename table and update history table triggers */
-{
-encodeExpTableRename(connExp, table, newTable);
-}
-
 int encodeExp(char *command, char *file, char *assembly, int id)
 /* manage ENCODE experiments table */
 {
@@ -282,15 +349,23 @@ if (assembly != NULL)
     }
 
 if (sameString(command, "create"))
-    expCreate();
+    expCreateTable();
 else if (sameString(command, "drop"))
-    expDrop();
+    expDropTable();
+else if (sameString(command, "copy"))
+    expCopyTable();
+else if (sameString(command, "rename"))
+    expRenameTable();
+else if (sameString(command, "restore"))
+    expRestoreTable(file);
 else if (sameString(command, "add"))
     expAdd(file);
+else if (sameString(command, "remove"))
+    expRemove(id, why);
 else if (sameString(command, "acc"))
     expAcc(id);
-else if (sameString(command, "revoke"))
-    expRevoke(id);
+else if (sameString(command, "deacc"))
+    expDeacc(id);
 else if (sameString(command, "show"))
     expShow(id);
 else if (sameString(command, "history"))
@@ -301,8 +376,6 @@ else if (sameString(command, "find"))
     expFind(assembly, file);
 else if (sameString(command, "id"))
     expId();
-else if (sameString(command, "rename"))
-    expRenameTable();
 else
     {
     errAbort("ERROR: Unknown command %s\n", command);
@@ -324,9 +397,14 @@ if (argc < 2)
     usage();
 
 char *command = argv[1];
-table = optionVal("table", (sameString(command, "create") || sameString(command, "drop")) ?
-                        encodeExpTableNew:
-                        ENCODE_EXP_TABLE);
+table = optionVal("table", (sameString(command, "create") || 
+                            sameString(command, "drop") ||
+                            sameString(command, "restore") ||
+                            sameString(command, "remove") ||
+                            sameString(command, "deacc") ||
+                            sameString(command, "copy") ||
+                            sameString(command, "rename")) ?
+                        encodeExpTableNew: ENCODE_EXP_TABLE);
 mdb = optionVal("mdb", MDB_DEFAULT_NAME);
 composite = optionVal("composite", NULL);
 
@@ -340,18 +418,17 @@ if (sameString("find", command))
         }
     else
         assembly = argv[2];
-    if (sameString("find", command))
+    if (argc < 4)
         {
-        if (argc < 4)
-            {
-            errAbort("ERROR: Missing file\n");
-            usage();
-            }
-        else
-            file = argv[3];
+        errAbort("ERROR: Missing .ra file\n");
+        usage();
         }
+    else
+        file = argv[3];
     }
-else if (sameString("add", command) || sameString("dump", command))
+else if (sameString("add", command) ||
+         sameString("dump", command) || 
+         sameString("restore", command))
     {
     if (argc < 3)
         {
@@ -375,9 +452,9 @@ else if (sameString("id", command))
             expVars = argv[6];
         }
     }
-else if (sameString("history", command) ||
-        sameString("acc", command) || 
-        sameString("revoke", command) || 
+else if ( sameString("acc", command) || 
+        sameString("deacc", command) || 
+        sameString("remove", command) || 
         sameString("show", command))
     {
     if (argc < 3)
@@ -390,9 +467,21 @@ else if (sameString("history", command) ||
         id = atoi(argv[2]);
         if (id < 1)
             errAbort("ERROR: Bad id %d\n", id);
+        if (sameString("remove", command))
+            {
+            if (argc < 4)
+                errAbort("ERROR: remove must include why");
+            else
+                why = argv[3];
+            }
         }
     }
-else if (sameString("rename", command))
+else if (sameString("history", command))
+    {
+    if (argc > 2)
+        id = atoi(argv[2]);
+    }
+else if (sameString("rename", command) || sameString("copy", command))
     {
     if (argc < 3)
         errAbort("ERROR: Missing new tablename\n");

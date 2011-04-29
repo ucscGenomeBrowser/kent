@@ -1,0 +1,62 @@
+# test input for encodeExp tests
+
+# 1 - bad
+ix 0
+organism human
+lab BAD1
+dataType ChipSeq
+cellType GM12878
+expVars Antibody=Pol2
+
+# 2
+ix 0
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars Antibody=Pol2
+
+# 3
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType K562
+
+# 4 - bad
+ix 0
+organism human
+lab BAD2
+dataType ChipSeq
+cellType GM12878
+expVars Antibody=Pol2
+
+# 5 - bad
+ix 0
+organism mouse
+lab BAD3
+dataType ChipSeq
+cellType CH12
+expVars Antibody=Pol2
+
+# 6
+ix 0
+organism human
+lab Duke
+dataType DnaseSeq
+cellType K562
+
+# 7 - bad
+ix 0
+organism human
+lab BAD4
+dataType DnaseSeq
+cellType K562
+
+# 8 - bad
+ix 0
+organism human
+lab BAD5
+dataType DnaseSeq
+cellType K562
+
