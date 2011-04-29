@@ -5488,6 +5488,7 @@ else
     chromInfoRowsNonChrom(1000);
 
 hTableEnd();
+puts("</P><BR>");
 
 hgPositionsHelpHtml(organism, database);
 puts("</FORM>");
