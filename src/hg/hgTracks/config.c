@@ -530,8 +530,8 @@ hPrintf("</TD><TD>");
 hPrintf("Enable advanced javascript features");
 hPrintf("</TD></TR>\n");
 
-
 hTableEnd();
+puts("<div style='height:.9em;'></div>");
 
 char *freeze = hFreezeFromDb(database);
 char buf[128];
@@ -557,7 +557,7 @@ hPrintf("&nbsp;&nbsp;&nbsp;Groups:  ");
 hButtonWithOnClick("hgt.collapseGroups", "collapse all", "Collapse all track groups", "return setAllTrackGroupVisibility(false)");
 hPrintf(" ");
 hButtonWithOnClick("hgt.expandGroups", "expand all", "Expand all track groups", "return setAllTrackGroupVisibility(true)");
-hPrintf("<P STYLE=\"margin-top:5;\">Control track and group visibility more selectively below.<P>");
+hPrintf("<div style='margin-top:.2em; margin-bottom:.9em;'>Control track and group visibility more selectively below.</div>");
 trackConfig(trackList, groupList, groupTarget, vis);
 
 dyStringFree(&title);

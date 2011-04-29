@@ -80,9 +80,13 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     htmlHorizontalLine();
     // include anchor for Description link
     puts("<A NAME=TRACK_HTML></A>");
-    printf("<table class='windowSize'><tr valign='top'><td>");
+    char *browserVersion;
+    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
+        printf("<table class='windowSize'><tr valign='top'><td>");
+    else
+        printf("<table class='windowSize' style='position:relative; top:-1em;'><tr valign='top'><td>");
     puts(tdb->html);
-    printf("</td><td>");
+    printf("</td><td><div style='height:.7em;'></div>");
     makeTopLink(tdb);
     printf("&nbsp</td></tr><tr valign='bottom'><td colspan=2>");
     makeTopLink(tdb);
@@ -103,8 +107,8 @@ getDbAndGenome(cart, &db, &ignored, NULL);
 char *chrom = cartUsualString(cart, "c", hDefaultChrom(db));
 
 // QUESTION: Do We need track list ???  trackHash ??? Can't we just get one track and no children
-// ANSWER: The way the code is set up now you will get the whole list. This is just to put all 
-// the logic for resolving loading parents and children in one place.  We do occassionally pay the 
+// ANSWER: The way the code is set up now you will get the whole list. This is just to put all
+// the logic for resolving loading parents and children in one place.  We do occassionally pay the
 // price of a 200 millisecond delay because of it though - JK.
 trackHash = trackHashMakeWithComposites(db,chrom,&tdbList,FALSE);
 tdb = tdbForTrack(db, track,&tdbList);
