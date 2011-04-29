@@ -2863,9 +2863,14 @@ if (!ct)
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();
+    puts("<A NAME='TRACK_HTML'></A>");
+
     // include anchor for Description link
-    puts("<A NAME=TRACK_HTML></A>");
-    printf("<table class='windowSize'><tr valign='top'><td>");
+    char *browserVersion;
+    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
+        printf("<table class='windowSize'><tr valign='top'><td>");
+    else
+        printf("<table class='windowSize' style='position:relative; top:-1em;'><tr valign='top'><td>");
 
     // Add pennantIcon
     printPennantIconNote(tdb);
