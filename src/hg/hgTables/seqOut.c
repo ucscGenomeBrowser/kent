@@ -248,6 +248,7 @@ else
     cgiMakeButton(hgtaDoMainPage, "cancel");
     hPrintf("</FORM>");
     }
+hPrintf("<div style='height:.9em;'></div>\n");
 htmlClose();
 }
 
