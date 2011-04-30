@@ -125,6 +125,7 @@ verifyGreatAssemblies();
 startGreatForm();
 cgiMakeHiddenVar(hgtaDoTopSubmit, "get output");
 printGreatSubmitButtons();
+hPrintf("<div style='height:.9em;'></div>\n");
 htmlClose();
 }
 
