@@ -16415,8 +16415,8 @@ TMPDIR=/scratch/tmp
 see file: ucscGenes10.txt
 
 #######################################################################
-# ENCODE Regulation track  (In progress May 2010, very rough instructions
-# as am still defining how to build track...)
+# ENCODE Regulation track  (DONE June 2010.  DNAse and TFBS redone April 30
+# 2011 kent)
 
       #make root dir
       mkdir -p /cluster/data/hg18/bed/wgEncodeReg
@@ -16424,24 +16424,27 @@ see file: ucscGenes10.txt
 
       # Create the DNAse peak clusters subtrack.
       # Get all of the narrowPeak format files for the wgEncodeUwDnaseSeq
-      # unzipped in directory /hive/users/kent/regulate/dnase/peaks
+      # linked into directory /hive/users/kent/regulate/dnase/peaks
       mkdir dnase
       cd dnase
-      ls -1 peaks/*.narrowPeak > peak.lst
-      regClusterMakeTableOfTables peak.lst peak.table
+      mkdir peaks
+      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg18/wgEncodeUwDnase/*.narrowPeak.gz peaks
+
+      # Process these into clusters in a bed file and load clusters into
+      # table.
+      /bin/ls -1 peaks/*.narrowPeak.gz > peak.lst
+      regClusterMakeTableOfTables uw01 peak.lst peak.table
       regCluster peak.table /dev/null peak.bed
       awk '$4 > 1 || $5 >= 100' peak.bed > wgEncodeRegDnaseClustered.bed
       hgLoadBed hg18 wgEncodeRegDnaseClustered wgEncodeRegDnaseClustered.bed
 
-      # Create inputTrackTable - two columns: <table> <cell>
-      tdbQuery "select track,subGroups from hg18 where parent[0]='wgEncodeUwDnaseSeqViewaPeaks'" -noCompSub | awk '/track/ {printf("%s\t", $2);} /subGroups/ {printf("%s\tNone\n", $3);}' | sed s/cellType=// > wgEncodeRegDnaseClusteredInputs.tab 
-
-      # Next time around might do this to fetch from metaDb instead of
-      # trackDb:
-      #   mdbQuery "select tableName,cell from hg18 where dataType like 'dnase%' and lab='Uw' and view = 'Peaks'" out=tab > wgEncodeRegDnaseClusteredInputs.tab
-
-      # Load table
-      hgLoadSqlTab hg18 wgEncodeRegDnaseClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable.sql wgEncodeRegDnaseClusteredInputs.tab
+      # Make wgEncodeRegDnaseClusteredInput table.  Start with mdbQuery, and
+      # then do some massaging since not completely in sync with file list.
+      mdbQuery out=tab "select obj,cell,treatment,replicate,lab,dateUnrestricted from hg18 where obj like 'wgEncodeUwDnase%' and view='Peaks'" | sed 's/n\/a/None/' > inputMdb.tab
+      cut -f 1 peak.table | sed 's/\.narrowPeak\.gz//' | sed 's/peaks\///' > inputs.lst
+      weedLines inputs.lst inputMdb.tab wgEncodeRegDnaseClusteredInputs.tab -invert 
+      hgLoadSqlTab hg18 wgEncodeRegDnaseClusteredInputs ~/kent/src/hg/lib/clusterInputDnase.sql \
+	  wgEncodeRegDnaseClusteredInputs.tab
 
       # Create the Transcription Factor Binding Site subtrack.  This is a bit
       # complex because it is merging data from the Snyder lab (yale) and from
@@ -16466,7 +16469,7 @@ see file: ucscGenes10.txt
       cd /cluster/data/hg18/bed/wgEncodeReg/tfbs/hud
       mkdir hud
       cd hud
-      mdbQuery "select fileName,antibody,cell,replicate,treatment from hg18 \
+      mdbQuery "select tableName,fileName,antibody,cell,replicate,treatment,lab from hg18 \
 	where view='Peaks' and lab='HudsonAlpha' and dataType='ChipSeq'" \
 	-out=ra | sed s/broadPeak/narrowPeak/ >  hud.ra
 
@@ -16483,7 +16486,7 @@ see file: ucscGenes10.txt
       ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg18/wgEncodeYaleChIPseq yalePeaks
 
       # Get ra file that includes the file name and other info we need for yale
-      mdbQuery "select fileName,antibody,cell,treatment from hg18 where lab like '%Snyder%' and dataType like 'ChipSeq' and view='Peaks'" out=ra | sed 's/wgEncode/yalePeaks\/wgEncode/' > yale.ra
+      mdbQuery "select tableName,fileName,antibody,cell,treatment,lab from hg18 where lab like '%Snyder%' and dataType like 'ChipSeq' and view='Peaks'" out=ra | sed 's/wgEncode/yalePeaks\/wgEncode/' > yale.ra
 
       # Get ra file for hud
       cat hud/merged.ra | sed 's/wgEncode/hudPeaks\/wgEncode/' > hud.ra
@@ -16504,8 +16507,11 @@ see file: ucscGenes10.txt
       hgLoadSqlTab hg18 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
 
       # Create inputTrackTable - three columns: <table> <source> <factor>
-      mdbQuery "select tableName,cell,antibody from hg18 where (lab like '%Snyder%' or lab='HudsonAlpha') and dataType like 'ChipSeq' and view='Peaks' and antibody not like 'Pol2%'" -out=tab > wgEncodeRegTfbsClusteredInputs.tab
-      hgLoadSqlTab hg18 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable.sql wgEncodeRegTfbsClusteredInputs.tab
+      #mdbQuery "select tableName,cell,antibody from hg18 where (lab like '%Snyder%' or lab='HudsonAlpha') and dataType like 'ChipSeq' and view='Peaks' and antibody not like 'Pol2%'" -out=tab > wgEncodeRegTfbsClusteredInputs.tab
+      cat yale.ra hud.ra | raToTab stdin stdout -cols=tableName,cell,antibody,cell,treatment,lab \
+       | awk 'BEGIN {OFS="\t";} {if ($5 != "None") $2=$2 "+" $5;print}' \
+       > wgEncodeRegTfbsClusteredInputs.tab
+      hgLoadSqlTab hg18 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable4.sql wgEncodeRegTfbsClusteredInputs.tab
 
 
 #######################################################################
