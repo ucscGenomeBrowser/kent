@@ -722,7 +722,7 @@ if (isNotEmpty(ss))
 
     if (exists)
 	dyStringPrintf(dyMessage,
-		       "<P>Note: the session contains saved BLAT results.  ");
+		       "<P>Note: the session contains BLAT results.  ");
     else
 	dyStringPrintf(dyMessage,
 		"<P>Note: the session contains an expired reference to "
