@@ -1690,13 +1690,23 @@ if (dbRequested)
     int fputcErr = 0;
 
 #ifdef PROGRESS_METER
+/* don't forget: http://www.redips.net/javascript/ajax-progress-bar/ */
+    struct stat localStat;
+    ZeroVar(&localStat);
+    off_t wigAsciiSize = 0;
+    if (stat(wigAscii,&localStat)==0)
+	wigAsciiSize = localStat.st_size;
     FILE *progress = 0;
+    long msStart = clock1000();
     unsigned long long bytesWritten = 0;
+    off_t progressSeek = 0;
     if (track->progressFile)
 	{
-fprintf(stderr, "DBG: open: '%llu' -> '%llu'\n", (unsigned long long)track, (unsigned long long)track->progressFile);
-	progress = mustOpen(track->progressFile, "w");
-	fprintf(progress, "%s\n", wigAscii);
+	ZeroVar(&localStat);
+	if (stat(track->progressFile,&localStat)==0)
+	    progressSeek = localStat.st_size;
+	progress = mustOpen(track->progressFile, "r+");
+	fseeko(progress, progressSeek, SEEK_SET);
 	}
 #endif
     unlink(wigAscii);/* stays open, disappears when close or pipe fail */
@@ -1705,12 +1715,24 @@ fprintf(stderr, "DBG: open: '%llu' -> '%llu'\n", (unsigned long long)track, (uns
 	fputcErr = fputc(c, out);
 #ifdef PROGRESS_METER
 	++bytesWritten;
-	if (0 == (bytesWritten % 10))
-	    fprintf(progress, "%llu\n", bytesWritten);
+	if (0 == (bytesWritten % 100000))
+	    {
+	    if (progressSeek)
+		fseeko(progress, progressSeek, SEEK_SET);
+	    long msNow = clock1000();
+	    int percentDone = (100 * bytesWritten) / wigAsciiSize;
+	    fprintf(progress, "encoding:\t%llu\t%llu\t%ld\t%% %d\t%llu\n", bytesWritten, (unsigned long long)wigAsciiSize, msNow - msStart, percentDone, (unsigned long long)progressSeek);
+	    fflush(progress);
+	    }
 #endif
 	}
     carefulClose(&in);
 #ifdef PROGRESS_METER
+//    if (progressSeek)
+//	fseeko(progress, progressSeek, SEEK_SET);
+    long msNow = clock1000();
+    int percentDone = (100 * bytesWritten) / wigAsciiSize;
+    fprintf(progress, "encoding:\t%llu\t%llu\t%ld\t%% %d\t%llu\tdone\n", bytesWritten, (unsigned long long)wigAsciiSize, msNow - msStart, percentDone, (unsigned long long)progressSeek);
     carefulClose(&progress);
 #endif
     fflush(out);		/* help see error from loader failure */
@@ -1816,13 +1838,45 @@ else
     trashDirFile(&tn, "progress", "wig", ".txt");
     track->progressFile = cloneString(tn.forCgi);
 fprintf(stderr, "DBG: setting progressFile: '%s'\n", track->progressFile);
+FILE *progress = mustOpen(track->progressFile, "w");
+fprintf(progress, "progressFile: %s\n", track->progressFile);
+fprintf(progress, "shortLabel: %s\n", track->tdb->shortLabel);
+fprintf(progress, "forHtml: %s\n", tn.forHtml);
+fprintf(progress, "remote size: %llu\n", (unsigned long long)cpp->remoteFileSize);
+    fflush(progress);
+    off_t remoteSize = cpp->remoteFileSize;
+//    off_t progressSeek = ftello(progress);
+    unsigned long long bytesWritten = 0;
+    unsigned long long nextInterval = bytesWritten + 100000;
+    long msStart = clock1000();
 #endif
 
     /* Actually create wigAscii file. */
     f = mustOpen(wigAscii, "w");
     while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
+	{
+#ifdef PROGRESS_METER
+	bytesWritten += strlen(line);
+	if (bytesWritten > nextInterval)
+	    {
+//	    if (progressSeek)
+//		fseeko(progress, progressSeek, SEEK_SET);
+	    long msNow = clock1000();
+	    int percentDone = (100 * bytesWritten) / remoteSize;
+	    fprintf(progress, "incoming:\t%llu\t%llu\t%ld\t%% %d\n", bytesWritten, (unsigned long long)remoteSize, msNow - msStart, percentDone );
+	    fflush(progress);
+    	    nextInterval = bytesWritten + 100000;
+	    }
+#endif
 	fprintf(f, "%s\n", line);
+	}
     carefulClose(&f);
+#ifdef PROGRESS_METER
+long msNow = clock1000();
+int percentDone = (100 * bytesWritten) / remoteSize;
+fprintf(progress, "incoming:\t%llu\t%llu\t%ld\t%% %d\tdone\n", bytesWritten, (unsigned long long)remoteSize, msNow - msStart, percentDone );
+carefulClose(&progress);
+#endif
 
     wigLoaderEncoding(track, wigAscii, dbRequested);
     }
@@ -2349,7 +2403,6 @@ track->genomeDb = cloneString(genomeDb);
 track->dbTrackType = hashFindVal(hash, "dbTrackType");
 track->dbTableName = hashFindVal(hash, "dbTableName");
 #ifdef PROGRESS_METER
-fprintf(stderr, "DBG: setting progressFile to 0 '%llu' -> '%llu'\n", (unsigned long long)track, (unsigned long long)track->progressFile);
 track->progressFile = 0;
 #endif
 if (track->dbTableName)
@@ -2989,9 +3042,17 @@ if (!fileExists(fileName))
     }
 
 struct lineFile *lf = customLineFile(fileName, TRUE);
+#ifdef PROGRESS_METER
+off_t remoteSize = 0;
+if (stringIn("://", fileName))
+    remoteSize = remoteFileSize(fileName);
+#endif
 
 /* wrap a customPp object around it. */
 struct customPp *cpp = customPpNew(lf);
+#ifdef PROGRESS_METER
+cpp->remoteFileSize = remoteSize;
+#endif
 lf = NULL;
 
 if (dbTrack)
