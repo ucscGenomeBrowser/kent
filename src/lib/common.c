@@ -1055,7 +1055,7 @@ while(1)
 		// Shall we check for name being alphanumeric, at least for the respectQuotes=FALSE case?
 		}
 	    else // mode == 2
-		{	    
+		{
 		safecpy(val, sizeof val, buf);
 		if (!respectQuotes && (hasWhiteSpace(name) || hasWhiteSpace(val))) // should never happen
 		    {
@@ -1073,7 +1073,7 @@ while(1)
 	    {
 	    warn("slPairListFromString: Expected character = after name in %s", str);
 	    return NULL;
-	    }		
+	    }
 	++mode;
 	sep = ' ';
 	b = buf;
@@ -1090,80 +1090,6 @@ while(1)
 	    sep = '=';
 	    }
 	}
-    }
-slReverse(&list);
-return list;
-}
-
-struct slPair *oopsSlPairListFromString(char *str,boolean respectQuotes)
-// Do not use.
-// This version does not handle '=' in the name or val field, even when quoted.
-// But drosophila/trackDb.ra has fields like this since 2009:
-// [best1=Best_Antibody_(FDR=1%) best25=Best_Antibody_(FDR=25%) other1=Other_Antibodies_(FDR=1%) other25=Other_Antibodies_(FDR=25%)]
-//
-// Return slPair list parsed from list in string like:  [name1=val1 name2=val2 ...]
-// if respectQuotes then string can have double quotes: [name1="val 1" "name 2"=val2 ...]
-//    resulting pair strips quotes: {name1}={val 1},{name 2}={val2}
-// Returns NULL if parse error.  Free this up with slPairFreeValsAndList.
-{
-if (isEmpty(str))
-    return NULL;
-int count = countChars(str, '=') + 1; // Should have 1 more token than '=': {"name 1"},{val1 name2},{"val 2"}
-if (count < 2)
-    {
-    warn("slPairListFromString() No pairs found in string meant to contain name=value pairs [%s]\n", str);
-    return NULL;
-    }
-char *strClone = cloneString(str);
-char **tokens = needMem(sizeof(char *) * count);
-count = chopByChar(strClone, '=',tokens,count);
-
-int ix;
-struct slPair *list = NULL;
-for (ix=1; ix < count;ix++) // starting at 1 and looking back to 0
-    {
-    // name comes from prev token!
-    char *name = skipLeadingSpaces(tokens[ix - 1]); // Could be multiple spaces delimiting one pair from next
-    char *val =  tokens[ix];                        // should be immediately after '='
-
-    // Parse of val and set up ptr for next name
-    char *next = NULL;
-    if (respectQuotes && val[0] == '"')
-        next = skipBeyondDelimit(tokens[ix] + 1,'"');
-    else
-        next = skipToSpaces(tokens[ix]);
-    if (next != NULL)
-        {
-        *next++ = '\0';
-        tokens[ix] = next; // set up for next round.
-        }
-    else if (ix + 1 != count) // Last token should have no 'next'.
-        {
-        warn("slPairListFromString() Error parsing string meant to contain name=value pairs: [%s]\n", str);
-        break;
-        }
-
-    if (respectQuotes && name[0] == '"')
-        stripEnclosingDoubleQuotes(name);
-    else if (hasWhiteSpace(name))
-        {
-        warn("slPairListFromString() Unexpected white space in name=value pair: [%s]=[%s] in string=[%s]\n", name, val, str);
-        break;
-        }
-    if (respectQuotes && val[0] == '"')
-        stripEnclosingDoubleQuotes(val);
-    else if (hasWhiteSpace(val))
-        {
-        warn("slPairListFromString() Unexpected white space in name=value pair: [%s]=[%s] in string=[%s]\n", name, val, str);
-        break;
-        }
-    slPairAdd(&list, name, cloneString(val));
-    }
-freez(&strClone);
-if (ix != count) // error detected.
-    {
-    slPairFreeValsAndList(&list);
-    return NULL;
     }
 slReverse(&list);
 return list;
