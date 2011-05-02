@@ -453,3 +453,12 @@ noInherit on
         color 153,38,0
         # subId=4000 dateSubmitted=2011-04-28
 
+        track wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal off
+        shortLabel Spleen Input Sig
+        longLabel Spleen Input TFBS TFBS ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=adult8wks factor=Input cellType=Spleen control=std sex=M strain=C57BL6
+        type bigWig 0.130000 31.219999
+        color 153,38,0
+        # subId=4036 dateSubmitted=2011-05-02
+

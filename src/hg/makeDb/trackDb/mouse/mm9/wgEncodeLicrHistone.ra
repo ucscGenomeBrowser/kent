@@ -29,7 +29,7 @@ shortLabel LICR Histone
 longLabel Histone Modifications by ChIP-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line BMarrow=Bone_Marrow Cbellum=Cerebellum Cortex=Cortex Heart=Heart Kidney=Kidney Liver=Liver Lung=Lung MEF=MEF
+subGroup2 cellType Cell_Line BMarrow=Bone_Marrow Cbellum=Cerebellum Cortex=Cortex Heart=Heart Kidney=Kidney Liver=Liver Lung=Lung MEF=MEF Spleen=Spleen
 subGroup3 factor Factor H3K4me1=H3K4me1 H3K4me3=H3K4me3 Input=Input
 subGroup4 sex Sex M=M
 subGroup5 age Age adult8wks=adult-8wks
@@ -205,6 +205,24 @@ noInherit on
         type broadPeak
         color 153,38,0
         # subId=4001 dateSubmitted=2011-04-28
+
+        track wgEncodeLicrHistoneSpleenH3k4me3MAdult8wksC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Spleen H3K4me3 Pk
+        longLabel Spleen H3K4me3 Histone Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=adult8wks factor=H3K4me3 cellType=Spleen control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=4034 dateSubmitted=2011-05-02
+
+        track wgEncodeLicrHistoneSpleenH3k4me1MAdult8wksC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Spleen H3K4me1 Pk
+        longLabel Spleen H3K4me1 Histone Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=adult8wks factor=H3K4me1 cellType=Spleen control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=4033 dateSubmitted=2011-05-02
 
 	#######	Signal Tracks###########
 	track wgEncodeLicrHistoneViewSignal
@@ -433,4 +451,31 @@ noInherit on
         type bigWig 0.110000 21.290001
         color 153,38,0
         # subId=4001 dateSubmitted=2011-04-28
+
+        track wgEncodeLicrHistoneSpleenInputMAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel Spleen Input Sig
+        longLabel Spleen Input Histone Histone Modifications by ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=adult8wks factor=Input cellType=Spleen control=std sex=M strain=C57BL6
+        type bigWig 0.130000 31.219999
+        color 153,38,0
+        # subId=4035 dateSubmitted=2011-05-02
+
+        track wgEncodeLicrHistoneSpleenH3k4me3MAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Spleen H3K4me3 Sig
+        longLabel Spleen H3K4me3 Histone Histone Modifications by ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=Spleen control=std sex=M strain=C57BL6
+        type bigWig 0.160000 65.190002
+        color 153,38,0
+        # subId=4034 dateSubmitted=2011-05-02
+
+        track wgEncodeLicrHistoneSpleenH3k4me1MAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Spleen H3K4me1 Sig
+        longLabel Spleen H3K4me1 Histone Histone Modifications by ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=Spleen control=std sex=M strain=C57BL6
+        type bigWig 0.140000 55.639999
+        color 153,38,0
+        # subId=4033 dateSubmitted=2011-05-02
 
