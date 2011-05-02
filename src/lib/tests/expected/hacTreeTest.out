@@ -28,22 +28,16 @@ Clustering by numeric value:
  )
 )
 Clustering by string length:
-(there i:6:
- (there it w:4:
-  (there it was:1:
-   {there it is},
-   {there it was}
+(NNNNN:2.250000:
+ (NTANN:1.000000:
+  (NTATN:0.500000:
+   {GTATG},
+   {CTATA}
   ),
-  {is there}
+  {CTAGG}
  ),
- (is i:2:
-  (is it:0:
-   {is it},
-   {three}
-  ),
-  (one:0:
-   {one},
-   {two}
-  )
+ (GCGTN:0.250000:
+  {GCGTC},
+  {GCGTA}
  )
 )
