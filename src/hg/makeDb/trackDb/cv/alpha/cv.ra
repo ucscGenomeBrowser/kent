@@ -3025,6 +3025,7 @@ protocol SYDH_TFBS(Farnham):PBDE_Farnham_protocol.pdf
 
 term PBMC
 tag PBMC
+type Cell Line
 organism human
 description Peripheral blood mononuclear cells (Provisional)
 tissue Blood

@@ -65,28 +65,29 @@ color-coded for each cell type as follows:
 <DT><B>Validated</B>, OC Code = 1:</DT>
 <DD><ul style="list-style-type:none;">
 <li><b>Black</b>:
-Regions identified as peaks by both the DNaseI HS assay<!-- described here--> and
-FAIRE assay<!-- described here-->.  Peaks for DNaseI HS have
-p-values <code>&lt; 0.01</code> (<code>-log<sub>10</sub>(p-value) &gt; 2</code>)
-and peaks for FAIRE have
-p-values <code>&lt; 0.01</code> (<code>-log<sub>10</sub>(p-value) &gt; 2</code>).</li></DD>
+Regions identified as peaks by both the DNaseI HS assay and FAIRE assay.  Peaks
+for DNaseI HS have DNase peak calling p-values <code>&lt; 0.05</code>
+(<code>-log<sub>10</sub>(p-value) &gt; 1.3</code>) and peaks for FAIRE have FAIRE
+peak calling p-values <code>&lt;  0.1</code> (<code>-log<sub>10</sub>(p-value) &gt; 1.0</code>).
+</li></DD>
 </ul>
 <br />
-<DT><B>Open Chromatin</B>, OC Code = 2, 3 or 4:</DT>
+<DT><B>Open Chromatin</B>, OC Code = 2 or 3:</DT>
 <DD><ul style="list-style-type:none;">
 <li><span style='color: #0000FF;'><b>Blue</b></span> (high significance):
-Regions not identified as peaks in both DNaseI HS and FAIRE, but for which
-the combination of p-values from these assays using Fisher's combined
-probability test results in a
-p-value <code>&lt; 0.01</code> (<code>-log<sub>10</sub>(p-value) &gt; 2</code>).</li></DD>
+Regions not identified as peaks in both DNaseI HS and FAIRE, but for which the
+combination of peak calling p-values from these assays using Fisher's combined
+probability test results in a p-value <code>&lt; 0.01</code>
+(<code>-log<sub>10</sub>(p-value) &gt; 2</code>).</li></DD>
 </ul>
 <br />
 <DT><B>DNase</B>, OC Code = 2:</DT>
 <DD><ul style="list-style-type:none;">
 <li><b><span style='color: #009900;'>Green</span></b> (low significance):
-Regions identified by DNaseI HS as peaks and not identified by FAIRE as
-peaks, and with a Fisher's combined DNaseI HS and FAIRE
-p-value <code>&gt;= 0.01</code> (<code>-log<sub>10</sub>(p-value) &lt;= 2</code>).</li>
+Regions identified by DNaseI HS as peaks (DNase peak calling p-value <code>&lt; 0.05</code>)
+and not identified by FAIRE as peaks (FAIRE peak calling p-value <code>&lt;  0.1</code>),
+and with a Fisher's combined DNaseI HS and FAIRE p-value <code>&gt;= 0.01</code>
+(<code>-log<sub>10</sub>(p-value) &lt;= 2</code>).</li>
 <li><b><span style='color: #0000FF;'>Blue</b></span> (high significance):
 see Open Chromatin above.</li></DD>
 </ul>
@@ -94,24 +95,24 @@ see Open Chromatin above.</li></DD>
 <DT><B>FAIRE</B>, OC Code = 3:</DT>
 <DD><ul style="list-style-type:none;">
 <li><b><span style='color: #990000;'>Dark Red</span></b> (low significance):
-Regions identified by FAIRE as peaks and not identified by DNaseI HS as
-peaks, and with a Fisher's combined DNaseI HS and FAIRE
-p-value <code>&gt;= 0.01</code> (<code>-log<sub>10</sub>(p-value) &lt;= 2</code>).</li>
+Regions identified by FAIRE as peaks (FAIRE peak calling <code>&lt;  0.1</code>) and not
+identified by DNaseI HS as peaks (DNase peak calling <code>&lt; 0.05</code>), and with a
+Fisher's combined DNaseI HS and FAIRE p-value <code>&gt;= 0.01</code>
+(<code>-log<sub>10</sub>(p-value) &lt;= 2</code>).</li>
 <li><b><span style='color: #0000FF;'>Blue</b></span> (high significance):
 see Open Chromatin above.</li></DD>
 </ul>
 <br />
 <DT><B>ChIP-seq</B>, OC Code = 4:</DT>
 <DD><ul style="list-style-type:none;">
-<li><b><span style='color: #FF00FF;'>Pink</span></b> (low significance):
-Regions identified by ChIP-seq as peaks indicating binding sites for one
-or more of RNA Pol II, CTCF, and c-Myc described here and not identified by
-DNaseI HS or FAIRE as peaks. Peaks for ChIP-seq have
-p-values <code>&lt; 0.01</code> (<code>-log<sub>10</sub>(p-value) &gt; 2</code>).
-For RNA Pol II, only sites that overlap annotated transcription start sites
-by the UCSC Genes track are considered.
-<li><b><span style='color: #0000FF;'>Blue</b></span> (high significance):
-see Open Chromatin above.</li></DD>
+<li><b><span style='color: #FF00FF;'>Pink</span></b>:
+Regions identified by ChIP-seq as peaks (at least one of the peak calling p-values for
+the three ChIP experiment is <code>&lt; 0.05</code>) indicating binding sites for one
+or more of RNA Pol II, CTCF, and c-Myc described here and not identified by DNaseI HS
+or FAIRE as peaks. Peaks for ChIP-seq have p-values <code>&lt; 0.05</code>
+(<code>-log<sub>10</sub>(p-value) &gt; 1.3</code>). For RNA Pol II, only sites that
+overlap annotated transcription start sites by the UCSC Genes track are considered.
+</li></DD>
 </ul>
 </DL>
 </P>
