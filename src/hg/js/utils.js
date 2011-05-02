@@ -1988,7 +1988,7 @@ function filterByMaxHeight(multiSel)
     var maxHeight = $(window).height() - pos;
     var selHeight = $(multiSel).children().length * 21;
     if (maxHeight > selHeight)
-        maxHeight = selHeight;
+        maxHeight = null;
     return maxHeight;
 }
 

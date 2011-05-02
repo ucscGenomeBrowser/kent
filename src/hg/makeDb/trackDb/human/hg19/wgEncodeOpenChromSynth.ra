@@ -35,7 +35,7 @@ extraFields pValue=[f]Fisher's_Combined_P-Value_(<code>-log<sub>10</sub></code>)
             ocCode=[i]Open_Chromatin_(OC)_Code
 filterBy color:Validation_Level=\
             0|Validated_(OC_1){#000000},\
-            255|Open_Chromatin_(OC_2-4){#0000FF},\
+            255|Open_Chromatin_(OC_2-3){#0000FF},\
             39168|DNase_low_(OC_2){#009900},\
             10027008|FAIRE_low_(OC_3){#990000},\
             16711935|ChIP-seq_(OC_4){#FF00FF} \
