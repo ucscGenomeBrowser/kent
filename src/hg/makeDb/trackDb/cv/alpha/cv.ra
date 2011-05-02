@@ -8500,35 +8500,28 @@ description Sequencing analysis of RNA expression
 #GeneST and Tiling are flavors of the RIP-chip.  
 #They need separate dataTypes for the experiment table to work
 term RipGeneSt 
-tag  RipGeneSt 
+tag  genest    
 type dataType
 label RIP-chip Gene ST
 description RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays 
 
 term RipTiling 
-tag  RipTiling 
+tag  tiling 
 type dataType
 label RIP-chip Tiling Array
 description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays 
 
 term RipChip
-tag  ripChip
+tag  ripchip
 type dataType
 label RIP-chip
 description Rna IP measured on microarray
 
 term RipSeq
-tag  ripSeq
+tag  ripseq
 type dataType
 label RIP-seq
 description RNA-seq on RIP-chip data
-
-#This should be retired (12/15/10)
-term ShortRnaSeq
-tag shortRnaSeq
-type dataType
-label RNA-seq
-description sequencing of short RNAs
 
 #term Snp
 #tag Snp
@@ -8538,7 +8531,7 @@ description sequencing of short RNAs
 # I would like to take this out and replace with Genotype as a more general datatype to match the composite
 
 term Switchgear
-tag Switchgear
+tag switchgear
 type dataType
 label SwitchGear
 description SwitchGear Genomics 3' UTR reporter assay
