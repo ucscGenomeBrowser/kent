@@ -8512,13 +8512,13 @@ description Sequencing analysis of RNA expression
 
 #GeneST and Tiling are flavors of the RIP-chip.
 #They need separate dataTypes for the experiment table to work
-term RipGeneSt 
+term RipGeneSt
 tag  genest    
 type dataType
 label RIP-chip Gene ST
 description RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays
 
-term RipTiling 
+term RipTiling
 tag  tiling 
 type dataType
 label RIP-chip Tiling Array
@@ -9288,6 +9288,19 @@ labPiFull Michael Snyder
 grantPi Snyder
 organism mouse
 
+### AWG (DAC) Labs
+
+term DAC-Stanford
+tag  dacstanf
+type lab
+label Anshul Kundaje - Stanford University
+description (PROVISIONAL) Kundaje - Stanford University
+labInst Stanford
+labPi Kundaje
+labPiFull Ewan Birney
+grantPi Birney
+organism human
+
 
 
 # Grant information
@@ -9301,6 +9314,13 @@ type grant
 description Bernstein
 grantInst Broad Institute
 projectName Broad
+
+term Birney
+tag birney
+type grant
+description Birney
+grantInst (PROVISIONAL) ENCODE Data Analysis Center (DAC)
+projectName DAC
 
 term Tullius
 tag tullius
