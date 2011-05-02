@@ -8978,8 +8978,9 @@ TMPDIR=/scratch/tmp
       # then do some massaging since not completely in sync with file list.
       mdbQuery out=tab "select obj,cell,treatment,replicate,lab,dateUnrestricted from hg19 where obj like 'wgEncodeUwDnase%' and view='Peaks'" | sed 's/n\/a/None/' > inputMdb.tab
       cut -f 1 peak.table | sed 's/\.narrowPeak\.gz//' | sed 's/peaks\///' > inputs.lst
-      weedLines inputs.lst inputMdb.tab inputs.tab -invert -weeded=weeded.tab
-      hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredInputs ~/kent/src/hg/lib/clusterInputDnase.sql inputs.tab
+      weedLines inputs.lst inputMdb.tab wgEncodeRegDnaseClusteredInputs.tab -invert 
+      hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredInputs ~/kent/src/hg/lib/clusterInputDnase.sql \
+	  wgEncodeRegDnaseClusteredInputs.tab
 
       # Make transcription factor binding site clusters.  Start with Anshul's
       # nice uniform peak calls, downloaded from 
@@ -9033,7 +9034,7 @@ TMPDIR=/scratch/tmp
       hgLoadSqlTab hg19 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
 
       # Create inputTrackTable - six columns: <table> <source> <factor> <cell> <treatment> <lab>
-      awk '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $7, ($10 == "None" ? $8 : $8 "+" $10), $9, $8, $10, $11);}' peak.table > wgEncodeRegTfbsClusteredInputs.tab
+      awk '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $7, ($10 == "None" ? $8 : $8 "+" $10), $9, $8, $10, $11);}' peak.table | sed 's/AlnRep/PkRep/'> wgEncodeRegTfbsClusteredInputs.tab
       hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable4.sql wgEncodeRegTfbsClusteredInputs.tab
 
 
@@ -9044,43 +9045,43 @@ TMPDIR=/scratch/tmp
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqGm12878R2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqH1hescR2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHct116R2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHct116R2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHelas3R2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHepg2R2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHsmmR2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqHuvecR2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqK562R2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqMcf7R2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqMcf7R2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeCaltechRnaSeqNhekR2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigPooled.bedGraph
 
       # Now have to normalize.  This takes two passes.  The first just creates
       # a tab-separated file with normalization values. A batch file is made
@@ -9121,7 +9122,8 @@ TMPDIR=/scratch/tmp
 
       # Make metadata: (forgive the long line)
       mdbQuery out=ra "select * from hg19 where obj='wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2'" \
-      | sed 's/SigRep1V2/SigPooled/g' | grep -v ^replicate \
+      | sed 's/SigRep1V2/SigPooled/g' | sed 's/wgEncodeCal/wgEncodeRegTxnCal/' \
+      | grep -v ^replicate \
       > ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/wgEncodeReg.ra
 
 
@@ -13634,7 +13636,164 @@ done
 
   # upload
   hgLoadBed -notItemRgb -sqlTable=$HOME/kent/src/hg/lib/evofold.sql hg19 evofold foldsHg19.bed
+#############################################################################
+# CREATE .PNG PICTURE FILES OF EVOFOLD RNA STRUCTURES. (DONE, 4/29/2011, Fan)
 
+ssh hgwdev
+mkdir /hive/data/genomes/hg19/bed/evofold/doEvoFold
+cd /hive/data/genomes/hg19/bed/evofold/doEvoFold
+
+# Creaet sub-directories to store .png files (total of about 47.5 K of them) sparated by chromosomes.
+
+mkdir -p evoFold/chr1
+mkdir -p evoFold/chr10
+mkdir -p evoFold/chr11
+mkdir -p evoFold/chr12
+mkdir -p evoFold/chr13
+mkdir -p evoFold/chr14
+mkdir -p evoFold/chr15
+mkdir -p evoFold/chr16
+mkdir -p evoFold/chr17
+mkdir -p evoFold/chr18
+mkdir -p evoFold/chr19
+mkdir -p evoFold/chr2
+mkdir -p evoFold/chr20
+mkdir -p evoFold/chr21
+mkdir -p evoFold/chr22
+mkdir -p evoFold/chr3
+mkdir -p evoFold/chr4
+mkdir -p evoFold/chr5
+mkdir -p evoFold/chr6
+mkdir -p evoFold/chr7
+mkdir -p evoFold/chr8
+mkdir -p evoFold/chr9
+mkdir -p evoFold/chrM
+mkdir -p evoFold/chrX
+mkdir -p evoFold/chrY
+
+# get latest verion of the .jar file of VARNA
+
+wget --timestamping http://varna.lri.fr/bin/VARNAv3-7.jar
+
+# Create Java command line files
+
+echo 'doEvoFold hg19 do$1 $1' >do1Chrom
+chmod +x do1Chrom
+
+do1Chrom chr1
+do1Chrom chr10
+do1Chrom chr11
+do1Chrom chr12
+do1Chrom chr13
+do1Chrom chr14
+do1Chrom chr15
+do1Chrom chr16
+do1Chrom chr17
+do1Chrom chr18
+do1Chrom chr19
+do1Chrom chr2
+do1Chrom chr20
+do1Chrom chr21
+do1Chrom chr22
+do1Chrom chr3
+do1Chrom chr4
+do1Chrom chr5
+do1Chrom chr6
+do1Chrom chr7
+do1Chrom chr8
+do1Chrom chr9
+do1Chrom chrM
+do1Chrom chrX
+do1Chrom chrY
+
+# run the dochrXX command files in small batches with '&' to exploit multiple CPU
+# wait an hour for each batch to finish so that we don't suck in too much computational resources.
+
+dochr1 &
+dochr2 &
+dochr3 &
+dochr4 &
+dochr5 &
+
+sleep 3600
+
+dochr6 &
+dochr7 &
+dochr8 &
+dochr9 &
+dochr10 &
+
+sleep 3600
+
+dochr11 &
+dochr12 &
+dochr13 &
+dochr14 &
+dochr15 &
+
+sleep 3600
+
+dochr16 &
+dochr17 &
+dochr18 &
+dochr19 &
+dochr20 &
+
+sleep 3600
+
+dochr21 &
+dochr22 &
+dochrX &
+dochrY &
+dochrM &
+
+# check the resulting .png files
+
+# create a simple script file, check1, with the following 3 lines:
+
+echo $1
+hgsql hg19 -N -e "select count(*) from evofold where chrom='${1}'"
+ls evoFold/$1/*.png|wc
+
+chmod +x check1
+
+# create another script file, checkAll, with the following lines:
+
+check1 chr1
+check1 chr10
+check1 chr11
+check1 chr12
+check1 chr13
+check1 chr14
+check1 chr15
+check1 chr16
+check1 chr17
+check1 chr18
+check1 chr19
+check1 chr2
+check1 chr20
+check1 chr21
+check1 chr22
+check1 chr3
+check1 chr4
+check1 chr5
+check1 chr6
+check1 chr7
+check1 chr8
+check1 chr9
+check1 chrM
+check1 chrX
+check1 chrY
+
+chmod +x checkAll
+checkAll >j.check
+
+# examing the resuls in j.check to make sure things are OK.
+
+# create symbolic links
+
+ln -s /hive/data/genomes/hg19/bed/evofold/doEvoFold/evoFold  /gbdb/hg19/evoFold 
+ln -s /gbdb/hg19/evoFold /usr/local/apache/htdocs/evoFold/hg19
 
 ##########################################################################
 # Build targetScanS track - (DONE - 2010-12-13 galt)

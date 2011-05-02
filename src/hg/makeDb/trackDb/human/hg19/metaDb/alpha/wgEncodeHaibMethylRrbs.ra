@@ -3709,7 +3709,6 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsHek293UwSitesRep2
 objType table
-attic auxExp
 cell HEK293
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs

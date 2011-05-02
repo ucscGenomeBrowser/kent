@@ -33,17 +33,17 @@ extraFields pValue=[f]Fisher's_Combined_P-Value_(<code>-log<sub>10</sub></code>)
             cmycSignal=[f]c-Myc_Signal \
             cmycPvalue=[f]c-Myc_P-Value_(<code>-log<sub>10</sub></code>) \
             ocCode=[i]Open_Chromatin_(OC)_Code
-filterBy color:Validation<BR>Level=\
-            0|Validated{#000000},\
-            255|Open_Chromatin{#0000FF},\
-            39168|DNase_Low{#009900},\
-            10027008|FAIRE_Low{#990000},\
-            16711935|ChIP_Low{#FF00FF} \
-        ocCode:Open_Chromatin<BR>(OC)_Code=+\
-            1&#58;_DNase_and_FAIRE,\
-            2&#58;_DNase-only,\
-            3&#58;_FAIRE-only,\
-            4&#58;_Neither
+filterBy color:Validation_Level=\
+            0|Validated_(all){#000000},\
+            255|Open_Chromatin_(significant_of_OC_Codes_2-4){#0000FF},\
+            39168|DNase_(low_significance_of_OC_Code_2){#009900},\
+            10027008|FAIRE_(low_significance_of_OC_Code_3){#990000},\
+            16711935|ChIP_(low_significance_of_OC_Code_4){#FF00FF} \
+         ocCode:OC_Code=+\
+            1&#58;_Validated_(all),\
+            2&#58;_DNase_(all),\
+            3&#58;_FAIRE_(all),\
+            4&#58;_ChIP_(all)
 dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromSynthK562Pk
