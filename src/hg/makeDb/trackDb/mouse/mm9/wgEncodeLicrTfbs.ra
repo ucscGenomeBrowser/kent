@@ -237,7 +237,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Bone Marrow CTCF Sig
+		shortLabel Bone Marrow CTCF Sg
         longLabel Bone Marrow CTCF TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=CTCF cellType=BMarrow control=std sex=M strain=C57BL6
 		type bigWig 0.150000 40.070000
@@ -247,7 +247,7 @@ noInherit on
 
         track wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Cerebellum Input Sig
+        shortLabel Cerebellum Input Sg
         longLabel Cerebellum Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Cbellum control=std sex=M strain=C57BL6
         type bigWig 0.140000 41.009998
@@ -256,7 +256,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal
-		shortLabel Bone Marrow Pol2 Sig
+		shortLabel Bone Marrow Pol2 Sg
         longLabel Bone Marrow Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=POL2 cellType=BMarrow control=std sex=M strain=C57BL6
 		type bigWig 0.120000 46.389999
@@ -265,7 +265,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Cerebellum CTCF Sig
+		shortLabel Cerebellum CTCF Sg
         longLabel Cerebellum CTCF TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=CTCF cellType=Cbellum control=std sex=M strain=C57BL6
 		type bigWig 0.110000 29.299999
@@ -274,7 +274,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Cortex CTCF Sig
+		shortLabel Cortex CTCF Sg
         longLabel Cortex CTCF TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=CTCF cellType=Cortex control=std sex=M strain=C57BL6
 		type bigWig 0.130000 58.930000
@@ -284,7 +284,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal off 
-		shortLabel Cortex Input Sig
+		shortLabel Cortex Input Sg
         longLabel Cortex Input TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=Input cellType=Cortex control=std sex=M strain=C57BL6
 		type bigWig 0.130000 61.080002
@@ -293,7 +293,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Cortex Pol2 Sig
+		shortLabel Cortex Pol2 Sg
         longLabel Cortex Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=POL2 cellType=Cortex control=std sex=M strain=C57BL6
 		type bigWig 0.110000 40.849998
@@ -302,7 +302,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Cerebellum Pol2 Sig
+		shortLabel Cerebellum Pol2 Sg
         longLabel Cerebellum Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=POL2 cellType=Cbellum control=std sex=M strain=C57BL6
 		type bigWig 0.150000 52.380001
@@ -311,7 +311,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Heart CTCF Sig
+		shortLabel Heart CTCF Sg
         longLabel Heart CTCF TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=CTCF cellType=Heart control=std sex=M strain=C57BL6
 		type bigWig 0.120000 52.910000
@@ -320,7 +320,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal
-		shortLabel Kidney Pol2 Sig
+		shortLabel Kidney Pol2 Sg
         longLabel Kidney Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=POL2 cellType=Kidney control=std sex=M strain=C57BL6
 		type bigWig 0.140000 40.459999
@@ -329,7 +329,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal
-		shortLabel Kidney CTCF Sig
+		shortLabel Kidney CTCF Sg
         longLabel Kidney CTCF TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=CTCF cellType=Kidney control=std sex=M strain=C57BL6
 		type bigWig 0.150000 51.889999
@@ -338,7 +338,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal
-		shortLabel Heart Pol2 Sig
+		shortLabel Heart Pol2 Sg
         longLabel Heart Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=POL2 cellType=Heart control=std sex=M strain=C57BL6
 		type bigWig 0.150000 50.889999
@@ -347,7 +347,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal
-		shortLabel Liver Pol2 Sig
+		shortLabel Liver Pol2 Sg
         longLabel Liver Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=POL2 cellType=Liver control=std sex=M strain=C57BL6
 		type bigWig 0.160000 45.200001
@@ -356,7 +356,7 @@ noInherit on
 
         track wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal
-        shortLabel Lung Pol2 Sig
+        shortLabel Lung Pol2 Sg
         longLabel Lung Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=POL2 cellType=Lung control=std sex=M strain=C57BL6
         type bigWig 0.120000 48.990002
@@ -365,7 +365,7 @@ noInherit on
 
         track wgEncodeLicrTfbsBmarrowInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Bone Marrow Input Sig
+        shortLabel Bone Marrow Input Sg
         longLabel Bone Marrow Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=BMarrow control=std sex=M strain=C57BL6
         type bigWig 0.150000 34.869999
@@ -374,7 +374,7 @@ noInherit on
 
         track wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Heart Input Sig
+        shortLabel Heart Input Sg
         longLabel Heart Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Heart control=std sex=M strain=C57BL6
         type bigWig 0.140000 73.459999
@@ -383,7 +383,7 @@ noInherit on
 
         track wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Kidney Input Sig
+        shortLabel Kidney Input Sg
         longLabel Kidney Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Kidney control=std sex=M strain=C57BL6
         type bigWig 0.140000 51.650002
@@ -392,7 +392,7 @@ noInherit on
 
         track wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal
-        shortLabel Lung CTCF Sig
+        shortLabel Lung CTCF Sg
         longLabel Lung CTCF TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=CTCF cellType=Lung control=std sex=M strain=C57BL6
         type bigWig 0.160000 34.049999
@@ -401,7 +401,7 @@ noInherit on
 
         track wgEncodeLicrTfbsLungInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Lung Input Sig
+        shortLabel Lung Input Sg
         longLabel Lung Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Lung control=std sex=M strain=C57BL6
         type bigWig 0.150000 39.330002
@@ -410,7 +410,7 @@ noInherit on
 
         track wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal
-        shortLabel Liver CTCF Sig
+        shortLabel Liver CTCF Sg
         longLabel Liver CTCF TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=CTCF cellType=Liver control=std sex=M strain=C57BL6
         type bigWig 0.110000 52.470001
@@ -419,7 +419,7 @@ noInherit on
 
         track wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Liver Input Sig
+        shortLabel Liver Input Sg
         longLabel Liver Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Liver control=std sex=M strain=C57BL6
         type bigWig 0.130000 65.070000
@@ -428,7 +428,7 @@ noInherit on
 
         track wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal 
-        shortLabel MEF Pol2 Sig
+        shortLabel MEF Pol2 Sg
         longLabel MEF Pol2 TFBS TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=POL2 cellType=MEF control=std sex=M strain=C57BL6
         type bigWig 0.110000 40.720001
@@ -437,7 +437,7 @@ noInherit on
 
         track wgEncodeLicrTfbsMefInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel MEF Input Sig
+        shortLabel MEF Input Sg
         longLabel MEF Input TFBS TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=MEF control=std sex=M strain=C57BL6
         type bigWig 0.140000 50.770000
@@ -446,7 +446,7 @@ noInherit on
 
         track wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal 
-        shortLabel Spleen CTCF Sig
+        shortLabel Spleen CTCF Sg
         longLabel Spleen CTCF TFBS TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=CTCF cellType=Spleen control=std sex=M strain=C57BL6
         type bigWig 0.200000 53.349998
@@ -455,7 +455,7 @@ noInherit on
 
         track wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal 
-        shortLabel MEF CTCF Sig
+        shortLabel MEF CTCF Sg
         longLabel MEF CTCF TFBS TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=CTCF cellType=MEF control=std sex=M strain=C57BL6
         type bigWig 0.160000 68.889999
@@ -464,7 +464,7 @@ noInherit on
 
         track wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Spleen Input Sig
+        shortLabel Spleen Input Sg
         longLabel Spleen Input TFBS TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Spleen control=std sex=M strain=C57BL6
         type bigWig 0.130000 31.219999
@@ -473,7 +473,7 @@ noInherit on
 
         track wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal 
-        shortLabel Spleen Pol2 Sig
+        shortLabel Spleen Pol2 Sg
         longLabel Spleen Pol2 TFBS TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=POL2 cellType=Spleen control=std sex=M strain=C57BL6
         type bigWig 0.130000 26.709999
