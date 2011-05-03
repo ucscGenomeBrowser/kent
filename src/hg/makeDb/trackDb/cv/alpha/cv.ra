@@ -9554,7 +9554,7 @@ description  Provisional This indicates the status of a file in the attic or not
 searchable no
 cvDefined no
 #It probably should be cv defined, but Venkat will need to define the terms
-validate 
+validate list: supplemental,auxUnValid,auxValid,auxExp 
 priority 190
 hidden yes
 
