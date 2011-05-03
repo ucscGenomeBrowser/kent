@@ -91,54 +91,12 @@ while (lineFileNextFull(lf, &line, &lineLen, &raw, &rawLen)) // Joins continuati
 return FALSE;
 }
 
-boolean raNextTagValUnjoined(struct lineFile *lf, char **retTag, char **retVal,
-                             struct dyString *dy)
-// NOTE: this is the former raNextTagVal routine is ignorant of continuation lines.
-//       It is provided in case older RAs need it.
-// Read next line.  Return FALSE at end of file or blank line.  Otherwise
-// fill in *retTag and *retVal and return TRUE.
-// If dy parameter is non-null, then the text parsed gets appended to dy.
-{
-char *line;
-for (;;)
-    {
-    if (!lineFileNext(lf, &line, NULL))
-       return FALSE;
-    char *tag = skipLeadingSpaces(line);
-    if (tag[0] == 0)
-       {
-       if (dy)
-	   lineFileReuse(lf);	/* Just so don't lose leading space in dy. */
-       return FALSE;
-       }
-    if (dy)
-       {
-       dyStringAppend(dy, line);
-       dyStringAppendC(dy, '\n');
-       }
-    if (tag[0] == '#')
-       {
-       if (startsWith("#EOF", tag))
-	   return FALSE;
-       else
-	   {
-	   continue;
-	   }
-       }
-    break;
-    }
-*retTag = nextWord(&line);
-*retVal = trimSpaces(line);
-return TRUE;
-}
-
-struct hash *raNextStanza(struct lineFile *lf,boolean joined)
+struct hash *raNextStanza(struct lineFile *lf)
 // Return a hash containing next record.
-// Will ignore '#' comments and if requsted, joins lines ending in continuation char '\'.
-// Returns NULL at end of file.  freeHash this
-// when done.  Note this will free the hash
-// keys and values as well, so you'll have to
-// cloneMem them if you want them for later.
+// Will ignore '#' comments and joins continued lines (ending in '\').
+// Returns NULL at end of file.  freeHash this when done.
+// Note this will free the hash keys and values as well,
+// so you'll have to cloneMem them if you want them for later.
 {
 struct hash *hash = NULL;
 char *key, *val;
@@ -146,12 +104,7 @@ char *key, *val;
 if (!raSkipLeadingEmptyLines(lf, NULL))
     return NULL;
 
-// Which function to use?
-boolean (*raNextTagAndVal)(struct lineFile *, char **, char **, struct dyString *) = raNextTagVal;
-if (!joined)
-    raNextTagAndVal = raNextTagValUnjoined;
-
-while (raNextTagAndVal(lf, &key, &val, NULL))
+while (raNextTagVal(lf, &key, &val, NULL))
     {
     if (hash == NULL)
         hash = newHash(7);
@@ -160,21 +113,16 @@ while (raNextTagAndVal(lf, &key, &val, NULL))
 return hash;
 }
 
-struct slPair *raNextStanzAsPairs(struct lineFile *lf,boolean joined)
-// Return ra stanza as an slPair list instead of a hash.  Handy to preserve the order.
-// Will ignore '#' comments and if requsted, joins lines ending in continuation char '\'.
+struct slPair *raNextStanzAsPairs(struct lineFile *lf)
+// Return ra stanza as an slPair list instead of a hash.  Handy to preserve the
+// order.  Will ignore '#' comments and joins continued lines (ending in '\').
 {
 struct slPair *list = NULL;
 char *key, *val;
 if (!raSkipLeadingEmptyLines(lf, NULL))
     return NULL;
 
-// Which function to use?
-boolean (*raNextTagAndVal)(struct lineFile *, char **, char **, struct dyString *) = raNextTagVal;
-if (!joined)
-    raNextTagAndVal = raNextTagValUnjoined;
-
-while (raNextTagAndVal(lf, &key, &val, NULL))
+while (raNextTagVal(lf, &key, &val, NULL))
     {
     slPairAdd(&list, key, cloneString(val)); // key gets cloned by slPairAdd
     }
