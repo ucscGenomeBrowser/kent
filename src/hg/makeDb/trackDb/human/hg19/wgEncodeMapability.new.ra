@@ -1,11 +1,11 @@
-# Mapability is a multi-lab track (wrangler: Tim, assisted by Rachel)
+# Mapability is a multi-lab track (wrangler: Tim, assisted by Rachel, taken over by Cricket)
 
 track wgEncodeMapability
 compositeTrack on
 shortLabel Mapability
 longLabel Mapability or Uniqueness of Reference Genome
 group map
-#dimensions dimensionX=win
+fileSortOrder size=Size view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 dragAndDrop subTracks
 priority 0
 type bigWig 0.00 1.00
