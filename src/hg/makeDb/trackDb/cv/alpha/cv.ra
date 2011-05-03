@@ -3963,6 +3963,22 @@ color 153,38,0
 sex U
 protocol LICR(Ren):Pancreas_Ren_protocol.pdf
 
+term Patski
+tag Patski
+type Cell Line
+organism Mouse
+tissue Kidney
+category Cell Line
+description Mouse Embryonic Kidney Fibroblast. As described in Lingenfelter et al., 1998 (Nat Genet. 1998 18:212-3) and Yang et al., 2010 (Genome Res.  2010 20:614-22), PATSKI is a female interspecific mouse fibroblast that was derived from the embryonic  kidney of an M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X. This is an adherent cell line. (Provisional)
+age immortalized
+strain C57BL/6J
+vendorName Dr. Christine Disteche (University of Washington)
+termId 6948
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+color 153,38,0
+sex F
+protocol UW(Stam):Patski_Stam_protocol.pdf
+
 term Placenta
 tag Placenta
 type Cell Line
@@ -4076,6 +4092,22 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 153,38,0
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
+
+term ZhBTc4
+tag ZHBTC4
+type Cell Line
+organism Mouse
+tissue 
+category Primary Cell
+age E0
+strain 129/Ola
+description Undifferentiated mouse embryonic stem cells (Provisional) 
+vendorName Dr. Levasseur (University of Iowa)
+termId 
+termUrl 
+color 153,38,0
+sex U
+protocol UW(Stam):ZhBTc4_Stam_protocol.pdf
 
 
 
@@ -8613,6 +8645,11 @@ term 129
 tag S129
 type strain
 description Strain 129, has widely available embryonic stem cells
+
+term 129/Ola
+tag 129Ola
+type strain
+description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice. (Provisional) 
 
 term Unknown
 tag UKN
