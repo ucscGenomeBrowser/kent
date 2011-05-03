@@ -317,6 +317,33 @@ for (i = 0; i < mcCount; i++)
 slReverse(&maf->components);
 }
 
+void htmlPrintSecStrDrawing(FILE *f, struct rnaSecStr *item) 
+{
+char fileName[512];
+struct dnaSeq *seq;
+seq = hChromSeq(database, item->chrom, item->chromStart, item->chromEnd);
+touppers(seq->dna);
+if (item->strand[0] == '-')
+    reverseComplement(seq->dna, seq->size);
+memSwapChar(seq->dna, seq->size, 'T', 'U');
+
+safef(fileName, sizeof(fileName), "/gbdb/%s/evoFold/%s/%s.png", 
+       database, item->chrom, item->name);
+if (fileExists(fileName))
+    {
+    fprintf(f, "<center><h2> RNA secondary structure drawing </h2></center>");
+    fprintf(f,"<B>");
+
+    // Could consider to serve up all EvoFold .png files from our public server in the future
+    // fprintf(f,"<IMG SRC=\"http://genome.ucsc.edu/evoFold/%s/%s/%s.png\" border = '2' ALT=\"ERROR: VARA plotting failed.\"</B><BR>", 
+    fprintf(f,"<IMG SRC=\"../evoFold/%s/%s/%s.png\" border = '2' ALT=\"ERROR: VARA plotting failed.\"</B><BR>", 
+            database, item->chrom, item->name);
+    fprintf(f,"</B>");
+    }    
+
+freeMem(seq);
+}
+
 void doRnaSecStr(struct trackDb *tdb, char *itemName)
 /* Handle click on rnaSecStr type elements. */
 {
@@ -358,6 +385,11 @@ mafAndFoldHeader(stdout);
 htmlPrintMafAndFold(stdout, maf, item->secStr, item->conf, 100);
 
 mafAndFoldLegend(stdout);
+
+/* Draw structure */
+htmlHorizontalLine();
+htmlPrintSecStrDrawing(stdout, item);
+
 /* track specific html */
 printTrackHtml(tdb);
 

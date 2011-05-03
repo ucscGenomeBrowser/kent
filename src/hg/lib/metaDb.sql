@@ -7,10 +7,6 @@
 CREATE TABLE metaDb (
     obj varchar(255) not null,	        # Object name or ID.
     var varchar(255) not null,	        # Metadata variable name.
-    varType     enum (
-                 'txt',                 # Most vars are txt
-                 'binary'               # some vars are binary
-               ) not null default 'txt',
     val longblob not null,	        # Metadata value.
               #Indices
     PRIMARY KEY(obj,var),

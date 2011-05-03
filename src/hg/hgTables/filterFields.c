@@ -276,8 +276,8 @@ cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
 			   "clear all");
 }
 
-static void showTableFieldsOnList(char *db, char *rootTable, 
-	struct asObject *asObj, struct slName *fieldList, 
+static void showTableFieldsOnList(char *db, char *rootTable,
+	struct asObject *asObj, struct slName *fieldList,
 	boolean showItemRgb, boolean withGetButton)
 /* Put up html table with check box, name, description, etc for each field. */
 {
@@ -451,6 +451,7 @@ showLinkedTables(joiner, dtList, selFieldLinkedTablePrefix(),
 
 /* clean up. */
 hPrintf("</FORM>");
+hPrintf("<div style='height:.9em;'></div>\n");
 htmlClose();
 joinerFree(&joiner);
 }
@@ -848,7 +849,7 @@ if (logOp == NULL)
 hPrintf("<TD>%s</TD></TR>\n", logOp);
 }
 
-static void printSqlFieldListAsControlTable(struct sqlFieldType *ftList, char *db, 
+static void printSqlFieldListAsControlTable(struct sqlFieldType *ftList, char *db,
 	char *rootTable, struct trackDb *tdb, boolean isBedGr)
 /* Print out table of controls for fields. */
 {
@@ -1173,6 +1174,7 @@ showLinkedTables(joiner, dtList, filterLinkedTablePrefix,
 	hgtaDoFilterMore, "Allow Filtering Using Fields in Checked Tables");
 
 hPrintf("</FORM>\n");
+hPrintf("<div style='height:.9em;'></div>\n");
 htmlClose();
 }
 

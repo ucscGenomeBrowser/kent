@@ -413,6 +413,14 @@ struct dbDb *hArchiveDbDbList(void);
 /* Return list of databases in archive central dbDb.
  * Free this with dbDbFree. */
 
+struct hash *hDbDbHash();
+/* The hashed-up version of the entire dbDb table, keyed on the db */
+/* this is likely better to use than hArchiveOrganism if it's likely to be */
+/* repeatedly called */
+
+struct hash *hDbDbAndArchiveHash();
+/* hDbDbHash() plus the dbDb rows from the archive table */
+
 int hDbDbCmpOrderKey(const void *va, const void *vb);
 /* Compare to sort based on order key */
 

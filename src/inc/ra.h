@@ -77,5 +77,8 @@ struct hash *raReadWithFilter(char *fileName, char *keyField,char *filterKey,cha
  * The values of the hash are themselves hashes.  The filter is a key/value pair that must exist.
  * Example raReadWithFilter(file,"term","type","antibody"): returns hash of hashes of every term with type=antibody */
 
+struct hash *raTagVals(char *fileName, char *tag);
+/* Return a hash of all values of given tag seen in any stanza of ra file. */
+
 #endif /* RA_H */
 

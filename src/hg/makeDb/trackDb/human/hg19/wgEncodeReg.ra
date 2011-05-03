@@ -3,7 +3,7 @@
 track wgEncodeReg
 superTrack on show
 shortLabel ENCODE Regulation
-longLabel ENCODE Integrated Regulation
+longLabel Integrated Regulation from ENCODE
 wgEncode 1
 group regulation
 priority 1
@@ -25,56 +25,49 @@ canPack On
     priority 1.1
     dragAndDrop subTracks
 
-	track wgEncodeCaltechRnaSeqGm12878R2x75Il200SigPooled
-	table wgEncodeCaltechRnaSeqGm12878R2x75Il200SigPooled
+	track wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
 	shortLabel Gm12878
 	longLabel Transcription of Gm12878 cells from ENCODE
 	parent wgEncodeRegTxn
         type bigWig 0 65534
 	color 255,128,128
 
-	track wgEncodeCaltechRnaSeqH1hescR2x75Il200SigPooled
-	table wgEncodeCaltechRnaSeqH1hescR2x75Il200SigPooled
+	track wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigPooled
 	shortLabel H1-hESC
 	longLabel Transcription of H1-hESC cells from ENCODE
 	parent wgEncodeRegTxn
         type bigWig 0 65177
 	color 255,212,128
 
-	track wgEncodeCaltechRnaSeqHsmmR2x75Il200SigPooled
-	table wgEncodeCaltechRnaSeqHsmmR2x75Il200SigPooled
+	track wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled
 	shortLabel HSMM
 	longLabel Transcription of HSMM cells from ENCODE
 	parent wgEncodeRegTxn
         type bigWig 0 65503
 	color 120,235,204
 
-	track wgEncodeCaltechRnaSeqHuvecR2x75Il200SigPooled
-	table wgEncodeCaltechRnaSeqHuvecR2x75Il200SigPooled
+	track wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled
 	shortLabel HUVEC
 	longLabel Transcription of HUVEC cells from ENCODE
 	parent wgEncodeRegTxn
         type bigWig 0 65535
 	color 128,212,255
 
-	track wgEncodeCaltechRnaSeqK562R2x75Il200SigPooled
-	table wgEncodeCaltechRnaSeqK562R2x75Il200SigPooled
+	track wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigPooled
 	shortLabel K562
 	longLabel Transcription of K562 cells from ENCODE
 	parent wgEncodeRegTxn
         type bigWig 0 65528
 	color 128,128,255
 
-	track wgEncodeCaltechRnaSeqNhekR2x75Il200SigPooled
-	table wgEncodeCaltechRnaSeqNhekR2x75Il200SigPooled
+	track wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigPooled
 	shortLabel NHEK
 	longLabel Transcription of NHEK cells from ENCODE
 	parent wgEncodeRegTxn
 	type bigWig 0 65534
 	color 212,128,255
 
-	track wgEncodeCaltechRnaSeqNhlfR2x75Il200SigPooled
-	table wgEncodeCaltechRnaSeqNhlfR2x75Il200SigPooled
+	track wgEncodeRegTxnCaltechRnaSeqNhlfR2x75Il200SigPooled
 	shortLabel NHLF
 	longLabel Transcription of NHLF cells from ENCODE
 	parent wgEncodeRegTxn
@@ -85,10 +78,10 @@ canPack On
     container multiWig
     noInherit on
     type bigWig 0 10000
-    superTrack wgEncodeReg full
-    shortLabel Overlayed H3K4Me1
+    superTrack wgEncodeReg hide
+    shortLabel Layered H3K4Me1
     longLabel H3K4Me1 Mark (Often Found Near Regulatory Elements) on 7 cell lines from ENCODE
-    visibility full
+    visibility hide
     viewLimits 0:50
     maxHeightPixels 100:30:11
     aggregate transparentOverlay
@@ -156,11 +149,11 @@ canPack On
     container multiWig
     noInherit on
     type bigWig 0 10000
-    superTrack wgEncodeReg full
-    shortLabel Overlayed H3K4Me3
+    superTrack wgEncodeReg hide
+    shortLabel Layered H3K4Me3
     longLabel H3K4Me3 Mark (Often Found Near Promoters) on 7 cell lines from ENCODE
-    visibility full
-    viewLimits 0:100
+    visibility hide
+    viewLimits 0:150
     maxHeightPixels 100:30:11
     aggregate transparentOverlay
     showSubtrackColorOnUi on
@@ -227,11 +220,11 @@ canPack On
     container multiWig
     noInherit on
     type bigWig 0 10000
-    superTrack wgEncodeReg hide
-    shortLabel Overlayed H3K27Ac
-    longLabel H3K27Ac Mark (Often Found Near Regulatory Elements) on 7 cell lines from ENCODE
-    visibility hide
-    viewLimits 0:50
+    superTrack wgEncodeReg full
+    shortLabel Layered H3K27Ac
+    longLabel H3K27Ac Mark (Often Found Near Active Regulatory Elements) on 7 cell lines from ENCODE
+    visibility full
+    viewLimits 0:100
     maxHeightPixels 100:30:11
     aggregate transparentOverlay
     showSubtrackColorOnUi on
@@ -297,18 +290,20 @@ canPack On
 
     track wgEncodeRegDnaseClustered
     shortLabel DNase Clusters
-    longLabel ENCODE Digital DNaseI Hypersensitivity Clusters
+    longLabel Digital DNaseI Hypersensitivity Clusters from ENCODE
     type bed 5 .
     superTrack wgEncodeReg dense
     inputTrackTable wgEncodeRegDnaseClusteredInputs
-    inputTracksSubgroupDisplay cellType treatment rep
+    #inputTracksSubgroupDisplay cellType treatment rep
+    inputTableFieldDisplay cellType treatment replicate lab dateUnrestricted
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     visibility dense
     useScore 1
     priority 1.6
 
     track wgEncodeRegTfbsClustered
     shortLabel Txn Factor ChIP
-    longLabel ENCODE Transcription Factor ChIP-seq
+    longLabel Transcription Factor ChIP-seq from ENCODE
     type factorSource
     superTrack wgEncodeReg dense
     sourceTable wgEncodeRegTfbsCells
