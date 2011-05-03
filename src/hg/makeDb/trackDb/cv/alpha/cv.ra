@@ -3027,7 +3027,7 @@ term PBMC
 tag PBMC
 type Cell Line
 organism human
-description Peripheral blood mononuclear cells (Provisional)
+description Peripheral blood mononuclear cells 
 tissue Blood
 vendorName PBMC cells provided by E. Bresnick, UW Madison
 termId BTO:0001025
@@ -3116,7 +3116,7 @@ tag prostate
 type Cell Line
 organism Human
 description prostate tissue purchased for Gingeras project
-#)description Provisional prostate tissue purchased for Gingeras project (provisional)
+#)description Provisional prostate tissue purchased for Gingeras project 
 tissue Prostate
 #)lineage endoderm
 vendorName ATCC
@@ -3963,6 +3963,22 @@ color 153,38,0
 sex U
 protocol LICR(Ren):Pancreas_Ren_protocol.pdf
 
+term Patski
+tag Patski
+type Cell Line
+organism Mouse
+tissue Kidney
+category Cell Line
+description Mouse Embryonic Kidney Fibroblast. As described in Lingenfelter et al., 1998 (Nat Genet. 1998 18:212-3) and Yang et al., 2010 (Genome Res.  2010 20:614-22), PATSKI is a female interspecific mouse fibroblast that was derived from the embryonic  kidney of an M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X. This is an adherent cell line. 
+age immortalized
+strain C57BL/6J
+vendorName Dr. Christine Disteche (University of Washington)
+termId 6948
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+color 153,38,0
+sex F
+protocol UW(Stam):Patski_Stam_protocol.pdf
+
 term Placenta
 tag Placenta
 type Cell Line
@@ -4076,6 +4092,22 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 153,38,0
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
+
+term ZhBTc4
+tag ZHBTC4
+type Cell Line
+organism Mouse
+tissue 
+category Primary Cell
+age E0
+strain 129/Ola
+description Undifferentiated mouse embryonic stem cells 
+vendorName Dr. Levasseur (University of Iowa)
+termId 
+termUrl 
+color 153,38,0
+sex U
+protocol UW(Stam):ZhBTc4_Stam_protocol.pdf
 
 
 
@@ -8587,7 +8619,7 @@ description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/
 term BALB/cAnN
 tag BALBCANN
 type strain
-description ccMyeloma high incidence H2d (Provisional)
+description ccMyeloma high incidence H2d 
 
 term C3H
 tag C3H
@@ -8613,6 +8645,11 @@ term 129
 tag S129
 type strain
 description Strain 129, has widely available embryonic stem cells
+
+term 129/Ola
+tag 129Ola
+type strain
+description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice. 
 
 term Unknown
 tag UKN
@@ -8785,7 +8822,7 @@ term Illumina_HiSeq_2000
 tag IlluminaHiSeq2
 geo Illumina HiSeq 2000
 type seqPlatform
-description Illumina HiSeq 2000 (Provisional)
+description Illumina HiSeq 2000 
 
 term 454_GS
 tag 454GS
@@ -9294,9 +9331,9 @@ term DAC-Stanford
 tag  dacstanf
 type lab
 label Anshul Kundaje - Stanford University
-description (PROVISIONAL) Kundaje - Stanford University
+description Kundaje - Stanford University
 labInst Stanford
-labPi Kundaje
+labPi Birney
 labPiFull Ewan Birney
 grantPi Birney
 organism human
@@ -9554,7 +9591,7 @@ description  Provisional This indicates the status of a file in the attic or not
 searchable no
 cvDefined no
 #It probably should be cv defined, but Venkat will need to define the terms
-validate 
+validate list: supplemental,auxUnValid,auxValid,auxExp 
 priority 190
 hidden yes
 
