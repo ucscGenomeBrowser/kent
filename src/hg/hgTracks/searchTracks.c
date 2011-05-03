@@ -835,6 +835,10 @@ else
     hPrintf("<p>Search for terms in track descriptions, groups, and names. "
             "If multiple terms are entered, only tracks with all terms "
             "will be part of the results.");
-hPrintf("<BR><a target='_blank' href='../goldenPath/help/trackSearch.html'>more help</a></p>\n");
+    hPrintf("<BR><a href='#' onclick=\"retrieveHtml('../goldenPath/help/trackSearch.html'); return false;\">more help</a></p>\n");
+    // NOTE: By declaring a div and passing it to retrieveHtml, the div could be populated.
+    // However, this is not desired here because of the titles.
+    //hPrintf("<BR><a href='#' onclick=\"retrieveHtml('../goldenPath/help/trackSearch.html',$('#moreHelp'),true); return false;\">more help</a></p>\n");
+    //hPrintf("<div id='moreHelp'></div>\n");
 webEndSectionTables();
 }
