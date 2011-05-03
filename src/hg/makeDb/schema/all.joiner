@@ -1291,7 +1291,6 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     hg17.mrnaRefseq.mrna minCheck=0.80
     $rn.mrnaRefseq.mrna minCheck=0.03
     $gbd,!mm7,!mm8,!mm9,!hg17,!hg18,!rn4.spMrna.mrnaID minCheck=0.98
-    $mm.spMrna.mrnaID minCheck=0.20
     $mm.dupSpMrna.mrnaID minCheck=0.10
     $mm.dupSpMrna.dupMrnaID minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.30
@@ -1335,7 +1334,6 @@ identifier refSeqId typeOf=mrnaAccession
     dm1.bdgpToRefSeq.value minCheck=0.94
     $dm,!dm1.flyBaseToRefSeq.value minCheck=0.96
     $mm.mrnaRefseq.mrna minCheck=0.03
-    $mm.spMrna.mrnaID minCheck=0.40
     $mm.dupSpMrna.mrnaID minCheck=0.60
     $mm,!mm8,!mm9.dupSpMrna.dupMrnaID minCheck=0.20
     mm9.dupSpMrna.dupMrnaID minCheck=0.19
@@ -1358,7 +1356,7 @@ identifier knownToRefSeqId typeOf=mrnaAccession
     $kgDb.knownToRefSeq.value dupeOk
     mm7.geneNetworkId.id minCheck=0.80
     mm8.geneNetworkId.id minCheck=0.80
-    mm9.geneNetworkId.id minCheck=0.80
+    mm9.geneNetworkId.id minCheck=0.40
     hg19.geneNetworkId.id
     rn3.geneNetworkId.id minCheck=0.40
 
@@ -2104,9 +2102,9 @@ identifier cgapMapId
 identifier cgapAlias
 "NCI Cancer Genome Annotation Project Alias"
     $gbd.cgapAlias.alias dupeOk
-    $gbd,!hg16,!hg18,!hg19.knownGene.name minCheck=0.50
+    $gbd,!hg16,!hg18,!hg19,!mm9.knownGene.name minCheck=0.50
     hg16.knownGene.name minCheck=0.05
-    hg18,hg19.kgXref.geneSymbol minCheck=0.85
+    hg18,hg19,mm9.kgXref.geneSymbol minCheck=0.85
 
 # SNP (Simple Nucleotide Polymorphism) Stuff
 
