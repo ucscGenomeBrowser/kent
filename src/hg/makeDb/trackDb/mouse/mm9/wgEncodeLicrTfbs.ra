@@ -214,6 +214,15 @@ noInherit on
         color 153,38,0
         # subId=4000 dateSubmitted=2011-04-28
 
+        track wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdPk
+        parent wgEncodeLicrTfbsViewPeaks 
+        shortLabel Spleen Pol2 Pk
+        longLabel Spleen Pol2 TFBS TFBS ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=adult8wks factor=POL2 cellType=Spleen control=std sex=M strain=C57BL6
+        type broadPeak
+        color 153,38,0
+        # subId=4037 dateSubmitted=2011-05-02
+
 	#######	Signal Tracks###########
 	track wgEncodeLicrTfbsViewSignal
 	shortLabel Signal
@@ -461,4 +470,13 @@ noInherit on
         type bigWig 0.130000 31.219999
         color 153,38,0
         # subId=4036 dateSubmitted=2011-05-02
+
+        track wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdSig
+        parent wgEncodeLicrTfbsViewSignal 
+        shortLabel Spleen Pol2 Sig
+        longLabel Spleen Pol2 TFBS TFBS ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=adult8wks factor=POL2 cellType=Spleen control=std sex=M strain=C57BL6
+        type bigWig 0.130000 26.709999
+        color 153,38,0
+        # subId=4037 dateSubmitted=2011-05-02
 
