@@ -25,7 +25,7 @@
 #                       - SK-N-SH_RA = SKRA
 #                       - WERI-Rb-1 = WERIRb1
 #		- Treatment: Treatment abbreviations
-#			- 4-hydroxytamoxifen = OHTAM ??
+#			- 4-hydroxytamoxifen = OHT
 #		- Views: For consistency sake view will be
 #			- Peaks = Pk
 #			- Raw Signal = Sig
@@ -1435,7 +1435,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38OhtamHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel WI-38 OHTAM Hspt 1
+        shortLabel WI-38 OHT Hspt 1
         longLabel WI-38 4-hydroxytamoxifen DNaseI HS Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hot cellType=WI38 treatment=OHTAM rep=1
         type broadPeak
@@ -1444,7 +1444,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38OhtamHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel WI-38 OHTAM Hspt 2
+        shortLabel WI-38 OHT Hspt 2
         longLabel WI-38 4-hydroxytamoxifen DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=WI38 treatment=OHTAM rep=2
         type broadPeak
@@ -2747,7 +2747,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38OhtamPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel WI-38 OHTAM Pk 1
+        shortLabel WI-38 OHT Pk 1
         longLabel WI-38 4-hydroxytamoxifen DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=WI38 treatment=OHTAM rep=1
         type narrowPeak
@@ -2756,7 +2756,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38OhtamPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel WI-38 OHTAM Pk 2
+        shortLabel WI-38 OHT Pk 2
         longLabel WI-38 4-hydroxytamoxifen DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=WI38 treatment=OHTAM rep=2
         type narrowPeak
@@ -4207,7 +4207,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38OhtamRawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel WI-38 OHTAM Sig 1
+        shortLabel WI-38 OHT Sig 1
         longLabel WI-38 4-hydroxytamoxifen DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=WI38 treatment=OHTAM rep=1
         type bigWig 1.000000 21917.000000
@@ -4216,7 +4216,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38OhtamRawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel WI-38 OHTAM Sig 2
+        shortLabel WI-38 OHT Sig 2
         longLabel WI-38 4-hydroxytamoxifen DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=WI38 treatment=OHTAM rep=2
         type bigWig 1.000000 24297.000000

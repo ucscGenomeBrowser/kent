@@ -3,11 +3,11 @@ compositeTrack on
 shortLabel RIKEN CAGE Loc
 longLabel RNA Subcellular CAGE Localization from ENCODE/RIKEN
 group expression
-subGroup1 view Views PlusRawSignal=Plus_Signal MinusRawSignal=Minus_Signal Alignments=Alignments
+subGroup1 view Views PlusRawSignal=Plus_Signal MinusRawSignal=Minus_Signal Alignments=Alignments Clusters=Clusters
 subGroup2 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K562&nbsp;(Tier_1) BJ=BJ A549=A549 AG04450=AG04450 HeLaS3=HeLa-S3 HepG2=HepG2 HUVEC=HUVEC MCF7=MCF7 NHEK=NHEK prostate=Prostate SKNSHRA=SK-N-SH_RA
 subGroup3 localization Localization cell=Whole_Cell cytosol=Cytosol nucleus=Nucleus polysome=Polysome nucleoplasm=Nucleoplasm chromatin=Chromatin nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=PolyA- longPolyA=PolyA+ total=Total_RNA pAP=PolyA+
-subGroup5 rep Rep rep0=0 rep1=1 rep2=2 rep3=3 rep4=4
+subGroup5 rep Rep rep0=0 rep1=1 rep2=2 rep3=3 rep4=4 Pooled=Pooled
 dimensions dimensionX=cellType dimensionC=rnaExtract dimensionY=localization dimensionB=rep
 dimensionCchecked longPolyA,longNonPolyA,total
 dimensionBchecked rep0,rep1,rep2,rep3,rep4
@@ -20,6 +20,39 @@ priority 0
 type bed 3
 wgEncode 1
 superTrack wgEncodeRnaSeqSuper dense
+
+    track wgEncodeRikenCageViewClusters
+    shortLabel Clusters 
+    view Clusters
+    visibility full
+    parent wgEncodeRikenCage
+    maxHeightPixels 100:24:16
+    type bed 6
+
+        track wgEncodeRikenCageHuvecNucleusPapClusters
+        parent wgEncodeRikenCageViewClusters off
+        shortLabel HUVEC nucleus longPolyA
+        longLabel ENCODE RIKEN CAGE Clusters (longPolyA in HUVEC nucleus)
+        subGroups view=Clusters rep=Pooled cellType=HUVEC localization=nucleus rnaExtract=pAP
+        type bedRnaElements
+        color 224,75,0
+        # subId=3959 dateSubmitted=2011-04-28
+
+#        track wgEncodeRikenCageA549CellPapClusters
+#        parent wgEncodeRikenCageViewClusters off
+#        shortLabel A549 cell longPolyA
+#        longLabel ENCODE RIKEN CAGE Clusters (longPolyA in A549 cell)
+#        subGroups view=Clusters cellType=A549 localization=cell rnaExtract=pAP
+#        type bedRnaElements
+#        # subId=3998 dateSubmitted=2011-04-28
+
+        track wgEncodeRikenCageA549CellPapClusters
+        parent wgEncodeRikenCageViewClusters off
+        shortLabel A549 cell longPolyA
+        longLabel ENCODE RIKEN CAGE Clusters (longPolyA in A549 cell)
+        subGroups view=Clusters rep=Pooled cellType=A549 localization=cell rnaExtract=pAP
+        type bedRnaElements
+        # subId=3998 dateSubmitted=2011-04-28
 
     track wgEncodeRikenCageViewPlusClusters
     shortLabel Plus Signal
@@ -621,6 +654,114 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 193962.000000
         origAssembly hg19
         # subId=3479 dateSubmitted=2011-01-21
+
+##        track wgEncodeRikenCageGm12878CellPapPlusRawRep1
+##        parent wgEncodeRikenCageViewPlusClusters off
+##        shortLabel GM12878 cell longPolyA PlusRaw 1
+##        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cell)
+##        subGroups view=PlusRawSignal cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep1
+##        type bigWig 1.000000 188531.000000
+##        color 153,38,0
+##        # subId=3946 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878CellPapPlusRawRep1
+#        parent wgEncodeRikenCageViewPlusClusters off
+#        shortLabel GM12878 cell longPolyA PlusRaw 1
+#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cell)
+#        subGroups view=PlusRawSignal cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep1
+#        type bigWig 1.000000 188531.000000
+#        color 153,38,0
+#        # subId=3946 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878CellPapPlusRawRep1
+        parent wgEncodeRikenCageViewPlusClusters off
+        shortLabel GM12878 cell longPolyA PlusRaw 1
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cell)
+        subGroups view=PlusRawSignal cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 188531.000000
+        color 153,38,0
+        # subId=3946 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878CytosolPapPlusRawRep1
+#        parent wgEncodeRikenCageViewPlusClusters off
+#        shortLabel GM12878 cytosol longPolyA PlusRaw 1
+#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cytosol)
+#        subGroups view=PlusRawSignal cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+#        type bigWig 1.000000 178047.000000
+#        color 153,38,0
+#        # subId=3950 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878CytosolPapPlusRawRep1
+        parent wgEncodeRikenCageViewPlusClusters off
+        shortLabel GM12878 cytosol longPolyA PlusRaw 1
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cytosol)
+        subGroups view=PlusRawSignal cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 178047.000000
+        color 153,38,0
+        # subId=3950 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878NucleusPapPlusRawRep1
+#        parent wgEncodeRikenCageViewPlusClusters off
+#        shortLabel GM12878 nucleus longPolyA PlusRaw 1
+#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 nucleus)
+#        subGroups view=PlusRawSignal cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep1
+#        type bigWig 1.000000 255779.000000
+#        color 153,38,0
+#        # subId=3948 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878NucleusPapPlusRawRep1
+        parent wgEncodeRikenCageViewPlusClusters off
+        shortLabel GM12878 nucleus longPolyA PlusRaw 1
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 nucleus)
+        subGroups view=PlusRawSignal cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 255779.000000
+        color 153,38,0
+        # subId=3948 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878NucleusPapPlusRawRep2
+#        parent wgEncodeRikenCageViewPlusClusters off
+#        shortLabel GM12878 nucleus longPolyA PlusRaw 2
+#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 nucleus)
+#        subGroups view=PlusRawSignal cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep2
+#        type bigWig 1.000000 361501.000000
+#        color 153,38,0
+#        # subId=3949 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878NucleusPapPlusRawRep2
+        parent wgEncodeRikenCageViewPlusClusters off
+        shortLabel GM12878 nucleus longPolyA PlusRaw 2
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 nucleus)
+        subGroups view=PlusRawSignal cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 361501.000000
+        color 153,38,0
+        # subId=3949 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878CellPapPlusRawRep2
+#        parent wgEncodeRikenCageViewPlusClusters off
+#        shortLabel GM12878 cell longPolyA PlusRaw 2
+#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 cell)
+#        subGroups view=PlusRawSignal cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep2
+#        type bigWig 1.000000 218248.000000
+#        color 153,38,0
+#        # subId=3951 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878CellPapPlusRawRep2
+        parent wgEncodeRikenCageViewPlusClusters off
+        shortLabel GM12878 cell longPolyA PlusRaw 2
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 cell)
+        subGroups view=PlusRawSignal cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 218248.000000
+        color 153,38,0
+        # subId=3951 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878CytosolPapPlusRawRep2
+        parent wgEncodeRikenCageViewPlusClusters off
+        shortLabel GM12878 cytosol longPolyA PlusRaw 2
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 cytosol)
+        subGroups view=PlusRawSignal cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 277633.000000
+        color 153,38,0
+        # subId=3947 dateSubmitted=2011-04-28
 
 
     track wgEncodeRikenCageViewMinusClusters
@@ -1225,6 +1366,114 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 201709.000000
         origAssembly hg19
         # subId=3479 dateSubmitted=2011-01-21
+
+##        track wgEncodeRikenCageGm12878CellPapMinusRawRep1
+##        parent wgEncodeRikenCageViewMinusClusters off
+##        shortLabel GM12878 cell longPolyA MinusRaw 1
+##        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cell)
+##        subGroups view=MinusRawSignal cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep1
+##        type bigWig 1.000000 285019.000000
+##        color 153,38,0
+##        # subId=3946 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878CellPapMinusRawRep1
+#        parent wgEncodeRikenCageViewMinusClusters off
+#        shortLabel GM12878 cell longPolyA MinusRaw 1
+#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cell)
+#        subGroups view=MinusRawSignal cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep1
+#        type bigWig 1.000000 285019.000000
+#        color 153,38,0
+#        # subId=3946 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878CellPapMinusRawRep1
+        parent wgEncodeRikenCageViewMinusClusters off
+        shortLabel GM12878 cell longPolyA MinusRaw 1
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cell)
+        subGroups view=MinusRawSignal cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 285019.000000
+        color 153,38,0
+        # subId=3946 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878CytosolPapMinusRawRep1
+#        parent wgEncodeRikenCageViewMinusClusters off
+#        shortLabel GM12878 cytosol longPolyA MinusRaw 1
+#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cytosol)
+#        subGroups view=MinusRawSignal cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+#        type bigWig 1.000000 461584.000000
+#        color 153,38,0
+#        # subId=3950 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878CytosolPapMinusRawRep1
+        parent wgEncodeRikenCageViewMinusClusters off
+        shortLabel GM12878 cytosol longPolyA MinusRaw 1
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cytosol)
+        subGroups view=MinusRawSignal cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 461584.000000
+        color 153,38,0
+        # subId=3950 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878NucleusPapMinusRawRep1
+#        parent wgEncodeRikenCageViewMinusClusters off
+#        shortLabel GM12878 nucleus longPolyA MinusRaw 1
+#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 nucleus)
+#        subGroups view=MinusRawSignal cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep1
+#        type bigWig 1.000000 110366.000000
+#        color 153,38,0
+#        # subId=3948 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878NucleusPapMinusRawRep1
+        parent wgEncodeRikenCageViewMinusClusters off
+        shortLabel GM12878 nucleus longPolyA MinusRaw 1
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 nucleus)
+        subGroups view=MinusRawSignal cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 110366.000000
+        color 153,38,0
+        # subId=3948 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878NucleusPapMinusRawRep2
+#        parent wgEncodeRikenCageViewMinusClusters off
+#        shortLabel GM12878 nucleus longPolyA MinusRaw 2
+#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 nucleus)
+#        subGroups view=MinusRawSignal cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep2
+#        type bigWig 1.000000 106130.000000
+#        color 153,38,0
+#        # subId=3949 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878NucleusPapMinusRawRep2
+        parent wgEncodeRikenCageViewMinusClusters off
+        shortLabel GM12878 nucleus longPolyA MinusRaw 2
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 nucleus)
+        subGroups view=MinusRawSignal cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 106130.000000
+        color 153,38,0
+        # subId=3949 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878CellPapMinusRawRep2
+#        parent wgEncodeRikenCageViewMinusClusters off
+#        shortLabel GM12878 cell longPolyA MinusRaw 2
+#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 cell)
+#        subGroups view=MinusRawSignal cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep2
+#        type bigWig 1.000000 304430.000000
+#        color 153,38,0
+#        # subId=3951 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878CellPapMinusRawRep2
+        parent wgEncodeRikenCageViewMinusClusters off
+        shortLabel GM12878 cell longPolyA MinusRaw 2
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 cell)
+        subGroups view=MinusRawSignal cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 304430.000000
+        color 153,38,0
+        # subId=3951 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878CytosolPapMinusRawRep2
+        parent wgEncodeRikenCageViewMinusClusters off
+        shortLabel GM12878 cytosol longPolyA MinusRaw 2
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 cytosol)
+        subGroups view=MinusRawSignal cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 460936.000000
+        color 153,38,0
+        # subId=3947 dateSubmitted=2011-04-28
 
 
     track wgEncodeRikenCageViewAlignments
@@ -1867,6 +2116,114 @@ superTrack wgEncodeRnaSeqSuper dense
         type bam
         origAssembly hg19
         # subId=3339 dateSubmitted=2011-01-19
+
+##        track wgEncodeRikenCageGm12878CellPapAlnRep1
+##        parent wgEncodeRikenCageViewAlignments off
+##        shortLabel GM12878 cell longPolyA Aln 1
+##        longLabel ENCODE RIKEN CAGE Alignments Replicate 1 (longPolyA in GM12878 cell)
+##        subGroups view=Alignments cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep1
+##        type bam
+##        color 153,38,0
+##        # subId=3946 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878CellPapAlnRep1
+#        parent wgEncodeRikenCageViewAlignments off
+#        shortLabel GM12878 cell longPolyA Aln 1
+#        longLabel ENCODE RIKEN CAGE Alignments Replicate 1 (longPolyA in GM12878 cell)
+#        subGroups view=Alignments cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep1
+#        type bam
+#        color 153,38,0
+#        # subId=3946 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878CellPapAlnRep1
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel GM12878 cell longPolyA Aln 1
+        longLabel ENCODE RIKEN CAGE Alignments Replicate 1 (longPolyA in GM12878 cell)
+        subGroups view=Alignments cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep1
+        type bam
+        color 153,38,0
+        # subId=3946 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878CytosolPapAlnRep1
+#        parent wgEncodeRikenCageViewAlignments off
+#        shortLabel GM12878 cytosol longPolyA Aln 1
+#        longLabel ENCODE RIKEN CAGE Alignments Replicate 1 (longPolyA in GM12878 cytosol)
+#        subGroups view=Alignments cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+#        type bam
+#        color 153,38,0
+#        # subId=3950 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878CytosolPapAlnRep1
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel GM12878 cytosol longPolyA Aln 1
+        longLabel ENCODE RIKEN CAGE Alignments Replicate 1 (longPolyA in GM12878 cytosol)
+        subGroups view=Alignments cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        type bam
+        color 153,38,0
+        # subId=3950 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878NucleusPapAlnRep1
+#        parent wgEncodeRikenCageViewAlignments off
+#        shortLabel GM12878 nucleus longPolyA Aln 1
+#        longLabel ENCODE RIKEN CAGE Alignments Replicate 1 (longPolyA in GM12878 nucleus)
+#        subGroups view=Alignments cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep1
+#        type bam
+#        color 153,38,0
+#        # subId=3948 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878NucleusPapAlnRep1
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel GM12878 nucleus longPolyA Aln 1
+        longLabel ENCODE RIKEN CAGE Alignments Replicate 1 (longPolyA in GM12878 nucleus)
+        subGroups view=Alignments cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep1
+        type bam
+        color 153,38,0
+        # subId=3948 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878NucleusPapAlnRep2
+#        parent wgEncodeRikenCageViewAlignments off
+#        shortLabel GM12878 nucleus longPolyA Aln 2
+#        longLabel ENCODE RIKEN CAGE Alignments Replicate 2 (longPolyA in GM12878 nucleus)
+#        subGroups view=Alignments cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep2
+#        type bam
+#        color 153,38,0
+#        # subId=3949 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878NucleusPapAlnRep2
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel GM12878 nucleus longPolyA Aln 2
+        longLabel ENCODE RIKEN CAGE Alignments Replicate 2 (longPolyA in GM12878 nucleus)
+        subGroups view=Alignments cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep2
+        type bam
+        color 153,38,0
+        # subId=3949 dateSubmitted=2011-04-29
+
+#        track wgEncodeRikenCageGm12878CellPapAlnRep2
+#        parent wgEncodeRikenCageViewAlignments off
+#        shortLabel GM12878 cell longPolyA Aln 2
+#        longLabel ENCODE RIKEN CAGE Alignments Replicate 2 (longPolyA in GM12878 cell)
+#        subGroups view=Alignments cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep2
+#        type bam
+#        color 153,38,0
+#        # subId=3951 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878CellPapAlnRep2
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel GM12878 cell longPolyA Aln 2
+        longLabel ENCODE RIKEN CAGE Alignments Replicate 2 (longPolyA in GM12878 cell)
+        subGroups view=Alignments cellType=1-GM12878 localization=cell rnaExtract=pAP rep=rep2
+        type bam
+        color 153,38,0
+        # subId=3951 dateSubmitted=2011-04-29
+
+        track wgEncodeRikenCageGm12878CytosolPapAlnRep2
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel GM12878 cytosol longPolyA Aln 2
+        longLabel ENCODE RIKEN CAGE Alignments Replicate 2 (longPolyA in GM12878 cytosol)
+        subGroups view=Alignments cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep2
+        type bam
+        color 153,38,0
+        # subId=3947 dateSubmitted=2011-04-28
 
 
 
