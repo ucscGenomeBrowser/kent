@@ -10189,7 +10189,7 @@ label Tissue Source Type
 description Source of tissue from either an indiviual organism or pooled set of organisms
 searchable multiSelect
 cvDefined yes
-validate cv
+validate cv or None
 priority 470
 
 # term type
