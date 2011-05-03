@@ -140,8 +140,32 @@ The goal of ENCODE is to build a comprehensive parts list of
 functional elements in the human genome, including elements that
 act at the protein and RNA levels,
 and regulatory elements that control cells and
-circumstances in which a gene is active.</p>
+circumstances in which a gene is active.
+</p>
+<!--#if expr='"$SERVER_NAME" = /hgwdev.*.cse.ucsc.edu/ || $SERVER_NAME" = "genome-test.cse.ucsc.edu"'-->
 <p>
+<b>WARNING: This is a test site.</b>
+Data and tools here are under 
+construction, have not been quality reviewed, and are subject to change 
+at any time.  
+For 
+high-quality reviewed annotations on our production server, visit
+<a HREF="http://encodeproject.org">http://encodeproject.org</a>.</p>
+<!--#endif -->
+
+<!--#if expr='"$SERVER_NAME" = /genome-preview.*.ucsc.edu/' -->
+<p>
+<b>WARNING: This is our preview site.</b>
+This website is a weekly mirror of our internal 
+development server for public access.  
+Data and tools here are under 
+construction, have not been quality reviewed, and are subject to change 
+at any time.  We provide this site for early access, with the warning that it is
+less available and stable than our public site. For 
+high-quality reviewed annotations on our production server, visit
+<a HREF="http://encodeproject.org">http://encodeproject.org</a>.</p>
+<!--#endif -->
+
 <table><tr>
 <td><a href="/ENCODE/aboutScaleup.html" target="_blank"><img src="../images/EncodeNatureGraphic.png" alt="" height="200">
 <em><font size=-2>Click to enlarge</em></font></td>
