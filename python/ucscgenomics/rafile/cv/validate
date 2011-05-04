@@ -3,5 +3,14 @@ import sys
 from CvFile import *
 
 cv = CvFile(sys.argv[1])
-cv.validate()
+errors = list()
+
+for entry in cv.itervalues():
+    try:
+        entry.validate(cv)
+    except CvError as e:
+        errors.append(e)
+	
+for err in errors:
+    print err
 

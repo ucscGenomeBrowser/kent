@@ -5,7 +5,6 @@ class CvFile(RaFile):
 
 	def __init__(self, filePath=''):
 		RaFile.__init__(self)
-		self.errors = list()
 		if filePath != '':
 			self.read(filePath)
 
@@ -82,7 +81,7 @@ class CvFile(RaFile):
 		elif type == 'view':
 			entry = ViewStanza()
 		else:
-			raise NonmatchKeyError(entry.name, type, 'type')
+			raise NonmatchKeyError(e.name, type, 'type')
 
 		key, val = entry.readStanza(stanza)
 		return key, val, entry
@@ -90,13 +89,7 @@ class CvFile(RaFile):
 
 	def validate(self):
 		for stanza in self.itervalues():
-			try:
 				stanza.validate(self)
-			except CvError as e:
-				self.errors.append(e)
-		
-		for err in self.errors:
-			print err
 
 class CvStanza(RaStanza):
 
