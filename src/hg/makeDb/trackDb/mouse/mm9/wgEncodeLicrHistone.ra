@@ -238,7 +238,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal
-		shortLabel Bone Marrow H3K4me1 Sig
+		shortLabel Bone Marrow H3K4me1 Sg
         longLabel Bone Marrow H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=BMarrow control=std sex=M strain=C57BL6
 		type bigWig 0.120000 20.459999
@@ -247,7 +247,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal
-		shortLabel Bone Marrow H3K4me3 Sig
+		shortLabel Bone Marrow H3K4me3 Sg
         longLabel Bone Marrow H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=BMarrow control=std sex=M strain=C57BL6
 		type bigWig 0.120000 50.509998
@@ -256,7 +256,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal 
-		shortLabel Cerebellum H3K4me3 Sig
+		shortLabel Cerebellum H3K4me3 Sg
         longLabel Cerebellum H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=Cbellum control=std sex=M strain=C57BL6
 		type bigWig 0.140000 49.660000
@@ -265,7 +265,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal 
-		shortLabel Cortex H3K4me1 Sig
+		shortLabel Cortex H3K4me1 Sg
         longLabel Cortex H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=Cortex control=std sex=M strain=C57BL6
 		type bigWig 0.110000 8.410000
@@ -274,7 +274,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal 
-		shortLabel Cortex H3K4me3 Sig
+		shortLabel Cortex H3K4me3 Sg
         longLabel Cortex H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=Cortex control=std sex=M strain=C57BL6
 		type bigWig 0.110000 44.410000
@@ -283,7 +283,7 @@ noInherit on
 
 			track wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdSig
 			parent wgEncodeLicrHistoneViewSignal
-			shortLabel Cerebellum H3K4me1 Sig
+			shortLabel Cerebellum H3K4me1 Sg
         longLabel Cerebellum H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 			subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=Cbellum control=std sex=M strain=C57BL6
 			type bigWig 0.120000 18.879999
@@ -292,7 +292,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal 
-		shortLabel Heart H3K4me1 Sig
+		shortLabel Heart H3K4me1 Sg
         longLabel Heart H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=Heart control=std sex=M strain=C57BL6
 		type bigWig 0.130000 15.600000
@@ -301,7 +301,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneKidneyH3k4me1MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal 
-		shortLabel Kidney H3K4me1 Sig
+		shortLabel Kidney H3K4me1 Sg
         longLabel Kidney H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=Kidney control=std sex=M strain=C57BL6
 		type bigWig 0.130000 16.070000
@@ -310,7 +310,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneLiverH3k4me1MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal 
-		shortLabel Liver H3K4me1 Sig
+		shortLabel Liver H3K4me1 Sg
         longLabel Liver H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=Liver control=std sex=M strain=C57BL6
 		type bigWig 0.140000 31.250000
@@ -319,7 +319,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneLiverH3k4me3MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal 
-		shortLabel Liver H3K4me3 Sig
+		shortLabel Liver H3K4me3 Sg
         longLabel Liver H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=Liver control=std sex=M strain=C57BL6
 		type bigWig 0.140000 72.970001
@@ -328,7 +328,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneKidneyH3k4me3MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal 
-		shortLabel Kidney H3K4me3 Sig
+		shortLabel Kidney H3K4me3 Sg
         longLabel Kidney H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=Kidney control=std sex=M strain=C57BL6
 		type bigWig 0.110000 57.959999
@@ -337,7 +337,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneHeartH3k4me3MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal 
-		shortLabel Heart H3K4me3 Sig
+		shortLabel Heart H3K4me3 Sg
         longLabel Heart H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=Heart control=std sex=M strain=C57BL6
 		type bigWig 0.130000 67.910004
@@ -346,7 +346,7 @@ noInherit on
 
         track wgEncodeLicrHistoneLungH3k4me3MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal 
-        shortLabel Lung H3K4me3 Sig
+        shortLabel Lung H3K4me3 Sg
         longLabel Lung H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=Lung control=std sex=M strain=C57BL6
         type bigWig 0.120000 55.680000
@@ -355,7 +355,7 @@ noInherit on
 
         track wgEncodeLicrHistoneLungH3k4me1MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal 
-        shortLabel Lung H3K4me1 Sig
+        shortLabel Lung H3K4me1 Sg
         longLabel Lung H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=Lung control=std sex=M strain=C57BL6
         type bigWig 0.130000 25.240000
@@ -364,7 +364,7 @@ noInherit on
 
         track wgEncodeLicrHistoneBmarrowInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Bone Marrow Input Sig
+        shortLabel Bone Marrow Input Sg
         longLabel Bone Marrow Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=BMarrow control=std sex=M strain=C57BL6
         type bigWig 0.150000 34.869999
@@ -373,7 +373,7 @@ noInherit on
 
         track wgEncodeLicrHistoneCbellumInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Cerebellum Input Sig
+        shortLabel Cerebellum Input Sg
         longLabel Cerebellum Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Cbellum control=std sex=M strain=C57BL6
         type bigWig 0.140000 41.009998
@@ -382,7 +382,7 @@ noInherit on
 
         track wgEncodeLicrHistoneCortexInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Cortex Input Sig
+        shortLabel Cortex Input Sg
         longLabel Cortex Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Cortex control=std sex=M strain=C57BL6
         type bigWig 0.130000 61.080002
@@ -391,7 +391,7 @@ noInherit on
 
         track wgEncodeLicrHistoneHeartInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Heart Input Sig
+        shortLabel Heart Input Sg
         longLabel Heart Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Heart control=std sex=M strain=C57BL6
         type bigWig 0.140000 73.459999
@@ -400,7 +400,7 @@ noInherit on
 
         track wgEncodeLicrHistoneKidneyInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Kidney Input Sig
+        shortLabel Kidney Input Sg
         longLabel Kidney Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Kidney control=std sex=M strain=C57BL6
         type bigWig 0.140000 51.650002
@@ -409,7 +409,7 @@ noInherit on
 
         track wgEncodeLicrHistoneLiverInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Liver Input Sig
+        shortLabel Liver Input Sg
         longLabel Liver Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Liver control=std sex=M strain=C57BL6
         type bigWig 0.130000 65.070000
@@ -418,7 +418,7 @@ noInherit on
 
         track wgEncodeLicrHistoneLungInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Lung Input Sig
+        shortLabel Lung Input Sg
         longLabel Lung Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Lung control=std sex=M strain=C57BL6
         type bigWig 0.150000 39.330002
@@ -427,7 +427,7 @@ noInherit on
 
         track wgEncodeLicrHistoneMefInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel MEF Input Sig
+        shortLabel MEF Input Sg
         longLabel MEF Input Histone Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=MEF control=std sex=M strain=C57BL6
         type bigWig 0.140000 50.770000
@@ -436,7 +436,7 @@ noInherit on
 
         track wgEncodeLicrHistoneMefH3k4me3MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal 
-        shortLabel MEF H3K4me3 Sig
+        shortLabel MEF H3K4me3 Sg
         longLabel MEF H3K4me3 Histone Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=MEF control=std sex=M strain=C57BL6
         type bigWig 0.130000 71.599998
@@ -445,7 +445,7 @@ noInherit on
 
         track wgEncodeLicrHistoneMefH3k4me1MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal 
-        shortLabel MEF H3K4me1 Sig
+        shortLabel MEF H3K4me1 Sg
         longLabel MEF H3K4me1 Histone Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=MEF control=std sex=M strain=C57BL6
         type bigWig 0.110000 21.290001
@@ -454,7 +454,7 @@ noInherit on
 
         track wgEncodeLicrHistoneSpleenInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Spleen Input Sig
+        shortLabel Spleen Input Sg
         longLabel Spleen Input Histone Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Spleen control=std sex=M strain=C57BL6
         type bigWig 0.130000 31.219999
@@ -463,7 +463,7 @@ noInherit on
 
         track wgEncodeLicrHistoneSpleenH3k4me3MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
-        shortLabel Spleen H3K4me3 Sig
+        shortLabel Spleen H3K4me3 Sg
         longLabel Spleen H3K4me3 Histone Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=Spleen control=std sex=M strain=C57BL6
         type bigWig 0.160000 65.190002
@@ -472,7 +472,7 @@ noInherit on
 
         track wgEncodeLicrHistoneSpleenH3k4me1MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
-        shortLabel Spleen H3K4me1 Sig
+        shortLabel Spleen H3K4me1 Sg
         longLabel Spleen H3K4me1 Histone Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=Spleen control=std sex=M strain=C57BL6
         type bigWig 0.140000 55.639999

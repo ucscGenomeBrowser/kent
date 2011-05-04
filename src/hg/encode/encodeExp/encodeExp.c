@@ -161,6 +161,7 @@ verbose(1, "To complete restore, delete rows where accession=DELETED\n");
 void expRenameTable()
 /* Rename table and update history table triggers */
 {
+verbose(1, "Renaming table %s to %s\n", table, newTable);
 encodeExpTableRename(connExp, table, newTable);
 }
 
@@ -181,8 +182,8 @@ verbose(1, "Added accession: %s\n", acc);
 void expDeacc(int id)
 /* Decession an experiment (remove accession but leave in table)*/
 {
+verbose(1, "Removing accession from id: %d\n", id);
 encodeExpRemoveAccession(connExp, table, id);
-verbose(1, "Removed accession from id: %d\n", id);
 }
 
 void expRemove(int id, char *why)
@@ -191,8 +192,8 @@ void expRemove(int id, char *why)
 struct encodeExp *exp = encodeExpGetByIdFromTable(connExp, table, id);
 if (exp == NULL)
     errAbort("Id %d not found in experiment table %s", id, table);
+verbose(1, "Deleting experiment id %d\n", id);
 encodeExpRemove(connExp, table, exp, why);
-verbose(1, "Deleted experiment id %d\n", id);
 }
 
 void expShow(int id)
