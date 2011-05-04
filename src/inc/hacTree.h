@@ -25,6 +25,12 @@
  * where each leaf node contains one of your items and each node above
  * that contains a cluster.  The root node contains the cluster of all items.
  *
+ * If a significant proportion of input items are identical to each other,
+ * you can also pass in a comparison function that will be used to sort the
+ * items before clustering.  After sorting, adjacent identical items will
+ * be pre-clustered in order to reduce the number of inputs to the main
+ * clustering step.
+ *
  * kent/src/lib/tests/hacTreeTest.c contains a couple simple examples.
  *
  * To get the top k clusters, perform a breadth-first,
@@ -41,11 +47,18 @@
 /* Note: this must be able to handle identical inputs or NULL inputs */
 /* Note: this should be monotonic and nonnegative, *not* a + or -
  * difference (as would be used for comparing/ordering/sorting) */
-typedef double hacDistanceFunction(const struct slList *item1, const struct slList *item2, void *extraData);
+typedef double hacDistanceFunction(const struct slList *item1, const struct slList *item2,
+				   void *extraData);
 
 /* Caller-provided function to merge two items or clusters into a new cluster */
 /* Note: this must be able to handle NULL inputs */
-typedef struct slList *(hacMergeFunction)(const struct slList *item1, const struct slList *item2, void *extraData);
+typedef struct slList *(hacMergeFunction)(const struct slList *item1, const struct slList *item2,
+					  void *extraData);
+
+/* Optional caller-provided function to compare two items or clusters for pre-sorting
+ * and pre-clustering of identical items. */
+typedef int hacCmpFunction(const struct slList *item1, const struct slList *item2,
+			   void *extraData);
 
 /* Structure of nodes of the binary tree that contains a hierarchical clustering of inputs */
 struct hacTree
@@ -61,9 +74,9 @@ struct hacTree
 
 struct hacTree *hacTreeFromItems(const struct slList *itemList, struct lm *localMem,
 				 hacDistanceFunction *distF, hacMergeFunction *mergeF,
-				 void *extraData);
-/* Using distF, mergeF, and binary tree operations, perform a
- * hierarchical agglomerative (bottom-up) clustering of items.
- * To free the resulting tree, lmCleanup(&localMem). */
+				 hacCmpFunction *cmpF, void *extraData);
+/* Using distF, mergeF, optionally cmpF and binary tree operations,
+ * perform a hierarchical agglomerative (bottom-up) clustering of
+ * items.  To free the resulting tree, lmCleanup(&localMem). */
 
 #endif//def HACTREE_H
