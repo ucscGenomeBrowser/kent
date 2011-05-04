@@ -75,7 +75,7 @@ INLINE struct hacTree preClusterNodes(const struct sortWrapper *leafWraps, int i
  * a recursively constructed cluster of nodes extracted from wrapped
  * leafNodes (leafWraps) starting at i, for runLength items. */
 {
-struct hacTree ret;
+struct hacTree ret = {NULL, NULL, NULL, NULL, 0, NULL};
 if (runLength > 2)
     {
     struct hacTree *newClusters = lmAlloc(localMem, 2 * sizeof(struct hacTree));
