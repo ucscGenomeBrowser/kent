@@ -3705,6 +3705,23 @@ color 153,38,0
 sex U
 protocol LICR(Ren):Cortex_Ren_protocol.pdf
 
+term ES-Bruce4
+tag ESB4
+type Cell Line
+organism Mouse
+category Primary Cells
+description mouse embryonic stem cells
+age E0
+vendorName University of California, San Diego Transgenic Core and Embryonic Stem Cell
+vendorId
+orderUrl
+termId
+termUrl
+color 153,38,0
+sex M
+protocol LICR(Ren):ES-Bruce4_Ren_protocol.pdf
+
+
 term FatPad
 tag Fat
 type Cell Line
