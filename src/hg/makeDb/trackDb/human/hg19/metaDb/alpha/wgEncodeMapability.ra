@@ -105,7 +105,6 @@ composite wgEncodeMapability
 dataType Mapability
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-04
-dateUnrestricted 2011-05-04
 fileName wgEncodeMapabilityDacConsensusBlacklist.bed.gz
 grant Birney
 lab DAC-Stanford
@@ -168,4 +167,4 @@ subId 3840
 tableName wgEncodeMapabilityDukeUniqueness35bp
 view Uniqueness
 
-# MAGIC: 1086199726
+# MAGIC: -599623887
