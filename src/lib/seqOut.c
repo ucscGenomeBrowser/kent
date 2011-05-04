@@ -55,7 +55,7 @@ if (cfm->bold)
 if (cfm->underline)
   fprintf(cfm->out, "<span style='text-decoration:underline;'>");
 if (cfm->color != 0)
-  fprintf(cfm->out, "<span style='font-color:#%06X;'>", cfm->color);
+  fprintf(cfm->out, "<span style='color:#%06X;'>", cfm->color);
 }
 
 void cfmOutExt(struct cfm *cfm, char c, int color, boolean underline, boolean bold, boolean italic)
