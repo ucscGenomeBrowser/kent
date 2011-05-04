@@ -1,7 +1,7 @@
 metaObject wgEncodeHaibMethylRrbs
 objType composite
 composite wgEncodeHaibMethylRrbs
-expVars lab,dataType,cell,treatment,obtainedBy
+expVars lab,dataType,cell,treatment
 geoSeriesAccession GSE27584
 
 metaObject wgEncodeHaibMethylRrbsAg04449UwRawDataRep1
@@ -8231,4 +8231,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -23888311
+# MAGIC: 513177952

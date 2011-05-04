@@ -10,6 +10,7 @@ subGroup1 cellType Cell_Line K562=K562&nbsp;(Tier_1) GM12878=GM12878&nbsp;(Tier_
 subGroup2 rep Replicate rep1=1 rep2=2
 subGroup3 view View Regions=Regions
 dimensions dimensionX=rep dimensionY=cellType
+fileSortOrder cell=Cell_Line protocol=Protocol restrictionEnzyme=Restriction_Enzyme replicate=Rep labExpId=Lab_ID dccAccession=UCSC_Accession geoSampleAccession=GEO<BR>Accession view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 sortOrder cellType=+ rep=+
 dragAndDrop subTracks
 visibilityViewDefaults Regions=dense

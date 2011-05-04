@@ -52,4 +52,9 @@ subId 453
 submittedDataVersion V3c
 tableName wgEncodeGencodePolyaV3
 
-# MAGIC: -338502988
+metaObject wgEncodeSangerGencode
+objType composite
+composite wgEncodeSangerGencode
+expVars lab,dataType,annotation,level
+
+# MAGIC: 1776914776
