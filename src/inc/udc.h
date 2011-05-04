@@ -135,4 +135,9 @@ void udcSetCacheTimeout(int timeout);
 time_t udcUpdateTime(struct udcFile *udc);
 /* return udc->updateTime */
 
+#ifdef PROGRESS_METER
+off_t remoteFileSize(char *url);
+/* fetch remote file size from given URL */
+#endif
+
 #endif /* UDC_H */

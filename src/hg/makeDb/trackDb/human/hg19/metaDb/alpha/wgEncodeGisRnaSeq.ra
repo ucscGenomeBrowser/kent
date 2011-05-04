@@ -14,6 +14,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
+expId 269
 fileName wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam
 geoSampleAccession GSM672834
 grant Gingeras
@@ -39,6 +41,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
+expId 269
 fileName wgEncodeGisRnaSeqGm12878CytosolPapMinusRawRep1.bigWig
 geoSampleAccession GSM672834
 grant Gingeras
@@ -64,6 +68,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
+expId 269
 fileName wgEncodeGisRnaSeqGm12878CytosolPapPlusRawRep1.bigWig
 geoSampleAccession GSM672834
 grant Gingeras
@@ -89,6 +95,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
+expId 269
 fileName wgEncodeGisRnaSeqGm12878CytosolPapRawData2Rep1.csqual.gz
 geoSampleAccession GSM672834
 grant Gingeras
@@ -113,6 +121,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
+expId 269
 fileName wgEncodeGisRnaSeqGm12878CytosolPapRawDataRep1.csfasta.gz
 geoSampleAccession GSM672834
 grant Gingeras
@@ -137,6 +147,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000270
+expId 270
 fileName wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam
 geoSampleAccession GSM672836
 grant Gingeras
@@ -162,6 +174,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000270
+expId 270
 fileName wgEncodeGisRnaSeqH1hescCellPapMinusRawRep1.bigWig
 geoSampleAccession GSM672836
 grant Gingeras
@@ -187,6 +201,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000270
+expId 270
 fileName wgEncodeGisRnaSeqH1hescCellPapPlusRawRep1.bigWig
 geoSampleAccession GSM672836
 grant Gingeras
@@ -212,6 +228,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000270
+expId 270
 fileName wgEncodeGisRnaSeqH1hescCellPapRawData3Rep1.fastq.gz
 geoSampleAccession GSM672836
 grant Gingeras
@@ -236,6 +254,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam
 geoSampleAccession GSM672833
 grant Gingeras
@@ -261,6 +281,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam
 geoSampleAccession GSM672835
 grant Gingeras
@@ -286,6 +308,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapMinusRawRep1.bigWig
 geoSampleAccession GSM672833
 grant Gingeras
@@ -311,6 +335,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapMinusRawRep2.bigWig
 geoSampleAccession GSM672835
 grant Gingeras
@@ -336,6 +362,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapPlusRawRep1.bigWig
 geoSampleAccession GSM672833
 grant Gingeras
@@ -361,6 +389,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapPlusRawRep2.bigWig
 geoSampleAccession GSM672835
 grant Gingeras
@@ -386,6 +416,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapRawData2Rep2.csqual.gz
 geoSampleAccession GSM672835
 grant Gingeras
@@ -410,6 +442,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapRawData3Rep1.fastq.gz
 geoSampleAccession GSM672833
 grant Gingeras
@@ -434,6 +468,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapRawDataRep2.csfasta.gz
 geoSampleAccession GSM672835
 grant Gingeras
@@ -448,4 +484,4 @@ rnaExtract longPolyA
 subId 2323
 view RawData
 
-# MAGIC: 2043860733
+# MAGIC: -2085151267

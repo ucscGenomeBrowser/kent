@@ -9,9 +9,10 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hacTreeTest - Read in lines from a file and print the resulting clusters by length.\n"
+  "hacTreeTest - Read in haplotypes from a file and print the resulting clusters.\n"
   "usage:\n"
   "   hacTreeTest in.txt out.txt\n"
+  "All lines of in.txt must have the same length.\n"
   "Actually, before clustering in.txt, it clusters some numbers because that is easier.\n"
   "\n"
   );
@@ -101,7 +102,8 @@ printSlDoubleTree(f, clusters);
 }
 
 
-//------------------- strlen(line) example ------------------
+//-------------------------------------------------------------------
+// Center-weighted alpha clustering of haplotypes -- see Redmine #3711, #2823 note 7
 
 static void rPrintSlNameTree(FILE *f, struct hacTree *tree, int level)
 /* Recursively print out cluster as nested-parens with {}'s around leaf nodes. */
@@ -117,7 +119,7 @@ if (tree->left == NULL && tree->right == NULL)
     }
 else if (tree->left == NULL || tree->right == NULL)
     errAbort("\nHow did we get a node with one NULL kid??");
-fprintf(f, "(%s:%d:\n", contents, (int)(tree->childDistance));
+fprintf(f, "(%s:%f:\n", contents, tree->childDistance);
 rPrintSlNameTree(f, tree->left, level+1);
 fputs(",\n", f);
 rPrintSlNameTree(f, tree->right, level+1);
@@ -139,46 +141,91 @@ rPrintSlNameTree(f, tree, 0);
 fputc('\n', f);
 }
 
-double strlenDistance(const struct slList *item1, const struct slList *item2, void *extraData)
-/* Return the absolute difference in length between the two kids. */
+struct cwaExtraData
+/* Helper data for hacTree clustering of haplotypes by center-weighted alpha distance */
+{
+    int center;    // index from which each point's contribution to distance is to be weighted
+    int len;       // total length of haplotype strings
+    double alpha;  // weighting factor for distance from center
+    struct lm *localMem;
+};
+
+static double cwaDistance(const struct slList *item1, const struct slList *item2, void *extraData)
+/* Center-weighted alpha sequence distance function for hacTree clustering of haplotype seqs */
+// This is inner-loop so I am not doing defensive checks.  Caller must ensure:
+// 1. kids's sequences' lengths are both equal to helper->len
+// 2. 0 <= helper->center <= len
+// 3. 0.0 < helper->alpha <= 1.0
 {
 const struct slName *kid1 = (const struct slName *)item1;
 const struct slName *kid2 = (const struct slName *)item2;
-int diff = strlen(kid1->name) - strlen(kid2->name);
-if (diff < 0)
-    diff = -diff;
-return (double)diff;
+const char *hap1 = kid1->name;
+const char *hap2 = kid2->name;
+struct cwaExtraData *helper = extraData;
+double distance = 0;
+double weight = 1; // start at center: alpha to the 0th power
+int i;
+for (i=helper->center;  i >= 0;  i--)
+    {
+    if (hap1[i] != hap2[i])
+	distance += weight;
+    weight *= helper->alpha;
+    }
+weight = helper->alpha; // start at center+1: alpha to the 1st power
+for (i=helper->center+1;  i < helper->len;  i++)
+    {
+    if (hap1[i] != hap2[i])
+	distance += weight;
+    weight *= helper->alpha;
+    }
+return distance;
 }
 
-struct slList *mergeLines(const struct slList *item1, const struct slList *item2,
-			  void *unusedExtraData)
-/* Make a string that is the average length of the kids. */
+static struct slList *cwaMerge(const struct slList *item1, const struct slList *item2,
+			       void *extraData)
+/* Make a consensus haplotype from two input haplotypes, for hacTree clustering by
+ * center-weighted alpha distance. */
+// This is inner-loop so I am not doing defensive checks.  Caller must ensure that
+// kids's sequences' lengths are both equal to helper->len.
 {
 const struct slName *kid1 = (const struct slName *)item1;
 const struct slName *kid2 = (const struct slName *)item2;
-int len1 = strlen(kid1->name);
-int len2 = strlen(kid2->name);
-int avgLen = (len1 + len2 + 1) / 2;
-const char *longerName = (len1 >= len2) ? kid1->name : kid2->name;
-return (struct slList *)slNameNewN((char *)longerName, avgLen);
+const char *hap1 = kid1->name;
+const char *hap2 = kid2->name;
+struct cwaExtraData *helper = extraData;
+struct slName *consensus = lmSlName(helper->localMem, (char *)hap1);
+int i;
+for (i=0; i < helper->len;  i++)
+    if (hap1[i] != hap2[i])
+	consensus->name[i] = 'N';
+return (struct slList *)consensus;
 }
 
-void hacTreeTestStrlens(char *inFileName, FILE *f, struct lm *localMem)
-/* Read in items from a file and print the resulting clusters. */
+void hacTreeTestHaplos(char *inFileName, FILE *f, struct lm *localMem)
+/* Read in haplotypes of same length from a file and print the resulting clusters. */
 {
 struct slName *sln, *slnList = NULL;
 struct lineFile *lf = lineFileOpen(inFileName, TRUE);
+int len = 0;
 char *line;
 int size;
 while (lineFileNext(lf, &line, &size))
     {
+    if (len == 0)
+	len = size-1;
+    else if (size-1 != len)
+	lineFileAbort(lf, "All lines in input file must have same length (got %d vs. %d)",
+		      size-1, len);
     sln = slNameNewN(line, size);
     slAddHead(&slnList, sln);
     }
 lineFileClose(&lf);
 slReverse(&slnList);
+int center = len / 2;
+double alpha = 0.5;
+struct cwaExtraData helper = { center, len, alpha, localMem };
 struct hacTree *clusters = hacTreeFromItems((struct slList *)slnList, localMem,
-					    strlenDistance, mergeLines, NULL);
+					    cwaDistance, cwaMerge, &helper);
 fputs("Clustering by string length:\n", f);
 printSlNameTree(f, clusters);
 carefulClose(&f);
@@ -190,7 +237,7 @@ void hacTreeTest(char *inFileName, char *outFileName)
 FILE *f = mustOpen(outFileName, "w");
 struct lm *localMem = lmInit(0);
 hacTreeTestInts(f, localMem);
-hacTreeTestStrlens(inFileName, f, localMem);
+hacTreeTestHaplos(inFileName, f, localMem);
 lmCleanup(&localMem);
 }
 

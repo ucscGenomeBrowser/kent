@@ -9,7 +9,7 @@ group regulation
 subGroup1 cellType Cell_Line 1GM=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier&nbsp;1) 1K5=K562&nbsp;(Tier&nbsp;1) 2HELA=HeLa-S3&nbsp;(Tier&nbsp;2) 2HEP=HepG2&nbsp;(Tier&nbsp;2) 2HUV=HUVEC&nbsp;(Tier&nbsp;2) NHEK=NHEK
 dimensions dimensionX=cellType
 sortOrder cellType=+
-fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell
 priority 1
@@ -33,17 +33,17 @@ extraFields pValue=[f]Fisher's_Combined_P-Value_(<code>-log<sub>10</sub></code>)
             cmycSignal=[f]c-Myc_Signal \
             cmycPvalue=[f]c-Myc_P-Value_(<code>-log<sub>10</sub></code>) \
             ocCode=[i]Open_Chromatin_(OC)_Code
-filterBy color:Validation<BR>Level=\
-            0|Validated{#000000},\
-            255|Open_Chromatin{#0000FF},\
-            39168|DNase_Low{#009900},\
-            10027008|FAIRE_Low{#990000},\
-            16711935|ChIP_Low{#FF00FF} \
-        ocCode:Open_Chromatin<BR>(OC)_Code=+\
-            1&#58;_DNase_and_FAIRE,\
-            2&#58;_DNase-only,\
-            3&#58;_FAIRE-only,\
-            4&#58;_Neither
+filterBy color:Validation_Level=\
+            0|Validated_(OC_1){#000000},\
+            255|Open_Chromatin_(OC_2-3){#0000FF},\
+            39168|DNase_low_(OC_2){#009900},\
+            10027008|FAIRE_low_(OC_3){#990000},\
+            16711935|ChIP-seq_(OC_4){#FF00FF} \
+         ocCode:OC_Code=+\
+            1&#58;_Validated_(all),\
+            2&#58;_DNase_(all),\
+            3&#58;_FAIRE_(all),\
+            4&#58;_ChIP_(all)
 dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromSynthK562Pk

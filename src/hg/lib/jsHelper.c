@@ -476,7 +476,7 @@ printf("<IMG height='18' width='18' "
        "</A></TD>\n",
        section, track,
        section, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
-printf("<TD class='bigBlue' style='font-size:medium;'><B>&nbsp;%s</B></TD></TR>\n", sectionTitle);
+printf("<TD class='bigBlue' style='font-size:large;'><B>&nbsp;%s</B></TD></TR>\n", sectionTitle);
 printf("<TR %sid='%s-%d'><TD colspan=2>", isOpen ? "" : "style='display: none' ", section, 1);
 }
 

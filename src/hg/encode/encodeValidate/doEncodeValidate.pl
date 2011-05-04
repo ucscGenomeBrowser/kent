@@ -180,6 +180,7 @@ our %validators = (
     obtainedBy => \&validateObtainedBy,
     md5sum => \&validateNoValidation,
     bioRep => \&validateNoValidation,
+	tissueSourceType => \&validateControlledVocabOrControl,
     default => \&validateControlledVocab,
     );
 

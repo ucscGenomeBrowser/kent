@@ -20,7 +20,8 @@ include wgEncodeSydhNsome.ra alpha
 include wgEncodeGisRnaPet.ra alpha
 
 # GIS DNA PET (wrangler: cricket)
-include wgEncodeGisDnaPet.ra
+include wgEncodeGisDnaPet.ra beta,public
+include wgEncodeGisDnaPet.new.ra alpha
 
 # HAIB Genotype (CNV) (wrangler: Cricket)
 include wgEncodeHaibGenotype.ra alpha
@@ -28,8 +29,9 @@ include wgEncodeHaibGenotype.ra alpha
 # BU Orchid (wrangler: cricket)
 include wgEncodeBuOrchid.ra alpha,beta
 
-# Affy Rna Chip (wrangler: braney)
-include wgEncodeAffyRnaChip.ra
+# Affy Rna Chip (wrangler: cricket)
+include wgEncodeAffyRnaChip.ra beta,public
+include wgEncodeAffyRnaChip.new.ra alpha
 
 # Chromatin Interactions ------
 
@@ -61,8 +63,8 @@ include wgEncodeOpenChromFaire.ra beta,public
 include wgEncodeOpenChromSynth.ra
 
 #Duke DNaseI HS (wrangler: tim)
-include wgEncodeOpenChromDnase.new.ra alpha
-include wgEncodeOpenChromDnase.ra beta,public
+include wgEncodeOpenChromDnase.new.ra alpha,beta
+include wgEncodeOpenChromDnase.ra public
 
 #Uw Dnase-Seq (wrangler: Venkat)
 include wgEncodeUwDnase.ra beta,public
@@ -87,7 +89,8 @@ include wgEncodeCshlShortRnaSeq.ra beta,public
 include wgEncodeCshlShortRnaSeq.new.ra alpha
 
 # GIS RNA Seq (wrangler: cricket)
-include wgEncodeGisRnaSeq.ra
+include wgEncodeGisRnaSeq.ra beta,public
+include wgEncodeGisRnaSeq.new.ra alpha
 
 # Caltech RNA Seq (wrangler: cricket)
 include wgEncodeCaltechRnaSeq.ra beta,public
@@ -176,7 +179,7 @@ include wgEncodeSunyRipSeq.ra alpha
 
 # Other miscellany ------------------------------------
 
-# Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and whever else wants to help)
+# Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and Cricket)
 include wgEncodeMapability.ra beta,public
 include wgEncodeMapability.new.ra alpha
 
