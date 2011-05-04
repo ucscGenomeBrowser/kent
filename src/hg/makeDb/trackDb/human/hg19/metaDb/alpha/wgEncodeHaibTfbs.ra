@@ -5,7 +5,7 @@ expVars lab,dataType,cell,treatment,antibody,protocol
 
 metaObject wgEncodeHaibTfbsA549ControlPcr1xDex100nmRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL474
@@ -27,7 +27,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsA549ControlPcr1xDex100nmRawRep1
 objType table
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL474
@@ -50,7 +50,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsA549ControlPcr1xDexaAlnRep1
 objType file
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL474
@@ -72,7 +72,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsA549ControlPcr1xEtoh02AlnRep1
 objType file
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL475
@@ -97,7 +97,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsA549ControlPcr1xEtoh02RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL475
@@ -119,7 +119,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsA549ControlPcr1xEtoh02RawRep1
 objType table
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL475
@@ -142,7 +142,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsA549ControlPcr2xDex100nmAlnRep1
 objType file
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL335
@@ -165,7 +165,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsA549ControlPcr2xDex100nmRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL335
@@ -187,7 +187,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsA549ControlPcr2xDexaRawRep1
 objType table
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL335
@@ -210,7 +210,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsA549ControlPcr2xEtoh02AlnRep1
 objType file
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL307
@@ -233,7 +233,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsA549ControlPcr2xEtoh02RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL307
@@ -255,7 +255,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsA549ControlPcr2xEtoh02RawRep1
 objType table
-antibody Control
+antibody Input
 cell A549
 composite wgEncodeHaibTfbs
 controlId SL307
@@ -2478,7 +2478,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep1
 objType file
-antibody Control
+antibody Input
 cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1882
@@ -2501,7 +2501,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsEcc1ControlV0416102Dmso2RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1882
@@ -2524,7 +2524,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsEcc1ControlV0416102Dmso2RawRep1
 objType table
-antibody Control
+antibody Input
 cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1882
@@ -4685,7 +4685,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -4709,7 +4709,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep2
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -4734,7 +4734,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep3
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL678
@@ -4756,7 +4756,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep4
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1394
@@ -4778,7 +4778,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep5
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1395
@@ -4800,7 +4800,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -4822,7 +4822,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -4844,7 +4844,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xRawDataRep3
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL678
@@ -4866,7 +4866,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xRawDataRep4
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1394
@@ -4889,7 +4889,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xRawDataRep5
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1395
@@ -4911,7 +4911,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xRawRep1
 objType table
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -4934,7 +4934,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xRawRep2
 objType table
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -4957,7 +4957,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xRawRep3
 objType table
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL678
@@ -4980,7 +4980,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xRawRep4
 objType table
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1394
@@ -5003,7 +5003,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xRawRep5
 objType table
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1395
@@ -5026,7 +5026,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr2xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL217
@@ -5051,7 +5051,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr2xAlnRep2
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL218
@@ -5076,7 +5076,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr2xRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL217
@@ -5099,7 +5099,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr2xRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL218
@@ -5122,7 +5122,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr2xRawRep1
 objType table
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL217
@@ -5145,7 +5145,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr2xRawRep2
 objType table
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL218
@@ -5168,7 +5168,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878ControlV0416101AlnRep1
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
@@ -5191,7 +5191,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878ControlV0416101RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
@@ -5213,7 +5213,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878ControlV0416101RawRep1
 objType table
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
@@ -5236,7 +5236,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878ControlV0416102AlnRep1
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL3979
@@ -5258,7 +5258,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878ControlV0416102RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL3979
@@ -5280,7 +5280,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878ControlV0416102RawRep1
 objType table
-antibody Control
+antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL3979
@@ -10815,7 +10815,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12891ControlPcr1xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL817
@@ -10840,7 +10840,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12891ControlPcr1xRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL817
@@ -10864,7 +10864,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12891ControlPcr1xRawRep1
 objType table
-antibody Control
+antibody Input
 cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL817
@@ -10888,7 +10888,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12891ControlV0416101AlnRep1
 objType file
-antibody Control
+antibody Input
 cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL1782
@@ -10913,7 +10913,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12891ControlV0416101RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL1782
@@ -10935,7 +10935,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12891ControlV0416101RawRep1
 objType table
-antibody Control
+antibody Input
 cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL1782
@@ -12309,7 +12309,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12892ControlV0416101AlnRep1
 objType file
-antibody Control
+antibody Input
 cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL1783
@@ -12334,7 +12334,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12892ControlV0416101RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL1783
@@ -12357,7 +12357,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12892ControlV0416101RawRep1
 objType table
-antibody Control
+antibody Input
 cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL1783
@@ -12380,7 +12380,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12892ControlV0416102AlnRep1
 objType file
-antibody Control
+antibody Input
 cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL818
@@ -12405,7 +12405,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12892ControlV0416102RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL818
@@ -12428,7 +12428,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12892ControlV0416102RawRep1
 objType table
-antibody Control
+antibody Input
 cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL818
@@ -13743,7 +13743,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsH1hescControlPcr1xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
@@ -13766,7 +13766,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsH1hescControlPcr1xRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
@@ -13789,7 +13789,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsH1hescControlPcr1xRawRep1
 objType table
-antibody Control
+antibody Input
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
@@ -13812,7 +13812,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsH1hescControlV0416102AlnRep1
 objType file
-antibody Control
+antibody Input
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL969
@@ -13835,7 +13835,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsH1hescControlV0416102RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL969
@@ -13858,7 +13858,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsH1hescControlV0416102RawRep1
 objType table
-antibody Control
+antibody Input
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL969
@@ -18140,7 +18140,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHct116ControlV0416101AlnRep1
 objType file
-antibody Control
+antibody Input
 cell HCT-116
 composite wgEncodeHaibTfbs
 controlId SL3457
@@ -18163,7 +18163,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHct116ControlV0416101RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell HCT-116
 composite wgEncodeHaibTfbs
 controlId SL3457
@@ -18185,7 +18185,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHct116ControlV0416101RawRep1
 objType table
-antibody Control
+antibody Input
 cell HCT-116
 composite wgEncodeHaibTfbs
 controlId SL3457
@@ -18391,7 +18391,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHelas3ControlPcr1xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell HeLa-S3
 composite wgEncodeHaibTfbs
 controlId SL592
@@ -18416,7 +18416,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHelas3ControlPcr1xRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell HeLa-S3
 composite wgEncodeHaibTfbs
 controlId SL592
@@ -18439,7 +18439,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHelas3ControlPcr1xRawRep1
 objType table
-antibody Control
+antibody Input
 cell HeLa-S3
 composite wgEncodeHaibTfbs
 controlId SL592
@@ -19605,7 +19605,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr1xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL593
@@ -19630,7 +19630,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr1xAlnRep2
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL819
@@ -19655,7 +19655,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr1xAlnRep3
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1400
@@ -19677,7 +19677,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr1xAlnRep4
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1401
@@ -19699,7 +19699,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr1xRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL593
@@ -19723,7 +19723,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr1xRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL819
@@ -19747,7 +19747,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr1xRawDataRep3
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1400
@@ -19769,7 +19769,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr1xRawDataRep4
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1401
@@ -19791,7 +19791,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr1xRawRep1
 objType table
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL593
@@ -19814,7 +19814,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr1xRawRep2
 objType table
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL819
@@ -19838,7 +19838,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr1xRawRep3
 objType table
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1400
@@ -19861,7 +19861,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr1xRawRep4
 objType table
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1401
@@ -19884,7 +19884,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr2xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL294
@@ -19908,7 +19908,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr2xAlnRep2
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL295
@@ -19932,7 +19932,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr2xRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL294
@@ -19955,7 +19955,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr2xRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL295
@@ -19977,7 +19977,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr2xRawRep1
 objType table
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL294
@@ -20000,7 +20000,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2ControlPcr2xRawRep2
 objType table
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL295
@@ -20023,7 +20023,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2ControlV0416101AlnRep1
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1781
@@ -20047,7 +20047,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2ControlV0416101AlnRep2
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -20069,7 +20069,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2ControlV0416101RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1781
@@ -20091,7 +20091,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2ControlV0416101RawDataRep2
 objType file
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -20113,7 +20113,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2ControlV0416101RawRep1
 objType table
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1781
@@ -20136,7 +20136,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2ControlV0416101RawRep2
 objType table
-antibody Control
+antibody Input
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -25005,7 +25005,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHtb11ControlPcr2xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell HTB-11
 composite wgEncodeHaibTfbs
 controlId SL108
@@ -25029,7 +25029,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHtb11ControlPcr2xAlnRep2
 objType file
-antibody Control
+antibody Input
 cell HTB-11
 composite wgEncodeHaibTfbs
 controlId SL410
@@ -25054,7 +25054,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHtb11ControlPcr2xRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell HTB-11
 composite wgEncodeHaibTfbs
 controlId SL108
@@ -25076,7 +25076,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHtb11ControlPcr2xRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell HTB-11
 composite wgEncodeHaibTfbs
 controlId SL410
@@ -25099,7 +25099,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHtb11ControlPcr2xRawRep1
 objType table
-antibody Control
+antibody Input
 cell HTB-11
 composite wgEncodeHaibTfbs
 controlId SL108
@@ -25122,7 +25122,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHtb11ControlPcr2xRawRep2
 objType table
-antibody Control
+antibody Input
 cell HTB-11
 composite wgEncodeHaibTfbs
 controlId SL410
@@ -25875,7 +25875,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562ControlPcr1xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL518
@@ -25900,7 +25900,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562ControlPcr1xAlnRep2
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL519
@@ -25925,7 +25925,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562ControlPcr1xAlnRep3
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1396
@@ -25947,7 +25947,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562ControlPcr1xAlnRep4
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1397
@@ -25969,7 +25969,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562ControlPcr1xRawDataRep3
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1396
@@ -25991,7 +25991,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsK562ControlPcr1xRawDataRep4
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1397
@@ -26013,7 +26013,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsK562ControlPcr1xRawRep1
 objType table
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL518
@@ -26036,7 +26036,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562ControlPcr1xRawRep2
 objType table
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL519
@@ -26059,7 +26059,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562ControlPcr1xRawRep3
 objType table
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1396
@@ -26082,7 +26082,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562ControlPcr1xRawRep4
 objType table
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1397
@@ -26105,7 +26105,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562ControlV0416101AlnRep1
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -26126,7 +26126,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562ControlV0416101AlnRep2
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL3980
@@ -26148,7 +26148,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562ControlV0416101RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -26170,7 +26170,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsK562ControlV0416101RawDataRep2
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL3980
@@ -26192,7 +26192,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsK562ControlV0416101RawRep1
 objType table
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -26215,7 +26215,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562ControlV0416101RawRep2
 objType table
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL3980
@@ -26238,7 +26238,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562ControlV2RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL518
@@ -26264,7 +26264,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsK562ControlV2RawDataRep2
 objType file
-antibody Control
+antibody Input
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL519
@@ -32003,7 +32003,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsPanc1ControlPcr2xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL117
@@ -32026,7 +32026,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsPanc1ControlPcr2xAlnRep2
 objType file
-antibody Control
+antibody Input
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL523
@@ -32048,7 +32048,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsPanc1ControlPcr2xRawRep1
 objType table
-antibody Control
+antibody Input
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL117
@@ -32071,7 +32071,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsPanc1ControlPcr2xRawRep2
 objType table
-antibody Control
+antibody Input
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL523
@@ -32094,7 +32094,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsPanc1ControlRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL117
@@ -32118,7 +32118,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsPanc1ControlRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL523
@@ -32327,7 +32327,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsPfsk1ControlPcr2xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL150
@@ -32349,7 +32349,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsPfsk1ControlPcr2xAlnRep2
 objType file
-antibody Control
+antibody Input
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL412
@@ -32372,7 +32372,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsPfsk1ControlPcr2xRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL150
@@ -32394,7 +32394,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsPfsk1ControlPcr2xRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL412
@@ -32416,7 +32416,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsPfsk1ControlPcr2xRawRep1
 objType table
-antibody Control
+antibody Input
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL150
@@ -32439,7 +32439,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsPfsk1ControlPcr2xRawRep2
 objType table
-antibody Control
+antibody Input
 cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL412
@@ -32739,7 +32739,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsSknmcControlV0416101AlnRep1
 objType file
-antibody Control
+antibody Input
 cell SK-N-MC
 composite wgEncodeHaibTfbs
 controlId SL1714
@@ -32763,7 +32763,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsSknmcControlV0416101RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell SK-N-MC
 composite wgEncodeHaibTfbs
 controlId SL1714
@@ -32785,7 +32785,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsSknmcControlV0416101RawRep1
 objType table
-antibody Control
+antibody Input
 cell SK-N-MC
 composite wgEncodeHaibTfbs
 controlId SL1714
@@ -32902,7 +32902,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsSknshraControlV0416102AlnRep1
 objType file
-antibody Control
+antibody Input
 cell SK-N-SH_RA
 composite wgEncodeHaibTfbs
 controlId SL2905
@@ -32925,7 +32925,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsSknshraControlV0416102RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell SK-N-SH_RA
 composite wgEncodeHaibTfbs
 controlId SL2905
@@ -32947,7 +32947,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsSknshraControlV0416102RawRep1
 objType table
-antibody Control
+antibody Input
 cell SK-N-SH_RA
 composite wgEncodeHaibTfbs
 controlId SL2905
@@ -33881,7 +33881,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsT47dControlV0416102Dmso2AlnRep1
 objType file
-antibody Control
+antibody Input
 cell T-47D
 composite wgEncodeHaibTfbs
 controlId SL1881
@@ -33904,7 +33904,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsT47dControlV0416102Dmso2RawDataRep1
 objType file
-antibody Control
+antibody Input
 cell T-47D
 composite wgEncodeHaibTfbs
 controlId SL1881
@@ -33926,7 +33926,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsT47dControlV0416102Dmso2RawRep1
 objType table
-antibody Control
+antibody Input
 cell T-47D
 composite wgEncodeHaibTfbs
 controlId SL1881
@@ -35193,7 +35193,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsU87ControlPcr2xAlnRep1
 objType file
-antibody Control
+antibody Input
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL103
@@ -35215,7 +35215,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsU87ControlPcr2xAlnRep2
 objType file
-antibody Control
+antibody Input
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL414
@@ -35238,7 +35238,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsU87ControlPcr2xRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL103
@@ -35260,7 +35260,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsU87ControlPcr2xRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL414
@@ -35282,7 +35282,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsU87ControlPcr2xRawRep1
 objType table
-antibody Control
+antibody Input
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL103
@@ -35305,7 +35305,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsU87ControlPcr2xRawRep2
 objType table
-antibody Control
+antibody Input
 cell U87
 composite wgEncodeHaibTfbs
 controlId SL414
@@ -35510,4 +35510,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 869389275
+# MAGIC: 813248574
