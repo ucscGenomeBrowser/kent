@@ -308,7 +308,7 @@ canPack On
     superTrack wgEncodeReg dense
     sourceTable wgEncodeRegTfbsCells
     inputTrackTable wgEncodeRegTfbsClusteredInputs
-    inputTableFieldDisplay cellType treatment lab
+    inputTableFieldDisplay cellType factor treatment lab
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     # inputTracksSubgroupDisplay cellType factor treatment
     visibility dense
