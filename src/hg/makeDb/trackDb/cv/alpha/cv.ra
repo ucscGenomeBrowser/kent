@@ -3027,7 +3027,7 @@ term PBMC
 tag PBMC
 type Cell Line
 organism human
-description Peripheral blood mononuclear cells (Provisional)
+description Peripheral blood mononuclear cells
 tissue Blood
 vendorName PBMC cells provided by E. Bresnick, UW Madison
 termId BTO:0001025
@@ -3116,7 +3116,7 @@ tag prostate
 type Cell Line
 organism Human
 description prostate tissue purchased for Gingeras project
-#)description Provisional prostate tissue purchased for Gingeras project (provisional)
+#)description Provisional prostate tissue purchased for Gingeras project
 tissue Prostate
 #)lineage endoderm
 vendorName ATCC
@@ -3518,7 +3518,7 @@ tag 3134
 type Cell Line
 organism Mouse
 tissue Mammary
-category Cell Line
+category cellLine
 description Mammary
 age immortalized
 strain RIII
@@ -3534,7 +3534,7 @@ tag 416B
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description myeloid progenitor cells, CD34+
 age immortalized
 strain B6D2F1/J
@@ -3550,7 +3550,7 @@ tag A20
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description B cell lymphoma line derived from a spontaneous reticulum cell neoplasm
 age immortalized
 strain BALB/cAnN
@@ -3569,7 +3569,7 @@ tag AtT20
 type Cell Line
 organism Mouse
 tissue Cortex
-category Cell Line
+category cellLine
 description Pituitary tumor LAF1
 age immortalized
 strain Unknown
@@ -3585,7 +3585,7 @@ tag BCellCD19p
 type Cell Line
 organism Mouse
 tissue Blood
-category Primary Cells
+category primaryCells
 description B Cell , CD19+
 age immortalized
 strain C57BL/6
@@ -3643,7 +3643,7 @@ tag CH12
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description B-cell lymphoma (GM12878 analog)
 age immortalized
 strain B10.H-2aH-4bp/Wts
@@ -3663,7 +3663,7 @@ tag ESCJ7
 type Cell Line
 organism Mouse
 tissue
-category Primary Cells
+category primaryCells
 description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov;7(11):2071-84.)
 age E0
 strain 129
@@ -3705,6 +3705,23 @@ color 153,38,0
 sex U
 protocol LICR(Ren):Cortex_Ren_protocol.pdf
 
+term ES-Bruce4
+tag ESB4
+type Cell Line
+organism Mouse
+category primaryCells
+description mouse embryonic stem cells
+age E0
+vendorName University of California, San Diego Transgenic Core and Embryonic Stem Cell
+vendorId
+orderUrl
+termId
+termUrl
+color 153,38,0
+sex M
+protocol LICR(Ren):ES-Bruce4_Ren_protocol.pdf
+
+
 term FatPad
 tag Fat
 type Cell Line
@@ -3738,7 +3755,7 @@ tag G1E
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description Gata1- erythroid progenitor
 age E0
 strain 129
@@ -3755,7 +3772,7 @@ tag G1E_ER4_E2
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)
 age E0
 strain 129
@@ -3844,7 +3861,7 @@ tag MEF
 type Cell Line
 organism Mouse
 tissue MEF
-category Primary Cells
+category primaryCells
 description Mouse Embryonic Fibroblast
 vendorName LICR lab
 termId 6948
@@ -3859,7 +3876,7 @@ tag Megakaryocyte
 type Cell Line
 organism Mouse
 tissue Blood
-category Primary Cells
+category primaryCells
 description Megakaryocyte
 vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
@@ -3875,7 +3892,7 @@ term MEL
 tag MEL
 type Cell Line
 organism Mouse
-category Cell Line
+category cellLine
 description Leukemia (K562 analog)
 age immortalized
 strain Unknown
@@ -3890,7 +3907,7 @@ tag Myocyte
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description Myocyte
 vendorName
 orderUrl
@@ -3920,7 +3937,7 @@ tag NIH3T3
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description fibroblast
 age immortalized
 strain NIH/Swiss
@@ -3962,6 +3979,22 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
 protocol LICR(Ren):Pancreas_Ren_protocol.pdf
+
+term Patski
+tag Patski
+type Cell Line
+organism Mouse
+tissue Kidney
+category cellLine
+description Mouse Embryonic Kidney Fibroblast. As described in Lingenfelter et al., 1998 (Nat Genet. 1998 18:212-3) and Yang et al., 2010 (Genome Res.  2010 20:614-22), PATSKI is a female interspecific mouse fibroblast that was derived from the embryonic  kidney of an M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X. This is an adherent cell line.
+age immortalized
+strain C57BL/6J
+vendorName Dr. Christine Disteche (University of Washington)
+termId 6948
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+color 153,38,0
+sex F
+protocol UW(Stam):Patski_Stam_protocol.pdf
 
 term Placenta
 tag Placenta
@@ -4040,7 +4073,7 @@ tag TNaive
 type Cell Line
 organism Mouse
 tissue Blood
-category Primary Cells
+category primaryCells
 description Naive T cells: CD4+, CD25-
 vendorName UW lab
 termId 7060
@@ -4054,7 +4087,7 @@ tag TReg
 type Cell Line
 organism Mouse
 tissue Blood
-category Primary Cells
+category primaryCells
 description Regulatory T cells CD4+,CD25+
 vendorName UW lab
 termId
@@ -4076,6 +4109,22 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 153,38,0
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
+
+term ZhBTc4
+tag ZHBTC4
+type Cell Line
+organism Mouse
+tissue
+category primaryCell
+age E0
+strain 129/Ola
+description Undifferentiated mouse embryonic stem cells
+vendorName Dr. Levasseur (University of Iowa)
+termId
+termUrl
+color 153,38,0
+sex U
+protocol UW(Stam):ZhBTc4_Stam_protocol.pdf
 
 
 
@@ -4901,15 +4950,15 @@ term GATA-1
 tag GATA1
 type Antibody
 target GATA1
-targetDescription GATA binding protein 1 (globin transcription factor 1)
-antibodyDescription Rabbit polyclonal
+targetDescription GATA-1 is a transcriptional activator which probably serves as a general switch factor for erythroid development. It binds to DNA sites with the consensus sequence [AT]GATA[AG} within regulatory regions of globin genes and of other genes expressed in erythroid cells.
+antibodyDescription Anti-GATA-1 rabbit polyclonal antibody was generated by using a purified GST fusion to amino acids 1-89 of mouse GATA-1.
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
-vendorId   ;
-orderUrl
+vendorId N/A
+orderUrl http://stemcells.wisc.edu/faculty/bresnick.html
 targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 lab Farnham
-validation missing
+validation GATA-1_(WesternBlot,ChIP):human_GATA-1_validation_Farnham.pdf
 
 term GATA1_(SC-265)
 tag GATA1SC265
@@ -4982,7 +5031,7 @@ lab  Myers
 lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
-validation GATA3_SC-268(Immunoblot):human_GATA3-SC268_validation_Myers.pdf
+validation GATA3_SC-268(ChIP,MassSpec):human_GATA3-SC268_validation_Myers.pdf
 
 term GCN5
 tag GCN5
@@ -5406,7 +5455,7 @@ lab Myers
 lots I299
 targetId GeneCards:HNF4G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
-validation missing
+validation HNF4G_(SC-6558)(ChIP,MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
 
 term HSF1
 tag HSF1
@@ -5931,7 +5980,7 @@ orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-
 lab Myers
 targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
-validation missing
+validation Pol2-4H8(ChIP,MassSpec):human_Pol2-4H8_validation_Myers.pdf
 
 term Pol2(phosphoS2)
 tag POL2S2
@@ -6144,7 +6193,7 @@ orderUrl http://www.scbt.com/datasheet-55706-six5-k-20-antibody.html
 lab Myers
 targetId GeneCard:SIX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIX5
-validation missing
+validation SIX5(ChIP,MassSpec):human_SIX5_validation_Myers.pdf
 
 term SMC3_(ab9263)
 tag SMC3ab9263
@@ -6332,7 +6381,8 @@ orderUrl http://www.scbt.com/product.php?datasheet=735
 geneId 6872
 lab Myers / Wold
 lots K0905 F2706
-validation missing
+validation TAF1(ChIP,MassSpec):human_TAF1_validation_Myers.pdf
+
 
 term  TAF7_(SC-101167)
 tag  TAF7SC101167
@@ -6499,11 +6549,27 @@ target TR4
 antibodyDescription Rabbit polyclonal
 targetDescription (Also: NR2C2) Members of the nuclear hormone receptor family, such as NR2C2, act as ligand-activated transcription factors. The proteins have an N-terminal transactivation domain, a central DNA-binding domain with 2 zinc fingers, and a ligand-binding domain at the C terminus.
 vendorName Donated by Dr. J.D.Engel, University of Michigan
-vendorId  ;
+vendorId N/A
+orderUrl https://www.umms.med.umich.edu/facultysearch/facultyPage.do?facUniqname=engel
 lab Farnham
 targetId GeneCard:nr2c2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
-validation missing
+validation TR4_(WesternBlot,ChIP):mouse_TR4_validation_Farnham.pdf
+
+term TRIM37_(SC-49548)
+tag TRIM37SC49548
+type Antibody
+target TRIM37
+antibodyDescription Goat polyclonal IgG raised against  a peptide mapping at the C-terminus of TRIM37 of human origin.
+targetDescription This gene encodes a member of the tripartite motif (TRIM) family, whose members are involved in diverse cellular functions such as developmental patterning and oncogenesis.  The TRIM motif includes zinc-binding domains, a RING finger region, a B-box motif and a coiled-coil domain.  The RING finger and B-box domains chelate zinc and might be involved in protein-protein and/or protein-nucleic acid interactions.  The gene mutations are associated with mulibrey (muscle-liver-brain-eye) nanism, an autosomal recessive disorder that involves several tissues of mesodermal origin.  Alternatively spliced transcript variants encoding the same protein have been identified. (provided by RefSeq)
+vendorName Santa Cruz Biotech Cat#
+vendorId sc-49548
+orderUrl http://www.scbt.com/datasheet-49548-trim37-c-15-antibody.html
+lab Myers
+lots F2507
+targetId TRIM37
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM37
+validation TRIM37_(SC-49548)(ChIP,MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
 
 term USF-1
 tag USF1
@@ -6691,7 +6757,7 @@ orderUrl http://www.novusbio.com/data_sheet/index/H00010127-A01
 lab Farnham
 targetId GeneCard:ZNF263
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF263
-validation missing
+validation ZNF263_(WesternBlot,siRNA):human_ZNF263_validation_Farnham.pdf
 
 term ZNF274
 tag ZNF274
@@ -8513,13 +8579,13 @@ description Sequencing analysis of RNA expression
 #GeneST and Tiling are flavors of the RIP-chip.
 #They need separate dataTypes for the experiment table to work
 term RipGeneSt
-tag  genest    
+tag  genest
 type dataType
 label RIP-chip Gene ST
 description RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays
 
 term RipTiling
-tag  tiling 
+tag  tiling
 type dataType
 label RIP-chip Tiling Array
 description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays
@@ -8587,7 +8653,7 @@ description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/
 term BALB/cAnN
 tag BALBCANN
 type strain
-description ccMyeloma high incidence H2d (Provisional)
+description ccMyeloma high incidence H2d
 
 term C3H
 tag C3H
@@ -8613,6 +8679,11 @@ term 129
 tag S129
 type strain
 description Strain 129, has widely available embryonic stem cells
+
+term 129/Ola
+tag 129Ola
+type strain
+description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice.
 
 term Unknown
 tag UKN
@@ -8683,6 +8754,23 @@ description Immortal cells
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be sex)
 # description (human-readable description.  Can't say where/how it's used)
+
+#
+# Category: T for tissue, L for cell Line, P for Primary cell
+term Tissue
+tag T
+type category
+description Tissue
+
+term cellLine
+tag L
+type category
+description cell line
+
+term primaryCells
+tag P
+type category
+description primary cells
 
 term M
 tag M
@@ -8785,7 +8873,7 @@ term Illumina_HiSeq_2000
 tag IlluminaHiSeq2
 geo Illumina HiSeq 2000
 type seqPlatform
-description Illumina HiSeq 2000 (Provisional)
+description Illumina HiSeq 2000
 
 term 454_GS
 tag 454GS
@@ -9293,10 +9381,10 @@ organism mouse
 term DAC-Stanford
 tag  dacstanf
 type lab
-label Anshul Kundaje - Stanford University
-description (PROVISIONAL) Kundaje - Stanford University
+label Batzoglou & Sidow - Stanford University
+description Batzoglou & Sidow - Stanford University
 labInst Stanford
-labPi Kundaje
+labPi Birney
 labPiFull Ewan Birney
 grantPi Birney
 organism human
@@ -9497,7 +9585,7 @@ projectName UNC-Giddings
 #         insertLength:500  level:500  obtainedBy:500  readType:500  run:500  seqPlatform:500  size:500  uniqueness:500
 #       At End:
 #         dccInternalNotes:910  parentTable:920  sourceObj:921 tableName:970  fileName:980
-#         fileIndex:990
+#         fileIndex:990 category:991
 
 
 term typeOfTerm
@@ -9547,14 +9635,14 @@ cvDefined yes
 validate cv or control
 priority 190
 
-term attic   
+term attic
 type typeOfTerm
 label Is this auxillary data
-description  Provisional This indicates the status of a file in the attic or not.  It is an internal piece of metaData.  
+description  Provisional This indicates the status of a file in the attic or not.  It is an internal piece of metaData.
 searchable no
 cvDefined no
 #It probably should be cv defined, but Venkat will need to define the terms
-validate list: supplemental,auxUnValid,auxValid,auxExp 
+validate list: supplemental,auxUnValid,auxValid,auxExp
 priority 190
 hidden yes
 
@@ -9566,6 +9654,15 @@ searchable no
 cvDefined no
 validate none
 priority 500
+
+term category
+type typeOfTerm
+label Cell type category
+description Cell type category, such as T for tissue, L for cell line, P for primary cells
+searchable no
+cvDefined yes
+validate cv
+priority 991
 
 term cellType
 type typeOfTerm
@@ -10152,7 +10249,7 @@ label Tissue Source Type
 description Source of tissue from either an indiviual organism or pooled set of organisms
 searchable multiSelect
 cvDefined yes
-validate cv
+validate cv or None
 priority 470
 
 # term type
@@ -10167,8 +10264,8 @@ priority 470
 
 term uniqueness
 type typeOfTerm
-label Number of mismatches tolerated
-description Mapping sequence tags to a reference genome will typically tolerate a number of mismatches which may be due to natural variability. This variable is used in generating mapability tracks.
+label Mapability Distinctions
+description (PRIVISIONAL) Degree of region uniqueness or mapability disctinctions
 searchable no
 cvDefined no
 validate none
