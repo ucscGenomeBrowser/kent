@@ -3027,7 +3027,7 @@ term PBMC
 tag PBMC
 type Cell Line
 organism human
-description Peripheral blood mononuclear cells 
+description Peripheral blood mononuclear cells
 tissue Blood
 vendorName PBMC cells provided by E. Bresnick, UW Madison
 termId BTO:0001025
@@ -3116,7 +3116,7 @@ tag prostate
 type Cell Line
 organism Human
 description prostate tissue purchased for Gingeras project
-#)description Provisional prostate tissue purchased for Gingeras project 
+#)description Provisional prostate tissue purchased for Gingeras project
 tissue Prostate
 #)lineage endoderm
 vendorName ATCC
@@ -3986,7 +3986,7 @@ type Cell Line
 organism Mouse
 tissue Kidney
 category cellLine
-description Mouse Embryonic Kidney Fibroblast. As described in Lingenfelter et al., 1998 (Nat Genet. 1998 18:212-3) and Yang et al., 2010 (Genome Res.  2010 20:614-22), PATSKI is a female interspecific mouse fibroblast that was derived from the embryonic  kidney of an M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X. This is an adherent cell line. 
+description Mouse Embryonic Kidney Fibroblast. As described in Lingenfelter et al., 1998 (Nat Genet. 1998 18:212-3) and Yang et al., 2010 (Genome Res.  2010 20:614-22), PATSKI is a female interspecific mouse fibroblast that was derived from the embryonic  kidney of an M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X. This is an adherent cell line.
 age immortalized
 strain C57BL/6J
 vendorName Dr. Christine Disteche (University of Washington)
@@ -4114,14 +4114,14 @@ term ZhBTc4
 tag ZHBTC4
 type Cell Line
 organism Mouse
-tissue 
+tissue
 category primaryCell
 age E0
 strain 129/Ola
-description Undifferentiated mouse embryonic stem cells 
+description Undifferentiated mouse embryonic stem cells
 vendorName Dr. Levasseur (University of Iowa)
-termId 
-termUrl 
+termId
+termUrl
 color 153,38,0
 sex U
 protocol UW(Stam):ZhBTc4_Stam_protocol.pdf
@@ -8579,13 +8579,13 @@ description Sequencing analysis of RNA expression
 #GeneST and Tiling are flavors of the RIP-chip.
 #They need separate dataTypes for the experiment table to work
 term RipGeneSt
-tag  genest    
+tag  genest
 type dataType
 label RIP-chip Gene ST
 description RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays
 
 term RipTiling
-tag  tiling 
+tag  tiling
 type dataType
 label RIP-chip Tiling Array
 description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays
@@ -8653,7 +8653,7 @@ description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/
 term BALB/cAnN
 tag BALBCANN
 type strain
-description ccMyeloma high incidence H2d 
+description ccMyeloma high incidence H2d
 
 term C3H
 tag C3H
@@ -8683,7 +8683,7 @@ description Strain 129, has widely available embryonic stem cells
 term 129/Ola
 tag 129Ola
 type strain
-description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice. 
+description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice.
 
 term Unknown
 tag UKN
@@ -8873,7 +8873,7 @@ term Illumina_HiSeq_2000
 tag IlluminaHiSeq2
 geo Illumina HiSeq 2000
 type seqPlatform
-description Illumina HiSeq 2000 
+description Illumina HiSeq 2000
 
 term 454_GS
 tag 454GS
@@ -9381,8 +9381,8 @@ organism mouse
 term DAC-Stanford
 tag  dacstanf
 type lab
-label Anshul Kundaje - Stanford University
-description Kundaje - Stanford University
+label Batzoglou & Sidow - Stanford University
+description Batzoglou & Sidow - Stanford University
 labInst Stanford
 labPi Birney
 labPiFull Ewan Birney
@@ -9585,7 +9585,7 @@ projectName UNC-Giddings
 #         insertLength:500  level:500  obtainedBy:500  readType:500  run:500  seqPlatform:500  size:500  uniqueness:500
 #       At End:
 #         dccInternalNotes:910  parentTable:920  sourceObj:921 tableName:970  fileName:980
-#         fileIndex:990 category:991 
+#         fileIndex:990 category:991
 
 
 term typeOfTerm
@@ -9635,14 +9635,14 @@ cvDefined yes
 validate cv or control
 priority 190
 
-term attic   
+term attic
 type typeOfTerm
 label Is this auxillary data
-description  Provisional This indicates the status of a file in the attic or not.  It is an internal piece of metaData.  
+description  Provisional This indicates the status of a file in the attic or not.  It is an internal piece of metaData.
 searchable no
 cvDefined no
 #It probably should be cv defined, but Venkat will need to define the terms
-validate list: supplemental,auxUnValid,auxValid,auxExp 
+validate list: supplemental,auxUnValid,auxValid,auxExp
 priority 190
 hidden yes
 
@@ -10264,8 +10264,8 @@ priority 470
 
 term uniqueness
 type typeOfTerm
-label Number of mismatches tolerated
-description Mapping sequence tags to a reference genome will typically tolerate a number of mismatches which may be due to natural variability. This variable is used in generating mapability tracks.
+label Mapability Distinctions
+description (PRIVISIONAL) Degree of region uniqueness or mapability disctinctions
 searchable no
 cvDefined no
 validate none
