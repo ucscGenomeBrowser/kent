@@ -471,7 +471,7 @@ superTrack wgEncodeRnaSeqSuper dense
     transformFunc NONE
     windowingFunction mean
 
-        track wgEncodeRikenCageNhekCytosolLongnonpolyaPlusClusters
+        track wgEncodeRikenCageNhekCytosolPamPlusSignal
         subTrack wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK cyto pA- + 0
         longLabel NHEK cytosol polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -479,8 +479,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 179,0,134
         # subId=1811 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageNhekCytosolLongnonpolyaPlusClusters cricket Wed May  4 14:37:32 2011
 
-        track wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters
+        track wgEncodeRikenCageGm12878CytosolPamPlusSignal
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel GM12 cyto pA- + 0
         longLabel GM12878 cytosol polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -488,9 +489,10 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 153,38,0
         # subId=1797 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters cricket Wed May  4 14:37:28 2011
 
 
-        track wgEncodeRikenCageHuvecCytosolLongnonpolyaPlusClusters
+        track wgEncodeRikenCageHuvecCytosolPamPlusSignal
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE cyto pA- + 0
         longLabel HUVEC cytosol polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -498,8 +500,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 224,75,0
         # subId=1800 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageHuvecCytosolLongnonpolyaPlusClusters cricket Wed May  4 14:37:30 2011
 
-        track wgEncodeRikenCageHepg2CytosolLongnonpolyaPlusClusters
+        track wgEncodeRikenCageHepg2CytosolPamPlusSignal
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG cyto pA- + 0
         longLabel HepG2 cytosol polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -507,8 +510,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=1801 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageHepg2CytosolLongnonpolyaPlusClusters cricket Wed May  4 14:37:30 2011
 
-        track wgEncodeRikenCageHepg2NucleusLongnonpolyaPlusClusters
+        track wgEncodeRikenCageHepg2NucleusPamPlusSignal
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG nucl pA- + 0
         longLabel HepG2 nucleus polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -516,8 +520,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=1802 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageHepg2NucleusLongnonpolyaPlusClusters cricket Wed May  4 14:37:30 2011
 
-        track wgEncodeRikenCageHuvecCellPapPlusClustersRep2
+        track wgEncodeRikenCageHuvecCellPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE cell pA+ + 2
         longLabel HUVEC whole cell polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -526,8 +531,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 224,75,0
         # subId=2388 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHuvecCellPapPlusClustersRep2 cricket Wed May  4 14:37:30 2011
 
-        track wgEncodeRikenCageHelas3NucleusPapPlusClustersRep1
+        track wgEncodeRikenCageHelas3NucleusPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa nucl pA+ + 1
         longLabel HeLa-S3 nucleus polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -536,8 +542,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,119,158
         # subId=2386 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHelas3NucleusPapPlusClustersRep1 cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageHelas3NucleusPapPlusClustersRep2
+        track wgEncodeRikenCageHelas3NucleusPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa nucl pA+ + 2
         longLabel HeLa-S3 nucleus polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -546,8 +553,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,119,158
         # subId=2384 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHelas3NucleusPapPlusClustersRep2 cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageNhekNucleusPapPlusClustersRep3
+        track wgEncodeRikenCageNhekNucleusPapPlusSignalRep3
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK nucl pA+ + 3
         longLabel NHEK nucleus polyA+ CAGE Plus strand start sites rep 3 from ENCODE/RIKEN
@@ -556,8 +564,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 179,0,134
         # subId=2382 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageNhekNucleusPapPlusClustersRep3 cricket Wed May  4 14:37:32 2011
 
-        track wgEncodeRikenCageHepg2CellPapPlusClustersRep1
+        track wgEncodeRikenCageHepg2CellPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG cell pA+ + 1
         longLabel HepG2 whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -566,8 +575,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 189,0,157
         # subId=2381 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHepg2CellPapPlusClustersRep1 cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageH1hescCellPapPlusClustersRep1
+        track wgEncodeRikenCageH1hescCellPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel H1ES cell pA+ + 1
         longLabel H1-hESC whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -576,8 +586,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,107,27
         # subId=2380 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageH1hescCellPapPlusClustersRep1 cricket Wed May  4 14:37:28 2011
 
-        track wgEncodeRikenCageH1hescCytosolPapPlusClustersRep2
+        track wgEncodeRikenCageH1hescCytosolPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel H1ES cyto pA+ + 2
         longLabel H1-hESC cytosol polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -586,8 +597,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,107,27
         # subId=2379 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageH1hescCytosolPapPlusClustersRep2 cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageHepg2CellPapPlusClustersRep2
+        track wgEncodeRikenCageHepg2CellPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG cell pA+ + 2
         longLabel HepG2 whole cell polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -596,8 +608,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 189,0,157
         # subId=2378 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHepg2CellPapPlusClustersRep2 cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageHuvecNucleusPapPlusClustersRep3
+        track wgEncodeRikenCageHuvecNucleusPapPlusSignalRep3
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE nucl pA+ + 3
         longLabel HUVEC nucleus polyA+ CAGE Plus strand start sites rep 3 from ENCODE/RIKEN
@@ -606,8 +619,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 224,75,0
         # subId=2377 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHuvecNucleusPapPlusClustersRep3 cricket Wed May  4 14:37:31 2011
 
-        track wgEncodeRikenCageHuvecCellPapPlusClustersRep1
+        track wgEncodeRikenCageHuvecCellPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE cell pA+ + 1
         longLabel HUVEC whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -616,8 +630,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 224,75,0
         # subId=2376 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHuvecCellPapPlusClustersRep1 cricket Wed May  4 14:37:30 2011
 
-        track wgEncodeRikenCageHepg2NucleusPapPlusClustersRep1
+        track wgEncodeRikenCageHepg2NucleusPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG nucl pA+ + 1
         longLabel HepG2 nucleus polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -626,8 +641,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 189,0,157
         # subId=2375 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHepg2NucleusPapPlusClustersRep1 cricket Wed May  4 14:37:30 2011
 
-        track wgEncodeRikenCageHelas3CellPapPlusClustersRep2
+        track wgEncodeRikenCageHelas3CellPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa cell pA+ + 2
         longLabel HeLa-S3 whole cell polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -636,8 +652,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,119,158
         # subId=2374 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHelas3CellPapPlusClustersRep2 cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageNhekCytosolPapPlusClustersRep3
+        track wgEncodeRikenCageNhekCytosolPapPlusSignalRep3
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK cyto pA+ + 3
         longLabel NHEK cytosol polyA+ CAGE Plus strand start sites rep 3 from ENCODE/RIKEN
@@ -646,8 +663,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 179,0,134
         # subId=2373 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageNhekCytosolPapPlusClustersRep3 cricket Wed May  4 14:37:32 2011
 
-        track wgEncodeRikenCageNhekCellPapPlusClustersRep1
+        track wgEncodeRikenCageNhekCellPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK cell pA+ + 1
         longLabel NHEK whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -656,8 +674,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 179,0,134
         # subId=2372 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageNhekCellPapPlusClustersRep1 cricket Wed May  4 14:37:32 2011
 
-        track wgEncodeRikenCageK562CytosolPapPlusClustersRep1
+        track wgEncodeRikenCageK562CytosolPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 cyto pA+ + 1
         longLabel K562 cytosol polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -666,8 +685,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2371 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageK562CytosolPapPlusClustersRep1 cricket Wed May  4 14:37:31 2011
 
-        track wgEncodeRikenCageH1hescCellPapPlusClustersRep2
+        track wgEncodeRikenCageH1hescCellPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel H1ES cell pA+ + 2
         longLabel H1-hESC whole cell polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -676,8 +696,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,107,27
         # subId=2370 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageH1hescCellPapPlusClustersRep2 cricket Wed May  4 14:37:28 2011
 
-        track wgEncodeRikenCageHepg2CytosolPapPlusClustersRep2
+        track wgEncodeRikenCageHepg2CytosolPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG cyto pA+ + 2
         longLabel HepG2 cytosol polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -686,8 +707,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 189,0,157
         # subId=2369 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHepg2CytosolPapPlusClustersRep2 cricket Wed May  4 14:37:30 2011
 
-        track wgEncodeRikenCageHuvecCytosolPapPlusClustersRep3
+        track wgEncodeRikenCageHuvecCytosolPapPlusSignalRep3
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE cyto pA+ + 3
         longLabel HUVEC cytosol polyA+ CAGE Plus strand start sites rep 3 from ENCODE/RIKEN
@@ -696,8 +718,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 224,75,0
         # subId=2368 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHuvecCytosolPapPlusClustersRep3 cricket Wed May  4 14:37:30 2011
 
-        track wgEncodeRikenCageK562NucleusPapPlusClustersRep1
+        track wgEncodeRikenCageK562NucleusPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 nucl pA+ + 1
         longLabel K562 nucleus polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -706,8 +729,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2367 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageK562NucleusPapPlusClustersRep1 cricket Wed May  4 14:37:31 2011
 
-        track wgEncodeRikenCageHepg2NucleusPapPlusClustersRep2
+        track wgEncodeRikenCageHepg2NucleusPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG nucl pA+ + 2
         longLabel HepG2 nucleus polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -716,8 +740,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 189,0,157
         # subId=2366 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHepg2NucleusPapPlusClustersRep2 cricket Wed May  4 14:37:30 2011
 
-        track wgEncodeRikenCageHelas3CytosolPapPlusClustersRep1
+        track wgEncodeRikenCageHelas3CytosolPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa cyto pA+ + 1
         longLabel HeLa-S3 cytosol polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -726,8 +751,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,119,158
         # subId=2364 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHelas3CytosolPapPlusClustersRep1 cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageHelas3CellPapPlusClustersRep1
+        track wgEncodeRikenCageHelas3CellPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa cell pA+ + 1
         longLabel HeLa-S3 whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -736,8 +762,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,119,158
         # subId=2363 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHelas3CellPapPlusClustersRep1 cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageK562CellPapPlusClustersRep2
+        track wgEncodeRikenCageK562CellPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 cell pA+ + 2
         longLabel K562 whole cell polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -746,8 +773,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2362 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageK562CellPapPlusClustersRep2 cricket Wed May  4 14:37:31 2011
 
-        track wgEncodeRikenCageNhekCellPapPlusClustersRep2
+        track wgEncodeRikenCageNhekCellPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK cell pA+ + 2
         longLabel NHEK whole cell polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -756,8 +784,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 179,0,134
         # subId=2361 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageNhekCellPapPlusClustersRep2 cricket Wed May  4 14:37:32 2011
 
-        track wgEncodeRikenCageH1hescNucleusPapPlusClustersRep2
+        track wgEncodeRikenCageH1hescNucleusPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel H1ES nucl pA+ + 2
         longLabel H1-hESC nucleus polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -766,8 +795,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,107,27
         # subId=2360 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageH1hescNucleusPapPlusClustersRep2 cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageK562CellPapPlusClustersRep1
+        track wgEncodeRikenCageK562CellPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 cell pA+ + 1
         longLabel K562 whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -776,8 +806,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2359 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageK562CellPapPlusClustersRep1 cricket Wed May  4 14:37:31 2011
 
-        track wgEncodeRikenCageK562NucleusPapPlusClustersRep2
+        track wgEncodeRikenCageK562NucleusPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 nucl pA+ + 2
         longLabel K562 nucleus polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -786,8 +817,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2358 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageK562NucleusPapPlusClustersRep2 cricket Wed May  4 14:37:32 2011
 
-        track wgEncodeRikenCageHepg2CytosolPapPlusClustersRep1
+        track wgEncodeRikenCageHepg2CytosolPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG cyto pA+ + 1
         longLabel HepG2 cytosol polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -796,8 +828,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 189,0,157
         # subId=2357 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHepg2CytosolPapPlusClustersRep1 cricket Wed May  4 14:37:30 2011
 
-        track wgEncodeRikenCageHuvecNucleusPapPlusClustersRep4
+        track wgEncodeRikenCageHuvecNucleusPapPlusSignalRep4
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE nucl pA+ + 4
         longLabel HUVEC nucleus polyA+ CAGE Plus strand start sites rep 4 from ENCODE/RIKEN
@@ -806,8 +839,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 224,75,0
         # subId=2356 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHuvecNucleusPapPlusClustersRep4 cricket Wed May  4 14:37:31 2011
 
-        track wgEncodeRikenCageHelas3CytosolPapPlusClustersRep2
+        track wgEncodeRikenCageHelas3CytosolPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa cyto pA+ + 2
         longLabel HeLa-S3 cytosol polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -816,8 +850,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,119,158
         # subId=2355 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHelas3CytosolPapPlusClustersRep2 cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageHuvecCytosolPapPlusClustersRep4
+        track wgEncodeRikenCageHuvecCytosolPapPlusSignalRep4
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE cyto pA+ + 4
         longLabel HUVEC cytosol polyA+ CAGE Plus strand start sites rep 4 from ENCODE/RIKEN
@@ -826,8 +861,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 224,75,0
         # subId=2354 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHuvecCytosolPapPlusClustersRep4 cricket Wed May  4 14:37:30 2011
 
-        track wgEncodeRikenCageGm12878NucleusLongnonpolyaPlusClustersRep1
+        track wgEncodeRikenCageGm12878NucleusPamPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel GM12 nucl pA- + 1
         longLabel GM12878 nucleus polyA- CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -836,8 +872,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 153,38,0
         # subId=2350 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageGm12878NucleusLongnonpolyaPlusClustersRep1 cricket Wed May  4 14:37:28 2011
 
-        track wgEncodeRikenCageMcf7CellPapPlusClustersRep1
+        track wgEncodeRikenCageMcf7CellPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel MCF7 cell pA+ + 1
         longLabel MCF-7 whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -845,8 +882,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 24800.419922
         origAssembly hg19
         # subId=2365 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageMcf7CellPapPlusClustersRep1 cricket Wed May  4 14:37:32 2011
 
-        track wgEncodeRikenCageK562CytosolPapPlusClustersRep2
+        track wgEncodeRikenCageK562CytosolPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 cyto pA+ + 2
         longLabel K562 cytosol polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -855,8 +893,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2383 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageK562CytosolPapPlusClustersRep2 cricket Wed May  4 14:37:31 2011
 
-        track wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters
+        track wgEncodeRikenCageProstateCellPamPlusSignal
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel Pros cell pA- + 0
         longLabel Prostate whole cell polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -864,8 +903,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.070000 10635.549805
         origAssembly hg18
         # subId=1813 dateSubmitted=2010-09-22
+        # was wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters cricket Wed May  4 14:37:32 2011
 
-        track wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters
+        track wgEncodeRikenCageK562CytosolPamPlusSignal
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 cyto pA- + 0
         longLabel K562 cytosol polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -874,8 +914,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg18
         color 46,0,184
         # subId=1805 dateSubmitted=2010-09-22
+        # was wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters cricket Wed May  4 14:37:31 2011
 
-        track wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters
+        track wgEncodeRikenCageH1hescCellPamPlusSignal
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel H1ES cell pA- + 0
         longLabel H1-hESC whole cell polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -884,8 +925,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg18
         color 0,107,27
         # subId=1799 dateSubmitted=2010-09-22
+        # was wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters cricket Wed May  4 14:37:28 2011
 
-        track wgEncodeRikenCageK562ChromatinTotalPlusClusters
+        track wgEncodeRikenCageK562ChromatinTotalPlusSignal
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 chrm tot + 0
         longLabel K562 chromatin Total CAGE Plus strand start sites from ENCODE/RIKEN
@@ -893,6 +935,7 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1804 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageK562ChromatinTotalPlusClusters cricket Wed May  4 14:37:31 2011
 
         #ATTIC
         #track wgEncodeRikenCageK562CytosolPapPlusClusters
@@ -913,7 +956,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=1807 dateSubmitted=2010-06-21
 
-        track wgEncodeRikenCageK562NucleoplasmTotalPlusClusters
+        track wgEncodeRikenCageK562NucleoplasmTotalPlusSignal
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 nplm tot + 0
         longLabel K562 nucleoplasm Total CAGE Plus strand start sites from ENCODE/RIKEN
@@ -921,8 +964,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1808 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageK562NucleoplasmTotalPlusClusters cricket Wed May  4 14:37:31 2011
 
-        track wgEncodeRikenCageK562PolysomeLongnonpolyaPlusClusters
+        track wgEncodeRikenCageK562PolysomePamPlusSignal
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 psom pA- + 0
         longLabel K562 polysome polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -930,8 +974,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1810 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageK562PolysomeLongnonpolyaPlusClusters cricket Wed May  4 14:37:32 2011
 
-        track wgEncodeRikenCageNhekNucleusLongnonpolyaPlusClusters
+        track wgEncodeRikenCageNhekNucleusPamPlusSignal
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK nucl pA- + 0
         longLabel NHEK nucleus polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -939,8 +984,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 179,0,134
         # subId=1812 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageNhekNucleusLongnonpolyaPlusClusters cricket Wed May  4 14:37:32 2011
 
-        track wgEncodeRikenCageK562NucleusLongnonpolyaPlusClusters
+        track wgEncodeRikenCageK562NucleusPamPlusSignal
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 nucl pA- + 0
         longLabel K562 nucleus polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -948,8 +994,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=2127 dateSubmitted=2010-08-26
+        # was wgEncodeRikenCageK562NucleusLongnonpolyaPlusClusters cricket Wed May  4 14:37:31 2011
 
-        track wgEncodeRikenCageHepg2NucleolusTotalPlusClusters
+        track wgEncodeRikenCageHepg2NucleolusTotalPlusSignal
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG nlos tot + 0
         longLabel HepG2 nucleolus Total CAGE Plus strand start sites from ENCODE/RIKEN
@@ -957,8 +1004,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=2124 dateSubmitted=2010-08-23
+        # was wgEncodeRikenCageHepg2NucleolusTotalPlusClusters cricket Wed May  4 14:37:30 2011
 
-        track wgEncodeRikenCageGm12878NucleolusTotalPlusClusters
+        track wgEncodeRikenCageGm12878NucleolusTotalPlusSignal
         parent wgEncodeRikenCageViewPlusClusters on 
         shortLabel GM12 nlos tot + 0
         longLabel GM12878 nucleolus Total CAGE Plus strand start sites from ENCODE/RIKEN
@@ -966,8 +1014,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 153,38,0
         # subId=2125 dateSubmitted=2010-08-23
+        # was wgEncodeRikenCageGm12878NucleolusTotalPlusClusters cricket Wed May  4 14:37:28 2011
 
-        track wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters
+        track wgEncodeRikenCageHelas3CytosolPamPlusSignal
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa cyto pA- +
         longLabel HeLa-S3 cytosol polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -976,8 +1025,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg18
         color 0,119,158
         # subId=2784 dateSubmitted=2010-10-29
+        # was wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageHelas3NucleolusTotalPlusClusters
+        track wgEncodeRikenCageHelas3NucleolusTotalPlusSignal
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa nlos tot +
         longLabel Hela-S3 nucleolus total CAGE Plus strand start sites from ENCODE/RIKEN
@@ -986,8 +1036,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg18
         color 0,119,158
         # subId=2783 dateSubmitted=2010-10-29
+        # was wgEncodeRikenCageHelas3NucleolusTotalPlusClusters cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1
+        track wgEncodeRikenCageK562NucleolusTotalPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 nlos tot 1
         longLabel K562 nucleolus total CAGE Plus strand start sites replicate 1 from ENCODE/RIKEN
@@ -996,8 +1047,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
+        # was wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1 cricket Wed May  4 14:37:31 2011
 
-        track wgEncodeRikenCageSknshraCellPapPlusClustersRep2
+        track wgEncodeRikenCageSknshraCellPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel SK-N-SH_RA cell longPolyA 2
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 2 (longPolyA in SK-N-SH_RA cell)
@@ -1005,8 +1057,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 232069.000000
         origAssembly hg19
         # subId=3339 dateSubmitted=2011-01-19
+        # was wgEncodeRikenCageSknshraCellPapPlusClustersRep2 cricket Wed May  4 14:37:32 2011
 
-        track wgEncodeRikenCageBjCellPapPlusRawRep2
+        track wgEncodeRikenCageBjCellPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel BJ cell longPolyA PlusRaw 2
         longLabel ENCODE RIKEN CAGE Plus Raw Signal Replicate 2 (longPolyA in BJ cell)
@@ -1014,8 +1067,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 146417.000000
         origAssembly hg19
         # subId=3484 dateSubmitted=2011-01-21
+        # was wgEncodeRikenCageBjCellPapPlusRawRep2 cricket Wed May  4 14:47:03 2011
 
-        track wgEncodeRikenCageBjCellPapPlusRawRep1
+        track wgEncodeRikenCageBjCellPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel BJ cell longPolyA PlusRaw 1
         longLabel ENCODE RIKEN CAGE Plus Raw Signal Replicate 1 (longPolyA in BJ cell)
@@ -1023,8 +1077,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 159896.000000
         origAssembly hg19
         # subId=3483 dateSubmitted=2011-01-21
+        # was wgEncodeRikenCageBjCellPapPlusRawRep1 cricket Wed May  4 14:47:03 2011
 
-        track wgEncodeRikenCageA549CellPapPlusRawRep2
+        track wgEncodeRikenCageA549CellPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel A549 cell longPolyA PlusRaw 2
         longLabel ENCODE RIKEN CAGE Plus Raw Signal Replicate 2 (longPolyA in A549 cell)
@@ -1032,8 +1087,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 87645.000000
         origAssembly hg19
         # subId=3482 dateSubmitted=2011-01-21
+        # was wgEncodeRikenCageA549CellPapPlusRawRep2 cricket Wed May  4 14:47:02 2011
 
-        track wgEncodeRikenCageA549CellPapPlusRawRep1
+        track wgEncodeRikenCageA549CellPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel A549 cell longPolyA PlusRaw 1
         longLabel ENCODE RIKEN CAGE Plus Raw Signal Replicate 1 (longPolyA in A549 cell)
@@ -1041,8 +1097,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 131500.000000
         origAssembly hg19
         # subId=3481 dateSubmitted=2011-01-21
+        # was wgEncodeRikenCageA549CellPapPlusRawRep1 cricket Wed May  4 14:47:02 2011
 
-        track wgEncodeRikenCageAg04450CellPapPlusRawRep2
+        track wgEncodeRikenCageAg04450CellPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel AG04450 cell longPolyA PlusRaw 2
         longLabel ENCODE RIKEN CAGE Plus Raw Signal Replicate 2 (longPolyA in AG04450 cell)
@@ -1050,8 +1107,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 168679.000000
         origAssembly hg19
         # subId=3480 dateSubmitted=2011-01-21
+        # was wgEncodeRikenCageAg04450CellPapPlusRawRep2 cricket Wed May  4 14:47:03 2011
 
-        track wgEncodeRikenCageAg04450CellPapPlusRawRep1
+        track wgEncodeRikenCageAg04450CellPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel AG04450 cell longPolyA PlusRaw 1
         longLabel ENCODE RIKEN CAGE Plus Raw Signal Replicate 1 (longPolyA in AG04450 cell)
@@ -1059,8 +1117,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 193962.000000
         origAssembly hg19
         # subId=3479 dateSubmitted=2011-01-21
+        # was wgEncodeRikenCageAg04450CellPapPlusRawRep1 cricket Wed May  4 14:47:03 2011
 
-        track wgEncodeRikenCageGm12878CellPapPlusRawRep1
+        track wgEncodeRikenCageGm12878CellPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters on 
         shortLabel GM12878 cell longPolyA PlusRaw 1
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cell)
@@ -1068,9 +1127,10 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 188531.000000
         color 153,38,0
         # subId=3946 dateSubmitted=2011-04-29
+        # was wgEncodeRikenCageGm12878CellPapPlusRawRep1 cricket Wed May  4 14:47:03 2011
 
 
-        track wgEncodeRikenCageGm12878CytosolPapPlusRawRep1
+        track wgEncodeRikenCageGm12878CytosolPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel GM12878 cytosol longPolyA PlusRaw 1
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cytosol)
@@ -1078,9 +1138,10 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 178047.000000
         color 153,38,0
         # subId=3950 dateSubmitted=2011-04-29
+        # was wgEncodeRikenCageGm12878CytosolPapPlusRawRep1 cricket Wed May  4 14:47:04 2011
 
 
-        track wgEncodeRikenCageGm12878NucleusPapPlusRawRep1
+        track wgEncodeRikenCageGm12878NucleusPapPlusSignalRep1
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel GM12878 nucleus longPolyA PlusRaw 1
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 nucleus)
@@ -1088,6 +1149,7 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 255779.000000
         color 153,38,0
         # subId=3948 dateSubmitted=2011-04-29
+        # was wgEncodeRikenCageGm12878NucleusPapPlusRawRep1 cricket Wed May  4 14:47:04 2011
 
 #        track wgEncodeRikenCageGm12878NucleusPapPlusRawRep2
 #        parent wgEncodeRikenCageViewPlusClusters off
@@ -1098,7 +1160,7 @@ superTrack wgEncodeRnaSeqSuper dense
 #        color 153,38,0
 #        # subId=3949 dateSubmitted=2011-04-29
 
-        track wgEncodeRikenCageGm12878NucleusPapPlusRawRep2
+        track wgEncodeRikenCageGm12878NucleusPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel GM12878 nucleus longPolyA PlusRaw 2
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 nucleus)
@@ -1106,6 +1168,7 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 361501.000000
         color 153,38,0
         # subId=3949 dateSubmitted=2011-04-29
+        # was wgEncodeRikenCageGm12878NucleusPapPlusRawRep2 cricket Wed May  4 14:47:04 2011
 
 #        track wgEncodeRikenCageGm12878CellPapPlusRawRep2
 #        parent wgEncodeRikenCageViewPlusClusters off
@@ -1116,7 +1179,7 @@ superTrack wgEncodeRnaSeqSuper dense
 #        color 153,38,0
 #        # subId=3951 dateSubmitted=2011-04-29
 
-        track wgEncodeRikenCageGm12878CellPapPlusRawRep2
+        track wgEncodeRikenCageGm12878CellPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel GM12878 cell longPolyA PlusRaw 2
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 cell)
@@ -1124,8 +1187,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 218248.000000
         color 153,38,0
         # subId=3951 dateSubmitted=2011-04-29
+        # was wgEncodeRikenCageGm12878CellPapPlusRawRep2 cricket Wed May  4 14:47:03 2011
 
-        track wgEncodeRikenCageGm12878CytosolPapPlusRawRep2
+        track wgEncodeRikenCageGm12878CytosolPapPlusSignalRep2
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel GM12878 cytosol longPolyA PlusRaw 2
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 cytosol)
@@ -1133,6 +1197,7 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 277633.000000
         color 153,38,0
         # subId=3947 dateSubmitted=2011-04-28
+        # was wgEncodeRikenCageGm12878CytosolPapPlusRawRep2 cricket Wed May  4 14:47:04 2011
 
 
     track wgEncodeRikenCageViewMinusClusters
@@ -1149,7 +1214,7 @@ superTrack wgEncodeRnaSeqSuper dense
     transformFunc NONE
 
 
-        track wgEncodeRikenCageNhekCytosolLongnonpolyaMinusClusters
+        track wgEncodeRikenCageNhekCytosolPamMinusSignal
         subTrack wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK cyto pA- - 0
         longLabel NHEK cytosol polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1157,8 +1222,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 179,0,134
         # subId=1811 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageNhekCytosolLongnonpolyaMinusClusters cricket Wed May  4 14:37:27 2011
 
-        track wgEncodeRikenCageGm12878CytosolLongnonpolyaMinusClusters
+        track wgEncodeRikenCageGm12878CytosolPamMinusSignal
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel GM12 cyto pA- - 0
         longLabel GM12878 cytosol polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1166,9 +1232,10 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 153,38,0
         # subId=1797 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageGm12878CytosolLongnonpolyaMinusClusters cricket Wed May  4 14:37:23 2011
 
 
-        track wgEncodeRikenCageHuvecCytosolLongnonpolyaMinusClusters
+        track wgEncodeRikenCageHuvecCytosolPamMinusSignal
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE cyto pA- - 0
         longLabel HUVEC cytosol polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1176,8 +1243,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 224,75,0
         # subId=1800 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageHuvecCytosolLongnonpolyaMinusClusters cricket Wed May  4 14:37:26 2011
 
-        track wgEncodeRikenCageHepg2CytosolLongnonpolyaMinusClusters
+        track wgEncodeRikenCageHepg2CytosolPamMinusSignal
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG cyto pA- - 0
         longLabel HepG2 cytosol polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1185,8 +1253,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=1801 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageHepg2CytosolLongnonpolyaMinusClusters cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageHepg2NucleusLongnonpolyaMinusClusters
+        track wgEncodeRikenCageHepg2NucleusPamMinusSignal
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG nucl pA- - 0
         longLabel HepG2 nucleus polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1194,9 +1263,10 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=1802 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageHepg2NucleusLongnonpolyaMinusClusters cricket Wed May  4 14:37:25 2011
 
 
-        track wgEncodeRikenCageK562ChromatinTotalMinusClusters
+        track wgEncodeRikenCageK562ChromatinTotalMinusSignal
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 chrm tot - 0
         longLabel K562 chromatin Total CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1204,6 +1274,7 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1804 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageK562ChromatinTotalMinusClusters cricket Wed May  4 14:37:26 2011
 
         #ATTIC
         #track wgEncodeRikenCageK562CytosolPapMinusClusters
@@ -1224,7 +1295,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=1807 dateSubmitted=2010-06-21
 
-        track wgEncodeRikenCageK562NucleoplasmTotalMinusClusters
+        track wgEncodeRikenCageK562NucleoplasmTotalMinusSignal
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 nplm tot - 0
         longLabel K562 nucleoplasm Total CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1232,8 +1303,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1808 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageK562NucleoplasmTotalMinusClusters cricket Wed May  4 14:37:27 2011
 
-        track wgEncodeRikenCageK562PolysomeLongnonpolyaMinusClusters
+        track wgEncodeRikenCageK562PolysomePamMinusSignal
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 psom pA- - 0
         longLabel K562 polysome polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1241,8 +1313,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1810 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageK562PolysomeLongnonpolyaMinusClusters cricket Wed May  4 14:37:27 2011
 
-        track wgEncodeRikenCageNhekNucleusLongnonpolyaMinusClusters
+        track wgEncodeRikenCageNhekNucleusPamMinusSignal
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK nucl pA- - 0
         longLabel NHEK nucleus polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1250,8 +1323,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 179,0,134
         # subId=1812 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageNhekNucleusLongnonpolyaMinusClusters cricket Wed May  4 14:37:28 2011
 
-        track wgEncodeRikenCageK562NucleusLongnonpolyaMinusClusters
+        track wgEncodeRikenCageK562NucleusPamMinusSignal
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 nucl pA- - 0
         longLabel K562 nucleus polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1259,8 +1333,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=2127 dateSubmitted=2010-08-26
+        # was wgEncodeRikenCageK562NucleusLongnonpolyaMinusClusters cricket Wed May  4 14:37:27 2011
 
-        track wgEncodeRikenCageHepg2NucleolusTotalMinusClusters
+        track wgEncodeRikenCageHepg2NucleolusTotalMinusSignal
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG nlos tot - 0
         longLabel HepG2 nucleolus Total CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1268,8 +1343,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=2124 dateSubmitted=2010-08-23
+        # was wgEncodeRikenCageHepg2NucleolusTotalMinusClusters cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageGm12878NucleolusTotalMinusClusters
+        track wgEncodeRikenCageGm12878NucleolusTotalMinusSignal
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel GM12 nlos tot - 0
         longLabel GM12878 nucleolus Total CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1277,8 +1353,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 4464.319824
         color 153,38,0
         # subId=2125 dateSubmitted=2010-08-23
+        # was wgEncodeRikenCageGm12878NucleolusTotalMinusClusters cricket Wed May  4 14:37:23 2011
 
-        track wgEncodeRikenCageHuvecCellPapMinusClustersRep2
+        track wgEncodeRikenCageHuvecCellPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE cell pA+ - 2
         longLabel HUVEC whole cell polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1287,8 +1364,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 224,75,0
         # subId=2388 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHuvecCellPapMinusClustersRep2 cricket Wed May  4 14:37:26 2011
 
-        track wgEncodeRikenCageHelas3NucleusPapMinusClustersRep1
+        track wgEncodeRikenCageHelas3NucleusPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa nucl pA+ - 1
         longLabel HeLa-S3 nucleus polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1297,8 +1375,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,119,158
         # subId=2386 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHelas3NucleusPapMinusClustersRep1 cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageHelas3NucleusPapMinusClustersRep2
+        track wgEncodeRikenCageHelas3NucleusPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa nucl pA+ - 2
         longLabel HeLa-S3 nucleus polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1307,8 +1386,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,119,158
         # subId=2384 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHelas3NucleusPapMinusClustersRep2 cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageNhekNucleusPapMinusClustersRep3
+        track wgEncodeRikenCageNhekNucleusPapMinusSignalRep3
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK nucl pA+ - 3
         longLabel NHEK nucleus polyA+ CAGE Minus strand start sites rep 3 from ENCODE/RIKEN
@@ -1317,8 +1397,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 179,0,134
         # subId=2382 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageNhekNucleusPapMinusClustersRep3 cricket Wed May  4 14:37:28 2011
 
-        track wgEncodeRikenCageHepg2CellPapMinusClustersRep1
+        track wgEncodeRikenCageHepg2CellPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG cell pA+ - 1
         longLabel HepG2 whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1327,8 +1408,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 189,0,157
         # subId=2381 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHepg2CellPapMinusClustersRep1 cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageH1hescCellPapMinusClustersRep1
+        track wgEncodeRikenCageH1hescCellPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel H1ES cell pA+ - 1
         longLabel H1-hESC whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1337,8 +1419,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,107,27
         # subId=2380 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageH1hescCellPapMinusClustersRep1 cricket Wed May  4 14:37:24 2011
 
-        track wgEncodeRikenCageH1hescCytosolPapMinusClustersRep2
+        track wgEncodeRikenCageH1hescCytosolPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel H1ES cyto pA+ - 2
         longLabel H1-hESC cytosol polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1347,8 +1430,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,107,27
         # subId=2379 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageH1hescCytosolPapMinusClustersRep2 cricket Wed May  4 14:37:24 2011
 
-        track wgEncodeRikenCageHepg2CellPapMinusClustersRep2
+        track wgEncodeRikenCageHepg2CellPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG cell pA+ - 2
         longLabel HepG2 whole cell polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1357,8 +1441,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 189,0,157
         # subId=2378 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHepg2CellPapMinusClustersRep2 cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageHuvecNucleusPapMinusClustersRep3
+        track wgEncodeRikenCageHuvecNucleusPapMinusSignalRep3
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE nucl pA+ - 3
         longLabel HUVEC nucleus polyA+ CAGE Minus strand start sites rep 3 from ENCODE/RIKEN
@@ -1367,8 +1452,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 224,75,0
         # subId=2377 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHuvecNucleusPapMinusClustersRep3 cricket Wed May  4 14:37:26 2011
 
-        track wgEncodeRikenCageHuvecCellPapMinusClustersRep1
+        track wgEncodeRikenCageHuvecCellPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE cell pA+ - 1
         longLabel HUVEC whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1377,8 +1463,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 224,75,0
         # subId=2376 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHuvecCellPapMinusClustersRep1 cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageHepg2NucleusPapMinusClustersRep1
+        track wgEncodeRikenCageHepg2NucleusPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG nucl pA+ - 1
         longLabel HepG2 nucleus polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1387,8 +1474,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 189,0,157
         # subId=2375 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHepg2NucleusPapMinusClustersRep1 cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageHelas3CellPapMinusClustersRep2
+        track wgEncodeRikenCageHelas3CellPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa cell pA+ - 2
         longLabel HeLa-S3 whole cell polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1397,8 +1485,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,119,158
         # subId=2374 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHelas3CellPapMinusClustersRep2 cricket Wed May  4 14:37:24 2011
 
-        track wgEncodeRikenCageNhekCytosolPapMinusClustersRep3
+        track wgEncodeRikenCageNhekCytosolPapMinusSignalRep3
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK cyto pA+ - 3
         longLabel NHEK cytosol polyA+ CAGE Minus strand start sites rep 3 from ENCODE/RIKEN
@@ -1407,8 +1496,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 179,0,134
         # subId=2373 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageNhekCytosolPapMinusClustersRep3 cricket Wed May  4 14:37:28 2011
 
-        track wgEncodeRikenCageNhekCellPapMinusClustersRep1
+        track wgEncodeRikenCageNhekCellPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK cell pA+ - 1
         longLabel NHEK whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1417,8 +1507,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 179,0,134
         # subId=2372 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageNhekCellPapMinusClustersRep1 cricket Wed May  4 14:37:27 2011
 
-        track wgEncodeRikenCageK562CytosolPapMinusClustersRep1
+        track wgEncodeRikenCageK562CytosolPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 cyto pA+ - 1
         longLabel K562 cytosol polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1427,8 +1518,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2371 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageK562CytosolPapMinusClustersRep1 cricket Wed May  4 14:37:26 2011
 
-        track wgEncodeRikenCageH1hescCellPapMinusClustersRep2
+        track wgEncodeRikenCageH1hescCellPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel H1ES cell pA+ - 2
         longLabel H1-hESC whole cell polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1437,8 +1529,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,107,27
         # subId=2370 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageH1hescCellPapMinusClustersRep2 cricket Wed May  4 14:37:24 2011
 
-        track wgEncodeRikenCageHepg2CytosolPapMinusClustersRep2
+        track wgEncodeRikenCageHepg2CytosolPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG cyto pA+ - 2
         longLabel HepG2 cytosol polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1447,8 +1540,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 189,0,157
         # subId=2369 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHepg2CytosolPapMinusClustersRep2 cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageHuvecCytosolPapMinusClustersRep3
+        track wgEncodeRikenCageHuvecCytosolPapMinusSignalRep3
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE cyto pA+ - 3
         longLabel HUVEC cytosol polyA+ CAGE Minus strand start sites rep 3 from ENCODE/RIKEN
@@ -1457,8 +1551,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 224,75,0
         # subId=2368 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHuvecCytosolPapMinusClustersRep3 cricket Wed May  4 14:37:26 2011
 
-        track wgEncodeRikenCageK562NucleusPapMinusClustersRep1
+        track wgEncodeRikenCageK562NucleusPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 nucl pA+ - 1
         longLabel K562 nucleus polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1467,8 +1562,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2367 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageK562NucleusPapMinusClustersRep1 cricket Wed May  4 14:37:27 2011
 
-        track wgEncodeRikenCageHepg2NucleusPapMinusClustersRep2
+        track wgEncodeRikenCageHepg2NucleusPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG nucl pA+ - 2
         longLabel HepG2 nucleus polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1477,8 +1573,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 189,0,157
         # subId=2366 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHepg2NucleusPapMinusClustersRep2 cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageHelas3CytosolPapMinusClustersRep1
+        track wgEncodeRikenCageHelas3CytosolPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa cyto pA+ - 1
         longLabel HeLa-S3 cytosol polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1487,8 +1584,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,119,158
         # subId=2364 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHelas3CytosolPapMinusClustersRep1 cricket Wed May  4 14:37:24 2011
 
-        track wgEncodeRikenCageHelas3CellPapMinusClustersRep1
+        track wgEncodeRikenCageHelas3CellPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa cell pA+ - 1
         longLabel HeLa-S3 whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1497,8 +1595,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,119,158
         # subId=2363 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHelas3CellPapMinusClustersRep1 cricket Wed May  4 14:37:24 2011
 
-        track wgEncodeRikenCageK562CellPapMinusClustersRep2
+        track wgEncodeRikenCageK562CellPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 cell pA+ - 2
         longLabel K562 whole cell polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1507,8 +1606,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2362 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageK562CellPapMinusClustersRep2 cricket Wed May  4 14:37:26 2011
 
-        track wgEncodeRikenCageNhekCellPapMinusClustersRep2
+        track wgEncodeRikenCageNhekCellPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK cell pA+ - 2
         longLabel NHEK whole cell polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1517,8 +1617,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 179,0,134
         # subId=2361 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageNhekCellPapMinusClustersRep2 cricket Wed May  4 14:37:27 2011
 
-        track wgEncodeRikenCageH1hescNucleusPapMinusClustersRep2
+        track wgEncodeRikenCageH1hescNucleusPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel H1ES nucl pA+ - 2
         longLabel H1-hESC nucleus polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1527,8 +1628,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,107,27
         # subId=2360 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageH1hescNucleusPapMinusClustersRep2 cricket Wed May  4 14:37:24 2011
 
-        track wgEncodeRikenCageK562CellPapMinusClustersRep1
+        track wgEncodeRikenCageK562CellPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 cell pA+ - 1
         longLabel K562 whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1537,8 +1639,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2359 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageK562CellPapMinusClustersRep1 cricket Wed May  4 14:37:26 2011
 
-        track wgEncodeRikenCageK562NucleusPapMinusClustersRep2
+        track wgEncodeRikenCageK562NucleusPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 nucl pA+ - 2
         longLabel K562 nucleus polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1547,8 +1650,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2358 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageK562NucleusPapMinusClustersRep2 cricket Wed May  4 14:37:27 2011
 
-        track wgEncodeRikenCageHepg2CytosolPapMinusClustersRep1
+        track wgEncodeRikenCageHepg2CytosolPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG cyto pA+ - 1
         longLabel HepG2 cytosol polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1557,8 +1661,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 189,0,157
         # subId=2357 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHepg2CytosolPapMinusClustersRep1 cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageHuvecNucleusPapMinusClustersRep4
+        track wgEncodeRikenCageHuvecNucleusPapMinusSignalRep4
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE nucl pA+ - 4
         longLabel HUVEC nucleus polyA+ CAGE Minus strand start sites rep 4 from ENCODE/RIKEN
@@ -1567,8 +1672,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 224,75,0
         # subId=2356 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHuvecNucleusPapMinusClustersRep4 cricket Wed May  4 14:37:26 2011
 
-        track wgEncodeRikenCageHelas3CytosolPapMinusClustersRep2
+        track wgEncodeRikenCageHelas3CytosolPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa cyto pA+ - 2
         longLabel HeLa-S3 cytosol polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1577,8 +1683,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 0,119,158
         # subId=2355 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHelas3CytosolPapMinusClustersRep2 cricket Wed May  4 14:37:24 2011
 
-        track wgEncodeRikenCageHuvecCytosolPapMinusClustersRep4
+        track wgEncodeRikenCageHuvecCytosolPapMinusSignalRep4
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE cyto pA+ - 4
         longLabel HUVEC cytosol polyA+ CAGE Minus strand start sites rep 4 from ENCODE/RIKEN
@@ -1587,8 +1694,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 224,75,0
         # subId=2354 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageHuvecCytosolPapMinusClustersRep4 cricket Wed May  4 14:37:26 2011
 
-        track wgEncodeRikenCageGm12878NucleusLongnonpolyaMinusClustersRep1
+        track wgEncodeRikenCageGm12878NucleusPamMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters on 
         shortLabel GM12 nucl pA- - 1
         longLabel GM12878 nucleus polyA- CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1597,8 +1705,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 153,38,0
         # subId=2350 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageGm12878NucleusLongnonpolyaMinusClustersRep1 cricket Wed May  4 14:37:23 2011
 
-        track wgEncodeRikenCageMcf7CellPapMinusClustersRep1
+        track wgEncodeRikenCageMcf7CellPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel MCF7 cell pA+ - 1
         longLabel MCF-7 whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1606,8 +1715,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.040000 6428.500000
         origAssembly hg19
         # subId=2365 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageMcf7CellPapMinusClustersRep1 cricket Wed May  4 14:37:27 2011
 
-        track wgEncodeRikenCageK562CytosolPapMinusClustersRep2
+        track wgEncodeRikenCageK562CytosolPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 cyto pA+ - 2
         longLabel K562 cytosol polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1616,8 +1726,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2383 dateSubmitted=2010-09-21
+        # was wgEncodeRikenCageK562CytosolPapMinusClustersRep2 cricket Wed May  4 14:37:27 2011
 
-        track wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters
+        track wgEncodeRikenCageProstateCellPamMinusSignal
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel Pros cell pA- - 0
         longLabel Prostate whole cell polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1625,8 +1736,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 0.070000 1982.420044
         origAssembly hg18
         # subId=1813 dateSubmitted=2010-09-22
+        # was wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters cricket Wed May  4 14:37:28 2011
 
-        track wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters
+        track wgEncodeRikenCageK562CytosolPamMinusSignal
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 cyto pA- - 0
         longLabel K562 cytosol polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1635,8 +1747,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg18
         color 46,0,184
         # subId=1805 dateSubmitted=2010-09-22
+        # was wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters cricket Wed May  4 14:37:26 2011
 
-        track wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters
+        track wgEncodeRikenCageH1hescCellPamMinusSignal
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel H1ES cell pA- - 0
         longLabel H1-hESC whole cell polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1645,8 +1758,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg18
         color 0,107,27
         # subId=1799 dateSubmitted=2010-09-22
+        # was wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters cricket Wed May  4 14:37:24 2011
 
-        track wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters
+        track wgEncodeRikenCageHelas3CytosolPamMinusSignal
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa cyto pA- -
         longLabel HeLa-S3 cytosol polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1655,8 +1769,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg18
         color 0,119,158
         # subId=2784 dateSubmitted=2010-10-29
+        # was wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters cricket Wed May  4 14:37:24 2011
 
-        track wgEncodeRikenCageHelas3NucleolusTotalMinusClusters
+        track wgEncodeRikenCageHelas3NucleolusTotalMinusSignal
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa nlos tot -
         longLabel Hela-S3 nucleolus total CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1665,8 +1780,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg18
         color 0,119,158
         # subId=2783 dateSubmitted=2010-10-29
+        # was wgEncodeRikenCageHelas3NucleolusTotalMinusClusters cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1
+        track wgEncodeRikenCageK562NucleolusTotalMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 nlos tot 1
         longLabel K562 nucleolus total CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1675,8 +1791,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
+        # was wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1 cricket Wed May  4 14:37:27 2011
 
-        track wgEncodeRikenCageSknshraCellPapMinusClustersRep2
+        track wgEncodeRikenCageSknshraCellPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel SK-N-SH_RA cell longPolyA 2
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 2 (longPolyA in SK-N-SH_RA cell)
@@ -1684,8 +1801,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 118040.000000
         origAssembly hg19
         # subId=3339 dateSubmitted=2011-01-19
+        # was wgEncodeRikenCageSknshraCellPapMinusClustersRep2 cricket Wed May  4 14:37:28 2011
 
-        track wgEncodeRikenCageBjCellPapMinusRawRep2
+        track wgEncodeRikenCageBjCellPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel BJ cell longPolyA MinusRaw 2
         longLabel ENCODE RIKEN CAGE Minus Raw Signal Replicate 2 (longPolyA in BJ cell)
@@ -1693,8 +1811,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 202847.000000
         origAssembly hg19
         # subId=3484 dateSubmitted=2011-01-21
+        # was wgEncodeRikenCageBjCellPapMinusRawRep2 cricket Wed May  4 14:47:03 2011
 
-        track wgEncodeRikenCageBjCellPapMinusRawRep1
+        track wgEncodeRikenCageBjCellPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel BJ cell longPolyA MinusRaw 1
         longLabel ENCODE RIKEN CAGE Minus Raw Signal Replicate 1 (longPolyA in BJ cell)
@@ -1702,8 +1821,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 226750.000000
         origAssembly hg19
         # subId=3483 dateSubmitted=2011-01-21
+        # was wgEncodeRikenCageBjCellPapMinusRawRep1 cricket Wed May  4 14:47:03 2011
 
-        track wgEncodeRikenCageA549CellPapMinusRawRep2
+        track wgEncodeRikenCageA549CellPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel A549 cell longPolyA MinusRaw 2
         longLabel ENCODE RIKEN CAGE Minus Raw Signal Replicate 2 (longPolyA in A549 cell)
@@ -1711,8 +1831,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 91547.000000
         origAssembly hg19
         # subId=3482 dateSubmitted=2011-01-21
+        # was wgEncodeRikenCageA549CellPapMinusRawRep2 cricket Wed May  4 14:47:02 2011
 
-        track wgEncodeRikenCageA549CellPapMinusRawRep1
+        track wgEncodeRikenCageA549CellPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel A549 cell longPolyA MinusRaw 1
         longLabel ENCODE RIKEN CAGE Minus Raw Signal Replicate 1 (longPolyA in A549 cell)
@@ -1720,8 +1841,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 320517.000000
         origAssembly hg19
         # subId=3481 dateSubmitted=2011-01-21
+        # was wgEncodeRikenCageA549CellPapMinusRawRep1 cricket Wed May  4 14:47:02 2011
 
-        track wgEncodeRikenCageAg04450CellPapMinusRawRep2
+        track wgEncodeRikenCageAg04450CellPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel AG04450 cell longPolyA MinusRaw 2
         longLabel ENCODE RIKEN CAGE Minus Raw Signal Replicate 2 (longPolyA in AG04450 cell)
@@ -1729,8 +1851,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 144192.000000
         origAssembly hg19
         # subId=3480 dateSubmitted=2011-01-21
+        # was wgEncodeRikenCageAg04450CellPapMinusRawRep2 cricket Wed May  4 14:47:03 2011
 
-        track wgEncodeRikenCageAg04450CellPapMinusRawRep1
+        track wgEncodeRikenCageAg04450CellPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel AG04450 cell longPolyA MinusRaw 1
         longLabel ENCODE RIKEN CAGE Minus Raw Signal Replicate 1 (longPolyA in AG04450 cell)
@@ -1738,8 +1861,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 201709.000000
         origAssembly hg19
         # subId=3479 dateSubmitted=2011-01-21
+        # was wgEncodeRikenCageAg04450CellPapMinusRawRep1 cricket Wed May  4 14:47:02 2011
 
-        track wgEncodeRikenCageGm12878CellPapMinusRawRep1
+        track wgEncodeRikenCageGm12878CellPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters on 
         shortLabel GM12878 cell longPolyA MinusRaw 1
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cell)
@@ -1747,8 +1871,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 285019.000000
         color 153,38,0
         # subId=3946 dateSubmitted=2011-04-29
+        # was wgEncodeRikenCageGm12878CellPapMinusRawRep1 cricket Wed May  4 14:47:03 2011
 
-        track wgEncodeRikenCageGm12878CytosolPapMinusRawRep1
+        track wgEncodeRikenCageGm12878CytosolPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel GM12878 cytosol longPolyA MinusRaw 1
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 cytosol)
@@ -1756,8 +1881,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 461584.000000
         color 153,38,0
         # subId=3950 dateSubmitted=2011-04-29
+        # was wgEncodeRikenCageGm12878CytosolPapMinusRawRep1 cricket Wed May  4 14:47:03 2011
 
-        track wgEncodeRikenCageGm12878NucleusPapMinusRawRep1
+        track wgEncodeRikenCageGm12878NucleusPapMinusSignalRep1
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel GM12878 nucleus longPolyA MinusRaw 1
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 1 (longPolyA in GM12878 nucleus)
@@ -1765,8 +1891,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 110366.000000
         color 153,38,0
         # subId=3948 dateSubmitted=2011-04-29
+        # was wgEncodeRikenCageGm12878NucleusPapMinusRawRep1 cricket Wed May  4 14:47:04 2011
 
-        track wgEncodeRikenCageGm12878NucleusPapMinusRawRep2
+        track wgEncodeRikenCageGm12878NucleusPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel GM12878 nucleus longPolyA MinusRaw 2
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 nucleus)
@@ -1774,8 +1901,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 106130.000000
         color 153,38,0
         # subId=3949 dateSubmitted=2011-04-29
+        # was wgEncodeRikenCageGm12878NucleusPapMinusRawRep2 cricket Wed May  4 14:47:04 2011
 
-        track wgEncodeRikenCageGm12878CellPapMinusRawRep2
+        track wgEncodeRikenCageGm12878CellPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel GM12878 cell longPolyA MinusRaw 2
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 cell)
@@ -1783,8 +1911,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 304430.000000
         color 153,38,0
         # subId=3951 dateSubmitted=2011-04-29
+        # was wgEncodeRikenCageGm12878CellPapMinusRawRep2 cricket Wed May  4 14:47:03 2011
 
-        track wgEncodeRikenCageGm12878CytosolPapMinusRawRep2
+        track wgEncodeRikenCageGm12878CytosolPapMinusSignalRep2
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel GM12878 cytosol longPolyA MinusRaw 2
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 2 (longPolyA in GM12878 cytosol)
@@ -1792,6 +1921,7 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 460936.000000
         color 153,38,0
         # subId=3947 dateSubmitted=2011-04-28
+        # was wgEncodeRikenCageGm12878CytosolPapMinusRawRep2 cricket Wed May  4 14:47:03 2011
 
 
     track wgEncodeRikenCageViewAlignments
@@ -1813,7 +1943,7 @@ superTrack wgEncodeRnaSeqSuper dense
     maxWindowToDraw 10000
 
 
-        track wgEncodeRikenCageNhekCytosolLongnonpolyaAln
+        track wgEncodeRikenCageNhekCytosolPamAln
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel NHEK cyto pA- A 0
         longLabel NHEK cytosol polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1821,8 +1951,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bam
         color 179,0,134
         # subId=1811 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageNhekCytosolLongnonpolyaAln cricket Wed May  4 14:47:02 2011
 
-        track wgEncodeRikenCageGm12878CytosolLongnonpolyaAln
+        track wgEncodeRikenCageGm12878CytosolPamAln
         parent wgEncodeRikenCageViewAlignments off
         shortLabel GM12 cyto pA- A 0
         longLabel GM12878 cytosol polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1830,9 +1961,10 @@ superTrack wgEncodeRnaSeqSuper dense
         type bam
         color 153,38,0
         # subId=1797 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageGm12878CytosolLongnonpolyaAln cricket Wed May  4 14:47:00 2011
 
 
-        track wgEncodeRikenCageHuvecCytosolLongnonpolyaAln
+        track wgEncodeRikenCageHuvecCytosolPamAln
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVE cyto pA- A 0
         longLabel HUVEC cytosol polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1840,9 +1972,10 @@ superTrack wgEncodeRnaSeqSuper dense
         type bam
         color 224,75,0
         # subId=1800 dateSubmitted=2010-06-21 THIS ONE SHOWS
+        # was wgEncodeRikenCageHuvecCytosolLongnonpolyaAln cricket Wed May  4 14:47:01 2011
 
 
-        track wgEncodeRikenCageHepg2CytosolLongnonpolyaAln
+        track wgEncodeRikenCageHepg2CytosolPamAln
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG cyto pA- A 0
         longLabel HepG2 cytosol polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1850,9 +1983,10 @@ superTrack wgEncodeRnaSeqSuper dense
         type bam
         color 189,0,157
         # subId=1801 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageHepg2CytosolLongnonpolyaAln cricket Wed May  4 14:47:01 2011
 
 
-        track wgEncodeRikenCageHepg2NucleusLongnonpolyaAln
+        track wgEncodeRikenCageHepg2NucleusPamAln
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG nucl pA- A 0
         longLabel HepG2 nucleus polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1860,6 +1994,7 @@ superTrack wgEncodeRnaSeqSuper dense
         type bam
         color 189,0,157
         # subId=1802 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageHepg2NucleusLongnonpolyaAln cricket Wed May  4 14:47:01 2011
 
 
         track wgEncodeRikenCageK562ChromatinTotalAln
@@ -1902,7 +2037,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=1808 dateSubmitted=2010-06-21
 
-        track wgEncodeRikenCageK562PolysomeLongnonpolyaAln
+        track wgEncodeRikenCageK562PolysomePamAln
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 psom pA- A 0
         longLabel K562 polysome polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1910,8 +2045,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bam
         color 46,0,184
         # subId=1810 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageK562PolysomeLongnonpolyaAln cricket Wed May  4 14:47:02 2011
 
-        track wgEncodeRikenCageNhekNucleusLongnonpolyaAln
+        track wgEncodeRikenCageNhekNucleusPamAln
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK nucl pA- A 0
         longLabel NHEK nucleus polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1919,8 +2055,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bam
         color 179,0,134
         # subId=1812 dateSubmitted=2010-06-21
+        # was wgEncodeRikenCageNhekNucleusLongnonpolyaAln cricket Wed May  4 14:47:02 2011
 
-        track wgEncodeRikenCageK562NucleusLongnonpolyaAln
+        track wgEncodeRikenCageK562NucleusPamAln
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 nucl pA- A 0
         longLabel K562 nucleus polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1928,6 +2065,7 @@ superTrack wgEncodeRnaSeqSuper dense
         type bam
         color 46,0,184
         # subId=2127 dateSubmitted=2010-08-26
+        # was wgEncodeRikenCageK562NucleusLongnonpolyaAln cricket Wed May  4 14:47:01 2011
 
         track wgEncodeRikenCageHepg2NucleolusTotalAln
         parent wgEncodeRikenCageViewAlignments off
@@ -2257,7 +2395,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=2354 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1
+        track wgEncodeRikenCageGm12878NucleusPamAlnRep1
         parent wgEncodeRikenCageViewAlignments off
         shortLabel GM12 nucl pA- A 1
         longLabel GM12878 nucleus polyA- CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -2266,6 +2404,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 153,38,0
         # subId=2350 dateSubmitted=2010-09-21  THIS ONE SHOWS
+        # was wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1 cricket Wed May  4 14:47:00 2011
 
         track wgEncodeRikenCageMcf7CellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
@@ -2286,7 +2425,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=2383 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageProstateCellLongnonpolyaAln
+        track wgEncodeRikenCageProstateCellPamAln
         parent wgEncodeRikenCageViewAlignments off
         shortLabel Pros cell pA- A 0
         longLabel Prostate whole cell polyA- CAGE Alignments from ENCODE/RIKEN
@@ -2294,8 +2433,9 @@ superTrack wgEncodeRnaSeqSuper dense
         type bam
         origAssembly hg18
         # subId=1813 dateSubmitted=2010-09-22
+        # was wgEncodeRikenCageProstateCellLongnonpolyaAln cricket Wed May  4 14:47:02 2011
 
-        track wgEncodeRikenCageK562CytosolLongnonpolyaAln
+        track wgEncodeRikenCageK562CytosolPamAln
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cyto pA- A 0
         longLabel K562 cytosol polyA- CAGE Alignments from ENCODE/RIKEN
@@ -2304,8 +2444,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg18
         color 46,0,184
         # subId=1805 dateSubmitted=2010-09-22
+        # was wgEncodeRikenCageK562CytosolLongnonpolyaAln cricket Wed May  4 14:47:01 2011
 
-        track wgEncodeRikenCageH1hescCellLongnonpolyaAln
+        track wgEncodeRikenCageH1hescCellPamAln
         parent wgEncodeRikenCageViewAlignments off
         shortLabel H1ES cell pA- A 0
         longLabel H1-hESC whole cell polyA- CAGE Alignments from ENCODE/RIKEN
@@ -2314,8 +2455,9 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg18
         color 0,107,27
         # subId=1799 dateSubmitted=2010-09-22
+        # was wgEncodeRikenCageH1hescCellLongnonpolyaAln cricket Wed May  4 14:47:00 2011
 
-        track wgEncodeRikenCageHelas3CytosolLongnonpolyaAln
+        track wgEncodeRikenCageHelas3CytosolPamAln
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa cyto pA- A
         longLabel HeLa-S3 cytosol polyA- CAGE Alignments from ENCODE/RIKEN
@@ -2324,6 +2466,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg18
         color 0,119,158
         # subId=2784 dateSubmitted=2010-10-29
+        # was wgEncodeRikenCageHelas3CytosolLongnonpolyaAln cricket Wed May  4 14:47:00 2011
 
         track wgEncodeRikenCageHelas3NucleolusTotalAln
         parent wgEncodeRikenCageViewAlignments off
