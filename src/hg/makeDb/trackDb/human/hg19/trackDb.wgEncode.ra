@@ -139,7 +139,7 @@ include wgEncodeBroadHmm.ra
 include wgEncodeUwHistone.ra
 
 # SYDH Histone (wrangler: Venkat)
-include wgEncodeSydhHistone.ra alpha
+include wgEncodeSydhHistone.ra
 
 
 # ENCODE TFBS -------------------------------------------
