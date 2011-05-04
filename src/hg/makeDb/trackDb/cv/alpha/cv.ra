@@ -3518,7 +3518,7 @@ tag 3134
 type Cell Line
 organism Mouse
 tissue Mammary
-category Cell Line
+category cellLine
 description Mammary
 age immortalized
 strain RIII
@@ -3534,7 +3534,7 @@ tag 416B
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description myeloid progenitor cells, CD34+
 age immortalized
 strain B6D2F1/J
@@ -3550,7 +3550,7 @@ tag A20
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description B cell lymphoma line derived from a spontaneous reticulum cell neoplasm
 age immortalized
 strain BALB/cAnN
@@ -3569,7 +3569,7 @@ tag AtT20
 type Cell Line
 organism Mouse
 tissue Cortex
-category Cell Line
+category cellLine
 description Pituitary tumor LAF1
 age immortalized
 strain Unknown
@@ -3585,7 +3585,7 @@ tag BCellCD19p
 type Cell Line
 organism Mouse
 tissue Blood
-category Primary Cells
+category primaryCells
 description B Cell , CD19+
 age immortalized
 strain C57BL/6
@@ -3643,7 +3643,7 @@ tag CH12
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description B-cell lymphoma (GM12878 analog)
 age immortalized
 strain B10.H-2aH-4bp/Wts
@@ -3663,7 +3663,7 @@ tag ESCJ7
 type Cell Line
 organism Mouse
 tissue
-category Primary Cells
+category primaryCells
 description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov;7(11):2071-84.)
 age E0
 strain 129
@@ -3709,7 +3709,7 @@ term ES-Bruce4
 tag ESB4
 type Cell Line
 organism Mouse
-category Primary Cells
+category primaryCells
 description mouse embryonic stem cells
 age E0
 vendorName University of California, San Diego Transgenic Core and Embryonic Stem Cell
@@ -3755,7 +3755,7 @@ tag G1E
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description Gata1- erythroid progenitor
 age E0
 strain 129
@@ -3772,7 +3772,7 @@ tag G1E_ER4_E2
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)
 age E0
 strain 129
@@ -3861,7 +3861,7 @@ tag MEF
 type Cell Line
 organism Mouse
 tissue MEF
-category Primary Cells
+category primaryCells
 description Mouse Embryonic Fibroblast
 vendorName LICR lab
 termId 6948
@@ -3876,7 +3876,7 @@ tag Megakaryocyte
 type Cell Line
 organism Mouse
 tissue Blood
-category Primary Cells
+category primaryCells
 description Megakaryocyte
 vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
@@ -3892,7 +3892,7 @@ term MEL
 tag MEL
 type Cell Line
 organism Mouse
-category Cell Line
+category cellLine
 description Leukemia (K562 analog)
 age immortalized
 strain Unknown
@@ -3907,7 +3907,7 @@ tag Myocyte
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description Myocyte
 vendorName
 orderUrl
@@ -3937,7 +3937,7 @@ tag NIH3T3
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
+category cellLine
 description fibroblast
 age immortalized
 strain NIH/Swiss
@@ -3985,7 +3985,7 @@ tag Patski
 type Cell Line
 organism Mouse
 tissue Kidney
-category Cell Line
+category cellLine
 description Mouse Embryonic Kidney Fibroblast. As described in Lingenfelter et al., 1998 (Nat Genet. 1998 18:212-3) and Yang et al., 2010 (Genome Res.  2010 20:614-22), PATSKI is a female interspecific mouse fibroblast that was derived from the embryonic  kidney of an M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X. This is an adherent cell line. 
 age immortalized
 strain C57BL/6J
@@ -4073,7 +4073,7 @@ tag TNaive
 type Cell Line
 organism Mouse
 tissue Blood
-category Primary Cells
+category primaryCells
 description Naive T cells: CD4+, CD25-
 vendorName UW lab
 termId 7060
@@ -4087,7 +4087,7 @@ tag TReg
 type Cell Line
 organism Mouse
 tissue Blood
-category Primary Cells
+category primaryCells
 description Regulatory T cells CD4+,CD25+
 vendorName UW lab
 termId
@@ -4115,7 +4115,7 @@ tag ZHBTC4
 type Cell Line
 organism Mouse
 tissue 
-category Primary Cell
+category primaryCell
 age E0
 strain 129/Ola
 description Undifferentiated mouse embryonic stem cells 
@@ -8757,20 +8757,20 @@ description Immortal cells
 
 #
 # Category: T for tissue, L for cell Line, P for Primary cell
-term T
+term Tissue
 tag T
 type category
 description Tissue
 
-term L
+term cellLine
 tag L
 type category
 description cell line
 
-term P
+term primaryCells
 tag P
 type category
-description primary cell
+description primary cells
 
 term M
 tag M
