@@ -99,6 +99,21 @@ objType composite
 composite wgEncodeMapability
 expVars lab,dataType,view,size
 
+metaObject wgEncodeMapabilityDacConsensusBlacklist
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-04
+fileName wgEncodeMapabilityDacConsensusBlacklist.bed.gz
+grant Birney
+lab DAC-Stanford
+labVersion consensus: Duke Excluded and DAC UltraHighSignal blacklist
+project wgEncode
+subId 4039
+tableName wgEncodeMapabilityDacConsensusBlacklist
+view Excludable
+
 metaObject wgEncodeMapabilityDukeRegionsExcluded
 objType table
 composite wgEncodeMapability
@@ -152,4 +167,4 @@ subId 3840
 tableName wgEncodeMapabilityDukeUniqueness35bp
 view Uniqueness
 
-# MAGIC: -531643600
+# MAGIC: -599623887

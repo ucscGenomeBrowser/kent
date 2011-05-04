@@ -409,7 +409,7 @@ fputs("<BODY",f);
 if (htmlBackground != NULL )
     fprintf(f, " BACKGROUND=\"%s\"", htmlBackground);
 if (gotBgColor)
-    fprintf(f, " BGCOLOR=\"%X\"", htmlBgColor);
+    fprintf(f, " BGCOLOR=\"#%X\"", htmlBgColor);
 fputs(">\n",f);
 
 htmlWarnBoxSetup(f);

@@ -96,7 +96,7 @@ slAddHead(&sldList, slDoubleNew(-6));
 slAddHead(&sldList, slDoubleNew(-3));
 slAddHead(&sldList, slDoubleNew(8));
 struct hacTree *clusters = hacTreeFromItems((struct slList *)sldList, localMem,
-					    slDoubleDistance, slDoubleMidpoint, NULL);
+					    slDoubleDistance, slDoubleMidpoint, NULL, NULL);
 fputs("Clustering by numeric value:\n", f);
 printSlDoubleTree(f, clusters);
 }
@@ -201,6 +201,14 @@ for (i=0; i < helper->len;  i++)
 return (struct slList *)consensus;
 }
 
+static int cwaCmp(const struct slList *item1, const struct slList *item2, void *extraData)
+/* Use strcmp on haplotype strings. */
+{
+const struct slName *kid1 = (const struct slName *)item1;
+const struct slName *kid2 = (const struct slName *)item2;
+return strcmp(kid1->name, kid2->name);
+}
+
 void hacTreeTestHaplos(char *inFileName, FILE *f, struct lm *localMem)
 /* Read in haplotypes of same length from a file and print the resulting clusters. */
 {
@@ -225,8 +233,8 @@ int center = len / 2;
 double alpha = 0.5;
 struct cwaExtraData helper = { center, len, alpha, localMem };
 struct hacTree *clusters = hacTreeFromItems((struct slList *)slnList, localMem,
-					    cwaDistance, cwaMerge, &helper);
-fputs("Clustering by string length:\n", f);
+					    cwaDistance, cwaMerge, cwaCmp, &helper);
+fputs("Clustering by haplotype similarity:\n", f);
 printSlNameTree(f, clusters);
 carefulClose(&f);
 }
