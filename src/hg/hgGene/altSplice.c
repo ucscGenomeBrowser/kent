@@ -102,7 +102,7 @@ hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
 makeGrayShades(hvg, maxShade, shadesOfGray);
 hvGfxSetClip(hvg, 0, 0, pixWidth, pixHeight);
 altGraphXDrawPack(ag, ssList, hvg, 0, 0, pixWidth, lineHeight, lineHeight-1,
-		  ag->tStart, ag->tEnd, scale, 
+		  ag->tStart, ag->tEnd, scale,
 		  font, MG_BLACK, shadesOfGray, "Dummy", NULL);
 hvGfxUnclip(hvg);
 hvGfxClose(&hvg);
@@ -112,7 +112,7 @@ printf(
 return cloneString(gifTn.forHtml);
 }
 
-static boolean altSpliceExists(struct section *section, 
+static boolean altSpliceExists(struct section *section,
 	struct sqlConnection *conn, char *geneId)
 /* Return TRUE if altSplice table exists and has something
  * on this one. */
@@ -125,13 +125,13 @@ section->items = altGraphId(conn, curGenePred);
    is a component take the prefix for matching back to the graph.
    i.e. cut of an '-1' or '-2' */
 if (section->items != NULL)
-    if((mark = strrchr((char *)section->items, '-')) != NULL) 
+    if((mark = strrchr((char *)section->items, '-')) != NULL)
         *mark = '\0';
 return section->items != NULL;
 }
 
 
-static void altSplicePrint(struct section *section, 
+static void altSplicePrint(struct section *section,
 	struct sqlConnection *conn, char *geneId)
 /* Print out altSplicing info. */
 {
@@ -149,7 +149,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     ag = altGraphXLoad(row+hasBin);
-    hPrintf("<TABLE><TR><TD BGCOLOR=#888888>\n");
+    hPrintf("<TABLE><TR><TD BGCOLOR='#888888'>\n");
     altGraphXMakeImage(ag);
     hPrintf("</TD></TR></TABLE><BR>");
     }

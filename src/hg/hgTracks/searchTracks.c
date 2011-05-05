@@ -488,7 +488,7 @@ else
         jsonTdbSettingsBuild(&jsonTdbVars, track, FALSE); // FALSE: No configuration from track search
 
         if (tdbIsFolder(track->tdb)) // supertrack
-            hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n","#EED5B7");//"#DEB887");//"#E6B426");//#FCECC0//COLOR_LTGREY);//COLOR_LTGREEN);//COLOR_TRACKLIST_LEVEL1);
+            hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL4);
         else if (tdbIsContainer(track->tdb))
             hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL3);
         else
@@ -835,10 +835,13 @@ else
     hPrintf("<p>Search for terms in track descriptions, groups, and names. "
             "If multiple terms are entered, only tracks with all terms "
             "will be part of the results.");
-    hPrintf("<BR><a href='#' onclick=\"retrieveHtml('../goldenPath/help/trackSearch.html'); return false;\">more help</a></p>\n");
-    // NOTE: By declaring a div and passing it to retrieveHtml, the div could be populated.
-    // However, this is not desired here because of the titles.
-    //hPrintf("<BR><a href='#' onclick=\"retrieveHtml('../goldenPath/help/trackSearch.html',$('#moreHelp'),true); return false;\">more help</a></p>\n");
-    //hPrintf("<div id='moreHelp'></div>\n");
+
+hPrintf("<BR><a target='_blank' href='../goldenPath/help/trackSearch.html'>more help</a></p>\n");
+// NOTE: Could use ajax and dynamically popup the html file in a box:
+//hPrintf("<BR><a href='#' onclick=\"retrieveHtml('../goldenPath/help/trackSearch.html'); return false;\">more help</a></p>\n");
+// NOTE: OR by declaring a div and passing it to retrieveHtml, the html file could be embedded in the div.
+// However, this is not desired here because of the titles.
+//hPrintf("<BR><a href='#' onclick=\"retrieveHtml('../goldenPath/help/trackSearch.html',$('#moreHelp'),true); return false;\">more help</a></p>\n");
+//hPrintf("<div id='moreHelp'></div>\n");
 webEndSectionTables();
 }

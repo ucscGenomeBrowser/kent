@@ -120,7 +120,7 @@ if (trackDbSetting(tdb, "dimensions"))
     if (browser == btIE || browser == btFF)
         upArrow = "&uarr;";
     // Note: the nested spans are so that javascript can determine position and selectively display the link when appropriate
-    printf("<span><span class='navUp' style='float:right; display:none'>&nbsp;&nbsp;<A HREF='#' TITLE='Return to top of page'>Top%s</A></span></span>\n",upArrow);
+    printf("<span class='navUp' style='float:right; display:none'>&nbsp;&nbsp;<A HREF='#' TITLE='Return to top of page'>Top%s</A></span>",upArrow);
     }
 }
 

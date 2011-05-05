@@ -69,22 +69,20 @@ jsIncludeFile("hgGateway.js", NULL);
 jsIncludeFile("utils.js", NULL);
 
 puts(
-"<CENTER>"
-"<TABLE BGCOLOR=\"#FFFEE8\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
-"<TR><TD>\n"
-"<CENTER><span style='font-size:small;'>\n"
+"<span style='text-align:center;'>"
+"<TABLE BGCOLOR='#FFFEE8' BORDERCOLOR='#CCCC99' BORDER=0 CELLPADDING=1>\n"
+"<TR><TD style='font-size:small; text-align:center;'>\n"
 "The UCSC Genome Browser was created by the \n"
 "<A HREF=\"../staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
 "<BR>"
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
-"</span></CENTER>\n"
-"</TD></TR></TABLE></CENTER>\n"
+"</TD></TR></TABLE></span>\n"
 );
 
 puts(
 "<FORM ACTION='../cgi-bin/hgTracks' NAME='mainForm' METHOD='GET' style='display:inline;'>\n"
-"<center>"
+"<span style='text-align:center;'>"
 "<table style='background-color:#FFFEF3; border: 1px solid #CCCC99;'>\n"
 "<tr><td>\n");
 
@@ -160,7 +158,7 @@ puts(
 "</td></tr>\n");
 
 puts(
-"<tr><td><center><BR>\n"
+"<tr><td><span style='text-align:center;'><BR>\n"
 "<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.");
 
 #define SURVEY 1
@@ -171,8 +169,8 @@ if (survey && differentWord(survey, "off"))
 
 puts(
 "<BR>\n"
-"</center>\n"
-"</td></tr><tr><td><center>\n"
+"</span>\n"
+"</td></tr><tr><td><span style='text-align:center;'>\n"
 );
 
 puts("<TABLE BORDER=\"0\">");
@@ -222,10 +220,10 @@ puts("</TD>");
 
 puts("</TR></TABLE>");
 
-puts("</center>\n"
+puts("</span>\n"
 "</td></tr></table>\n"
 );
-puts("</center>");
+puts("</span>");
 #ifdef NEW_JQUERY
 hPrintf("<input type='hidden' id='hgt.newJQuery' name='hgt.newJQuery' value='1'>\n");
 #endif

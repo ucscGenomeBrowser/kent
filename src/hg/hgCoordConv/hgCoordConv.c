@@ -1,5 +1,5 @@
 /**
-   cgi program to convert coordinates from one draft of the 
+   cgi program to convert coordinates from one draft of the
    genome to another. Cool place to test is: chr1:126168504-126599722
    from Dec to April, it was inverted. Looks to be inverted back in
    Aug.
@@ -36,7 +36,7 @@ int numTests = 0;               /* how many tests should we do */
 int hgTestCorrect = 0;          /* how many we called correct and were placed correctly */
 int hgTestWrong = 0;            /* how many we called correct and were placed incorrectly */
 
-/* these variables are used for links and if the browser is 
+/* these variables are used for links and if the browser is
    called by cgi */
 char *chrom = NULL;            /* which chromosom are we on */
 int chromStart = -1;           /* chromStart on chrom */
@@ -52,7 +52,7 @@ char *origGenome = NULL;      /* name of genome converting from */
 char *defaultPos = "chr22:17045228-17054909"; /* default position */
 char *origDb = NULL;          /* name of genome to use as from genome, optional */
 char *organism = "Human";     /* Only do human for now. */
-struct dyString *webWarning = NULL; /* set this string with warnings for user, 
+struct dyString *webWarning = NULL; /* set this string with warnings for user,
 				       displayed on results page */
 
 /* Null terminated list of CGI Variables we don't want to save
@@ -78,7 +78,7 @@ struct dbDb *db = NULL;
 int count = 0;
 for(db = dbList; db != NULL; db = db->next)
     {
-    
+
     /*  Make sure zoo Combo isn't included and that the species are zoo */
     if(strstrNoCase(db->name, "zoo") && !strstrNoCase(db->name,"combo"))
 	count++;
@@ -207,16 +207,16 @@ dyStringPrintf(warn, "%s", warning);
 slAddHead(&webWarning, warn);
 }
 
-void posAbort(char *position) 
+void posAbort(char *position)
 /** print error message about format of position input */
 {
 char buff[256];
-snprintf(buff, sizeof(buff), "Expecting position in the form chrN:10000-20000 got %s", 
+snprintf(buff, sizeof(buff), "Expecting position in the form chrN:10000-20000 got %s",
 	 (position != NULL ? position : ""));
 webAbort("Error:", buff );
 }
 
-void parsePosition(char *origPos, char **chr, int *s, int *e) 
+void parsePosition(char *origPos, char **chr, int *s, int *e)
 /** Parse the coordinate information from the user text */
 {
 /* trying to parse something that looks like chrN:10000-20000 */
@@ -224,7 +224,7 @@ char *pos = cloneString(origPos);
 char *tmp = NULL;
 char *tmp2 = NULL;
 tmp = strstr(pos, ":");
-if(tmp == NULL) 
+if(tmp == NULL)
     posAbort(origPos);
 *tmp='\0';
 tmp++;
@@ -250,10 +250,10 @@ char *ret = NULL;
 struct dyString *dy = newDyString(128);
 
 if (database != NULL)
-    dyStringPrintf(dy, "select description from dbDb where name = '%s' and (genome like '%s' or genome like 'Zoo')", 
+    dyStringPrintf(dy, "select description from dbDb where name = '%s' and (genome like '%s' or genome like 'Zoo')",
 		   database, org);
 else if (freeze != NULL)
-    dyStringPrintf(dy, "select name from dbDb where description = '%s' and (genome like '%s' or genome like 'Zoo')", 
+    dyStringPrintf(dy, "select name from dbDb where description = '%s' and (genome like '%s' or genome like 'Zoo')",
 		   freeze, org);
 else
     internalErr();
@@ -267,9 +267,9 @@ return ret;
 }
 
 
-void checkArguments() 
+void checkArguments()
 /** setup our parameters depending on whether we've been called as a
-    cgi script or from the command line */ 
+    cgi script or from the command line */
 {
 hgTest = cgiBoolean("hgTest");
 numTests = cgiOptionalInt("numTests",0);
@@ -292,24 +292,24 @@ if (position != NULL && position[0] != 0)
     parsePosition(cloneString(position), &chrom, &chromStart, &chromEnd);
     }
 if (chromStart > chromEnd)
-    { 
+    {
     webAbort("Error:", "Start of range is greater than end. %d > %d", chromStart, chromEnd);
     }
 
 /* convert the genomes requested to hgN format */
 if(origGenome != NULL)
     origGenome = ccFreezeDbConversion(NULL, origGenome, organism);
-if(newGenome != NULL) 
+if(newGenome != NULL)
     newGenome = ccFreezeDbConversion(NULL, newGenome, organism);
 
 /* make sure that we've got valid arguments */
-if((newGenome == NULL || origGenome == NULL || chrom == NULL || chromStart == -1 || chromEnd == -1) && (calledSelf)) 
+if((newGenome == NULL || origGenome == NULL || chrom == NULL || chromStart == -1 || chromEnd == -1) && (calledSelf))
     webAbort("Error:", "Missing some inputs.");
 
 if( origGenome != NULL && sameString(origGenome, newGenome))
     {
     struct dyString *warning = newDyString(1024);
-    dyStringPrintf(warning, "Did you really want to convert from %s to %s (the same genome)?", 
+    dyStringPrintf(warning, "Did you really want to convert from %s to %s (the same genome)?",
 		   ccFreezeDbConversion(origGenome, NULL, organism), \
 		   ccFreezeDbConversion(newGenome, NULL, organism));
     appendWarningMsg(warning->string);
@@ -325,26 +325,26 @@ sprintf(url, "%sposition=%s:%d-%d&db=%s", browserUrl, chrom, start, end, version
 return cloneString(url);
 }
 
-void outputBlatLink(char *link, char *db, struct dnaSeq *seq) 
+void outputBlatLink(char *link, char *db, struct dnaSeq *seq)
 /** output a link to hgBlat a certain sequence */
 {
 printf("<a href=\"%stype=DNA&db=%s&sort=query,score&output=hyperlink&userSeq=%s\">%s</a>",blatUrl, db,seq->dna, link);
 }
 
-void printWebWarnings() 
+void printWebWarnings()
 /** print out any warning messages that we may have
  * for the user */
 {
 struct dyString *warn = NULL;
 if(webWarning != NULL)
     {
-    printf("<font color=red>\n");
+    printf("<span style='color:red;'>\n");
     printf("<h3>Warning:</h3><ul>\n");
     for(warn = webWarning; warn != NULL; warn = warn->next)
 	{
 	printf("<li>%s</li>\n", warn->string);
 	}
-    printf("</ul></font>\n");
+    printf("</ul></span>\n");
     }
 }
 
@@ -369,7 +369,7 @@ void printSucessWarning() {
 printf("<p>Please be aware that this is merely our best guess of converting from one draft to another. Make sure to check with local landmarks and use common sense.\n");
 }
 
-void printTroubleShooting(struct coordConvRep *ccr) 
+void printTroubleShooting(struct coordConvRep *ccr)
 {
 /** print out the information used to try and convert */
 webNewSection("Alignment Details:");
@@ -382,32 +382,32 @@ printf("<i><font size=-1>Comments, Questions, Bug Reports: <a href=\"mailto:sugn
 }
 
 /* Mimic behaviour of doGoodReport do less stuff... */
-void doGoodReportZoo(FILE *dummy, struct coordConvRep *ccr) 
+void doGoodReportZoo(FILE *dummy, struct coordConvRep *ccr)
 /** output the result of a successful conversion */
 {
-cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d", 
+cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d",
 	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 printWebWarnings();
 printf("<p><b>Success:</b> %s\n", ccr->msg);
 
-printSucessWarningZoo(); 
+printSucessWarningZoo();
 
-printf("<ul><li><b>Original Coordinates:</b> %s %s:%d-%d  ", 
+printf("<ul><li><b>Original Coordinates:</b> %s %s:%d-%d  ",
        ccr->from->date ,ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 
-printf("<a href=\"%s\">[browser]</a></li>\n", 
+printf("<a href=\"%s\">[browser]</a></li>\n",
        makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd));
 
-printf("<li><b>Region of Original Coordinates Converted:</b> %s %s:%d-%d  ", 
+printf("<li><b>Region of Original Coordinates Converted:</b> %s %s:%d-%d  ",
        ccr->from->date ,ccr->from->chrom, ccr->from->next->chromStart, ccr->from->next->chromEnd);
 
-printf("<a href=\"%s\">[browser]</a></li>\n", 
+printf("<a href=\"%s\">[browser]</a></li>\n",
        makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->next->chromStart, ccr->from->next->chromEnd));
 
-printf("<li><b>New Coordinates:</b> %s %s:%d-%d  ", 
+printf("<li><b>New Coordinates:</b> %s %s:%d-%d  ",
        ccr->to->date ,ccr->to->chrom, ccr->to->chromStart, ccr->to->chromEnd);
 
-printf("<a href=\"%s\">[browser]</a></li></ul>\n", 
+printf("<a href=\"%s\">[browser]</a></li></ul>\n",
        makeBrowserUrl(ccr->to->version, ccr->to->chrom, ccr->to->chromStart, ccr->to->chromEnd));
 
 /* Trouble shooting isn't applicable in this case yet... ccr doesn't contain proper info.. */
@@ -416,25 +416,25 @@ printf("<a href=\"%s\">[browser]</a></li></ul>\n",
 cartWebEnd();
 }
 
-void doGoodReport(FILE *dummy, struct coordConvRep *ccr) 
+void doGoodReport(FILE *dummy, struct coordConvRep *ccr)
 /** output the result of a successful conversion */
 {
-cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d", 
+cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d",
 	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 printWebWarnings();
 printf("<p><b>Success:</b> %s\n", ccr->msg);
-if(sameString(ccr->midPsl->strand, "-")) 
+if(sameString(ccr->midPsl->strand, "-"))
     {
     printf(" It appears that the orientation of your coordinate range has been inverted.\n");
     }
-printSucessWarning(); 
-printf("<ul><li><b>Old Coordinates:</b> %s %s:%d-%d  ", 
+printSucessWarning();
+printf("<ul><li><b>Old Coordinates:</b> %s %s:%d-%d  ",
        ccr->from->date ,ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
-printf("<a href=\"%s\">[browser]</a></li>\n", 
+printf("<a href=\"%s\">[browser]</a></li>\n",
        makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd));
-printf("<li><b>New Coordinates:</b> %s %s:%d-%d  ", 
+printf("<li><b>New Coordinates:</b> %s %s:%d-%d  ",
        ccr->to->date ,ccr->to->chrom, ccr->to->chromStart, ccr->to->chromEnd);
-printf("<a href=\"%s\">[browser]</a></li></ul>\n", 
+printf("<a href=\"%s\">[browser]</a></li></ul>\n",
        makeBrowserUrl(ccr->to->version, ccr->to->chrom, ccr->to->chromStart, ccr->to->chromEnd));
 printTroubleShooting(ccr);
 cartWebEnd();
@@ -442,13 +442,13 @@ cartWebEnd();
 
 
 /* Same as below.. pretty much */
-void doBadReportZoo(FILE *dummy, struct coordConvRep *ccr) 
+void doBadReportZoo(FILE *dummy, struct coordConvRep *ccr)
 /** output the result of a flawed conversion */{
-cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d", 
+cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d",
 	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 printWebWarnings();
 printf("<p><b>Conversion Not Successful:</B> %s\n", ccr->msg);
-printf("<p><a href=\"%s\">View old Coordinates in %s browser.</a>\n", 
+printf("<p><a href=\"%s\">View old Coordinates in %s browser.</a>\n",
        makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd),
        ccr->from->date);
 
@@ -457,13 +457,13 @@ printf("<p><a href=\"%s\">View old Coordinates in %s browser.</a>\n",
 cartWebEnd();
 }
 
-void doBadReport(FILE *dummy, struct coordConvRep *ccr) 
+void doBadReport(FILE *dummy, struct coordConvRep *ccr)
 /** output the result of a flawed conversion */{
-cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d", 
+cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d",
 	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 printWebWarnings();
 printf("<p><b>Conversion Not Successful:</B> %s\n", ccr->msg);
-printf("<p><a href=\"%s\">View old Coordinates in %s browser.</a>\n", 
+printf("<p><a href=\"%s\">View old Coordinates in %s browser.</a>\n",
        makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd),
        ccr->from->date);
 printTroubleShooting(ccr);
@@ -472,10 +472,10 @@ cartWebEnd();
 
 
 /* Version for Zoo species */
-boolean convertCoordinatesZoo(FILE *goodOut, FILE *badOut, 
+boolean convertCoordinatesZoo(FILE *goodOut, FILE *badOut,
 			void (*goodResult)(FILE *out, struct coordConvRep *report),
-			void (*badResult)(FILE *out, struct coordConvRep *report)) 
-/* tries to convert coordinates and prints report 
+			void (*badResult)(FILE *out, struct coordConvRep *report))
+/* tries to convert coordinates and prints report
  depending on function pointers provided. In generial
  goodResult and badResult either generate html or tesxt
  if we are in cgi or testing mode respectively. */
@@ -503,7 +503,7 @@ int rowOffset;
 int conv_total=0;
 int iteration = 0;
 
-/* These two distances check how different the distance is between the converted and unconverted coordinates.  
+/* These two distances check how different the distance is between the converted and unconverted coordinates.
    In this case if the distance between a converted versus unconverted block is more than 10 times
    and greater than 10 000 bases, set up a warning... */
 
@@ -540,26 +540,26 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     /* Find the correponding track */
     struct psl *psl = pslLoad(row+rowOffset);
-    
+
     /* If first time through... */
     if(iteration==0)
 	{
 	/* Fill in stuff if first time through... */
 	ccr->to->chrom=cloneString(psl->qName);
 	ccr->to->chromStart=psl->qStart;
-	
+
 	/* Actual point of conversion of coordinates */
-	ccr->from->next->chromStart=psl->tStart;      
+	ccr->from->next->chromStart=psl->tStart;
 	ccr->good=TRUE;
-	
+
 	success=TRUE;
 	}
-    
+
     /* check for erroneous conversion if not first time through */
     /* Check for inversions, massive insertions... */
-    
-    /* Check for inversion (old start is "bigger" than new start)*/	
-    
+
+    /* Check for inversion (old start is "bigger" than new start)*/
+
     if(iteration > 0)
 	{
 	if((comp_start> psl->qStart))
@@ -569,19 +569,19 @@ while ((row = sqlNextRow(sr)) != NULL)
 		/* If not the second time through (first time inversion could be detected) */
 		if(iteration > 2)
 		    incoherent=TRUE;
-	    
+
 	    /* Reset variables used for measuring distance... */
-	    
+
 	    /* Set inversion state variable to true */
 	    inversion = TRUE;
-	    
-	    
+
+
 	    /* Check to see if there are too great distances ... */
-	    
+
 	    if( ((comp_start - psl->qEnd)>(10 * (psl->tStart - ref_end))) && ((comp_start - psl->qEnd) > 10000))
 		max_apart=TRUE;
 	    }
-	else 
+	else
 	    /* No inversion */
 	    {
 	    /* Check if previous state was an inversion (then flip flop)...*/
@@ -595,39 +595,39 @@ while ((row = sqlNextRow(sr)) != NULL)
 		}
 	    }
 	}
-    
+
     if(inversion)
 	{
 	if(iteration == 1)
 	    ccr->to->chromEnd=comp_end;
-	
+
 	ccr->to->chromStart=psl->qStart;
 	}
     else
 	ccr->to->chromEnd=psl->qEnd;
-    
+
     ccr->from->next->chromEnd=psl->tEnd;
-    
+
     if(max_apart || incoherent)
 	{
 	success=FALSE;
 	break;
 	}
-    
+
     if(psl->tStart > ref_end)
 	conv_total+=(psl->tEnd - psl->tStart);
     else
 	conv_total+=(psl->tEnd - ref_end);
-    
+
     ref_end=psl->tEnd;
     comp_end=psl->qEnd;
     ref_start=psl->tStart;
     comp_start=psl->qStart;
-        
+
     iteration++;
     pslFree(&psl);
     }
-		    
+
 if(!success)
     {
     /* Check to see if using version two of zoo.  Not integrated into the database at this stage... */
@@ -639,7 +639,7 @@ if(!success)
 	sprintf(success_message, "Coordinates couldn't be converted due to inconsistent inversions.");
     else
 	sprintf(success_message,"Couldn't find a corresponding region for the original genome to the new genome.");
-    
+
     ccr->msg=cloneString(success_message);
     badResult(badOut,ccr);
     }
@@ -652,15 +652,15 @@ else
 
 dbDbFree(&oldDbRec);
 dbDbFree(&newDbRec);
-coordConvRepFreeList(&ccr); 
+coordConvRepFreeList(&ccr);
 return success;
 }
 
 
-boolean convertCoordinates(FILE *goodOut, FILE *badOut, 
+boolean convertCoordinates(FILE *goodOut, FILE *badOut,
 			void (*goodResult)(FILE *out, struct coordConvRep *report),
-			void (*badResult)(FILE *out, struct coordConvRep *report)) 
-/* tries to convert coordinates and prints report 
+			void (*badResult)(FILE *out, struct coordConvRep *report))
+/* tries to convert coordinates and prints report
  depending on function pointers provided. In generial
  goodResult and badResult either generate html or tesxt
  if we are in cgi or testing mode respectively. */
@@ -669,14 +669,14 @@ struct blatServerTable *serve = NULL;
 struct coordConvRep *ccr = NULL;
 boolean success = FALSE;
 serve = hFindBlatServer(newGenome, FALSE);
-ccr = coordConvConvertPos(chrom, chromStart, chromEnd, origGenome, newGenome, 
+ccr = coordConvConvertPos(chrom, chromStart, chromEnd, origGenome, newGenome,
 	       	       serve->host, serve->port, serve->nibDir);
 if(ccr->good)
     {
     goodResult(goodOut, ccr);
     success = TRUE;
     }
-else 
+else
     {
     badResult(badOut, ccr);
     success = FALSE;
@@ -705,14 +705,14 @@ char *chooseDb(char *db1, char *db2)
 /* match up our possible databases with the date version i.e. Dec 17, 2000 */
 {
 int i;
-if(db1 != NULL) 
+if(db1 != NULL)
     {
     if(strstr(db1, "hg") == db1)
 	return ccFreezeDbConversion(db1, NULL, organism);
     else
 	return db1;
     }
-else 
+else
     {
     if(strstr(db2, "hg") == db2)
 	return ccFreezeDbConversion(db2, NULL, organism);
@@ -723,7 +723,7 @@ return NULL;
 }
 
 /* This is very similar to doForm except it's for Zoo species */
-void doFormZoo(struct cart *lCart) 
+void doFormZoo(struct cart *lCart)
 /** Print out the form for users */
 {
 char **genomeList = NULL;
@@ -732,7 +732,7 @@ char *dbChoice = NULL;
 int i = 0;
 cart = lCart;
 cartWebStart(cart, databases, "Converting Coordinates Between Species");
-puts( 
+puts(
      "<p>This page attempts to convert coordinates from one Zoo species' CFTR region\n"
      "to another. The mechanism for doing this is to use the blastz alignments which have been\n"
      "done between each Zoo species and use this to convert coordinates.  In general these should\n"
@@ -741,13 +741,13 @@ puts(
      "region in a different species.\n"
      );
 
-/* Get all Zoo species since we are using blastz static alignments */ 
+/* Get all Zoo species since we are using blastz static alignments */
 getIndexedGenomeDescriptionsZoo(&genomeList, &genomeCount,FALSE);
 
 /* choose whether to use the db supplied by cgi or our default */
 if(origDb != NULL && strstr(origDb, "zoo") == NULL)
     errAbort("Sorry, this mode of the program only works between zoo species.");
-dbChoice = chooseDb(origDb, genomeList[0]); 
+dbChoice = chooseDb(origDb, genomeList[0]);
 
 printf("<form action=\"../cgi-bin/hgCoordConv\" method=get>\n");
 printf("<br><br>\n");
@@ -758,7 +758,7 @@ printf("</td></tr></table></td>\n");
 printf("  <b><td><table><tr><td>Original Position:  </b>\n");
 
 /* if someone has passed in a position fill it in for them */
-if(position == NULL) 
+if(position == NULL)
     cgiMakeTextVar("position",defaultPos, 30);
 else
     cgiMakeTextVar("position",position, 30);
@@ -779,7 +779,7 @@ cartWebEnd();
 }
 
 
-void doForm(struct cart *lCart) 
+void doForm(struct cart *lCart)
 /** Print out the form for users */
 {
 char **genomeList = NULL;
@@ -788,7 +788,7 @@ char *dbChoice = NULL;
 int i = 0;
 cart = lCart;
 cartWebStart(cart, databases, "Converting Coordinates Between Drafts");
-puts( 
+puts(
      "<p>This page attempts to convert coordinates from one draft of the human genome\n"
      "to another. The mechanism for doing this is to cut out and align pieces from the\n"
      "old draft and align them to the new draft making sure that\n"
@@ -801,7 +801,7 @@ getIndexedGenomeDescriptions(&genomeList, &genomeCount, TRUE);
 /* choose whether to use the db supplied by cgi or our default */
 if(origDb != NULL && strstr(origDb, "hg") == NULL)
     errAbort("Sorry, currently the conversion program only works with human genomes.");
-dbChoice = chooseDb(origDb, genomeList[0]); 
+dbChoice = chooseDb(origDb, genomeList[0]);
 
 printf("<form action=\"../cgi-bin/hgCoordConv\" method=get>\n");
 printf("<br><br>\n");
@@ -812,7 +812,7 @@ printf("</td></tr></table></td>\n");
 printf("  <b><td><table><tr><td>Original Position:  </b>\n");
 
 /* if someone has passed in a position fill it in for them */
-if(position == NULL) 
+if(position == NULL)
     cgiMakeTextVar("position",defaultPos, 30);
 else
     cgiMakeTextVar("position",position, 30);
@@ -880,7 +880,7 @@ cc->version = cloneString(database);
 return cc;
 }
 
-void putTic() 
+void putTic()
 /* put a tic out for user feedback */
 {
 printf(".");
@@ -945,7 +945,7 @@ for(i=0;i<numToRun;i++)
 	else
 	    numBad++;
 	}
-    else 
+    else
 	{
 	tooManyNs++;
 	}
@@ -955,13 +955,13 @@ for(i=0;i<numToRun;i++)
 carefulClose(&good);
 carefulClose(&bad);
 printf("\tDone.\n");
-printf("Out of %d attempts got %d 'succesfully converted' and %d 'had problems', %d had too many N's\n", 
+printf("Out of %d attempts got %d 'succesfully converted' and %d 'had problems', %d had too many N's\n",
        (numGood + numBad), numGood, numBad, tooManyNs);
-printf("After checking got %d of %d correctly called and %d incorrectly called.\n", 
+printf("After checking got %d of %d correctly called and %d incorrectly called.\n",
        hgTestCorrect, hgTestCorrect+hgTestWrong, hgTestWrong);
 }
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
 if(argc == 1 && !cgiIsOnWeb())
     usage();
@@ -970,10 +970,10 @@ checkArguments();
 hSetDb(origGenome);
 if(hgTest)
     runSamples("hgCoordConv.test.good", "hgCoordConv.test.bad", origGenome, origGenome, numTests);
-else 
+else
     {
 /* do our thing  */
-    if(calledSelf)  
+    if(calledSelf)
         {
 	cartEmptyShell(doConvertCoordinates, hUserCookie(), excludeVars, NULL);
         }
@@ -984,7 +984,7 @@ else
 	cartEmptyShell(doForm, hUserCookie(), excludeVars, NULL);
     else
 	cartEmptyShell(doFormZoo, hUserCookie(), excludeVars, NULL);
-        }    
+        }
     }
 return 0;
 }

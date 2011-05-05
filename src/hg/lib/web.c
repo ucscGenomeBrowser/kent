@@ -580,6 +580,24 @@ puts("</font></TD>" "\n"
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
     {
+#ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
+    puts(        // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
+         "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
+         "<TR><TD COLSPAN=3>\n"
+         "      <!--outer table is for border purposes-->\n"
+       "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
+       "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
+       "      <TABLE BGCOLOR='#" HG_COL_HEADER "' BACKGROUND='../images/hr.gif' WIDTH='100%'><TR><TD class='windowSize'>\n"
+         "              <B style='font-size: medium;' id='sectTtl'>&nbsp;"
+         );
+    htmlTextOut(textOutBuf);
+
+    puts(
+         "</b></TD><TD></TD></TR></TABLE>\n"
+         "      <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>\n"
+         "      <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
+         );
+#else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     puts(
          "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
 	 "<TR><TD COLSPAN=3>	" "\n"
@@ -597,6 +615,7 @@ if(!skipSectionHeader)
 	 "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
 	 "	" "\n"
 	 );
+#endif///def TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
 
     };
 webPushErrHandlers();
@@ -696,6 +715,24 @@ va_start(args, format);
 
 webEndSection();
 puts("<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->");
+#ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
+puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
+    "<BR>\n\n"
+    "   <!--outer table is for border purposes-->\n"
+    "   <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
+    "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
+    "   <TABLE BGCOLOR='#" HG_COL_HEADER "' BACKGROUND='../images/hr.gif' WIDTH='100%'><TR><TD>\n"
+    "           <b style='font-size:medium;'>&nbsp; "
+);
+
+vprintf(format, args);
+
+puts(
+    "   </b></TD></TR></TABLE>\n"
+    "   <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>\n"
+    "   <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
+);
+#else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
 puts(
     "<BR>" "\n"
     "" "\n"
@@ -714,6 +751,7 @@ puts(
     "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
     "" "\n"
 );
+#endif///def TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
 
 va_end(args);
 }
@@ -1299,7 +1337,7 @@ webIncludeFile(hHelpFile(fileRoot));
 void webPrintLinkTableStart()
 /* Print link table start in our colors. */
 {
-printf("<TABLE><TR><TD BGCOLOR=#888888>\n");
+printf("<TABLE><TR><TD BGCOLOR='#888888'>\n");
 printf("<TABLE CELLSPACING=1 CELLPADDING=3><TR>\n");
 }
 
@@ -1314,13 +1352,13 @@ void webPrintLinkOutCellStart()
 /* Print link cell that goes out of our site. End with
  * webPrintLinkTableEnd. */
 {
-printf("<TD BGCOLOR=\"#"HG_COL_LOCAL_TABLE"\">");
+printf("<TD BGCOLOR='#" HG_COL_LOCAL_TABLE "'>");
 }
 
 void webPrintWideCellStart(int colSpan, char *bgColorRgb)
 /* Print link multi-column cell start in our colors. */
 {
-printf("<TD BGCOLOR=\"#%s\"", bgColorRgb);
+printf("<TD BGCOLOR='#%s'", bgColorRgb);
 if (colSpan > 1)
     printf(" COLSPAN=%d", colSpan);
 printf(">");
@@ -1335,7 +1373,7 @@ webPrintWideCellStart(1, HG_COL_TABLE);
 void webPrintLinkCellRightStart()
 /* Print right-justified cell start in our colors. */
 {
-printf("<TD BGCOLOR=\"#"HG_COL_TABLE"\" ALIGN=\"right\">");
+printf("<TD BGCOLOR='#"HG_COL_TABLE"' ALIGN='right'>");
 }
 
 void webPrintLinkCellEnd()
@@ -1372,19 +1410,19 @@ webPrintLinkCellEnd();
 void webPrintWideLabelCell(char *label, int colSpan)
 /* Print label cell over multiple columns in our colors. */
 {
-printf("<TD BGCOLOR=\"#"HG_COL_TABLE_LABEL"\"");
+printf("<TD BGCOLOR='#"HG_COL_TABLE_LABEL"'");
 if (colSpan > 1)
     printf(" COLSPAN=%d", colSpan);
-printf("><FONT COLOR=\"#FFFFFF\"><B>%s</B></FONT></TD>", label);
+printf("><span style='color:#FFFFFF;'><B>%s</B></spanT></TD>", label);
 }
 
 void webPrintWideCenteredLabelCell(char *label, int colSpan)
 /* Print label cell over multiple columns in our colors and centered. */
 {
-printf("<TD BGCOLOR=\"#"HG_COL_TABLE_LABEL"\"");
+printf("<TD BGCOLOR='#" HG_COL_TABLE_LABEL "'");
 if (colSpan > 1)
     printf(" COLSPAN=%d", colSpan);
-printf("><CENTER><FONT COLOR=\"#FFFFFF\"><B>%s</B></FONT></CENTER></TD>", label);
+printf("><CENTER><span style='color:#FFFFFF;'><B>%s</B></span></CENTER></TD>", label);
 }
 
 void webPrintLabelCell(char *label)

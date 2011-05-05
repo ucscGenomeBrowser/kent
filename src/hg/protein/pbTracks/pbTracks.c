@@ -99,7 +99,7 @@ int exStart[500], exEnd[500];
 int exCount;
 int aaStart[500], aaEnd[500];
 
-char kgProtMapTableName[20] = {"kgProtMap"}; 
+char kgProtMapTableName[20] = {"kgProtMap"};
 int blockSize[500], blockSizePositive[500];
 int blockStart[500], blockStartPositive[500];
 int blockEnd[500],   blockEndPositive[500];
@@ -163,7 +163,7 @@ char *spDisplayId;
 
 hPrintf("<br><font size=4>");
 hPrintf("%s protein: ", organism);
-hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" TARGET=_blank><B>%s</B></A>\n", 
+hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" TARGET=_blank><B>%s</B></A>\n",
 	proteinID, proteinID);
 
 /* show SWISS-PROT display ID if it is different than the accession ID */
@@ -192,9 +192,9 @@ if (protSeq == NULL)
     }
 protSeqLen = strlen(protSeq);
 
-iypos = 15; 
+iypos = 15;
 doTracks(proteinID, mrnaID, protSeq, &iypos, psOutput);
-if (!hTableExists(database, "pbStamp")) goto histDone; 
+if (!hTableExists(database, "pbStamp")) goto histDone;
 
 pbScale = 3;
 pixWidth = 765;
@@ -267,7 +267,7 @@ conn = sqlConnect(UNIPROT_DB_NAME);
 domainsPrint(conn, proteinID);
 
 hPrintf("<P>");
-doPathwayLinks(protDisplayID, mrnaID); 
+doPathwayLinks(protDisplayID, mrnaID);
 
 printFASTA(proteinID, protSeq);
 }
@@ -287,7 +287,7 @@ cartSaveSession(cart);
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", wrapWhiteFont("Home"));
-hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>",
+hPrintf("<TD style='text-align:center; color:#FFFFFF; font-size:medium;'>%s</TD>",
         "UCSC Proteome Browser");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbTracks?%s=%u&pbt.psOutput=on\">%s</A></TD>\n",
         cartSessionVarName(), cartSessionId(cart), wrapWhiteFont("PDF/PS"));
@@ -322,7 +322,7 @@ doTrackForm(psTn.forCgi, psTn2.forCgi);
 printf("<A HREF=\"%s\">Click here to download</A> "
        "the current protein tracks graphic in PostScript.  ", psTn.forCgi);
 pdfFile = convertEpsToPdf(psTn.forCgi);
-if(pdfFile != NULL) 
+if(pdfFile != NULL)
     {
     printf("<BR><A HREF=\"%s\">Click here to download</A> "
 	   "the current protein tracks graphic in PDF", pdfFile);
@@ -333,7 +333,7 @@ else
 printf("<BR><BR><A HREF=\"%s\">Click here to download</A> "
        "the current protein histograms graphic in PostScript.  ", psTn2.forCgi);
 pdfFile = convertEpsToPdf(psTn2.forCgi);
-if(pdfFile != NULL) 
+if(pdfFile != NULL)
     {
     printf("<BR><A HREF=\"%s\">Click here to download</A> "
 	   "the current protein histograms graphic in PDF", pdfFile);
@@ -360,14 +360,14 @@ cart = theCart;
 /* Uncomment this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track is more than 4k */
 /*
-{ struct dyString *state = cgiUrlString(); 
+{ struct dyString *state = cgiUrlString();
   hPrintf("State: %s\n", state->string); }
 */
 
 getDbAndGenome(cart, &database, &organism, oldVars);
 
 /* if kgProtMap2 table exists, this means we are doing KG III */
-if (hTableExists(database, "kgProtMap2")) 
+if (hTableExists(database, "kgProtMap2"))
     {
     kgVersion = KG_III;
     strcpy(kgProtMapTableName, "kgProtMap2");
@@ -425,14 +425,14 @@ if (spFindAcc(spConn, proteinID) == NULL)
     answer = sqlGetField(protDbName, "spXref3", "biodatabaseID", cond_str);
     if (sameWord(answer, "3"))
         {
-        hUserAbort("The corresponding protein %s is no longer available from UniProtKB.", 
+        hUserAbort("The corresponding protein %s is no longer available from UniProtKB.",
 		 proteinID);
         }
     else
         {
         hUserAbort("%s seems not to be a valid protein ID.", proteinID);
         }
-    } 
+    }
 else
    {
    if (!sameWord(proteinID, spFindAcc(spConn, proteinID)))
@@ -465,7 +465,7 @@ if (positionStr != NULL)
     chp = strstr(positionStr, ":");
     *chp = '\0';
     prevGBChrom = cloneString(positionStr);
-    
+
     chp1 = chp + 1;
     chp9 = strstr(chp1, "-");
     *chp9 = '\0';
@@ -497,14 +497,14 @@ hPrintf("Please try again later.\n");
 
 /* Other than submit and Submit all these vars should start with pbt.
  * to avoid weeding things out of other program's namespaces.
- * Because the browser is a central program, most of it's cart 
+ * Because the browser is a central program, most of it's cart
  * variables are not pbt. qualified.  It's a good idea if other
  * program's unique variables be qualified with a prefix though. */
 char *excludeVars[] = { "submit", "Submit", "pbt.reset",
 			"pbt.in1", "pbt.in2", "pbt.in3", "pbt.inBase",
 			"pbt.out1", "pbt.out2", "pbt.out3",
-			"pbt.left1", "pbt.left2", "pbt.left3", 
-			"pbt.right1", "pbt.right2", "pbt.right3", 
+			"pbt.left1", "pbt.left2", "pbt.left3",
+			"pbt.right1", "pbt.right2", "pbt.right3",
 			"pbt.dinkLL", "pbt.dinkLR", "pbt.dinkRL", "pbt.dinkRR",
 			"pbt.tui", "pbt.hideAll", "pbt.psOutput", "hideControls",
 			NULL };

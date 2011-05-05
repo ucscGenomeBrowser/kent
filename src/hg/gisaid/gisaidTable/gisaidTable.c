@@ -23,7 +23,7 @@
 
 static char const rcsid[] = "$Id: gisaidTable.c,v 1.8 2009/06/29 17:14:37 fanhsu Exp $";
 
-char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
+char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL };
 /* The excludeVars are not saved to the cart. (We also exclude
  * any variables that start "near.do.") */
 
@@ -111,7 +111,7 @@ void makeTitle(char *title, char *helpName)
 {
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
-hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>", title);
+hPrintf("<TD style='text-align:center; color:#FFFFFF; font-size:medium;'>%s</TD>", title);
 hPrintf("<TD ALIGN=Right>%s", wrapWhiteFont(""));
 hPrintf("</TR></TABLE>");
 }
@@ -324,39 +324,39 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 
 /* Home */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='/index.html' class='topbar' style='color:#FFFFFF;'>Home</A></TD>");
 //, orgEnc);
 
 /* Sample View */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidSample\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Sample View</FONT>");
+hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/gisaidSample' class='topbar' style='color:#FFFFFF;'>Sample View</A></TD>");
 
 /* Sequence View */
 if (hIsGisaidServer())
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>", database);
+    hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgTracks?db=%s' class='topbar' style='color:#FFFFFF;'>Sequence View</A></TD>", database);
     }
 else
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View Gateway</FONT></A></TD>", database);
+    hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgGateway?db=%s' class='topbar' style='color:#FFFFFF;'>Sequence View Gateway</A></TD>", database);
     }
 
 /* select Subjects */
 hPrintf(
-        "<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable?gisaidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">%s</FONT></A></TD>",
+        "<TD ALIGN=CENTER><A HREF='../cgi-bin/gisaidTable?gisaidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks' class='topbar' style='color:#FFFFFF;'>%s</A></TD>",
 	    '%', '%', "Select Subjects");
 
 /* Blat */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgBlat?command=start' class='topbar' style='color:#FFFFFF;'>Blat</A></TD>");
 
 /* Help */
 
 if (cartVarExists(cart, advFilterVarName))
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gisaidTutorial.html#SelectSubject\" TARGET=_blank class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Help</FONT></A></TD>");
+    hPrintf("<TD ALIGN=CENTER><A HREF='/goldenPath/help/gisaidTutorial.html#SelectSubject' TARGET=_blank class='topbar' style='color:#FFFFFF;'>Help</A></TD>");
     }
 else
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gisaidTutorial.html#TableView\" TARGET=_blank class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Help</FONT></A></TD>");
+    hPrintf("<TD ALIGN=CENTER><A HREF='/goldenPath/help/gisaidTutorial.html#TableView' TARGET=_blank class='topbar' style='color:#FFFFFF;'>Help</A></TD>");
     }
 
 hPuts("</TR></TABLE>");
@@ -523,11 +523,11 @@ col->longLabel = mustFindInRaHash(fileName, settings, "longLabel");
 col->priority = atof(mustFindInRaHash(fileName, settings, "priority"));
 col->on = col->defaultOn =
         sameString(mustFindInRaHash(fileName, settings, "visibility"), "on");
-col->filterOn = FALSE; 
+col->filterOn = FALSE;
 col->type = mustFindInRaHash(fileName, settings, "type");
 col->query = hashFindVal(settings, "query");
 col->filterDropDown = sameOk(hashFindVal(settings, "filterDropDown"), "on");
-col->colNo = -1;  
+col->colNo = -1;
 }
 
 
@@ -574,7 +574,7 @@ char *plusMinus = "%2B";  /* "+" cgi encoded */
 
 if (sameString(orderOn+1,col->name)&&orderOn[0]=='+')
     plusMinus = "-";
-hPrintf("<A href=\"gisaidTable?org=%s&db=%s&%s&%s=%s%s\" >", 
+hPrintf("<A href=\"gisaidTable?org=%s&db=%s&%s&%s=%s%s\" >",
     genome, database, cartSidUrlString(cart), orderVarName, plusMinus, col->name);
 }
 
@@ -600,10 +600,10 @@ else
     int labelLen = strlen(col->shortLabel);
     int diff = colWidth - labelLen;
     if (diff < 0) diff = 0;
-    
+
     colSortLink(col);
     hPrintf("%s</A>", col->shortLabel);
-    
+
     hPrintSpaces(diff);
     }
 hPrintf("</PRE></B></TH>");
@@ -744,7 +744,7 @@ return cnt;
 }
 
 struct hash *keyFileHash(struct column *col)
-/* Make up a hash from key file for this column. 
+/* Make up a hash from key file for this column.
  * Return NULL if no key file. */
 {
 char *fileName = keyFileName(col);
@@ -753,7 +753,7 @@ if (fileName == NULL)
 return upcHashWordsInFile(fileName, 16);
 }
 
-struct subjInfo *intAdvFilter(struct column *col, 
+struct subjInfo *intAdvFilter(struct column *col,
 	struct sqlConnection *conn, struct subjInfo *list)
 /* Do advanced filter on string in main table. */
 {
@@ -782,7 +782,7 @@ return list;
 }
 
 
-struct subjInfo *doubleAdvFilter(struct column *col, 
+struct subjInfo *doubleAdvFilter(struct column *col,
 	struct sqlConnection *conn, struct subjInfo *list)
 /* Do advanced filter on string in main table. */
 {
@@ -814,7 +814,7 @@ return list;
 
 
 
-struct subjInfo *stringAdvFilter(struct column *col, 
+struct subjInfo *stringAdvFilter(struct column *col,
 	struct sqlConnection *conn, struct subjInfo *list)
 /* Do advanced filter on string in main table. */
 {
@@ -926,11 +926,11 @@ char query[256];
 char *answer;
 safef(query, sizeof(query), col->query, si->fields[0]);
 answer = sqlQuickString(conn, query);
-if (answer == NULL) 
+if (answer == NULL)
     {
     return(cloneString("-1"));
     }
-else 
+else
     {
     return answer;
     }
@@ -1070,7 +1070,7 @@ for (el = list; el; el = el->next)
     {
     hPrintf("<TR><TD>%s</TD></TR>\n", el->name);
     }
-    
+
 hPrintf("</TABLE>\n");
 
 slFreeList(&list);
@@ -1112,7 +1112,7 @@ for (el = list; el; el = el->next)
 	hPrintf(" SELECTED");
     hPrintf(">%s\n", el->name);
     }
-    
+
 hPrintf("</SELECT>\n");
 
 slFreeList(&list);
@@ -1179,7 +1179,7 @@ while (*parameters != 0)
     c = (*parameters++);
     if (c != '"')
 	errAbort("remap syntax error in %s",col->name);
-   
+
     while(TRUE)
 	{
 	c = *parameters++;
@@ -1189,8 +1189,8 @@ while (*parameters != 0)
 	if (word >= wEnd)
 	    errAbort("remap syntax error in %s",col->name);
 	}
-    *word = 0;	    
-    
+    *word = 0;
+
     c = (*parameters++);
     if (c != '=')
 	errAbort("remap syntax error in %s",col->name);
@@ -1206,7 +1206,7 @@ while (*parameters != 0)
 	if (value >= vEnd)
 	    errAbort("remap syntax error in %s",col->name);
 	}
-    *value = 0;	    
+    *value = 0;
     word = wordBuf;
     value = valueBuf;
     hashAdd(col->remap, word, cloneString(value));
@@ -1221,7 +1221,7 @@ void setupColumnType(struct column *col)
 {
 char *dupe = cloneString(col->type);
 char *s = dupe;
-char *type = nextWord(&s); 
+char *type = nextWord(&s);
 columnDefaultMethods(col);
 if (type == NULL)
     warn("Missing type value for column %s", col->name);
@@ -1390,24 +1390,24 @@ char **row;
 char query[255];
 int cnt;
 char cmd[512];
-if (!outName) 
+if (!outName)
     {
     trashDirFile(&tn, "ct", "gisaidSubj", ".list");
     outName = tn.forCgi;
     }
 
-if (!outName2) 
+if (!outName2)
     {
     trashDirFile(&tn2, "ct", "gisaidSeq", ".list");
     outName2 = tn2.forCgi;
     }
 
-if (!outName3) 
+if (!outName3)
     {
     trashDirFile(&tn3, "ct", "gisaidAaSeq", ".list");
     outName3 = tn3.forCgi;
     }
-    
+
 trashDirFile(&tnTemp, "ct", "gisaidListTemp", ".list");
 outNameTemp = tnTemp.forCgi;
 
@@ -1420,16 +1420,16 @@ subjList = subjListIn;
 while (subjList)
     {
     fprintf(outF, "%s\n", subjList->fields[1]);
-    
-    safef(query, sizeof(query), 
+
+    safef(query, sizeof(query),
 	  "select distinct seqId from h1n1SeqXref where islId='%s'",
 	  subjList->fields[0]);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     	{
-	/* Remove "ss." from the front of the DNA sequence ID, 
+	/* Remove "ss." from the front of the DNA sequence ID,
 	   so that they could be used both for DNA and protein MSA maf display */
-	
+
 	fprintf(outF2, "%s\t%s\n", row[0], subjList->fields[1]);
 	cnt++;
 	}
@@ -1442,17 +1442,17 @@ subjList = subjListIn;
 while (subjList)
     {
     fprintf(outF, "%s\n", subjList->fields[0]);
-    
-    safef(query, sizeof(query), 
+
+    safef(query, sizeof(query),
 	  "select distinct seqId, geneSymbol from h1n1SeqXref where islId='%s'",
 	  subjList->fields[0]);
 
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     	{
-	/* Remove "ss." from the front of the DNA sequence ID, 
+	/* Remove "ss." from the front of the DNA sequence ID,
 	   so that they could be used both for DNA and protein MSA maf display */
-	
+
 	fprintf(outF3, "%s_%s\t%s\n", row[0], row[1], subjList->fields[1]);
 	cnt++;
 	}
@@ -1561,9 +1561,9 @@ struct column *ord = curOrder(ordList);
 
 if (ord == NULL)  /* no columns are visible, go to back to configure page */
     {
-    doConfigure(conn, colList); 
+    doConfigure(conn, colList);
     return;
-    };  
+    };
 
 
 if (cartVarExists(cart, getTextVarName))
@@ -1598,7 +1598,7 @@ else
 
 
 void doMiddle(struct cart *theCart)
-/* Write the middle parts of the HTML page. 
+/* Write the middle parts of the HTML page.
  * This routine sets up some globals and then
  * dispatches to the appropriate page-maker. */
 {
@@ -1625,7 +1625,7 @@ else if (cartVarExists(cart, advFilterVarName))
     doAdvFilter(conn, colList);
 else if (cartVarExists(cart, advFilterClearVarName))
     doAdvFilterClear(conn, colList);
-   
+
 else if ((col = advFilterKeyPastePressed(colList)) != NULL)
     doAdvFilterKeyPaste(conn, colList, col);
 else if ((col = advFilterKeyPastedPressed(colList)) != NULL)
@@ -1635,7 +1635,7 @@ else if ((col = advFilterKeyUploadPressed(colList)) != NULL)
 else if ((col = advFilterKeyClearPressed(colList)) != NULL)
     doAdvFilterKeyClear(conn, colList, col);
 
-else 
+else
     displayData(conn, colList);
 
 cartRemovePrefix(cart, "gisaidTable.do.");
@@ -1673,14 +1673,14 @@ database = strdup("h1n1");
 orderOn = cartUsualString(cart, orderVarName, "+subjId");
 
 displayCountString = cartUsualString(cart, countVarName, "50");
-if (sameString(displayCountString, "all")) 
+if (sameString(displayCountString, "all"))
     displayCount = BIGNUM;
 else
     displayCount = atoi(displayCountString);
 colList = getColumns(conn);
 
-if (cgiVarExists("submit_filter"))  
-    {  
+if (cgiVarExists("submit_filter"))
+    {
     struct dyString *head = dyStringNew(1024);
     boolean redir = cgiVarExists(redirectName);
     struct subjInfo *subjList = NULL;
@@ -1692,7 +1692,7 @@ if (cgiVarExists("submit_filter"))
 	{
 	if (subjList && redir)
 	    {
-	    dyStringPrintf(head,	
+	    dyStringPrintf(head,
 		"<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=/cgi-bin/%s\">"
 		"<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">"
 		"<META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">"
