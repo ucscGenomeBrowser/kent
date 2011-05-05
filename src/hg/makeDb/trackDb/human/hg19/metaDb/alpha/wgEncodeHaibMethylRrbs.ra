@@ -3609,7 +3609,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsHek293StanfordSitesRep1.bedRrbs.gz
-geoSampleAccession GSM683825
 grant Myers
 lab HudsonAlpha
 labExpId SL759
@@ -3631,7 +3630,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsHek293StanfordSitesRep2.bedRrbs.gz
-geoSampleAccession GSM683769
 grant Myers
 lab HudsonAlpha
 labExpId SL1901
