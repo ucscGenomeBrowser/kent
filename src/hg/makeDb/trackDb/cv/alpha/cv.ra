@@ -1157,6 +1157,23 @@ sex F
 tier 3
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
 
+term Dnd41
+tag Dnd41
+type Cell Line
+tier 3
+organism human
+description Human T cell leukemia with notch mutation
+lineage 
+karyotype 
+sex M
+tissue Blood
+vendorName DSMZ 
+vendorId N/A
+orderUrl http://www.dsmz.de/index.htm
+termId BTO:0002104
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002104
+protocol Bernstein:Dnd41_Bernstein_protocol.pdf
+
 term ECC-1
 tag ECC1
 type Cell Line
@@ -1173,6 +1190,23 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol HudsonAlpha:ECC1_Myers_protocol.pdf
+
+term FetalPBDE
+tag FetalPBDE
+type Cell Line
+tier 3
+organism human
+description Peripheral blood-derived erythroblasts from 16-19 week human fetal liver
+lineage 
+karyotype normal
+sex U
+tissue Liver
+vendorName Bouhassira Lab
+vendorId N/A
+orderUrl http://www.einstein.yu.edu/cellbiology/Lab/Bouhassira/default.htm
+termId BTO:0000553
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000553
+protocol Farnham:FetalPBDE_Farnham_protocol.pdf
 
 term Fibrobl
 tag Fibrobl
@@ -2668,6 +2702,23 @@ color 0,119,158
 sex M
 tier 3
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:LNCaP_Crawford_protocol.pdf Yale_TFBS(Farnham):LNCaP_protocol.pdf UW_Stam:LNCaP_Stam_protocol.pdf
+
+term Loucy
+tag Loucy
+type Cell Line
+tier 3
+organism human
+description Human T cell leukemia
+lineage 
+karyotype 
+sex F
+tissue Blood
+vendorName DSMZ
+vendorId N/A
+orderUrl http://www.dsmz.de/index.htm
+termId BTO:0002104
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002104
+protocol Bernstein:Loucy_Bernstein_protocol.pdf
 
 term MCF-7
 tag MCF7
@@ -7908,6 +7959,11 @@ type treatment
 term DMSO_4hr
 tag DMSO4hr
 description 4 hr with DMSO (Myers)
+type treatment
+
+term DIFF_7d
+tag DIFF7d 
+description PROVISIONAL Grown for 7 days in differentiation medium (Wold)
 type treatment
 
 term Estradiol_10nM
