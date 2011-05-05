@@ -27,23 +27,77 @@ Clustering by numeric value:
   {12.000}
  )
 )
-Clustering by string length:
-(there i:6:
- (there it w:4:
-  (there it was:1:
-   {there it is},
-   {there it was}
+Clustering by haplotype similarity:
+(NNNNN:2.250000:
+ (NTANN:1.000000:
+  (NTATN:0.500000:
+   (CTATA:0.000000:
+    (CTATA:0.000000:
+     {CTATA},
+     {CTATA}
+    ),
+    (CTATA:0.000000:
+     {CTATA},
+     (CTATA:0.000000:
+      {CTATA},
+      {CTATA}
+     )
+    )
+   ),
+   (GTATG:0.000000:
+    (GTATG:0.000000:
+     {GTATG},
+     {GTATG}
+    ),
+    (GTATG:0.000000:
+     {GTATG},
+     (GTATG:0.000000:
+      {GTATG},
+      {GTATG}
+     )
+    )
+   )
   ),
-  {is there}
+  (CTAGG:0.000000:
+   (CTAGG:0.000000:
+    {CTAGG},
+    {CTAGG}
+   ),
+   (CTAGG:0.000000:
+    {CTAGG},
+    (CTAGG:0.000000:
+     {CTAGG},
+     {CTAGG}
+    )
+   )
+  )
  ),
- (is i:2:
-  (is it:0:
-   {is it},
-   {three}
+ (GCGTN:0.250000:
+  (GCGTA:0.000000:
+   (GCGTA:0.000000:
+    {GCGTA},
+    {GCGTA}
+   ),
+   (GCGTA:0.000000:
+    {GCGTA},
+    (GCGTA:0.000000:
+     {GCGTA},
+     {GCGTA}
+    )
+   )
   ),
-  (one:0:
-   {one},
-   {two}
+  (GCGTC:0.000000:
+   (GCGTC:0.000000:
+    {GCGTC},
+    {GCGTC}
+   ),
+   (GCGTC:0.000000:
+    {GCGTC},
+    (GCGTC:0.000000:
+     {GCGTC},
+     {GCGTC}
+    )
+   )
   )
  )
 )

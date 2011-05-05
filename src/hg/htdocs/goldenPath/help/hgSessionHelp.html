@@ -638,18 +638,13 @@ not be updated to reflect any edits.
    <UL>
     <LI><A HREF="hgTracksHelp.html#CustomTracks">Custom Tracks</A></LI>
     <LI><A HREF="hgTracksHelp.html#GenomeGraphs">Genome Graph</A> tracks</LI>
-    <LI><A HREF="hgTracksHelp.html#BLATAlign">BLAT</A> results</LI>
    </UL> 
    Before you create and save your session, be sure to upload your 
    <A HREF="../../cgi-bin/hgCustom" target="_blank">Custom Track</A> or 
-   <A HREF="../../cgi-bin/hgGenome" target="_blank">Genome Graph</A> track or
-   <A HREF="../../cgi-bin/hgBlat" target="_blank">BLAT</A> results.
-
-   Please note that these user-generated tracks have a lifespan of 48 hours.
-   If you open a session that includes one or more expired 
-   user-generated tracks, the Genome Browser will display all
-   aspects of the session except the expired tracks.</P>
-
+   <A HREF="../../cgi-bin/hgGenome" target="_blank">Genome Graph</A> track.
+   These user-generated tracks will be kept for <B>four months</B> from the
+   time the session was last accessed.  BLAT results always have a lifespan of
+   48 hours, even if they are part of a session.</P>
   </TD><TD WIDTH=15></TD></TR>
   </TABLE>
  <BR></TD></TR>
@@ -722,9 +717,9 @@ not be updated to reflect any edits.
    at least once every four months, it will persist on the server until you 
    <A HREF="#Delete">delete</A> it.</P>
 
-   <P>Note that if your session contains <A HREF="#CTs">user-generated 
-   tracks</A> that expire, those tracks will expire at their normal rate, 
-   and your session will persist without those tracks.</P>
+   <P>Note that it is possible for <A HREF="#CTs">user-generated 
+   tracks</A> contained within sessions to expire before the session does.
+   If that happens, your session will persist without those tracks.</P>
 
   </TD><TD WIDTH=15></TD></TR>
   </TABLE>

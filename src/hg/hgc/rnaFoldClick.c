@@ -317,6 +317,38 @@ for (i = 0; i < mcCount; i++)
 slReverse(&maf->components);
 }
 
+void htmlPrintSecStrDrawing(FILE *f, struct rnaSecStr *item) 
+{
+char fileName[512];
+struct dnaSeq *seq;
+seq = hChromSeq(database, item->chrom, item->chromStart, item->chromEnd);
+touppers(seq->dna);
+if (item->strand[0] == '-')
+    reverseComplement(seq->dna, seq->size);
+memSwapChar(seq->dna, seq->size, 'T', 'U');
+
+safef(fileName, sizeof(fileName), "/gbdb/%s/evoFold/%s/%s.png", 
+       database, item->chrom, item->name);
+if (fileExists(fileName))
+    {
+    fprintf(f, "<center><h2> RNA secondary structure drawing </h2></center>");
+    fprintf(f,"<B>");
+
+    // Could consider to serve up all EvoFold .png files from our public server in the future
+    // fprintf(f,"<IMG SRC=\"http://genome.ucsc.edu/evoFold/%s/%s/%s.png\" border = '2' ALT=\"ERROR: VARA plotting failed.\"</B><BR>", 
+    fprintf(f,"<IMG SRC=\"../evoFold/%s/%s/%s.png\" border = '2' ALT=\"ERROR: VARA plotting failed.\"</B><BR>", 
+            database, item->chrom, item->name);
+    fprintf(f,"</B>");
+    }    
+
+freeMem(seq);
+printf("<p>The UCSC Genome Browser mirror site at the Molecular Diagnostic Laboratory (MDL) at Aarhus University Hospital Skejby in Denmark offers a VARNA Java applet to view the above RNA structure with more options, ");
+printf("<A HREF=\"");
+printf("http://moma.ki.au.dk/genome-mirror/cgi-bin/hgc?db=%s&o=%d&t=%d&g=evofold&i=%s",
+database, item->chromStart, item->chromEnd, cgiEncode(item->name));
+printf("\" TARGET=_blank>%s</A></p>", "click here to go to moma.ki.au.dk/genome-mirror.");
+}
+
 void doRnaSecStr(struct trackDb *tdb, char *itemName)
 /* Handle click on rnaSecStr type elements. */
 {
@@ -358,6 +390,14 @@ mafAndFoldHeader(stdout);
 htmlPrintMafAndFold(stdout, maf, item->secStr, item->conf, 100);
 
 mafAndFoldLegend(stdout);
+
+/* Draw structure for evoFold */
+if (sameWord(tdb->table, "evofold"))
+    {
+    htmlHorizontalLine();
+    htmlPrintSecStrDrawing(stdout, item);
+    }
+
 /* track specific html */
 printTrackHtml(tdb);
 

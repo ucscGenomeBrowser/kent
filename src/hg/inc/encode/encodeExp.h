@@ -132,6 +132,9 @@ void encodeExpTableDrop(struct sqlConnection *conn, char *tableName);
 void encodeExpTableRename(struct sqlConnection *conn, char *tableName, char *newTableName);
 /* Rename table and history table, updating triggers to match */
 
+void encodeExpTableCopy(struct sqlConnection *conn, char *tableName, char *newTableName);
+/* Copy table and history table, updating triggers */
+
 struct encodeExp *encodeExpLoadAllFromTable(struct sqlConnection *conn, char *table);
 /* Load all encodeExp in table */
 
@@ -151,6 +154,9 @@ struct hash *encodeExpToRaFile(struct encodeExp *exp, FILE *f);
 struct hash *encodeExpToRa(struct encodeExp *exp);
 /* Create a Ra hash from an encodeExp */
 
+boolean encodeExpSame(struct encodeExp *exp, struct encodeExp *exp2);
+/* Return TRUE if two experiments are the same */
+
 struct encodeExp *encodeExpGetByIdFromTable(struct sqlConnection *conn, char *tableName, int id);
 /* Return experiment specified by id from named table */
 
@@ -160,6 +166,12 @@ struct encodeExp *encodeExpGetById(struct sqlConnection *conn, int id);
 void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp *exp);
 /* Add encodeExp as a new row to the table specified by tableName.
    Update accession using index assigned with autoincrement */
+
+void encodeExpRemove(struct sqlConnection *conn, char *tableName, struct encodeExp *exp, char *why);
+/* Delete row containing experiment from encodeExp.
+ * WARNING:  This is a management function, not for regular use.  Accession must
+ * not be present.  In general, experiments should be reviewed before adding to table
+ * rather than added and removed if problematic. */
 
 char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id);
 /* Add accession field to an existing "temp" experiment.  This is done

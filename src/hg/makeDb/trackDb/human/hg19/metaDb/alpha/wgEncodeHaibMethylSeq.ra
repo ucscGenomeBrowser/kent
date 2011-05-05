@@ -20,7 +20,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1875
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqBg02esHpaRegionsRep1
@@ -40,7 +39,6 @@ replicate 1
 restrictionEnzyme hpa
 subId 1875
 tableName wgEncodeHaibMethylSeqBg02esHpaRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqBg02esRegionsRep1
@@ -55,12 +53,9 @@ fileName wgEncodeHaibMethylSeqBg02esRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1875
 tableName wgEncodeHaibMethylSeqBg02esRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqBg02esebdHpaAlnRep1
@@ -80,7 +75,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1875
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqBg02esebdHpaAlnRep2
@@ -100,7 +94,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme hpa
 subId 1875
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep1
@@ -120,7 +113,6 @@ replicate 1
 restrictionEnzyme hpa
 subId 1875
 tableName wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep2
@@ -140,7 +132,6 @@ replicate 2
 restrictionEnzyme hpa
 subId 1875
 tableName wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep2
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqBg02esebdRegionsRep1
@@ -155,12 +146,9 @@ fileName wgEncodeHaibMethylSeqBg02esebdRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1875
 tableName wgEncodeHaibMethylSeqBg02esebdRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqBg02esebdRegionsRep2
@@ -175,12 +163,9 @@ fileName wgEncodeHaibMethylSeqBg02esebdRegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 2
-restrictionEnzyme None
 subId 1875
 tableName wgEncodeHaibMethylSeqBg02esebdRegionsRep2
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqGm12878HpaAlnRep1
@@ -200,7 +185,6 @@ protocol PCR1x
 replicate 1
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqGm12878HpaAlnRep2
@@ -220,7 +204,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqGm12878HpaRawDataRep1
@@ -238,7 +221,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 restrictionEnzyme hpa
-softwareVersion myerslab
 subId 387
 view RawData
 
@@ -257,7 +239,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 restrictionEnzyme hpa
-softwareVersion myerslab
 subId 387
 view RawData
 
@@ -278,7 +259,6 @@ protocol PCR1x
 replicate 1
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqGm12878MspAlnRep2
@@ -298,7 +278,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqGm12878MspRawDataRep1
@@ -316,7 +295,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 restrictionEnzyme msp
-softwareVersion myerslab
 subId 387
 view RawData
 
@@ -335,7 +313,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 restrictionEnzyme msp
-softwareVersion myerslab
 subId 387
 view RawData
 
@@ -351,12 +328,9 @@ fileName wgEncodeHaibMethylSeqGm12878RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqGm12878RegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqGm12878RegionsRep2
@@ -371,12 +345,9 @@ fileName wgEncodeHaibMethylSeqGm12878RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 2
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqGm12878RegionsRep2
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqGm12891HpaAlnRep1
@@ -396,7 +367,6 @@ protocol PCR1x
 replicate 1
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqGm12891HpaAlnRep2
@@ -416,7 +386,6 @@ protocol PCR1x
 replicate 2
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqGm12891HpaRawDataRep1
@@ -434,7 +403,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 restrictionEnzyme hpa
-softwareVersion myerslab
 subId 794
 view RawData
 
@@ -453,7 +421,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 restrictionEnzyme hpa
-softwareVersion myerslab
 subId 794
 view RawData
 
@@ -474,7 +441,6 @@ protocol PCR1x
 replicate 1
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqGm12891MspAlnRep2
@@ -494,7 +460,6 @@ protocol PCR1x
 replicate 2
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqGm12891MspRawDataRep1
@@ -512,7 +477,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 restrictionEnzyme msp
-softwareVersion myerslab
 subId 794
 view RawData
 
@@ -531,7 +495,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 restrictionEnzyme msp
-softwareVersion myerslab
 subId 794
 view RawData
 
@@ -547,12 +510,9 @@ fileName wgEncodeHaibMethylSeqGm12891RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqGm12891RegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqGm12891RegionsRep2
@@ -567,12 +527,9 @@ fileName wgEncodeHaibMethylSeqGm12891RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 2
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqGm12891RegionsRep2
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqGm12892HpaAlnRep1
@@ -592,7 +549,6 @@ protocol PCR1x
 replicate 1
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqGm12892HpaAlnRep2
@@ -612,7 +568,6 @@ protocol PCR1x
 replicate 2
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqGm12892HpaRawDataRep1
@@ -630,7 +585,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 restrictionEnzyme hpa
-softwareVersion myerslab
 subId 796
 view RawData
 
@@ -649,7 +603,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 restrictionEnzyme hpa
-softwareVersion myerslab
 subId 796
 view RawData
 
@@ -670,7 +623,6 @@ protocol PCR1x
 replicate 1
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqGm12892MspAlnRep2
@@ -690,7 +642,6 @@ protocol PCR1x
 replicate 2
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqGm12892MspRawDataRep1
@@ -708,7 +659,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 restrictionEnzyme msp
-softwareVersion myerslab
 subId 796
 view RawData
 
@@ -727,7 +677,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 restrictionEnzyme msp
-softwareVersion myerslab
 subId 796
 view RawData
 
@@ -743,12 +692,9 @@ fileName wgEncodeHaibMethylSeqGm12892RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqGm12892RegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqGm12892RegionsRep2
@@ -763,12 +709,9 @@ fileName wgEncodeHaibMethylSeqGm12892RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 2
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqGm12892RegionsRep2
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH1hescHpaAlnRep1
@@ -788,7 +731,6 @@ protocol PCR1x
 replicate 1
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqH1hescHpaAlnRep2
@@ -808,7 +750,6 @@ protocol PCR1x
 replicate 2
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqH1hescHpaRawDataRep1
@@ -822,12 +763,12 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeHaibMethylSeqH1hescHpaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL605
 origAssembly hg18
 project wgEncode
 protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
-softwareVersion SL605
 subId 887
 view RawData
 
@@ -842,12 +783,12 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeHaibMethylSeqH1hescHpaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL659
 origAssembly hg18
 project wgEncode
 protocol PCR1x
 replicate 2
 restrictionEnzyme hpa
-softwareVersion SL659
 subId 887
 view RawData
 
@@ -868,7 +809,6 @@ protocol PCR1x
 replicate 1
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqH1hescMspAlnRep2
@@ -888,7 +828,6 @@ protocol PCR1x
 replicate 2
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqH1hescMspRawDataRep1
@@ -902,12 +841,12 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeHaibMethylSeqH1hescMspRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL605
 origAssembly hg18
 project wgEncode
 protocol PCR2x
 replicate 1
 restrictionEnzyme msp
-softwareVersion SL605
 subId 887
 view RawData
 
@@ -922,12 +861,12 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeHaibMethylSeqH1hescMspRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL659
 origAssembly hg18
 project wgEncode
 protocol PCR1x
 replicate 2
 restrictionEnzyme msp
-softwareVersion SL659
 subId 887
 view RawData
 
@@ -943,12 +882,9 @@ fileName wgEncodeHaibMethylSeqH1hescRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqH1hescRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH1hescRegionsRep2
@@ -963,12 +899,9 @@ fileName wgEncodeHaibMethylSeqH1hescRegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 2
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqH1hescRegionsRep2
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH9esHpaAlnRep1
@@ -988,7 +921,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1875
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqH9esHpaRegionsRep1
@@ -1008,7 +940,6 @@ replicate 1
 restrictionEnzyme hpa
 subId 1875
 tableName wgEncodeHaibMethylSeqH9esHpaRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH9esRegionsRep1
@@ -1023,12 +954,9 @@ fileName wgEncodeHaibMethylSeqH9esRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1875
 tableName wgEncodeHaibMethylSeqH9esRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH9esafpminusHpaAlnRep1
@@ -1048,7 +976,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1968
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqH9esafpminusRegionsRep1
@@ -1063,12 +990,9 @@ fileName wgEncodeHaibMethylSeqH9esafpminusRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1968
 tableName wgEncodeHaibMethylSeqH9esafpminusRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH9esafpplusHpaAlnRep1
@@ -1088,7 +1012,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1875
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqH9esafpplusHpaRegionsRep1
@@ -1108,7 +1031,6 @@ replicate 1
 restrictionEnzyme hpa
 subId 1875
 tableName wgEncodeHaibMethylSeqH9esafpplusHpaRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH9esafpplusRegionsRep1
@@ -1123,12 +1045,9 @@ fileName wgEncodeHaibMethylSeqH9esafpplusRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1875
 tableName wgEncodeHaibMethylSeqH9esafpplusRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH9escmHpaAlnRep1
@@ -1148,7 +1067,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1875
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqH9escmHpaRegionsRep1
@@ -1168,7 +1086,6 @@ replicate 1
 restrictionEnzyme hpa
 subId 1875
 tableName wgEncodeHaibMethylSeqH9escmHpaRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH9escmRegionsRep1
@@ -1183,12 +1100,9 @@ fileName wgEncodeHaibMethylSeqH9escmRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1875
 tableName wgEncodeHaibMethylSeqH9escmRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH9eseHpaAlnRep1
@@ -1208,7 +1122,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1875
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqH9eseHpaRegionsRep1
@@ -1228,7 +1141,6 @@ replicate 1
 restrictionEnzyme hpa
 subId 1875
 tableName wgEncodeHaibMethylSeqH9eseHpaRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH9eseRegionsRep1
@@ -1243,12 +1155,9 @@ fileName wgEncodeHaibMethylSeqH9eseRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1875
 tableName wgEncodeHaibMethylSeqH9eseRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH9esebHpaAlnRep1
@@ -1268,7 +1177,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1968
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqH9esebRegionsRep1
@@ -1283,12 +1191,9 @@ fileName wgEncodeHaibMethylSeqH9esebRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1968
 tableName wgEncodeHaibMethylSeqH9esebRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH9esebdHpaAlnRep1
@@ -1308,7 +1213,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1968
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqH9esebdHpaRegionsRep1
@@ -1328,7 +1232,6 @@ replicate 1
 restrictionEnzyme hpa
 subId 1875
 tableName wgEncodeHaibMethylSeqH9esebdHpaRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqH9esebdRegionsRep1
@@ -1343,12 +1246,9 @@ fileName wgEncodeHaibMethylSeqH9esebdRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1968
 tableName wgEncodeHaibMethylSeqH9esebdRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqHalHpaAlnRep1
@@ -1368,7 +1268,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1875
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHalHpaRegionsRep1
@@ -1388,7 +1287,6 @@ replicate 1
 restrictionEnzyme hpa
 subId 1875
 tableName wgEncodeHaibMethylSeqHalHpaRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqHalRegionsRep1
@@ -1403,12 +1301,9 @@ fileName wgEncodeHaibMethylSeqHalRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1875
 tableName wgEncodeHaibMethylSeqHalRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqHct116HpaAlnRep1
@@ -1428,7 +1323,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1875
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHct116HpaAlnRep2
@@ -1448,7 +1342,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme hpa
 subId 1875
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHct116HpaRegionsRep1
@@ -1468,7 +1361,6 @@ replicate 1
 restrictionEnzyme hpa
 subId 1875
 tableName wgEncodeHaibMethylSeqHct116HpaRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqHct116MspAlnRep1
@@ -1488,7 +1380,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme msp
 subId 1875
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHct116RegionsRep1
@@ -1503,12 +1394,9 @@ fileName wgEncodeHaibMethylSeqHct116RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1875
 tableName wgEncodeHaibMethylSeqHct116RegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqHct116RegionsRep2
@@ -1523,12 +1411,9 @@ fileName wgEncodeHaibMethylSeqHct116RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 2
-restrictionEnzyme None
 subId 1875
 tableName wgEncodeHaibMethylSeqHct116RegionsRep2
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqHelas3HpaAlnRep1
@@ -1548,7 +1433,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHelas3HpaAlnRep2
@@ -1568,7 +1452,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHelas3HpaPcr2xRawDataRep1
@@ -1628,7 +1511,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHelas3MspAlnRep2
@@ -1648,7 +1530,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHelas3MspPcr2xRawDataRep1
@@ -1703,12 +1584,9 @@ fileName wgEncodeHaibMethylSeqHelas3RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqHelas3RegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqHelas3RegionsRep2
@@ -1723,12 +1601,9 @@ fileName wgEncodeHaibMethylSeqHelas3RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 2
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqHelas3RegionsRep2
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqHepg2HpaAlnRep1
@@ -1748,7 +1623,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHepg2HpaAlnRep2
@@ -1768,7 +1642,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHepg2HpaPcr2xRawDataRep1
@@ -1828,7 +1701,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHepg2MspAlnRep2
@@ -1848,7 +1720,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHepg2MspPcr2xRawDataRep1
@@ -1903,12 +1774,9 @@ fileName wgEncodeHaibMethylSeqHepg2RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqHepg2RegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqHepg2RegionsRep2
@@ -1923,12 +1791,9 @@ fileName wgEncodeHaibMethylSeqHepg2RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 2
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqHepg2RegionsRep2
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqHfl11wHpaAlnRep1
@@ -1948,7 +1813,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1875
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHfl11wHpaRegionsRep1
@@ -1968,7 +1832,6 @@ replicate 1
 restrictionEnzyme hpa
 subId 1875
 tableName wgEncodeHaibMethylSeqHfl11wHpaRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqHfl11wRegionsRep1
@@ -1983,12 +1846,9 @@ fileName wgEncodeHaibMethylSeqHfl11wRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1875
 tableName wgEncodeHaibMethylSeqHfl11wRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqHfl24wHpaAlnRep1
@@ -2008,7 +1868,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1875
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqHfl24wHpaRegionsRep1
@@ -2028,7 +1887,6 @@ replicate 1
 restrictionEnzyme hpa
 subId 1875
 tableName wgEncodeHaibMethylSeqHfl24wHpaRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqHfl24wRegionsRep1
@@ -2043,12 +1901,9 @@ fileName wgEncodeHaibMethylSeqHfl24wRegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1875
 tableName wgEncodeHaibMethylSeqHfl24wRegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqK562HpaAlnRep1
@@ -2068,7 +1923,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqK562HpaAlnRep2
@@ -2088,7 +1942,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme hpa
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqK562HpaRawDataRep1
@@ -2106,7 +1959,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 restrictionEnzyme hpa
-softwareVersion myerslab
 subId 387
 view RawData
 
@@ -2125,7 +1977,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 restrictionEnzyme hpa
-softwareVersion myerslab
 subId 387
 view RawData
 
@@ -2146,7 +1997,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqK562MspAlnRep2
@@ -2166,7 +2016,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme msp
 subId 1247
-treatment None
 view Alignments
 
 metaObject wgEncodeHaibMethylSeqK562MspRawDataRep1
@@ -2184,7 +2033,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 restrictionEnzyme msp
-softwareVersion myerslab
 subId 387
 view RawData
 
@@ -2203,7 +2051,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 restrictionEnzyme msp
-softwareVersion myerslab
 subId 387
 view RawData
 
@@ -2219,12 +2066,9 @@ fileName wgEncodeHaibMethylSeqK562RegionsRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 1
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqK562RegionsRep1
-treatment None
 view Regions
 
 metaObject wgEncodeHaibMethylSeqK562RegionsRep2
@@ -2239,12 +2083,9 @@ fileName wgEncodeHaibMethylSeqK562RegionsRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol None
 replicate 2
-restrictionEnzyme None
 subId 1247
 tableName wgEncodeHaibMethylSeqK562RegionsRep2
-treatment None
 view Regions
 
-# MAGIC: 711639794
+# MAGIC: 1808101002

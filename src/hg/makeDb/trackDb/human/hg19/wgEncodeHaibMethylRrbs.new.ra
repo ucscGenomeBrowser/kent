@@ -49,14 +49,14 @@ longLabel DNA Methylation by Reduced Representation Bisulfite Seq from ENCODE/Hu
 group regulation
 subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC Astrocy=Astrocy BE2C=BE2C BJ=BJ CMK=CMK Caco2=Caco2 ECC1=ECC-1 Fibrobl=Fibrobl GM06990=GM06990 GM12878XiMat=GM12878-Xi-Mat GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 GM19240=GM19240 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HIPE=HIPEpiC HL60=HL60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiCi HSMM=HSMM  HSMMt=HSMMtube HTB11=HTB-11 HTR8=HTR-8 Hepatocytes=Hepatocytes IMR90=IMR90  Jurkat=Jurkat LNCaP=LNCaP  MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MELANO=Melano MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 ovcar3=ovcar3 Osteobl=Osteoblast PANC1=PANC-1 PFSK1=PFSK-1 PanIslets=PanIslets PrEC=PrEC ProgFib=ProgFib RPTEC=RPTEC SAEC=SAEC SKNSHRA=SK-N-SH_RA SKMC=SKMC SKNMC=SK-N-MC T47D=T-47D U87=U87 BCAdrenalGlandH12803N=BCAdrenalGlandH12803N BCBrainH11058N=BCBrainH11058N BCBreast0203015=BCBreast0203015 BCKidney0111002=BCKidney0111002 BCLeftVentricleN41=BCLeftVentricleN41 BCLeukocyteUHN00204=BCLeukocyteUHN00204 BCLiver0111002=BCLiver0111002 BCLung0111002=BCLung0111002 BCPancreasH12817N=BCPancreasH12817N BCPericardiumH12529N=BCPericardiumH12529N BCPlacentaUHN00189=BCPlacentaUHN00189 BCSkeletalMuscle0111002=BCSkeletalMuscle0111002 BCSkeletalMuscleH12817N=BCSkeletalMuscleH12817N BCSkin0111002=BCSkin0111002 BCStomach0111002=BCStomach0111002 BCTestisN30=BCTestisN30 BCUterusBN0765=BCUterusBN0765
 subGroup2 view View Sites=Sites
-subGroup3 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6
+subGroup3 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 
 subGroup4 treatment Treatment None=None ANDRO=Methyltrienolone(androgen) TAM=Tamoxifen DMSO224h=DMSO ESTRADIa24hh=Estradiol
 subGroup5 obtainedBy Obtained_by UW=UW HAIB=Hudson_Alpha Stanford=Stanford Duke=Duke BioChain=BioChain UNC=UNC Yale=Yale
 dimensions dimensionX=treatment dimensionY=cellType dimensionD=rep
-dimensionDchecked rep1,rep2
+dimensionDchecked rep1
 sortOrder cellType=+ rep=+ treatment=+ obtainedBy=+
-fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Obtained_By replicate=Rep labExpId=Lab_ID geoSampleAccession=GEO<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until attic=Attic
-controlledVocabulary encode/cv.ra cellType=cell treatment=treatment 
+fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Obtained_By replicate=Rep labExpId=Lab_ID geoSampleAccession=GEO<BR>Accession view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment obtainedBy=lab
 dragAndDrop subTracks
 priority 0
 wgEncode 1
@@ -75,7 +75,7 @@ visibility dense
     viewUi on
 
         track wgEncodeHaibMethylRrbsGm12878HaibSitesRep2
-        parent wgEncodeHaibMethylRrbsViewSites on 
+        parent wgEncodeHaibMethylRrbsViewSites off
         shortLabel GM12878 2
         longLabel GM12878 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1GM12878 obtainedBy=HAIB treatment=None rep=rep2
@@ -565,7 +565,6 @@ visibility dense
         # subId=3159 dateSubmitted=2011-01-06
 
         #track wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel HSMMtube 3
         #longLabel HSMMtube Methyl-RRBS Sites Rep 3 from ENCODE/HudsonAlpha
@@ -610,7 +609,6 @@ visibility dense
 
        # ATTIC
        # track wgEncodeHaibMethylRrbsLncapDukeSitesRep1
-       # attic auxExp
        # parent wgEncodeHaibMethylRrbsViewSites off
        # shortLabel LNCaP 1
        # longLabel LNCaP Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
@@ -621,7 +619,6 @@ visibility dense
 
        #ATTIC
        # track wgEncodeHaibMethylRrbsLncapDukeSitesRep2
-       # attic auxExp
        # parent wgEncodeHaibMethylRrbsViewSites off
        # shortLabel LNCaP 2
        # longLabel LNCaP Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
@@ -647,7 +644,6 @@ visibility dense
         ## subId=3159 dateSubmitted=2011-01-06
 
         #track wgEncodeHaibMethylRrbsHsmmDukeSitesRep3
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel HSMM 3
         #longLabel HSMM Methyl-RRBS Sites Rep 3 from ENCODE/HudsonAlpha
@@ -656,7 +652,6 @@ visibility dense
         # subId=3159 dateSubmitted=2011-01-06
 
   #      track wgEncodeHaibMethylRrbsNt2d1UwSitesRep2
-  #      attic auxExp
   #      parent wgEncodeHaibMethylRrbsViewSites off
   #      shortLabel NT2-D1 2
   #      longLabel NT2-D1 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
@@ -775,9 +770,9 @@ visibility dense
         subGroups view=Sites cellType=U87 obtainedBy=HAIB treatment=None rep=rep2
         type bed 9
         # subId=3159 dateSubmitted=2011-01-06
-
+        
+        #ATTIC
         #track wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel MCF10A-Er-Src 3
         #longLabel MCF10A-Er-Src Methyl-RRBS Sites Rep 3 from ENCODE/HudsonAlpha
@@ -785,8 +780,8 @@ visibility dense
         #type bed 9
         # subId=3190 dateSubmitted=2011-01-08
 
+        #ATTIC
         #track wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep3
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel MCF10A-Er-Src 3
         #longLabel MCF10A-Er-Src Methyl-RRBS Sites Rep 3 from ENCODE/HudsonAlpha
@@ -796,7 +791,6 @@ visibility dense
 
         #ATTIC
         #track wgEncodeHaibMethylRrbsMcf7UwSitesRep2
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel MCF-7 2
         #longLabel MCF-7 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
@@ -833,7 +827,6 @@ visibility dense
 
         #ATTIC
         #track wgEncodeHaibMethylRrbsMcf7UwSitesRep1
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel MCF-7 1
         #longLabel MCF-7 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
@@ -1130,7 +1123,7 @@ visibility dense
         # was wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2 cricket Mon Apr 18 11:24:35 2011
 
         track wgEncodeHaibMethylRrbsK562HaibSitesRep2
-        parent wgEncodeHaibMethylRrbsViewSites on 
+        parent wgEncodeHaibMethylRrbsViewSites off
         shortLabel K562 2
         longLabel K562 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep2
@@ -1161,7 +1154,6 @@ visibility dense
 
         #ATTIC
         #track wgEncodeHaibMethylRrbsHepg2HaibSitesRep1
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel HepG2 1
         #longLabel HepG2Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
@@ -1172,7 +1164,6 @@ visibility dense
 
         #ATTIC
         #track wgEncodeHaibMethylRrbsHepg2HaibSitesRep2
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel HepG2 2
         #longLabel HepG2Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
@@ -1182,7 +1173,7 @@ visibility dense
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsH1hescHaibSitesRep2
-        parent wgEncodeHaibMethylRrbsViewSites on 
+        parent wgEncodeHaibMethylRrbsViewSites off
         shortLabel H1-hESC 2
         longLabel H1-hESC Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1H1hESC obtainedBy=HAIB treatment=None rep=rep2
@@ -1202,7 +1193,7 @@ visibility dense
         # was wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2 cricket Mon Apr 18 11:24:38 2011
 
         track wgEncodeHaibMethylRrbsHelas3HaibSitesRep1
-        parent wgEncodeHaibMethylRrbsViewSites off
+        parent wgEncodeHaibMethylRrbsViewSites on
         shortLabel HeLa-S3 1
         longLabel HeLa-S3 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=2HeLaS3 obtainedBy=HAIB treatment=None rep=rep1
@@ -1316,7 +1307,6 @@ visibility dense
         # subId=1220 dateSubmitted=2010-07-13
 
 #        track wgEncodeHaibMethylRrbsHek293UwSitesRep1
-#        attic auxExp
 #        parent wgEncodeHaibMethylRrbsViewSites off
 #        shortLabel HEK293 1
 #        longLabel HEK293 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
@@ -1325,7 +1315,6 @@ visibility dense
 #        # subId=1220 dateSubmitted=2010-07-13
 
 #        track wgEncodeHaibMethylRrbsHek293UwSitesRep2
-#        attic auxExp
 #        parent wgEncodeHaibMethylRrbsViewSites off
 #        shortLabel HEK293 2
 #        longLabel HEK293 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
@@ -1334,7 +1323,7 @@ visibility dense
 #        # subId=1220 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHepg2DukeSitesRep1
-        parent wgEncodeHaibMethylRrbsViewSites off
+        parent wgEncodeHaibMethylRrbsViewSites on 
         shortLabel HepG2 1
         longLabel HepG2 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=2HepG2 obtainedBy=Duke treatment=None rep=rep1
@@ -1426,7 +1415,6 @@ visibility dense
         # was wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2 cricket Mon Apr 18 11:24:38 2011
 
 #        track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
-#        attic auxExp
 #        parent wgEncodeHaibMethylRrbsViewSites off
 #        shortLabel MCF-7 2
 #        longLabel MCF-7 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
@@ -1435,7 +1423,6 @@ visibility dense
 #        # subId=2348 dateSubmitted=2010-09-22
 
 #        track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
-#        attic auxExp
 #        parent wgEncodeHaibMethylRrbsViewSites off
 #        shortLabel MCF-7 1
 #        longLabel MCF-7 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
@@ -1506,7 +1493,6 @@ visibility dense
         # subId=2471 dateSubmitted=2010-09-29
 
         #track wgEncodeHaibMethylRrbsPanisletsSitesRep5
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel PanIslets 5
         #longLabel PanIslets Methyl-RRBS Sites Rep 5 from ENCODE/HudsonAlpha
@@ -1515,7 +1501,6 @@ visibility dense
         # subId=2471 dateSubmitted=2010-09-29
 
         #track wgEncodeHaibMethylRrbsPanisletsSitesRep4
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel PanIslets 4
         #longLabel PanIslets Methyl-RRBS Sites Rep 4 from ENCODE/HudsonAlpha
@@ -1524,7 +1509,6 @@ visibility dense
         # subId=2471 dateSubmitted=2010-09-29
 
         #track wgEncodeHaibMethylRrbsPanisletsSitesRep3
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel PanIslets 3
         #longLabel PanIslets Methyl-RRBS Sites Rep 3 from ENCODE/HudsonAlpha
@@ -1549,7 +1533,6 @@ visibility dense
         # subId=2471 dateSubmitted=2010-09-29
 
         #track wgEncodeHaibMethylRrbsMelanoSitesRep3
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel Melano 3
         #longLabel Melano Methyl-RRBS Sites Rep 3 from ENCODE/HudsonAlpha
@@ -1728,28 +1711,27 @@ visibility dense
         type bed 9
         # subId=3239 dateSubmitted=2011-01-19
 
-        #track wgEncodeHaibMethylRrbsHtr8DukeSitesRep3
-        #attic auxExp
-        #parent wgEncodeHaibMethylRrbsViewSites off
-        #shortLabel HTR8svn 3
-        #longLabel HTR-8svn Methyl-RRBS Sites Rep 3 from ENCODE/HudsonAlpha
-        #subGroups view=Sites cellType=HTR8 obtainedBy=Duke treatment=None rep=rep3
-        #type bed 9
+        track wgEncodeHaibMethylRrbsHtr8DukeSitesRep3
+        parent wgEncodeHaibMethylRrbsViewSites off
+        shortLabel HTR8svn 2
+        longLabel HTR-8svn Methyl-RRBS Sites Rep 2 (Lab Rep 3) from ENCODE/HudsonAlpha
+        subGroups view=Sites cellType=HTR8 obtainedBy=Duke treatment=None rep=rep2
+        type bed 9
         # subId=3239 dateSubmitted=2011-01-19
 
         track wgEncodeHaibMethylRrbsHl60UwSitesRep2
         parent wgEncodeHaibMethylRrbsViewSites off
         shortLabel HL-60 2
-        longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in HL-60 cells)
+        longLabel HL-60 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=HL60 obtainedBy=UW treatment=None rep=rep2
         type bed 9
         # subId=3841 dateSubmitted=2011-03-31
 
+        #ATTIC
         #track wgEncodeHaibMethylRrbsPanc1UwSitesRep2
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel PANC-1 2
-        #longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in PANC-1 cells)
+        #longLabel PANC-1 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         #subGroups view=Sites cellType=PANC1 obtainedBy=UW treatment=None rep=rep2
         #type bed 9
         # subId=3841 dateSubmitted=2011-03-31
@@ -1757,7 +1739,7 @@ visibility dense
         track wgEncodeHaibMethylRrbsCaco2UwSitesRep2
         parent wgEncodeHaibMethylRrbsViewSites off
         shortLabel Caco-2 2
-        longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in Caco-2 cells)
+        longLabel Caco-2 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=Caco2 obtainedBy=UW treatment=None rep=rep2
         type bed 9
         # subId=3841 dateSubmitted=2011-03-31
@@ -1765,24 +1747,24 @@ visibility dense
         track wgEncodeHaibMethylRrbsGm06990UwSitesRep2
         parent wgEncodeHaibMethylRrbsViewSites off
         shortLabel GM06990 2
-        longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in GM06990 cells)
+        longLabel GM06990 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=GM06990 obtainedBy=UW treatment=None rep=rep2
         type bed 9
         # subId=3841 dateSubmitted=2011-03-31
 
         track wgEncodeHaibMethylRrbsOvcar3UwSitesRep2
         parent wgEncodeHaibMethylRrbsViewSites off
-        shortLabel ovcar-3 2
-        longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in ovcar-3 cells)
+        shortLabel Ovcar-3 2
+        longLabel Ovcar-3 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=ovcar3 obtainedBy=UW treatment=None rep=rep2
         type bed 9
         # subId=3841 dateSubmitted=2011-03-31
 
+        #ATTIC
         #track wgEncodeHaibMethylRrbsPanc1UwSitesRep1
-        #attic auxExp
         #parent wgEncodeHaibMethylRrbsViewSites off
         #shortLabel PANC-1 1
-        #longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in PANC-1 cells)
+        #longLabel PANC-1 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         #subGroups view=Sites cellType=PANC1 obtainedBy=UW treatment=None rep=rep1
         #type bed 9
         # subId=3841 dateSubmitted=2011-03-31
@@ -1790,7 +1772,7 @@ visibility dense
         track wgEncodeHaibMethylRrbsCaco2UwSitesRep1
         parent wgEncodeHaibMethylRrbsViewSites off
         shortLabel Caco-2 1
-        longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in Caco-2 cells)
+        longLabel Caco-2 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=Caco2 obtainedBy=UW treatment=None rep=rep1
         type bed 9
         # subId=3841 dateSubmitted=2011-03-31
@@ -1798,7 +1780,7 @@ visibility dense
         track wgEncodeHaibMethylRrbsGm06990UwSitesRep1
         parent wgEncodeHaibMethylRrbsViewSites off
         shortLabel GM06990 1
-        longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in GM06990 cells)
+        longLabel GM06990 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=GM06990 obtainedBy=UW treatment=None rep=rep1
         type bed 9
         # subId=3841 dateSubmitted=2011-03-31
@@ -1806,15 +1788,15 @@ visibility dense
         track wgEncodeHaibMethylRrbsHl60UwSitesRep1
         parent wgEncodeHaibMethylRrbsViewSites off
         shortLabel HL-60 1
-        longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in HL-60 cells)
+        longLabel HL-60 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=HL60 obtainedBy=UW treatment=None rep=rep1
         type bed 9
         # subId=3841 dateSubmitted=2011-03-31
 
         track wgEncodeHaibMethylRrbsOvcar3UwSitesRep1
         parent wgEncodeHaibMethylRrbsViewSites off
-        shortLabel ovcar-3 1
-        longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in ovcar-3 cells)
+        shortLabel Ovcar-3 1
+        longLabel Ovcar-3 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=ovcar3 obtainedBy=UW treatment=None rep=rep1
         type bed 9
         # subId=3841 dateSubmitted=2011-03-31

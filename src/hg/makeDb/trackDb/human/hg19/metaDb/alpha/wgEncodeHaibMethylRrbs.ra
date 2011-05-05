@@ -1,7 +1,7 @@
 metaObject wgEncodeHaibMethylRrbs
 objType composite
 composite wgEncodeHaibMethylRrbs
-expVars lab,dataType,cell,treatment,obtainedBy
+expVars lab,dataType,cell,treatment
 geoSeriesAccession GSE27584
 
 metaObject wgEncodeHaibMethylRrbsAg04449UwRawDataRep1
@@ -2142,7 +2142,7 @@ dataType MethylRrbs
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibMethylRrbsCaco2UwSitesRep1.bed.gz
+fileName wgEncodeHaibMethylRrbsCaco2UwSitesRep1.bedRrbs.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL862
@@ -2162,7 +2162,7 @@ dataType MethylRrbs
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibMethylRrbsCaco2UwSitesRep2.bed.gz
+fileName wgEncodeHaibMethylRrbsCaco2UwSitesRep2.bedRrbs.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL4744
@@ -2464,7 +2464,7 @@ dataType MethylRrbs
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibMethylRrbsGm06990UwSitesRep1.bed.gz
+fileName wgEncodeHaibMethylRrbsGm06990UwSitesRep1.bedRrbs.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL901
@@ -2484,7 +2484,7 @@ dataType MethylRrbs
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibMethylRrbsGm06990UwSitesRep2.bed.gz
+fileName wgEncodeHaibMethylRrbsGm06990UwSitesRep2.bedRrbs.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL4745
@@ -3609,7 +3609,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsHek293StanfordSitesRep1.bedRrbs.gz
-geoSampleAccession GSM683825
 grant Myers
 lab HudsonAlpha
 labExpId SL759
@@ -3631,7 +3630,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsHek293StanfordSitesRep2.bedRrbs.gz
-geoSampleAccession GSM683769
 grant Myers
 lab HudsonAlpha
 labExpId SL1901
@@ -3645,8 +3643,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHek293UwRawDataRep1
-attic auxExp
 objType file
+attic auxExp
 cell HEK293
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -3665,8 +3663,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsHek293UwRawDataRep2
-attic auxExp
 objType file
+attic auxExp
 cell HEK293
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -3708,9 +3706,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHek293UwSitesRep2
-attic auxExp
 objType table
-attic auxExp
 cell HEK293
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -3976,8 +3972,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHepg2HaibRawDataRep1
-attic auxExp
 objType file
+attic auxExp
 cell HepG2
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -3996,8 +3992,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsHepg2HaibRawDataRep2
-attic auxExp
 objType file
+attic auxExp
 cell HepG2
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -4189,7 +4185,7 @@ dataType MethylRrbs
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibMethylRrbsHl60UwSitesRep1.bed.gz
+fileName wgEncodeHaibMethylRrbsHl60UwSitesRep1.bedRrbs.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL902
@@ -4209,7 +4205,7 @@ dataType MethylRrbs
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibMethylRrbsHl60UwSitesRep2.bed.gz
+fileName wgEncodeHaibMethylRrbsHl60UwSitesRep2.bedRrbs.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL4742
@@ -4752,8 +4748,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsHsmmDukeRawDataRep3
-attic auxExp
 objType file
+attic auxExp
 cell HSMM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -4816,8 +4812,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHsmmDukeSitesRep3
-attic auxExp
 objType table
+attic auxExp
 cell HSMM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -4876,8 +4872,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsHsmmtDukeRawDataRep3
-attic auxExp
 objType file
+attic auxExp
 cell HSMMtube
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -4940,8 +4936,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3
-attic auxExp
 objType table
+attic auxExp
 cell HSMMtube
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5061,7 +5057,6 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsHtr8DukeRawDataRep3
-attic auxExp
 objType file
 cell HTR8svn
 composite wgEncodeHaibMethylRrbs
@@ -5102,8 +5097,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHtr8DukeSitesRep3
-attic auxExp
 objType table
+attic auxExp
 cell HTR8svn
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5452,8 +5447,8 @@ treatment androgen
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsLncapDukeRawDataRep1
-attic auxExp
 objType file
+attic auxExp
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5472,8 +5467,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsLncapDukeRawDataRep2
-attic auxExp
 objType file
+attic auxExp
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5654,8 +5649,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesStanfordRawDataRep3
-attic auxExp
 objType file
+attic auxExp
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5718,8 +5713,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep3
-attic auxExp
 objType table
+attic auxExp
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5778,8 +5773,8 @@ treatment TAM_1uM_36hr
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordRawDataRep3
-attic auxExp
 objType file
+attic auxExp
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5842,8 +5837,8 @@ treatment TAM_1uM_36hr
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3
-attic auxExp
 objType table
+attic auxExp
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5910,7 +5905,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsMcf7DukeSitesRep1.bedRrbs.gz
-geoSampleAccession GSM683787
 grant Myers
 lab HudsonAlpha
 labExpId SL1812
@@ -5932,7 +5926,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsMcf7DukeSitesRep2.bedRrbs.gz
-geoSampleAccession GSM683793
 grant Myers
 lab HudsonAlpha
 labExpId SL1813
@@ -5946,8 +5939,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7StanfordRawDataRep1
-attic auxExp
 objType file
+attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5966,8 +5959,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf7StanfordRawDataRep2
-attic auxExp
 objType file
+attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5995,7 +5988,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsMcf7StanfordSitesRep1.bedRrbs.gz
-geoSampleAccession GSM683787
 grant Myers
 lab HudsonAlpha
 labExpId SL756
@@ -6018,7 +6010,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsMcf7StanfordSitesRep2.bedRrbs.gz
-geoSampleAccession GSM683793
 grant Myers
 lab HudsonAlpha
 labExpId SL1900
@@ -6032,8 +6023,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7UwRawDataRep1
-attic auxExp
 objType file
+attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -6052,8 +6043,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf7UwRawDataRep2
-attic auxExp
 objType file
+attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -6081,7 +6072,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsMcf7UwSitesRep1.bedRrbs.gz
-geoSampleAccession GSM683787
 grant Myers
 lab HudsonAlpha
 labExpId SL905
@@ -6104,7 +6094,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsMcf7UwSitesRep2.bedRrbs.gz
-geoSampleAccession GSM683793
 grant Myers
 lab HudsonAlpha
 labExpId SL1627
@@ -6156,8 +6145,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMelanoDukeRawDataRep3
-attic auxExp
 objType file
+attic auxExp
 cell Melano
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -6220,8 +6209,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMelanoSitesRep3
-attic auxExp
 objType table
+attic auxExp
 cell Melano
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -6733,8 +6722,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsNt2d1UwRawDataRep1
-attic auxExp
 objType file
+attic auxExp
 cell NT2-D1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -6753,8 +6742,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsNt2d1UwRawDataRep2
-attic auxExp
 objType file
+attic auxExp
 cell NT2-D1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -6945,7 +6934,7 @@ dataType MethylRrbs
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibMethylRrbsOvcar3UwSitesRep1.bed.gz
+fileName wgEncodeHaibMethylRrbsOvcar3UwSitesRep1.bedRrbs.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL904
@@ -6965,7 +6954,7 @@ dataType MethylRrbs
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibMethylRrbsOvcar3UwSitesRep2.bed.gz
+fileName wgEncodeHaibMethylRrbsOvcar3UwSitesRep2.bedRrbs.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL4746
@@ -7058,8 +7047,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanc1UwRawDataRep1
-attic auxExp
 objType file
+attic auxExp
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -7078,8 +7067,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsPanc1UwRawDataRep2
-attic auxExp
 objType file
+attic auxExp
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -7098,15 +7087,15 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsPanc1UwSitesRep1
-attic auxExp
 objType table
+attic auxExp
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibMethylRrbsPanc1UwSitesRep1.bed.gz
+fileName wgEncodeHaibMethylRrbsPanc1UwSitesRep1.bedRrbs.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL861
@@ -7119,15 +7108,15 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanc1UwSitesRep2
-attic auxExp
 objType table
+attic auxExp
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
-fileName wgEncodeHaibMethylRrbsPanc1UwSitesRep2.bed.gz
+fileName wgEncodeHaibMethylRrbsPanc1UwSitesRep2.bedRrbs.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL4743
@@ -7178,8 +7167,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep3
-attic auxExp
 objType file
+attic auxExp
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -7198,8 +7187,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep4
-attic auxExp
 objType file
+attic auxExp
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -7218,8 +7207,8 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep5
-attic auxExp
 objType file
+attic auxExp
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -7282,8 +7271,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanisletsSitesRep3
-attic auxExp
 objType table
+attic auxExp
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -7305,8 +7294,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanisletsSitesRep4
-attic auxExp
 objType table
+attic auxExp
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -7328,8 +7317,8 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanisletsSitesRep5
-attic auxExp
 objType table
+attic auxExp
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -8240,4 +8229,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 660166983
+# MAGIC: 513177952

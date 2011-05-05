@@ -757,7 +757,7 @@ TMPDIR=/scratch/tmp
 
 
 ############################################################################
-# HUMAN (hg18) PROTEINS TRACK (working braney ....)
+# HUMAN (hg18) PROTEINS TRACK (DONE 2011-04-26 braney)
     # bash  if not using bash shell already
     cd /cluster/data/melGal1
     mkdir /cluster/data/melGal1/blastDb
