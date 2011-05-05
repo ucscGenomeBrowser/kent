@@ -363,4 +363,3 @@ fclose(outf2);
 
 return(0);
 }
-  

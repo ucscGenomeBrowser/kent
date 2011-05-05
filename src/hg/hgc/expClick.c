@@ -485,5 +485,3 @@ else
 puts("<h2></h2><p>\n");
 bedFreeList(&bedList);
 }
-
-  
