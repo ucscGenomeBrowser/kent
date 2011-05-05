@@ -54,9 +54,19 @@ boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal, struct d
 *retTag = NULL;
 *retVal = NULL;
 
-char *line, *raw;
+char *line, *raw = NULL;
 int lineLen,rawLen;
-while (lineFileNextFull(lf, &line, &lineLen, &raw, &rawLen)) // Joins continuation lines
+
+// Don't bother with raw if it isn't used.
+char **pRaw    = NULL;
+int   *pRawLen = NULL;
+if (dyRecord != NULL)
+    {
+    pRaw    = &raw;
+    pRawLen = &rawLen;
+    }
+
+while (lineFileNextFull(lf, &line, &lineLen, pRaw, pRawLen)) // Joins continuation lines
     {
     char *clippedText = skipLeadingSpaces(line);
     if (*clippedText == 0)
@@ -199,7 +209,7 @@ struct hashEl *hel;
 
 /* Get first nonempty non-comment line and make sure
  * it contains name. */
-if (!lineFileNextReal(lf, &line))
+if (!lineFileNextFullReal(lf, &line))
     return NULL;
 word = nextWord(&line);
 if (!sameString(word, "name"))
@@ -222,11 +232,11 @@ if ((ra = hashFindVal(hashOfHash, name)) == NULL)
  * blank line or end of file. */
 for (;;)
     {
-    if (!lineFileNextFull(lf, &line, NULL,NULL,NULL))
+    if (!lineFileNextFull(lf, &line, NULL,NULL,NULL)) // Not using FullReal to detect end of stanza
         break;
     line = skipLeadingSpaces(line);
     if (line[0] == 0)
-        break;
+        break;                                        // End of stanza detected
     if (line[0] == '#')
         continue;
     word = nextWord(&line);
