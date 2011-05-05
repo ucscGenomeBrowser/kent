@@ -628,7 +628,7 @@ if (! hDbIsActive(database))
     }
 
 puts(
-"<span style='text-align:center;'>"
+"<CENTER>"
 "<TABLE BGCOLOR='#FFFEF3' BORDERCOLOR='#CCCC99' BORDER=0 CELLPADDING=1>\n"
 "<TR><TD style='font-size:small; text-align:center;'>\n"
 "The UCSC Table Browser was created by the \n"
@@ -636,7 +636,7 @@ puts(
 "<BR>\n"
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
-"</TD></TR></TABLE></span><P>\n"
+"</TD></TR></TABLE></CENTER><P>\n"
 );
 
 puts("<P>This tool allows you to download portions of the Genome Browser \n"
@@ -656,7 +656,7 @@ puts("See the <A HREF=\"/goldenPath/help/hgTextHelp.html\">Table Browser "
      "list</A> with questions or comments.</B> "
      "<P> ");
 
-puts("<span style='text-align:center;'>");
+puts("<CENTER>");
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
        hgTextName(), httpFormMethod);
 puts(
@@ -698,7 +698,7 @@ puts(
 cgiMakeHiddenVar("phase", chooseTablePhase);
 puts(
 "</FORM>"
-"</span>\n"
+"</CENTER>\n"
 );
 
 printf("To reset <B>all</B> user cart settings (including custom tracks), \n"
@@ -875,9 +875,9 @@ cgiContinueHiddenVar("table1");
 if (tableIsPositional)
     {
     puts("<TEXTAREA NAME=tbUserKeys ROWS=10 COLS=80></TEXTAREA><BR>\n");
-    puts("<span style='text-align:center;'>");
+    puts("<CENTER>");
     puts(" <INPUT TYPE=SUBMIT Name=tbShowPasteResults VALUE=\"Submit\"><P>\n");
-    puts("</span>");
+    puts("</CENTER>");
     }
 else
     {

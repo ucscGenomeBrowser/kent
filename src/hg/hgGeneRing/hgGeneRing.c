@@ -80,7 +80,7 @@ if (sameString(position, "genome") || sameString(position, "hgBatch"))
 
 puts(
 "<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
-"<span style='text-align:center;'>"
+"<CENTER>"
 "<TABLE BGCOLOR='#FFFEF3' BORDERCOLOR='#CCCC99' BORDER=0 CELLPADDING=1>\n"
 "<TR><TD style='text-align:center; font-size:small;'>\n"
 "The UCSC Genome Browser was created by the \n"
@@ -88,12 +88,12 @@ puts(
 "<BR>"
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
-"</TD></TR></TABLE></span>\n"
+"</TD></TR></TABLE></CENTER>\n"
 );
 
 puts(
 "<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>\n"
-"<span style='text-align:center;'>\n"
+"<CENTER>\n"
 "<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"
 "<table BGCOLOR='#FEFDEF' BORDERCOLOR='#CCCC99' BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"
@@ -168,18 +168,18 @@ printf("</td>\n");
 
 puts(
 "</tr></table>\n"
-"</td></tr><tr><td><span style='text-align:center;'>\n"
+"</td></tr><tr><td><CENTER>\n"
 "<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.<BR>\n"
-"</span>\n"
-"</td></tr><tr><td><span style='text-align:center;'>\n"
+"</CENTER>\n"
+"</td></tr><tr><td><CENTER>\n"
 );
 cgiMakeButton("customTrackPage", "Add Your Own Custom Tracks");
-puts("</span>\n"
+puts("</CENTER>\n"
 "</td></tr></table>\n"
 "</td></tr></table>\n"
 "</td></tr></table>\n"
 );
-puts("</span>");
+puts("</CENTER>");
 
 hgPositionsHelpHtml(organism, db);
 
@@ -379,20 +379,20 @@ char *oldGeneList = hashFindVal(oldVars, "ring_geneList");
 
 if (!sameString(errMsg,""))
     {
-    printf("<span style='text-align:center;'>%s</span>\n",errMsg);
+    printf("<CENTER>%s</CENTER>\n",errMsg);
     }
 
 puts(
 "<FORM ACTION=\"/cgi-bin/hgGeneRing\" NAME=\"mainForm\" METHOD=\"GET\">\n"
-"<span style='text-align:center;'>"
+"<CENTER>"
 "<TABLE BGCOLOR='#FFFEF3' BORDERCOLOR='#CCCC99' BORDER=0 CELLPADDING=1>\n"
 "<TR><TD style='text-align:center; font-size:x-small;'>\n"
 "Enter gene list for gene network ring.\n"
-"</TD></TR></TABLE></span>\n"
+"</TD></TR></TABLE></CENTER>\n"
 );
 
 puts(
-"<span style='text-align:center;'>"
+"<CENTER>"
 "<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
 "<tr>\n"
 );
@@ -410,7 +410,7 @@ cgiMakeButton("Submit", "Submit");
 printf("</td>\n");
 
 puts(
-"</tr></table></span>\n"
+"</tr></table></CENTER>\n"
 );
 puts("</FORM>\n");
 
@@ -459,7 +459,7 @@ if (!getGenesAsList())
 if (showAll)
     {
     puts(
-    "<span style='text-align:center;'>"
+    "<CENTER>"
     "<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
     "<tr><td>\n"
     );
@@ -473,7 +473,7 @@ if (showAll)
     "<a href=\"/cgi-bin/hgGeneRing?ring_action=drawScreen\">screen</a>\n"
     );
     puts(
-    "</td></tr></table></span>\n"
+    "</td></tr></table></CENTER>\n"
     );
 
     }
@@ -772,7 +772,7 @@ printf("</MAP>\n");
 mgSaveGif(mg, filename.forCgi, FALSE);
 
 width=height=SCREEN_SIZE;
-printf("<span style='text-align:center;'><TABLE BORDER=0 CELLPADDING=0>");
+printf("<CENTER><TABLE BORDER=0 CELLPADDING=0>");
 printf("<TR><TD HEIGHT=5></TD></TR>");
 printf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s >",
        filename.forHtml, width, height, mapName);
@@ -784,7 +784,7 @@ printf(
     "<a href = \"/cgi-bin/hgGeneRing?ring_action=getGeneList\">gene-list</a> "
     "<a href = \"/cgi-bin/hgGeneRing?ring_action=drawScreen\">refresh</a> "
     "</TD></TR>");
-printf("<TR><TD HEIGHT=5></TD></TR></TABLE></span>");
+printf("<TR><TD HEIGHT=5></TD></TR></TABLE></CENTER>");
 
 }
 

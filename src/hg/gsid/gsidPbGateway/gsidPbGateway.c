@@ -32,7 +32,7 @@ if (sameString(position, "proteome") || sameString(position, "genome") ||
 
 puts(
 "<FORM ACTION=\"../cgi-bin/pbGsid\" NAME=\"mainForm\" METHOD=\"GET\">\n"
-"<span style='text-align:center;'>"
+"<CENTER>"
 "<TABLE BGCOLOR='#FFFEF3' BORDERCOLOR='#CCCC99' BORDER=0 CELLPADDING=1>\n"
 "<TR><TD><span style='font-size:small; text-align:center;'>\n"
 "The GSID Protein View was created by the \n"
@@ -40,7 +40,7 @@ puts(
 "<BR>"
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
-"</span></TD></TR></TABLE></span>\n"
+"</span></TD></TR></TABLE></CENTER>\n"
 );
 
 puts("<BR><B>Enter a VAX003 or VAX004 protein ID: </B>");
