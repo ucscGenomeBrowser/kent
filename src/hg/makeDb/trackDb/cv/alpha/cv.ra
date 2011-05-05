@@ -7910,6 +7910,11 @@ tag DMSO4hr
 description 4 hr with DMSO (Myers)
 type treatment
 
+term DIFF_7d
+tag DIFF7d 
+description PROVISIONAL Grown for 7 days in differentiation medium (Wold)
+type treatment
+
 term Estradiol_10nM
 tag ESTRADIa1h
 description  1 h with 10 nM Estradiol  (Myers)

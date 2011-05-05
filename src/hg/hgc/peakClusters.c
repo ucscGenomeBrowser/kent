@@ -323,11 +323,9 @@ static void printFactorSourceTableHits(struct bed *cluster, struct sqlConnection
  * cluster, or if invert is set, that have misses. */
 {
 char *vocabFile = NULL;
-struct hash *vocabHash = NULL;
 if (vocab)
     {
     vocabFile = cloneFirstWord(vocab);
-    vocabHash = getVocabHash(vocabFile);
     }
 
 /* Make the monster SQL query to get all assays*/
