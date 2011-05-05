@@ -36,7 +36,7 @@ FDR 1.0% hypersensitive zones.</DD>
 </DL>
 <p>DNaseI sensitivity is shown as the absolute density of <EM>in vivo</EM>
 cleavage sites across the genome mapped using the Digital DNaseI methodology
-(see below).  Data have been normalized to 25 million reads per cell type.
+(see below).  
 
 <H2>Methods</H2>
 
@@ -68,10 +68,24 @@ conventional DNaseI hypersensitivity assays using end-labeling/Southern
 blotting methods. </p>
 
 <h2>Release Notes</h2>
+<P>
+This is Release 2 (May 2011) of this track, which includes 20 additional
+experiments.
+</P>
+<P>
+A number of previously released Peaks have been replaced by updated versions.
+The affected database tables and files include 'V2' in the name, and metadata is marked with "submittedDataVersion=V2",
+followed by the reason for replacement, "Fixed bug in peak calls that artificially reduced the number of peaks".
+</P>
+<P>
+Previous versions of files are available for download from the
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/"
+TARGET=_BLANK>FTP site</A>
+</P>
+
+
 <p>
-There are 5 bam files found in the 
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/"
- TARGET=_BLANK>FTP site</A> that contain mis-mappings to chrY, with long
+There are 5 bam files that contain mis-mappings to chrY, with long
 stretches of n's in the alignments. The associated processed data files will contain small 
 number of mis-mapping to chrY. The files directly affected are:
 <ul>

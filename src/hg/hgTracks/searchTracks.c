@@ -433,7 +433,7 @@ else
         {
         hPrintf("<tr><td nowrap colspan=3>\n");
         hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='return to browser' class='viewBtn' style='font-size:.8em;'>");
-        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>\n");
+        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<span class='selCbCount'></span>\n");
 
         startFrom = cartUsualInt(cart,TRACK_SEARCH_PAGER,0);
         if (startFrom > 0 && startFrom < tracksFound)
@@ -556,7 +556,7 @@ else
     // Closing view in browser button and foundTracks count
     hPrintf("<tr><td nowrap colspan=3>");
     hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn' style='font-size:.8em;'>");
-    hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
+    hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<span class='selCbCount'></span>");
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
         hPrintf("</td><td align='right' valign='top'>\n");
@@ -588,7 +588,7 @@ webIncludeResourceFile("ui.dropdownchecklist.css");
 //jsIncludeFile("ui.core.js",NULL);   // NOTE: This appears to be not needed as long as jquery-ui.js comes before ui.dropdownchecklist.js
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
 // This line is needed to get the multi-selects initialized
-hPrintf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
+hPrintf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
 
 struct group *group;
 char *groups[128];
@@ -765,6 +765,7 @@ hPrintf("</div>\n");
 
 hPrintf("</form>\n");
 hPrintf("</div>"); // Restricts to max-width:1000px;
+puts("<div style='height:.8em;'></div>");
 
 if (measureTiming)
     uglyTime("Rendered tabs");
@@ -834,6 +835,10 @@ else
     hPrintf("<p>Search for terms in track descriptions, groups, and names. "
             "If multiple terms are entered, only tracks with all terms "
             "will be part of the results.");
-hPrintf("<BR><a target='_blank' href='../goldenPath/help/trackSearch.html'>more help</a></p>\n");
+    hPrintf("<BR><a href='#' onclick=\"retrieveHtml('../goldenPath/help/trackSearch.html'); return false;\">more help</a></p>\n");
+    // NOTE: By declaring a div and passing it to retrieveHtml, the div could be populated.
+    // However, this is not desired here because of the titles.
+    //hPrintf("<BR><a href='#' onclick=\"retrieveHtml('../goldenPath/help/trackSearch.html',$('#moreHelp'),true); return false;\">more help</a></p>\n");
+    //hPrintf("<div id='moreHelp'></div>\n");
 webEndSectionTables();
 }

@@ -434,7 +434,8 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortAln
 objType table
-attic aux
+attic auxExp
+bioRep gen0101WC
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -447,12 +448,12 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam
 geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-2
+labProtocolId gen0101WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1403
 tableName wgEncodeCshlShortRnaSeqGm12878CellShortAln
@@ -460,7 +461,8 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0101WC
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -473,12 +475,12 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw.bigWig
 geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-2
+labProtocolId gen0101WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1403
 tableName wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw
@@ -486,7 +488,8 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0101WC
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -499,12 +502,12 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw.bigWig
 geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-2
+labProtocolId gen0101WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1403
 tableName wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw
@@ -512,7 +515,8 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortRawData
 objType file
-attic aux
+attic auxExp
+bioRep gen0101WC
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -524,12 +528,12 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShortRawData.fastq.gz
 geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-2
+labProtocolId gen0101WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1017
 view RawData
@@ -750,7 +754,8 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortAln
 objType table
-attic aux
+attic auxExp
+bioRep gen0108C
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -763,12 +768,12 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam
 geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-4
+labProtocolId gen0108Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1404
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortAln
@@ -776,7 +781,8 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0108C
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -789,12 +795,12 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw.bigWig
 geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-4
+labProtocolId gen0108Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1404
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw
@@ -802,7 +808,8 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0108C
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -815,12 +822,12 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw.bigWig
 geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-4
+labProtocolId gen0108Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1404
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw
@@ -828,7 +835,8 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortRawData
 objType file
-attic aux
+attic auxExp
+bioRep gen0108C
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -840,19 +848,20 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortRawData.fastq.gz
 geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-4
+labProtocolId gen0108Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags
 objType table
-attic aux
+attic auxExp
+bioRep gen0108C
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -865,12 +874,12 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-4
+labProtocolId gen0108Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags
@@ -1092,7 +1101,8 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
 objType table
-attic aux
+attic auxExp
+bioRep gen0112N
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1105,12 +1115,12 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam
 geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-6
+labProtocolId gen0112Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1402
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
@@ -1118,7 +1128,8 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0112N
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1131,12 +1142,12 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw.bigWig
 geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-6
+labProtocolId gen0112Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1402
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
@@ -1144,7 +1155,8 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0112N
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1157,12 +1169,12 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw.bigWig
 geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-6
+labProtocolId gen0112Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1402
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
@@ -1170,7 +1182,8 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortRawData
 objType file
-attic aux
+attic auxExp
+bioRep gen0112N
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1182,19 +1195,20 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortRawData.fastq.gz
 geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-6
+labProtocolId gen0112Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags
 objType table
-attic aux
+attic auxExp
+bioRep gen0112N
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -1207,12 +1221,12 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-6
+labProtocolId gen0112Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags
@@ -3170,7 +3184,8 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortAln
 objType table
-attic aux
+attic auxExp
+bioRep gen0130WC
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3183,12 +3198,12 @@ fileName wgEncodeCshlShortRnaSeqK562CellShortAln.bam
 geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-31
+labProtocolId gen0130WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1409
 tableName wgEncodeCshlShortRnaSeqK562CellShortAln
@@ -3196,7 +3211,8 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortMinusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0130WC
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3209,12 +3225,12 @@ fileName wgEncodeCshlShortRnaSeqK562CellShortMinusRaw.bigWig
 geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-31
+labProtocolId gen0130WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1409
 tableName wgEncodeCshlShortRnaSeqK562CellShortMinusRaw
@@ -3222,7 +3238,8 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortPlusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0130WC
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3235,12 +3252,12 @@ fileName wgEncodeCshlShortRnaSeqK562CellShortPlusRaw.bigWig
 geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-31
+labProtocolId gen0130WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1409
 tableName wgEncodeCshlShortRnaSeqK562CellShortPlusRaw
@@ -3248,7 +3265,8 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortRawData
 objType file
-attic aux
+attic auxExp
+bioRep gen0130WC
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3260,19 +3278,20 @@ fileName wgEncodeCshlShortRnaSeqK562CellShortRawData.fastq.gz
 geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-31
+labProtocolId gen0130WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1000
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortTransfrags
 objType table
-attic aux
+attic auxExp
+bioRep gen0130WC
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3285,12 +3304,12 @@ fileName wgEncodeCshlShortRnaSeqK562CellShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-31
+labProtocolId gen0130WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562CellShortTransfrags
@@ -3512,7 +3531,8 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortAln
 objType table
-attic aux
+attic auxExp
+bioRep gen0133CH
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3525,12 +3545,12 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam
 geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-32
+labProtocolId gen0133CHs
 labVersion Produced by Hannon Lab
 localization chromatin
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1405
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortAln
@@ -3538,7 +3558,8 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0133CH
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3551,12 +3572,12 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw.bigWig
 geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-32
+labProtocolId gen0133CHs
 labVersion Produced by Hannon Lab
 localization chromatin
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1405
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw
@@ -3564,7 +3585,8 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0133CH
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3577,12 +3599,12 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw.bigWig
 geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-32
+labProtocolId gen0133CHs
 labVersion Produced by Hannon Lab
 localization chromatin
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1405
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw
@@ -3590,7 +3612,8 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortRawData
 objType file
-attic aux
+attic auxExp
+bioRep gen0133CH
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3602,19 +3625,20 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShortRawData.fastq.gz
 geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-32
+labProtocolId gen0133CHs
 labVersion Produced by Hannon Lab
 localization chromatin
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags
 objType table
-attic aux
+attic auxExp
+bioRep gen0133CH
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3627,12 +3651,12 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-32
+labProtocolId gen0133CHs
 labVersion Produced by Hannon Lab
 localization chromatin
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags
@@ -3854,7 +3878,8 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortAln
 objType table
-attic aux
+attic auxExp
+bioRep gen0142C
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3867,12 +3892,12 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam
 geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-36
+labProtocolId gen0142Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1406
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortAln
@@ -3880,7 +3905,8 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0142C
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3893,12 +3919,12 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw.bigWig
 geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-36
+labProtocolId gen0142Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1406
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw
@@ -3906,7 +3932,8 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0142C
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3919,12 +3946,12 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw.bigWig
 geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-36
+labProtocolId gen0142Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1406
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw
@@ -3932,7 +3959,8 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortRawData
 objType file
-attic aux
+attic auxExp
+bioRep gen0142C
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3944,19 +3972,20 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShortRawData.fastq.gz
 geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-36
+labProtocolId gen0142Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags
 objType table
-attic aux
+attic auxExp
+bioRep gen0142C
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -3969,12 +3998,12 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-36
+labProtocolId gen0142Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags
@@ -4196,7 +4225,8 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortAln
 objType table
-attic aux
+attic auxExp
+bioRep gen0143NL
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4209,12 +4239,12 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam
 geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-37
+labProtocolId gen0143NLs
 labVersion Produced by Hannon Lab
 localization nucleolus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1408
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortAln
@@ -4222,7 +4252,8 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0143NL
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4235,12 +4266,12 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw.bigWig
 geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-37
+labProtocolId gen0143NLs
 labVersion Produced by Hannon Lab
 localization nucleolus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1408
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw
@@ -4248,7 +4279,8 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0143NL
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4261,12 +4293,12 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw.bigWig
 geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-37
+labProtocolId gen0143NLs
 labVersion Produced by Hannon Lab
 localization nucleolus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1408
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
@@ -4274,7 +4306,8 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortRawData
 objType file
-attic aux
+attic auxExp
+bioRep gen0143NL
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4286,19 +4319,20 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShortRawData.fastq.gz
 geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-37
+labProtocolId gen0143NLs
 labVersion Produced by Hannon Lab
 localization nucleolus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags
 objType table
-attic aux
+attic auxExp
+bioRep gen0143NL
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4311,12 +4345,12 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-37
+labProtocolId gen0143NLs
 labVersion Produced by Hannon Lab
 localization nucleolus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags
@@ -4538,7 +4572,8 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln
 objType table
-attic aux
+attic auxExp
+bioRep gen0146NP
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4551,12 +4586,12 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam
 geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-39
+labProtocolId gen0146NPs
 labVersion Produced by Hannon Lab
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1411
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln
@@ -4564,7 +4599,8 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0146NP
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4577,12 +4613,12 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw.bigWig
 geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-39
+labProtocolId gen0146NPs
 labVersion Produced by Hannon Lab
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1411
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw
@@ -4590,7 +4626,8 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0146NP
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4603,12 +4640,12 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw.bigWig
 geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-39
+labProtocolId gen0146NPs
 labVersion Produced by Hannon Lab
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1411
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw
@@ -4616,7 +4653,8 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortRawData
 objType file
-attic aux
+attic auxExp
+bioRep gen0146NP
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4628,19 +4666,20 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortRawData.fastq.gz
 geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-39
+labProtocolId gen0146NPs
 labVersion Produced by Hannon Lab
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags
 objType table
-attic aux
+attic auxExp
+bioRep gen0146NP
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4653,12 +4692,12 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-39
+labProtocolId gen0146NPs
 labVersion Produced by Hannon Lab
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags
@@ -4880,7 +4919,8 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortAln
 objType table
-attic aux
+attic auxExp
+bioRep gen0151N
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4893,12 +4933,12 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam
 geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-42
+labProtocolId gen0151Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1407
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortAln
@@ -4906,7 +4946,8 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0151N
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4919,12 +4960,12 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw.bigWig
 geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-42
+labProtocolId gen0151Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1407
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw
@@ -4932,7 +4973,8 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw
 objType table
-attic aux
+attic auxExp
+bioRep gen0151N
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4945,12 +4987,12 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw.bigWig
 geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-42
+labProtocolId gen0151Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1407
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw
@@ -4958,7 +5000,8 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortRawData
 objType file
-attic aux
+attic auxExp
+bioRep gen0151N
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4970,19 +5013,20 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShortRawData.fastq.gz
 geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-42
+labProtocolId gen0151Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags
 objType table
-attic aux
+attic auxExp
+bioRep gen0151N
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -4995,12 +5039,12 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-42
+labProtocolId gen0151Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags
@@ -5222,6 +5266,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortAln
 objType table
+bioRep gen0154P
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5234,12 +5279,12 @@ fileName wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam
 geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-44
+labProtocolId gen0154Ps
 labVersion Produced by Hannon Lab
 localization polysome
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1410
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortAln
@@ -5247,6 +5292,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw
 objType table
+bioRep gen0154P
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5259,12 +5305,12 @@ fileName wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw.bigWig
 geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-44
+labProtocolId gen0154Ps
 labVersion Produced by Hannon Lab
 localization polysome
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1410
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw
@@ -5272,6 +5318,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw
 objType table
+bioRep gen0154P
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5284,12 +5331,12 @@ fileName wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw.bigWig
 geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-44
+labProtocolId gen0154Ps
 labVersion Produced by Hannon Lab
 localization polysome
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1410
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw
@@ -5297,6 +5344,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortRawData
 objType file
+bioRep gen0154P
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5308,18 +5356,19 @@ fileName wgEncodeCshlShortRnaSeqK562PolysomeShortRawData.fastq.gz
 geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-44
+labProtocolId gen0154Ps
 labVersion Produced by Hannon Lab
 localization polysome
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags
 objType table
+bioRep gen0154P
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -5332,12 +5381,12 @@ fileName wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-44
+labProtocolId gen0154Ps
 labVersion Produced by Hannon Lab
 localization polysome
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags
@@ -6177,6 +6226,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
 objType table
+bioRep gen0161WC
 cell prostate
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -6189,12 +6239,12 @@ fileName wgEncodeCshlShortRnaSeqProstateCellShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-61
+labProtocolId gen0161WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
@@ -6202,6 +6252,7 @@ view Transfrags
 
 metaObject wgEncodeCshlShortRnaSeqProstateCellTotalAln
 objType table
+bioRep gen0161WC
 cell prostate
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -6214,12 +6265,12 @@ fileName wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam
 geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-61
+labProtocolId gen0161WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalAln
@@ -6227,6 +6278,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw
 objType table
+bioRep gen0161WC
 cell prostate
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -6239,12 +6291,12 @@ fileName wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw.bigWig
 geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-61
+labProtocolId gen0161WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw
@@ -6252,6 +6304,7 @@ view MinusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw
 objType table
+bioRep gen0161WC
 cell prostate
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -6264,12 +6317,12 @@ fileName wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw.bigWig
 geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-61
+labProtocolId gen0161WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw
@@ -6277,6 +6330,7 @@ view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqProstateCellTotalRawData
 objType file
+bioRep gen0161WC
 cell prostate
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
@@ -6288,12 +6342,12 @@ fileName wgEncodeCshlShortRnaSeqProstateCellTotalRawData.fastq.gz
 geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
-labProtocolId Generation 0
+labExpId crg-61
+labProtocolId gen0161WCs
 labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
-replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
@@ -6512,4 +6566,4 @@ rnaExtract shortTotal
 subId 3377
 view RawData
 
-# MAGIC: 707831377
+# MAGIC: -472106064

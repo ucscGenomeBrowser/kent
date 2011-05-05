@@ -1970,8 +1970,8 @@ tnfgVis = hTvFromString(visString);
 printf("<b>Transfrags Display Mode: </b>");
 hTvDropDown("hgt.affyPhase2.tnfg", tnfgVis, TRUE);
 
-wigCfgUi(cart,tdb,tdb->track,"<u>Graph Plotting options:</u>",FALSE);
-printf("<p><b><u>View/Hide individual cell lines:</u></b>");
+wigCfgUi(cart,tdb,tdb->track,"<span style='text-decoration:underline;'>Graph Plotting options:</span>",FALSE);
+printf("<p><b><span style='text-decoration:underline;'>View/Hide individual cell lines:</span></b>");
 }
 
 void humMusUi(struct trackDb *tdb, int optionNum )
@@ -2358,7 +2358,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     printf("<TD>%s", tdb->longLabel);
     char *dataVersion = trackDbSetting(tdb, "dataVersion");
     if (dataVersion)
-        printf("&nbsp&nbsp;<EM><FONT COLOR=#666666 SIZE=-1>%s</FONT></EM>", dataVersion);
+        printf("&nbsp&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
     printf("</TD></TR>");
     }
 printf("</TABLE>");
@@ -2616,7 +2616,7 @@ if (!ajax)
 
 #ifdef UNUSED
 static void findSuperChildrenAndSettings(struct trackDb *tdbList, struct trackDb *super)
-/* Find the tracks that have super as a parent and stuff references to them on 
+/* Find the tracks that have super as a parent and stuff references to them on
  * super's children list. Also do some visibility and parentName futzing. */
 {
 struct trackDb *tdb;
@@ -2707,7 +2707,7 @@ if (sameWord(tdb->track,"ensGene"))
     printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
     }
 else
-    printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
 /* Print link for parent track */
 if (!ajax)
@@ -2735,7 +2735,7 @@ if (!ajax)
         grpFreeList(&grps);
         }
     }
-puts("<BR><BR>");
+    puts("<BR><BR>");
 
 if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
@@ -2863,15 +2863,20 @@ if (!ct)
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();
+    puts("<A NAME='TRACK_HTML'></A>");
+
     // include anchor for Description link
-    puts("<A NAME=TRACK_HTML></A>");
-    printf("<table class='windowSize'><tr valign='top'><td>");
+    char *browserVersion;
+    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
+        printf("<table class='windowSize'><tr valign='top'><td>");
+    else
+        printf("<table class='windowSize' style='position:relative; top:-1em;'><tr valign='top'><td>");
 
     // Add pennantIcon
     printPennantIconNote(tdb);
 
     puts(tdb->html);
-    printf("</td><td>");
+    printf("</td><td><div style='height:.7em;'></div>");
     makeTopLink(tdb);
     printf("&nbsp</td></tr><tr valign='bottom'><td colspan=2>");
     makeTopLink(tdb);

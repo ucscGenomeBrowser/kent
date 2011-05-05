@@ -70,10 +70,12 @@ set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
 set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/090218/sgdPep.faa
 
 # Other files needed
-  # For bioCyc pathways - best to update these following build instructions in
-  # mm9.txt
-set bioCycPathways = /hive/data/outside/bioCyc/090623/pathways.col
-set bioCycGenes = /hive/data/outside/bioCyc/090623/genes.col
+  # For bioCyc pathways - ask Jim for URL and password to get fresh files
+  # for theses two.  In the past it's been a pain in the butt.  You have
+  # to download 3 gig of stuff from a web browser because of the password,
+  # and in the end we need about 1 meg of it....
+set bioCycPathways = /hive/data/outside/bioCyc/110503/mouse/pathways.col
+set bioCycGenes = /hive/data/outside/bioCyc/110503/mouse/genes.col
 
 # These next two may need to be updated on /scratch/data on $cpuFarm
 set Pfam_fs = /scratch/data/Pfam_fs
@@ -1087,6 +1089,7 @@ cd $dir
 ~/kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
 
 # Map old to new mapping
+# See the hg19 docs for what to do when old genes are on a different assembly.
 # XXX TODO - haven't figured out how to do this when old genes were on old assembly
 cd $dir
 hgsql $db -N -e 'select * from knownGene' > knownGeneOld.gp
@@ -1168,24 +1171,51 @@ hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd
     hgLoadSqlTab $tempDb bioCycPathway ~/kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
     hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
-# Do KEGG Pathways build
+# Do KEGG Pathways build (OOPS - instructions are for HUMAN!
     mkdir $dir/kegg
     cd $dir/kegg
 
-    wget --timestamping -O hsa2.html \
-    "http://www.kegg.jp/kegg-bin/show_organism?menu_type=pathway_maps&org=hsa" 
+    wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
 
-    cat hsa2.html |grep "mapno=" |sed -e 's/mapno=/\npath:hsa/'|grep -v org_name |\
-    sed -e 's/">/\t/' |\
-    sed -e 's/</\t/'|cut -f 1,2 >hsa.lis
-    
-    ~/kent/src/hg/protein/getKeggList2.pl hsa > keggList.tab
+    cat map_title.tab | sed -e 's/\t/\tmmu\t/' > j.tmp
+    cut -f 2 j.tmp >j.mmu
+    cut -f 1,3 j.tmp >j.1
+    paste j.mmu j.1 |sed -e 's/\t//' > keggMapDesc.tab
+    rm j.mmu j.1
+    rm j.tmp
 
-    kgAttachKegg $db keggList.tab  keggPathway.tab
-    hgLoadSqlTab $tempDb keggPathway ~/src/hg/lib/keggPathway.sql ./keggPathway.tab
+    hgsql mm9 -e 'drop table keggMapDesc'
+    hgsql mm9 < ~/kent/src/hg/lib/keggMapDesc.sql
+    hgsql mm9 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
 
-    cat hsa.lis | sed -e 's/path://' > keggMapDesc.tab
-    hgLoadSqlTab $tempDb keggMapDesc ~/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
+    wget --timestamping ftp://ftp.genome.jp/pub/kegg/genes/organisms/mmu/mmu_pathway.list
+
+    cat mmu_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > j.tmp
+    hgsql mm9 -e 'drop table keggPathway'
+    hgsql mm9 < ~/kent/src/hg/lib/keggPathway.sql
+    hgsql mm9 -e 'load data local infile "j.tmp" into table keggPathway'
+
+    hgsql mm9 -N -e \
+    'select name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
+    >keggPathway.tab
+
+    hgsql mm9 -e 'delete from keggPathway'
+
+    hgsql mm9 -e 'load data local infile "keggPathway.tab" into table keggPathway'
+
+    rm j.tmp
+
+    mkdir -p /hive/data/genomes/mm9/bed/geneSorter
+    cd /hive/data/genomes/mm9/bed/geneSorter
+    hgsql mm9 -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' \
+         |sort -u|sed -e 's/\t+\t/+/' > knownToKeggEntrez.tab
+
+    hgsql mm9 -e 'drop table knownToKeggEntrez'
+
+    hgsql mm9 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
+
+    hgsql mm9 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
+
 
 # Make spMrna table (useful still?)
    cd $dir
@@ -1197,8 +1227,8 @@ hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd
     mkdir $dir/cgap
     cd $dir/cgap
     
-    wget --timestamping -O Hs_GeneData.dat "ftp://ftp1.nci.nih.gov/pub/CGAP/Hs_GeneData.dat"
-    hgCGAP Hs_GeneData.dat
+    wget --timestamping -O Mm_GeneData.dat "ftp://ftp1.nci.nih.gov/pub/CGAP/Mm_GeneData.dat"
+    hgCGAP Mm_GeneData.dat
         
     cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab|sort -u > cgapAlias.tab
     hgLoadSqlTab $tempDb cgapAlias ~/kent/src/hg/lib/cgapAlias.sql ./cgapAlias.tab

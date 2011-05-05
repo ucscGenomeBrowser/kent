@@ -3,6 +3,8 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion January 2010
+dccAccession wgEncodeEH000317
+expId 317
 fileName wgEncodeCrgMapabilityAlign100mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -17,6 +19,8 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion April 2010
+dccAccession wgEncodeEH000608
+expId 608
 fileName wgEncodeCrgMapabilityAlign24mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -31,6 +35,8 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion January 2010
+dccAccession wgEncodeEH000318
+expId 318
 fileName wgEncodeCrgMapabilityAlign36mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -45,6 +51,8 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion January 2010
+dccAccession wgEncodeEH000319
+expId 319
 fileName wgEncodeCrgMapabilityAlign40mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -59,6 +67,8 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion January 2010
+dccAccession wgEncodeEH000320
+expId 320
 fileName wgEncodeCrgMapabilityAlign50mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -73,6 +83,8 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion January 2010
+dccAccession wgEncodeEH000321
+expId 321
 fileName wgEncodeCrgMapabilityAlign75mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -87,12 +99,29 @@ objType composite
 composite wgEncodeMapability
 expVars lab,dataType,view,size
 
+metaObject wgEncodeMapabilityDacConsensusBlacklist
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-04
+fileName wgEncodeMapabilityDacConsensusBlacklist.bed.gz
+grant Birney
+lab DAC-Stanford
+labVersion consensus: Duke Excluded and DAC UltraHighSignal blacklist
+project wgEncode
+subId 4039
+tableName wgEncodeMapabilityDacConsensusBlacklist
+view Excludable
+
 metaObject wgEncodeMapabilityDukeRegionsExcluded
 objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-28
+dccAccession wgEncodeEH000322
+expId 322
 fileName wgEncodeMapabilityDukeRegionsExcluded.bed.gz
 grant Crawford
 lab Duke
@@ -108,6 +137,8 @@ composite wgEncodeMapability
 dataType Mapability
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-28
+dccAccession wgEncodeEH000323
+expId 323
 fileName wgEncodeMapabilityDukeUniqueness20bp.bigWig
 grant Crawford
 lab Duke
@@ -124,6 +155,8 @@ composite wgEncodeMapability
 dataType Mapability
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-28
+dccAccession wgEncodeEH000325
+expId 325
 fileName wgEncodeMapabilityDukeUniqueness35bp.bigWig
 grant Crawford
 lab Duke
@@ -134,4 +167,4 @@ subId 3840
 tableName wgEncodeMapabilityDukeUniqueness35bp
 view Uniqueness
 
-# MAGIC: 1151436231
+# MAGIC: -599623887

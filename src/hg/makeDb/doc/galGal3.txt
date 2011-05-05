@@ -2845,3 +2845,59 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/melGal1/bed
 
 ############################################################################
+# LASTZ Lizard AnoCar2 (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/galGal3/bed/lastzAnoCar2.2011-04-25
+    cd /hive/data/genomes/galGal3/bed/lastzAnoCar2.2011-04-25
+
+    cat << '_EOF_' > DEF
+# Chicken vs lizard
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Chicken galGal3
+SEQ1_DIR=/scratch/data/galGal3/nib
+SEQ1_LEN=/scratch/data/galGal3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Lizard anoCar2
+SEQ2_DIR=/scratch/data/anoCar2/anoCar2.2bit
+SEQ2_LEN=/scratch/data/anoCar2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/galGal3/bed/lastzAnoCar2.2011-04-25
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +25 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
+	-bigClusterHub=swarm -tRepeats=windowmaskerSdust \
+	-qRepeats=windowmaskerSdust > do.log 2>&1 &
+    #	real    210m1.468s
+    cat fb.galGal3.chainAnoCar2Link.txt 
+    #	113851392 bases of 1042591351 (10.920%) in intersection
+
+    #	running the swap - DONE - 2011-04-26
+    mkdir /hive/data/genomes/anoCar2/bed/blastz.galGal3.swap
+    cd /hive/data/genomes/anoCar2/bed/blastz.galGal3.swap
+    time nice -n +25 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/galGal3/bed/lastzAnoCar2.2011-04-25/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-syntenicNet -swap -qRepeats=windowmaskerSdust \
+	-tRepeats=windowmaskerSdust > swap.log 2>&1 &
+    #	real    11m8.229s
+    cat fb.anoCar2.chainGalGal3Link.txt 
+    #	116069635 bases of 1701353770 (6.822%) in intersection
+
+##############################################################################

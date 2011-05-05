@@ -614,9 +614,11 @@ void simpleBedNextPrevEdge(struct track *tg, struct hvGfx *hvg, void *item, int 
 struct bed4 *bed = item;
 char *mouseOverText = NULL;
 if (next)
-    mouseOverText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Right Edge");
+    mouseOverText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText",
+							 revCmplDisp ? "Left Edge" : "Right Edge");
 else
-    mouseOverText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Left Edge");
+    mouseOverText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText",
+							 revCmplDisp ? "Right Edge" : "Left Edge");
 int winSize = winEnd - winStart;
 int bufferToEdge = 0.05 * winSize;
 int newWinStart, newWinEnd;

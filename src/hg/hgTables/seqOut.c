@@ -85,6 +85,7 @@ cgiMakeButton(hgtaDoGenePredSequence, "submit");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>\n");
+hPrintf("<div style='height:.9em;'></div>\n");
 htmlClose();
 freez(&dupType);
 }
@@ -248,6 +249,7 @@ else
     cgiMakeButton(hgtaDoMainPage, "cancel");
     hPrintf("</FORM>");
     }
+hPrintf("<div style='height:.9em;'></div>\n");
 htmlClose();
 }
 

@@ -384,12 +384,6 @@ freeMem(encodedMapName);
 return(cloneString(buf));
 }
 
-void smallBreak()
-/* Draw small horizontal break */
-{
-hPrintf("<FONT SIZE=1><BR></FONT>\n");
-}
-
 #ifdef REMOTE_TRACK_AJAX_CALLBACK
 static boolean trackUsesRemoteData(struct track *track)
 /* returns TRUE is this track has a remote datasource */
@@ -4520,7 +4514,7 @@ if (!hideControls)
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
     freezeName = "Unknown";
-    hPrintf("<FONT SIZE=5><B>");
+    hPrintf("<span style='font-size:x-large;'><B>");
     if (startsWith("zoo",database) )
 	{
 	hPrintf("%s %s on %s June 2002 Assembly %s target1",
@@ -4543,7 +4537,7 @@ if (!hideControls)
 			organization, browserName, organism, freezeName, database);
 	    }
 	}
-    hPrintf("</B></FONT><BR>\n");
+    hPrintf("</B></span><BR>\n");
 
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
     hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
@@ -4566,7 +4560,7 @@ if (!hideControls)
     topButton("hgt.out1", ZOOM_1PT5X);
     topButton("hgt.out2", ZOOM_3X);
     topButton("hgt.out3", ZOOM_10X);
-    hWrites("<BR>\n");
+    hWrites("<div style='height:1em;'></div>\n");
 #endif//ndef USE_NAVIGATION_LINKS
 
     if (showTrackControls)
@@ -4623,9 +4617,9 @@ if (!hideControls)
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
 	hWrites(" ");
 	hButton("hgTracksConfigPage", "configure");
-        //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</B></EM></A></FONT>\n");
+        //hPrintf("&nbsp;&nbsp;<span style='font-size:small;'><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</B></EM></A></span>\n");
 	if (survey && differentWord(survey, "off"))
-	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"%s\" TARGET=_BLANK><EM><B>%s</B></EM></A></FONT>\n", survey, surveyLabel ? surveyLabel : "Take survey");
+	    hPrintf("&nbsp;&nbsp;<span style='font-size:small;'><A STYLE=\"background-color:yellow;\" HREF=\"%s\" TARGET=_BLANK><EM><B>%s</B></EM></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
 	// info for drag selection javascript
 	hPrintf("<input type='hidden' id='hgt.winStart' name='winStart' value='%d'>\n", winStart);
 	hPrintf("<input type='hidden' id='hgt.winEnd' name='winEnd' value='%d'>\n", winEnd);
@@ -4714,7 +4708,6 @@ if (!hideControls)
     hPrintf("</TD>");
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TR></TABLE>\n");
-    // smallBreak();
 
     /* Display bottom control panel. */
 
@@ -4806,27 +4799,18 @@ if (!hideControls)
 	    hPrintf("<TR>");
 	    cg->rowOpen = TRUE;
 	    if (!hIsGsidServer())
-		{
-		hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>",
-		    MAX_CONTROL_COLUMNS);
-		}
+                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
 	    else
-		{
-		hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>",
-		    MAX_CONTROL_COLUMNS-1);
-		}
-	    hPrintf("<table width='100%%'><tr><td align='left'>");
-	    hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-	    hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'><IMG height='18' width='18' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue' title='%s this group'></A>&nbsp;&nbsp;",
-		    hgTracksName(), cartSidUrlString(cart),
-		    collapseGroupVar(group->name),
-		    otherState, group->name,
-		    group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
-	    hPrintf("</td><td align='center' width='100%%'>\n");
-	    hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
-	    hPrintf("</td><td align='right'>\n");
-	    hPrintf("<input type='submit' name='hgt.refresh' value='refresh' title='Update image with your changes'>\n");
-	    hPrintf("</td></tr></table></th>\n");
+                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS-1);
+
+            hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
+            hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
+            hPrintf("<IMG class='toggleButton' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue' title='%s this group'>&nbsp;&nbsp;",
+                    group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+            hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
+            hPrintf("</td><td style='text-align:right;'>\n");
+            hPrintf("<input type='submit' name='hgt.refresh' value='refresh' title='Update image with your changes'>\n");
+            hPrintf("</td></tr></table></th>\n");
 	    controlGridEndRow(cg);
 
 	    /* First track group that is not custom track group gets ruler,
@@ -5504,6 +5488,7 @@ else
     chromInfoRowsNonChrom(1000);
 
 hTableEnd();
+puts("</P><div style='height:.9em;'></div>");
 
 hgPositionsHelpHtml(organism, database);
 puts("</FORM>");

@@ -1771,7 +1771,7 @@ function findTracksHandleNewMdbVals(response, status)
         }
         $(td).find('.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
             if (usesFilterBy) {
-                $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });
+                $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
             } else {
                 $(this).attr("multiple",false);
                 $(this).removeClass('filterBy');
@@ -1799,7 +1799,7 @@ function findTracksMdbValChanged(obj)
                 if ($(this).hasClass('filterBy')) {
                     //$(this).dropdownchecklist("refresh");  // requires v1.1
                     $(this).dropdownchecklist("destroy");
-                    $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });
+                    $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
                 }
             });
         }
@@ -1970,6 +1970,28 @@ function findTracksClearFound()
     return false;
 }
 
+function filterByMaxHeight(multiSel)
+{   // Setting a max hieght to scroll dropdownchecklists but
+    // multiSel is hidden when this is done, so it's position and height must be estimated.
+    var pos = $(multiSel).closest(':visible').offset().top + 30;
+    if (pos <= 0)
+        pos = 260;
+
+    // Special mess since the filterBy's on non-current tabs will calculate pos badly.
+    var tabbed = $('input#currentTab');
+    if (tabbed != undefined) {
+        var tabDiv = $(multiSel).parents('div#'+ $(tabbed).attr('value'));
+        if (tabDiv == null || tabDiv == undefined || $(tabDiv).length == 0) {
+            pos = 360;
+        }
+    }
+    var maxHeight = $(window).height() - pos;
+    var selHeight = $(multiSel).children().length * 21;
+    if (maxHeight > selHeight)
+        maxHeight = null;
+    return maxHeight;
+}
+
 function findTracksClear()
 {// Clear found tracks and all input controls
     findTracksClearFound();
@@ -1977,9 +1999,9 @@ function findTracksClear()
     //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
     $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
     $('select.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
-          //$(this).dropdownchecklist("refresh");  // requires v1.1
-          $(this).dropdownchecklist("destroy");
-          $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });
+        //$(this).dropdownchecklist("refresh");  // requires v1.1
+        $(this).dropdownchecklist("destroy");
+        $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
     });
 
     $('select.groupSearch').attr('selectedIndex',0);

@@ -458,7 +458,7 @@ return advancedJsEnabled;
 
 void jsBeginCollapsibleSection(struct cart *cart, char *track, char *section, char *sectionTitle,
 			       boolean isOpenDefault)
-/* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's 
+/* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's
  * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. */
 {
 char collapseGroupVar[512];
@@ -476,7 +476,7 @@ printf("<IMG height='18' width='18' "
        "</A></TD>\n",
        section, track,
        section, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
-printf("<TD class='bigBlue'><FONT SIZE=4><B>&nbsp;%s</B></FONT></TD></TR>\n", sectionTitle);
+printf("<TD class='bigBlue' style='font-size:large;'><B>&nbsp;%s</B></TD></TR>\n", sectionTitle);
 printf("<TR %sid='%s-%d'><TD colspan=2>", isOpen ? "" : "style='display: none' ", section, 1);
 }
 

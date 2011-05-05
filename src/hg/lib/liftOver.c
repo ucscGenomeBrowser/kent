@@ -1200,6 +1200,57 @@ lineFileClose(&lf);
 return ct;
 }
 
+int liftOverBedOrPositions(char *fileName, struct hash *chainHash, 
+                        double minMatch,  double minBlocks, 
+                        int minSizeT, int minSizeQ,
+                        int minChainT, int minChainQ,
+		        bool fudgeThick, FILE *mapped, FILE *unmapped, 
+		        bool multiple, char *chainTable, int *errCt)
+/* Sniff the first line of the file, and determine whether it's a */
+/* bed, a positions file, or neither. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line = NULL;
+char *chrom, *start, *end;
+boolean isPosition = FALSE;
+lineFileNextReal(lf, &line);
+if (!line)
+    return 0;
+chrom = line;
+start = strchr(chrom, ':');
+if (start)
+    {
+    *start++ = 0;
+    end = strchr(start, '-');
+    if (end)
+	{
+	*end++ = 0;
+	isPosition = TRUE;
+	}
+    else 
+	return 0;
+    }
+else
+    {
+    char *words[3];
+    int numWords = chopLine(line, words);
+    if (numWords < 3)
+	return 0;
+    start = words[1];
+    end = words[2];
+    }
+if (!isdigit(start[0]) || !isdigit(end[0]))
+    return 0;
+lineFileClose(&lf);
+if (isPosition)
+    return liftOverPositions(fileName, chainHash, minMatch, minBlocks, minSizeT, 
+			     minSizeQ, minChainT, minChainQ, fudgeThick, mapped, unmapped,
+			     multiple, chainTable, errCt);
+return liftOverBed(fileName, chainHash, minMatch, minBlocks, minSizeT, 
+			     minSizeQ, minChainT, minChainQ, fudgeThick, mapped, unmapped,
+			     multiple, chainTable, errCt);
+}
+
 static char *remapBlockedPsl(struct hash *chainHash, struct psl *psl, 
                             double minMatch, double minBlocks, bool fudgeThick)
 /* Remap blocks in psl, and also chromStart/chromEnd.  

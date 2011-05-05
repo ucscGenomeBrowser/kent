@@ -6,10 +6,10 @@
 #tfbsConsFactors Data
 CREATE TABLE tfbsConsFactors (
     name varchar(255) not null,	# Name of item
-    ac varchar(255) not null,	# gene-regulation.com AC
-    species char(6) not null,	# common name, scientific name
-    factor char(64) not null,	# factor 
-    id char(25) not null,	# id
+    ac varchar(255) not null,	# Gene-regulation.com AC
+    species char(6) not null,	# Common name
+    factor char(64) not null,	# Factor 
+    id char(25) not null,	# SwissProt ID
               #Indices
     INDEX(name(10))
 );

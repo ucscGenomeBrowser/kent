@@ -746,4 +746,29 @@ liftUp /hive/data/genomes/oryCun2/jkStuff/ens.62.lft
     featureBits oryCun2 ensGene
     # 31797207 bases of 2604023284 (1.221%) in intersection
 
+#############################################################################
+# N-SCAN gene predictions (nscanGene) - (2011-05-02 markd)
+
+/cluster/home/jeltje/hive/rabbit/oryCun2.prot.fa
+/cluster/home/jeltje/hive/rabbit/chr_gtf/chr*.fa
+
+    # obtained NSCAN predictions from Jeltje van Baren <jeltje@mbari.org>,
+    cd /hive/data/genomes/oryCun2/bed/nscan
+    cp /cluster/home/jeltje/hive/rabbit/oryCun2.prot.fa  .
+    cp -r /cluster/home/jeltje/hive/rabbit/chr_gtf .
+    gzip oryCun2.* chr_gtf/*
+    chmod a-w oryCun2.* chr_gtf/*
+
+    # load track
+    zcat chr_gtf/*.gtf.gz | gtfToGenePred -genePredExt stdin stdout | hgLoadGenePred -genePredExt oryCun2 nscanGene stdin
+    hgPepPred oryCun2 generic nscanPep oryCun2.prot.fa.gz
+    rm *.tab
+
+    # rabbit/oryCun2/trackDb.ra, add:
+    track nscanGene override
+    informant Rabbit N-SCAN used human (hg19) as the informant for conservation.
+
+    # verify top-level search spec, should produce no results an an error for egrep:
+    hgsql -Ne 'select name from nscanGene' oryCun2 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
+
 ############################################################################

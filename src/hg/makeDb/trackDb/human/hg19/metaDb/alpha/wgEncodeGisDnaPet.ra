@@ -2,6 +2,7 @@ metaObject wgEncodeGisDnaPet
 objType composite
 composite wgEncodeGisDnaPet
 expVars lab,dataType,cell,fragSize
+geoSeriesAccession GSE28867
 
 metaObject wgEncodeGisDnaPetGm1287810kFasta3p
 objType file
@@ -11,8 +12,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000242
+expId 242
 fileName wgEncodeGisDnaPetGm1287810kFasta3p.csfasta.gz
 fragSize 10k
+geoSampleAccession GSM714697
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -28,8 +32,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000242
+expId 242
 fileName wgEncodeGisDnaPetGm1287810kFasta5p.csfasta.gz
 fragSize 10k
+geoSampleAccession GSM714697
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -45,8 +52,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000242
+expId 242
 fileName wgEncodeGisDnaPetGm1287810kQual3p.csqual.gz
 fragSize 10k
+geoSampleAccession GSM714697
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -62,8 +72,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000242
+expId 242
 fileName wgEncodeGisDnaPetGm1287810kQual5p.csqual.gz
 fragSize 10k
+geoSampleAccession GSM714697
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -79,8 +92,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000245
+expId 245
 fileName wgEncodeGisDnaPetGm128781kFasta3p.csfasta.gz
 fragSize 1k
+geoSampleAccession GSM714695
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -96,8 +112,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000245
+expId 245
 fileName wgEncodeGisDnaPetGm128781kFasta5p.csfasta.gz
 fragSize 1k
+geoSampleAccession GSM714695
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -113,8 +132,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000245
+expId 245
 fileName wgEncodeGisDnaPetGm128781kQual3p.csqual.gz
 fragSize 1k
+geoSampleAccession GSM714695
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -130,8 +152,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000245
+expId 245
 fileName wgEncodeGisDnaPetGm128781kQual5p.csqual.gz
 fragSize 1k
+geoSampleAccession GSM714695
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -147,8 +172,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000246
+expId 246
 fileName wgEncodeGisDnaPetGm128785kFasta3p.csfasta.gz
 fragSize 5k
+geoSampleAccession GSM714692
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -164,8 +192,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000246
+expId 246
 fileName wgEncodeGisDnaPetGm128785kFasta5p.csfasta.gz
 fragSize 5k
+geoSampleAccession GSM714692
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -181,8 +212,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000246
+expId 246
 fileName wgEncodeGisDnaPetGm128785kQual3p.csqual.gz
 fragSize 5k
+geoSampleAccession GSM714692
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -198,8 +232,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000246
+expId 246
 fileName wgEncodeGisDnaPetGm128785kQual5p.csqual.gz
 fragSize 5k
+geoSampleAccession GSM714692
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -216,8 +253,11 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000242
+expId 242
 fileName wgEncodeGisDnaPetGm12878F10kAln.bam
 fragSize 10k
+geoSampleAccession GSM714697
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -235,8 +275,11 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
+dccAccession wgEncodeEH000245
+expId 245
 fileName wgEncodeGisDnaPetGm12878F1kAln.bam
 fragSize 1k
+geoSampleAccession GSM714695
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -254,8 +297,11 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
+dccAccession wgEncodeEH000246
+expId 246
 fileName wgEncodeGisDnaPetGm12878F5kAln.bam
 fragSize 5k
+geoSampleAccession GSM714692
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -272,8 +318,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000243
+expId 243
 fileName wgEncodeGisDnaPetK56210kFasta3p.csfasta.gz
 fragSize 10k
+geoSampleAccession GSM714698
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -289,8 +338,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000243
+expId 243
 fileName wgEncodeGisDnaPetK56210kFasta5p.csfasta.gz
 fragSize 10k
+geoSampleAccession GSM714698
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -306,8 +358,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000243
+expId 243
 fileName wgEncodeGisDnaPetK56210kQual3p.csqual.gz
 fragSize 10k
+geoSampleAccession GSM714698
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -323,8 +378,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000243
+expId 243
 fileName wgEncodeGisDnaPetK56210kQual5p.csqual.gz
 fragSize 10k
+geoSampleAccession GSM714698
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -340,8 +398,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000244
+expId 244
 fileName wgEncodeGisDnaPetK5621kFasta3p.csfasta.gz
 fragSize 1k
+geoSampleAccession GSM714693
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -357,8 +418,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000244
+expId 244
 fileName wgEncodeGisDnaPetK5621kFasta5p.csfasta.gz
 fragSize 1k
+geoSampleAccession GSM714693
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -374,8 +438,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000244
+expId 244
 fileName wgEncodeGisDnaPetK5621kQual3p.csqual.gz
 fragSize 1k
+geoSampleAccession GSM714693
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -391,8 +458,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000244
+expId 244
 fileName wgEncodeGisDnaPetK5621kQual5p.csqual.gz
 fragSize 1k
+geoSampleAccession GSM714693
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -408,8 +478,11 @@ dataType DnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-05
 dateUnrestricted 2011-01-05
+dccAccession wgEncodeEH000247
+expId 247
 fileName wgEncodeGisDnaPetK56220kFasta3p.csfasta.gz
 fragSize 20k
+geoSampleAccession GSM714696
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -425,8 +498,11 @@ dataType DnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-05
 dateUnrestricted 2011-01-05
+dccAccession wgEncodeEH000247
+expId 247
 fileName wgEncodeGisDnaPetK56220kFasta5p.csfasta.gz
 fragSize 20k
+geoSampleAccession GSM714696
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -442,8 +518,11 @@ dataType DnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-05
 dateUnrestricted 2011-01-05
+dccAccession wgEncodeEH000247
+expId 247
 fileName wgEncodeGisDnaPetK56220kQual3p.csqual.gz
 fragSize 20k
+geoSampleAccession GSM714696
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -459,8 +538,11 @@ dataType DnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-05
 dateUnrestricted 2011-01-05
+dccAccession wgEncodeEH000247
+expId 247
 fileName wgEncodeGisDnaPetK56220kQual5p.csqual.gz
 fragSize 20k
+geoSampleAccession GSM714696
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -477,8 +559,11 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000243
+expId 243
 fileName wgEncodeGisDnaPetK562F10kAln.bam
 fragSize 10k
+geoSampleAccession GSM714698
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -496,8 +581,11 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
+dccAccession wgEncodeEH000244
+expId 244
 fileName wgEncodeGisDnaPetK562F1kAln.bam
 fragSize 1k
+geoSampleAccession GSM714693
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -515,8 +603,11 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2010-04-05
 dateUnrestricted 2011-01-05
+dccAccession wgEncodeEH000247
+expId 247
 fileName wgEncodeGisDnaPetK562F20kAln.bam
 fragSize 20k
+geoSampleAccession GSM714696
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -533,8 +624,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000243
+expId 243
 fileName wgEncodeGisDnaPetRd1K56210kFastq.fastq.gz
 fragSize 10k
+geoSampleAccession GSM714699
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -550,8 +644,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000244
+expId 244
 fileName wgEncodeGisDnaPetRd1K5621kFastq.fastq.gz
 fragSize 1k
+geoSampleAccession GSM714694
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -567,8 +664,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000243
+expId 243
 fileName wgEncodeGisDnaPetRd2K56210kFastq.fastq.gz
 fragSize 10k
+geoSampleAccession GSM714699
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -584,8 +684,11 @@ dataType DnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
+dccAccession wgEncodeEH000244
+expId 244
 fileName wgEncodeGisDnaPetRd2K5621kFastq.fastq.gz
 fragSize 1k
+geoSampleAccession GSM714694
 grant Gingeras
 lab GIS
 origAssembly hg18
@@ -593,4 +696,4 @@ project wgEncode
 subId 761
 view FastqRd2
 
-# MAGIC: -1637048581
+# MAGIC: 191971678

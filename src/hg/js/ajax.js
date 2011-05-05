@@ -311,3 +311,111 @@ function removeHgsid(href)
     }
     return href;
 }
+
+
+/////////////////////////
+// Retrieve extra html from a file
+var gAppendTo = null;
+
+function _retrieveHtml(fileName,obj)
+{ // popup cfg dialog
+    if (obj && obj != undefined && $(obj).length == 1) {
+        gAppendTo = obj;
+    } else
+        gAppendTo = null;
+
+    $.ajax({
+                type: "GET",
+                url: fileName,
+                dataType: "html",
+                trueSuccess: retrieveHtmlHandle,
+                success: catchErrorOrDispatch,
+                error: errorHandler,
+                cmd: "info",
+                cache: true
+            });
+}
+
+function retrieveHtml(fileName,obj,toggle)
+{ // Retrieves html from file
+  // If no obj is supplied then html will be shown in a popup.
+  // if obj supplied then object's html will be replaced by what is retrieved.
+  //    if obj and toggle == true, and obj has html, it will be emptied, resulting in toggle like calls
+    if (toggle && obj && obj != undefined && $(obj).length == 1) {
+        if ($(obj).html().length > 0) {
+            $(obj).html("")
+            return;
+        }
+    }
+
+    waitOnFunction( _retrieveHtml, fileName, obj );  // Launches the popup but shields the ajax with a waitOnFunction
+}
+
+function retrieveHtmlHandle(response, status)
+{
+// Take html from hgTrackUi and put it up as a modal dialog.
+
+    // make sure all links (e.g. help links) open up in a new window
+    response = response.replace(/<a /ig, "<a target='_blank' ");
+
+    // TODO: Shlurp up any javascript files from the response and load them with $.getScript()
+    // example <script type='text/javascript' SRC='../js/tdreszer/jquery.contextmenu-1296177766.js'></script>
+    var cleanHtml = response;
+    var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
+    var jsFiles = cleanHtml.match(shlurpPattern);
+    cleanHtml = cleanHtml.replace(shlurpPattern,"");
+    shlurpPattern=/\<script type=\'text\/javascript\'>.*\<\/script\>/gi;
+    var jsEmbeded = cleanHtml.match(shlurpPattern);
+    cleanHtml = cleanHtml.replace(shlurpPattern,"");
+    //<LINK rel='STYLESHEET' href='../style/ui.dropdownchecklist-1276528376.css' TYPE='text/css' />
+    shlurpPattern=/\<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
+    var cssFiles = cleanHtml.match(shlurpPattern);
+    cleanHtml = cleanHtml.replace(shlurpPattern,"");
+
+    if (gAppendTo && gAppendTo != undefined) {
+        //warn($(gAppendTo).html());
+        //return;
+        $(gAppendTo).html(cleanHtml);
+        return;
+    }
+
+    var popUp = $('#popupDialog');
+    if (popUp == undefined || $(popUp).length == 0) {
+        $('body').prepend("<div id='popupDialog' style='display: none'></div>");
+        popUp = $('#popupDialog');
+    }
+
+    $(popUp).html("<div id='pop'>" + cleanHtml + "</div>");
+
+    $(popUp).dialog({
+        ajaxOptions: { cache: true },  // This doesn't work
+        resizable: true,
+        height: 'auto',
+        width: 'auto',
+        minHeight: 200,
+        minWidth: 700,
+        modal: true,
+        closeOnEscape: true,
+        autoOpen: false,
+        buttons: { "OK": function() {
+            $(this).dialog("close");
+        }},
+        close: function() {
+            var popUpClose = $('#popupDialog');
+            if (popUpClose != undefined && $(popUpClose).length == 1) {
+                $(popUpClose).html("");  // clear out html after close to prevent problems caused by duplicate html elements
+            }
+        }
+    });
+
+    var myWidth =  $(window).width() - 300;
+    if(myWidth > 900)
+        myWidth = 900;
+    $(popUp).dialog("option", "maxWidth", myWidth);
+    $(popUp).dialog("option", "width", myWidth);
+    $(popUp).dialog('open');
+    var buttOk = $('button.ui-state-default');
+    if($(buttOk).length == 1)
+        $(buttOk).focus();
+}
+
