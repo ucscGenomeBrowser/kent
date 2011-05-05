@@ -20,6 +20,7 @@
 //#*** TODO: use trackDb/cart setting or something
 static boolean boringBed = FALSE;
 static boolean doHapClusterDisplay = TRUE;
+static boolean colorHapByRefAlt = TRUE;
 
 static struct bed4 *vcfFileToBed4(struct vcfFile *vcff)
 /* Convert vcff's records to bed4; don't free vcff until you're done with bed4
@@ -140,36 +141,6 @@ slReverse(&pgsList);
 return pgsList;
 }
 
-INLINE char *hapIxToAllele(int hapIx, char *refAllele, char *altAlleles[])
-/* Look up allele by index into reference allele and alternate allele(s). */
-{
-return (hapIx == 0) ? refAllele : altAlleles[hapIx-1];
-}
-
-INLINE Color colorFromGt(struct vcfGenotype *gt, int ploidIx, char *refAllele,
-			 char *altAlleles[], int altCount, boolean grayUnphasedHet)
-/* Color allele by base. */
-{
-int hapIx = ploidIx ? gt->hapIxB : gt->hapIxA;
-char *allele = hapIxToAllele(hapIx, refAllele, altAlleles);
-if (gt->isHaploid && hapIx > 0)
-    return shadesOfGray[5];
-if (grayUnphasedHet && !gt->isPhased && gt->hapIxA != gt->hapIxB)
-    return shadesOfGray[5];
-// Copying pgSnp color scheme here, using first base of allele which is not ideal for multibase
-// but allows us to simplify it to 5 colors:
-else if (allele[0] == 'A')
-    return MG_RED;
-else if (allele[0] == 'C')
-    return MG_BLUE;
-else if (allele[0] == 'G')
-    return darkGreenColor;
-else if (allele[0] == 'T')
-    return MG_MAGENTA;
-else
-    return shadesOfGray[5];
-}
-
 
 // Center-weighted alpha clustering of haplotypes -- see Redmine #3711, #2823 note 7
 // It might be nice to use an allele-frequency representation here instead of [ACGTN] strings
@@ -266,16 +237,68 @@ for (i=0;  i < helper->len;  i++)
 return (struct slList *)consensus;
 }
 
-static struct hacTree *clusterChroms(const struct vcfFile *vcff)
+INLINE void hapClusterToString(const struct hapCluster *c, struct dyString *dy, int len)
+/* Write a text representation of hapCluster's alleles into dy.  */
+{
+dyStringClear(dy);
+int i;
+for (i=0;  i < len;  i++)
+    dyStringAppendC(dy, (isRef(c, i) ? '0': '1'));
+}
+
+static int cwaCmp(const struct slList *item1, const struct slList *item2, void *extraData)
+/* Convert hapCluster to allele strings for easy comparison by strcmp. */
+{
+const struct hapCluster *c1 = (const struct hapCluster *)item1;
+const struct hapCluster *c2 = (const struct hapCluster *)item2;
+struct cwaExtraData *helper = extraData;
+static struct dyString *dy1 = NULL, *dy2 = NULL;
+if (dy1 == NULL)
+    {
+    dy1 = dyStringNew(0);
+    dy2 = dyStringNew(0);
+    }
+hapClusterToString(c1, dy1, helper->len);
+hapClusterToString(c2, dy2, helper->len);
+return strcmp(dy1->string, dy2->string);
+}
+
+void rSetGtHapOrder(struct hacTree *ht, unsigned short *gtHapOrder, unsigned short *retGtHapEnd)
+/* Traverse hacTree and build an ordered array of genotype + haplotype indices. */
+{
+if (ht->left == NULL && ht->right == NULL)
+    {
+    struct hapCluster *c = (struct hapCluster *)ht->itemOrCluster;
+    gtHapOrder[(*retGtHapEnd)++] = c->gtHapIx;
+    }
+else
+    {
+    struct hapCluster *cL = (struct hapCluster *)ht->left->itemOrCluster;
+    struct hapCluster *cR = (struct hapCluster *)ht->right->itemOrCluster;
+    if (cL->leafCount >= cR->leafCount)
+	{
+	rSetGtHapOrder(ht->left, gtHapOrder, retGtHapEnd);
+	rSetGtHapOrder(ht->right, gtHapOrder, retGtHapEnd);
+	}
+    else
+	{
+	rSetGtHapOrder(ht->right, gtHapOrder, retGtHapEnd);
+	rSetGtHapOrder(ht->left, gtHapOrder, retGtHapEnd);
+	}
+    }
+}
+
+static unsigned short *clusterChroms(const struct vcfFile *vcff, unsigned short *retGtHapEnd)
 /* Given a bunch of VCF records with phased genotypes, build up one haplotype string
  * per chromosome that is the sequence of alleles in all variants (simplified to one base
  * per variant).  Each individual/sample will have two haplotype strings (unless haploid
  * like Y or male X).  Independently cluster the haplotype strings using hacTree with the 
- * center-weighted alpha functions above.  */
+ * center-weighted alpha functions above. Return an array of genotype+haplotype indices
+ * in the order determined by the hacTree, and set retGtHapEnd to its length/end. */
 {
 int len = slCount(vcff->records);
-// TODO: make this settable by user right-click or some other means of choosing a specific
-// variant or position:
+// Use the median variant in the window as the center; would be even nicer to allow
+// the user to choose a variant (or position) to use as center:
 int center = len / 2;
 // Should alpha depend on len?  Should the penalty drop off with distance?  Seems like
 // straight-up exponential will cause the signal to drop to nothing pretty quickly...
@@ -345,78 +368,63 @@ for (varIx = 0, rec = vcff->records;  rec != NULL;  varIx++, rec = rec->next)
 	    }
 	}
     }
-return hacTreeFromItems((struct slList *)(hapArray[0]), lm, cwaDistance, cwaMerge, &helper);
+struct hacTree *ht = hacTreeFromItems((struct slList *)(hapArray[0]), lm,
+				      cwaDistance, cwaMerge, cwaCmp, &helper);
+unsigned short *gtHapOrder = needMem(vcff->genotypeCount * 2 * sizeof(unsigned short));
+rSetGtHapOrder(ht, gtHapOrder, retGtHapEnd);
+return gtHapOrder;
 }
+
+INLINE char *hapIxToAllele(int hapIx, char *refAllele, char *altAlleles[])
+/* Look up allele by index into reference allele and alternate allele(s). */
+{
+return (hapIx == 0) ? refAllele : altAlleles[hapIx-1];
+}
+
+INLINE Color colorFromGt(struct vcfGenotype *gt, int ploidIx, char *refAllele,
+			 char *altAlleles[], int altCount, boolean grayUnphasedHet)
+/* Color allele by base. */
+{
+int hapIx = ploidIx ? gt->hapIxB : gt->hapIxA;
+char *allele = hapIxToAllele(hapIx, refAllele, altAlleles);
+if (gt->isHaploid && hapIx > 0)
+    return shadesOfGray[5];
+if (grayUnphasedHet && !gt->isPhased && gt->hapIxA != gt->hapIxB)
+    return shadesOfGray[5];
+// Copying pgSnp color scheme here, using first base of allele which is not ideal for multibase
+// but allows us to simplify it to 5 colors:
+else if (allele[0] == 'A')
+    return MG_RED;
+else if (allele[0] == 'C')
+    return MG_BLUE;
+else if (allele[0] == 'G')
+    return darkGreenColor;
+else if (allele[0] == 'T')
+    return MG_MAGENTA;
+else
+    return shadesOfGray[5];
+}
+
+INLINE Color colorFromRefAlt(struct vcfGenotype *gt, int hapIx, boolean grayUnphasedHet)
+/* Color allele red for alternate allele, blue for reference allele. */
+{
+if (grayUnphasedHet && !gt->isPhased && gt->hapIxA != gt->hapIxB)
+    return shadesOfGray[5];
+int alIx = hapIx ? gt->hapIxB : gt->hapIxA;
+return alIx ? MG_RED : MG_BLUE;
+}
+
 
 INLINE int drawOneHap(struct vcfGenotype *gt, int hapIx,
 		      char *ref, char *altAlleles[], int altCount,
 		      struct hvGfx *hvg, int x1, int y, int w, int itemHeight, int lineHeight)
 /* Draw a base-colored box for genotype[hapIx].  Return the new y offset. */
 {
-Color color = colorFromGt(gt, hapIx, ref, altAlleles, altCount, TRUE);
+Color color = colorHapByRefAlt ? colorFromRefAlt(gt, hapIx, TRUE) :
+				 colorFromGt(gt, hapIx, ref, altAlleles, altCount, TRUE);
 hvGfxBox(hvg, x1, y, w, itemHeight+1, color);
 y += itemHeight+1;
 return y;
-}
-
-
-#ifdef DEBUG
-static void rPrintHapClusterTree(FILE *f, struct hacTree *tree, int len, int level)
-/* Recursively print out cluster as nested-parens with {}'s around leaf nodes. */
-{
-static struct dyString *dy = NULL;
-if (dy == NULL)
-    dy = dyStringNew(0);
-dyStringClear(dy);
-struct hapCluster *c = (struct hapCluster *)(tree->itemOrCluster);
-int i;
-for (i=0;  i < len;  i++)
-    dyStringAppendC(dy, isRef(c, i) ? '0' : '1');
-for (i=0;  i < level;  i++)
-    fputc('0'+i, f);
-if (tree->left == NULL && tree->right == NULL)
-    {
-    fprintf(f, "{%s}", dy->string);
-    return;
-    }
-else if (tree->left == NULL || tree->right == NULL)
-    errAbort("\nHow did we get a node with one NULL kid??");
-fprintf(f, "(%s:%d:\n", dy->string, (int)(tree->childDistance));
-rPrintHapClusterTree(f, tree->left, len, level+1);
-fputs(",\n", f);
-rPrintHapClusterTree(f, tree->right, len, level+1);
-fputc('\n', f);
-for (i=0;  i < level;  i++)
-    fputc('0'+i, f);
-fputs(")", f);
-}
-
-void printHapClusterTree(FILE *f, struct hacTree *tree, int len)
-/* Print out cluster as nested-parens with {}'s around leaf nodes. */
-{
-if (tree == NULL)
-    {
-    fputs("Empty tree.\n", f);
-    return;
-    }
-rPrintHapClusterTree(f, tree, len, 0);
-fputc('\n', f);
-}
-#endif//def DEBUG
-
-void rSetGtHapOrder(struct hacTree *ht, unsigned short *gtHapOrder, unsigned short *retGtHapEnd)
-/* Traverse hacTree and build an ordered array of genotype + haplotype indices. */
-{
-if (ht->left == NULL && ht->right == NULL)
-    {
-    struct hapCluster *c = (struct hapCluster *)ht->itemOrCluster;
-    gtHapOrder[(*retGtHapEnd)++] = c->gtHapIx;
-    }
-else
-    {
-    rSetGtHapOrder(ht->left, gtHapOrder, retGtHapEnd);
-    rSetGtHapOrder(ht->right, gtHapOrder, retGtHapEnd);
-    }
 }
 
 static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
@@ -426,16 +434,8 @@ static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
  * alpha similarity, and draw in the order determined by clustering. */
 {
 const struct vcfFile *vcff = tg->extraUiData;
-struct hacTree *ht = clusterChroms(vcff);
-#ifdef DEBUG
-puts("<pre>");
-printHapClusterTree(stdout, ht, slCount(vcff->records));
-puts("</pre>");
-#endif//def DEBUG
-// the following 4 lines should probably be moved into clusterChroms.
-unsigned short *gtHapOrder = needMem(vcff->genotypeCount * 2 * sizeof(unsigned short));
 unsigned short gtHapEnd = 0;
-rSetGtHapOrder(ht, gtHapOrder, &gtHapEnd);
+unsigned short *gtHapOrder = clusterChroms(vcff, &gtHapEnd);
 struct dyString *tmp = dyStringNew(0);
 struct vcfRecord *rec;
 const int lineHeight = tg->lineHeight;
@@ -532,7 +532,7 @@ if (vcff != NULL)
     {
     if (boringBed)
 	tg->items = vcfFileToBed4(vcff);
-    else if (doHapClusterDisplay && vcff->genotypeCount > 0 && vcff->genotypeCount < 100 &&
+    else if (doHapClusterDisplay && vcff->genotypeCount > 0 && vcff->genotypeCount < 3000 &&
 	     (tg->visibility == tvPack || tg->visibility == tvSquish))
 	vcfHapClusterOverloadMethods(tg, vcff);
     else
