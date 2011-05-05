@@ -2,17 +2,7 @@
 
 # create tableList show tables cache for all assemblies (redmine #3780)
 
-refreshTableCache() {
-    local db="$1"
-    hgsql $db -e "drop table if exists tableList"
-    hgsql $db < ../../lib/tableList.sql
-    tmpFile=`mktemp`
-    hgsql $db -e 'show tables' | tail -n +2 > $tmpFile
-    hgsql $db -e "load data local infile '$tmpFile' into table tableList"
-    rm $tmpFile
-}
-
 # skip first "database" (which is information_schema)
 for db in `hgsql information_schema -e "show databases" | tail -n +3` ; do
-    refreshTableCache $db
+    ./makeTableList $db
 done
