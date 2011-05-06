@@ -2509,3 +2509,10 @@ gold wgEncodeBroadHmm.ra
 
 gold, gadd, gci, gup,gpush
 
+cd {downloads}/wgEncodeBroadChipSeq
+encodeDownloadsPage.pl -db=hg18 index.html
+
+cd {downloads}/wgEncodeBroadHmm
+encodeDownloadsPage.pl -db=hg18 index.html
+cp index.html release1/
+cp files.txt release1/
