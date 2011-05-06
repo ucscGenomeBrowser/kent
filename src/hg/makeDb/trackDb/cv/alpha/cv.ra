@@ -3712,6 +3712,7 @@ organism Mouse
 category primaryCells
 description mouse embryonic stem cells
 age E0
+strain C57BL/6
 vendorName University of California, San Diego Transgenic Core and Embryonic Stem Cell
 vendorId
 orderUrl
@@ -4123,7 +4124,7 @@ vendorName Dr. Levasseur (University of Iowa)
 termId
 termUrl
 color 153,38,0
-sex U
+sex M
 protocol UW(Stam):ZhBTc4_Stam_protocol.pdf
 
 
