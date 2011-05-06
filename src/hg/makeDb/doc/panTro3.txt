@@ -2695,3 +2695,76 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
+# download data for 8-way (DONE - 2011-01-19 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/phastCons12way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/phastCons12way
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/cons/all/downloads/phastCons12way.wigFix.gz \
+	./vertebrate.phastCons12way.wigFix.gz
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/cons/primate/downloads/phastCons12wayPrimate.wigFix.gz \
+	./primate.phastCons12way.wigFix.gz
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/cons/all/phastCons12way.bw \
+	./vertebrate.phastCons12way.bw
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/cons/primate/phastCons12wayPrimate.bw \
+	./primate.phastCons12way.bw
+
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/cons/primate/primate.mod \
+	./primate.mod
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/cons/all/all.mod \
+	./vertebrate.mod
+    # use a README from a recent multiz like this, this one is from danRer7
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/cons/README.txt .
+    md5sum * > /hive/data/genomes/panTro3/bed/multiz12way/cons/md5sum.txt
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/cons/md5sum.txt .
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/phyloP12way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/phyloP12way
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/all/downloads/phyloP12way.wigFix.gz \
+	./vertebrate.phyloP12way.wigFix.gz
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/primate/downloads/phyloP12wayPrimate.wigFix.gz \
+	./primate.phyloP12way.wigFix.gz
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/primate/phyloP12wayPrimate.bw \
+	./primate.phyloP12way.bw
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/all/phyloP12way.bw \
+	./vertebrate.phyloP12way.bw
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/run.phyloP/primate.mod \
+	./primate.mod
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/run.phyloP/all.mod \
+	./vertebrate.mod
+    # use a README from a recent multiz like this, this one is from danRer7
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/README.txt .
+    md5sum * > /hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/md5sum.txt
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/md5sum.txt .
+
+    cd /hive/data/genomes/panTro3/bed/multiz12way
+    # this was already done elsewhere:
+    /cluster/bin/phast/tree_doctor --rename \
+"panTro3->Chimp; hg19->Human; ponAbe2->Orangutan; rheMac2->Rhesus; calJac3->Marmoset; equCab2->Horse; mm9->Mouse; rn4->Rat; monDom5->Opossum; galGal3->Chicken; danRer7->Zebrafish; " \
+	panTro3.12way.nh > panTro3.commonNames.12way.nh
+
+    mkdir /hive/data/genomes/panTro3/bed/multiz12way/downloads
+    cd /hive/data/genomes/panTro3/bed/multiz12way/downloads
+    cp -p ../anno/panTro3.12way.maf ./multiz12way.maf
+    gzip multiz12way.maf
+XXX - running - Fri May  6 15:18:42 PDT 2011
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/multiz12way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/multiz12way
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/12way.nh .
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/commonNames.12way.nh .
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/downloads/multiz12way.maf.gz \
+	.
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/downloads/README.txt .
+
+    md5sum * > /hive/data/genomes/panTro3/bed/multiz12way/downloads/md5sum.txt
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/downloads/md5sum.txt .
+
+#############################################################################
