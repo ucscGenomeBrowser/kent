@@ -28,6 +28,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3157
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep2
@@ -55,6 +56,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3157
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk
@@ -81,6 +83,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3157
 tableName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawDataRep1
@@ -108,6 +111,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3157
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -135,6 +139,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3157
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdSig
@@ -161,6 +166,7 @@ softwareVersion Custom scripts
 strain C57BL/6
 subId 3157
 tableName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsBmarrowInputMAdult8wksC57bl6StdAlnRep1
@@ -187,6 +193,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3920
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsBmarrowInputMAdult8wksC57bl6StdAlnRep2
@@ -213,6 +220,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3920
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsBmarrowInputMAdult8wksC57bl6StdRawDataRep1
@@ -239,6 +247,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3920
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsBmarrowInputMAdult8wksC57bl6StdRawDataRep2
@@ -265,6 +274,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3920
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsBmarrowInputMAdult8wksC57bl6StdSig
@@ -291,6 +301,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3920
 tableName wgEncodeLicrTfbsBmarrowInputMAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1
@@ -318,6 +329,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3391
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep2
@@ -345,6 +357,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3391
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdPk
@@ -371,6 +384,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3391
 tableName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdPk
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawDataRep1
@@ -398,6 +412,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3391
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawDataRep2
@@ -425,6 +440,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3391
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig
@@ -451,6 +467,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3391
 tableName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep1
@@ -478,6 +495,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3393
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep2
@@ -505,6 +523,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3393
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdPk
@@ -531,6 +550,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3393
 tableName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdPk
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawDataRep1
@@ -558,6 +578,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3393
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -585,6 +606,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3393
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdSig
@@ -611,6 +633,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3393
 tableName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdAlnRep1
@@ -638,6 +661,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3921
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdAlnRep2
@@ -665,6 +689,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3921
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdRawDataRep1
@@ -692,6 +717,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3921
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdRawDataRep2
@@ -719,6 +745,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3921
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig
@@ -746,6 +773,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3921
 tableName wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdAlnRep1
@@ -772,6 +800,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3811
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdAlnRep2
@@ -798,6 +827,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3811
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdPk
@@ -824,6 +854,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3811
 tableName wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdPk
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdRawDataRep1
@@ -850,6 +881,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3811
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdRawDataRep2
@@ -876,6 +908,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3811
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdSig
@@ -902,6 +935,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3811
 tableName wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdAlnRep1
@@ -927,6 +961,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 2497
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdRawDataRep1
@@ -952,6 +987,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 2497
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep1
@@ -979,6 +1015,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3395
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep2
@@ -1006,6 +1043,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3395
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdPk
@@ -1032,6 +1070,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3395
 tableName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdPk
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawDataRep1
@@ -1059,6 +1098,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3395
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -1086,6 +1126,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3395
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdSig
@@ -1112,6 +1153,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3395
 tableName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep1
@@ -1139,6 +1181,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3398
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep2
@@ -1166,6 +1209,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3398
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawDataRep1
@@ -1193,6 +1237,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3398
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawDataRep2
@@ -1220,6 +1265,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3398
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdSig
@@ -1246,6 +1292,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3398
 tableName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep1
@@ -1273,6 +1320,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3406
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep2
@@ -1300,6 +1348,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3406
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdPk
@@ -1326,6 +1375,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3406
 tableName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdPk
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawDataRep1
@@ -1353,6 +1403,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3406
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawDataRep2
@@ -1380,6 +1431,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3406
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdSig
@@ -1406,6 +1458,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3406
 tableName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsEsb4CtcfME0C57bl6StdAlnRep1
@@ -2031,6 +2084,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3884
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdAlnRep2
@@ -2058,6 +2112,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3884
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdPk
@@ -2085,6 +2140,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3884
 tableName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdPk
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdRawDataRep1
@@ -2112,6 +2168,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3884
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -2139,6 +2196,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3884
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdSig
@@ -2166,6 +2224,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3884
 tableName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdAlnRep1
@@ -2192,6 +2251,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 2791
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdAlnRep2
@@ -2218,6 +2278,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 2791
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdRawDataRep1
@@ -2244,6 +2305,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 2791
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdRawDataRep2
@@ -2270,6 +2332,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 2791
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdSig
@@ -2296,6 +2359,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 2791
 tableName wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsHeartP300MAdult8wksC57bl6StdAlnRep1
@@ -2322,6 +2386,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4038
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsHeartP300MAdult8wksC57bl6StdAlnRep2
@@ -2348,6 +2413,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4038
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsHeartP300MAdult8wksC57bl6StdPk
@@ -2374,6 +2440,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 4038
 tableName wgEncodeLicrTfbsHeartP300MAdult8wksC57bl6StdPk
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeLicrTfbsHeartP300MAdult8wksC57bl6StdRawDataRep1
@@ -2400,6 +2467,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4038
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsHeartP300MAdult8wksC57bl6StdRawDataRep2
@@ -2426,6 +2494,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4038
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsHeartP300MAdult8wksC57bl6StdSig
@@ -2452,6 +2521,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 4038
 tableName wgEncodeLicrTfbsHeartP300MAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdAlnRep1
@@ -2478,6 +2548,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 2792
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdAlnRep2
@@ -2504,6 +2575,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 2792
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdPk
@@ -2530,6 +2602,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 2792
 tableName wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdPk
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdRawDataRep1
@@ -2556,6 +2629,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 2792
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdRawDataRep2
@@ -2582,6 +2656,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 2792
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdSig
@@ -2608,6 +2683,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 2792
 tableName wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdAlnRep1
@@ -2635,6 +2711,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3878
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdAlnRep2
@@ -2662,6 +2739,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3878
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdPk
@@ -2689,6 +2767,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3878
 tableName wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdPk
+tissueSourceType Individual
 view Peaks
 
 metaObject wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdRawDataRep1
@@ -2716,6 +2795,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3878
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -2743,6 +2823,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3878
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdSig
@@ -2770,6 +2851,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3878
 tableName wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdSig
+tissueSourceType Individual
 view Signal
 
 metaObject wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdAlnRep1
@@ -2796,6 +2878,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3004
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdAlnRep2
@@ -2822,6 +2905,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3004
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdRawDataRep1
@@ -2848,6 +2932,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3004
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdRawDataRep2
@@ -2874,6 +2959,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3004
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdSig
@@ -2900,6 +2986,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3004
 tableName wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdSig
+tissueSourceType Individual
 view Signal
 
 metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep1
@@ -2926,6 +3013,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3005
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep2
@@ -2953,6 +3041,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3880
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep3
@@ -2980,6 +3069,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3880
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdPk
@@ -3007,6 +3097,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3880
 tableName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdPk
+tissueSourceType Individual
 view Peaks
 
 metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep1
@@ -3033,6 +3124,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3005
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep2
@@ -3060,6 +3152,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3880
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep3
@@ -3087,6 +3180,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3880
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdSig
@@ -3114,6 +3208,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3880
 tableName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdSig
+tissueSourceType Individual
 view Signal
 
 metaObject wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdAlnRep1
@@ -3140,6 +3235,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3925
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdAlnRep2
@@ -3166,6 +3262,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3925
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdPk
@@ -3192,6 +3289,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3925
 tableName wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdPk
+tissueSourceType Individual
 view Peaks
 
 metaObject wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdRawDataRep1
@@ -3218,6 +3316,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3925
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -3244,6 +3343,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3925
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdSig
@@ -3270,6 +3370,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3925
 tableName wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdSig
+tissueSourceType Individual
 view Signal
 
 metaObject wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdAlnRep1
@@ -3296,6 +3397,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3926
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdAlnRep2
@@ -3322,6 +3424,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3926
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdRawDataRep1
@@ -3348,6 +3451,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3926
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdRawDataRep2
@@ -3374,6 +3478,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3926
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdSig
@@ -3400,6 +3505,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3926
 tableName wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdSig
+tissueSourceType Individual
 view Signal
 
 metaObject wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdAlnRep1
@@ -3426,6 +3532,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3883
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdAlnRep2
@@ -3452,6 +3559,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3883
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdPk
@@ -3478,6 +3586,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3883
 tableName wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdPk
+tissueSourceType Individual
 view Peaks
 
 metaObject wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdRawDataRep1
@@ -3504,6 +3613,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3883
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdRawDataRep2
@@ -3530,6 +3640,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3883
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdSig
@@ -3556,6 +3667,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3883
 tableName wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdSig
+tissueSourceType Individual
 view Signal
 
 metaObject wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdAlnRep1
@@ -3582,6 +3694,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3923
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdAlnRep2
@@ -3608,6 +3721,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3923
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdPk
@@ -3634,6 +3748,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3923
 tableName wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdPk
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdRawDataRep1
@@ -3660,6 +3775,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3923
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -3686,6 +3802,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3923
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdSig
@@ -3712,6 +3829,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3923
 tableName wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsLungInputMAdult8wksC57bl6StdAlnRep1
@@ -3738,6 +3856,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3924
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsLungInputMAdult8wksC57bl6StdAlnRep2
@@ -3764,6 +3883,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3924
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsLungInputMAdult8wksC57bl6StdRawDataRep1
@@ -3790,6 +3910,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3924
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsLungInputMAdult8wksC57bl6StdRawDataRep2
@@ -3816,6 +3937,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3924
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsLungInputMAdult8wksC57bl6StdSig
@@ -3842,6 +3964,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3924
 tableName wgEncodeLicrTfbsLungInputMAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdAlnRep1
@@ -3868,6 +3991,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3888
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdAlnRep2
@@ -3894,6 +4018,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3888
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdPk
@@ -3920,6 +4045,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3888
 tableName wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdPk
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdRawDataRep1
@@ -3946,6 +4072,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3888
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdRawDataRep2
@@ -3972,6 +4099,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3888
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdSig
@@ -3998,6 +4126,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3888
 tableName wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdAlnRep1
@@ -4024,6 +4153,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4000
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdAlnRep2
@@ -4050,6 +4180,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4000
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdPk
@@ -4076,6 +4207,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 4000
 tableName wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdPk
+tissueSourceType Individual
 view Peaks
 
 metaObject wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdRawDataRep1
@@ -4102,6 +4234,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4000
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -4128,6 +4261,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4000
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdSig
@@ -4154,6 +4288,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 4000
 tableName wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdSig
+tissueSourceType Individual
 view Signal
 
 metaObject wgEncodeLicrTfbsMefInputMAdult8wksC57bl6StdAlnRep1
@@ -4180,6 +4315,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4009
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsMefInputMAdult8wksC57bl6StdAlnRep2
@@ -4206,6 +4342,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4009
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsMefInputMAdult8wksC57bl6StdRawDataRep1
@@ -4232,6 +4369,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4009
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsMefInputMAdult8wksC57bl6StdRawDataRep2
@@ -4258,6 +4396,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4009
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsMefInputMAdult8wksC57bl6StdSig
@@ -4284,6 +4423,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 4009
 tableName wgEncodeLicrTfbsMefInputMAdult8wksC57bl6StdSig
+tissueSourceType Individual
 view Signal
 
 metaObject wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdAlnRep1
@@ -4310,6 +4450,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4010
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdAlnRep2
@@ -4336,6 +4477,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4010
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdPk
@@ -4362,6 +4504,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 4010
 tableName wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdPk
+tissueSourceType Individual
 view Peaks
 
 metaObject wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdRawDataRep1
@@ -4388,6 +4531,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4010
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdRawDataRep2
@@ -4414,6 +4558,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4010
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdSig
@@ -4440,6 +4585,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 4010
 tableName wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdSig
+tissueSourceType Individual
 view Signal
 
 metaObject wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdAlnRep1
@@ -4466,6 +4612,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 3999
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdAlnRep2
@@ -4492,6 +4639,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 3999
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdPk
@@ -4518,6 +4666,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 3999
 tableName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdPk
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdRawDataRep1
@@ -4544,6 +4693,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 3999
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -4570,6 +4720,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 3999
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdSig
@@ -4596,6 +4747,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 3999
 tableName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdAlnRep1
@@ -4622,6 +4774,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4036
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdAlnRep2
@@ -4648,6 +4801,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 4036
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdRawDataRep1
@@ -4674,6 +4828,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4036
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdRawDataRep2
@@ -4700,6 +4855,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 4036
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdSig
@@ -4726,6 +4882,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 4036
 tableName wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdAlnRep1
@@ -4752,6 +4909,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4037
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdAlnRep2
@@ -4778,6 +4936,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4037
+tissueSourceType Pooled
 view Alignments
 
 metaObject wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdPk
@@ -4804,6 +4963,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 4037
 tableName wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdPk
+tissueSourceType Pooled
 view Peaks
 
 metaObject wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdRawDataRep1
@@ -4830,6 +4990,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4037
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdRawDataRep2
@@ -4856,6 +5017,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4037
+tissueSourceType Pooled
 view RawData
 
 metaObject wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdSig
@@ -4882,6 +5044,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 4037
 tableName wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdSig
+tissueSourceType Pooled
 view Signal
 
-# MAGIC: -1757765755
+# MAGIC: -1769662453
