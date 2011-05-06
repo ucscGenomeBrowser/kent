@@ -71,15 +71,13 @@ char *cvLabDeNormalize(char *minimalTerm)
 */
 
 
-// TODO: decide to make this public or hide it away inside the one function so far that uses it.
-static char *cv_file()
+static char *cvFile()
 // return default location of cv.ra
 {
 static char filePath[PATH_LEN];
 char *root = hCgiRoot();
 if (root == NULL || *root == 0)
     root = "/usr/local/apache/cgi-bin/"; // Make this check out sandboxes?
-//    root = "/cluster/home/tdreszer/kent/src/hg/makeDb/trackDb/cv/alpha/"; // Make this check out sandboxes?
 safef(filePath, sizeof(filePath), "%s/encode/%s", root,CV_FILE_NAME);
 if(!fileExists(filePath))
     errAbort("Error: can't locate %s; %s doesn't exist\n", CV_FILE_NAME, filePath);
@@ -103,7 +101,7 @@ struct hash *cvHashForTerm = hashFindVal(cvHashOfHashOfHashes,term);
 // Establish cv hash of Term Types if it doesn't already exist
 if (cvHashForTerm == NULL)
     {
-    cvHashForTerm = raReadWithFilter(cv_file(), CV_TERM,CV_TYPE,term);
+    cvHashForTerm = raReadWithFilter(cvFile(), CV_TERM,CV_TYPE,term);
     if (cvHashForTerm != NULL)
         hashAdd(cvHashOfHashOfHashes,term,cvHashForTerm);
     }
@@ -121,7 +119,7 @@ static struct hash *cvHashOfTermTypes = NULL;
 // Establish cv hash of Term Types if it doesn't already exist
 if (cvHashOfTermTypes == NULL)
     {
-    cvHashOfTermTypes = raReadWithFilter(cv_file(), CV_TERM,CV_TYPE,CV_TOT);
+    cvHashOfTermTypes = raReadWithFilter(cvFile(), CV_TERM,CV_TYPE,CV_TOT);
     // Patch up an ugly inconsistency with 'cell'
     struct hash *cellHash = hashRemove(cvHashOfTermTypes,CV_UGLY_TOT_CELLTYPE);
     if (cellHash)
