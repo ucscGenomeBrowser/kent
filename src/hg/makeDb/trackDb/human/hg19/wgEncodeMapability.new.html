@@ -37,17 +37,6 @@ for the ENCODE project as tools in the development of the
 <A HREF="hgTrackUi?g=wgEncodeOpenChromDnase">Synthesis</A></B> tracks.
 
 <H4>Blacklisted Regions</H4>
-The <em>Duke excluded regions</em> track displays genomic regions for
-which mapped sequence tags were filtered out before signal generation
-and peak calling for
-<A HREF="hgTrackUi?g=wgEncodeDNAseSuper">Open Chromatin</A>:
-<A HREF="hgTrackUi?g=wgEncodeOpenChromDnase">DNaseI HS</A> and
-<A HREF="hgTrackUi?g=wgEncodeOpenChromFaire">FAIRE</A> tracks.
-This track contains problematic regions for short sequence tag signal
-detection (such as satellites and rRNA genes). The
-<em>Duke excluded regions</em> track was generated for the ENCODE project.
-
-<P>
 The <em>DAC Blacklist regions</em> aim to identify a comprehensive set of
 regions in the human genome that have anomalous, unstructured, high
 signal/read counts in next gen sequencing experiments independent of
@@ -59,11 +48,22 @@ multi-mapping to unique mapping reads and high variance in mappability.
 Some of these regions overlap pathological repeat elements such as satellite,
 centromeric and telomeric repeats. However, simple mappability based filters
 do not account for most of these regions. Hence, it is recommended to use this
-blacklist alongside mappability filters.
-Complete methods can be found
+blacklist alongside mappability filters.  The
+<em>DAC Blacklist regions</em> track was generated for the ENCODE project.
+<!-- Complete methods can be found
 <A HREF="ftp://encodeftp.cse.ucsc.edu/users/akundaje/rawdata/blacklists/hg19/hg19-blacklist-README.pdf">here</a>.
-This dataset is the consensus set of regions generated from DAC Ultra-high
-signal artifacts and Duke excluded regions.
+-->
+
+<P>
+The <em>Duke excluded regions</em> track displays genomic regions for
+which mapped sequence tags were filtered out before signal generation
+and peak calling for
+<A HREF="hgTrackUi?g=wgEncodeDNAseSuper">Open Chromatin</A>:
+<A HREF="hgTrackUi?g=wgEncodeOpenChromDnase">DNaseI HS</A> and
+<A HREF="hgTrackUi?g=wgEncodeOpenChromFaire">FAIRE</A> tracks.
+This track contains problematic regions for short sequence tag signal
+detection (such as satellites and rRNA genes). The
+<em>Duke excluded regions</em> track was generated for the ENCODE project.
 </P>
 
 <H2>Credits</H2>
