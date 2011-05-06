@@ -585,17 +585,16 @@ if(!skipSectionHeader)
          "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
          "<TR><TD COLSPAN=3>\n"
          "      <!--outer table is for border purposes-->\n"
-       "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
-       "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
-       "      <TABLE BGCOLOR='#" HG_COL_HEADER "' BACKGROUND='../images/hr.gif' WIDTH='100%'><TR><TD class='windowSize'>\n"
-         "              <B style='font-size: medium;' id='sectTtl'>&nbsp;"
+         "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
+         "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
+         "     <div class='subheadingBar' class='windowSize' id='sectTtl'>"
          );
     htmlTextOut(textOutBuf);
 
     puts(
-         "</b></TD><TD></TD></TR></TABLE>\n"
-         "      <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>\n"
-         "      <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
+         "     </div>\n"
+         "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>\n"
+         "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
          );
 #else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     puts(
@@ -721,16 +720,15 @@ puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are cl
     "   <!--outer table is for border purposes-->\n"
     "   <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
     "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
-    "   <TABLE BGCOLOR='#" HG_COL_HEADER "' BACKGROUND='../images/hr.gif' WIDTH='100%'><TR><TD>\n"
-    "           <b style='font-size:medium;'>&nbsp; "
+    "     <div class='subheadingBar' class='windowSize'>"
 );
 
 vprintf(format, args);
 
 puts(
-    "   </b></TD></TR></TABLE>\n"
-    "   <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>\n"
-    "   <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
+    "     </div>\n"
+    "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>\n"
+    "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
 );
 #else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
 puts(
