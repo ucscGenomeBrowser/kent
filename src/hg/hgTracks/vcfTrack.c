@@ -406,6 +406,45 @@ y += itemHeight+1;
 return y;
 }
 
+INLINE char *gtSummaryString(struct vcfRecord *rec, char **altAlleles, int altCount)
+// Make pgSnp-like mouseover text, but with genotype counts instead of allele counts.
+// NOTE 1: Returned string is statically allocated, don't free it!
+// NOTE 2: if revCmplDisp is set, this reverse-complements rec->ref and altAlleles!
+{
+static struct dyString *dy = NULL;
+if (dy == NULL)
+    dy = dyStringNew(0);
+dyStringClear(dy);
+const struct vcfFile *vcff = rec->file;
+int gtRefRefCount = 0, gtRefAltCount = 0, gtAltAltCount = 0, gtOtherCount = 0;
+int i;
+for (i=0;  i < vcff->genotypeCount;  i++)
+    {
+    struct vcfGenotype *gt = &(rec->genotypes[i]);
+    if (gt->hapIxA == 0 && gt->hapIxB == 0)
+	gtRefRefCount++;
+    else if (gt->hapIxA == 1 && gt->hapIxB == 1)
+	gtAltAltCount++;
+    else if ((gt->hapIxA == 0 && gt->hapIxB == 1) || (gt->hapIxA == 1 && gt->hapIxB == 0))
+	gtRefAltCount++;
+    else
+	gtOtherCount++;
+    }
+if (revCmplDisp)
+    {
+    reverseComplement(rec->ref, strlen(rec->ref));
+    for (i=0;  i < altCount;  i++)
+	reverseComplement(altAlleles[i], strlen(altAlleles[i]));
+    }
+
+dyStringPrintf(dy, "%s/%s:%d %s/%s:%d %s/%s:%d", rec->ref, rec->ref, gtRefRefCount,
+	       rec->ref, altAlleles[0], gtRefAltCount,
+	       altAlleles[0], altAlleles[0], gtAltAltCount);
+if (gtOtherCount > 0)
+    dyStringPrintf(dy, " other:%d", gtOtherCount);
+return dy->string;
+}
+
 static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis)
@@ -442,9 +481,9 @@ for (rec = vcff->records;  rec != NULL;  rec = rec->next)
 	y = drawOneHap(gt, hapIx, rec->ref, altAlleles, altCount,
 		       hvg, x1, y, w, itemHeight, lineHeight);
 	}
-    //#*** TODO: pgSnp-like mouseover text?
     mapBoxHgcOrHgGene(hvg, rec->chromStart, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
-		      rec->name, rec->name, FALSE, TRUE, NULL);
+		      rec->name, gtSummaryString(rec, altAlleles, altCount),
+		      NULL, TRUE, NULL);
     }
 // left labels?
 }
