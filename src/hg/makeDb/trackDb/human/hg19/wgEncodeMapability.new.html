@@ -51,9 +51,18 @@ detection (such as satellites and rRNA genes). The
 The <em>DAC Blacklist regions</em> aim to identify a comprehensive set of
 regions in the human genome that have anomalous, unstructured, high
 signal/read counts in next gen sequencing experiments independent of
-cell line and type of experiment.  Complete methods can be found
+cell line and type of experiment. We use 80 open chromatin tracks
+(DNase and FAIRE datasets) and 20 ChIP-seq input/control tracks spanning
+&#126;60 human tissue types/cell lines in total to identify these regions
+with signal artifacts. These regions tend to have a very high ratio of
+multi-mapping to unique mapping reads and high variance in mappability.
+Some of these regions overlap pathological repeat elements such as satellite,
+centromeric and telomeric repeats. However, simple mappability based filters
+do not account for most of these regions. Hence, it is recommended to use this
+blacklist alongside mappability filters.
+Complete methods can be found
 <A HREF="ftp://encodeftp.cse.ucsc.edu/users/akundaje/rawdata/blacklists/hg19/hg19-blacklist-README.pdf">here</a>.
-This dataset is the consensus set of regions generated from Ultra-high
+This dataset is the consensus set of regions generated from DAC Ultra-high
 signal artifacts and Duke excluded regions.
 </P>
 
