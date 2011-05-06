@@ -18,29 +18,8 @@
 #ifdef USE_TABIX
 
 //#*** TODO: use trackDb/cart setting or something
-static boolean boringBed = FALSE;
 static boolean doHapClusterDisplay = TRUE;
 static boolean colorHapByRefAlt = TRUE;
-
-static struct bed4 *vcfFileToBed4(struct vcfFile *vcff)
-/* Convert vcff's records to bed4; don't free vcff until you're done with bed4
- * because bed4 contains pointers into vcff's records' chrom and name. */
-{
-struct bed4 *bedList = NULL;
-struct vcfRecord *rec;
-for (rec = vcff->records;  rec != NULL;  rec = rec->next)
-    {
-    struct bed4 *bed;
-    AllocVar(bed);
-    bed->chrom = rec->chrom;
-    bed->chromStart = rec->chromStart;
-    bed->chromEnd = rec->chromEnd;
-    bed->name = rec->name;
-    slAddHead(&bedList, bed);
-    }
-slReverse(&bedList);
-return bedList;
-}
 
 #define VCF_MAX_ALLELE_LEN 80
 
@@ -530,15 +509,13 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 if (vcff != NULL)
     {
-    if (boringBed)
-	tg->items = vcfFileToBed4(vcff);
-    else if (doHapClusterDisplay && vcff->genotypeCount > 0 && vcff->genotypeCount < 3000 &&
-	     (tg->visibility == tvPack || tg->visibility == tvSquish))
+    if (doHapClusterDisplay && vcff->genotypeCount > 0 && vcff->genotypeCount < 3000 &&
+	(tg->visibility == tvPack || tg->visibility == tvSquish))
 	vcfHapClusterOverloadMethods(tg, vcff);
     else
 	{
 	tg->items = vcfFileToPgSnp(vcff);
-	/* base coloring/display decision on count of items */
+	// pgSnp bases coloring/display decision on count of items:
 	tg->customInt = slCount(tg->items);
 	}
     // Don't vcfFileFree here -- we are using its string pointers!
@@ -548,10 +525,7 @@ if (vcff != NULL)
 void vcfTabixMethods(struct track *track)
 /* Methods for VCF + tabix files. */
 {
-if (boringBed == TRUE)
-    bedMethods(track);
-else
-    pgSnpMethods(track);
+pgSnpMethods(track);
 track->loadItems = vcfTabixLoadItems;
 track->canPack = TRUE;
 }
