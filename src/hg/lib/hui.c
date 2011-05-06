@@ -286,7 +286,7 @@ boolean moreThanOne = (schemaLink && metadataLink)
                    || (schemaLink && downloadLink)
                    || (downloadLink && metadataLink);
 
-printf("<P>");
+printf("\n<div style='height:.8em;'></div>");
 if(moreThanOne)
     printf("<table><tr><td nowrap>View table: ");
 
@@ -319,8 +319,6 @@ if (metadataLink)
 
 if(moreThanOne)
     printf("</td></tr></table>");
-
-puts("</P>");
 }
 
 
@@ -4223,8 +4221,6 @@ puts("</TFOOT></TABLE>");
 if (sortOrder == NULL)
     printf("</td></tr></table>");
 
-puts("<P>");
-
 // Tying subtracks with matrix and subtrack cfgs with views requires javascript help
 puts("<script type='text/javascript'>matInitializeMatrix();</script>");
 #ifndef SUBTRACK_CFG_POPUP
@@ -7009,8 +7005,8 @@ if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not
     {
     if (trackDbCountDescendantLeaves(tdb) > 5)
         {
+        puts("<div style='height:.7em;'></div>");
         cgiMakeButton("Submit", "Submit");
-        puts("<P>");
         }
     }
 }
