@@ -100,7 +100,7 @@ include wgEncodeCaltechRnaSeq.new.ra alpha
 include wgEncodeCshlLongRnaSeq.ra alpha
 
 # Yale Rna Seq (wrangler: cricket)
-include wgEncodeYaleRnaSeq.ra
+include wgEncodeYaleRnaSeq.ra alpha
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra alpha
