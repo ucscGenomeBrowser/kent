@@ -180,8 +180,7 @@ our %validators = (
     obtainedBy => \&validateObtainedBy,
     md5sum => \&validateNoValidation,
     bioRep => \&validateNoValidation,
-    tissueSourceType => \&validateControlledVocabOrControl,
-    uniqueness => \&validateNoValidation,
+	tissueSourceType => \&validateControlledVocabOrControl,
     default => \&validateControlledVocab,
     );
 
@@ -1207,10 +1206,10 @@ sub printCompositeTdbSettings {
                                 if (defined($terms{"control"}->{$term})) {
                                     $tag=$terms{"control"}->{$term}->{"tag"};
                                 }
-                                elsif (defined($terms{"lab"}->{$term})) {
-                                    $tag=$terms{"lab"}->{$term}->{"tag"};
-                                } else {
-                                    $tag=$term;
+			       	elsif (defined($terms{"lab"}->{$term})) {
+			    	    $tag=$terms{"lab"}->{$term}->{"tag"};
+				}	    else {
+                                    die "'$term' is not a registered '$cvTypeVar' term\n";
                                 }
                             }
                             if (!defined($tags{$tag})) {
@@ -1979,9 +1978,6 @@ foreach my $ddfLine (@ddfLines) {
                 $cvTypeVar = "control";
             }
             my $val = $terms{$cvTypeVar}->{$hash{$var}}->{'tag'};
-            if(!defined($val)) {
-                $val = $hash{$var};
-            }
             $val = ucfirst(lc($val));
             if($val ne 'None') {  # Special control term does not show up in the name!
                 # trailing + => Plus, - => Neg (e.g. H9ES-AFP+)
@@ -2012,10 +2008,6 @@ foreach my $ddfLine (@ddfLines) {
         } elsif($hash{'freezeDate'}) {
             $shortSuffix = $hash{'freezeDate'};
             $longSuffix = $hash{'freezeDate'};
-            $pushQDescription = $longSuffix;
-        } elsif ($hash{"uniqueness"}) {
-            $shortSuffix = "$hash{'uniqueness'}";
-            $longSuffix = "in $hash{'uniqueness'}";
             $pushQDescription = $longSuffix;
         } elsif ($hash{"species"}) {
             $pushQDescription = "$hash{'species'}";
@@ -2066,11 +2058,7 @@ foreach my $ddfLine (@ddfLines) {
             if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
                 $cvTypeVar = "control";
             }
-            if(defined($terms{$cvTypeVar}->{$hash{$var}}->{'tag'})) {
-                $subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
-            } else {
-                $subGroups .= " $groupVar=$hash{$var}";
-            }
+            $subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
         }
          #Venkat: Commented out the below line such that if any lab has replicates the replicate number will be placed
 	 #        in the table name. The below code was found to be to specific, however if there are any problems
