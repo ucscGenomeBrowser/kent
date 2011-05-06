@@ -1345,6 +1345,448 @@ subId 3930
 tableName wgEncodeLicrHistoneCortexInputMAdult8wksC57bl6StdSig
 view Signal
 
+metaObject wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdAlnRep1
+objType file
+age E0
+antibody H3K4me1
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-06
+fileName wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdAlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 12/23/09 SOLEXA2 Lane 4
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 4044
+view Alignments
+
+metaObject wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdAlnRep2
+objType file
+age E0
+antibody H3K4me1
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-06
+fileName wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdAlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 12/23/09 SOLEXA1 Lane 2
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 4044
+view Alignments
+
+metaObject wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdPk
+objType table
+age E0
+antibody H3K4me1
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-06
+fileName wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 4044
+tableName wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdPk
+view Peaks
+
+metaObject wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdRawDataRep1
+objType file
+age E0
+antibody H3K4me1
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-06
+fileName wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 12/23/09 SOLEXA2 Lane 4
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 4044
+view RawData
+
+metaObject wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdRawDataRep2
+objType file
+age E0
+antibody H3K4me1
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-06
+fileName wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdRawDataRep2.fasta.gz
+grant Ren
+lab LICR-m
+labVersion 12/23/09 SOLEXA1 Lane 2
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 4044
+view RawData
+
+metaObject wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdSig
+objType table
+age E0
+antibody H3K4me1
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-06
+fileName wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 4044
+tableName wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdAlnRep1
+objType file
+age E0
+antibody H3K4me3
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-05
+fileName wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdAlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 12/07/09 Lane 4
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 4045
+view Alignments
+
+metaObject wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdAlnRep2
+objType file
+age E0
+antibody H3K4me3
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-05
+fileName wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdAlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 12/07/09 Lane 5
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 4045
+view Alignments
+
+metaObject wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdPk
+objType table
+age E0
+antibody H3K4me3
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-05
+fileName wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 4045
+tableName wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdPk
+view Peaks
+
+metaObject wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdRawDataRep1
+objType file
+age E0
+antibody H3K4me3
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-05
+fileName wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 12/07/09 Lane 4
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 4045
+view RawData
+
+metaObject wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdRawDataRep2
+objType file
+age E0
+antibody H3K4me3
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-05
+fileName wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 12/07/09 Lane 5
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 4045
+view RawData
+
+metaObject wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdSig
+objType table
+age E0
+antibody H3K4me3
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-05
+fileName wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 4045
+tableName wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrHistoneEsb4InputME0C57bl6StdAlnRep1
+objType file
+age E0
+antibody Input
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-05
+fileName wgEncodeLicrHistoneEsb4InputME0C57bl6StdAlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 12/04/09 Lane 1
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType input
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 4046
+view Alignments
+
+metaObject wgEncodeLicrHistoneEsb4InputME0C57bl6StdAlnRep2
+objType file
+age E0
+antibody Input
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-05
+fileName wgEncodeLicrHistoneEsb4InputME0C57bl6StdAlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 12/04/09 Lane 2
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType input
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 4046
+view Alignments
+
+metaObject wgEncodeLicrHistoneEsb4InputME0C57bl6StdRawDataRep1
+objType file
+age E0
+antibody Input
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-05
+fileName wgEncodeLicrHistoneEsb4InputME0C57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 12/04/09 Lane 1
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType input
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 4046
+view RawData
+
+metaObject wgEncodeLicrHistoneEsb4InputME0C57bl6StdRawDataRep2
+objType file
+age E0
+antibody Input
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-05
+fileName wgEncodeLicrHistoneEsb4InputME0C57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 12/04/09 Lane 2
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType input
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 4046
+view RawData
+
+metaObject wgEncodeLicrHistoneEsb4InputME0C57bl6StdSig
+objType table
+age E0
+antibody Input
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-05
+fileName wgEncodeLicrHistoneEsb4InputME0C57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType input
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 4046
+tableName wgEncodeLicrHistoneEsb4InputME0C57bl6StdSig
+view Signal
+
 metaObject wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -4013,4 +4455,4 @@ subId 4035
 tableName wgEncodeLicrHistoneSpleenInputMAdult8wksC57bl6StdSig
 view Signal
 
-# MAGIC: 1038990003
+# MAGIC: -75400859
