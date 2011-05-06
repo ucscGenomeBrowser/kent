@@ -274,6 +274,7 @@ hPrintf(" ");
 cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
 			   setClearAllVar(hgtaDoClearAllFieldPrefix,db,table),
 			   "clear all");
+hPrintf("<div style='max-height:.7em;'>&nbsp;</div>\n"); // Extra spacing below the buttons
 }
 
 static void showTableFieldsOnList(char *db, char *rootTable,
@@ -1125,6 +1126,7 @@ if (isCustomTrack(rootTable))
     filterControlsForTableCt(db, rootTable);
 else
     filterControlsForTableDb(db, rootTable);
+hPrintf("<div style='max-height:.7em;'>&nbsp;</div>\n"); // Extra spacing below the buttons
 }
 
 static void showLinkedFilters(struct dbTable *dtList)
