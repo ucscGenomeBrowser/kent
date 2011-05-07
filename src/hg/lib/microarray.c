@@ -894,7 +894,6 @@ struct maGrouping *maCombineGroupingFromCart(struct microarrayGroups *groupings,
 {
 char *setting = NULL;
 char cartVar[512];
-struct maGrouping *ret = NULL;
 /* Possibly NULL from custom trackness. */
 if (!groupings)
     return NULL;
@@ -909,11 +908,7 @@ if (setting)
 	if (sameWord(cur->name, setting))
 	    return cur;
     }
-if (ret == NULL)
-    ret = groupings->defaultCombine;
-if (ret == NULL)
-    ret = groupings->allArrays;
-return ret;
+return groupings->defaultCombine;
 }
 
 /********* Dealing with BED. ************/
