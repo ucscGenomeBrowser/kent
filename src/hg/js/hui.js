@@ -1027,8 +1027,8 @@ function navigationLinksSetup()
     var navDown = $("#navDown");
     if(navDown != undefined && navDown.length > 0) {
         navDown = navDown[0];
-        var winWidth = ($(window).width() - 30) + "px"; // Room for borders
-        $('.windowSize').css({maxWidth: winWidth,width: winWidth});
+        var winWidth = ($(window).width() - 20) + "px"; // Room for borders
+        $('.windowSize').css({maxWidth:winWidth,width:winWidth});
         var sectTtl = $("#sectTtl");
         if(sectTtl != undefined && sectTtl.length > 0) {
             $(sectTtl).css({clear: 'none'});
