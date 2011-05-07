@@ -587,7 +587,7 @@ if(!skipSectionHeader)
          "      <!--outer table is for border purposes-->\n"
          "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
          "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
-         "     <div class='subheadingBar' class='windowSize' id='sectTtl'>"
+         "     <div class='subheadingBar windowSize' id='sectTtl'>"
          );
     htmlTextOut(textOutBuf);
 
