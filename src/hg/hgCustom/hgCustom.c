@@ -342,7 +342,7 @@ cgiTableRowEnd();
 
 /* extra space */
 cgiSimpleTableRowStart();
-puts("<TD style='height:.7em;'></TD>");
+cgiDown(0.7);
 cgiTableRowEnd();
 
 /* next row - label for description text entry */
@@ -420,7 +420,7 @@ else
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_add\" VALUE=\"1\">\n");
     }
 puts("</FORM>");
-puts("<div style='height:.9em;'></div>");
+cgiDown(0.9);
 }
 
 void tableHeaderFieldStart(int columns)

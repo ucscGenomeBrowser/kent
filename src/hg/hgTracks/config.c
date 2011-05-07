@@ -531,7 +531,7 @@ hPrintf("Enable advanced javascript features");
 hPrintf("</TD></TR>\n");
 
 hTableEnd();
-puts("<div style='height:.9em;'></div>");
+cgiDown(0.9);
 
 char *freeze = hFreezeFromDb(database);
 char buf[128];

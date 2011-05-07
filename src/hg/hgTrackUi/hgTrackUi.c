@@ -2820,7 +2820,8 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb))
         printf("&nbsp;</span>");
         }
     }
-printf("<BR>\n");
+if (!tdbIsSuperTrack(tdb) && !tdbIsComposite(tdb))
+    puts("<BR>");
 
 if (tdbIsDownloadsOnly(tdb))
     filesDownloadUi(database,cart,tdb);  // Composites without tracks but with files to download are tdb->type: downloadsOnly
@@ -2852,7 +2853,10 @@ if (!ct)
     /* Print data version trackDB setting, if any */
     char *version = trackDbSetting(tdb, "dataVersion");
     if (version)
-        printf("<div style='height:.6em;'></div><B>Data version:</B> %s\n", version);
+        {
+        cgiDown(0.7);
+        printf("<B>Data version:</B> %s\n", version);
+        }
 
    /* Print lift information from trackDb, if any */
    trackDbPrintOrigAssembly(tdb, database);
@@ -2875,7 +2879,8 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     printPennantIconNote(tdb);
 
     puts(tdb->html);
-    printf("</td><td nowrap><div style='height:.8em;'></div>"); // positions top link below line
+    printf("</td><td nowrap>");
+    cgiDown(0.7); // positions top link below line
     makeTopLink(tdb);
     printf("&nbsp</td></tr><tr valign='bottom'><td nowrap>");
     makeTopLink(tdb);

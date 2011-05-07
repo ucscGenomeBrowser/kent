@@ -2056,6 +2056,12 @@ cookieHash = NULL;
 cookieList = NULL;
 }
 
+void cgiDown(float lines)
+// Drop down a certain number of lines (may be fractional)
+{
+printf("<div style='height:%fem;'></div>\n",lines);
+}
+
 char *commonCssStyles()
 /* Returns a string of common CSS styles */
 {
