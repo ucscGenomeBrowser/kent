@@ -1034,7 +1034,7 @@ function navigationLinksSetup()
             $(sectTtl).css({clear: 'none'});
             $(sectTtl).prepend($(navDown));
         }
-        $(navDown).css({'float':'right', 'font-weight':'normal'});
+        $(navDown).css({'float':'right', 'font-weight':'normal','font-size':'medium'});
         $(navDown).show();
     }
 
