@@ -8805,6 +8805,35 @@ type age
 stage Cell Line
 description Immortal cells
 
+### Age
+# Expected fields:
+# ----------------
+# term (human-readable name)
+# tag (machine-readable name, no special characters)
+# type (informs pipeline code of stanza type.  Should always be age)
+# description (human-readable description.  Can't say where/how it's used)
+
+
+term supplemental
+tag sup
+type attic
+description Files supplemental at composite level (Provisional)
+
+term auxUnValid
+term auxUV
+type attic
+description Unvalidated files supplemental at experimental level (Provisional)
+
+term auxValid
+tag auxV
+type attic
+description Validated files supplemental to experiments (Provisional)
+
+term auxExp
+tag auxE
+type attic
+description Supplemental experiments (Provisional)
+
 # Expected fields:
 # ----------------
 # term (human-readable name)
@@ -9702,9 +9731,9 @@ type typeOfTerm
 label Is this auxillary data
 description  Provisional This indicates the status of a file in the attic or not.  It is an internal piece of metaData.
 searchable no
-cvDefined no
+cvDefined yes
 #It probably should be cv defined, but Venkat will need to define the terms
-validate list: supplemental,auxUnValid,auxValid,auxExp
+validate cv
 priority 190
 hidden yes
 
