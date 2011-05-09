@@ -310,6 +310,9 @@ struct slDouble *sqlQuickDoubleList(struct sqlConnection *conn, char *query);
 void sqlRenameTable(struct sqlConnection *sc, char *table1, char *table2);
 /* Rename table */
 
+void sqlCopyTable(struct sqlConnection *sc, char *table1, char *table2);
+/* Copy table1 to table2 */
+
 void sqlDropTable(struct sqlConnection *sc, char *table);
 /* Drop table if it exists. */
 

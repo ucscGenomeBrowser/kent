@@ -1477,3 +1477,25 @@ if (sameString("transparent", udc->protocol))
     }
 return udc->updateTime;
 }
+
+#ifdef PROGRESS_METER
+off_t remoteFileSize(char *url)
+/* fetch remote file size from given URL */
+{
+off_t answer = 0;
+struct udcRemoteFileInfo info;
+
+if (startsWith("http://",url) || startsWith("https://",url))
+    {
+    if (udcInfoViaHttp(url, &info))
+	answer = info.size;
+    }
+else if (startsWith("ftp://",url))
+    {
+    if (udcInfoViaFtp(url, &info))
+	answer = info.size;
+    }
+
+return answer;
+}
+#endif

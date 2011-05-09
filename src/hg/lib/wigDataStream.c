@@ -128,14 +128,13 @@ if (htmlOut)
     {
     /* For some reason BORDER=1 does not work in our web.c nested table
      * scheme.  So use web.c's trick of using an enclosing table
-     *	to provide a border.  
+     *	to provide a border.
      */
     fprintf(fh,"<P><!--outer table is for border purposes-->" "\n"
 	"<TABLE BGCOLOR=\"#" HG_COL_BORDER
 	"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
 
-    fprintf (fh, "<TABLE COLS=12 BORDER=1 BGCOLOR=\"" HG_COL_INSIDE
-	"\" ALIGN=CENTER HSPACE=0><TR>");
+    fprintf(fh, "<TABLE COLS=12 BORDER=1 BGCOLOR='#" HG_COL_INSIDE "' ALIGN=CENTER HSPACE=0><TR>");
     if (wds->db)
 	fprintf(fh, "<TH COLSPAN=6 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", wds->db, wds->tblName);
     if (wds->isFile)
@@ -916,7 +915,7 @@ if (doDataArray && wds->winEnd && wds->chrName)
     {
     long startTime = 0;
     struct wiggleArray *wa;
-    size_t inx, size; 
+    size_t inx, size;
     size_t winSize;
     unsigned long long hugeSize;
 
@@ -991,7 +990,7 @@ if (wds->winEnd)
  *	not.  This is the single instance of wiggleFree() in the entire
  *	source file, as it should be.
  */
-	    
+
 for ( ; (!maxReached) && nextRow(wds, row, WIGGLE_NUM_COLS);
 	wiggleFree(&wiggle) )
     {
@@ -1031,7 +1030,7 @@ for ( ; (!maxReached) && nextRow(wds, row, WIGGLE_NUM_COLS);
     chromPosition = wiggle->chromStart;
 
     /*	this will be true the very first time for both reasons	*/
-    if ( (wds->currentSpan != wiggle->span) || 
+    if ( (wds->currentSpan != wiggle->span) ||
 	    (wds->currentChrom &&
 		differentString(wds->currentChrom, wiggle->chrom)))
 	{
@@ -1310,7 +1309,7 @@ for ( ; (!maxReached) && nextRow(wds, row, WIGGLE_NUM_COLS);
 			/*	special case squeezing into the end	*/
 			if ((dataArrayPosition + span) > wds->winEnd)
 				span = wds->winEnd - dataArrayPosition;
-				
+
 			dataArrayPtr += gap;	/* move up, leave NaN's */
 			verbose(VERBOSE_PER_VALUE_LEVEL, "#\t%u-%u <- %g\n",
 				dataArrayPosition,
@@ -1409,7 +1408,7 @@ return(valuesMatched);
 
 static float *asciiToDataArray(struct wiggleDataStream *wds,
 	unsigned long long count, size_t *returned)
-/*	convert the AsciiData list to a float array */ 
+/*	convert the AsciiData list to a float array */
 {
 float *floatArray = NULL;
 float *fptr = NULL;
@@ -1471,7 +1470,7 @@ if (bedList && *bedList)
     unsigned long long valuesFound = 0;
     boolean maxReached = FALSE;
     unsigned long long prevMaxOutput = 0;
-    
+
 
     /* remember these constraints so we can reset them afterwards
      * because we are going to use them for our own internal uses here.
@@ -1505,7 +1504,7 @@ if (bedList && *bedList)
 	    /*  out of order bed file ?  Maybe already saw this name */
 	    if (hashLookup(chromSizes, bed->chrom) != NULL)
 		{
-		chrStartEnd = hashFindVal(chromSizes, bed->chrom); 
+		chrStartEnd = hashFindVal(chromSizes, bed->chrom);
 		chrStartEnd->chrStart = min(bed->chromStart,chrStartEnd->chrStart);
 		chrStartEnd->chrEnd = max(bed->chromEnd, chrStartEnd->chrEnd);
 		}
@@ -1571,7 +1570,7 @@ if (bedList && *bedList)
 	/*	set chrom name constraint	*/
 	wds->setChromConstraint(wds, (char *)&chr->name);
 
-	chrStartEnd = hashFindVal(chromSizes, wds->chrName); 
+	chrStartEnd = hashFindVal(chromSizes, wds->chrName);
 	if (NULL == chrStartEnd)
 	    errAbort("getDataViaBed: constructed hash of bed coords is broken");
 	/* This may seem unusual, but if the caller has
@@ -1773,7 +1772,7 @@ if (bedList && *bedList)
                  */
 		verbose(VERBOSE_CHR_LEVEL,
 		    "#\tworst case ascii array needLargeMem (%llu * %llu = %llu)\n",
-			(unsigned long long)sizeof(struct asciiDatum), 
+			(unsigned long long)sizeof(struct asciiDatum),
                         (unsigned long long)asciiDataSizeLimit,
                         (unsigned long long)(sizeof(struct asciiDatum) * asciiDataSizeLimit));
 		wigAscii->data = (struct asciiDatum *) needLargeMem((size_t)
@@ -1830,7 +1829,7 @@ if (bedList && *bedList)
 		    if (doAscii)
 			{
 			/*	record limits when not also doing that
-			 *	for stats	*/ 
+			 *	for stats	*/
 			if (!doStats)
 			    {
 			    if (value < lowerLimit)

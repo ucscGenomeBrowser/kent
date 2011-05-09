@@ -4,7 +4,7 @@
 #include "localmem.h"
 #include "hash.h"
 #include "options.h"
-#include "obscure.h"
+#include "ra.h"
 #include "jksql.h"
 #include "trackDb.h"
 #include "hui.h"
@@ -16,19 +16,25 @@ errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen input\n");
 }
 
-void freen(char *track)
+void freen(char *input)
 /* Test some hair-brained thing. */
 {
-uglyTime(NULL);
-int fd = mustOpenFd(track, O_RDONLY);
-uglyTime("Opened %s to %d\n", track, fd);
+struct hash *hash = raReadAll(input, "track"); 
+struct hashEl *hohList = hashElListHash(hash);
+struct hashEl *hohEl;
+for (hohEl = hohList; hohEl != NULL; hohEl = hohEl->next)
+    {
+    struct hashEl *helList = hashElListHash(hohEl->val);
+    struct hashEl *hel;
+    for (hel = helList; hel != NULL; hel = hel->next)
+        printf("%s: %s\n", hel->name, (char*)hel->val);
+    printf("\n");
+    }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-// optionInit(&argc, argv, options);
-
 if (argc != 2)
     usage();
 freen(argv[1]);

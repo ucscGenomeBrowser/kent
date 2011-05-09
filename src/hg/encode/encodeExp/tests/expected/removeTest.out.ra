@@ -1,0 +1,13 @@
+ix 1
+organism human
+lab Stanford
+dataType ChipSeq
+cellType GM12878
+expVars Antibody=Pol2
+
+ix 3
+organism human
+lab Duke
+dataType DnaseSeq
+cellType K562
+

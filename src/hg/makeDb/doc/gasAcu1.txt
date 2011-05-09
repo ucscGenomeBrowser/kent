@@ -2833,3 +2833,23 @@ see doc/builds.txt for specific details.
     #	122918766 bases of 446627861 (27.522%) in intersection
 
 #########################################################################
+# lastz swap lizard anoCar2 (DONE - 2011-04-27 - Hiram)
+    # the original alignment
+    cd /cluster/data/anoCar2/bed/lastzGasAcu1.2011-04-26
+    cat fb.anoCar2.chainGasAcu1Link.txt 
+    #	53478872 bases of 1701353770 (3.143%) in intersection
+
+    ## and running the swap
+    mkdir /hive/data/genomes/gasAcu1/bed/blastz.anoCar2.swap
+    cd /hive/data/genomes/gasAcu1/bed/blastz.anoCar2.swap
+    time nice -n +25 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/anoCar2/bed/lastzGasAcu1.2011-04-26/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
+	-bigClusterHub=swarm -tRepeats=windowmaskerSdust \
+	-swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
+    #	real    15m28.724s
+    cat fb.gasAcu1.chainAnoCar2Link.txt 
+    #	55990919 bases of 446627861 (12.536%) in intersection
+
+#######################################################################

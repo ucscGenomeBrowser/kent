@@ -450,11 +450,12 @@ if (sortOrder != NULL)
         webIncludeResourceFile("ui.dropdownchecklist.css");
         jsIncludeFile("ui.dropdownchecklist.js",NULL);
         #define FILTERBY_HELP_LINK  "<A HREF=\"../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
+        cgiDown(0.9);
         printf("<B>Filter files by:</B> (select multiple %sitems - %s)\n<table><tr valign='bottom'>\n",
                (count >= 1 ? "categories and ":""),FILTERBY_HELP_LINK);
         printf("%s\n",dyStringContents(dyFilters));
         printf("</tr></table>\n");
-        printf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
+        printf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
         }
     dyStringFree(&dyFilters);
     }
@@ -467,8 +468,9 @@ static void filesDownloadsPreamble(char *db, struct trackDb *tdb)
 // 1) It isn't on the RR (yet)
 // 2) It will likely refer back to the composite for Description info which is included in this page
 // 3) The rsync-to-tmp-file hurdle isn't worth the effort.
-puts("<p><B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
-puts("in publication  until the restriction date noted for the given data file.</B></p>");
+cgiDown(0.7);
+puts("<B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
+puts("in publication  until the restriction date noted for the given data file.</B>");
 
 char *server = hDownloadsServer();
 char *subDir = "";
@@ -481,17 +483,16 @@ if (hIsBetaHost())
 struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
 if (oneFile != NULL)
     {
-    printf("<p>\n<B>Supplemental materials</b> may be found <A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>here</A>.</p>\n",
+    cgiDown(0.7);
+    printf("<B>Supplemental materials</b> may be found <A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>here</A>.\n",
           server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
     }
-puts("<p>\nThere are two files within this directory that contain information about the downloads:");
+cgiDown(0.7);
+puts("There are two files within this directory that contain information about the downloads:");
 printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A> which is a tab-separated file with the name and metadata for each download.</LI>\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A> which is a list of the md5sum output for each download.</LI>\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
-
-
-puts("<P>");
 }
 
 static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder,boolean filterable)
@@ -661,7 +662,7 @@ if (restrictedColumn > 1)
     printf("</TD><TH colspan=%d align='left'><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A>", columnCount,ENCODE_DATA_RELEASE_POLICY);
 
 printf("</TD></TR>\n");
-printf("</TFOOT></TABLE><BR>\n");
+printf("</TFOOT></TABLE>\n");
 
 if (parentTdb == NULL)
     printf("<script type='text/javascript'>{$(document).ready(function() {sortTableInitialize($('table.sortable')[0],true,true);});}</script>\n");

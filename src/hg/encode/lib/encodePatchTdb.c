@@ -97,8 +97,8 @@ while (raSkipLeadingEmptyLines(lf, dy))
     AllocVar(r);
     r->startLineIx = lf->lineIx;
     char *name, *val;
-    while (raNextTagVal(lf, &name, &val, dy))   // MAY NEED ATTENTION FOR LINE-CONTINUATION CHARACTER "\"
-        {   // TODO replace with raNextTagValJoined()
+    while (raNextTagVal(lf, &name, &val, dy))
+        {
 	struct raTag *tag;
 	AllocVar(tag);
 	tag->name = cloneString( name);
@@ -615,15 +615,15 @@ text[l-1] = '\n';
 }
 
 void updateTagText(struct raTag *tag, char *lcOverride, char *iOverride)
-/* Update tag->text because tag->name or tag->val has changed. 
+/* Update tag->text because tag->name or tag->val has changed.
  * Use lcOverride or iOverride to override the default leadingComment and indentation */
 {
 char tempTagText[1024];
 char *leadingComment, *indentation;
 splitTagText(tag, &leadingComment, &indentation, NULL, NULL);
-safef(tempTagText, sizeof tempTagText, "%s%s%s %s\n", 
-    lcOverride ? lcOverride : leadingComment, 
-    iOverride ? iOverride : indentation, 
+safef(tempTagText, sizeof tempTagText, "%s%s%s %s\n",
+    lcOverride ? lcOverride : leadingComment,
+    iOverride ? iOverride : indentation,
     tag->name, tag->val);
 tag->text = cloneString(tempTagText);
 freeMem(leadingComment);
@@ -631,7 +631,7 @@ freeMem(indentation);
 }
 
 boolean renameTrack(struct raFile *tdbFile, char *oldTrack, char *newTrack, int pass, char **warnMsg)
-/* Rename track, or just check if it is found 
+/* Rename track, or just check if it is found
  * pass 0 is checking, pass 1 is renaming*/
 {
 boolean foundOld = FALSE;
@@ -646,7 +646,7 @@ for (r = tdbFile->recordList; r != NULL; r = r->next)
 	    {
 	    if (sameString(tag->name, "track") && sameString(tag->val, oldTrack))
 		{
-		foundOld = TRUE;		
+		foundOld = TRUE;
 		if (pass == 1)
 		    {
 		    tag->val = cloneString(newTrack);   // rename the track
@@ -667,7 +667,7 @@ for (r = tdbFile->recordList; r != NULL; r = r->next)
 		{
 		foundNew = TRUE;
 		char errMsg[1024];
-		safef(errMsg, sizeof errMsg, "Track renaming collision: newTrack %s already exists, unable to rename oldTrack %s to it\n", 
+		safef(errMsg, sizeof errMsg, "Track renaming collision: newTrack %s already exists, unable to rename oldTrack %s to it\n",
 		    newTrack, oldTrack);
 		if (*warnMsg)
 		    *warnMsg = cloneString(errMsg);
@@ -678,7 +678,7 @@ for (r = tdbFile->recordList; r != NULL; r = r->next)
 if (!foundOld)
     {
     char errMsg[1024];
-    safef(errMsg, sizeof errMsg, "Unable to find oldTrack %s in renameTrack()\n", oldTrack); 
+    safef(errMsg, sizeof errMsg, "Unable to find oldTrack %s in renameTrack()\n", oldTrack);
     if (*warnMsg)
 	*warnMsg = cloneString(errMsg);
     }
@@ -689,8 +689,8 @@ char *findCompositeInIncluder(struct raFile *includer, char *composite, int *num
 /* */
 /* Find <composite>{.other}.ra in includer file trackDb.wgEncode.ra
  * Return compositeName (no path) or NULL if error, give warnings.
- * Must have tag alpha or no tags. 
- * If removeAlpha is true, then the alpha tag is removed, 
+ * Must have tag alpha or no tags.
+ * If removeAlpha is true, then the alpha tag is removed,
  * or if no tags then adds tags beta,pubic */
 {
 char *result = NULL;
@@ -729,7 +729,7 @@ for (r = includer->recordList; r != NULL; r = r->next)
 			    }
 
 			}
-		    else 
+		    else
 			{
     			struct slName *rlTags = slNameListFromString(releaseTags, ',');
     			struct slName *rlTag, *elFound = NULL;
@@ -765,7 +765,7 @@ for (r = includer->recordList; r != NULL; r = r->next)
 if (!found)
     {
     char errMsg[1024];
-    safef(errMsg, sizeof errMsg, "Unable to find composite{.something}.ra in includer for composite %s in findCompositeInIncluder()\n", 
+    safef(errMsg, sizeof errMsg, "Unable to find composite{.something}.ra in includer for composite %s in findCompositeInIncluder()\n",
 	composite);
     if (*warnMsg)
 	*warnMsg = cloneString(errMsg);
@@ -826,7 +826,7 @@ if (found)
 else
     {
     char errMsg[1024];
-    safef(errMsg, sizeof errMsg, "Unable to find composite{.something}.ra in includer for composite %s in findCompositeInIncluder()\n", 
+    safef(errMsg, sizeof errMsg, "Unable to find composite{.something}.ra in includer for composite %s in findCompositeInIncluder()\n",
 	composite);
     if (*warnMsg)
 	*warnMsg = cloneString(errMsg);
@@ -880,7 +880,7 @@ struct raRecord *tdbParent = findRecordCompatibleWithRelease(tdbFile, "alpha", p
 if (!tdbParent)
     errAbort("Can't find composite track %s compatible with alpha mode in %s",
     	parentName, tdbFileName);
-patchInSubtracks(tdbParent, subList); 
+patchInSubtracks(tdbParent, subList);
 
 char *outName = tdbFileName;
 if (clTest != NULL)

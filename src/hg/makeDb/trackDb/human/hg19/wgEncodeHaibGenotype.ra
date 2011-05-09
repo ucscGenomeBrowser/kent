@@ -16,11 +16,12 @@ priority 0
 wgEncode 1
 type bed 9 + 
 itemRgb on
-visibility dense
+visibility hide
 canPack On
 extraFields logR=[f]LogR_Value
 scoreFilter 0
 scoreFilterLimits 0:1000
+
 
         track wgEncodeHaibGenotypeGm12878RegionsRep1
         parent wgEncodeHaibGenotype on
@@ -29,7 +30,7 @@ scoreFilterLimits 0:1000
         subGroups cellType=1GM12878 treatment=None rep=rep1
         type bed 9 +
         origAssembly hg18
-        # subId=3195 dateSubmitted=2011-01-08
+        # subId=4057 dateSubmitted=2011-05-09
 
         track wgEncodeHaibGenotypeA549RegionsRep1
         parent wgEncodeHaibGenotype off

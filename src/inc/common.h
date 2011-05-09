@@ -350,7 +350,7 @@ struct slList
     struct slList *next;
     };
 
-int slCount(void *list);
+int slCount(const void *list);
 /* Return # of elements in list.  */
 
 void *slElementFromIx(void *list, int ix);

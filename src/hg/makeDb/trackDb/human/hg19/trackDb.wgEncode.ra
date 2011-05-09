@@ -20,7 +20,8 @@ include wgEncodeSydhNsome.ra alpha
 include wgEncodeGisRnaPet.ra alpha
 
 # GIS DNA PET (wrangler: cricket)
-include wgEncodeGisDnaPet.ra
+include wgEncodeGisDnaPet.ra beta,public
+include wgEncodeGisDnaPet.new.ra alpha
 
 # HAIB Genotype (CNV) (wrangler: Cricket)
 include wgEncodeHaibGenotype.ra alpha
@@ -28,8 +29,9 @@ include wgEncodeHaibGenotype.ra alpha
 # BU Orchid (wrangler: cricket)
 include wgEncodeBuOrchid.ra alpha,beta
 
-# Affy Rna Chip (wrangler: braney)
-include wgEncodeAffyRnaChip.ra
+# Affy Rna Chip (wrangler: cricket)
+include wgEncodeAffyRnaChip.ra beta,public
+include wgEncodeAffyRnaChip.new.ra alpha
 
 # Chromatin Interactions ------
 
@@ -65,8 +67,8 @@ include wgEncodeOpenChromDnase.new.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.ra beta,public
-include wgEncodeUwDnase.new.ra alpha
+include wgEncodeUwDnase.ra 
+
 
 #UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.ra
@@ -87,7 +89,8 @@ include wgEncodeCshlShortRnaSeq.ra beta,public
 include wgEncodeCshlShortRnaSeq.new.ra alpha
 
 # GIS RNA Seq (wrangler: cricket)
-include wgEncodeGisRnaSeq.ra
+include wgEncodeGisRnaSeq.ra beta,public
+include wgEncodeGisRnaSeq.new.ra alpha
 
 # Caltech RNA Seq (wrangler: cricket)
 include wgEncodeCaltechRnaSeq.ra beta,public
@@ -97,7 +100,7 @@ include wgEncodeCaltechRnaSeq.new.ra alpha
 include wgEncodeCshlLongRnaSeq.ra alpha
 
 # Yale Rna Seq (wrangler: cricket)
-include wgEncodeYaleRnaSeq.ra
+include wgEncodeYaleRnaSeq.ra alpha
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra alpha
@@ -136,7 +139,7 @@ include wgEncodeBroadHmm.ra
 include wgEncodeUwHistone.ra
 
 # SYDH Histone (wrangler: Venkat)
-include wgEncodeSydhHistone.ra alpha
+include wgEncodeSydhHistone.ra
 
 
 # ENCODE TFBS -------------------------------------------
@@ -160,8 +163,8 @@ include wgEncodeUchicagoTfbs.ra
 
 # SUNY RBP -----------------------------------------
 
-# SUNY Gene ST (wrangler: cricket)
-include wgEncodeSunyAlbanyGeneSt.ra alpha,beta
+# SUNY RIP Gene ST (wrangler: cricket)
+include wgEncodeSunyAlbanyGeneSt.ra
 
 # SUNY Tiling Array (wrangler: cricket)
 include wgEncodeSunyAlbanyTiling.ra beta,public
@@ -176,7 +179,7 @@ include wgEncodeSunyRipSeq.ra alpha
 
 # Other miscellany ------------------------------------
 
-# Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and whever else wants to help)
+# Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and Cricket)
 include wgEncodeMapability.ra beta,public
 include wgEncodeMapability.new.ra alpha
 

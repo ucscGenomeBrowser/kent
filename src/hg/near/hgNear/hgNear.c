@@ -22,7 +22,7 @@
 
 static char const rcsid[] = "$Id: hgNear.c,v 1.186 2010/05/07 03:37:41 galt Exp $";
 
-char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
+char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL };
 /* The excludeVars are not saved to the cart. (We also exclude
  * any variables that start "near.do.") */
 
@@ -162,8 +162,8 @@ void makeTitle(char *title, char *helpName)
 {
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", wrapWhiteFont("Home"));
-hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>", title);
-hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>", 
+hPrintf("<TD ALIGN=CENTER style='color:#FFFFFF;'><span style='font-size:large;'>%s</span></TD>", title);
+hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>",
 	helpName, wrapWhiteFont("Help"));
 hPrintf("</TR></TABLE>");
 }
@@ -242,7 +242,7 @@ return hashFindVal(col->settings, name) != NULL;
 }
 
 struct sqlConnection *hgFixedConn()
-/* Return connection to hgFixed database. 
+/* Return connection to hgFixed database.
  * This is effectively a global, but not
  * opened until needed. */
 {
@@ -343,7 +343,7 @@ return hash;
 }
 
 struct hash *keyFileHash(struct column *col)
-/* Make up a hash from key file for this column. 
+/* Make up a hash from key file for this column.
  * Return NULL if no key file. */
 {
 char *fileName = keyFileName(col);
@@ -352,9 +352,9 @@ if (fileName == NULL)
 return upcHashWordsInFile(fileName, 16);
 }
 
-char *cellLookupVal(struct column *col, struct genePos *gp, 
+char *cellLookupVal(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
-/* Get a field in a table defined by col->table, col->keyField, 
+/* Get a field in a table defined by col->table, col->keyField,
  * col->valField.  If an xrefLookup is specified in col->settings,
  * use that to look up an alternate name for the result. */
 {
@@ -388,13 +388,13 @@ return sqlQuickString(conn, query);
 }
 
 
-void cellSimplePrintExt(struct column *col, struct genePos *gp, 
+void cellSimplePrintExt(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn, boolean lookupForUrl)
 /* This just prints one field from table. */
 {
 char *s = col->cellVal(col, gp, conn);
 hPrintf("<TD>");
-if (s == NULL) 
+if (s == NULL)
     {
     hPrintf("n/a");
     }
@@ -443,14 +443,14 @@ else
 hPrintf("</TD>");
 }
 
-void cellSimplePrint(struct column *col, struct genePos *gp, 
+void cellSimplePrint(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
 /* This just prints one field from table. */
 {
 cellSimplePrintExt(col, gp, conn, TRUE);
 }
 
-void cellSimplePrintNoLookupUrl(struct column *col, struct genePos *gp, 
+void cellSimplePrintNoLookupUrl(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
 /* This just prints one field from table using gp->name for
  * itemUrl. */
@@ -505,7 +505,7 @@ int colWidth = columnSettingInt(col, "colWidth", 0);
 
 hPrintf("<TH ALIGN=LEFT VALIGN=BOTTOM><B><PRE>");
 /* The <PRE> above helps Internet Explorer avoid wrapping
- * in the label column, which helps us avoid wrapping in 
+ * in the label column, which helps us avoid wrapping in
  * the data columns below.  Wrapping in the data columns
  * makes the expression display less effective so we try
  * to minimize it.  -jk */
@@ -527,14 +527,14 @@ hPrintf("</PRE></B></TH>");
 void selfAnchorSearch(struct genePos *gp)
 /* Print self anchor to given search term. */
 {
-hPrintf("<A HREF=\"../cgi-bin/hgNear?%s&%s=%s\">", 
+hPrintf("<A HREF=\"../cgi-bin/hgNear?%s&%s=%s\">",
 	cartSidUrlString(cart), searchVarName, gp->name);
 }
 
 void selfAnchorId(struct genePos *gp)
 /* Print self anchor to given id. */
 {
-hPrintf("<A HREF=\"../cgi-bin/hgNear?%s&%s=%s", 
+hPrintf("<A HREF=\"../cgi-bin/hgNear?%s&%s=%s",
 	cartSidUrlString(cart), idVarName, gp->name);
 if (gp->chrom != NULL)
     hPrintf("&%s=%s:%d-%d", idPosVarName, gp->chrom, gp->start+1, gp->end);
@@ -546,7 +546,7 @@ void cellSelfLinkPrint(struct column *col, struct genePos *gp,
 /* Print self and hyperlink to make this the search term. */
 {
 char *s = col->cellVal(col, gp, conn);
-if (s == NULL) 
+if (s == NULL)
     s = cloneString("n/a");
 hPrintf("<TD>");
 selfAnchorId(gp);
@@ -614,7 +614,7 @@ char *host = getHost();
 return startsWith("hgwdev", host);
 }
 
-char *debugCellVal(struct column *col, struct genePos *gp, 
+char *debugCellVal(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
 /* Return value for debugging column. */
 {
@@ -650,7 +650,7 @@ static char *accVal(struct column *col, struct genePos *gp, struct sqlConnection
 return cloneString(gp->name);
 }
 
-struct genePos *accAdvFilter(struct column *col, 
+struct genePos *accAdvFilter(struct column *col,
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced filter on accession. */
 {
@@ -701,7 +701,7 @@ col->advFilter = accAdvFilter;
 
 /* ---- Number column ---- */
 
-static char *numberVal(struct column *col, struct genePos *gp, 
+static char *numberVal(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
 /* Return incrementing number. */
 {
@@ -722,7 +722,7 @@ col->cellPrint = cellSelfLinkPrint;
 /* ---- Simple table lookup type columns ---- */
 
 
-struct searchResult *lookupTypeSimpleSearch(struct column *col, 
+struct searchResult *lookupTypeSimpleSearch(struct column *col,
     struct sqlConnection *conn, char *search)
 /* Search lookup type column. */
 {
@@ -733,7 +733,7 @@ struct sqlResult *sr;
 char **row;
 struct searchResult *resList = NULL, *res;
 
-dyStringPrintf(query, "select %s,%s from %s where %s ", 
+dyStringPrintf(query, "select %s,%s from %s where %s ",
 	col->keyField, col->valField, col->table, col->valField);
 if (sameString(searchHow, "fuzzy"))
     dyStringPrintf(query, "like '%%%s%%'", search);
@@ -796,7 +796,7 @@ if (!columnSetting(col, "noKeys", NULL))
     }
 }
 
-struct genePos *lookupAdvFilter(struct column *col, 
+struct genePos *lookupAdvFilter(struct column *col,
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced filter on position. */
 {
@@ -861,8 +861,8 @@ if (isNotEmpty(xrefLookup))
 	struct sqlConnection *xrefConn = hAllocConn(xrefDb);
 	if (sqlTableExists(xrefConn, xrefTable))
 	    {
-	    /* These are the column settings that will be used by 
-	     * cellLookupVal, so it doesn't have to parse xrefLookup and 
+	    /* These are the column settings that will be used by
+	     * cellLookupVal, so it doesn't have to parse xrefLookup and
 	     * query for table existence for each cell. */
 	    hashAdd(col->settings, "xrefDb", xrefDb);
 	    hashAdd(col->settings, "xrefTable", xrefTable);
@@ -917,7 +917,7 @@ hashFree(&passHash);
 return list;
 }
 
-struct genePos *distanceAdvFilter(struct column *col, 
+struct genePos *distanceAdvFilter(struct column *col,
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced filter on distance type. */
 {
@@ -949,7 +949,7 @@ if (minString != NULL || maxString != NULL)
 return list;
 }
 
-void distanceTypeMethods(struct column *col, char *table, 
+void distanceTypeMethods(struct column *col, char *table,
 	char *curGene, char *otherGene, char *valField)
 /* Set up a column that looks up a field in a distance matrix
  * type table such as the expression or homology tables. */
@@ -980,7 +980,7 @@ distanceTypeMethods(col, table, curGene, otherGene, valField);
 
 /* ---------- Lookup floating point number column ------------- */
 
-struct genePos *floatAdvFilter(struct column *col, 
+struct genePos *floatAdvFilter(struct column *col,
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced filter on float type. */
 {
@@ -1112,7 +1112,7 @@ void controlPanelStart()
 {
 hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=0 CELLPADDING=4><TR><TD ALIGN=CENTER>");
 hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=0 BGCOLOR=\"#"HG_COL_BORDER"\"><TR><TD>");
-hPrintf("<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=2 BGCOLOR=\""HG_COL_INSIDE"\"><TR><TD>\n");
+hPrintf("<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=2 BGCOLOR=\"#"HG_COL_INSIDE"\"><TR><TD>\n");
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1><TR><TD>");
 }
 
@@ -1125,7 +1125,7 @@ hPrintf("</TD></TR></TABLE>");
 hPrintf("</TD></TR></TABLE>");
 }
 
-static void mainControlPanel(struct genePos *gp, 
+static void mainControlPanel(struct genePos *gp,
 	struct order *curOrd, struct order *ordList)
 /* Make control panel. */
 {
@@ -1155,7 +1155,7 @@ hPrintf("</TD></TR>\n<TR><TD>");
     struct order *ord;
 
     hPrintf("<A HREF=\"");
-    hPrintf("../cgi-bin/hgNear?%s=on&%s", 
+    hPrintf("../cgi-bin/hgNear?%s=on&%s",
     	orderInfoDoName, cartSidUrlString(cart));
     hPrintf("\">");
     hPrintf("sort by");
@@ -1164,7 +1164,7 @@ hPrintf("</TD></TR>\n<TR><TD>");
     hPrintf(" onchange=\""
 	"document.orgForm.%s.value = document.mainForm.%s.options[document.mainForm.%s.selectedIndex].value;"
       	"document.orgForm.submit();"
-	"\"", 
+	"\"",
 	orderVarName,
 	orderVarName,
 	orderVarName);
@@ -1200,7 +1200,7 @@ hPrintf("</TD></TR>\n<TR><TD>");
     hPrintf(" onchange=\""
 	"document.orgForm.%s.value = document.mainForm.%s.options[document.mainForm.%s.selectedIndex].value;"
       	"document.orgForm.submit();"
-	"\"", 
+	"\"",
 	countVarName,
 	countVarName,
 	countVarName);
@@ -1216,7 +1216,7 @@ hPrintf("</TD></TR>\n<TR><TD>");
     }
 
 
-/* Make getDna, getText buttons */ 
+/* Make getDna, getText buttons */
     {
     hPrintf(" output ");
     cgiMakeOptionalButton(getSeqPageVarName, "sequence", gp == NULL);
@@ -1243,7 +1243,7 @@ slReverse(&newList);
 }
 
 struct genePos *getOrderedList(struct order *ord,
-	struct column *colList, struct sqlConnection *conn, 
+	struct column *colList, struct sqlConnection *conn,
 	int maxCount)
 /* Return sorted list of gene neighbors. */
 {
@@ -1340,7 +1340,7 @@ void setupColumnType(struct column *col)
 /* Set up methods and column-specific variables based on
  * track type. */
 {
-char *dupe = cloneString(col->type);	
+char *dupe = cloneString(col->type);
 char *s = dupe;
 char *type = nextWord(&s);
 
@@ -1378,7 +1378,7 @@ else if (sameString(type, "go"))
 else if (sameString(type, "pfam"))
     setupColumnPfam(col, s);
 else if (sameString(type, "flyBdgp"))
-    setupColumnFlyBdgp(col, s); 
+    setupColumnFlyBdgp(col, s);
 else if (sameString(type, "intronSize"))
     setupColumnIntronSize(col, s);
 else if (sameString(type, "xyz"))
@@ -1445,7 +1445,7 @@ spaceToUnderbar(col->name);
 col->shortLabel = mustFindInRaHash(fileName, settings, "shortLabel");
 col->longLabel = mustFindInRaHash(fileName, settings, "longLabel");
 col->priority = atof(mustFindInRaHash(fileName, settings, "priority"));
-col->on = col->defaultOn = 
+col->on = col->defaultOn =
 	sameString(mustFindInRaHash(fileName, settings, "visibility"), "on");
 col->type = mustFindInRaHash(fileName, settings, "type");
 col->itemUrl = hashFindVal(settings, "itemUrl");
@@ -1543,7 +1543,7 @@ for (col = colList; col != NULL; col = col->next)
 return count;
 }
 
-void bigTable(struct sqlConnection *conn, struct column *colList, 
+void bigTable(struct sqlConnection *conn, struct column *colList,
 	struct genePos *geneList)
 /* Put up great big table. */
 {
@@ -1558,7 +1558,7 @@ if (geneList == NULL)
 	}
     return;
     }
-hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=1 COLS=%d BGCOLOR=\"#"HG_COL_INSIDE"\">\n", 
+hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=1 COLS=%d BGCOLOR=\"#"HG_COL_INSIDE"\">\n",
 	totalHtmlColumns(colList));
 
 /* Print label row. */
@@ -1580,7 +1580,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
         hPrintf("<TR BGCOLOR=\"#D0FFD0\">");
     else
         hPrintf("<TR>");
-    for (col = colList; col != NULL; 
+    for (col = colList; col != NULL;
     		col = col->next)
         {
 	if (col->on)
@@ -1600,7 +1600,7 @@ hPrintf("<!-- End Rows -->");
 hPrintf("</TABLE>");
 }
 
-void doGetText(struct sqlConnection *conn, struct column *colList, 
+void doGetText(struct sqlConnection *conn, struct column *colList,
 	struct genePos *geneList)
 /* Put up great big table. */
 {
@@ -1653,10 +1653,10 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 hPrintf("</PRE></TT>");
 }
 
-void doMainDisplay(struct sqlConnection *conn, 
+void doMainDisplay(struct sqlConnection *conn,
 	struct order *ord, struct order *ordList,
 	struct column *colList, struct genePos *geneList)
-/* Put up the main gene sorter display - a control panel followed by 
+/* Put up the main gene sorter display - a control panel followed by
  * a big table. */
 {
 char buf[128];
@@ -1705,13 +1705,13 @@ char buf[64];
 
 if (kgVersion == KG_III)
     {
-    safef(query, sizeof(query), 
+    safef(query, sizeof(query),
 	"select spDisplayID from kgXref where kgId='%s'", mrnaName);
     }
 else
     {
-    safef(query, sizeof(query), 
-	"select protein from %s where transcript='%s'", 
+    safef(query, sizeof(query),
+	"select protein from %s where transcript='%s'",
 	genomeSetting("canonicalTable"), mrnaName);
     }
 if (!sqlQuickQuery(conn, query, buf, sizeof(buf)))
@@ -1719,7 +1719,7 @@ if (!sqlQuickQuery(conn, query, buf, sizeof(buf)))
 return cloneString(buf);
 }
 
-void displayData(struct sqlConnection *conn, struct column *colList, 
+void displayData(struct sqlConnection *conn, struct column *colList,
 	struct genePos *gp)
 /* Display data in neighborhood of gene. */
 {
@@ -1757,7 +1757,7 @@ static struct genePos *curGenePos()
 struct genePos *gp;
 AllocVar(gp);
 gp->name = cloneString(cartString(cart, idVarName));
-/* Update cart's searchVarName to idVarName so that subsequent clicks will 
+/* Update cart's searchVarName to idVarName so that subsequent clicks will
  * have the right value in orgForm's searchVarName. */
 cartSetString(cart, searchVarName, gp->name);
 if (cartVarExists(cart, idPosVarName))
@@ -1819,7 +1819,7 @@ freeMem(htmlFileName);
 
 static char *defaultHgNearDb(char *genome)
 /* Return default database for hgNear for given
- * genome (or NULL for default genome.) 
+ * genome (or NULL for default genome.)
  * You can freeMem the returned value when done. */
 {
 char *dbName = NULL;
@@ -1864,7 +1864,7 @@ return dbName;
 }
 
 static void makeSureDbHasHgNear()
-/* Check that current database supports hgNear. 
+/* Check that current database supports hgNear.
  * If not try to find one that does. */
 {
 if (hgNearOk(database))
@@ -1882,7 +1882,7 @@ else
 
 
 void doMiddle(struct cart *theCart)
-/* Write the middle parts of the HTML page. 
+/* Write the middle parts of the HTML page.
  * This routine sets up some globals and then
  * dispatches to the appropriate page-maker. */
 {
@@ -1903,7 +1903,7 @@ if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;
 groupOn = cartUsualString(cart, groupVarName, "expression");
 
 displayCountString = cartUsualString(cart, countVarName, "50");
-if (sameString(displayCountString, "all")) 
+if (sameString(displayCountString, "all"))
     displayCount = BIGNUM;
 else
     displayCount = atoi(displayCountString);
@@ -1970,7 +1970,7 @@ else if (cartVarExists(cart, customClearDoName))
 else if (cartVarExists(cart, customPasteDoName))
     doCustomPaste(conn, colList);
 else if (cartVarExists(cart, customUploadDoName))
-    doCustomUpload(conn, colList); 
+    doCustomUpload(conn, colList);
 else if (cartVarExists(cart, customFromUrlDoName))
     doCustomFromUrl(conn, colList);
 else if (cartVarExists(cart, orderInfoDoName))

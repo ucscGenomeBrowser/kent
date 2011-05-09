@@ -18,8 +18,8 @@ struct dfm
     FILE *out;
     };
 
-void initDfm(struct dfm *dfm, int wordLen, int lineLen, 
-	boolean lineNumbers, 
+void initDfm(struct dfm *dfm, int wordLen, int lineLen,
+	boolean lineNumbers,
 	boolean hiliteRange, long startRange, long endRange,
 	FILE *out)
 /* Set up formatting. */
@@ -40,13 +40,13 @@ void dfmOut(struct dfm *dfm, char c)
 {
 if (dfm->hiliteRange && dfm->charCount == dfm->startRange)
     {
-    fprintf(dfm->out, "<A NAME=\"CLICKED\"></A><FONT COLOR=\"#0033FF\">");
+    fprintf(dfm->out, "<A NAME=\"CLICKED\"></A><span style='color:#0033FF;'>");
     }
 ++dfm->charCount;
 fputc(c, dfm->out);
 if (dfm->hiliteRange && dfm->charCount == dfm->endRange)
     {
-    fprintf(dfm->out, "</FONT>");
+    fprintf(dfm->out, "</span>");
     }
 if (dfm->wordLen)
     {
@@ -68,7 +68,7 @@ if (dfm->lineLen)
     }
 }
 
-boolean findLineInFile(char *fileName, char *start, 
+boolean findLineInFile(char *fileName, char *start,
     char *lineBuf, int lineBufSize)
 /* Loop through each line in named file until come to one whose
  * first word (deliminated by a space) is start.  Put the resulting
@@ -109,7 +109,7 @@ s[wordLen] = 0;
 return s;
 }
 
-void outputSeq(DNA *dna, int dnaSize, 
+void outputSeq(DNA *dna, int dnaSize,
 	boolean hiliteRange, long startRange, long endRange,
 	FILE *out)
 /* Write out sequence. */
@@ -204,7 +204,7 @@ if (cgiVarExists("hiliteNear"))
     }
 fprintf(stdout, "<P><TT>\n");
 
-/* The logic here is a little complex to optimize speed.  
+/* The logic here is a little complex to optimize speed.
  * If we can decide what type of thing the name refers to by
  * simply looking at the name we do.  Otherwise we have to
  * search the database in various ways until we get a hit. */
@@ -252,7 +252,7 @@ else if (getWormGeneDna(seqName, &dna, TRUE))
             {
             printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=m&term=C+elegans+%s&dispmax=50&relentrezdate=No+Limit\">",
                 geneName);
-            printf("PubMed search on gene: </A>%s<BR>\n", geneName); 
+            printf("PubMed search on gene: </A>%s<BR>\n", geneName);
             }
         if (productName)
             {
@@ -268,9 +268,9 @@ else if (getWormGeneDna(seqName, &dna, TRUE))
         else
             {
             strcpy(nameBuf, seqName);
-#ifdef NEVER      
+#ifdef NEVER
             /* Sometimes Proteome requires the letter after the orf name
-             * in alt-spliced cases, sometimes it can't handle it.... */      
+             * in alt-spliced cases, sometimes it can't handle it.... */
             nameLen = strlen(nameBuf);
             if (wormIsOrfName(nameBuf) && isalpha(nameBuf[nameLen-1]))
                 {
@@ -329,7 +329,7 @@ if (isChromRange)
     int size;
 
     if (!wormGeneRange(seqName, &chromId, &strand, &start, &end))
-        errAbort("Can't find %s",seqName); 
+        errAbort("Can't find %s",seqName);
     size = end - start;
     if (intronsLowerCase)
         dna = wormChromPartExonsUpper(chromId, start, size);

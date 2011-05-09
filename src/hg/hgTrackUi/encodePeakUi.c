@@ -30,6 +30,7 @@ else
     if (!trackDbSettingOn(tdb, "filterPvalQval"))
 	useScore = TRUE;
     }
+    cgiDown(0.7);
 if (useScore)
     {
     safef(scoreVarName, sizeof(scoreVarName), "%s.%s", trackName, ENCODE_PEAK_SCORE_FILTER_SUFFIX);
@@ -45,7 +46,7 @@ else
     puts("<BR><B>Minimum p-value (-log10):</B>");
     cgiMakeTextVar(pValVarName, cartCgiUsualString(cart, pValVarName, "0.00"), 6);
     puts("<BR><B>Minimum q-value:</B>");
-    cgiMakeTextVar(qValVarName, cartCgiUsualString(cart, qValVarName, "0.00"), 6);	
+    cgiMakeTextVar(qValVarName, cartCgiUsualString(cart, qValVarName, "0.00"), 6);
     }
 hFreeConn(&conn);
 }

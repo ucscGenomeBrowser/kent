@@ -923,7 +923,7 @@ canPack On
     noInherit on
     type wig 0 10000
     superTrack wgEncodeReg full
-    shortLabel Enhanced H3K4Me1
+    shortLabel Layered H3K4Me1
     longLabel ENCODE Enhancer- and Promoter-Associated Histone Mark (H3K4Me1) on 8 Cell Lines
     configurable on
     visibility full
@@ -1097,7 +1097,7 @@ canPack On
     track wgEncodeRegMarkPromoter
     container multiWig
     superTrack wgEncodeReg full
-    shortLabel Promoter H3K4Me3
+    shortLabel Layered H3K4Me3
     longLabel ENCODE Promoter-Associated Histone Mark (H3K4Me3) on 9 Cell Lines
     type wig 0 30000
     viewLimits 0:100
@@ -1288,9 +1288,9 @@ canPack On
     type bed 5 .
     superTrack wgEncodeReg dense
     inputTrackTable wgEncodeRegDnaseClusteredInputs
-    #inputTracks wgEncodeUwDnaseSeq
-    #inputTracksSubgroupSelect view=aPeaks
-    inputTracksSubgroupDisplay cellType rank
+    #inputTracksSubgroupDisplay cellType rank
+    inputTableFieldDisplay cellType treatment replicate lab dateUnrestricted
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     visibility dense
     useScore 1
     priority 1.6
@@ -1305,6 +1305,8 @@ canPack On
     #inputTracks wgEncodeYaleChIPseq wgEncodeHudsonalphaChipSeq
     #inputTracksSubgroupSelect view=Peaks
     inputTracksSubgroupDisplay cellType factor
+    inputTableFieldDisplay cellType factor treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     visibility dense
     useScore 1
     priority 1.7

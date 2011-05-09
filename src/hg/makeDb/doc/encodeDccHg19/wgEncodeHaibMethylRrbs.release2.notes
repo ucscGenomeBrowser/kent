@@ -113,8 +113,8 @@ The composite track is wgEncodeHaibMethylRrbs
 109 - table wgEncodeHaibMethylRrbsNt2d1UwSitesRep1 does not exist, from filetype bedRrbs
 110 - table wgEncodeHaibMethylRrbsMcf7StanfordSitesRep1 does not exist, from filetype bedRrbs
 111 - table wgEncodeHaibMethylRrbsMcf7StanfordSitesRep2 does not exist, from filetype bedRrbs
-112 - table wgEncodeHaibMethylRrbsHepg2HaibSitesRep2 does not exist, from filetype bedRrbs
-113 - table wgEncodeHaibMethylRrbsMcf7UwSitesRep2 does not exist, from filetype bedRrbs
+112 - table wgEncodeHaibMethylRrbsMcf7UwSitesRep2 does not exist, from filetype bedRrbs
+113 - table wgEncodeHaibMethylRrbsHepg2HaibSitesRep2 does not exist, from filetype bedRrbs
 ############################################################
 
 Categories of tables and files('):
@@ -591,8 +591,8 @@ wgEncodeHaibMethylRrbsBjUwSitesRep1.bedRrbs.gz
 wgEncodeHaibMethylRrbsBjUwSitesRep2.bedRrbs.gz
 wgEncodeHaibMethylRrbsCaco2UwRawDataRep1.fastq.gz
 wgEncodeHaibMethylRrbsCaco2UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsCaco2UwSitesRep1.bed.gz
-wgEncodeHaibMethylRrbsCaco2UwSitesRep2.bed.gz
+wgEncodeHaibMethylRrbsCaco2UwSitesRep1.bedRrbs.gz
+wgEncodeHaibMethylRrbsCaco2UwSitesRep2.bedRrbs.gz
 wgEncodeHaibMethylRrbsCmkUwRawDataRep1.fastq.gz
 wgEncodeHaibMethylRrbsCmkUwRawDataRep2.fastq.gz
 wgEncodeHaibMethylRrbsCmkUwSitesRep1.bedRrbs.gz
@@ -607,8 +607,8 @@ wgEncodeHaibMethylRrbsFibroblDukeSitesRep1.bedRrbs.gz
 wgEncodeHaibMethylRrbsFibroblDukeSitesRep2.bedRrbs.gz
 wgEncodeHaibMethylRrbsGm06990UwRawDataRep1.fastq.gz
 wgEncodeHaibMethylRrbsGm06990UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsGm06990UwSitesRep1.bed.gz
-wgEncodeHaibMethylRrbsGm06990UwSitesRep2.bed.gz
+wgEncodeHaibMethylRrbsGm06990UwSitesRep1.bedRrbs.gz
+wgEncodeHaibMethylRrbsGm06990UwSitesRep2.bedRrbs.gz
 wgEncodeHaibMethylRrbsGm12878HaibRawDataRep1.fastq.gz
 wgEncodeHaibMethylRrbsGm12878HaibRawDataRep2.fastq.gz
 wgEncodeHaibMethylRrbsGm12878HaibSitesRep1.bedRrbs.gz
@@ -691,8 +691,8 @@ wgEncodeHaibMethylRrbsHipeUwSitesRep1.bedRrbs.gz
 wgEncodeHaibMethylRrbsHipeUwSitesRep2.bedRrbs.gz
 wgEncodeHaibMethylRrbsHl60UwRawDataRep1.fastq.gz
 wgEncodeHaibMethylRrbsHl60UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsHl60UwSitesRep1.bed.gz
-wgEncodeHaibMethylRrbsHl60UwSitesRep2.bed.gz
+wgEncodeHaibMethylRrbsHl60UwSitesRep1.bedRrbs.gz
+wgEncodeHaibMethylRrbsHl60UwSitesRep2.bedRrbs.gz
 wgEncodeHaibMethylRrbsHmecUwRawDataRep1.fastq.gz
 wgEncodeHaibMethylRrbsHmecUwRawDataRep2.fastq.gz
 wgEncodeHaibMethylRrbsHmecUwSitesRep1.bedRrbs.gz
@@ -825,16 +825,16 @@ wgEncodeHaibMethylRrbsOsteoblDukeSitesRep1.bedRrbs.gz
 wgEncodeHaibMethylRrbsOsteoblDukeSitesRep2.bedRrbs.gz
 wgEncodeHaibMethylRrbsOvcar3UwRawDataRep1.fastq.gz
 wgEncodeHaibMethylRrbsOvcar3UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsOvcar3UwSitesRep1.bed.gz
-wgEncodeHaibMethylRrbsOvcar3UwSitesRep2.bed.gz
+wgEncodeHaibMethylRrbsOvcar3UwSitesRep1.bedRrbs.gz
+wgEncodeHaibMethylRrbsOvcar3UwSitesRep2.bedRrbs.gz
 wgEncodeHaibMethylRrbsPanc1HaibRawDataRep1.fastq.gz
 wgEncodeHaibMethylRrbsPanc1HaibRawDataRep2.fastq.gz
 wgEncodeHaibMethylRrbsPanc1HaibSitesRep1.bedRrbs.gz
 wgEncodeHaibMethylRrbsPanc1HaibSitesRep2.bedRrbs.gz
 wgEncodeHaibMethylRrbsPanc1UwRawDataRep1.fastq.gz
 wgEncodeHaibMethylRrbsPanc1UwRawDataRep2.fastq.gz
-wgEncodeHaibMethylRrbsPanc1UwSitesRep1.bed.gz
-wgEncodeHaibMethylRrbsPanc1UwSitesRep2.bed.gz
+wgEncodeHaibMethylRrbsPanc1UwSitesRep1.bedRrbs.gz
+wgEncodeHaibMethylRrbsPanc1UwSitesRep2.bedRrbs.gz
 wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep1.fastq.gz
 wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep2.fastq.gz
 wgEncodeHaibMethylRrbsPanisletsDukeRawDataRep3.fastq.gz
