@@ -1046,15 +1046,6 @@ wgEncode 1
     windowingFunction mean
    
 
-	    track wgEncodeSydhTfbsGm12878WhipIggmusSig
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel GM12878 WHIP   Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (WHIP in GM12878 cells)
-	    subGroups view=Signal factor=WHIP cellType=GM12878 control=IGGmus treatment=aNone 
-	    type bigWig 1 8218
-	    color 153,38,0
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=GM12878 antibody=WHIP treatment=None control=IgG-mus setType=exp inputType=GM12878/None/Input/IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1178 dateSubmitted=2010-04-26 dateUnrestricted=2011-01-26 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsGm12878WhipIggmusSig fileName=wgEncodeSydhTfbsGm12878WhipIggmusSig.bigWig.gz
-
 #	    track wgEncodeSydhTfbsHelas3Rad21IggrabSig
 #	    subTrack wgEncodeSydhTfbsViewSignal off
 #	    shortLabel HeLa-S3 Rad21  Sg
@@ -2157,7 +2148,7 @@ wgEncode 1
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm12878Xrcc4IggmusSig
+        track wgEncodeSydhTfbsGm12878WhipIggmusSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 WHIP Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (WHIP in GM12878 cells)
