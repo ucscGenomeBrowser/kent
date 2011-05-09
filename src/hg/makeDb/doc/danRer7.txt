@@ -313,7 +313,7 @@ danRer7.downloadDir = danRer7
 danRer7.perChromTables = no
 danRer7.refseq.mrna.xeno.load  = yes
 danRer7.upstreamGeneTbl = refGene
-danRer7.upstreamMaf = multiz6way /hive/data/genomes/danRer7/bed/multiz6way/species.lst
+danRer7.upstreamMaf = multiz8way /hive/data/genomes/danRer7/bed/multiz8way/species.lst
 
     # end of section added to etc/genbank.conf
     git commit -m "adding danRer7 definition" genbank.conf

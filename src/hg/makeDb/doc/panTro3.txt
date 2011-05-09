@@ -1823,6 +1823,54 @@ done
     time hgLoadMafFrames panTro3 multiz12wayFrames multiz12way.mafFrames.gz
     #	real    0m23.641s
 
+    # Adding automatic generation of upstream files (DONE - 2011-05-09 - Hiram)
+    # edit src/hg/makeDb/genbank/etc/genbank.conf to add:
+panTro3.upstreamGeneTbl = ensGene
+panTro3.upstreamMaf = multiz12way /hive/data/genomes/panTro3/bed/multiz12way/species.list
+
+    ###########################################################################
+    ## create upstream ensGene maf files
+    mkdir -p /hive/data/genomes/panTro3/bed/multiz12way/downloads/maf
+    cd /hive/data/genomes/panTro3/bed/multiz12way/downloads/maf
+    # bash script
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits panTro3 ensGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags panTro3 multiz12way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/panTro3/bed/multiz12way/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+
+    # take a look to see if the names are OK:
+    zcat upstream1000.maf.gz | grep "^s " | awk '{print $2}' \
+	| sort | uniq -c | sort -rn | head
+    #	16006 rn4
+    #	16006 rheMac2
+    #	16006 ponAbe2
+    #	16006 monDom5
+    #	16006 mm9
+    #	16006 hg19
+    #	16006 galGal3
+    #	16006 equCab2
+    #	16006 danRer7
+    #	16006 canFam2
+    #	16006 calJac3
+    #	1 ENSPTRT00000068163
+    #	1 ENSPTRT00000068158
+    #	... etc ...
+
+    zcat upstream1000.maf.gz | grep "^s " | awk '{print $2}' \
+	| sort | uniq -c | sort -rn | wc
+    #	16017   32034  432327
+    # check the other files too
+
+    md5sum up*.gz > md5sum.txt
+
 #########################################################################
 # Phylogenetic tree from 12-way (DONE - 2011-03-24,03-28 - Hiram)
 
@@ -2753,18 +2801,26 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     mkdir /hive/data/genomes/panTro3/bed/multiz12way/downloads
     cd /hive/data/genomes/panTro3/bed/multiz12way/downloads
     cp -p ../anno/panTro3.12way.maf ./multiz12way.maf
-    gzip multiz12way.maf
-XXX - running - Fri May  6 15:18:42 PDT 2011
+    time gzip multiz12way.maf
+    #	real    54m14.149s
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/multiz12way
     cd /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/multiz12way
     ln -s /hive/data/genomes/panTro3/bed/multiz12way/12way.nh .
-    ln -s /hive/data/genomes/panTro3/bed/multiz12way/commonNames.12way.nh .
     ln -s \
-/hive/data/genomes/panTro3/bed/multiz12way/downloads/multiz12way.maf.gz \
-	.
+/hive/data/genomes/panTro3/bed/multiz12way/panTro3.commonNames.12way.nh .
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/downloads/multiz12way.maf.gz .
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/multiz12way/maf
+
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/multiz12way/maf
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/downloads/maf/up*.gz .
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/downloads/maf/md5sum.txt .
+
+    # use a README from a recent multiz like this, this one is from danRer7
     ln -s /hive/data/genomes/panTro3/bed/multiz12way/downloads/README.txt .
 
-    md5sum * > /hive/data/genomes/panTro3/bed/multiz12way/downloads/md5sum.txt
+    md5sum *.nh *.gz *.txt \
+	> /hive/data/genomes/panTro3/bed/multiz12way/downloads/md5sum.txt
     ln -s /hive/data/genomes/panTro3/bed/multiz12way/downloads/md5sum.txt .
 
 #############################################################################
