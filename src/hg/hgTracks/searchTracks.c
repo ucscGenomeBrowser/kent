@@ -765,7 +765,7 @@ hPrintf("</div>\n");
 
 hPrintf("</form>\n");
 hPrintf("</div>"); // Restricts to max-width:1000px;
-puts("<div style='height:.8em;'></div>");
+cgiDown(0.8);
 
 if (measureTiming)
     uglyTime("Rendered tabs");

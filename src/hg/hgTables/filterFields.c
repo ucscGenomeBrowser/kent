@@ -274,7 +274,7 @@ hPrintf(" ");
 cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
 			   setClearAllVar(hgtaDoClearAllFieldPrefix,db,table),
 			   "clear all");
-hPrintf("<div style='max-height:.7em;'>&nbsp;</div>\n"); // Extra spacing below the buttons
+cgiDown(0.7); // Extra spacing below the buttons
 }
 
 static void showTableFieldsOnList(char *db, char *rootTable,
@@ -452,7 +452,7 @@ showLinkedTables(joiner, dtList, selFieldLinkedTablePrefix(),
 
 /* clean up. */
 hPrintf("</FORM>");
-hPrintf("<div style='height:.9em;'></div>\n");
+cgiDown(0.9);
 htmlClose();
 joinerFree(&joiner);
 }
@@ -1126,7 +1126,7 @@ if (isCustomTrack(rootTable))
     filterControlsForTableCt(db, rootTable);
 else
     filterControlsForTableDb(db, rootTable);
-hPrintf("<div style='max-height:.7em;'>&nbsp;</div>\n"); // Extra spacing below the buttons
+cgiDown(0.7); // Extra spacing below the buttons
 }
 
 static void showLinkedFilters(struct dbTable *dtList)
@@ -1176,7 +1176,7 @@ showLinkedTables(joiner, dtList, filterLinkedTablePrefix,
 	hgtaDoFilterMore, "Allow Filtering Using Fields in Checked Tables");
 
 hPrintf("</FORM>\n");
-hPrintf("<div style='height:.9em;'></div>\n");
+cgiDown(0.9);
 htmlClose();
 }
 

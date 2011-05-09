@@ -5488,7 +5488,7 @@ else
     chromInfoRowsNonChrom(1000);
 
 hTableEnd();
-puts("</P><div style='height:.9em;'></div>");
+cgiDown(0.9);
 
 hgPositionsHelpHtml(organism, database);
 puts("</FORM>");

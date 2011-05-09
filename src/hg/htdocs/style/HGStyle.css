@@ -47,7 +47,10 @@ A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
                 text-align:center; vertical-align:middle; white-space:nowrap;}
 .toggleButton  {height: 16px; width: 16px; vertical-align:middle;}
 
-
+/* A subheading bar is the light blue bar that appears at the top of web.c section boxes */
+.subheadingBar {font-weight: bold; font-size:1.1em; color:#000000; background-color:#D9E4F8;
+                height:24px; width:100%; text-align:left; vertical-align:bottom;
+                white-space:nowrap; text-indent:10px; padding-top:2px; }
 
 /* OVERALL DEFINITIONS */
 P	{	line-height: 1.1;
