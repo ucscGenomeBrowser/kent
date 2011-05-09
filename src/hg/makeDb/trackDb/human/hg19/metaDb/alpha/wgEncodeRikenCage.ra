@@ -6158,7 +6158,7 @@ view Alignments
 
 metaObject wgEncodeRikenCageK562CytosolPapClusters
 objType table
-bioRep gen0137C
+bioRep 002C,001C
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -6166,6 +6166,29 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 fileName wgEncodeRikenCageK562CytosolPapClusters.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId J83,J82
+labProtocolId 002C+cage,001C+cage
+labVersion iIDR
+localization cytosol
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3956
+tableName wgEncodeRikenCageK562CytosolPapClusters
+view Clusters
+
+metaObject wgEncodeRikenCageK562CytosolPapClustersI40
+objType file
+bioRep gen0137C
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+fileName wgEncodeRikenCageK562CytosolPapClustersI40.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I40
@@ -6176,7 +6199,6 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3952
-tableName wgEncodeRikenCageK562CytosolPapClusters
 view Clusters
 
 metaObject wgEncodeRikenCageK562CytosolPapMinusClusters
@@ -8716,4 +8738,4 @@ rnaExtract longPolyA
 subId 3804
 view TSS
 
-# MAGIC: -1346499860
+# MAGIC: -2103977688
