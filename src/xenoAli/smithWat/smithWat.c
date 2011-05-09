@@ -38,7 +38,7 @@ for (qIx = 0; qIx < qDim; ++qIx)
         cell = &matrix[tIx*qDim + qIx];
         parent = cell->parent;
         if (cell == end)
-            uglyf("<A NAME=end></A><FONT COLOR=#FF0000>");
+            uglyf("<A NAME=end></A><span style='color:#FF0000;'>");
         if (parent == NULL)
             uglyf(".");
         else if (parent == cell-1)
@@ -48,7 +48,7 @@ for (qIx = 0; qIx < qDim; ++qIx)
         else
             uglyf("\\");
         if (cell == end)
-            uglyf("</FONT>");
+            uglyf("</span>");
         }
     uglyf("\n");
     }
@@ -119,7 +119,7 @@ for (diag = 1; diag < diagMax; ++diag)
                 score = qSlipScore;
                 parent = cell;
                 }
-            
+
             /* Look what happens if insert a gap in target. */
             cell = newCell-1;
             tSlipScore = cell->score - gapOpenCost;
@@ -175,7 +175,7 @@ for (;;)
         pair->targetSym = target[tIx-1];
         }
     slAddHead(&pairList, pair);
-    }    
+    }
 
 printf("%s\n%s\n------------------------------------------------\n", query, target);
 for (pair = pairList; pair != NULL; pair = pair->next)

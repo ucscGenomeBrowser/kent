@@ -468,6 +468,9 @@ void cgiResetState();
 /* This is for reloading CGI settings multiple times in the same program
  * execution.  No effect if state has not yet been initialized. */
 
+void cgiDown(float lines);
+// Drop down a certain number of lines (may be fractional)
+
 char *commonCssStyles();
 /* Returns a string of common CSS styles */
 

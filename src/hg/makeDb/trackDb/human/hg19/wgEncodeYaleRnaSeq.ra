@@ -1,5 +1,4 @@
 track wgEncodeYaleRnaSeq
-release alpha
 compositeTrack on
 shortLabel Yale RNA-seq
 longLabel RNA-seq from ENCODE/Yale
@@ -21,7 +20,6 @@ wgEncode 1
 noInherit on
 
     track wgEncodeYaleRnaSeqViewSignal
-    release alpha
     shortLabel Signal
     view RawSignal
     visibility full
@@ -34,7 +32,6 @@ noInherit on
 
 
         track wgEncodeYaleRnaSeqK562Ifna30PolyaRaw
-        release alpha
         parent wgEncodeYaleRnaSeqViewSignal on
         shortLabel K562 pA+ Na30
         longLabel K562 polyA+ IFNa30 RNA-Seq Signal from ENCODE/Yale/UCD/Harvard
@@ -45,7 +42,6 @@ noInherit on
         # subId=3113 dateSubmitted=2010-12-17
 
         track wgEncodeYaleRnaSeqK562Ifng6hPolyaRaw
-        release alpha
         parent wgEncodeYaleRnaSeqViewSignal on
         shortLabel K562 pA+ Ng6h
         longLabel K562 polyA+ IFNg6h RNA-Seq Signal from ENCODE/Yale/UCD/Harvard
@@ -56,7 +52,6 @@ noInherit on
         # subId=3113 dateSubmitted=2010-12-17
 
         track wgEncodeYaleRnaSeqK562Ifna6hPolyaRaw
-        release alpha
         parent wgEncodeYaleRnaSeqViewSignal on
         shortLabel K562 pA+ Na6h
         longLabel K562 polyA+ IFNa6h RNA-Seq Signal from ENCODE/Yale/UCD/Harvard
@@ -68,7 +63,6 @@ noInherit on
 
 
         track wgEncodeYaleRnaSeqK562Ifng30PolyaRaw
-        release alpha
         parent wgEncodeYaleRnaSeqViewSignal on
         shortLabel K562 pA+ Ng30
         longLabel K562 polyA+ IFNg30 RNA-Seq Signal from ENCODE/Yale/UCD/Harvard
@@ -81,7 +75,6 @@ noInherit on
 
 
     track wgEncodeYaleRnaSeqViewAlignments
-    release alpha
     shortLabel Alignments
     view Alignments
     visibility hide 
@@ -102,7 +95,6 @@ noInherit on
 
 
         track wgEncodeYaleRnaSeqK562Ifna30PolyaAln
-        release alpha
         parent wgEncodeYaleRnaSeqViewAlignments off
         shortLabel K562 pA+ Na30 
         longLabel K562 polyA+ IFNa30 RNA-seq Alignments from ENCODE/Yale/UCD/Harvard
@@ -113,7 +105,6 @@ noInherit on
         # subId=2007 dateSubmitted=2010-10-21
 
         track wgEncodeYaleRnaSeqK562Ifna6hPolyaAln
-        release alpha
         parent wgEncodeYaleRnaSeqViewAlignments off
         shortLabel K562 pA+ Na6h 
         longLabel K562 polyA+ IFNa6h RNA-seq Alignments from ENCODE/Yale/UCD/Harvard 
@@ -124,7 +115,6 @@ noInherit on
         # subId=2007 dateSubmitted=2010-10-21
 
         track wgEncodeYaleRnaSeqK562Ifng30PolyaAln
-        release alpha
         parent wgEncodeYaleRnaSeqViewAlignments off
         shortLabel K562 pA+ Ng30 
         longLabel K562 polyA+ IFNg30 RNA-seq Alignments from ENCODE/Yale/UCD/Harvard
@@ -135,7 +125,6 @@ noInherit on
         # subId=2007 dateSubmitted=2010-10-21
 
         track wgEncodeYaleRnaSeqK562Ifng6hPolyaAln
-        release alpha
         parent wgEncodeYaleRnaSeqViewAlignments off
         shortLabel K562 pA+ Ng6h 
         longLabel K562 polyA+ IFNg6h RNA-seq Alignments from ENCODE/Yale/UCD/Harvard

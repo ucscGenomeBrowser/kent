@@ -1,3 +1,4 @@
+
 #include "common.h"
 #include "hash.h"
 #include "cheapcgi.h"
@@ -70,25 +71,33 @@ filesDownloadUi(db,cart,tdb);
 // Print data version trackDB setting, if any */
 char *version = trackDbSetting(tdb, "dataVersion");
 if (version)
-    printf("<P><B>Data version:</B> %s<BR>\n", version);
+    {
+    cgiDown(0.7);
+    printf("<B>Data version:</B> %s<BR>\n", version);
+    }
 
 // Print lift information from trackDb, if any
 (void) trackDbPrintOrigAssembly(tdb, db);
 
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
-    htmlHorizontalLine();
-    // include anchor for Description link
-    puts("<A NAME=TRACK_HTML></A>");
     char *browserVersion;
     if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
-        printf("<table class='windowSize'><tr valign='top'><td>");
-    else
-        printf("<table class='windowSize' style='position:relative; top:-1em;'><tr valign='top'><td>");
+        htmlHorizontalLine();
+    else // Move line down, since <H2>Description (in ->html) is proceded by too much space
+        printf("<span style='position:relative; top:1em;'><HR ALIGN='bottom'></span>");
+
+    printf("<table class='windowSize'><tr valign='top'><td rowspan=2>");
+    puts("<A NAME='TRACK_HTML'></A>");    // include anchor for Description link
+
+    // Add pennantIcon
+    printPennantIconNote(tdb);
+
     puts(tdb->html);
-    printf("</td><td><div style='height:.7em;'></div>");
+    printf("</td><td nowrap>");
+    cgiDown(0.7); // positions top link below line
     makeTopLink(tdb);
-    printf("&nbsp</td></tr><tr valign='bottom'><td colspan=2>");
+    printf("&nbsp</td></tr><tr valign='bottom'><td nowrap>");
     makeTopLink(tdb);
     printf("&nbsp</td></tr></table>");
     }
