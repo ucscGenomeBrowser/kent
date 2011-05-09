@@ -1,3 +1,4 @@
+
 #include "common.h"
 #include "hash.h"
 #include "cheapcgi.h"
@@ -70,7 +71,10 @@ filesDownloadUi(db,cart,tdb);
 // Print data version trackDB setting, if any */
 char *version = trackDbSetting(tdb, "dataVersion");
 if (version)
-    printf("<div style='height:.6em;'></div><B>Data version:</B> %s<BR>\n", version);
+    {
+    cgiDown(0.7);
+    printf("<B>Data version:</B> %s<BR>\n", version);
+    }
 
 // Print lift information from trackDb, if any
 (void) trackDbPrintOrigAssembly(tdb, db);
@@ -90,7 +94,8 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     printPennantIconNote(tdb);
 
     puts(tdb->html);
-    printf("</td><td nowrap><div style='height:.8em;'></div>"); // positions top link below line
+    printf("</td><td nowrap>");
+    cgiDown(0.7); // positions top link below line
     makeTopLink(tdb);
     printf("&nbsp</td></tr><tr valign='bottom'><td nowrap>");
     makeTopLink(tdb);
