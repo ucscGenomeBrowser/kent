@@ -413,6 +413,7 @@ if (currentType == ggSoftEnd)
 	    if (checkSnapOk(vOld, v, FALSE, dif, maxUncheckedSnapSize, seqCache, chromName))
 		{
 		vOld->movedTo = v;
+		verbose(3, "snapping vertex %d to %d\n", oldPos, newPos);
 		return TRUE;
 		}
 	    }
@@ -571,6 +572,8 @@ for (;;)
         break;
     rbTreeRemove(edgeTree, softEdge);
     struct edge *hardEdge = hardRef->val;
+    verbose(3, "Snapping half-hard edge ending at %d to %d\n", softEdge->end->position, 
+	    hardEdge->end->position); 
     softEdge->end = hardEdge->end;
     ++snapCount;
     mergeOrAddEdge(edgeTree, softEdge);
@@ -614,6 +617,8 @@ for (;;)
         break;
     rbTreeRemove(edgeTree, softEdge);
     struct edge *hardEdge = hardRef->val;
+    verbose(3, "Snapping half-hard edge starting at %d to %d\n", softEdge->start->position, 
+	    hardEdge->start->position); 
     softEdge->start = hardEdge->start;
     ++snapCount;
     mergeOrAddEdge(edgeTree, softEdge);
@@ -750,6 +755,8 @@ if (softCount > 1)
 	if (v != end && v->type == softType)
 	    {
 	    rbTreeRemove(edgeTree, edge);
+	    verbose(3, "Performing half-hard consensus: moving edge end from %d to %d\n",
+		    edge->end->position, end->position);
 	    edge->end = end;
 	    mergeOrAddEdge(edgeTree, edge);  // Will always merge. 
 	    }
@@ -798,6 +805,8 @@ if (softCount > 1)
 	if (v != start && v->type == softType)
 	    {
 	    rbTreeRemove(edgeTree, edge);
+	    verbose(3, "Performing half-hard consensus: moving edge start from %d to %d\n",
+		    edge->start->position, start->position);
 	    edge->start = start;
 	    mergeOrAddEdge(edgeTree, edge);  // Will always merge. 
 	    }
@@ -934,6 +943,7 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 	if (size <= maxBleedOver+maxBleedOver)
 	     {
 	     /* Tiny case, just remove edge and forget it. */
+	     verbose(3, "Removing tiny double-soft edge from %d to %d\n", s, e);
 	     rbTreeRemove(edgeTree, edge);
 	     ++removedCount;
 	     }
@@ -950,6 +960,8 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 		     struct edge *bigEdge = r->val;
 		     bigEdge->evList = slCat(bigEdge->evList, edge->evList);
 		     edge->evList = NULL;
+		     verbose(3, "Removing doubly-soft edge %d-%d, reassigning to %d-%d\n",
+			     s, e, bigEdge->start->position, bigEdge->end->position);
 		     rbTreeRemove(edgeTree, edge);
 		     ++removedCount;
 		     }
@@ -1005,6 +1017,8 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 	    }
 	mergeEdge->evidence = slCat(edge->evList, mergeEdge->evidence);
 	edge->evList = NULL;
+	verbose(3, "Merging doubly-soft edge (%d-%d) with edge (%d-%d)\n", 
+		edge->start->position, edge->end->position, r->start, r->end);
 	rbTreeRemove(edgeTree, edge);
 	}
     }
