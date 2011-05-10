@@ -341,7 +341,7 @@ wgEncode 1
 		color 153,38,0
 		# subId=1999 dateSubmitted=2010-07-23
 
-		track wgEncodeUwDnase3134C3hMAdult8wksHotspotsRep1
+		track wgEncodeUwDnase3134RiiiMImmortalHotspotsRep1
 		parent wgEncodeUwDnaseViewHotspots off
 		shortLabel 3134 Hspt 1
 		longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in 3134 cells)
@@ -881,7 +881,7 @@ wgEncode 1
 		color 153,38,0
 		# subId=1999 dateSubmitted=2010-07-23
 
-		track wgEncodeUwDnase3134C3hMAdult8wksPkRep1
+		track wgEncodeUwDnase3134RiiiMImmortalPkRep1
 		parent wgEncodeUwDnaseViewPeaks off
 		shortLabel 3134 Pk 1
 		longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in 3134 cells)
@@ -1423,7 +1423,7 @@ wgEncode 1
 		color 153,38,0
 		# subId=1999 dateSubmitted=2010-07-23
 
-		track wgEncodeUwDnase3134C3hMAdult8wksRawRep1
+		track wgEncodeUwDnase3134RiiiMImmortalRawRep1
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel 3134 Sig 1
 		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in 3134 cells)

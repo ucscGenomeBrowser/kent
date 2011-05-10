@@ -3,7 +3,7 @@ objType composite
 composite wgEncodeUwDnase
 expVars lab,dataType,cell,age
 
-metaObject wgEncodeUwDnase3134C3hMAdult8wksAlnRep1
+metaObject wgEncodeUwDnase3134RiiiMImmortalAlnRep1
 objType file
 age immortalized
 cell 3134
@@ -12,7 +12,7 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnase3134C3hMAdult8wksAlnRep1.bam
+fileName wgEncodeUwDnase3134RiiiMImmortalAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
@@ -22,89 +22,6 @@ sex M
 strain RIII
 subId 2016
 view Alignments
-
-metaObject wgEncodeUwDnase3134C3hMAdult8wksHotspotsRep1
-objType table
-age immortalized
-cell 3134
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-24
-dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnase3134C3hMAdult8wksHotspotsRep1.broadPeak.gz
-grant Stam
-lab UW-m
-labVersion Hotspot-v5.1
-project wgEncode
-replicate 1
-sex M
-strain RIII
-subId 2016
-tableName wgEncodeUwDnase3134C3hMAdult8wksHotspotsRep1
-view Hotspots
-
-metaObject wgEncodeUwDnase3134C3hMAdult8wksPkRep1
-objType table
-age immortalized
-cell 3134
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-24
-dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnase3134C3hMAdult8wksPkRep1.narrowPeak.gz
-grant Stam
-lab UW-m
-labVersion lmax-v1.0
-project wgEncode
-replicate 1
-sex M
-strain RIII
-subId 2016
-tableName wgEncodeUwDnase3134C3hMAdult8wksPkRep1
-view Peaks
-
-metaObject wgEncodeUwDnase3134C3hMAdult8wksRawDataRep1
-objType file
-age immortalized
-cell 3134
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-24
-dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnase3134C3hMAdult8wksRawDataRep1.fastq.gz
-grant Stam
-lab UW-m
-labVersion 1
-project wgEncode
-replicate 1
-sex M
-strain RIII
-subId 2016
-view RawData
-
-metaObject wgEncodeUwDnase3134C3hMAdult8wksRawRep1
-objType table
-age immortalized
-cell 3134
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-24
-dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnase3134C3hMAdult8wksRawRep1.bigWig
-grant Stam
-lab UW-m
-labVersion WindowDensity-bin20-win+/-75
-project wgEncode
-replicate 1
-sex M
-strain RIII
-subId 2016
-tableName wgEncodeUwDnase3134C3hMAdult8wksRawRep1
-view RawSignal
 
 metaObject wgEncodeUwDnase3134RiiiMImmortalAlnRep2
 objType file
@@ -125,6 +42,27 @@ sex M
 strain RIII
 subId 3895
 view Alignments
+
+metaObject wgEncodeUwDnase3134RiiiMImmortalHotspotsRep1
+objType table
+age immortalized
+cell 3134
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-24
+dateUnrestricted 2011-04-23
+fileName wgEncodeUwDnase3134RiiiMImmortalHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW-m
+labVersion Hotspot-v5.1
+project wgEncode
+replicate 1
+sex M
+strain RIII
+subId 2016
+tableName wgEncodeUwDnase3134RiiiMImmortalHotspotsRep1
+view Hotspots
 
 metaObject wgEncodeUwDnase3134RiiiMImmortalHotspotsRep2
 objType table
@@ -147,6 +85,27 @@ subId 3895
 tableName wgEncodeUwDnase3134RiiiMImmortalHotspotsRep2
 view Hotspots
 
+metaObject wgEncodeUwDnase3134RiiiMImmortalPkRep1
+objType table
+age immortalized
+cell 3134
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-24
+dateUnrestricted 2011-04-23
+fileName wgEncodeUwDnase3134RiiiMImmortalPkRep1.narrowPeak.gz
+grant Stam
+lab UW-m
+labVersion lmax-v1.0
+project wgEncode
+replicate 1
+sex M
+strain RIII
+subId 2016
+tableName wgEncodeUwDnase3134RiiiMImmortalPkRep1
+view Peaks
+
 metaObject wgEncodeUwDnase3134RiiiMImmortalPkRep2
 objType table
 age immortalized
@@ -168,6 +127,26 @@ subId 3895
 tableName wgEncodeUwDnase3134RiiiMImmortalPkRep2
 view Peaks
 
+metaObject wgEncodeUwDnase3134RiiiMImmortalRawDataRep1
+objType file
+age immortalized
+cell 3134
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-24
+dateUnrestricted 2011-04-23
+fileName wgEncodeUwDnase3134RiiiMImmortalRawDataRep1.fastq.gz
+grant Stam
+lab UW-m
+labVersion 1
+project wgEncode
+replicate 1
+sex M
+strain RIII
+subId 2016
+view RawData
+
 metaObject wgEncodeUwDnase3134RiiiMImmortalRawDataRep2
 objType file
 age immortalized
@@ -187,6 +166,27 @@ sex M
 strain RIII
 subId 3895
 view RawData
+
+metaObject wgEncodeUwDnase3134RiiiMImmortalRawRep1
+objType table
+age immortalized
+cell 3134
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-24
+dateUnrestricted 2011-04-23
+fileName wgEncodeUwDnase3134RiiiMImmortalRawRep1.bigWig
+grant Stam
+lab UW-m
+labVersion WindowDensity-bin20-win+/-75
+project wgEncode
+replicate 1
+sex M
+strain RIII
+subId 2016
+tableName wgEncodeUwDnase3134RiiiMImmortalRawRep1
+view RawSignal
 
 metaObject wgEncodeUwDnase3134RiiiMImmortalRawRep2
 objType table
@@ -6179,4 +6179,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0RawRep2
 tissueSourceType None
 view RawSignal
 
-# MAGIC: 1109750907
+# MAGIC: 1478646276
