@@ -2,16 +2,26 @@ import re
 from RaFile import *
 
 class CvFile(RaFile):
+	"""cv.ra representation. Mainly adds CV-specific validation to the RaFile"""
 
-	def __init__(self, filePath=''):
+	def __init__(self, filePath='', handler=None):
+		"""sets up exception handling method, and optionally reads from a file"""
 		RaFile.__init__(self)
+		if handler != None:
+			self.handler = handler
+		else:
+			self.handler = self.raiseException
 		if filePath != '':
 			self.read(filePath)
 
+	def raiseException(self, exception):
+		"""wrapper function for raising exception"""
+		raise exception
 
 	def readStanza(self, stanza):
+		"""overriden method from RaFile which makes specialized stanzas based on type"""
 		e = RaStanza()
-		e.readStanza(stanza)
+		ek, ev = e.readStanza(stanza)
 		type = e['type']
 
 		# this will become a 30 case if-else block if I do it this way,
@@ -19,7 +29,13 @@ class CvFile(RaFile):
 		if type == 'Antibody':
 			entry = AntibodyStanza()
 		elif type == 'Cell Line':
-			entry = CellLineStanza()
+			if e['organism'] == 'human':
+				entry = CellLineStanza()
+			elif e['organism'] == 'Mouse':
+				entry = MouseStanza()
+			else:
+				self.handler(NonmatchKeyError(e.name, e['organism'], 'organism'))
+				return ek, ev, None
 		elif type == 'Gene Type':
 			entry = GeneTypeStanza()
 		elif type == 'age':
@@ -42,8 +58,6 @@ class CvFile(RaFile):
 			entry = LocalizationStanza()
 		elif type == 'mapAlgorithm':
 			entry = MapAlgorithmStanza()
-		elif type == 'mouse':
-			entry = MouseStanza()
 		elif type == 'organism':
 			entry = OrganismStanza()
 		elif type == 'phase':
@@ -81,41 +95,47 @@ class CvFile(RaFile):
 		elif type == 'view':
 			entry = ViewStanza()
 		else:
-			raise NonmatchKeyError(e.name, type, 'type')
+			self.handler(NonmatchKeyError(e.name, type, 'type'))
+			return ek, ev, None
 
 		key, val = entry.readStanza(stanza)
 		return key, val, entry
 
 
 	def validate(self):
+		"""base validation method which calls all stanzas' validate"""
 		for stanza in self.itervalues():
 				stanza.validate(self)
 
 class CvStanza(RaStanza):
-
+	"""base class for a single stanza in the cv, which adds validation"""
+	
 	def __init__(self):
 		RaStanza.__init__(self)
 
 	def validate(self, ra):
+		"""default validation for a generic cv stanza."""
 		#print 'CvStanza.validate(' + self.name + ')'
 
 		necessary = {'term', 'tag', 'type', 'description'}
-		self.checkMandatory(necessary)
+		self.checkMandatory(ra, necessary)
 		
-	def checkMandatory(self, keys):
+	def checkMandatory(self, ra, keys):
+		"""ensure that all keys are present and not blank in the stanza"""
 		for key in keys:
 			if not key in self.keys():
-				raise MissingKeyError(self.name, key)
-			if self[key] == '':
-				raise BlankKeyError(self.name, key)
+				ra.handler(MissingKeyError(self.name, key))
+			elif self[key] == '':
+				ra.handler(BlankKeyError(self.name, key))
 		
-	def checkExtraneous(self, keys):
+	def checkExtraneous(self, ra, keys):
+		"""check for keys that are not in the list of keys"""
 		for key in self.iterkeys():
 			if key not in keys:
-				raise ExtraKeyError(self.name, key)
+				ra.handler(ExtraKeyError(self.name, key))
 	
-	#check that the value at 'key' matches the value at some 'other'
 	def checkRelational(self, ra, key, other):
+		"""check that the value at key matches the value at other"""
 		p = 0
 		if key not in self:
 			return
@@ -125,14 +145,17 @@ class CvStanza(RaStanza):
 				if entry['type'] == key and self[key] == entry[other]:
 					p = 1
 		if p == 0:
-			raise NonmatchKeyError(self.name, key, other)
+			ra.handler(NonmatchKeyError(self.name, key, other))
 
 
 class CvError(Exception):
+	"""base error class for the cv."""
 	pass
 		
 		
 class MissingKeyError(CvError):
+	"""raised if a mandatory key is missing"""
+	
 	def __init__(self, stanza, key):
 		self.stanza = stanza
 		self.key = key
@@ -142,6 +165,8 @@ class MissingKeyError(CvError):
 	
 	
 class BlankKeyError(CvError):
+	"""raised if a mandatory key is blank"""
+	
 	def __init__(self, stanza, key):
 		self.stanza = stanza
 		self.key = key
@@ -151,6 +176,8 @@ class BlankKeyError(CvError):
 	
 	
 class ExtraKeyError(CvError):
+	"""raised if an extra key not in the list of keys is found"""
+
 	def __init__(self, stanza, key):
 		self.stanza = stanza
 		self.key = key
@@ -160,6 +187,8 @@ class ExtraKeyError(CvError):
 
 		
 class NonmatchKeyError(CvError):
+	"""raised if a relational key does not match any other value"""
+	
 	def __init__(self, stanza, key, val):
 		self.stanza = stanza
 		self.key = key
@@ -270,8 +299,8 @@ class LabStanza(CvStanza):
 		necessary = {'term', 'tag', 'type', 'description', 'organism', 'labPi'}
 		optional = {'label', 'labInst', 'labPiFull', 'grantPi'}
 
-		self.checkMandatory(necessary)
-		self.checkExtraneous(necessary | optional)
+		self.checkMandatory(ra, necessary)
+		self.checkExtraneous(ra, necessary | optional)
 		self.checkRelational(ra, 'organism', 'term')
 
 
@@ -295,8 +324,8 @@ class AgeStanza(CvStanza):
 
 		necessary = {'term', 'tag', 'type', 'description', 'stage'}
 
-		self.checkMandatory(necessary)
-		self.checkExtraneous(necessary)
+		self.checkMandatory(ra, necessary)
+		self.checkExtraneous(ra, necessary)
 
 
 class DataTypeStanza(CvStanza):
@@ -309,8 +338,8 @@ class DataTypeStanza(CvStanza):
 
 		necessary = {'term', 'tag', 'type', 'description', 'label'}
 
-		self.checkMandatory(necessary)
-		self.checkExtraneous(necessary)
+		self.checkMandatory(ra, necessary)
+		self.checkExtraneous(ra, necessary)
 
 
 class RegionStanza(CvStanza):
@@ -334,8 +363,8 @@ class CellLineStanza(CvStanza):
 		necessary = {'term', 'tag', 'type', 'description', 'organism', 'vendorName', 'orderUrl', 'sex', 'tier'}
 		optional = {'tissue', 'vendorId', 'karyotype', 'lineage', 'termId', 'termUrl', 'color', 'protocol', 'category'}
 
-		self.checkMandatory(necessary)
-		self.checkExtraneous(necessary | optional)
+		self.checkMandatory(ra, necessary)
+		self.checkExtraneous(ra, necessary | optional)
 		self.checkRelational(ra, 'organism', 'term')
 		self.checkRelational(ra, 'sex', 'term')
 		self.checkRelational(ra, 'category', 'term')
@@ -413,8 +442,8 @@ class SeqPlatformStanza(CvStanza):
 		necessary = {'term', 'tag', 'type', 'description'}
 		optional = {'geo'}
 
-		self.checkMandatory(necessary)
-		self.checkExtraneous(necessary | optional)
+		self.checkMandatory(ra, necessary)
+		self.checkExtraneous(ra, necessary | optional)
 
 
 class AntibodyStanza(CvStanza):
@@ -425,11 +454,11 @@ class AntibodyStanza(CvStanza):
 	def validate(self, ra):
 		#print 'AntibodyStanza.validate(' + self.name + ')'
 
-		necessary = {'term', 'tag', 'type', 'description', 'target', 'antibodyDescription', 'targetDescription', 'vendorName', 'vendorId', 'orderUrl', 'lab', 'targetId'}
+		necessary = {'term', 'tag', 'type', 'target', 'antibodyDescription', 'targetDescription', 'vendorName', 'vendorId', 'orderUrl', 'lab', 'targetId'}
 		optional = {'validation', 'targetUrl'}
 
-		self.checkMandatory(necessary)
-		self.checkExtraneous(necessary | optional)
+		self.checkMandatory(ra, necessary)
+		self.checkExtraneous(ra, necessary | optional)
 		self.checkRelational(ra, 'lab', 'labPi')
 
 
@@ -443,8 +472,8 @@ class ViewStanza(CvStanza):
 
 		necessary = {'term', 'tag', 'type', 'description', 'label'}
 
-		self.checkMandatory(necessary)
-		self.checkExtraneous(necessary)
+		self.checkMandatory(ra, necessary)
+		self.checkExtraneous(ra, necessary)
 
 
 class ControlStanza(CvStanza):
@@ -518,8 +547,8 @@ class MouseStanza(CvStanza):
 		necessary = {'term', 'tag', 'type', 'description', 'organism', 'vendorName', 'orderUrl', 'age', 'strain', 'sex'}
 		optional = {'tissue', 'termId', 'termUrl', 'color', 'protocol', 'category'}
 		
-		self.checkMandatory(necessary)
-		self.checkExtraneous(necessary | optional)
+		self.checkMandatory(ra, necessary)
+		self.checkExtraneous(ra, necessary | optional)
 		self.checkRelational(ra, 'organism', 'term')
 		self.checkRelational(ra, 'sex', 'term')
 		self.checkRelational(ra, 'category', 'term')
