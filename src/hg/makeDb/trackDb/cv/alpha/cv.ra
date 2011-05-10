@@ -1164,7 +1164,7 @@ term Dnd41
 tag Dnd41
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human T cell leukemia with notch mutation
 lineage
 karyotype
@@ -1199,7 +1199,7 @@ term FetalPBDE
 tag FetalPBDE
 type Cell Line
 tier 3
-organism human
+organism Human
 description Peripheral blood-derived erythroblasts from 16-19 week human fetal liver
 lineage
 karyotype normal
@@ -1821,7 +1821,7 @@ term HAc
 tag HAc
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Astrocytes-cerebellar
 lineage Astrocytic
 karyotype Normal
@@ -1851,7 +1851,7 @@ term HA-h
 tag HAh
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Astrocytes-hippocampal
 lineage Astrocytic
 karyotype Normal
@@ -1884,7 +1884,7 @@ protocol HudsonAlpha:HAL_Myers_protocol.pdf
 term HA-sp
 tag HA-sp
 type Cell Line
-organism human
+organism Human
 description Human astrocytes spinal cord
 tissue Spinal cord
 vendorName ScienCell
@@ -2072,7 +2072,7 @@ term HFF
 tag HFF
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Foreskin Fibroblast
 lineage Fibroblast
 karyotype Normal
@@ -2089,7 +2089,7 @@ term HFF-Myc
 tag HFFMyc
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Foreskin Fibroblast Cells Expressing Canine cMyc
 lineage Fibroblast
 karyotype Normal (cMyc)
@@ -2452,7 +2452,7 @@ term HRGEC
 tag HRGEC
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Renal Glomerular Endothelial Cells
 lineage Endothelial
 karyotype Normal
@@ -2677,7 +2677,7 @@ term LHCN-M2
 tag LHCNM2
 type Cell Line
 tier 3
-organism human
+organism Human
 description Skeletal muscle myoblast
 #)description Provisional LHCN-M2 are a line of human skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old Caucasian male heart transplant donor.  They are immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN").   Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
 lineage LHCN-M2 are a line of human skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old Caucasian male heart transplant donor.  They are immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN").   Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
@@ -2738,7 +2738,7 @@ term Loucy
 tag Loucy
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human T cell leukemia
 lineage
 karyotype
@@ -2865,7 +2865,7 @@ term Monocytes-CD14+
 tag MonoCD14
 type Cell Line
 tier 3
-organism human
+organism Human
 description Monocytes-CD14+ are CD14-positive cells from human leukapheresis product
 lineage Monocytic
 karyotype Normal
@@ -3094,7 +3094,7 @@ protocol Duke/UNC/UTA/EBI_Open_Chromatin:PanIslets_Crawford_protocol.pdf Duke/UN
 term PBDE
 tag PBDE
 type Cell Line
-organism human
+organism Human
 description Human peripheral blood-derived erythroblasts
 tissue Blood
 vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
@@ -3112,7 +3112,7 @@ protocol SYDH_TFBS(Farnham):PBDE_Farnham_protocol.pdf
 term PBMC
 tag PBMC
 type Cell Line
-organism human
+organism Human
 description Peripheral blood mononuclear cells
 tissue Blood
 vendorName PBMC cells provided by E. Bresnick, UW Madison
@@ -3385,7 +3385,7 @@ term T-REx-HEK293
 tag tHEK293
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor
 lineage Human embryonic kidney, ATCC number CRL-1573
 karyotype cancer, hypotriploid, XXX
@@ -3571,7 +3571,7 @@ term WI-38
 tag WI38
 type Cell Line
 tier 3
-organism human
+organism Human
 description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct
 lineage Fibroblast
 karyotype Normal (RAF)
@@ -5249,6 +5249,21 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf
 
+term H3K4me1_(pAb-037-050)
+tag H3K4me1pAb037050
+type Antibody
+antibodyDescription Polyclonal antibody raised in rabbit against histone H3 containing the monomethylated lysine 4 (H3K4me1), using a KLH-conjugated synthetic peptide.
+target H3K4me1
+targetDescription Histones are the main constituents of the protein part of chromosomes of eukaryotic cells. They are rich in the amino acids arginine and lysine and have been greatly conserved during evolution.Histone tails undergo numerous posttranslational modifications. This antibodies recognizes histone H3 monomethylated on lysine 4.
+vendorName Diagenode
+vendorId pAb-037-050
+orderUrl http://www.diagenode.com/en/catalog/antibodies-3/histone-h3-and-modified-h3-27/product/h3k4me1-polyclonal-antibody-37
+lab Farnham
+lots Lot# A399-002341P
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K4me1_(pAb-037-050)(WesternBlot,DotBlot):human_H3K4me1_pAb-037-050_validation_Farnham.pdf
+
 term H3K4me2
 tag H3K4me2
 type Antibody
@@ -5304,8 +5319,7 @@ tag H3K9ac
 type Antibody
 target H3K9ac
 antibodyDescription rabbit polyclonal
-targetDescription Histone H3 (acetyl K9). As with H3K27ac, associated with transcriptional initiation and open chromatin structure.
-It remains unknown whether acetylation has can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.
+targetDescription Histone H3 (acetyl K9). As with H3K27ac, associated with transcriptional initiation and open chromatin structure. It remains unknown whether acetylation has can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.
 orderUrl http://www.abcam.com/index.html?datasheet=4441
 vendorName Abcam
 vendorId ab4441
@@ -5330,6 +5344,21 @@ lots
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
+
+term H3K9Ac_(9649)
+tag H3K9Ac9649
+type Antibody
+antibodyDescription Monoclonal antibody was produced by immunizing rabbits with a synthetic peptide corresponding to the amino terminus of histone H3 in which Lys9 is acetylated.
+target H3K9Ac
+targetDescription Acetyl-Histone H3 (Lys9) (C5B11) Rabbit mAb detects endogenous levels of histone target H3 only when acetylated on Lys9. This antibody does not cross-react with other acetylated histones.
+vendorName Cell Signaling
+vendorId 9649
+orderUrl http://www.cellsignal.com/products/9649.html
+lab Farnham
+lots Lot#1
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K9Ac_(9649)(WesternBlot,DotBlot):human_H3K9Ac_9649_validation_Farnham.pdf
 
 term H3K9me1
 tag H3K9me1
@@ -5359,6 +5388,27 @@ lab Farnham
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf
+
+erm H3K9me3_(9754)
+tag H3K9me39754
+type Antibody
+antibodyDescription Rabbit polyclonal antibody was produced by immunizing animals with a synthetic\
+ peptide corresponding to the amino terminus of histone H3 in which Lys9 is tri-methylated. Antibo\
+dy was purified by protein A and peptide affinity chromatography.
+target H3K9me3
+targetDescription Tri-Methyl-Histone H3 (Lys9) Antibody detects endogenous levels of histone H3 on\
+ly when tri-methylated on Lys9. The antibody does not cross-react with non-methylated, mono-methyl\
+ated, or di-methylated Lys9. In addition, the antibody does not cross-react with non-methylated, m\
+ono-methylated, di-methylated or tri-methylated histone H3 Lys4, Lys27, Lys36 or histone H4 Lys20.
+vendorName Cell Signaling
+vendorId 9754
+orderUrl http://www.cellsignal.com/products/9754.html
+lab Farnham
+lots Lot#1
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K9me3_(9754)(WesternBlot,PeptideELISA):human_H3K9me3_9754_validation_Farnham.pdf
+
 
 term H3K27ac
 tag H3K27ac
@@ -8946,14 +8996,14 @@ description Unknown
 
 
 ## Organisms
-term human
+term Human
 tag human
 type organism
 description human
 
-term mouse
+term Mouse
 tag mouse
-type mouse
+type organism
 description mouse
 
 ## Tiers (used by cell types)
@@ -9092,7 +9142,7 @@ labInst BioChain
 labPi Myers
 labPiFull
 grantPi
-organism human
+organism Human
 
 term Broad
 tag Broad
@@ -9103,7 +9153,7 @@ labInst Broad Institute
 labPi Bernstein
 labPiFull Bradley Bernstein
 grantPi Bernstein
-organism human
+organism Human
 
 term BU
 tag BU
@@ -9114,7 +9164,7 @@ labInst Boston University
 labPi Tullius
 labPiFull Thomas Tullius
 grantPi Tullius
-organism human
+organism Human
 
 term CRG-Guigo
 tag CRG
@@ -9125,7 +9175,7 @@ labInst Genome Center for Genomic Regulation, Barcelona
 labPi Guigo
 labPiFull Roderic Guigo
 grantPi Guigo
-organism human
+organism Human
 
 term GIS-Ruan
 tag GisRuan
@@ -9136,7 +9186,7 @@ labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Ruan
-organism human
+organism Human
 
 term Sanger
 tag gencode
@@ -9147,7 +9197,7 @@ labInst Gencode
 labPi Hubbard
 labPiFull Tim Hubbard
 grantPi Hubbard
-organism human
+organism Human
 
 term SunyAlbany
 tag SUNY
@@ -9158,7 +9208,7 @@ labInst State University of New York at Albany
 labPi Tenenbaum
 labPiFull Scott Tenebaum
 grantPi Tenenbaum
-organism human
+organism Human
 
 term UCSC
 tag UCSC
@@ -9169,7 +9219,7 @@ labInst University of California at Santa Cruz
 labPi Kent
 labPiFull Jim Kent
 grantPi Kent
-organism human
+organism Human
 
 term UW
 tag UW
@@ -9180,7 +9230,7 @@ labInst University of Washington
 labPi Stam
 labPiFull John Stamatoyannopoulous
 grantPi Stam
-organism human
+organism Human
 
 
 ### Duke Labs
@@ -9195,7 +9245,7 @@ labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
 grantPi Crawford
-organism human
+organism Human
 
 term UT-A
 tag UT-A
@@ -9206,7 +9256,7 @@ labInst University of Texas at Austin
 labPi Iyer
 labPiFull Tara Iyer
 grantPi Crawford
-organism human
+organism Human
 
 term UNC
 tag UNC
@@ -9217,7 +9267,7 @@ labInst Univeristy of North Carolina
 labPi Lieb
 labPiFull Jason Lieb
 grantPi Crawford
-organism human
+organism Human
 
 ### HAIB Project Labs
 ### Caltech and HudsonAlpha
@@ -9231,7 +9281,7 @@ grantInst California Institute of Technology (Wold Lab)
 labPi Wold
 labPiFull Barbara Wold
 grantPi Myers
-organism human
+organism Human
 
 term HudsonAlpha
 tag HAIB
@@ -9242,7 +9292,7 @@ labInst Hudson Alpha Institute for Biotechnology
 labPi Myers
 labPiFull Richard Myers
 grantPi Myers
-organism human
+organism Human
 
 ### NHGRI Labs
 ###
@@ -9256,7 +9306,7 @@ labInst National Human Genome Research Institute
 labPi Elnitski
 labPiFull Laura Elnitski
 grantPi Elnitski
-organism human
+organism Human
 
 term NHGRI-Margulies
 tag NHGRI-Marigulies
@@ -9267,7 +9317,7 @@ labInst National Human Genome Research Institute
 labPi Margulies
 labPiFull Elliott Margulies
 grantPi Margulies
-organism human
+organism Human
 
 
 ### Transcriptome Project Labs
@@ -9283,7 +9333,7 @@ labInst Cold Spring Harbor Laboratory
 labPi Gingeras
 labpiFull Thomas Gingeras
 grantPi Gingeras
-organism human
+organism Human
 
 term GIS
 tag  GIS
@@ -9294,7 +9344,7 @@ labInst Genome Institute of Singapore
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Gingeras
-organism human
+organism Human
 
 term Helicos
 tag Helicos
@@ -9305,7 +9355,7 @@ labInst Helicos BioScience Corporation
 labPi Kapranov
 labPiFull Philipp Kapranov
 grantPi Gingeras
-organism human
+organism Human
 
 term Affy
 tag  Affy
@@ -9316,7 +9366,7 @@ labInst Affymetrix
 labPi Gingeras
 labPiFull Thomas Gingeras
 grantPi Gingeras
-organism human
+organism Human
 
 term RIKEN
 tag  Riken
@@ -9327,7 +9377,7 @@ labName Riken
 labPi Carninci
 labPiFull Piero Carninci
 grantPi Gingeras
-organism human
+organism Human
 
 
 ### UMass Labs
@@ -9342,7 +9392,7 @@ labInst UMass
 labPi Dekker
 labPiFull Job Dekker
 grantPi Dekker
-organism human
+organism Human
 
 term UMass-Weng
 tag UMass-Weng
@@ -9353,7 +9403,7 @@ labInst UMass
 labPi Weng
 labPiFull Zhiping Weng
 grantPi Weng
-organism human
+organism Human
 
 
 #### The SYDH Project
@@ -9368,7 +9418,7 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism human
+organism Human
 
 term Yale
 tag  Yale
@@ -9379,7 +9429,7 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism human
+organism Human
 
 term Yale-Weissman
 tag  YaleWeis
@@ -9390,7 +9440,7 @@ labInst Yale
 labPi Weissman
 labPiFull Sherman Weissman
 grantPi Snyder
-organism human
+organism Human
 
 term Harvard
 tag  Harvard
@@ -9401,7 +9451,7 @@ labInst Harvard
 labPi Struhl
 labPiFull Kevin Struhl
 grantPi Snyder
-organism human
+organism Human
 
 term UCD
 tag UCD
@@ -9412,7 +9462,7 @@ labName UCD
 labPi Farnham
 labPiFull Peggy Farnham
 grantPi Snyder
-organism human
+organism Human
 
 
 ### ARRA human labs
@@ -9426,7 +9476,7 @@ labInst University of North Carolina / Boise State University
 labPi Giddings
 labPiFull Morgan Giddings
 grantPi Giddings
-organism human
+organism Human
 
 term UChicago
 tag UChicago
@@ -9437,7 +9487,7 @@ labInst University of Chicago
 labPi White
 labPiFull Kevin White
 grantPi White
-organism human
+organism Human
 
 
 
@@ -9453,7 +9503,7 @@ labInst Ludwig Institue for Cancer Research
 labPi Ren
 labPiFull Bing Ren
 grantPi Ren
-organism mouse
+organism Mouse
 
 term Caltech-m
 tag Caltech
@@ -9464,7 +9514,7 @@ labInst Caltech
 labPi Wold
 labPiFull Barbara Wold
 grantPi Hardison
-organism mouse
+organism Mouse
 
 term UMass-m
 tag  UMass
@@ -9475,7 +9525,7 @@ labInst University of Massachusettes
 labPi Dekker
 labPiFull Job Dekker
 grantPi Hardison
-organism mouse
+organism Mouse
 
 term Duke-m
 tag Duke
@@ -9486,7 +9536,7 @@ labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
 grantPi Hardison
-organism mouse
+organism Mouse
 
 term PSU-m
 tag PSU
@@ -9497,7 +9547,7 @@ labInst PSU
 labPi Hardison
 labPiFull Ross Hardison
 grantPi Hardison
-organism mouse
+organism Mouse
 
 
 term UW-m
@@ -9509,7 +9559,7 @@ labInst University of Washington
 labPi Stam
 labpiFull George Stamatoyannopoulous
 grantPi Stam
-organism mouse
+organism Mouse
 
 term Stanford-m
 tag  Stanford
@@ -9520,7 +9570,7 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism mouse
+organism Mouse
 
 term Yale-m
 tag  Yale
@@ -9531,7 +9581,7 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism mouse
+organism Mouse
 
 ### AWG (DAC) Labs
 
@@ -9544,7 +9594,7 @@ labInst Stanford
 labPi Birney
 labPiFull Ewan Birney
 grantPi Birney
-organism human
+organism Human
 
 
 
