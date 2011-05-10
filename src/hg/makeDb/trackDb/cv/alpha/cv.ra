@@ -3691,6 +3691,22 @@ color 153,38,0
 sex M
 protocol UW(Stam):bCellCd19_Stam_protocol.pdf
 
+term B-cell_(CD43-)
+tag BCellCD43N
+type Cell Line
+organism Mouse
+tissue Blood
+category primaryCells
+description mouse spleen B cells, CD43-,CD11b- (Provisional) 
+age immortalized
+strain C57BL/6
+vendorName M. Bender (FHCRC)
+termId 7069
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
+color 153,38,0
+sex M
+protocol UW(Stam):bCellCd43_Stam_protocol.pdf
+
 term BoneMarrow
 tag BMarrow
 type Cell Line
@@ -8785,6 +8801,12 @@ term 129/Ola
 tag 129Ola
 type strain
 description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice.
+
+term Spretus.BL6-Xist
+tag SPBL6
+type strain
+description: M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X. (Provisional)
+
 
 term Unknown
 tag UKN
