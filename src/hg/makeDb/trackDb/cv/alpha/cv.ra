@@ -4186,7 +4186,7 @@ tissue Blood
 category primaryCells
 description Regulatory T cells CD4+,CD25+
 vendorName UW lab
-termId
+termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 153,38,0
 sex U
