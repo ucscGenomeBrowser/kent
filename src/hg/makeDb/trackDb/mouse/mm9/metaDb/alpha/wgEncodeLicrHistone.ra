@@ -1420,6 +1420,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4044
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdAlnRep2
@@ -1446,6 +1447,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 4044
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdPk
@@ -1472,6 +1474,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 4044
 tableName wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdPk
+tissueSourceType Individual
 view Peaks
 
 metaObject wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdRawDataRep1
@@ -1498,6 +1501,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4044
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdRawDataRep2
@@ -1524,6 +1528,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 4044
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdSig
@@ -1550,6 +1555,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 4044
 tableName wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdSig
+tissueSourceType Individual
 view Signal
 
 metaObject wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdAlnRep1
@@ -1576,6 +1582,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4045
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdAlnRep2
@@ -1602,6 +1609,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4045
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdPk
@@ -1628,6 +1636,7 @@ softwareVersion MACS
 strain C57BL/6
 subId 4045
 tableName wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdPk
+tissueSourceType Individual
 view Peaks
 
 metaObject wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdRawDataRep1
@@ -1654,6 +1663,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4045
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdRawDataRep2
@@ -1680,6 +1690,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4045
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdSig
@@ -1706,6 +1717,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 4045
 tableName wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdSig
+tissueSourceType Individual
 view Signal
 
 metaObject wgEncodeLicrHistoneEsb4InputME0C57bl6StdAlnRep1
@@ -1732,6 +1744,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4046
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrHistoneEsb4InputME0C57bl6StdAlnRep2
@@ -1758,6 +1771,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4046
+tissueSourceType Individual
 view Alignments
 
 metaObject wgEncodeLicrHistoneEsb4InputME0C57bl6StdRawDataRep1
@@ -1784,6 +1798,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4046
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrHistoneEsb4InputME0C57bl6StdRawDataRep2
@@ -1810,6 +1825,7 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 4046
+tissueSourceType Individual
 view RawData
 
 metaObject wgEncodeLicrHistoneEsb4InputME0C57bl6StdSig
@@ -1836,6 +1852,7 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 4046
 tableName wgEncodeLicrHistoneEsb4InputME0C57bl6StdSig
+tissueSourceType Individual
 view Signal
 
 metaObject wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdAlnRep1
@@ -4608,4 +4625,4 @@ tableName wgEncodeLicrHistoneSpleenInputMAdult8wksC57bl6StdSig
 tissueSourceType Pooled
 view Signal
 
-# MAGIC: 1850180127
+# MAGIC: -960247123
