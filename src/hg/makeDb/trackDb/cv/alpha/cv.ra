@@ -5389,7 +5389,7 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf
 
-erm H3K9me3_(9754)
+term H3K9me3_(9754)
 tag H3K9me39754
 type Antibody
 antibodyDescription Rabbit polyclonal antibody was produced by immunizing animals with a synthetic\
@@ -5408,7 +5408,6 @@ lots Lot#1
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K9me3_(9754)(WesternBlot,PeptideELISA):human_H3K9me3_9754_validation_Farnham.pdf
-
 
 term H3K27ac
 tag H3K27ac
