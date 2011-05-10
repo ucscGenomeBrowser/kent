@@ -29,7 +29,7 @@ class CvFile(RaFile):
 		if type == 'Antibody':
 			entry = AntibodyStanza()
 		elif type == 'Cell Line':
-			if e['organism'] == 'human':
+			if e['organism'] == 'Human':
 				entry = CellLineStanza()
 			elif e['organism'] == 'Mouse':
 				entry = MouseStanza()
@@ -94,6 +94,8 @@ class CvFile(RaFile):
 			entry = VersionStanza()
 		elif type == 'view':
 			entry = ViewStanza()
+		elif type == 'category':
+			entry = CategoryStanza()
 		else:
 			self.handler(NonmatchKeyError(e.name, type, 'type'))
 			return ek, ev, None
@@ -137,13 +139,25 @@ class CvStanza(RaStanza):
 	def checkRelational(self, ra, key, other):
 		"""check that the value at key matches the value at other"""
 		p = 0
+		
+		#if (self['term'] == "CH12"):
+		#	print "checkrelational CH12";
+		
 		if key not in self:
 			return
-			
+		
 		for entry in ra.itervalues():
 			if 'type' in entry and other in entry:
+				
+				#if (self['term'] == "CH12"):
+				#	print self['term'] + ': entrytype: ' + entry['type'] + ' ?= key: ' + key + ' and selfkey: ' + self[key] + ' ?= entryother: ' + entry[other]
+				
 				if entry['type'] == key and self[key] == entry[other]:
+					
+					#if (self['term'] == "CH12"):
+					#	print 'passed'
 					p = 1
+					break
 		if p == 0:
 			ra.handler(NonmatchKeyError(self.name, key, other))
 
@@ -360,6 +374,9 @@ class CellLineStanza(CvStanza):
 	def validate(self, ra):
 		#print 'CellLineStanza.validate(' + self.name + ')'
 
+		#if (self['term'] == 'GM12878'):
+		#	print 'GM12878 Validate'
+		
 		necessary = {'term', 'tag', 'type', 'description', 'organism', 'vendorName', 'orderUrl', 'sex', 'tier'}
 		optional = {'tissue', 'vendorId', 'karyotype', 'lineage', 'termId', 'termUrl', 'color', 'protocol', 'category'}
 
@@ -566,4 +583,11 @@ class SpeciesStanza(CvStanza):
 		CvStanza.validate(self, ra)
 		#print 'validate(' + self.name + ')'
 
+class CategoryStanza(CvStanza):
+	
+	def __init__(self):
+		CvStanza.__init__(self)
 
+	def validate(self, ra):
+		CvStanza.validate(self, ra)
+		#print 'validate(' + self.name + ')'
