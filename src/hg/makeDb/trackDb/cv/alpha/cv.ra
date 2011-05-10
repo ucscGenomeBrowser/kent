@@ -3682,7 +3682,7 @@ organism Mouse
 tissue Blood
 category primaryCells
 description B Cell , CD19+
-age immortalized
+age adult-8wks
 strain C57BL/6
 vendorName
 termId 7069
@@ -3698,7 +3698,7 @@ organism Mouse
 tissue Blood
 category primaryCells
 description mouse spleen B cells, CD43-,CD11b- (Provisional) 
-age immortalized
+age adult-8wks
 strain C57BL/6
 vendorName M. Bender (FHCRC)
 termId 7069
