@@ -8953,7 +8953,7 @@ description human
 
 term Mouse
 tag mouse
-type mouse
+type organism
 description mouse
 
 ## Tiers (used by cell types)
