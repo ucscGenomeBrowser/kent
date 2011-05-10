@@ -250,6 +250,10 @@ if (ht->left == NULL && ht->right == NULL)
     struct hapCluster *c = (struct hapCluster *)ht->itemOrCluster;
     gtHapOrder[(*retGtHapEnd)++] = c->gtHapIx;
     }
+else if (ht->left == NULL)
+    rSetGtHapOrder(ht->right, gtHapOrder, retGtHapEnd);
+else if (ht->right == NULL)
+    rSetGtHapOrder(ht->left, gtHapOrder, retGtHapEnd);
 else
     {
     struct hapCluster *cL = (struct hapCluster *)ht->left->itemOrCluster;
@@ -452,6 +456,8 @@ static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
  * alpha similarity, and draw in the order determined by clustering. */
 {
 const struct vcfFile *vcff = tg->extraUiData;
+if (vcff->records == NULL)
+    return;
 unsigned short gtHapEnd = 0;
 unsigned short *gtHapOrder = clusterChroms(vcff, &gtHapEnd);
 struct dyString *tmp = dyStringNew(0);
@@ -494,6 +500,8 @@ static int vcfHapClusterTotalHeight(struct track *tg, enum trackVisibility vis)
 {
 // Should we make it single-height when on chrY?
 const struct vcfFile *vcff = tg->extraUiData;
+if (vcff->records == NULL)
+    return 0;
 int ploidy = 2;
 tg->height = ploidy * vcff->genotypeCount * tg->lineHeight;
 return tg->height;
