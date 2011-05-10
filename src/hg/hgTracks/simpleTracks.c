@@ -9511,7 +9511,7 @@ if (allWidth >= w || sameString(display, "freq"))
     {
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item),
                 tg->mapItemName(tg, item), myItem->chromStart, myItem->chromEnd,
-                x1-allWidth-2, yCopy, allWidth+w, tg->heightPer);
+                x1-allWidth-2, y+1, allWidth+w, tg->heightPer);
     }
 withIndividualLabels = FALSE; //turn labels off, done already
 }

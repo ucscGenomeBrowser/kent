@@ -80,7 +80,7 @@ else
 }
 
 static void explainIdentifiers(struct sqlConnection *conn, char *idField)
-/* Tell the user what field(s) they may paste/upload values for, and give 
+/* Tell the user what field(s) they may paste/upload values for, and give
  * some examples. */
 {
 char *xrefTable = NULL, *xrefIdField = NULL, *aliasField = NULL;
@@ -175,6 +175,7 @@ cgiMakeButton(hgtaDoClearPasteIdentifierText, "clear");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>");
+cgiDown(0.9);
 htmlClose();
 if (sameWord(curTable, WIKI_TRACK_TABLE))
     wikiDisconnect(&alternateConn);
@@ -203,6 +204,7 @@ cgiMakeButton(hgtaDoPastedIdentifiers, "submit");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>");
+cgiDown(0.9);
 htmlClose();
 }
 
@@ -257,7 +259,7 @@ else
 	  xrefTable, curTable,
 	  xrefTable, xrefIdField, curTable, idField);
 if (extraWhere != NULL)
-    // extraWhere begins w/ID field of curTable=xrefTable.  Skip that field name and 
+    // extraWhere begins w/ID field of curTable=xrefTable.  Skip that field name and
     // use "xrefTable.aliasField" with the IN (...) condition that follows:
     dyStringPrintf(query, " %s %s.%s %s",
 		   (sameString(xrefTable, curTable) ? "where" : "and"),
@@ -275,7 +277,7 @@ sqlFreeResult(&sr);
 
 static struct hash *getAllPossibleIds(struct sqlConnection *conn,
 				      struct lm *lm, char *idField, char *extraWhere)
-/* Make a hash of all identifiers in curTable (and alias tables if specified) 
+/* Make a hash of all identifiers in curTable (and alias tables if specified)
  * so that we can check the validity of pasted/uploaded identifiers. */
 {
 struct hash *matchHash = hashNew(20);
@@ -286,7 +288,7 @@ struct sqlConnection *alternateConn = conn;
 if (sameWord(curTable, WIKI_TRACK_TABLE))
     alternateConn = wikiConnect();
 
-if (isCustomTrack(curTable) || isBamTable(curTable)) 
+if (isCustomTrack(curTable) || isBamTable(curTable))
     /* Currently we don't check whether these are valid CT item
      * names or not.  matchHash is empty for CTs. */
     tableList = NULL;
@@ -340,7 +342,7 @@ char *idText = trimSpaces(cartString(cart, hgtaPastedIdentifiers));
 htmlOpen("Table Browser (Input Identifiers)");
 if (isNotEmpty(idText))
     {
-    /* Write terms to temp file, checking whether they have matches, and 
+    /* Write terms to temp file, checking whether they have matches, and
      * save temp file name. */
     boolean saveIdText = (strlen(idText) < MAX_IDTEXT);
     char *idTextForLf = saveIdText ? cloneString(idText) : idText;

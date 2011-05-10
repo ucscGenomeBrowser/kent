@@ -15,12 +15,12 @@ $ hgsql -e "create database hgcentral;" mysql
 
 Load all tables into the hgcentral database.
 Copy all the mysql data files from
-    rsync -avzP rsync://hgdownload.cse.ucsc.edu/mysql/hgcentral/ .
+    rsync -avP rsync://hgdownload.cse.ucsc.edu/mysql/hgcentral/ .
 directly into the MySQL data area for your hgcentral database.
 (something usually like /var/lib/mysql/hgcentral/)
 (or load this database with mysql/hgsql commands and the hgcentral.sql
 	text file dump of these tables from:
-    rsync -avzP rsync://hgdownload.cse.ucsc.edu/genome/admin/hgcentral.sql .
+    rsync -avP rsync://hgdownload.cse.ucsc.edu/genome/admin/hgcentral.sql .
     (or: http://hgdownload.cse.ucsc.edu/admin/hgcentral.sql)
 )
 
@@ -36,11 +36,11 @@ $ hgsql -e "create database hg18;" mysql
 
 Again, copy the MySQL files directly from the download
 server, for example hg18:
-    rsync -avzP rsync://hgdownload.cse.ucsc.edu/mysql/hg18/ .
+    rsync -avP rsync://hgdownload.cse.ucsc.edu/mysql/hg18/ .
     (beware, this is an immense amount of data)
 into your MySQL data area.  Or load these tables from the text SQL
 dumps from:
-    rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ .
+    rsync -avP rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ .
     (beware, this is an immense amount of data)
 
 The minimal set of tables required are:

@@ -13,8 +13,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam
+md5sum 943107cd2fc437dff04098c604d053e2
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 replicate 1
 subId 3408
@@ -31,8 +33,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam
+md5sum 376b865faa2a124b9825266256b1c26e
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 replicate 2
 subId 3408
@@ -49,8 +53,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSunyRipSeqGm12878Elavl1Pk.bed.gz
+md5sum 3077dc1d93897220cc65700e55295385
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 subId 3306
 tableName wgEncodeSunyRipSeqGm12878Elavl1Pk
@@ -66,8 +72,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878Elavl1RawDataRep1.fastq.gz
+md5sum 07d6caad17bfaab4f4436374955369c3
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 replicate 1
 subId 3408
@@ -83,8 +91,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878Elavl1RawDataRep2.fastq.gz
+md5sum a75f374311943fc7645dcc4884820d79
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 replicate 2
 subId 3408
@@ -100,8 +110,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878Elavl1SigRep1.bigWig
+md5sum ef861d9af632b0ba6a31c4e08009e16e
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 replicate 1
 subId 3408
@@ -118,8 +130,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878Elavl1SigRep2.bigWig
+md5sum 57fbc4d8b79d2410e432c9ac1cfb6e9f
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 replicate 2
 subId 3408
@@ -136,8 +150,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam
+md5sum 0893917404fc33e60c261cc9588c9732
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 replicate 1
 subId 3408
@@ -154,8 +170,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam
+md5sum 7bc706622e3e5c18d2517001d39b63c6
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 replicate 2
 subId 3408
@@ -172,8 +190,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSunyRipSeqGm12878Pabpc1Pk.bed.gz
+md5sum 4343366c8e80a83eaedf2d437a1ffdf1
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 subId 3306
 tableName wgEncodeSunyRipSeqGm12878Pabpc1Pk
@@ -189,8 +209,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep1.fastq.gz
+md5sum 80dbb0db72ebd488d8ef3c39cdd2e951
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 replicate 1
 subId 3408
@@ -206,8 +228,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep2.fastq.gz
+md5sum 02e15bfa8318b8213f42ce2e2bc822f5
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 replicate 2
 subId 3408
@@ -223,8 +247,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878Pabpc1SigRep1.bigWig
+md5sum 68a5d00a2df7acc691e7f0c81510abb2
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 replicate 1
 subId 3408
@@ -241,8 +267,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878Pabpc1SigRep2.bigWig
+md5sum 14fb7c1cc7e0be7d7f95e478fd4ddfee
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 replicate 2
 subId 3408
@@ -259,6 +287,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam
+md5sum 520ae680dd974c1cc5e25053f1a4e6dd
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -277,6 +306,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam
+md5sum d4bbb373f592be5c808ada966f9c1952
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -295,6 +325,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
 fileName wgEncodeSunyRipSeqGm12878RipinputPk.bed.gz
+md5sum 8ceb9892cd831621ab5681d1b5a05d96
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -312,6 +343,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878RipinputRawDataRep1.fastq.gz
+md5sum 0b3d478e7011b1104b451ae4de2639ed
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -329,6 +361,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878RipinputRawDataRep2.fastq.gz
+md5sum 4d8a482b7ca29f56bff40bd110d5a431
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -346,6 +379,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878RipinputSigRep1.bigWig
+md5sum 6fc963d37686f8a7ba73b7adeea1f6e7
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -364,6 +398,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878RipinputSigRep2.bigWig
+md5sum e97f1cffaee0f2b9d4c8f2ee7058c6dc
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -382,8 +417,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep1.bam
+md5sum e93f1b8f78fb9c35a579567513238557
 grant Tenenbaum
 lab SunyAlbany
+labVersion Nov_69522 antibody
 project wgEncode
 replicate 1
 subId 3408
@@ -400,8 +437,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep2.bam
+md5sum d64d6a2790ec360bed0b24d1e7705426
 grant Tenenbaum
 lab SunyAlbany
+labVersion Nov_69522 antibody
 project wgEncode
 replicate 2
 subId 3408
@@ -418,8 +457,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878T7tagRawDataRep1.fastq.gz
+md5sum 6287d54f4736376579e57e77265dac5b
 grant Tenenbaum
 lab SunyAlbany
+labVersion Nov_69522 antibody
 project wgEncode
 replicate 1
 subId 3408
@@ -435,8 +476,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878T7tagRawDataRep2.fastq.gz
+md5sum 0c7d7e88e2d0aaf9e12017caab084b60
 grant Tenenbaum
 lab SunyAlbany
+labVersion Nov_69522 antibody
 project wgEncode
 replicate 2
 subId 3408
@@ -452,8 +495,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878T7tagSigRep1.bigWig
+md5sum 444ecc13c927aec541fda438033827ba
 grant Tenenbaum
 lab SunyAlbany
+labVersion Nov_69522 antibody
 project wgEncode
 replicate 1
 subId 3408
@@ -470,8 +515,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqGm12878T7tagSigRep2.bigWig
+md5sum 889611b51ae4ceaae665756472d97a8b
 grant Tenenbaum
 lab SunyAlbany
+labVersion Nov_69522 antibody
 project wgEncode
 replicate 2
 subId 3408
@@ -488,8 +535,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam
+md5sum 212f2e7c780b8195bf26383ef5d6283f
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 replicate 1
 subId 3407
@@ -506,8 +555,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam
+md5sum 1b088a487491d437e49d364943e9db44
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 replicate 2
 subId 3407
@@ -524,8 +575,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSunyRipSeqK562Elavl1Pk.bed.gz
+md5sum e8b74cce4afad60891a09deb7274cd24
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 subId 3291
 tableName wgEncodeSunyRipSeqK562Elavl1Pk
@@ -541,8 +594,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562Elavl1RawDataRep1.fastq.gz
+md5sum ba3556004122fecfbfd0054b37a4aefa
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 replicate 1
 subId 3407
@@ -558,8 +613,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562Elavl1RawDataRep2.fastq.gz
+md5sum f46a944edd1b734570ae8b280a7fe63b
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 replicate 2
 subId 3407
@@ -575,8 +632,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562Elavl1SigRep1.bigWig
+md5sum 337329ce77cb27d358ec5ea807f951c7
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 replicate 1
 subId 3407
@@ -593,8 +652,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562Elavl1SigRep2.bigWig
+md5sum 9ef0efd828644574c954221cd9ddd81e
 grant Tenenbaum
 lab SunyAlbany
+labVersion SC_5261 antibody
 project wgEncode
 replicate 2
 subId 3407
@@ -611,8 +672,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam
+md5sum 22eca903bbc982a413decb540b556a00
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 replicate 1
 subId 3407
@@ -629,8 +692,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam
+md5sum 05f96f4d2c9c0bd411fc16d600c9a4fb
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 replicate 2
 subId 3407
@@ -647,8 +712,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSunyRipSeqK562Pabpc1Pk.bed.gz
+md5sum d1b3e9fe4e4db73d501dc0df46d68ae6
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 subId 3291
 tableName wgEncodeSunyRipSeqK562Pabpc1Pk
@@ -664,8 +731,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562Pabpc1RawDataRep1.fastq.gz
+md5sum d2261c92a562e4c9178740672c08bdca
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 replicate 1
 subId 3407
@@ -681,8 +750,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562Pabpc1RawDataRep2.fastq.gz
+md5sum 7aebac3d234d83346f1b2142e1e26e46
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 replicate 2
 subId 3407
@@ -698,8 +769,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562Pabpc1SigRep1.bigWig
+md5sum 7561c144d3006b7c40dada2a202b1521
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 replicate 1
 subId 3407
@@ -716,8 +789,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562Pabpc1SigRep2.bigWig
+md5sum 30a6a96b5092b7c2675dfde782388afb
 grant Tenenbaum
 lab SunyAlbany
+labVersion Sig_P6246 antibody
 project wgEncode
 replicate 2
 subId 3407
@@ -734,6 +809,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562RipinputAlnRep1.bam
+md5sum b9946f5c231fa041955b56c38f1c3063
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -752,6 +828,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562RipinputAlnRep2.bam
+md5sum 95a97446ee0832de77593175bd94c9ce
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -770,6 +847,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSunyRipSeqK562RipinputPk.bed.gz
+md5sum 0ee14834175d79656f94286560cb4667
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -787,6 +865,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562RipinputRawDataRep1.fastq.gz
+md5sum f6fbf96100718232b38680d6511c87d3
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -804,6 +883,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562RipinputRawDataRep2.fastq.gz
+md5sum a64639ff8fa8039446ba0c20c8d25e57
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -821,6 +901,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562RipinputSigRep1.bigWig
+md5sum fd05149874e1d5b5716db384295659fc
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -839,6 +920,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562RipinputSigRep2.bigWig
+md5sum 5c4819fc03ae862ad6bcaf28925438be
 grant Tenenbaum
 lab SunyAlbany
 project wgEncode
@@ -857,8 +939,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562T7tagAlnRep1.bam
+md5sum b1af906d167b070ebc67744cce0fb521
 grant Tenenbaum
 lab SunyAlbany
+labVersion Nov_69522 antibody
 project wgEncode
 replicate 1
 subId 3407
@@ -875,8 +959,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562T7tagAlnRep2.bam
+md5sum 2fdefeb9db79da66ac379cb9a22930f1
 grant Tenenbaum
 lab SunyAlbany
+labVersion Nov_69522 antibody
 project wgEncode
 replicate 2
 subId 3407
@@ -893,8 +979,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562T7tagRawDataRep1.fastq.gz
+md5sum ac72342f178656cf62392a93e9b685b2
 grant Tenenbaum
 lab SunyAlbany
+labVersion Nov_69522 antibody
 project wgEncode
 replicate 1
 subId 3407
@@ -910,8 +998,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562T7tagRawDataRep2.fastq.gz
+md5sum 1519e3306c38e0159310bc100abb8277
 grant Tenenbaum
 lab SunyAlbany
+labVersion Nov_69522 antibody
 project wgEncode
 replicate 2
 subId 3407
@@ -927,8 +1017,10 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562T7tagSigRep1.bigWig
+md5sum 5f55cf78fe2e915b1568db6e3f972d77
 grant Tenenbaum
 lab SunyAlbany
+labVersion Nov_69522 antibody
 project wgEncode
 replicate 1
 subId 3407
@@ -945,12 +1037,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 fileName wgEncodeSunyRipSeqK562T7tagSigRep2.bigWig
+md5sum 66a2ad0d34bde70a3496bd1c4166a2ba
 grant Tenenbaum
 lab SunyAlbany
+labVersion Nov_69522 antibody
 project wgEncode
 replicate 2
 subId 3407
 tableName wgEncodeSunyRipSeqK562T7tagSigRep2
 view Signal
 
-# MAGIC: 152329558
+# MAGIC: -131934592

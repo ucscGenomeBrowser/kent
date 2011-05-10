@@ -51,7 +51,6 @@ static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp
 #define ENCODE_DCC_DOWNLOADS "encodeDCC"
 
 //#define SUBTRACK_CFG_POPUP
-#define BAM_CFG_UI_CHANGES
 
 struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
 /* Look up through self and parents, looking for someone responsible for handling
@@ -120,7 +119,7 @@ if (trackDbSetting(tdb, "dimensions"))
     if (browser == btIE || browser == btFF)
         upArrow = "&uarr;";
     // Note: the nested spans are so that javascript can determine position and selectively display the link when appropriate
-    printf("<span><span class='navUp' style='float:right; display:none'>&nbsp;&nbsp;<A HREF='#' TITLE='Return to top of page'>Top%s</A></span></span>\n",upArrow);
+    printf("<span class='navUp' style='float:right; display:none'>&nbsp;&nbsp;<A HREF='#' TITLE='Return to top of page'>Top%s</A></span>",upArrow);
     }
 }
 
@@ -282,17 +281,22 @@ boolean schemaLink = (isCustomTrack(tdb->table) == FALSE)
 boolean metadataLink = (!tdbIsComposite(tdb)
                   && metadataForTable(db, tdb, NULL) != NULL);
 boolean downloadLink = (trackDbSetting(tdb, "wgEncode") != NULL && !tdbIsSuperTrack(tdb));
-boolean moreThanOne = (schemaLink && metadataLink)
-                   || (schemaLink && downloadLink)
-                   || (downloadLink && metadataLink);
+int links = 0;
+if (schemaLink)
+    links++;
+if (metadataLink)
+    links++;
+if (downloadLink)
+    links++;
 
-printf("<P>");
-if(moreThanOne)
+if(links > 0)
+    cgiDown(0.7);
+if(links > 1)
     printf("<table><tr><td nowrap>View table: ");
 
 if(schemaLink)
     {
-    makeSchemaLink(db,tdb,(moreThanOne ? "schema":"View table schema"));
+    makeSchemaLink(db,tdb,(links > 1 ? "schema":"View table schema"));
     if(downloadLink || metadataLink)
         printf(", ");
     }
@@ -309,7 +313,7 @@ if(downloadLink)
     if (targetDb == NULL)
         targetDb = cloneString(db);
 
-    makeNamedDownloadsLink(targetDb, tdb, (moreThanOne ? "downloads":"Downloads"), trackHash);
+    makeNamedDownloadsLink(targetDb, tdb, (links > 1 ? "downloads":"Downloads"), trackHash);
     freez(&targetDb);
     if(metadataLink)
         printf(",");
@@ -317,10 +321,8 @@ if(downloadLink)
 if (metadataLink)
     compositeMetadataToggle(db,tdb,"metadata", TRUE, TRUE, trackHash);
 
-if(moreThanOne)
+if(links > 1)
     printf("</td></tr></table>");
-
-puts("</P>");
 }
 
 
@@ -1064,9 +1066,6 @@ if (gotCds && gotSeq)
 			baseColorDrawAllOptionValues,
 			ArraySize(baseColorDrawAllOptionLabels),
 			curValue, NULL);
-#ifndef BAM_CFG_UI_CHANGES
-    printf("<BR>");
-#endif///ndef BAM_CFG_UI_CHANGES
     printf("<A HREF=\"%s\">Help on mRNA coloring</A><BR>",
 	   CDS_MRNA_HELP_PAGE);
     }
@@ -1080,9 +1079,6 @@ else if (gotCds)
 			baseColorDrawGenomicOptionValues,
 			ArraySize(baseColorDrawGenomicOptionLabels),
 			curValue, buf);
-#ifndef BAM_CFG_UI_CHANGES
-    printf("<BR>");
-#endif///ndef BAM_CFG_UI_CHANGES
     printf("<A HREF=\"%s\">Help on codon coloring</A><BR>",
 	   CDS_HELP_PAGE);
     safef(buf, sizeof(buf), "%s.%s", name, CODON_NUMBERING_SUFFIX);
@@ -1098,9 +1094,6 @@ else if (gotSeq)
 			baseColorDrawItemOptionValues,
 			ArraySize(baseColorDrawItemOptionLabels),
 			curValue, NULL);
-#ifndef BAM_CFG_UI_CHANGES
-    printf("<BR>");
-#endif///ndef BAM_CFG_UI_CHANGES
     printf("<A HREF=\"%s\">Help on base coloring</A><BR>",
 	   CDS_BASE_HELP_PAGE);
     }
@@ -1196,7 +1189,6 @@ if (indelAppropriate(tdb))
     boolean showDoubleInsert, showQueryInsert, showPolyA;
     char var[512];
     indelEnabledByName(cart, tdb, name, 0.0, &showDoubleInsert, &showQueryInsert, &showPolyA);
-#ifdef BAM_CFG_UI_CHANGES
     printf("<TABLE><TR><TD colspan=2><B>Alignment Gap/Insertion Display Options</B>");
     printf("&nbsp;<A HREF=\"%s\">Help on display options</A>\n<TR valign='top'><TD>",
            INDEL_HELP_PAGE);
@@ -1219,33 +1211,6 @@ if (indelAppropriate(tdb))
         }
 
     printf("</TABLE>\n");
-#else///ifndef BAM_CFG_UI_CHANGES
-    printf("<P><B>Alignment Gap/Insertion Display Options</B><BR>\n");
-    safef(var, sizeof(var), "%s.%s", name, INDEL_DOUBLE_INSERT);
-    cgiMakeCheckBox(var, showDoubleInsert);
-    printf("Draw double horizontal lines when both genome and query have "
-	   "an insertion "
-	   "<BR>\n");
-    safef(var, sizeof(var), "%s.%s", name, INDEL_QUERY_INSERT);
-    cgiMakeCheckBox(var, showQueryInsert);
-    printf("Draw a vertical purple line for an insertion at the beginning or "
-	   "end of the query, orange for insertion in the middle of the query"
-	   "<BR>\n");
-    safef(var, sizeof(var), "%s.%s", name, INDEL_POLY_A);
-    /* We can highlight valid polyA's only if we have query sequence --
-     * so indelPolyA code piggiebacks on baseColor code: */
-    if (baseColorGotSequence(tdb))
-	{
-	cgiMakeCheckBox(var, showPolyA);
-	printf("Draw a vertical green line where query has a polyA tail "
-	       "insertion"
-	       "<BR>\n");
-	}
-
-    printf("<A HREF=\"%s\">Help on alignment gap/insertion display options</A>"
-	   "<BR>\n",
-	   INDEL_HELP_PAGE);
-#endif///ndef BAM_CFG_UI_CHANGES
     }
 }
 
@@ -3040,26 +3005,20 @@ else
 
 sortOrder->setting = cloneString(setting);
 sortOrder->count   = chopByWhite(sortOrder->setting,NULL,0);  // Get size
-#ifdef SORT_ON_TRACK_NAME
 if (cart && !stringIn(SORT_ON_TRACK_NAME,setting))
     sortOrder->count += 1;
-#endif///def SORT_ON_TRACK_NAME
-#ifdef SORT_ON_RESTRICTED
 if (cart && !stringIn(SORT_ON_RESTRICTED,setting))
     sortOrder->count += 1;
-#endif///def SORT_ON_RESTRICTED
 sortOrder->column  = needMem(sortOrder->count*sizeof(char*));
 int foundColumns = chopByWhite(sortOrder->setting, sortOrder->column,sortOrder->count);
 sortOrder->title   = needMem(sortOrder->count*sizeof(char*));
 sortOrder->forward = needMem(sortOrder->count*sizeof(boolean));
 sortOrder->order   = needMem(sortOrder->count*sizeof(int));
-#if defined(SORT_ON_TRACK_NAME) || defined(SORT_ON_RESTRICTED)
 if (cart && foundColumns < sortOrder->count)
     {
     int columnCount = foundColumns;
     int size = 0;
     char *moreOrder = NULL;
-    #ifdef SORT_ON_TRACK_NAME
     if (cart && columnCount < sortOrder->count && !stringIn(SORT_ON_TRACK_NAME,setting))
         {
         assert(sortOrder->column[columnCount] == NULL);
@@ -3074,8 +3033,6 @@ if (cart && foundColumns < sortOrder->count)
             }
         columnCount++;
         }
-    #endif///def SORT_ON_TRACK_NAME
-    #ifdef SORT_ON_RESTRICTED
     if (cart && columnCount < sortOrder->count && !stringIn(SORT_ON_RESTRICTED,setting))
         {
         assert(sortOrder->column[columnCount] == NULL);
@@ -3090,9 +3047,7 @@ if (cart && foundColumns < sortOrder->count)
             }
         columnCount++;
         }
-    #endif///def SORT_ON_RESTRICTED
     }
-#endif///def SORT_ON_TRACK_NAME
 for (ix = 0; ix<sortOrder->count; ix++)
     {
     strSwapChar(sortOrder->column[ix],'=',0);  // Don't want 'CEL=+' but 'CEL' and '+'
@@ -3115,9 +3070,7 @@ for (ix = 0; ix<sortOrder->count; ix++)
         sortOrder->forward[ix] = TRUE;
         sortOrder->order[ix] = ix+1;
         }
-#ifdef SORT_ON_TRACK_NAME
     if (ix < foundColumns)
-#endif///def SORT_ON_TRACK_NAME
         subgroupFindTitle(parentTdb,sortOrder->column[ix],&(sortOrder->title[ix]));
     }
 return sortOrder;  // NOTE cloneString:words[0]==*sortOrder->column[0] and will be freed when sortOrder is freed
@@ -3873,6 +3826,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     }
 
 // Table wraps around entire list so that "Top" link can float to the correct place.
+cgiDown(0.7);
 printf("<table><tr><td class='windowSize'>");
 printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
 if (sortOrder != NULL)
@@ -3956,14 +3910,10 @@ if (sortOrder != NULL)
     int sIx=0;
     for(sIx=0;sIx<sortOrder->count;sIx++)
         {
-#ifdef SORT_ON_TRACK_NAME
         if (sameString(SORT_ON_TRACK_NAME,sortOrder->column[sIx]))
             break; // All wrangler requested sort orders have been done.
-#endif///def SORT_ON_TRACK_NAME
-#ifdef SORT_ON_RESTRICTED
         if (sameString(SORT_ON_RESTRICTED,sortOrder->column[sIx]))
             break; // All wrangler requested sort orders have been done.
-#endif///def SORT_ON_RESTRICTED
         printf("<TH id='%s' class='sortable%s sort%d' abbr='use' onclick='tableSortAtButtonPress(this);'>%s",
             sortOrder->column[sIx],(sortOrder->forward[sIx]?"":" sortRev"),sortOrder->order[sIx],sortOrder->title[sIx]);
         printf("<sup>%s",(sortOrder->forward[sIx]?"&darr;":"&uarr;"));
@@ -3975,15 +3925,11 @@ if (sortOrder != NULL)
         }
 
     // longLabel column
-#ifdef SORT_ON_TRACK_NAME
     assert(sameString(SORT_ON_TRACK_NAME,sortOrder->column[sIx]));
     printf("<TH id='%s' class='sortable%s sort%d' onclick='tableSortAtButtonPress(this);' align='left'>&nbsp;&nbsp;Track Name",
            sortOrder->column[sIx],(sortOrder->forward[sIx]?"":" sortRev"),sortOrder->order[sIx]);
     printf("<sup>%s%d</sup>",(sortOrder->forward[sIx]?"&darr;":"&uarr;"),sortOrder->order[sIx]);
     puts ("</TH>");
-#else///ifndef SORT_ON_TRACK_NAME
-    puts("<TD>&nbsp;</TD>");
-#endif///ndef SORT_ON_TRACK_NAME
     columnCount++;
     }
 puts("<TH>&nbsp;</TH>"); // schema column
@@ -3992,7 +3938,6 @@ columnCount++;
 // Finally there may be a restricted until column
 if (restrictions)
     {
-#ifdef SORT_ON_RESTRICTED
     if (sortOrder != NULL)
         {
         int sIx=sortOrder->count-1;
@@ -4004,7 +3949,6 @@ if (restrictions)
         puts ("</TH>");
         }
     else
-#endif///def SORT_ON_RESTRICTED
         {
         printf("<TH align='center'>&nbsp;");
         printf("<A HREF=\'%s\' TARGET=BLANK>Restricted Until</A>", ENCODE_DATA_RELEASE_POLICY);
@@ -4205,25 +4149,25 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     }
 
 // End of the table
-puts("</TBODY><TFOOT>");
-printf("<TR valign='top'><TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",columnCount-1);
+puts("</TBODY>");
+if (slCount(subtrackRefList) > 5 || (restrictions && sortOrder != NULL))
+    {
+    printf("<TFOOT style='background-color:%s;'><TR valign='top'><TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",
+           COLOR_BG_DEFAULT_DARKER,columnCount-1);
 
-// Count of subtracks is filled in by javascript.
-if (slCount(subtrackRefList) > 5)
-    printf("<span class='subCBcount'></span>\n");
+    // Count of subtracks is filled in by javascript.
+    if (slCount(subtrackRefList) > 5)
+        printf("<span class='subCBcount'></span>\n");
 
-// Restruction policy needs a link
-#ifdef SORT_ON_RESTRICTED
-if (restrictions && sortOrder != NULL)
-    printf("</TD><TH><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A>", ENCODE_DATA_RELEASE_POLICY);
-#endif///def SORT_ON_RESTRICTED
+    // Restruction policy needs a link
+    if (restrictions && sortOrder != NULL)
+        printf("</TD><TH><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A>", ENCODE_DATA_RELEASE_POLICY);
 
-printf("</TD></TR>\n");
-puts("</TFOOT></TABLE>");
+    printf("</TD></TR></TFOOT>\n");
+    }
+puts("</TABLE>");
 if (sortOrder == NULL)
     printf("</td></tr></table>");
-
-puts("<P>");
 
 // Tying subtracks with matrix and subtrack cfgs with views requires javascript help
 puts("<script type='text/javascript'>matInitializeMatrix();</script>");
@@ -4536,7 +4480,7 @@ if (scoreMinStr != NULL)
                         setting ? atoi(setting) : scoreMinGrayLevel);
     if (minGrayLevel <= 0) minGrayLevel = 1;
     if (minGrayLevel > maxShade) minGrayLevel = maxShade;
-    puts("\n<P><B>Shade of lowest-scoring items: </B>");
+    puts("\n<B>Shade of lowest-scoring items: </B>");
     // Add javascript to select so that its color is consistent with option colors:
     int level = 255 - (255*minGrayLevel / maxShade);
     printf("<SELECT NAME=\"%s.%s\" STYLE='color: #%02x%02x%02x' class='normalText'",
@@ -4565,7 +4509,7 @@ if (scoreMinStr != NULL)
         else
             printf("&bull; gray (%d%%)</OPTION>\n", i * (100/maxShade));
         }
-    printf("</SELECT></P>\n");
+    printf("</SELECT>\n");
     }
 }
 
@@ -5874,7 +5818,6 @@ void bamCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, b
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 char cartVarName[1024];
 
-#ifdef BAM_CFG_UI_CHANGES
 printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
 char *tdbShowNames = trackDbSetting(tdb, BAM_SHOW_NAMES);
 safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAM_SHOW_NAMES);
@@ -5899,27 +5842,6 @@ cartMakeIntVar(cart, cartVarName,
                atoi(trackDbSettingOrDefault(tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
 printf("</TD></TR></TABLE>");
 
-#else///nef BAM_CFG_UI_CHANGES
-puts("<BR>");
-printf("<B>Display read names:</B>\n");
-char *tdbShowNames = trackDbSetting(tdb, BAM_SHOW_NAMES);
-safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAM_SHOW_NAMES);
-cartMakeCheckBox(cart, cartVarName, !sameOk(tdbShowNames, "off"));
-boolean canPair = (trackDbSetting(tdb, BAM_PAIR_ENDS_BY_NAME) != NULL);
-puts("<BR>");
-if (canPair)
-    {
-    printf("<B>Attempt to join paired end reads by name:</B>\n");
-    safef(cartVarName, sizeof(cartVarName), "%s." BAM_PAIR_ENDS_BY_NAME, name);
-    cartMakeCheckBox(cart, cartVarName, TRUE);
-    puts("<BR>");
-    }
-printf("<B>Minimum alignment quality:</B>\n");
-safef(cartVarName, sizeof(cartVarName), "%s." BAM_MIN_ALI_QUAL, name);
-cartMakeIntVar(cart, cartVarName,
-               atoi(trackDbSettingOrDefault(tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
-puts("<BR>");
-#endif///ndef BAM_CFG_UI_CHANGES
 
 if (isCustomTrack(name))
     {
@@ -5930,9 +5852,7 @@ if (isCustomTrack(name))
     hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
     }
 baseColorDropLists(cart, tdb, name);
-#ifdef BAM_CFG_UI_CHANGES
 puts("<BR>");
-#endif///def BAM_CFG_UI_CHANGES
 indelShowOptionsWithName(cart, tdb, name);
 printf("<BR>\n");
 printf("<B>Additional coloring modes:</B><BR>\n");
@@ -5967,17 +5887,10 @@ if (trackDbSetting(tdb, "noColorTag") == NULL)
     }
 cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_OFF, sameString(selected, BAM_COLOR_MODE_OFF));
 printf("No additional coloring");
-#ifndef BAM_CFG_UI_CHANGES
-printf("<BR>\n");
-#endif///ndef BAM_CFG_UI_CHANGES
 
 //TODO: include / exclude flags
 
-#ifdef BAM_CFG_UI_CHANGES
 if (!boxed && fileExists(hHelpFile("hgBamTrackHelp")))
-#else///ifndef BAM_CFG_UI_CHANGES
-if (fileExists(hHelpFile("hgBamTrackHelp")))
-#endif///ndef BAM_CFG_UI_CHANGES
     printf("<P><A HREF=\"../goldenPath/help/hgBamTrackHelp.html\" TARGET=_BLANK>BAM "
 	   "configuration help</A></P>");
 
@@ -6151,7 +6064,7 @@ if(makeCfgRows)
             }
         }
     }
-puts("</TABLE><BR>");
+puts("</TABLE>");
 subgroupMembersFree(&membersOfView);
 freeMem(matchedSubtracks);
 return TRUE;
@@ -6486,6 +6399,7 @@ webIncludeResourceFile("ui.dropdownchecklist.css");
 //    #define FILTER_COMPOSITE_OPEN_SIZE 16
 // 2) columnCount (Number of filterBoxes per row) should be configurable through tdb setting
 
+cgiDown(0.7);
 printf("<B>Filter subtracks %sby:</B> (select multiple %sitems - %s)<BR>\n",
        (membersForAll->members[dimX] != NULL || membersForAll->members[dimY] != NULL ? "further ":""),
        (membersForAll->dimMax == dimA?"":"categories and "),FILTERBY_HELP_LINK);
@@ -6745,7 +6659,6 @@ if(dimensionY && cntY>MATRIX_BOTTOM_BUTTONS_AFTER)
     matrixXheadings(db,parentTdb,membersForAll,FALSE);
 
 puts("</TD></TR></TABLE>");
-puts("<BR>\n");
 
 // If any filter additional filter composites, they can be added at the end.
 compositeUiByFilter(db, cart, parentTdb, formName);
@@ -6767,7 +6680,7 @@ if(dimensionsExist(parentTdb))
 #define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
 BUTTON_PLUS_ALL_GLOBAL();
 BUTTON_MINUS_ALL_GLOBAL();
-puts("&nbsp;<B>Select all subtracks</B><BR><BR>");
+puts("&nbsp;<B>Select all subtracks</B><BR>");
 return TRUE;
 }
 
@@ -6955,7 +6868,7 @@ printf("<div id='popit' style='display: none'></div>");
 cgiMakeHiddenVar("db", db);
 printf("<input type=HIDDEN id='track' value='%s';</input>\n",tdb->track);
 #endif
-puts("<BR>");
+cgiDown(0.7);
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
     {
     if(primarySubtrack)
@@ -6977,6 +6890,7 @@ if(primarySubtrack == NULL)
         }
     if(!viewsOnly)
         {
+        cgiDown(0.7);
         if(trackDbSettingOn(tdb, "allButtonPair"))
 	    {
             compositeUiAllButtons(db, cart, tdb, formName);
@@ -7009,8 +6923,8 @@ if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not
     {
     if (trackDbCountDescendantLeaves(tdb) > 5)
         {
+        cgiDown(0.7);
         cgiMakeButton("Submit", "Submit");
-        puts("<P>");
         }
     }
 }

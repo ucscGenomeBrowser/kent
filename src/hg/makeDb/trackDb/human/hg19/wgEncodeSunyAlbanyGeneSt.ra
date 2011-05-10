@@ -26,8 +26,8 @@ noInherit on
     visibility full 
     viewUi on
     subTrack wgEncodeSunyAlbanyGeneSt
-    pValueFilter 0.0
-    pValueFilterLimits 0:0.5
+    #pValueFilter 0.0
+    #pValueFilterLimits 0:0.5
     scoreFilter 2
     scoreFilterLimits 1:1000
     scoreMin 0

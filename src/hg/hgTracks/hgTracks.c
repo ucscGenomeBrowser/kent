@@ -4560,7 +4560,7 @@ if (!hideControls)
     topButton("hgt.out1", ZOOM_1PT5X);
     topButton("hgt.out2", ZOOM_3X);
     topButton("hgt.out3", ZOOM_10X);
-    hWrites("<BR>\n");
+    hWrites("<div style='height:1em;'></div>\n");
 #endif//ndef USE_NAVIGATION_LINKS
 
     if (showTrackControls)
@@ -4807,7 +4807,7 @@ if (!hideControls)
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
             hPrintf("<IMG class='toggleButton' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue' title='%s this group'>&nbsp;&nbsp;",
                     group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
-            hPrintf("</td><td style='text-align:center;'>\n<B>%s</B>", group->label);
+            hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' title='Update image with your changes'>\n");
             hPrintf("</td></tr></table></th>\n");
@@ -5488,6 +5488,7 @@ else
     chromInfoRowsNonChrom(1000);
 
 hTableEnd();
+cgiDown(0.9);
 
 hgPositionsHelpHtml(organism, database);
 puts("</FORM>");

@@ -12,22 +12,22 @@
 
 #define PMCURL "http://www.ncbi.nlm.nih.gov/pmc/articles/PMC"
 
-void printPubmedLink(char* pmid) 
+void printPubmedLink(char* pmid)
 {
     printf("<B>PubMed:</B>&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\" TARGET=_blank>%s</A><BR>\n", pmid, pmid);
 }
 
-void printPmcLink(char* pmcId) 
+void printPmcLink(char* pmcId)
 {
     printf("<B>PubMed&nbsp;Central:</B>&nbsp;<A HREF=\"%s%s\" TARGET=_blank>PMC%s</A><BR>\n", PMCURL, pmcId, pmcId);
 }
 
-void printT2gLink(char* pmcId) 
+void printT2gLink(char* pmcId)
 {
     printf("<B>Text2Genome:</B>&nbsp;<A HREF=\"http://kumiho.smith.man.ac.uk/bergman/text2genome/inspector.cgi?pmcId=%s\" TARGET=_blank>%s</A><BR>\n", pmcId, pmcId);
 }
 
-void printLinks(char* pmid, char* pmcId) 
+void printLinks(char* pmid, char* pmcId)
 {
     printPubmedLink(pmid);
     printPmcLink(pmcId);
@@ -35,7 +35,7 @@ void printLinks(char* pmid, char* pmcId)
     printf("<BR>\n");
 }
 
-char* printArticleInfo(struct sqlConnection *conn, struct trackDb* tdb, char* item) 
+char* printArticleInfo(struct sqlConnection *conn, struct trackDb* tdb, char* item)
 /* Header with information about paper, return documentId */
 {
     char query[512];
@@ -79,7 +79,7 @@ void printSeqInfo(struct sqlConnection* conn, struct trackDb* tdb,
     int i;
     struct hash *seqIdHash = NULL;
     seqIdHash = newHash(0);
-    for (i=0; i<partCount; i++) 
+    for (i=0; i<partCount; i++)
 	hashAdd(seqIdHash, seqIds[i], NULL);
     freeMem(seqIdsString);
 
@@ -97,12 +97,12 @@ void printSeqInfo(struct sqlConnection* conn, struct trackDb* tdb,
         char* seqId    = parts[0];
         char* seq      = parts[1];
 
-        if (hashLookup(seqIdHash, seqId)) 
+        if (hashLookup(seqIdHash, seqId))
             printf("<TD BGCOLOR=\"#%s\"><TT><B>%s</B></TT></TD>",
 		HG_COL_TABLE, seq);
         else
-            printf("<TD BGCOLOR=\"#%s\"><TT><FONT COLOR=\"#AAAAAA\">%s"
-		"</FONT></TT></TD>\n", HG_COL_TABLE, seq);
+            printf("<TD style='background-color:#%s; color:#AAAAAA;'><TT>%s"
+		"</TT></TD>\n", HG_COL_TABLE, seq);
         webPrintLinkTableNewRow();
         listEl=listEl->next;
         }
@@ -170,7 +170,7 @@ printf("<B>Genomic Size:</B>&nbsp;%s<BR>\n", startBuf);
 
 char* docId = printArticleInfo(conn, tdb, item);
 
-if (docId!=0) 
+if (docId!=0)
     printSeqInfo(conn, tdb, docId, item, seqName, start);
 hFreeConn(&conn);
 }

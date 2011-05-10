@@ -6,6 +6,8 @@
 #include "cart.h"
 #include "trackDb.h"
 #include "customTrack.h"
+#include "wiggle.h"
+
 struct lineFile;
 
 void setUdcCacheDir();
@@ -480,7 +482,7 @@ enum wiggleSmoothingEnum {
    wiggleSmoothing14 = 13,
    wiggleSmoothing15 = 14,
    wiggleSmoothing16 = 15,
-   wiggleSmoothingMax = 16,	/* Not an option, but lets us keep track of memory to use */
+   wiggleSmoothingMax = MAX_SMOOTHING,	/* Not an option, but lets us keep track of memory to use */
 };
 
 enum wiggleSmoothingEnum wiggleSmoothingStringToEnum(char *string);

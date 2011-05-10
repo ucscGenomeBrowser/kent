@@ -66,15 +66,15 @@ int i;
 if (!L || (L && strlen(s)<L) )
     L = strlen(s);
 
-fprintf(f, "<FONT COLOR=\"%06X\">", colors[0]); /* default color */
+fprintf(f, "<span style='color:#%06X;'>", colors[0]); /* default color */
 for (i = 0; i < L; i++)
     {
     if (colorFormat[i] == 0)
 	fprintf(f, "%c", s[i]);
     else
-	fprintf(f, "<FONT COLOR=\"%06X\">%c</FONT>", colors[ colorFormat[i] ], s[i]);
+	fprintf(f, "<span style='color:#%06X;'>%c</span>", colors[ colorFormat[i] ], s[i]);
     }
-fprintf(f, "</FONT>");
+fprintf(f, "</span>");
 }
 
 void mafAndFoldHeader(FILE *f)
@@ -88,11 +88,11 @@ void mkPosString(char *s, int size)
 {
 int i, d;
 for (i = 0, d = 0; i < size; i++)
-    if (i%10 == 0) 
+    if (i%10 == 0)
 	{
 	s[i] = '0' + d;
 	d++;
-	if (d == 10) 
+	if (d == 10)
 	  d = 0;
 	}
     else
@@ -106,10 +106,10 @@ char *mkScoreString(double *scores, int L, char *referenceText)
 char *s = (char *) needMem(L+1);
 char *scoreString = NULL;
 int i, n;
-for (i=0;i<L;i++) 
+for (i=0;i<L;i++)
     {
     n    = floor(10 *scores[i]);
-    if (n == 10) 
+    if (n == 10)
 	n = 9;
     if (n < 0 || n > 9)
 	errAbort( "Score not between 0 and 1\n" );
@@ -264,14 +264,14 @@ int colorFormat[] = {0,1,2,3,4,5,6,7,8,9};
 int colors[]      = {0x999999,0x888888,0x777777,0x666666,0x555555,0x444444,0x333333,0x222222,0x111111,0x000000};
 fprintf(f, "<h3> Color legend </h3>");
 fprintf(f, "<TABLE BORDER=0>");
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">GRAY:       </TD> <TD> Not part of annotated pair, no substitution. <BR>             </TD> </TR>", LTGRAY);
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">LT. PURPLE: </TD> <TD> Not part of annotated pair, substitution. <BR>                </TD> </TR>", LTPURPLE);
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">BLACK:      </TD> <TD> Compatible with annotated pair, no substitutions.<BR>         </TD> </TR>", BLACK);
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">BLUE:       </TD> <TD> Compatible with annotated pair, single substitution.<BR>      </TD> </TR>", BLUE);
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">GREEN:      </TD> <TD> Compatible with annotated pair, double substitution.<BR>      </TD> </TR>", GREEN);
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">RED:        </TD> <TD> Not compatible with annotated pair, single substitution. <BR> </TD> </TR>", RED);
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">ORANGE:     </TD> <TD> Not compatible with annotated pair, double substitution. <BR> </TD> </TR>", ORANGE);
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">MAGENTA:    </TD> <TD> Not compatible with annotated pair, involves gap. <BR>        </TD> </TR>", MAGENTA);
+fprintf(f, "<TR> <TD style='color:#%06X;'> GRAY:       </TD> <TD> Not part of annotated pair, no substitution. <BR>             </TD> </TR>", LTGRAY);
+fprintf(f, "<TR> <TD style='color:#%06X;'> LT. PURPLE: </TD> <TD> Not part of annotated pair, substitution. <BR>                </TD> </TR>", LTPURPLE);
+fprintf(f, "<TR> <TD style='color:#%06X;'> BLACK:      </TD> <TD> Compatible with annotated pair, no substitutions.<BR>         </TD> </TR>", BLACK);
+fprintf(f, "<TR> <TD style='color:#%06X;'> BLUE:       </TD> <TD> Compatible with annotated pair, single substitution.<BR>      </TD> </TR>", BLUE);
+fprintf(f, "<TR> <TD style='color:#%06X;'> GREEN:      </TD> <TD> Compatible with annotated pair, double substitution.<BR>      </TD> </TR>", GREEN);
+fprintf(f, "<TR> <TD style='color:#%06X;'> RED:        </TD> <TD> Not compatible with annotated pair, single substitution. <BR> </TD> </TR>", RED);
+fprintf(f, "<TR> <TD style='color:#%06X;'> ORANGE:     </TD> <TD> Not compatible with annotated pair, double substitution. <BR> </TD> </TR>", ORANGE);
+fprintf(f, "<TR> <TD style='color:#%06X;'> MAGENTA:    </TD> <TD> Not compatible with annotated pair, involves gap. <BR>        </TD> </TR>", MAGENTA);
 fprintf(f, "</TABLE>");
 /* Score legend */
 fprintf(f, "<BR>SCORE:   min ");
@@ -294,27 +294,59 @@ char *species[256];
 struct mafComp **newOrder, *mcThis;
 int i;
 int mcCount;
-   
+
 mcCount = 0;
 speciesCt = chopLine(cloneString(speciesOrder), species);
 newOrder = needMem((speciesCt + 1) * sizeof (struct mafComp *));
 newOrder[mcCount++] = maf->components;
-   
+
 for (i = 0; i < speciesCt; i++)
   {
     if ((mcThis = mafMayFindCompSpecies(maf, species[i], '.')) == NULL)
 	continue;
     newOrder[mcCount++] = mcThis;
   }
-   
+
 maf->components = NULL;
 for (i = 0; i < mcCount; i++)
   {
     newOrder[i]->next = 0;
     slAddHead(&maf->components, newOrder[i]);
   }
-   
+
 slReverse(&maf->components);
+}
+
+void htmlPrintSecStrDrawing(FILE *f, struct rnaSecStr *item)
+{
+char fileName[512];
+struct dnaSeq *seq;
+seq = hChromSeq(database, item->chrom, item->chromStart, item->chromEnd);
+touppers(seq->dna);
+if (item->strand[0] == '-')
+    reverseComplement(seq->dna, seq->size);
+memSwapChar(seq->dna, seq->size, 'T', 'U');
+
+safef(fileName, sizeof(fileName), "/gbdb/%s/evoFold/%s/%s.png",
+       database, item->chrom, item->name);
+if (fileExists(fileName))
+    {
+    fprintf(f, "<center><h2> RNA secondary structure drawing </h2></center>");
+    fprintf(f,"<B>");
+
+    // Could consider to serve up all EvoFold .png files from our public server in the future
+    // fprintf(f,"<IMG SRC=\"http://genome.ucsc.edu/evoFold/%s/%s/%s.png\" border = '2' ALT=\"ERROR: VARA plotting failed.\"</B><BR>",
+    fprintf(f,"<IMG SRC=\"../evoFold/%s/%s/%s.png\" border = '2' ALT=\"ERROR: VARA plotting failed.\"</B><BR>",
+            database, item->chrom, item->name);
+    fprintf(f,"</B>");
+    }
+
+freeMem(seq);
+printf("<p>The UCSC Genome Browser mirror site at the Molecular Diagnostic Laboratory (MDL) at Aarhus University Hospital Skejby in Denmark offers a VARNA Java applet to view the above RNA structure with more options, ");
+printf("<A HREF=\"");
+printf("http://moma.ki.au.dk/genome-mirror/cgi-bin/hgc?db=%s&o=%d&t=%d&g=evofold&i=%s",
+database, item->chromStart, item->chromEnd, cgiEncode(item->name));
+printf("\" TARGET=_blank>%s</A></p>", "click here to go to moma.ki.au.dk/genome-mirror.");
 }
 
 void doRnaSecStr(struct trackDb *tdb, char *itemName)
@@ -358,6 +390,14 @@ mafAndFoldHeader(stdout);
 htmlPrintMafAndFold(stdout, maf, item->secStr, item->conf, 100);
 
 mafAndFoldLegend(stdout);
+
+/* Draw structure for evoFold */
+if (sameWord(tdb->table, "evofold"))
+    {
+htmlHorizontalLine();
+htmlPrintSecStrDrawing(stdout, item);
+    }
+
 /* track specific html */
 printTrackHtml(tdb);
 

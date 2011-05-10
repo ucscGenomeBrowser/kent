@@ -106,7 +106,7 @@ for (group = groupList; group != NULL; group = group->next)
                             &indicator, &otherState);
     hTableStart();
     hPrintf("<TR NOWRAP>");
-    hPrintf("<TH NOWRAP align=\"left\" colspan=3 BGCOLOR=#536ED3>");
+    hPrintf("<TH NOWRAP align='left' colspan=3 BGCOLOR='#536ED3'>");
     hPrintf("\n<A NAME='%sGroup'></A>",group->name);
     hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
         collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
@@ -154,7 +154,7 @@ for (group = groupList; group != NULL; group = group->next)
         hDoubleVar(pname, (double)group->priority, 4);
         hPrintf("</TH>\n");
         if (isOpen)
-            hPrintf("<TH align=CENTER BGCOLOR=#536ED3><B>&nbsp;%s</B></TH> ", wrapWhiteFont("Group"));
+            hPrintf("<TH align=CENTER BGCOLOR='#536ED3'><B>&nbsp;%s</B></TH> ", wrapWhiteFont("Group"));
         hPrintf("\n");
         }
 #endif///def PRIORITY_CHANGES_IN_CONFIG_UI
@@ -530,8 +530,8 @@ hPrintf("</TD><TD>");
 hPrintf("Enable advanced javascript features");
 hPrintf("</TD></TR>\n");
 
-
 hTableEnd();
+cgiDown(0.9);
 
 char *freeze = hFreezeFromDb(database);
 char buf[128];
@@ -557,7 +557,7 @@ hPrintf("&nbsp;&nbsp;&nbsp;Groups:  ");
 hButtonWithOnClick("hgt.collapseGroups", "collapse all", "Collapse all track groups", "return setAllTrackGroupVisibility(false)");
 hPrintf(" ");
 hButtonWithOnClick("hgt.expandGroups", "expand all", "Expand all track groups", "return setAllTrackGroupVisibility(true)");
-hPrintf("<P STYLE=\"margin-top:5;\">Control track and group visibility more selectively below.<P>");
+hPrintf("<div style='margin-top:.2em; margin-bottom:.9em;'>Control track and group visibility more selectively below.</div>");
 trackConfig(trackList, groupList, groupTarget, vis);
 
 dyStringFree(&title);

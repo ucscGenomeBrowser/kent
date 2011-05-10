@@ -11,6 +11,9 @@
 #include "linefile.h"
 #include "net.h"
 #include "customPp.h"
+#ifdef PROGRESS_METER
+#include "udc.h"
+#endif
 
 static char const rcsid[] = "$Id: customPp.c,v 1.8 2009/09/25 00:20:20 galt Exp $";
 
@@ -75,6 +78,11 @@ while ((lf = cpp->fileStack) != NULL)
 	    {
 	    lf = netLineFileOpen(line);
 	    slAddHead(&cpp->fileStack, lf);
+#ifdef PROGRESS_METER
+	    off_t remoteSize = 0;
+	    remoteSize = remoteFileSize(line);
+	    cpp->remoteFileSize = remoteSize;
+#endif
 	    continue;
 	    }
 	else if (!cpp->ignoreBrowserLines && startsWith("browser", line))

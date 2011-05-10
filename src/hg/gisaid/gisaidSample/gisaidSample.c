@@ -98,7 +98,7 @@ char *sectionRequiredSetting(struct section *section, char *name)
 {
 char *res = sectionSetting(section, name);
 if (res == NULL)
-    errAbort("Can't find required %s field in %s in settings.ra", 
+    errAbort("Can't find required %s field in %s in settings.ra",
     	name, section->name);
 return res;
 }
@@ -152,7 +152,7 @@ else
     return 0;
 }
 
-static void addGoodSection(struct section *section, 
+static void addGoodSection(struct section *section,
 	struct sqlConnection *conn, struct section **pList)
 /* Add section to list if it is non-null and exists returns ok. */
 {
@@ -198,25 +198,25 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 
 /* Home */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='/index.html' class='topbar' style='color:#FFFFFF;'>Home</A></TD>");
 //, orgEnc);
 
 /* Blat */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgBlat?command=start' class='topbar' style='color:#FFFFFF;'>Blat</A></TD>");
 
 /* Sequence View */
 if (hIsGisaidServer())
-    {hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>", database);
+    {hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgTracks?db=%s' class='topbar' style='color:#FFFFFF;'>Sequence View</A></TD>", database);
     }
 else
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View Gateway</FONT></A></TD>", database);
+    hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgGateway?db=%s' class='topbar' style='color:#FFFFFF;'>Sequence View Gateway</A></TD>", database);
     }
 /* Table View */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Table View</FONT>");
+hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/gisaidTable' class='topbar' style='color:#FFFFFF;'>Table View</A></TD>");
 
 /* Help */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gisaidTutorial.html#SampleView\" target=_blank class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Help</FONT>");
+hPrintf("<TD ALIGN=CENTER><A HREF='/goldenPath/help/gisaidTutorial.html#SampleView' target=_blank class='topbar' style='color:#FFFFFF;'>Help</A></TD>");
 
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
@@ -258,8 +258,8 @@ if (sameWord(curSampleId, ""))
     }
 else
     {
-    safef(query, sizeof(query), 
-    	  "select EPI_ISOLATE_ID from %s.gisaidSubjInfo where EPI_ISOLATE_ID = '%s'", 
+    safef(query, sizeof(query),
+    	  "select EPI_ISOLATE_ID from %s.gisaidSubjInfo where EPI_ISOLATE_ID = '%s'",
     	  database, curSampleId);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -274,8 +274,8 @@ else
     	}
     else
     	{
-    	printf("<H3><font color=red>%s</font> is not a valid sample ID.</H3>", curSampleId);
-	
+    	printf("<H3><span style='color:red;'>%s</span> is not a valid sample ID.</H3>", curSampleId);
+
     	printf("<H3>Please enter a valid sample ID.\n");
     	printf("<input type=\"text\" name=\"hgs_sample\" value=\"%s\">\n", "");
     	cgiMakeButton("submit", "Go!");
@@ -295,7 +295,7 @@ struct sqlConnection *conn = NULL;
 cart = theCart;
 getDbAndGenome(cart, &database, &genome, oldCart);
 
-/* !!! force database to hiv1 until move to server hiv1 is complete 
+/* !!! force database to hiv1 until move to server hiv1 is complete
    and the default database of hgcentral on it point to hiv1. */
 
 conn = hAllocConn(database);

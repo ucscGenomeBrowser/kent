@@ -91,11 +91,11 @@ The sequence of instructions here are similar to the Mirror site
 	See also: scripts/updateHtml.sh
 
 6.  Copy CGI binaries:
-	rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/
+	rsync -avP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/
 	This set of binaries are for x86_64 types of Linux machines.
 	If you need i386 32-bit binaries, run the above rsync to fetch
 	everything, then, overlay with the i386 binaries:
-	rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin-i386/ \
+	rsync -avP rsync://hgdownload.cse.ucsc.edu/cgi-bin-i386/ \
 		${WEBROOT}/cgi-bin/
 	If you need to instead build binaries for your platform,
 	follow the instructions in: README.building.source
@@ -152,7 +152,7 @@ The sequence of instructions here are similar to the Mirror site
 	table load, but it can save a lot of time since the data loading
 	step is quite compute intensive.  A typical rsync command for an
 	entire database (e.g. ce4) would be something like:
-	rsync -avzP --delete --max-delete=20 \
+	rsync -avP --delete --max-delete=20 \
 		rsync://hgdownload.cse.ucsc.edu/mysql/ce4/ \
 		/var/lib/mysql/ce4/
 

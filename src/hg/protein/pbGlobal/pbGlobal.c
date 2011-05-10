@@ -99,7 +99,7 @@ int exStart[500], exEnd[500];
 int exCount;
 int aaStart[500], aaEnd[500];
 
-char kgProtMapTableName[20] = {"kgProtMap"}; 
+char kgProtMapTableName[20] = {"kgProtMap"};
 int blockSize[500], blockSizePositive[500];
 int blockStart[500], blockStartPositive[500];
 int blockEnd[500],   blockEndPositive[500];
@@ -172,7 +172,7 @@ char *oldDisplayId;
 conn  = sqlConnect(UNIPROT_DB_NAME);
 hPrintf("<br><font size=4>Protein ");
 
-hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" TARGET=_blank><B>%s</B></A>\n", 
+hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" TARGET=_blank><B>%s</B></A>\n",
 	proteinID, proteinID);
 
 spDisplayId = spAccToId(conn, spFindAcc(conn, proteinID));
@@ -203,7 +203,7 @@ if (answer != NULL)
     {
     safef(cond_str, sizeof(cond_str), "id=%s and nameType='scientific name'", answer);
     sciName = sqlGetField(PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
-    
+
     safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", answer);
     commonName = sqlGetField(PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
     }
@@ -226,9 +226,9 @@ protSeqLen = strlen(protSeq);
 
 fflush(stdout);
 
-iypos = 15; 
+iypos = 15;
 doTracks(proteinID, mrnaID, protSeq, &iypos, psOutput);
-if (!hTableExists(database, "pbStamp")) goto histDone; 
+if (!hTableExists(database, "pbStamp")) goto histDone;
 
 pbScale = 3;
 pixWidth = 765;
@@ -297,7 +297,7 @@ fflush(stdout);
 
 /* See if a UCSC Genome Browser exist for this organism.  If so, display BLAT link. */
 connCentral = hConnectCentral();
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
       "select defaultDb.name from dbDb, defaultDb where dbDb.scientificName='%s' and dbDb.name=defaultDb.name",
       sciName);
 sr = sqlGetResult(connCentral, query);
@@ -330,13 +330,13 @@ if (proteinInSupportedGenome || (blatGbDb != NULL))
     	{
     	doGeneSorterLink(protDisplayID, mrnaID, hgsidStr);
     	}
-	
+
     /* Show BLAT link if we have UCSC Genome Browser for it */
     if (blatGbDb != NULL)
     	{
     	doBlatLink(blatGbDb, sciName, commonName, protSeq);
     	}
-	
+
     hPrintf("</UL><P>");
     }
 
@@ -349,9 +349,9 @@ hPrintf("<P>");
 /* Do Pathway section only if the protein belongs to a supported genome */
 if (proteinInSupportedGenome);
     {
-    doPathwayLinks(proteinID, mrnaID); 
+    doPathwayLinks(proteinID, mrnaID);
     }
-    
+
 printFASTA(proteinID, protSeq);
 }
 
@@ -370,7 +370,7 @@ cartSaveSession(cart);
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", wrapWhiteFont("Home"));
-hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>",
+hPrintf("<TD style='text-align:center; color:#FFFFFF; font-size:medium;'>%s</TD>",
         "UCSC Proteome Browser");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbGlobal?%s=%u&pbt.psOutput=on\">%s</A></TD>\n",
         cartSessionVarName(), cartSessionId(cart), wrapWhiteFont("PDF/PS"));
@@ -385,7 +385,7 @@ else
     hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml\" TARGET=_blank>%s</A></TD>",
         wrapWhiteFont("Help"));
     }
-    
+
 hPrintf("</TR></TABLE>");
 fflush(stdout);
 
@@ -415,7 +415,7 @@ doTrackForm(psTn.forCgi, psTn2.forCgi);
 printf("<A HREF=\"%s\">Click here to download</A> "
        "the current protein tracks graphic in PostScript.  ", psTn.forCgi);
 pdfFile = convertEpsToPdf(psTn.forCgi);
-if(pdfFile != NULL) 
+if(pdfFile != NULL)
     {
     printf("<BR><A HREF=\"%s\">Click here to download</A> "
 	   "the current protein tracks graphic in PDF", pdfFile);
@@ -426,7 +426,7 @@ else
 printf("<BR><BR><A HREF=\"%s\">Click here to download</A> "
        "the current protein histograms graphic in PostScript.  ", psTn2.forCgi);
 pdfFile = convertEpsToPdf(psTn2.forCgi);
-if(pdfFile != NULL) 
+if(pdfFile != NULL)
     {
     printf("<BR><A HREF=\"%s\">Click here to download</A> "
 	   "the current protein histograms graphic in PDF", pdfFile);
@@ -448,7 +448,7 @@ char *debugTmp = NULL;
 char *chromStr, *cdsStartStr, *cdsEndStr, posStr[255];
 
 char *supportedGenomeDatabase;
-  
+
 char *answer;
 char *queryID;
 
@@ -458,18 +458,18 @@ cart = theCart;
 /* Uncomment this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
-/* 
+/*
 { struct dyString *state = cgiUrlString();
-  hPrintf("State: %s\n", state->string); 
+  hPrintf("State: %s\n", state->string);
 }
-*/   
+*/
 
 queryID = cartOptionalString(cart, "proteinID");
 if (sameString(queryID, ""))
     {
     hUserAbort("Please go back and enter a gene symbol or a Swiss-Prot/TrEMBL protein ID.\n");
     }
-	    
+
 if (cgiVarExists("db"))
     {
     /* if db is known, get key variables set */
@@ -479,12 +479,12 @@ if (cgiVarExists("db"))
     protDbName = hPdbFromGdb(database);
     proteinID  = strdup(queryID);
     }
-else 
+else
     {
     protCntInSwissByGene = searchProteinsInSwissProtByGene(queryID);
     /* no CGI 'db' variable means it did not come in from GB but from pbGateway */
     /* search existing GB databases to see if this protein can be found */
-    protCntInSupportedGenomeDb = 
+    protCntInSupportedGenomeDb =
     	searchProteinsInSupportedGenomes(queryID, &supportedGenomeDatabase);
     if ((protCntInSupportedGenomeDb > 1) || protCntInSwissByGene >= 1)
     	{
@@ -508,7 +508,7 @@ else
 	    {
 	    /* not found in genome DBs that support KG/PB */
 	    /* now search PROTEOME_DB_NAMES to see if this protein is there. */
-	    
+
 	    answer = uniProtFindPrimAcc(queryID);
 	    if (answer == NULL)
 		{
@@ -516,7 +516,7 @@ else
 		"'%s' does not seem to be a valid UniProtKB protein ID or a gene symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> to start another query."
 		    	, queryID);
 	    	}
-	    
+
 	    proteinInSupportedGenome = FALSE;
 	    database = strdup(GLOBAL_PB_DB);
 	    organism = strdup("");
@@ -524,16 +524,16 @@ else
 	    proteinID = strdup(answer);
 	    }
 	}
-    
+
     if (proteinInSupportedGenome)
         {
         spConn = sqlConnect(database);
         safef(cond_str, sizeof(cond_str), "alias='%s'", queryID);
         proteinID = sqlGetField(database, "kgSpAlias", "spID", cond_str);
-    	
+
         safef(cond_str, sizeof(cond_str), "spID='%s'", proteinID);
         answer = sqlGetField(database, "kgXref", "spDisplayID", cond_str);
-    	
+
 	safef(cond_str, sizeof(cond_str), "proteinID='%s'", answer);
     	chromStr    = sqlGetField(database, "knownGene", "chrom", cond_str);
 	if (chromStr)
@@ -557,7 +557,7 @@ if (hTableExists(database, "kgProtMap2"))
     kgVersion = KG_III;
     strcpy(kgProtMapTableName, "kgProtMap2");
     }
-		
+
 debugTmp = cartUsualString(cart, "hgDebug", "off");
 if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
@@ -598,7 +598,7 @@ else
     safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
     protDisplayID = sqlGetField(protDbName, "spXref3", "displayID", cond_str);
     }
-    
+
 if (proteinInSupportedGenome)
     {
     if (kgVersion == KG_III)
@@ -626,7 +626,7 @@ if (positionStr != NULL)
     chp = strstr(positionStr, ":");
     *chp = '\0';
     prevGBChrom = cloneString(positionStr);
-    
+
     chp1 = chp + 1;
     chp9 = strstr(chp1, "-");
     *chp9 = '\0';
@@ -660,14 +660,14 @@ hPrintf("Please try again later.\n");
 
 /* Other than submit and Submit all these vars should start with pbt.
  * to avoid weeding things out of other program's namespaces.
- * Because the browser is a central program, most of it's cart 
+ * Because the browser is a central program, most of it's cart
  * variables are not pbt. qualified.  It's a good idea if other
  * program's unique variables be qualified with a prefix though. */
 char *excludeVars[] = { "submit", "Submit", "pbt.reset",
 			"pbt.in1", "pbt.in2", "pbt.in3", "pbt.inBase",
 			"pbt.out1", "pbt.out2", "pbt.out3",
-			"pbt.left1", "pbt.left2", "pbt.left3", 
-			"pbt.right1", "pbt.right2", "pbt.right3", 
+			"pbt.left1", "pbt.left2", "pbt.left3",
+			"pbt.right1", "pbt.right2", "pbt.right3",
 			"pbt.dinkLL", "pbt.dinkLR", "pbt.dinkRL", "pbt.dinkRR",
 			"pbt.tui", "pbt.hideAll", "pbt.psOutput", "hideControls",
 			NULL };
