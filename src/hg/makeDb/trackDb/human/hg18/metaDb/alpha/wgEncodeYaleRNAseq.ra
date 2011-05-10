@@ -1,7 +1,7 @@
 metaObject wgEncodeYaleRNAseq
 objType composite
 composite wgEncodeYaleRNAseq
-expVars lab,dataType,cell,treatment
+expVars lab,dataType,cell,treatment,rnaExtract
 rnaExtract polyA
 
 metaObject wgEncodeYaleRnaSeqPolyaAlignmentsGm12878
@@ -319,4 +319,4 @@ tableName wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
 treatment IFNg6h
 view Signal
 
-# MAGIC: -1158241614
+# MAGIC: -1694317618

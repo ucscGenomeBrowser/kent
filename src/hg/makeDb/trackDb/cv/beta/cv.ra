@@ -1661,7 +1661,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
 karyotype XX euploid
-#)karyotype does not match edits. edit: unknown. 
+#)karyotype does not match edits. edit: unknown.
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -3023,6 +3023,19 @@ sex M
 tier 3
 protocol SYDH_TFBS(Farnham):PBDE_Farnham_protocol.pdf
 
+term PBMC
+tag PBMC
+type Cell Line
+organism human
+description Peripheral blood mononuclear cells 
+tissue Blood
+vendorName PBMC cells provided by E. Bresnick, UW Madison
+termId BTO:0001025
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
+sex M
+tier 3
+protocol SYDH_TFBS(Farnham):PBMC_Farnham_protocol.pdf
+
 term PFSK-1
 tag PFSK1
 type Cell Line
@@ -3103,7 +3116,7 @@ tag prostate
 type Cell Line
 organism Human
 description prostate tissue purchased for Gingeras project
-#)description Provisional prostate tissue purchased for Gingeras project (provisional)
+#)description Provisional prostate tissue purchased for Gingeras project 
 tissue Prostate
 #)lineage endoderm
 vendorName ATCC
@@ -3538,9 +3551,9 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description B cell lymphoma line derived from a spontaneous reticulum cell neoplasm 
+description B cell lymphoma line derived from a spontaneous reticulum cell neoplasm
 age immortalized
-strain BALB/cAnN 
+strain BALB/cAnN
 vendorName ATCC
 vendorId TIB-208
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-208&Template=cellBiology
@@ -3573,7 +3586,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Primary Cells
-description B Cell , CD19+ 
+description B Cell , CD19+
 age immortalized
 strain C57BL/6
 vendorName
@@ -3698,7 +3711,7 @@ type Cell Line
 organism Mouse
 tissue Adipose
 category Tissue
-description Adipose tissue 
+description Adipose tissue
 vendorName UW lab
 termId 7108
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7108
@@ -3908,7 +3921,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-description fibroblast 
+description fibroblast
 age immortalized
 strain NIH/Swiss
 vendorName ATCC
@@ -3949,6 +3962,22 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
 protocol LICR(Ren):Pancreas_Ren_protocol.pdf
+
+term Patski
+tag Patski
+type Cell Line
+organism Mouse
+tissue Kidney
+category Cell Line
+description Mouse Embryonic Kidney Fibroblast. As described in Lingenfelter et al., 1998 (Nat Genet. 1998 18:212-3) and Yang et al., 2010 (Genome Res.  2010 20:614-22), PATSKI is a female interspecific mouse fibroblast that was derived from the embryonic  kidney of an M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X. This is an adherent cell line. 
+age immortalized
+strain C57BL/6J
+vendorName Dr. Christine Disteche (University of Washington)
+termId 6948
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+color 153,38,0
+sex F
+protocol UW(Stam):Patski_Stam_protocol.pdf
 
 term Placenta
 tag Placenta
@@ -4028,7 +4057,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Primary Cells
-description Naive T cells: CD4+, CD25- 
+description Naive T cells: CD4+, CD25-
 vendorName UW lab
 termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
@@ -4044,7 +4073,7 @@ tissue Blood
 category Primary Cells
 description Regulatory T cells CD4+,CD25+
 vendorName UW lab
-termId 
+termId
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 153,38,0
 sex U
@@ -4063,6 +4092,22 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 153,38,0
 sex U
 protocol UW(Stam):Tissue_Stam_protocol.pdf
+
+term ZhBTc4
+tag ZHBTC4
+type Cell Line
+organism Mouse
+tissue 
+category Primary Cell
+age E0
+strain 129/Ola
+description Undifferentiated mouse embryonic stem cells 
+vendorName Dr. Levasseur (University of Iowa)
+termId 
+termUrl 
+color 153,38,0
+sex U
+protocol UW(Stam):ZhBTc4_Stam_protocol.pdf
 
 
 
@@ -8497,38 +8542,31 @@ type dataType
 label RNA-seq
 description Sequencing analysis of RNA expression
 
-#GeneST and Tiling are flavors of the RIP-chip.  
+#GeneST and Tiling are flavors of the RIP-chip.
 #They need separate dataTypes for the experiment table to work
-term RipGeneSt 
-tag  RipGeneSt 
+term RipGeneSt
+tag  genest    
 type dataType
 label RIP-chip Gene ST
-description RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays 
+description RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays
 
-term RipTiling 
-tag  RipTiling 
+term RipTiling
+tag  tiling 
 type dataType
 label RIP-chip Tiling Array
-description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays 
+description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays
 
 term RipChip
-tag  ripChip
+tag  ripchip
 type dataType
 label RIP-chip
 description Rna IP measured on microarray
 
 term RipSeq
-tag  ripSeq
+tag  ripseq
 type dataType
 label RIP-seq
 description RNA-seq on RIP-chip data
-
-#This should be retired (12/15/10)
-term ShortRnaSeq
-tag shortRnaSeq
-type dataType
-label RNA-seq
-description sequencing of short RNAs
 
 #term Snp
 #tag Snp
@@ -8538,7 +8576,7 @@ description sequencing of short RNAs
 # I would like to take this out and replace with Genotype as a more general datatype to match the composite
 
 term Switchgear
-tag Switchgear
+tag switchgear
 type dataType
 label SwitchGear
 description SwitchGear Genomics 3' UTR reporter assay
@@ -8581,7 +8619,7 @@ description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/
 term BALB/cAnN
 tag BALBCANN
 type strain
-description ccMyeloma high incidence H2d (Provisional) 
+description ccMyeloma high incidence H2d 
 
 term C3H
 tag C3H
@@ -8607,6 +8645,11 @@ term 129
 tag S129
 type strain
 description Strain 129, has widely available embryonic stem cells
+
+term 129/Ola
+tag 129Ola
+type strain
+description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice. 
 
 term Unknown
 tag UKN
@@ -8731,12 +8774,12 @@ description tier 3
 term Individual
 tag Indiv
 type tissueSourceType
-description Tissue obtained from an individual 
+description Tissue obtained from an individual
 
 term Pooled
 tag Pool
 type tissueSourceType
-description Tissue obtained from pooling samples from various sample organisms 
+description Tissue obtained from pooling samples from various sample organisms
 
 #Venkat: Trial to add seqPlatform for use for GEO submissions
 #Uses the GEO terms to be conistent and help with GEO submissions
@@ -8774,6 +8817,12 @@ geo Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIx
 # Matches GA2x that Kate initally indicated as the term
+
+term Illumina_HiSeq_2000
+tag IlluminaHiSeq2
+geo Illumina HiSeq 2000
+type seqPlatform
+description Illumina HiSeq 2000 
 
 term 454_GS
 tag 454GS
@@ -8921,7 +8970,7 @@ label Stamatoyannopoulous - University of Washington
 description Stamatoyannopoulous - University of Washington
 labInst University of Washington
 labPi Stam
-labPiFull George Stamatoyannopoulous
+labPiFull John Stamatoyannopoulous
 grantPi Stam
 organism human
 
@@ -9276,6 +9325,19 @@ labPiFull Michael Snyder
 grantPi Snyder
 organism mouse
 
+### AWG (DAC) Labs
+
+term DAC-Stanford
+tag  dacstanf
+type lab
+label Anshul Kundaje - Stanford University
+description Kundaje - Stanford University
+labInst Stanford
+labPi Birney
+labPiFull Ewan Birney
+grantPi Birney
+organism human
+
 
 
 # Grant information
@@ -9289,6 +9351,13 @@ type grant
 description Bernstein
 grantInst Broad Institute
 projectName Broad
+
+term Birney
+tag birney
+type grant
+description Birney
+grantInst (PROVISIONAL) ENCODE Data Analysis Center (DAC)
+projectName DAC
 
 term Tullius
 tag tullius
@@ -9464,7 +9533,8 @@ projectName UNC-Giddings
 #         accession:500  annotation:500  bioRep:500  fragLength:500  fragSize:500  mapAlgorithm:500  expVars:500
 #         insertLength:500  level:500  obtainedBy:500  readType:500  run:500  seqPlatform:500  size:500  uniqueness:500
 #       At End:
-#         dccInternalNotes:910  parentTable:920  tableName:970  fileName:980  fileIndex:990
+#         dccInternalNotes:910  parentTable:920  sourceObj:921 tableName:970  fileName:980
+#         fileIndex:990
 
 
 term typeOfTerm
@@ -9513,6 +9583,17 @@ searchable multiSelect
 cvDefined yes
 validate cv or control
 priority 190
+
+term attic   
+type typeOfTerm
+label Is this auxillary data
+description  Provisional This indicates the status of a file in the attic or not.  It is an internal piece of metaData.  
+searchable no
+cvDefined no
+#It probably should be cv defined, but Venkat will need to define the terms
+validate list: supplemental,auxUnValid,auxValid,auxExp 
+priority 190
+hidden yes
 
 term bioRep
 type typeOfTerm
@@ -9619,7 +9700,7 @@ label UCSC Accession
 description The accession number provided by the UCSC Genome Browser.
 searchable freeText
 cvDefined no
-validate regex: ^wgEncodeE[H,E][0-9]*$
+validate regex: ^wgEncodeE[H,M][0-9]*$
 priority 312
 
 term dccInternalNotes
@@ -10034,6 +10115,15 @@ cvDefined no
 validate none
 priority 440
 
+term sourceObj
+type typeOfTerm
+label Source Objects
+description Objects this object was built with.
+searchable no
+cvDefined no
+validate none
+priority 921
+
 term strain
 type typeOfTerm
 label Strain of organism
@@ -10096,7 +10186,7 @@ priority 180
 term tissueSourceType
 type typeOfTerm
 label Tissue Source Type
-description Source of tissue from either an indiviual organism or pooled set of organisms 
+description Source of tissue from either an indiviual organism or pooled set of organisms
 searchable multiSelect
 cvDefined yes
 validate cv

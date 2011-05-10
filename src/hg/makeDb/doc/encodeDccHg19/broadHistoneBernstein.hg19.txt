@@ -5030,3 +5030,11 @@ gold wgEncodeBroadHmm.ra
 
 gold, gadd, gci, gup,gpush
 
+cd {downloads}/wgEncodeBroadHistone
+encodeDownloadsPage.pl -db=hg19 index.html
+
+cd {downloads}/wgEncodeBroadHmm
+encodeDownloadsPage.pl -db=hg19 index.html
+cp index.html release1/
+cp files.txt release1/
+

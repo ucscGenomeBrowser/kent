@@ -127,9 +127,9 @@ struct peakCluster *peakClusterItems(struct lm *lm, struct peakItem *itemList,
         CCCC     EEEE
    The strategy is to build a rangeTree of coverage, which might look something like so:
       123333211123333211 
-   then define cluster ends that exceed the minimum limit, which is either 10% of the highest
-   or forceJoinScore if 10% of the highest is more than forceJoinScore.  This will go to
-   something like so:
+   then define cluster ends that exceed the minimum limit, which is either weakLevel
+   (usually 10%) of the highest or forceJoinScore if weakLevel times the highest is 
+   more than forceJoinScore.  This will go to something like so:
         [---]   [----]   
    Finally the items that are overlapping a cluster are assigned to it.  Note that this
    may mean that an item may be in multiple clusters.

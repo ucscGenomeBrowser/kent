@@ -22,7 +22,7 @@ if (html)
 	"<TABLE BGCOLOR=\"#" HG_COL_BORDER
 	    "\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 
-    puts ("<TABLE COLS=8 BGCOLOR=\""HG_COL_INSIDE"\" BORDER=1 HSPACE=0>\n");
+    puts ("<TABLE COLS=8 BGCOLOR='#"HG_COL_INSIDE"' BORDER=1 HSPACE=0>\n");
     if (histoResults)
 	printf("<TR><TH ALIGN=CENTER COLSPAN=8>%d bin histogram on %u values (zero count bins not shown)</TH></TR>\n",
 	    histoResults->binCount - 1, histoResults->count);
@@ -30,9 +30,8 @@ if (html)
 	printf("<TR><TH ALIGN=CENTER COLSPAN=8> histogram (zero count bins not shown)</TH></TR>\n");
     puts ("<TR><TH ALIGN=LEFT> bin </TH>\n");
     puts ("    <TD COLSPAN=2 ALIGN=CENTER>\n");
-    puts ("      <TABLE WIDTH=100% ALIGN=CENTER COLS=2 BGCOLOR=\"");
-    puts (HG_COL_INSIDE"\" BORDER=0 HSPACE=0>\n");
-    puts ("        <TR><TH COLSPAN=2 ALIGN=CENTER>range&nbsp;in&nbsp;bin</TH></TR>\n");
+    puts ("      <TABLE WIDTH=100% ALIGN=CENTER COLS=2 BGCOLOR='#" HG_COL_INSIDE "' BORDER=0");
+    puts (" HSPACE=0>\n<TR><TH COLSPAN=2 ALIGN=CENTER>range&nbsp;in&nbsp;bin</TH></TR>\n");
     puts ("        <TR><TH ALIGN=LEFT>minimum</TH>\n");
     puts ("              <TH ALIGN=RIGHT>maximum</TH></TR>\n");
     puts ("      </TABLE>\n");
@@ -235,7 +234,7 @@ else
 	"SELECT span from %s where chrom = '%s' limit 1", table, chrom);
     char *tmpSpan = sqlQuickString(conn, query);
     // if there's no data on this chrom just return 1 arbitrarily
-    minSpan = 1;  
+    minSpan = 1;
     if (tmpSpan != NULL)
 	minSpan = sqlUnsigned(tmpSpan);
     }
@@ -288,7 +287,7 @@ safef(query, ArraySize(query),
 
 sr = sqlMustGetResult(conn,query);
 while ((row = sqlNextRow(sr)) != NULL)
-    {   
+    {
     char spanName[128];
     unsigned span = sqlUnsigned(row[0]);
 
@@ -317,8 +316,8 @@ cookie = hashFirst(spans);
 while ((el = hashNext(&cookie)) != NULL)
     {
     int span = sqlSigned(el->name);
-    
-    if ((float) span <= basesPerPixel) 
+
+    if ((float) span <= basesPerPixel)
 	spanInUse = span;
     }
 
@@ -331,7 +330,7 @@ return spanInUse;
  */
 /*	Return is an array of integers, last one of value zero to indicate the
  *	end of the array.  In case of nothing found in trackDb, return
- *	a NULL pointer indicating no results. 
+ *	a NULL pointer indicating no results.
  *
  *      If the value is 'first' then use the first span value from the table.
  *      Assumes that all values in the table are the same. */
@@ -370,7 +369,7 @@ else if( sameWord("first",tdbDefault))
     ret[1] = 0;
     freeMem(tmpSpan);
     }
-else 
+else
     {
     /*	If something found, let's parse it	*/
     int i;
@@ -477,7 +476,7 @@ if (summaryOnly)
     if (wiggleCompare)
 	takeIt = (*wiggleCompare)(tableId, 0.0, summaryOnly, wiggle);
     if (takeIt)
-	{ 
+	{
 	upperLimit = wiggle->lowerLimit + wiggle->dataRange;
 	lowerLimit = wiggle->lowerLimit;
 	chromStart = wiggle->chromStart;
@@ -485,7 +484,7 @@ if (summaryOnly)
 	validCount = wiggle->validCount;
 	sumData = wiggle->sumData;
 	sumSquares = wiggle->sumSquares;
-	} 
+	}
     }
 else
     {
@@ -526,7 +525,7 @@ else
 		    takeIt = (*wiggleCompare)(tableId, value, summaryOnly,
 			    wiggle);
 		if (takeIt)
-		    { 
+		    {
 		    dataPtr->chromStart = chromPosition;
 		    dataPtr->value = value;
 		    ++validCount;

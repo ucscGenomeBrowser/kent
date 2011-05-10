@@ -1669,7 +1669,7 @@ hPrintf("<TH>Track</TH>");
 hPrintf("<TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH><TH>Variance</TH>");
 hPrintf("<TH>Standard<BR>deviation</TH>");
 hPrintf("<TH COLSPAN=2>");
-hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=0 WIDTH=100%%>", HG_COL_INSIDE);
+hPrintf("<TABLE BGCOLOR='#%s' BORDER=0 WIDTH=100%%>", HG_COL_INSIDE);
 hPrintf("<TR WIDTH=100%%><TH COLSPAN=2>Regression<BR>line<BR>");
 hPrintf("y&nbsp;=&nbsp;m*x&nbsp;+&nbsp;b</TH></TR>");
 hPrintf("<TR><TH>m</TH><TH>b</TH></TR></TABLE>");
@@ -1706,9 +1706,9 @@ double max2 = -INFINITY;
  *	inner border lines work
  */
 hPrintf("<P><!--outer table is for border purposes-->\n");
-hPrintf("<TABLE BGCOLOR=\"#%s",HG_COL_BORDER);
-hPrintf("\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
-hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=1>", HG_COL_INSIDE);
+hPrintf("<TABLE BGCOLOR='#%s'",HG_COL_BORDER);
+hPrintf(" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+hPrintf("<TABLE BGCOLOR='#%s' BORDER=1>", HG_COL_INSIDE);
 
 tableLabels();
 
@@ -2250,10 +2250,10 @@ return result;
 static void residualStats(struct dataVector *residuals)
 {
 hPrintf("<P><!--outer table is for border purposes-->\n");
-hPrintf("<TABLE BGCOLOR=\"#%s",HG_COL_BORDER);
-hPrintf("\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+hPrintf("<TABLE BGCOLOR='#%s'",HG_COL_BORDER);
+hPrintf(" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 
-hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=1>", HG_COL_INSIDE);
+hPrintf("<TABLE BGCOLOR='#%s' BORDER=1>", HG_COL_INSIDE);
 hPrintf("<TR><TH COLSPAN=3>residuals</TH></TR>\n");
 hPrintf("<TR><TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH></TR>\n");
 hPrintf("<TR><TD ALIGN=RIGHT>%.4g</TD>", residuals->min);
@@ -2288,14 +2288,14 @@ histogram2PlotGif=histogramPlot(table2, &totalWidthHisto2, &totalHeightHisto2);
 hPrintf("<TABLE>");
 hPrintf("<TR><TD>\n");
 
-hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
+hPrintf("<TABLE BGCOLOR='#%s'>", HG_COL_INSIDE);
 hPrintf("<TR><TH COLSPAN=2>scatter&nbsp;plot,&nbsp;r<sup>2</sup>&nbsp;%.4g</TH></TR>\n", result->r*result->r);
 hPrintf("<TR>");
 hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
 	scatterPlotGif->forHtml, totalWidthScatter, totalHeightScatter);
-hPrintf("</TABLE></TD><TD BGCOLOR=\"%s\">\n", HG_COL_INSIDE);
+hPrintf("</TABLE></TD><TD BGCOLOR='#%s'>\n", HG_COL_INSIDE);
 
-hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
+hPrintf("<TABLE BGCOLOR='#%s'>", HG_COL_INSIDE);
 hPrintf("<TR><TH COLSPAN=2>Residuals&nbsp;vs.&nbsp;Fitted,&nbsp;F&nbsp;statistic:&nbsp;%.4g</TH></TR>\n", F_statistic);
 hPrintf("<TR>");
 hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
@@ -2311,14 +2311,14 @@ hPrintf("<TR><TD>\n");
 
 if ((histogram1PlotGif != NULL) && (histogram2PlotGif != NULL))
     {
-    hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
+    hPrintf("<TABLE BGCOLOR='#%s'>", HG_COL_INSIDE);
     hPrintf("<TR><TH COLSPAN=2>histogram<BR>%s</TH></TR>\n", table1->shortLabel);
     hPrintf("<TR>");
     hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
 	    histogram1PlotGif->forHtml, totalWidthHisto1, totalHeightHisto1);
-    hPrintf("</TABLE></TD><TD BGCOLOR=\"%s\">\n", HG_COL_INSIDE);
+    hPrintf("</TABLE></TD><TD BGCOLOR='#%s'>\n", HG_COL_INSIDE);
 
-    hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
+    hPrintf("<TABLE BGCOLOR='#%s'>", HG_COL_INSIDE);
     hPrintf("<TR><TH COLSPAN=2>histogram<BR>%s</TH></TR>\n", table2->shortLabel);
     hPrintf("<TR>");
     hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
@@ -2336,10 +2336,10 @@ static void tableInfoDebugDisplay(struct trackTable *tableList)
     struct trackTable *table;
 
     hPrintf("<P><!--outer table is for border purposes-->\n");
-    hPrintf("<TABLE BGCOLOR=\"#%s",HG_COL_BORDER);
-    hPrintf("\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+    hPrintf("<TABLE BGCOLOR='#%s'",HG_COL_BORDER);
+    hPrintf(" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 
-    hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=1><TR><TH COLSPAN=9>debugging information</TH></TR><TR><TH>Track</TH><TH>Track<BR>(perhaps composite)</TH><TH>table</TH><TH>type</TH><TH>type</TH><TH>bedGraph<BR>column</TH><TH>bedGraph<BR>column</TH><TH>isCustom</TH><TH>bedColumns</TH></TR>\n", HG_COL_INSIDE);
+    hPrintf("<TABLE BGCOLOR='#%s' BORDER=1><TR><TH COLSPAN=9>debugging information</TH></TR><TR><TH>Track</TH><TH>Track<BR>(perhaps composite)</TH><TH>table</TH><TH>type</TH><TH>type</TH><TH>bedGraph<BR>column</TH><TH>bedGraph<BR>column</TH><TH>isCustom</TH><TH>bedColumns</TH></TR>\n", HG_COL_INSIDE);
 
     for (table = tableList; table != NULL; table = table->next)
 	{

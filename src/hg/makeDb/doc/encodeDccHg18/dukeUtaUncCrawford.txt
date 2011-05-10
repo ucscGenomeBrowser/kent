@@ -3476,3 +3476,6 @@ objects:534  vars:10235
 gold wgEncodeChromatinMap.ra
 
 gold, gadd, gci, gup,gpush
+
+cd {downloads}/wgEncodeChromatinMap
+encodeDownloadsPage.pl -db=hg18 index.html

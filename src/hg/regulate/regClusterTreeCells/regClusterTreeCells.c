@@ -34,8 +34,7 @@ static struct optionSpec options[] = {
 };
 
 struct treeNode
-/* An element in a hierarchical tree.  We use this general structure because it's so
- * easy even though we are just making a binary tree. */
+/* An element in a hierarchical binary tree.  */
     {
     struct treeNode *left, *right;	/* Two children */
     int vectorSize;		/* # of items in vector below. */

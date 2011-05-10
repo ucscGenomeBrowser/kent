@@ -1,7 +1,7 @@
 metaObject wgEncodeHaibMethylRrbs
 objType composite
 composite wgEncodeHaibMethylRrbs
-expVars lab,dataType,cell,treatment,obtainedBy
+expVars lab,dataType,cell,treatment
 geoSeriesAccession GSE27584
 
 metaObject wgEncodeHaibMethylRrbsAg04449UwRawDataRep1
@@ -3609,7 +3609,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsHek293StanfordSitesRep1.bedRrbs.gz
-geoSampleAccession GSM683825
 grant Myers
 lab HudsonAlpha
 labExpId SL759
@@ -3631,7 +3630,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-22
 dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsHek293StanfordSitesRep2.bedRrbs.gz
-geoSampleAccession GSM683769
 grant Myers
 lab HudsonAlpha
 labExpId SL1901
@@ -8231,4 +8229,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -23888311
+# MAGIC: 513177952
