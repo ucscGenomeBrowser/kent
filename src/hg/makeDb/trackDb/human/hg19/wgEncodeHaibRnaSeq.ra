@@ -71,7 +71,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=2974 dateSubmitted=2011-01-22
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1
-        parent wgEncodeHaibRnaSeqViewAlignments off
+        parent wgEncodeHaibRnaSeqViewAlignments on
         shortLabel A549 DEX100p 1
         longLabel A549 DEX 1 hr 100 pM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep1
@@ -80,7 +80,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=2974 dateSubmitted=2011-01-22
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1
-        parent wgEncodeHaibRnaSeqViewAlignments off
+        parent wgEncodeHaibRnaSeqViewAlignments on
         shortLabel A549 DEX500p 1
         longLabel A549 DEX 1 hr 500 pM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep1
@@ -89,7 +89,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=2974 dateSubmitted=2011-01-22
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1
-        parent wgEncodeHaibRnaSeqViewAlignments off
+        parent wgEncodeHaibRnaSeqViewAlignments on
         shortLabel A549 DEX1n1
         longLabel A549 DEX 1 hr 1nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep1
@@ -98,7 +98,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=2974 dateSubmitted=2011-01-22
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1
-        parent wgEncodeHaibRnaSeqViewAlignments off
+        parent wgEncodeHaibRnaSeqViewAlignments on
         shortLabel A549 DEX5n 1
         longLabel A549 DEX 1 hr 5 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep1
@@ -296,7 +296,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=2976 dateSubmitted=2011-01-21
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1
-        parent wgEncodeHaibRnaSeqViewAlignments off
+        parent wgEncodeHaibRnaSeqViewAlignments on
         shortLabel A549 ETOH 1
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep1
@@ -314,7 +314,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=1849 dateSubmitted=2011-01-21
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1
-        parent wgEncodeHaibRnaSeqViewAlignments off
+        parent wgEncodeHaibRnaSeqViewAlignments on
         shortLabel A549 DEX100n 1
         longLabel A549 DEX 1 hr 100 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep1
@@ -438,7 +438,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=2974 dateSubmitted=2011-01-22
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        parent wgEncodeHaibRnaSeqViewGencV3 on
         shortLabel A549 DEX500p 1
         longLabel A549 DEX 1 hr 500 pM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep1
@@ -456,7 +456,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=2974 dateSubmitted=2011-01-22
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        parent wgEncodeHaibRnaSeqViewGencV3 on
         shortLabel A549 DEX5n 1
         longLabel A549 DEX 1 hr 5 nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep1
@@ -672,7 +672,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=1849 dateSubmitted=2011-01-21
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        parent wgEncodeHaibRnaSeqViewGencV3 on
         shortLabel A549 DEX100n 1
         longLabel A549 DEX 1 hr 100 nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep1
@@ -690,7 +690,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=1849 dateSubmitted=2011-01-21
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        parent wgEncodeHaibRnaSeqViewGencV3 on
         shortLabel A549 DEX100p 1
         longLabel A549 DEX 1 hr 100 pM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep1
@@ -823,7 +823,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=2974 dateSubmitted=2011-01-22
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep1
-        parent wgEncodeHaibRnaSeqViewSignal off
+        parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX100p 1
         longLabel A549 DEX 1 hr 100 pM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep1
@@ -832,7 +832,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=2974 dateSubmitted=2011-01-22
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep1
-        parent wgEncodeHaibRnaSeqViewSignal off
+        parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX500p 1
         longLabel A549 DEX 1 hr 500 pM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep1
@@ -841,7 +841,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=2974 dateSubmitted=2011-01-22
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep1
-        parent wgEncodeHaibRnaSeqViewSignal off
+        parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX1n 1
         longLabel A549 DEX 1 hr 1nM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep1
@@ -850,7 +850,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=2974 dateSubmitted=2011-01-22
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep1
-        parent wgEncodeHaibRnaSeqViewSignal off
+        parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX5n 1
         longLabel A549 DEX 1 hr 5 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep1
@@ -1048,7 +1048,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=2976 dateSubmitted=2011-01-21
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep1
-        parent wgEncodeHaibRnaSeqViewSignal off
+        parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 ETOH 1
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep1
@@ -1066,7 +1066,7 @@ html wgEncodeHaibRnaSeq.new
         # subId=1849 dateSubmitted=2011-01-21
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep1
-        parent wgEncodeHaibRnaSeqViewSignal off
+        parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX100n 1
         longLabel A549 DEX 1 hr 100 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep1

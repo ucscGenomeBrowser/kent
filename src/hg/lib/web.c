@@ -236,7 +236,7 @@ if (isGisaid)
     printf("<TD><A HREF='../cgi-bin/gisaidSample' class='topbar'>Sample View</A></TD>\n");          // Subject  View
     printf("<TD><A HREF='../cgi-bin/hgTracks%s' class='topbar'>Sequence View</A></TD>\n",uiState);  // Sequence View
     printf("<TD><A HREF='../cgi-bin/gisaidTable' class='topbar'>Table View</A></TD>\n");            // Table View
-    printf("<TD style='width:80%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
+    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
 
 #else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
@@ -290,7 +290,7 @@ else if (isGsid)
         printf("<TD><A HREF='/goldenPath/help/gsidTutorial.html#BLAT' TARGET=_blank class='topbar'>Help</A></TD>\n");   // Help
     else
         printf("<TD><A HREF='/goldenPath/help/sequenceViewHelp.html' TARGET=_blank class='topbar'>Help</A></TD>\n");    // Help
-    printf("<TD style='width:80%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
+    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
 
 #else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
@@ -420,7 +420,7 @@ else if (dbIsFound)
         printf(" class='topbar'>Help</A></TD>\n");
         }
     }
-    printf("<TD style='width:80%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
+    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
     puts("</TD></TR>\n");
 
 #else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS

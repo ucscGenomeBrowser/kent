@@ -1,8 +1,8 @@
 <H2>Description</H2>
 <P>This track, produced as part of the ENCODE Project,
-displays maps of histone modifications genome-wide in different
-<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>,
-obtained using ChIP-seq. The ChIP-seq method involves first using formaldehyde
+displays maps of histone modifications genome-wide using ChIP-seq in different
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>.
+The ChIP-seq method involves first using formaldehyde
 to cross-link histones and other DNA-associated proteins to genomic DNA 
 within cells. The cross-linked chromatin is subsequently extracted, 
 sheared, and immunoprecipitated using specific antibodies. 
@@ -72,15 +72,15 @@ Library DNA was quantitated using either a Nanodrop or a BioAnalyzer and sequenc
 <P> 
 The sequencing reads were mapped to the genome using the Eland alignment program.
 ChIP-seq data was scored based on sequence reads (length &#126;30 bps) that align uniquely
-to the human genome. From the mapped tags a signal map of ChIP DNA fragments
+to the human genome. From the mapped tags, a signal map of ChIP DNA fragments
 (average fragment length &#126; 200 bp) was constructed where the 
 signal height is the number of overlapping fragments at each nucleotide position in the genome. 
 </P>
 
 <P> 
-For each 1 Mb segment of each chromosome a peak height threshold was determined by
+For each 1 Mb segment of each chromosome, a peak height threshold was determined by
 requiring a false discovery rate &lt;&#61; 0.05 when comparing the number of peaks 
-above threshold as compared the number obtained from multiple simulations of 
+above threshold as compared to the number obtained from multiple simulations of 
 a random null background with the same number of mapped reads
 (also accounting for the fraction of mapable bases for sequence tags in that 1 Mb segment).
 The number of mapped tags in a putative binding region is compared to the
@@ -113,6 +113,12 @@ for data scoring and submission inquiries.
 <H2>References</H2>
 
 <P>
+O&#39;Geen H, Echipare L, Farnham PJ
+Using ChIP-seq technology to generate high-resolution profiles of histone modifications.
+ <EM>Methods Mol Biol.</EM> In Press.
+</P>
+
+<P>
 O&#39;Geen H, Frietze S, Farnham PJ 
 	<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/20680851?dopt=abstract&otool=uscnmlib"
 	class="external text"
@@ -121,11 +127,6 @@ O&#39;Geen H, Frietze S, Farnham PJ
 	TARGET = _BLANK>Using ChIP-seq Technology to Identify Targets of Zinc Finger Transcription Factors</A>.
  <EM>Methods Mol Biol.</EM> 2010;649:437-455.
 </P>
-<P>
-O&#39;Geen H, Echipare L, Farnham PJ
-Using ChIP-seq technology to generate high-resolution profiles of histone modifications.
- <EM>Methods Mol Biol.</EM> In Press.
-</P
 
 <H2> Data Release Policy </H2>
 
