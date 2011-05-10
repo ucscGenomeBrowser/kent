@@ -975,7 +975,7 @@ tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) BG02
 karyotype XY euploid
-#)karyotype normal 
+#)karyotype normal
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
@@ -1061,7 +1061,7 @@ tag BJT
 type Cell Line
 organism Human
 description Skin Fibroblast
-#)description Provisional foreskin fibroblast 
+#)description Provisional foreskin fibroblast
 tissue Skin
 vendorName Struhl laboratory
 vendorId BJ-T
@@ -1166,11 +1166,11 @@ type Cell Line
 tier 3
 organism human
 description Human T cell leukemia with notch mutation
-lineage 
-karyotype 
+lineage
+karyotype
 sex M
 tissue Blood
-vendorName DSMZ 
+vendorName DSMZ
 vendorId N/A
 orderUrl http://www.dsmz.de/index.htm
 termId BTO:0002104
@@ -1182,7 +1182,7 @@ tag ECC1
 type Cell Line
 organism Human
 description ECC-1 is a human epithelial cell line derived from an endometrium adenocarcinoma.
-#)description Provisional ECC-1 is a human epithelial cell line derived from an endometrium adenocarcinoma, fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes 
+#)description Provisional ECC-1 is a human epithelial cell line derived from an endometrium adenocarcinoma, fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes
 tissue luminal epithelium
 vendorName ATCC
 vendorId CRL-2923
@@ -1201,7 +1201,7 @@ type Cell Line
 tier 3
 organism human
 description Peripheral blood-derived erythroblasts from 16-19 week human fetal liver
-lineage 
+lineage
 karyotype normal
 sex U
 tissue Liver
@@ -1273,7 +1273,7 @@ vendorId GM06990
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM06990&PgId=166
 lineage CEPH/Utah - European Caucasion; Epstein-Barr Virus
 #)lineage mesoderm
-karyotype normal 
+karyotype normal
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
@@ -2394,7 +2394,7 @@ vendorId 7409 # ScienCell Id is 2630 for HPLF
 #)vendorId CC-7049
 orderUrl http://www.sciencellonline.com/site/products/7409.php
 #)orderUrl http://www.lonza.com/   # http://www.sciencellonline.com/site/productDetails.php?keyword=2630
-sex M 
+sex M
 tier 3
 protocol UW_Stam:HPdLF_Stam_protocol.pdf
 
@@ -2681,7 +2681,7 @@ organism human
 description Skeletal muscle myoblast
 #)description Provisional LHCN-M2 are a line of human skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old Caucasian male heart transplant donor.  They are immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN").   Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
 lineage LHCN-M2 are a line of human skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old Caucasian male heart transplant donor.  They are immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN").   Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
-#)lineage 
+#)lineage
 karyotype
 sex M
 tissue Skeletal muscle myoblast
@@ -2740,8 +2740,8 @@ type Cell Line
 tier 3
 organism human
 description Human T cell leukemia
-lineage 
-karyotype 
+lineage
+karyotype
 sex F
 tissue Blood
 vendorName DSMZ
@@ -3306,7 +3306,7 @@ protocol HudsonAlpha:SK-N-MC_protocol.pdf
 # In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
 # this cell line is not SK-N-MC, it is SK-N-SH
 # this is an experimental treatment with retinoic acid
-# the previous lineage and Provisional description were wrong 
+# the previous lineage and Provisional description were wrong
 # they  referred to SK-N-MC
 term SK-N-SH_RA
 tag SKNSHRA
@@ -8007,7 +8007,7 @@ description 4 hr with DMSO (Myers)
 type treatment
 
 term DIFF_7d
-tag DIFF7d 
+tag DIFF7d
 description PROVISIONAL Grown for 7 days in differentiation medium (Wold)
 type treatment
 
@@ -8863,10 +8863,10 @@ tag sup
 type attic
 description Files supplemental at composite level (Provisional)
 
-term auxUnValid
-term auxUV
+term auxSup
+tag auxsup
 type attic
-description Unvalidated files supplemental at experimental level (Provisional)
+description Unverified files supplemental at experiment level (provisional)
 
 term auxValid
 tag auxV
