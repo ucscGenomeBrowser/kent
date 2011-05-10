@@ -8850,12 +8850,12 @@ description Unknown
 
 
 ## Organisms
-term human
+term Human
 tag human
 type organism
 description human
 
-term mouse
+term Mouse
 tag mouse
 type mouse
 description mouse
