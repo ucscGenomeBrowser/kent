@@ -2273,9 +2273,19 @@ identifier locusLinkId external=LocusLink
     $kgDb,!hg16,!mm8.knownToLocusLink.value minCheck=0.98
     hg16,mm8.knownToLocusLink.value minCheck=0.96
 
+identifier omimLocationId external=OMIM
+"Online Mendelian Inheritance in Man (OMIM) Location ID"
+    $hg.omimLocation.name dupeOk exclude=0
+
+identifier omimAvSnpId external=OMIM
+"Online Mendelian Inheritance in Man (OMIM) AV SNP ID"
+    $hg.omimAvSnp.name dupeOk exclude=0
+
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
     $gbd.refLink.omimId dupeOk exclude=0
+    $hg.omimGene2.name minCheck=0.90
+    $hg.omimGeneMap.omimId minCheck=0.85
 
 identifier omimGeneId
 "omimGene ID"
@@ -2284,6 +2294,16 @@ identifier omimGeneId
     $hg.refLink.omimId exclude=0 minCheck=0.98
     $hg.omimMorbidMap.omimId minCheck=0.75
     $hg.omimToKnownCanonical.omimId
+
+identifier omimGene2Id
+"omimGene2 ID"
+    $hg.omimGene2.name dupeOk
+    $hg.omimGeneSymbol.omimId minCheck=0.90
+    $hg.omimAv.omimId minCheck=0.90
+    $hg.omimAvRepl.omimId minCheck=0.90
+    $hg.omimDisorderPhenotype.omimId minCheck=0.75
+    $hg.omimDisorderMap.omimId minCheck=0.75
+    $hg.refLink.omimId exclude=0 minCheck=0.98
 
 identifier unigeneId fuzzy
 "NCBI UniGene Cluster ID"

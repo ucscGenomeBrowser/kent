@@ -1027,18 +1027,14 @@ function navigationLinksSetup()
     var navDown = $("#navDown");
     if(navDown != undefined && navDown.length > 0) {
         navDown = navDown[0];
-        var winWidth = ($(window).width() - 30) + "px"; // Room for borders
-        $('.windowSize').css({maxWidth: winWidth,width: winWidth});
-        var sectTtl = $("#sectTtl").parent("td");
+        var winWidth = ($(window).width() - 20) + "px"; // Room for borders
+        $('.windowSize').css({maxWidth:winWidth,width:winWidth});
+        var sectTtl = $("#sectTtl");
         if(sectTtl != undefined && sectTtl.length > 0) {
-            sectTtl = sectTtl[0];
             $(sectTtl).css({clear: 'none'});
-            if($.browser.msie)
-                $(sectTtl).prepend($(navDown));
-            else
-                $(sectTtl).append($(navDown));
+            $(sectTtl).prepend($(navDown));
         }
-        $(navDown).css({float:'right'})
+        $(navDown).css({'float':'right', 'font-weight':'normal','font-size':'medium'});
         $(navDown).show();
     }
 
@@ -1047,7 +1043,7 @@ function navigationLinksSetup()
     if(navUp != undefined && navUp.length > 0) {
         $(navUp).each(function(i) {
             var offset = $(this).parent().offset();
-            if(offset.top  > $(window).height()) {
+            if(offset.top  > ($(window).height()*(2/3))) {
                 $(this).show();
             }
         });

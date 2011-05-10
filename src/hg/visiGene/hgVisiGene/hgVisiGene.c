@@ -20,6 +20,7 @@
 #include "configPage.h"
 #include "printCaption.h"
 #include "trashDir.h"
+#include "jsHelper.h"
 
 static char const rcsid[] = "$Id: hgVisiGene.c,v 1.102 2010/01/19 19:17:06 galt Exp $";
 
@@ -343,7 +344,15 @@ if (imageId != 0)
     safef(buf,sizeof(buf),"../bigImage.html?url=%s%s/%s&w=%d&h=%d",
 	    dir,name,name,w,h);
 #endif
+    jsIncludeFile("jquery.js", NULL);
     printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
+    printf("<script type='text/javascript'>$(document).ready( function () {;\n");
+    printf("   $('[name=\"bigImg\"]').css('height',($(window).height()*0.85) + 'px');\n");
+    printf("});\n");
+    printf("$(window).resize( function() {\n");
+    printf("   $('[name=\"bigImg\"]').css('height',($(window).height()*0.85) + 'px');\n");
+    printf("});\n");
+    printf("</script>\n");
 
     fullCaption(conn, imageId);
 
@@ -530,7 +539,7 @@ saveMatchFile(matchFile, matchList);
 cartSetString(cart, hgpMatchFile, matchFile);
 cartSetInt(cart, hgpId, imageId);
 //puts("\n");
-puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
+puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\" \"http://www.w3.org/TR/html4/frameset.dtd\">");
 printf("<HTML>\n");
 printf("<HEAD>\n");
 printf("<TITLE>\n");

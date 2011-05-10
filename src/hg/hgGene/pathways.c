@@ -104,8 +104,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* only print new ones */
     if (!sameWord(oldMapId, row[0]))
     	{
-    	hPrintf("<A HREF=\"http://biocyc.org/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2\" TARGET=_blank>",
-    	row[0]);
+	hPrintf("<A HREF=\"http://biocyc.org/%s/new-image?type=PATHWAY&object=%s&detail-level=2\" TARGET=_blank>",
+    		genome, row[0]);
     	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
 	}
     oldMapId = cloneString(row[0]);	

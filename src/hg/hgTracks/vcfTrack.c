@@ -18,29 +18,8 @@
 #ifdef USE_TABIX
 
 //#*** TODO: use trackDb/cart setting or something
-static boolean boringBed = FALSE;
 static boolean doHapClusterDisplay = TRUE;
 static boolean colorHapByRefAlt = TRUE;
-
-static struct bed4 *vcfFileToBed4(struct vcfFile *vcff)
-/* Convert vcff's records to bed4; don't free vcff until you're done with bed4
- * because bed4 contains pointers into vcff's records' chrom and name. */
-{
-struct bed4 *bedList = NULL;
-struct vcfRecord *rec;
-for (rec = vcff->records;  rec != NULL;  rec = rec->next)
-    {
-    struct bed4 *bed;
-    AllocVar(bed);
-    bed->chrom = rec->chrom;
-    bed->chromStart = rec->chromStart;
-    bed->chromEnd = rec->chromEnd;
-    bed->name = rec->name;
-    slAddHead(&bedList, bed);
-    }
-slReverse(&bedList);
-return bedList;
-}
 
 #define VCF_MAX_ALLELE_LEN 80
 
@@ -271,6 +250,10 @@ if (ht->left == NULL && ht->right == NULL)
     struct hapCluster *c = (struct hapCluster *)ht->itemOrCluster;
     gtHapOrder[(*retGtHapEnd)++] = c->gtHapIx;
     }
+else if (ht->left == NULL)
+    rSetGtHapOrder(ht->right, gtHapOrder, retGtHapEnd);
+else if (ht->right == NULL)
+    rSetGtHapOrder(ht->left, gtHapOrder, retGtHapEnd);
 else
     {
     struct hapCluster *cL = (struct hapCluster *)ht->left->itemOrCluster;
@@ -427,6 +410,45 @@ y += itemHeight+1;
 return y;
 }
 
+INLINE char *gtSummaryString(struct vcfRecord *rec, char **altAlleles, int altCount)
+// Make pgSnp-like mouseover text, but with genotype counts instead of allele counts.
+// NOTE 1: Returned string is statically allocated, don't free it!
+// NOTE 2: if revCmplDisp is set, this reverse-complements rec->ref and altAlleles!
+{
+static struct dyString *dy = NULL;
+if (dy == NULL)
+    dy = dyStringNew(0);
+dyStringClear(dy);
+const struct vcfFile *vcff = rec->file;
+int gtRefRefCount = 0, gtRefAltCount = 0, gtAltAltCount = 0, gtOtherCount = 0;
+int i;
+for (i=0;  i < vcff->genotypeCount;  i++)
+    {
+    struct vcfGenotype *gt = &(rec->genotypes[i]);
+    if (gt->hapIxA == 0 && gt->hapIxB == 0)
+	gtRefRefCount++;
+    else if (gt->hapIxA == 1 && gt->hapIxB == 1)
+	gtAltAltCount++;
+    else if ((gt->hapIxA == 0 && gt->hapIxB == 1) || (gt->hapIxA == 1 && gt->hapIxB == 0))
+	gtRefAltCount++;
+    else
+	gtOtherCount++;
+    }
+if (revCmplDisp)
+    {
+    reverseComplement(rec->ref, strlen(rec->ref));
+    for (i=0;  i < altCount;  i++)
+	reverseComplement(altAlleles[i], strlen(altAlleles[i]));
+    }
+
+dyStringPrintf(dy, "%s/%s:%d %s/%s:%d %s/%s:%d", rec->ref, rec->ref, gtRefRefCount,
+	       rec->ref, altAlleles[0], gtRefAltCount,
+	       altAlleles[0], altAlleles[0], gtAltAltCount);
+if (gtOtherCount > 0)
+    dyStringPrintf(dy, " other:%d", gtOtherCount);
+return dy->string;
+}
+
 static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis)
@@ -434,6 +456,8 @@ static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
  * alpha similarity, and draw in the order determined by clustering. */
 {
 const struct vcfFile *vcff = tg->extraUiData;
+if (vcff->records == NULL)
+    return;
 unsigned short gtHapEnd = 0;
 unsigned short *gtHapOrder = clusterChroms(vcff, &gtHapEnd);
 struct dyString *tmp = dyStringNew(0);
@@ -463,9 +487,9 @@ for (rec = vcff->records;  rec != NULL;  rec = rec->next)
 	y = drawOneHap(gt, hapIx, rec->ref, altAlleles, altCount,
 		       hvg, x1, y, w, itemHeight, lineHeight);
 	}
-    //#*** TODO: pgSnp-like mouseover text?
     mapBoxHgcOrHgGene(hvg, rec->chromStart, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
-		      rec->name, rec->name, FALSE, TRUE, NULL);
+		      rec->name, gtSummaryString(rec, altAlleles, altCount),
+		      NULL, TRUE, NULL);
     }
 // left labels?
 }
@@ -476,6 +500,8 @@ static int vcfHapClusterTotalHeight(struct track *tg, enum trackVisibility vis)
 {
 // Should we make it single-height when on chrY?
 const struct vcfFile *vcff = tg->extraUiData;
+if (vcff->records == NULL)
+    return 0;
 int ploidy = 2;
 tg->height = ploidy * vcff->genotypeCount * tg->lineHeight;
 return tg->height;
@@ -530,15 +556,13 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 if (vcff != NULL)
     {
-    if (boringBed)
-	tg->items = vcfFileToBed4(vcff);
-    else if (doHapClusterDisplay && vcff->genotypeCount > 0 && vcff->genotypeCount < 3000 &&
-	     (tg->visibility == tvPack || tg->visibility == tvSquish))
+    if (doHapClusterDisplay && vcff->genotypeCount > 0 && vcff->genotypeCount < 3000 &&
+	(tg->visibility == tvPack || tg->visibility == tvSquish))
 	vcfHapClusterOverloadMethods(tg, vcff);
     else
 	{
 	tg->items = vcfFileToPgSnp(vcff);
-	/* base coloring/display decision on count of items */
+	// pgSnp bases coloring/display decision on count of items:
 	tg->customInt = slCount(tg->items);
 	}
     // Don't vcfFileFree here -- we are using its string pointers!
@@ -548,10 +572,7 @@ if (vcff != NULL)
 void vcfTabixMethods(struct track *track)
 /* Methods for VCF + tabix files. */
 {
-if (boringBed == TRUE)
-    bedMethods(track);
-else
-    pgSnpMethods(track);
+pgSnpMethods(track);
 track->loadItems = vcfTabixLoadItems;
 track->canPack = TRUE;
 }

@@ -27,7 +27,7 @@
 
 static char const rcsid[] = "$Id: gsidMember.c,v 1.36 2009/04/14 18:14:44 galt Exp $";
 
-char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
+char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL };
 /* The excludeVars are not saved to the cart. (We also exclude
  * any variables that start "near.do.") */
 
@@ -119,7 +119,7 @@ srand( (unsigned)time( NULL ) );
 for(i=0;i<8;++i)
     {
     r = randInt(4);
-    switch (r) 
+    switch (r)
 	{
 	case 0 :
     	    c = 'A' + randInt(26);
@@ -148,10 +148,10 @@ void updatePasswordsFile(struct sqlConnection *conn)
 {
 struct sqlResult *sr;
 char **row;
- 
+
 FILE *out = mustOpen("../conf/passwords", "w");
 
-sr = sqlGetResult(conn, 
+sr = sqlGetResult(conn,
 "select email,password from members where activated='Y'"
 " and (expireDate='' or (current_date() < expireDate))");
 while ((row = sqlNextRow(sr)) != NULL)
@@ -182,7 +182,7 @@ struct sockaddr_in sock;
 if (inet_aton(ip,&sock.sin_addr) == 0) return NULL;
 hp = gethostbyaddr(&sock.sin_addr,sizeof(sock.sin_addr),AF_INET);
 if (!hp) return NULL;
-return cloneString(hp->h_name); 
+return cloneString(hp->h_name);
 }
 
 
@@ -208,8 +208,8 @@ for(this=cgiVars;this;this=this->next)
 
 
 void processIpn(struct sqlConnection *conn)
-/* process Instant Payment Notification 
- *  Steps: 
+/* process Instant Payment Notification
+ *  Steps:
  *   verify server source name
  *   write to log
  *   compose post pack to paypal.com or sandbox
@@ -235,7 +235,7 @@ for(this=cgiVars;this;this=this->next)
     char *encodedVal = cgiEncode(this->val);
     dyStringPrintf(dy,"&%s=%s", this->name, encodedVal);
     freeMem(encodedVal);
-    this->saved = FALSE; /* clear now, use later */ 
+    this->saved = FALSE; /* clear now, use later */
     }
 fflush(f);
 
@@ -274,7 +274,7 @@ fflush(f);
 char *line = NULL;
 boolean verified = FALSE;
 /* skip http response header */
-while (lineFileNext(lf, &line, NULL))  
+while (lineFileNext(lf, &line, NULL))
     {
     if (sameString(line,""))
 	break;
@@ -342,7 +342,7 @@ for(this=cgiVars;this;this=this->next)
     if (!this->saved)
 	dyStringPrintf(dy,"%s=%s\\n",sqlEscapeString(this->name),sqlEscapeString(this->val));
     /* remove these vars from the cart for better security/privacy */
-    cartRemove(cart, this->name);	
+    cartRemove(cart, this->name);
     }
 dyStringPrintf(dy,"'");
 
@@ -358,8 +358,8 @@ char *paymentDate = cgiUsualString("payment_date","");
 
 /* handle expiration date */
 
-/* Could use <time.h> function strptime, 
-but perhaps getdate with the external file datemsk 
+/* Could use <time.h> function strptime,
+but perhaps getdate with the external file datemsk
 is more flexible for GSID in the long run.
 struct tm *tm;
 AllocVar(tm);
@@ -376,7 +376,7 @@ if (!tm)
     goto cleanup;
     }
 /* set expiration date to one year ahead */
-char expireDate[11]; /* note: tm returns year rel 1900, mon and day are 0 based */ 
+char expireDate[11]; /* note: tm returns year rel 1900, mon and day are 0 based */
 safef(expireDate,sizeof(expireDate),"%4d-%02d-%02d",1900+tm->tm_year+1,tm->tm_mon+1,tm->tm_mday+1);
 
 /* use invoice# to map back to user's email */
@@ -399,10 +399,10 @@ if (!sameString("Completed",paymentStatus))
     fflush(f);
     /* send payer an email confirming */
     char cmd[256];
-    safef(cmd,sizeof(cmd), 
+    safef(cmd,sizeof(cmd),
     "echo \"We received your payment through PayPal. However your account is not yet activated.\nPayment status is %s %s. When your payment status is completed your account will be activated and you will receive another email.  Thank you.\" | mail -s \"Payment received for GSID HIV Data Browser access.\" %s"
     , paymentStatus
-    , cgiUsualString("payment_reason","") 
+    , cgiUsualString("payment_reason","")
     , email);
     int result = system(cmd);
     if (result == -1)
@@ -415,7 +415,7 @@ if (!sameString("Completed",paymentStatus))
     }
 
 
-/* Write payment info to the members table 
+/* Write payment info to the members table
  *  email field has been stored in the invoice field */
 dyStringClear(dy);
 dyStringPrintf(dy,"update members set "
@@ -442,7 +442,7 @@ updatePasswordsFile(conn);
 
 /* send payer an email confirming */
 char cmd[256];
-safef(cmd,sizeof(cmd), 
+safef(cmd,sizeof(cmd),
 "echo \"We received your payment through Paypal. Your account is now activated.\nPlease go to http://%s/ to access the site. \" | mail -s \"Payment received for GSID HIV Data Browser access.\" %s"
 , getenv("HTTP_HOST"), email);
 int result = system(cmd);
@@ -468,7 +468,7 @@ void debugShowAllMembers(struct sqlConnection *conn)
 {
 struct sqlResult *sr;
 char **row;
- 
+
 hPrintf("<h1>Members</h1>");
 hPrintf("<table>");
 hPrintf("<th>email</th><th>password</th>");
@@ -492,7 +492,7 @@ hPrintf(
 "<h2>GSID HIV Data Browser</h2>"
 "<p align=\"left\">"
 "</p>"
-"<font color=red>%s</font>"
+"<span style='color:red;'>%s</span>"
 "<h3>Send Me A New Password</h3>"
 "<form method=post action=\"gsidMember\" name=lostPasswordForm >"
 "<table>"
@@ -544,7 +544,7 @@ sqlUpdate(conn, query);
 
 updatePasswordsFile(conn);
 
-safef(cmd,sizeof(cmd), 
+safef(cmd,sizeof(cmd),
 "echo 'Your new password is: %s' | mail -s \"Lost GSID HIV password\" %s"
 , password, email);
 int result = system(cmd);
@@ -581,7 +581,7 @@ hPrintf(
 "<h2>GSID HIV Data Browser</h2>"
 "<p align=\"left\">"
 "</p>"
-"<font color=red>%s</font>"
+"<span style='color:red;'>%s</span>"
 "<h3>Change Password</h3>"
 "<form method=post action=\"gsidMember\" name=changePasswordForm >"
 "<table>"
@@ -678,7 +678,7 @@ hPrintf
     "Click <a href=gsidMember?gsidMember.do.signupPage=1>here</a> to return.<br>"
     , email
     );
-    
+
 updatePasswordsFile(conn);
 
 cartRemove(cart, "gsidM_password");
@@ -702,7 +702,7 @@ hPrintf(
 "To view your existing account, click <a href=\"gsidMember?gsidMember.do.displayAccountPage=1\">here</a>.<br>\n"
 "To change your password, click <a href=\"gsidMember?gsidMember.do.changePasswordPage=1\">here</a>.<br>\n"
 "Lost your password? Click <a href=\"gsidMember?gsidMember.do.lostPasswordPage=1\">here</a>.<br>\n"
-"<font color=red>%s</font>"
+"<span style='color:red;'>%s</span>"
 "<h3>Sign up</h3>\n"
 "<form method=post action=\"gsidMember\" name=mainForm >\n"
 "NOTE: Your e-mail is also your user-id.\n"
@@ -760,7 +760,7 @@ char *paypalServer = cfgOption("paypalServer");
 char *httpHost=getenv("HTTP_HOST");
 char *paypalEmail = cfgOption("paypalEmail");
 
-safef(buttonData, sizeof(buttonData), 
+safef(buttonData, sizeof(buttonData),
 "cmd=_xclick\n"
 "business=%s\n"
 "invoice=%s\n"
@@ -780,16 +780,16 @@ safef(buttonData, sizeof(buttonData),
 , paypalEmail
 , invoice
 
-, sameString("commercial",type) 
+, sameString("commercial",type)
   ? "Commercial"
   : "Academic"
 
-, sameString("commercial",type) 
+, sameString("commercial",type)
   ? "001"
   : "002"
 
-, sameString("commercial",type) 
-  ? cfgOption("paypalCommercialFee") 
+, sameString("commercial",type)
+  ? cfgOption("paypalCommercialFee")
   : cfgOption("paypalAcademicFee")
 
 , httpHost
@@ -931,7 +931,7 @@ if (!type || sameString(type,""))
 char encPwd[35] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
 safef(query,sizeof(query), "insert into members set "
-    "email='%s',password='%s',activated='%s',name='%s',phone='%s',institution='%s',type='%s'", 
+    "email='%s',password='%s',activated='%s',name='%s',phone='%s',institution='%s',type='%s'",
     sqlEscapeString(email), sqlEscapeString(encPwd), "N", sqlEscapeString(name), sqlEscapeString(phone), sqlEscapeString(institution), type);
 sqlUpdate(conn, query);
 
@@ -968,9 +968,9 @@ if (sameString(status,"Completed"))
 //    );
 
     "Your account is now activated and ready to use.<br>\n"
-    
+
 // disable the following statement with temporary Beta release message
-/* 
+/*
     hPrintf(" We received your payment.  Your account is now created.  \n");
     hPrintf("<br><br><B>At the moment, the system is available only to our authorized Beta test users.</B>");
     hPrintf(" We will notify you as soon as our Beta test phase is completed. ");
@@ -1042,12 +1042,12 @@ void displayAccountPage(struct sqlConnection *conn)
 {
 char *email = cartUsualString(cart, "gsidM_email", "");
 /* for password security, use cgi hash instead of cart */
-char *password = cgiUsualString("gsidM_password", ""); 
+char *password = cgiUsualString("gsidM_password", "");
 hPrintf(
 "<h2>GSID HIV Data Browser</h2>"
 "<p align=\"left\">"
 "</p>"
-"<font color=red>%s</font>"
+"<span style='color:red;'>%s</span>"
 "<h3>Account Login</h3>"
 "<form method=post action=\"gsidMember\" name=accountLoginForm >"
 "<table>"
@@ -1086,7 +1086,7 @@ if (sameString(email,""))
     return;
     }
 /* for password security, use cgi hash instead of cart */
-char *password = cgiUsualString("gsidM_password", ""); 
+char *password = cgiUsualString("gsidM_password", "");
 if (sameString(password,""))
     {
     freez(&errMsg);
@@ -1158,12 +1158,12 @@ for(email=list;email;email=email->next)
     {
 
     uglyf("email=%s<br>\n",email->name);
-    
+
     safef(query,sizeof(query),"select password from members where email='%s'", email->name);
     char *password = sqlQuickString(conn,query);
 
     uglyf("password=%s<br>\n",password);
-    
+
     if (password)
 	{
 	if (!startsWith("$1$",password)) / * upgrade has not already been done * /
@@ -1171,7 +1171,7 @@ for(email=list;email;email=email->next)
 	    uglyf("does not start with $1$<br>\n");
 	    char encPwd[35] = "";
     	    encryptNewPwd(password, encPwd, sizeof(encPwd));
-	    safef(query,sizeof(query),"update members set password = '%s' where email='%s'", 
+	    safef(query,sizeof(query),"update members set password = '%s' where email='%s'",
 		sqlEscapeString(encPwd), sqlEscapeString(email->name));
 	    uglyf("query: %s<br>\n",query);
 	    sqlUpdate(conn,query);
@@ -1180,7 +1180,7 @@ for(email=list;email;email=email->next)
 	}
 
     uglyf("<br>\n");
-    
+
     }
 slFreeList(&list);
 }
@@ -1188,7 +1188,7 @@ slFreeList(&list);
 
 
 void doMiddle(struct cart *theCart)
-/* Write the middle parts of the HTML page. 
+/* Write the middle parts of the HTML page.
  * This routine sets up some globals and then
  * dispatches to the appropriate page-maker. */
 {
@@ -1248,7 +1248,7 @@ else if (cartVarExists(cart, "gsidMember.do.signup"))
     signup(conn);
 else
     signupPage(conn);
-    
+
 
 hFreeConn(&conn);
 cartRemovePrefix(cart, "gsidMember.do.");

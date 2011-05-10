@@ -341,7 +341,7 @@ if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
 
 printf("</form>\n");
 printf("</div>"); // Restricts to max-width:1000px;
-puts("<div style='height:.8em;'></div>");
+cgiDown(0.8);
 
 if (measureTiming)
     uglyTime("Rendered tabs");
@@ -408,10 +408,10 @@ if(doSearch)
 hFreeConn(&conn);
 
 webNewSection("About " FILE_SEARCH_NAME);
-printf("<p>Search for downloadable ENCODE files by entering search terms in "
+printf("Search for downloadable ENCODE files by entering search terms in "
         "the Track name or Description fields and/or by making selections with "
         "the group, data format, and/or ENCODE metadata drop-downs.");
-printf("<BR><a target='_blank' href='../goldenPath/help/fileSearch.html'>more help</a></p>\n");
+printf("<BR><a target='_blank' href='../goldenPath/help/fileSearch.html'>more help</a>\n");
 webEndSectionTables();
 }
 

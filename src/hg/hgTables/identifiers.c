@@ -175,7 +175,7 @@ cgiMakeButton(hgtaDoClearPasteIdentifierText, "clear");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>");
-hPrintf("<div style='height:.9em;'></div>\n");
+cgiDown(0.9);
 htmlClose();
 if (sameWord(curTable, WIKI_TRACK_TABLE))
     wikiDisconnect(&alternateConn);
@@ -204,7 +204,7 @@ cgiMakeButton(hgtaDoPastedIdentifiers, "submit");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>");
-hPrintf("<div style='height:.9em;'></div>\n");
+cgiDown(0.9);
 htmlClose();
 }
 

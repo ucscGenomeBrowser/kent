@@ -89,7 +89,7 @@ else
 return mgcDb;
 }
 
-char *mgcDbName() 
+char *mgcDbName()
 /* get just the MGC collection name for the current ucsc database */
 {
 return getMgcDb().name;
@@ -336,7 +336,7 @@ if (ci->mgcId == 0)
 if (ci->imageId == 0)
     errAbort("no IMAGE:nnnn entry in mrnaClone table for MGC clone %s", acc);
 return ci;
-}      
+}
 
 static struct cloneInfo *orfeomeCloneInfoLoad(struct sqlConnection *conn, char *acc,
                                               int start)
@@ -400,7 +400,7 @@ webPrintLinkTableStart();
 
 webPrintLinkCellStart();
 hgcAnchorSomewhere("htcDisplayMrna", ci->acc, ci->pslTbl, seqName);
-printf("mRNA</a>"); 
+printf("mRNA</a>");
 webPrintLinkCellEnd();
 
 webPrintLinkCellStart();
@@ -483,7 +483,7 @@ slSort(&pslList, pslCmpMatch);
 // come from another details page
 webNewSection("Alignments");
 if ((pslList->next != NULL) && (winStart < winEnd))
-    printf("<font size=-1><em>The alignment you clicked on is shown first.</em></font>\n");
+    printf("<span style='font-size:smaller;'><em>The alignment you clicked on is shown first.</em></span>\n");
 
 webPrintLinkTableStart();
 webPrintLabelCell("genomic (browser)");
@@ -750,7 +750,7 @@ webPrintLinkCellEnd();
 static void prRefSeqSims(struct cloneInfo *ci)
 /* print similarity information for RefSeqs */
 {
-webNewSection("RefSeq CDS isoform similarity of %s clone %s", 
+webNewSection("RefSeq CDS isoform similarity of %s clone %s",
               cdnaInfoDbName(ci), ci->acc);
 webPrintLinkTableStart();
 webPrintLabelCell("RefSeq");

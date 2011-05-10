@@ -43,7 +43,7 @@ errAbort("All for now");
 }
 
 static void vaProgress(char *format, va_list args)
-/* Print message to indicate progress - to web page if in 
+/* Print message to indicate progress - to web page if in
  * interactive mode, to console if not. */
 {
 FILE *f = (isFromWeb ? stdout : stderr);
@@ -54,7 +54,7 @@ if (format != NULL) {
 }
 
 static void progress(char *format, ...)
-/* Print message to indicate progress - to web page if in 
+/* Print message to indicate progress - to web page if in
  * interactive mode, to console if not. */
 {
 va_list args;
@@ -253,7 +253,7 @@ for (el = list; el != NULL; el = el->next)
 return seqSize;
 }
 
-void gaussLocale(double mean, double standardDeviation, int localeLen, 
+void gaussLocale(double mean, double standardDeviation, int localeLen,
     double *locale, int *slogLocale)
 /* Fill in locale with values of Gaussian distribution with given mean and standard
  * deviation at positions 0 ... localeLen-1.  Since this is going to clip off the
@@ -843,7 +843,7 @@ for (col = prof->columns; col != NULL; col = col->next)
     {
     if ((baseVal = ntVal[*pat++]) >= 0)
         slogProb += col->slogProb[baseVal] + *softMask++;
-    else 
+    else
         slogProb += slogOneFourth;
     }
 return slogProb;
@@ -887,7 +887,7 @@ for (pos = *pPosList; pos != NULL; pos = next)
     {
     next = pos->next;
     slAddHead(&posCache, pos);
-    }    
+    }
 *pPosList = NULL;
 }
 
@@ -942,7 +942,7 @@ pos->next = NULL;
 return pos;
 }
 
-struct position *positionsInSeq(struct profile *prof, struct seqList *seqEl, int seqSize, 
+struct position *positionsInSeq(struct profile *prof, struct seqList *seqEl, int seqSize,
     int *slogLocProb, int threshold)
 /* Return a list of positions in sequence matching profile at better than threshold levels.
  * (Set threshold to 0 for "better than chance". ) */
@@ -990,7 +990,7 @@ for (i=0; i< endIx; ++i)
 return posList;
 }
 
-struct position *getPositions(struct profile *prof, struct seqList *seqEl, int seqSize, 
+struct position *getPositions(struct profile *prof, struct seqList *seqEl, int seqSize,
     int *slogLocProb, int threshold)
 /* Get the places the profile hits in the seqList. */
 {
@@ -1019,7 +1019,7 @@ else
     }
 }
 
-int scoreAtPositions(struct profile *prof, 
+int scoreAtPositions(struct profile *prof,
     struct position *posList, int posOff, int seqCount)
 /* Score profile given list of positions. */
 {
@@ -1042,14 +1042,14 @@ for (position = posList; position != NULL; position = position->next)
         {
         seq = seqEl->seq;
         dna = seq->dna + pos;
-        oneScore = profilePatSlogProb(dna, seqEl->softMask+pos, prof)  
+        oneScore = profilePatSlogProb(dna, seqEl->softMask+pos, prof)
               - nullPatSlogProb(seq->dna, pos, profSize);
         if (useLocation)
             oneScore +=  slogLocProb[pos-posOff] - slogInvPos;
         }
     else
         oneScore = 0;
-    //oneScore = slog(0.5 + 0.5*sexp(oneScore));    
+    //oneScore = slog(0.5 + 0.5*sexp(oneScore));
     profScore += oneScore;
     }
 return profScore/seqCount;
@@ -1116,7 +1116,7 @@ for (i=0; i<4; ++i)
 if (histTotal * 2 < seqCount)
     return NULL;
 
-col = allocColumn();  
+col = allocColumn();
 for (i=0; i<4; ++i)
     {
     col->slogProb[i] = slog( (double)hist[i]/histTotal);
@@ -1124,7 +1124,7 @@ for (i=0; i<4; ++i)
 return col;
 }
 
-int iterateProfile(struct profile *prof, struct seqList *goodSeq, 
+int iterateProfile(struct profile *prof, struct seqList *goodSeq,
     struct profile **retProfile, boolean erase)
 {
 int profScore = 0;
@@ -1141,7 +1141,7 @@ boolean saveWeight = (retProfile != NULL || erase);
 struct position *posList = NULL, *pos, *newPosList;
 
 
-/* Go through sequence list and collect best hit on each sequence. 
+/* Go through sequence list and collect best hit on each sequence.
  * and score it. */
 makeLocProb(prof->locale.mean, prof->locale.standardDeviation, seqSize);
 for (seqEl = goodSeq; seqEl != NULL; seqEl = seqEl->next)
@@ -1150,7 +1150,7 @@ for (seqEl = goodSeq; seqEl != NULL; seqEl = seqEl->next)
     for (pos = newPosList; pos != NULL; pos = pos->next)
         {
         oneScore = pos->score;
-        //    oneScore = slog(0.5 + 0.5*sexp(oneScore));    
+        //    oneScore = slog(0.5 + 0.5*sexp(oneScore));
         profScore += oneScore;
         if (saveWeight)
             {
@@ -1172,7 +1172,7 @@ for (seqEl = goodSeq; seqEl != NULL; seqEl = seqEl->next)
     }
 profScore /= seqCount;
 
-if (erase)  
+if (erase)
 /* Probabalistically erase hits. */
     {
     int startPos, endPos;
@@ -1215,7 +1215,7 @@ else if (retProfile != NULL)
     struct position *pos;
     int expandConstrainFactor = round(fSlogScale*constrainer/seqCount);    /* Reduce urge to expand. */
     double **tempColProbs = getTempColProbs(profSize);
-    
+
     /* Go through hits and use them to generate next generation
      * of profile. */
     for (pos = posList; pos != NULL; pos = pos->next)
@@ -1265,7 +1265,7 @@ else if (retProfile != NULL)
     newProf->locale.standardDeviation = sd;
 
     /* Get current score of new profile. */
-    profScore = scoreAtPositions(newProf, posList, 0, seqCount);    
+    profScore = scoreAtPositions(newProf, posList, 0, seqCount);
 
     /* See if profile improves by subtracting column from left */
     if ((col = slPopHead(&newProf->columns)) != NULL)
@@ -1648,7 +1648,7 @@ fclose(f);
 
 void pasteToFa(char *varName, char **retFileName, int *retSeqCount, int *retLongestLen)
 /* Returns a (temporary) fa file made from the contents of the CGI variable
- * varName. */ 
+ * varName. */
 {
 static struct tempName tn;
 FILE *f;
@@ -1691,7 +1691,7 @@ if (lines[0][0] == '>') /* Looks like an FA file - just copy it to file. */
         }
     }
 else
-    {     
+    {
     for (i=0; i<lineCount; ++i)
         {
         cleanSeq = lines[i];
@@ -1704,7 +1704,7 @@ else
         if (oneLen > longestLen)
             longestLen = oneLen;
         fprintf(f, ">%d\n%s\n", lineIx, cleanSeq);
-        }    
+        }
     }
 *retFileName = goodName;
 *retSeqCount = seqCount;
@@ -1755,8 +1755,8 @@ if (color.r != lastColor.r || color.b != lastColor.b || color.g != lastColor.g)
     if (firstTextColorSwitch)
         firstTextColorSwitch = FALSE;
     else
-        printf("</FONT>");
-    printf("<FONT COLOR=#%02X%02X%02X>",color.r, color.g, color.b);
+        printf("</span>");
+    printf("<span style='color:#%02X%02X%02X;'>",color.r, color.g, color.b);
     lastColor = color;
     }
 }
@@ -1859,7 +1859,7 @@ for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
             {
             struct position *pos, *posList = NULL;
             makeLocProb(prof->locale.mean, prof->locale.standardDeviation, seqSize);
-            posList = getPositions(prof, seqEl, seqSize, slogLocProb, 0);    
+            posList = getPositions(prof, seqEl, seqSize, slogLocProb, 0);
             for (pos = posList; pos != NULL; pos = pos->next)
                 {
                 /* Colored text. */
@@ -1870,7 +1870,7 @@ for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
                 mix = (double)pos->score/prof->bestIndividualScore;
                 if (mix > 1.0) mix = 1.0;
                 else if (mix < 0.0) mix = 0.0;
-                blendColors(textBgColor, distinctColors[colorIx], mix, &blend); 
+                blendColors(textBgColor, distinctColors[colorIx], mix, &blend);
                 for (i=start; i < end; ++i)
                     colors[i] = blend;
 
@@ -2040,7 +2040,7 @@ switch (nullModel)
 }
 
 static double evenProb[5] = {1.0, 0.25, 0.25, 0.25, 0.25};
- 
+
 void generate(char *faFileName, int numSeq, int lenSeq)
 /* Generate a fa file containing numSeq sequences of lenSeq bases */
 {
@@ -2091,12 +2091,12 @@ goodSeqNameSize = maxSeqNameSize(goodSeq);
 
 makeTempName(&tn, "imp", ".pfl");
 
-printf("<P>Looking for %d motifs in %d sequences. Longest sequence is %d bases.</P>\n", 
+printf("<P>Looking for %d motifs in %d sequences. Longest sequence is %d bases.</P>\n",
     numMotifs, goodSeqListSize, goodSeqElSize);
-printf("<P>Settings are %s location; %d occurrences per sequence; %s align; ", 
+printf("<P>Settings are %s location; %d occurrences per sequence; %s align; ",
     (useLocation ? "use" : "ignore"), maxOcc,
     (leftAlign ? "left" : "right") );
-printf("training weights %s; initial motif size %d; ", 
+printf("training weights %s; initial motif size %d; ",
     (kentishWeights ? "Kentish" : "classical"), defaultTileSize);
 printf("restrain expansionist tendencies %f;  number of sequences in initial scan %d; ",
     constrainer, startScanLimit);
@@ -2105,10 +2105,10 @@ if (backgroundName == NULL)
     backgroundName = badName;
 if (backgroundName == NULL)
     backgroundName = "same as foreground";
-printf("background model %s; background data %s;</P>", 
+printf("background model %s; background data %s;</P>",
     (nullModelCgiName == NULL ? "Markov 0" : nullModelCgiName),
     backgroundName);
-    
+
 printf("<TT><PRE>\n");
 progress("This run would take about %2.1f minutes on a lightly loaded UCSC CSE web server.",
     calcApproximateTime());
@@ -2170,7 +2170,7 @@ leftAlign = cgiBoolean("leftAlign");
 if (cgiVarExists(nullModelCgi))
     {
     nullModelCgiName = cgiEncode(cgiString(nullModelCgi));
-    nullModel = cgiOneChoice(nullModelCgi, nullModelChoices, ArraySize(nullModelChoices));    
+    nullModel = cgiOneChoice(nullModelCgi, nullModelChoices, ArraySize(nullModelChoices));
     }
 if (cgiVarExists("maxOcc"))
     maxOcc = cgiInt("maxOcc");
@@ -2308,7 +2308,7 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
 /* Print out html header.  Make background color brilliant white. */
 puts("Content-Type:text/html\n");
 printf("<HEAD>\n<TITLE>%s</TITLE>\n</HEAD>\n\n", "Improbizer Results");
-puts("<BODY BGCOLOR=#FFFFFF>\n");
+puts("<BODY BGCOLOR='#FFFFFF'>\n");
 
 /* Wrap error handling et. around doMiddle. */
 htmEmptyShell(doMiddle, NULL);

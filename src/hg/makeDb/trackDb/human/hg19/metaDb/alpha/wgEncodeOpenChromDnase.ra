@@ -1424,6 +1424,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseGm12878Validation
 objType file
+attic auxSup
 cell GM12878
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -4903,6 +4904,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseK562Validation
 objType file
+attic auxSup
 cell K562
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -7309,4 +7311,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1708315814
+# MAGIC: 1708665170

@@ -58,14 +58,13 @@
 			    to actually transferring the data.  For instance, to find
 			    the size of the /gbdb directory, run:<br>
 <PRE>
-rsync -navzP rsync://hgdownload.cse.ucsc.edu/gbdb/
+rsync -navP rsync://hgdownload.cse.ucsc.edu/gbdb/
 </PRE>
 The rsync options used in this command are:
 <PRE>
 -n, --dry-run         show what would have been transferred
 -a, --archive         archive mode, equivalent to -rlptgoD
 -v, --verbose         increase verbosity
--z, --compress        compress file data
 -P                    equivalent to --partial --progress
 </PRE>
 			    <P>
@@ -190,7 +189,7 @@ installed on your system, obtain it from
 <LI> Test the rsync connection:
 <BR>
 <PRE>
-rsync -navz --progress rsync://hgdownload.cse.ucsc.edu
+rsync -nav --progress rsync://hgdownload.cse.ucsc.edu
 </PRE>
 This should respond with:
 <PRE>
@@ -206,7 +205,7 @@ mysql           UCSC Human Genome Raw Mysql Tables
 <LI>Determine the destination of the copy ($WEBROOT) and fire off the production copy (270 Mb)<BR>
 <em>The trailing slash is important!</em><BR>
 <PRE>
-rsync -avzP rsync://hgdownload.cse.ucsc.edu/htdocs/ $WEBROOT/
+rsync -avP rsync://hgdownload.cse.ucsc.edu/htdocs/ $WEBROOT/
 </PRE>
 </OL>
 <P>
@@ -224,7 +223,7 @@ Human March 2006 full data set, do:
 <P>
 <PRE>
 mkdir -p $WEBROOT/goldenPath/hg18/database/
-rsync -avzP --delete --max-delete=20 \
+rsync -avP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hg18/database/ \
   $WEBROOT/goldenPath/hg18/database/
 </PRE>
@@ -238,7 +237,7 @@ rsync -avzP --delete --max-delete=20 \
 <LI>You will need the portions of /gbdb used by the browser:
 <BR>
 <PRE>
-rsync -avzP --delete --max-delete=20 \
+rsync -avP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/gbdb/ /gbdb/
 </PRE>
 </OL>
@@ -360,12 +359,12 @@ database is restricted to read-only.
 
 <LI>Pre-compiled Red-Hat (2.6.12-1.1381_FC3smp) AMD Opteron x86_64 64-bit
 binaries can be fetched with the rsync command:<BR><BR>
-<TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ $CGI_BIN/ </TT><BR><BR>
+<TT> rsync -avP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ $CGI_BIN/ </TT><BR><BR>
 There are a number of data files that are also used in this directory.
 This rsync will fetch them all.  If you need i386 (x86) 32-bit binaries, please
 use the following rsync in addition to and after the above rsync,
 to replace the 64 bit binaries:<BR><BR>
-<TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin-i386/ $CGI_BIN/ </TT>
+<TT> rsync -avP rsync://hgdownload.cse.ucsc.edu/cgi-bin-i386/ $CGI_BIN/ </TT>
 <BR><BR>
 
 <LI>In the CGI_BIN directory, make an 
@@ -530,7 +529,7 @@ that runs the web server write access to it.
 <OL type="a">
 <LI>Download a copy of the dumped hgFixed tables.
 <PRE>
-rsync -avzP --delete --max-delete=20 \
+rsync -avP --delete --max-delete=20 \
    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hgFixed/ \
    $WEBROOT/goldenPath/hgFixed/
 </PRE>
@@ -547,7 +546,7 @@ mysql&gt; create database hgFixed
 <OL type="a">
 <LI>Download a copy of the dumped protein tables.
 <PRE>
-rsync -avzP --delete --max-delete=20 \
+rsync -avP --delete --max-delete=20 \
     rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteinDB/ \
     $WEBROOT/goldenPath/proteinDB/
 </PRE>
@@ -577,7 +576,7 @@ and so on
 
 <LI>Download a copy of the dumped UniProt tables.
 <PRE>
-rsync -avzP --delete --max-delete=20 \
+rsync -avP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/uniProt/ \
   $WEBROOT/goldenPath/uniProt/
 </PRE>
@@ -604,7 +603,7 @@ and so on
 <OL type="a">
 <LI>Download a copy of the dumped visiGene tables.
 <PRE>
-rsync -avzP --delete --max-delete=20 \
+rsync -avP --delete --max-delete=20 \
    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/visiGene/ \
    $WEBROOT/goldenPath/visiGene/
 </PRE>

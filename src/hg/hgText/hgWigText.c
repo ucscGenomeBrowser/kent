@@ -278,7 +278,7 @@ if ( (struct hashEl *)NULL == hashLookup(chromsDone[tableId],chrom))
     hashAdd(chromsDone[tableId],chrom,NULL);
 }
 
-void wigMakeBedList(char *database, char *table, char *chrom, 
+void wigMakeBedList(char *database, char *table, char *chrom,
 	char *constraints, int tableId)
 {
 char *setting = cartCgiUsualString(cart, "tbWigCount", ctWigCountMenu[1]);
@@ -327,11 +327,11 @@ sr = sqlMustGetResult(conn,query);
 row = sqlNextRow(sr);
 
 // For some reason BORDER=1 does not work in our web.c nested table scheme.
-// So use web.c's trick of using an enclosing table to provide a border.  
+// So use web.c's trick of using an enclosing table to provide a border.
 puts("<P><!--outer table is for border purposes-->" "\n"
-     "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
+     "<TABLE BGCOLOR='#" HG_COL_BORDER "' BORDER=0 CELLSPACING=0 CELLPADDING=1><TR><TD>");
 
-puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
+puts("<TABLE BGCOLOR='#" HG_COL_INSIDE "' BORDER=1 CELLSPACING=0>");
 
 if (row != NULL)
     {
@@ -859,7 +859,7 @@ if (doCt)
 	      "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
 	      redirDelay, browserUrl);
 	webStartHeader(cart, headerText,
-		       "Table Browser: %s %s: %s", hOrganism(database), 
+		       "Table Browser: %s %s: %s", hOrganism(database),
 		       freezeName, getCtPhase);
 	printf("You will be automatically redirected to the genome browser in\n"
 	       "%d seconds, or you can <BR>\n"

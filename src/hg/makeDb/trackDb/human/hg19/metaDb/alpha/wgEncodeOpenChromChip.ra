@@ -729,6 +729,7 @@ view Signal
 metaObject wgEncodeOpenChromChipGm12878CmycValidation
 objType file
 antibody c-Myc
+attic auxSup
 cell GM12878
 composite wgEncodeOpenChromChip
 controlId GM12878/Input
@@ -960,6 +961,7 @@ view Signal
 metaObject wgEncodeOpenChromChipGm12878CtcfValidation
 objType file
 antibody CTCF
+attic auxSup
 cell GM12878
 composite wgEncodeOpenChromChip
 controlId GM12878/Input
@@ -1216,6 +1218,7 @@ view Signal
 metaObject wgEncodeOpenChromChipGm12878Pol2Validation
 objType file
 antibody Pol2
+attic auxSup
 cell GM12878
 composite wgEncodeOpenChromChip
 controlId GM12878/Input
@@ -4398,6 +4401,7 @@ view Signal
 metaObject wgEncodeOpenChromChipK562CmycValidation
 objType file
 antibody c-Myc
+attic auxSup
 cell K562
 composite wgEncodeOpenChromChip
 controlId K562/Input
@@ -4635,6 +4639,7 @@ view Signal
 metaObject wgEncodeOpenChromChipK562CtcfValidation
 objType file
 antibody CTCF
+attic auxSup
 cell K562
 composite wgEncodeOpenChromChip
 controlId K562/Input
@@ -4892,6 +4897,7 @@ view Signal
 metaObject wgEncodeOpenChromChipK562Pol2Validation
 objType file
 antibody Pol2
+attic auxSup
 cell K562
 composite wgEncodeOpenChromChip
 controlId K562/Input
@@ -6567,4 +6573,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: 866286929
+# MAGIC: 867334997

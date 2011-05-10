@@ -123,7 +123,7 @@ printf("</FORM>\n");
 static void makeGenomePrint()
 {
 getDbAndGenome(cart, &database, &organism, oldVars);
-printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s  ", 
+printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s  ",
 	organism, hFreezeDate(database));
 }
 
@@ -133,8 +133,8 @@ void hgHubConnectPublic()
 printf("<B>List of Public Hubs</B><BR>");
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
-safef(query, sizeof(query), "select id,shortLabel,longLabel,errorMessage,hubUrl,dbList from %s", 
-	hubConnectTableName); 
+safef(query, sizeof(query), "select id,shortLabel,longLabel,errorMessage,hubUrl,dbList from %s",
+	hubConnectTableName);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 
@@ -221,7 +221,7 @@ puts("<P>");
 
 /* row for error message */
 if (err)
-    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT COLOR='RED'>Error</I></FONT>&nbsp;%s</B><P>", err);
+    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:red; font-style:italic;'>Error</span>&nbsp;%s</B><P>", err);
 
 printf("Enter URL:");
 
