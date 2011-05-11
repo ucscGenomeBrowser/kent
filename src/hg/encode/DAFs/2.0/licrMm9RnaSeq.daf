@@ -1,13 +1,13 @@
 # Data Agreement File for LICR RNA-seq experiments for mm9  
 
-#$Revision: 1.1 $
+#$Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
 
 
 # The header for the associated DDF should look like this:
-#files   view    cell   sex     age     strain  replicate rnaExtract    seqPlatform  tissueSourceType      softwareVersion labVersion
+#files   view    cell   sex     age     strain  replicate rnaExtract	localization    seqPlatform  tissueSourceType      softwareVersion labVersion
 
 
 #Explanation of DDF terms
@@ -21,6 +21,7 @@
 #control: The input used as control for ChIP-seq data. The control registerd vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Controls
 #replicate: The Replicate number. The replication number of a given experiment.
 #rnaExtract:   The RNA extract.  http://hgwdev.cse.ucsc.edu/ENCODE/otherTerms.html#rnaExtract
+#localization   the cellular compartment (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#localization)
 #seqPlatform: The sequencing platform.The sequence platformregistered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sequence_Platforms
 #tissueSourceType: The collection srouce of the tissue, either Pooled or Individual mice
 #softwareVersion: Free text for the lab to keep track of software used in processed data
@@ -35,10 +36,10 @@ lab               Licr-m
 dataType          RnaSeq 
 compositeSuffix   LicrRnaSeq
 group             Expression
-variables         cell,rnaExtract,sex,age,strain
+variables         cell,localization,rnaExtract,sex,age,strain
 assembly          mm9
 
-validationSettings validateFiles.bam:mismatches=2,matchFirst=25,nMatch;validateFiles.fastq:quick=1000
+validationSettings validateFiles.bam:mismatches=2,matchFirst=28,nMatch;validateFiles.fastq:quick=1000
 
 # Track/view definition
 view             Signal
