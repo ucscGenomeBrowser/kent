@@ -8768,12 +8768,12 @@ type attic
 description Unverified files supplemental at experiment level
 
 term auxValid
-tag auxV
+tag auxval
 type attic
 description Validated files supplemental to experiments 
 
 term auxExp
-tag auxE
+tag auxexp
 type attic
 description Supplemental experiments 
 
