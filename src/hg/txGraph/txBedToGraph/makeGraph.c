@@ -93,11 +93,11 @@ static boolean encloses(struct edge *a, struct edge *b)
 if (a->start->position <= b->start->position
     && a->end->position >= b->end->position)
     {
-    return(true);
+    return(TRUE);
     } 
 else 
     {
-    return(false);
+    return(FALSE);
     }
 }
 
