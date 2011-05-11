@@ -188,6 +188,20 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 hTableEnd();
 }
 
+static void pgSnpCodingDetail(struct vcfRecord *rec)
+/* Translate rec into pgSnp (with proper chrom name) and call Belinda's
+ * coding effect predictor from pgSnp details. */
+{
+if (hTableExists(database, "knownGene"))
+    {
+    struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
+    if (!sameString(rec->chrom, seqName))
+	// rec->chrom might be missing "chr" prefix:
+	pgs->chrom = seqName;
+    printSeqCodDisplay(database, pgs);
+    }
+}
+
 static void vcfRecordDetails(struct vcfRecord *rec)
 /* Display the contents of a single line of VCF. */
 {
@@ -199,6 +213,7 @@ if (rec->qual != 0.0)
     printf("<B>Call quality:</B> %.1f<BR>\n", rec->qual);
 vcfFilterDetails(rec);
 vcfInfoDetails(rec);
+pgSnpCodingDetail(rec);
 vcfGenotypesDetails(rec);
 }
 
