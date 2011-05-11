@@ -793,6 +793,7 @@ maxHeightPixels 128:64:20
         longLabel NKI Nuclear Lamina Associated Domains (LaminB1 DamID)
         group regulation
         priority 300
+	html laminB1Mm9
 
 #ES
 track laminB1_ES
@@ -810,6 +811,7 @@ smoothingWindow 2
 type wig -5.572 4.617
 spanList 60
 viewLimits -2:2
+html laminB1Mm9
 
 #NP
 track laminB1_NP
@@ -827,6 +829,7 @@ smoothingWindow 2
 type wig -5.998 4.292 
 spanList 60
 viewLimits -2:2
+html laminB1Mm9
 
 #AC
 track laminB1_AC
@@ -844,6 +847,7 @@ smoothingWindow 2
 type wig -5.742 4.293
 spanList 60
 viewLimits -2:2
+html laminB1Mm9
 
 #EF
 track laminB1_EF
@@ -861,4 +865,5 @@ smoothingWindow 2
 type wig -5.444 4.922
 spanList 60
 viewLimits -2:2
+html laminB1Mm9
 
