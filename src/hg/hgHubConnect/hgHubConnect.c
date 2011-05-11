@@ -329,6 +329,10 @@ else
     cartWebStart(cart, NULL, pageTitle);
     checkForNewHub(cart);
 
+    printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
+    cartSaveSession(cart);
+
+    cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
     printf(
        "<P>Track data hubs are collections of tracks from outside of UCSC that can be imported into "
        "the Genome Browser.  To import a public hub check the box in the list below. "
@@ -342,15 +346,12 @@ else
     printf("Contact <A HREF=\"mailto:genome@soe.ucsc.edu\"> genome@soe.ucsc.edu </A>to add a public hub.</P>\n");
     puts("<BR>");
     hgHubConnectPrivate();
-    makeNewHubButton();
     puts("<BR>");
 
-    printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
-    cartSaveSession(cart);
-
-    cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
     cgiMakeButton("Submit", "Use Selected Hubs");
     puts("</FORM>");
+
+    makeNewHubButton();
 
     }
 cartWebEnd();
