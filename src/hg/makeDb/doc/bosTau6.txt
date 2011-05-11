@@ -196,6 +196,13 @@ taxId 9913
     #    1279368433 lower) in 3317 sequences in 1 files
     # %47.91 masked total, %48.28 masked real
 
+    # double check with featureBits
+    featureBits -countGaps bosTau4 gap
+    # 186143830 bases of 2917974530 (6.379%) in intersection
+
+    rm /gbdb/bosTau6/bosTau6.2bit
+    ln -s `pwd`/bosTau6.2bit /gbdb/bosTau6/bosTau6.2bit
+
 #########################################################################
 # Marking *all* gaps - they are not all in the AGP file
 #	(DONE - 2011-05-10 - Chin)
@@ -358,15 +365,16 @@ bosTau6.refseq.mrna.xeno.loadDesc  = yes
     make etc-update
 
 #########################################################################
-# reset position to RHO location as found from blat of hg19 RHO gene
-#	(working - 2010-04-15 - Chin)
+# reset default position (DONE - 2011-05-11 - Chin)
+#       Reset default position to an area of chr3 with a number of genes
     hgsql -e \
-'update dbDb set defaultPos="chr19:53,315,047-53,326,013" where name="bosTau6";' \
-	hgcentraltest
+'update dbDb set defaultPos="chr3:21,592,157-21,596,916" where name="bosTau6";' \
+        hgcentraltest
+
 
 ############################################################################
 # ctgPos2 track - showing clone sequence locations on chromosomes
-#	(working 2011-02-03 - Chin)
+#	(DONE 2011-05-11 - Chin)
 # NOTE - create bosTau6 entry in all.joiner since this is a new species
     mkdir /hive/data/genomes/bosTau6/bed/ctgPos2
     cd /hive/data/genomes/bosTau6/bed/ctgPos2
@@ -390,7 +398,7 @@ while (my $line = <FH>) {
     next if ($line =~ m/^#/);
     chomp $line;
     my @a = split('\s+', $line);
-    next if ($a[4] =~ m/^N$/);
+    next if ($a[4] =~ m/^U$/);
     my $chrSize = $a[2]-$a[1]+1;
     my $ctgSize = $a[7]-$a[6]+1;
     die "sizes differ $chrSize != $ctgSize\n$line\n" if ($chrSize != $ctgSize);
@@ -411,12 +419,12 @@ do
 done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 
     hgLoadSqlTab bosTau6 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
-    # add the track ctgPos2 to src/hg/makeDb/trackDb/cow/trackDb.ra
+    # add the track ctgPos2 to src/hg/makeDb/trackDb/cow/bosTau6/trackDb.ra
     # at src/makeDb/trackdb do "make update DBS=bosTau6" or/and "make alpha"
     # based on result of
     # hgsql -N -e "select type from ctgPos2;" bosTau6 | sort | uniq
     # W
-    # prepare the src/hg/makeDb/trackDb/cow/ctgPos2.html 
+    # prepare the src/hg/makeDb/trackDb/cow/bosTau6/ctgPos2.html 
 
 
 
