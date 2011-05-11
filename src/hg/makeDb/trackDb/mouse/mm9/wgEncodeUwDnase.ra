@@ -8,12 +8,12 @@
 #	   - Default View selections
 #		       - Hotspots = pack
 #		       - Peaks = pack
-#		       - Raw Signal = full
+#		       - Signal = full
 #	   - Short Labels: 
 #		       Template:[cell [Age] [view] [Rep #]
 #		       - Views: For consistency sake view will be
 #		               - Peaks = Pk
-#		               - Raw Signal = Sig
+#		               - Signal = Sig
 #		               - Hotspots = Hspt 
 #		- Replicate #
 #	-Attic
@@ -24,7 +24,7 @@ compositeTrack on
 shortLabel UW DNaseI HS
 longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
 group regulation
-subGroup1 view Views Hotspots=Hotspots Peaks=Peaks RawSignal=Raw_Signal
+subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line 3134=3134 416B=416B A20=A20 BCellCD19p=B-cell_(CD19+) BCellCD43N=B-cell_(CD43-) Cerebellum=Cerebellum Cerebrum=Cerebrum ESCJ7=ES-CJ7 Fat=FatPad Fibroblast=Fibroblast Heart=Heart Kidney=Kidney Liver=Liver Lung=Lung MEL=MEL NIH3T3=NIH-3T3 Patski=Patski TNaive=T-Naive TReg=TReg WholeBrain=Whole_Brain ZHBTC4=ZhBTc4
 subGroup3 strain Strain BALBCANN=BALB/cAnN B6D2F1J=B6D2F1/J C57BL6=C57BL/6 NIHS=NIH/Swiss RIII=RIII S129=129 129Ola=129/Ola SPBL6=Spretus.BL6-Xist  UKN=Unknown
 subGroup4 sex Sex M=M
@@ -1123,8 +1123,8 @@ wgEncode 1
         #display no
 
 	track wgEncodeUwDnaseViewRawSignal
-	shortLabel Raw Signal
-	view RawSignal
+	shortLabel Signal
+	view Signal
 	visibility full
 	parent wgEncodeUwDnase
 	viewLimits 1:100
@@ -1137,8 +1137,8 @@ wgEncode 1
 		track wgEncodeUwDnaseCerebellumC57bl6MAdult8wksRawRep1
 		parent wgEncodeUwDnaseViewRawSignal
 		shortLabel Cerebellum Sig 1
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Cerebellum cells)
-		subGroups view=RawSignal age=adult8wks cellType=Cerebellum sex=M strain=C57BL6 rep=rep1
+		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Cerebellum cells)
+		subGroups view=Signal age=adult8wks cellType=Cerebellum sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 21846.000000
 		color 153,38,0
 		# subId=1967 dateSubmitted=2010-07-21
@@ -1146,8 +1146,8 @@ wgEncode 1
 		track wgEncodeUwDnase416bC57bl6MAdult8wksRawRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel 416B Sig 2
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in 416B cells)
-		subGroups view=RawSignal age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep2
+		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in 416B cells)
+		subGroups view=Signal age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep2
 		type bigWig 1.000000 74554.000000
 		color 153,38,0
 		# subId=1997 dateSubmitted=2010-07-22
@@ -1155,8 +1155,8 @@ wgEncode 1
 		track wgEncodeUwDnase416bC57bl6MAdult8wksRawRep1
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel 416B Sig 1
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in 416B cells)
-		subGroups view=RawSignal age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep1
+		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in 416B cells)
+		subGroups view=Signal age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep1
 		type bigWig 1.000000 109673.000000
 		color 153,38,0
 		# subId=2000 dateSubmitted=2010-07-23
@@ -1164,8 +1164,8 @@ wgEncode 1
 		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep2
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel B-cell_(CD19+) Sig 2
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in B-cell_(CD19+) cells)
-		subGroups view=RawSignal age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep2
+		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in B-cell_(CD19+) cells)
+		subGroups view=Signal age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 159668.000000
 		color 153,38,0
 		# subId=2002 dateSubmitted=2010-07-28
@@ -1173,8 +1173,8 @@ wgEncode 1
 		track wgEncodeUwDnaseEscj7S129ME0RawRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel ES-CJ7 Sig 2
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in ES-CJ7 cells)
-		subGroups view=RawSignal age=E0 cellType=ESCJ7 sex=M strain=S129 rep=rep2
+		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in ES-CJ7 cells)
+		subGroups view=Signal age=E0 cellType=ESCJ7 sex=M strain=S129 rep=rep2
 		type bigWig 1.000000 85510.000000
 		color 153,38,0
 		# subId=2003 dateSubmitted=2010-07-28
@@ -1182,8 +1182,8 @@ wgEncode 1
 		track wgEncodeUwDnaseEscj7S129ME0RawRep1
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel ES-CJ7 Sig 1
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in ES-CJ7 cells)
-		subGroups view=RawSignal age=E0 cellType=ESCJ7 sex=M strain=S129 rep=rep1
+		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in ES-CJ7 cells)
+		subGroups view=Signal age=E0 cellType=ESCJ7 sex=M strain=S129 rep=rep1
 		type bigWig 1.000000 74881.000000
 		color 153,38,0
 		# subId=2004 dateSubmitted=2010-07-28
@@ -1191,8 +1191,8 @@ wgEncode 1
 		track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Fibroblast Sig 2
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in Fibroblast cells)
-		subGroups view=RawSignal age=adult8wks cellType=Fibroblast sex=M strain=C57BL6 rep=rep2
+		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in Fibroblast cells)
+		subGroups view=Signal age=adult8wks cellType=Fibroblast sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 91985.000000
 		color 153,38,0
 		# subId=2005 dateSubmitted=2010-07-23
@@ -1200,8 +1200,8 @@ wgEncode 1
 		track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawRep1
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Fibroblast Sig 1
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Fibroblast cells)
-		subGroups view=RawSignal age=adult8wks cellType=Fibroblast sex=M strain=C57BL6 rep=rep1
+		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Fibroblast cells)
+		subGroups view=Signal age=adult8wks cellType=Fibroblast sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 76418.000000
 		color 153,38,0
 		# subId=2006 dateSubmitted=2010-07-23
@@ -1209,8 +1209,8 @@ wgEncode 1
 		track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep1
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Liver Raw 1
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Liver cells)
-		subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep1
+		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Liver cells)
+		subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 49169.000000
 		color 153,38,0
 		# subId=2008 dateSubmitted=2010-07-23
@@ -1218,8 +1218,8 @@ wgEncode 1
 		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep7
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel Liver Sig 7
-		#longLabel ENCODE UW DNaseI HS Raw Signal Replicate 7 (in Liver cells)
-		#subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep7
+		#longLabel ENCODE UW DNaseI HS Signal Replicate 7 (in Liver cells)
+		#subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep7
 		#type bigWig 1.000000 26836.000000
 		#color 153,38,0
 		# subId=2009 dateSubmitted=2010-07-23
@@ -1228,8 +1228,8 @@ wgEncode 1
 		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep9
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel Liver Raw 9
-		#longLabel ENCODE UW DNaseI HS Raw Signal Replicate 9 (in Liver cells)
-		#subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep9
+		#longLabel ENCODE UW DNaseI HS Signal Replicate 9 (in Liver cells)
+		#subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep9
 		#type bigWig 1.000000 32841.000000
 		#color 153,38,0
 		# subId=2010 dateSubmitted=2010-07-23
@@ -1238,8 +1238,8 @@ wgEncode 1
 		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep3
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel Liver Raw 3
-		#longLabel ENCODE UW DNaseI HS Raw Signal Replicate 3 (in Liver cells)
-		#subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep3
+		#longLabel ENCODE UW DNaseI HS Signal Replicate 3 (in Liver cells)
+		#subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep3
 		#type bigWig 1.000000 31463.000000
 		#color 153,38,0
 		# subId=2011 dateSubmitted=2010-07-24
@@ -1248,8 +1248,8 @@ wgEncode 1
 		track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Liver Sig 2
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in Liver cells)
-		subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep2
+		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in Liver cells)
+		subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 29008.000000
 		color 153,38,0
 		# subId=2012 dateSubmitted=2010-07-24
@@ -1257,8 +1257,8 @@ wgEncode 1
 		track wgEncodeUwDnaseKidneyC57bl6MAdult8wksRawRep1
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Kidney Sig 1
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Kidney cells)
-		subGroups view=RawSignal age=adult8wks cellType=Kidney sex=M strain=C57BL6 rep=rep1
+		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Kidney cells)
+		subGroups view=Signal age=adult8wks cellType=Kidney sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 74651.000000
 		color 153,38,0
 		# subId=2013 dateSubmitted=2010-07-24
@@ -1266,8 +1266,8 @@ wgEncode 1
 		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep8
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel Liver Raw 8
-		#longLabel ENCODE UW DNaseI HS Raw Signal Replicate 8 (in Liver cells)
-		#subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep8
+		#longLabel ENCODE UW DNaseI HS Signal Replicate 8 (in Liver cells)
+		#subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep8
 		#type bigWig 1.000000 30303.000000
 		#color 153,38,0
 		# subId=2014 dateSubmitted=2010-07-24
@@ -1276,8 +1276,8 @@ wgEncode 1
 		track wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Lung Sig 2
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in Lung cells)
-		subGroups view=RawSignal age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep2
+		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in Lung cells)
+		subGroups view=Signal age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 34840.000000
 		color 153,38,0
 		# subId=2015 dateSubmitted=2010-07-24
@@ -1285,8 +1285,8 @@ wgEncode 1
 		track wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep1
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel MEL Sig 1
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in MEL cells)
-		subGroups view=RawSignal age=immortal cellType=MEL sex=M strain=UKN rep=rep1
+		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in MEL cells)
+		subGroups view=Signal age=immortal cellType=MEL sex=M strain=UKN rep=rep1
 		type bigWig 1.000000 123367.000000
 		color 46,0,184
 		# subId=2017 dateSubmitted=2010-07-24
@@ -1294,8 +1294,8 @@ wgEncode 1
 		#track wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep3
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel MEL Raw 3
-		#longLabel ENCODE UW DNaseI HS Raw Signal Replicate 3 (in MEL cells)
-		#subGroups view=RawSignal age=immortal cellType=MEL sex=M strain=UKN rep=rep3
+		#longLabel ENCODE UW DNaseI HS Signal Replicate 3 (in MEL cells)
+		#subGroups view=Signal age=immortal cellType=MEL sex=M strain=UKN rep=rep3
 		#type bigWig 1.000000 121025.000000
 		#color 46,0,184
 		# subId=2018 dateSubmitted=2010-07-24
@@ -1304,8 +1304,8 @@ wgEncode 1
 		track wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel MEL Sig 2
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in MEL cells)
-		subGroups view=RawSignal age=immortal cellType=MEL sex=M strain=UKN rep=rep2
+		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in MEL cells)
+		subGroups view=Signal age=immortal cellType=MEL sex=M strain=UKN rep=rep2
 		type bigWig 1.000000 228690.000000
 		color 46,0,184
 		# subId=2019 dateSubmitted=2010-07-24
@@ -1313,8 +1313,8 @@ wgEncode 1
 		track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel T-Naive Sig 2
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in T-Naive cells)
-		subGroups view=RawSignal age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep2
+		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in T-Naive cells)
+		subGroups view=Signal age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 86604.000000
 		color 153,38,0
 		# subId=2020 dateSubmitted=2010-07-24
@@ -1322,8 +1322,8 @@ wgEncode 1
 		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel WholeBrain Sig 2
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in WholeBrain cells)
-		subGroups view=RawSignal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep2
+		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in WholeBrain cells)
+		subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 52176.000000
 		color 153,38,0
 		# subId=2021 dateSubmitted=2010-07-28
@@ -1331,8 +1331,8 @@ wgEncode 1
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep4
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel WholeBrain Raw 4
-		#longLabel ENCODE UW DNaseI HS Raw Signal Replicate 4 (in WholeBrain cells)
-		#subGroups view=RawSignal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep4
+		#longLabel ENCODE UW DNaseI HS Signal Replicate 4 (in WholeBrain cells)
+		#subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep4
 		#type bigWig 1.000000 37454.000000
 		#color 153,38,0
 		# subId=2022 dateSubmitted=2010-07-28
@@ -1341,8 +1341,8 @@ wgEncode 1
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep6
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel WholeBrain Raw 6
-		#longLabel ENCODE UW DNaseI HS Raw Signal Replicate 6 (in WholeBrain cells)
-		#subGroups view=RawSignal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep6
+		#longLabel ENCODE UW DNaseI HS Signal Replicate 6 (in WholeBrain cells)
+		#subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep6
 		#type bigWig 1.000000 39028.000000
 		#color 153,38,0
 		# subId=2023 dateSubmitted=2010-07-28
@@ -1351,8 +1351,8 @@ wgEncode 1
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep5
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel WholeBrain Raw 5
-		#longLabel ENCODE UW DNaseI HS Raw Signal Replicate 5 (in WholeBrain cells)
-		#subGroups view=RawSignal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep5
+		#longLabel ENCODE UW DNaseI HS Signal Replicate 5 (in WholeBrain cells)
+		#subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep5
 		#type bigWig 1.000000 77130.000000
 		#color 153,38,0
 		# subId=2024 dateSubmitted=2010-07-28
@@ -1361,8 +1361,8 @@ wgEncode 1
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep3
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel WholeBrain Raw 3
-		#longLabel ENCODE UW DNaseI HS Raw Signal Replicate 3 (in WholeBrain cells)
-		#subGroups view=RawSignal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep3
+		#longLabel ENCODE UW DNaseI HS Signal Replicate 3 (in WholeBrain cells)
+		#subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep3
 		#type bigWig 1.000000 39773.000000
 		#color 153,38,0
 		# subId=2025 dateSubmitted=2010-07-28
@@ -1371,8 +1371,8 @@ wgEncode 1
 		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep1
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel WholeBrain Sig 1
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in WholeBrain cells)
-		subGroups view=RawSignal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
+		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in WholeBrain cells)
+		subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 27364.000000
 		color 153,38,0
 		# subId=2026 dateSubmitted=2010-07-28
@@ -1380,8 +1380,8 @@ wgEncode 1
 		track wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep1
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel WholeBrain Sig 1
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in WholeBrain cells)
-		subGroups view=RawSignal age=E14half cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
+		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in WholeBrain cells)
+		subGroups view=Signal age=E14half cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 32455.000000
 		color 153,38,0
 		# subId=2027 dateSubmitted=2010-07-28
@@ -1389,8 +1389,8 @@ wgEncode 1
 		track wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel WholeBrain Sig 2
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in WholeBrain cells)
-		subGroups view=RawSignal age=E14half cellType=WholeBrain sex=M strain=C57BL6 rep=rep2
+		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in WholeBrain cells)
+		subGroups view=Signal age=E14half cellType=WholeBrain sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 26788.000000
 		color 153,38,0
 		# subId=2028 dateSubmitted=2010-07-27
@@ -1398,8 +1398,8 @@ wgEncode 1
 		#track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep3
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel Cerebrum Raw 3
-		#longLabel ENCODE UW DNaseI HS Raw Signal Replicate 3 (in Cerebrum cells)
-		#subGroups view=RawSignal age=adult8wks cellType=Cerebrum sex=M strain=C57BL6 rep=rep3
+		#longLabel ENCODE UW DNaseI HS Signal Replicate 3 (in Cerebrum cells)
+		#subGroups view=Signal age=adult8wks cellType=Cerebrum sex=M strain=C57BL6 rep=rep3
 		#type bigWig 1.000000 20708.000000
 		#color 153,38,0
 		# subId=2001 dateSubmitted=2010-07-23
@@ -1408,8 +1408,8 @@ wgEncode 1
 		track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Cerebrum Sig 2
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in Cerebrum cells)
-		subGroups view=RawSignal age=adult8wks cellType=Cerebrum sex=M strain=C57BL6 rep=rep2
+		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in Cerebrum cells)
+		subGroups view=Signal age=adult8wks cellType=Cerebrum sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 19185.000000
 		color 153,38,0
 		# subId=1998 dateSubmitted=2010-07-22
@@ -1417,8 +1417,8 @@ wgEncode 1
 		track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep1
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel Cerebrum Sig 1
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Cerebrum cells)
-		subGroups view=RawSignal age=adult8wks cellType=Cerebrum sex=M strain=C57BL6 rep=rep1
+		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Cerebrum cells)
+		subGroups view=Signal age=adult8wks cellType=Cerebrum sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 40784.000000
 		color 153,38,0
 		# subId=1999 dateSubmitted=2010-07-23
@@ -1426,8 +1426,8 @@ wgEncode 1
 		track wgEncodeUwDnase3134RiiiMImmortalRawRep1
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel 3134 Sig 1
-		longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in 3134 cells)
-		subGroups view=RawSignal age=immortal cellType=3134 sex=M strain=RIII rep=rep1
+		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in 3134 cells)
+		subGroups view=Signal age=immortal cellType=3134 sex=M strain=RIII rep=rep1
 		type bigWig 1.000000 53562.000000
 		color 153,38,0
 		# subId=2016 dateSubmitted=2010-07-24
@@ -1435,8 +1435,8 @@ wgEncode 1
         track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel T-Naive Raw 1
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in T-Naive cells)
-        subGroups view=RawSignal age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep1
+        longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in T-Naive cells)
+        subGroups view=Signal age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 87148.000000
         color 153,38,0
         # subId=3890 dateSubmitted=2011-04-18
@@ -1444,8 +1444,8 @@ wgEncode 1
         track wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Lung Raw 1
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Lung cells)
-        subGroups view=RawSignal age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep1
+        longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Lung cells)
+        subGroups view=Signal age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 33112.000000
         color 153,38,0
         # subId=3906 dateSubmitted=2011-04-19
@@ -1453,8 +1453,8 @@ wgEncode 1
         track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel B-cell_(CD19+) Raw 1
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in B-cell_(CD19+) cells)
-        subGroups view=RawSignal age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep1
+        longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in B-cell_(CD19+) cells)
+        subGroups view=Signal age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 84233.000000
         color 153,38,0
         # subId=3891 dateSubmitted=2011-04-19
@@ -1462,8 +1462,8 @@ wgEncode 1
         track wgEncodeUwDnaseHeartC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Heart Raw 1
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Heart cells)
-        subGroups view=RawSignal age=adult8wks cellType=Heart sex=M strain=C57BL6 rep=rep1
+        longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Heart cells)
+        subGroups view=Signal age=adult8wks cellType=Heart sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 35686.000000
         color 153,38,0
         # subId=3912 dateSubmitted=2011-04-19
@@ -1471,8 +1471,8 @@ wgEncode 1
         track wgEncodeUwDnaseKidneyC57bl6MAdult8wksRawRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Kidney Raw 2
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in Kidney cells)
-        subGroups view=RawSignal age=adult8wks cellType=Kidney sex=M strain=C57BL6 rep=rep2
+        longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in Kidney cells)
+        subGroups view=Signal age=adult8wks cellType=Kidney sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 39287.000000
         color 153,38,0
         # subId=3900 dateSubmitted=2011-04-19
@@ -1480,8 +1480,8 @@ wgEncode 1
         track wgEncodeUwDnaseCbellumC57bl6MAdult8wksRawRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Cerebellum Raw 2
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in Cerebellum cells)
-        subGroups view=RawSignal age=adult8wks cellType=Cerebellum sex=M strain=C57BL6 rep=rep2
+        longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in Cerebellum cells)
+        subGroups view=Signal age=adult8wks cellType=Cerebellum sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 19240.000000
         color 153,38,0
         # subId=3910 dateSubmitted=2011-04-19
@@ -1489,8 +1489,8 @@ wgEncode 1
         track wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel A20 Raw 1
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in A20 cells)
-        subGroups view=RawSignal age=adult8wks cellType=A20 sex=M strain=BALBCANN rep=rep1
+        longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in A20 cells)
+        subGroups view=Signal age=adult8wks cellType=A20 sex=M strain=BALBCANN rep=rep1
         type bigWig 1.000000 93407.000000
         color 153,38,0
         # subId=3892 dateSubmitted=2011-05-03
@@ -1498,8 +1498,8 @@ wgEncode 1
         track wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel A20 Raw 2
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in A20 cells)
-        subGroups view=RawSignal age=adult8wks cellType=A20 sex=M strain=BALBCANN rep=rep2
+        longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in A20 cells)
+        subGroups view=Signal age=adult8wks cellType=A20 sex=M strain=BALBCANN rep=rep2
         type bigWig 1.000000 162688.000000
         color 153,38,0
         # subId=3893 dateSubmitted=2011-05-03
@@ -1507,8 +1507,8 @@ wgEncode 1
         track wgEncodeUwDnaseZhbtc4129olaME0RawRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ZhBTc4 Raw 1
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in ZhBTc4 cells)
-        subGroups view=RawSignal age=E0 cellType=ZHBTC4 sex=M strain=129Ola rep=rep1
+        longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in ZhBTc4 cells)
+        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=129Ola rep=rep1
         type bigWig 1.000000 87655.000000
         color 153,38,0
         # subId=3896 dateSubmitted=2011-05-06
@@ -1516,8 +1516,8 @@ wgEncode 1
         track wgEncodeUwDnaseZhbtc4129olaME0RawRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ZhBTc4 Raw 2
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in ZhBTc4 cells)
-        subGroups view=RawSignal age=E0 cellType=ZHBTC4 sex=M strain=129Ola rep=rep2
+        longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in ZhBTc4 cells)
+        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=129Ola rep=rep2
         type bigWig 1.000000 94703.000000
         color 153,38,0
         # subId=3897 dateSubmitted=2011-05-06
@@ -1525,8 +1525,8 @@ wgEncode 1
         track wgEncodeUwDnaseFatC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel FatPad Raw 1
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in FatPad cells)
-        subGroups view=RawSignal age=adult8wks cellType=Fat sex=M strain=C57BL6 rep=rep1
+        longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in FatPad cells)
+        subGroups view=Signal age=adult8wks cellType=Fat sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 52562.000000
         color 153,38,0
         # subId=3908 dateSubmitted=2011-05-02
@@ -1534,8 +1534,8 @@ wgEncode 1
         track wgEncodeUwDnaseFatC57bl6MAdult8wksRawRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel FatPad Raw 2
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in FatPad cells)
-        subGroups view=RawSignal age=adult8wks cellType=Fat sex=M strain=C57BL6 rep=rep2
+        longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in FatPad cells)
+        subGroups view=Signal age=adult8wks cellType=Fat sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 53274.000000
         color 153,38,0
         # subId=3909 dateSubmitted=2011-05-02
@@ -1543,8 +1543,8 @@ wgEncode 1
         track wgEncodeUwDnaseTregC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel TReg Raw 1
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in TReg cells)
-        subGroups view=RawSignal age=adult8wks cellType=TReg sex=M strain=C57BL6 rep=rep1
+        longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in TReg cells)
+        subGroups view=Signal age=adult8wks cellType=TReg sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 36553.000000
         color 153,38,0
         # subId=3911 dateSubmitted=2011-05-02
@@ -1552,8 +1552,8 @@ wgEncode 1
         track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel B-cell_(CD43-) Raw 1
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in B-cell_(CD43-) cells)
-        subGroups view=RawSignal age=adult8wks cellType=BCellCD43N sex=M strain=C57BL6 rep=rep1
+        longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in B-cell_(CD43-) cells)
+        subGroups view=Signal age=adult8wks cellType=BCellCD43N sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 45976.000000
         color 153,38,0
         # subId=3913 dateSubmitted=2011-05-06
@@ -1561,8 +1561,8 @@ wgEncode 1
         track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksRawRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel B-cell_(CD43-) Raw 2
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in B-cell_(CD43-) cells)
-        subGroups view=RawSignal age=adult8wks cellType=BCellCD43N sex=M strain=C57BL6 rep=rep2
+        longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in B-cell_(CD43-) cells)
+        subGroups view=Signal age=adult8wks cellType=BCellCD43N sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 76500.000000
         color 153,38,0
         # subId=3914 dateSubmitted=2011-05-06
@@ -1570,8 +1570,8 @@ wgEncode 1
         track wgEncodeUwDnase3134RiiiMImmortalRawRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel 3134 Raw 2
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in 3134 cells)
-        subGroups view=RawSignal age=immortal cellType=3134 sex=M strain=RIII rep=rep2
+        longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in 3134 cells)
+        subGroups view=Signal age=immortal cellType=3134 sex=M strain=RIII rep=rep2
         type bigWig 1.000000 42784.000000
         color 153,38,0
         # subId=3895 dateSubmitted=2011-05-10
@@ -1579,8 +1579,8 @@ wgEncode 1
         track wgEncodeUwDnasePatskiSpbl6MImmortalRawRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Patski Raw 2
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in Patski cells)
-        subGroups view=RawSignal age=immortal cellType=Patski sex=M strain=SPBL6 rep=rep2
+        longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in Patski cells)
+        subGroups view=Signal age=immortal cellType=Patski sex=M strain=SPBL6 rep=rep2
         type bigWig 1.000000 86679.000000
         color 153,38,0
         # subId=3899 dateSubmitted=2011-05-10
@@ -1588,8 +1588,8 @@ wgEncode 1
         track wgEncodeUwDnasePatskiSpbl6MImmortalRawRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Patski Raw 1
-        longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Patski cells)
-        subGroups view=RawSignal age=immortal cellType=Patski sex=M strain=SPBL6 rep=rep1
+        longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Patski cells)
+        subGroups view=Signal age=immortal cellType=Patski sex=M strain=SPBL6 rep=rep1
         type bigWig 1.000000 101941.000000
         color 153,38,0
         # subId=3898 dateSubmitted=2011-05-10
@@ -1597,8 +1597,8 @@ wgEncode 1
         #track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksRawRep3
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel B-cell_(CD43-) Raw 3
-        #longLabel ENCODE UW DNaseI HS Raw Signal Replicate 3 (in B-cell_(CD43-) cells)
-        #subGroups view=RawSignal age=adult8wks cellType=BCellCD43N sex=M strain=C57BL6 rep=rep3
+        #longLabel ENCODE UW DNaseI HS Signal Replicate 3 (in B-cell_(CD43-) cells)
+        #subGroups view=Signal age=adult8wks cellType=BCellCD43N sex=M strain=C57BL6 rep=rep3
         #type bigWig 1.000000 58844.000000
         #color 153,38,0
         # subId=3915 dateSubmitted=2011-05-06
@@ -1607,8 +1607,8 @@ wgEncode 1
         #track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep7
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel WholeBrain Raw 7
-        #longLabel ENCODE UW DNaseI HS Raw Signal Replicate 7 (in WholeBrain cells)
-        #subGroups view=RawSignal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep7
+        #longLabel ENCODE UW DNaseI HS Signal Replicate 7 (in WholeBrain cells)
+        #subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep7
         #type bigWig 1.000000 59323.000000
         #color 153,38,0
         # subId=3901 dateSubmitted=2011-04-19
@@ -1617,8 +1617,8 @@ wgEncode 1
         #track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep10
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel Liver Raw 10
-        #longLabel ENCODE UW DNaseI HS Raw Signal Replicate 10 (in Liver cells)
-        #subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep10
+        #longLabel ENCODE UW DNaseI HS Signal Replicate 10 (in Liver cells)
+        #subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep10
         #type bigWig 1.000000 67587.000000
         #color 153,38,0
         # subId=3905 dateSubmitted=2011-04-19
@@ -1627,8 +1627,8 @@ wgEncode 1
         #track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep4
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel Liver Raw 4
-        #longLabel ENCODE UW DNaseI HS Raw Signal Replicate 4 (in Liver cells)
-        #subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep4
+        #longLabel ENCODE UW DNaseI HS Signal Replicate 4 (in Liver cells)
+        #subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep4
         #type bigWig 1.000000 34957.000000
         #color 153,38,0
         # subId=3902 dateSubmitted=2011-04-19
@@ -1637,8 +1637,8 @@ wgEncode 1
         #track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep5
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel Liver Raw 5
-        #longLabel ENCODE UW DNaseI HS Raw Signal Replicate 5 (in Liver cells)
-        #subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep5
+        #longLabel ENCODE UW DNaseI HS Signal Replicate 5 (in Liver cells)
+        #subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep5
         #type bigWig 1.000000 20383.000000
         #color 153,38,0
         # subId=3903 dateSubmitted=2011-04-19
@@ -1647,8 +1647,8 @@ wgEncode 1
         #track wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep3
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel Lung Raw 3
-        #longLabel ENCODE UW DNaseI HS Raw Signal Replicate 3 (in Lung cells)
-        #subGroups view=RawSignal age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep3
+        #longLabel ENCODE UW DNaseI HS Signal Replicate 3 (in Lung cells)
+        #subGroups view=Signal age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep3
         #type bigWig 1.000000 29892.000000
         #color 153,38,0
         # subId=3907 dateSubmitted=2011-04-19
@@ -1657,8 +1657,8 @@ wgEncode 1
         #track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep6
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel Liver Raw 6
-        #longLabel ENCODE UW DNaseI HS Raw Signal Replicate 6 (in Liver cells)
-        #subGroups view=RawSignal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep6
+        #longLabel ENCODE UW DNaseI HS Signal Replicate 6 (in Liver cells)
+        #subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep6
         #type bigWig 1.000000 18306.000000
         #color 153,38,0
         # subId=3904 dateSubmitted=2011-04-19
