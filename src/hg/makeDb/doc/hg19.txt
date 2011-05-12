@@ -15026,7 +15026,8 @@ paste j1 j1.2 j3 j4 j4.1 j4.2 j5 j2 >omimAv.tab
 
 hgsql hg19 -e 'drop table omimAv'
 hgsql hg19 < ~/src/hg/lib/omimAv.sql
-hgsql hg19 -e 'load data local infile "omimAv.tab" into table omimAv'
+hgsql hg19 -e \
+'load data local infile "omimAv.tab" into table omimAv ignore 1 lines'
 hgsql hg19 -e 'update omimAv set repl2 = rtrim(ltrim(repl2))'
 
 doOmimAv hg19 omimAvRepl.tab  2>j.err
