@@ -798,7 +798,7 @@ maxHeightPixels 128:64:20
 #ES
 track laminB1_ES
 superTrack laminB1Super full
-shortLabel LaminB1 ES
+shortLabel mouse LaminB1 ESC
 longLabel NKI LaminB1 (DamID of LaminB1 in mouse Embryonic Stem cells, log2-ratio)
 group regulation
 priority 310
@@ -816,7 +816,7 @@ html laminB1Mm9
 #NP
 track laminB1_NP
 superTrack laminB1Super full
-shortLabel LaminB1 NP
+shortLabel mouse LaminB1 NPC
 longLabel NKI LaminB1 (DamID of LaminB1 in mouse Neuro Progenitor cells, log2-ratio)
 group regulation
 priority 320
@@ -834,7 +834,7 @@ html laminB1Mm9
 #AC
 track laminB1_AC
 superTrack laminB1Super full
-shortLabel LaminB1 AC
+shortLabel mouse LaminB1 AC
 longLabel NKI LaminB1 (DamID of LaminB1 in mouse Astrocytes, log2-ratio)
 group regulation
 priority 330
@@ -852,7 +852,7 @@ html laminB1Mm9
 #EF
 track laminB1_EF
 superTrack laminB1Super full
-shortLabel LaminB1 EF
+shortLabel mouse LaminB1 MEF
 longLabel NKI LaminB1 (DamID of LaminB1 in mouse Embryonic Fibroblasts, log2-ratio)
 group regulation
 priority 340
