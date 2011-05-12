@@ -808,9 +808,9 @@ maxHeightPixels 100:40:11
 autoScale Off
 windowingFunction mean
 smoothingWindow 2
-type wig -5.572 4.617
+type wig -5.58 4.62
 spanList 60
-viewLimits -2:2
+viewLimits -1.5:1.5
 html laminB1Mm9
 
 #NP
@@ -826,9 +826,9 @@ maxHeightPixels 100:40:11
 autoScale Off
 windowingFunction mean
 smoothingWindow 2
-type wig -5.998 4.292 
+type wig -6.00 4.30 
 spanList 60
-viewLimits -2:2
+viewLimits -1.5:1.5
 html laminB1Mm9
 
 #AC
@@ -844,9 +844,9 @@ maxHeightPixels 100:40:11
 autoScale Off
 windowingFunction mean
 smoothingWindow 2
-type wig -5.742 4.293
+type wig -5.75 4.30
 spanList 60
-viewLimits -2:2
+viewLimits -1.5:1.5 
 html laminB1Mm9
 
 #EF
@@ -862,8 +862,8 @@ maxHeightPixels 100:40:11
 autoScale Off
 windowingFunction mean
 smoothingWindow 2
-type wig -5.444 4.922
+type wig -5.45 4.93
 spanList 60
-viewLimits -2:2
+viewLimits -1.5:1.5
 html laminB1Mm9
 

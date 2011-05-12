@@ -19,7 +19,7 @@ errAbort(
   "   mdbUpdate {db} [-table= [-force]] [-recreate] [-test [-verbose=2]]\n"
   "                  [{fileName}] [-replace] or\n"
   "                  [[-vars=\"var1=val1 var2=val2...\"] or [-obj=]]\n"
-  "                  [[-var= [-val=]] or [-setVars=\"var1=val1 ...\"]] [-delete]\n"
+  "                  [[-setVars=\"var1=val1 ...\"]] [-delete]\n"
   "                  [-encodeExp [-accession]\n"
   "Options:\n"
   "    {db}     Database to update metadata in.  This argument is required.\n"
@@ -29,24 +29,24 @@ errAbort(
   "       -force      Overrides restrictions placed on shared  '" MDB_DEFAULT_NAME "'.\n"
   "    -test    Does not actually update and does full cv validation.\n"
   "             Use with -verbose=2 to see the SQL.\n"
+  "             RECOMMENDED: Test complex selection criteria with mdbPrint first.\n"
   "    [{fileName}] File of formatted metadata from mdbPrint (RA or lines).\n"
   "      -replace   Remove all old variables for each object before adding new.\n"
-  "  if {fileName} argument not provided, then -vars or -obj must be provided:\n"
-  "    -vars=\"{var=val ...}\" Apply update to a group of objects matching vars.\n"
+  "    if {fileName}, then -obj, -composite or -vars must be provided:\n"
+  "  SELECT Objects to work on:\n"
+  "     -obj={objName}  Select this single object to update\n"
+  "     -composite={}   Select all objects belonging to this composite.\n"
+  "     -vars=\"{var=val ...}\" Apply update to a group of objects matching vars.\n"
   "        Use: 'var=val'  'var=v%%'  'var='  'var=val1,val2' (val1 or val2).\n"
   "             'var!=val' 'var!=v%%' 'var!=' 'var!=val1,val2' are all supported.\n"
-  "        RECOMMENDED: Test complex selection criteria with mdbPrint first.\n"
-  "    -obj={objName}     Update this single object from the command line as:\n\n"
-  "    -composite={}      Special commonly used var=val pair replaces -vars=\"composite=wgEn...\".\n"
-  "    These options work on objects selected with -vars or -obj:\n"
-  "       -var={varName}  Provide variable name (if no -var then must be -delete)\n"
-  "       -val={value}    (Enclose in \"quotes if necessary\").\n"
-  "       -setVars={var=val...}  Allows setting multiple var=val pairs.\n"
-  "       -delete         Remove specific var or entire object.\n"
-  "       -encodeExp={table}  Update groups of objs as experiments defined in hgFixed.{table}.\n"
-  "        -accession         If encodeExp, then make/update accession too.\n"
-  "There are two ways to call mdbUpdate.  The object (or objects matching vars) and var to update "
-  "can be declared on the command line, or a file of formatted metadata lines can be provided. "
+  "  TARGET vars to set or delete:\").\n"
+  "     -setVars={var=val...}  Allows setting multiple var=val pairs.\n"
+  "        NOTE: val cannot have blank spaces (yet).  TO BE DONE.\n"
+  "  ACTION (update to values defined in -setVars is the default):\n"
+  "     -delete         Remove specific var (or entire object if -setVar is not used).\n"
+  "     -encodeExp={table}  Update groups of objs as experiments defined in hgFixed.{table}.\n"
+  "       -accession        If encodeExp, then make/update accession too.\n"
+  "There are two ways to call mdbUpdate: with a file or by command line selection of objects. "
   "The file can be the formatted output from mdbPrint or the following special formats:\n"
   "  metadata objName var1=val1 var2=\"val2 with spaces\" var3=...\n"
   "    Adds or updates the specific object and variables\n"
@@ -61,8 +61,8 @@ errAbort(
   "Examples:\n"
   "  mdbUpdate hg19 -vars=\"grant=Snyder cell=K562 antibody=CTCF\" -setVars=\"expId=1427\"\n"
   "            Update all objects matcing Snyder/K562/CTCF and set the expId=1472.\n"
-  "  mdbUpdate hg19 -obj=fredsTable -var=whatIs val=\"Ethyl's husband's clutter\"\n"
-  "            Updates fredsTable object with a description.\n"
+  "  mdbUpdate hg19 -composite=%%BroadHist%% -vars=\"dccAccession=\" -setVars=\"dccAccession=\" -delete\n"
+  "            Deletes all accessions from Broad Histone objects that have them.\n"
   "  mdbUpdate mm9 -table=mdb_braney -recreate\n"
   "            Creates or empties the named metadata table.\n"
   "  mdbUpdate hg18 -vars=\"composite=wgEncodeDukeDNase\" -delete -test\n"
@@ -103,8 +103,7 @@ optionInit(&argc, argv, optionSpecs);
 
 if(argc < 2)
     {
-    verbose(1, "REQUIRED 'DB' argument not found:\n");
-    usage();
+    errAbort("REQUIRED 'DB' argument not found.\n");
     }
 
 char *db         = argv[1];
@@ -125,25 +124,13 @@ if (encodeExp != NULL)
     }
 
 if (recreate && encodeExp != NULL)
-    {
-    verbose(1, "Incompatible options 'recreate' and 'encodeExp':\n");
-    usage();
-    }
+    errAbort("Incompatible options 'recreate' and 'encodeExp':\n");
 if (recreate && deleteIt)
-    {
-    verbose(1, "Incompatible options 'recreate' and 'delete':\n");
-    usage();
-    }
+    errAbort("Incompatible options 'recreate' and 'delete':\n");
 if (encodeExp != NULL && deleteIt)
-    {
-    verbose(1, "Incompatible options 'encodeExp' and 'delete':\n");
-    usage();
-    }
+    errAbort("Incompatible options 'encodeExp' and 'delete':\n");
 if (testIt && force)
-    {
-    verbose(1, "Incompatible options 'test' and 'force':\n");
-    usage();
-    }
+    errAbort("Incompatible options 'test' and 'force':\n");
 
 struct sqlConnection *conn = sqlConnect(db);
 
@@ -198,30 +185,22 @@ if(recreate)
     }
 
 if(argc > 2 && (deleteIt || encodeExp != NULL || var != NULL || val != NULL || setVars != NULL))
-    {
-    verbose(1, "INCONSISTENT REQUEST: can't combine supplied file with -delete, -encodeExp, -var, -val or -setVars.\n");
-    usage();
-    }
-if((deleteIt || encodeExp != NULL) && var != NULL && val != NULL)
-    {
-    verbose(1, "INCONSISTENT REQUEST: can't combine -%s with -var and -val.\n",deleteIt?"delete":"encodeExp");
-    usage();
-    }
+    errAbort("INCONSISTENT REQUEST: can't combine supplied file with -delete, -encodeExp, -var, -val or -setVars.\n");
+if((deleteIt || encodeExp != NULL) && (var != NULL || val != NULL))
+    errAbort("INCONSISTENT REQUEST: can't combine -%s with -var and -val.\n",deleteIt?"delete":"encodeExp");
 if (argc != 3 && !deleteIt && encodeExp == NULL)
     {
     if(setVars == NULL && (var == NULL || val == NULL))
         {
         if(recreate) // no problem
             return 0;
-        verbose(1, "INCONSISTENT REQUEST: need both -var and -val.\n");
-        usage();
+        errAbort("INCONSISTENT REQUEST: need both -var and -val.\n");
         }
     else if (setVars != NULL && (var != NULL || val != NULL))
         {
         if(recreate) // no problem
             return 0;
-        verbose(1, "INCONSISTENT REQUEST: can't combin -var or -val with -setVars.\n");
-        usage();
+        errAbort("INCONSISTENT REQUEST: can't combine -var or -val with -setVars.\n");
         }
     }
 
@@ -231,14 +210,12 @@ if(optionExists("obj"))
     if(sharedTbl && !force)
         {
         sqlDisconnect(&conn);
-        verbose(1, "NOT SUPPORTED for shared table '%s'.\n",MDB_DEFAULT_NAME);
-        usage(); // Must not have submitted formatted file also
+        errAbort("NOT SUPPORTED for shared table '%s'.\n",MDB_DEFAULT_NAME);
         }
     if(argc > 2 || optionExists("vars"))
         {
         sqlDisconnect(&conn);
-        verbose(1, "INCONSISTENT REQUEST: can't combine -obj with -vars or a supplied file.\n");
-        usage(); // Must not have submitted formatted file also
+        errAbort("INCONSISTENT REQUEST: can't combine -obj with -vars or a supplied file.\n");
         }
 
     mdbObjs = mdbObjCreate(optionVal("obj",  NULL),var,val);
@@ -258,15 +235,13 @@ else if(optionExists("vars") || optionExists("composite"))
     if(sharedTbl && !force)
         {
         sqlDisconnect(&conn);
-        verbose(1, "NOT SUPPORTED for shared table '%s'.\n",MDB_DEFAULT_NAME);
-        usage(); // Must not have submitted formatted file also
+        errAbort("NOT SUPPORTED for shared table '%s'.\n",MDB_DEFAULT_NAME);
         }
     if((argc > 2 && (!optionExists("vars") || !optionExists("composite")))
     || (argc > 3 &&   optionExists("vars") &&  optionExists("composite")) )
         {
         sqlDisconnect(&conn);
-        verbose(1, "INCONSISTENT REQUEST: can't combine -vars or -composite with a supplied file.\n");
-        usage(); // Must not have submitted formatted file also
+        errAbort("INCONSISTENT REQUEST: can't combine -vars or -composite with a supplied file.\n");
         }
     struct mdbByVar * mdbByVars = NULL;
     if (optionExists("vars"))
@@ -300,15 +275,14 @@ else // Must be submitting formatted file
         sqlDisconnect(&conn);
         if(recreate) // no problem
             return 0;
-        verbose(1, "REQUIRED: must declare -obj, -vars or supply a file.\n");
-        usage(); // Must not have submitted formatted file also
+        errAbort("REQUIRED: must declare -obj, -vars or supply a file.\n");
         }
 
     replace = optionExists("replace");
     boolean validated = FALSE;
-    mdbObjs = mdbObjsLoadFromFormattedFile(argv[2],&validated);
+    mdbObjs = mdbObjsLoadFromFormattedFile(argv[2],(sharedTbl ? &validated : NULL)); // Only validate magic for shared table.
     if(sharedTbl && !force && !validated)
-        {
+        { // Can't test magic if RAs are catted together!  Requires reading in 1 stanza at a time, slAddTail, and testing magic when intercepted.
         sqlDisconnect(&conn);
         errAbort("Update to shared table '%s' requires file directly written by mdbPrint from sandbox file.\n", table);
         }
