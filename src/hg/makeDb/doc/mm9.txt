@@ -12002,8 +12002,9 @@ hgsql mm9 -e 'drop table if exists allMm9RS_BW; \
 # create corresponding trackDb.ra section and html description page.
 
 
+
 ############################################################################
-# Nuclear Lamina (woring 2011-04-04 - Chin)
+# Nuclear Lamina (DONE 2011-04-04 - Chin)
 #
 # "Molecular maps of the reorganization of genome-nuclear lamina 
 # interactions during differentiation"
@@ -12036,7 +12037,7 @@ hgsql mm9 -e 'drop table if exists allMm9RS_BW; \
     wget --timestamping \
       ftp://ftp.ncbi.nih.gov/pub/geo/DATA/SeriesMatrix/GSE17051/GSE17051_series_matrix.txt.gz
 
-    # wiggle data from vansteensel lab (2011-04-15):
+    # wiggle data from vansteensel lab (2011-04-26):
     # Embryonic Stem Cells
      wget --timestamping \
         http://bioinformatics.nki.nl/~meuleman/ES.gff.gz
@@ -12074,6 +12075,9 @@ hgsql mm9 -e 'drop table if exists allMm9RS_BW; \
     cp /hive/data/outside/vansteensel/2011-04-26/*.wig.gz .
     gunzip *.gz
 
+    # The wiggle files contain 51 set of duplicates (all on chr18), 
+    # Per data provider's instruction, fixed them by taking
+    # the average.
     cat << '_EOF_' > quickCheckWig.pl
 #!/usr/bin/env perl
 use strict;
@@ -12202,7 +12206,14 @@ done
       ln -s /cluster/data/mm9/bed/nuclearLamina/laminB1_${WIG}.wib \
          /gbdb/mm9/wib/
     done
-    # Create the track definitions in mm9 
-    # Waiting for the descrition html ...
+
+    # Create the laminB1 supertrack definitions in mm9/trackDb.ra 
+    # copy the descrition html to right place
+    cp /hive/data/outside/vansteensel/2011-05-11/mouse_laminB1_DamID.html \
+    /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/mouse/mm9/laminB1Mm9.html
+    cp /hive/data/outside/vansteensel/2011-05-11/MolCell2010_cartoon.png \
+     /cluster/home/chinhli/kent/src/hg/htdocs/images/laminB1Mm9.png
+    # edit/rescale the html and png files
+    # add the new html and image files to git
 
 ##############################################################################
