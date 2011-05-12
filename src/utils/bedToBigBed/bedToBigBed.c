@@ -20,6 +20,7 @@ int itemsPerSlot = 512;
 int bedFields = 0;
 char *as = NULL;
 static boolean doCompress = FALSE;
+static boolean tabSep = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -43,6 +44,8 @@ errAbort(
   "   -as=fields.as - If have non-standard fields, it's great to put a definition\n"
   "                   of each field in a row in AutoSql format here.\n"
   "   -unc - If set, do not use compression."
+  "   -tabs - If set, expect fields to be tab separated, normally\n"
+  "           expects white space separator.\n"
   , bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -53,6 +56,7 @@ static struct optionSpec options[] = {
    {"bedFields", OPTION_INT},
    {"as", OPTION_STRING},
    {"unc", OPTION_BOOLEAN},
+   {"tabs", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -94,7 +98,10 @@ for (;;)
 	    {
 	    if (as == NULL)
 		{
-		fieldCount = chopByWhite(line, NULL, 0);
+		if (tabSep)
+		    fieldCount = chopString(line, "\t", NULL, 0);
+		else
+		    fieldCount = chopByWhite(line, NULL, 0);
 		if (definedFieldCount == 0)
 		    definedFieldCount = fieldCount;
 		char *asText = bedAsDef(definedFieldCount, fieldCount);
@@ -114,7 +121,11 @@ for (;;)
 	    }
 
 	/* Chop up line and make sure the word count is right. */
-	int wordCount = chopByWhite(line, row, fieldAlloc);
+	int wordCount;
+	if (tabSep)
+	    wordCount = chopString(line, "\t", row, fieldAlloc);
+	else
+	    wordCount = chopByWhite(line, row, fieldAlloc);
 	lineFileExpectWords(lf, fieldCount, wordCount);
 
 	/* Parse out first three fields. */
@@ -669,6 +680,7 @@ itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
 bedFields = optionInt("bedFields", bedFields);
 as = optionVal("as", as);
 doCompress = !optionExists("unc");
+tabSep = optionExists("tabs");
 if (argc != 4)
     usage();
 bedToBigBed(argv[1], argv[2], argv[3]);

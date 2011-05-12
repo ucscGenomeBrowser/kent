@@ -237,7 +237,7 @@ term A549
 tag A549
 type Cell Line
 organism Human
-description Epithelial cell line "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old Caucasian male." - ATCC Derived from a lung carcinoma tissue
+description Epithelial cell line "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old Caucasian male." - ATCC. Derived from a lung carcinoma tissue
 tissue Epithelium
 vendorName ATCC
 vendorId CCl-185
@@ -1659,8 +1659,7 @@ term H9ES-E
 tag H9ESE
 type Cell Line
 organism Human
-description H9 Endoderm
-#)description Human embryonic stem cell (hESC) H9
+description Human embryonic stem cell (hESC) H9
 tissue EmbryonicStemCell
 tier 3
 lineage human Embryonic Stem Cell (hESC) H9
@@ -2690,7 +2689,7 @@ term MDA-MB-231
 tag MDA
 type Cell Line
 organism Human
-description Breast adenocarcinoma; epithelial cell line  Derived from metastatic site: pleural effusion
+description Breast adenocarcinoma; epithelial cell line.  Derived from metastatic site: pleural effusion
 tissue Breast
 vendorName ATCC
 vendorId HTB-26
@@ -2964,6 +2963,8 @@ organism Human
 description Human peripheral blood-derived erythroblasts
 tissue Blood
 vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
+vendorId
+orderUrl
 termId BTO:0000574 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000574
 sex M
@@ -2977,6 +2978,8 @@ organism Human
 description Peripheral blood mononuclear cells
 tissue Blood
 vendorName PBMC cells provided by E. Bresnick, UW Madison
+vendorId
+orderUrl
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
 sex M
@@ -2987,7 +2990,7 @@ term PFSK-1
 tag PFSK1
 type Cell Line
 organism Human
-description Neuroectodermal cell line  Derived from a human cerebral brain tumor
+description Neuroectodermal cell line.  Derived from a human cerebral brain tumor
 tissue Brain
 lineage ectoderm
 vendorName ATCC
@@ -3009,8 +3012,7 @@ description Primary Human Tracheal Epithelial Cells
 tissue Epithelium
 vendorName Dr. Cal Cotton at Case Western Reserve University
 orderUrl https://www.case.edu/cgi-bin/directory/pb_lookup.cgi?search_text=calvin+cotton&submit.x=0&submit.y=0&submit=Search&search_method=regular&page_num=1
-lineage primary
-#)lineage endoderm
+lineage endoderm
 termId BTO:0001120 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001120
 sex U
@@ -3498,6 +3500,8 @@ description Pituitary tumor LAF1
 age immortalized
 strain Unknown
 vendorName ATCC
+vendorId
+orderUrl
 termId 7087
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
 color 153,38,0
@@ -3514,6 +3518,8 @@ description B Cell , CD19+
 age adult-8wks
 strain C57BL/6
 vendorName
+vendorId
+orderUrl
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 153,38,0
@@ -3542,6 +3548,8 @@ type Cell Line
 organism Mouse
 tissue Bone
 category Tissue
+age ageUnknown
+strain unknown
 description Bone Marrow
 vendorName LICR lab
 termId 6943
@@ -3556,10 +3564,12 @@ type Cell Line
 organism Mouse
 tissue Cerebellum
 category Tissue
+age ageUnknown
+strain unknown
 description Cerebellum
 vendorName LICR lab
 termId 7012
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
+1termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 153,38,0
 sex U
 protocol LICR(Ren):Cerebellum_Ren_protocol.pdf UW(Stam):Tissue_Stam_protocol.pdf
@@ -3624,7 +3634,11 @@ organism Mouse
 tissue Colon
 category Tissue
 description Colon
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
 color 153,38,0
@@ -3638,7 +3652,11 @@ organism Mouse
 tissue Cortex
 category Tissue
 description Cortex
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
 color 153,38,0
@@ -3670,7 +3688,11 @@ organism Mouse
 tissue Adipose
 category Tissue
 description Adipose tissue
+age ageUnknown
+strain unknown
 vendorName UW lab
+vendorId
+orderUrl
 termId 7108
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7108
 color 153,38,0
@@ -3684,7 +3706,11 @@ organism Mouse
 tissue Lung
 category Tissue
 description Fibroblast
+age ageUnknown
+strain unknown
 vendorName UW lab
+vendorId
+orderUrl
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
@@ -3732,7 +3758,11 @@ organism Mouse
 tissue Heart
 category Tissue
 description Heart
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 7103
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
@@ -3746,7 +3776,11 @@ organism Mouse
 tissue Kidney
 category Tissue
 description Kidney
+age ageUnknown
+strain unknown
 vendorName UW lab
+vendorId
+orderUrl
 termId
 termUrl
 color 153,38,0
@@ -3775,7 +3809,11 @@ organism Mouse
 tissue Liver
 category Tissue
 description Liver
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 153,38,0
@@ -3789,7 +3827,11 @@ organism Mouse
 tissue Lung
 category Tissue
 description Lung
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
@@ -3804,7 +3846,11 @@ organism Mouse
 tissue MEF
 category primaryCells
 description Mouse Embryonic Fibroblast
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
@@ -3819,6 +3865,8 @@ organism Mouse
 tissue Blood
 category primaryCells
 description Megakaryocyte
+age ageUnknown
+strain unknown
 vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7054
@@ -3850,6 +3898,8 @@ organism Mouse
 tissue Blood
 category cellLine
 description Myocyte
+age ageUnknown
+strain unknown
 vendorName
 orderUrl
 color 153,38,0
@@ -3865,6 +3915,8 @@ organism Mouse
 tissue Blood
 category Tissue
 description Muscle
+age ageUnknown
+strain unknown
 vendorName
 orderUrl
 termId 7054
@@ -3900,7 +3952,11 @@ organism Mouse
 tissue OlfactoryBulb
 category Tissue
 description Olfactory Bulb
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
@@ -3914,7 +3970,11 @@ organism Mouse
 tissue Pancreas
 category Tissue
 description Pancreas
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
@@ -3931,6 +3991,8 @@ description Mouse Embryonic Kidney Fibroblast. As described in Lingenfelter et a
 age immortalized
 strain C57BL/6J
 vendorName Dr. Christine Disteche (University of Washington)
+vendorId
+orderUrl
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
@@ -3944,7 +4006,11 @@ organism Mouse
 tissue Placenta
 category Tissue
 description Placenta
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
 color 153,38,0
@@ -3960,7 +4026,11 @@ organism Mouse
 tissue SmallIntestine
 category Tissue
 description Small Intestine
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
 color 153,38,0
@@ -3974,7 +4044,11 @@ organism Mouse
 tissue Spleen
 category Tissue
 description Spleen
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 153,38,0
@@ -3988,7 +4062,11 @@ organism Mouse
 tissue Testis
 category Tissue
 description Testis
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
 color 153,38,0
@@ -4002,7 +4080,11 @@ organism Mouse
 tissue Thymus
 category Tissue
 description Thymus
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 153,38,0
@@ -4016,7 +4098,11 @@ organism Mouse
 tissue Blood
 category primaryCells
 description Naive T cells: CD4+, CD25-
+age ageUnknown
+strain unknown
 vendorName UW lab
+vendorId
+orderUrl
 termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 153,38,0
@@ -4030,7 +4116,11 @@ organism Mouse
 tissue Blood
 category primaryCells
 description Regulatory T cells CD4+,CD25+
+age ageUnknown
+strain unknown
 vendorName UW lab
+vendorId
+orderUrl
 termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 153,38,0
@@ -4044,7 +4134,11 @@ organism Mouse
 tissue Brain
 category Tissue
 description Whole Brain
+age ageUnknown
+strain unknown
 vendorName UW lab
+vendorId
+orderUrl
 termId 7005
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 153,38,0
@@ -4061,6 +4155,8 @@ age E0
 strain 129/Ola
 description Undifferentiated mouse embryonic stem cells
 vendorName Dr. Levasseur (University of Iowa)
+vendorId
+orderUrl
 termId
 termUrl
 color 153,38,0
@@ -8686,7 +8782,7 @@ type strain
 description: M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X.
 
 
-term Unknown
+term unknown
 tag UKN
 type strain
 description Unknown strain origin
@@ -8740,7 +8836,7 @@ description Embryonic day 18
 term adult-8wks
 tag adult8wks
 type age
-Stage Adult
+stage Adult
 description Adult 8 weeks
 
 term immortalized
@@ -8748,6 +8844,13 @@ tag immortal
 type age
 stage Cell Line
 description Immortal cells
+
+term ageUnknown
+tag ageUnknwn
+type age
+stage stageUnknown
+description the age when the real age is unknown
+
 
 ### Attic
 # Expected fields:
