@@ -12181,9 +12181,14 @@ mm9.laminB1_NP  -5.998 4.292 -0.00148136 2102030 -3113.87 1.059 viewLimits=-5.29
     # copy the descrition html to right place
     cp /hive/data/outside/vansteensel/2011-05-11/mouse_laminB1_DamID.html \
     /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/mouse/mm9/laminB1Mm9.html
-    cp /hive/data/outside/vansteensel/2011-05-11/MolCell2010_cartoon.png \
-     /cluster/home/chinhli/kent/src/hg/htdocs/images/laminB1Mm9.png
+    # scale down to 42%
+    convert -size 42% \
+        /hive/data/outside/vansteensel/2011-05-11/MolCell2010_cartoon.png \
+    -resize 42% \
+        /cluster/home/chinhli/kent/src/hg/htdocs/images/laminB1Mm9.png
     # edit/rescale the html and png files
     # add the new html and image files to git
+    # cd ~/kent/src/hg/htdocs and make
+    # cd ~/kent/src/hg/makeDb/trackDb and make DBS=mm9
 
 ##############################################################################
