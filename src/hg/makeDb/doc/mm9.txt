@@ -12133,50 +12133,6 @@ done
     # all dup.list are empty, so there is no duplicate in the wiggles.
     rm *.dup.list
 
-    # Find the min/max/avg range of values from the wiggle file
-    egrep  "^[0-9]" AC.wig |ave -col=2 stdin
-    # Q1 -0.623000
-    # median -0.090000
-    # Q3 0.691000
-    # average -0.002013
-    # min -5.742000
-    # max 4.293000
-    # count 2102030
-    # total -4231.885998
-    # standard deviation 1.140679
-    egrep  "^[0-9]" EF.wig |ave -col=2 stdin
-    # Q1 -0.569000
-    # median -0.098000
-    # Q3 0.568000
-    # average -0.001545
-    # min -5.444000
-    # max 4.922000
-    # count 2102030
-    # total -3247.823798
-    # standard deviation 1.042319
-
-    egrep  "^[0-9]" ES.wig |ave -col=2 stdin
-    # Q1 -0.529000
-    # median -0.085000
-    # Q3 0.522000
-    # average -0.001338
-    # min -5.572000
-    # max 4.617000
-    # count 2102030
-    # total -2812.845102
-    # standard deviation 0.929746
-
-    egrep  "^[0-9]" NP.wig |ave -col=2 stdin
-    # Q1 -0.612000
-    # median -0.107000
-    # Q3 0.621000
-    # average -0.001481
-    # min -5.998000
-    # max 4.292000
-    # count 2102030
-    # total -3113.872474
-    # standard deviation 1.059002
-
     # load the tracks on hgwdev
     ssh hgwdev
     cd /cluster/data/mm9/bed/nuclearLamina/
@@ -12206,6 +12162,20 @@ done
       ln -s /cluster/data/mm9/bed/nuclearLamina/laminB1_${WIG}.wib \
          /gbdb/mm9/wib/
     done
+
+    # collect wiggle stats for track definition:
+    for WIG in AC EF ES NP
+    do
+      wigTableStats.sh mm9 laminB1_${WIG}
+    done
+# db.table      min max mean count sumData stdDev viewLimits
+mm9.laminB1_AC  -5.742 4.293 -0.00201324 2102030 -4231.89 1.14068 viewLimits=-5.70541:4.293
+# db.table      min max mean count sumData stdDev viewLimits
+mm9.laminB1_EF  -5.444 4.922 -0.00154509 2102030 -3247.82 1.04232 viewLimits=-5.21314:4.922
+# db.table      min max mean count sumData stdDev viewLimits
+mm9.laminB1_ES  -5.572 4.617 -0.00133816 2102030 -2812.85 0.929746 viewLimits=-4.65007:4.617
+# db.table      min max mean count sumData stdDev viewLimits
+mm9.laminB1_NP  -5.998 4.292 -0.00148136 2102030 -3113.87 1.059 viewLimits=-5.29649:4.292
 
     # Create the laminB1 supertrack definitions in mm9/trackDb.ra 
     # copy the descrition html to right place
