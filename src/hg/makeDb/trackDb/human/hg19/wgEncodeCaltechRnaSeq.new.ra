@@ -9,11 +9,11 @@ subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1hESC&nbsp;
 subGroup3 readType Read_Type r1x75=Single_75nt r1x75D=Single_Strand-Specific_75nt r2x75=Paired_75nt_(200_bp) r2x75400=Paired_75nt_(400_bp)
 subGroup4 insertLength Insert_Length il200=200 il400=400 ilNa=NA
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
-#subGroup6 treatment Treatment DIFF7d=Differentiated
+#subGroup6 treatment Treatment DIFF7d=Differentiated None=None
 dimensions dimensionX=readType dimensionY=cellType dimensionA=rep
 dimensionAchecked rep1
 sortOrder cellType=+ readType=+ view=+ rep=+
-fileSortOrder cell=Cell_Line readType=Read<BR>Type insertLength=Insert<BR>Length view=View replicate=Rep labVersion=Lab_Details dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
+fileSortOrder cell=Cell_Line readType=Read<BR>Type insertLength=Insert<BR>Length view=View replicate=Rep mapAlgorithm=Map_Algorithm dccAccession=UCSC_Accession geoAccession=GEO_Accession origAssembly=Original_Assembly fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 controlledVocabulary encode/cv.ra cellType=cell readType=readType insertLength=insertLength
 dragAndDrop subTracks
 priority 0
@@ -1510,4 +1510,20 @@ html wgEncodeCaltechRnaSeq.new
 		subGroups view=Signal cellType=GM12892 insertLength=il200 readType=r2x75 rep=rep1
 		type bigWig 1.000000 157171.000000
 		# subId=3441 dateSubmitted=2011-03-17
+
+        track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1
+        parent wgEncodeCaltechRnaSeqViewSignal off
+        shortLabel LHCN-M2 Sig 1
+        longLabel ENCODE Caltech RNA-seq Signal Replicate 1 (in LHCN-M2 differntiated cells)
+        subGroups view=Signal cellType=LHCNM2D insertLength=il200 readType=r2x75 rep=rep1
+        type bigWig 1.000000 287591.000000
+        # subId=4105 dateSubmitted=2011-05-11
+
+        track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1
+        parent wgEncodeCaltechRnaSeqViewSignal off
+        shortLabel LHCN-M2 Sig 1
+        longLabel ENCODE Caltech RNA-seq Signal Replicate 1 (in LHCN-M2 cycling cells)
+        subGroups view=Signal cellType=LHCNM2 insertLength=il200 readType=r2x75 rep=rep1
+        type bigWig 1.000000 286185.000000
+        # subId=4106 dateSubmitted=2011-05-11
 
