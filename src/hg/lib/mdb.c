@@ -1151,7 +1151,7 @@ sqlLoadTabFile(conn, MDB_TEMPORARY_TAB_FILE, tableName, SQL_TAB_FILE_WARN_ON_ERR
 safef(query, sizeof(query),"alter table %s enable keys",tableName);
 sqlUpdate(conn, query);
 
-unlink(MDB_TEMPORARY_TAB_FILE);
+//unlink(MDB_TEMPORARY_TAB_FILE);
 
 verbose(0,"%04ldms - Done loading mdb with 'LOAD DATA INFILE' mysql command.\n",(clock1000() - lastTime));
 
@@ -2906,15 +2906,17 @@ while(mdbObjs != NULL)
                     }
                 else
                     {
-                    char *acc = mdbObjFindValue(obj,MDB_VAR_DCC_ACCESSION); // FIXME: Add code to update accession to encodeExp
-                    if (updateAccession && !createExpIfNecessary && exp->accession == NULL)
+                    char *acc = mdbObjFindValue(obj,MDB_VAR_DCC_ACCESSION);
+                    if (updateAccession && !createExpIfNecessary && exp->accession == NULL) // -test so one wasn't created
                         {
                         exp->accession = needMem(16);
                         safef(exp->accession, 16, "TEMP%06d", exp->ix); // Temporary since this is not an update but we want -test to work.
                         }
                     if (exp->accession != NULL && (acc == NULL || differentString(acc,exp->accession)))
                         {
-                        updateObj = TRUE;
+                        if (updateAccession)
+                            updateObj = TRUE;
+
                         accMissing++;
 
                         if (acc != NULL) // Always an error
@@ -2954,7 +2956,7 @@ while(mdbObjs != NULL)
                 mdbObjSetVarInt(obj,MDB_VAR_ENCODE_EXP_ID,expId);
                 struct mdbObj *newObj = mdbObjCreate(obj->obj,MDB_VAR_ENCODE_EXP_ID, experimentId);
                 assert(exp != NULL);
-                if (exp->accession != NULL)
+                if (exp->accession != NULL && updateAccession)
                     mdbObjSetVar(newObj,MDB_VAR_DCC_ACCESSION,exp->accession);
                 slAddHead(&mdbUpdateObjs,newObj);
                 }

@@ -1661,6 +1661,24 @@ if (span == 0)
 *retSpan = span;
 }
 
+#ifdef PROGRESS_METER
+static void progressWrite(char *label, FILE *progressFH, off_t seekTo,
+    long msStart, unsigned long long bytesWritten,
+    unsigned long long expectedBytes)
+/* write to given file the current progress situation */
+{
+if (seekTo)
+    fseeko(progressFH, seekTo, SEEK_SET);
+long msNow = clock1000();
+int percentDone = 0;
+if (expectedBytes > 0)
+    percentDone = (100 * bytesWritten) / expectedBytes;
+fprintf(progressFH, "%s:\t%llu\t%llu\t%ld\t%% %d\n", label, bytesWritten,
+    (unsigned long long)expectedBytes, msNow - msStart, percentDone);
+fflush(progressFH);
+}
+#endif
+
 /*  HACK ALERT - The table browser needs to be able to encode its wiggle
  *	data.  This function is temporarily global until a proper method
  *	is used to work this business into the table browser custom
@@ -1717,22 +1735,13 @@ if (dbRequested)
 	++bytesWritten;
 	if (0 == (bytesWritten % 100000))
 	    {
-	    if (progressSeek)
-		fseeko(progress, progressSeek, SEEK_SET);
-	    long msNow = clock1000();
-	    int percentDone = (100 * bytesWritten) / wigAsciiSize;
-	    fprintf(progress, "encoding:\t%llu\t%llu\t%ld\t%% %d\t%llu\n", bytesWritten, (unsigned long long)wigAsciiSize, msNow - msStart, percentDone, (unsigned long long)progressSeek);
-	    fflush(progress);
+	    progressWrite("encoding", progress, progressSeek, msStart, bytesWritten, wigAsciiSize);
 	    }
 #endif
 	}
     carefulClose(&in);
 #ifdef PROGRESS_METER
-//    if (progressSeek)
-//	fseeko(progress, progressSeek, SEEK_SET);
-    long msNow = clock1000();
-    int percentDone = (100 * bytesWritten) / wigAsciiSize;
-    fprintf(progress, "encoding:\t%llu\t%llu\t%ld\t%% %d\t%llu\tdone\n", bytesWritten, (unsigned long long)wigAsciiSize, msNow - msStart, percentDone, (unsigned long long)progressSeek);
+    progressWrite("encoding_done", progress, (off_t)0, msStart, bytesWritten, wigAsciiSize);
     carefulClose(&progress);
 #endif
     fflush(out);		/* help see error from loader failure */
@@ -1847,6 +1856,7 @@ fprintf(progress, "remote size: %llu\n", (unsigned long long)cpp->remoteFileSize
     off_t remoteSize = cpp->remoteFileSize;
 //    off_t progressSeek = ftello(progress);
     unsigned long long bytesWritten = 0;
+    unsigned long long linesRead = 0;
     unsigned long long nextInterval = bytesWritten + 100000;
     long msStart = clock1000();
 #endif
@@ -1856,15 +1866,11 @@ fprintf(progress, "remote size: %llu\n", (unsigned long long)cpp->remoteFileSize
     while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
 	{
 #ifdef PROGRESS_METER
+	linesRead++;
 	bytesWritten += strlen(line);
 	if (bytesWritten > nextInterval)
 	    {
-//	    if (progressSeek)
-//		fseeko(progress, progressSeek, SEEK_SET);
-	    long msNow = clock1000();
-	    int percentDone = (100 * bytesWritten) / remoteSize;
-	    fprintf(progress, "incoming:\t%llu\t%llu\t%ld\t%% %d\n", bytesWritten, (unsigned long long)remoteSize, msNow - msStart, percentDone );
-	    fflush(progress);
+	    progressWrite("incoming", progress, (off_t)0, msStart, bytesWritten, remoteSize);
     	    nextInterval = bytesWritten + 100000;
 	    }
 #endif
@@ -1872,10 +1878,10 @@ fprintf(progress, "remote size: %llu\n", (unsigned long long)cpp->remoteFileSize
 	}
     carefulClose(&f);
 #ifdef PROGRESS_METER
-long msNow = clock1000();
-int percentDone = (100 * bytesWritten) / remoteSize;
-fprintf(progress, "incoming:\t%llu\t%llu\t%ld\t%% %d\tdone\n", bytesWritten, (unsigned long long)remoteSize, msNow - msStart, percentDone );
-carefulClose(&progress);
+    progressWrite("incoming_done", progress, (off_t)0, msStart, bytesWritten, remoteSize);
+fprintf(progress, "lines_read: %llu\n", linesRead);
+fflush(progress);
+    carefulClose(&progress);
 #endif
 
     wigLoaderEncoding(track, wigAscii, dbRequested);
