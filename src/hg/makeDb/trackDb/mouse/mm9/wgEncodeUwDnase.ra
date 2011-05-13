@@ -1688,7 +1688,7 @@ wgEncode 1
         #display no		
         # was wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep3 cricket Fri May 13 13:56:41 2011
 
-        track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep6
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep6
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel Liver Raw 6
         #longLabel ENCODE UW DNaseI HS Signal Replicate 6 (in Liver cells)
