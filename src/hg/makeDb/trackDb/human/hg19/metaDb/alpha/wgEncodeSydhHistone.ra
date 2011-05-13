@@ -14,6 +14,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000912
 expId 912
 fileName wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep1.bam
 grant Snyder
@@ -36,6 +37,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000912
 expId 912
 fileName wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep2.bam
 grant Snyder
@@ -58,6 +60,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000912
 expId 912
 fileName wgEncodeSydhHistoneK562bH3k27me3bUcdPk.narrowPeak.gz
 grant Snyder
@@ -81,6 +84,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000912
 expId 912
 fileName wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep1.fastq.gz
 grant Snyder
@@ -104,6 +108,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000912
 expId 912
 fileName wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep2.fastq.gz
 grant Snyder
@@ -127,6 +132,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000912
 expId 912
 fileName wgEncodeSydhHistoneK562bH3k27me3bUcdSig.bigWig
 grant Snyder
@@ -150,6 +156,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
+dccAccession wgEncodeEH000911
 expId 911
 fileName wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep1.bam
 grant Snyder
@@ -172,6 +179,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
+dccAccession wgEncodeEH000911
 expId 911
 fileName wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep2.bam
 grant Snyder
@@ -194,6 +202,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
+dccAccession wgEncodeEH000911
 expId 911
 fileName wgEncodeSydhHistoneK562bH3k4me1UcdPk.narrowPeak.gz
 grant Snyder
@@ -217,6 +226,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
+dccAccession wgEncodeEH000911
 expId 911
 fileName wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep1.fastq.gz
 grant Snyder
@@ -239,6 +249,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
+dccAccession wgEncodeEH000911
 expId 911
 fileName wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep2.fastq.gz
 grant Snyder
@@ -261,6 +272,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
+dccAccession wgEncodeEH000911
 expId 911
 fileName wgEncodeSydhHistoneK562bH3k4me1UcdSig.bigWig
 grant Snyder
@@ -284,6 +296,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000913
 expId 913
 fileName wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep1.bam
 grant Snyder
@@ -306,6 +319,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000913
 expId 913
 fileName wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep2.bam
 grant Snyder
@@ -328,6 +342,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000913
 expId 913
 fileName wgEncodeSydhHistoneK562bH3k4me3bUcdPk.narrowPeak.gz
 grant Snyder
@@ -351,6 +366,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000913
 expId 913
 fileName wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep1.fastq.gz
 grant Snyder
@@ -374,6 +390,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000913
 expId 913
 fileName wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep2.fastq.gz
 grant Snyder
@@ -397,6 +414,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000913
 expId 913
 fileName wgEncodeSydhHistoneK562bH3k4me3bUcdSig.bigWig
 grant Snyder
@@ -420,6 +438,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000914
 expId 914
 fileName wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep1.bam
 grant Snyder
@@ -442,6 +461,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000914
 expId 914
 fileName wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep2.bam
 grant Snyder
@@ -464,6 +484,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000914
 expId 914
 fileName wgEncodeSydhHistoneK562bH3k9acbUcdPk.narrowPeak.gz
 grant Snyder
@@ -487,6 +508,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000914
 expId 914
 fileName wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep1.fastq.gz
 grant Snyder
@@ -510,6 +532,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000914
 expId 914
 fileName wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep2.fastq.gz
 grant Snyder
@@ -533,6 +556,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000914
 expId 914
 fileName wgEncodeSydhHistoneK562bH3k9acbUcdSig.bigWig
 grant Snyder
@@ -557,6 +581,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000672
 expId 672
 fileName wgEncodeSydhHistoneK562bInputUcdAln.bam
 grant Snyder
@@ -581,6 +606,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000672
 expId 672
 fileName wgEncodeSydhHistoneK562bInputUcdRawData.fastq.gz
 grant Snyder
@@ -605,6 +631,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
+dccAccession wgEncodeEH000672
 dccInternalNotes Signal file generated by AWG Uniform Signal Calls: June 2010 Freeze
 expId 672
 fileName wgEncodeSydhHistoneK562bInputUcdSig.bigWig
@@ -629,6 +656,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000908
 expId 908
 fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1.bam
 grant Snyder
@@ -651,6 +679,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000908
 expId 908
 fileName wgEncodeSydhHistoneNt2d1H3k27me3BUcdAlnRep2.bam
 grant Snyder
@@ -673,6 +702,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000908
 expId 908
 fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk.narrowPeak.gz
 grant Snyder
@@ -696,6 +726,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000908
 expId 908
 fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep1.fastq.gz
 grant Snyder
@@ -719,6 +750,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000908
 expId 908
 fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep2.fastq.gz
 grant Snyder
@@ -742,6 +774,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000908
 expId 908
 fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig.bigWig
 grant Snyder
@@ -765,6 +798,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000915
 expId 915
 fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam
 grant Snyder
@@ -787,6 +821,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000915
 expId 915
 fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam
 grant Snyder
@@ -809,6 +844,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000915
 expId 915
 fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk.narrowPeak.gz
 grant Snyder
@@ -832,6 +868,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000915
 expId 915
 fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep1.fastq.gz
 grant Snyder
@@ -855,6 +892,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000915
 expId 915
 fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep2.fastq.gz
 grant Snyder
@@ -878,6 +916,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000915
 expId 915
 fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig.bigWig
 grant Snyder
@@ -901,6 +940,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000917
 expId 917
 fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam
 grant Snyder
@@ -923,6 +963,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000917
 expId 917
 fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam
 grant Snyder
@@ -945,6 +986,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000917
 expId 917
 fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdPk.narrowPeak.gz
 grant Snyder
@@ -968,6 +1010,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000917
 expId 917
 fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep1.fastq.gz
 grant Snyder
@@ -990,6 +1033,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000917
 expId 917
 fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep2.fastq.gz
 grant Snyder
@@ -1012,6 +1056,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000917
 expId 917
 fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdSig.bigWig
 grant Snyder
@@ -1035,6 +1080,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000909
 expId 909
 fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1.bam
 grant Snyder
@@ -1057,6 +1103,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000909
 expId 909
 fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2.bam
 grant Snyder
@@ -1079,6 +1126,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000909
 expId 909
 fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdPk.narrowPeak.gz
 grant Snyder
@@ -1102,6 +1150,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000909
 expId 909
 fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep1.fastq.gz
 grant Snyder
@@ -1125,6 +1174,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000909
 expId 909
 fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep2.fastq.gz
 grant Snyder
@@ -1148,6 +1198,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000909
 expId 909
 fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdSig.bigWig
 grant Snyder
@@ -1171,6 +1222,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000910
 expId 910
 fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1.bam
 grant Snyder
@@ -1193,6 +1245,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000910
 expId 910
 fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2.bam
 grant Snyder
@@ -1215,6 +1268,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000910
 expId 910
 fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdPk.narrowPeak.gz
 grant Snyder
@@ -1238,6 +1292,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000910
 expId 910
 fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep1.fastq.gz
 grant Snyder
@@ -1261,6 +1316,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000910
 expId 910
 fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep2.fastq.gz
 grant Snyder
@@ -1284,6 +1340,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000910
 expId 910
 fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdSig.bigWig
 grant Snyder
@@ -1307,6 +1364,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep1.bam
 grant Snyder
@@ -1329,6 +1387,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep2.bam
 grant Snyder
@@ -1351,6 +1410,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdPk.narrowPeak.gz
 grant Snyder
@@ -1374,6 +1434,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdRawDataRep1.fastq.gz
 grant Snyder
@@ -1397,6 +1458,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdRawDataRep2.fastq.gz
 grant Snyder
@@ -1420,6 +1482,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000918
 expId 918
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdSig.bigWig
 grant Snyder
@@ -1443,6 +1506,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000654
 expId 654
 fileName wgEncodeSydhHistoneNt2d1InputUcdAln.bam
 grant Snyder
@@ -1464,6 +1528,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000654
 expId 654
 fileName wgEncodeSydhHistoneNt2d1InputUcdRawData.fastq.gz
 grant Snyder
@@ -1485,6 +1550,7 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
+dccAccession wgEncodeEH000654
 expId 654
 fileName wgEncodeSydhHistoneNt2d1InputUcdSig.bigWig
 grant Snyder
@@ -1508,6 +1574,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
+dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
 grant Snyder
@@ -1531,6 +1598,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
+dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
 grant Snyder
@@ -1554,6 +1622,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
+dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdPk.narrowPeak.gz
 grant Snyder
@@ -1577,6 +1646,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
+dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1.fastq.gz
 grant Snyder
@@ -1600,6 +1670,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
+dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2.fastq.gz
 grant Snyder
@@ -1623,6 +1694,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
+dccAccession wgEncodeEH000920
 expId 920
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdSig.bigWig
 grant Snyder
@@ -1646,6 +1718,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
+dccAccession wgEncodeEH000919
 expId 919
 fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1.bam
 grant Snyder
@@ -1668,6 +1741,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
+dccAccession wgEncodeEH000919
 expId 919
 fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2.bam
 grant Snyder
@@ -1690,6 +1764,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
+dccAccession wgEncodeEH000919
 expId 919
 fileName wgEncodeSydhHistoneU2osH3k9me3UcdPk.narrowPeak.gz
 grant Snyder
@@ -1713,6 +1788,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
+dccAccession wgEncodeEH000919
 expId 919
 fileName wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep1.fastq.gz
 grant Snyder
@@ -1736,6 +1812,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
+dccAccession wgEncodeEH000919
 expId 919
 fileName wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep2.fastq.gz
 grant Snyder
@@ -1759,6 +1836,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
+dccAccession wgEncodeEH000919
 expId 919
 fileName wgEncodeSydhHistoneU2osH3k9me3UcdSig.bigWig
 grant Snyder
@@ -1783,6 +1861,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000916
 expId 916
 fileName wgEncodeSydhHistoneU2osInputUcdAln.bam
 grant Snyder
@@ -1805,6 +1884,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000916
 expId 916
 fileName wgEncodeSydhHistoneU2osInputUcdRawData.fastq.gz
 grant Snyder
@@ -1827,6 +1907,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateReSubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
+dccAccession wgEncodeEH000916
 dccInternalNotes Signal file generated by AWG Uniform Signal Calls: June 2010 Freeze
 expId 916
 fileName wgEncodeSydhHistoneU2osInputUcdSig.bigWig
@@ -1840,4 +1921,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 1294141010
+# MAGIC: -971701741
