@@ -489,11 +489,13 @@ for my $key (keys %ra) {
                 }
 
                 # Now lets tgz all the sources
-                my $cmd = "/bin/tar -czf $targetFile";
+                my $cmd = "/bin/tar -c";
 
                 for my $file (@files) {
                     $cmd .= " $submitPath/$file";
                 }
+                $cmd .= " | /usr/bin/pigz -c > $targetFile";  # pigz will parallelize and is faster!
+
                 HgAutomate::verbose(2, "creating gzipped tar $targetFile of multiple files: [@files].\n");
                 !system($cmd) || die "system '$cmd' failed: $?\n";
 
