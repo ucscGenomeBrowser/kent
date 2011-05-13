@@ -842,6 +842,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000583
+expId 583
 fileName wgEncodeOpenChromDnaseFibroblValidation.tgz
 grant Crawford
 lab Duke
@@ -1982,6 +1984,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000581
+expId 581
 fileName wgEncodeOpenChromDnaseGm18507Validation.tgz
 grant Crawford
 lab Duke
@@ -3148,6 +3152,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000540
+expId 540
 fileName wgEncodeOpenChromDnaseHelas3Validation.tgz
 grant Crawford
 lab Duke
@@ -3519,6 +3525,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000537
+expId 537
 fileName wgEncodeOpenChromDnaseHepg2Validation.tgz
 grant Crawford
 lab Duke
@@ -3649,6 +3657,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH001101
+expId 1101
 fileName wgEncodeOpenChromDnaseHmecValidation.tgz
 grant Crawford
 lab Duke
@@ -4706,6 +4716,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000548
+expId 548
 fileName wgEncodeOpenChromDnaseHuvecValidation.tgz
 grant Crawford
 lab Duke
@@ -5256,6 +5268,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH001096
+expId 1096
 fileName wgEncodeOpenChromDnaseLncapAndroValidation.tgz
 grant Crawford
 lab Duke
@@ -5397,6 +5411,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH001097
+expId 1097
 fileName wgEncodeOpenChromDnaseLncapValidation.tgz
 grant Crawford
 lab Duke
@@ -5572,6 +5588,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000579
+expId 579
 fileName wgEncodeOpenChromDnaseMcf7Validation.tgz
 grant Crawford
 lab Duke
@@ -6180,6 +6198,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000553
+expId 553
 fileName wgEncodeOpenChromDnaseNhekValidation.tgz
 grant Crawford
 lab Duke
@@ -6903,6 +6923,8 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000576
+expId 576
 fileName wgEncodeOpenChromDnaseProgfibValidation.tgz
 grant Crawford
 lab Duke
@@ -7507,4 +7529,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -480896932
+# MAGIC: 1756983165
