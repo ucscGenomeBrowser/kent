@@ -1,7 +1,7 @@
 metaObject wgEncodeCaltechRnaSeq
 objType composite
 composite wgEncodeCaltechRnaSeq
-expVars lab,dataType,cell,readType,insertLength,replicate,treatment
+expVars lab,dataType,cell,readType,insertLength,treatment
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2
 objType table
@@ -11,6 +11,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
@@ -34,6 +36,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam
 grant Myers
 lab Caltech
@@ -58,6 +62,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
@@ -80,6 +86,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
@@ -101,6 +109,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -124,6 +134,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -147,6 +159,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -170,6 +184,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -193,6 +209,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
@@ -216,6 +234,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam
 grant Myers
 lab Caltech
@@ -239,6 +259,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -263,6 +285,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -287,6 +311,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -310,6 +336,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -334,6 +362,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -357,6 +387,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -380,6 +412,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -403,6 +437,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -424,6 +460,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -447,6 +485,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -470,6 +510,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -493,6 +535,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -516,6 +560,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -539,6 +585,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -562,6 +610,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -585,6 +635,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -608,6 +660,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -631,6 +685,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -654,6 +710,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -677,6 +735,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -700,6 +760,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -723,6 +785,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -746,6 +810,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -769,6 +835,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -792,6 +860,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam
 grant Myers
 insertLength 400
@@ -815,6 +885,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 400
@@ -839,6 +911,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 400
@@ -861,6 +935,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 400
@@ -882,6 +958,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 400
@@ -905,6 +983,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 400
@@ -928,6 +1008,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 400
@@ -951,6 +1033,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SigRep2V2.bigWig
 grant Myers
 insertLength 400
@@ -974,6 +1058,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam
 grant Myers
 insertLength 400
@@ -997,6 +1083,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400TSSRep2V3.gtf.gz
 grant Myers
 insertLength 400
@@ -1020,6 +1108,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 400
@@ -1043,6 +1133,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 400
@@ -1066,6 +1158,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -1089,6 +1183,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -1112,6 +1208,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1135,6 +1233,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1158,6 +1258,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -1178,6 +1280,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -1199,6 +1303,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -1219,6 +1325,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -1240,6 +1348,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1263,6 +1373,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1286,6 +1398,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1309,6 +1423,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1332,6 +1448,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -1355,6 +1473,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -1378,6 +1498,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -1401,6 +1523,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -1424,6 +1548,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -1447,6 +1573,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -1470,6 +1598,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1493,6 +1623,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1516,6 +1648,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1539,6 +1673,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1562,6 +1698,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1585,6 +1723,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1608,6 +1748,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -1631,6 +1773,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -1654,6 +1798,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2.bam
 grant Myers
 insertLength 200
@@ -1677,6 +1823,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1700,6 +1848,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1723,6 +1873,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1746,6 +1898,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -1766,6 +1920,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -1786,6 +1942,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep3.fastq.gz
 grant Myers
 insertLength 200
@@ -1806,6 +1964,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -1826,6 +1986,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -1846,6 +2008,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep3.fastq.gz
 grant Myers
 insertLength 200
@@ -1866,6 +2030,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1889,6 +2055,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1912,6 +2080,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1935,6 +2105,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1958,6 +2130,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1981,6 +2155,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2004,6 +2180,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -2027,6 +2205,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -2050,6 +2230,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bed.gz
 grant Myers
 insertLength 200
@@ -2073,6 +2255,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -2096,6 +2280,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -2119,6 +2305,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3V2.bigWig
 grant Myers
 insertLength 200
@@ -2142,6 +2330,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -2165,6 +2355,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -2188,6 +2380,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2.bam
 grant Myers
 insertLength 200
@@ -2211,6 +2405,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2234,6 +2430,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2257,6 +2455,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2280,6 +2480,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2303,6 +2505,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2326,6 +2530,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2349,6 +2555,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2372,6 +2580,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2395,6 +2605,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2418,6 +2630,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
@@ -2440,6 +2654,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam
 grant Myers
 lab Caltech
@@ -2463,6 +2679,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
@@ -2484,6 +2702,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
@@ -2504,6 +2724,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -2527,6 +2749,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -2550,6 +2774,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -2573,6 +2799,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -2596,6 +2824,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
@@ -2618,6 +2848,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam
 grant Myers
 lab Caltech
@@ -2640,6 +2872,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -2663,6 +2897,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -2686,6 +2922,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam
 grant Myers
 insertLength 200
@@ -2709,6 +2947,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam
 grant Myers
 insertLength 200
@@ -2732,6 +2972,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2755,6 +2997,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2778,6 +3022,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2801,6 +3047,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep4V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2825,6 +3073,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -2847,6 +3097,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -2869,6 +3121,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep3.fastq.gz
 grant Myers
 insertLength 200
@@ -2891,6 +3145,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep4.fastq.gz
 grant Myers
 insertLength 200
@@ -2913,6 +3169,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -2935,6 +3193,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -2957,6 +3217,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep3.fastq.gz
 grant Myers
 insertLength 200
@@ -2979,6 +3241,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep4.fastq.gz
 grant Myers
 insertLength 200
@@ -3000,6 +3264,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3023,6 +3289,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3046,6 +3314,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3069,6 +3339,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep4V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3092,6 +3364,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3115,6 +3389,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3138,6 +3414,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3161,6 +3439,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep4V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3184,6 +3464,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -3207,6 +3489,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -3230,6 +3514,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep3V3.bed.gz
 grant Myers
 insertLength 200
@@ -3253,6 +3539,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep4V3.bed.gz
 grant Myers
 insertLength 200
@@ -3276,6 +3564,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -3299,6 +3589,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -3322,6 +3614,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep3V2.bigWig
 grant Myers
 insertLength 200
@@ -3345,6 +3639,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep4V2.bigWig
 grant Myers
 insertLength 200
@@ -3368,6 +3664,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -3391,6 +3689,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -3414,6 +3714,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam
 grant Myers
 insertLength 200
@@ -3437,6 +3739,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam
 grant Myers
 insertLength 200
@@ -3460,6 +3764,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3483,6 +3789,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3506,6 +3814,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3529,6 +3839,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep4V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3552,6 +3864,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3575,6 +3889,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3598,6 +3914,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3621,6 +3939,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep4V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3644,6 +3964,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3667,6 +3989,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3690,6 +4014,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3713,6 +4039,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep4V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3736,6 +4064,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam
 grant Myers
 insertLength 400
@@ -3759,6 +4089,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 400
@@ -3783,6 +4115,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 400
@@ -3805,6 +4139,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 400
@@ -3826,6 +4162,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 400
@@ -3849,6 +4187,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 400
@@ -3872,6 +4212,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 400
@@ -3895,6 +4237,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400SigRep1V2.bigWig
 grant Myers
 insertLength 400
@@ -3918,6 +4262,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2.bam
 grant Myers
 insertLength 400
@@ -3941,6 +4287,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400TSSRep1V3.gtf.gz
 grant Myers
 insertLength 400
@@ -3964,6 +4312,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 400
@@ -3987,6 +4337,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 400
@@ -4010,6 +4362,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -4033,6 +4387,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -4057,6 +4413,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4080,6 +4438,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4103,6 +4463,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep1V2.fastq.gz
 grant Myers
 insertLength 200
@@ -4124,6 +4486,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep2V2.fastq.gz
 grant Myers
 insertLength 200
@@ -4145,6 +4509,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep1V2.fastq.gz
 grant Myers
 insertLength 200
@@ -4166,6 +4532,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep2V2.fastq.gz
 grant Myers
 insertLength 200
@@ -4187,6 +4555,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4210,6 +4580,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4233,6 +4605,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4256,6 +4630,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4279,6 +4655,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -4302,6 +4680,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -4325,6 +4705,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-12-16
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -4349,6 +4731,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -4373,6 +4757,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -4396,6 +4782,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -4420,6 +4808,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4443,6 +4833,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4466,6 +4858,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4489,6 +4883,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4512,6 +4908,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4535,6 +4933,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4558,6 +4958,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
@@ -4580,6 +4982,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam
 grant Myers
 lab Caltech
@@ -4603,6 +5007,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
@@ -4624,6 +5030,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
@@ -4644,6 +5052,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -4667,6 +5077,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -4690,6 +5102,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -4713,6 +5127,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -4736,6 +5152,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
@@ -4758,6 +5176,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam
 grant Myers
 lab Caltech
@@ -4780,6 +5200,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -4803,6 +5225,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -4826,6 +5250,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4849,6 +5275,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4873,6 +5301,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -4895,6 +5325,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -4917,6 +5349,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -4939,6 +5373,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -4960,6 +5396,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4983,6 +5421,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5006,6 +5446,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5029,6 +5471,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5052,6 +5496,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -5075,6 +5521,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -5098,6 +5546,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -5121,6 +5571,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -5144,6 +5596,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -5167,6 +5621,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -5190,6 +5646,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5213,6 +5671,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5236,6 +5696,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5259,6 +5721,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5282,6 +5746,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5305,6 +5771,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5328,6 +5796,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
@@ -5350,6 +5820,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam
 grant Myers
 lab Caltech
@@ -5373,6 +5845,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
@@ -5394,6 +5868,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
@@ -5414,6 +5890,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -5437,6 +5915,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -5460,6 +5940,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -5483,6 +5965,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -5506,6 +5990,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
@@ -5528,6 +6014,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam
 grant Myers
 lab Caltech
@@ -5550,6 +6038,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -5573,6 +6063,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -5596,6 +6088,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5619,6 +6113,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5643,6 +6139,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -5665,6 +6163,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -5687,6 +6187,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -5709,6 +6211,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -5730,6 +6234,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5753,6 +6259,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5776,6 +6284,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5799,6 +6309,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5822,6 +6334,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -5845,6 +6359,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -5868,6 +6384,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -5891,6 +6409,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -5914,6 +6434,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -5937,6 +6459,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -5960,6 +6484,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5983,6 +6509,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6006,6 +6534,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6029,6 +6559,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6052,6 +6584,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6075,6 +6609,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6098,6 +6634,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -6121,6 +6659,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -6144,6 +6684,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6167,6 +6709,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6190,6 +6734,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -6211,6 +6757,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -6232,6 +6780,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -6253,6 +6803,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -6274,6 +6826,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6297,6 +6851,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6320,6 +6876,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6343,6 +6901,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6366,6 +6926,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -6389,6 +6951,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -6412,6 +6976,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -6435,6 +7001,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -6458,6 +7026,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -6481,6 +7051,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -6504,6 +7076,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6527,6 +7101,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6550,6 +7126,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6573,6 +7151,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6596,6 +7176,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6619,6 +7201,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6642,6 +7226,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
@@ -6664,6 +7250,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam
 grant Myers
 lab Caltech
@@ -6687,6 +7275,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
@@ -6708,6 +7298,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
@@ -6728,6 +7320,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -6751,6 +7345,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -6774,6 +7370,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -6797,6 +7395,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -6820,6 +7420,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
@@ -6842,6 +7444,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam
 grant Myers
 lab Caltech
@@ -6864,6 +7468,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -6887,6 +7493,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -6910,6 +7518,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6933,6 +7543,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6957,6 +7569,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -6979,6 +7593,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -7001,6 +7617,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -7023,6 +7641,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -7044,6 +7664,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7067,6 +7689,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7090,6 +7714,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7113,6 +7739,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7136,6 +7764,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -7159,6 +7789,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -7182,6 +7814,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -7205,6 +7839,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -7228,6 +7864,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -7251,6 +7889,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -7274,6 +7914,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7297,6 +7939,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7320,6 +7964,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7343,6 +7989,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7366,6 +8014,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7389,6 +8039,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7412,6 +8064,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
@@ -7434,6 +8088,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam
 grant Myers
 lab Caltech
@@ -7457,6 +8113,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
@@ -7478,6 +8136,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
@@ -7498,6 +8158,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -7521,6 +8183,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -7544,6 +8208,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -7567,6 +8233,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-14
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -7590,6 +8258,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
@@ -7612,6 +8282,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam
 grant Myers
 lab Caltech
@@ -7634,6 +8306,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -7657,6 +8331,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -7680,6 +8356,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7703,6 +8381,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7727,6 +8407,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -7748,6 +8430,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -7770,6 +8454,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-14
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -7791,6 +8477,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -7812,6 +8500,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7835,6 +8525,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7858,6 +8550,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7881,6 +8575,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7904,6 +8600,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -7927,6 +8625,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -7950,6 +8650,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -7973,6 +8675,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -7996,6 +8700,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -8019,6 +8725,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -8042,6 +8750,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8065,6 +8775,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8088,6 +8800,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8111,6 +8825,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8134,6 +8850,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8157,6 +8875,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8180,6 +8900,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8204,12 +8926,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
+dccAccession wgEncodeEH001670
+expId 1670
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dFastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 1
@@ -8226,12 +8949,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
+dccAccession wgEncodeEH001670
+expId 1670
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dFastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 1
@@ -8248,6 +8972,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8272,6 +8998,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8296,6 +9024,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dJunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -8320,6 +9050,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
+dccAccession wgEncodeEH001670
+expId 1670
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1.bam
 grant Myers
 insertLength 200
@@ -8343,6 +9075,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1.bigWig
 grant Myers
 insertLength 200
@@ -8366,6 +9100,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
+dccAccession wgEncodeEH001670
+expId 1670
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1.bam
 grant Myers
 insertLength 200
@@ -8389,6 +9125,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8413,6 +9151,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8437,6 +9177,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8461,6 +9203,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8484,12 +9228,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd1Rep1V2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 1
@@ -8506,12 +9251,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd2Rep1V2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 1
@@ -8528,6 +9274,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8551,6 +9299,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8574,6 +9324,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -8597,6 +9349,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200PairedRep1V2.bam
 grant Myers
 insertLength 200
@@ -8620,6 +9374,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001669
+expId 1669
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1.bigWig
 grant Myers
 insertLength 200
@@ -8642,6 +9398,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -8665,6 +9423,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8688,6 +9448,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8711,6 +9473,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
 fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8734,6 +9498,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -8757,6 +9523,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -8780,6 +9548,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2.bam
 grant Myers
 insertLength 200
@@ -8804,6 +9574,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8827,6 +9599,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8850,6 +9624,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8874,6 +9650,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -8894,6 +9672,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -8915,12 +9695,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep3V2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 3
@@ -8938,6 +9719,8 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -8958,6 +9741,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -8979,12 +9764,13 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep3V2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 3
@@ -9001,6 +9787,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9024,6 +9812,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9039,29 +9829,6 @@ subId 3597
 submittedDataVersion V3 - New Elements Formats
 view GeneDeNovo
 
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep3V2
-objType file
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-20
-dateUnrestricted 2012-01-20
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep3V2.fpkm.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum 2fa8c0ba19bd8c1f195727d678e8a17f
-project wgEncode
-readType 2x75
-replicate 3
-rnaExtract longPolyA
-subId 3478
-submittedDataVersion V2 - A better mapping technique.
-view GeneDeNovo
-
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep3V3
 objType file
 cell MCF-7
@@ -9070,6 +9837,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9085,29 +9854,6 @@ subId 3598
 submittedDataVersion V3 - New Elements Formats
 view GeneDeNovo
 
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGCV3cRep3V2
-objType file
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-20
-dateUnrestricted 2012-01-20
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGCV3cRep3V2.fpkm.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum 74de0b8ce8a82ab5f88e7008fb9b7d32
-project wgEncode
-readType 2x75
-replicate 3
-rnaExtract longPolyA
-subId 3478
-submittedDataVersion V2 - A better mapping technique.
-view GeneGCV3c
-
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep1V3
 objType file
 cell MCF-7
@@ -9116,6 +9862,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9139,6 +9887,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9162,6 +9912,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9177,30 +9929,6 @@ subId 3598
 submittedDataVersion V3 - New Elements Formats
 view GeneGencV3c
 
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneModelRep3V2
-objType table
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-20
-dateUnrestricted 2012-01-20
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneModelRep3V2.gtf.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum b84318412372265eef489cfdb707572a
-project wgEncode
-readType 2x75
-replicate 3
-rnaExtract longPolyA
-subId 3478
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneModelRep3V2
-view GeneModel
-
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep1V3
 objType file
 cell MCF-7
@@ -9209,6 +9937,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -9232,6 +9962,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -9255,6 +9987,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep3V3.bed.gz
 grant Myers
 insertLength 200
@@ -9278,6 +10012,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -9301,6 +10037,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -9324,6 +10062,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep3V2.bigWig
 grant Myers
 insertLength 200
@@ -9348,6 +10088,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -9371,6 +10113,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -9394,6 +10138,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2.bam
 grant Myers
 insertLength 200
@@ -9418,6 +10164,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9441,6 +10189,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9464,6 +10214,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9487,6 +10239,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9510,6 +10264,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9525,29 +10281,6 @@ subId 3597
 submittedDataVersion V3 - New Elements Formats
 view TranscriptDeNovo
 
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep3V2
-objType file
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-20
-dateUnrestricted 2012-01-20
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep3V2.fpkm.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum 5ce2278e35af9ae8fa90c70f2de73405
-project wgEncode
-readType 2x75
-replicate 3
-rnaExtract longPolyA
-subId 3478
-submittedDataVersion V2 - A better mapping technique.
-view TranscriptDeNovo
-
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep3V3
 objType file
 cell MCF-7
@@ -9556,6 +10289,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9571,29 +10306,6 @@ subId 3598
 submittedDataVersion V3 - New Elements Formats
 view TranscriptDeNovo
 
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGCV3cRep3V2
-objType file
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-20
-dateUnrestricted 2012-01-20
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGCV3cRep3V2.fpkm.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum 3ed6a3d11d9564571f01e2bfc5db31a5
-project wgEncode
-readType 2x75
-replicate 3
-rnaExtract longPolyA
-subId 3478
-submittedDataVersion V2 - A better mapping technique.
-view TranscriptGCV3c
-
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep1V3
 objType file
 cell MCF-7
@@ -9602,6 +10314,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9625,6 +10339,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9640,29 +10356,6 @@ subId 3597
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep3V2
-objType file
-cell MCF-7
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-20
-dateUnrestricted 2012-01-20
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep3V2.gtf.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm TH1014
-md5sum dda60b7b5620b5a2f74d5dd44555a3ea
-project wgEncode
-readType 2x75
-replicate 3
-rnaExtract longPolyA
-subId 3478
-submittedDataVersion V2 - A better mapping technique.
-view TranscriptGencV3c
-
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep3V3
 objType file
 cell MCF-7
@@ -9671,6 +10364,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9694,6 +10389,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000136
+expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
@@ -9717,6 +10414,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000136
+expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
@@ -9737,6 +10436,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-15
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000136
+expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -9760,6 +10461,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-15
 dateUnrestricted 2011-11-14
+dccAccession wgEncodeEH000136
+expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -9783,6 +10486,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000136
+expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
@@ -9805,6 +10510,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -9828,6 +10535,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -9851,6 +10560,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9874,6 +10585,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9898,6 +10611,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -9919,6 +10634,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -9941,6 +10658,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -9962,6 +10681,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -9983,6 +10704,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10006,6 +10729,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10029,6 +10754,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10052,6 +10779,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10075,6 +10804,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -10098,6 +10829,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -10121,6 +10854,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -10144,6 +10879,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -10167,6 +10904,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -10190,6 +10929,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -10213,6 +10954,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10236,6 +10979,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10259,6 +11004,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10282,6 +11029,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10305,6 +11054,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10328,6 +11079,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10351,6 +11104,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -10374,6 +11129,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -10397,6 +11154,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10420,6 +11179,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10443,6 +11204,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -10464,6 +11227,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -10485,6 +11250,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -10506,6 +11273,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -10527,6 +11296,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10550,6 +11321,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10573,6 +11346,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10596,6 +11371,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10619,6 +11396,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -10642,6 +11421,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -10665,6 +11446,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -10688,6 +11471,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -10711,6 +11496,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -10734,6 +11521,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -10757,6 +11546,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10780,6 +11571,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10803,6 +11596,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10826,6 +11621,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10849,6 +11646,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10872,6 +11671,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10887,4 +11688,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: -1704010686
+# MAGIC: -682081060
