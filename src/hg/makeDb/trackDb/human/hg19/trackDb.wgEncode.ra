@@ -67,11 +67,13 @@ include wgEncodeOpenChromDnase.new.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.ra 
+include wgEncodeUwDnase.new.ra alpha
+include wgEncodeUwDnase.ra beta,public
 
 
 #UW DNase DGF (wrangler: Venkat)
-include wgEncodeUwDgf.ra
+include wgEncodeUwDgf.new.ra alpha
+include wgEncodeUwDgf.ra beta,public
 
 ###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 
@@ -136,7 +138,8 @@ include wgEncodeBroadHistone.ra beta,public
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.ra
+include wgEncodeUwHistone.new.ra alpha
+include wgEncodeUwHistone.ra beta,public
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra
@@ -145,7 +148,8 @@ include wgEncodeSydhHistone.ra
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.ra
+include wgEncodeUwTfbs.new.ra alpha
+include wgEncodeUwTfbs.ra beta,public
 
 #UTA TFBS (wrangler: Tim)
 include wgEncodeOpenChromChip.new.ra alpha
@@ -158,7 +162,7 @@ include wgEncodeHaibTfbs.ra alpha
 include wgEncodeSydhTfbs.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
-include wgEncodeUchicagoTfbs.ra
+include wgEncodeUchicagoTfbs.ra alpha
 
 
 # SUNY RBP -----------------------------------------
