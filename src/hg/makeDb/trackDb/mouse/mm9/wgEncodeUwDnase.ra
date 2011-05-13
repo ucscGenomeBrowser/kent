@@ -1124,7 +1124,7 @@ wgEncode 1
 	maxHeightPixels 100:32:16
 	windowingFunction maximum
 
-		track wgEncodeUwDnaseCerebellumC57bl6MAdult8wksRawRep1
+		track wgEncodeUwDnaseCerebellumC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal
 		shortLabel Cerebellum Sig 1
 		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Cerebellum cells)
@@ -1132,6 +1132,7 @@ wgEncode 1
 		type bigWig 1.000000 21846.000000
 		color 105,105,105
 		# subId=1967 dateSubmitted=2010-07-21
+		# was wgEncodeUwDnaseCerebellumC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:25 2011
 
 		track wgEncodeUwDnase416bC57bl6MAdult8wksRawRep2
 		parent wgEncodeUwDnaseViewRawSignal off
@@ -1151,7 +1152,7 @@ wgEncode 1
 		color 153,38,0
 		# subId=2000 dateSubmitted=2010-07-23
 
-		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep2
+		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel B-cell_(CD19+) Sig 2
 		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in B-cell_(CD19+) cells)
@@ -1159,8 +1160,9 @@ wgEncode 1
 		type bigWig 1.000000 159668.000000
 		color 86,180,233
 		# subId=2002 dateSubmitted=2010-07-28
+		# was wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:25 2011
 
-		track wgEncodeUwDnaseEscj7S129ME0RawRep2
+		track wgEncodeUwDnaseEscj7S129ME0SigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel ES-CJ7 Sig 2
 		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in ES-CJ7 cells)
@@ -1168,8 +1170,9 @@ wgEncode 1
 		type bigWig 1.000000 85510.000000
 		color 65,105,225
 		# subId=2003 dateSubmitted=2010-07-28
+		# was wgEncodeUwDnaseEscj7S129ME0RawRep2 cricket Fri May 13 13:52:25 2011
 
-		track wgEncodeUwDnaseEscj7S129ME0RawRep1
+		track wgEncodeUwDnaseEscj7S129ME0SigRep1
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel ES-CJ7 Sig 1
 		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in ES-CJ7 cells)
@@ -1177,8 +1180,9 @@ wgEncode 1
 		type bigWig 1.000000 74881.000000
 		color 65,105,225
 		# subId=2004 dateSubmitted=2010-07-28
+		# was wgEncodeUwDnaseEscj7S129ME0RawRep1 cricket Fri May 13 13:52:25 2011
 
-		track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawRep2
+		track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Fibroblast Sig 2
 		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in Fibroblast cells)
@@ -1186,8 +1190,9 @@ wgEncode 1
 		type bigWig 1.000000 91985.000000
 		color 230,159,0
 		# subId=2005 dateSubmitted=2010-07-23
+		# was wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:26 2011
 
-		track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawRep1
+		track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Fibroblast Sig 1
 		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Fibroblast cells)
@@ -1195,8 +1200,9 @@ wgEncode 1
 		type bigWig 1.000000 76418.000000
 		color 230,159,0
 		# subId=2006 dateSubmitted=2010-07-23
+		# was wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:26 2011
 
-		track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep1
+		track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Liver Raw 1
 		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Liver cells)
@@ -1204,8 +1210,9 @@ wgEncode 1
 		type bigWig 1.000000 49169.000000
 		color 139,69,19
 		# subId=2008 dateSubmitted=2010-07-23
+		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:26 2011
 
-		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep7
+		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep7
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel Liver Sig 7
 		#longLabel ENCODE UW DNaseI HS Signal Replicate 7 (in Liver cells)
@@ -1214,8 +1221,9 @@ wgEncode 1
 		#color 139,69,19
 		# subId=2009 dateSubmitted=2010-07-23
 		#display no
+		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep7 cricket Fri May 13 13:56:40 2011
 
-		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep9
+		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep9
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel Liver Raw 9
 		#longLabel ENCODE UW DNaseI HS Signal Replicate 9 (in Liver cells)
@@ -1224,8 +1232,9 @@ wgEncode 1
 		#color 139,69,19
 		# subId=2010 dateSubmitted=2010-07-23
 		#display no
+		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep9 cricket Fri May 13 13:56:40 2011
 
-		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep3
+		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep3
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel Liver Raw 3
 		#longLabel ENCODE UW DNaseI HS Signal Replicate 3 (in Liver cells)
@@ -1234,6 +1243,7 @@ wgEncode 1
 		#color 139,69,19
 		# subId=2011 dateSubmitted=2010-07-24
 		#display no
+		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep3 cricket Fri May 13 13:56:40 2011
 
 		track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep2
 		parent wgEncodeUwDnaseViewRawSignal off
@@ -1244,7 +1254,7 @@ wgEncode 1
 		color 139,69,19
 		# subId=2012 dateSubmitted=2010-07-24
 
-		track wgEncodeUwDnaseKidneyC57bl6MAdult8wksRawRep1
+		track wgEncodeUwDnaseKidneyC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Kidney Sig 1
 		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Kidney cells)
@@ -1252,8 +1262,9 @@ wgEncode 1
 		type bigWig 1.000000 74651.000000
 		color 102,50,200
 		# subId=2013 dateSubmitted=2010-07-24
+		# was wgEncodeUwDnaseKidneyC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:26 2011
 
-		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep8
+		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep8
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel Liver Raw 8
 		#longLabel ENCODE UW DNaseI HS Signal Replicate 8 (in Liver cells)
@@ -1262,16 +1273,18 @@ wgEncode 1
 		#color 139,69,19
 		# subId=2014 dateSubmitted=2010-07-24
 		#display no
+		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep8 cricket Fri May 13 13:56:40 2011
 
-		track wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep2
+		track wgEncodeUwDnaseLungC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Lung Sig 2
 		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in Lung cells)
 		subGroups view=Signal age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 34840.000000
 		# subId=2015 dateSubmitted=2010-07-24
+		# was wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:27 2011
 
-		track wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep1
+		track wgEncodeUwDnaseMelC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel MEL Sig 1
 		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in MEL cells)
@@ -1279,8 +1292,9 @@ wgEncode 1
 		type bigWig 1.000000 123367.000000
 		color 65,105,225
 		# subId=2017 dateSubmitted=2010-07-24
+		# was wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:27 2011
 
-		#track wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep3
+		#track wgEncodeUwDnaseMelC57bl6MAdult8wksSigRep3
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel MEL Raw 3
 		#longLabel ENCODE UW DNaseI HS Signal Replicate 3 (in MEL cells)
@@ -1289,8 +1303,9 @@ wgEncode 1
 		#color 65,105,225
 		# subId=2018 dateSubmitted=2010-07-24
 		#display no
+		# was wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep3 cricket Fri May 13 13:56:41 2011
 
-		track wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep2
+		track wgEncodeUwDnaseMelC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel MEL Sig 2
 		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in MEL cells)
@@ -1298,8 +1313,9 @@ wgEncode 1
 		type bigWig 1.000000 228690.000000
 		color 65,105,225
 		# subId=2019 dateSubmitted=2010-07-24
+		# was wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:27 2011
 
-		track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep2
+		track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel T-Naive Sig 2
 		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in T-Naive cells)
@@ -1307,8 +1323,9 @@ wgEncode 1
 		type bigWig 1.000000 86604.000000
 		color 204,121,167
 		# subId=2020 dateSubmitted=2010-07-24
+		# was wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:27 2011
 
-		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep2
+		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel WholeBrain Sig 2
 		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in WholeBrain cells)
@@ -1316,8 +1333,9 @@ wgEncode 1
 		type bigWig 1.000000 52176.000000
 		color 105,105,105
 		# subId=2021 dateSubmitted=2010-07-28
+		# was wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:58:31 2011
 
-		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep4
+		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep4
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel WholeBrain Raw 4
 		#longLabel ENCODE UW DNaseI HS Signal Replicate 4 (in WholeBrain cells)
@@ -1326,8 +1344,9 @@ wgEncode 1
 		#color 105,105,105
 		# subId=2022 dateSubmitted=2010-07-28
 		#display no
+		# was wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep4 cricket Fri May 13 13:58:31 2011
 
-		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep6
+		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep6
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel WholeBrain Raw 6
 		#longLabel ENCODE UW DNaseI HS Signal Replicate 6 (in WholeBrain cells)
@@ -1336,8 +1355,9 @@ wgEncode 1
 		#color 105,105,105
 		# subId=2023 dateSubmitted=2010-07-28
 		#display no
+		# was wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep6 cricket Fri May 13 13:58:31 2011
 
-		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep5
+		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep5
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel WholeBrain Raw 5
 		#longLabel ENCODE UW DNaseI HS Signal Replicate 5 (in WholeBrain cells)
@@ -1346,8 +1366,9 @@ wgEncode 1
 		#color 105,105,105
 		# subId=2024 dateSubmitted=2010-07-28
 		#display no
+		# was wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep5 cricket Fri May 13 13:58:31 2011
 
-		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep3
+		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep3
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel WholeBrain Raw 3
 		#longLabel ENCODE UW DNaseI HS Signal Replicate 3 (in WholeBrain cells)
@@ -1356,8 +1377,9 @@ wgEncode 1
 		#color 105,105,105
 		# subId=2025 dateSubmitted=2010-07-28
 		#display no
+		# was wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep3 cricket Fri May 13 13:58:31 2011
 
-		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep1
+		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel WholeBrain Sig 1
 		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in WholeBrain cells)
@@ -1365,8 +1387,9 @@ wgEncode 1
 		type bigWig 1.000000 27364.000000
 		color 105,105,105
 		# subId=2026 dateSubmitted=2010-07-28
+		# was wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:58:31 2011
 
-		track wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep1
+		track wgEncodeUwDnaseWholebrainC57bl6ME14halfSigRep1
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel WholeBrain Sig 1
 		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in WholeBrain cells)
@@ -1374,8 +1397,9 @@ wgEncode 1
 		type bigWig 1.000000 32455.000000
 		color 105,105,105
 		# subId=2027 dateSubmitted=2010-07-28
+		# was wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep1 cricket Fri May 13 13:58:31 2011
 
-		track wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep2
+		track wgEncodeUwDnaseWholebrainC57bl6ME14halfSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel WholeBrain Sig 2
 		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in WholeBrain cells)
@@ -1383,8 +1407,9 @@ wgEncode 1
 		type bigWig 1.000000 26788.000000
 		color 105,105,105
 		# subId=2028 dateSubmitted=2010-07-27
+		# was wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep2 cricket Fri May 13 13:58:32 2011
 
-		#track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep3
+		#track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksSigRep3
 		#parent wgEncodeUwDnaseViewRawSignal off
 		#shortLabel Cerebrum Raw 3
 		#longLabel ENCODE UW DNaseI HS Signal Replicate 3 (in Cerebrum cells)
@@ -1393,8 +1418,9 @@ wgEncode 1
 		#color 105,105,105
 		# subId=2001 dateSubmitted=2010-07-23
 		#display no
+		# was wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep3 cricket Fri May 13 13:56:39 2011
 
-		track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep2
+		track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Cerebrum Sig 2
 		longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in Cerebrum cells)
@@ -1402,8 +1428,9 @@ wgEncode 1
 		type bigWig 1.000000 19185.000000
 		color 105,105,105
 		# subId=1998 dateSubmitted=2010-07-22
+		# was wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:25 2011
 
-		track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep1
+		track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel Cerebrum Sig 1
 		longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Cerebrum cells)
@@ -1411,6 +1438,7 @@ wgEncode 1
 		type bigWig 1.000000 40784.000000
 		color 105,105,105
 		# subId=1999 dateSubmitted=2010-07-23
+		# was wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:25 2011
 
 		track wgEncodeUwDnase3134RiiiMImmortalRawRep1
 		parent wgEncodeUwDnaseViewRawSignal off
@@ -1421,7 +1449,7 @@ wgEncode 1
 		color 0,158,115
 		# subId=2016 dateSubmitted=2010-07-24
 
-        track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep1
+        track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel T-Naive Raw 1
         longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in T-Naive cells)
@@ -1429,16 +1457,18 @@ wgEncode 1
         type bigWig 1.000000 87148.000000
         color 204,121,167
         # subId=3890 dateSubmitted=2011-04-18
+        # was wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:27 2011
 
-        track wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep1
+        track wgEncodeUwDnaseLungC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Lung Raw 1
         longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Lung cells)
         subGroups view=Signal age=adult8wks cellType=Lung sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 33112.000000
         # subId=3906 dateSubmitted=2011-04-19
+        # was wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:27 2011
 
-        track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep1
+        track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel B-cell_(CD19+) Raw 1
         longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in B-cell_(CD19+) cells)
@@ -1446,8 +1476,9 @@ wgEncode 1
         type bigWig 1.000000 84233.000000
         color 86,180,233
         # subId=3891 dateSubmitted=2011-04-19
+        # was wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:49:11 2011
 
-        track wgEncodeUwDnaseHeartC57bl6MAdult8wksRawRep1
+        track wgEncodeUwDnaseHeartC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Heart Raw 1
         longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Heart cells)
@@ -1455,8 +1486,9 @@ wgEncode 1
         type bigWig 1.000000 35686.000000
         color 189,0,157
         # subId=3912 dateSubmitted=2011-04-19
+        # was wgEncodeUwDnaseHeartC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:26 2011
 
-        track wgEncodeUwDnaseKidneyC57bl6MAdult8wksRawRep2
+        track wgEncodeUwDnaseKidneyC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Kidney Raw 2
         longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in Kidney cells)
@@ -1464,8 +1496,9 @@ wgEncode 1
         type bigWig 1.000000 39287.000000
         color 102,50,200
         # subId=3900 dateSubmitted=2011-04-19
+        # was wgEncodeUwDnaseKidneyC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:26 2011
 
-        track wgEncodeUwDnaseCbellumC57bl6MAdult8wksRawRep2
+        track wgEncodeUwDnaseCbellumC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Cerebellum Raw 2
         longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in Cerebellum cells)
@@ -1473,6 +1506,7 @@ wgEncode 1
         type bigWig 1.000000 19240.000000
         color 105,105,105
         # subId=3910 dateSubmitted=2011-04-19
+        # was wgEncodeUwDnaseCbellumC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:25 2011
 
         track wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep1
         parent wgEncodeUwDnaseViewRawSignal off
@@ -1492,7 +1526,7 @@ wgEncode 1
         color 86,180,233
         # subId=3893 dateSubmitted=2011-05-03
 
-        track wgEncodeUwDnaseZhbtc4129olaME0RawRep1
+        track wgEncodeUwDnaseZhbtc4129olaME0SigRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ZhBTc4 Raw 1
         longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in ZhBTc4 cells)
@@ -1500,8 +1534,9 @@ wgEncode 1
         type bigWig 1.000000 87655.000000
         color 65,105,225
         # subId=3896 dateSubmitted=2011-05-06
+        # was wgEncodeUwDnaseZhbtc4129olaME0RawRep1 cricket Fri May 13 13:58:32 2011
 
-        track wgEncodeUwDnaseZhbtc4129olaME0RawRep2
+        track wgEncodeUwDnaseZhbtc4129olaME0SigRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ZhBTc4 Raw 2
         longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in ZhBTc4 cells)
@@ -1509,8 +1544,9 @@ wgEncode 1
         type bigWig 1.000000 94703.000000
         color 65,105,225
         # subId=3897 dateSubmitted=2011-05-06
+        # was wgEncodeUwDnaseZhbtc4129olaME0RawRep2 cricket Fri May 13 13:58:32 2011
 
-        track wgEncodeUwDnaseFatC57bl6MAdult8wksRawRep1
+        track wgEncodeUwDnaseFatC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel FatPad Raw 1
         longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in FatPad cells)
@@ -1518,8 +1554,9 @@ wgEncode 1
         type bigWig 1.000000 52562.000000
         color 154,205,68
         # subId=3908 dateSubmitted=2011-05-02
+        # was wgEncodeUwDnaseFatC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:26 2011
 
-        track wgEncodeUwDnaseFatC57bl6MAdult8wksRawRep2
+        track wgEncodeUwDnaseFatC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel FatPad Raw 2
         longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in FatPad cells)
@@ -1527,8 +1564,9 @@ wgEncode 1
         type bigWig 1.000000 53274.000000
         color 154,205,68
         # subId=3909 dateSubmitted=2011-05-02
+        # was wgEncodeUwDnaseFatC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:26 2011
 
-        track wgEncodeUwDnaseTregC57bl6MAdult8wksRawRep1
+        track wgEncodeUwDnaseTregC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel TReg Raw 1
         longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in TReg cells)
@@ -1536,8 +1574,9 @@ wgEncode 1
         type bigWig 1.000000 36553.000000
         color 204,121,167
         # subId=3911 dateSubmitted=2011-05-02
+        # was wgEncodeUwDnaseTregC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:27 2011
 
-        track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksRawRep1
+        track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel B-cell_(CD43-) Raw 1
         longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in B-cell_(CD43-) cells)
@@ -1545,8 +1584,9 @@ wgEncode 1
         type bigWig 1.000000 45976.000000
         color 86,180,233
         # subId=3913 dateSubmitted=2011-05-06
+        # was wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:25 2011
 
-        track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksRawRep2
+        track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel B-cell_(CD43-) Raw 2
         longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in B-cell_(CD43-) cells)
@@ -1554,6 +1594,7 @@ wgEncode 1
         type bigWig 1.000000 76500.000000
         color 86,180,233
         # subId=3914 dateSubmitted=2011-05-06
+        # was wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:25 2011
 
         track wgEncodeUwDnase3134RiiiMImmortalRawRep2
         parent wgEncodeUwDnaseViewRawSignal off
@@ -1564,23 +1605,25 @@ wgEncode 1
         color 0,158,115
         # subId=3895 dateSubmitted=2011-05-10
 
-        track wgEncodeUwDnasePatskiSpbl6MImmortalRawRep2
+        track wgEncodeUwDnasePatskiSpbl6MImmortalSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Patski Raw 2
         longLabel ENCODE UW DNaseI HS Signal Replicate 2 (in Patski cells)
         subGroups view=Signal age=immortal cellType=Patski sex=M strain=SPBL6 rep=rep2
         type bigWig 1.000000 86679.000000
         # subId=3899 dateSubmitted=2011-05-10
+        # was wgEncodeUwDnasePatskiSpbl6MImmortalRawRep2 cricket Fri May 13 13:52:27 2011
 
-        track wgEncodeUwDnasePatskiSpbl6MImmortalRawRep1
+        track wgEncodeUwDnasePatskiSpbl6MImmortalSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Patski Raw 1
         longLabel ENCODE UW DNaseI HS Signal Replicate 1 (in Patski cells)
         subGroups view=Signal age=immortal cellType=Patski sex=M strain=SPBL6 rep=rep1
         type bigWig 1.000000 101941.000000
         # subId=3898 dateSubmitted=2011-05-10
+        # was wgEncodeUwDnasePatskiSpbl6MImmortalRawRep1 cricket Fri May 13 13:52:27 2011
 
-        #track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksRawRep3
+        #track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksSigRep3
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel B-cell_(CD43-) Raw 3
         #longLabel ENCODE UW DNaseI HS Signal Replicate 3 (in B-cell_(CD43-) cells)
@@ -1589,8 +1632,9 @@ wgEncode 1
         #color 86,180,233
         # subId=3915 dateSubmitted=2011-05-06
 		#display no
+        # was wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksRawRep3 cricket Fri May 13 13:56:39 2011
 		
-        #track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep7
+        #track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep7
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel WholeBrain Raw 7
         #longLabel ENCODE UW DNaseI HS Signal Replicate 7 (in WholeBrain cells)
@@ -1599,8 +1643,9 @@ wgEncode 1
         #color 105,105,105
         # subId=3901 dateSubmitted=2011-04-19
         #display no
+        # was wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep7 cricket Fri May 13 13:58:31 2011
 
-        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep10
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep10
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel Liver Raw 10
         #longLabel ENCODE UW DNaseI HS Signal Replicate 10 (in Liver cells)
@@ -1609,8 +1654,9 @@ wgEncode 1
         #color 139,69,19
         # subId=3905 dateSubmitted=2011-04-19
         #display no
+        # was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep10 cricket Fri May 13 13:56:40 2011
 
-        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep4
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep4
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel Liver Raw 4
         #longLabel ENCODE UW DNaseI HS Signal Replicate 4 (in Liver cells)
@@ -1619,8 +1665,9 @@ wgEncode 1
         #color 139,69,19
         # subId=3902 dateSubmitted=2011-04-19
         #display no
+        # was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep4 cricket Fri May 13 13:56:40 2011
 
-        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep5
+        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep5
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel Liver Raw 5
         #longLabel ENCODE UW DNaseI HS Signal Replicate 5 (in Liver cells)
@@ -1629,8 +1676,9 @@ wgEncode 1
         #color 139,69,19
         # subId=3903 dateSubmitted=2011-04-19
         #display no
+        # was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep5 cricket Fri May 13 13:56:40 2011
 
-        #track wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep3
+        #track wgEncodeUwDnaseLungC57bl6MAdult8wksSigRep3
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel Lung Raw 3
         #longLabel ENCODE UW DNaseI HS Signal Replicate 3 (in Lung cells)
@@ -1638,8 +1686,9 @@ wgEncode 1
         #type bigWig 1.000000 29892.000000
         # subId=3907 dateSubmitted=2011-04-19
         #display no		
+        # was wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep3 cricket Fri May 13 13:56:41 2011
 
-        #track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep6
+        track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep6
         #parent wgEncodeUwDnaseViewRawSignal off
         #shortLabel Liver Raw 6
         #longLabel ENCODE UW DNaseI HS Signal Replicate 6 (in Liver cells)
@@ -1648,5 +1697,6 @@ wgEncode 1
         #color 139,69,19
         # subId=3904 dateSubmitted=2011-04-19
         #display no
+        # was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep6 cricket Fri May 13 13:56:40 2011
 
 
