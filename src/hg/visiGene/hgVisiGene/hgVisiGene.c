@@ -345,14 +345,22 @@ if (imageId != 0)
 	    dir,name,name,w,h);
 #endif
     jsIncludeFile("jquery.js", NULL);
-    printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
-    printf("<script type='text/javascript'>$(document).ready( function () {;\n");
-    printf("   $('[name=\"bigImg\"]').css('height',($(window).height()*0.85) + 'px');\n");
-    printf("});\n");
-    printf("$(window).resize( function() {\n");
-    printf("   $('[name=\"bigImg\"]').css('height',($(window).height()*0.85) + 'px');\n");
-    printf("});\n");
-    printf("</script>\n");
+    char *browserVersion;
+    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion >= '8')
+        {
+        // IE using DTD 4.01 Transitional (IE>=8) has problem with setting iFRAME height.
+        // To solve it, height is set large (800px), then dynamically changed in javascript at load time.
+        printf("<IFRAME name='bigImg' width='100%%' height='800px' SRC='%s'></IFRAME><BR>\n", buf);
+        printf("<script type='text/javascript'>$(document).ready( function () {;\n");
+        printf("   $('[name=\"bigImg\"]').css('height',($(window).height()*0.85) + 'px');\n");
+        printf("});\n");
+        printf("$(window).resize( function() {\n");
+        printf("   $('[name=\"bigImg\"]').css('height',($(window).height()*0.85) + 'px');\n");
+        printf("});\n");
+        printf("</script>\n");
+        }
+    else // Other browsers have no problem with IFRAME height
+        printf("<IFRAME name='bigImg' width='100%%' height='90%%' SRC='%s'></IFRAME><BR>\n", buf);
 
     fullCaption(conn, imageId);
 
