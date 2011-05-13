@@ -817,7 +817,7 @@ html laminB1Mm9
 track laminB1_NP
 superTrack laminB1Super full
 shortLabel mouse LaminB1 NPC
-longLabel NKI LaminB1 (DamID of LaminB1 in mouse Neuro Progenitor cells, log2-ratio)
+longLabel NKI LaminB1 (DamID of LaminB1 in mouse Neural Progenitor cells, log2-ratio)
 group regulation
 priority 320
 visibility hide

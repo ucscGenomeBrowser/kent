@@ -519,7 +519,7 @@ mustWriteFd(sd, cmd, strlen(cmd));
 
 #define NET_FTP_TIMEOUT 1000000
 
-static boolean receiveFtpReply(int sd, char *cmd, struct dyString **retReply)
+static boolean receiveFtpReply(int sd, char *cmd, struct dyString **retReply, int *retCode)
 /* send command to ftp server and check resulting reply code, 
  * warn and return FALSE if not desired reply.  If retReply is non-NULL, store reply text there. */
 {
@@ -577,15 +577,17 @@ if (retReply)
     *retReply = rs;
 else
     dyStringFree(&rs);
+if (retCode)
+    *retCode = reply;
 return TRUE;
 }
 
-static boolean sendFtpCommand(int sd, char *cmd, struct dyString **retReply)
+static boolean sendFtpCommand(int sd, char *cmd, struct dyString **retReply, int *retCode)
 /* send command to ftp server and check resulting reply code, 
  * warn and return FALSE if not desired reply.  If retReply is non-NULL, store reply text there. */
 {   
 sendFtpCommandOnly(sd, cmd);
-return receiveFtpReply(sd, cmd, retReply);
+return receiveFtpReply(sd, cmd, retReply, retCode);
 }
 
 static int parsePasvPort(char *rs)
@@ -680,24 +682,28 @@ if (sd < 0)
 
 /* First read the welcome msg */
 if (readReadyWait(sd, NET_FTP_TIMEOUT))
-    sendFtpCommand(sd, "", NULL);
+    sendFtpCommand(sd, "", NULL, NULL);
 
 char cmd[256];
+int retCode = 0;
 safef(cmd,sizeof(cmd),"USER %s\r\n", user);
-if (!sendFtpCommand(sd, cmd, NULL))
+if (!sendFtpCommand(sd, cmd, NULL, &retCode))
     {
     close(sd);
     return -1;
     }
 
-safef(cmd,sizeof(cmd),"PASS %s\r\n", password);
-if (!sendFtpCommand(sd, cmd, NULL))
+if (retCode == 331)
     {
-    close(sd);
-    return -1;
+    safef(cmd,sizeof(cmd),"PASS %s\r\n", password);
+    if (!sendFtpCommand(sd, cmd, NULL, NULL))
+	{
+	close(sd);
+	return -1;
+	}
     }
 
-if (!sendFtpCommand(sd, "TYPE I\r\n", NULL))
+if (!sendFtpCommand(sd, "TYPE I\r\n", NULL, NULL))
     {
     close(sd);
     return -1;
@@ -730,7 +736,7 @@ if (sd < 0)
 char cmd[256];
 safef(cmd,sizeof(cmd),"SIZE %s\r\n", npu.file);
 struct dyString *rs = NULL;
-if (!sendFtpCommand(sd, cmd, &rs))
+if (!sendFtpCommand(sd, cmd, &rs, NULL))
     {
     close(sd);
     return FALSE;
@@ -740,7 +746,7 @@ if (!sendFtpCommand(sd, cmd, &rs))
 dyStringFree(&rs);
 
 safef(cmd,sizeof(cmd),"MDTM %s\r\n", npu.file);
-if (!sendFtpCommand(sd, cmd, &rs))
+if (!sendFtpCommand(sd, cmd, &rs, NULL))
     {
     close(sd);
     return FALSE;
@@ -816,7 +822,7 @@ if (sd == -1)
     return -1;
 
 struct dyString *rs = NULL;
-if (!sendFtpCommand(sd, "PASV\r\n", &rs))
+if (!sendFtpCommand(sd, "PASV\r\n", &rs, NULL))
     {
     close(sd);
     return -1;
@@ -826,7 +832,7 @@ if (!sendFtpCommand(sd, "PASV\r\n", &rs))
 if (npu.byteRangeStart != -1)
     {
     safef(cmd,sizeof(cmd),"REST %lld\r\n", (long long) npu.byteRangeStart);
-    if (!sendFtpCommand(sd, cmd, NULL))
+    if (!sendFtpCommand(sd, cmd, NULL, NULL))
 	{
 	close(sd);
 	return -1;
@@ -860,7 +866,7 @@ while (TRUE)
     if (readReadyWait(sd, 0)) /* wait in microsec */
 	{
 	// this can see an error like bad filename
-	if (!receiveFtpReply(sd, cmd, NULL))
+	if (!receiveFtpReply(sd, cmd, NULL, NULL))
 	    {
 	    close(sd);
 	    close(sdata);
