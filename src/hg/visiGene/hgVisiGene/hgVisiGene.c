@@ -353,9 +353,11 @@ if (imageId != 0)
         printf("<IFRAME name='bigImg' width='100%%' height='800px' SRC='%s'></IFRAME><BR>\n", buf);
         printf("<script type='text/javascript'>$(document).ready( function () {;\n");
         printf("   $('[name=\"bigImg\"]').css('height',($(window).height()*0.85) + 'px');\n");
+        printf("   $('[name=\"bigImg\"]').attr('src','%s');\n",buf);
         printf("});\n");
         printf("$(window).resize( function() {\n");
         printf("   $('[name=\"bigImg\"]').css('height',($(window).height()*0.85) + 'px');\n");
+        printf("   $('[name=\"bigImg\"]').attr('src','%s');\n",buf);
         printf("});\n");
         printf("</script>\n");
         }
