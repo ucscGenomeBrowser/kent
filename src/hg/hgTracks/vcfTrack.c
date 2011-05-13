@@ -21,99 +21,15 @@
 static boolean doHapClusterDisplay = TRUE;
 static boolean colorHapByRefAlt = TRUE;
 
-#define VCF_MAX_ALLELE_LEN 80
-
 static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
  * because it contains pointers into vcff's records' chrom. */
 {
 struct pgSnp *pgsList = NULL;
 struct vcfRecord *rec;
-struct dyString *dy = dyStringNew(0);
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
-    struct pgSnp *pgs;
-    AllocVar(pgs);
-    pgs->chrom = rec->chrom;
-    pgs->chromStart = rec->chromStart;
-    pgs->chromEnd = rec->chromEnd;
-    // Build up slash-separated allele string from rec->ref + rec->alt:
-    dyStringClear(dy);
-    dyStringAppend(dy, rec->ref);
-    int altCount, i;
-    if (sameString(rec->alt, "."))
-	altCount = 0;
-    else
-	{
-	char *words[64]; // we're going to truncate anyway if there are this many alleles!
-	char copy[VCF_MAX_ALLELE_LEN+1];
-	strncpy(copy, rec->alt, VCF_MAX_ALLELE_LEN);
-	copy[VCF_MAX_ALLELE_LEN] = '\0';
-	altCount = chopCommas(copy, words);
-	for (i = 0;  i < altCount && dy->stringSize < VCF_MAX_ALLELE_LEN;  i++)
-	    dyStringPrintf(dy, "/%s", words[i]);
-	if (i < altCount)
-	    altCount = i;
-	}
-    pgs->name = cloneStringZ(dy->string, dy->stringSize+1);
-    pgs->alleleCount = altCount + 1;
-    // Build up comma-sep list of per-allele counts, if available:
-    dyStringClear(dy);
-    int refAlleleCount = 0;
-    boolean gotAltCounts = FALSE;
-    for (i = 0;  i < rec->infoCount;  i++)
-	if (sameString(rec->infoElements[i].key, "AN"))
-	    {
-	    refAlleleCount = rec->infoElements[i].values[0].datInt;
-	    break;
-	    }
-    for (i = 0;  i < rec->infoCount;  i++)
-	if (sameString(rec->infoElements[i].key, "AC"))
-	    {
-	    int alCounts[64];
-	    int j;
-	    gotAltCounts = (rec->infoElements[i].count > 0);
-	    for (j = 0;  j < rec->infoElements[i].count;  j++)
-		{
-		int ac = rec->infoElements[i].values[j].datInt;
-		if (j < altCount)
-		    alCounts[1+j] = ac;
-		refAlleleCount -= ac;
-		}
-	    if (gotAltCounts)
-		{
-		while (j++ < altCount)
-		    alCounts[1+j] = -1;
-		alCounts[0] = refAlleleCount;
-		if (refAlleleCount >= 0)
-		    dyStringPrintf(dy, "%d", refAlleleCount);
-		else
-		    dyStringAppend(dy, "-1");
-		for (j = 0;  j < altCount;  j++)
-		    if (alCounts[1+j] >= 0)
-			dyStringPrintf(dy, ",%d", alCounts[1+j]);
-		    else
-			dyStringAppend(dy, ",-1");
-		}
-	    break;
-	    }
-    if (refAlleleCount > 0 && !gotAltCounts)
-	dyStringPrintf(dy, "%d", refAlleleCount);
-    pgs->alleleFreq = cloneStringZ(dy->string, dy->stringSize+1);
-    // Build up comma-sep list... supposed to be per-allele quality scores but I think
-    // the VCF spec only gives us one BQ... for the reference position?  should ask.
-    dyStringClear(dy);
-    for (i = 0;  i < rec->infoCount;  i++)
-	if (sameString(rec->infoElements[i].key, "BQ"))
-	    {
-	    float qual = rec->infoElements[i].values[0].datFloat;
-	    dyStringPrintf(dy, "%.1f", qual);
-	    int j;
-	    for (j = 0;  j < altCount;  j++)
-		dyStringPrintf(dy, ",%.1f", qual);
-	    break;
-	    }
-    pgs->alleleScores = cloneStringZ(dy->string, dy->stringSize+1);
+    struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
     slAddHead(&pgsList, pgs);
     }
 slReverse(&pgsList);
@@ -156,6 +72,12 @@ unsigned short altCount = c->leafCount - c->refCounts[varIx] - c->unkCounts[varI
 return (c->refCounts[varIx] >= altCount);
 }
 
+INLINE boolean hasUnk(const struct hapCluster *c, int varIx)
+// Return TRUE if at least one haplotype in this cluster has an unknown/unphased value at varIx.
+{
+return (c->unkCounts[varIx] > 0);
+}
+
 static double cwaDistance(const struct slList *item1, const struct slList *item2, void *extraData)
 /* Center-weighted alpha sequence distance function for hacTree clustering of haplotype seqs */
 // This is inner-loop so I am not doing defensive checks.  Caller must ensure:
@@ -173,6 +95,8 @@ for (i=helper->center;  i >= 0;  i--)
     {
     if (isRef(kid1, i) != isRef(kid2, i))
 	distance += weight;
+    else if (hasUnk(kid1, i) != hasUnk(kid2, i))
+	distance += weight/2;
     weight *= helper->alpha;
     }
 weight = helper->alpha; // start at center+1: alpha to the 1st power
@@ -250,6 +174,10 @@ if (ht->left == NULL && ht->right == NULL)
     struct hapCluster *c = (struct hapCluster *)ht->itemOrCluster;
     gtHapOrder[(*retGtHapEnd)++] = c->gtHapIx;
     }
+else if (ht->left == NULL)
+    rSetGtHapOrder(ht->right, gtHapOrder, retGtHapEnd);
+else if (ht->right == NULL)
+    rSetGtHapOrder(ht->left, gtHapOrder, retGtHapEnd);
 else
     {
     struct hapCluster *cL = (struct hapCluster *)ht->left->itemOrCluster;
@@ -452,6 +380,8 @@ static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
  * alpha similarity, and draw in the order determined by clustering. */
 {
 const struct vcfFile *vcff = tg->extraUiData;
+if (vcff->records == NULL)
+    return;
 unsigned short gtHapEnd = 0;
 unsigned short *gtHapOrder = clusterChroms(vcff, &gtHapEnd);
 struct dyString *tmp = dyStringNew(0);
@@ -494,6 +424,8 @@ static int vcfHapClusterTotalHeight(struct track *tg, enum trackVisibility vis)
 {
 // Should we make it single-height when on chrY?
 const struct vcfFile *vcff = tg->extraUiData;
+if (vcff->records == NULL)
+    return 0;
 int ploidy = 2;
 tg->height = ploidy * vcff->genotypeCount * tg->lineHeight;
 return tg->height;

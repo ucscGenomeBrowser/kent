@@ -1132,6 +1132,7 @@ description decidua cells (part of the mucous membrane lining uterus), Fetal mem
 tissue Cervix
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
+tissue Cervix
 lineage decidua
 karyotype unknown
 termId BTO:0001360
@@ -1150,7 +1151,7 @@ lineage
 karyotype 
 sex M
 tissue Blood
-vendorName DSMZ 
+vendorName DSMZ
 vendorId N/A
 orderUrl http://www.dsmz.de/index.htm
 termId BTO:0002104
@@ -1178,9 +1179,9 @@ term FetalPBDE
 tag FetalPBDE
 type Cell Line
 tier 3
-organism human
+organism Human
 description Peripheral blood-derived erythroblasts from 16-19 week human fetal liver
-lineage 
+lineage
 karyotype normal
 sex U
 tissue Liver
@@ -1279,121 +1280,6 @@ tissue Blood
 vendorName Coriell
 vendorId GM12801
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12801&PgId=166
-lineage mesoderm
-karyotype unknown
-termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
-sex M
-tier 3
-protocol UW_Stam:GM12801_Stam_protocol.pdf
-
-term GM12864
-tag GM12864
-type Cell Line
-organism Human
-description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed
-tissue Blood
-lineage mesoderm
-karyotype unknown
-vendorName Coriell
-vendorId GM12864
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12864&PgId=166
-termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
-sex M
-tier 3
-protocol UW_Stam:GM12864_Stam_protocol.pdf
-
-term GM12865
-tag GM12865
-type Cell Line
-organism Human
-description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed
-tissue Blood
-lineage mesoderm
-karyotype unknown
-vendorName Coriell
-vendorId GM12865
-orderUrl http://ccr.coriell.org/sections/Search/Sample_Detail.aspx?Ref=GM12865&PgId=166
-termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
-sex F
-tier 3
-protocol UW_Stam:GM12865_Stam_protocol.pdf
-
-term GM12872
-tag GM12872
-type Cell Line
-organism Human
-description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed
-tissue Blood
-lineage mesoderm
-karyotype unknown
-vendorName Coriell
-vendorId GM12872
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12872&PgId=166
-termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
-sex M
-tier 3
-protocol UW_Stam:GM12872_Stam_protocol.pdf
-
-term GM12873
-tag GM12873
-type Cell Line
-organism Human
-description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed
-tissue Blood
-lineage mesoderm
-karyotype unknown
-vendorName Coriell
-vendorId GM12873
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12873&PgId=166
-termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
-sex F
-tier 3
-protocol UW_Stam:GM12873_Stam_protocol.pdf
-
-term GM12874
-tag GM12874
-type Cell Line
-organism Human
-description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed
-tissue Blood
-lineage mesoderm
-karyotype unknown
-vendorName Coriell
-vendorId GM12874
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12874&PgId=166
-termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
-sex M
-tier 3
-protocol UW_Stam:GM12874_Stam_protocol.pdf
-
-term GM12875
-tag GM12875
-type Cell Line
-organism Human
-description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed
-tissue Blood
-lineage mesoderm
-karyotype unknown
-vendorName Coriell
-vendorId GM12875
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12875&PgId=166
-termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
-sex F
-tier 3
-protocol UW_Stam:GM12875_Stam_protocol.pdf
-
-term GM12878-XiMat
-tag GM12878XiMat
-type Cell Line
-organism Human
-description lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
 tissue Blood
 vendorName Hunt Willard at Duke University
 karyotype unknown
@@ -1745,7 +1631,7 @@ term HAc
 tag HAc
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Astrocytes-cerebellar
 lineage Astrocytic
 karyotype Normal
@@ -1775,7 +1661,7 @@ term HA-h
 tag HAh
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Astrocytes-hippocampal
 lineage Astrocytic
 karyotype Normal
@@ -1806,7 +1692,7 @@ protocol HudsonAlpha:HAL_Myers_protocol.pdf
 term HA-sp
 tag HA-sp
 type Cell Line
-organism human
+organism Human
 description Human astrocytes spinal cord
 tissue Spinal cord
 vendorName ScienCell
@@ -1894,6 +1780,7 @@ type Cell Line
 organism Human
 description Human Choroid Plexus Epithelial Cells
 tissue Epithelium
+lineage ectoderm
 vendorName ScienCell
 vendorId 1310
 orderUrl http://www.sciencellonline.com/site/products/1310.php
@@ -1991,7 +1878,7 @@ term HFF
 tag HFF
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Foreskin Fibroblast
 lineage Fibroblast
 karyotype Normal
@@ -2008,7 +1895,7 @@ term HFF-Myc
 tag HFFMyc
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Foreskin Fibroblast Cells Expressing Canine cMyc
 lineage Fibroblast
 karyotype Normal (cMyc)
@@ -2323,6 +2210,7 @@ description Human Renal Cortical Epithelial cells (normal)
 tissue Epithelium
 vendorName Lonza
 vendorId CC-2554
+orderUrl http://www.lonza.com/
 lineage mesoderm
 karyotype normal
 orderUrl http://www.lonza.com/
@@ -2353,7 +2241,7 @@ term HRGEC
 tag HRGEC
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Renal Glomerular Endothelial Cells
 lineage Endothelial
 karyotype Normal
@@ -2618,10 +2506,10 @@ term Loucy
 tag Loucy
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human T cell leukemia
-lineage 
-karyotype 
+lineage
+karyotype
 sex F
 tissue Blood
 vendorName DSMZ
@@ -2734,7 +2622,7 @@ term Monocytes-CD14+
 tag MonoCD14
 type Cell Line
 tier 3
-organism human
+organism Human
 description Monocytes-CD14+ are CD14-positive cells from human leukapheresis product
 lineage Monocytic
 karyotype Normal
@@ -2769,7 +2657,6 @@ tissue Blood
 lineage mesoderm
 description acute promyelocytic leukemia cell line
 vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
-#put universities in for Stam and Snyder
 vendorId
 orderUrl
 lineage
@@ -2861,6 +2748,7 @@ type Cell Line
 organism Human
 tissue Testis
 description malignant pluripotent embryonal carcinoma (Ntera2), "The NTERA-2 cl.D1 cell line is a pluripotent human testicular embryonal carcinoma cell line derived by cloning the NTERA-2 cell line." - ATCC
+
 vendorName ATCC
 vendorId CRL-1973
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1973&Template=cellBiology
@@ -2957,17 +2845,14 @@ protocol Duke/UNC/UTA/EBI_Open_Chromatin:PanIslets_Crawford_protocol.pdf Duke/UN
 term PBDE
 tag PBDE
 type Cell Line
-organism human
+organism Human
 description Human peripheral blood-derived erythroblasts
 tissue Blood
 vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
-#vendorId (the ID of the cell type in the vendor's catalog)
-#orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html)
-#karyotype (optional human-readable karyotype, for .html page)
-#lineage (optional human-readable source of cell lines, e.g. 18 year old male)
+vendorId
+orderUrl
 termId BTO:0000574 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000574
-#color (specifies color code for track data of this cell type, rgb values)
 sex M
 tier 3
 protocol SYDH_TFBS(Farnham):PBDE_Farnham_protocol.pdf
@@ -2975,10 +2860,12 @@ protocol SYDH_TFBS(Farnham):PBDE_Farnham_protocol.pdf
 term PBMC
 tag PBMC
 type Cell Line
-organism human
+organism Human
 description Peripheral blood mononuclear cells
 tissue Blood
 vendorName PBMC cells provided by E. Bresnick, UW Madison
+vendorId
+orderUrl
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
 sex M
@@ -3227,7 +3114,7 @@ term T-REx-HEK293
 tag tHEK293
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor
 lineage Human embryonic kidney, ATCC number CRL-1573
 karyotype cancer, hypotriploid, XXX
@@ -3399,7 +3286,7 @@ term WI-38
 tag WI38
 type Cell Line
 tier 3
-organism human
+organism Human
 description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct
 lineage Fibroblast
 karyotype Normal (RAF)
@@ -3497,6 +3384,8 @@ description Pituitary tumor LAF1
 age immortalized
 strain Unknown
 vendorName ATCC
+vendorId
+orderUrl
 termId 7087
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
 color 153,38,0
@@ -3510,14 +3399,32 @@ organism Mouse
 tissue Blood
 category primaryCells
 description B Cell , CD19+
-age immortalized
+age adult-8wks
 strain C57BL/6
 vendorName
+vendorId
+orderUrl
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 153,38,0
 sex M
 protocol UW(Stam):bCellCd19_Stam_protocol.pdf
+
+term B-cell_(CD43-)
+tag BCellCD43N
+type Cell Line
+organism Mouse
+tissue Blood
+category primaryCells
+description mouse spleen B cells, CD43-,CD11b- 
+age adult-8wks
+strain C57BL/6
+vendorName M. Bender (FHCRC)
+termId 7069
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
+color 153,38,0
+sex M
+protocol UW(Stam):bCellCd43_Stam_protocol.pdf
 
 term BoneMarrow
 tag BMarrow
@@ -3525,6 +3432,8 @@ type Cell Line
 organism Mouse
 tissue Bone
 category Tissue
+age ageUnknown
+strain unknown
 description Bone Marrow
 vendorName LICR lab
 termId 6943
@@ -3539,10 +3448,12 @@ type Cell Line
 organism Mouse
 tissue Cerebellum
 category Tissue
+age ageUnknown
+strain unknown
 description Cerebellum
 vendorName LICR lab
 termId 7012
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
+1termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 153,38,0
 sex U
 protocol LICR(Ren):Cerebellum_Ren_protocol.pdf UW(Stam):Tissue_Stam_protocol.pdf
@@ -3607,7 +3518,11 @@ organism Mouse
 tissue Colon
 category Tissue
 description Colon
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
 color 153,38,0
@@ -3621,7 +3536,11 @@ organism Mouse
 tissue Cortex
 category Tissue
 description Cortex
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
 color 153,38,0
@@ -3653,7 +3572,11 @@ organism Mouse
 tissue Adipose
 category Tissue
 description Adipose tissue
+age ageUnknown
+strain unknown
 vendorName UW lab
+vendorId
+orderUrl
 termId 7108
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7108
 color 153,38,0
@@ -3667,7 +3590,11 @@ organism Mouse
 tissue Lung
 category Tissue
 description Fibroblast
+age ageUnknown
+strain unknown
 vendorName UW lab
+vendorId
+orderUrl
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
@@ -3715,7 +3642,11 @@ organism Mouse
 tissue Heart
 category Tissue
 description Heart
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 7103
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
@@ -3729,7 +3660,11 @@ organism Mouse
 tissue Kidney
 category Tissue
 description Kidney
+age ageUnknown
+strain unknown
 vendorName UW lab
+vendorId
+orderUrl
 termId
 termUrl
 color 153,38,0
@@ -3758,7 +3693,11 @@ organism Mouse
 tissue Liver
 category Tissue
 description Liver
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 153,38,0
@@ -3772,7 +3711,11 @@ organism Mouse
 tissue Lung
 category Tissue
 description Lung
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
@@ -3787,7 +3730,11 @@ organism Mouse
 tissue MEF
 category primaryCells
 description Mouse Embryonic Fibroblast
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
@@ -3802,6 +3749,8 @@ organism Mouse
 tissue Blood
 category primaryCells
 description Megakaryocyte
+age ageUnknown
+strain unknown
 vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7054
@@ -3833,6 +3782,8 @@ organism Mouse
 tissue Blood
 category cellLine
 description Myocyte
+age ageUnknown
+strain unknown
 vendorName
 orderUrl
 color 153,38,0
@@ -3848,6 +3799,8 @@ organism Mouse
 tissue Blood
 category Tissue
 description Muscle
+age ageUnknown
+strain unknown
 vendorName
 orderUrl
 termId 7054
@@ -3883,7 +3836,11 @@ organism Mouse
 tissue OlfactoryBulb
 category Tissue
 description Olfactory Bulb
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
@@ -3897,7 +3854,11 @@ organism Mouse
 tissue Pancreas
 category Tissue
 description Pancreas
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
@@ -3914,6 +3875,8 @@ description Mouse Embryonic Kidney Fibroblast. As described in Lingenfelter et a
 age immortalized
 strain C57BL/6J
 vendorName Dr. Christine Disteche (University of Washington)
+vendorId
+orderUrl
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
@@ -3927,7 +3890,11 @@ organism Mouse
 tissue Placenta
 category Tissue
 description Placenta
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
 color 153,38,0
@@ -3943,7 +3910,11 @@ organism Mouse
 tissue SmallIntestine
 category Tissue
 description Small Intestine
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
 color 153,38,0
@@ -3957,7 +3928,11 @@ organism Mouse
 tissue Spleen
 category Tissue
 description Spleen
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 153,38,0
@@ -3971,7 +3946,11 @@ organism Mouse
 tissue Testis
 category Tissue
 description Testis
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
 color 153,38,0
@@ -3985,7 +3964,11 @@ organism Mouse
 tissue Thymus
 category Tissue
 description Thymus
+age ageUnknown
+strain unknown
 vendorName LICR lab
+vendorId
+orderUrl
 termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 153,38,0
@@ -3999,7 +3982,11 @@ organism Mouse
 tissue Blood
 category primaryCells
 description Naive T cells: CD4+, CD25-
+age ageUnknown
+strain unknown
 vendorName UW lab
+vendorId
+orderUrl
 termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 153,38,0
@@ -4013,8 +4000,12 @@ organism Mouse
 tissue Blood
 category primaryCells
 description Regulatory T cells CD4+,CD25+
+age ageUnknown
+strain unknown
 vendorName UW lab
-termId
+vendorId
+orderUrl
+termId 7060
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 153,38,0
 sex U
@@ -4027,7 +4018,11 @@ organism Mouse
 tissue Brain
 category Tissue
 description Whole Brain
+age ageUnknown
+strain unknown
 vendorName UW lab
+vendorId
+orderUrl
 termId 7005
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 153,38,0
@@ -4044,6 +4039,8 @@ age E0
 strain 129/Ola
 description Undifferentiated mouse embryonic stem cells
 vendorName Dr. Levasseur (University of Iowa)
+vendorId
+orderUrl
 termId
 termUrl
 color 153,38,0
@@ -5061,6 +5058,21 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf
 
+term H3K4me1_(pAb-037-050)
+tag H3K4me1pAb037050
+type Antibody
+antibodyDescription Polyclonal antibody raised in rabbit against histone H3 containing the monomethylated lysine 4 (H3K4me1), using a KLH-conjugated synthetic peptide.
+target H3K4me1
+targetDescription Histones are the main constituents of the protein part of chromosomes of eukaryotic cells. They are rich in the amino acids arginine and lysine and have been greatly conserved during evolution.Histone tails undergo numerous posttranslational modifications. This antibodies recognizes histone H3 monomethylated on lysine 4.
+vendorName Diagenode
+vendorId pAb-037-050
+orderUrl http://www.diagenode.com/en/catalog/antibodies-3/histone-h3-and-modified-h3-27/product/h3k4me1-polyclonal-antibody-37
+lab Farnham
+lots Lot# A399-002341P
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K4me1_(pAb-037-050)(WesternBlot,DotBlot):human_H3K4me1_pAb-037-050_validation_Farnham.pdf
+
 term H3K4me2
 tag H3K4me2
 type Antibody
@@ -5116,8 +5128,7 @@ tag H3K9ac
 type Antibody
 target H3K9ac
 antibodyDescription rabbit polyclonal
-targetDescription Histone H3 (acetyl K9). As with H3K27ac, associated with transcriptional initiation and open chromatin structure.
-It remains unknown whether acetylation has can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.
+targetDescription Histone H3 (acetyl K9). As with H3K27ac, associated with transcriptional initiation and open chromatin structure. It remains unknown whether acetylation has can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.
 orderUrl http://www.abcam.com/index.html?datasheet=4441
 vendorName Abcam
 vendorId ab4441
@@ -5142,6 +5153,21 @@ lots
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
+
+term H3K9Ac_(9649)
+tag H3K9Ac9649
+type Antibody
+antibodyDescription Monoclonal antibody was produced by immunizing rabbits with a synthetic peptide corresponding to the amino terminus of histone H3 in which Lys9 is acetylated.
+target H3K9Ac
+targetDescription Acetyl-Histone H3 (Lys9) (C5B11) Rabbit mAb detects endogenous levels of histone target H3 only when acetylated on Lys9. This antibody does not cross-react with other acetylated histones.
+vendorName Cell Signaling
+vendorId 9649
+orderUrl http://www.cellsignal.com/products/9649.html
+lab Farnham
+lots Lot#1
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K9Ac_(9649)(WesternBlot,DotBlot):human_H3K9Ac_9649_validation_Farnham.pdf
 
 term H3K9me1
 tag H3K9me1
@@ -5171,6 +5197,26 @@ lab Farnham
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf
+
+term H3K9me3_(9754)
+tag H3K9me39754
+type Antibody
+antibodyDescription Rabbit polyclonal antibody was produced by immunizing animals with a synthetic\
+ peptide corresponding to the amino terminus of histone H3 in which Lys9 is tri-methylated. Antibo\
+dy was purified by protein A and peptide affinity chromatography.
+target H3K9me3
+targetDescription Tri-Methyl-Histone H3 (Lys9) Antibody detects endogenous levels of histone H3 on\
+ly when tri-methylated on Lys9. The antibody does not cross-react with non-methylated, mono-methyl\
+ated, or di-methylated Lys9. In addition, the antibody does not cross-react with non-methylated, m\
+ono-methylated, di-methylated or tri-methylated histone H3 Lys4, Lys27, Lys36 or histone H4 Lys20.
+vendorName Cell Signaling
+vendorId 9754
+orderUrl http://www.cellsignal.com/products/9754.html
+lab Farnham
+lots Lot#1
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K9me3_(9754)(WesternBlot,PeptideELISA):human_H3K9me3_9754_validation_Farnham.pdf
 
 term H3K27ac
 tag H3K27ac
@@ -7835,8 +7881,8 @@ description 4 hr with DMSO (Myers)
 type treatment
 
 term DIFF_7d
-tag DIFF7d 
-description PROVISIONAL Grown for 7 days in differentiation medium (Wold)
+tag DIFF7d
+description Grown for 7 days in differentiation medium (Wold)
 type treatment
 
 term Estradiol_10nM
@@ -8614,7 +8660,13 @@ tag 129Ola
 type strain
 description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice.
 
-term Unknown
+term Spretus.BL6-Xist
+tag SPBL6
+type strain
+description: M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X.
+
+
+term unknown
 tag UKN
 type strain
 description Unknown strain origin
@@ -8668,7 +8720,7 @@ description Embryonic day 18
 term adult-8wks
 tag adult8wks
 type age
-Stage Adult
+stage Adult
 description Adult 8 weeks
 
 term immortalized
@@ -8677,34 +8729,40 @@ type age
 stage Cell Line
 description Immortal cells
 
-### Age
+term ageUnknown
+tag ageUnknwn
+type age
+stage stageUnknown
+description the age when the real age is unknown
+
+
+### Attic
 # Expected fields:
 # ----------------
 # term (human-readable name)
-# tag (machine-readable name, no special characters)
-# type (informs pipeline code of stanza type.  Should always be age)
-# description (human-readable description.  Can't say where/how it's used)
-
+# tag (short machine-readable name, no special characters)
+# type (informs pipeline code of stanza type.  Should always be attic)
+# description (human-readable description)
 
 term supplemental
 tag sup
 type attic
-description Files supplemental at composite level (Provisional)
+description Files supplemental at composite level
 
-term auxUnValid
-term auxUV
+term auxSup
+tag auxsup
 type attic
-description Unvalidated files supplemental at experimental level (Provisional)
+description Unverified files supplemental at experiment level
 
 term auxValid
-tag auxV
+tag auxval
 type attic
-description Validated files supplemental to experiments (Provisional)
+description Validated files supplemental to experiments 
 
 term auxExp
-tag auxE
+tag auxexp
 type attic
-description Supplemental experiments (Provisional)
+description Supplemental experiments 
 
 # Expected fields:
 # ----------------
@@ -8752,14 +8810,14 @@ description Unknown
 
 
 ## Organisms
-term human
+term Human
 tag human
 type organism
 description human
 
-term mouse
+term Mouse
 tag mouse
-type mouse
+type organism
 description mouse
 
 ## Tiers (used by cell types)
@@ -8783,7 +8841,7 @@ description tier 3
 term Both
 tag Both
 type tissueSourceType
-description Tissue analyzed using replicate samples obtained from and individual and by pooling. (Provisional)
+description Tissue analyzed using replicate samples obtained from and individual and by pooling. 
 
 term Individual
 tag Indiv
@@ -8898,7 +8956,7 @@ labInst BioChain
 labPi Myers
 labPiFull
 grantPi
-organism human
+organism Human
 
 term Broad
 tag Broad
@@ -8909,7 +8967,7 @@ labInst Broad Institute
 labPi Bernstein
 labPiFull Bradley Bernstein
 grantPi Bernstein
-organism human
+organism Human
 
 term BU
 tag BU
@@ -8920,7 +8978,7 @@ labInst Boston University
 labPi Tullius
 labPiFull Thomas Tullius
 grantPi Tullius
-organism human
+organism Human
 
 term CRG-Guigo
 tag CRG
@@ -8931,7 +8989,7 @@ labInst Genome Center for Genomic Regulation, Barcelona
 labPi Guigo
 labPiFull Roderic Guigo
 grantPi Guigo
-organism human
+organism Human
 
 term GIS-Ruan
 tag GisRuan
@@ -8942,7 +9000,7 @@ labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Ruan
-organism human
+organism Human
 
 term Sanger
 tag gencode
@@ -8953,7 +9011,7 @@ labInst Gencode
 labPi Hubbard
 labPiFull Tim Hubbard
 grantPi Hubbard
-organism human
+organism Human
 
 term SunyAlbany
 tag SUNY
@@ -8964,7 +9022,7 @@ labInst State University of New York at Albany
 labPi Tenenbaum
 labPiFull Scott Tenebaum
 grantPi Tenenbaum
-organism human
+organism Human
 
 term UCSC
 tag UCSC
@@ -8975,7 +9033,7 @@ labInst University of California at Santa Cruz
 labPi Kent
 labPiFull Jim Kent
 grantPi Kent
-organism human
+organism Human
 
 term UW
 tag UW
@@ -8986,7 +9044,7 @@ labInst University of Washington
 labPi Stam
 labPiFull John Stamatoyannopoulous
 grantPi Stam
-organism human
+organism Human
 
 
 ### Duke Labs
@@ -9001,7 +9059,7 @@ labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
 grantPi Crawford
-organism human
+organism Human
 
 term UT-A
 tag UT-A
@@ -9012,7 +9070,7 @@ labInst University of Texas at Austin
 labPi Iyer
 labPiFull Tara Iyer
 grantPi Crawford
-organism human
+organism Human
 
 term UNC
 tag UNC
@@ -9023,7 +9081,7 @@ labInst Univeristy of North Carolina
 labPi Lieb
 labPiFull Jason Lieb
 grantPi Crawford
-organism human
+organism Human
 
 ### HAIB Project Labs
 ### Caltech and HudsonAlpha
@@ -9037,7 +9095,7 @@ grantInst California Institute of Technology (Wold Lab)
 labPi Wold
 labPiFull Barbara Wold
 grantPi Myers
-organism human
+organism Human
 
 term HudsonAlpha
 tag HAIB
@@ -9048,7 +9106,7 @@ labInst Hudson Alpha Institute for Biotechnology
 labPi Myers
 labPiFull Richard Myers
 grantPi Myers
-organism human
+organism Human
 
 ### NHGRI Labs
 ###
@@ -9062,7 +9120,7 @@ labInst National Human Genome Research Institute
 labPi Elnitski
 labPiFull Laura Elnitski
 grantPi Elnitski
-organism human
+organism Human
 
 term NHGRI-Margulies
 tag NHGRI-Marigulies
@@ -9073,7 +9131,7 @@ labInst National Human Genome Research Institute
 labPi Margulies
 labPiFull Elliott Margulies
 grantPi Margulies
-organism human
+organism Human
 
 
 ### Transcriptome Project Labs
@@ -9089,7 +9147,7 @@ labInst Cold Spring Harbor Laboratory
 labPi Gingeras
 labpiFull Thomas Gingeras
 grantPi Gingeras
-organism human
+organism Human
 
 term GIS
 tag  GIS
@@ -9100,7 +9158,7 @@ labInst Genome Institute of Singapore
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Gingeras
-organism human
+organism Human
 
 term Helicos
 tag Helicos
@@ -9111,7 +9169,7 @@ labInst Helicos BioScience Corporation
 labPi Kapranov
 labPiFull Philipp Kapranov
 grantPi Gingeras
-organism human
+organism Human
 
 term Affy
 tag  Affy
@@ -9122,7 +9180,7 @@ labInst Affymetrix
 labPi Gingeras
 labPiFull Thomas Gingeras
 grantPi Gingeras
-organism human
+organism Human
 
 term RIKEN
 tag  Riken
@@ -9133,7 +9191,7 @@ labName Riken
 labPi Carninci
 labPiFull Piero Carninci
 grantPi Gingeras
-organism human
+organism Human
 
 
 ### UMass Labs
@@ -9148,7 +9206,7 @@ labInst UMass
 labPi Dekker
 labPiFull Job Dekker
 grantPi Dekker
-organism human
+organism Human
 
 term UMass-Weng
 tag UMass-Weng
@@ -9159,7 +9217,7 @@ labInst UMass
 labPi Weng
 labPiFull Zhiping Weng
 grantPi Weng
-organism human
+organism Human
 
 
 #### The SYDH Project
@@ -9174,7 +9232,7 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism human
+organism Human
 
 term Yale
 tag  Yale
@@ -9185,7 +9243,7 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism human
+organism Human
 
 term Yale-Weissman
 tag  YaleWeis
@@ -9196,7 +9254,7 @@ labInst Yale
 labPi Weissman
 labPiFull Sherman Weissman
 grantPi Snyder
-organism human
+organism Human
 
 term Harvard
 tag  Harvard
@@ -9207,7 +9265,7 @@ labInst Harvard
 labPi Struhl
 labPiFull Kevin Struhl
 grantPi Snyder
-organism human
+organism Human
 
 term UCD
 tag UCD
@@ -9218,7 +9276,7 @@ labName UCD
 labPi Farnham
 labPiFull Peggy Farnham
 grantPi Snyder
-organism human
+organism Human
 
 
 ### ARRA human labs
@@ -9232,7 +9290,7 @@ labInst University of North Carolina / Boise State University
 labPi Giddings
 labPiFull Morgan Giddings
 grantPi Giddings
-organism human
+organism Human
 
 term UChicago
 tag UChicago
@@ -9243,7 +9301,7 @@ labInst University of Chicago
 labPi White
 labPiFull Kevin White
 grantPi White
-organism human
+organism Human
 
 
 
@@ -9259,7 +9317,7 @@ labInst Ludwig Institue for Cancer Research
 labPi Ren
 labPiFull Bing Ren
 grantPi Ren
-organism mouse
+organism Mouse
 
 term Caltech-m
 tag Caltech
@@ -9270,7 +9328,7 @@ labInst Caltech
 labPi Wold
 labPiFull Barbara Wold
 grantPi Hardison
-organism mouse
+organism Mouse
 
 term UMass-m
 tag  UMass
@@ -9281,7 +9339,7 @@ labInst University of Massachusettes
 labPi Dekker
 labPiFull Job Dekker
 grantPi Hardison
-organism mouse
+organism Mouse
 
 term Duke-m
 tag Duke
@@ -9292,7 +9350,7 @@ labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
 grantPi Hardison
-organism mouse
+organism Mouse
 
 term PSU-m
 tag PSU
@@ -9303,7 +9361,7 @@ labInst PSU
 labPi Hardison
 labPiFull Ross Hardison
 grantPi Hardison
-organism mouse
+organism Mouse
 
 
 term UW-m
@@ -9315,7 +9373,7 @@ labInst University of Washington
 labPi Stam
 labpiFull George Stamatoyannopoulous
 grantPi Stam
-organism mouse
+organism Mouse
 
 term Stanford-m
 tag  Stanford
@@ -9326,7 +9384,7 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism mouse
+organism Mouse
 
 term Yale-m
 tag  Yale
@@ -9337,7 +9395,7 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism mouse
+organism Mouse
 
 ### AWG (DAC) Labs
 
@@ -9350,7 +9408,7 @@ labInst Stanford
 labPi Birney
 labPiFull Ewan Birney
 grantPi Birney
-organism human
+organism Human
 
 
 
@@ -9370,7 +9428,7 @@ term Birney
 tag birney
 type grant
 description Birney
-grantInst (PROVISIONAL) ENCODE Data Analysis Center (DAC)
+grantInst ENCODE Data Analysis Center (DAC)
 projectName DAC
 
 term Tullius
@@ -10228,7 +10286,7 @@ priority 470
 term uniqueness
 type typeOfTerm
 label Mapability Distinctions
-description (PRIVISIONAL) Degree of region uniqueness or mapability disctinctions
+description Degree of region uniqueness or mapability distinctions
 searchable no
 cvDefined no
 validate none
