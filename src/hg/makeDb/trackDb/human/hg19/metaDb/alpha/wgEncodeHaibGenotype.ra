@@ -360,7 +360,7 @@ dccRep 1
 fileName wgEncodeHaibGenotypeGm12878RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId  Illumina 1MDuo
+labExpId Illumina 1MDuo
 labVersion HudsonAlpha
 obtainedBy HudsonAlpha
 origAssembly hg19
@@ -1970,4 +1970,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -2124694189
+# MAGIC: -2124694221
