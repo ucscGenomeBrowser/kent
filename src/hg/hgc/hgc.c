@@ -19001,7 +19001,7 @@ for(sg=sgList; sg != NULL; sg = sg->next)
     }
 featureCount= slCount(sgList);
 printf("<basefont size=-1>\n");
-printf("<table cellspacing=0 border=1 bordercolor=\"black\">\n");
+printf("<table cellspacing=0 style='border:1px solid black;'>\n");
 printf("<tr>\n");
 printf("<th align=center>Sage Experiment</th>\n");
 printf("<th align=center>Tissue</th>\n");
