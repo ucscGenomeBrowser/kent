@@ -20,7 +20,6 @@
 #include "configPage.h"
 #include "printCaption.h"
 #include "trashDir.h"
-#include "jsHelper.h"
 
 static char const rcsid[] = "$Id: hgVisiGene.c,v 1.102 2010/01/19 19:17:06 galt Exp $";
 
@@ -235,13 +234,13 @@ if (imageCount > 0)
 "    <DIV"
 "    ID='perspClip'"
 "    STYLE='position:absolute;left:-1000px;top:-1000px;z-index:2;visibility:visible;overflow:hidden!important;'"
-"         onmouseover='this.style.left=-1000;' "
+"         onmouseover='this.style.left=\"-1000px\";' "
 "    >"
 "    <DIV"
 "    ID='perspective'"
 "    STYLE='position:absolute;left:0px;top:0px;'"
 "    >"
-"    <IMG ID='perspBox' SRC='../images/dot_clear.gif' BORDER=2 HEIGHT=100 WIDTH=100 STYLE='position:absolute;left:0px;top:0px;border-color:#8080FF;border-width:1' "
+"    <IMG ID='perspBox' SRC='../images/dot_clear.gif' STYLE='position:absolute;left:0px;top:0px;width:100px;height:100px;border-style:solid;border-color:#8080FF;border-width:1px' "
 ">"
 "    </DIV>"
 "    </DIV>"
@@ -324,6 +323,13 @@ int w = 0, h = 0;
 htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
 
+puts(
+"<script type=\"text/JavaScript\">"
+"document.getElementsByTagName('html')[0].style.height=\"100%\";"
+"document.getElementsByTagName('body')[0].style.height=\"100%\";"
+"</script>"
+);
+
 if (!visiGeneImageSize(conn, imageId, &w, &h))
     imageId = 0;
 
@@ -344,15 +350,7 @@ if (imageId != 0)
     safef(buf,sizeof(buf),"../bigImage.html?url=%s%s/%s&w=%d&h=%d",
 	    dir,name,name,w,h);
 #endif
-    jsIncludeFile("jquery.js", NULL);
     printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
-    printf("<script type='text/javascript'>$(document).ready( function () {;\n");
-    printf("   $('[name=\"bigImg\"]').css('height',($(window).height()*0.85) + 'px');\n");
-    printf("});\n");
-    printf("$(window).resize( function() {\n");
-    printf("   $('[name=\"bigImg\"]').css('height',($(window).height()*0.85) + 'px');\n");
-    printf("});\n");
-    printf("</script>\n");
 
     fullCaption(conn, imageId);
 

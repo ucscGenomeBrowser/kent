@@ -33,7 +33,7 @@ if (sameString(position, "proteome") || sameString(position, "genome") ||
 puts(
 "<FORM ACTION=\"../cgi-bin/pbGlobal\" NAME=\"mainForm\" METHOD=\"GET\">\n"
 "<CENTER>"
-"<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
+"<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
 "<TR><TD><FONT SIZE=\"2\">\n"
 "<CENTER>\n"
 "The UCSC Proteome Browser was created by the \n"
@@ -72,12 +72,12 @@ if (! hDbIsActive(db))
 cartWebStart(theCart, NULL, "UCSC Proteome Browser Gateway \n");
 
 /* start with a clean slate */
-cartResetInDb(hUserCookie());  
+cartResetInDb(hUserCookie());
 /* This cartResetInDb does nothing since database will be overwritten
  * with memory by cartWebEnd ... unless pgGateway crashes, in which
  * case along with the crash it will wipe out all the users settings.
  * Is that a nice thing to do?  -Jim */
-          
+
 
 pbGateway();
 cartWebEnd();
