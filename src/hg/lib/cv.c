@@ -70,15 +70,30 @@ char *cvLabDeNormalize(char *minimalTerm)
 }
 */
 
+static char *cvFileRequested = NULL;
+
+void cvFileDeclare(char *filePath)
+// Declare an altername cv.ra file to use
+// (The cv.ra file is normally discovered based upon CGI/Tool and envirnment)
+{
+cvFileRequested = cloneString(filePath);
+}
 
 static char *cvFile()
 // return default location of cv.ra
 {
 static char filePath[PATH_LEN];
-char *root = hCgiRoot();
-if (root == NULL || *root == 0)
-    root = "/usr/local/apache/cgi-bin/"; // Make this check out sandboxes?
-safef(filePath, sizeof(filePath), "%s/encode/%s", root,CV_FILE_NAME);
+if (cvFileRequested != NULL)
+    {
+    safecpy(filePath, sizeof(filePath), cvFileRequested);
+    }
+else
+    {
+    char *root = hCgiRoot();
+    if (root == NULL || *root == 0)
+        root = "/usr/local/apache/cgi-bin/"; // Make this check out sandboxes?
+    safef(filePath, sizeof(filePath), "%s/encode/%s", root,CV_FILE_NAME);
+    }
 if(!fileExists(filePath))
     errAbort("Error: can't locate %s; %s doesn't exist\n", CV_FILE_NAME, filePath);
 return filePath;
@@ -261,6 +276,27 @@ if (termHash != NULL)
     {
     char *setting = hashFindVal(termHash,CV_TOT_HIDDEN);
     return cvHiddenIsTrue(setting);
+    }
+return FALSE;
+}
+
+boolean cvTermIsEmpty(char *term,char *val)
+// returns TRUE if term has validation of "cv or None" and the val is None
+{
+if (val == NULL)
+    return TRUE; // Empty whether it is supposed to be or not
+
+struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
+struct hash *termHash = hashFindVal(termTypeHash,term);
+if (termHash != NULL)
+    {
+    char *validationRule = hashFindVal(termHash,CV_VALIDATE);
+    if (validationRule != NULL)
+        {           // Currently only supporting special case for "None"
+        if (sameString(validationRule,CV_VALIDATE_CV_OR_NONE)
+        && sameString(val,MDB_VAL_ENCODE_EDV_NONE))
+            return TRUE;
+        }
     }
 return FALSE;
 }
