@@ -169,8 +169,6 @@ taxId 28377
 	anoCar2 > do.log 2>&1 &
     #	real    23m18.960s
 
-XXX - READY - Tue Apr 12 16:21:42 PDT 2011
-
     #	real    198m33.953s
     cat fb.simpleRepeat 
     #	66211508 bases of 2752505800 (2.405%) in intersection
@@ -1056,3 +1054,91 @@ done >> multiz7way.maf
     rm multiz7way*.tab
 
 ############################################################################
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2011-05-03 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.
+    mkdir /hive/data/genomes/anoCar2/bed/multiz7way/anno/mafSplit
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/anno/mafSplit
+    time mafSplit -byTarget -useFullSequenceName \
+	/dev/null . ../../multiz7way.maf
+    #	real    0m49.816s
+    ls | wc
+    #	4423    4423   94331
+
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/anno
+
+    # only one of these does not yet have an N.bed file
+    cd /hive/data/genomes/danRer7
+    twoBitInfo -nBed danRer7.2bit danRer7.N.bed
+for DB in `sed -e "s/anoCar2 //" ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    ssh swarm
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/anno
+    mkdir result
+    cat << '_EOF_' > template
+#LOOP
+mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/anoCar2/anoCar2.2bit result/$(file1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls mafSplit/*.maf > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs to one per node with the ram=8g requirement
+    para -ram=8g create jobList
+    para try ... check ... push ...
+# Completed: 4423 of 4423 jobs
+# CPU time in finished jobs:       2692s      44.87m     0.75h    0.03d  0.000 y
+# IO & Wait Time:                 11343s     189.04m     3.15h    0.13d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:             700s      11.67m     0.19h    0.01d
+# Submission to last job:           702s      11.70m     0.20h    0.01d
+
+    # verify all result files have some content, look for 0 size files:
+    find . -type f -size 0
+    # should see none
+
+    # combine into one file
+    head -q -n 1 result/chr1.maf > anoCar2.7way.maf
+    for F in result/*.maf
+do
+    grep -h -v "^#" ${F}
+done >> anoCar2.7way.maf
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/chr1.maf >> anoCar2.7way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> anoCar2.7way.maf
+
+    # Load into database
+    rm /gbdb/anoCar2/multiz7way/multiz7way.maf   # remove old symlink
+    ln -s `pwd`/anoCar2.7way.maf /gbdb/anoCar2/multiz7way/multiz7way.maf
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf anoCar2 multiz7way
+    #	Loaded 2552410 mafs in 1 files from /gbdb/anoCar2/multiz7way
+    #	real    1m18.221s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 anoCar2 multiz7waySummary \
+	/gbdb/anoCar2/multiz7way/multiz7way.maf
+    #	Created 623115 summary blocks from 4606157 components
+    #	and 2552410 mafs from /gbdb/anoCar2/multiz7way/multiz7way.maf
+    #	real    1m36.715s
+
+    wc -l multiz7way*.tab
+    #	2552410 multiz7way.tab
+    #	623115 multiz7waySummary.tab
+    #	3175525 total
+
+    rm multiz7way*.tab
+
+#########################################################################
