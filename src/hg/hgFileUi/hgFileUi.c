@@ -83,7 +83,7 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
         htmlHorizontalLine();
     else // Move line down, since <H2>Description (in ->html) is proceded by too much space
-        printf("<span style='position:relative; top:1em;'><HR ALIGN='bottom'></span>");
+        printf("<HR ALIGN='bottom' style='position:relative; top:1em;'>");
 
     printf("<table class='windowSize'><tr valign='top'><td rowspan=2>");
     puts("<A NAME='TRACK_HTML'></A>");    // include anchor for Description link
