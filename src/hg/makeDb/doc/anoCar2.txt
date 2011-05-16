@@ -1040,24 +1040,18 @@ done >> multiz7way.maf
     #	Indexing and tabulating /gbdb/anoCar2/multiz7way/multiz7way.maf
     #	Loaded 2182259 mafs in 1 files from /gbdb/anoCar2/multiz7way
     #	real    0m48.824s
-XXX - done to here - Fri May 13 16:19:42 PDT 2011
-
-
-    #	Indexing and tabulating /gbdb/anoCar2/multiz7way/multiz7way.maf
-    #	Loaded 15113841 mafs in 1 files from /gbdb/anoCar2/multiz7way
-    #	real    9m38.121s
 
     time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 anoCar2 multiz7waySummary \
 	/gbdb/anoCar2/multiz7way/multiz7way.maf
-    #	Created 1828535 summary blocks from 85036569 components
-    #	and 15113841 mafs from /gbdb/anoCar2/multiz7way/multiz7way.maf
-    #	real    8m51.192s
+    #	Created 623115 summary blocks from 4606157 components and 2182259 mafs
+    #	from /gbdb/anoCar2/multiz7way/multiz7way.maf
+    #	real    0m38.445s
 
     wc -l multiz7way*.tab
-    #	15113841 multiz7way.tab
-    #	1828535 multiz7waySummary.tab
-    #	16942376 total
+    #	2182259 multiz7way.tab
+    #	623115 multiz7waySummary.tab
+    #	2805374 total
 
     rm multiz7way*.tab
 
