@@ -750,7 +750,6 @@ if (htmlRedirectPage(*OUT_FILE,$db,$opt_db,$composite) == 0) {
         print OUT_FILE "<TABLE class='sortable' style='border: 2px outset #006600;'>\n";
 
         htmlTrHeader(*OUT_FILE,\@colList);
-        }
     } else {
         print OUT_FILE "<TABLE cellspacing=0>\n";
         print OUT_FILE "<TR valign='bottom'><TH class'sortable'>RESTRICTED<BR>until<TH align='left' class'sortTh'>&nbsp;&nbsp;File<TH align='right' class'sortTh'>Size<TH class'sortTh'>Submitted<TH align='left' class'sortTh'>&nbsp;&nbsp;Details</TR>\n";
