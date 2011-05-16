@@ -7,8 +7,10 @@
 #ifndef HUBCONNECT_H
 #define HUBCONNECT_H
 
-#define hubConnectTableName "hubConnect"
-/* Name of our table. */
+#define hubPublicTableName "hubPublic"
+/* Name of our table with list of public hubs. read only */
+#define hubStatusTableName "hubStatus"
+/* Name of table that maintains status of hubs  read/write. */
 
 #define hubTrackPrefix "hub_"
 /* The names of all hub tracks begin with this.  Use in cart. */
@@ -17,19 +19,26 @@ boolean isHubTrack(char *trackName);
 /* Return TRUE if it's a hub track. */
 
 struct hubConnectStatus
-/* Basic status on hubConnect.  Note it is *not* the same as the
- * hubConnect table, that has a bunch of extra fields to help 
+/* Basic status in hubStatus.  Note it is *not* the same as the
+ * hubStatus table, that has a bunch of extra fields to help 
  * keep track of whether the hub is alive. */
     {
     struct hubConnectStatus *next;
-    int id;	/* Hub ID */
+    unsigned id;	/* Hub ID */
     char *shortLabel;	/* Hub short label. */
     char *longLabel;	/* Hub long label. */
     char *hubUrl;	/* URL to hub.ra file. */
     char *errorMessage;	/* If non-empty hub has an error and this describes it. */
     unsigned dbCount;	/* Number of databases hub has data for. */
     char **dbArray;	/* Array of databases hub has data for. */
+    unsigned  status;   /* 1 if private */
     };
+
+/* status bits */
+#define HUB_UNLISTED    (1 << 0)
+
+boolean isHubUnlisted(struct hubConnectStatus *hub) ;
+/* Return TRUE if it's an unlisted hub */
 
 void hubConnectStatusFree(struct hubConnectStatus **pHub);
 /* Free hubConnectStatus */

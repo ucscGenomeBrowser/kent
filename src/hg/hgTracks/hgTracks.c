@@ -3350,21 +3350,28 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         if (errCatchStart(errCatch))
 	    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
         errCatchEnd(errCatch);
+	struct sqlConnection *conn = hConnectCentral();
+	char query[256];
         if (errCatch->gotError)
 	    {
-	    struct sqlConnection *conn = hConnectCentral();
-	    char query[256];
 	    safef(query, sizeof(query),
 		"update %s set errorMessage=\"%s\", lastNotOkTime=now() where id=%d"
-		, hubConnectTableName
+		, hubStatusTableName
 		, errCatch->message->string
 		, hub->id
 		);
-	    sqlUpdate(conn, query);
-	    hDisconnectCentral(&conn);
 	    }
+	else
+	    {
+	    safef(query, sizeof(query),
+		"update %s set errorMessage=\"\", lastOkTime=now() where id=%d"
+		, hubStatusTableName
+		, hub->id
+		);
+	    }
+	sqlUpdate(conn, query);
+	hDisconnectCentral(&conn);
         errCatchFree(&errCatch);
-
 	}
     }
 hubConnectStatusFreeList(&hubList);
