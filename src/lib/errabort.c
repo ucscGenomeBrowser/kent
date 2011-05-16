@@ -133,7 +133,7 @@ if (warnIx <= 0)
     {
     if (debugPushPopErr)
         dumpStack("popWarnHandler underflow");
-    errAbort("Too many popWarnHandlers\n");
+    errAbort("Too many popWarnHandlers");
     }
 --warnIx;
 }
@@ -199,7 +199,7 @@ if (abortIx >= maxAbortHandlers-1)
     {
     if (debugPushPopErr)
         dumpStack("pushAbortHandler overflow");
-    errAbort("Too many pushAbortHandlers, can only handle %d\n", maxAbortHandlers-1);
+    errAbort("Too many pushAbortHandlers, can only handle %d", maxAbortHandlers-1);
     }
 abortArray[++abortIx] = handler;
 }
