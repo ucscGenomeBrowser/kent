@@ -33,7 +33,7 @@ if (sameString(position, "proteome") || sameString(position, "genome") ||
 puts(
 "<FORM ACTION=\"../cgi-bin/pbGsid\" NAME=\"mainForm\" METHOD=\"GET\">\n"
 "<CENTER>"
-"<TABLE BGCOLOR='#FFFEF3' BORDERCOLOR='#CCCC99' BORDER=0 CELLPADDING=1>\n"
+"<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
 "<TR><TD><span style='font-size:small; text-align:center;'>\n"
 "The GSID Protein View was created by the \n"
 "<A HREF=\"../staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
