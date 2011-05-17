@@ -1,9 +1,9 @@
 /* trackHub - supports collections of tracks hosted on a remote site.
  * The basic layout of a data hub is:
- *        hub.ra - contains information about the hub itself
- *        genomes.ra - says which genomes are supported by hub
- *                 Contains file name of trackDb.ra for each genome
- *        trackDb.ra - contains a stanza for each track.  Stanzas
+ *        hub.txt - contains information about the hub itself
+ *        genomes.txt - says which genomes are supported by hub
+ *                 Contains file name of trackDb.txt for each genome
+ *        trackDb.txt - contains a stanza for each track.  Stanzas
  *                 are in a subset of the usual trackDb format. 
  * How you use the routines here most commonly is as so:
  *     struct trackHub *hub = trackHubOpen(hubRaUrl);

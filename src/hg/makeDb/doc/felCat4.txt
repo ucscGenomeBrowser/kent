@@ -1073,11 +1073,31 @@ done
     # Loading complete
     # real    3m8.890s
 
-    # Gap Annotation
-    # prepare bed files with gap info
+############################################################################
+# GAP ANNOTATE MULTIZ6WAY MAF AND LOAD TABLES (DONE 2011-05-09 - Chin)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #   function correctly when more than one reference sequence
+    #   are in a single file.
+
+    # use the
+    # /hive/data/genomes/felCat4/bed/multiz6way/run/felCat4.6way.maf
+    # to split
+
+    cd /hive/data/genomes/felCat4/bed/multiz6way/
+    mkdir mafSplit
+    cd mafSplit
+    mafSplit -byTarget -useFullSequenceName /dev/null . ../run/felCat4.6way.maf
+    # Splitting 1 files by target sequence -- ignoring first argument
+    # /dev/null
+    ls -lt | wc -l
+    # 64892
+    # got 64892 mafs named after their chrom/scaff .maf
+    # although there are over 104054 chroms and scaffolds (wc -l
+    # chrom.sizes),
+    # some are too small or have nothing aligning.
+
     mkdir /hive/data/genomes/felCat4/bed/multiz6way/anno
     cd /hive/data/genomes/felCat4/bed/multiz6way/anno
-    mkdir maf run
 
     #   most of these will already exist from previous multiple
     #   alignments
@@ -1095,9 +1115,7 @@ do
     fi
 done
 
-    cd run
-    rm -f nBeds sizes
-    for DB in `sed -e "s/felCat4 //" ../../species.list`
+    for DB in `sed -e "s/felCat4 //" ../species.list`
 do
     echo "${DB} "
     ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
@@ -1106,138 +1124,65 @@ do
     echo ${DB}.len  >> sizes
 done
 
-    #   the annotation step requires large memory, run on memk nodes
+    # make sure they all are successful symLinks:
+    ls -ogrtL
 
-    ssh memk
-    cd /hive/data/genomes/felCat4/bed/multiz6way/anno/run
-    ls ../../run/maf | sed -e "s/.maf//" > chr.list
-    cat << '_EOF_' > template
-#LOOP
-./anno.csh $(root1) {check out line+ ../maf/$(root1).maf}
-#ENDLOOP
-'_EOF_'
-    # << happy emacs
+    mkdir mafSplit
+    for F in ../mafSplit/*.maf
+do
+    B=`basename ${F}`
+    mafAddIRows -nBeds=nBeds ${F} /hive/data/genomes/felCat4/felCat4.2bit \
+        mafSplit/${B}
+    echo $B
+done
+    # about 3h 20m
 
-    cat << '_EOF_' > anno.csh
-#!/bin/csh -fe
+    # combine into one file
+    head -q -n 1 mafSplit/chrA1.maf > felCat4.6way.maf
+    for F in mafSplit/*.maf
+do
+    grep -h -v "^#" ${F}
+done >> felCat4.6way.maf
+    #   these maf files do not have the end marker, this does nothing:
+    #   tail -q -n 1 mafSplit/chrA1.maf >> felCat4.6way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> felCat4.6way.maf
 
-set inMaf = ../../run/maf/$1.maf
-set outMaf = ../maf/$1.maf
-rm -f $outMaf
-mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/felCat4/felCat4.2bit $outMaf
-'_EOF_'
-    # << happy emacs
-    chmod +x anno.csh
-
-    gensub2 chr.list single template jobList
-    para -ram=30g create jobList
-    #   specify lots of ram to get one job per node
-    para -ram=30g push
-    #   
-# para time
-# Completed: 256 of 256 jobs
-# CPU time in finished jobs:       3634s      60.56m     1.01h    0.04d  0.000 y
-# IO & Wait Time:                   996s      16.60m     0.28h    0.01d  0.000 y
-# Average job time:                  18s       0.30m     0.01h    0.00d
-# Longest finished job:             529s       8.82m     0.15h    0.01d
-# Submission to last job:          4385s      73.08m     1.22h    0.05d
-
-
-    ssh hgwdev
-    rm -fr /gbdb/felCat4/multiz6way/maf
-    mkdir /gbdb/felCat4/multiz6way/maf
-    cd /hive/data/genomes/felCat4/bed/multiz6way/anno/maf
-    ln -s `pwd`/*.maf /gbdb/felCat4/multiz6way/maf/
-    #   by loading this into the table multiz6way, it will replace the
-    #   previously loaded table with the unannotated mafs
-    #   huge temp files are made, do them on local disk
-    cd /data/tmp
-
-    time nice -n +19 hgLoadMaf \
-        -pathPrefix=/gbdb/felCat4/multiz6way/maf felCat4 multiz6way
-    #  real    9m37.428s
-    #  Loading multiz6way into database
-    #  Loaded 6509883 mafs in 256 files from /gbdb/felCat4/multiz6way/maf
-
-    time nice -n +19 cat /gbdb/felCat4/multiz6way/maf/*.maf \
-        | hgLoadMafSummary felCat4 -minSize=30000 -mergeGap=1500 \
-                 -maxSize=200000  multiz6waySummary stdin
-    # Indexing and tabulating stdin
-    # Created 1029636 summary blocks from 15177243 components and 6509883 mafs from stdin
-    # Loading into felCat4 table multiz6waySummary...
-    # Loading complete
-    # real    25m27.648s
-
+    # Load into database
     #   by loading this into the table multiz6waySummary, it will
     #   replace
     #   the previously loaded table with the unannotated mafs
-    #   remove the multiz6way*.tab files in this /data/tmp directory
-    ##-rw-rw-r-- 1 338458171 Jul 15 16:27 multiz6way.tab
-    ##-rw-rw-r-- 1  49961076 Jul 19 08:56 multiz6waySummary.tab
-
-    wc -l multiz6way*.tab
-    #  6509883 multiz6way.tab
-    #  1029636 multiz6waySummary.tab
-    #  7539519 total
-
-    rm multiz6way*.tab
-
-    # create some downloads
-    mkdir -p /hive/data/genomes/felCat4/bed/multiz6way/downloads/maf
-    cd /hive/data/genomes/felCat4/bed/multiz6way/downloads/maf
-    # time cp -p ../../anno/maf/chr*.maf .
-    time cp -p ../../anno/maf/*.maf .
-    #   real    6m55.315s
-    time gzip --rsyncable *.maf
-    #   real    113m32.738s
-    time md5sum *.gz > md5sum.txt
-    #   real    2m44.689s
-
-
-    # re-do the multiz6way.maf (DONE 2011-02-24 - Chin)
-    ssh hgwdev
-    rm -fr /gbdb/felCat4/multiz6way/maf
-    cd /hive/data/genomes/felCat4/bed/multiz6way/anno
-
-    grep "^##maf version" maf/000.maf \
-        | sort -u > felCat4.anno.6way.maf
-    find ./maf -type f  -name "*.maf" | while read F
-do
-    grep -v -h "^#" "${F}"
-done >> felCat4.anno.6way.maf
-    echo "##eof maf" >> felCat4.anno.6way.maf
-
-    mkdir -p /gbdb/felCat4/multiz6way/anno
-    ln -s `pwd`/felCat4.anno.6way.maf \
-                /gbdb/felCat4/multiz6way/anno/multiz6way.maf
-    #   by loading this into the table multiz6way, it will replace the
-    #   previously loaded table with the unannotated mafs
-    #   huge temp files are made, do them on local disk
+    rm /gbdb/felCat4/multiz6way/multiz6way.maf   # remove old symlink
+    ln -s `pwd`/felCat4.6way.maf /gbdb/felCat4/multiz6way/multiz6way.maf
     cd /scratch/tmp
-    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/felCat4/multiz6way/anno \
-                felCat4 multiz6way
-    # Indexing and tabulating /gbdb/felCat4/multiz6way/anno/multiz6way.maf
+    time nice -n +19 hgLoadMaf felCat4 multiz6way
+    # Indexing and tabulating /gbdb/felCat4/multiz6way/multiz6way.maf
     # Loading multiz6way into database
-    # Loaded 6509883 mafs in 1 files from /gbdb/felCat4/multiz6way/anno
+    # Loaded 6501671 mafs in 1 files from /gbdb/felCat4/multiz6way
     # 
-    # real    9m6.201s
+    # real    3m37.682s
 
-
-    hgLoadMafSummary felCat4 -minSize=30000 -mergeGap=1500 \
-        -maxSize=200000  multiz6waySummary \
-            /gbdb/felCat4/multiz6way/anno/multiz6way.maf
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+        -mergeGap=1500 -maxSize=200000 felCat4 multiz6waySummary \
+        /gbdb/felCat4/multiz6way/multiz6way.maf
+    # Indexing and tabulating /gbdb/felCat4/multiz6way/multiz6way.maf
+    # Created 1029636 summary blocks from 15177243 components and 
+    #   6501671 mafs from /gbdb/felCat4/multiz6way/multiz6way.maf
     # Loading into felCat4 table multiz6waySummary...
     # Loading complete
+    # real    3m34.271s
+
 
     #   by loading this into the table multiz6waySummary, it will
     #   replace
     #   the previously loaded table with the unannotated mafs
     #   remove the multiz6way*.tab files in this /scratch/tmp directory
+    wc -l multiz6way*.tab
+    #  6501671 multiz6way.tab
+    #  1029636 multiz6waySummary.tab
+
     rm multiz6way*.tab
-    #   And, you can remove the previously loaded non-annotated maf file
-    #   link:
-    rm /gbdb/felCat4/multiz6way/maf/multiz6way.maf
-    rmdir /gbdb/felCat4/multiz6way/maf
+
 
 ####################################################################
 # HUMAN (hg18) PROTEINS TRACK (???? DONE braney 2010-05-05) 
@@ -1411,6 +1356,7 @@ chainOne $(path1)
 ############################################################################
 ## Annotate 6-way multiple alignment with gene annotations
 ##              (DONE 2010-12-15  - Chin)
+##          rework due to mafAddiRow bug (working 2011-05-10 - Chin)
     # Gene frames
     ## survey all genomes to see what type of gene track to use
     ## Rules to decide which genes to use in order:
@@ -1456,12 +1402,12 @@ end
     # << happy emacs
     chmod +x ./showGenes.csh
     ./showGenes.csh
-    # felCat4: nscanGene: 18804, refGene: 359, xenoRefGene: 222119, Mrnas: 2199
-    # canFam2: ensGene: 30914, nscanGene: 24615, refGene: 1167, xenoRefGene: 220681, Mrnas: 3410
-    # ailMel1: ensGene: 25018, xenoRefGene: 210498, Mrnas: 78
-    # hg19: ensGene: 157477, knownGene: 77614, mgcGenes: 31354, nscanGene: 67448, refGene: 38064, xenoRefGene: 134129, Mrnas: 291603
-    # mm9: ensGene: 88186, knownGene: 54042, mgcGenes: 26582, nscanGene: 21895, refGene: 28038, xenoRefGene: 129971, Mrnas: 260856
-    # monDom5: ensGene: 35113, nscanGene: 45946, refGene: 445, xenoRefGene: 222705, Mrnas: 1695
+    # felCat4: nscanGene: 18804, refGene: 362, xenoRefGene: 229184, Mrnas: 2310
+    # canFam2: ensGene: 30914, nscanGene: 24615, refGene: 1206, xenoRefGene: 227488, Mrnas: 3486
+    # ailMel1: ensGene: 25018, xenoRefGene: 217130, Mrnas: 130
+    # hg19: ensGene: 168482, knownGene: 77614, mgcGenes: 31354, nscanGene: 67448, refGene: 38999, xenoRefGene: 138604, Mrnas: 295814
+    # mm9: ensGene: 93805, knownGene: 55419, mgcGenes: 26707, nscanGene: 21895, refGene: 28511, xenoRefGene: 134290, Mrnas: 261833
+    # monDom5: ensGene: 35113, nscanGene: 45946, refGene: 467, xenoRefGene: 230571, Mrnas: 1719
 
     #   Based on this, use
     #    1. knownGenes for hg19, mm9
@@ -1471,6 +1417,8 @@ end
 
     mkdir genes
     # knownGene
+    echo "hg19 mm9" \
+    | sed -e "s/  */ /g" > knownGene.list
 
     for DB in hg19 mm9
 do
@@ -1520,7 +1468,88 @@ do
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
     echo "${DB} done"
 done
+XXXX 05-11 10:05 AM stoped here
 
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+
+# genes/ailMel1.gp.gz: 20302
+# genes/canFam2.gp.gz: 19245
+# genes/felCat4.gp.gz: 18804
+# genes/hg19.gp.gz: 20597
+# genes/mm9.gp.gz: 20905
+# genes/monDom5.gp.gz: 19188
+
+    ssh hgwdev
+    cd /hive/data/genomes/felCat4/bed/multiz6way/frames
+    cat ../anno/felCat4.6way.maf \
+        | nice -n +19 genePredToMafFrames felCat4 stdin stdout \
+            `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+                | gzip > multiz6way.mafFrames.gz
+    #   real    ??? 12m47.652s
+    # verify there are frames on everything:
+    zcat multiz6way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
+    #  201953 ailMel1
+    #  189814 canFam2
+    #  159815 felCat4
+    #  188339 hg19
+    #  181433 mm9
+    #  157198 monDom5
+
+    ssh hgwdev
+    cd /hive/data/genomes/felCat4/bed/multiz6way/frames
+    time hgLoadMafFrames felCat4 multiz6wayFrames multiz6way.mafFrames.gz
+    #   real     0m9.567s
+
+    ##########################################################################
+    ## create upstream nscanGene maf files
+    mkdir -p /hive/data/genomes/felCat4/bed/multiz6way/downloads/maf
+    cd /hive/data/genomes/felCat4/bed/multiz6way/downloads/maf
+    # bash script
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits felCat4 nscanGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags felCat4 multiz6way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/felCat4/bed/multiz6way/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+
+
+    # take a look to see if the names are OK:
+    zcat upstream1000.maf.gz | grep "^s " | awk '{print $2}' \
+        | sort | uniq -c | sort -rn | head
+    #   16006 rn4
+    #   16006 rheMac2
+    #   16006 ponAbe2
+    #   16006 monDom5
+    #   16006 mm9
+    #   16006 hg19
+    #   16006 galGal3
+    #   16006 equCab2
+    #   16006 danRer7
+    #   16006 canFam2
+    #   16006 calJac3
+    #   1 ENSPTRT00000068163
+    #   1 ENSPTRT00000068158
+    #   ... etc ...
+
+    zcat upstream1000.maf.gz | grep "^s " | awk '{print $2}' \
+        | sort | uniq -c | sort -rn | wc
+    #   16017   32034  432327
+    # check the other files too
+
+    md5sum up*.gz > md5sum.txt
+
+*************** old stuff **********
     #   the following single command doesn't work on any 32 Gb computer,
     #   requires much more memory, turn it into a kluster job
     ssh swarm

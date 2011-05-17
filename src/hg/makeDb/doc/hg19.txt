@@ -15026,7 +15026,8 @@ paste j1 j1.2 j3 j4 j4.1 j4.2 j5 j2 >omimAv.tab
 
 hgsql hg19 -e 'drop table omimAv'
 hgsql hg19 < ~/src/hg/lib/omimAv.sql
-hgsql hg19 -e 'load data local infile "omimAv.tab" into table omimAv'
+hgsql hg19 -e \
+'load data local infile "omimAv.tab" into table omimAv ignore 1 lines'
 hgsql hg19 -e 'update omimAv set repl2 = rtrim(ltrim(repl2))'
 
 doOmimAv hg19 omimAvRepl.tab  2>j.err
@@ -15773,5 +15774,62 @@ hgsql hg19 -e 'drop table if exists allHg19RS_BW; \
 	       insert into allHg19RS_BW values ("/gbdb/hg19/bbi/All_hg19_RS.bw");'
 
 # create corresponding trackDb.ra section and html description page.
+
+
+#########################################################################
+# LASTZ Cow BosTau6 (DONE - 2011-05-16 - Chin)
+    mkdir /hive/data/genomes/hg19/bed/lastzBosTau6.2011-05-16
+    cd /hive/data/genomes/hg19/bed/lastzBosTau6.2011-05-16
+
+    cat << '_EOF_' > DEF
+# human vs cow
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau6 
+SEQ2_DIR=/scratch/data/bosTau6/bosTau6.2bit
+SEQ2_LEN=/scratch/data/bosTau6/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzBosTau6.2011-05-16
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+    # real    481m23.263s 
+    cat fb.hg19.chainBosTau6Link.txt
+    # 1370696434 bases of 2897316137 (47.309%) in intersection
+    # Create link
+    cd /hive/data/genomes/hg19/bed
+    ln -s  lastzBosTau6.2011-05-16 lastz.bosTau6
+
+
+    #   running the swap 
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.hg19.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzBosTau6.2011-05-16/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #   real     72m57.889s
+    cat fb.bosTau6.chainHg19Link.txt
+    #   1336966333 bases of 2649682029 (50.458%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
 
 ###################################################################

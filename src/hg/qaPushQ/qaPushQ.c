@@ -3475,7 +3475,7 @@ printf("<em>Last updated %s. <a HREF=\"/contacts.html\">Inquiries and feedback w
 /* 10 LATEST CHANGES */
 webNewSection("<A NAME=recent></A> 10 Latest Changes (all assemblies)");
 
-printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%%\">\n"
+printf("<TABLE CELLPADDING=4 style='border:1px solid #aaaaaa; width:100%%;'>\n"
     "<TR>\n"
     "<TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>\n"
     "<TD nowrap><B style='color:#006666;'>Assembly</B></TD>\n"
@@ -3564,7 +3564,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 
     webNewSection("<A NAME=%s></A>%s %s (%s, %s)",
 	ki->name, tempName, ki->description, ki->name, ki->sourceName);
-    printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%%\">\n"
+    printf("<TABLE CELLPADDING=4 style='border:1px solid #aaaaaa; width:100%%;'>\n"
 	"<TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>\n"
 	"    <TD nowrap><B style='color:#006666;'>Release Date</B>\n"
 	"</TD></TR>\n"

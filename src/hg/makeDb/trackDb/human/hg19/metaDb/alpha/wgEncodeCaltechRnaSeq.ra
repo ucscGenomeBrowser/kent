@@ -1,7 +1,7 @@
 metaObject wgEncodeCaltechRnaSeq
 objType composite
 composite wgEncodeCaltechRnaSeq
-expVars lab,dataType,cell,readType,insertLength
+expVars lab,dataType,cell,readType,insertLength,treatment
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2
 objType table
@@ -9,13 +9,18 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-04
+dateSubmitted1 2010-01-04
+dateUnrestricted 2010-10-04
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
+md5sum b7d7d916256f7fbed062d62f8e638b0c
 project wgEncode
 readType 1x75D
 replicate 1
@@ -31,13 +36,18 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam
 grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
+md5sum c25e4497f13790cfb1cb774af139f031
 project wgEncode
 readType 1x75D
 replicate 2
@@ -53,14 +63,17 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-02-10
-dateUnrestricted 2010-11-09
+dateResubmitted 2010-02-10
+dateSubmitted 2010-01-04
+dateSubmitted1 2010-01-04
+dateUnrestricted 2010-10-04
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
 localization cell
-mapAlgorithm NA
+md5sum 2ff540ecbc946ff623948c01e89a85bd
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -75,14 +88,17 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-02-10
-dateUnrestricted 2010-11-09
+dateResubmitted 2010-02-10
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
 localization cell
-mapAlgorithm NA
+md5sum 5cd378ef1832aabfc8461dd1384514d3
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -97,8 +113,12 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-04
+dateSubmitted1 2010-01-04
+dateUnrestricted 2010-10-04
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -120,8 +140,12 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -143,8 +167,12 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-04
+dateSubmitted1 2010-01-04
+dateUnrestricted 2010-10-04
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -166,8 +194,12 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -189,13 +221,18 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-04
+dateSubmitted1 2010-01-04
+dateUnrestricted 2010-10-04
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
+md5sum 84e858ca0735e80e3f4d7849e9c090be
 project wgEncode
 readType 1x75D
 replicate 1
@@ -211,13 +248,18 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam
 grant Myers
 lab Caltech
 localization cell
 mapAlgorithm TH1014
+md5sum 26293fea65f5e28d1f460fca23661171
 project wgEncode
 readType 1x75D
 replicate 2
@@ -233,14 +275,19 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
+md5sum 30b867ee186936262528423c7d8fecd2
 project wgEncode
 readType 2x75
 replicate 1
@@ -256,14 +303,19 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm TH1014
+md5sum 4e211666eebc50fed6118e7bf373b0fe
 project wgEncode
 readType 2x75
 replicate 2
@@ -281,6 +333,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -304,6 +358,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -325,15 +381,18 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateResubmitted 2010-06-21
+dateSubmitted 2010-07-14
+dateSubmitted1 2010-07-14
+dateUnrestricted 2011-04-14
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
+md5sum 91940319b96d09c685f2c459bf28f007
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -348,15 +407,18 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-07-07
-dateUnrestricted 2011-04-07
+dateResubmitted 2010-07-07
+dateSubmitted 2010-07-14
+dateSubmitted1 2010-07-14
+dateUnrestricted 2011-04-14
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
+md5sum c77af49ad556e4526c24e26c65761077
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -371,15 +433,18 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateResubmitted 2010-06-21
+dateSubmitted 2010-07-14
+dateSubmitted1 2010-07-14
+dateUnrestricted 2011-04-14
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
+md5sum 2f4e28e25ecda434e76a32ac990a9414
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -394,15 +459,17 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-07-07
-dateUnrestricted 2011-04-07
+dateResubmitted 2010-07-07
+dateSubmitted 2010-07-14
+dateSubmitted1 2010-07-14
+dateUnrestricted 2011-04-14
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -419,6 +486,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -442,6 +511,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -465,6 +536,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -488,6 +561,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -511,6 +586,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -534,6 +611,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -555,8 +634,12 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -578,8 +661,12 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -601,8 +688,12 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -624,8 +715,12 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -649,6 +744,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -672,6 +769,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -695,6 +794,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -718,6 +819,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -741,6 +844,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -764,6 +869,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -785,8 +892,12 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam
 grant Myers
 insertLength 400
@@ -810,6 +921,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 400
@@ -831,15 +944,17 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
+dateResubmitted 2010-01-15
 dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 400
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -854,15 +969,17 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
+dateResubmitted 2010-01-15
 dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 400
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -879,6 +996,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 400
@@ -902,6 +1021,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 400
@@ -925,6 +1046,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 400
@@ -946,8 +1069,12 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SigRep2V2.bigWig
 grant Myers
 insertLength 400
@@ -969,8 +1096,12 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam
 grant Myers
 insertLength 400
@@ -994,6 +1125,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400TSSRep2V3.gtf.gz
 grant Myers
 insertLength 400
@@ -1017,6 +1150,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 400
@@ -1040,6 +1175,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 400
@@ -1063,14 +1200,18 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 3436
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2
@@ -1084,14 +1225,18 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3437
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2
@@ -1103,8 +1248,10 @@ cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-19
-dateUnrestricted 2011-11-18
+dateSubmitted 2011-03-30
+dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1128,6 +1275,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1151,12 +1300,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 1
@@ -1172,14 +1322,17 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-mapAlgorithm NA
+localization cell
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3437
 submittedDataVersion V2 - A better mapping technique.
 view FastqRd1
@@ -1192,12 +1345,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 1
@@ -1213,38 +1367,20 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-mapAlgorithm NA
+localization cell
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3437
 submittedDataVersion V2 - A better mapping technique.
 view FastqRd2
-
-metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRep1
-objType file
-cell GM12891
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRep1.fastq.gz
-grant Myers
-insertLength 200
-lab Caltech
-localization cell
-mapAlgorithm NA
-project wgEncode
-readType 2x75
-replicate 1
-rnaExtract longPolyA
-subId 3436
-view Fastq
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep1V3
 objType file
@@ -1252,8 +1388,10 @@ cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-19
-dateUnrestricted 2011-11-18
+dateSubmitted 2011-03-30
+dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1277,6 +1415,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1298,8 +1438,10 @@ cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-19
-dateUnrestricted 2011-11-18
+dateSubmitted 2011-03-30
+dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1323,6 +1465,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1338,6 +1482,31 @@ subId 3665
 submittedDataVersion V3 - New Elements Formats
 view GeneGencV3c
 
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep1V3
+objType file
+cell GM12891
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-30
+dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep1V3.bed.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 655348e2920bbdc19b7a6dbf549b89a5
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3576
+submittedDataVersion V3 - New Elements Formats
+view Junctions
+
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep2V3
 objType file
 cell GM12891
@@ -1346,6 +1515,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -1369,14 +1540,18 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 3436
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2
@@ -1390,14 +1565,18 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3437
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep2V2
@@ -1411,14 +1590,18 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 3436
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2
@@ -1432,14 +1615,18 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3437
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2
@@ -1451,8 +1638,10 @@ cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-19
-dateUnrestricted 2011-11-18
+dateSubmitted 2011-03-30
+dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1476,6 +1665,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1497,8 +1688,10 @@ cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-19
-dateUnrestricted 2011-11-18
+dateSubmitted 2011-03-30
+dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1522,6 +1715,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1543,8 +1738,10 @@ cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-19
-dateUnrestricted 2011-11-18
+dateSubmitted 2011-03-30
+dateUnrestricted 2011-12-29
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1568,6 +1765,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1591,14 +1790,18 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 3441
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2
@@ -1612,14 +1815,18 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3438
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2
@@ -1633,14 +1840,18 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 3
+rnaExtract longPolyA
 subId 3439
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2
@@ -1654,6 +1865,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1677,15 +1890,19 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum 8a2e010f3fb6d55a10591406e4099962
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3666
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
@@ -1698,6 +1915,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1721,12 +1940,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 1
@@ -1742,14 +1962,17 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-mapAlgorithm NA
+localization cell
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3438
 view FastqRd1
 
@@ -1761,14 +1984,17 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep3.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-mapAlgorithm NA
+localization cell
 project wgEncode
 readType 2x75
 replicate 3
+rnaExtract longPolyA
 subId 3439
 view FastqRd1
 
@@ -1780,12 +2006,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 1
@@ -1801,14 +2028,17 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-mapAlgorithm NA
+localization cell
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3438
 view FastqRd2
 
@@ -1820,14 +2050,17 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep3.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-mapAlgorithm NA
+localization cell
 project wgEncode
 readType 2x75
 replicate 3
+rnaExtract longPolyA
 subId 3439
 view FastqRd2
 
@@ -1839,6 +2072,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1862,15 +2097,19 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum 678a6061100678b2667b5f7175880165
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3666
 submittedDataVersion V3 - New Elements Formats
 view GeneDeNovo
@@ -1883,6 +2122,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1906,6 +2147,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1929,15 +2172,19 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum 96c122a527fade8355b4f19ed9c293c3
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3666
 submittedDataVersion V3 - New Elements Formats
 view GeneGencV3c
@@ -1950,6 +2197,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -1973,6 +2222,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -1996,15 +2247,19 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum 4358694922be535f1f0772c07bee63d5
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3666
 submittedDataVersion V3 - New Elements Formats
 view Junctions
@@ -2017,15 +2272,19 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum 4c8f5cfacb38cae3c4b128fcf9d66142
 project wgEncode
 readType 2x75
 replicate 3
+rnaExtract longPolyA
 subId 3744
 submittedDataVersion V3 - New Elements Formats
 view Junctions
@@ -2038,14 +2297,18 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 3441
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1V2
@@ -2059,14 +2322,18 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3438
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2V2
@@ -2080,14 +2347,18 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 3
+rnaExtract longPolyA
 subId 3439
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3V2
@@ -2101,14 +2372,18 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 3441
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2
@@ -2122,14 +2397,18 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3438
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2
@@ -2143,14 +2422,18 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 3
+rnaExtract longPolyA
 subId 3439
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2
@@ -2164,6 +2447,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2187,15 +2472,19 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum 533efb7d72dafb5b862a2888a05e7770
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3666
 submittedDataVersion V3 - New Elements Formats
 view TSS
@@ -2208,6 +2497,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2231,6 +2522,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2254,15 +2547,19 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum 5ef278eae89ff7d18592ca9c614165fd
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3666
 submittedDataVersion V3 - New Elements Formats
 view TranscriptDeNovo
@@ -2275,6 +2572,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2298,6 +2597,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2321,15 +2622,19 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum b6d8ac969840d73e147c1f289624c732
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3666
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
@@ -2342,6 +2647,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2363,8 +2670,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
@@ -2385,8 +2696,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam
 grant Myers
 lab Caltech
@@ -2407,14 +2722,16 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -2429,14 +2746,16 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -2451,8 +2770,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -2474,8 +2797,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -2497,8 +2824,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -2520,8 +2851,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -2543,8 +2878,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
@@ -2565,8 +2904,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam
 grant Myers
 lab Caltech
@@ -2587,8 +2930,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -2610,8 +2957,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -2633,8 +2984,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam
 grant Myers
 insertLength 200
@@ -2656,8 +3011,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam
 grant Myers
 insertLength 200
@@ -2681,6 +3040,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2704,6 +3065,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2727,6 +3090,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2750,6 +3115,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep4V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2771,15 +3138,17 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -2794,15 +3163,17 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -2817,15 +3188,17 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep3.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -2840,15 +3213,17 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-15
 dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep4.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -2863,15 +3238,17 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -2886,15 +3263,17 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -2909,15 +3288,17 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep3.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -2932,15 +3313,17 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-15
 dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep4.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -2957,6 +3340,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -2980,6 +3365,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3003,6 +3390,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3026,6 +3415,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep4V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3049,6 +3440,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3072,6 +3465,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3095,6 +3490,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3118,6 +3515,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep4V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3141,6 +3540,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -3164,6 +3565,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -3187,6 +3590,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep3V3.bed.gz
 grant Myers
 insertLength 200
@@ -3210,6 +3615,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep4V3.bed.gz
 grant Myers
 insertLength 200
@@ -3231,8 +3638,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -3254,8 +3665,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -3277,8 +3692,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep3V2.bigWig
 grant Myers
 insertLength 200
@@ -3300,8 +3719,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep4V2.bigWig
 grant Myers
 insertLength 200
@@ -3323,8 +3746,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -3346,8 +3773,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -3369,8 +3800,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam
 grant Myers
 insertLength 200
@@ -3392,8 +3827,12 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam
 grant Myers
 insertLength 200
@@ -3417,6 +3856,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3440,6 +3881,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3463,6 +3906,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3486,6 +3931,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep4V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3509,6 +3956,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3532,6 +3981,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3555,6 +4006,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3578,6 +4031,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep4V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3601,6 +4056,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3624,6 +4081,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3647,6 +4106,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3670,6 +4131,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep4V3.gtf.gz
 grant Myers
 insertLength 200
@@ -3691,16 +4154,22 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam
 grant Myers
 insertLength 400
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 3462
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2
@@ -3714,6 +4183,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 400
@@ -3735,15 +4206,17 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-13
+dateResubmitted 2010-01-13
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 400
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3758,15 +4231,17 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-13
+dateResubmitted 2010-01-13
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 400
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3783,6 +4258,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 400
@@ -3806,6 +4283,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 400
@@ -3829,6 +4308,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 400
@@ -3850,16 +4331,22 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400SigRep1V2.bigWig
 grant Myers
 insertLength 400
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 3462
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il400SigRep1V2
@@ -3871,16 +4358,22 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2.bam
 grant Myers
 insertLength 400
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 3462
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2
@@ -3894,6 +4387,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400TSSRep1V3.gtf.gz
 grant Myers
 insertLength 400
@@ -3917,6 +4412,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 400
@@ -3940,6 +4437,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 400
@@ -3963,6 +4462,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -3986,15 +4487,19 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum 6ded65a8d81d53743b63158b70893549
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3475
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2
@@ -4008,6 +4513,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4031,6 +4538,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4054,12 +4563,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep1V2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 1
@@ -4076,15 +4586,17 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep2V2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-mapAlgorithm NA
-md5sum None
+localization cell
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3475
 submittedDataVersion V2 - A better mapping technique.
 view FastqRd1
@@ -4097,12 +4609,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep1V2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 1
@@ -4119,15 +4632,17 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep2V2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-mapAlgorithm NA
-md5sum None
+localization cell
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3475
 submittedDataVersion V2 - A better mapping technique.
 view FastqRd2
@@ -4140,6 +4655,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4163,6 +4680,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4186,6 +4705,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4209,6 +4730,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4232,6 +4755,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -4255,6 +4780,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -4278,15 +4805,19 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-12-16
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum 63c5505af9d35ca6a86312980f9989ba
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 3474
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2
@@ -4300,15 +4831,19 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum de34ec8697426f7334f6193dc2e53d5e
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3475
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2
@@ -4322,6 +4857,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -4345,15 +4882,19 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum d5c96023912ae5f31817fbfca973e9c0
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 3475
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2
@@ -4367,6 +4908,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4390,6 +4933,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4413,6 +4958,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4436,6 +4983,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4459,6 +5008,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4482,6 +5033,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001425
+expId 1425
 fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4503,8 +5056,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
@@ -4525,8 +5082,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam
 grant Myers
 lab Caltech
@@ -4547,14 +5108,16 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -4569,14 +5132,16 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -4591,8 +5156,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -4614,8 +5183,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -4637,8 +5210,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -4660,8 +5237,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -4683,8 +5264,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
@@ -4705,8 +5290,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam
 grant Myers
 lab Caltech
@@ -4727,8 +5316,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -4750,8 +5343,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -4775,6 +5372,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4798,6 +5397,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4819,15 +5420,17 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4842,15 +5445,17 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4865,15 +5470,17 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4888,15 +5495,17 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4913,6 +5522,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4936,6 +5547,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4959,6 +5572,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -4982,6 +5597,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5005,6 +5622,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -5028,6 +5647,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -5049,8 +5670,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -5072,8 +5697,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -5095,8 +5724,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -5118,8 +5751,12 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -5143,6 +5780,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5166,6 +5805,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5189,6 +5830,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5212,6 +5855,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5235,6 +5880,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5258,6 +5905,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5279,8 +5928,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
@@ -5301,8 +5954,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam
 grant Myers
 lab Caltech
@@ -5323,14 +5980,16 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -5345,14 +6004,16 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -5367,8 +6028,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -5390,8 +6055,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -5413,8 +6082,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -5436,8 +6109,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -5459,8 +6136,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
@@ -5481,8 +6162,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam
 grant Myers
 lab Caltech
@@ -5503,8 +6188,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-12
+dateSubmitted1 2010-01-12
+dateUnrestricted 2010-10-11
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -5526,8 +6215,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-22
+dateSubmitted1 2010-01-22
+dateUnrestricted 2010-10-22
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -5551,6 +6244,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5574,6 +6269,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5595,15 +6292,17 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-12
 dateSubmitted 2010-01-12
+dateSubmitted1 2010-01-12
 dateUnrestricted 2010-10-11
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -5618,15 +6317,17 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-22
 dateSubmitted 2010-01-22
+dateSubmitted1 2010-01-22
 dateUnrestricted 2010-10-22
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -5641,15 +6342,17 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-12
 dateSubmitted 2010-01-12
+dateSubmitted1 2010-01-12
 dateUnrestricted 2010-10-11
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -5664,15 +6367,17 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-22
 dateSubmitted 2010-01-22
+dateSubmitted1 2010-01-22
 dateUnrestricted 2010-10-22
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -5689,6 +6394,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5712,6 +6419,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5735,6 +6444,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5758,6 +6469,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5781,6 +6494,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -5804,6 +6519,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -5825,8 +6542,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-12
+dateSubmitted1 2010-01-12
+dateUnrestricted 2010-10-11
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -5848,8 +6569,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-22
+dateSubmitted1 2010-01-22
+dateUnrestricted 2010-10-22
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -5871,8 +6596,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-12
+dateSubmitted1 2010-01-12
+dateUnrestricted 2010-10-11
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -5894,8 +6623,12 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-22
+dateSubmitted1 2010-01-22
+dateUnrestricted 2010-10-22
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -5919,6 +6652,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5942,6 +6677,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5965,6 +6702,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -5988,6 +6727,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6011,6 +6752,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6034,6 +6777,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6057,6 +6802,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -6080,6 +6827,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -6103,6 +6852,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6126,6 +6877,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6149,12 +6902,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -6171,12 +6925,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -6193,12 +6948,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -6215,12 +6971,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -6237,6 +6994,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6260,6 +7019,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6283,6 +7044,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6306,6 +7069,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6329,6 +7094,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -6352,6 +7119,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -6375,6 +7144,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -6398,6 +7169,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -6421,6 +7194,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -6444,6 +7219,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -6467,6 +7244,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6490,6 +7269,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6513,6 +7294,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6536,6 +7319,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6559,6 +7344,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6582,6 +7369,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6603,8 +7392,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
@@ -6625,8 +7418,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam
 grant Myers
 lab Caltech
@@ -6647,14 +7444,16 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6669,14 +7468,16 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6691,8 +7492,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -6714,8 +7519,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -6737,8 +7546,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -6760,8 +7573,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -6783,8 +7600,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
@@ -6805,8 +7626,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam
 grant Myers
 lab Caltech
@@ -6827,8 +7652,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -6850,8 +7679,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -6875,6 +7708,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6898,6 +7733,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -6919,15 +7756,17 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6942,15 +7781,17 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6965,15 +7806,17 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6988,15 +7831,17 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -7013,6 +7858,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7036,6 +7883,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7059,6 +7908,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7082,6 +7933,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7105,6 +7958,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -7128,6 +7983,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -7149,8 +8006,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -7172,8 +8033,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -7195,8 +8060,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -7218,8 +8087,12 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -7243,6 +8116,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7266,6 +8141,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7289,6 +8166,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7312,6 +8191,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7335,6 +8216,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7358,6 +8241,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7379,8 +8264,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
@@ -7401,8 +8290,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam
 grant Myers
 lab Caltech
@@ -7423,14 +8316,16 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-02-10
-dateUnrestricted 2010-11-09
+dateResubmitted 2010-02-10
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -7445,14 +8340,16 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
-dateSubmitted 2010-02-10
-dateUnrestricted 2010-11-09
+dateResubmitted 2010-02-10
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -7467,8 +8364,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -7490,8 +8391,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -7513,8 +8418,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -7536,8 +8445,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
@@ -7559,8 +8472,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
@@ -7581,8 +8498,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam
 grant Myers
 lab Caltech
@@ -7603,8 +8524,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -7626,8 +8551,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -7651,6 +8580,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7674,6 +8605,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7695,15 +8628,17 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dateResubmitted 2010-06-22
+dateSubmitted 2010-07-14
+dateSubmitted1 2010-07-14
+dateUnrestricted 2011-04-14
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -7720,12 +8655,13 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -7740,15 +8676,17 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dateResubmitted 2010-06-22
+dateSubmitted 2010-07-14
+dateSubmitted1 2010-07-14
+dateUnrestricted 2011-04-14
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -7765,12 +8703,13 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -7787,6 +8726,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7810,6 +8751,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7833,6 +8776,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7856,6 +8801,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -7879,6 +8826,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -7902,6 +8851,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -7923,8 +8874,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -7946,8 +8901,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -7969,8 +8928,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -7992,8 +8955,12 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -8017,6 +8984,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8040,6 +9009,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8063,6 +9034,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8086,6 +9059,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8109,6 +9084,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8132,6 +9109,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8147,6 +9126,604 @@ subId 3593
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dExonsGencV3cRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dExonsGencV3cRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum ea22be45e7a987419458d994f6767e8d
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment DIFF_7d
+view ExonsGencV3c
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dFastqRd1Rep1
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-05
+dateUnrestricted 2012-02-05
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dFastqRd1Rep1.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3477
+treatment DIFF_7d
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dFastqRd2Rep1
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-05
+dateUnrestricted 2012-02-05
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dFastqRd2Rep1.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3477
+treatment DIFF_7d
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneDeNovoRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneDeNovoRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 13409074780a6f8b8cd9ca6dbaabb112
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment DIFF_7d
+view GeneDeNovo
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneGencV3cRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneGencV3cRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 569d1c68e99b4d3ab4d1431ca276b9eb
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment DIFF_7d
+view GeneGencV3c
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dJunctionsRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dJunctionsRep1V3.bed.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 1823e3ae74dfe3994b428ed8c5d693cc
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment DIFF_7d
+view Junctions
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1
+objType table
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-05
+dateUnrestricted 2012-02-05
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3477
+tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1
+treatment DIFF_7d
+view Paired
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1
+objType table
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 4105
+tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1
+treatment DIFF_7d
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1
+objType table
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-05
+dateUnrestricted 2012-02-05
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3477
+tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1
+treatment DIFF_7d
+view Splices
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTSSRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTSSRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum ddc04f6482c6f9acbc6a737e1fcfeabc
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment DIFF_7d
+view TSS
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 97963344b4554eca47c7813a321aa2a7
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment DIFF_7d
+view TrnscrptDeNovo
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001670
+expId 1670
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 3b6e382d070757680851cf3cbf431781
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3595
+submittedDataVersion V3 - New Elements Formats
+treatment DIFF_7d
+view TrnscrptGencV3c
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200ExonsGencV3cRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 0696fa9a6c327cfca58890ec2b716bcb
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3594
+submittedDataVersion V3 - New Elements Formats
+view ExonsGencV3c
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd1Rep1V2
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd1Rep1V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3476
+submittedDataVersion V2 - A better mapping technique.
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd2Rep1V2
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd2Rep1V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3476
+submittedDataVersion V2 - A better mapping technique.
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneDeNovoRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneDeNovoRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 598b7b8563fba1d1c62ad173f8f712eb
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3594
+submittedDataVersion V3 - New Elements Formats
+view GeneDeNovo
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneGencV3cRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneGencV3cRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 9a23b3db223189a064000f3c68705f06
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3594
+submittedDataVersion V3 - New Elements Formats
+view GeneGencV3c
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200JunctionsRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200JunctionsRep1V3.bed.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum fccabb9ad0ab5b1db9deee4b51ed42e0
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3594
+submittedDataVersion V3 - New Elements Formats
+view Junctions
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200PairedRep1V2
+objType table
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200PairedRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3476
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200PairedRep1V2
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1
+objType table
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001669
+expId 1669
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 4106
+tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2
+objType table
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3476
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2
+view Splices
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TSSRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TSSRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 20f004bc709c76507ad6b82e77e8281b
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3594
+submittedDataVersion V3 - New Elements Formats
+view TSS
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptDeNovoRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 7a13dea7b8d2101e54fd8b77199b238a
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3594
+submittedDataVersion V3 - New Elements Formats
+view TranscriptDeNovo
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptGencV3cRep1V3
+objType file
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001669
+expId 1669
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 0ce382c9830998745ad108e50f379edd
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 3594
+submittedDataVersion V3 - New Elements Formats
+view TranscriptGencV3c
+
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2
 objType table
 cell MCF-7
@@ -8155,14 +9732,18 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 3414
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2
@@ -8176,6 +9757,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -8199,15 +9782,19 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum d30e635c48943bd85ad061bd5eb7294b
 project wgEncode
 readType 2x75
 replicate 3
+rnaExtract longPolyA
 subId 3478
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2
@@ -8221,6 +9808,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8244,6 +9833,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8267,6 +9858,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8291,12 +9884,13 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 1
@@ -8312,18 +9906,42 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1904
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep3V2
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEH001421
+expId 1421
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep3V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+project wgEncode
+readType 2x75
+replicate 3
+rnaExtract longPolyA
+subId 3478
+submittedDataVersion V2 - A better mapping technique.
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep1
@@ -8335,12 +9953,13 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 project wgEncode
 readType 2x75
 replicate 1
@@ -8356,18 +9975,42 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1904
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep3V2
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEH001421
+expId 1421
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep3V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+project wgEncode
+readType 2x75
+replicate 3
+rnaExtract longPolyA
+subId 3478
+submittedDataVersion V2 - A better mapping technique.
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep1V3
@@ -8378,6 +10021,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8401,6 +10046,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8424,6 +10071,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8447,6 +10096,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8470,6 +10121,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8493,6 +10146,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8516,6 +10171,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -8539,6 +10196,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -8562,6 +10221,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep3V3.bed.gz
 grant Myers
 insertLength 200
@@ -8585,14 +10246,18 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 3414
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2
@@ -8606,6 +10271,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -8627,17 +10294,21 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-12
-dateUnrestricted 2011-11-11
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep3V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum 3c5c7b34f0d917a331a60da7ac1f16d6
 project wgEncode
 readType 2x75
 replicate 3
+rnaExtract longPolyA
 subId 3478
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep3V2
@@ -8651,14 +10322,18 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 3414
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2
@@ -8672,6 +10347,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -8693,17 +10370,21 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-12
-dateUnrestricted 2011-11-11
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2.bam
 grant Myers
 insertLength 200
 lab Caltech
+localization cell
 mapAlgorithm TH1014
 md5sum e4454727fe54f4872d50e011278a744f
 project wgEncode
 readType 2x75
 replicate 3
+rnaExtract longPolyA
 subId 3478
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2
@@ -8717,6 +10398,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8740,6 +10423,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8763,6 +10448,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8786,6 +10473,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8809,6 +10498,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8832,6 +10523,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8855,6 +10548,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8878,6 +10573,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8901,6 +10598,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
@@ -8922,8 +10621,12 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000136
+expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam
 grant Myers
 lab Caltech
@@ -8944,14 +10647,16 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000136
+expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -8966,8 +10671,12 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-15
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-15
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000136
+expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -8989,8 +10698,12 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-15
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-15
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000136
+expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
@@ -9012,8 +10725,12 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000136
+expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam
 grant Myers
 lab Caltech
@@ -9034,8 +10751,12 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -9059,6 +10780,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -9082,6 +10805,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9105,6 +10830,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9126,15 +10853,17 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -9151,12 +10880,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -9171,15 +10901,17 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -9196,12 +10928,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -9218,6 +10951,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9241,6 +10976,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9264,6 +11001,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9287,6 +11026,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9310,6 +11051,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -9333,6 +11076,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -9354,8 +11099,12 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -9379,6 +11128,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -9400,8 +11151,12 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -9425,6 +11180,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -9448,6 +11205,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9471,6 +11230,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9494,6 +11255,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9517,6 +11280,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9540,6 +11305,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9563,6 +11330,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9586,6 +11355,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2.bam
 grant Myers
 insertLength 200
@@ -9609,6 +11380,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2.bam
 grant Myers
 insertLength 200
@@ -9632,6 +11405,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9655,6 +11430,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9678,12 +11455,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -9700,12 +11478,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -9722,12 +11501,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -9744,12 +11524,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 localization cell
-mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -9766,6 +11547,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9789,6 +11572,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9812,6 +11597,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9835,6 +11622,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -9858,6 +11647,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
@@ -9881,6 +11672,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
@@ -9904,6 +11697,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -9927,6 +11722,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -9950,6 +11747,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -9973,6 +11772,8 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -9996,6 +11797,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10019,6 +11822,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10042,6 +11847,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10065,6 +11872,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10088,6 +11897,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10111,6 +11922,8 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
@@ -10126,4 +11939,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: 1441247161
+# MAGIC: 1346286611

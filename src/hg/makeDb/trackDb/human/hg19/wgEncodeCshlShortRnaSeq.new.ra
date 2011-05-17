@@ -619,6 +619,49 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3295 dateSubmitted=2011-01-18
 
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel A549 cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in A549 cell)
+        subGroups view=Alignments cellType=A549 localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        # subId=4059 dateSubmitted=2011-05-11
+
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel A549 cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in A549 cell)
+        subGroups view=Alignments cellType=A549 localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        # subId=4058 dateSubmitted=2011-05-09
+
+        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HepG2 nucleus shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HepG2 nucleus)
+        subGroups view=Alignments cellType=2HepG2 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bam
+        color 189,0,157
+        # subId=4061 dateSubmitted=2011-05-11
+
+        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HepG2 cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HepG2 cell)
+        subGroups view=Alignments cellType=2HepG2 localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        color 189,0,157
+        # subId=4060 dateSubmitted=2011-05-11
+
+        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HepG2 cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HepG2 cell)
+        subGroups view=Alignments cellType=2HepG2 localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        color 189,0,157
+        # subId=4062 dateSubmitted=2011-05-11
+
     track wgEncodeCshlShortRnaSeqView3MinusRawSignal
     shortLabel Minus Signal
     view MinusRawSignal
@@ -1210,6 +1253,49 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 224,75,0
         # subId=3295 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel A549 cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in A549 cell)
+        subGroups view=MinusRawSignal cellType=A549 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 1785277.000000
+        # subId=4059 dateSubmitted=2011-05-11
+
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel A549 cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in A549 cell)
+        subGroups view=MinusRawSignal cellType=A549 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 2036805.000000
+        # subId=4058 dateSubmitted=2011-05-09
+
+        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep1
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HepG2 nucleus shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HepG2 nucleus)
+        subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 2034826.000000
+        color 189,0,157
+        # subId=4061 dateSubmitted=2011-05-11
+
+        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HepG2 cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HepG2 cell)
+        subGroups view=MinusRawSignal cellType=2HepG2 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 3566535.000000
+        color 189,0,157
+        # subId=4060 dateSubmitted=2011-05-11
+
+        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep2
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HepG2 cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HepG2 cell)
+        subGroups view=MinusRawSignal cellType=2HepG2 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 3191993.000000
+        color 189,0,157
+        # subId=4062 dateSubmitted=2011-05-11
 
     track wgEncodeCshlShortRnaSeqView2PlusRawSignal
     shortLabel Plus Signal
@@ -1803,6 +1889,49 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3295 dateSubmitted=2011-01-18
 
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel A549 cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in A549 cell)
+        subGroups view=PlusRawSignal cellType=A549 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 10013224.000000
+        # subId=4059 dateSubmitted=2011-05-11
+
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel A549 cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in A549 cell)
+        subGroups view=PlusRawSignal cellType=A549 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 7091328.000000
+        # subId=4058 dateSubmitted=2011-05-09
+
+        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep1
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HepG2 nucleus shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HepG2 nucleus)
+        subGroups view=PlusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 2592219.000000
+        color 189,0,157
+        # subId=4061 dateSubmitted=2011-05-11
+
+        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HepG2 cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HepG2 cell)
+        subGroups view=PlusRawSignal cellType=2HepG2 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 4470346.000000
+        color 189,0,157
+        # subId=4060 dateSubmitted=2011-05-11
+
+        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HepG2 cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HepG2 cell)
+        subGroups view=PlusRawSignal cellType=2HepG2 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 3841099.000000
+        color 189,0,157
+        # subId=4062 dateSubmitted=2011-05-11
+
     track wgEncodeCshlShortRnaSeqViewTransfrags
     shortLabel Transfrags
     view Transfrags
@@ -2129,4 +2258,12 @@ superTrack wgEncodeRnaSeqSuper dense
         subGroups view=Contigs rep=Pooled cellType=SKNSHRA localization=cell rnaExtract=shortTotal
         type bed 6
         # subId=3866 dateSubmitted=2011-03-31
+
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalContigs
+        parent wgEncodeCshlShortRnaSeqViewContigs off
+        shortLabel MCF-7 cell shortTotal
+        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in MCF-7 cell)
+        subGroups view=Contigs rep=Pooled cellType=MCF7 localization=cell rnaExtract=shortTotal
+        type bedRnaElements
+        # subId=4063 dateSubmitted=2011-05-10
  

@@ -12,6 +12,7 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 350
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Nov69522T7tag.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -32,6 +33,7 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 348
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sc5261Elavl1.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -52,6 +54,7 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 349
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sigp6246Pabpc1.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -72,6 +75,7 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 354
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Nov69522T7tag.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -92,6 +96,7 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 352
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc21027Igf2bp1.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -112,6 +117,7 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 351
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc5261Elavl1.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -132,6 +138,7 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 353
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -143,4 +150,4 @@ subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1
 view RbpAssocRna
 
-# MAGIC: 1158176913
+# MAGIC: 1158439135

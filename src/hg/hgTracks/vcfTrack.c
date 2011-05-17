@@ -21,99 +21,15 @@
 static boolean doHapClusterDisplay = TRUE;
 static boolean colorHapByRefAlt = TRUE;
 
-#define VCF_MAX_ALLELE_LEN 80
-
 static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
  * because it contains pointers into vcff's records' chrom. */
 {
 struct pgSnp *pgsList = NULL;
 struct vcfRecord *rec;
-struct dyString *dy = dyStringNew(0);
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
-    struct pgSnp *pgs;
-    AllocVar(pgs);
-    pgs->chrom = rec->chrom;
-    pgs->chromStart = rec->chromStart;
-    pgs->chromEnd = rec->chromEnd;
-    // Build up slash-separated allele string from rec->ref + rec->alt:
-    dyStringClear(dy);
-    dyStringAppend(dy, rec->ref);
-    int altCount, i;
-    if (sameString(rec->alt, "."))
-	altCount = 0;
-    else
-	{
-	char *words[64]; // we're going to truncate anyway if there are this many alleles!
-	char copy[VCF_MAX_ALLELE_LEN+1];
-	strncpy(copy, rec->alt, VCF_MAX_ALLELE_LEN);
-	copy[VCF_MAX_ALLELE_LEN] = '\0';
-	altCount = chopCommas(copy, words);
-	for (i = 0;  i < altCount && dy->stringSize < VCF_MAX_ALLELE_LEN;  i++)
-	    dyStringPrintf(dy, "/%s", words[i]);
-	if (i < altCount)
-	    altCount = i;
-	}
-    pgs->name = cloneStringZ(dy->string, dy->stringSize+1);
-    pgs->alleleCount = altCount + 1;
-    // Build up comma-sep list of per-allele counts, if available:
-    dyStringClear(dy);
-    int refAlleleCount = 0;
-    boolean gotAltCounts = FALSE;
-    for (i = 0;  i < rec->infoCount;  i++)
-	if (sameString(rec->infoElements[i].key, "AN"))
-	    {
-	    refAlleleCount = rec->infoElements[i].values[0].datInt;
-	    break;
-	    }
-    for (i = 0;  i < rec->infoCount;  i++)
-	if (sameString(rec->infoElements[i].key, "AC"))
-	    {
-	    int alCounts[64];
-	    int j;
-	    gotAltCounts = (rec->infoElements[i].count > 0);
-	    for (j = 0;  j < rec->infoElements[i].count;  j++)
-		{
-		int ac = rec->infoElements[i].values[j].datInt;
-		if (j < altCount)
-		    alCounts[1+j] = ac;
-		refAlleleCount -= ac;
-		}
-	    if (gotAltCounts)
-		{
-		while (j++ < altCount)
-		    alCounts[1+j] = -1;
-		alCounts[0] = refAlleleCount;
-		if (refAlleleCount >= 0)
-		    dyStringPrintf(dy, "%d", refAlleleCount);
-		else
-		    dyStringAppend(dy, "-1");
-		for (j = 0;  j < altCount;  j++)
-		    if (alCounts[1+j] >= 0)
-			dyStringPrintf(dy, ",%d", alCounts[1+j]);
-		    else
-			dyStringAppend(dy, ",-1");
-		}
-	    break;
-	    }
-    if (refAlleleCount > 0 && !gotAltCounts)
-	dyStringPrintf(dy, "%d", refAlleleCount);
-    pgs->alleleFreq = cloneStringZ(dy->string, dy->stringSize+1);
-    // Build up comma-sep list... supposed to be per-allele quality scores but I think
-    // the VCF spec only gives us one BQ... for the reference position?  should ask.
-    dyStringClear(dy);
-    for (i = 0;  i < rec->infoCount;  i++)
-	if (sameString(rec->infoElements[i].key, "BQ"))
-	    {
-	    float qual = rec->infoElements[i].values[0].datFloat;
-	    dyStringPrintf(dy, "%.1f", qual);
-	    int j;
-	    for (j = 0;  j < altCount;  j++)
-		dyStringPrintf(dy, ",%.1f", qual);
-	    break;
-	    }
-    pgs->alleleScores = cloneStringZ(dy->string, dy->stringSize+1);
+    struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
     slAddHead(&pgsList, pgs);
     }
 slReverse(&pgsList);
@@ -156,6 +72,12 @@ unsigned short altCount = c->leafCount - c->refCounts[varIx] - c->unkCounts[varI
 return (c->refCounts[varIx] >= altCount);
 }
 
+INLINE boolean hasUnk(const struct hapCluster *c, int varIx)
+// Return TRUE if at least one haplotype in this cluster has an unknown/unphased value at varIx.
+{
+return (c->unkCounts[varIx] > 0);
+}
+
 static double cwaDistance(const struct slList *item1, const struct slList *item2, void *extraData)
 /* Center-weighted alpha sequence distance function for hacTree clustering of haplotype seqs */
 // This is inner-loop so I am not doing defensive checks.  Caller must ensure:
@@ -173,6 +95,8 @@ for (i=helper->center;  i >= 0;  i--)
     {
     if (isRef(kid1, i) != isRef(kid2, i))
 	distance += weight;
+    else if (hasUnk(kid1, i) != hasUnk(kid2, i))
+	distance += weight/2;
     weight *= helper->alpha;
     }
 weight = helper->alpha; // start at center+1: alpha to the 1st power
@@ -271,7 +195,8 @@ else
     }
 }
 
-static unsigned short *clusterChroms(const struct vcfFile *vcff, unsigned short *retGtHapEnd)
+static unsigned short *clusterChroms(const struct vcfFile *vcff, int centerIx,
+				     unsigned short *retGtHapEnd)
 /* Given a bunch of VCF records with phased genotypes, build up one haplotype string
  * per chromosome that is the sequence of alleles in all variants (simplified to one base
  * per variant).  Each individual/sample will have two haplotype strings (unless haploid
@@ -280,14 +205,11 @@ static unsigned short *clusterChroms(const struct vcfFile *vcff, unsigned short 
  * in the order determined by the hacTree, and set retGtHapEnd to its length/end. */
 {
 int len = slCount(vcff->records);
-// Use the median variant in the window as the center; would be even nicer to allow
-// the user to choose a variant (or position) to use as center:
-int center = len / 2;
 // Should alpha depend on len?  Should the penalty drop off with distance?  Seems like
 // straight-up exponential will cause the signal to drop to nothing pretty quickly...
 double alpha = 0.5;
 struct lm *lm = lmInit(0);
-struct cwaExtraData helper = { center, len, alpha, lm };
+struct cwaExtraData helper = { centerIx, len, alpha, lm };
 int ploidy = 2; // Assuming diploid genomes here, no XXY, tetraploid etc.
 int gtCount = vcff->genotypeCount;
 // Make an slList of hapClusters, but allocate in a big block so I can use
@@ -388,23 +310,33 @@ else
     return shadesOfGray[5];
 }
 
-INLINE Color colorFromRefAlt(struct vcfGenotype *gt, int hapIx, boolean grayUnphasedHet)
-/* Color allele red for alternate allele, blue for reference allele. */
+INLINE Color colorFromRefAlt(struct vcfGenotype *gt, int hapIx, boolean grayUnphasedHet,
+			     boolean isCenter)
+/* Color allele red for alternate allele, blue for reference allele -- 
+ * except for special center variant, make it yellow/green for contrast. */
 {
 if (grayUnphasedHet && !gt->isPhased && gt->hapIxA != gt->hapIxB)
     return shadesOfGray[5];
 int alIx = hapIx ? gt->hapIxB : gt->hapIxA;
+if (isCenter)
+    return alIx ? MG_YELLOW : MG_GREEN;
 return alIx ? MG_RED : MG_BLUE;
 }
 
 
 INLINE int drawOneHap(struct vcfGenotype *gt, int hapIx,
 		      char *ref, char *altAlleles[], int altCount,
-		      struct hvGfx *hvg, int x1, int y, int w, int itemHeight, int lineHeight)
+		      struct hvGfx *hvg, int x1, int y, int w, int itemHeight, int lineHeight,
+		      boolean isCenter)
 /* Draw a base-colored box for genotype[hapIx].  Return the new y offset. */
 {
-Color color = colorHapByRefAlt ? colorFromRefAlt(gt, hapIx, TRUE) :
+Color color = colorHapByRefAlt ? colorFromRefAlt(gt, hapIx, TRUE, isCenter) :
 				 colorFromGt(gt, hapIx, ref, altAlleles, altCount, TRUE);
+if (w == 1)
+    {
+    x1--;
+    w = 3;
+    }
 hvGfxBox(hvg, x1, y, w, itemHeight+1, color);
 y += itemHeight+1;
 return y;
@@ -449,6 +381,43 @@ if (gtOtherCount > 0)
 return dy->string;
 }
 
+static void drawOneRec(struct vcfRecord *rec, boolean isCenter,
+		       unsigned short *gtHapOrder, int gtHapEnd,
+		       struct track *tg, struct hvGfx *hvg, int xOff, int yOff, int width)
+/* Draw a stack of genotype bars for this record */
+{
+static struct dyString *tmp = NULL;
+if (tmp == NULL)
+    tmp = dyStringNew(0);
+char *altAlleles[256];
+int altCount;
+const int lineHeight = tg->lineHeight;
+const int itemHeight = tg->heightPer;
+const double scale = scaleForPixels(width);
+int x1 = round((double)(rec->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)(rec->chromEnd-winStart)*scale) + xOff;
+int w = x2-x1;
+if (w < 1)
+    w = 1;
+int y = yOff;
+dyStringClear(tmp);
+dyStringAppend(tmp, rec->alt);
+altCount = chopCommas(tmp->string, altAlleles);
+int gtHapOrderIx;
+for (gtHapOrderIx = 0;  gtHapOrderIx < gtHapEnd;  gtHapOrderIx++)
+    {
+    int gtHapIx = gtHapOrder[gtHapOrderIx];
+    int hapIx = gtHapIx & 1;
+    int gtIx = gtHapIx >>1;
+    struct vcfGenotype *gt = &(rec->genotypes[gtIx]);
+    y = drawOneHap(gt, hapIx, rec->ref, altAlleles, altCount,
+		   hvg, x1, y, w, itemHeight, lineHeight, isCenter);
+    }
+mapBoxHgcOrHgGene(hvg, rec->chromStart, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
+		  rec->name, gtSummaryString(rec, altAlleles, altCount),
+		  NULL, TRUE, NULL);
+}
+
 static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis)
@@ -459,39 +428,28 @@ const struct vcfFile *vcff = tg->extraUiData;
 if (vcff->records == NULL)
     return;
 unsigned short gtHapEnd = 0;
-unsigned short *gtHapOrder = clusterChroms(vcff, &gtHapEnd);
-struct dyString *tmp = dyStringNew(0);
-struct vcfRecord *rec;
-const int lineHeight = tg->lineHeight;
-const int itemHeight = tg->heightPer;
-const double scale = scaleForPixels(width);
-for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+// Use the median variant in the window as the center; would be even nicer to allow
+// the user to choose a variant (or position) to use as center:
+int ix, centerIx = (slCount(vcff->records)-1) / 2;
+unsigned short *gtHapOrder = clusterChroms(vcff, centerIx, &gtHapEnd);
+struct vcfRecord *rec, *centerRec = NULL;
+for (rec = vcff->records, ix=0;  rec != NULL;  rec = rec->next, ix++)
     {
-    dyStringClear(tmp);
-    dyStringAppend(tmp, rec->alt);
-    char *altAlleles[256];
-    int altCount = chopCommas(tmp->string, altAlleles);
-    int x1 = round((double)(rec->chromStart-winStart)*scale) + xOff;
-    int x2 = round((double)(rec->chromEnd-winStart)*scale) + xOff;
-    int w = x2-x1;
-    if (w < 1)
-	w = 1;
-    int y = yOff;
-    int gtHapOrderIx;
-    for (gtHapOrderIx = 0;  gtHapOrderIx < gtHapEnd;  gtHapOrderIx++)
-	{
-	int gtHapIx = gtHapOrder[gtHapOrderIx];
-	int hapIx = gtHapIx & 1;
-	int gtIx = gtHapIx >>1;
-	struct vcfGenotype *gt = &(rec->genotypes[gtIx]);
-	y = drawOneHap(gt, hapIx, rec->ref, altAlleles, altCount,
-		       hvg, x1, y, w, itemHeight, lineHeight);
-	}
-    mapBoxHgcOrHgGene(hvg, rec->chromStart, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
-		      rec->name, gtSummaryString(rec, altAlleles, altCount),
-		      NULL, TRUE, NULL);
+    boolean isCenter = (ix == centerIx);
+    drawOneRec(rec, isCenter, gtHapOrder, gtHapEnd, tg, hvg, xOff, yOff, width);
+    if (isCenter)
+	centerRec = rec;
     }
-// left labels?
+// Draw the center rec on top, outlined with black lines, to make sure it is very visible:
+drawOneRec(centerRec, TRUE, gtHapOrder, gtHapEnd, tg, hvg, xOff, yOff, width);
+const double scale = scaleForPixels(width);
+int x1 = round((double)(centerRec->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)(centerRec->chromEnd-winStart)*scale) + xOff;
+int yBot = yOff + tg->height - 2;
+hvGfxLine(hvg, x1-2, yOff, x1-2, yBot, MG_BLACK);
+hvGfxLine(hvg, x1-2, yOff, x2+2, yOff, MG_BLACK);
+hvGfxLine(hvg, x2+2, yOff, x2+2, yBot, MG_BLACK);
+hvGfxLine(hvg, x1-2, yBot, x2+2, yBot, MG_BLACK);
 }
 
 static int vcfHapClusterTotalHeight(struct track *tg, enum trackVisibility vis)

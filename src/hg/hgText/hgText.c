@@ -629,7 +629,7 @@ if (! hDbIsActive(database))
 
 puts(
 "<CENTER>"
-"<TABLE BGCOLOR='#FFFEF3' BORDERCOLOR='#CCCC99' BORDER=0 CELLPADDING=1>\n"
+"<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
 "<TR><TD style='font-size:small; text-align:center;'>\n"
 "The UCSC Table Browser was created by the \n"
 "<A HREF=\"/staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>. \n"
@@ -662,7 +662,7 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
 puts(
 "<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"
-"<table BGCOLOR='#FEFDEF' BORDERCOLOR='#CCCC99' BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"
+"<table CELLPADDING=0 CELLSPACING=0 style='background-color:#FEFDEF; border-style:none;'>\n"
 "<tr><td>\n"
 );
 
