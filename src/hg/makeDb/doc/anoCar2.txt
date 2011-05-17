@@ -1142,3 +1142,80 @@ done >> anoCar2.7way.maf
     rm multiz7way*.tab
 
 #########################################################################
+# MULTIZ7WAY MAF FRAMES (DONE - 2011-03-24 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/anoCar2/bed/multiz7way/frames
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/frames
+    mkdir genes
+
+    #	we get more annotations using the ensGene on mm9 and hg19
+    #	instead of knownGene, so, using ensGene for hg19 and mm9
+
+# hg19 knownGene
+# mm9 knownGene
+
+# anoCar2 ensGene
+# galGal3 ensGene
+# ornAna1 ensGene
+# xenTro2	ensGene
+# gasAcu1	ensGene
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using ensGene for:
+for qDB in hg19 mm9 anoCar2 galGal3 ornAna1 xenTro2 gasAcu1
+do
+  echo hgsql -N -e \"'select * from 'ensGene\;\" ${qDB}
+      hgsql -N -e "select * from ensGene" ${qDB} | cut -f 2-11 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+done
+
+    # if you were using knownGene for mm9 hg19
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    for qDB in mm9 hg19
+    do
+      echo hgsql -N -e \"'select * from 'knownGene\;\" ${qDB}
+      hgsql -N -e "select * from knownGene" ${qDB} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+    done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+
+# genes/anoCar2.gp.gz: 17757
+# genes/galGal3.gp.gz: 16491
+# genes/gasAcu1.gp.gz: 20631
+# genes/hg19.gp.gz: 21254
+# genes/mm9.gp.gz: 22739
+# genes/ornAna1.gp.gz: 17728
+# genes/xenTro2.gp.gz: 17888
+
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/frames
+    cat ../anno/anoCar2.7way.maf \
+	| nice -n +19 genePredToMafFrames anoCar2 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+		| gzip > multiz7way.mafFrames.gz
+    #	real    12m47.652s
+    # verify there are frames on everything:
+    zcat multiz7way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
+    #	171338 anoCar2
+    #	231157 galGal3
+    #	249046 gasAcu1
+    #	299896 hg19
+    #	291605 mm9
+    #	229117 ornAna1
+    #	218682 xenTro2
+
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/frames
+    time hgLoadMafFrames anoCar2 multiz7wayFrames multiz7way.mafFrames.gz
+    #	real    0m16.366s
+
+#########################################################################
