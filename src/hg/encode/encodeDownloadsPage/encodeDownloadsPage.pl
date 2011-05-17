@@ -102,6 +102,8 @@ sub htmlStartPage {
 
 sub htmlTrHeader {
 # prints tr header row for sortable table
+    local *OUT_FILE = shift;
+
     my ($colListRef,,$tagsRef,$valsRef) = @_;
     my @colList  = @{$colListRef};
     my $sorColCount = scalar(@colList);
@@ -128,6 +130,43 @@ sub htmlEndPage {
     print OUT_FILE "\n<HR>\n";
     print OUT_FILE @_;
     print OUT_FILE "</BODY></HTML>\n";
+}
+
+sub htmlRedirectPage {
+# prints redirect page if compoiste has a fileSortOrder
+    local *OUT_FILE = shift;
+
+    my ($db, $database, $composite) = @_;
+
+    my $results = $db->quickQuery("select settings from $database.trackDb where tableName = '$composite'");
+    if($results) {
+        my @settings = split(/\n/, $results); # New Line
+        while (@settings) {
+            my @pair = split(/\s+/, (shift @settings),2);
+            if($pair[0] eq "fileSortOrder") { # fileSortOrderExists so di the cool thing and redirect
+                print OUT_FILE "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>\n";
+                print OUT_FILE "<HTML>\n";
+                print OUT_FILE "<HEAD>\n";
+                print OUT_FILE "<META HTTP-EQUIV='Content-Type' CONTENT='text/html;CHARSET=iso-8859-1'>\n";
+                print OUT_FILE "<META http-equiv='Content-Script-Type' content='text/javascript'>\n";
+                print OUT_FILE "<META HTTP-EQUIV='Pragma' CONTENT='no-cache'>\n";
+                print OUT_FILE "<META HTTP-EQUIV='Expires' CONTENT='-1'>\n";
+                print OUT_FILE "<META http-equiv='refresh' content='0; URL=/cgi-bin/hgFileUi?db=$database&g=$composite'>\n";
+                print OUT_FILE "<TITLE>Redirecting...</TITLE>\n";
+                print OUT_FILE "<LINK rel='STYLESHEET' href='../style/HGStyle-1304985632.css' TYPE='text/css' />\n";
+                print OUT_FILE "</HEAD>\n\n";
+                print OUT_FILE "<body onload=\"window.location.href='/cgi-bin/hgFileUi?db=$database&g=$composite';\" BGCOLOR='#FFF9D2' LINK='#0000CC' VLINK='#330066' ALINK='#6600FF' text='#000000'>\n";
+                print OUT_FILE "<p>Loading <a href='/cgi-bin/hgFileUi?db=$database&g=$composite'>redirection target</a></p>\n";
+                print OUT_FILE "<p>In approx. 1 second the redirection target page should load.<br>\n";
+                print OUT_FILE "If it doesn't please select the link above.</p>\n";
+                print OUT_FILE "</BODY>\n";
+                print OUT_FILE "</HTML>\n";
+
+                return 1;
+            }
+        }
+    }
+    return 0;
 }
 
 sub cmpRows {
@@ -436,24 +475,12 @@ if(open(README, "$downloadsDir/README.txt")) {
     close(README);
 }
 
-# Start the page
-htmlStartPage(*OUT_FILE,$downloadsDir,$indexHtml,$preamble);
+my $composite = "unknown";  # The composite needs to be discovered
 
 # NOTE: these two arrays should be collapsed, and HTML derived from plain text
 my @rows; #  Gather rows to be printed here
 my @textRows; #  Gather rows to be printed here (plain-text)
-my $headerDone = 0;
-if (defined $opt_sortable) {
-    #print OUT_FILE "<script type='text/javascript' SRC='../js/jquery-1291074736.js'></script>\n";  Can't have timestamped version on static page (NOT A CGI)
-    print OUT_FILE "<script type='text/javascript' SRC='http://hgwdev.cse.ucsc.edu/js/tdreszer/jquery.js'></script>\n";
-    print OUT_FILE "<script type='text/javascript' SRC='http://hgwdev.cse.ucsc.edu/js/tdreszer/utils.js'></script>\n";
-    print OUT_FILE "<TABLE class='sortable' style='border: 2px outset #006600;'>\n";
-} else {
-    print OUT_FILE "<TABLE cellspacing=0>\n";
-    print OUT_FILE "<TR valign='bottom'><TH class'sortable'>RESTRICTED<BR>until<TH align='left' class'sortTh'>&nbsp;&nbsp;File<TH align='right' class'sortTh'>Size<TH class'sortTh'>Submitted<TH align='left' class'sortTh'>&nbsp;&nbsp;Details</TR>\n";
-    print OUT_FILE "</TR>\n";
-    $headerDone = 1;
-}
+my $columnsDetermined = 0; # Only used by $opt_sortable
 my @colList; # Only one colList made off the first row and declaring which are the metadata values to be stand alone columns
 
 for my $line (@fileList) {
@@ -584,6 +611,9 @@ for my $line (@fileList) {
                             $input = "removeAntiBodyDup";
                         }
                     }
+                    if ($composite eq "unknown" && $tags[$tix] eq "composite") {
+                        $composite = $vals[$tix];
+                    }
                     $tix++;
                 }
                 if ($fileName =~ m/bai$/) {
@@ -604,10 +634,11 @@ for my $line (@fileList) {
 
                 @sortables = sortablesSetFromMetadataArrays( \@sortables,\@sortFields,\@tags,\@vals );
                 if (defined $opt_sortable) {
-                    if (!$headerDone) {
+                    if (!$columnsDetermined) {
                         # Note this is done only on the first line.  So whatever unsorted line is first will determine the list of columns
                         @colList = colListCreateFromSortables( \@sortables,\@sortFields );
                         push @colList, "type"; # push values onto the front
+                        $columnsDetermined = 1;
                     }
                     # create colListValues values from meta arrays and @colList
                     @colListVals = colListValsCreateFromMetadataArrays( \@colList,\@tags,\@vals );
@@ -694,11 +725,6 @@ for my $line (@fileList) {
 
     #htmlTableRow(*OUT_FILE,$fileName,$file[2],$submitDate,$releaseDate,$details);
     if (defined $opt_sortable) {
-        if (!$headerDone) {
-            # Now we print col headers with @colList
-            htmlTrHeader(\@colList);
-            $headerDone = 1;
-        }
         # And add @colListVals to the table rows
         push @rows, sortableHtmlRowWithColumns(\@sortables,$fileName,$file[2],$submitDate,$releaseDate,$metaData{leftOver},\@colListVals);
     } else {
@@ -709,17 +735,39 @@ for my $line (@fileList) {
         printf TEXT_FILE "%s\tsize=%s; dateSubmitted=%s; %s\n", $fileName, $file[2], $submitDate, $details;
     }
 }
-sortAndPrintHtmlTableRows(*OUT_FILE,@rows);
-if (defined $opt_sortable) {
-    print OUT_FILE "</tbody></TABLE>\n";
-    print OUT_FILE "<script type='text/javascript'>{\$(document).ready(function() {sortTableInitialize(\$('table.sortable')[0],true,true);});}</script>\n";
-} else {
-    print OUT_FILE "</TABLE>\n";
+
+# Redirect if the CGI hgFileUi should be displayed
+if (htmlRedirectPage(*OUT_FILE,$db,$opt_db,$composite) == 0) {
+    # Can't redirect to the hgFileUi CGI so make a page here
+
+    # Start the page
+    htmlStartPage(*OUT_FILE,$downloadsDir,$indexHtml,$preamble);
+
+    if (defined $opt_sortable) {
+        #print OUT_FILE "<script type='text/javascript' SRC='../js/jquery-1291074736.js'></script>\n";  Can't have timestamped version on static page (NOT A CGI)
+        print OUT_FILE "<script type='text/javascript' SRC='http://hgwdev.cse.ucsc.edu/js/tdreszer/jquery.js'></script>\n";
+        print OUT_FILE "<script type='text/javascript' SRC='http://hgwdev.cse.ucsc.edu/js/tdreszer/utils.js'></script>\n";
+        print OUT_FILE "<TABLE class='sortable' style='border: 2px outset #006600;'>\n";
+
+        htmlTrHeader(*OUT_FILE,\@colList);
+    } else {
+        print OUT_FILE "<TABLE cellspacing=0>\n";
+        print OUT_FILE "<TR valign='bottom'><TH class'sortable'>RESTRICTED<BR>until<TH align='left' class'sortTh'>&nbsp;&nbsp;File<TH align='right' class'sortTh'>Size<TH class'sortTh'>Submitted<TH align='left' class'sortTh'>&nbsp;&nbsp;Details</TR>\n";
+        print OUT_FILE "</TR>\n";
+    }
+
+    sortAndPrintHtmlTableRows(*OUT_FILE,@rows);
+    if (defined $opt_sortable) {
+        print OUT_FILE "</tbody></TABLE>\n";
+        print OUT_FILE "<script type='text/javascript'>{\$(document).ready(function() {sortTableInitialize(\$('table.sortable')[0],true,true);});}</script>\n";
+    } else {
+        print OUT_FILE "</TABLE>\n";
+    }
+
+    my $conclusion = "<i>" . scalar(@rows) . " files</i>\n";
+
+    htmlEndPage(*OUT_FILE,$conclusion);
 }
-
-my $conclusion = "<i>" . scalar(@rows) . " files</i>\n";
-
-htmlEndPage(*OUT_FILE,$conclusion);
 if($indexHtml eq "index.html") {  # Only make this text file when making index.html
     close TEXT_FILE;
 }

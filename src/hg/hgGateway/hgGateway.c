@@ -69,15 +69,13 @@ jsIncludeFile("hgGateway.js", NULL);
 jsIncludeFile("utils.js", NULL);
 
 puts(
-"<CENTER>"
-"<TABLE BGCOLOR='#FFFEE8' BORDERCOLOR='#CCCC99' BORDER=0 CELLPADDING=1>\n"
-"<TR><TD style='font-size:small; text-align:center;'>\n"
+"<CENTER style='font-size:small;'>"
 "The UCSC Genome Browser was created by the \n"
 "<A HREF=\"../staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
 "<BR>"
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
-"</TD></TR></TABLE></CENTER>\n"
+"</CENTER>\n"
 );
 
 puts(
