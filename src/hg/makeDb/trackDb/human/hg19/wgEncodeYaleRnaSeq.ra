@@ -1,7 +1,7 @@
 track wgEncodeYaleRnaSeq
 compositeTrack on
-shortLabel Yale RNA-seq
-longLabel RNA-seq from ENCODE/Yale
+shortLabel SYDH RNA-seq
+longLabel RNA-seq from ENCODE/Stanford/Yale/Davis/Harvard
 group expression
 superTrack wgEncodeRnaSeqSuper dense
 subGroup1 view Views RawSignal=Signal Alignments=Alignments 
@@ -34,7 +34,7 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ifna30PolyaRaw
         parent wgEncodeYaleRnaSeqViewSignal on
         shortLabel K562 pA+ Na30
-        longLabel K562 polyA+ IFNa30 RNA-Seq Signal from ENCODE/Yale/UCD/Harvard
+        longLabel K562 polyA+ IFNa30 RNA-Seq Signal from ENCODE/SYDH
         subGroups view=RawSignal cellType=K562 rnaExtract=polyA treatment=IFNa30
         type bigWig 0.000000 165257.000000
         origAssembly hg18
@@ -44,7 +44,7 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ifng6hPolyaRaw
         parent wgEncodeYaleRnaSeqViewSignal on
         shortLabel K562 pA+ Ng6h
-        longLabel K562 polyA+ IFNg6h RNA-Seq Signal from ENCODE/Yale/UCD/Harvard
+        longLabel K562 polyA+ IFNg6h RNA-Seq Signal from ENCODE/SYDH
         subGroups view=RawSignal cellType=K562 rnaExtract=polyA treatment=IFNg6h
         type bigWig 0.000000 184050.000000
         origAssembly hg18
@@ -54,7 +54,7 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ifna6hPolyaRaw
         parent wgEncodeYaleRnaSeqViewSignal on
         shortLabel K562 pA+ Na6h
-        longLabel K562 polyA+ IFNa6h RNA-Seq Signal from ENCODE/Yale/UCD/Harvard
+        longLabel K562 polyA+ IFNa6h RNA-Seq Signal from ENCODE/SYDH
         subGroups view=RawSignal cellType=K562 rnaExtract=polyA treatment=IFNa6h
         type bigWig 0.000000 134219.000000
         origAssembly hg18
@@ -65,7 +65,7 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ifng30PolyaRaw
         parent wgEncodeYaleRnaSeqViewSignal on
         shortLabel K562 pA+ Ng30
-        longLabel K562 polyA+ IFNg30 RNA-Seq Signal from ENCODE/Yale/UCD/Harvard
+        longLabel K562 polyA+ IFNg30 RNA-Seq Signal from ENCODE/SYDH
         subGroups view=RawSignal cellType=K562 rnaExtract=polyA treatment=IFNg30
         type bigWig 0.000000 172495.000000
         origAssembly hg18
@@ -97,7 +97,7 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ifna30PolyaAln
         parent wgEncodeYaleRnaSeqViewAlignments off
         shortLabel K562 pA+ Na30 
-        longLabel K562 polyA+ IFNa30 RNA-seq Alignments from ENCODE/Yale/UCD/Harvard
+        longLabel K562 polyA+ IFNa30 RNA-seq Alignments from ENCODE/SYDH
         subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=IFNa30
         type bam
         origAssembly hg18
@@ -107,7 +107,7 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ifna6hPolyaAln
         parent wgEncodeYaleRnaSeqViewAlignments off
         shortLabel K562 pA+ Na6h 
-        longLabel K562 polyA+ IFNa6h RNA-seq Alignments from ENCODE/Yale/UCD/Harvard 
+        longLabel K562 polyA+ IFNa6h RNA-seq Alignments from ENCODE/SYDH 
         subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=IFNa6h
         type bam
         origAssembly hg18
@@ -117,7 +117,7 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ifng30PolyaAln
         parent wgEncodeYaleRnaSeqViewAlignments off
         shortLabel K562 pA+ Ng30 
-        longLabel K562 polyA+ IFNg30 RNA-seq Alignments from ENCODE/Yale/UCD/Harvard
+        longLabel K562 polyA+ IFNg30 RNA-seq Alignments from ENCODE/SYDH
         subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=IFNg30
         type bam
         origAssembly hg18
@@ -127,7 +127,7 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ifng6hPolyaAln
         parent wgEncodeYaleRnaSeqViewAlignments off
         shortLabel K562 pA+ Ng6h 
-        longLabel K562 polyA+ IFNg6h RNA-seq Alignments from ENCODE/Yale/UCD/Harvard
+        longLabel K562 polyA+ IFNg6h RNA-seq Alignments from ENCODE/SYDH
         subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=IFNg6h
         type bam
         origAssembly hg18
