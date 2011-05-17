@@ -51,7 +51,6 @@ static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp
 #define ENCODE_DCC_DOWNLOADS "encodeDCC"
 
 //#define SUBTRACK_CFG_POPUP
-#define BAM_CFG_UI_CHANGES
 
 struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
 /* Look up through self and parents, looking for someone responsible for handling
@@ -1067,9 +1066,6 @@ if (gotCds && gotSeq)
 			baseColorDrawAllOptionValues,
 			ArraySize(baseColorDrawAllOptionLabels),
 			curValue, NULL);
-#ifndef BAM_CFG_UI_CHANGES
-    printf("<BR>");
-#endif///ndef BAM_CFG_UI_CHANGES
     printf("<A HREF=\"%s\">Help on mRNA coloring</A><BR>",
 	   CDS_MRNA_HELP_PAGE);
     }
@@ -1083,9 +1079,6 @@ else if (gotCds)
 			baseColorDrawGenomicOptionValues,
 			ArraySize(baseColorDrawGenomicOptionLabels),
 			curValue, buf);
-#ifndef BAM_CFG_UI_CHANGES
-    printf("<BR>");
-#endif///ndef BAM_CFG_UI_CHANGES
     printf("<A HREF=\"%s\">Help on codon coloring</A><BR>",
 	   CDS_HELP_PAGE);
     safef(buf, sizeof(buf), "%s.%s", name, CODON_NUMBERING_SUFFIX);
@@ -1101,9 +1094,6 @@ else if (gotSeq)
 			baseColorDrawItemOptionValues,
 			ArraySize(baseColorDrawItemOptionLabels),
 			curValue, NULL);
-#ifndef BAM_CFG_UI_CHANGES
-    printf("<BR>");
-#endif///ndef BAM_CFG_UI_CHANGES
     printf("<A HREF=\"%s\">Help on base coloring</A><BR>",
 	   CDS_BASE_HELP_PAGE);
     }
@@ -1199,7 +1189,6 @@ if (indelAppropriate(tdb))
     boolean showDoubleInsert, showQueryInsert, showPolyA;
     char var[512];
     indelEnabledByName(cart, tdb, name, 0.0, &showDoubleInsert, &showQueryInsert, &showPolyA);
-#ifdef BAM_CFG_UI_CHANGES
     printf("<TABLE><TR><TD colspan=2><B>Alignment Gap/Insertion Display Options</B>");
     printf("&nbsp;<A HREF=\"%s\">Help on display options</A>\n<TR valign='top'><TD>",
            INDEL_HELP_PAGE);
@@ -1222,33 +1211,6 @@ if (indelAppropriate(tdb))
         }
 
     printf("</TABLE>\n");
-#else///ifndef BAM_CFG_UI_CHANGES
-    printf("<P><B>Alignment Gap/Insertion Display Options</B><BR>\n");
-    safef(var, sizeof(var), "%s.%s", name, INDEL_DOUBLE_INSERT);
-    cgiMakeCheckBox(var, showDoubleInsert);
-    printf("Draw double horizontal lines when both genome and query have "
-	   "an insertion "
-	   "<BR>\n");
-    safef(var, sizeof(var), "%s.%s", name, INDEL_QUERY_INSERT);
-    cgiMakeCheckBox(var, showQueryInsert);
-    printf("Draw a vertical purple line for an insertion at the beginning or "
-	   "end of the query, orange for insertion in the middle of the query"
-	   "<BR>\n");
-    safef(var, sizeof(var), "%s.%s", name, INDEL_POLY_A);
-    /* We can highlight valid polyA's only if we have query sequence --
-     * so indelPolyA code piggiebacks on baseColor code: */
-    if (baseColorGotSequence(tdb))
-	{
-	cgiMakeCheckBox(var, showPolyA);
-	printf("Draw a vertical green line where query has a polyA tail "
-	       "insertion"
-	       "<BR>\n");
-	}
-
-    printf("<A HREF=\"%s\">Help on alignment gap/insertion display options</A>"
-	   "<BR>\n",
-	   INDEL_HELP_PAGE);
-#endif///ndef BAM_CFG_UI_CHANGES
     }
 }
 
@@ -4099,7 +4061,11 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             ix = stringArrayIx(sortOrder->column[sIx], membership->subgroups, membership->count); // TODO: Sort needs to expand from subGroups to labels as well
             if (ix >= 0)
                 {
-                char *titleRoot=labelRoot(membership->titles[ix],NULL);
+                char *titleRoot=NULL;
+                if (cvTermIsEmpty(sortOrder->column[sIx],membership->titles[ix]))
+                    titleRoot = cloneString(" &nbsp;");
+                else
+                    titleRoot = labelRoot(membership->titles[ix],NULL);
                 // Each sortable column requires hidden goop (in the "abbr" field currently) which is the actual sort on value
                 printf ("<TD id='%s_%s' abbr='%s' align='left'>&nbsp;",subtrack->track,sortOrder->column[sIx],membership->membership[ix]);
             #ifdef SUBTRACK_CFG_POPUP
@@ -4303,7 +4269,7 @@ if (boxed)
     char *view = tdbGetViewName(tdb);
     if(view != NULL)
         printf(" %s",view);
-    printf("' bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>", COLOR_BG_ALTDEFAULT, COLOR_BG_ALTDEFAULT);
+    printf("' style='background-color:%s;'><TR><TD>", COLOR_BG_ALTDEFAULT);
     if (title)
         printf("<CENTER><B>%s Configuration</B></CENTER>\n", title);
     }
@@ -5856,7 +5822,6 @@ void bamCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, b
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 char cartVarName[1024];
 
-#ifdef BAM_CFG_UI_CHANGES
 printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
 char *tdbShowNames = trackDbSetting(tdb, BAM_SHOW_NAMES);
 safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAM_SHOW_NAMES);
@@ -5881,27 +5846,6 @@ cartMakeIntVar(cart, cartVarName,
                atoi(trackDbSettingOrDefault(tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
 printf("</TD></TR></TABLE>");
 
-#else///nef BAM_CFG_UI_CHANGES
-puts("<BR>");
-printf("<B>Display read names:</B>\n");
-char *tdbShowNames = trackDbSetting(tdb, BAM_SHOW_NAMES);
-safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAM_SHOW_NAMES);
-cartMakeCheckBox(cart, cartVarName, !sameOk(tdbShowNames, "off"));
-boolean canPair = (trackDbSetting(tdb, BAM_PAIR_ENDS_BY_NAME) != NULL);
-puts("<BR>");
-if (canPair)
-    {
-    printf("<B>Attempt to join paired end reads by name:</B>\n");
-    safef(cartVarName, sizeof(cartVarName), "%s." BAM_PAIR_ENDS_BY_NAME, name);
-    cartMakeCheckBox(cart, cartVarName, TRUE);
-    puts("<BR>");
-    }
-printf("<B>Minimum alignment quality:</B>\n");
-safef(cartVarName, sizeof(cartVarName), "%s." BAM_MIN_ALI_QUAL, name);
-cartMakeIntVar(cart, cartVarName,
-               atoi(trackDbSettingOrDefault(tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
-puts("<BR>");
-#endif///ndef BAM_CFG_UI_CHANGES
 
 if (isCustomTrack(name))
     {
@@ -5912,9 +5856,7 @@ if (isCustomTrack(name))
     hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
     }
 baseColorDropLists(cart, tdb, name);
-#ifdef BAM_CFG_UI_CHANGES
 puts("<BR>");
-#endif///def BAM_CFG_UI_CHANGES
 indelShowOptionsWithName(cart, tdb, name);
 printf("<BR>\n");
 printf("<B>Additional coloring modes:</B><BR>\n");
@@ -5949,17 +5891,10 @@ if (trackDbSetting(tdb, "noColorTag") == NULL)
     }
 cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_OFF, sameString(selected, BAM_COLOR_MODE_OFF));
 printf("No additional coloring");
-#ifndef BAM_CFG_UI_CHANGES
-printf("<BR>\n");
-#endif///ndef BAM_CFG_UI_CHANGES
 
 //TODO: include / exclude flags
 
-#ifdef BAM_CFG_UI_CHANGES
 if (!boxed && fileExists(hHelpFile("hgBamTrackHelp")))
-#else///ifndef BAM_CFG_UI_CHANGES
-if (fileExists(hHelpFile("hgBamTrackHelp")))
-#endif///ndef BAM_CFG_UI_CHANGES
     printf("<P><A HREF=\"../goldenPath/help/hgBamTrackHelp.html\" TARGET=_BLANK>BAM "
 	   "configuration help</A></P>");
 
@@ -6630,7 +6565,7 @@ if(membersForAll->abcCount > 0 && membersForAll->filters == FALSE)
 if(dimensionX == NULL && dimensionY == NULL) // Could have been just filterComposite. Must be an X or Y dimension
     return FALSE;
 
-printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
+printf("<TABLE class='greenBox' style='background-color:%s;'>\n",COLOR_BG_DEFAULT);
 
 matrixXheadings(db,parentTdb,membersForAll,TRUE);
 

@@ -1,0 +1,1423 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release2 of the "ENCODE wgEncodeCaltechRnaSeq"
+The composite track is wgEncodeCaltechRnaSeq
+# WARNINGS #################################################
+1 - Use of MD5 checksums to verify unchanged files has been disabled.
+2 - table wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2 does not exist, from filetype bigWig
+3 - table wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2 does not exist, from filetype bigWig
+4 - table wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1 does not exist, from filetype bigWig
+5 - table wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1 does not exist, from filetype bigWig
+6 - table wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1 does not exist, from filetype bigWig
+7 - table wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1 does not exist, from filetype bigWig
+8 - table wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1 does not exist, from filetype bigWig
+9 - table wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1 does not exist, from filetype bigWig
+10 - table wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2 does not exist, from filetype bigWig
+11 - table wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1 does not exist, from filetype bigWig
+12 - table wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2 does not exist, from filetype bigWig
+13 - table wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2 does not exist, from filetype bigWig
+14 - table wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1 does not exist, from filetype bigWig
+15 - table wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2 does not exist, from filetype bigWig
+16 - table wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2 does not exist, from filetype bigWig
+17 - table wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2 does not exist, from filetype bigWig
+18 - table wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1 does not exist, from filetype bigWig
+19 - table wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2 does not exist, from filetype bigWig
+20 - table wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1 does not exist, from filetype bigWig
+21 - table wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3 does not exist, from filetype bigWig
+22 - table wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2 does not exist, from filetype bigWig
+23 - table wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1 does not exist, from filetype bigWig
+24 - table wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1 does not exist, from filetype bigWig
+25 - table wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1 does not exist, from filetype bigWig
+26 - table wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1 does not exist, from filetype bigWig
+27 - table wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1 does not exist, from filetype bigWig
+28 - table wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1 does not exist, from filetype bigWig
+29 - table wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2 does not exist, from filetype bigWig
+30 - table wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1 does not exist, from filetype bigWig
+31 - table wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2 does not exist, from filetype bigWig
+32 - table wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2 does not exist, from filetype bigWig
+33 - table wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2 does not exist, from filetype bigWig
+34 - table wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1 does not exist, from filetype bigWig
+35 - table wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2 does not exist, from filetype bigWig
+36 - table wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1 does not exist, from filetype bigWig
+37 - table wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1 does not exist, from filetype bigWig
+38 - table wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1 does not exist, from filetype bigWig
+39 - table wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2 does not exist, from filetype bigWig
+40 - table wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2 does not exist, from filetype bigWig
+41 - table wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4 does not exist, from filetype bigWig
+42 - table wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2 does not exist, from filetype bigWig
+43 - table wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2 does not exist, from filetype bigWig
+44 - table wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1 does not exist, from filetype bigWig
+45 - table wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1 does not exist, from filetype bigWig
+46 - table wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1 does not exist, from filetype bigWig
+47 - table wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2 does not exist, from filetype bigWig
+48 - table wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2 does not exist, from filetype bigWig
+49 - table wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2 does not exist, from filetype bigWig
+50 - table wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2 does not exist, from filetype bigWig
+51 - table wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1 does not exist, from filetype bigWig
+52 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneGencV3cRep2V3 does not exist, from filetype gtf
+53 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+54 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+55 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep2V3 does not exist, from filetype bed
+56 - table wgEncodeCaltechRnaSeqGm12878R2x75Il400JunctionsRep2V3 does not exist, from filetype bed
+57 - table wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+58 - table wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+59 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep3V3 does not exist, from filetype gtf
+60 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep4V3 does not exist, from filetype gtf
+61 - table wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+62 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep2V3 does not exist, from filetype gtf
+63 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+64 - table wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep2V3 does not exist, from filetype gtf
+65 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep1V3 does not exist, from filetype gtf
+66 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep3V3 does not exist, from filetype gtf
+67 - table wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep2V3 does not exist, from filetype gtf
+68 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+69 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep2V3 does not exist, from filetype bed
+70 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep2V3 does not exist, from filetype gtf
+71 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+72 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep2V3 does not exist, from filetype gtf
+73 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3 does not exist, from filetype gtf
+74 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep3V3 does not exist, from filetype bed
+75 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200TSSRep1V3 does not exist, from filetype gtf
+76 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep1V3 does not exist, from filetype gtf
+77 - table wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep2V3 does not exist, from filetype gtf
+78 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+79 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep3V3 does not exist, from filetype gtf
+80 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+81 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep2V3 does not exist, from filetype gtf
+82 - table wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+83 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep2V3 does not exist, from filetype gtf
+84 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dExonsGencV3cRep1V3 does not exist, from filetype gtf
+85 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+86 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep3V3 does not exist, from filetype gtf
+87 - table wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+88 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep2V3 does not exist, from filetype gtf
+89 - table wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep2V3 does not exist, from filetype gtf
+90 - table wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep2V3 does not exist, from filetype bed
+91 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+92 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TSSRep1V3 does not exist, from filetype gtf
+93 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+94 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+95 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+96 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep2V3 does not exist, from filetype gtf
+97 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep3V3 does not exist, from filetype gtf
+98 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+99 - table wgEncodeCaltechRnaSeqHct116R2x75Il200TSSRep2V3 does not exist, from filetype gtf
+100 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep3V3 does not exist, from filetype gtf
+101 - table wgEncodeCaltechRnaSeqHct116R2x75Il200ExonsGencV3cRep2V3 does not exist, from filetype gtf
+102 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep4V3 does not exist, from filetype gtf
+103 - table wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneDeNovoRep2V3 does not exist, from filetype gtf
+104 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep2V3 does not exist, from filetype bed
+105 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep3V3 does not exist, from filetype gtf
+106 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+107 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+108 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+109 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+110 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+111 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200ExonsGencV3cRep2V3 does not exist, from filetype gtf
+112 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep3V3 does not exist, from filetype gtf
+113 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep2V3 does not exist, from filetype bed
+114 - table wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+115 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep2V3 does not exist, from filetype gtf
+116 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+117 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+118 - table wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneDeNovoRep1V3 does not exist, from filetype gtf
+119 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+120 - table wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+121 - table wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneGencV3cRep1V3 does not exist, from filetype gtf
+122 - table wgEncodeCaltechRnaSeqHct116R2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+123 - table wgEncodeCaltechRnaSeqHct116R2x75Il200TSSRep1V3 does not exist, from filetype gtf
+124 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+125 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep2V3 does not exist, from filetype gtf
+126 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep2V3 does not exist, from filetype gtf
+127 - table wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+128 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep4V3 does not exist, from filetype bed
+129 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep2V3 does not exist, from filetype gtf
+130 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200TSSRep1V3 does not exist, from filetype gtf
+131 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+132 - table wgEncodeCaltechRnaSeqHct116R2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+133 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+134 - table wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+135 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep2V3 does not exist, from filetype gtf
+136 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep2V3 does not exist, from filetype gtf
+137 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep2V3 does not exist, from filetype gtf
+138 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep2V3 does not exist, from filetype gtf
+139 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+140 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+141 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+142 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep3V3 does not exist, from filetype gtf
+143 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep3V3 does not exist, from filetype gtf
+144 - table wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+145 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+146 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+147 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+148 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+149 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+150 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep2V3 does not exist, from filetype bed
+151 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep3V3 does not exist, from filetype gtf
+152 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+153 - table wgEncodeCaltechRnaSeqHct116R2x75Il200GeneDeNovoRep2V3 does not exist, from filetype gtf
+154 - table wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+155 - table wgEncodeCaltechRnaSeqHct116R2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+156 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep2V3 does not exist, from filetype gtf
+157 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep2V3 does not exist, from filetype bed
+158 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep3V3 does not exist, from filetype gtf
+159 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep1V3 does not exist, from filetype gtf
+160 - table wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+161 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep2V3 does not exist, from filetype gtf
+162 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+163 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+164 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+165 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dJunctionsRep1V3 does not exist, from filetype bed
+166 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3 does not exist, from filetype gtf
+167 - table wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep2V3 does not exist, from filetype gtf
+168 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep3V3 does not exist, from filetype bed
+169 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+170 - table wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep2V3 does not exist, from filetype bed
+171 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200TSSRep2V3 does not exist, from filetype gtf
+172 - table wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+173 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+174 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+175 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+176 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+177 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+178 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+179 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+180 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneGencV3cRep2V3 does not exist, from filetype gtf
+181 - table wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+182 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep2V3 does not exist, from filetype bed
+183 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+184 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep2V3 does not exist, from filetype gtf
+185 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+186 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+187 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+188 - table wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+189 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep2V3 does not exist, from filetype bed
+190 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+191 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+192 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200TSSRep2V3 does not exist, from filetype gtf
+193 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep1V3 does not exist, from filetype gtf
+194 - table wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+195 - table wgEncodeCaltechRnaSeqHct116R2x75Il200GeneGencV3cRep2V3 does not exist, from filetype gtf
+196 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneGencV3cRep1V3 does not exist, from filetype gtf
+197 - table wgEncodeCaltechRnaSeqH1hescR2x75Il400TSSRep1V3 does not exist, from filetype gtf
+198 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+199 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep3V3 does not exist, from filetype gtf
+200 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+201 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTSSRep1V3 does not exist, from filetype gtf
+202 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+203 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep2V3 does not exist, from filetype bed
+204 - table wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+205 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+206 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneDeNovoRep2V3 does not exist, from filetype gtf
+207 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+208 - table wgEncodeCaltechRnaSeqGm12878R2x75Il400ExonsGencV3cRep2V3 does not exist, from filetype gtf
+209 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200TSSRep1V3 does not exist, from filetype gtf
+210 - table wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+211 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep2V3 does not exist, from filetype gtf
+212 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep3V3 does not exist, from filetype gtf
+213 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+214 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3 does not exist, from filetype bed
+215 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+216 - table wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+217 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+218 - table wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+219 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep3V3 does not exist, from filetype gtf
+220 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep1V3 does not exist, from filetype gtf
+221 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep3V3 does not exist, from filetype gtf
+222 - table wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep2V3 does not exist, from filetype gtf
+223 - table wgEncodeCaltechRnaSeqH1hescR2x75Il400JunctionsRep1V3 does not exist, from filetype bed
+224 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep1V3 does not exist, from filetype gtf
+225 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200ExonsGencV3cRep2V3 does not exist, from filetype gtf
+226 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+227 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep2V3 does not exist, from filetype gtf
+228 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+229 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+230 - table wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+231 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep2V3 does not exist, from filetype gtf
+232 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+233 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep2V3 does not exist, from filetype gtf
+234 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep2V3 does not exist, from filetype gtf
+235 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+236 - table wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+237 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep3V3 does not exist, from filetype gtf
+238 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+239 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+240 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+241 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+242 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+243 - table wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep2V3 does not exist, from filetype gtf
+244 - table wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep2V3 does not exist, from filetype bed
+245 - table wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+246 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+247 - table wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep2V3 does not exist, from filetype gtf
+248 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep4V3 does not exist, from filetype gtf
+249 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+250 - table wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+251 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep1V3 does not exist, from filetype gtf
+252 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep2V3 does not exist, from filetype gtf
+253 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+254 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+255 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+256 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+257 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+258 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep4V3 does not exist, from filetype gtf
+259 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+260 - table wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep1V3 does not exist, from filetype gtf
+261 - table wgEncodeCaltechRnaSeqH1hescR2x75Il400ExonsGencV3cRep1V3 does not exist, from filetype gtf
+262 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep2V3 does not exist, from filetype gtf
+263 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep2V3 does not exist, from filetype gtf
+264 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+265 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneGencV3cRep2V3 does not exist, from filetype gtf
+266 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+267 - table wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep1V3 does not exist, from filetype gtf
+268 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptDeNovoRep2V3 does not exist, from filetype gtf
+269 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep4V3 does not exist, from filetype gtf
+270 - table wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneDeNovoRep2V3 does not exist, from filetype gtf
+271 - table wgEncodeCaltechRnaSeqGm12878R2x75Il400TSSRep2V3 does not exist, from filetype gtf
+272 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep3V3 does not exist, from filetype gtf
+273 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+274 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep2V3 does not exist, from filetype gtf
+275 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep2V3 does not exist, from filetype gtf
+276 - table wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep4V3 does not exist, from filetype gtf
+277 - table wgEncodeCaltechRnaSeqNhlfR2x75Il200TSSRep2V3 does not exist, from filetype gtf
+278 - table wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneGencV3cRep2V3 does not exist, from filetype gtf
+279 - table wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneDeNovoRep1V3 does not exist, from filetype gtf
+280 - table wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep1V3 does not exist, from filetype gtf
+281 - table wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep2V3 does not exist, from filetype gtf
+282 - table wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep2V3 does not exist, from filetype gtf
+283 - table wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep2V3 does not exist, from filetype gtf
+284 - table wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep1V3 does not exist, from filetype gtf
+285 - table wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep1V3 does not exist, from filetype bed
+286 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep1V3 does not exist, from filetype gtf
+287 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep2V3 does not exist, from filetype bed
+288 - table wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep1V3 does not exist, from filetype gtf
+289 - table wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep1V3 does not exist, from filetype gtf
+############################################################
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release2 (new+untouched):
+    Tables: 154
+    Files: 564
+    Gbdbs: 248
+
+A) Untouched Tables (0):
+
+A') Untouched Files (0 downloadables, 0 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release2/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/
+
+
+
+B) Deprecated tables (0):
+
+B') Deprecated files (111 downloadables, 0 gbdbs):
+    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
+    This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/
+
+wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2.bigWig
+wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2.bigWig
+wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1.bigWig
+wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig
+wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2.bigWig
+wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep2.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2.bigWig
+wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2.bigWig
+wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep3.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep4.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep3.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep4.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1.bigWig
+wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2.bigWig
+wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3.bigWig
+wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4.bigWig
+wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1.bigWig
+wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep2.fastq.gz
+wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2.bigWig
+wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2.bigWig
+wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1.bigWig
+wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2.bigWig
+wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep2.fastq.gz
+wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2.bigWig
+wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2.bigWig
+wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1.bigWig
+wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2.bigWig
+wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1.bigWig
+wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2.bigWig
+wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep2.fastq.gz
+wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2.bigWig
+wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2.bigWig
+wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1.bigWig
+wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2.bigWig
+wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep2.fastq.gz
+wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2.bigWig
+wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2.bigWig
+wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1.bigWig
+wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2.bigWig
+wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1.bigWig
+wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2.bigWig
+wgEncodeCaltechRnaSeqNhekR1x75dNaIlnaFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1.bigWig
+wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1.bigWig
+wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2.bigWig
+wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1.bigWig
+wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2.bigWig
+
+
+C) New tables (154):
+wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2
+wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2
+wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3
+wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3
+wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3
+wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3
+wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2
+wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2
+wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2
+wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2
+wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2
+wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2
+wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2
+wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2
+wgEncodeCaltechRnaSeqGm12878R2x75Il400SigRep2V2
+wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2
+wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2
+wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2
+wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2
+wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep2V2
+wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2
+wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2
+wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2
+wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1V2
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2V2
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3V2
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2
+wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2
+wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2
+wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3
+wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3
+wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3
+wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3
+wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2
+wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep3V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep4V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il400SigRep1V2
+wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2
+wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2
+wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2
+wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2
+wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2
+wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2
+wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2
+wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2
+wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3
+wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3
+wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3
+wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3
+wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2
+wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2
+wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2
+wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2
+wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2
+wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2
+wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2
+wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2
+wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2
+wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3
+wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3
+wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3
+wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3
+wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2
+wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2
+wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2
+wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2
+wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2
+wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2
+wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2
+wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2
+wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2
+wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2
+wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2
+wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2
+wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2
+wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2
+wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3
+wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3
+wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3
+wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3
+wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2
+wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2
+wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2
+wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2
+wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2
+wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2
+wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2
+wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2
+wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2
+wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3
+wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3
+wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3
+wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3
+wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2
+wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2
+wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2
+wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2
+wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2
+wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2
+wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200PairedRep1V2
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2
+wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2
+wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep3V2
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2
+wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2
+wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3
+wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3
+wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2
+wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2
+wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2
+wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2
+wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2
+wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2
+wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2
+wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2
+wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2
+wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep2V2
+wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2
+wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2
+
+C') New files (561 downloadables, 248 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release2/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/
+
+wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam
+wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam
+wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3.bigWig
+wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3.bigWig
+wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam
+wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam
+wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqGm12878R2x75Il400ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il400JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il400SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqGm12878R2x75Il400TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqGm12891R2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2.bam
+wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2.bam.bai
+wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep3.fastq.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep3.fastq.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bed.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3V2.bigWig
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2.bam
+wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2.bam.bai
+wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam
+wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam
+wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep2.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3.bigWig
+wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3.bigWig
+wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam
+wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam
+wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam
+wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam
+wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep4V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep3.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep4.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep3.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep4.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep4V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep4V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep3V3.bed.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep4V3.bed.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep3V2.bigWig
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep4V2.bigWig
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam
+wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep4V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep4V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep4V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR2x75Il400ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il400JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il400SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqH1hescR2x75Il400TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHct116R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep1V2.fastq.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep2V2.fastq.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep1V2.fastq.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep2V2.fastq.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHct116R2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam
+wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam
+wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep2.fastq.gz
+wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3.bigWig
+wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3.bigWig
+wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam
+wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam
+wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam
+wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam
+wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep2.fastq.gz
+wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3.bigWig
+wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3.bigWig
+wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam
+wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam
+wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHsmmR2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHsmmR2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam
+wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam
+wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep2.fastq.gz
+wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3.bigWig
+wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3.bigWig
+wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam
+wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam
+wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam
+wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam
+wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqK562R1x75dFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqK562R1x75dFastqRep2.fastq.gz
+wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3.bigWig
+wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3.bigWig
+wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam
+wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam
+wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dGeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dJunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1.bam
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1.bam.bai
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1.bigWig
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1.bam
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1.bam.bai
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dTrnscrptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200PairedRep1V2.bam
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200PairedRep1V2.bam.bai
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1.bigWig
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2.bam
+wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2.bam.bai
+wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep3V3.bed.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep3V2.bigWig
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2.bam
+wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2.bam.bai
+wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep3V3.gtf.gz
+wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam
+wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqNhekR1x75dFastqRep1.fastq.gz
+wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3.bigWig
+wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam
+wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2.bam
+wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2.bam.bai
+wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2.bam
+wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2.bam.bai
+wgEncodeCaltechRnaSeqNhlfR2x75Il200ExonsGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200ExonsGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep1.fastq.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep2.fastq.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep1.fastq.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep2.fastq.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneGencV3cRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep1V3.bed.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep2V3.bed.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2.bigWig
+wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep2V2.bigWig
+wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2.bam
+wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2.bam.bai
+wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2.bam
+wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2.bam.bai
+wgEncodeCaltechRnaSeqNhlfR2x75Il200TSSRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200TSSRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il400SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep3V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep4V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il400SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dPairedRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Diff7dSplicesRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqLhcnm2R2x75Il200PairedRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqLhcnm2R2x75Il200PairedRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep3V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep2V2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2.bam
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2.bam.bai
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release2/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/
+
+index.html
+files.txt
+md5sum.txt

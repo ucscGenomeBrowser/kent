@@ -83,9 +83,9 @@ if (foundFiles == NULL
         {
         // Works:         rsync -avn rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/
         if (hIsBetaHost())
-            safef(cmd,sizeof(cmd),"rsync -avn rsync://hgdownload-test.cse.ucsc.edu/goldenPath/%s/%s/%s/beta/",  db, dir, subDir); // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+            safef(cmd,sizeof(cmd),"rsync -n rsync://hgdownload-test.cse.ucsc.edu/goldenPath/%s/%s/%s/beta/",  db, dir, subDir); // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
         else
-            safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
+            safef(cmd,sizeof(cmd),"rsync -n rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
         }
     //warn("cmd: %s",cmd);
     scriptOutput = popen(cmd, "r");
@@ -603,6 +603,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
             else
                 {
                 field = oneFile->sortFields[sortOrder->order[ix] - 1];
+                boolean isFieldEmpty = cvTermIsEmpty(sortOrder->column[ix],field);
                 char class[128];
                 class[0] = '\0';
                 if (filterable)
@@ -610,7 +611,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                     enum cvSearchable searchBy = cvSearchMethod(sortOrder->column[ix]);
                     if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)
                         {
-                        char *cleanClass = cloneString(field?field:"None");     // FIXME: Only none if none is a fliter choice.
+                        char *cleanClass = cloneString(isFieldEmpty?"None":field);
                         eraseNonAlphaNum(cleanClass);
                         safef(class,sizeof class," class='%s %s'",sortOrder->column[ix],cleanClass);
                         }
@@ -619,7 +620,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                 if (sameString("dateUnrestricted",sortOrder->column[ix]) && field && dateIsOld(field,"%F"))
                     printf("<TD%s nowrap style='color: #BBBBBB;'%s>%s</td>",align,class,field);
                 else
-                    printf("<TD%s nowrap%s>%s</td>",align,class,field?field:" &nbsp;");
+                    printf("<TD%s nowrap%s>%s</td>",align,class,isFieldEmpty?" &nbsp;":field);
                 if (!sameString("fileType",sortOrder->column[ix]))
                     mdbObjRemoveVars(oneFile->mdb,sortOrder->column[ix]); // Remove this from mdb now so that it isn't displayed in "extras'
                 }

@@ -857,3 +857,208 @@ TMPDIR=/scratch/tmp
     #	75402821 bases of 1842236818 (4.093%) in intersection
 
 #######################################################################
+## 7-Way Multiz (DONE - 2011-03-18,03-21 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/anoCar2/bed/multiz7way
+    cd /hive/data/genomes/anoCar2/bed/multiz7way
+
+    # working with: anoCar2 xenTro2 galGal3 mm9 hg19 gasAcu1 ornAna1
+
+kent/src/hg/utils/phyloTrees/50way.nh
+    anoCar2,xenTro2,galGal3,mm9,hg19,gasAcu1,ornAna1
+
+    #	All distances remain as specified in the 46way.nh
+    /cluster/bin/phast/tree_doctor --prune-all-but \
+	anoCar1,xenTro2,galGal3,mm9,hg19,gasAcu1,ornAna1 \
+	$HOME/kent/src/hg/utils/phyloTrees/50way.nh \
+	| sed -e "s/anoCar1/anoCar2/" > 7way.nh
+    #	what that looks like:
+    cat 7way.nh
+# (((((hg19:0.144018,mm9:0.356483):0.350649,ornAna1:0.456592):0.109504,(galGal3:0.464759,anoCar2:0.489241):0.105143):0.172371,xenTro2:0.855573):0.311354,gasAcu1:0.849152);
+
+    cat << '_EOF_' > anoCar2.7way.nh
+((((anoCar2:0.489241,galGal3:0.464759):0.105143,
+((hg19:0.144018,mm9:0.356483):0.350649,ornAna1:0.456592):0.109504):0.172371,
+xenTro2:0.855573):0.311354,gasAcu1:0.849152);
+'_EOF_'
+    # << happy emacs
+
+    # convert to species names
+    /cluster/bin/phast/tree_doctor --rename \
+"anoCar2->Lizard; hg19->Human; xenTro2->X_tropicalis; gasAcu1->Stickleback; ornAna1->Platypus; mm9->Mouse; galGal3->Chicken" \
+anoCar2.7way.nh > anoCar2.commonNames.7way.nh
+
+# ((((Lizard:0.489241,Chicken:0.464759):0.105143,((Human:0.144018,Mouse:0.356483):0.350649,Platypus:0.456592):0.109504):0.172371,X._tropicalis:0.855573):0.311354,Stickleback:0.849152);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for src/hg/htdocs/images/phylo/anoCar2_7way.png
+
+    /cluster/bin/phast/all_dists anoCar2.7way.nh > 7way.distances.txt
+    #	Use this output to create the table below
+    grep -i anoCar2 7way.distances.txt | sort -k3,3n
+# anoCar2 galGal3 0.954000
+# anoCar2 ornAna1 1.160480
+# anoCar2 hg19    1.198555
+# anoCar2 mm9     1.411020
+# anoCar2 xenTro2 1.622328
+# anoCar2 gasAcu1 1.927261
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#                         featureBits chainLink measures
+#                                   chainAnoCar2Link         chain linearGap
+#    distance                    on anoCar2  on other     minScore
+#  1  0.954 - chicken galGal3     (%  6.82) (% 10.92)       5000     loose
+#  2  1.160 - platypus ornAna1    (%  4.56) (%  4.09)       5000     loose
+#  3  1.199 - human hg19          (%  5.19) (%  3.55)       5000     loose
+#  4  1.411 - mouse mm9           (%  4.98) (%  3.36)       5000     loose
+#  5  1.622 - X.tropicalis xenTro2(%  5.05) (%  6.76)       5000     loose
+#  6  1.927 - stickleback gasAcu1 (%  3.14) (% 12.54)       3000     medium
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	anoCar2.7way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/anoCar2/bed/multiz7way/mafSplit
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/mafSplit
+    for D in `sed -e "s/anoCar2 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=10 /dev/null . ../../../lastz.${D}/axtChain/anoCar2.${D}.synNet.maf.gz"
+    mafSplit -byTarget -useHashedName=8 /dev/null . \
+	../../../lastz.${D}/mafNet/anoCar2.${D}.net.maf.gz
+    cd ..
+done
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 1536
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 256 maf.list
+
+    mkdir /hive/data/genomes/anoCar2/bed/multiz7way/splitRun
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = anoCar2
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/anoCar2/bed/multiz7way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+	if (! -s $out) then
+	    echo "##maf version=1 scoring=autoMZ" > $out
+	endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+	> /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/anoCar2/bed/multiz7way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh swarm
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/splitRun/run
+    gensub2 maf.list single template jobList
+    tac jobList > smallJobsFirst
+    para -ram=8g create smallJobsFirst
+# Completed: 484 of 484 jobs
+# CPU time in finished jobs:     370423s    6173.72m   102.90h    4.29d  0.012 y
+# IO & Wait Time:                 27319s     455.32m     7.59h    0.32d  0.001 y
+# Average job time:                 822s      13.70m     0.23h    0.01d
+# Longest finished job:           31994s     533.23m     8.89h    0.37d
+# Submission to last job:         32007s     533.45m     8.89h    0.37d
+
+    # assemble into a single maf file
+    cd /hive/data/genomes/anoCar2/bed/multiz7way
+    head -1 splitRun/maf/001.maf > multiz7way.maf
+    for F in splitRun/maf/*.maf
+do
+    egrep -v "^#" ${F}
+done >> multiz7way.maf
+    tail -1 splitRun/maf/001.maf >> multiz7way.maf
+
+# -rw-rw-r-- 1 1237537614 May 13 16:13 multiz7way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2/bed/multiz7way
+    mkdir /gbdb/anoCar2/multiz7way
+    ln -s `pwd`/multiz7way.maf /gbdb/anoCar2/multiz7way
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf anoCar2 multiz7way
+    #	Indexing and tabulating /gbdb/anoCar2/multiz7way/multiz7way.maf
+    #	Loaded 2182259 mafs in 1 files from /gbdb/anoCar2/multiz7way
+    #	real    0m48.824s
+XXX - done to here - Fri May 13 16:19:42 PDT 2011
+
+
+    #	Indexing and tabulating /gbdb/anoCar2/multiz7way/multiz7way.maf
+    #	Loaded 15113841 mafs in 1 files from /gbdb/anoCar2/multiz7way
+    #	real    9m38.121s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 anoCar2 multiz7waySummary \
+	/gbdb/anoCar2/multiz7way/multiz7way.maf
+    #	Created 1828535 summary blocks from 85036569 components
+    #	and 15113841 mafs from /gbdb/anoCar2/multiz7way/multiz7way.maf
+    #	real    8m51.192s
+
+    wc -l multiz7way*.tab
+    #	15113841 multiz7way.tab
+    #	1828535 multiz7waySummary.tab
+    #	16942376 total
+
+    rm multiz7way*.tab
+
+############################################################################

@@ -12,8 +12,6 @@
 #include "pgPhenoAssoc.h"
 #include "regexHelper.h"
 
-static char const rcsid[] = "$Id: pgSnp.c,v 1.8 2010/03/08 17:45:41 giardine Exp $";
-
 void pgSnpStaticLoad(char **row, struct pgSnp *ret)
 /* Load a row from pgSnp table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -689,3 +687,99 @@ if (! regexMatchNoCase(row[6], pattern))
     lineFileAbort(lf, "invalid allele scores, %s with count of %d", row[6], item->alleleCount);
 return item;
 }
+
+#define VCF_MAX_ALLELE_LEN 80
+
+struct pgSnp *pgSnpFromVcfRecord(struct vcfRecord *rec)
+/* Convert VCF rec to pgSnp; don't free rec->file (vcfFile) until
+ * you're done with pgSnp because pgSnp points to rec->chrom. */
+{
+static struct dyString *dy = NULL;
+if (dy == NULL)
+    dy = dyStringNew(0);
+else
+    dyStringClear(dy);
+struct pgSnp *pgs;
+AllocVar(pgs);
+pgs->chrom = rec->chrom;
+pgs->chromStart = rec->chromStart;
+pgs->chromEnd = rec->chromEnd;
+// Build up slash-separated allele string from rec->ref + rec->alt:
+dyStringAppend(dy, rec->ref);
+int altCount, i;
+if (sameString(rec->alt, "."))
+    altCount = 0;
+else
+    {
+    char *words[VCF_MAX_ALLELE_LEN/2];
+    char copy[VCF_MAX_ALLELE_LEN+1];
+    strncpy(copy, rec->alt, VCF_MAX_ALLELE_LEN);
+    copy[VCF_MAX_ALLELE_LEN] = '\0';
+    altCount = chopCommas(copy, words);
+    for (i = 0;  i < altCount && dy->stringSize < VCF_MAX_ALLELE_LEN;  i++)
+	dyStringPrintf(dy, "/%s", words[i]);
+    if (i < altCount)
+	altCount = i;
+    }
+pgs->name = cloneStringZ(dy->string, dy->stringSize+1);
+pgs->alleleCount = altCount + 1;
+// Build up comma-sep list of per-allele counts, if available:
+dyStringClear(dy);
+int refAlleleCount = 0;
+boolean gotAltCounts = FALSE;
+for (i = 0;  i < rec->infoCount;  i++)
+    if (sameString(rec->infoElements[i].key, "AN"))
+	{
+	refAlleleCount = rec->infoElements[i].values[0].datInt;
+	break;
+	}
+for (i = 0;  i < rec->infoCount;  i++)
+    if (sameString(rec->infoElements[i].key, "AC"))
+	{
+	int alCounts[64];
+	int j;
+	gotAltCounts = (rec->infoElements[i].count > 0);
+	for (j = 0;  j < rec->infoElements[i].count;  j++)
+	    {
+	    int ac = rec->infoElements[i].values[j].datInt;
+	    if (j < altCount)
+		alCounts[1+j] = ac;
+	    refAlleleCount -= ac;
+	    }
+	if (gotAltCounts)
+	    {
+	    while (j++ < altCount)
+		alCounts[1+j] = -1;
+	    alCounts[0] = refAlleleCount;
+	    if (refAlleleCount >= 0)
+		dyStringPrintf(dy, "%d", refAlleleCount);
+	    else
+		dyStringAppend(dy, "-1");
+	    for (j = 0;  j < altCount;  j++)
+		if (alCounts[1+j] >= 0)
+		    dyStringPrintf(dy, ",%d", alCounts[1+j]);
+		else
+		    dyStringAppend(dy, ",-1");
+	    }
+	break;
+	}
+if (refAlleleCount > 0 && !gotAltCounts)
+    dyStringPrintf(dy, "%d", refAlleleCount);
+pgs->alleleFreq = cloneStringZ(dy->string, dy->stringSize+1);
+// Build up comma-sep list... supposed to be per-allele quality scores but I think
+// the VCF spec only gives us one BQ... for the reference position?  should ask.
+dyStringClear(dy);
+for (i = 0;  i < rec->infoCount;  i++)
+    if (sameString(rec->infoElements[i].key, "BQ"))
+	{
+	float qual = rec->infoElements[i].values[0].datFloat;
+	dyStringPrintf(dy, "%.1f", qual);
+	int j;
+	for (j = 0;  j < altCount;  j++)
+	    dyStringPrintf(dy, ",%.1f", qual);
+	break;
+	}
+pgs->alleleScores = cloneStringZ(dy->string, dy->stringSize+1);
+return pgs;
+}
+

@@ -426,12 +426,20 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
     if($(divit).css('display') == 'none') {
         $("#div_"+trackName+"_cfg").hide();  // Hide any configuration when opening metadata
 
-        if($(divit).find('table').length == 0)
+        if($(divit).find('table').length == 0) {
             lookupMetadata(trackName,showLonglabel,showShortLabel);
+            return false;
+        }
     }
     var tr = $(divit).parents('tr');
     if (tr.length > 0) {
-        $(divit).children('table').css('backgroundColor',$(tr[0]).css('backgroundColor'));
+        if ($(tr).hasClass("bgLevel2")) {
+            $(divit).children('table').removeClass('bgLevel1');
+            $(divit).children('table').addClass('bgLevel2');
+        } else {
+            $(divit).children('table').removeClass('bgLevel2');
+            $(divit).children('table').addClass('bgLevel1');
+        }
     }
     $(divit).toggle();  // jQuery hide/show
     return false;
@@ -1634,8 +1642,10 @@ function sortTableInitialize(table,addSuperscript,altColors)
     // Highlight rows?  But on subtrack list, this will mess up the "..." coloring.  So just exclude tables with drag and drop
     if ($(table).hasClass('tableWithDragAndDrop') == false) {
         $('tbody.sortable').find('tr').hover(
-            function(){ $(this).addClass('bgLevel3'); },      // Will highlight the rows
-            function(){ $(this).removeClass('bgLevel3');}
+            function(){ $(this).addClass('bgLevel3');
+                        $(this).find('table').addClass('bgLevel3'); },      // Will highlight the rows, including '...'
+            function(){ $(this).removeClass('bgLevel3');
+                        $(this).find('table').removeClass('bgLevel3'); }
         );
     }
 

@@ -684,6 +684,7 @@ view Signal
 
 metaObject wgEncodeOpenChromFaireGm12878Validation
 objType file
+attic auxSup
 cell GM12878
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
@@ -2909,6 +2910,7 @@ view Signal
 
 metaObject wgEncodeOpenChromFaireK562Validation
 objType file
+attic auxSup
 cell K562
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
@@ -3939,4 +3941,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 593027136
+# MAGIC: 593376492

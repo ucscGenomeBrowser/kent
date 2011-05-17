@@ -64,8 +64,11 @@ INLINE void initNode(struct hacTree *node, const struct hacTree *left, const str
 {
 node->left = (struct hacTree *)left;
 node->right = (struct hacTree *)right;
-node->childDistance = distF(left->itemOrCluster, right->itemOrCluster, extraData);
-node->itemOrCluster = mergeF(left->itemOrCluster, right->itemOrCluster, extraData);
+if (left != NULL && right != NULL)
+    {
+    node->childDistance = distF(left->itemOrCluster, right->itemOrCluster, extraData);
+    node->itemOrCluster = mergeF(left->itemOrCluster, right->itemOrCluster, extraData);
+    }
 }
 
 INLINE struct hacTree preClusterNodes(const struct sortWrapper *leafWraps, int i, int runLength,
@@ -135,12 +138,18 @@ struct hacTree *leafNodes = leafNodesFromItems(itemList, itemCount, localMem);
 if (cmpF != NULL)
     leafNodes = sortAndPreCluster(leafNodes, &itemCount, localMem,
 				  distF, mergeF, cmpF, extraData);
-int pairCount = itemCount * (itemCount-1) / 2;
+int pairCount = (itemCount == 1) ? 1 : (itemCount * (itemCount-1) / 2);
 struct hacTree *pairPool = lmAlloc(localMem, pairCount * sizeof(struct hacTree));
-int i, j, pairIx;
-for (i=0, pairIx=0;  i < itemCount-1;  i++)
-    for (j=i+1;  j < itemCount;  j++, pairIx++)
-	initNode(&(pairPool[pairIx]), &(leafNodes[i]), &(leafNodes[j]), distF, mergeF, extraData);
+if (itemCount == 1)
+    initNode(pairPool, leafNodes, NULL, distF, mergeF, extraData);
+else
+    {
+    int i, j, pairIx;
+    for (i=0, pairIx=0;  i < itemCount-1;  i++)
+	for (j=i+1;  j < itemCount;  j++, pairIx++)
+	    initNode(&(pairPool[pairIx]), &(leafNodes[i]), &(leafNodes[j]), distF, mergeF,
+		     extraData);
+    }
 *retPairCount = pairCount;
 return pairPool;
 }

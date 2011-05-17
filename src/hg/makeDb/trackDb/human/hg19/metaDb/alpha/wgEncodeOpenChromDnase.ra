@@ -833,6 +833,26 @@ tableName wgEncodeOpenChromDnaseFibroblSig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromDnaseFibroblValidation
+objType file
+attic auxSup
+cell Fibrobl
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000583
+expId 583
+fileName wgEncodeOpenChromDnaseFibroblValidation.tgz
+grant Crawford
+lab Duke
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4107
+treatment None
+view Validation
+
 metaObject wgEncodeOpenChromDnaseFibropAlnRep1
 objType file
 cell FibroP
@@ -1954,6 +1974,26 @@ subId 1507
 tableName wgEncodeOpenChromDnaseGm18507Sig
 treatment None
 view Signal
+
+metaObject wgEncodeOpenChromDnaseGm18507Validation
+objType file
+attic auxSup
+cell GM18507
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000581
+expId 581
+fileName wgEncodeOpenChromDnaseGm18507Validation.tgz
+grant Crawford
+lab Duke
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4107
+treatment None
+view Validation
 
 metaObject wgEncodeOpenChromDnaseGm19238AlnRep1
 objType file
@@ -3103,6 +3143,26 @@ tableName wgEncodeOpenChromDnaseHelas3Sig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromDnaseHelas3Validation
+objType file
+attic auxSup
+cell HeLa-S3
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000540
+expId 540
+fileName wgEncodeOpenChromDnaseHelas3Validation.tgz
+grant Crawford
+lab Duke
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4107
+treatment None
+view Validation
+
 metaObject wgEncodeOpenChromDnaseHepatocytesAlnRep1
 objType file
 cell Hepatocytes
@@ -3456,6 +3516,26 @@ tableName wgEncodeOpenChromDnaseHepg2Sig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromDnaseHepg2Validation
+objType file
+attic auxSup
+cell HepG2
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000537
+expId 537
+fileName wgEncodeOpenChromDnaseHepg2Validation.tgz
+grant Crawford
+lab Duke
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4107
+treatment None
+view Validation
+
 metaObject wgEncodeOpenChromDnaseHmecAlnRep1
 objType file
 cell HMEC
@@ -3567,6 +3647,26 @@ project wgEncode
 subId 2764
 tableName wgEncodeOpenChromDnaseHmecSig
 view Signal
+
+metaObject wgEncodeOpenChromDnaseHmecValidation
+objType file
+attic auxSup
+cell HMEC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH001101
+expId 1101
+fileName wgEncodeOpenChromDnaseHmecValidation.tgz
+grant Crawford
+lab Duke
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4107
+treatment None
+view Validation
 
 metaObject wgEncodeOpenChromDnaseHpde6e6e7AlnRep1
 objType file
@@ -4607,6 +4707,26 @@ tableName wgEncodeOpenChromDnaseHuvecSig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromDnaseHuvecValidation
+objType file
+attic auxSup
+cell HUVEC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000548
+expId 548
+fileName wgEncodeOpenChromDnaseHuvecValidation.tgz
+grant Crawford
+lab Duke
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4107
+treatment None
+view Validation
+
 metaObject wgEncodeOpenChromDnaseIpsAlnRep1
 objType file
 cell iPS
@@ -5139,6 +5259,26 @@ tableName wgEncodeOpenChromDnaseLncapAndroSig
 treatment androgen
 view Signal
 
+metaObject wgEncodeOpenChromDnaseLncapAndroValidation
+objType file
+attic auxSup
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH001096
+expId 1096
+fileName wgEncodeOpenChromDnaseLncapAndroValidation.tgz
+grant Crawford
+lab Duke
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4107
+treatment androgen
+view Validation
+
 metaObject wgEncodeOpenChromDnaseLncapBaseOverlapSignal
 objType table
 cell LNCaP
@@ -5261,6 +5401,26 @@ project wgEncode
 subId 2482
 tableName wgEncodeOpenChromDnaseLncapSig
 view Signal
+
+metaObject wgEncodeOpenChromDnaseLncapValidation
+objType file
+attic auxSup
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH001097
+expId 1097
+fileName wgEncodeOpenChromDnaseLncapValidation.tgz
+grant Crawford
+lab Duke
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4107
+treatment None
+view Validation
 
 metaObject wgEncodeOpenChromDnaseMcf7AlnRep1
 objType file
@@ -5418,6 +5578,26 @@ subId 1545
 tableName wgEncodeOpenChromDnaseMcf7Sig
 treatment None
 view Signal
+
+metaObject wgEncodeOpenChromDnaseMcf7Validation
+objType file
+attic auxSup
+cell MCF-7
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000579
+expId 579
+fileName wgEncodeOpenChromDnaseMcf7Validation.tgz
+grant Crawford
+lab Duke
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4107
+treatment None
+view Validation
 
 metaObject wgEncodeOpenChromDnaseMedulloAlnRep1
 objType file
@@ -6008,6 +6188,26 @@ subId 1533
 tableName wgEncodeOpenChromDnaseNhekSig
 treatment None
 view Signal
+
+metaObject wgEncodeOpenChromDnaseNhekValidation
+objType file
+attic auxSup
+cell NHEK
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000553
+expId 553
+fileName wgEncodeOpenChromDnaseNhekValidation.tgz
+grant Crawford
+lab Duke
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4107
+treatment None
+view Validation
 
 metaObject wgEncodeOpenChromDnaseOsteoblAlnRep1
 objType file
@@ -6714,6 +6914,26 @@ tableName wgEncodeOpenChromDnaseProgfibSig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromDnaseProgfibValidation
+objType file
+attic auxSup
+cell ProgFib
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-12
+dateUnrestricted 2012-02-12
+dccAccession wgEncodeEH000576
+expId 576
+fileName wgEncodeOpenChromDnaseProgfibValidation.tgz
+grant Crawford
+lab Duke
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+subId 4107
+treatment None
+view Validation
+
 metaObject wgEncodeOpenChromDnaseStellateAlnRep1
 objType file
 cell Stellate
@@ -7309,4 +7529,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1708315814
+# MAGIC: 1756983165

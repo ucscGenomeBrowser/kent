@@ -866,8 +866,17 @@ rm -fr tmp
 
 #########################################################################
 # GAP ANNOTATE MULTIZ6WAY MAF AND LOAD TABLES (DONE - 2011-01-19 - Hiram)
-
+    # redone properly 2011-05-12
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.
     ssh hgwdev
+    mkdir -p /hive/data/genomes/danRer7/bed/multiz8way/anno/mafSplit
+    cd /hive/data/genomes/danRer7/bed/multiz8way/anno/mafSplit
+    time mafSplit -byTarget -useFullSequenceName \
+	/dev/null . ../../multiz8way.maf
+    #	real    1m0.519s
+
     mkdir /hive/data/genomes/danRer7/bed/multiz8way/anno
     cd /hive/data/genomes/danRer7/bed/multiz8way/anno
 for DB in `sed -e "s/ danRer7//" ../species.lst`
@@ -879,29 +888,46 @@ do
     echo ${DB}.len  >> sizes
 done
 
-    time nice -n +19 mafAddIRows -nBeds=nBeds ../multiz8way.maf \
-	/hive/data/genomes/danRer7/danRer7.2bit multiz8way.maf
-    #	real    9m16.433s
+    mkdir annoSplit
+    for F in mafSplit/*.maf
+do
+    B=`basename ${F}`
+    mafAddIRows -nBeds=nBeds ${F} /hive/data/genomes/danRer7/danRer7.2bit \
+	annoSplit/${B}
+    echo $B
+done
+    # about 10 minutes
+    # combine into one file
+    head -q -n 1 annoSplit/chr1.maf > danRer7.8way.maf
+    for F in annoSplit/*.maf
+do
+    grep -h -v "^#" ${F}
+done >> danRer7.8way.maf
+    #	about 2 minutes
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 mafSplit/chr1.maf >> panTro3.12way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> danRer7.8way.maf
 
     # Load into database
     rm /gbdb/danRer7/multiz8way/multiz8way.maf   # remove old symlink
-    ln -s `pwd`/multiz8way.maf /gbdb/danRer7/multiz8way
+    ln -s `pwd`/danRer7.8way.maf /gbdb/danRer7/multiz8way/multiz8way.maf
     cd /scratch/tmp
     time nice -n +19 hgLoadMaf danRer7 multiz8way
-    #	Loaded 3398556 mafs in 1 files from /gbdb/danRer7/multiz8way
-    #	real    1m42.103s
+    #	Loaded 3365771 mafs in 1 files from /gbdb/danRer7/multiz8way
+    #	real    1m22.783s
 
     time nice hgLoadMafSummary -minSize=10000 -mergeGap=500 \
 	-maxSize=50000 danRer7 multiz8waySummary \
 	/gbdb/danRer7/multiz8way/multiz8way.maf
     #	Created 1160923 summary blocks from 9245726 components
-    #	and 3398556 mafs from /gbdb/danRer7/multiz8way/multiz8way.maf
+    #	and 3365771 mafs from /gbdb/danRer7/multiz8way/multiz8way.maf
     #	real    1m37.885s
 
     wc -l multiz8way*.tab
-    #	3398556 multiz8way.tab
+    #	3365771 multiz8way.tab
     #	1160923 multiz8waySummary.tab
-    #	4559479 total
+    #	4526694 total
 
     rm multiz8way*.tab
 
@@ -974,15 +1000,16 @@ done
 # genes/tetNig2.gp.gz: 19539
 # genes/xenTro2.gp.gz: 17888
 
+    # reloaded corrected maf 2011-05-12
     ssh hgwdev
     cd /hive/data/genomes/danRer7/bed/multiz8way/frames
-    cat ../anno/multiz8way.maf \
+    cat ../anno/danRer7.8way.maf \
 	| nice -n +19 genePredToMafFrames danRer7 stdin stdout \
 	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.lst` \
 		| gzip > multiz8way.mafFrames.gz
     # verify there are frames on everything:
     zcat multiz8way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
-    #	238460 danRer7
+    #	234538 danRer7
     #	418660 fr2
     #	437610 gasAcu1
     #	436329 hg19
@@ -1862,8 +1889,9 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     mkdir /hive/data/genomes/danRer7/bed/multiz8way/downloads
     cd /hive/data/genomes/danRer7/bed/multiz8way/downloads
-    cp -p ../anno/multiz8way.maf .
+    cp -p ../anno/danRer7.8way.maf multiz8way.maf
     gzip multiz8way.maf
+    #	real    8m35.334s
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/multiz8way
     cd /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/multiz8way
     ln -s /hive/data/genomes/danRer7/bed/multiz8way/8way.nh .
