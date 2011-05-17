@@ -472,7 +472,7 @@ class AntibodyStanza(CvStanza):
 		#print 'AntibodyStanza.validate(' + self.name + ')'
 
 		necessary = {'term', 'tag', 'type', 'target', 'antibodyDescription', 'targetDescription', 'vendorName', 'vendorId', 'orderUrl', 'lab', 'targetId'}
-		optional = {'validation', 'targetUrl'}
+		optional = {'validation', 'targetUrl', 'lots'}
 
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary | optional)
