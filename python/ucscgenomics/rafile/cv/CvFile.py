@@ -96,6 +96,8 @@ class CvFile(RaFile):
 			entry = ViewStanza()
 		elif type == 'category':
 			entry = CategoryStanza()
+		elif type == 'attic':
+			entry = AtticStanza()
 		else:
 			self.handler(NonmatchKeyError(e.name, type, 'type'))
 			return ek, ev, None
@@ -583,7 +585,18 @@ class SpeciesStanza(CvStanza):
 		CvStanza.validate(self, ra)
 		#print 'validate(' + self.name + ')'
 
+		
 class CategoryStanza(CvStanza):
+	
+	def __init__(self):
+		CvStanza.__init__(self)
+
+	def validate(self, ra):
+		CvStanza.validate(self, ra)
+		#print 'validate(' + self.name + ')'
+		
+		
+class AtticStanza(CvStanza):
 	
 	def __init__(self):
 		CvStanza.__init__(self)
