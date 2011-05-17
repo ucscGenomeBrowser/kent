@@ -83,7 +83,7 @@ wgEncode 1
 		longLabel 416B DNaseI HS Hotspots Rep 2 from ENCODE/UW
 		subGroups view=Hotspots age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep2
 		type broadPeak
-		color 153,38,0
+		color 86,180,233
 		# subId=1997 dateSubmitted=2010-07-22
 
 		track wgEncodeUwDnase416bC57bl6MAdult8wksHotspotsRep1
@@ -92,7 +92,7 @@ wgEncode 1
 		longLabel 416B DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep1
 		type broadPeak
-		color 153,38,0
+		color 86,180,233
 		# subId=2000 dateSubmitted=2010-07-23
 
 		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep2
@@ -128,7 +128,6 @@ wgEncode 1
 		longLabel Fibroblast Adult 8-weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=Fibroblast sex=M strain=C57BL6 rep=rep2
 		type broadPeak
-		color 230,159,0
 		# subId=2005 dateSubmitted=2010-07-23
 
 		track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksHotspotsRep1
@@ -137,7 +136,6 @@ wgEncode 1
 		longLabel Fibroblast Adult 8-weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=Fibroblast sex=M strain=C57BL6 rep=rep1
 		type broadPeak
-		color 230,159,0
 		# subId=2006 dateSubmitted=2010-07-23
 
 		track wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep1
@@ -146,7 +144,7 @@ wgEncode 1
 		longLabel Liver Adult 8-weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep1
 		type broadPeak
-		color 139,69,19
+		color 230,159,0
 		# subId=2008 dateSubmitted=2010-07-23
 
 		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep7
@@ -155,7 +153,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Hotspots Rep 7 from ENCODE/UW
 		#subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep7
 		#type broadPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=2009 dateSubmitted=2010-07-23
 		#display no
 
@@ -165,7 +163,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Hotspots Rep 9 from ENCODE/UW
 		#subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep9
 		#type broadPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=2010 dateSubmitted=2010-07-23
 		#display no
 
@@ -175,7 +173,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Hotspots Rep 3 from ENCODE/UW
 		#subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep3
 		#type broadPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=2011 dateSubmitted=2010-07-24
 		#display no
 
@@ -185,7 +183,7 @@ wgEncode 1
 		longLabel Liver Adult 8-weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep2
 		type broadPeak
-		color 139,69,19
+		color 230,159,0
 		# subId=2012 dateSubmitted=2010-07-24
 
 		track wgEncodeUwDnaseKidneyC57bl6MAdult8wksHotspotsRep1
@@ -194,7 +192,7 @@ wgEncode 1
 		longLabel Kidney Adult 8-weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=Kidney sex=M strain=C57BL6 rep=rep1
 		type broadPeak
-		color 102,50,200
+		color 204,121,167
 		# subId=2013 dateSubmitted=2010-07-24
 
 		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep8
@@ -203,7 +201,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Hotspots Rep 8 from ENCODE/UW
 		#subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep8
 		#type broadPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=2014 dateSubmitted=2010-07-24
 		#display no
 
@@ -221,7 +219,7 @@ wgEncode 1
 		longLabel MEL DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=immortal cellType=MEL sex=M strain=UKN rep=rep1
 		type broadPeak
-		color 65,105,225
+		color 86,180,233
 		# subId=2017 dateSubmitted=2010-07-24
 
 		#track wgEncodeUwDnaseMelC57bl6MAdult8wksHotspotsRep3
@@ -230,7 +228,7 @@ wgEncode 1
 		#longLabel MEL DNaseI HS Hotspots Rep 3 from ENCODE/UW
 		#subGroups view=Hotspots age=immortal cellType=MEL sex=M strain=UKN rep=rep3
 		#type broadPeak
-		#color 65,105,225
+		#color 86,180,233
 		# subId=2018 dateSubmitted=2010-07-24
 		#display no
 
@@ -240,7 +238,7 @@ wgEncode 1
 		longLabel MEL DNaseI HS Hotspots Rep 2 from ENCODE/UW
 		subGroups view=Hotspots age=immortal cellType=MEL sex=M strain=UKN rep=rep2
 		type broadPeak
-		color 65,105,225
+		color 86,180,233
 		# subId=2019 dateSubmitted=2010-07-24
 
 		track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep2
@@ -249,7 +247,7 @@ wgEncode 1
 		longLabel T-Naive Adult 8-weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep2
 		type broadPeak
-		color 204,121,167
+		color 86,180,233
 		# subId=2020 dateSubmitted=2010-07-24
 
 		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep2
@@ -371,7 +369,7 @@ wgEncode 1
 		longLabel T-Naive Adult 8-weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep1
 		type broadPeak
-		color 204,121,167
+		color 86,180,233
 		# subId=3890 dateSubmitted=2011-04-18
 
 		track wgEncodeUwDnaseLungC57bl6MAdult8wksHotspotsRep1
@@ -397,7 +395,7 @@ wgEncode 1
 		longLabel Heart Adult 8-weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=Heart sex=M strain=C57BL6 rep=rep1
 		type broadPeak
-		color 189,0,157
+		color 153,38,0
 		# subId=3912 dateSubmitted=2011-04-19
 
 		track wgEncodeUwDnaseKidneyC57bl6MAdult8wksHotspotsRep2
@@ -406,7 +404,7 @@ wgEncode 1
 		longLabel Kidney Adult 8-weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=Kidney sex=M strain=C57BL6 rep=rep2
 		type broadPeak
-		color 102,50,200
+		color 204,121,167
 		# subId=3900 dateSubmitted=2011-04-19
 
 		track wgEncodeUwDnaseCbellumC57bl6MAdult8wksHotspotsRep2
@@ -460,7 +458,7 @@ wgEncode 1
 		longLabel FatPad Adult 8-weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=Fat sex=M strain=C57BL6 rep=rep1
 		type broadPeak
-		color 154,205,68
+		color 189,0,157
 		# subId=3908 dateSubmitted=2011-05-02
 
 		track wgEncodeUwDnaseFatC57bl6MAdult8wksHotspotsRep2
@@ -469,7 +467,7 @@ wgEncode 1
 		longLabel FatPad Adult 8-weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=Fat sex=M strain=C57BL6 rep=rep2
 		type broadPeak
-		color 154,205,68
+		color 189,0,157
 		# subId=3909 dateSubmitted=2011-05-02
 
 		track wgEncodeUwDnaseTregC57bl6MAdult8wksHotspotsRep1
@@ -478,7 +476,7 @@ wgEncode 1
 		longLabel TReg Adult 8-weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=TReg sex=M strain=C57BL6 rep=rep1
 		type broadPeak
-		color 204,121,167
+		color 86,180,233
 		# subId=3911 dateSubmitted=2011-05-02
 
 		track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksHotspotsRep1
@@ -513,6 +511,7 @@ wgEncode 1
 		shortLabel Patski Hspt 2
 		longLabel Patski DNaseI HS Hotspots Rep 2 from ENCODE/UW
 		subGroups view=Hotspots age=immortal cellType=Patski sex=M strain=SPBL6 rep=rep2
+		color 204,121,167
 		type broadPeak
 		# subId=3899 dateSubmitted=2011-05-10
 
@@ -521,6 +520,7 @@ wgEncode 1
 		shortLabel Patski Hspt 1
 		longLabel Patski DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=immortal cellType=Patski sex=M strain=SPBL6 rep=rep1
+		color 204,121,167
 		type broadPeak
 		# subId=3898 dateSubmitted=2011-05-10
 
@@ -550,7 +550,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Hotspots Rep 10 from ENCODE/UW
 		#subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep10
 		#type broadPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=3905 dateSubmitted=2011-04-19
 		#display no
 
@@ -560,7 +560,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Hotspots Rep 4 from ENCODE/UW
 		#subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep4
 		#type broadPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=3902 dateSubmitted=2011-04-19
 		#display no
 
@@ -570,7 +570,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Hotspots Rep 5 from ENCODE/UW
 		#subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep5
 		#type broadPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=3903 dateSubmitted=2011-04-19
 		#display no
 
@@ -589,7 +589,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Hotspots Rep 6 from ENCODE/UW
 		#subGroups view=Hotspots age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep6
 		#type broadPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=3904 dateSubmitted=2011-04-19
 		#display no
 
@@ -618,7 +618,7 @@ wgEncode 1
 		longLabel 416B DNaseI HS Peaks Rep 2 from ENCODE/UW
 		subGroups view=Peaks age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep2
 		type narrowPeak
-		color 153,38,0
+		color 86,180,233
 		# subId=1997 dateSubmitted=2010-07-22
 
 		track wgEncodeUwDnase416bC57bl6MAdult8wksPkRep1
@@ -627,7 +627,7 @@ wgEncode 1
 		longLabel 416B DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep1
 		type narrowPeak
-		color 153,38,0
+		color 86,180,233
 		# subId=2000 dateSubmitted=2010-07-23
 
 		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep2
@@ -663,7 +663,6 @@ wgEncode 1
 		longLabel Fibroblast Adult 8-weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=Fibroblast sex=M strain=C57BL6 rep=rep2
 		type narrowPeak
-		color 230,159,0
 		# subId=2005 dateSubmitted=2010-07-23
 
 		track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksPkRep1
@@ -672,7 +671,6 @@ wgEncode 1
 		longLabel Fibroblast Adult 8-weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=Fibroblast sex=M strain=C57BL6 rep=rep1
 		type narrowPeak
-		color 230,159,0
 		# subId=2006 dateSubmitted=2010-07-23
 
 		track wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep1
@@ -681,7 +679,7 @@ wgEncode 1
 		longLabel Liver Adult 8-weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep1
 		type narrowPeak
-		color 139,69,19
+		color 230,159,0
 		# subId=2008 dateSubmitted=2010-07-23
 
 		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep7
@@ -690,7 +688,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Peaks Rep 7 from ENCODE/UW
 		#subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep7
 		#type narrowPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=2009 dateSubmitted=2010-07-23
 		#display no
 
@@ -700,7 +698,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Peaks Rep 9 from ENCODE/UW
 		#subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep9
 		#type narrowPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=2010 dateSubmitted=2010-07-23
 		#display no
 
@@ -710,7 +708,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Peaks Rep 3 from ENCODE/UW
 		#subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep3
 		#type narrowPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=2011 dateSubmitted=2010-07-24
 		#display no
 
@@ -720,7 +718,7 @@ wgEncode 1
 		longLabel Liver Adult 8-weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep2
 		type narrowPeak
-		color 139,69,19
+		color 230,159,0
 		# subId=2012 dateSubmitted=2010-07-24
 
 		track wgEncodeUwDnaseKidneyC57bl6MAdult8wksPkRep1
@@ -729,7 +727,7 @@ wgEncode 1
 		longLabel Kidney Adult 8-weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=Kidney sex=M strain=C57BL6 rep=rep1
 		type narrowPeak
-		color 102,50,200
+		color 204,121,167
 		# subId=2013 dateSubmitted=2010-07-24
 
 		#track wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep8
@@ -738,7 +736,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Peaks Rep 8 from ENCODE/UW
 		#subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep8
 		#type narrowPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=2014 dateSubmitted=2010-07-24
 		#display no
 
@@ -756,7 +754,7 @@ wgEncode 1
 		longLabel MEL DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=immortal cellType=MEL sex=M strain=UKN rep=rep1
 		type narrowPeak
-		color 65,105,225
+		color 86,180,233
 		# subId=2017 dateSubmitted=2010-07-24
 
 		#track wgEncodeUwDnaseMelC57bl6MAdult8wksPkRep3
@@ -765,7 +763,7 @@ wgEncode 1
 		#longLabel MEL DNaseI HS Peaks Rep 3 from ENCODE/UW
 		#subGroups view=Peaks age=immortal cellType=MEL sex=M strain=UKN rep=rep3
 		#type narrowPeak
-		#color 65,105,225
+		#color 86,180,233
 		# subId=2018 dateSubmitted=2010-07-24
 		#display no
 
@@ -775,7 +773,7 @@ wgEncode 1
 		longLabel MEL DNaseI HS Peaks Rep 2 from ENCODE/UW
 		subGroups view=Peaks age=immortal cellType=MEL sex=M strain=UKN rep=rep2
 		type narrowPeak
-		color 65,105,225
+		color 86,180,233
 		# subId=2019 dateSubmitted=2010-07-24
 
 		track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep2
@@ -784,7 +782,7 @@ wgEncode 1
 		longLabel T-Naive Adult 8-weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep2
 		type narrowPeak
-		color 204,121,167
+		color 86,180,233
 		# subId=2020 dateSubmitted=2010-07-24
 
 		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep2
@@ -906,7 +904,7 @@ wgEncode 1
 		longLabel T-Naive Adult 8-weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep1
 		type narrowPeak
-		color 204,121,167
+		color 86,180,233
 		# subId=3890 dateSubmitted=2011-04-18
 
 		track wgEncodeUwDnaseLungC57bl6MAdult8wksPkRep1
@@ -932,7 +930,7 @@ wgEncode 1
 		longLabel Heart Adult 8-weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=Heart sex=M strain=C57BL6 rep=rep1
 		type narrowPeak
-		color 189,0,157
+		color 153,38,0
 		# subId=3912 dateSubmitted=2011-04-19
 
 		track wgEncodeUwDnaseKidneyC57bl6MAdult8wksPkRep2
@@ -941,7 +939,7 @@ wgEncode 1
 		longLabel Kidney Adult 8-weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=Kidney sex=M strain=C57BL6 rep=rep2
 		type narrowPeak
-		color 102,50,200
+		color 204,121,167
 		# subId=3900 dateSubmitted=2011-04-19
 
 		track wgEncodeUwDnaseCbellumC57bl6MAdult8wksPkRep2
@@ -995,7 +993,7 @@ wgEncode 1
 		longLabel FatPad Adult 8-weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=Fat sex=M strain=C57BL6 rep=rep1
 		type narrowPeak
-		color 154,205,68
+		color 189,0,157
 		# subId=3908 dateSubmitted=2011-05-02
 
 		track wgEncodeUwDnaseFatC57bl6MAdult8wksPkRep2
@@ -1004,7 +1002,7 @@ wgEncode 1
 		longLabel FatPad Adult 8-weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=Fat sex=M strain=C57BL6 rep=rep2
 		type narrowPeak
-		color 154,205,68
+		color 189,0,157
 		# subId=3909 dateSubmitted=2011-05-02
 
 		track wgEncodeUwDnaseTregC57bl6MAdult8wksPkRep1
@@ -1013,7 +1011,7 @@ wgEncode 1
 		longLabel TReg Adult 8-weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=TReg sex=M strain=C57BL6 rep=rep1
 		type narrowPeak
-		color 204,121,167
+		color 86,180,233
 		# subId=3911 dateSubmitted=2011-05-02
 
 		track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksPkRep1
@@ -1048,6 +1046,7 @@ wgEncode 1
 		shortLabel Patski Pk 2
 		longLabel Patski DNaseI HS Peaks Rep 2 from ENCODE/UW
 		subGroups view=Peaks age=immortal cellType=Patski sex=M strain=SPBL6 rep=rep2
+		color 204,121,167
 		type narrowPeak
 		# subId=3899 dateSubmitted=2011-05-10
 
@@ -1056,6 +1055,7 @@ wgEncode 1
 		shortLabel Patski Pk 1
 		longLabel Patski DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=immortal cellType=Patski sex=M strain=SPBL6 rep=rep1
+		color 204,121,167
 		type narrowPeak
 		# subId=3898 dateSubmitted=2011-05-10
 
@@ -1085,7 +1085,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Peaks Rep 10 from ENCODE/UW
 		#subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep10
 		#type narrowPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=3905 dateSubmitted=2011-04-19 
 		#display no
 
@@ -1095,7 +1095,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Peaks Rep 4 from ENCODE/UW
 		#subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep4
 		#type narrowPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=3902 dateSubmitted=2011-04-19
 		#display no
 		
@@ -1105,7 +1105,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Peaks Rep 5 from ENCODE/UW
 		#subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep5
 		#type narrowPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=3903 dateSubmitted=2011-04-19
 		#display no
 		
@@ -1124,7 +1124,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Peaks Rep 6 from ENCODE/UW
 		#subGroups view=Peaks age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep6
 		#type narrowPeak
-		#color 139,69,19
+		#color 230,159,0
 		# subId=3904 dateSubmitted=2011-04-19
 		#display no
 
@@ -1156,7 +1156,7 @@ wgEncode 1
 		longLabel 416B DNaseI HS Signal Rep 2 from ENCODE/UW
 		subGroups view=Signal age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep2
 		type bigWig 1.000000 74554.000000
-		color 153,38,0
+		color 86,180,233
 		# subId=1997 dateSubmitted=2010-07-22
 
 		track wgEncodeUwDnase416bC57bl6MAdult8wksRawRep1
@@ -1165,7 +1165,7 @@ wgEncode 1
 		longLabel 416B DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep1
 		type bigWig 1.000000 109673.000000
-		color 153,38,0
+		color 86,180,233
 		# subId=2000 dateSubmitted=2010-07-23
 
 		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksSigRep2
@@ -1204,7 +1204,6 @@ wgEncode 1
 		longLabel Fibroblast Adult 8-weeks DNaseI HS Signal Rep 2 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=Fibroblast sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 91985.000000
-		color 230,159,0
 		# subId=2005 dateSubmitted=2010-07-23
 		# was wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:26 2011
 
@@ -1214,7 +1213,6 @@ wgEncode 1
 		longLabel Fibroblast Adult 8-weeks DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=Fibroblast sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 76418.000000
-		color 230,159,0
 		# subId=2006 dateSubmitted=2010-07-23
 		# was wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:26 2011
 
@@ -1224,7 +1222,7 @@ wgEncode 1
 		longLabel Liver Adult 8-weeks DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 49169.000000
-		color 139,69,19
+		color 230,159,0
 		# subId=2008 dateSubmitted=2010-07-23
 		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:26 2011
 
@@ -1234,7 +1232,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Signal Rep 7 from ENCODE/UW
 		#subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep7
 		#type bigWig 1.000000 26836.000000
-		#color 139,69,19
+		#color 230,159,0
 		# subId=2009 dateSubmitted=2010-07-23
 		#display no
 		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep7 cricket Fri May 13 13:56:40 2011
@@ -1245,7 +1243,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Signal Rep 9 from ENCODE/UW
 		#subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep9
 		#type bigWig 1.000000 32841.000000
-		#color 139,69,19
+		#color 230,159,0
 		# subId=2010 dateSubmitted=2010-07-23
 		#display no
 		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep9 cricket Fri May 13 13:56:40 2011
@@ -1256,7 +1254,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Signal Rep 3 from ENCODE/UW
 		#subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep3
 		#type bigWig 1.000000 31463.000000
-		#color 139,69,19
+		#color 230,159,0
 		# subId=2011 dateSubmitted=2010-07-24
 		#display no
 		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep3 cricket Fri May 13 13:56:40 2011
@@ -1267,7 +1265,7 @@ wgEncode 1
 		longLabel Liver Adult 8-weeks DNaseI HS Signal Rep 2 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 29008.000000
-		color 139,69,19
+		color 230,159,0
 		# subId=2012 dateSubmitted=2010-07-24
 
 		track wgEncodeUwDnaseKidneyC57bl6MAdult8wksSigRep1
@@ -1276,7 +1274,7 @@ wgEncode 1
 		longLabel Kidney Adult 8-weeks DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=Kidney sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 74651.000000
-		color 102,50,200
+		color 204,121,167
 		# subId=2013 dateSubmitted=2010-07-24
 		# was wgEncodeUwDnaseKidneyC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:26 2011
 
@@ -1286,7 +1284,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Signal Rep 8 from ENCODE/UW
 		#subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep8
 		#type bigWig 1.000000 30303.000000
-		#color 139,69,19
+		#color 230,159,0
 		# subId=2014 dateSubmitted=2010-07-24
 		#display no
 		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep8 cricket Fri May 13 13:56:40 2011
@@ -1306,7 +1304,7 @@ wgEncode 1
 		longLabel MEL DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=immortal cellType=MEL sex=M strain=UKN rep=rep1
 		type bigWig 1.000000 123367.000000
-		color 65,105,225
+		color 86,180,233
 		# subId=2017 dateSubmitted=2010-07-24
 		# was wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:27 2011
 
@@ -1316,7 +1314,7 @@ wgEncode 1
 		#longLabel MEL DNaseI HS Signal Rep 3 from ENCODE/UW
 		#subGroups view=Signal age=immortal cellType=MEL sex=M strain=UKN rep=rep3
 		#type bigWig 1.000000 121025.000000
-		#color 65,105,225
+		#color 86,180,233
 		# subId=2018 dateSubmitted=2010-07-24
 		#display no
 		# was wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep3 cricket Fri May 13 13:56:41 2011
@@ -1327,7 +1325,7 @@ wgEncode 1
 		longLabel MEL DNaseI HS Signal Rep 2 from ENCODE/UW
 		subGroups view=Signal age=immortal cellType=MEL sex=M strain=UKN rep=rep2
 		type bigWig 1.000000 228690.000000
-		color 65,105,225
+		color 86,180,233
 		# subId=2019 dateSubmitted=2010-07-24
 		# was wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:27 2011
 
@@ -1337,7 +1335,7 @@ wgEncode 1
 		longLabel T-Naive Adult 8-weeks DNaseI HS Signal Rep 2 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 86604.000000
-		color 204,121,167
+		color 86,180,233
 		# subId=2020 dateSubmitted=2010-07-24
 		# was wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:27 2011
 
@@ -1471,7 +1469,7 @@ wgEncode 1
 		longLabel T-Naive Adult 8-weeks DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=TNaive sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 87148.000000
-		color 204,121,167
+		color 86,180,233
 		# subId=3890 dateSubmitted=2011-04-18
 		# was wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:27 2011
 
@@ -1500,7 +1498,7 @@ wgEncode 1
 		longLabel Heart Adult 8-weeks DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=Heart sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 35686.000000
-		color 189,0,157
+		color 153,38,0
 		# subId=3912 dateSubmitted=2011-04-19
 		# was wgEncodeUwDnaseHeartC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:26 2011
 
@@ -1510,7 +1508,7 @@ wgEncode 1
 		longLabel Kidney Adult 8-weeks DNaseI HS Signal Rep 2 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=Kidney sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 39287.000000
-		color 102,50,200
+		color 204,121,167
 		# subId=3900 dateSubmitted=2011-04-19
 		# was wgEncodeUwDnaseKidneyC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:26 2011
 
@@ -1568,7 +1566,7 @@ wgEncode 1
 		longLabel FatPad Adult 8-weeks DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=Fat sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 52562.000000
-		color 154,205,68
+		color 189,0,157
 		# subId=3908 dateSubmitted=2011-05-02
 		# was wgEncodeUwDnaseFatC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:26 2011
 
@@ -1578,7 +1576,7 @@ wgEncode 1
 		longLabel FatPad Adult 8-weeks DNaseI HS Signal Rep 2 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=Fat sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 53274.000000
-		color 154,205,68
+		color 189,0,157
 		# subId=3909 dateSubmitted=2011-05-02
 		# was wgEncodeUwDnaseFatC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:26 2011
 
@@ -1588,7 +1586,7 @@ wgEncode 1
 		longLabel TReg Adult 8-weeks DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=TReg sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 36553.000000
-		color 204,121,167
+		color 86,180,233
 		# subId=3911 dateSubmitted=2011-05-02
 		# was wgEncodeUwDnaseTregC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:27 2011
 
@@ -1626,6 +1624,7 @@ wgEncode 1
 		shortLabel Patski Sg 2
 		longLabel Patski DNaseI HS Signal Rep 2 from ENCODE/UW
 		subGroups view=Signal age=immortal cellType=Patski sex=M strain=SPBL6 rep=rep2
+		color 204,121,167
 		type bigWig 1.000000 86679.000000
 		# subId=3899 dateSubmitted=2011-05-10
 		# was wgEncodeUwDnasePatskiSpbl6MImmortalRawRep2 cricket Fri May 13 13:52:27 2011
@@ -1635,6 +1634,7 @@ wgEncode 1
 		shortLabel Patski Sg 1
 		longLabel Patski DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=immortal cellType=Patski sex=M strain=SPBL6 rep=rep1
+		color 204,121,167
 		type bigWig 1.000000 101941.000000
 		# subId=3898 dateSubmitted=2011-05-10
 		# was wgEncodeUwDnasePatskiSpbl6MImmortalRawRep1 cricket Fri May 13 13:52:27 2011
@@ -1667,7 +1667,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Signal Rep 10 from ENCODE/UW
 		#subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep10
 		#type bigWig 1.000000 67587.000000
-		#color 139,69,19
+		#color 230,159,0
 		# subId=3905 dateSubmitted=2011-04-19
 		#display no
 		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep10 cricket Fri May 13 13:56:40 2011
@@ -1678,7 +1678,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Signal Rep 4 from ENCODE/UW
 		#subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep4
 		#type bigWig 1.000000 34957.000000
-		#color 139,69,19
+		#color 230,159,0
 		# subId=3902 dateSubmitted=2011-04-19
 		#display no
 		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep4 cricket Fri May 13 13:56:40 2011
@@ -1689,7 +1689,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Signal Rep 5 from ENCODE/UW
 		#subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep5
 		#type bigWig 1.000000 20383.000000
-		#color 139,69,19
+		#color 230,159,0
 		# subId=3903 dateSubmitted=2011-04-19
 		#display no
 		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep5 cricket Fri May 13 13:56:40 2011
@@ -1710,7 +1710,7 @@ wgEncode 1
 		#longLabel Liver Adult 8-weeks DNaseI HS Signal Rep 6 from ENCODE/UW
 		#subGroups view=Signal age=adult8wks cellType=Liver sex=M strain=C57BL6 rep=rep6
 		#type bigWig 1.000000 18306.000000
-		#color 139,69,19
+		#color 230,159,0
 		# subId=3904 dateSubmitted=2011-04-19
 		#display no
 		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep6 cricket Fri May 13 13:56:40 2011
