@@ -855,7 +855,7 @@ TMPDIR=/scratch/tmp
     #	75402821 bases of 1842236818 (4.093%) in intersection
 
 #######################################################################
-## 7-Way Multiz (DONE - 2011-03-18,03-21 - Hiram)
+## 7-Way Multiz (DONE - 2011-05-13 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/anoCar2/bed/multiz7way
     cd /hive/data/genomes/anoCar2/bed/multiz7way
@@ -1054,7 +1054,7 @@ done >> multiz7way.maf
     rm multiz7way*.tab
 
 ############################################################################
-# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2011-05-03 - Hiram)
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2011-05-16 - Hiram)
     # mafAddIRows has to be run on single chromosome maf files, it does not
     #	function correctly when more than one reference sequence
     #	are in a single file.
@@ -1142,7 +1142,7 @@ done >> anoCar2.7way.maf
     rm multiz7way*.tab
 
 #########################################################################
-# MULTIZ7WAY MAF FRAMES (DONE - 2011-03-24 - Hiram)
+# MULTIZ7WAY MAF FRAMES (DONE - 2011-05-16 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/anoCar2/bed/multiz7way/frames
     cd /hive/data/genomes/anoCar2/bed/multiz7way/frames
@@ -1330,7 +1330,7 @@ rm -f $c.gp $c.maf $c.ss
     #	((((anoCar2:0.460438,galGal3:0.356919):0.110793,((hg19:0.156181,mm9:0.285682):0.241872,ornAna1:0.489289):0.118758):0.152026,xenTro2:0.761473):0.567782,gasAcu1:0.567782);
 
 #########################################################################
-# phastCons 7-way (DONE - 2011-03-28 - Hiram)
+# phastCons 7-way (DONE - 2011-05-17 - Hiram)
 
     # split 7way mafs into 10M chunks and generate sufficient statistics 
     # files for # phastCons
@@ -1476,7 +1476,6 @@ rm -fr $tmp
 # Average job time:                   7s       0.12m     0.00h    0.00d
 # Longest finished job:              25s       0.42m     0.01h    0.00d
 # Submission to last job:          1251s      20.85m     0.35h    0.01d
-XXX - running
 
     cd /hive/data/genomes/anoCar2/bed/multiz7way/cons/all
 
@@ -1579,6 +1578,185 @@ set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
 set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# phyloP for 7-way (DONE - 2011-05-17 - Hiram)
+    # run phyloP with score=LRT 
+    ssh encodek
+    mkdir /cluster/data/anoCar2/bed/multiz7way/consPhyloP
+    cd /cluster/data/anoCar2/bed/multiz7way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.510
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/all/all.mod 0.510 > all.mod
+
+    #	following the pattern from panTro3 with grp: "all" (no other grp)
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set file1 = $f:t
+set out = $2
+set cName = $f:t:r
+set n = $f:r:e
+set grp = $cwd:t
+set cons = /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+rm -fr $tmp
+mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/anoCar2/bed/multiz7way/cons/SS/result/$f"
+set useGrp = "$grp.mod"
+ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+mkdir -p $out:h
+sleep 4
+mv $tmp/$file1.wigFix $out
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$cName
+rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+rmdir --ignore-fail-on-non-empty $cons/tmp
+'_EOF_'
+    # << happy emacs
+
+    # Create list of chunks
+    find ../../cons/SS/result -type f | grep ".ss$" \
+	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	3291 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/all
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    # the -ram=8g will allow only one job per node to slow this down since
+    #	it would run too fast otherwise
+    para -ram=8g create jobList
+    para try ... check ... etc ...
+    para -maxJob=64 push
+    para time > run.time
+# Completed: 3291 of 3291 jobs
+# CPU time in finished jobs:       3580s      59.66m     0.99h    0.04d  0.000 y
+# IO & Wait Time:                 21571s     359.52m     5.99h    0.25d  0.001 y
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest finished job:              31s       0.52m     0.01h    0.00d
+# Submission to last job:          1286s      21.43m     0.36h    0.01d
+
+    # make downloads
+    mkdir downloads
+
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP7way.wigFix.gz) &
+    #	real    4m11.100s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phyloP7way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/anoCar2/chrom.sizes \
+	phyloP7way.bw) > bigWig.log 2>&1 &
+    egrep "real|VmPeak" bigWig.log
+    # pid=1977: VmPeak:      2291148 kB
+    #	real    2m47.897s
+
+    bigWigInfo phyloP7way.bw 
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 348,394,293
+# primaryIndexSize: 14,137,804
+# zoomLevels: 10
+# chromCount: 3186
+# basesCovered: 209,259,312
+# mean: 0.433542
+# min: -1.565000
+# max: 2.266000
+# std: 0.726042
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phyloP7way.wigFix.gz \
+	| wigEncode stdin phyloP7way.wig phyloP7way.wib) &
+    #	Converted stdin, upper limit 2.27, lower limit -1.56
+    #	real    1m3.017s
+
+    du -hsc *.wi?
+    #	200M    phyloP7way.wib
+    #	44M     phyloP7way.wig
+    #	244M    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP7way.wib /gbdb/anoCar2/multiz7way/phyloP7way.wib
+    nice hgLoadWiggle -pathPrefix=/gbdb/anoCar2/multiz7way anoCar2 \
+	phyloP7way phyloP7way.wig
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh anoCar2 phyloP7way
+# db.table      min max mean count sumData stdDev viewLimits
+# anoCar2.phyloP7way      -1.565 2.266 0.433542 209259312 9.07227e+07 0.726042
+# viewLimits=-1.565:2.266
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=anoCar2 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phyloP7way > histogram.data 2>&1
+    #	real    0m19.396s
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000233
+# median 0.000518
+# Q3 0.000759
+# average 0.001003
+# min 0.000000
+# max 0.110084
+# count 997
+# total 1.000009
+# standard deviation 0.004194
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Lizard anoCar2 Histogram phyloP7way track"
+set xlabel " phyloP7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.007]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
