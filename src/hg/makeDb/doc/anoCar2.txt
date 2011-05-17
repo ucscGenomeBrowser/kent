@@ -1766,3 +1766,67 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
+# download data for 7-way (DONE - 2011-01-19 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/anoCar2/phastCons7way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/anoCar2/phastCons7way
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/cons/all/downloads/phastCons7way.wigFix.gz \
+	./phastCons7way.wigFix.gz
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/cons/all/phastCons7way.bw \
+	./phastCons7way.bw
+
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/cons/all/all.mod \
+	./vertebrate.mod
+    # use a README from a recent multiz like this, this one is from panTro3
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/cons/README.txt .
+    md5sum * > /hive/data/genomes/anoCar2/bed/multiz7way/cons/md5sum.txt
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/cons/md5sum.txt .
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/anoCar2/phyloP7way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/anoCar2/phyloP7way
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/all/downloads/phyloP7way.wigFix.gz \
+	./phyloP7way.wigFix.gz
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/all/phyloP7way.bw \
+	./phyloP7way.bw
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/run.phyloP/primate.mod \
+	./primate.mod
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/run.phyloP/all.mod \
+	./vertebrate.mod
+    # use a README from a recent multiz like this, this one is from panTro3
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/README.txt .
+    md5sum * > /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/md5sum.txt
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/md5sum.txt .
+
+    mkdir /hive/data/genomes/anoCar2/bed/multiz7way/downloads
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/downloads
+    # this was already done elsewhere:
+    grep TREE ../cons/all/all.mod | sed -e "s/TREE: //" > 7way.nh
+    /cluster/bin/phast/tree_doctor --rename \
+"anoCar2->Lizard; hg19->Human; xenTro2->X_tropicalis; galGal3->Chicken; ornAna1->Platypus; mm9->Mouse; gasAcu1->Stickleback;" \
+	t.nh > anoCar2.commonNames.7way.nh
+    rm t.nh
+
+    time cp -p ../anno/anoCar2.7way.maf ./multiz7way.maf
+    #	real    1m13.847s
+    time gzip multiz7way.maf
+    #	real    9m46.886s
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/anoCar2/multiz7way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/anoCar2/multiz7way
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/downloads/7way.nh .
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/downloads/anoCar2.commonNames.7way.nh .
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/downloads/multiz7way.maf.gz .
+
+    # use a README from a recent multiz like this, this one is from danRer7
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/downloads/README.txt .
+
+    md5sum *.nh *.gz *.txt \
+	> /hive/data/genomes/anoCar2/bed/multiz7way/downloads/md5sum.txt
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/downloads/md5sum.txt .
+
+#############################################################################
