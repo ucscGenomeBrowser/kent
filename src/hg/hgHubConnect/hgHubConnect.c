@@ -220,10 +220,12 @@ static void doClearHub(struct cart *theCart)
 {
 char *url = cartOptionalString(cart, hgHubDataText);
 
+printf("<pre>clearing hub %s\n",url);
 if (url != NULL)
     hubClearStatus(url);
 else
     errAbort("must specify url in %s\n", hgHubDataText);
+printf("<pre>Completed\n");
 }
 
 void doMiddle(struct cart *theCart)
@@ -266,7 +268,7 @@ else
 cartWebEnd();
 }
 
-char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl, hgHubDoAdd, hgHubDoClear hgHubDataText, NULL};
+char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl, hgHubDoAdd, hgHubDoClear, hgHubDataText, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
