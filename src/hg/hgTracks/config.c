@@ -114,7 +114,8 @@ for (group = groupList; group != NULL; group = group->next)
         group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
     hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
     hPrintf("&nbsp;&nbsp;&nbsp;");
-    hPrintf("<span style='float:right;'>");
+    //hPrintf("<span style='float:right;'>"); //FIXME: backing out float:right until I figure out why FF wraps the TH to 2 lines
+    hPrintf("<span>");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
 	   "onClick=\"document.mainForm.%s.value='%s'; %s\" title='Hide all tracks in this groups'>",
 	    configHideAll, "hide all", configGroupTarget, group->name,
