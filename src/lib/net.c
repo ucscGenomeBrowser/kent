@@ -1475,17 +1475,26 @@ while (TRUE)
 	    }
 	else 
 	    {
-	    struct netParsedUrl npu;
+	    struct netParsedUrl npu, newNpu;
 	    /* Parse the old URL to make parts available for graft onto the redirected url. */
-	    /* This makes redirection work with byterange urls */
-	    /* If needed we can preserve the user and password from the old url in a similar way. */
+	    /* This makes redirection work with byterange urls and user:password@ */
 	    netParseUrl(url, &npu);
+	    netParseUrl(newUrl, &newNpu);
+	    boolean updated = FALSE;
 	    if (npu.byteRangeStart != -1)
 		{
-		struct netParsedUrl newNpu;
-		netParseUrl(newUrl, &newNpu);
 		newNpu.byteRangeStart = npu.byteRangeStart;
 		newNpu.byteRangeEnd = npu.byteRangeEnd;
+		updated = TRUE;
+		}
+	    if ((npu.user[0] != 0) && (newNpu.user[0] == 0))
+		{
+		safecpy(newNpu.user,     sizeof newNpu.user,     npu.user);
+		safecpy(newNpu.password, sizeof newNpu.password, npu.password);
+		updated = TRUE;
+		}
+	    if (updated)
+		{
 		freeMem(newUrl);
 		newUrl = urlFromNetParsedUrl(&newNpu);
 		}
