@@ -24,8 +24,6 @@ class CvFile(RaFile):
 		ek, ev = e.readStanza(stanza)
 		type = e['type']
 
-		# this will become a 30 case if-else block if I do it this way,
-		# I'll probably create a dictionary for this.
 		if type == 'Antibody':
 			entry = AntibodyStanza()
 		elif type == 'Cell Line':
