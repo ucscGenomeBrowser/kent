@@ -27,7 +27,7 @@ include wgEncodeGisDnaPet.new.ra alpha
 include wgEncodeHaibGenotype.ra alpha
 
 # BU Orchid (wrangler: cricket)
-include wgEncodeBuOrchid.ra alpha,beta
+include wgEncodeBuOrchid.ra
 
 # Affy Rna Chip (wrangler: cricket)
 include wgEncodeAffyRnaChip.ra beta,public
