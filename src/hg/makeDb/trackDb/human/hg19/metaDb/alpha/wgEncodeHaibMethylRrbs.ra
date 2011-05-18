@@ -4421,7 +4421,6 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH001349
 expId 1349
 fileName wgEncodeHaibMethylRrbsHepg2HaibSitesRep1.bedRrbs.gz
-geoSampleAccession GSM683795
 grant Myers
 lab HudsonAlpha
 labExpId SL715
@@ -4446,7 +4445,6 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH001349
 expId 1349
 fileName wgEncodeHaibMethylRrbsHepg2HaibSitesRep2.bedRrbs.gz
-geoSampleAccession GSM683855
 grant Myers
 lab HudsonAlpha
 labExpId SL714
@@ -9045,4 +9043,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -1409288646
+# MAGIC: -1613740045

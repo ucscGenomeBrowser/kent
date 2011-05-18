@@ -11,9 +11,9 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release2 (new+untouched):
-    Tables: 212
-    Files: 349
-    Gbdbs: 268
+    Tables: 208
+    Files: 343
+    Gbdbs: 264
 
 A) Untouched Tables (43):
 wgEncodeCshlShortRnaSeqGm12878CellShortAln
@@ -167,7 +167,7 @@ B') Deprecated files (1 downloadables, 0 gbdbs):
 wgEncodeCshlShortRnaSeqCellShortRawData.fastq.gz
 
 
-C) New tables (169):
+C) New tables (165):
 wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1
 wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2
 wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1
@@ -186,7 +186,6 @@ wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep1
 wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep2
 wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep1
 wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep2
-wgEncodeCshlShortRnaSeqGm12878CellShortTransfrags
 wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep1
 wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep2
 wgEncodeCshlShortRnaSeqGm12878CellShorttotalMinusRawRep1
@@ -241,11 +240,8 @@ wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1
 wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep2
 wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1
 wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2
-wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep1
 wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2
-wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep1
 wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2
-wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep1
 wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2
 wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1
 wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2
@@ -338,7 +334,7 @@ wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep2
 wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep1
 wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep2
 
-C') New files (293 downloadables, 235 gbdbs):
+C') New files (287 downloadables, 231 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/
     NOT on RR but must be placed in:
@@ -375,7 +371,6 @@ wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep2.bigWig
 wgEncodeCshlShortRnaSeqBjCellShorttotalRawDataRep1.fastq.gz
 wgEncodeCshlShortRnaSeqBjCellShorttotalRawDataRep2.fastq.gz
 wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam.bai
-wgEncodeCshlShortRnaSeqGm12878CellShortTransfrags.shortFrags.gz
 wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep1.bam
 wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep1.bam.bai
 wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep2.bam
@@ -468,15 +463,10 @@ wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1.bigWig
 wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2.bigWig
 wgEncodeCshlShortRnaSeqHepg2CellShorttotalRawDataRep1.fastq.gz
 wgEncodeCshlShortRnaSeqHepg2CellShorttotalRawDataRep2.fastq.gz
-wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep1.bam
-wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep1.bam.bai
 wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2.bam
 wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2.bam.bai
-wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep1.bigWig
 wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2.bigWig
-wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep1.bigWig
 wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2.bigWig
-wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalRawDataRep1.fastq.gz
 wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalRawDataRep2.fastq.gz
 wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1.bam
 wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1.bam.bai
@@ -737,13 +727,9 @@ wgEncodeCshlShortRnaSeqSknshraCellShorttotalRawDataRep2.fastq.gz
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2.bam.bai
-/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1.bam.bai

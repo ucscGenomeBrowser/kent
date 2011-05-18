@@ -15,6 +15,8 @@
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "hui.h"
+#include "errCatch.h"
+#include "obscure.h"
 
 
 boolean isHubTrack(char *trackName)
@@ -174,8 +176,17 @@ int hubIdFromTrackName(char *trackName)
 /* Given something like "hub_123_myWig" return 123 */
 {
 assert(startsWith("hub_", trackName));
-trackName += 4;
-return sqlUnsigned(trackName);
+char *ptr1 = trackName;
+ptr1 += 4;
+char *ptr2 = strchr(ptr1, '_');
+
+if (ptr2 == NULL)
+    errAbort("hub track %s not in correct format\n", trackName);
+char save = *ptr2;
+*ptr2 = 0;
+unsigned val = sqlUnsigned(ptr1);
+*ptr2 = save;
+return  val;
 }
 
 char *hubConnectSkipHubPrefix(char *trackName)
@@ -272,5 +283,200 @@ for (parent = tdb; parent != NULL; parent = parent->parent)
 trackHubClose(&hub);
 
 return tdb;
+}
+
+static void enterHubInStatus(struct trackHub *tHub, boolean unlisted)
+/* put the hub status in the hubStatus table */
+{
+struct sqlConnection *conn = hConnectCentral();
+
+/* calculate dbList */
+struct dyString *dy = newDyString(1024);
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(tHub->genomeHash);
+int dbCount = 0;
+
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    dbCount++;
+    dyStringPrintf(dy,"%s,", hel->name);
+    }
+
+
+char query[512];
+safef(query, sizeof(query), "insert into %s (hubUrl,status,shortLabel, longLabel, dbList, dbCount) values (\"%s\",%d,\"%s\",\"%s\", \"%s\", %d)",
+    hubStatusTableName, tHub->url, unlisted ? 1 : 0,
+    tHub->shortLabel, tHub->longLabel,
+    dy->string, dbCount);
+sqlUpdate(conn, query);
+hDisconnectCentral(&conn);
+}
+
+static unsigned getHubId(char *url, char **errorMessage)
+/* find id for url in hubStatus table */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[512];
+char **row;
+boolean foundOne = FALSE;
+int id = 0;
+
+safef(query, sizeof(query), "select id,errorMessage from %s where hubUrl = \"%s\"", hubStatusTableName, url);
+
+struct sqlResult *sr = sqlGetResult(conn, query);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (foundOne)
+	errAbort("more than one line in %s with hubUrl %s\n", 
+	    hubStatusTableName, url);
+
+    foundOne = TRUE;
+
+    char *thisId = row[0], *thisError = row[1];
+
+    if (!isEmpty(thisError))
+	*errorMessage = cloneString(thisError);
+
+    id = sqlUnsigned(thisId);
+    }
+sqlFreeResult(&sr);
+
+hDisconnectCentral(&conn);
+
+return id;
+}
+
+static boolean hubHasDatabase(unsigned id, char *database)
+/* check to see if hub specified by id supports database */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[512];
+
+safef(query, sizeof(query), "select dbList from %s where id=%d", 
+    hubStatusTableName, id); 
+char *dbList = sqlQuickString(conn, query);
+boolean gotIt = FALSE;
+
+if (nameInCommaList(database, dbList))
+    gotIt = TRUE;
+
+hDisconnectCentral(&conn);
+
+freeMem(dbList);
+
+return gotIt;
+}
+
+static boolean fetchHub(char *database, char *url, boolean unlisted)
+{
+struct errCatch *errCatch = errCatchNew();
+struct trackHub *tHub = NULL;
+boolean gotWarning = FALSE;
+unsigned id = 0;
+
+if (errCatchStart(errCatch))
+    tHub = trackHubOpen(url, "1"); // open hub.. it'll get renamed later
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    gotWarning = TRUE;
+    warn(errCatch->message->string);
+    }
+errCatchFree(&errCatch);
+
+if (gotWarning)
+    {
+    return 0;
+    }
+
+if (hashLookup(tHub->genomeHash, database) != NULL)
+    {
+    enterHubInStatus(tHub, unlisted);
+    }
+else
+    {
+    warn("requested hub at %s does not have data for %s\n", url, database);
+    return 0;
+    }
+
+trackHubClose(&tHub);
+
+char *errorMessage = NULL;
+id = getHubId(url, &errorMessage);
+return id;
+}
+
+static void getAndSetHubStatus(char *database, struct cart *cart, char *url, 
+    boolean set, boolean unlisted)
+{
+char *errorMessage = NULL;
+unsigned id;
+
+if ((id = getHubId(url, &errorMessage)) == 0)
+    {
+    if ((id = fetchHub(database, url, unlisted)) == 0)
+	return;
+    }
+else if (!hubHasDatabase(id, database))
+    {
+    warn("requested hub at %s does not have data for %s\n", url, database);
+    return;
+    }
+
+char hubName[32];
+safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
+if (set)
+    cartSetString(cart, hubName, "1");
+}
+
+unsigned hubFindOrAddUrlInStatusTable(char *database, struct cart *cart,
+    char *url, char **errorMessage)
+/* find this url in the status table, and return its id and errorMessage (if an errorMessage exists) */
+{
+int id = 0;
+
+*errorMessage = NULL;
+
+if ((id = getHubId(url, errorMessage)) > 0)
+    return id;
+
+getAndSetHubStatus(database, cart, url, FALSE, FALSE);
+
+if ((id = getHubId(url, errorMessage)) == 0)
+    errAbort("inserted new hubUrl %s, but cannot find it", url);
+
+return id;
+}
+
+void hubCheckForNew(char *database, struct cart *cart)
+/* see if the user just typed in a new hub url */
+{
+char *url = cartOptionalString(cart, hgHubDataText);
+
+if (url != NULL)
+    {
+    getAndSetHubStatus(database, cart, url, TRUE, TRUE);
+    cartRemove(cart, hgHubDataText);
+    }
+}
+
+void hubClearStatus(char *url)
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[512];
+
+safef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", hubStatusTableName, url);
+unsigned id = sqlQuickNum(conn, query);
+
+if (id == 0)
+    errAbort("could not find url %s in status table (%s)\n", 
+	url, hubStatusTableName);
+
+safef(query, sizeof(query), "delete from %s where hubUrl = \"%s\"", hubStatusTableName, url);
+
+sqlUpdate(conn, query);
+hDisconnectCentral(&conn);
+
 }
 

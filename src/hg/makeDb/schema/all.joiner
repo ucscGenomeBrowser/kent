@@ -1452,6 +1452,12 @@ identifier knownGeneId dependency
     $kgDb.kg3ToKg4.newId exclude=
     $kgDb.kgTargetAli.qName full
     hg19.kg4ToKg5.newId
+    mm9.kg4ToKg5.newId
+
+identifier knownGeneOld4Id dependency
+"Previous UCSC Gene build"
+    $kgDb.knownGeneOld4.name
+    $kgDb.kg4ToKg5.oldId full
 
 identifier knownGeneOld3Id dependency
 "Previous UCSC Gene build"
