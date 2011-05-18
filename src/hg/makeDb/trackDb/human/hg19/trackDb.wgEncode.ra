@@ -84,7 +84,7 @@ include wgEncodeUwDgf.ra beta,public
 
 # Riken CAGE (wrangler: cricket)
 include wgEncodeRikenCage.ra beta,public
-include wgEncodeRikenCage.new.ra alpha
+#include wgEncodeRikenCage.new.ra alpha
 
 # CSHL Small RNA (wrangler: cricket)
 include wgEncodeCshlShortRnaSeq.ra beta,public
@@ -101,8 +101,9 @@ include wgEncodeCaltechRnaSeq.new.ra alpha
 # CSHL Long Rna Seq (wrangler: cricket)
 include wgEncodeCshlLongRnaSeq.ra alpha
 
-# Yale Rna Seq (wrangler: cricket)
-include wgEncodeYaleRnaSeq.ra alpha
+# SYDH  Rna Seq (wrangler: cricket)
+# used to be yale
+include wgEncodeSydhRnaSeq.ra alpha
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra alpha
