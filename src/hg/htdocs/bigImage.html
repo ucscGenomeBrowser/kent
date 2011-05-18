@@ -568,13 +568,14 @@ if (persp == null) return;
 if (pbox  == null) return;
 
 if (thumb == null) { // no thumb to follow with, so hide box and exit
-    pclip.style.left = -1000;
-    pclip.style.top = -1000;
+    pclip.style.left = -1000 + 'px';
+    pclip.style.top = -1000 + 'px';
     return;
 }    
 
 var wt = thumb.offsetWidth;
 var ht = thumb.offsetHeight;
+//alert('wt='+wt+' ht='+ht);
 
 //alert('img'
 //   +'\nthumb.width='+thumb.width
@@ -623,24 +624,31 @@ tox += thumb.offsetLeft;
 toy += thumb.offsetTop;
    
 //alert('tox='+tox+' toy='+toy);
-//alert('persp.style.left='+persp.style.left+' persp.style.top='+persp.style.top);
 
 var wp = wc/z * wt/wOrig[0];
 var hp = hc/z * ht/hOrig[0];
+//alert('wp='+wp+' hp='+hp);
 
+//alert('pbox.width='+pbox.width+' pbox.height='+pbox.height);
+//alert('pbox.style.width='+pbox.style.width+' pbox.style.height='+pbox.style.height);
 // set the width and height box, i.e. the 1x1 transparent gif with border
-pbox.width  = wp;
-pbox.height = hp;
+//pbox.width  = wp+'px';
+//pbox.height = hp+'px';
+pbox.style.width  = wp+'px';
+pbox.style.height = hp+'px';
 
+//alert('x='+x+' y='+y+' wOrig[0]='+wOrig[0]+' hOrig[0]='+hOrig[0]);
+//alert('persp.style.left='+persp.style.left+' persp.style.top='+persp.style.top);
 // use persp div to position the "box"
-persp.style.left = 0 - wp/2 + x*wt/wOrig[0];
-persp.style.top  = 0 - hp/2 + y*ht/hOrig[0];
+persp.style.left = (0 - wp/2 + x*wt/wOrig[0])+'px';
+persp.style.top  = (0 - hp/2 + y*ht/hOrig[0])+'px';
 
+//alert( 'pclip.style.left='+pclip.style.left+' pclip.style.top='+pclip.style.top + ' pclip.style.width='+pclip.style.width+' pclip.style.height='+pclip.style.height);
 // position clipping div over the thumbnail
-pclip.style.left = tox;
-pclip.style.top  = toy;
-pclip.style.width = wt;
-pclip.style.height  = ht;
+pclip.style.left = tox+'px';
+pclip.style.top  = toy+'px';
+pclip.style.width = wt+'px';
+pclip.style.height  = ht+'px';
 
 }
 

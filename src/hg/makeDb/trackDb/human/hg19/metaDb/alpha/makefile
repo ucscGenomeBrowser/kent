@@ -24,6 +24,7 @@ wgEncodeSunyRipSeq.ra \
 wgEncodeSunySwitchgear.ra \
 wgEncodeSydhHistone.ra \
 wgEncodeSydhNsome.ra \
+wgEncodeSydhRnaSeq.ra \
 wgEncodeSydhTfbs.ra \
 wgEncodeUmassDekker5C.ra \
 wgEncodeUncBsuProt.ra \
@@ -37,7 +38,6 @@ wgEncodeRikenCage.ra \
 wgEncodeHaibMethylSeq.ra \
 wgEncodeUwTfbs.ra \
 wgEncodeGisRnaPet.ra \
-wgEncodeYaleRnaSeq.ra \
 wgEncodeMapability.ra \
 wgEncodeUwDgf.ra \
 wgEncodeDukeAffyExon.ra \

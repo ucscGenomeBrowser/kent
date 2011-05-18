@@ -7,7 +7,7 @@ set anoCar anoCar1,anoCar2
 set anoGam anoGam1
 set apiMel apiMel1,apiMel2
 set aplCal aplCal1
-set bosTau bosTau2,bosTau3,bosTau4,bosTau5
+set bosTau bosTau2,bosTau3,bosTau4,bosTau5,bosTau6
 set braFlo braFlo1
 set bruMal bruMal1
 set caeJap caeJap1,caeJap3
@@ -2279,9 +2279,26 @@ identifier locusLinkId external=LocusLink
     $kgDb,!hg16,!mm8.knownToLocusLink.value minCheck=0.98
     hg16,mm8.knownToLocusLink.value minCheck=0.96
 
+identifier omimLocationId external=OMIM
+"Online Mendelian Inheritance in Man (OMIM) Location ID"
+    $hg.omimLocation.name dupeOk exclude=0
+    $hg.omimGeneMap.omimId minCheck=0.10
+
+identifier omimAvSnpId external=OMIM
+"Online Mendelian Inheritance in Man (OMIM) AV SNP ID"
+    $hg.omimAvSnp.name dupeOk exclude=0
+
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
     $gbd.refLink.omimId dupeOk exclude=0
+    $hg.omimGene2.name minCheck=0.90
+    $hg.omimGeneMap.omimId minCheck=0.85
+
+identifier omimAvId external=OMIM
+"Online Mendelian Inheritance in Man (OMIM) AV ID"
+    $hg.omimAv.avId dupeOk exclude=0
+    $hg.omimAvRepl.avId minCheck=0.90
+    $hg.omimAvSnp.name minCheck=0.90
 
 identifier omimGeneId
 "omimGene ID"
@@ -2290,6 +2307,16 @@ identifier omimGeneId
     $hg.refLink.omimId exclude=0 minCheck=0.98
     $hg.omimMorbidMap.omimId minCheck=0.75
     $hg.omimToKnownCanonical.omimId
+
+identifier omimGene2Id
+"omimGene2 ID"
+    $hg.omimGene2.name dupeOk
+    $hg.omimGeneSymbol.omimId minCheck=0.90
+    $hg.omimAv.omimId minCheck=0.90
+    $hg.omimAvRepl.omimId minCheck=0.90
+    $hg.omimDisorderPhenotype.omimId minCheck=0.75
+    $hg.omimDisorderMap.omimId minCheck=0.75
+    $hg.refLink.omimId exclude=0 minCheck=0.98
 
 identifier unigeneId fuzzy
 "NCBI UniGene Cluster ID"

@@ -180,8 +180,7 @@ our %validators = (
     obtainedBy => \&validateObtainedBy,
     md5sum => \&validateNoValidation,
     bioRep => \&validateNoValidation,
-    tissueSourceType => \&validateControlledVocabOrControl,
-    uniqueness => \&validateNoValidation,
+	tissueSourceType => \&validateControlledVocabOrControl,
     default => \&validateControlledVocab,
     );
 
@@ -1207,10 +1206,10 @@ sub printCompositeTdbSettings {
                                 if (defined($terms{"control"}->{$term})) {
                                     $tag=$terms{"control"}->{$term}->{"tag"};
                                 }
-                                elsif (defined($terms{"lab"}->{$term})) {
-                                    $tag=$terms{"lab"}->{$term}->{"tag"};
-                                } else {
-                                    $tag=$term;
+			       	elsif (defined($terms{"lab"}->{$term})) {
+			    	    $tag=$terms{"lab"}->{$term}->{"tag"};
+				}	    else {
+                                    die "'$term' is not a registered '$cvTypeVar' term\n";
                                 }
                             }
                             if (!defined($tags{$tag})) {
@@ -1322,7 +1321,7 @@ sub makeDownloadTargetFileName {
         $fileType = "bed" if ($type =~ /^bed /);
 
         if (@srcFiles > 1) {
-                if (($type eq "fastq") || ($type eq "doc")) {
+            if (($type eq "fastq") || ($type eq "doc")) {
                 $target = "$tablename.$fileType.tgz"; # will want to tar these
             } else {
                 $target = "$tablename.$fileType.gz";  # will cat and gz these
@@ -1340,9 +1339,15 @@ sub makeDownloadTargetFileName {
             }
 
             if (Encode::isTarZipped($srcFile)) {
-                $target = "$tablename.$fileType.tgz";
+                if (Encode::isTarZipped(".$fileType")) {
+                    $target = "$tablename.$fileType"; # $fileType includes .tgz
+                } else {
+                    $target = "$tablename.$fileType.tgz";
+                }
+            } elsif (Encode::isZipped($srcFile) && Encode::isZipped(".$fileType")) {
+                $target = "$tablename.$fileType"; # $fileType includes .gz
             } else {
-                $target = "$tablename.$fileType.gz";
+                $target = "$tablename.$fileType.gz"; # default of single file will be gz (even for a doc or fastq)
             }
         }
     }
@@ -1979,9 +1984,6 @@ foreach my $ddfLine (@ddfLines) {
                 $cvTypeVar = "control";
             }
             my $val = $terms{$cvTypeVar}->{$hash{$var}}->{'tag'};
-            if(!defined($val)) {
-                $val = $hash{$var};
-            }
             $val = ucfirst(lc($val));
             if($val ne 'None') {  # Special control term does not show up in the name!
                 # trailing + => Plus, - => Neg (e.g. H9ES-AFP+)
@@ -2012,10 +2014,6 @@ foreach my $ddfLine (@ddfLines) {
         } elsif($hash{'freezeDate'}) {
             $shortSuffix = $hash{'freezeDate'};
             $longSuffix = $hash{'freezeDate'};
-            $pushQDescription = $longSuffix;
-        } elsif ($hash{"uniqueness"}) {
-            $shortSuffix = "$hash{'uniqueness'}";
-            $longSuffix = "in $hash{'uniqueness'}";
             $pushQDescription = $longSuffix;
         } elsif ($hash{"species"}) {
             $pushQDescription = "$hash{'species'}";
@@ -2066,11 +2064,7 @@ foreach my $ddfLine (@ddfLines) {
             if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
                 $cvTypeVar = "control";
             }
-            if(defined($terms{$cvTypeVar}->{$hash{$var}}->{'tag'})) {
-                $subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
-            } else {
-                $subGroups .= " $groupVar=$hash{$var}";
-            }
+            $subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
         }
          #Venkat: Commented out the below line such that if any lab has replicates the replicate number will be placed
 	 #        in the table name. The below code was found to be to specific, however if there are any problems
@@ -2140,6 +2134,20 @@ foreach my $ddfLine (@ddfLines) {
     $metadata .= " dateSubmitted=$dateSubmitted";
     $metadata .= " dateUnrestricted=$dateUnrestricted";
 
+    # We should add attic terms to the mdb.txt.  At least those that we can recognize
+    if ($daf->{TRACKS}{$view}{auxilary} && $daf->{TRACKS}{$view}{auxilary} eq "yes") {
+        $metadata .= " attic=auxValid";
+    } elsif ($ddfLine->{display} && $ddfLine->{display} eq "no") {
+        $metadata .= " attic=auxExp";
+    } elsif ($type eq "doc") {
+        if ($daf->{TRACKS}{$view}{supplemental} && $daf->{TRACKS}{$view}{supplemental} eq "yes") {
+            # FIXME: at this point, the pipeline is unprepared to deal with "sup" which is placed in "supplemental" subdir.
+            $metadata .= " attic=sup";
+        } else {
+            $metadata .= " attic=auxSup";
+        }
+    }
+
     $tableName =~ "/Utaustin/Uta/";  # Special case for certain transgressors
     if(length($tableName) > 64) {
         $tableName =~ "/Hudsonalpha/Haib/" if length($tableName) > 64; # Special case for certain transgressors
@@ -2149,7 +2157,6 @@ foreach my $ddfLine (@ddfLines) {
         $tableName =~ "/Control/Ctrl/" if length($tableName) > 64;
         die "Table name [$tableName] too long, must be <= 64 chars, got [".length($tableName)."]\n" if length($tableName) > 64;
     }
-
 
     if($tableNamesUsed{$tableName}++) {
         dieTellWrangler("System Error: identical tableName '$tableName' was generated by multiple data sets\n");

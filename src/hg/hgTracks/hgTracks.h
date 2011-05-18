@@ -1180,7 +1180,7 @@ void linkedFeaturesSeriesDrawAt(struct track *tg, void *item,
 	MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a linked features series item at position. */
 
-#define NEXT_ITEM_ARROW_BUFFER 5
+#define NEXT_ITEM_ARROW_BUFFER 1
 /* Space around "next item" arrow (in pixels). */
 
 void addWikiTrack(struct track **pGroupList);

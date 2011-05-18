@@ -42,7 +42,7 @@ struct node {
 
 struct nodelist {
     struct nodelist *next;  /* next in list */
-    struct node *node;      
+    struct node *node;
 };
 
 struct nodelist* allNodes = NULL;
@@ -81,26 +81,24 @@ if (sameString(position, "genome") || sameString(position, "hgBatch"))
 puts(
 "<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
 "<CENTER>"
-"<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
-"<TR><TD><FONT SIZE=\"2\">\n"
-"<CENTER>\n"
+"<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
+"<TR><TD style='text-align:center; font-size:small;'>\n"
 "The UCSC Genome Browser was created by the \n"
 "<A HREF=\"/staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
 "<BR>"
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
-"</CENTER>\n"
-"</FONT></TD></TR></TABLE></CENTER>\n"
+"</TD></TR></TABLE></CENTER>\n"
 );
 
 puts(
 "<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>\n"
-"<center>\n"
-"<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
+"<CENTER>\n"
+"<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"
-"<table BGCOLOR=\"FEFDEF\" BORDERCOLOR=\"CCCC99\" BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"  
+"<table CELLPADDING=0 CELLSPACING=0 style='background-color:#FEFDEF; border-style:none;'>\n"
 "<tr><td>\n"
-"<table bgcolor=\"fffef3\" border=0>\n"
+"<table bgcolor='#FFFEF3' border=0>\n"
 "<tr>\n"
 "<td>\n"
 "<table><tr>");
@@ -170,18 +168,18 @@ printf("</td>\n");
 
 puts(
 "</tr></table>\n"
-"</td></tr><tr><td><center>\n"
+"</td></tr><tr><td><CENTER>\n"
 "<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.<BR>\n"
-"</center>\n"
-"</td></tr><tr><td><center>\n"
+"</CENTER>\n"
+"</td></tr><tr><td><CENTER>\n"
 );
 cgiMakeButton("customTrackPage", "Add Your Own Custom Tracks");
-puts("</center>\n"
+puts("</CENTER>\n"
 "</td></tr></table>\n"
 "</td></tr></table>\n"
 "</td></tr></table>\n"
 );
-puts("</center>");
+puts("</CENTER>");
 
 hgPositionsHelpHtml(organism, db);
 
@@ -204,7 +202,7 @@ puts("</FORM><BR>");
 
 boolean getGenesAsList()
 /* create name-list from geneString,
-   so that we don't have to keep re-parsing 
+   so that we don't have to keep re-parsing
    the cart string in different places
 */
 {
@@ -221,12 +219,12 @@ subChar(ss, '\r',' ');
 while (1)
     {
     if (!(w = nextWord(&s))) break;
-    if(slNameInList(geneNames, w))  
+    if(slNameInList(geneNames, w))
 	/* could be optimized, but not expecting large lists for ring */
 	{
 	safef(emsg,sizeof(emsg), "Duplicate gene id (%s) found in list.",w);
 	errMsg = cloneString(emsg);
-	freez(&ss);    
+	freez(&ss);
 	return FALSE;
 	}
     slNameAddHead(&geneNames, w);
@@ -238,7 +236,7 @@ if (c==0)
     errMsg = "No genes in list. Please specify genes for ring.";
     return FALSE;
     }
-freez(&ss);    
+freez(&ss);
 return TRUE;
 }
 
@@ -259,9 +257,9 @@ freeDyString(&geneList);
 }
 
 struct bdgpGeneInfo *bdgpGeneInfoLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all interaction from table that satisfy the query given.  
+/* Load all interaction from table that satisfy the query given.
  * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
+ * or 'select example.* from example, anotherTable where example.something =
  * anotherTable.something'.
  * Dispose of this with bdgpGeneInfoFreeList(). */
 {
@@ -304,7 +302,7 @@ while(sn)
 	}
     sn = sn->next;
     }
-//uglyf("<br>SQL=%s<br><br>\n",query->string);    
+//uglyf("<br>SQL=%s<br><br>\n",query->string);
 struct sqlConnection* conn = hAllocConn();
 result = bdgpGeneInfoLoadByQuery(conn, query->string);
 for(this=result;this;this=this->next)
@@ -314,7 +312,7 @@ for(this=result;this;this=this->next)
     //uglyf("<br>adding %s=%s<br>\n",this->symbol,this->flyBaseId); // debug
     hashAdd(aliasHash,this->symbol,cloneString(this->flyBaseId));
     }
-// Mysterious crashes if I free this list: 
+// Mysterious crashes if I free this list:
 //bdgpGeneInfoFreeList(&result);
 hFreeConn(&conn);
 freeDyString(&query);
@@ -361,7 +359,7 @@ while(sn)
     sep = "or";
     sn = sn->next;
     }
-//uglyf("<br>SQL=%s<br><br>\n",query->string);    
+//uglyf("<br>SQL=%s<br><br>\n",query->string);
 struct sqlConnection* conn = hAllocConn();
 result = interactionLoadByQuery(conn, query->string);
 hFreeConn(&conn);
@@ -387,17 +385,15 @@ if (!sameString(errMsg,""))
 puts(
 "<FORM ACTION=\"/cgi-bin/hgGeneRing\" NAME=\"mainForm\" METHOD=\"GET\">\n"
 "<CENTER>"
-"<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
-"<TR><TD><FONT SIZE=\"2\">\n"
-"<CENTER>\n"
+"<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
+"<TR><TD style='text-align:center; font-size:x-small;'>\n"
 "Enter gene list for gene network ring.\n"
-"</CENTER>\n"
-"</FONT></TD></TR></TABLE></CENTER>\n"
+"</TD></TR></TABLE></CENTER>\n"
 );
 
 puts(
-"<center>"
-"<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
+"<CENTER>"
+"<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
 "<tr>\n"
 );
 
@@ -414,7 +410,7 @@ cgiMakeButton("Submit", "Submit");
 printf("</td>\n");
 
 puts(
-"</tr></table></center>\n"
+"</tr></table></CENTER>\n"
 );
 puts("</FORM>\n");
 
@@ -432,15 +428,15 @@ if (a->node->ring && !b->node->ring) return -1;
 if (!a->node->ring && b->node->ring) return  1;
 if (a->node->ring && b->node->ring)
     {
-    return differentWord(a->node->name,b->node->name)*-1; 
+    return differentWord(a->node->name,b->node->name)*-1;
     }
 if (a->node->ringRank == b->node->ringRank)
     {
-    return differentWord(a->node->name,b->node->name)*-1; 
+    return differentWord(a->node->name,b->node->name)*-1;
     }
 else
     {
-    return (b->node->ringRank - a->node->ringRank); 
+    return (b->node->ringRank - a->node->ringRank);
     }
 }
 
@@ -463,11 +459,11 @@ if (!getGenesAsList())
 if (showAll)
     {
     puts(
-    "<center>"
-    "<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
+    "<CENTER>"
+    "<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
     "<tr><td>\n"
     );
-    printf("geneList: %s<br>\n", 
+    printf("geneList: %s<br>\n",
 	geneList
     );
     puts(
@@ -477,11 +473,11 @@ if (showAll)
     "<a href=\"/cgi-bin/hgGeneRing?ring_action=drawScreen\">screen</a>\n"
     );
     puts(
-    "</td></tr></table></center>\n"
+    "</td></tr></table></CENTER>\n"
     );
 
     }
-  
+
 
 interactions = getGenesFromTable("intrP2P");  /* adds geneList elements to hash */
 
@@ -562,7 +558,7 @@ for(nl=allNodes;nl;nl=nl->next)
 	    outsideCount++;
 	    }
 	}
-    
+
     if (showAll)
 	{
 	uglyf("%11s %4d %4d     %4s %3d \n",
@@ -692,7 +688,7 @@ for(i=0;i<insideCount;i++)
     nl->node->ypos = y;
     mgCircle(mg, x, y, NODE_SIZE, MG_BLACK, FALSE);
     addMap(nl);
-    
+
     /* draw connections to ring */
     { /*local*/
     struct nodelist *l;
@@ -705,7 +701,7 @@ for(i=0;i<insideCount;i++)
 	mgDrawLine(mg, x, y, l->node->xpos, l->node->ypos, MG_RED);
 	}
     }
-    
+
     nl=nl->next;
     }
 
@@ -720,10 +716,10 @@ for(i=0;i<ringCount;i++)
 
     double subAngle=0;
     int numOutside=0, doneOutside=0;
-    numOutside += slCountOutside(nl->node->nrays); 
-    numOutside += slCountOutside(nl->node->xrays); 
+    numOutside += slCountOutside(nl->node->nrays);
+    numOutside += slCountOutside(nl->node->xrays);
     subAngle = angle / (numOutside+1);  /* add 1 to give a little space between ring groups */
-    
+
     /* draw connections to ring */
     { /*local*/
     struct nodelist *l;
@@ -764,7 +760,7 @@ for(i=0;i<ringCount;i++)
 	    }
 	}
     }
-    
+
     nl=nl->next;
     }
 
@@ -774,7 +770,7 @@ printf("</MAP>\n");
 
 
 mgSaveGif(mg, filename.forCgi, FALSE);
- 
+
 width=height=SCREEN_SIZE;
 printf("<CENTER><TABLE BORDER=0 CELLPADDING=0>");
 printf("<TR><TD HEIGHT=5></TD></TR>");
@@ -789,7 +785,7 @@ printf(
     "<a href = \"/cgi-bin/hgGeneRing?ring_action=drawScreen\">refresh</a> "
     "</TD></TR>");
 printf("<TR><TD HEIGHT=5></TD></TR></TABLE></CENTER>");
-			    
+
 }
 
 char *unAlias(char *gene)
@@ -803,7 +799,7 @@ if (!startsWith("FBgn",gene))
 	gene=(char *)hf->val;
 	}
     }
-return gene;    
+return gene;
 }
 
 void drawDetails()
@@ -813,7 +809,7 @@ char *targ = unAlias(gene);
 struct hashEl *hel = NULL;
 struct node *n;
 hel = hashLookup(nodeHash,targ);
-if (hel) 
+if (hel)
     {
     n = hel->val;
     printf(
@@ -834,7 +830,7 @@ else
     {
     printf("Unknown gene %s",gene);
     }
-}    
+}
 
 
 void hgGeneRing()

@@ -379,7 +379,7 @@ visibility full
     parent UMassChIP-SeqComposite
     shortLabel UMassME1
     longLabel U Mass ChIP-Seq H3K4me1 Binding at 24 hours Post Fertilization
-    color 255,0,0
+    color 0,0,255
     priority 2
     maxHeightPixels 128:64:16
     type wig 0 100
@@ -393,19 +393,29 @@ visibility full
     longLabel U Mass ChIP-Seq H3K4me1 Binding Peaks at 24 hours Post Fertilization
     priority 3
     maxHeightPixels 128:64:16
-    color 255,0,0
+    color 0,0,255
     autoScale off
     configurable on
     visibility full
     type wig 0 100
+    
+    track UMassME1Hotspot
+    parent UMassChIP-SeqComposite
+    shortLabel UMassME1Hotspot
+    longLabel U Mass ChIP-Seq H3K4me1 Binding Hot Spots at 24 hours Post Fertilization
+    priority 4
+    visibility pack
+    color 0,0,255
+    configurable on
+    type bed 5
 
     track UMassME3
     parent UMassChIP-SeqComposite
     shortLabel UMassME3
     longLabel U Mass ChIP-Seq H3K4me3 Binding at 24 hours Post Fertilization
-    priority 4
+    priority 5
     maxHeightPixels 128:64:16
-    color 0,0,255
+    color 255,0,0
     visibility full
     autoScale off
     configurable on
@@ -415,29 +425,21 @@ visibility full
     parent UMassChIP-SeqComposite
     shortLabel UMassME3Peak
     longLabel U Mass ChIP-Seq H3K4me3 Binding Peaks at 24 hours Post Fertilization
-    priority 5
+    priority 6
     maxHeightPixels 128:64:16
-    color 0,0,255
+    color 255,0,0
     visibility full
     autoScale off
     configurable on
     type wig 0 100
 
-    track UMassME1Hotspot
-    parent UMassChIP-SeqComposite
-    shortLabel UMassME1Hotspot
-    longLabel U Mass ChIP-Seq H3K4me1 Binding Hot Spots at 24 hours Post Fertilization
-    priority 5.5
-    visibility pack
-    configurable on
-    type bed 5
-
     track UMassME3Hotspot
     parent UMassChIP-SeqComposite
     shortLabel UMassME3Hotspot
     longLabel U Mass ChIP-Seq H3K4me3 Binding Hot Spots at 24 hours Post Fertilization
-    priority 5.6
+    priority 7
     visibility pack
+    color 255,0,0
     configurable on
     type bed 5
 

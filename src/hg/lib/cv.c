@@ -70,17 +70,30 @@ char *cvLabDeNormalize(char *minimalTerm)
 }
 */
 
+static char *cvFileRequested = NULL;
 
-// TODO: decide to make this public or hide it away inside the one function so far that uses it.
-static char *cv_file()
+void cvFileDeclare(char *filePath)
+// Declare an altername cv.ra file to use
+// (The cv.ra file is normally discovered based upon CGI/Tool and envirnment)
+{
+cvFileRequested = cloneString(filePath);
+}
+
+static char *cvFile()
 // return default location of cv.ra
 {
 static char filePath[PATH_LEN];
-char *root = hCgiRoot();
-if (root == NULL || *root == 0)
-    root = "/usr/local/apache/cgi-bin/"; // Make this check out sandboxes?
-//    root = "/cluster/home/tdreszer/kent/src/hg/makeDb/trackDb/cv/alpha/"; // Make this check out sandboxes?
-safef(filePath, sizeof(filePath), "%s/encode/%s", root,CV_FILE_NAME);
+if (cvFileRequested != NULL)
+    {
+    safecpy(filePath, sizeof(filePath), cvFileRequested);
+    }
+else
+    {
+    char *root = hCgiRoot();
+    if (root == NULL || *root == 0)
+        root = "/usr/local/apache/cgi-bin/"; // Make this check out sandboxes?
+    safef(filePath, sizeof(filePath), "%s/encode/%s", root,CV_FILE_NAME);
+    }
 if(!fileExists(filePath))
     errAbort("Error: can't locate %s; %s doesn't exist\n", CV_FILE_NAME, filePath);
 return filePath;
@@ -103,7 +116,7 @@ struct hash *cvHashForTerm = hashFindVal(cvHashOfHashOfHashes,term);
 // Establish cv hash of Term Types if it doesn't already exist
 if (cvHashForTerm == NULL)
     {
-    cvHashForTerm = raReadWithFilter(cv_file(), CV_TERM,CV_TYPE,term);
+    cvHashForTerm = raReadWithFilter(cvFile(), CV_TERM,CV_TYPE,term);
     if (cvHashForTerm != NULL)
         hashAdd(cvHashOfHashOfHashes,term,cvHashForTerm);
     }
@@ -121,7 +134,7 @@ static struct hash *cvHashOfTermTypes = NULL;
 // Establish cv hash of Term Types if it doesn't already exist
 if (cvHashOfTermTypes == NULL)
     {
-    cvHashOfTermTypes = raReadWithFilter(cv_file(), CV_TERM,CV_TYPE,CV_TOT);
+    cvHashOfTermTypes = raReadWithFilter(cvFile(), CV_TERM,CV_TYPE,CV_TOT);
     // Patch up an ugly inconsistency with 'cell'
     struct hash *cellHash = hashRemove(cvHashOfTermTypes,CV_UGLY_TOT_CELLTYPE);
     if (cellHash)
@@ -263,6 +276,27 @@ if (termHash != NULL)
     {
     char *setting = hashFindVal(termHash,CV_TOT_HIDDEN);
     return cvHiddenIsTrue(setting);
+    }
+return FALSE;
+}
+
+boolean cvTermIsEmpty(char *term,char *val)
+// returns TRUE if term has validation of "cv or None" and the val is None
+{
+if (val == NULL)
+    return TRUE; // Empty whether it is supposed to be or not
+
+struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
+struct hash *termHash = hashFindVal(termTypeHash,term);
+if (termHash != NULL)
+    {
+    char *validationRule = hashFindVal(termHash,CV_VALIDATE);
+    if (validationRule != NULL)
+        {           // Currently only supporting special case for "None"
+        if (sameString(validationRule,CV_VALIDATE_CV_OR_NONE)
+        && sameString(val,MDB_VAL_ENCODE_EDV_NONE))
+            return TRUE;
+        }
     }
 return FALSE;
 }

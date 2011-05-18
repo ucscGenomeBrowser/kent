@@ -43,7 +43,7 @@ fprintf(outf, "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso
 fprintf(outf, "<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n");
 fprintf(outf, "<TITLE>UCSC Known Genes Description and Page Index</TITLE>\n");
 webIncludeResourcePrintToFile(outf,"HGStyle.css");
-fprintf(outf, "</HEAD><BODY BGCOLOR=\"FFF9D2\">\n");
+fprintf(outf, "</HEAD><BODY BGCOLOR='#FFF9D2'>\n");
 }
 
 void printHtmlEnd(FILE *outf)

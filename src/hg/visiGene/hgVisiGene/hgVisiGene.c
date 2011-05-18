@@ -234,13 +234,13 @@ if (imageCount > 0)
 "    <DIV"
 "    ID='perspClip'"
 "    STYLE='position:absolute;left:-1000px;top:-1000px;z-index:2;visibility:visible;overflow:hidden!important;'"
-"         onmouseover='this.style.left=-1000;' "
+"         onmouseover='this.style.left=\"-1000px\";' "
 "    >"
 "    <DIV"
 "    ID='perspective'"
 "    STYLE='position:absolute;left:0px;top:0px;'"
 "    >"
-"    <IMG ID='perspBox' SRC='../images/dot_clear.gif' BORDER=2 HEIGHT=100 WIDTH=100 STYLE='position:absolute;left:0px;top:0px;border-color:#8080FF;border-width:1' "
+"    <IMG ID='perspBox' SRC='../images/dot_clear.gif' STYLE='position:absolute;left:0px;top:0px;width:100px;height:100px;border-style:solid;border-color:#8080FF;border-width:1px' "
 ">"
 "    </DIV>"
 "    </DIV>"
@@ -322,6 +322,13 @@ char extension[64];
 int w = 0, h = 0;
 htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
+
+puts(
+"<script type=\"text/JavaScript\">"
+"document.getElementsByTagName('html')[0].style.height=\"100%\";"
+"document.getElementsByTagName('body')[0].style.height=\"100%\";"
+"</script>"
+);
 
 if (!visiGeneImageSize(conn, imageId, &w, &h))
     imageId = 0;
@@ -530,7 +537,7 @@ saveMatchFile(matchFile, matchList);
 cartSetString(cart, hgpMatchFile, matchFile);
 cartSetInt(cart, hgpId, imageId);
 //puts("\n");
-puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
+puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\" \"http://www.w3.org/TR/html4/frameset.dtd\">");
 printf("<HTML>\n");
 printf("<HEAD>\n");
 printf("<TITLE>\n");

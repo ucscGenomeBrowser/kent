@@ -17,14 +17,5 @@ compile: $O
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
 
-html: bigImage.html
-	cp bigImage.html /usr/local/apache/htdocs/
-
-htmltest: bigImage.html
-	cp bigImage.html /usr/local/apache/htdocs/bigImageTest.html
-
-gif:
-	cp dot_clear.gif /usr/local/apache/htdocs/images/
-
 testVisiSearch:  visiSearch.o testVisiSearch.o
 	${CC} -o testVisiSearch visiSearch.o testVisiSearch.o ${MYLIBS} ${L}

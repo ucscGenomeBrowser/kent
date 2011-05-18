@@ -4127,5 +4127,60 @@ gold wgEncodeOpenChromFaire.ra
 
 gold, gadd, gci, gup,gpush
 
+cd {downloads}/wgEncodeOpenChromChip
+encodeDownloadsPage.pl -db=hg19 index.html
 
+cd {downloads}/wgEncodeOpenChromDnase
+encodeDownloadsPage.pl -db=hg19 index.html
+
+cd {downloads}/wgEncodeOpenChromFaire
+encodeDownloadsPage.pl -db=hg19 index.html
+
+
+2011-05-02 Resumbitted Open Chrom Synth to fix erroneous blues
+==============================================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3273 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3273 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3273 reviewing
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3507 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3507 released
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3840 approved
+
+
+2011-05-04 Anshul's Black list regions
+======================================
+### Should move to a separate doc but keeping here now for convenience 
+# location: ftp://encodeftp.cse.ucsc.edu/users/akundaje/rawdata/blacklists/hg19/
+# contents: Anshul_Hg19UltraHighSignalArtifactRegions.bed.gz ### bed 5 needs to be altered.
+#           Duke_Hg19SignalRepeatArtifactRegions.bed.gz # Same as Duke Excluded regions already added
+#           wgEncodeHg19ConsensusSignalArtifactRegions.bed.gz ### bed 6 but last column is 0, not '.'
+
+### How to distinguish the three "Excluded Regions" tracks?
+# lab only distinguishes 1.
+# size?  But what size?
+# A new term?  No, use "uniqueness" which is currently only used by mababilty.
+# Terry's:   uniqueness=excludedRegions
+# Anshul's:  uniqueness=ultraHighSignalBlacklist
+# consensus: uniqueness=consensusBlacklist
+### Requires cleaning up uniqueness in both hg18 and hg19 to use as expVar
+
+### Needed to conform bed files for sith field '.'.  Hand edited.
+tar -czf anshulBlacklist.tgz *.d?f anshulsUltraHighSignalBlacklist.bed  consensusBlacklist.bed
+
+# Sticking point on grant Birney.  For some reason doEncodeValidate.pl is not responding to the cv.ra
+
+ERROR: line 137:'chr11	122874443	122874443	Low_mappability_island	1000	.'
+chromStart == chromEnd (122874443) (zero-length item)
+
+# Neat awk command to list any problems
+awk '{printf "%d\t%s:%d-%d\n",$3 - $2,$1,$2,$3}'  < consensusBlacklist.bed | sort -n 
+0       chr11:122874443-122874443
+
+### Anshul wants to just have the consensus track, but there is still a 0 length region
+# Ansul gave proper coordinates for 0 region and another small one.
+
+rename table wgEncodeMapabilityDacRegionsExcluded to wgEncodeMapabilityDacConsensusBlacklist;
+mv ../wgEncodeMapabilityDac/wgEncodeMapabilityDacRegionsExcluded.bed.gz wgEncodeMapabilityDacConsensusBlacklist.bed.gz
 

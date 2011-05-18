@@ -55,7 +55,7 @@ subGroup5 obtainedBy Obtained_by UW=UW HAIB=Hudson_Alpha Stanford=Stanford Duke=
 dimensions dimensionX=treatment dimensionY=cellType dimensionD=rep
 dimensionDchecked rep1
 sortOrder cellType=+ rep=+ treatment=+ obtainedBy=+
-fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Obtained_By replicate=Rep labExpId=Lab_ID geoSampleAccession=GEO<BR>Accession view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
+fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Obtained_By replicate=Rep labExpId=Lab_ID geoSampleAccession=GEO<BR>Accession view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment obtainedBy=lab
 dragAndDrop subTracks
 priority 0

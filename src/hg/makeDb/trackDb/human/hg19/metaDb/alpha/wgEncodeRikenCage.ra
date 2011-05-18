@@ -6158,7 +6158,7 @@ view Alignments
 
 metaObject wgEncodeRikenCageK562CytosolPapClusters
 objType table
-bioRep gen0137C
+bioRep 002C,001C
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -6166,6 +6166,29 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 fileName wgEncodeRikenCageK562CytosolPapClusters.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId J83,J82
+labProtocolId 002C+cage,001C+cage
+labVersion iIDR
+localization cytosol
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3956
+tableName wgEncodeRikenCageK562CytosolPapClusters
+view Clusters
+
+metaObject wgEncodeRikenCageK562CytosolPapClustersI40
+objType file
+bioRep gen0137C
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+fileName wgEncodeRikenCageK562CytosolPapClustersI40.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I40
@@ -6176,7 +6199,6 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3952
-tableName wgEncodeRikenCageK562CytosolPapClusters
 view Clusters
 
 metaObject wgEncodeRikenCageK562CytosolPapMinusClusters
@@ -7283,7 +7305,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
@@ -7351,6 +7373,26 @@ subId 3997
 tableName wgEncodeRikenCageMcf7CellPapClusters
 view Clusters
 
+metaObject wgEncodeRikenCageMcf7CellPapMinusClustersRep1
+objType table
+cell MCF-7
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+fileName wgEncodeRikenCageMcf7CellPapMinusClustersRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId K07
+labProtocolId 015WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2365
+tableName wgEncodeRikenCageMcf7CellPapMinusClustersRep1
+view MinusClusters
+
 metaObject wgEncodeRikenCageMcf7CellPapMinusSignalRep1
 objType table
 bioRep 015WC
@@ -7375,6 +7417,26 @@ rnaExtract longPolyA
 subId 2365
 tableName wgEncodeRikenCageMcf7CellPapMinusSignalRep1
 view MinusRawSignal
+
+metaObject wgEncodeRikenCageMcf7CellPapPlusClustersRep1
+objType table
+cell MCF-7
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+fileName wgEncodeRikenCageMcf7CellPapPlusClustersRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId K07
+labProtocolId 015WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2365
+tableName wgEncodeRikenCageMcf7CellPapPlusClustersRep1
+view PlusClusters
 
 metaObject wgEncodeRikenCageMcf7CellPapPlusSignalRep1
 objType table
@@ -7407,11 +7469,11 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccRep 1
-fileName wgEncodeRikenCageMcf7CellPapRawDataRep1.fastq.gz
+fileName wgEncodeRikenCageMcf7CellPapRawDataRep1.fastq.tgz
 grant Gingeras
 lab RIKEN
 labExpId K07
@@ -8716,4 +8778,4 @@ rnaExtract longPolyA
 subId 3804
 view TSS
 
-# MAGIC: -1346499860
+# MAGIC: -1342042834

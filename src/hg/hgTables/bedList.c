@@ -399,7 +399,7 @@ if (isWiggle(database, table) || isBedGraph(table) || isBigWigTable(table) )
     }
 else
     {
-    hPrintf("<div style='height:.9em;'></div>\n");
+    cgiDown(0.9);
     hPrintf("<B> Create one BED record per: </B>\n");
     if ((anyIntersection() && intersectionIsBpWise()) ||
 	(anySubtrackMerge(database, table) && subtrackMergeIsBpWise()))
@@ -454,7 +454,7 @@ if (!doGalaxy() && !doGreat())
     cgiMakeButton(hgtaDoMainPage, "cancel");
     hPrintf("</FORM>\n");
     }
-hPrintf("<div style='height:.9em;'></div>\n");
+cgiDown(0.9);
 htmlClose();
 }
 

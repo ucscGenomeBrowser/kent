@@ -1,3 +1,8 @@
+metaObject wgEncodeUmassDekker5C
+objType composite
+composite wgEncodeUmassDekker5C
+expVars lab,dataType,cell
+
 metaObject wgEncodeUmassDekker5CGm12878MatrixRep1
 objType file
 cell GM12878
@@ -134,4 +139,4 @@ replicate 2
 subId 3488
 view Matrix
 
-# MAGIC: -535483648
+# MAGIC: -1878587271

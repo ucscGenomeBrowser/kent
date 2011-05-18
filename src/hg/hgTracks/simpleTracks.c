@@ -9511,7 +9511,7 @@ if (allWidth >= w || sameString(display, "freq"))
     {
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item),
                 tg->mapItemName(tg, item), myItem->chromStart, myItem->chromEnd,
-                x1-allWidth-2, yCopy, allWidth+w, tg->heightPer);
+                x1-allWidth-2, y+1, allWidth+w, tg->heightPer);
     }
 withIndividualLabels = FALSE; //turn labels off, done already
 }
@@ -10747,7 +10747,7 @@ if (isNotEmpty(ret))
     dyStringAppend(dy, ret);
 
 safef(query,sizeof(query),
-        "select distinct disorder from omimDisorderMap, omimGene2 where name='%s' and name=cast(omimId as char) order by disorder", name);
+        "select distinct description from omimPhenotype, omimGene2 where name='%s' and name=cast(omimId as char) order by description", name);
 char *disorders = collapseRowsFromQuery(query, "; ", 20);
 if (isNotEmpty(disorders))
     {
@@ -10765,7 +10765,7 @@ static char answer[256];
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 safef(query,sizeof(query),
-      "select phenotypeClass from omimDisorderPhenotype where omimId =%s", omimId);
+      "select phenotypeClass from omimPhenotype where omimId =%s", omimId);
 char *ret = sqlQuickQuery(conn, query, answer, sizeof(answer));
 if (ret == NULL)
     safecpy(answer, sizeof(answer), "0");
@@ -10866,7 +10866,7 @@ char **row;
 struct sqlConnection *conn = hAllocConn(database);
 
 safef(query, sizeof(query),
-      "select omimId, phenotypeClass from omimDisorderPhenotype where omimId=%s", el->name);
+      "select omimId, phenotypeClass from omimPhenotype where omimId=%s", el->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -10995,7 +10995,7 @@ char **row;
 struct sqlConnection *conn = hAllocConn(database);
 
 safef(query, sizeof(query),
-      "select omimId, phenotypeClass from omimDisorderPhenotype where omimId=%s", el->name);
+      "select omimId, phenotypeClass from omimPhenotype where omimId=%s", el->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 

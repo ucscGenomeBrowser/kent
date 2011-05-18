@@ -46,6 +46,10 @@
 #define CV_TERM_VIEW            "view"
 
 
+void cvFileDeclare(char *filePath);
+// Declare an altername cv.ra file to use
+// (The cv.ra file is normally discovered based upon CGI/Tool and envirnment)
+
 char *cvTypeNormalized(char *sloppyTerm);
 // returns (on stack) the proper term to use when requesting a typeOfTerm
 
@@ -83,6 +87,9 @@ const char *cvLabel(char *term);
 
 boolean cvTermIsHidden(char *term);
 // returns TRUE if term is defined as hidden in cv.ra
+
+boolean cvTermIsEmpty(char *term,char *val);
+// returns TRUE if term has validation of "cv or None" and the val is None
 
 char *cvLabNormalize(char *sloppyTerm);
 /* CV inconsistency work-arounds.  Return lab name trimmed of parenthesized trailing

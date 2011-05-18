@@ -54,14 +54,18 @@ struct vertex
 struct edge
 /* An edge in our graph */
     {
+    struct edge *next;          /* for forming a singly-linked list of edges */
     struct vertex *start;	/* Starting vertex. */
     struct vertex *end;		/* Ending vertex. */
     struct evidence *evList;	/* List of evidence. */
     };
 
+
 static int vertexCmp(void *va, void *vb)
-/* Return -1 if a before b,  0 if a and b overlap,
- * and 1 if a after b. */
+/* Return: if a before b, return negative.  If a after b, return positive.  
+ * else if a and b have the same position and same type, return 0.
+ * else if a and b have same position but different types, return 
+ * a nonzero value reflecting the difference in their types. */
 {
 struct vertex *a = va;
 struct vertex *b = vb;
@@ -81,6 +85,20 @@ int diff = vertexCmp(a->start, b->start);
 if (diff == 0)
     diff = vertexCmp(a->end, b->end);
 return diff;
+}
+
+static boolean encloses(struct edge *a, struct edge *b)
+/* Return TRUE if the first edge encloses the second, false otherwise */
+{
+if (a->start->position <= b->start->position
+    && a->end->position >= b->end->position)
+    {
+    return(TRUE);
+    } 
+else 
+    {
+    return(FALSE);
+    }
 }
 
 static boolean trustedEdge(struct edge *edge)
@@ -139,6 +157,7 @@ if (e == NULL)
     lmAllocVar(tree->lm, e);
     e->start = start;
     e->end = end;
+    e->next = NULL;
     rbTreeAdd(tree, e);
     }
 struct evidence *ev;
@@ -413,6 +432,7 @@ if (currentType == ggSoftEnd)
 	    if (checkSnapOk(vOld, v, FALSE, dif, maxUncheckedSnapSize, seqCache, chromName))
 		{
 		vOld->movedTo = v;
+		verbose(3, "snapping vertex %d to %d\n", oldPos, newPos);
 		return TRUE;
 		}
 	    }
@@ -538,6 +558,8 @@ struct edge *bEdge = b->val;
 return bEdge->end->position - aEdge->end->position;
 }
 
+
+
 int snapHalfHardForward(struct vertex *v, struct rbTree *edgeTree,
 	enum ggVertexType softType, enum ggVertexType hardType)
 /* V is a hard vertex. Try to snap soft end vertices connected to v
@@ -571,6 +593,8 @@ for (;;)
         break;
     rbTreeRemove(edgeTree, softEdge);
     struct edge *hardEdge = hardRef->val;
+    verbose(3, "Snapping half-hard edge ending at %d to %d\n", softEdge->end->position, 
+	    hardEdge->end->position); 
     softEdge->end = hardEdge->end;
     ++snapCount;
     mergeOrAddEdge(edgeTree, softEdge);
@@ -614,6 +638,8 @@ for (;;)
         break;
     rbTreeRemove(edgeTree, softEdge);
     struct edge *hardEdge = hardRef->val;
+    verbose(3, "Snapping half-hard edge starting at %d to %d\n", softEdge->start->position, 
+	    hardEdge->start->position); 
     softEdge->start = hardEdge->start;
     ++snapCount;
     mergeOrAddEdge(edgeTree, softEdge);
@@ -750,6 +776,8 @@ if (softCount > 1)
 	if (v != end && v->type == softType)
 	    {
 	    rbTreeRemove(edgeTree, edge);
+	    verbose(3, "Performing half-hard consensus: moving edge end from %d to %d\n",
+		    edge->end->position, end->position);
 	    edge->end = end;
 	    mergeOrAddEdge(edgeTree, edge);  // Will always merge. 
 	    }
@@ -798,6 +826,8 @@ if (softCount > 1)
 	if (v != start && v->type == softType)
 	    {
 	    rbTreeRemove(edgeTree, edge);
+	    verbose(3, "Performing half-hard consensus: moving edge start from %d to %d\n",
+		    edge->start->position, start->position);
 	    edge->start = start;
 	    mergeOrAddEdge(edgeTree, edge);  // Will always merge. 
 	    }
@@ -886,6 +916,7 @@ struct edge *edge;
 AllocVar(edge);
 edge->start = start;
 edge->end = end;
+edge->next = NULL;
 
 /* Add overlapping evidence to edge. */
 for (ev = evList; ev != NULL; ev = nextEv)
@@ -903,7 +934,9 @@ static void removeEnclosedDoubleSofts(struct rbTree *vertexTree, struct rbTree *
 /* Move double-softs that overlap spliced things to a very great extent into
  * the spliced things. Also remove tiny double-softs (no more than 2*maxBleedOver). */
 {
-/* Traverse graph and build up range tree covering spliced exons*/
+/* Traverse graph and build up range tree covering spliced exons.  For each 
+ * range of overlapping exons, assemble a singly-linked list of all exons in 
+ * the range */
 struct rbTree *rangeTree = rangeTreeNew(0);
 struct slRef *edgeRef, *edgeRefList = rbTreeItems(edgeTree);
 int removedCount = 0;
@@ -914,8 +947,7 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
     struct vertex *end = edge->end;
     if (start->type == ggHardStart || end->type == ggHardEnd)
 	{
-	struct range *r = rangeTreeAdd(rangeTree, start->position, end->position);
-	r->val = edge;
+	rangeTreeAddValList(rangeTree, start->position, end->position, edge);
 	}
     }
 
@@ -934,6 +966,7 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 	if (size <= maxBleedOver+maxBleedOver)
 	     {
 	     /* Tiny case, just remove edge and forget it. */
+	     verbose(3, "Removing tiny double-soft edge from %d to %d\n", s, e);
 	     rbTreeRemove(edgeTree, edge);
 	     ++removedCount;
 	     }
@@ -946,12 +979,29 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 	         {
 		 if (!trustedEdge(edge))
 		     {
+		     /* Once we find a range that overlaps the doubly-soft edge, find 
+		      * (half-hard or better) edge from that range that encloses the 
+		      * doubly soft edge. */
 		     struct range *r = rangeTreeMaxOverlapping(rangeTree, s, e);
-		     struct edge *bigEdge = r->val;
-		     bigEdge->evList = slCat(bigEdge->evList, edge->evList);
-		     edge->evList = NULL;
-		     rbTreeRemove(edgeTree, edge);
-		     ++removedCount;
+		     struct edge *nextEdge, *edgeList = r->val;
+		     struct edge *enclosingEdge = NULL;
+		     for (nextEdge = edgeList; edgeList != NULL; edgeList = edgeList->next)
+			 {
+			 if (encloses(nextEdge, edge))
+			     {
+			     enclosingEdge = nextEdge;
+			     }
+			 }
+		     if (enclosingEdge != NULL) 
+			 {
+			 enclosingEdge->evList = slCat(enclosingEdge->evList, edge->evList);
+			 edge->evList = NULL;
+			 verbose(3, "Removing doubly-soft edge %d-%d, reassigning to %d-%d\n",
+				 s, e, enclosingEdge->start->position, 
+				 enclosingEdge->end->position);
+			 rbTreeRemove(edgeTree, edge);
+			 ++removedCount;
+			 }
 		     }
 		 }
 	     }
@@ -961,6 +1011,16 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 /* Clean up and go home. */
 if (removedCount > 0)
     removeUnusedVertices(vertexTree, edgeTree);
+for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
+    {
+    struct edge *nextEdge, *edge = edgeRef->val;
+    while (edge != NULL) 
+	{
+	nextEdge = edge->next;
+	edge->next = NULL;
+	edge = nextEdge;
+	}
+    }
 slFreeList(&edgeRefList);
 rbTreeFree(&rangeTree);
 }
@@ -974,7 +1034,8 @@ struct mergedEdge
     struct evidence *evidence;
     };
 
-/* Traverse graph and build up range tree */
+/* Traverse graph and build up range tree.  Each node in the range tree
+ * will represent the bounds of coordinates of overlapping double softs */
 struct rbTree *rangeTree = rangeTreeNew(0);
 struct slRef *edgeRef, *edgeRefList = rbTreeItems(edgeTree);
 for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
@@ -997,19 +1058,26 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 	struct range *r = rangeTreeFindEnclosing(rangeTree,
 		start->position, end->position);
 	assert(r != NULL);
-	struct mergedEdge *mergeEdge = r->val;
-	if (mergeEdge == NULL)
-	    {
-	    lmAllocVar(rangeTree->lm, mergeEdge);
-	    r->val = mergeEdge;
-	    }
-	mergeEdge->evidence = slCat(edge->evList, mergeEdge->evidence);
-	edge->evList = NULL;
-	rbTreeRemove(edgeTree, edge);
+	/* At this point, r represents the bounds of a double-soft
+	 * region that encompasses this edge.  Collect the set of
+	 * evidence of edges overlapping this range */
+        struct mergedEdge *mergeEdge = r->val;
+        if (mergeEdge == NULL)
+            {
+            lmAllocVar(rangeTree->lm, mergeEdge);
+            r->val = mergeEdge;
+            }
+        mergeEdge->evidence = slCat(edge->evList, mergeEdge->evidence);
+	verbose(3, "Merging doubly-soft edge (%d,%d) into range (%d,%d)\n", 
+		start->position, end->position, r->start, r->end);
+        edge->evList = NULL;
+        rbTreeRemove(edgeTree, edge);
 	}
     }
 
-/* Traverse merged edge list, making a single edge from each range.  */
+/* Traverse merged edge list, making a single edge from each range. At this point,
+ * each range will have some evidence attached to it, from each of the double softs
+ * that fall within the range.  From all of this evidence, make a single consensus edge */
 struct range *r;
 struct lm *lm = lmInit(0);
 for (r = rangeTreeList(rangeTree); r != NULL; r = r->next)
@@ -1017,8 +1085,11 @@ for (r = rangeTreeList(rangeTree); r != NULL; r = r->next)
     struct mergedEdge *mergedEdge = r->val;
     struct edge *edge = edgeFromConsensusOfEvidence(vertexTree, mergedEdge->evidence, lm);
     if (edge != NULL)
-	rbTreeAdd(edgeTree, edge);
+        rbTreeAdd(edgeTree, edge);
+    verbose(3, "Deriving edge (%d,%d) from all the double softs in range (%d,%d)\n", 
+	    edge->start->position, edge->end->position, r->start, r->end);
     }
+
 
 /* Clean up and go home. */
 lmCleanup(&lm);

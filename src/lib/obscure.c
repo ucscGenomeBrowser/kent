@@ -711,3 +711,28 @@ else
     fprintf(stderr, "# printVmPeak: %s - not available\n", temp);
 fflush(stderr);
 }
+
+boolean nameInCommaList(char *name, char *commaList)
+/* Return TRUE if name is in comma separated list. */
+{
+if (commaList == NULL)
+    return FALSE;
+int nameLen = strlen(name);
+for (;;)
+    {
+    char c = *commaList;
+    if (c == 0)
+        return FALSE;
+    if (memcmp(name, commaList, nameLen) == 0)
+        {
+	c = commaList[nameLen];
+	if (c == 0 || c == ',')
+	    return TRUE;
+	}
+    commaList = strchr(commaList, ',');
+    if (commaList == NULL)
+        return FALSE;
+    commaList += 1;
+    }
+}
+
