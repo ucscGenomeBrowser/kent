@@ -15747,6 +15747,7 @@ cd omim/05172011
 
        genemap.txt  
        mim2gene.txt  
+       mimAV.txt
        script1.pl  
        script2.pl
 
