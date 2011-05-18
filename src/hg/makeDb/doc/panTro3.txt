@@ -2824,3 +2824,104 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s /hive/data/genomes/panTro3/bed/multiz12way/downloads/md5sum.txt .
 
 #############################################################################
+# hgPal downloads (DONE 2011-05-18 braney)
+#   FASTA from 12way for refGene, ensGene
+
+    ssh hgwdev
+    screen
+    bash
+    rm -rf /cluster/data/panTro3/bed/multiz12way/pal
+    mkdir /cluster/data/panTro3/bed/multiz12way/pal
+    cd /cluster/data/panTro3/bed/multiz12way/pal
+    for i in `cat ../species.list`; do echo $i; done > order.lst
+
+    mz=multiz12way
+    gp=refGene
+    db=panTro3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+# real    350m10.116s
+# user    38m38.731s
+# sys     7m22.106s
+
+
+    mz=multiz12way
+    gp=refGene
+    db=panTro3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz12way
+    gp=refGene
+    db=panTro3
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    mz=multiz12way
+    gp=ensGene
+    db=panTro3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+# real    56m26.162s
+# user    10m18.260s
+# sys     7m32.302s
+
+
+    mz=multiz12way
+    gp=ensGene
+    db=panTro3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz12way
+    gp=ensGene
+    db=panTro3
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
