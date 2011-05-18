@@ -79,6 +79,19 @@ visibility hide
     color 120,0,0
     priority 5
 
+track knownGeneOld4
+shortLabel Old UCSC Genes
+longLabel Previous Version of UCSC Genes
+group genes
+priority 34.1
+visibility hide
+color 82,82,160
+type genePred
+hgsid on
+oldToNew kg4ToKg5
+baseColorUseCds given
+baseColorDefault genomicCodons
+
 track pseudoYale60
 shortLabel Yale Pseudo60
 longLabel Yale Pseudogenes based on Ensembl Release 60
@@ -861,4 +874,10 @@ smoothingWindow 2
 type wig -5.444 4.922
 spanList 60
 viewLimits -2:2
+
+track forelimbH3k27ac
+type bed 3
+color 0,0,150
+group x
+visibility hide
 
