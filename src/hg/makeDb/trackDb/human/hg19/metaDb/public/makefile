@@ -20,6 +20,7 @@ wgEncodeRikenCage.ra \
 wgEncodeOpenChromDnase.ra \
 wgEncodeUwAffyExonArray.ra \
 wgEncodeSunyAlbanyGeneSt.ra \
+wgEncodeBuOrchid.ra \
 
 include ../../../../makefile.metaDb
 
