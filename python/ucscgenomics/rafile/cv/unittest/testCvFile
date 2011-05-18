@@ -1,0 +1,95 @@
+#!/hive/groups/encode/dcc/bin/python
+import sys
+import unittest
+sys.path.append('../')
+from CvFile import *
+
+curdir = sys.path[0]
+inputdir = '/input/'
+outputdir = '/output/'
+
+class CellLineValidationCheck(unittest.TestCase):
+
+	def testMissingKey(self):
+		"""A missing required key"""
+		cv = CvFile(curdir + inputdir + 'CellLine/MissingKey.ra')
+		self.assertRaises(MissingKeyError, cv['GM12878'].validate, cv)
+		
+	def testBlankKey(self):
+		"""A blank required key"""
+		cv = CvFile(curdir + inputdir + 'CellLine/BlankKey.ra')
+		self.assertRaises(BlankKeyError, cv['GM12878'].validate, cv)
+	
+	def testExtraKey(self):
+		"""An extraneous key"""
+		cv = CvFile(curdir + inputdir + 'CellLine/ExtraKey.ra')
+		self.assertRaises(ExtraKeyError, cv['GM12878'].validate, cv)
+		
+	def testNonmatchKey(self):
+		"""A nonmatching relational key"""
+		cv = CvFile(curdir + inputdir + 'CellLine/NonmatchKey.ra')
+		self.assertRaises(NonmatchKeyError, cv['GM12878'].validate, cv)
+		
+	def testValidStanza(self):
+		"""A valid stanza"""
+		cv = CvFile(curdir + inputdir + 'CellLine/ValidStanza.ra')
+		cv['GM12878'].validate(cv)
+		
+		
+class AntibodyValidationCheck(unittest.TestCase):
+
+	def testMissingKey(self):
+		"""A missing required key"""
+		cv = CvFile(curdir + inputdir + 'Antibody/MissingKey.ra')
+		self.assertRaises(MissingKeyError, cv['AP-2alpha'].validate, cv)
+		
+	def testBlankKey(self):
+		"""A blank required key"""
+		cv = CvFile(curdir + inputdir + 'Antibody/BlankKey.ra')
+		self.assertRaises(BlankKeyError, cv['AP-2alpha'].validate, cv)
+	
+	def testExtraKey(self):
+		"""An extraneous key"""
+		cv = CvFile(curdir + inputdir + 'Antibody/ExtraKey.ra')
+		self.assertRaises(ExtraKeyError, cv['AP-2alpha'].validate, cv)
+		
+	def testNonmatchKey(self):
+		"""A nonmatching relational key"""
+		cv = CvFile(curdir + inputdir + 'Antibody/NonmatchKey.ra')
+		self.assertRaises(NonmatchKeyError, cv['AP-2alpha'].validate, cv)
+		
+	def testValidStanza(self):
+		"""A valid stanza"""
+		cv = CvFile(curdir + inputdir + 'Antibody/ValidStanza.ra')
+		cv['AP-2alpha'].validate(cv)
+		
+		
+class MouseValidationCheck(unittest.TestCase):
+
+	def testMissingKey(self):
+		"""A missing required key"""
+		cv = CvFile(curdir + inputdir + 'Mouse/MissingKey.ra')
+		self.assertRaises(MissingKeyError, cv['3134'].validate, cv)
+		
+	def testBlankKey(self):
+		"""A blank required key"""
+		cv = CvFile(curdir + inputdir + 'Mouse/BlankKey.ra')
+		self.assertRaises(BlankKeyError, cv['3134'].validate, cv)
+	
+	def testExtraKey(self):
+		"""An extraneous key"""
+		cv = CvFile(curdir + inputdir + 'Mouse/ExtraKey.ra')
+		self.assertRaises(ExtraKeyError, cv['3134'].validate, cv)
+		
+	def testNonmatchKey(self):
+		"""A nonmatching relational key"""
+		cv = CvFile(curdir + inputdir + 'Mouse/NonmatchKey.ra')
+		self.assertRaises(NonmatchKeyError, cv['3134'].validate, cv)
+		
+	def testValidStanza(self):
+		"""A valid stanza"""
+		cv = CvFile(curdir + inputdir + 'Mouse/ValidStanza.ra')
+		cv['3134'].validate(cv)
+		
+if __name__ == '__main__':
+    unittest.main()

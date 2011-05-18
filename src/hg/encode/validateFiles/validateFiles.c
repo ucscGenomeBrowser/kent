@@ -255,7 +255,7 @@ for (i= (int)'0' ; i <= (int)'9' ; ++i)
     seqName[i] = digits[i] = csSeqName[i] = csQualChars[i] = 1;
 seqName['_'] = seqName['.'] = seqName[':'] = seqName['/'] = seqName['-'] = seqName['#'] = 1;
 csSeqName[','] = csSeqName['.'] = csSeqName['-'] = csSeqName['#'] = 1;
-csQualChars[' '] = 1;
+csQualChars[' '] = csQualChars['-'] = 1;
 for (i= (int)'!' ; i <= (int)'~' ; ++i)
     qualChars[i] = 1;
 }
