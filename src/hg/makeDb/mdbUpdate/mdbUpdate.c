@@ -101,6 +101,7 @@ struct mdbObj * mdbObjs = NULL;
 
 optionInit(&argc, argv, optionSpecs);
 
+verboseTime(2, NULL);
 if(argc < 2)
     {
     verbose(1, "REQUIRED 'DB' argument not found:\n");
@@ -225,6 +226,7 @@ if (argc != 3 && !deleteIt && encodeExp == NULL)
         }
     }
 
+verboseTime(2, "Initial stuff");
 // Now get the object list
 if(optionExists("obj"))
     {
@@ -316,6 +318,7 @@ else // Must be submitting formatted file
         verbose(1, "Read %d metadata objects from %s\n", slCount(mdbObjs),argv[1]);
     }
 
+verboseTime(2, "Past loading got %d objs", slCount(mdbObjs));
 int count = 0;
 
 if(mdbObjs != NULL)
@@ -362,6 +365,7 @@ else
 
 sqlDisconnect(&conn);
 mdbObjsFree(&mdbObjs);
+verboseTime(2, "All done");
 return 0;
 
 // TODO:
