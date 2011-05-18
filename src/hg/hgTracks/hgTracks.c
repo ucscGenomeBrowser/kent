@@ -4624,9 +4624,8 @@ if (!hideControls)
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
 	hWrites(" ");
 	hButton("hgTracksConfigPage", "configure");
-        //hPrintf("&nbsp;&nbsp;<span style='font-size:small;'><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</B></EM></A></span>\n");
 	if (survey && differentWord(survey, "off"))
-	    hPrintf("&nbsp;&nbsp;<span style='font-size:small;'><A STYLE=\"background-color:yellow;\" HREF=\"%s\" TARGET=_BLANK><EM><B>%s</B></EM></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
+            hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'><A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
 	// info for drag selection javascript
 	hPrintf("<input type='hidden' id='hgt.winStart' name='winStart' value='%d'>\n", winStart);
 	hPrintf("<input type='hidden' id='hgt.winEnd' name='winEnd' value='%d'>\n", winEnd);
@@ -4812,7 +4811,7 @@ if (!hideControls)
 
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-            hPrintf("<IMG class='toggleButton' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue' title='%s this group'>&nbsp;&nbsp;",
+            hPrintf("<IMG class='toggleButton' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
                     group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");

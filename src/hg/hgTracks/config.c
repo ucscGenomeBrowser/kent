@@ -104,17 +104,18 @@ for (group = groupList; group != NULL; group = group->next)
     boolean isOpen = !isCollapsedGroup(group);
     collapseGroupGoodies(isOpen, FALSE, &indicatorImg,
                             &indicator, &otherState);
-    hTableStart();
-    hPrintf("<TR NOWRAP>");
-    hPrintf("<TH NOWRAP align='left' colspan=3 BGCOLOR='#536ED3'>");
+    hPrintf("<TABLE BORDER='1' CELLSPACING='0' style='background-color:#%s; min-width:54em;'>\n",HG_COL_INSIDE);
+    hPrintf("<TR NOWRAP class='blueToggleBar'>");
+    hPrintf("<TH NOWRAP align='left' colspan=3>");
     hPrintf("\n<A NAME='%sGroup'></A>",group->name);
     hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
         collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
-    hPrintf("<A HREF='%s?%s&%s=%s#%sGroup' class='bigBlue'><IMG height=22 width=22 onclick=\"return toggleTrackGroupVisibility(this,'%s');\" id='%s_button' src='%s' alt='%s' class='bigBlue' title='%s this group'></A>&nbsp;&nbsp;",
-        hgTracksName(), cartSidUrlString(cart),collapseGroupVar(group->name),
-         otherState, group->name, group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+    hPrintf("&nbsp;<IMG class='toggleButton' onclick=\"return toggleTrackGroupVisibility(this,'%s');\" id='%s_button' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
+        group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
     hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
     hPrintf("&nbsp;&nbsp;&nbsp;");
+    //hPrintf("<span style='float:right;'>"); //FIXME: backing out float:right until I figure out why FF wraps the TH to 2 lines
+    hPrintf("<span>");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
 	   "onClick=\"document.mainForm.%s.value='%s'; %s\" title='Hide all tracks in this groups'>",
 	    configHideAll, "hide all", configGroupTarget, group->name,
@@ -145,6 +146,7 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintf("%s", wrapWhiteFont("Group Order: "));
         }
 #endif///def PRIORITY_CHANGES_IN_CONFIG_UI
+    hPrintf("</span>");
     hPrintf("</TH>\n");
 #ifdef PRIORITY_CHANGES_IN_CONFIG_UI
     if (withPriorityOverride)
@@ -328,7 +330,7 @@ for (group = groupList; group != NULL; group = group->next)
 #endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 	hPrintf("</TR>\n");
 	}
-    hTableEnd();
+    hPrintf("</TABLE>\n");
     hPrintf("<BR>");
     }
 }

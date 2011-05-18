@@ -662,6 +662,24 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=4062 dateSubmitted=2011-05-11
 
+        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HepG2 nucleus shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HepG2 nucleus)
+        subGroups view=Alignments cellType=2HepG2 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bam
+        color 189,0,157
+        # subId=4113 dateSubmitted=2011-05-13
+
+        track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HepG2 cytosol shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HepG2 cytosol)
+        subGroups view=Alignments cellType=2HepG2 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bam
+        color 189,0,157
+        # subId=4114 dateSubmitted=2011-05-13
+
     track wgEncodeCshlShortRnaSeqView3MinusRawSignal
     shortLabel Minus Signal
     view MinusRawSignal
@@ -1297,6 +1315,24 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=4062 dateSubmitted=2011-05-11
 
+        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep2
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HepG2 nucleus shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HepG2 nucleus)
+        subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 1892864.000000
+        color 189,0,157
+        # subId=4113 dateSubmitted=2011-05-13
+
+        track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HepG2 cytosol shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HepG2 cytosol)
+        subGroups view=MinusRawSignal cellType=2HepG2 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 756377.000000
+        color 189,0,157
+        # subId=4114 dateSubmitted=2011-05-13
+
     track wgEncodeCshlShortRnaSeqView2PlusRawSignal
     shortLabel Plus Signal
     view PlusRawSignal
@@ -1931,6 +1967,24 @@ superTrack wgEncodeRnaSeqSuper dense
         type bigWig 1.000000 3841099.000000
         color 189,0,157
         # subId=4062 dateSubmitted=2011-05-11
+
+        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep2
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HepG2 nucleus shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HepG2 nucleus)
+        subGroups view=PlusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 2960901.000000
+        color 189,0,157
+        # subId=4113 dateSubmitted=2011-05-13
+
+        track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HepG2 cytosol shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HepG2 cytosol)
+        subGroups view=PlusRawSignal cellType=2HepG2 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 2648832.000000
+        color 189,0,157
+        # subId=4114 dateSubmitted=2011-05-13
 
     track wgEncodeCshlShortRnaSeqViewTransfrags
     shortLabel Transfrags
