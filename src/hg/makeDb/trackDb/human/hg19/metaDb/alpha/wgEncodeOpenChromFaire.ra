@@ -1004,6 +1004,8 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH001117
+expId 1117
 fileName wgEncodeOpenChromFaireGm12892Validation.tgz
 grant Crawford
 lab UNC(Lieb)
@@ -1178,6 +1180,8 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH000586
+expId 586
 fileName wgEncodeOpenChromFaireGm18507Validation.tgz
 grant Crawford
 lab UNC(Lieb)
@@ -1352,6 +1356,8 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH000580
+expId 580
 fileName wgEncodeOpenChromFaireGm19239Validation.tgz
 grant Crawford
 lab UNC(Lieb)
@@ -2002,6 +2008,8 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH000544
+expId 544
 fileName wgEncodeOpenChromFaireHelas3Validation.tgz
 grant Crawford
 lab UNC(Lieb)
@@ -2218,6 +2226,8 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH000546
+expId 546
 fileName wgEncodeOpenChromFaireHepg2Validation.tgz
 grant Crawford
 lab UNC(Lieb)
@@ -2537,6 +2547,8 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH000549
+expId 549
 fileName wgEncodeOpenChromFaireHuvecValidation.tgz
 grant Crawford
 lab UNC(Lieb)
@@ -3650,6 +3662,8 @@ dataType FaireSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
+dccAccession wgEncodeEH000558
+expId 558
 fileName wgEncodeOpenChromFaireNhekValidation.tgz
 grant Crawford
 lab UNC(Lieb)
@@ -4067,4 +4081,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1885454585
+# MAGIC: 576396270

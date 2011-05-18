@@ -2600,6 +2600,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000542
+expId 542
 fileName wgEncodeOpenChromChipHelas3CmycValidation.tgz
 grant Crawford
 lab UT-A(Iyer)
@@ -2789,6 +2791,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000541
+expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfValidation.tgz
 grant Crawford
 lab UT-A(Iyer)
@@ -3047,6 +3051,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000597
+expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2Validation.tgz
 grant Crawford
 lab UT-A(Iyer)
@@ -3284,6 +3290,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000545
+expId 545
 fileName wgEncodeOpenChromChipHepg2CmycValidation.tgz
 grant Crawford
 lab UT-A(Iyer)
@@ -3473,6 +3481,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000543
+expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfValidation.tgz
 grant Crawford
 lab UT-A(Iyer)
@@ -3778,6 +3788,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000554
+expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2Validation.tgz
 grant Crawford
 lab UT-A(Iyer)
@@ -4084,6 +4096,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000551
+expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfValidation.tgz
 grant Crawford
 lab UT-A(Iyer)
@@ -6720,4 +6734,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: 30562163
+# MAGIC: -1278499324
