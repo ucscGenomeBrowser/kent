@@ -835,6 +835,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseFibroblValidation
 objType file
+attic auxSup
 cell Fibrobl
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -1443,6 +1444,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseGm12878Validation
 objType file
+attic auxSup
 cell GM12878
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -1976,6 +1978,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseGm18507Validation
 objType file
+attic auxSup
 cell GM18507
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -3143,6 +3146,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseHelas3Validation
 objType file
+attic auxSup
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -3515,6 +3519,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseHepg2Validation
 objType file
+attic auxSup
 cell HepG2
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -3646,6 +3651,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseHmecValidation
 objType file
+attic auxSup
 cell HMEC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -4704,6 +4710,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseHuvecValidation
 objType file
+attic auxSup
 cell HUVEC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -5017,6 +5024,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseK562Validation
 objType file
+attic auxSup
 cell K562
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -5255,6 +5263,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseLncapAndroValidation
 objType file
+attic auxSup
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -5397,6 +5406,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseLncapValidation
 objType file
+attic auxSup
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -5484,6 +5494,130 @@ subId 1545
 tableName wgEncodeOpenChromDnaseMcf7BaseOverlapSignal
 treatment None
 view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseMcf7HypoxlacAlnRep1
+objType file
+cell MCF-7
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+fileName wgEncodeOpenChromDnaseMcf7HypoxlacAlnRep1.bam
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 4155
+treatment Hypoxia_LacAcid
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseMcf7HypoxlacAlnRep2
+objType file
+cell MCF-7
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+fileName wgEncodeOpenChromDnaseMcf7HypoxlacAlnRep2.bam
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 4155
+treatment Hypoxia_LacAcid
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseMcf7HypoxlacBaseOverlapSignal
+objType table
+cell MCF-7
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+fileName wgEncodeOpenChromDnaseMcf7HypoxlacBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 4155
+tableName wgEncodeOpenChromDnaseMcf7HypoxlacBaseOverlapSignal
+treatment Hypoxia_LacAcid
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseMcf7HypoxlacPk
+objType table
+cell MCF-7
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+fileName wgEncodeOpenChromDnaseMcf7HypoxlacPk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 4155
+tableName wgEncodeOpenChromDnaseMcf7HypoxlacPk
+treatment Hypoxia_LacAcid
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseMcf7HypoxlacRawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+fileName wgEncodeOpenChromDnaseMcf7HypoxlacRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 4155
+treatment Hypoxia_LacAcid
+view RawData
+
+metaObject wgEncodeOpenChromDnaseMcf7HypoxlacRawDataRep2
+objType file
+cell MCF-7
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+fileName wgEncodeOpenChromDnaseMcf7HypoxlacRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 4155
+treatment Hypoxia_LacAcid
+view RawData
+
+metaObject wgEncodeOpenChromDnaseMcf7HypoxlacSig
+objType table
+cell MCF-7
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-17
+dateUnrestricted 2012-02-17
+fileName wgEncodeOpenChromDnaseMcf7HypoxlacSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_MCF7
+project wgEncode
+subId 4155
+tableName wgEncodeOpenChromDnaseMcf7HypoxlacSig
+treatment Hypoxia_LacAcid
+view Signal
 
 metaObject wgEncodeOpenChromDnaseMcf7Pk
 objType table
@@ -5573,6 +5707,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseMcf7Validation
 objType file
+attic auxSup
 cell MCF-7
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -6182,6 +6317,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseNhekValidation
 objType file
+attic auxSup
 cell NHEK
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -6906,6 +7042,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseProgfibValidation
 objType file
+attic auxSup
 cell ProgFib
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -7518,4 +7655,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1756983165
+# MAGIC: -1618383365
