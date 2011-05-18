@@ -9448,15 +9448,15 @@ if (url != NULL && url[0] != 0)
     if (geneSymbol!= NULL)
     	{
 	boolean disorderShown;
-	char *phenotypeClass, *questionable, *hasBracket, *hasBrace, *phenotypeId, *disorder;
+	char *phenotypeClass, *phenotypeId, *disorder;
 
 	printf("<B>Gene symbol(s):</B> %s", geneSymbol);
 	printf("<BR>\n");
 
 	/* display disorder for genes in morbidmap */
     	safef(query, sizeof(query),
-	 "select disorder, phenotypeClass, questionable, hasBracket, hasBrace, phenotypeId from omimDisorderPhenotype where omimId=%s order by disorder",
-	 itemName);
+	      "select description, phenotypeClass, phenotypeId from omimPhenotype where omimId=%s order by description",
+	      itemName);
     	sr = sqlMustGetResult(conn, query);
 	disorderShown = FALSE;
         while ((row = sqlNextRow(sr)) != NULL)
@@ -9468,10 +9468,7 @@ if (url != NULL && url[0] != 0)
 		}
 	    disorder       = row[0];
 	    phenotypeClass = row[1];
-	    questionable   = row[2];
-	    hasBracket     = row[3];
-	    hasBrace	   = row[4];
-	    phenotypeId    = row[5];
+	    phenotypeId    = row[2];
 	    printf("<LI>%s", disorder);
  	    if (phenotypeId != NULL)
 	    	{
@@ -9658,17 +9655,17 @@ if (url != NULL && url[0] != 0)
 	}
     sqlFreeResult(&sr);
 
-    safef(query, sizeof(query),"select omimId from omimDisorderPhenotype where omimId=%s\n", omimId);
+    safef(query, sizeof(query),"select omimId from omimPhenotype where omimId=%s\n", omimId);
     if (sqlQuickNum(conn, query) > 0)
     	{
-	char *phenotypeClass, *questionable, *hasBracket, *hasBrace, *phenotypeId, *disorder;
+	char *phenotypeClass, *phenotypeId, *disorder;
 
 	printf("<B>Gene symbol(s):</B> %s", geneSymbol);
 	printf("<BR>\n");
 
 	/* display disorder for genes in morbidmap */
     	safef(query, sizeof(query),
-	 "select disorder, phenotypeClass, questionable, hasBracket, hasBrace, phenotypeId from omimDisorderPhenotype where omimId=%s order by disorder",
+	 "select description, phenotypeClass, phenotypeId from omimPhenotype where omimId=%s order by description",
 	 itemName);
     	sr = sqlMustGetResult(conn, query);
  	printf("<B>Disorder(s):</B><UL>\n");
@@ -9676,10 +9673,7 @@ if (url != NULL && url[0] != 0)
     	    {
 	    disorder       = row[0];
 	    phenotypeClass = row[1];
-	    questionable   = row[2];
-	    hasBracket     = row[3];
-	    hasBrace	   = row[4];
-	    phenotypeId    = row[5];
+	    phenotypeId    = row[2];
 	    printf("<LI>%s", disorder);
  	    if (phenotypeId != NULL)
 	    	{

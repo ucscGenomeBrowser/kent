@@ -484,6 +484,45 @@ else
 safecpy(parsed->host, sizeof(parsed->host), s);
 }
 
+char *urlFromNetParsedUrl(struct netParsedUrl *npu)
+/* Build URL from netParsedUrl structure */
+{
+struct dyString *dy = newDyString(512);
+
+dyStringAppend(dy, npu->protocol);
+dyStringAppend(dy, "://");
+if (npu->user[0] != 0)
+    {
+    dyStringAppend(dy, npu->user);
+    if (npu->password[0] != 0)
+	{
+	dyStringAppend(dy, ":");
+	dyStringAppend(dy, npu->password);
+	}
+    dyStringAppend(dy, "@");
+    }
+dyStringAppend(dy, npu->host);
+/* do not include port if it is the default */
+if (!(
+ (sameString(npu->protocol, "ftp"  ) && sameString("21", npu->port)) ||
+ (sameString(npu->protocol, "http" ) && sameString("80", npu->port)) ||
+ (sameString(npu->protocol, "https") && sameString("443",npu->port))
+    ))
+    {
+    dyStringAppend(dy, ":");
+    dyStringAppend(dy, npu->port);
+    }
+dyStringAppend(dy, npu->file);
+if (npu->byteRangeStart != -1)
+    {
+    dyStringPrintf(dy, ";byterange=%lld-", (long long)npu->byteRangeStart);
+    if (npu->byteRangeEnd != -1)
+	dyStringPrintf(dy, "%lld", (long long)npu->byteRangeEnd);
+    }
+
+/* Clean up and return handle. */
+return dyStringCannibalize(&dy);
+}
 
 /* this was cloned from rudp.c - move it later for sharing */
 static boolean readReadyWait(int sd, int microseconds)
@@ -1005,7 +1044,8 @@ dyStringPrintf(dy, "%s %s %s\r\n", method, proxyUrl ? urlForProxy : npu.file, pr
 freeMem(urlForProxy);
 dyStringPrintf(dy, "User-Agent: %s\r\n", agent);
 /* do not need the 80 since it is the default */
-if (sameString("80",npu.port))
+if ((sameString(npu.protocol, "http" ) && sameString("80", npu.port)) ||
+    (sameString(npu.protocol, "https") && sameString("443",npu.port)))
     dyStringPrintf(dy, "Host: %s\r\n", npu.host);
 else
     dyStringPrintf(dy, "Host: %s:%s\r\n", npu.host, npu.port);
@@ -1435,6 +1475,29 @@ while (TRUE)
 	    }
 	else 
 	    {
+	    struct netParsedUrl npu, newNpu;
+	    /* Parse the old URL to make parts available for graft onto the redirected url. */
+	    /* This makes redirection work with byterange urls and user:password@ */
+	    netParseUrl(url, &npu);
+	    netParseUrl(newUrl, &newNpu);
+	    boolean updated = FALSE;
+	    if (npu.byteRangeStart != -1)
+		{
+		newNpu.byteRangeStart = npu.byteRangeStart;
+		newNpu.byteRangeEnd = npu.byteRangeEnd;
+		updated = TRUE;
+		}
+	    if ((npu.user[0] != 0) && (newNpu.user[0] == 0))
+		{
+		safecpy(newNpu.user,     sizeof newNpu.user,     npu.user);
+		safecpy(newNpu.password, sizeof newNpu.password, npu.password);
+		updated = TRUE;
+		}
+	    if (updated)
+		{
+		freeMem(newUrl);
+		newUrl = urlFromNetParsedUrl(&newNpu);
+		}
 	    sd = netUrlOpen(newUrl);
 	    if (sd < 0)
 		{
@@ -1951,9 +2014,6 @@ while (TRUE)
 			{
 			/*  Update sd with newSd, replace it with newUrl, etc. */
 			pc->sd = newSd;
-			warn("Redirects not supported at this time: %s re-directed to: %s", url, newUrl);
-			freeMem(newUrl);  /* redirects with byterange do not work anyway */
-			return FALSE;
 			}
 		    }
 		++connOpen;

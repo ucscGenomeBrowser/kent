@@ -1,0 +1,26 @@
+term AP-2alpha
+tag AP2alpha
+type Antibody
+target AP-2alpha
+antibodyDescription Rabbit polyclonal - AP-2alpha (H-79) is a rabbit polyclonal antibody raised against amino acids 130-209 mapping within an internal region of AP-2alpha of human origin.
+targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes.  AP-2 factors bind to the consensus sequence 5' -GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development.  They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.  AP-2alpha is the only AP-2 protein required for early morphogenesis of the lens vesicle (by similarity).
+vendorName Santa Cruz Biotech
+vendorId sc-8975
+foo bar
+orderUrl http://www.scbt.com/datasheet-8975-ap-2alpha-h-79-antibody.html
+lab Farnham
+targetId GeneCard:TFAP2A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2A
+validation AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
+
+term UCD
+tag UCD
+type lab
+label Farnham - University of California at Davis
+description Farnham - University of California at Davis
+labName UCD
+labPi Farnham
+labPiFull Peggy Farnham
+grantPi Snyder
+organism human
+

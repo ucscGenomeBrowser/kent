@@ -14956,103 +14956,6 @@ nice ./getBedFile.pl &
 hgLoadBed -noSort hg19  tfbsConsSites -sqlTable=$HOME/kent/src/hg/lib/tfbsConsSites.sql tfbsConsSites.bed -tab
 hgLoadSqlTab hg19 tfbsConsFactors $HOME/kent/src/hg/lib/tfbsConsFactors.sql tfbsConsFactors.bed
 #########################################################################
-# BUILD OMIM RELATED TRACKS (started 1/13/2011, refined, and finally done 03/08/11 Fan)
-
-ssh hgwdev
-cd /hive/data/genomes/hg19/bed
-mkdir -p omim/03052011
-cd omim/03052011
-
-# download the file morbidmap and genemap from OMIM
-
-wget --timestamping ftp://ftp.ncbi.nih.gov/repository/OMIM/genemap
-wget --timestamping ftp://ftp.ncbi.nih.gov/repository/OMIM/omim.txt.Z
-
-# put mim2gene.txt and mimAV.txt emailed from OMIM here.
-
-cat genemap|sed -e 's/|/\t/g' > genemap.tab
-
-#changed string to blob for disorders1, disorders2, disorders3. 
-hgLoadSqlTab -warn hg19 omimGeneMap ~/kent/src/hg/lib/omimGeneMap.sql genemap.tab
-
-# Build OMIM phenotype class 3 subtrack
-
-hgsql hg19 -e 'drop table mim2gene'
-hgsql hg19 < ~/kent/src/hg/lib/mim2gene.sql
-hgsql hg19 -e 'load data local infile "mim2gene.txt" into table mim2gene ignore 1 lines'
-
-doOmimDisorders hg19 omimDisorderMap.tab
-hgsql hg19 -e "drop table omimDisorderMap"
-hgsql hg19 < ~/kent/src/hg/lib/omimDisorderMap.sql
-hgLoadSqlTab -warn hg19 omimDisorderMap ~/kent/src/hg/lib/omimDisorderMap.sql omimDisorderMap.tab 
-
-# build omimGeneSymbol table
-
-doOmimGeneSymbols hg19 j.out
-cat j.out |sort -u >omimGeneSymbol.tab
-hgLoadSqlTab -warn hg19 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab 
-
-parseOmimDisorder hg19 omimDisorderPhenotype.tab
-hgLoadSqlTab -warn hg19 omimDisorderPhenotype ~/kent/src/hg/lib/omimDisorderPhenotype.sql omimDisorderPhenotype.tab 
-
-doOmimGene2 hg19 j.tmp
-cat j.tmp |sort -u > omimGene2.tab
-
-hgLoadBed hg19 omimGene2 omimGene2.tab
-
-rm j.tmp
-##############################################################
-# build the omimAvSnp track
-
-cd /hive/data/genomes/hg19/bed/omim/03052011
-mkdir av
-cd av
-
-# get the mimAV.txt data file from OMIM
-
-cut -f 1 mimAV.txt >j1
-cut -f 2 mimAV.txt >j2
-cut -f 3  mimAV.txt >j3
-cut -f 4  mimAV.txt >j4
-cut -f 5  mimAV.txt >j5
-
-cat j1 |sed -e 's/\./\t/' >j1.2
-
-cat j4 |sed -e 's/,/\t/' >j4-2
-cut -f 1 j4-2 >j4.1
-cut -f 2 j4-2 >j4.2
-
-paste j1 j1.2 j3 j4 j4.1 j4.2 j5 j2 >omimAv.tab
-
-hgsql hg19 -e 'drop table omimAv'
-hgsql hg19 < ~/src/hg/lib/omimAv.sql
-hgsql hg19 -e \
-'load data local infile "omimAv.tab" into table omimAv ignore 1 lines'
-hgsql hg19 -e 'update omimAv set repl2 = rtrim(ltrim(repl2))'
-
-doOmimAv hg19 omimAvRepl.tab  2>j.err
-
-hgsql hg19 -e "drop table omimAvRepl"
-hgsql hg19 < ~/kent/src/hg/lib/omimAvRepl.sql
-hgsql hg19 -e 'load data local infile "omimAvRepl.tab" into table omimAvRepl'
-
-rm j1.2  j1 j2 j3  j4  j4-2  j4.1  j4.2  j5
-##############################################################
-# build the omimLocation track
-
-cd /hive/data/genomes/hg19/bed/omim/03052011
-mkdir location
-cd location
-
-doOmimLocation hg19 omimLocation.bed 2>j.err
-hgLoadBed hg19 omimLocation omimLocation.bed
-
-# Remove all gene entries in omimGene2
-
-hgsql hg19 -N -e \
-'delete from omimLocation where name  in (select name from omimGene2) '
-
-##############################################################
 # BUILD THE TRACK OF IKMC MAPPED TO HUMAN GENOME. (DONE, Fan, 3/15/11)
 
     ssh hgwdev
@@ -15833,3 +15736,100 @@ TMPDIR=/scratch/tmp
 
 
 ###################################################################
+# BUILD OMIM RELATED TRACKS (REBUILT 5/17/11, Fan)
+
+ssh hgwdev
+cd /hive/data/genomes/hg19/bed
+mkdir -p omim/05172011
+cd omim/05172011
+
+# obtain the following files from OMIM and place them at this subdirectory
+
+       genemap.txt  
+       mim2gene.txt  
+       mimAV.txt
+       script1.pl  
+       script2.pl
+
+cat genemap.txt|sed -e 's/|/\t/g' > genemap.tab
+
+hgLoadSqlTab -warn hg19 omimGeneMap ~/kent/src/hg/lib/omimGeneMap.sql genemap.tab
+
+# Load mim2gene table
+
+hgsql hg19 -e 'drop table mim2gene'
+hgsql hg19 < ~/kent/src/hg/lib/mim2gene.sql
+hgsql hg19 -e 'load data local infile "mim2gene.txt" into table mim2gene ignore 1 lines'
+
+doOmimDisorders hg19 omimDisorderMap.tab
+hgsql hg19 -e "drop table omimDisorderMap"
+hgsql hg19 < ~/kent/src/hg/lib/omimDisorderMap.sql
+hgLoadSqlTab -warn hg19 omimDisorderMap ~/kent/src/hg/lib/omimDisorderMap.sql omimDisorderMap.tab 
+
+# build omimGeneSymbol table
+
+doOmimGeneSymbols hg19 j.out
+cat j.out |sort -u >omimGeneSymbol.tab
+hgLoadSqlTab -warn hg19 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab 
+
+perl ./script1.pl --gene-map-file=genemap.txt >omimPhenotype.tab
+hgLoadSqlTab -warn hg19 omimPhenotype ~/kent/src/hg/lib/omimPhenotype.sql omimPhenotype.tab 
+
+doOmimGene2 hg19 j.tmp
+cat j.tmp |sort -u > omimGene2.tab
+
+hgLoadBed hg19 omimGene2 omimGene2.tab
+
+rm j.tmp
+##############################################################
+# build the omimAvSnp track
+
+cd /hive/data/genomes/hg19/bed/omim/05172011
+mkdir av
+cd av
+
+# get the mimAV.txt data file from OMIM
+
+cut -f 1 mimAV.txt >j1
+cut -f 2 mimAV.txt >j2
+cut -f 3  mimAV.txt >j3
+cut -f 4  mimAV.txt >j4
+cut -f 5  mimAV.txt >j5
+
+cat j1 |sed -e 's/\./\t/' >j1.2
+
+cat j4 |sed -e 's/,/\t/' >j4-2
+cut -f 1 j4-2 >j4.1
+cut -f 2 j4-2 >j4.2
+
+paste j1 j1.2 j3 j4 j4.1 j4.2 j5 j2 >omimAv.tab
+
+hgsql hg19 -e 'drop table omimAv'
+hgsql hg19 < ~/src/hg/lib/omimAv.sql
+hgsql hg19 -e \
+'load data local infile "omimAv.tab" into table omimAv ignore 1 lines'
+hgsql hg19 -e 'update omimAv set repl2 = rtrim(ltrim(repl2))'
+
+doOmimAv hg19 omimAvRepl.tab  2>j.err
+
+hgsql hg19 -e "drop table omimAvRepl"
+hgsql hg19 < ~/kent/src/hg/lib/omimAvRepl.sql
+hgsql hg19 -e 'load data local infile "omimAvRepl.tab" into table omimAvRepl'
+
+rm j1.2  j1 j2 j3  j4  j4-2  j4.1  j4.2  j5
+##############################################################
+# build the omimLocation track
+
+cd /hive/data/genomes/hg19/bed/omim/05172011
+mkdir location
+cd location
+
+doOmimLocation hg19 omimLocation.bed 2>j.err
+hgLoadBed hg19 omimLocation omimLocation.bed
+
+# Remove all gene entries in omimGene2 from omimLocation table
+
+hgsql hg19 -N -e \
+'delete from omimLocation where name  in (select name from omimGene2) '
+
+##############################################################
