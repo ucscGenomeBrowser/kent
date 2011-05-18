@@ -5517,6 +5517,12 @@ cartCheckout(&oldCart);
 cgiVarExcludeExcept(except);
 }
 
+static void addDataHubs(struct cart *cart)
+{
+hubCheckForNew(database, cart);
+cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
+}
+
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -5613,6 +5619,13 @@ hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
 // XXXX stole this and '.hidden' from bioInt.css - needs work
 hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
     }
+
+/* check for new data hub */
+if (cartVarExists(cart, hgHubDataText))
+    {
+    addDataHubs(cart);
+    }
+
 if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");
@@ -5684,12 +5697,3 @@ else
     tracksDisplay();
     }
 }
-
-void doDown(struct cart *cart)
-{
-printf("<H2>The Browser is Being Updated</H2>\n");
-printf("The browser is currently unavailable.  We are in the process of\n");
-printf("updating the database and the display software with a number of\n");
-printf("new tracks, including some gene predictions.  Please try again tomorrow.\n");
-}
-

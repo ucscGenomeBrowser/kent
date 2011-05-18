@@ -12,6 +12,9 @@
 #define hubStatusTableName "hubStatus"
 /* Name of table that maintains status of hubs  read/write. */
 
+#define hgHubDataText      "hubUrl"
+/* name of cgi variable containing new hub name */
+
 #define hubTrackPrefix "hub_"
 /* The names of all hub tracks begin with this.  Use in cart. */
 
@@ -87,4 +90,14 @@ char *hubFileVar();
 
 boolean hubWriteToFile(FILE *f, struct hubConnectStatus *el);
 /* write out a hubConnectStatus structure to a file */
+
+unsigned hubFindOrAddUrlInStatusTable(char *database, struct cart *cart,
+    char *url, char **errorMessage);
+/* find or add a URL to the status table */
+
+void hubClearStatus(char *url);
+/* delete the status for this hub from the status table */
+
+void hubCheckForNew(char *database, struct cart *cart);
+/* see if the user just typed in a new hub url */
 #endif /* HUBCONNECT_H */
