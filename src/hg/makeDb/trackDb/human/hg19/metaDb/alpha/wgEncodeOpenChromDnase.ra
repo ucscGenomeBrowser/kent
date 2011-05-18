@@ -835,6 +835,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseFibroblValidation
 objType file
+attic auxSup
 cell Fibrobl
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -1443,6 +1444,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseGm12878Validation
 objType file
+attic auxSup
 cell GM12878
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -1976,6 +1978,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseGm18507Validation
 objType file
+attic auxSup
 cell GM18507
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -3143,6 +3146,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseHelas3Validation
 objType file
+attic auxSup
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -3515,6 +3519,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseHepg2Validation
 objType file
+attic auxSup
 cell HepG2
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -3646,6 +3651,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseHmecValidation
 objType file
+attic auxSup
 cell HMEC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -4704,6 +4710,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseHuvecValidation
 objType file
+attic auxSup
 cell HUVEC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -5017,6 +5024,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseK562Validation
 objType file
+attic auxSup
 cell K562
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -5255,6 +5263,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseLncapAndroValidation
 objType file
+attic auxSup
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -5397,6 +5406,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseLncapValidation
 objType file
+attic auxSup
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -5573,6 +5583,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseMcf7Validation
 objType file
+attic auxSup
 cell MCF-7
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -6182,6 +6193,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseNhekValidation
 objType file
+attic auxSup
 cell NHEK
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -6906,6 +6918,7 @@ view Signal
 
 metaObject wgEncodeOpenChromDnaseProgfibValidation
 objType file
+attic auxSup
 cell ProgFib
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
@@ -7518,4 +7531,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1756983165
+# MAGIC: 1757332521
