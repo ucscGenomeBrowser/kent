@@ -913,7 +913,7 @@ anoCar2.7way.nh > anoCar2.commonNames.7way.nh
 #  3  1.199 - human hg19          (%  5.19) (%  3.55)       5000     loose
 #  4  1.411 - mouse mm9           (%  4.98) (%  3.36)       5000     loose
 #  5  1.622 - X.tropicalis xenTro2(%  5.05) (%  6.76)       5000     loose
-#  6  1.927 - stickleback gasAcu1 (%  3.14) (% 12.54)       3000     medium
+#  6  1.927 - stickleback gasAcu1 (%  3.14) (% 12.54)       5000     loose
 
 # None of this concern for distances matters in building the first step, the
 # maf files.
