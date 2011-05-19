@@ -212,6 +212,7 @@ else
 // override looking for the cv.ra file in the standard place.
 cvFileDeclare(cvName);
 struct dyString *dySettings = dyStringNew(512);
+char *checkSettings = setting;
 
 // typeOfTerms is the set of type definitions
 if (type == NULL || sameWord(type,CV_TOT))
@@ -223,8 +224,15 @@ if (type == NULL || sameWord(type,CV_TOT))
         {
         dyStringAppend(dySettings,CV_LABEL " " CV_DESCRIPTION " " CV_VALIDATE " "
                 CV_TOT_PRIORITY " " CV_TOT_CV_DEFINED);
+        if (type != NULL && setting == NULL)
+            verbose(1,"Must haves: %s\n",dyStringContents(dySettings));
         if (level > 0)
-            dyStringAppend(dySettings," " CV_TOT_SEARCHABLE " " CV_TOT_HIDDEN);
+            {
+            checkSettings = " " CV_TOT_SEARCHABLE " " CV_TOT_HIDDEN;
+            if (type != NULL && setting == NULL)
+                verbose(1,"Should haves:%s\n",checkSettings);
+            dyStringAppend(dySettings,checkSettings);
+            }
         }
     count += cvTypeMustHaveSettings(&cvTypes,CV_TOT,dyStringContents(dySettings));
     }
@@ -238,9 +246,16 @@ if (type == NULL || sameWord(type,CV_TERM_ANTIBODY))
     else
         {
         dyStringAppend(dySettings,CV_TAG " " CV_TERM_LAB " " CV_VENDER_NAME " " CV_VENDOR_ID
-                                " antibodyDescription " CV_TARGET "  targetDescription");
+                                " antibodyDescription " CV_TARGET " targetDescription");
+        if (type != NULL && setting == NULL)
+            verbose(1,"Must haves: %s\n",dyStringContents(dySettings));
         if (level > 0)
-            dyStringAppend(dySettings," " CV_ORDER_URL " validation targetId targetUrl");
+            {
+            checkSettings = " " CV_ORDER_URL " validation targetId targetUrl";
+            dyStringAppend(dySettings,checkSettings);
+            if (type != NULL && setting == NULL)
+                verbose(1,"Should haves:%s\n",checkSettings);
+            }
         }
     count += cvTypeMustHaveSettings(&cvTypes,cvTypeNormalized(CV_TERM_ANTIBODY),
                                      dyStringContents(dySettings));
@@ -255,40 +270,60 @@ if (type == NULL || sameWord(cvTermNormalized(type),CV_TERM_CELL))
     else
         {
         dyStringAppend(dySettings,CV_TAG " " CV_DESCRIPTION " " CV_ORGANISM " " CV_SEX);
+        if (type != NULL && setting == NULL)
+            verbose(1,"Must haves: %s\n",dyStringContents(dySettings));
         if (level > 0)
-            dyStringAppend(dySettings," " CV_PROTOCOL " " CV_VENDER_NAME " " CV_VENDOR_ID
-                                    " " CV_ORDER_URL " " CV_TERM_ID  " " CV_TERM_URL);
+            {
+            checkSettings = " " CV_PROTOCOL " " CV_VENDER_NAME " " CV_VENDOR_ID
+                                    " " CV_ORDER_URL " " CV_TERM_ID  " " CV_TERM_URL;
+            dyStringAppend(dySettings,checkSettings);
+            if (type != NULL && setting == NULL)
+                verbose(1,"Should haves:%s\n",checkSettings);
+            }
         if (level > 1)
-            dyStringAppend(dySettings," " CV_LINEAGE " " CV_TIER " " CV_TISSUE " color karyotype");
+            {
+            checkSettings = " " CV_LINEAGE " " CV_TIER " " CV_TISSUE " color karyotype";
+            if (type != NULL && setting == NULL)
+                verbose(1,"Kitchen sink:%s\n",checkSettings);
+            dyStringAppend(dySettings,checkSettings);
+            }
         }
     count += cvTypeMustHaveSettings(&cvTypes,CV_UGLY_TERM_CELL_LINE,dyStringContents(dySettings));
     }
 
 // Other types with non-standard requirements
-char *checkSettings = setting;
+checkSettings = setting;
 if (type == NULL || sameWord(type,CV_TERM_LAB))
     {
     if (setting == NULL)
         checkSettings = CV_TAG " " CV_DESCRIPTION " " CV_LABEL " " CV_ORGANISM
                         " labInst labPi labPiFull grantPi";
+    if (type != NULL && setting == NULL)
+        verbose(1,"Must haves: %s\n",checkSettings);
     count += cvTypeMustHaveSettings(&cvTypes,CV_TERM_LAB,checkSettings);
     }
 if (type == NULL || sameWord(type,CV_TERM_GRANT))
     {
     if (setting == NULL)
         checkSettings = CV_TAG " " CV_DESCRIPTION " grantInst projectName";
+    if (type != NULL && setting == NULL)
+        verbose(1,"Must haves: %s\n",checkSettings);
     count += cvTypeMustHaveSettings(&cvTypes,CV_TERM_GRANT,checkSettings);
     }
 if (type == NULL || sameWord(type,CV_TERM_LOCALIZATION))
     {
     if (setting == NULL)
         checkSettings = CV_TAG " " CV_DESCRIPTION " " CV_TERM_ID " " CV_TERM_URL;
+    if (type != NULL && setting == NULL)
+        verbose(1,"Must haves: %s\n",checkSettings);
     count += cvTypeMustHaveSettings(&cvTypes,CV_TERM_LOCALIZATION,checkSettings);
     }
 if (type == NULL || sameWord(type,CV_TERM_SEQ_PLATFORM))
     {
     if (setting == NULL)
         checkSettings = CV_TAG " " CV_DESCRIPTION " geo";
+    if (type != NULL && setting == NULL)
+        verbose(1,"Must haves: %s\n",checkSettings);
     count += cvTypeMustHaveSettings(&cvTypes,CV_TERM_SEQ_PLATFORM,checkSettings);
     }
 
@@ -296,10 +331,14 @@ if (type == NULL || sameWord(type,CV_TERM_SEQ_PLATFORM))
 if (setting == NULL)
     checkSettings = CV_TAG " " CV_DESCRIPTION;
 while(cvTypes != NULL)
+    {
+    if (type != NULL && setting == NULL)
+        verbose(1,"Must haves: %s\n",checkSettings);
     count += cvTypeMustHaveSettings(&cvTypes,cvTypes->name,checkSettings);
+    }
 
-if (count > 0)
-    verbose(1,"Found %d error%s.\n",count,(count>1?"s":""));
+if (count > 0 || type != NULL)
+    verbose(1,"Found %d error%s.\n",count,(count==1?"":"s"));
 
 return count;
 }
