@@ -32,8 +32,8 @@ noInherit on
 
 		track wgEncodeSydhNsomeGm12878Sig
         	parent wgEncodeSydhNsomeViewSignal
-        	shortLabel GM12878 Sig
-        	longLabel GM12878 Signal from ENCODE/Stanford Nucleosome
+        	shortLabel GM12878 Sig1
+        	longLabel GM12878 Nucleosome Signal from ENCODE/SYDH
         	subGroups view=Signal cellType=GM12878
         	type bigWig 0.000000 16392.599609
         	origAssembly hg19
@@ -42,9 +42,8 @@ noInherit on
 
 		track wgEncodeSydhNsomeK562Sig
 	        parent wgEncodeSydhNsomeViewSignal
-	        shortLabel K562 Sig
-	        longLabel K562 Signal from ENCODE/Stanford Nucleosome
-		longLabel ENCODE Stanford Nucleosome Signal (in K562 cells)
+	        shortLabel K562 Sig1
+	        longLabel K562 Nucleosome Signal from ENCODE/SYDH
 	        subGroups view=Signal cellType=K562
 	        type bigWig 0.000000 31177.300781
 	        origAssembly hg19
