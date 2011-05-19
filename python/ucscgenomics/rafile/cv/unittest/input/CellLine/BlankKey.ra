@@ -1,0 +1,34 @@
+term GM12878
+tag GM12878
+type Cell Line
+organism human
+description lymphoblastoid
+tissue Blood
+vendorName Coriell
+vendorId GM12878
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&PgId=166
+karyotype relatively normal
+lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus
+termId BTO:0002026 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+color 153,38,0
+sex 
+tier 1
+protocol GM12878_protocol.pdf
+
+term human
+tag human
+type organism
+description human
+
+term F
+tag F
+type sex
+description Female
+
+term 1
+tag 1
+type tier
+description tier 1
+
+

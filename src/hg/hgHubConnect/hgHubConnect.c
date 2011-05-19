@@ -20,7 +20,6 @@
 #include "dystring.h"
 #include "hPrint.h"
 
-#define hgHubDataText      "hgHub_customText"
 
 #define hgHub             "hgHub_"  /* prefix for all control variables */
 #define hgHubDo            hgHub   "do_"    /* prefix for all commands */
@@ -35,29 +34,7 @@ static char *pageTitle = "Import Tracks from Data Hubs";
 char *database = NULL;
 char *organism = NULL;
 
-static boolean nameInCommaList(char *name, char *commaList)
-/* Return TRUE if name is in comma separated list. */
-{
-if (commaList == NULL)
-    return FALSE;
-int nameLen = strlen(name);
-for (;;)
-    {
-    char c = *commaList;
-    if (c == 0)
-        return FALSE;
-    if (memcmp(name, commaList, nameLen) == 0)
-        {
-	c = commaList[nameLen];
-	if (c == 0 || c == ',')
-	    return TRUE;
-	}
-    commaList = strchr(commaList, ',');
-    if (commaList == NULL)
-        return FALSE;
-    commaList += 1;
-    }
-}
+boolean nameInCommaList(char *name, char *commaList);
 
 static void hgHubConnectUnlisted()
 /* Put up the list of unlisted hubs and other controls for the page. */
@@ -175,167 +152,6 @@ helpUnlistedHub();
 cartWebEnd(cart);
 }
 
-static void enterHubInStatus(struct trackHub *tHub, boolean unlisted)
-/* put the hub status in the hubStatus table */
-{
-struct sqlConnection *conn = hConnectCentral();
-
-/* calculate dbList */
-struct dyString *dy = newDyString(1024);
-struct hashEl *hel;
-struct hashCookie cookie = hashFirst(tHub->genomeHash);
-int dbCount = 0;
-
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    dbCount++;
-    dyStringPrintf(dy,"%s,", hel->name);
-    }
-
-
-char query[512];
-safef(query, sizeof(query), "insert into %s (hubUrl,status,shortLabel, longLabel, dbList, dbCount) values (\"%s\",%d,\"%s\",\"%s\", \"%s\", %d)",
-    hubStatusTableName, tHub->url, unlisted ? 1 : 0,
-    tHub->shortLabel, tHub->longLabel,
-    dy->string, dbCount);
-sqlUpdate(conn, query);
-hDisconnectCentral(&conn);
-}
-
-static unsigned getHubId(char *url, char **errorMessage)
-/* find id for url in hubStatus table */
-{
-struct sqlConnection *conn = hConnectCentral();
-char query[512];
-char **row;
-boolean foundOne = FALSE;
-int id = 0;
-
-safef(query, sizeof(query), "select id,errorMessage from %s where hubUrl = \"%s\"", hubStatusTableName, url);
-
-struct sqlResult *sr = sqlGetResult(conn, query);
-
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (foundOne)
-	errAbort("more than one line in %s with hubUrl %s\n", 
-	    hubStatusTableName, url);
-
-    foundOne = TRUE;
-
-    char *thisId = row[0], *thisError = row[1];
-
-    if (!isEmpty(thisError))
-	*errorMessage = cloneString(thisError);
-
-    id = sqlUnsigned(thisId);
-    }
-sqlFreeResult(&sr);
-
-hDisconnectCentral(&conn);
-
-return id;
-}
-
-static boolean hubHasDatabase(unsigned id, char *database)
-/* check to see if hub specified by id supports database */
-{
-struct sqlConnection *conn = hConnectCentral();
-char query[512];
-
-safef(query, sizeof(query), "select dbList from %s where id=%d", 
-    hubStatusTableName, id); 
-char *dbList = sqlQuickString(conn, query);
-boolean gotIt = FALSE;
-
-if (nameInCommaList(database, dbList))
-    gotIt = TRUE;
-
-hDisconnectCentral(&conn);
-
-freeMem(dbList);
-
-return gotIt;
-}
-
-static boolean fetchHub(char *url, boolean unlisted)
-{
-struct errCatch *errCatch = errCatchNew();
-struct trackHub *tHub = NULL;
-boolean gotWarning = FALSE;
-unsigned id = 0;
-
-if (errCatchStart(errCatch))
-    tHub = trackHubOpen(url, "1"); // open hub.. it'll get renamed later
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    {
-    gotWarning = TRUE;
-    warn(errCatch->message->string);
-    }
-errCatchFree(&errCatch);
-
-if (gotWarning)
-    {
-    return 0;
-    }
-
-if (hashLookup(tHub->genomeHash, database) != NULL)
-    {
-    enterHubInStatus(tHub, unlisted);
-    }
-else
-    {
-    warn("requested hub at %s does not have data for %s\n", url, database);
-    return 0;
-    }
-
-trackHubClose(&tHub);
-
-char *errorMessage = NULL;
-id = getHubId(url, &errorMessage);
-return id;
-}
-
-static void getAndSetHubStatus(char *url, boolean set, boolean unlisted)
-{
-char *errorMessage = NULL;
-unsigned id;
-
-if ((id = getHubId(url, &errorMessage)) == 0)
-    {
-    if ((id = fetchHub(url, unlisted)) == 0)
-	return;
-    }
-else if (!hubHasDatabase(id, database))
-    {
-    warn("requested hub at %s does not have data for %s\n", url, database);
-    return;
-    }
-
-char hubName[32];
-safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
-if (set)
-    cartSetString(cart, hubName, "1");
-}
-
-static unsigned findOrAddUrlInStatusTable( char *url, char **errorMessage)
-/* find this url in the status table, and return its id and errorMessage (if an errorMessage exists) */
-{
-int id = 0;
-
-*errorMessage = NULL;
-
-if ((id = getHubId(url, errorMessage)) > 0)
-    return id;
-
-getAndSetHubStatus(url, FALSE, FALSE);
-
-if ((id = getHubId(url, errorMessage)) == 0)
-    errAbort("inserted new hubUrl %s, but cannot find it", url);
-
-return id;
-}
 
 void hgHubConnectPublic()
 /* Put up the list of external hubs and other controls for the page. */
@@ -363,7 +179,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    gotAnyRows = TRUE;
 	    }
 	char *errorMessage = NULL;
-	unsigned id = findOrAddUrlInStatusTable( url, &errorMessage);
+	unsigned id = hubFindOrAddUrlInStatusTable(database, cart, 
+	    url, &errorMessage);
 
 	if ((id != 0) && isEmpty(errorMessage)) 
 	    {
@@ -399,45 +216,16 @@ else
 hDisconnectCentral(&conn);
 }
 
-void checkForNewHub(struct cart *cart)
-/* see if the user just typed in a new hub url */
-{
-char *url = cartOptionalString(cart, hgHubDataText);
-
-if (url != NULL)
-    {
-    getAndSetHubStatus(url, TRUE, TRUE);
-    }
-}
-
-static void clearHubStatus(char *url)
-{
-struct sqlConnection *conn = hConnectCentral();
-char query[512];
-
-safef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", hubStatusTableName, url);
-unsigned id = sqlQuickNum(conn, query);
-
-if (id == 0)
-    errAbort("could not find url %s in status table (%s)\n", 
-	url, hubStatusTableName);
-
-safef(query, sizeof(query), "delete from %s where hubUrl = \"%s\"", hubStatusTableName, url);
-
-sqlUpdate(conn, query);
-hDisconnectCentral(&conn);
-
-printf("%s status has been cleared\n", url);
-}
-
 static void doClearHub(struct cart *theCart)
 {
 char *url = cartOptionalString(cart, hgHubDataText);
 
+printf("<pre>clearing hub %s\n",url);
 if (url != NULL)
-    clearHubStatus(url);
+    hubClearStatus(url);
 else
     errAbort("must specify url in %s\n", hgHubDataText);
+printf("<pre>Completed\n");
 }
 
 void doMiddle(struct cart *theCart)
@@ -461,7 +249,7 @@ else
        );
     makeGenomePrint();
 
-    checkForNewHub(cart);
+    hubCheckForNew(database, cart);
     printf("<BR><P>");
     printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
     cartSaveSession(cart);
@@ -480,7 +268,7 @@ else
 cartWebEnd();
 }
 
-char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl, hgHubDoAdd, hgHubDoClear hgHubDataText, NULL};
+char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl, hgHubDoAdd, hgHubDoClear, hgHubDataText, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */

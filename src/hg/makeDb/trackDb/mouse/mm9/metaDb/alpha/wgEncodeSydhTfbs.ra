@@ -4422,19 +4422,20 @@ tableName wgEncodeSydhTfbsMelMafkab50322IggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelMaxIggrabAlnRep1
+metaObject wgEncodeSydhTfbsMelMaxIggmusAlnRep1V2
 objType file
 age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-rab
-controlId MEL/None/Input/IgG-rab
+control IgG-mus
+controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-05-17
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelMaxIggmusAlnRep1V2.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -4442,23 +4443,25 @@ replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1863
+subId 4157
+submittedDataVersion V2 - Resubmitted with correct alignment file.
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelMaxIggrabAlnRep2
+metaObject wgEncodeSydhTfbsMelMaxIggmusAlnRep2V2
 objType file
 age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-rab
-controlId MEL/None/Input/IgG-rab
+control IgG-mus
+controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-05-17
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelMaxIggmusAlnRep2V2.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -4466,7 +4469,8 @@ replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1863
+subId 4157
+submittedDataVersion V2 - Resubmitted with correct alignment file.
 treatment None
 view Alignments
 
@@ -6041,7 +6045,7 @@ tableName wgEncodeSydhTfbsMelTbpIggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelUsf2IggmusAlnRep1
+metaObject wgEncodeSydhTfbsMelUsf2IggmusAlnRep1V2
 objType file
 age immortalized
 antibody USF2
@@ -6050,10 +6054,11 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-05-17
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam
+fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1V2.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -6061,11 +6066,12 @@ replicate 1
 setType exp
 sex M
 strain Unknown
-subId 1865
+subId 4158
+submittedDataVersion V2 - Resubmitted with correct alignment file.
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelUsf2IggmusAlnRep2
+metaObject wgEncodeSydhTfbsMelUsf2IggmusAlnRep2V2
 objType file
 age immortalized
 antibody USF2
@@ -6074,10 +6080,11 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-05-17
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam
+fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2V2.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -6085,7 +6092,8 @@ replicate 2
 setType exp
 sex M
 strain Unknown
-subId 1865
+subId 4158
+submittedDataVersion V2 - Resubmitted with correct alignment file.
 treatment None
 view Alignments
 
@@ -6187,4 +6195,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 935996018
+# MAGIC: -820498252
