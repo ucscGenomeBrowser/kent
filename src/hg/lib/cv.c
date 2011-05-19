@@ -19,7 +19,6 @@
 #define CV_UGLY_TERM_ANTIBODY   "Antibody"
 
 // Type of Terms searchable defines
-#define CV_SEARCHABLE               "searchable"
 #define CV_SEARCHABLE_SINGLE_SELECT "select"
 #define CV_SEARCHABLE_MULTI_SELECT  "multiSelect"
 #define CV_SEARCHABLE_FREE_TEXT     "freeText"
@@ -201,7 +200,7 @@ while ((hEl = hashNext(&hc)) != NULL)
         }
     if (searchTracks)
         {
-        setting = hashFindVal(typeHash,CV_SEARCHABLE);
+        setting = hashFindVal(typeHash,CV_TOT_SEARCHABLE);
         if (setting == NULL
         || (   differentWord(setting,CV_SEARCHABLE_SINGLE_SELECT)
             && differentWord(setting,CV_SEARCHABLE_MULTI_SELECT)
@@ -234,7 +233,7 @@ struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
 struct hash *termHash = hashFindVal(termTypeHash,term);
 if (termHash != NULL)
     {
-    char *searchable = hashFindVal(termHash,CV_SEARCHABLE);
+    char *searchable = hashFindVal(termHash,CV_TOT_SEARCHABLE);
     if (searchable != NULL)
         {
         if (sameWord(searchable,CV_SEARCHABLE_SINGLE_SELECT))

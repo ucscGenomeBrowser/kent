@@ -1139,7 +1139,7 @@ assert(mdbObjs != NULL);  // If this is the case, then be vocal
 long lastTime = 0;
 
 count = mdbObjPrintToTabFile(mdbObjs,MDB_TEMPORARY_TAB_FILE);
-verboseTime(2, "past mdbObjPrintToTabFile()", tableName);
+verboseTime(2, "past mdbObjPrintToTabFile()");
 
 // Disable keys in hopes of speeding things up.  No danger since it only disables non-unique keys
 char query[8192];

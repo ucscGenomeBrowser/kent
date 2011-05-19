@@ -107,6 +107,7 @@ if (0) then  # BRACKET
 
 
 
+
 # Get Genbank info
 txGenbankData $db
 # creates the files:
@@ -201,8 +202,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 end
 
 
-
-
 # Get list of accessions that are associated with antibodies from database.
 # This will be a good list but not 100% complete.  Cluster these to get
 # four or five antibody heavy regions.  Later we'll weed out input that
@@ -249,8 +248,6 @@ end
 #  seven minutes to this point
 
 
-
-
 # Create mrna splicing graphs.  Takes 10 seconds.
 mkdir -p bedToGraph
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
@@ -264,9 +261,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 end
 
 
-
-
-
 # Create an evidence weight file
 cat > trim.weights <<end
 refSeq  100
@@ -278,6 +272,8 @@ txOrtho 1
 exoniphy 1
 est 1
 end
+
+
 
 # Make evidence file for EST graph edges supported by at least 2 
 # ests.  Takes about 30 seconds.
@@ -311,6 +307,8 @@ end
 # Clean up all but final other.txg
 rm -r est mrna refSeq
 
+
+
 # Unpack chains and nets, apply synteny filter and split by chromosome
 # Takes 5 minutes.  Make up phony empty nets for ones that are empty after
 # synteny filter.
@@ -324,7 +322,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
         echo -n > $c.net
     endif
 end
-
 
 # Make txOrtho directory and a para spec file
 cd $dir
@@ -343,7 +340,7 @@ set otherTxg = ../$2/other.txg
 set tmpDir = /scratch/tmp/$3
 set workDir = $tmpDir/${1}_${2}
 mkdir -p $tmpDir
-mkdir $workDir
+mkdir -p $workDir
 txOrtho $inAgx $inChain $inNet $otherTxg $workDir/$1.edges
 mv $workDir/$1.edges edges/$1.edges
 rmdir $workDir
@@ -407,6 +404,9 @@ cd ..
 # Clean up chains and nets since they are big
 cd $dir
 rm -r $xdb/chains $xdb/nets
+
+
+
 
 # Get exonophy. Takes about 4 seconds.
 hgsql -N $db -e "select chrom, txStart, txEnd, name, "1", strand from exoniphy order by chrom, txStart;" \
@@ -490,7 +490,6 @@ faSplit sequence txWalk.fa 200 txFaSplit/
 #    $testingDir/txWalk.intersect.bed
 # wc $testingDir/txWalk.intersect.bed
 #
-
 
 
 # Fetch human protein set and table that describes if curated or not.
@@ -648,10 +647,6 @@ cat txWalk.bed antibody.bed > abWalk.bed
 sequenceForBed -db=$db -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName > antibody.fa
 cat txWalk.fa antibody.fa > abWalk.fa
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
-
 # Pick ORFs, make genes
 cat refToPep.tab refToCcds.tab | \
         txCdsPick abWalk.bed unweighted.tce stdin pick.tce pick.picks \
@@ -685,11 +680,6 @@ awk '$2 != "nearCodingJunk"' separated.info > weeded.info
 awk '$2 == "nearCodingJunk" {print $1}' separated.info > weeds.lst
 cat coding.bed nearCoding.bed antisense.bed uncoding.bed | sort -k1,1 -k2,3n >weeded.bed
 
-compareModifiedFileSizes . $oldGenesDir
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-
 # Make up a little alignment file for the ones that got tweaked.
 sed -r 's/.*NM_//' weededCds.tweaked | awk '{printf("NM_%s\n", $1);}' > tweakedNm.lst
 fgrep -f tweakedNm.lst refToPep.tab | cut -f 2 > tweakedNp.lst
@@ -709,7 +699,6 @@ txGeneCdsMap weeded.bed weeded.info pick.picks refTweaked.psl \
 	rnaToGenome.psl
 pslMap cdsToRna.psl rnaToGenome.psl cdsToGenome.psl
 
-#breakpoint
 
 # Assign permanent accessions to each transcript, and make up a number
 # of our files with this accession in place of the temporary IDs we've been
@@ -734,7 +723,6 @@ cat txWalk/*.ev | weedLines weeds.lst stdin stdout | subColumn 1 stdin txToAcc.t
 txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa refSeq.fa \
     refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa
 
-#breakpoint
 
 # Generate ucscGene/uniprot blat run.
 mkdir -p $dir/blat/uniprotVsUcsc
@@ -778,8 +766,8 @@ cat run.time
 #Submission to last job:            71s       1.18m     0.02h    0.00d
 
 pslCat raw/*.psl > ../../ucscVsUniprot.psl
-#breakpoint
 rm -r raw
+
 
 # Fixup UniProt links in picks file.  This is a little circuitious.  In the future may
 # avoid using the picks file for the protein link, and rely on protein/protein blat
@@ -803,7 +791,9 @@ txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNe
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
 
-#breakpoint (gene set)
+
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
 
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
@@ -846,7 +836,8 @@ hgLoadSqlTab $tempDb knownCanonical ~/kent/src/hg/lib/knownCanonical.sql canonic
 hgPepPred $tempDb generic knownGenePep ucscGenes.faa
 hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 
-#breakpoint
+
+
 
 # Make up kgXref table.  Takes about 3 minutes.
 txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
@@ -874,7 +865,9 @@ hgLoadSqlTab $tempDb kgProtAlias ~/kent/src/hg/lib/kgProtAlias.sql ucscGenes.pro
 # Load up kgProtMap2 table that says where exons are in terms of CDS
 hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 
-#breakpoint
+compareModifiedFileSizes.csh . $oldGeneDir
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
 cd $dir
