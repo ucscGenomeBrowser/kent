@@ -163,7 +163,7 @@ include wgEncodeHaibTfbs.ra alpha
 include wgEncodeSydhTfbs.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
-include wgEncodeUchicagoTfbs.ra alpha
+include wgEncodeUchicagoTfbs.ra 
 
 
 # SUNY RBP -----------------------------------------
