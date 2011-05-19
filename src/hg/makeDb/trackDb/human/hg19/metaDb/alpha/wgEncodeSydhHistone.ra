@@ -681,7 +681,7 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3BUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2.bam
 grant Snyder
 lab UCD
 project wgEncode
@@ -1921,4 +1921,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: -971701741
+# MAGIC: -971701709
