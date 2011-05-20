@@ -1147,7 +1147,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHelas3InputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 Input Sig
-        longLabel HeLa-S3 Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel HeLa-S3 Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=HeLaS3 control=UCD treatment=aNone
         type bigWig 0.000000 10071.400391
         color 0,119,158
@@ -1256,7 +1256,7 @@ wgEncode 1
         track wgEncodeSydhTfbsH1hescInputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC Input Sig
-        longLabel H1-hESC Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel H1-hESC Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=H1hESC control=UCD treatment=aNone
         type bigWig 0.000000 5709.399902
         color 0,107,27
@@ -1489,7 +1489,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHuvecInputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HUVEC Input Sig
-        longLabel HUVEC Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel HUVEC Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=HUVEC control=UCD treatment=aNone
         type bigWig 0.000000 16949.099609
         color 224,75,0
@@ -1522,7 +1522,7 @@ wgEncode 1
         track wgEncodeSydhTfbsRajiInputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel Raji Input Sig
-        longLabel Raji Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel Raji Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=Raji control=UCD treatment=aNone
         type bigWig 0.000000 8754.400391
         # subId=3072 dateSubmitted=2010-12-06
@@ -1629,7 +1629,7 @@ wgEncode 1
         track wgEncodeSydhTfbsU2osInputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel U2OS Input Sig
-        longLabel U2OS Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel U2OS Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=U2OS control=UCD treatment=aNone
         type bigWig 0.000000 11117.500000
         # subId=3072 dateSubmitted=2010-12-06
@@ -2451,7 +2451,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHct116InputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HCT-116 Input Sig
-        longLabel HCT-116 Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel HCT-116 Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=HCT116 control=UCD treatment=aNone
         type bigWig 0.000000 10692.400391
         # subId=3053 dateSubmitted=2010-12-02
@@ -2896,7 +2896,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHepg2bInputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2b Input Sig
-        longLabel HepG2b Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel HepG2b Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=HepG2b control=UCD treatment=aNone
         type bigWig 0.000000 11634.599609
         color 189,0,157
@@ -3373,7 +3373,7 @@ wgEncode 1
         track wgEncodeSydhTfbsK562bInputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562b Input Sig
-        longLabel K562b Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel K562b Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=K562b control=UCD treatment=aNone
         type bigWig 0.000000 12876.099609
         color 46,0,184
@@ -3444,7 +3444,7 @@ wgEncode 1
         track wgEncodeSydhTfbsMcf7InputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF-7 Input Sig
-        longLabel MCF-7 Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel MCF-7 Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=MCF7 control=UCD treatment=aNone
         type bigWig 0.000000 12982.900391
         # subId=3056 dateSubmitted=2010-12-02
@@ -3468,7 +3468,7 @@ wgEncode 1
         track wgEncodeSydhTfbsNt2d1InputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel NT2-D1 Input Sig
-        longLabel NT2-D1 Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel NT2-D1 Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=NT2D1 control=UCD treatment=aNone
         type bigWig 0.000000 20529.000000
         # subId=3056 dateSubmitted=2010-12-02
@@ -3492,7 +3492,7 @@ wgEncode 1
         track wgEncodeSydhTfbsPbdeInputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel PBDE Input Sig
-        longLabel PBDE Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel PBDE Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=PBDE control=UCD treatment=aNone
         type bigWig 1.000000 29040.000000
         # subId=1956 dateSubmitted=2011-01-14
@@ -3565,7 +3565,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHek293InputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HEK293(b) Input Sig
-        longLabel HEK293b Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel HEK293b Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=HEK293b control=UCD treatment=aNone
         type bigWig 1.000000 24948.000000
         # subId=3257 dateSubmitted=2011-01-14
@@ -3865,7 +3865,7 @@ wgEncode 1
         track wgEncodeSydhTfbsThek293InputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel T-REx-HEK293 Input Sig
-        longLabel T-REx-HEK293 Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel T-REx-HEK293 Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=tHEK293 control=UCD treatment=aNone
         type bigWig 1.000000 27995.000000
         # subId=3499 dateSubmitted=2011-02-03
@@ -3873,7 +3873,7 @@ wgEncode 1
         track wgEncodeSydhTfbsShsy5yInputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel SH-SY5Y Input Sig
-        longLabel SH-SY5Y Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel SH-SY5Y Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=SHSY5Y control=UCD treatment=aNone
         type bigWig 1.000000 9027.000000
         # subId=3498 dateSubmitted=2011-02-03
@@ -3890,7 +3890,7 @@ wgEncode 1
         track wgEncodeSydhTfbsMcf10aesInputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src Input Sig
-        longLabel MCF10A Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel MCF10A Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=MCF10AES control=UCD treatment=aNone
         type bigWig 1.000000 35209.000000
         # subId=3497 dateSubmitted=2011-02-03
@@ -3952,7 +3952,7 @@ wgEncode 1
         track wgEncodeSydhTfbsFetalpbdeInputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel PBDE Input Sig
-        longLabel FetalPBDE Input UCDavis UC Davis ChIP-seq Signal from ENCODE/SYDH
+        longLabel FetalPBDE Input UC Davis ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputucd cellType=FetalPBDE control=UCD treatment=aNone
         type bigWig 1.000000 10659.000000
         # subId=4119 dateSubmitted=2011-05-13
