@@ -126,7 +126,7 @@ searchName ucscRetroInfoRefSeq1
 searchTable ucscRetroAli1
 searchDescription Retroposed GenesV1, Including Pseudogenes - November 2010
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo2
+xrefTable refLink, ucscRetroInfo1
 dontCheckXrefQueryFormat 1
 xrefQuery select ucscRetroInfo1.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
 searchPriority 3.52
