@@ -579,23 +579,27 @@ struct slName *sqlListTables(struct sqlConnection *conn)
 struct sqlResult *sr;
 char **row;
 struct slName *list = NULL, *el;
-char *tableList = cfgOption("showTableCache");
+char *cfgName = "showTableCache";
+char *tableList = cfgOption(cfgName);
 
-if (tableList != NULL && sqlTableExists(conn, tableList))
+if (tableList != NULL)
     {
-    // mysql does not cache "show tables", so use a cached run of show tables in the tableList table (if it exists).
-    // Table should be loaded thus:
-    //
-    //   hgsql hg18 -e 'show tables' > tables.txt
-    //   CREATE TABLE tableList (name varchar(255) NOT NULL, INDEX(name));
-    //   load data local infile 'tables.txt' into table tableList;
-    char query[256];
-    safef(query, sizeof(query), "select * from %s order by name desc", tableList);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
+    // mysql does not cache "show tables", so use a cached run of show tables which is stored in the showTableCache table.
+    // See redmine 3780 for details.
+    if(sqlTableExists(conn, tableList))
         {
-        el = slNameNew(row[0]);
-        slAddHead(&list, el);
+        char query[256];
+        safef(query, sizeof(query), "select * from %s order by name desc", tableList);
+        sr = sqlGetResult(conn, query);
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            el = slNameNew(row[0]);
+            slAddHead(&list, el);
+            }
+        }
+    else
+        {
+        errAbort("%s option is misconfigured in hg.conf: table '%s' does not exist", cfgName, tableList);
         }
     }
 else
