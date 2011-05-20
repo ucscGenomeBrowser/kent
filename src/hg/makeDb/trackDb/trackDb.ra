@@ -408,7 +408,7 @@ priority 37.14
 color 20,0,250
 visibility hide
 nextItemButton on
-retroMrnaInfo ucscRetroInfo
+ucscRetroInfo ucscRetroInfo
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds
 baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
