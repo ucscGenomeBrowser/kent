@@ -10,7 +10,7 @@ include wgEncodeGencodeV5.ra alpha
 include wgEncodeUncBsuProt.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.ra alpha,beta
+include wgEncodeReg.ra
 #include wgEncodeRegNorm.ra alpha
 
 # Nucleosome (wrangler: venkat)
@@ -163,7 +163,7 @@ include wgEncodeHaibTfbs.ra alpha
 include wgEncodeSydhTfbs.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
-include wgEncodeUchicagoTfbs.ra alpha
+include wgEncodeUchicagoTfbs.ra 
 
 
 # SUNY RBP -----------------------------------------
