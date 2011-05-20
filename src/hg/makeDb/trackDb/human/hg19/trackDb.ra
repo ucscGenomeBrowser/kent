@@ -70,14 +70,14 @@ snpVersion 131
 
 track ucscRetroAli2
 shortLabel Retroposed GenesV2
-longLabel Retroposed GenesV2, Including Pseudogenes November 2010 [ucscRetroAli]
+longLabel Retroposed GenesV2, Including Pseudogenes November 2010 [ucscRetroAli2]
 group genes
 type psl
 priority 37.5
 color 20,0,250
 visibility hide
 nextItemButton on
-retroMrnaInfo ucscRetroInfo2
+ucscRetroInfo ucscRetroInfo2
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds
 baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
