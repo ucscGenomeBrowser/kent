@@ -4,7 +4,6 @@
 # automatic way.
 
 #Retrogenes based on cDNA alignments that are expressed or processed pseudogenes.
-drop table ucscRetroInfo;
 CREATE TABLE ucscRetroInfo (
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold col1
     chromStart int unsigned not null,	# pseudogene alignment start position col2
@@ -60,5 +59,7 @@ CREATE TABLE ucscRetroInfo (
     posConf float not null,	# pvalue for positive col52
     polyAlen int unsigned not null,	# length of polyA col53
               #Indices
-    PRIMARY KEY(name)
+    PRIMARY KEY(name),
+    index(kgName(10)),
+    index(refSeq(10))
 );

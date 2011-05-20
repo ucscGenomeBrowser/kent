@@ -4,7 +4,7 @@
 # automatic way.
 
 #Orthlogy of retrogenes based on chains/nets with other species.
-CREATE TABLE ucscRetroOrtho (
+CREATE TABLE ucscRetroOrtho1 (
     name varchar(255) not null,	# Unique name of retrogene 
     db varchar(255) not null,	# database of other species
     overlap int not null,	# percent of retro that breaks net relative to other species
