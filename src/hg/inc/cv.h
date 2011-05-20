@@ -16,11 +16,26 @@
 #define CV_TITLE                "title"
 #define CV_DESCRIPTION          "description"
 
+// CV Less common settings
+#define CV_GEO                  "geo"
+#define CV_LINEAGE              "lineage"
+#define CV_ORDER_URL            "orderUrl"
+#define CV_ORGANISM             "organism"
+#define CV_PROTOCOL             "protocol"
+#define CV_SEX                  "sex"
+#define CV_TERM_ID              "termId"
+#define CV_TERM_URL             "termUrl"
+#define CV_TIER                 "tier"
+#define CV_TISSUE               "tissue"
+#define CV_VENDOR_ID            "vendorId"
+#define CV_VENDER_NAME          "vendorName"
+
 // Type of Terms defines
 #define CV_TOT                  "typeOfTerm"
 #define CV_TOT_HIDDEN           "hidden"
 #define CV_TOT_CV_DEFINED       "cvDefined"
 #define CV_TOT_PRIORITY         "priority"
+#define CV_TOT_SEARCHABLE       "searchable"
 
 // Validation Rules
 #define CV_VALIDATE                 "validate"
@@ -44,7 +59,12 @@
 #define CV_TERM_DATA_TYPE       "dataType"
 #define CV_TERM_LOCALIZATION    "localization"
 #define CV_TERM_VIEW            "view"
+#define CV_TERM_SEQ_PLATFORM    "seqPlatform"
 
+
+void cvFileDeclare(char *filePath);
+// Declare an altername cv.ra file to use
+// (The cv.ra file is normally discovered based upon CGI/Tool and envirnment)
 
 char *cvTypeNormalized(char *sloppyTerm);
 // returns (on stack) the proper term to use when requesting a typeOfTerm
@@ -83,6 +103,9 @@ const char *cvLabel(char *term);
 
 boolean cvTermIsHidden(char *term);
 // returns TRUE if term is defined as hidden in cv.ra
+
+boolean cvTermIsEmpty(char *term,char *val);
+// returns TRUE if term has validation of "cv or None" and the val is None
 
 char *cvLabNormalize(char *sloppyTerm);
 /* CV inconsistency work-arounds.  Return lab name trimmed of parenthesized trailing

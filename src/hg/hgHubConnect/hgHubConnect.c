@@ -17,28 +17,14 @@
 #include "web.h"
 #include "trackHub.h"
 #include "hubConnect.h"
-#include "trashDir.h"
+#include "dystring.h"
 #include "hPrint.h"
 
-#define TEXT_ENTRY_ROWS 7
-#define TEXT_ENTRY_COLS 73
-#define CONFIG_ENTRY_ROWS 3
-#define SAVED_LINE_COUNT  50
-
-#define HUB_CUSTOM_TEXT_ALT_VAR  "hghub_customText"
-#define HUB_CUSTOM_FILE_VAR      "hghub.customFile"
-#define HUB_UPDATED_ID           "hghub_updatedId"
-
-
-
-#define hgHubDataText      HUB_CUSTOM_TEXT_ALT_VAR
-#define hgHubDataFile      HUB_CUSTOM_FILE_VAR
-#define hgHubUpdatedId     HUB_UPDATED_ID
 
 #define hgHub             "hgHub_"  /* prefix for all control variables */
 #define hgHubDo            hgHub   "do_"    /* prefix for all commands */
 #define hgHubDoAdd         hgHubDo "add"
-
+#define hgHubDoClear       hgHubDo "clear"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -48,40 +34,20 @@ static char *pageTitle = "Import Tracks from Data Hubs";
 char *database = NULL;
 char *organism = NULL;
 
-boolean nameInCommaList(char *name, char *commaList)
-/* Return TRUE if name is in comma separated list. */
-{
-if (commaList == NULL)
-    return FALSE;
-int nameLen = strlen(name);
-for (;;)
-    {
-    char c = *commaList;
-    if (c == 0)
-        return FALSE;
-    if (memcmp(name, commaList, nameLen) == 0)
-        {
-	c = commaList[nameLen];
-	if (c == 0 || c == ',')
-	    return TRUE;
-	}
-    commaList = strchr(commaList, ',');
-    if (commaList == NULL)
-        return FALSE;
-    commaList += 1;
-    }
-}
+boolean nameInCommaList(char *name, char *commaList);
 
-void hgHubConnectPrivate()
-/* Put up the list of private hubs and other controls for the page. */
+static void hgHubConnectUnlisted()
+/* Put up the list of unlisted hubs and other controls for the page. */
 {
-printf("<B>List of Private Hubs</B><BR>");
+printf("<B>Unlisted Hubs</B><BR>");
 struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCart(cart);
 int count = 0;
 for(hub = hubList; hub; hub = hub->next)
     {
-    if (hub->id > 0)
+    /* if the hub is public, then don't list it here */
+    if (!isHubUnlisted(hub))
 	continue;
+
     if (count)
 	webPrintLinkTableNewRow();
     else
@@ -92,7 +58,7 @@ for(hub = hubList; hub; hub = hub->next)
 	{
 	webPrintLinkCellStart();
 	char hubName[32];
-	safef(hubName, sizeof(hubName), "%s%d", hgHubConnectHubVarPrefix, hub->id);
+	safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, hub->id);
 	cartMakeCheckBox(cart, hubName, FALSE);
 	webPrintLinkCellEnd();
 	}
@@ -108,7 +74,7 @@ for(hub = hubList; hub; hub = hub->next)
 if (count)
     webPrintLinkTableEnd();
 else
-    printf("No Private Track Hubs for this genome assembly<BR>");
+    printf("No Unlisted Track Hubs for this genome assembly<BR>");
 }
 
 static void makeNewHubButton()
@@ -116,7 +82,7 @@ static void makeNewHubButton()
 printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"secondForm\">\n", "../cgi-bin/hgHubConnect");
 cartSaveSession(cart);
 cgiMakeHiddenVar(hgHubDoAdd, "on");
-cgiMakeButton("add", "Add new private hub");
+cgiMakeButton("add", "Add new unlisted hub");
 printf("</FORM>\n");
 }
 
@@ -127,73 +93,13 @@ printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s  ",
 	organism, hFreezeDate(database));
 }
 
-void hgHubConnectPublic()
-/* Put up the list of external hubs and other controls for the page. */
-{
-printf("<B>List of Public Hubs</B><BR>");
-struct sqlConnection *conn = hConnectCentral();
-char query[512];
-safef(query, sizeof(query), "select id,shortLabel,longLabel,errorMessage,hubUrl,dbList from %s",
-	hubConnectTableName);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-
-boolean gotAnyRows = FALSE;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *id = row[0], *shortLabel = row[1], *longLabel = row[2], *errorMessage = row[3],
-    	 *url = row[4], *dbList = row[5];
-    if (nameInCommaList(database, dbList))
-	{
-	if (gotAnyRows)
-	    webPrintLinkTableNewRow();
-	else
-	    {
-	    webPrintLinkTableStart();
-	    gotAnyRows = TRUE;
-	    }
-	if (isEmpty(errorMessage))
-	    {
-	    webPrintLinkCellStart();
-	    char hubName[32];
-	    safef(hubName, sizeof(hubName), "%s%s", hgHubConnectHubVarPrefix, id);
-	    cartMakeCheckBox(cart, hubName, FALSE);
-	    webPrintLinkCellEnd();
-	    }
-	else
-	    webPrintLinkCell("error");
-	webPrintLinkCell(shortLabel);
-	if (isEmpty(errorMessage))
-	    webPrintLinkCell(longLabel);
-	else
-	    webPrintLinkCell(errorMessage);
-	webPrintLinkCell(url);
-	}
-    }
-sqlFreeResult(&sr);
-if (gotAnyRows)
-    webPrintLinkTableEnd();
-else
-    printf("No Track Hubs for this genome assembly");
-hDisconnectCentral(&conn);
-}
-
 static void addIntro()
 {
 printf("Enter URL to remote hub.<BR>\n");
 }
 
-void makeClearButton(char *field)
-/* UI button that clears a text field */
-{
-char javascript[1024];
-safef(javascript, sizeof javascript,
-        "document.mainForm.%s.value = '';", field);
-cgiMakeOnClickButton(javascript, "&nbsp;Clear&nbsp;");
-}
-
-void addPrivateHubForm(struct hubConnectStatus *hub, char *err)
-/* display UI for adding private hubs by URL or pasting data */
+void addUnlistedHubForm(struct hubConnectStatus *hub, char *err)
+/* display UI for adding unlisted hubs by URL */
 {
 getDbAndGenome(cart, &database, &organism, oldVars);
 boolean gotClade = FALSE;
@@ -215,7 +121,7 @@ cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 
 /* intro text */
 puts("<P>");
-puts("Add your own private data hub for the browser.");
+puts("Add your own unlisted data hub for the browser.");
 addIntro();
 puts("<P>");
 
@@ -231,90 +137,95 @@ cgiMakeSubmitButton();
 puts("</FORM>");
 }
 
-void helpPrivateHub()
+void helpUnlistedHub()
 {
-printf("Private hubs are constructed the same way as public hubs, but they "
+printf("Unlisted hubs are constructed the same way as public hubs, but they "
    "aren't listed in hgcentral<BR>\n");
 }
 
-void doAddPrivateHub(struct cart *theCart, char *err)
+void doAddUnlistedHub(struct cart *theCart, char *err)
 /* Write header and body of html page. */
 {
-cartWebStart(cart, database, "Add Private Hub");
-addPrivateHubForm(NULL, err);
-helpPrivateHub();
+cartWebStart(cart, database, "Add Unlisted Hub");
+addUnlistedHubForm(NULL, err);
+helpUnlistedHub();
 cartWebEnd(cart);
 }
 
-void hubSaveInCart(struct cart *cart, struct hubConnectStatus *hub)
+
+void hgHubConnectPublic()
+/* Put up the list of external hubs and other controls for the page. */
 {
-char hubName[1024];
-char *oldHubTrashName = cartOptionalString(cart, hubFileVar());
-static struct tempName tn;
-trashDirFile(&tn, "hub", "hub_", ".txt");
-char *hubTrashName = tn.forCgi;
-FILE *f = mustOpen(hubTrashName, "w");
+printf("<B>Public Hubs</B><BR>");
+struct sqlConnection *conn = hConnectCentral();
+char query[512];
+safef(query, sizeof(query), "select hubUrl, shortLabel,longLabel,dbList from %s", 
+	hubPublicTableName); 
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
 
-if (oldHubTrashName == NULL)
+boolean gotAnyRows = FALSE;
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    hub->id = -1;
-    }
-else
-    {
-    struct lineFile *lf = lineFileOpen(oldHubTrashName, TRUE);
-    int lineSize;
-    char *line;
-    int count = 1;
-
-    while (lineFileNext(lf, &line, &lineSize))
+    char *url = row[0], *shortLabel = row[1], *longLabel = row[2], 
+    	  *dbList = row[3];
+    if (nameInCommaList(database, dbList))
 	{
-	count++;
-	fprintf(f, "%s\n", line);
+	if (gotAnyRows)
+	    webPrintLinkTableNewRow();
+	else
+	    {
+	    webPrintLinkTableStart();
+	    gotAnyRows = TRUE;
+	    }
+	char *errorMessage = NULL;
+	unsigned id = hubFindOrAddUrlInStatusTable(database, cart, 
+	    url, &errorMessage);
+
+	if ((id != 0) && isEmpty(errorMessage)) 
+	    {
+	    webPrintLinkCellStart();
+	    char hubName[32];
+	    safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
+	    cartMakeCheckBox(cart, hubName, FALSE);
+	    webPrintLinkCellEnd();
+	    }
+	else if (!isEmpty(errorMessage))
+	    webPrintLinkCell("error");
+	else
+	    errAbort("cannot get id for hub with url %s\n", url);
+
+	webPrintLinkCell(shortLabel);
+	if (isEmpty(errorMessage))
+	    webPrintLinkCell(longLabel);
+	else
+	    {
+	    char errorBuf[4*1024];
+	    safef(errorBuf, sizeof errorBuf, "Error: %s", errorMessage);
+	    webPrintLinkCell(errorBuf);
+	    }
+	webPrintLinkCell(url);
 	}
-    lineFileClose(&lf);
-    unlink(oldHubTrashName);
-    hub->id = -count;
     }
-hubWriteToFile(f, hub);
-carefulClose(&f);
+sqlFreeResult(&sr);
 
-safef(hubName, sizeof(hubName), "%s%d", hgHubConnectHubVarPrefix, hub->id);
-cartSetString(cart, hubName, "1");
-
-cartSetString(cart, hubFileVar(), hubTrashName);
+if (gotAnyRows)
+    webPrintLinkTableEnd();
+else
+    printf("No Public Track Hubs for this genome assembly<BR>");
+hDisconnectCentral(&conn);
 }
 
-void checkForNewHub(struct cart *cart)
+static void doClearHub(struct cart *theCart)
 {
 char *url = cartOptionalString(cart, hgHubDataText);
 
+printf("<pre>clearing hub %s\n",url);
 if (url != NULL)
-    {
-    struct hubConnectStatus *hub = NULL;
-    struct trackHub *tHub = NULL;
-
-    struct errCatch *errCatch = errCatchNew();
-    if (errCatchStart(errCatch))
-	tHub = trackHubOpen(url, "1");
-    errCatchEnd(errCatch);
-    if (errCatch->gotError)
-	{
-	warn(errCatch->message->string);
-	return;
-	}
-    errCatchFree(&errCatch);
-    AllocVar(hub);
-
-    hub->hubUrl = cloneString(url);
-    hub->errorMessage = "";
-    hub->shortLabel = tHub->shortLabel;
-    hub->longLabel = tHub->longLabel;
-    hub->dbCount = 0;
-    AllocArray(hub->dbArray, 1);
-    hub->dbArray[0] = database;
-
-    hubSaveInCart(cart, hub);
-    }
+    hubClearStatus(url);
+else
+    errAbort("must specify url in %s\n", hgHubDataText);
+printf("<pre>Completed\n");
 }
 
 void doMiddle(struct cart *theCart)
@@ -323,16 +234,13 @@ void doMiddle(struct cart *theCart)
 cart = theCart;
 setUdcCacheDir();
 if (cartVarExists(cart, hgHubDoAdd))
-    doAddPrivateHub(cart, NULL);
+    doAddUnlistedHub(cart, NULL);
+else if (cartVarExists(cart, hgHubDoClear))
+    doClearHub(cart);
 else
     {
     cartWebStart(cart, NULL, pageTitle);
-    checkForNewHub(cart);
 
-    printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
-    cartSaveSession(cart);
-
-    cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
     printf(
        "<P>Track data hubs are collections of tracks from outside of UCSC that can be imported into "
        "the Genome Browser.  To import a public hub check the box in the list below. "
@@ -341,23 +249,26 @@ else
        );
     makeGenomePrint();
 
+    hubCheckForNew(database, cart);
     printf("<BR><P>");
+    printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
+    cartSaveSession(cart);
     hgHubConnectPublic();
-    printf("Contact <A HREF=\"mailto:genome@soe.ucsc.edu\"> genome@soe.ucsc.edu </A>to add a public hub.</P>\n");
+    printf("<BR>Contact <A HREF=\"mailto:genome@soe.ucsc.edu\"> genome@soe.ucsc.edu </A>to add a public hub.</P>\n");
     puts("<BR>");
-    hgHubConnectPrivate();
+    hgHubConnectUnlisted();
     puts("<BR>");
 
+    cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
     cgiMakeButton("Submit", "Use Selected Hubs");
     puts("</FORM>");
 
     makeNewHubButton();
-
     }
 cartWebEnd();
 }
 
-char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl, hgHubDoAdd, hgHubDataText, NULL};
+char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl, hgHubDoAdd, hgHubDoClear, hgHubDataText, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */

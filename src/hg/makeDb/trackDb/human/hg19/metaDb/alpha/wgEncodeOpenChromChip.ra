@@ -2589,6 +2589,29 @@ subId 1501
 tableName wgEncodeOpenChromChipHelas3CmycSig
 view Signal
 
+metaObject wgEncodeOpenChromChipHelas3CmycValidation
+objType file
+antibody c-Myc
+attic auxSup
+cell HeLa-S3
+composite wgEncodeOpenChromChip
+controlId HeLa-S3/None/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-18
+dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000542
+expId 542
+fileName wgEncodeOpenChromChipHelas3CmycValidation.tgz
+grant Crawford
+lab UT-A(Iyer)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+setType exp
+subId 4161
+treatment None
+view Validation
+
 metaObject wgEncodeOpenChromChipHelas3CtcfAlnRep1
 objType file
 antibody CTCF
@@ -2756,6 +2779,29 @@ setType exp
 subId 1499
 tableName wgEncodeOpenChromChipHelas3CtcfSig
 view Signal
+
+metaObject wgEncodeOpenChromChipHelas3CtcfValidation
+objType file
+antibody CTCF
+attic auxSup
+cell HeLa-S3
+composite wgEncodeOpenChromChip
+controlId HeLa-S3/None/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-18
+dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000541
+expId 541
+fileName wgEncodeOpenChromChipHelas3CtcfValidation.tgz
+grant Crawford
+lab UT-A(Iyer)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+setType exp
+subId 4161
+treatment None
+view Validation
 
 metaObject wgEncodeOpenChromChipHelas3InputAln
 objType file
@@ -2994,6 +3040,29 @@ subId 1505
 tableName wgEncodeOpenChromChipHelas3Pol2Sig
 view Signal
 
+metaObject wgEncodeOpenChromChipHelas3Pol2Validation
+objType file
+antibody Pol2
+attic auxSup
+cell HeLa-S3
+composite wgEncodeOpenChromChip
+controlId HeLa-S3/None/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-18
+dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000597
+expId 597
+fileName wgEncodeOpenChromChipHelas3Pol2Validation.tgz
+grant Crawford
+lab UT-A(Iyer)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+setType exp
+subId 4161
+treatment None
+view Validation
+
 metaObject wgEncodeOpenChromChipHepg2CmycAlnRep1
 objType file
 antibody c-Myc
@@ -3210,6 +3279,29 @@ subId 1527
 tableName wgEncodeOpenChromChipHepg2CmycSig
 view Signal
 
+metaObject wgEncodeOpenChromChipHepg2CmycValidation
+objType file
+antibody c-Myc
+attic auxSup
+cell HepG2
+composite wgEncodeOpenChromChip
+controlId HepG2/None/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-18
+dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000545
+expId 545
+fileName wgEncodeOpenChromChipHepg2CmycValidation.tgz
+grant Crawford
+lab UT-A(Iyer)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+setType exp
+subId 4161
+treatment None
+view Validation
+
 metaObject wgEncodeOpenChromChipHepg2CtcfAlnRep1
 objType file
 antibody CTCF
@@ -3377,6 +3469,29 @@ setType exp
 subId 1517
 tableName wgEncodeOpenChromChipHepg2CtcfSig
 view Signal
+
+metaObject wgEncodeOpenChromChipHepg2CtcfValidation
+objType file
+antibody CTCF
+attic auxSup
+cell HepG2
+composite wgEncodeOpenChromChip
+controlId HepG2/None/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-18
+dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000543
+expId 543
+fileName wgEncodeOpenChromChipHepg2CtcfValidation.tgz
+grant Crawford
+lab UT-A(Iyer)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+setType exp
+subId 4161
+treatment None
+view Validation
 
 metaObject wgEncodeOpenChromChipHepg2InputAln
 objType file
@@ -3662,6 +3777,29 @@ subId 1526
 tableName wgEncodeOpenChromChipHepg2Pol2Sig
 view Signal
 
+metaObject wgEncodeOpenChromChipHepg2Pol2Validation
+objType file
+antibody Pol2
+attic auxSup
+cell HepG2
+composite wgEncodeOpenChromChip
+controlId HepG2/None/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-18
+dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000554
+expId 554
+fileName wgEncodeOpenChromChipHepg2Pol2Validation.tgz
+grant Crawford
+lab UT-A(Iyer)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+setType exp
+subId 4161
+treatment None
+view Validation
+
 metaObject wgEncodeOpenChromChipHuvecCmycAlnRep1
 objType file
 antibody c-Myc
@@ -3946,6 +4084,29 @@ setType exp
 subId 1537
 tableName wgEncodeOpenChromChipHuvecCtcfSig
 view Signal
+
+metaObject wgEncodeOpenChromChipHuvecCtcfValidation
+objType file
+antibody CTCF
+attic auxSup
+cell HUVEC
+composite wgEncodeOpenChromChip
+controlId HUVEC/None/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-18
+dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000551
+expId 551
+fileName wgEncodeOpenChromChipHuvecCtcfValidation.tgz
+grant Crawford
+lab UT-A(Iyer)
+labVersion 1% ENCODE array platform validation tests
+project wgEncode
+setType exp
+subId 4161
+treatment None
+view Validation
 
 metaObject wgEncodeOpenChromChipHuvecInputAln
 objType file
@@ -6573,4 +6734,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: 867334997
+# MAGIC: -1278499324

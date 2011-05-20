@@ -9,8 +9,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-04
+dateSubmitted1 2010-01-04
+dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam
@@ -34,8 +36,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam
@@ -59,9 +63,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-02-10
-dateUnrestricted 2010-11-09
+dateResubmitted 2010-02-10
+dateSubmitted 2010-01-04
+dateSubmitted1 2010-01-04
+dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep1.fastq.gz
@@ -83,9 +88,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-02-10
-dateUnrestricted 2010-11-09
+dateResubmitted 2010-02-10
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep2.fastq.gz
@@ -107,8 +113,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-04
+dateSubmitted1 2010-01-04
+dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3.bigWig
@@ -132,8 +140,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3.bigWig
@@ -157,8 +167,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-04
+dateSubmitted1 2010-01-04
+dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3.bigWig
@@ -182,8 +194,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3.bigWig
@@ -207,8 +221,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-04
+dateSubmitted1 2010-01-04
+dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam
@@ -232,8 +248,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam
@@ -257,8 +275,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam
@@ -283,8 +303,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam
@@ -359,9 +381,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateResubmitted 2010-06-21
+dateSubmitted 2010-07-14
+dateSubmitted1 2010-07-14
+dateUnrestricted 2011-04-14
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep1.fastq.gz
@@ -384,9 +407,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-07-07
-dateUnrestricted 2011-04-07
+dateResubmitted 2010-07-07
+dateSubmitted 2010-07-14
+dateSubmitted1 2010-07-14
+dateUnrestricted 2011-04-14
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2.fastq.gz
@@ -409,9 +433,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateResubmitted 2010-06-21
+dateSubmitted 2010-07-14
+dateSubmitted1 2010-07-14
+dateUnrestricted 2011-04-14
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep1.fastq.gz
@@ -434,9 +459,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-07-07
-dateUnrestricted 2011-04-07
+dateResubmitted 2010-07-07
+dateSubmitted 2010-07-14
+dateSubmitted1 2010-07-14
+dateUnrestricted 2011-04-14
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2.fastq.gz
@@ -608,8 +634,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2.bigWig
@@ -633,8 +661,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2.bigWig
@@ -658,8 +688,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam
@@ -683,8 +715,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam
@@ -858,8 +892,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam
@@ -908,8 +944,9 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
+dateResubmitted 2010-01-15
 dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
@@ -932,8 +969,9 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
+dateResubmitted 2010-01-15
 dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
@@ -1031,8 +1069,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SigRep2V2.bigWig
@@ -1056,8 +1096,10 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam
@@ -2628,8 +2670,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam
@@ -2652,8 +2696,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam
@@ -2676,8 +2722,9 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
@@ -2699,8 +2746,9 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
@@ -2722,8 +2770,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3.bigWig
@@ -2747,8 +2797,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3.bigWig
@@ -2772,8 +2824,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3.bigWig
@@ -2797,8 +2851,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3.bigWig
@@ -2822,8 +2878,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam
@@ -2846,8 +2904,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam
@@ -2870,8 +2930,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam
@@ -2895,8 +2957,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam
@@ -2920,8 +2984,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam
@@ -2945,8 +3011,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam
@@ -3070,8 +3138,9 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3094,8 +3163,9 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3118,8 +3188,9 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3142,8 +3213,9 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-15
 dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
@@ -3166,8 +3238,9 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3190,8 +3263,9 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3214,8 +3288,9 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
@@ -3238,8 +3313,9 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-15
 dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
@@ -3562,8 +3638,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2.bigWig
@@ -3587,8 +3665,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2.bigWig
@@ -3612,8 +3692,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep3V2.bigWig
@@ -3637,8 +3719,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep4V2.bigWig
@@ -3662,8 +3746,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam
@@ -3687,8 +3773,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam
@@ -3712,8 +3800,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam
@@ -3737,8 +3827,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam
@@ -4062,8 +4154,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam
@@ -4112,9 +4206,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-13
+dateResubmitted 2010-01-13
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd1Rep1.fastq.gz
@@ -4136,9 +4231,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-13
+dateResubmitted 2010-01-13
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd2Rep1.fastq.gz
@@ -4235,8 +4331,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400SigRep1V2.bigWig
@@ -4260,8 +4358,10 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-15
+dateSubmitted1 2010-01-15
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2.bam
@@ -4956,8 +5056,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam
@@ -4980,8 +5082,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam
@@ -5004,8 +5108,9 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
@@ -5027,8 +5132,9 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
@@ -5050,8 +5156,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3.bigWig
@@ -5075,8 +5183,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3.bigWig
@@ -5100,8 +5210,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3.bigWig
@@ -5125,8 +5237,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3.bigWig
@@ -5150,8 +5264,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam
@@ -5174,8 +5290,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam
@@ -5198,8 +5316,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam
@@ -5223,8 +5343,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam
@@ -5298,8 +5420,9 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -5322,8 +5445,9 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -5346,8 +5470,9 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -5370,8 +5495,9 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
@@ -5544,8 +5670,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig
@@ -5569,8 +5697,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig
@@ -5594,8 +5724,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam
@@ -5619,8 +5751,10 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam
@@ -5794,8 +5928,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam
@@ -5818,8 +5954,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam
@@ -5842,8 +5980,9 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
@@ -5865,8 +6004,9 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
@@ -5888,8 +6028,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3.bigWig
@@ -5913,8 +6055,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3.bigWig
@@ -5938,8 +6082,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3.bigWig
@@ -5963,8 +6109,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3.bigWig
@@ -5988,8 +6136,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam
@@ -6012,8 +6162,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam
@@ -6036,8 +6188,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-12
+dateSubmitted1 2010-01-12
+dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam
@@ -6061,8 +6215,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-22
+dateSubmitted1 2010-01-22
+dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam
@@ -6136,8 +6292,9 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-12
 dateSubmitted 2010-01-12
+dateSubmitted1 2010-01-12
 dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
@@ -6160,8 +6317,9 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-22
 dateSubmitted 2010-01-22
+dateSubmitted1 2010-01-22
 dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
@@ -6184,8 +6342,9 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-12
 dateSubmitted 2010-01-12
+dateSubmitted1 2010-01-12
 dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
@@ -6208,8 +6367,9 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-01-22
 dateSubmitted 2010-01-22
+dateSubmitted1 2010-01-22
 dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
@@ -6382,8 +6542,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-12
+dateSubmitted1 2010-01-12
+dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig
@@ -6407,8 +6569,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-22
+dateSubmitted1 2010-01-22
+dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig
@@ -6432,8 +6596,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-12
+dateSubmitted1 2010-01-12
+dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam
@@ -6457,8 +6623,10 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-22
+dateSubmitted1 2010-01-22
+dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam
@@ -7224,8 +7392,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam
@@ -7248,8 +7418,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam
@@ -7272,8 +7444,9 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
@@ -7295,8 +7468,9 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
@@ -7318,8 +7492,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3.bigWig
@@ -7343,8 +7519,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3.bigWig
@@ -7368,8 +7546,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3.bigWig
@@ -7393,8 +7573,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3.bigWig
@@ -7418,8 +7600,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam
@@ -7442,8 +7626,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam
@@ -7466,8 +7652,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam
@@ -7491,8 +7679,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam
@@ -7566,8 +7756,9 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -7590,8 +7781,9 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -7614,8 +7806,9 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -7638,8 +7831,9 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
@@ -7812,8 +8006,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2.bigWig
@@ -7837,8 +8033,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2.bigWig
@@ -7862,8 +8060,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam
@@ -7887,8 +8087,10 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam
@@ -8062,8 +8264,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam
@@ -8086,8 +8290,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam
@@ -8110,9 +8316,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-02-10
-dateUnrestricted 2010-11-09
+dateResubmitted 2010-02-10
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dFastqRep1.fastq.gz
@@ -8133,9 +8340,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
-dateSubmitted 2010-02-10
-dateUnrestricted 2010-11-09
+dateResubmitted 2010-02-10
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dFastqRep2.fastq.gz
@@ -8156,8 +8364,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3.bigWig
@@ -8181,8 +8391,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3.bigWig
@@ -8206,8 +8418,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3.bigWig
@@ -8231,8 +8445,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-14
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-14
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3.bigWig
@@ -8256,8 +8472,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam
@@ -8280,8 +8498,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-06
+dateSubmitted1 2010-01-06
+dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam
@@ -8304,8 +8524,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam
@@ -8329,8 +8551,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam
@@ -8404,9 +8628,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dateResubmitted 2010-06-22
+dateSubmitted 2010-07-14
+dateSubmitted1 2010-07-14
+dateUnrestricted 2011-04-14
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1.fastq.gz
@@ -8451,9 +8676,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-07-14
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dateResubmitted 2010-06-22
+dateSubmitted 2010-07-14
+dateSubmitted1 2010-07-14
+dateUnrestricted 2011-04-14
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1.fastq.gz
@@ -8648,8 +8874,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2.bigWig
@@ -8673,8 +8901,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2.bigWig
@@ -8698,8 +8928,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam
@@ -8723,8 +8955,10 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2009-03-06
+dateSubmitted1 2009-03-06
+dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam
@@ -10387,8 +10621,10 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam
@@ -10411,8 +10647,9 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
+dateResubmitted 2010-01-14
 dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
@@ -10434,8 +10671,10 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-15
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-15
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3.bigWig
@@ -10459,8 +10698,10 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-15
-dateUnrestricted 2011-11-14
+dateResubmitted 2011-02-15
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3.bigWig
@@ -10484,8 +10725,10 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-20
+dateResubmitted 2011-01-21
+dateSubmitted 2010-01-14
+dateSubmitted1 2010-01-14
+dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam
@@ -10508,8 +10751,10 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam
@@ -10608,8 +10853,9 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
@@ -10655,8 +10901,9 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
+dateResubmitted 2010-01-13
 dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
@@ -10852,8 +11099,10 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2.bigWig
@@ -10902,8 +11151,10 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateSubmitted1 2010-01-13
+dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam
@@ -11688,4 +11939,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: -682081060
+# MAGIC: 1346286611

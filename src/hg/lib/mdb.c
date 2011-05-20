@@ -1126,6 +1126,7 @@ int mdbObjsLoadToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *md
 // Adds mdb Objs with minimal error checking
 {
 int count = 0;
+verboseTime(2, "Start of mdbObjsLoadToDb %s", tableName);
 
 if (tableName == NULL)
     tableName = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
@@ -1138,6 +1139,7 @@ assert(mdbObjs != NULL);  // If this is the case, then be vocal
 long lastTime = 0;
 
 count = mdbObjPrintToTabFile(mdbObjs,MDB_TEMPORARY_TAB_FILE);
+verboseTime(2, "past mdbObjPrintToTabFile()");
 
 // Disable keys in hopes of speeding things up.  No danger since it only disables non-unique keys
 char query[8192];
@@ -1146,10 +1148,12 @@ sqlUpdate(conn, query);
 
 // Quick? load
 sqlLoadTabFile(conn, MDB_TEMPORARY_TAB_FILE, tableName, SQL_TAB_FILE_WARN_ON_ERROR|SQL_TAB_FILE_WARN_ON_WARN);
+verboseTime(2, "past sqlLoadTabFile()");
 
 // Enabling the keys again
 safef(query, sizeof(query),"alter table %s enable keys",tableName);
 sqlUpdate(conn, query);
+verboseTime(2, "Past alter table");
 
 //unlink(MDB_TEMPORARY_TAB_FILE);
 
