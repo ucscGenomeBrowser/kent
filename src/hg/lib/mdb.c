@@ -2186,19 +2186,20 @@ return mdbObjSetVar(mdbObj,var,buf);
 }
 
 void mdbObjSwapVars(struct mdbObj *mdbObjs, char *vars,boolean deleteThis)
-// Replaces objs' vars with var=vap pairs provided, preparing for DB update.
+// Replaces objs' vars with var=val pairs provided, preparing for DB update.
 {
 struct mdbObj *mdbObj = NULL;
 for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
     mdbObj->deleteThis = deleteThis;
 
-    if(mdbObj->varHash != NULL)
+    if (mdbObj->varHash != NULL)
         hashFree(&mdbObj->varHash);
 
     mdbVarsFree(&(mdbObj->vars));
 
-    mdbObjAddVarPairs(mdbObj,vars);
+    if (vars != NULL)
+        mdbObjAddVarPairs(mdbObj,vars);
     }
 }
 
@@ -2851,7 +2852,7 @@ while(mdbObjs != NULL)
 
         // Make sure the accession is set if requested.
         if (createExpIfNecessary && updateAccession
-        && exp->ix != ENCODE_EXP_IX_UNDEFINED && exp->accession == NULL)
+        && exp != NULL && exp->ix != ENCODE_EXP_IX_UNDEFINED && exp->accession == NULL)
             encodeExpSetAccession(exp, expTable);
 
         if (exp != NULL)
