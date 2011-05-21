@@ -74,6 +74,7 @@ shortLabel mRNA Descriptions
 longLabel Descriptions from all associated GenBank mRNAs
 priority 120
 
+name pathways
 shortLabel Pathways
 longLabel Biochemical and Signaling Pathways
 priority 130
