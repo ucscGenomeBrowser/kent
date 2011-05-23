@@ -2965,7 +2965,8 @@ longLabel OMIM Non-Gene Entry Cytogenetic Locations
 group phenDis
 priority 29.75
 visibility hide
-color 0, 100, 100
+#color 0, 100, 100
+color 12,12,120
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
@@ -2976,7 +2977,8 @@ longLabel OMIM Genes
 group phenDis
 priority 29.73
 visibility hide
-color 220, 0, 0
+#color 220, 0, 0
+color 12,12,120
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
@@ -2987,7 +2989,8 @@ longLabel OMIM Allelic Variant SNPs
 group phenDis
 priority 29.71
 visibility hide
-color 220,0,0
+#color 220,0,0
+color 0,0,0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/

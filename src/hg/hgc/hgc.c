@@ -9373,21 +9373,17 @@ printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
 }
 
 void printOmimGene2Details(struct trackDb *tdb, char *itemName, boolean encode)
-/* Print details of an OMIM Class 3 Gene entry. */
+/* Print details of an omimGene2 entry. */
 {
 struct sqlConnection *conn  = hAllocConn(database);
-struct sqlConnection *conn2 = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
 char *url = tdb->url;
-char *kgId= NULL;
 char *title1 = NULL;
 char *title2 = NULL;
 char *geneSymbol = NULL;
 char *chrom, *chromStart, *chromEnd;
-char *kgDescription = NULL;
-char *refSeq;
 
 chrom      = cartOptionalString(cart, "c");
 chromStart = cartOptionalString(cart, "o");
@@ -9395,7 +9391,7 @@ chromEnd   = cartOptionalString(cart, "t");
 
 if (url != NULL && url[0] != 0)
     {
-    printf("<B>OMIM Gene: ");fflush(stdout);
+    printf("<B>OMIM page at omim.org: ");fflush(stdout);
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     safef(query, sizeof(query),
@@ -9432,19 +9428,6 @@ if (url != NULL && url[0] != 0)
 	}
     sqlFreeResult(&sr);
 
-    /* get corresponding KG ID */
-    safef(query, sizeof(query),
-	  "select k.transcript from knownCanonical k where k.chrom='%s' and k.chromStart=%s and k.chromEnd=%s",
-	  chrom, chromStart, chromEnd);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-    	{
-	kgId = cloneString(row[0]);
-	}
-    sqlFreeResult(&sr);
-
-    /* use geneSymbol from omimMorbidMap if available */
     if (geneSymbol!= NULL)
     	{
 	boolean disorderShown;
@@ -9453,7 +9436,7 @@ if (url != NULL && url[0] != 0)
 	printf("<B>Gene symbol(s):</B> %s", geneSymbol);
 	printf("<BR>\n");
 
-	/* display disorder for genes in morbidmap */
+	/* display disorder(s) */
     	safef(query, sizeof(query),
 	      "select description, phenotypeClass, phenotypeId from omimPhenotype where omimId=%s order by description",
 	      itemName);
@@ -9475,7 +9458,10 @@ if (url != NULL && url[0] != 0)
 		if (!sameWord(phenotypeId, "-1"))
 		    {
                     printf(" (phenotype <A HREF=\"%s%s\" target=_blank>", url, phenotypeId);
-                    printf("%s</A></B>)", phenotypeId);
+                    printf("%s</A></B>", phenotypeId);
+		    // show phenotype class if available
+		    if (!sameWord(phenotypeClass, "-1")) printf(" (%s)", phenotypeClass);
+		    printf(")");
 		    }
 		}
 	    printf("<BR>\n");
@@ -9483,92 +9469,52 @@ if (url != NULL && url[0] != 0)
 	if (disorderShown) printf("</UL>\n");
     	sqlFreeResult(&sr);
 	}
-    else
+    
+    // show RefSeq Gene link(s)
+    safef(query, sizeof(query),
+          "select distinct r.name from refLink l, mim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
+	  itemName, chrom, chromStart, chromEnd);
+    sr = sqlMustGetResult(conn, query);
+    if (sr != NULL)
 	{
-	/* display gene symbol(s) from omimGenemap  */
-    	safef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
-    	sr = sqlMustGetResult(conn, query);
-    	row = sqlNextRow(sr);
-        if (row != NULL)
-    	    {
- 	    printf("<B>OMIM Gene Symbol:</B> %s", row[0]);
-	    printf("<BR>\n");
-    	    sqlFreeResult(&sr);
+	int printedCnt;
+	printedCnt = 0;
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    if (printedCnt < 1)
+		printf("<B>RefSeq Gene(s): </B>");
+	    else
+		printf(", ");
+    	    printf("<A HREF=\"%s%s&o=%s&t=%s\" target=_blank>", "../cgi-bin/hgc?g=refGene&i=", row[0], chromStart, chromEnd);
+    	    printf("%s</A></B>", row[0]);
+	    printedCnt++;
 	    }
-	else
-    	    {
-	    /* get gene symbol from kgXref if the entry is not in morbidmap and omim genemap */
-    	    safef(query, sizeof(query), "select geneSymbol from kgXref where kgId='%s';", kgId);
-
-            sr = sqlMustGetResult(conn, query);
-    	    row = sqlNextRow(sr);
-    	    if (row != NULL)
-    	    	{
- 	    	printf("<B>UCSC Gene Symbol:</B> %s", row[0]);
-	    	printf("<BR>\n");
-	    	}
-    	    sqlFreeResult(&sr);
-    	    }
+        if (printedCnt >= 1) printf("<BR>\n");
 	}
+    sqlFreeResult(&sr);
 
-    if (kgId != NULL)
-    	{
-    	printf("<B>UCSC Canonical Gene: ");
-    	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
-	       "../cgi-bin/hgGene?hgg_gene=", kgId);
-    	printf("%s</A></B> ", kgId);
-
-	safef(query, sizeof(query), "select refseq from kgXref where kgId='%s';", kgId);
-    	sr = sqlMustGetResult(conn, query);
-    	row = sqlNextRow(sr);
-    	if (row != NULL)
+    // show Related UCSC Gene links
+    safef(query, sizeof(query),
+          "select distinct kgId from kgXref x, refLink l, mim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
+	  itemName);
+    sr = sqlMustGetResult(conn, query);
+    if (sr != NULL)
+	{
+	int printedCnt;
+	printedCnt = 0;
+	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    refSeq = strdup(row[0]);
-	    kgDescription = gbCdnaGetDescription(conn2, refSeq);
+	    if (printedCnt < 1)
+		printf("<B>Related UCSC Gene(s): </B>");
+	    else
+		printf(", ");
+    	    printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>", "../cgi-bin/hgGene?hgg_gene=", row[0]);
+    	    printf("%s</A></B>", row[0]);
+	    printedCnt++;
 	    }
-	sqlFreeResult(&sr);
-        hFreeConn(&conn2);
-
-	if (kgDescription == NULL)
-	    {
-    	    safef(query, sizeof(query), "select description from kgXref where kgId='%s';", kgId);
-    	    sr = sqlMustGetResult(conn, query);
-    	    row = sqlNextRow(sr);
-    	    if (row != NULL)
-    	    	{
-	    	printf("%s", row[0]);
-	    	}
-
-	    sqlFreeResult(&sr);
-	    }
-	else
-    	    {
-	    printf("%s", kgDescription);
-	    }
-        printf("<BR>\n");
-
-	safef(query, sizeof(query),
-	      "select i.transcript from knownIsoforms i, knownCanonical c where c.transcript='%s' and i.clusterId=c.clusterId and i.transcript <>'%s'",
-	      kgId, kgId);
-    	sr = sqlMustGetResult(conn, query);
-	if (sr != NULL)
-	    {
-	    int printedCnt;
-	    printedCnt = 0;
-	    while ((row = sqlNextRow(sr)) != NULL)
-	    	{
-	        if (printedCnt < 1)
-		    printf("<B>Other UCSC Gene(s) in the same cluster: </B>");
-		else
-		    printf(", ");
-    	    	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>", "../cgi-bin/hgGene?hgg_gene=", row[0]);
-    	    	printf("%s</A></B>", row[0]);
-	    	printedCnt++;
-		}
-            if (printedCnt >= 1) printf("<BR>\n");
-	    }
-	sqlFreeResult(&sr);
+        if (printedCnt >= 1) printf("<BR>\n");
 	}
+    sqlFreeResult(&sr);
     }
 
 printf("<HR>");
@@ -9601,7 +9547,7 @@ omimId = itemName;
 
 if (url != NULL && url[0] != 0)
     {
-    printf("<B>OMIM Entry ");fflush(stdout);
+    printf("<B>OMIM page at omim.org: ");fflush(stdout);
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     safef(query, sizeof(query),
@@ -9849,7 +9795,7 @@ if (url != NULL && url[0] != 0)
     printf("%s</A></B>", avId);
     printf(" %s", avDesc);
 
-    printf("<BR><B>OMIM Entry ");
+    printf("<BR><B>OMIM page at omim.org: ");
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     if (title1 != NULL) printf(": %s", title1);

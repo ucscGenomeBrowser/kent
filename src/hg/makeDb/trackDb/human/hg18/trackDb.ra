@@ -3902,6 +3902,17 @@ itemRgb on
 color 0,0,0
 priority 26
 
+track evoCpg
+shortLabel Evo Cpg
+longLabel Weizmann Evolutionary CpG Islands
+visibility hide
+group compGeno
+type bed 9 .
+scoreFilterByRange on
+itemRgb on
+color 0,0,0
+priority 111
+
 track testChainHg19Overlap500
 shortLabel hg19 liftOver 500
 longLabel hg19 liftOver Chains 500 base overlap 5,000 base chunk size
