@@ -2322,6 +2322,10 @@ identifier omimPhenotypeId
 "OMIM Phenotype ID"
     $hg.omimPhenotype.phenotypeId dupeOk
 
+identifier evoCpgId
+"Evo Cpg ID"
+    $hg.evoCpg.name dupeOk
+
 identifier unigeneId fuzzy
 "NCBI UniGene Cluster ID"
 #   hgFixed.sage.uni
