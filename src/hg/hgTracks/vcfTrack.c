@@ -328,11 +328,6 @@ INLINE int drawOneHap(struct vcfGenotype *gt, int hapIx,
 {
 Color color = colorHapByRefAlt ? colorFromRefAlt(gt, hapIx, TRUE) :
 				 colorFromGt(gt, hapIx, ref, altAlleles, altCount, TRUE);
-if (w == 1)
-    {
-    x1--;
-    w = 3;
-    }
 hvGfxBox(hvg, x1, y, w, itemHeight+1, color);
 y += itemHeight+1;
 return y;
@@ -392,8 +387,11 @@ const double scale = scaleForPixels(width);
 int x1 = round((double)(rec->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)(rec->chromEnd-winStart)*scale) + xOff;
 int w = x2-x1;
-if (w < 1)
-    w = 1;
+if (w <= 1)
+    {
+    x1--;
+    w = 3;
+    }
 int y = yOff;
 dyStringClear(tmp);
 dyStringAppend(tmp, rec->alt);
@@ -413,6 +411,40 @@ mapBoxHgcOrHgGene(hvg, rec->chromStart, rec->chromEnd, x1, yOff, w, tg->height, 
 		  NULL, TRUE, NULL);
 }
 
+static int getCenterVariantIx(struct track *tg, int seqStart, int seqEnd,
+			      struct vcfRecord *records)
+// If the user hasn't specified a local variant/position to use as center,
+// just use the median variant in window.
+{
+int defaultIx = (slCount(records)-1) / 2;
+char cartVar[512];
+safef(cartVar, sizeof(cartVar), "%s.centerVariantPos", tg->tdb->track);
+char *centerPos = cartOptionalString(cart, cartVar);
+if (centerPos != NULL)
+    {
+    char *words[3];
+    int wordCount = chopByChar(cloneString(centerPos), ':', words, sizeof(words));
+    if (wordCount != 2)
+	errAbort("Cart variable %s format error: expected 'chrom:pos', got %s",
+		 cartVar, centerPos);
+    if (sameString(chromName, words[0]))
+	{
+	int pos = sqlUnsigned(words[1]);
+	int winSize = seqEnd - seqStart;
+	if (pos > (seqStart - winSize) && pos < (seqEnd + winSize))
+	    {
+	    int i;
+	    struct vcfRecord *rec;
+	    for (rec = records, i = 0;  rec != NULL;  rec = rec->next, i++)
+		if (rec->chromStart >= pos)
+		    return i;
+	    return i-1;
+	    }
+	}
+    }
+return defaultIx;
+}
+
 static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis)
@@ -423,9 +455,7 @@ const struct vcfFile *vcff = tg->extraUiData;
 if (vcff->records == NULL)
     return;
 unsigned short gtHapEnd = 0;
-// Use the median variant in the window as the center; would be even nicer to allow
-// the user to choose a variant (or position) to use as center:
-int ix, centerIx = (slCount(vcff->records)-1) / 2;
+int ix, centerIx = getCenterVariantIx(tg, seqStart, seqEnd, vcff->records);
 unsigned short *gtHapOrder = clusterChroms(vcff, centerIx, &gtHapEnd);
 struct vcfRecord *rec, *centerRec = NULL;
 for (rec = vcff->records, ix=0;  rec != NULL;  rec = rec->next, ix++)
