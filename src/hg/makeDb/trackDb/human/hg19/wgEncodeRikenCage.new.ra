@@ -462,7 +462,7 @@ superTrack wgEncodeRnaSeqSuper dense
         parent wgEncodeRikenCageViewClusters off
         shortLabel HeLa-S3 cytosol longNonPolyA
         longLabel ENCODE RIKEN CAGE Clusters (longNonPolyA in HeLa-S3 cytosol)
-        subGroups view=Clusters cellType=2HeLaS3 localization=cytosol rnaExtract=pAM
+        subGroups view=Clusters rep=Pooled  cellType=2HeLaS3 localization=cytosol rnaExtract=pAM
         type bedRnaElements
         color 0,119,158
         # subId=3992 dateSubmitted=2011-04-28
