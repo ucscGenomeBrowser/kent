@@ -1139,7 +1139,7 @@ assert(mdbObjs != NULL);  // If this is the case, then be vocal
 long lastTime = 0;
 
 count = mdbObjPrintToTabFile(mdbObjs,MDB_TEMPORARY_TAB_FILE);
-verboseTime(2, "past mdbObjPrintToTabFile()", tableName);
+verboseTime(2, "past mdbObjPrintToTabFile()");
 
 // Disable keys in hopes of speeding things up.  No danger since it only disables non-unique keys
 char query[8192];
@@ -2186,19 +2186,20 @@ return mdbObjSetVar(mdbObj,var,buf);
 }
 
 void mdbObjSwapVars(struct mdbObj *mdbObjs, char *vars,boolean deleteThis)
-// Replaces objs' vars with var=vap pairs provided, preparing for DB update.
+// Replaces objs' vars with var=val pairs provided, preparing for DB update.
 {
 struct mdbObj *mdbObj = NULL;
 for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
     mdbObj->deleteThis = deleteThis;
 
-    if(mdbObj->varHash != NULL)
+    if (mdbObj->varHash != NULL)
         hashFree(&mdbObj->varHash);
 
     mdbVarsFree(&(mdbObj->vars));
 
-    mdbObjAddVarPairs(mdbObj,vars);
+    if (vars != NULL)
+        mdbObjAddVarPairs(mdbObj,vars);
     }
 }
 
@@ -2851,7 +2852,7 @@ while(mdbObjs != NULL)
 
         // Make sure the accession is set if requested.
         if (createExpIfNecessary && updateAccession
-        && exp->ix != ENCODE_EXP_IX_UNDEFINED && exp->accession == NULL)
+        && exp != NULL && exp->ix != ENCODE_EXP_IX_UNDEFINED && exp->accession == NULL)
             encodeExpSetAccession(exp, expTable);
 
         if (exp != NULL)

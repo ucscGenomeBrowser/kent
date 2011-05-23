@@ -16,6 +16,129 @@
 
 static char const rcsid[] = "$Id: chainTrack.c,v 1.27 2006/02/23 01:41:31 baertsch Exp $";
 
+struct snakeFeature
+/* Minimal feature - just stores position in browser coordinates. */
+    {
+    struct snakeFeature *next;
+    int start, end;			/* Start/end in browser coordinates. */
+    int qStart, qEnd;			/* query start/end */
+    int level;
+    int orientation;
+    };
+
+struct level
+{
+boolean init;
+int orientation;
+int edge;
+};
+
+
+static struct level Levels[1000000];
+static int maxLevel = 0;
+static int maxEnd = 0;
+static struct snakeFeature *newList = NULL;
+static int inserts = 0;
+static int addedToExist = 0;
+static int endCaps = 0;
+
+static int snakeFeatureCmpQStart(const void *va, const void *vb)
+{
+const struct snakeFeature *a = *((struct snakeFeature **)va);
+const struct snakeFeature *b = *((struct snakeFeature **)vb);
+int diff = a->qStart - b->qStart;
+
+if (diff == 0)
+    {
+    diff = a->start - b->start;
+    }
+
+return diff;
+}
+
+void clearLevels()
+{
+int ii;
+
+for(ii=0; ii < sizeof(Levels) / sizeof(Levels[0]); ii++)
+    Levels[ii].init = FALSE;
+maxLevel = 0;
+}
+
+void calcSnake(struct snakeFeature *list, int level)
+{
+struct snakeFeature *cb = list;
+boolean didInit = FALSE;
+
+if (level > maxLevel)
+    maxLevel = level;
+if (level > ArraySize(Levels))
+    errAbort("too many levels");
+
+if (Levels[level].init == FALSE)
+    {
+    didInit = TRUE;
+    Levels[level].init = TRUE;
+    Levels[level].orientation = list->orientation;
+    if (list->orientation == -1)
+	Levels[level].edge = 1000000000;  // bigger than the biggest chrom
+    else
+	Levels[level].edge = 0;
+    }
+
+struct snakeFeature *next;
+struct snakeFeature *insertHead = NULL;
+for(; cb; cb = next)
+    {
+    next = cb->next;
+    //cb->next = NULL;
+
+    if ((Levels[level].orientation != cb->orientation) ||
+	((cb->orientation == 1) && (Levels[level].edge > cb->start)) ||
+	((cb->orientation == -1) && (Levels[level].edge < cb->end)))
+	{
+	slAddHead(&insertHead, cb);
+	continue;
+	}
+
+    if (insertHead)
+	{
+	 inserts++;
+	slReverse(&insertHead);
+	calcSnake(insertHead, level + 1);
+	insertHead = NULL;
+	}
+
+    if (!didInit)
+	{
+	addedToExist++;
+	didInit = TRUE;
+	}
+    //struct cBlockData *cData;
+    //AllocVar(cData);
+    cb->level = level;
+    //cb->data = (void *)cData;
+
+//printf("%d ", cb->qStart);
+    if (cb->orientation == 1)
+	Levels[level].edge = cb->end;
+    else
+	Levels[level].edge = cb->start;
+
+    if (cb->end > maxEnd)
+	maxEnd = cb->end;
+
+    slAddHead(&newList, cb);
+    }
+
+if (insertHead)
+    {
+    slReverse(&insertHead);
+    calcSnake(insertHead, level + 1);
+    insertHead = NULL;
+    endCaps++;
+    }
+}
 
 struct cartOptions
     {
@@ -35,7 +158,7 @@ static void doQuery(struct sqlConnection *conn, char *fullName,
 struct sqlResult *sr = NULL;
 char **row;
 struct linkedFeatures *lf;
-struct simpleFeature *sf;
+struct snakeFeature *sf;
 struct dyString *query = newDyString(1024);
 char *force = "";
 
@@ -78,7 +201,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    sf->qStart = pChain->qSize - sf->qEnd;
 	    sf->qEnd = pChain->qSize - temp;
 	    }
-	sf->grayIx = lf->orientation;
+	sf->orientation = lf->orientation;
 	slAddHead(&lf->components, sf);
 	}
     }
@@ -86,11 +209,47 @@ sqlFreeResult(&sr);
 dyStringFree(&query);
 }
 
-int snakeItemHeight(struct track *tg, void *item)
+struct snakeInfo
 {
-//return 40;
+int maxLevel;
+} snakeInfo;
+
+void calcPackSnake(struct track *tg, void *item)
+{
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
-struct simpleFeature  *sf;
+if (lf->components == NULL)
+    {
+    //lf->filterColor = 0;
+    return;
+    }
+
+if (lf->codons == NULL)
+    {
+    clearLevels();
+    calcSnake((struct snakeFeature *)lf->components, 0);
+    lf->components = (struct simpleFeature *)newList;
+    newList = NULL;
+    slSort(&lf->components, snakeFeatureCmpQStart);
+    struct snakeInfo *si;
+    AllocVar(si);
+    si->maxLevel = maxLevel;
+    lf->codons = (struct simpleFeature *)si;
+    }
+}
+
+int packSnakeItemHeight(struct track *tg, void *item)
+{
+struct linkedFeatures  *lf = (struct linkedFeatures *)item;
+calcPackSnake(tg, item);
+struct snakeInfo *si = (struct snakeInfo *)lf->codons;
+int lineHeight = tg->lineHeight ;
+return (si->maxLevel + 1) * lineHeight;
+}
+
+int fullSnakeItemHeight(struct track *tg, void *item)
+{
+struct linkedFeatures  *lf = (struct linkedFeatures *)item;
+struct snakeFeature  *sf;
 int s, e;
 int lineHeight = tg->lineHeight ;
 int oldOrient = 0;
@@ -101,9 +260,9 @@ tStart = 0;
 tEnd = 0;
 if (lf->components)
     size = lineHeight;
-for (sf =  lf->components; sf ;  sf = sf->next)
+for (sf =  (struct snakeFeature *)lf->components; sf ;  sf = sf->next)
     {
-    int orient = sf->grayIx;
+    int orient = sf->orientation;
 
     s = sf->start; e = sf->end;
     /*
@@ -123,6 +282,15 @@ for (sf =  lf->components; sf ;  sf = sf->next)
     tStart = s;
     }
 return size;
+}
+
+int snakeItemHeight(struct track *tg, void *item)
+{
+    if (tg->visibility == tvFull)
+	return fullSnakeItemHeight(tg, item);
+    else if (tg->visibility == tvPack)
+	return packSnakeItemHeight(tg, item);
+return 0;
 }
 
 static int linkedFeaturesCmpScore(const void *va, const void *vb)
@@ -150,17 +318,16 @@ double scale = scaleForWindow(width, seqStart, seqEnd);
 
 for(lf = lfStart; lf; lf = lf->next)
     {
-    struct simpleFeature  *sf;
+    struct snakeFeature  *sf;
 
     lf->score = 0;
-    for (sf =  lf->components; sf != NULL;  sf = sf->next)
+    for (sf =  (struct snakeFeature *)lf->components; sf != NULL;  sf = sf->next)
 	{
 	lf->score += sf->end - sf->start;
 	}
     }
 
 slSort(&tg->items, linkedFeaturesCmpScore);
-
 
 y = yOff;
 for (item = tg->items; item != NULL; item = item->next)
@@ -179,13 +346,79 @@ void snakeLeftLabels(struct track *tg, int seqStart, int seqEnd,
 {
 }
 
-void snakeDrawAt(struct track *tg, void *item,
+void packSnakeDrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
 {
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
-struct simpleFeature  *sf, *prevSf;
+calcPackSnake(tg, item);
+
+int x;
+int offY = y;
+struct snakeFeature  *sf, *prevSf;
+int lineHeight = tg->lineHeight ;
+int tStart, tEnd, qStart;
+int  qs, qe;
+int s, e;
+int heightPer = tg->heightPer;
+int lastX = -1,lastY = y;
+int lastQEnd = 0;
+qe = lastQEnd = 0;
+for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next)
+    {
+    qs = sf->qStart;
+    qe = sf->qEnd;
+    y = offY + sf->level * lineHeight;
+    s = sf->start; e = sf->end;
+    tEnd = sf->end;
+    x = round((double)((int)tEnd-winStart)*scale) + xOff;
+    //color =	    lfChromColor(tg, item, hvg);
+color = (sf->orientation == -1) ? MG_RED : MG_BLUE;
+
+    //if (lastX != -1)
+	//hvGfxLine(hvg, lastX, lastY + lineHeight/2, x, y + lineHeight/2, MG_BLACK);
+    drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
+			color, lf->score );
+    tEnd = e;
+    tStart = s;
+    qStart = sf->qStart;
+    lastY = y;
+    lastX = x;
+    }
+lastX = -1,lastY = y;
+lastQEnd = 0;
+qe = lastQEnd = 0;
+for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next)
+    {
+    qs = sf->qStart;
+    qe = sf->qEnd;
+    y = offY + sf->level * lineHeight;
+    s = sf->start; e = sf->end;
+    tEnd = sf->end;
+    x = round((double)((int)tEnd-winStart)*scale) + xOff;
+    //color =	    lfChromColor(tg, item, hvg);
+color = (sf->orientation == -1) ? MG_RED : MG_BLUE;
+
+    if (lastX != -1)
+	hvGfxLine(hvg, lastX, lastY + lineHeight/2, x, y + lineHeight/2, MG_BLACK);
+    //drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
+			//color, lf->score );
+    tEnd = e;
+    tStart = s;
+    qStart = sf->qStart;
+    lastY = y;
+    lastX = x;
+    }
+}
+
+void fullSnakeDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single simple bed item at position. */
+{
+struct linkedFeatures  *lf = (struct linkedFeatures *)item;
+struct snakeFeature  *sf, *prevSf;
 int s, e;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight ;
@@ -200,9 +433,9 @@ tEnd = winEnd;
 prevSf = NULL;
 
 qe = lastQEnd = 0;
-for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next)
+for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next)
     {
-    int orient = sf->grayIx;
+    int orient = sf->orientation;
     midY = y + heightPer/2;
 
     qs = sf->qStart;
@@ -218,7 +451,7 @@ for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next
 	continue;
 	*/
 
-    if (s < winStart) s = winStart;
+    //if (s < winStart) s = winStart;
     
     if (((oldOrient) && (oldOrient != orient))
 	||  ((oldOrient == 1) && (tEnd) && (s < tEnd))
@@ -364,6 +597,7 @@ for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next
 	}
     color =	    lfChromColor(tg, item, hvg);
 
+color = (sf->orientation == -1) ? MG_RED : MG_BLUE;
     drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
 			color, lf->score );
     tEnd = e;
@@ -373,18 +607,18 @@ for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next
     }
 }
 
-static int simpleFeatureCmpQStart(const void *va, const void *vb)
+void snakeDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single simple bed item at position. */
 {
-const struct simpleFeature *a = *((struct simpleFeature **)va);
-const struct simpleFeature *b = *((struct simpleFeature **)vb);
-int diff = a->qStart - b->qStart;
-
-if (diff == 0)
-    {
-    diff = a->start - b->start;
-    }
-
-return diff;
+    
+    if (tg->visibility == tvFull)
+	fullSnakeDrawAt(tg, item, hvg, xOff, y, scale, 
+	    font, color, vis);
+    else if (tg->visibility == tvPack)
+	packSnakeDrawAt(tg, item, hvg, xOff, y, scale, 
+	    font, color, vis);
 }
 
 static int linkedFeaturesCmpChrom(const void *va, const void *vb)
@@ -395,75 +629,66 @@ const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
 return strcmp(a->name, b->name);
 }
 
+void fixItems(struct linkedFeatures *lf)
+{
+struct linkedFeatures *firstLf, *next;
+struct snakeFeature  *sf,  *nextSf;
+
+firstLf = lf;
+for (;lf; lf = next)
+    {
+    next = lf->next;
+    if (!sameString(firstLf->name, lf->name))
+	{
+	slSort(&firstLf->components, snakeFeatureCmpQStart);
+	firstLf = lf;
+	}
+    for (sf =  (struct snakeFeature *)lf->components; sf != NULL; sf = nextSf)
+	{
+	sf->orientation = lf->orientation;
+	nextSf = sf->next;
+	if (firstLf != lf)
+	    {
+	    
+	    lf->components = NULL;
+	    slAddHead(&firstLf->components, sf);
+
+	    }
+	}
+    }
+
+slSort(&firstLf->components, snakeFeatureCmpQStart);
+firstLf->next = 0;
+}
+
 int snakeHeight(struct track *tg, enum trackVisibility vis)
 {
 int height = 0;
-struct slList *item = tg->items, *nextItem;
-struct linkedFeatures *firstLf, *lf = (struct linkedFeatures *)tg->items;
-struct simpleFeature  *sf,  *nextSf;
+struct slList *item = tg->items;
 
 slSort(&tg->items, linkedFeaturesCmpChrom);
 
 item = tg->items;
 
-lf =  (struct linkedFeatures *)tg->items;
-if (item)
+for (item=tg->items;item; item = item->next)
     {
-    firstLf = lf;
-    for (;item; item = nextItem)
-	{
-	struct linkedFeatures *lf = (struct linkedFeatures *)item;
-	nextItem = item->next;
-	if (!sameString(firstLf->name, lf->name))
-	    {
-	    slSort(&firstLf->components, simpleFeatureCmpQStart);
-	    firstLf = lf;
-	    }
-	for (sf =  lf->components; sf != NULL; sf = nextSf)
-	    {
-	    sf->grayIx = lf->orientation;
-	    nextSf = sf->next;
-	    if (firstLf != lf)
-		{
-		
-		lf->components = NULL;
-		slAddHead(&firstLf->components, sf);
-		}
-	    }
-	}
-
-    slSort(&firstLf->components, simpleFeatureCmpQStart);
-
-    for (item=tg->items;item; item = item->next)
-	{
-	height += tg->itemHeight(tg, item);
-	}
+    height += tg->itemHeight(tg, item);
     }
-return 3500; //height;
+return height;
 }
 
-static void chainDraw(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw chained features. This loads up the simple features from 
- * the chainLink table, calls linkedFeaturesDraw, and then
- * frees the simple features again. */
+static void loadLinks(struct track *tg, int seqStart, int seqEnd,
+         enum trackVisibility vis)
 {
+int start, end, extra;
+char fullName[64];
+int maxOverLeft = 0, maxOverRight = 0;
+int overLeft, overRight;
 struct linkedFeatures *lf;
-struct simpleFeature *sf;
+//struct snakeFeature *sf;
 struct lm *lm;
 struct hash *hash;	/* Hash of chain ids. */
 struct sqlConnection *conn;
-//double scale = ((double)(winEnd - winStart))/width;
-char fullName[64];
-int start, end, extra;
-//struct simpleFeature *lastSf = NULL;
-int maxOverLeft = 0, maxOverRight = 0;
-int overLeft, overRight;
-
-if (tg->items == NULL)		/*Exit Early if nothing to do */
-    return;
-
 lm = lmInit(1024*4);
 hash = newHash(0);
 conn = hAllocConn(database);
@@ -477,28 +702,17 @@ conn = hAllocConn(database);
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     //double pixelWidth = (lf->end - lf->start) / scale;
-    if (1)//pixelWidth >= 2.5)
-	{
-	char buf[256];
-	struct chain *pChain = lf->extra;
-	safef(buf, sizeof(buf), "%d", pChain->id);
-	//hashAdd(hash, lf->extra, lf);
-	hashAdd(hash, buf, lf);
-	overRight = lf->end - seqEnd;
-	if (overRight > maxOverRight)
-	    maxOverRight = overRight;
-	overLeft = seqStart - lf->start ;
-	if (overLeft > maxOverLeft)
-	    maxOverLeft = overLeft;
-	}
-    else
-	{
-	lmAllocVar(lm, sf);
-	sf->start = lf->start;
-	sf->end = lf->end;
-	sf->grayIx = lf->grayIx;
-	lf->components = sf;
-	}
+    char buf[256];
+    struct chain *pChain = lf->extra;
+    safef(buf, sizeof(buf), "%d", pChain->id);
+    //hashAdd(hash, lf->extra, lf);
+    hashAdd(hash, buf, lf);
+    overRight = lf->end - seqEnd;
+    if (overRight > maxOverRight)
+	maxOverRight = overRight;
+    overLeft = seqStart - lf->start ;
+    if (overLeft > maxOverLeft)
+	maxOverLeft = overLeft;
     }
 
 /* if some chains are bigger than 3 pixels */
@@ -608,30 +822,10 @@ if (hash->size)
 #endif
 	}
     }
-if (1)
-{
-snakeHeight(tg, vis);
-snakeDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
-	font, color, vis);
-	}
-    else
-    {
-linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
-	font, color, vis);
-	}
-/* Cleanup time. */
-for (lf = tg->items; lf != NULL; lf = lf->next)
-    lf->components = NULL;
-
-lmCleanup(&lm);
-freeHash(&hash);
 hFreeConn(&conn);
 }
 
 void snakeLoadItems(struct track *tg)
-/* Load up all of the chains from correct table into tg->items 
- * item list.  At this stage to conserve memory for other tracks
- * we don't load the links into the components list until draw time. */
 {
 char *track = tg->table;
 struct chain chain;
@@ -671,7 +865,7 @@ else
     else
         {
         snprintf(extraWhere, sizeof(extraWhere), " ");
-        sr = hRangeQuery(conn, track, chromName, winStart, winEnd, 
+        sr = hRangeQuery(conn, track, chromName, 0, 500000000, 
                 NULL, &rowOffset);
         }
     }
@@ -709,19 +903,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     char buffer[1024];
     snprintf(buffer, sizeof(buffer), "%s", chain.qName);
-    //snprintf(buffer, sizeof(buffer), "%s %c %dk", 
-    	//chain.qName, chain.qStrand, qs/1000);
     lf->name = cloneString(buffer);
-    //snprintf(lf->name, sizeof(lf->name), "%s %c %dk", 
-    //	chain.qName, chain.qStrand, qs/1000);
-    //snprintf(lf->name, sizeof(lf->name), "%s", 
-    //	chain.qName);
-    //snprintf(lf->popUp, sizeof(lf->name), "%s %c start %d size %d",
-    //	chain.qName, chain.qStrand, qs, chain.qEnd - chain.qStart);
-    //snprintf(buf, sizeof(buf), "%d", chain.id);
-    //lf->extra = cloneString(buf);
     lf->extra = pChain;
-    //printf("setting extra to %llu\n",(long long) pChain);
     slAddHead(&list, lf);
     }
 
@@ -740,6 +923,12 @@ tg->items = list;
 /* Clean up. */
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+
+/* now load the items */
+//loadLinks(tg, 0, 500000000, tg->visibility);
+loadLinks(tg, winStart, winEnd, tg->visibility);
+lf=tg->items;
+fixItems(lf);
 }	/*	chainLoadItems()	*/
 
 static Color chainScoreColor(struct track *tg, void *item, struct hvGfx *hvg)
@@ -772,22 +961,17 @@ void snakeMethods(struct track *tg, struct trackDb *tdb,
 /* Fill in custom parts of alignment chains. */
 {
 
-//boolean normScoreAvailable = FALSE;
 struct cartOptions *chainCart;
-//char scoreOption[256];
 
 AllocVar(chainCart);
 
 boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
-//normScoreAvailable = chainDbNormScoreAvailable(chromName, tg->table, NULL);
 
 /*	what does the cart say about coloring option	*/
 chainCart->chainColor = chainFetchColorOption(cart, tdb, FALSE);
 
-//snprintf( scoreOption, sizeof(scoreOption), "%s.scoreFilter", tdb->tableName);
 chainCart->scoreFilter = cartUsualIntClosestToHome(cart, tdb,
 	FALSE, SCORE_FILTER, 0);
-//chainCart->scoreFilter = cartUsualInt(cart, scoreOption, 0);
 
 
 linkedFeaturesMethods(tg);
@@ -826,13 +1010,14 @@ else
 	chainCart->chainColor = chainColorChromColors;
     }
 
+tg->canPack = TRUE;
 tg->loadItems = snakeLoadItems;
-tg->drawItems = chainDraw;
+tg->drawItems = snakeDraw;
 tg->mapItemName = lfMapNameFromExtra;
 tg->subType = lfSubChain;
 tg->extraUiData = (void *) chainCart;
-//    tg->drawItems = snakeDraw;
-    tg->drawItemAt = snakeDrawAt;
     tg->totalHeight = snakeHeight; 
+
+    tg->drawItemAt = snakeDrawAt;
     tg->itemHeight = snakeItemHeight;
 }

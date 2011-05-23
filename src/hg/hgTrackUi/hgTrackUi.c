@@ -1591,7 +1591,10 @@ indelShowOptions(cart, tdb);
 void retroGeneUI(struct trackDb *tdb)
 /* Put up retroGene-specific controls */
 {
-geneIdConfig(tdb);
+printf("<B>Label:</B> ");
+labelMakeCheckBox(tdb, "gene", "gene", FALSE);
+labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+
 baseColorDrawOptDropDown(cart, tdb);
 }
 
@@ -2419,7 +2422,7 @@ else if (sameString(track, "omimGene"))
         omimGeneUI(tdb);
 else if (sameString(track, "hg17Kg"))
         hg17KgUI(tdb);
-else if (sameString(track, "pseudoGeneLink") || startsWith("retroMrnaInfo", track))
+else if (startsWith("ucscRetro", track) || startsWith("retroMrnaInfo", track))
         retroGeneUI(tdb);
 else if (sameString(track, "ensGeneNonCoding"))
         ensemblNonCodingUI(tdb);
