@@ -15,6 +15,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1.bam
+md5sum d7e227b6da65127a37e13f4d00954bbe
 grant Gingeras
 lab CSHL
 labExpId LID20749
@@ -39,6 +40,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2.bam
+md5sum c5e1089ebbc3813538b430c870abab5c
 grant Gingeras
 lab CSHL
 labExpId LID20750
@@ -63,6 +65,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1.bigWig
+md5sum 078889d783147b1967c91983268f18e7
 grant Gingeras
 lab CSHL
 labExpId LID20749
@@ -87,6 +90,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2.bigWig
+md5sum 8d79aaa994c670e1cfeebf6acb3e6d09
 grant Gingeras
 lab CSHL
 labExpId LID20750
@@ -111,6 +115,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1.bigWig
+md5sum aa6e2314d0bcbaee8dbfb5160525ba67
 grant Gingeras
 lab CSHL
 labExpId LID20749
@@ -135,6 +140,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2.bigWig
+md5sum e0f8ca4ba5a4ca6df43badf72be2563f
 grant Gingeras
 lab CSHL
 labExpId LID20750
@@ -159,6 +165,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalRawDataRep1.fastq.gz
+md5sum c46483d72ea1793d613c7ddb829648f2
 grant Gingeras
 lab CSHL
 labExpId LID20749
@@ -182,6 +189,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalRawDataRep2.fastq.gz
+md5sum e80075b80e37905285234d584ca256b8
 grant Gingeras
 lab CSHL
 labExpId LID20750
@@ -205,6 +213,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep1.bam
+md5sum 037b138f43f920f809ad501447d1d3d8
 grant Gingeras
 lab CSHL
 labExpId LID20745
@@ -229,6 +238,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep2.bam
+md5sum 52e5e21990c255f31ca59085bfc9d449
 grant Gingeras
 lab CSHL
 labExpId LID20746
@@ -253,6 +263,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalMinusRawRep1.bigWig
+md5sum 209d292b3f189583c4c3a766e0cfb3cc
 grant Gingeras
 lab CSHL
 labExpId LID20745
@@ -277,6 +288,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalMinusRawRep2.bigWig
+md5sum 74d77389d610696cf9ccf093c5df921e
 grant Gingeras
 lab CSHL
 labExpId LID20746
@@ -301,6 +313,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalPlusRawRep1.bigWig
+md5sum edfa6744c8883f22aebf9e3eb950b21e
 grant Gingeras
 lab CSHL
 labExpId LID20745
@@ -325,6 +338,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalPlusRawRep2.bigWig
+md5sum 3359dba672da5f6fad1cd2d33045a372
 grant Gingeras
 lab CSHL
 labExpId LID20746
@@ -349,6 +363,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalRawDataRep1.fastq.gz
+md5sum 01b2f0206db86547eccddbdcead616f4
 grant Gingeras
 lab CSHL
 labExpId LID20745
@@ -372,6 +387,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalRawDataRep2.fastq.gz
+md5sum 706d39a25612e65f3d97ec671d47c1eb
 grant Gingeras
 lab CSHL
 labExpId LID20746
@@ -395,6 +411,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep1.bam
+md5sum 37b9f5f7941794ae15d5d77bb928c3f7
 grant Gingeras
 lab CSHL
 labExpId LID20909
@@ -419,6 +436,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2.bam
+md5sum c2ae5eab4f1100b16b035f771d7c89c4
 grant Gingeras
 lab CSHL
 labExpId LID20910
@@ -444,6 +462,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep1.bigWig
+md5sum 48256f7699401a458862fb4070737029
 grant Gingeras
 lab CSHL
 labExpId LID20909
@@ -468,6 +487,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep2.bigWig
+md5sum 9404df46696fe113bab5fe0949a92732
 grant Gingeras
 lab CSHL
 labExpId LID20910
@@ -492,6 +512,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep1.bigWig
+md5sum 9b8fbd762726e01b7d8b9c6665331133
 grant Gingeras
 lab CSHL
 labExpId LID20909
@@ -516,6 +537,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep2.bigWig
+md5sum cace71c4c83f23b7a79e93fb26d9afa1
 grant Gingeras
 lab CSHL
 labExpId LID20910
@@ -540,6 +562,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalRawDataRep1.fastq.gz
+md5sum ab3568167cb4ce3d28d77f7ceafb6d98
 grant Gingeras
 lab CSHL
 labExpId LID20909
@@ -563,6 +586,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalRawDataRep2.fastq.gz
+md5sum 5e9eb2745e344a3cde79f9fcdcf1bb3e
 grant Gingeras
 lab CSHL
 labExpId LID20910
@@ -588,6 +612,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam
+md5sum 03df08790fe81801c7e4fea90777a788
 geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
@@ -615,6 +640,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw.bigWig
+md5sum d7c07abdb1583cec226fa9902f26bdb2
 geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
@@ -642,6 +668,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw.bigWig
+md5sum e5461d01f6fc6ee96199bc861f75c30b
 geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
@@ -668,6 +695,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortRawData.fastq.gz
+md5sum 91cc9e599518719f89ecf51edd360954
 geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
@@ -692,6 +720,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep1.bam
+md5sum 26935ba53a77022957bb761f98a7791c
 grant Gingeras
 lab CSHL
 labExpId LID20899
@@ -716,6 +745,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep2.bam
+md5sum 689d64234d0da419adb9f0471ce50950
 grant Gingeras
 lab CSHL
 labExpId LID20902
@@ -741,6 +771,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalMinusRawRep1.bigWig
+md5sum 24710829d03156539f323530e398e0a3
 grant Gingeras
 lab CSHL
 labExpId LID20899
@@ -765,6 +796,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalMinusRawRep2.bigWig
+md5sum 143a411477be39cc3dda77db040b5191
 grant Gingeras
 lab CSHL
 labExpId LID20902
@@ -789,6 +821,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalPlusRawRep1.bigWig
+md5sum 2a38ce6feaf3e172f20dbd08a7ed41eb
 grant Gingeras
 lab CSHL
 labExpId LID20899
@@ -813,6 +846,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalPlusRawRep2.bigWig
+md5sum 1aba1dae749ba1eac22245c0486ba6ae
 grant Gingeras
 lab CSHL
 labExpId LID20902
@@ -837,6 +871,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalRawDataRep1.fastq.gz
+md5sum b3e5e650aeca8f1050d16ca9525da622
 grant Gingeras
 lab CSHL
 labExpId LID20899
@@ -860,6 +895,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalRawDataRep2.fastq.gz
+md5sum f7402929d9a8377b295171c22f33742e
 grant Gingeras
 lab CSHL
 labExpId LID20902
@@ -885,6 +921,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam
+md5sum 5290526e35e0d92d9659e230324d9699
 geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
@@ -912,6 +949,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw.bigWig
+md5sum 32c9332abad1e6949d590e7f978fda74
 geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
@@ -939,6 +977,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw.bigWig
+md5sum 7debeac04170a03e3e9f72d21a121b9d
 geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
@@ -965,6 +1004,7 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortRawData.fastq.gz
+md5sum 91eb0b8e8e26d5b83cbd4af2d8312c46
 geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
@@ -991,6 +1031,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags.shortFrags.gz
+md5sum 95feaeb4c61dfc1c76c97d961425138b
 geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
@@ -1016,6 +1057,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep1.bam
+md5sum 32e18ca6acd794dbbb9ce8cc1f986f10
 grant Gingeras
 lab CSHL
 labExpId LID20901
@@ -1040,6 +1082,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep2.bam
+md5sum e41f8dd0aaf9c019f6f1f055c8ea9952
 grant Gingeras
 lab CSHL
 labExpId LID20904
@@ -1064,6 +1107,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalMinusRawRep1.bigWig
+md5sum 1b692145fbefb07ff3d2265dea52cd7b
 grant Gingeras
 lab CSHL
 labExpId LID20901
@@ -1088,6 +1132,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalMinusRawRep2.bigWig
+md5sum 9bd53d6a6b7fd37604a8161d6ee013a8
 grant Gingeras
 lab CSHL
 labExpId LID20904
@@ -1112,6 +1157,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalPlusRawRep1.bigWig
+md5sum 8af9e35cc9dc0c90df759ab5b64ecc0a
 grant Gingeras
 lab CSHL
 labExpId LID20901
@@ -1136,6 +1182,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalPlusRawRep2.bigWig
+md5sum 34b5b31fccea887efdc370650f481b0f
 grant Gingeras
 lab CSHL
 labExpId LID20904
@@ -1160,6 +1207,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalRawDataRep1.fastq.gz
+md5sum 53d0fa4292dbe046e2c471ea4261f94e
 grant Gingeras
 lab CSHL
 labExpId LID20901
@@ -1183,6 +1231,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalRawDataRep2.fastq.gz
+md5sum bff82a306cc96cb35dd764cd7f1b3b09
 grant Gingeras
 lab CSHL
 labExpId LID20904
@@ -1208,6 +1257,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam
+md5sum d710bdf4ab5e03a5309e1783fb75c0df
 geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
@@ -1235,6 +1285,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw.bigWig
+md5sum 6663326e3102cf17b0d9ba4b08084512
 geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
@@ -1262,6 +1313,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw.bigWig
+md5sum 2549445d3289d3666cf5f4c0adafd79c
 geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
@@ -1288,6 +1340,7 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortRawData.fastq.gz
+md5sum dc95979eb6e3937a47511cd7cb9b035a
 geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
@@ -1314,6 +1367,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags.shortFrags.gz
+md5sum 35df1ca77cff34683b9baa6b2426b182
 geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
@@ -1339,6 +1393,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep1.bam
+md5sum 302ca6e4b1ea53fbe1d3e68cf0a59670
 grant Gingeras
 lab CSHL
 labExpId LID20900
@@ -1363,6 +1418,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep2.bam
+md5sum 23650e6de625f0de1148522020e302c9
 grant Gingeras
 lab CSHL
 labExpId LID20903
@@ -1387,6 +1443,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalMinusRawRep1.bigWig
+md5sum ca6b72d62e5f9dfa415ce1f537fa7dd3
 grant Gingeras
 lab CSHL
 labExpId LID20900
@@ -1411,6 +1468,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalMinusRawRep2.bigWig
+md5sum e74bcdc8965d96a1de75625692083d13
 grant Gingeras
 lab CSHL
 labExpId LID20903
@@ -1435,6 +1493,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalPlusRawRep1.bigWig
+md5sum f7a6b19f4d7f77116c43692c6a16ade7
 grant Gingeras
 lab CSHL
 labExpId LID20900
@@ -1459,6 +1518,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalPlusRawRep2.bigWig
+md5sum 471ecceaac3018f1bd7cfabe77837878
 grant Gingeras
 lab CSHL
 labExpId LID20903
@@ -1483,6 +1543,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalRawDataRep1.fastq.gz
+md5sum bc98249bb02a5e7e6fe6c6a2a608b197
 grant Gingeras
 lab CSHL
 labExpId LID20900
@@ -1506,6 +1567,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalRawDataRep2.fastq.gz
+md5sum 1645e1c4b3ae9c3647b94d8e0d77efba
 grant Gingeras
 lab CSHL
 labExpId LID20903
@@ -1529,6 +1591,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep1.bam
+md5sum f2599972fca418b1ce0ab702f38aebb0
 grant Gingeras
 lab CSHL
 labExpId LID20905
@@ -1553,6 +1616,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep2.bam
+md5sum cc23a429bfe42213ae82c221514457b8
 grant Gingeras
 lab CSHL
 labExpId LID20906
@@ -1577,6 +1641,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalMinusRawRep1.bigWig
+md5sum 381ec3bdde95cf32cc2ef48dc2fe158d
 grant Gingeras
 lab CSHL
 labExpId LID20905
@@ -1601,6 +1666,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalMinusRawRep2.bigWig
+md5sum fd9ee3f60e44bffb35696496e7234bf8
 grant Gingeras
 lab CSHL
 labExpId LID20906
@@ -1625,6 +1691,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalPlusRawRep1.bigWig
+md5sum 876438b671af7d900f9d6c5351fdb7af
 grant Gingeras
 lab CSHL
 labExpId LID20905
@@ -1649,6 +1716,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalPlusRawRep2.bigWig
+md5sum f1761d3d65f33865bb86849a81cc5594
 grant Gingeras
 lab CSHL
 labExpId LID20906
@@ -1673,6 +1741,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalRawDataRep1.fastq.gz
+md5sum 1dce5cd6d0e7f7db15d2a24c7b302773
 grant Gingeras
 lab CSHL
 labExpId LID20905
@@ -1696,6 +1765,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalRawDataRep2.fastq.gz
+md5sum 6a25b6692785467ed6d4f07b650c981d
 grant Gingeras
 lab CSHL
 labExpId LID20906
@@ -1719,6 +1789,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalAlnRep2.bam
+md5sum fd572bffc038fe6b7943623867cb8250
 grant Gingeras
 lab CSHL
 labExpId LID20908
@@ -1743,6 +1814,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalMinusRawRep2.bigWig
+md5sum 05f4e9214c02870fa6f7b0e807cbaffd
 grant Gingeras
 lab CSHL
 labExpId LID20908
@@ -1767,6 +1839,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalPlusRawRep2.bigWig
+md5sum dcde810070f32fbdaf722c425cd2e7d5
 grant Gingeras
 lab CSHL
 labExpId LID20908
@@ -1791,6 +1864,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalRawDataRep2.fastq.gz
+md5sum 9c717d33ac5a9ff3b954d35dd914cf29
 grant Gingeras
 lab CSHL
 labExpId LID20908
@@ -1814,6 +1888,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalAlnRep2.bam
+md5sum 773fae1c64130b176774ed9f69aef8e6
 grant Gingeras
 lab CSHL
 labExpId LID20907
@@ -1838,6 +1913,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalMinusRawRep2.bigWig
+md5sum 34b0ee01cf0202a92ca5c8900898f79b
 grant Gingeras
 lab CSHL
 labExpId LID20907
@@ -1862,6 +1938,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalPlusRawRep2.bigWig
+md5sum 813df911b2f3c04b72beed6f888b7749
 grant Gingeras
 lab CSHL
 labExpId LID20907
@@ -1886,6 +1963,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalRawDataRep2.fastq.gz
+md5sum 45ac3325433a21ac411e8dcf0f5dbbd9
 grant Gingeras
 lab CSHL
 labExpId LID20907
@@ -1909,6 +1987,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep1.bam
+md5sum bb601ea89be697303c2148860ddd9ec1
 grant Gingeras
 lab CSHL
 labExpId LID21143
@@ -1933,6 +2012,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep2.bam
+md5sum 1027f7e402f98a0ac1dae6125ce2a445
 grant Gingeras
 lab CSHL
 labExpId LID21146
@@ -1957,6 +2037,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalMinusRawRep1.bigWig
+md5sum 8260224488a6271a85b6498e185c0bc3
 grant Gingeras
 lab CSHL
 labExpId LID21143
@@ -1981,6 +2062,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalMinusRawRep2.bigWig
+md5sum e5f7015c0722d153965d38ee1063a1ed
 grant Gingeras
 lab CSHL
 labExpId LID21146
@@ -2005,6 +2087,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalPlusRawRep1.bigWig
+md5sum 4280926f2f48b85d793af36bcc26c494
 grant Gingeras
 lab CSHL
 labExpId LID21143
@@ -2029,6 +2112,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalPlusRawRep2.bigWig
+md5sum 38240c3ed165bf6124fa05d7efd7861a
 grant Gingeras
 lab CSHL
 labExpId LID21146
@@ -2053,6 +2137,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalRawDataRep1.fastq.gz
+md5sum 4b95560edc2f405c0d40021d9558ded4
 grant Gingeras
 lab CSHL
 labExpId LID21143
@@ -2076,6 +2161,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalRawDataRep2.fastq.gz
+md5sum 2250920043dafed0e4513e23e1c76be7
 grant Gingeras
 lab CSHL
 labExpId LID21146
@@ -2099,6 +2185,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep1.bam
+md5sum 10a1ec54fb3bdf40a29a4163cc5e9995
 grant Gingeras
 lab CSHL
 labExpId LID21145
@@ -2123,6 +2210,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep2.bam
+md5sum 7eddb273e507a3a79df0173ff42e05f2
 grant Gingeras
 lab CSHL
 labExpId LID21148
@@ -2147,6 +2235,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalMinusRawRep1.bigWig
+md5sum 4293962ed61b5edb5c726b6ef9975c58
 grant Gingeras
 lab CSHL
 labExpId LID21145
@@ -2171,6 +2260,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalMinusRawRep2.bigWig
+md5sum f5dd66f0c73b1f5c8ea4665a692e0c4d
 grant Gingeras
 lab CSHL
 labExpId LID21148
@@ -2195,6 +2285,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalPlusRawRep1.bigWig
+md5sum 89987d9f0be770f7223b90256d7bd340
 grant Gingeras
 lab CSHL
 labExpId LID21145
@@ -2219,6 +2310,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalPlusRawRep2.bigWig
+md5sum 14d80597887629f040093d3bda26ecd8
 grant Gingeras
 lab CSHL
 labExpId LID21148
@@ -2243,6 +2335,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalRawDataRep1.fastq.gz
+md5sum 71ab9acadfe6ae1cc5cb64ebcf9e965c
 grant Gingeras
 lab CSHL
 labExpId LID21145
@@ -2266,6 +2359,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalRawDataRep2.fastq.gz
+md5sum 3d1698c7c3f0671c0dc81ed639cdae29
 grant Gingeras
 lab CSHL
 labExpId LID21148
@@ -2289,6 +2383,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep1.bam
+md5sum edd0a9021247c896f5346bbb3f707c33
 grant Gingeras
 lab CSHL
 labExpId LID21144
@@ -2313,6 +2408,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep2.bam
+md5sum bc3384ce4c6994a844333c3f5a712d8c
 grant Gingeras
 lab CSHL
 labExpId LID21147
@@ -2337,6 +2433,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep1.bigWig
+md5sum 87fbaea5961f1983d8b01aab3b2d96ab
 grant Gingeras
 lab CSHL
 labExpId LID21144
@@ -2361,6 +2458,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep2.bigWig
+md5sum 10473c0215e9a1481597846efb597ce4
 grant Gingeras
 lab CSHL
 labExpId LID21147
@@ -2385,6 +2483,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalPlusRawRep1.bigWig
+md5sum 9a1de511d5522bf3ad92fd76c7c4c9cc
 grant Gingeras
 lab CSHL
 labExpId LID21144
@@ -2409,6 +2508,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalPlusRawRep2.bigWig
+md5sum 57b97f38feea7d5255133ec475a6c99c
 grant Gingeras
 lab CSHL
 labExpId LID21147
@@ -2433,6 +2533,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalRawDataRep1.fastq.gz
+md5sum 5b2587944b679f1be4f9400e5a79c240
 grant Gingeras
 lab CSHL
 labExpId LID21144
@@ -2456,6 +2557,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalRawDataRep2.fastq.gz
+md5sum a2a472e72f2e505814c5fbb4b6679f0c
 grant Gingeras
 lab CSHL
 labExpId LID21147
@@ -2479,6 +2581,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1.bam
+md5sum 2c351dc6f0523f40fc7e86dba023ba48
 grant Gingeras
 lab CSHL
 labExpId LID44460
@@ -2503,6 +2606,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2.bam
+md5sum 8cefbe45153562f2f273ae51ea7091d7
 grant Gingeras
 lab CSHL
 labExpId LID44461
@@ -2527,6 +2631,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1.bigWig
+md5sum a5cb40841ef1432aa986919792cab224
 grant Gingeras
 lab CSHL
 labExpId LID44460
@@ -2551,6 +2656,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep2.bigWig
+md5sum f1f4063da30b2e9aa28fd3ffe9f128de
 grant Gingeras
 lab CSHL
 labExpId LID44461
@@ -2575,6 +2681,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1.bigWig
+md5sum 94d57ceaed92102ff2999ae71fae9d0a
 grant Gingeras
 lab CSHL
 labExpId LID44460
@@ -2599,6 +2706,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2.bigWig
+md5sum 0825aa29ea183af2270f2ac76f23e749
 grant Gingeras
 lab CSHL
 labExpId LID44461
@@ -2623,6 +2731,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalRawDataRep1.fastq.gz
+md5sum 4daa2f0023cb9e468b6be00aad2b048b
 grant Gingeras
 lab CSHL
 labExpId LID44460
@@ -2646,6 +2755,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalRawDataRep2.fastq.gz
+md5sum 8bdbad322d9ee8dc0467006ff1c02e1b
 grant Gingeras
 lab CSHL
 labExpId LID44461
@@ -2669,6 +2779,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2.bam
+md5sum 09ddd4ebe294058bdee825d659c6e76d
 grant Gingeras
 lab CSHL
 labExpId LID44465
@@ -2693,6 +2804,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2.bigWig
+md5sum 1b54aac3b8151f98100163b6526520b7
 grant Gingeras
 lab CSHL
 labExpId LID44465
@@ -2717,6 +2829,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2.bigWig
+md5sum 2feb41f0343a89875d9ee47cdca3bf24
 grant Gingeras
 lab CSHL
 labExpId LID44465
@@ -2741,6 +2854,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalRawDataRep2.fastq.gz
+md5sum 0372280ee4eb82e8bb753b44c4abba35
 grant Gingeras
 lab CSHL
 labExpId LID44465
@@ -2764,6 +2878,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1.bam
+md5sum 2a8762293f390f29085bb94f0e159d49
 grant Gingeras
 lab CSHL
 labExpId LID44462
@@ -2788,6 +2903,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2.bam
+md5sum d65830bc54ac0f261b7ec07a8e88c387
 grant Gingeras
 lab CSHL
 labExpId LID44463
@@ -2812,6 +2928,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep1.bigWig
+md5sum 87689296b73fc06cd51a39ed3e13fb94
 grant Gingeras
 lab CSHL
 labExpId LID44462
@@ -2836,6 +2953,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep2.bigWig
+md5sum 1b5cbf9623e430913ce6c94db289678b
 grant Gingeras
 lab CSHL
 labExpId LID44463
@@ -2860,6 +2978,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep1.bigWig
+md5sum 632aac93ee1e44aecbabc12d776d26e8
 grant Gingeras
 lab CSHL
 labExpId LID44462
@@ -2884,6 +3003,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep2.bigWig
+md5sum e8ef9d3c0e235ab7a474942ea84a98fa
 grant Gingeras
 lab CSHL
 labExpId LID44463
@@ -2908,6 +3028,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalRawDataRep1.fastq.gz
+md5sum fd75364af617356e54ee4dbe7cba2538
 grant Gingeras
 lab CSHL
 labExpId LID44462
@@ -2931,6 +3052,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalRawDataRep2.fastq.gz
+md5sum ba8f88267ed0a03db07ffcd1b8f7d68c
 grant Gingeras
 lab CSHL
 labExpId LID44463
@@ -2954,6 +3076,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep1.bam
+md5sum 3683e07e823b4f3c1646fa916ed93d8f
 grant Gingeras
 lab CSHL
 labExpId LID21054
@@ -2978,6 +3101,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep2.bam
+md5sum b1c3673dab356ebf38c43261666cf884
 grant Gingeras
 lab CSHL
 labExpId LID21055
@@ -3002,6 +3126,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalMinusRawRep1.bigWig
+md5sum 1ad6e8e6db9bd8d4f3ec251d0c79c4f4
 grant Gingeras
 lab CSHL
 labExpId LID21054
@@ -3026,6 +3151,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalMinusRawRep2.bigWig
+md5sum 1c5222f7e620786d3fd883c7841ff390
 grant Gingeras
 lab CSHL
 labExpId LID21055
@@ -3050,6 +3176,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalPlusRawRep1.bigWig
+md5sum 04f72d0942aece7b810bb7a5fc10d3d9
 grant Gingeras
 lab CSHL
 labExpId LID21054
@@ -3074,6 +3201,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalPlusRawRep2.bigWig
+md5sum 8fb3c2d39f7f52338680cc9641d780d4
 grant Gingeras
 lab CSHL
 labExpId LID21055
@@ -3098,6 +3226,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalRawDataRep1.fastq.gz
+md5sum 1c3c4f5b1ed2fef64902193e9081026b
 grant Gingeras
 lab CSHL
 labExpId LID21054
@@ -3121,6 +3250,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalRawDataRep2.fastq.gz
+md5sum 235592f6ea54d9885f1999a02a2fbe15
 grant Gingeras
 lab CSHL
 labExpId LID21055
@@ -3144,6 +3274,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep3.bam
+md5sum 9e86fc293a0ab65226e4ff713cf0fb0c
 grant Gingeras
 lab CSHL
 labExpId LID21057
@@ -3168,6 +3299,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep4.bam
+md5sum b8c4ec58a3f9becee988537934a5a19c
 grant Gingeras
 lab CSHL
 labExpId LID21059
@@ -3192,6 +3324,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalMinusRawRep3.bigWig
+md5sum 67bb9b812982a8180a18a607f781e4ab
 grant Gingeras
 lab CSHL
 labExpId LID21057
@@ -3216,6 +3349,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalMinusRawRep4.bigWig
+md5sum ce66564f068dafe7dac26a5b2cb3f06c
 grant Gingeras
 lab CSHL
 labExpId LID21059
@@ -3240,6 +3374,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalPlusRawRep3.bigWig
+md5sum ca8642d017111b6e2f4efe8a608b1c58
 grant Gingeras
 lab CSHL
 labExpId LID21057
@@ -3264,6 +3399,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalPlusRawRep4.bigWig
+md5sum 1de69ada96011c2ac42b9de10e703123
 grant Gingeras
 lab CSHL
 labExpId LID21059
@@ -3288,6 +3424,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalRawDataRep3.fastq.gz
+md5sum 41248dab1ab21c0a43c92d260bc1ba0c
 grant Gingeras
 lab CSHL
 labExpId LID21057
@@ -3311,6 +3448,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalRawDataRep4.fastq.gz
+md5sum 13f6accfbf5b74802c7ce72f33e4d550
 grant Gingeras
 lab CSHL
 labExpId LID21059
@@ -3334,6 +3472,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep3.bam
+md5sum ff04ccf2cac390a81fc9f7c1275a96b8
 grant Gingeras
 lab CSHL
 labExpId LID21056
@@ -3358,6 +3497,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep4.bam
+md5sum b6a9fba1306499191fe7e562b833c210
 grant Gingeras
 lab CSHL
 labExpId LID21058
@@ -3382,6 +3522,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalMinusRawRep3.bigWig
+md5sum 913765bad3c1e58374276d7d92df8b9d
 grant Gingeras
 lab CSHL
 labExpId LID21056
@@ -3406,6 +3547,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalMinusRawRep4.bigWig
+md5sum 6f39e198619849b089e6b55c0148216d
 grant Gingeras
 lab CSHL
 labExpId LID21058
@@ -3430,6 +3572,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalPlusRawRep3.bigWig
+md5sum d8f28309df9602dfc7ee609aab5cdeb8
 grant Gingeras
 lab CSHL
 labExpId LID21056
@@ -3454,6 +3597,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalPlusRawRep4.bigWig
+md5sum c47a34ff4661284ee45b9251d607ba1b
 grant Gingeras
 lab CSHL
 labExpId LID21058
@@ -3478,6 +3622,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalRawDataRep3.fastq.gz
+md5sum 0d6d12b60fc88da597f8f014403b4305
 grant Gingeras
 lab CSHL
 labExpId LID21056
@@ -3501,6 +3646,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalRawDataRep4.fastq.gz
+md5sum 8b41b3ed8cc82e0b580024787b734b5b
 grant Gingeras
 lab CSHL
 labExpId LID21058
@@ -3526,6 +3672,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqK562CellShortAln.bam
+md5sum b8b6d993a31cda4827f9cd23a9a4d618
 geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
@@ -3553,6 +3700,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqK562CellShortMinusRaw.bigWig
+md5sum 73ed2cc27b31565e7d403faa3ebd8231
 geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
@@ -3580,6 +3728,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqK562CellShortPlusRaw.bigWig
+md5sum f7c0d7ad646646320eaccc2e050b9123
 geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
@@ -3606,6 +3755,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqK562CellShortRawData.fastq.gz
+md5sum 27bd048de5ac571a226bbd3d83e529ff
 geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
@@ -3632,6 +3782,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqK562CellShortTransfrags.shortFrags.gz
+md5sum 4c1639afd2d6bfc017fb2acee07b60bf
 geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
@@ -3657,6 +3808,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep1.bam
+md5sum d43bf7295915a91092026ad2c0a8c2d2
 grant Gingeras
 lab CSHL
 labExpId LID10567
@@ -3681,6 +3833,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep2.bam
+md5sum 5d4da451d8fc41bf2c806919caa4815d
 grant Gingeras
 lab CSHL
 labExpId LID10568
@@ -3705,6 +3858,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalMinusRawRep1.bigWig
+md5sum 18de869c0d45d10cf2be39b5736874d1
 grant Gingeras
 lab CSHL
 labExpId LID10567
@@ -3729,6 +3883,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalMinusRawRep2.bigWig
+md5sum 7ac3602b798a6d75ae6d9d0c8769a58b
 grant Gingeras
 lab CSHL
 labExpId LID10568
@@ -3753,6 +3908,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalPlusRawRep1.bigWig
+md5sum f27465fd0c8028c871e1fac627391a7c
 grant Gingeras
 lab CSHL
 labExpId LID10567
@@ -3777,6 +3933,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalPlusRawRep2.bigWig
+md5sum db0c5a6c5f60bc3125c55fa7bae88a13
 grant Gingeras
 lab CSHL
 labExpId LID10568
@@ -3801,6 +3958,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalRawDataRep1.fastq.gz
+md5sum 4b96def5b0732d53b7ff30e611e42a97
 grant Gingeras
 lab CSHL
 labExpId LID10567
@@ -3824,6 +3982,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalRawDataRep2.fastq.gz
+md5sum 49871ebb05bc2e786784ef8bd3062c9f
 grant Gingeras
 lab CSHL
 labExpId LID10568
@@ -3849,6 +4008,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam
+md5sum 99a96758feefaa37e4810bcfb268eaf8
 geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
@@ -3876,6 +4036,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw.bigWig
+md5sum 7ee072c90986f00e2e9b9eafdfffb9dc
 geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
@@ -3903,6 +4064,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw.bigWig
+md5sum 069a44a560ff4a5a6c80ba22c6062f28
 geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
@@ -3929,6 +4091,7 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortRawData.fastq.gz
+md5sum 2b37ae3eaaf4352318fdc75e3fef3f70
 geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
@@ -3955,6 +4118,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags.shortFrags.gz
+md5sum b10a237146847867ff5794dd5ba1fa65
 geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
@@ -3980,6 +4144,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep3.bam
+md5sum 44588996b7c1830a145ea17d8e3a52d1
 grant Gingeras
 lab CSHL
 labExpId LID8930
@@ -4004,6 +4169,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep4.bam
+md5sum 1f818c6d6b7b4dbc36da9632d2635ec8
 grant Gingeras
 lab CSHL
 labExpId LID18560
@@ -4028,6 +4194,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalMinusRawRep3.bigWig
+md5sum 8cfc54d326127c6e517d67231c6803a2
 grant Gingeras
 lab CSHL
 labExpId LID8930
@@ -4052,6 +4219,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalMinusRawRep4.bigWig
+md5sum 37de1632c73a3d657e1ab5838e50fa09
 grant Gingeras
 lab CSHL
 labExpId LID18560
@@ -4076,6 +4244,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalPlusRawRep3.bigWig
+md5sum 4bac393e86441779fcfd6445f57a113f
 grant Gingeras
 lab CSHL
 labExpId LID8930
@@ -4100,6 +4269,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalPlusRawRep4.bigWig
+md5sum 57b1b816a606f3435f415938d4340b6a
 grant Gingeras
 lab CSHL
 labExpId LID18560
@@ -4124,6 +4294,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalRawDataRep3.fastq.gz
+md5sum 9b470a4c3577bd40a3afed33d5fbb089
 grant Gingeras
 lab CSHL
 labExpId LID8930
@@ -4147,6 +4318,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalRawDataRep4.fastq.gz
+md5sum 333136c9d2e699973dc704ee59e5eebc
 grant Gingeras
 lab CSHL
 labExpId LID18560
@@ -4172,6 +4344,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam
+md5sum 0cc50ede720498592566740908ac669f
 geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
@@ -4199,6 +4372,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw.bigWig
+md5sum 5cbb3aedfb442f3dd1bc3410dadfd518
 geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
@@ -4226,6 +4400,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw.bigWig
+md5sum 3b0808e187cc32007d31b25ea91cece1
 geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
@@ -4252,6 +4427,7 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortRawData.fastq.gz
+md5sum e41db398bcbdb1abed3230b37ed2c195
 geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
@@ -4278,6 +4454,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags.shortFrags.gz
+md5sum ec554ecc914e06e8ed784472cc7f5565
 geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
@@ -4303,6 +4480,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep1.bam
+md5sum 45fedb7b863fab34cc9a1864eefe58d0
 grant Gingeras
 lab CSHL
 labExpId LID10572
@@ -4327,6 +4505,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep2.bam
+md5sum 1dd42d818027c74149a30b341be8a9ea
 grant Gingeras
 lab CSHL
 labExpId LID10571
@@ -4351,6 +4530,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalMinusRawRep1.bigWig
+md5sum 561d398f0b543ed94d5a9079cfd93f4f
 grant Gingeras
 lab CSHL
 labExpId LID10572
@@ -4375,6 +4555,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalMinusRawRep2.bigWig
+md5sum 97f175810838a38fc4a9f6e7941a7c39
 grant Gingeras
 lab CSHL
 labExpId LID10571
@@ -4399,6 +4580,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalPlusRawRep1.bigWig
+md5sum 7a403e4fc6c5bc7699d04a7ad01bb13d
 grant Gingeras
 lab CSHL
 labExpId LID10572
@@ -4423,6 +4605,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalPlusRawRep2.bigWig
+md5sum a8a864882059a8bc5a8983fecae17da2
 grant Gingeras
 lab CSHL
 labExpId LID10571
@@ -4447,6 +4630,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalRawDataRep1.fastq.gz
+md5sum 9d48f1ef3da7b8ab1286b53bf350c064
 grant Gingeras
 lab CSHL
 labExpId LID10572
@@ -4470,6 +4654,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalRawDataRep2.fastq.gz
+md5sum d1975ef6efba87c8821f901af53eabc4
 grant Gingeras
 lab CSHL
 labExpId LID10571
@@ -4495,6 +4680,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam
+md5sum 92bc993126f0a9034a9396a1caf5f36b
 geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
@@ -4522,6 +4708,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw.bigWig
+md5sum 001f287c628c3e66ab546930f00ab81f
 geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
@@ -4549,6 +4736,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw.bigWig
+md5sum 4389273c52e0e7a5bc4146d4c0c2ee00
 geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
@@ -4575,6 +4763,7 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortRawData.fastq.gz
+md5sum 79bcdc9187199406e6638d03173164fe
 geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
@@ -4601,6 +4790,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags.shortFrags.gz
+md5sum 499f8b948c6329c62c2aa0aafd514570
 geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
@@ -4626,6 +4816,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep3.bam
+md5sum 63fb0bb9ad9c1a7bbcb9cc2cd44be86d
 grant Gingeras
 lab CSHL
 labExpId LID8928
@@ -4650,6 +4841,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep4.bam
+md5sum 4166bbab0e923c0f407861b9d230cd63
 grant Gingeras
 lab CSHL
 labExpId LID18558
@@ -4674,6 +4866,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalMinusRawRep3.bigWig
+md5sum 81ac50814794826209a74b836b8c0819
 grant Gingeras
 lab CSHL
 labExpId LID8928
@@ -4698,6 +4891,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalMinusRawRep4.bigWig
+md5sum be54c86ef9b4b615a9ed0828537c0270
 grant Gingeras
 lab CSHL
 labExpId LID18558
@@ -4722,6 +4916,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalPlusRawRep3.bigWig
+md5sum 5b4f8a64dcf8efb943c90e21570d2826
 grant Gingeras
 lab CSHL
 labExpId LID8928
@@ -4746,6 +4941,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalPlusRawRep4.bigWig
+md5sum 91a25d4462f68dbe7c3dbaac3675e2c0
 grant Gingeras
 lab CSHL
 labExpId LID18558
@@ -4770,6 +4966,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalRawDataRep3.fastq.gz
+md5sum f96e4e47e52b37d978eef27adf7df636
 grant Gingeras
 lab CSHL
 labExpId LID8928
@@ -4793,6 +4990,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalRawDataRep4.fastq.gz
+md5sum 1be1fa8860e592135bba9e01ee0c4b19
 grant Gingeras
 lab CSHL
 labExpId LID18558
@@ -4818,6 +5016,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam
+md5sum 55f429d4f6b1d49fc7794a3277473cd4
 geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
@@ -4845,6 +5044,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw.bigWig
+md5sum 304e95f4f0fd3770e05ee3e77afe5a23
 geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
@@ -4872,6 +5072,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw.bigWig
+md5sum f3c9ab8009d30d29e4d8744f62dd7ab6
 geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
@@ -4898,6 +5099,7 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortRawData.fastq.gz
+md5sum 4fa23b0b2b4429814f7fb6e151dd31bc
 geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
@@ -4924,6 +5126,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags.shortFrags.gz
+md5sum 135787d24694f7999dd87a0ae4b98c54
 geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
@@ -4949,6 +5152,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep3.bam
+md5sum 9810e20cb34749352426228fe22f2fe0
 grant Gingeras
 lab CSHL
 labExpId LID8929
@@ -4973,6 +5177,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep4.bam
+md5sum 4e180551cf0af4c72d4687e3a3f4a0be
 grant Gingeras
 lab CSHL
 labExpId LID18559
@@ -4997,6 +5202,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalMinusRawRep3.bigWig
+md5sum e6054ab6e5ef0109e7e4d9031734c5e9
 grant Gingeras
 lab CSHL
 labExpId LID8929
@@ -5021,6 +5227,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalMinusRawRep4.bigWig
+md5sum c22342750e8a7d444f17f756816aef1c
 grant Gingeras
 lab CSHL
 labExpId LID18559
@@ -5045,6 +5252,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalPlusRawRep3.bigWig
+md5sum 5e021cf32cf5d735d4ee1ece911d2491
 grant Gingeras
 lab CSHL
 labExpId LID8929
@@ -5069,6 +5277,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalPlusRawRep4.bigWig
+md5sum 592a4196ebc8283f27f9d4b4c3364b2c
 grant Gingeras
 lab CSHL
 labExpId LID18559
@@ -5093,6 +5302,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalRawDataRep3.fastq.gz
+md5sum 5d015dc471ccf8cd33abe038bdef4714
 grant Gingeras
 lab CSHL
 labExpId LID8929
@@ -5116,6 +5326,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalRawDataRep4.fastq.gz
+md5sum 798b7bc9f941fadedc9d5027fc1f06f4
 grant Gingeras
 lab CSHL
 labExpId LID18559
@@ -5141,6 +5352,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam
+md5sum fa47b4158cfa85da47bdfb92aa292110
 geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
@@ -5168,6 +5380,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw.bigWig
+md5sum f010b65dccf6e1f03578f1158728e2be
 geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
@@ -5195,6 +5408,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw.bigWig
+md5sum 808368bb38471e7a2422429257ac72ef
 geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
@@ -5221,6 +5435,7 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortRawData.fastq.gz
+md5sum 47f0dc881271463933dd1ace317e18ff
 geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
@@ -5247,6 +5462,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags.shortFrags.gz
+md5sum b846c25f354c246db00c65f16a379c72
 geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
@@ -5272,6 +5488,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep1.bam
+md5sum 938a80d561e144724d05d72faeee629a
 grant Gingeras
 lab CSHL
 labExpId LID10570
@@ -5296,6 +5513,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep2.bam
+md5sum 770d18aceac7c6dbce6c09fbd7169650
 grant Gingeras
 lab CSHL
 labExpId LID10569
@@ -5320,6 +5538,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalMinusRawRep1.bigWig
+md5sum 2ae269e5e5422a9dc7ddeb4de88526da
 grant Gingeras
 lab CSHL
 labExpId LID10570
@@ -5344,6 +5563,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalMinusRawRep2.bigWig
+md5sum 1836a0ae8ee33ac6cb55508809dacbc1
 grant Gingeras
 lab CSHL
 labExpId LID10569
@@ -5368,6 +5588,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalPlusRawRep1.bigWig
+md5sum d33b7dfb19f123ffbe91e909494cbdfa
 grant Gingeras
 lab CSHL
 labExpId LID10570
@@ -5392,6 +5613,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalPlusRawRep2.bigWig
+md5sum 8b5ca5b6923b1f7175bb643a7c59572e
 grant Gingeras
 lab CSHL
 labExpId LID10569
@@ -5416,6 +5638,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalRawDataRep1.fastq.gz
+md5sum 7857ffa8cf4b9892b8dbc2522be6b89c
 grant Gingeras
 lab CSHL
 labExpId LID10570
@@ -5439,6 +5662,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalRawDataRep2.fastq.gz
+md5sum 02685eb72683978c71ef658a35056631
 grant Gingeras
 lab CSHL
 labExpId LID10569
@@ -5463,6 +5687,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam
+md5sum 1d6729a0e7ef60365ef0c12627666b41
 geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
@@ -5489,6 +5714,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw.bigWig
+md5sum 4cd0855c5b328c169d0dbb06a4531336
 geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
@@ -5515,6 +5741,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw.bigWig
+md5sum 36c98037c3852b824e1da0efa2ac3090
 geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
@@ -5540,6 +5767,7 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortRawData.fastq.gz
+md5sum 7916e2647309884d4dc586790fb04222
 geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
@@ -5565,6 +5793,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags.shortFrags.gz
+md5sum 7af2e4e15b34c58e1eabf798cfe2fca5
 geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
@@ -5590,6 +5819,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep1.bam
+md5sum 9d25c9ec6d8159c490ca1faa9e95b014
 grant Gingeras
 lab CSHL
 labExpId LID20743
@@ -5614,6 +5844,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep2.bam
+md5sum cf84774a08bbe3fa3cff37dbe8853645
 grant Gingeras
 lab CSHL
 labExpId LID20744
@@ -5638,6 +5869,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep1.bigWig
+md5sum 8dba39a523ccab75ef08d696ca113371
 grant Gingeras
 lab CSHL
 labExpId LID20743
@@ -5662,6 +5894,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep2.bigWig
+md5sum 681fc49d3c18c1140b5e66c0a3109fba
 grant Gingeras
 lab CSHL
 labExpId LID20744
@@ -5686,6 +5919,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep1.bigWig
+md5sum dc70a86afe2d597bb52e5e6597e4f1e1
 grant Gingeras
 lab CSHL
 labExpId LID20743
@@ -5710,6 +5944,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep2.bigWig
+md5sum 0a2c85c2f554272619a85e7a665e69a2
 grant Gingeras
 lab CSHL
 labExpId LID20744
@@ -5734,6 +5969,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalRawDataRep1.fastq.gz
+md5sum edab552c9bd6494c8919c1d2012e1a68
 grant Gingeras
 lab CSHL
 labExpId LID20743
@@ -5757,6 +5993,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalRawDataRep2.fastq.gz
+md5sum 8fde5c5bcea9add127e8f6416b523577
 grant Gingeras
 lab CSHL
 labExpId LID20744
@@ -5780,6 +6017,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep1.bam
+md5sum 3f6f90b587214ce0e8a2bbafe80b025e
 grant Gingeras
 lab CSHL
 labExpId LID20999
@@ -5804,6 +6042,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep2.bam
+md5sum ab6ac9d935ef9c2c9538512946c5f4ac
 grant Gingeras
 lab CSHL
 labExpId LID21000
@@ -5828,6 +6067,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep1.bigWig
+md5sum 043440435b36ce61bd34fdfdb8d7662a
 grant Gingeras
 lab CSHL
 labExpId LID20999
@@ -5852,6 +6092,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep2.bigWig
+md5sum ba9944c70d4a8de032b5657ef455273a
 grant Gingeras
 lab CSHL
 labExpId LID21000
@@ -5876,6 +6117,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep1.bigWig
+md5sum 6cfbb025bc9c9a37094ce106b5f5421d
 grant Gingeras
 lab CSHL
 labExpId LID20999
@@ -5900,6 +6142,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep2.bigWig
+md5sum 2f0ccdb07ccffc9addc89b7c5a42eb0a
 grant Gingeras
 lab CSHL
 labExpId LID21000
@@ -5924,6 +6167,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalRawDataRep1.fastq.gz
+md5sum 254f04a88e62aecacf37f1de096a5979
 grant Gingeras
 lab CSHL
 labExpId LID20999
@@ -5947,6 +6191,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalRawDataRep2.fastq.gz
+md5sum e045eb3939932f6afaa7cb024f8f5758
 grant Gingeras
 lab CSHL
 labExpId LID21000
@@ -5970,6 +6215,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep3.bam
+md5sum 22df271f2e055ac3a6ba4f82f411bb29
 grant Gingeras
 lab CSHL
 labExpId LID21002
@@ -5994,6 +6240,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep4.bam
+md5sum 72345303233f9f492d7b40a7ad3d8872
 grant Gingeras
 lab CSHL
 labExpId LID21004
@@ -6018,6 +6265,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalMinusRawRep3.bigWig
+md5sum eff824d26e69a9053d8dddbb0684dd9c
 grant Gingeras
 lab CSHL
 labExpId LID21002
@@ -6042,6 +6290,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalMinusRawRep4.bigWig
+md5sum c1e524f323d185200277800248d1e1e5
 grant Gingeras
 lab CSHL
 labExpId LID21004
@@ -6066,6 +6315,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalPlusRawRep3.bigWig
+md5sum cc831581083bd473b41f7cd427fffb11
 grant Gingeras
 lab CSHL
 labExpId LID21002
@@ -6090,6 +6340,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalPlusRawRep4.bigWig
+md5sum b6ec92eb7fa88e200e046ab169ab0610
 grant Gingeras
 lab CSHL
 labExpId LID21004
@@ -6114,6 +6365,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalRawDataRep3.fastq.gz
+md5sum 8815f0827d4783aa21a5dd280641b0a2
 grant Gingeras
 lab CSHL
 labExpId LID21002
@@ -6137,6 +6389,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalRawDataRep4.fastq.gz
+md5sum ead145e114537185482da76f2f6c2400
 grant Gingeras
 lab CSHL
 labExpId LID21004
@@ -6160,6 +6413,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep3.bam
+md5sum 86dfffadc9e67c5f19870f957198ce4d
 grant Gingeras
 lab CSHL
 labExpId LID21001
@@ -6184,6 +6438,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep4.bam
+md5sum 055e5581e306819524a51f19749eaa58
 grant Gingeras
 lab CSHL
 labExpId LID21003
@@ -6208,6 +6463,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep3.bigWig
+md5sum f1aed5ec40443beee05d7f80307ad2cb
 grant Gingeras
 lab CSHL
 labExpId LID21001
@@ -6232,6 +6488,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep4.bigWig
+md5sum d0c13d4a419eee2a3390fea8f807bc11
 grant Gingeras
 lab CSHL
 labExpId LID21003
@@ -6256,6 +6513,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep3.bigWig
+md5sum 8ed219b83cd0f36a4d0495e6642427c7
 grant Gingeras
 lab CSHL
 labExpId LID21001
@@ -6280,6 +6538,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep4.bigWig
+md5sum 61e3ab67bd0e1f27649dbc901e419a22
 grant Gingeras
 lab CSHL
 labExpId LID21003
@@ -6304,6 +6563,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalRawDataRep3.fastq.gz
+md5sum a32508dc782736896419d2939422c387
 grant Gingeras
 lab CSHL
 labExpId LID21001
@@ -6327,6 +6587,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalRawDataRep4.fastq.gz
+md5sum 5d296705dea53646051ca6e752bede15
 grant Gingeras
 lab CSHL
 labExpId LID21003
@@ -6351,6 +6612,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqProstateCellShortTransfrags.shortFrags.gz
+md5sum b6f38dbc11f6820eef4cfbc456373e45
 geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
@@ -6377,6 +6639,7 @@ dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam
+md5sum 8ee9ea5b2f0854fcacda49f88725baf6
 geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
@@ -6403,6 +6666,7 @@ dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw.bigWig
+md5sum e759d7207450fd4bd88007ba2b6e14b7
 geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
@@ -6429,6 +6693,7 @@ dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw.bigWig
+md5sum 16fe0adb8bae85a625f9b391dc0a17a2
 geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
@@ -6454,6 +6719,7 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqProstateCellTotalRawData.fastq.gz
+md5sum cc247f23a9a364e8a763b65e3819e1fe
 geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
@@ -6478,6 +6744,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep1.bam
+md5sum 5cadbe1fc66d9ae3f761c1d790f02d15
 grant Gingeras
 lab CSHL
 labExpId LID20747
@@ -6502,6 +6769,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep2.bam
+md5sum 913ee61cd5a672cd3a549a233ae2b156
 grant Gingeras
 lab CSHL
 labExpId LID20748
@@ -6526,6 +6794,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep1.bigWig
+md5sum 82c83d331341e068b130f7e142ee1a69
 grant Gingeras
 lab CSHL
 labExpId LID20747
@@ -6550,6 +6819,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep2.bigWig
+md5sum 5566d962153a68b78fb351c5d69aef13
 grant Gingeras
 lab CSHL
 labExpId LID20748
@@ -6574,6 +6844,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep1.bigWig
+md5sum b1f6556ea8d2922511c5a3e2126787ef
 grant Gingeras
 lab CSHL
 labExpId LID20747
@@ -6598,6 +6869,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep2.bigWig
+md5sum 1c598500a448a72b8b514b855baaba7d
 grant Gingeras
 lab CSHL
 labExpId LID20748
@@ -6622,6 +6894,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalRawDataRep1.fastq.gz
+md5sum aca2e59982611d4a7dff78c742e72301
 grant Gingeras
 lab CSHL
 labExpId LID20747
@@ -6645,6 +6918,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalRawDataRep2.fastq.gz
+md5sum 9e4f1246736d063a896c3172acc04a09
 grant Gingeras
 lab CSHL
 labExpId LID20748
