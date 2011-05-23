@@ -277,10 +277,11 @@ for (exon = exonList; exon != NULL; exon = exon->next)
 lmCleanup(&lm);
 }
 
-void outputProtein(struct cdsEvidence *cds, struct dnaSeq *txSeq, FILE *f)
+boolean outputProtein(struct cdsEvidence *cds, struct dnaSeq *txSeq, FILE *f)
 /* Translate txSeq to protein guided by cds, and output to file.
  * The implementation is a little complicated by checking for internal
- * stop codons and other error conditions. */
+ * stop codons and other error conditions. Return True if a sequence was
+ * generated and was not impacted by error conditions, False otherwise */
 {
 boolean selenocysteine = FALSE;
 if (selenocysteineHash != NULL)
@@ -328,11 +329,13 @@ if (prematureStop != NULL)
     {
     warn("Stop codons in CDS at position %d for %s, (source %s %s)", 
 	 (int)(prematureStop - dy->string), cds->name, cds->source, cds->accession);
+    return(FALSE);
     }
 else
     {
     faWriteNext(f, cds->name, dy->string, dy->stringSize);
     dyStringFree(&dy);
+    return(TRUE);
     }
 }
 
@@ -355,11 +358,12 @@ while (lineFileRow(lf, row))
     struct cdsEvidence *cds = hashFindVal(cdsHash, bed->name);
     struct dnaSeq *txSeq = hashFindVal(txSeqHash, bed->name);
     char *cdsSource = NULL;
+    boolean freeOfCdsErrors = TRUE;
     if (txSeq == NULL)
         errAbort("%s is in %s but not %s", bed->name, txBed, txFa);
     if (cds != NULL)
 	{
-        outputProtein(cds, txSeq, fFa);
+        freeOfCdsErrors = outputProtein(cds, txSeq, fFa);
 	if (cds->cdsCount > 1)
 	    {
 	    struct bed *newBed = breakUpBedAtCdsBreaks(cds, bed);
@@ -374,7 +378,7 @@ while (lineFileRow(lf, row))
 	}
 
     /* Set bed CDS bounds and optionally output bed. */
-    cdsEvidenceSetBedThick(cds, bed);
+    cdsEvidenceSetBedThick(cds, bed, freeOfCdsErrors);
     if (fBed)
         bedTabOutN(bed, 12, fBed);
 

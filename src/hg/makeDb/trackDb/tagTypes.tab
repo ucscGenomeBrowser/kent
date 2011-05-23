@@ -253,7 +253,7 @@ qValueFilter bed narrowPeak broadPeak
 qValueFilterLimits bed narrowPeak broadPeak
 refSeqAnnoVersion genePred
 release *
-retroMrnaInfo psl
+ucscRetroInfo psl
 sGroup_Chimp wigMaf
 sGroup_Glires wigMaf
 sGroup_Human wigMaf

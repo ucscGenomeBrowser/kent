@@ -663,6 +663,11 @@ cat mrna/*.psl refSeq/*.psl rfam/*psl trna.psl \
 # Cluster purely based on CDS (in same frame). Takes 1 second
 txCdsCluster pick.bed pick.cluster
 
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
+
+
 # Flag suspicious CDS regions, and add this to info file. Weed out bad CDS.
 # Map CDS to gene set.  Takes 10 seconds.  Might want to reconsider using
 # txCdsWeed here.
@@ -727,8 +732,8 @@ txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa refSeq.fa \
 # Generate ucscGene/uniprot blat run.
 mkdir -p $dir/blat/uniprotVsUcsc
 cd $dir/blat/uniprotVsUcsc
-mkdir raw
-mkdir ucscFaaSplit
+mkdir -p raw
+mkdir -p ucscFaaSplit
 faSplit sequence ../../ucscGenes.faa 100 ucscFaaSplit/uc
 ls -1 ucscFaaSplit/uc*.fa > toDoList
 
@@ -792,8 +797,6 @@ txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
 
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
