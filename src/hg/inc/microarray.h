@@ -159,6 +159,9 @@ void microarrayGroupsFree(struct microarrayGroups **pGroups);
 struct microarrayGroups *maGetTrackGroupings(char *database, struct trackDb *tdb);
 /* Get the settings from the .ra files and put them in a convenient struct. */
 
+struct maGrouping *maGetGrouping(struct microarrayGroups *groupings, char *name);
+/* Return the specfic grouping (combine or subset), or NULL if not found */
+
 struct maGrouping *maGetGroupingFromCt(struct customTrack *ct);
 /* Spoof an "all" maGrouping from a customTrack. */
 
@@ -169,7 +172,14 @@ struct maGrouping *maCombineGroupingFromCart(struct microarrayGroups *groupings,
 					     struct cart *cart, char *trackName);
 /* Determine which grouping to use based on the cart status or lack thereof. */
 
-void maBedClumpGivenGrouping(struct bed *bedList, struct maGrouping *grouping);
+struct maGrouping *maSubsetGroupingFromCart(struct microarrayGroups *groupings, 
+					     struct cart *cart, char *trackName);
+/* Determine which subsetting to use based on the cart status or lack thereof. */
+
+int maSubsetOffsetFromCart(struct maGrouping *subset, struct cart* cart, char *trackName);
+
+void maBedClumpGivenGrouping(struct bed *bedList, struct maGrouping *grouping, 
+			     struct maGrouping *subset, int subsetOffset);
 /* Clump (mean/median) a bed 15 given the grouping kind. */
 
 struct maGrouping *maHashToMaGrouping(struct hash *oneGroup);
@@ -178,5 +188,13 @@ struct maGrouping *maHashToMaGrouping(struct hash *oneGroup);
 
 enum expColorType getExpColorType(char *colorScheme);
 /* From a color type return the respective enum. */
+
+/* Linking to UI options... */
+
+char *expRatioCombineDLName(char *trackName);
+
+char *expRatioSubsetRadioName(char *trackName, struct microarrayGroups *groupings);
+
+char *expRatioSubsetDLName(char *trackName, struct maGrouping *group);
 
 #endif
