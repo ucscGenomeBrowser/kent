@@ -251,3 +251,8 @@ XXX - running
 	where name="ce10";' hgcentraltest
 
 ############################################################################
+# set this as the defaultDb (DONE - 2011-05-24 - Hiram)
+    hgsql -e 'update defaultDb set name="ce10" where name="ce9";' \
+	hgcentraltest
+
+##########################################################################
