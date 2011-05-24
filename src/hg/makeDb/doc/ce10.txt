@@ -213,23 +213,13 @@ ce10.downloadDir = ce10
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial ce10 &
     #	logFile:  var/build/logs/2011.05.24-09:14:56.ce10.initalign.log
-XXX - running 
-    #	real    118m26.190s
-    # this had a temporary failure:
-# Cannot allocate memory
-# can't fork
-# command failed: gbAlignInstall  -noMigrate -workdir=work/initial.ce10/align -orgCats=native genbank.179.0 daily.0826 mrna ce10 at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272. at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272.
-# command failed: gbAlignFinish -workdir=work/initial.ce10/align  -noMigrate ce10 at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272. at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272.
-    # continuing
-    time ./etc/align-genbank -finish -workdir work/initial.ce10/align
-    #	var/build/logs/2010.09.09-15:09:26.align.log
-    #	real    0m47.281s
+    #	real    311m56.911s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ce10
-    #	logFile: var/dbload/hgwdev/logs/2010.09.09-15:11:20.dbload.log
+    #	logFile: var/dbload/hgwdev/logs/2011.05.24-14:29:17.dbload.log
     #	real    24m52.293s
 
     # enable daily alignment and update of hgwdev
@@ -238,7 +228,7 @@ XXX - running
     # add ce10 to:
         etc/align.dbs
         etc/hgwdev.dbs
-    git commit -m "Added ce10 - C. elegans WS210" \
+    git commit -m "Added ce10 - C. elegans WS220" \
 	etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
