@@ -239,11 +239,15 @@ if (lf->codons == NULL)
 
 int packSnakeItemHeight(struct track *tg, void *item)
 {
+if (item == NULL)
+    return 0;
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
+if (lf->components == NULL)
+    return 0;
 calcPackSnake(tg, item);
 struct snakeInfo *si = (struct snakeInfo *)lf->codons;
 int lineHeight = tg->lineHeight ;
-return (si->maxLevel + 1) * lineHeight;
+return (si->maxLevel + 1) * (2 * lineHeight);
 }
 
 int fullSnakeItemHeight(struct track *tg, void *item)
@@ -354,7 +358,8 @@ void packSnakeDrawAt(struct track *tg, void *item,
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
 calcPackSnake(tg, item);
 
-int x;
+int lastLevel;
+//int x;
 int offY = y;
 struct snakeFeature  *sf, *prevSf;
 int lineHeight = tg->lineHeight ;
@@ -369,10 +374,10 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     {
     qs = sf->qStart;
     qe = sf->qEnd;
-    y = offY + sf->level * lineHeight;
+    y = offY + (sf->level * 2) * lineHeight;
     s = sf->start; e = sf->end;
     tEnd = sf->end;
-    x = round((double)((int)tEnd-winStart)*scale) + xOff;
+    //x = round((double)((int)tEnd-winStart)*scale) + xOff;
     //color =	    lfChromColor(tg, item, hvg);
 color = (sf->orientation == -1) ? MG_RED : MG_BLUE;
 
@@ -384,31 +389,56 @@ color = (sf->orientation == -1) ? MG_RED : MG_BLUE;
     tStart = s;
     qStart = sf->qStart;
     lastY = y;
-    lastX = x;
+    //lastX = x;
     }
 lastX = -1,lastY = y;
 lastQEnd = 0;
+lastLevel = 0;
 qe = lastQEnd = 0;
 for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next)
     {
+    int y1, y2;
+    int sx, ex;
     qs = sf->qStart;
     qe = sf->qEnd;
-    y = offY + sf->level * lineHeight;
+    if (lastLevel == sf->level)
+	{
+	y1 = offY + (lastLevel * 2) * lineHeight + lineHeight/2;
+	y2 = offY + (sf->level * 2) * lineHeight + lineHeight/2;
+	}
+    else if (lastLevel > sf->level)
+	{
+	y1 = offY + (lastLevel * 2 ) * lineHeight;
+	y2 = offY + (sf->level * 2 + 1) * lineHeight;
+	}
+    else
+	{
+	y1 = offY + (lastLevel * 2 + 1) * lineHeight;
+	y2 = offY + (sf->level * 2 ) * lineHeight;
+	}
     s = sf->start; e = sf->end;
-    tEnd = sf->end;
-    x = round((double)((int)tEnd-winStart)*scale) + xOff;
+    //tStart = sf->start;
+    //tEnd = sf->end;
+
+    sx = round((double)((int)s-winStart)*scale) + xOff;
+    ex = round((double)((int)e-winStart)*scale) + xOff;
     //color =	    lfChromColor(tg, item, hvg);
 color = (sf->orientation == -1) ? MG_RED : MG_BLUE;
 
     if (lastX != -1)
-	hvGfxLine(hvg, lastX, lastY + lineHeight/2, x, y + lineHeight/2, MG_BLACK);
+	{
+	hvGfxLine(hvg, lastX, y1, sx, y2, MG_GRAY);
+	//hvGfxLine(hvg, lastX, lastY + lineHeight/2, x, y + lineHeight/2, MG_BLACK);
+	//hvGfxLine(hvg,  x, y + lineHeight/2, x, y + lineHeight + lineHeight/2, MG_BLACK);
+	}
     //drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
 			//color, lf->score );
     tEnd = e;
     tStart = s;
     qStart = sf->qStart;
-    lastY = y;
-    lastX = x;
+    //lastY = y;
+    lastX = ex;
+    lastLevel = sf->level;
     }
 }
 
@@ -638,7 +668,7 @@ firstLf = lf;
 for (;lf; lf = next)
     {
     next = lf->next;
-    if (!sameString(firstLf->name, lf->name))
+    if (!sameString(firstLf->name, lf->name) && (lf->components != NULL))
 	{
 	slSort(&firstLf->components, snakeFeatureCmpQStart);
 	firstLf = lf;
@@ -657,8 +687,11 @@ for (;lf; lf = next)
 	}
     }
 
-slSort(&firstLf->components, snakeFeatureCmpQStart);
-firstLf->next = 0;
+if (firstLf != NULL)
+    {
+    slSort(&firstLf->components, snakeFeatureCmpQStart);
+    firstLf->next = 0;
+    }
 }
 
 int snakeHeight(struct track *tg, enum trackVisibility vis)

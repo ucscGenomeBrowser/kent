@@ -99,14 +99,15 @@ if (exitCode != 0)
     errAbort("system command [%s] failed with exitCode %d", cmd, exitCode);
 }
 
+void makeDiffAndSplit(struct commit *c, char *u, boolean full);  // FOREWARD REFERENCE
+
 struct commit* getCommits()
 /* Get all commits from startTag to endTag */
 {
 int numCommits = 0;
 safef(gitCmd,sizeof(gitCmd), ""
-"git log --cc %s..%s --name-status > commits.tmp"
+"git log %s..%s --name-status > commits.tmp"
 , startTag, endTag);
-// --cc brings in filenames for merge commits that are not all-ours or all-theirs conflict resolutions
 runShell(gitCmd);
 struct lineFile *lf = lineFileOpen("commits.tmp", TRUE);
 int lineSize;
@@ -173,20 +174,27 @@ while (lineFileNext(lf, &line, &lineSize))
     commit->comment = cloneString(dy->string);
     freeDyString(&dy);
 
-    /* collect the files-list */
-    while (lineFileNext(lf, &line, &lineSize))
+    if (commit->merge)
 	{
-	if (sameString("", line))
-	    break;
-	AllocVar(f);
-	w = nextWord(&line);
-	f->type = w[0];
-	f->path = cloneString(line);
-	slAddHead(&files, f);
+	makeDiffAndSplit(commit, "getFileNamesForMergeCommit", FALSE);  // special tricks to get this list (status field will not be applicable).
 	}
-    slReverse(&files);
+    else
+	{
+	/* collect the files-list */
+	while (lineFileNext(lf, &line, &lineSize))
+	    {
+	    if (sameString("", line))
+		break;
+	    AllocVar(f);
+	    w = nextWord(&line);
+	    f->type = w[0];
+	    f->path = cloneString(line);
+	    slAddHead(&files, f);
+	    }
+	slReverse(&files);
 
-    commit->files = files;
+	commit->files = files;
+	}
 
     
     if (!startsWith("Merge branch 'master' of", commit->comment) &&
@@ -354,6 +362,7 @@ runShell(gitCmd);
 
 
 // now parse it and split it into separate files with the right path.
+boolean getNamesOnly = c->merge && sameString(u,"getFileNamesForMergeCommit");
 struct lineFile *lf = lineFileOpen(tempMakeDiffName, TRUE);
 int lineSize;
 char *line;
@@ -374,32 +383,43 @@ while (lineFileNext(lf, &line, &lineSize))
 	    h = NULL;
 	    }
 	char *fpath = line + strlen(pattern);
-	if (!c->merge)
+	if (getNamesOnly) // too bad we had not choice but to get the merge names this way.
 	    {
-	    fpath = strchr(fpath, ' ');
-	    ++fpath;   // now we should be pointing to the world
+	    /* collect the files-list */
+	    struct files *f = NULL;
+	    AllocVar(f);
+	    f->path = cloneString(fpath);
+	    slAddHead(&c->files, f);
 	    }
-
-	char path[1024];
-	char *r = strrchr(fpath, '/');
-	if (r)
+	else
 	    {
-	    *r = 0;
-	    /* make internal levels of subdirs */
-	    safef(path, sizeof(path), "mkdir -p %s/%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, full ? "full" : "context", fpath);
-	    runShell(path);
-	    *r = '/';
-	    }
-	safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s%s.diff"
-	    , outDir, outPrefix, "user", u, full ? "full" : "context", fpath, c->commitId);
+	    if (!c->merge)
+		{
+		fpath = strchr(fpath, ' ');
+		++fpath;   // now we should be pointing to the world
+		}
 
-	h = mustOpen(path, "w");
-	fprintf(h, "%s\n", c->commitId);
-	if (c->merge)
-	    fprintf(h, "Merge parents %s\n", c->merge);
-	fprintf(h, "%s\n", c->author);
-	fprintf(h, "%s\n", c->date);
-	fprintf(h, "%s\n", c->comment);
+	    char path[1024];
+	    char *r = strrchr(fpath, '/');
+	    if (r)
+		{
+		*r = 0;
+		/* make internal levels of subdirs */
+		safef(path, sizeof(path), "mkdir -p %s/%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, full ? "full" : "context", fpath);
+		runShell(path);
+		*r = '/';
+		}
+	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s%s.diff"
+		, outDir, outPrefix, "user", u, full ? "full" : "context", fpath, c->commitId);
+
+	    h = mustOpen(path, "w");
+	    fprintf(h, "%s\n", c->commitId);
+	    if (c->merge)
+		fprintf(h, "Merge parents %s\n", c->merge);
+	    fprintf(h, "%s\n", c->author);
+	    fprintf(h, "%s\n", c->date);
+	    fprintf(h, "%s\n", c->comment);
+	    }
 	}
     else if (startsWith(section, line))
 	{
@@ -419,6 +439,8 @@ if (h)
     h = NULL;
     }
 lineFileClose(&lf);
+if (getNamesOnly) // too bad we had not choice but to get the merge names this way.
+    slReverse(&c->files);
 }
 
 

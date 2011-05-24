@@ -40,13 +40,13 @@ term GM12878
 tag GM12878
 type Cell Line
 organism Human
-description lymphoblastoid
+description lymphoblastoid, International HapMap Project - CEPH/Utah - European Caucasion, Epstein-Barr Virus
 tissue Blood
 vendorName Coriell
 vendorId GM12878
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&PgId=166
-karyotype relatively normal
-lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus
+karyotype normal
+lineage mesoderm
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 color 153,38,0
@@ -58,13 +58,13 @@ term K562
 tag K562
 type Cell Line
 organism Human
-description leukemia
+description leukemia, "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 tissue Blood
 vendorName ATCC
 vendorId CCL-243
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
 karyotype cancer
-lineage "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
+lineage mesoderm
 termId BTO:0000664
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
 color 46,0,184
@@ -77,12 +77,12 @@ tag K562b
 type Cell Line
 organism Human
 tissue Blood
-description leukemia (UCDavis alternate)
+description leukemia (UCDavis alternate), "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 vendorName ATCC
 vendorId CCL-243
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
 karyotype cancer
-lineage "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
+lineage mesoderm
 termId BTO:0000664
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
 color 46,0,184
@@ -165,7 +165,7 @@ term HUVEC
 tag HUVEC
 type Cell Line
 organism Human
-description Human Umbilical Vein Endothelial Cell
+description umbilical vein endothelial cells
 tissue Endothelium
 vendorName Lonza
 vendorId CC-2517
@@ -183,7 +183,7 @@ term NHEK
 tag NHEK
 type Cell Line
 organism Human
-description Normal Human Epidermal Keratinocytes
+description epidermal keratinocytes
 tissue Skin
 vendorName Lonza
 vendorId CC-2501
@@ -201,7 +201,7 @@ term H1-hESC
 tag H1hESC
 type Cell Line
 organism Human
-description Human Embryonic Stem Cells
+description embryonic stem cells
 tissue EmbryonicStemCell
 vendorName Cellular Dynamics
 vendorId
@@ -220,14 +220,14 @@ term 8988T
 tag 8988T
 type Cell Line
 organism Human
-description human pancreas adenocarcinoma (PA-TU-8988T)
+description human pancreas adenocarcinoma (PA-TU-8988T), "established in 1985 from the liver metastasis of a primary pancreatic adenocarcinoma from a 64-year-old woman" - DSMZ
 tier 3
-lineage pancreatic adenocarcinoma
+lineage endoderm
 karyotype cancer
 sex F
-tissue liver
+tissue liver 
 vendorName DSMZ
-vendorId 162
+vendorId ACC 162
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=162&term=162&highlight=
 termId BTO:0001521 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001521
@@ -237,7 +237,7 @@ term A549
 tag A549
 type Cell Line
 organism Human
-description epithelial cell line "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old Caucasian male." - ATCC, derived from a lung carcinoma tissue. (PMID: 175022)
+description epithelial cell line derived from a lung carcinoma tissue. (PMID: 175022), "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old caucasian male." - ATCC
 tissue Epithelium
 vendorName ATCC
 vendorId CCl-185
@@ -254,9 +254,11 @@ term AG04449
 tag AG04449
 type Cell Line
 organism Human
-description Fetal buttock/thigh fibroblast
+description fetal buttock/thigh fibroblast
 tissue Skin
-lineage mesoderm
+#lineage mesoderm
+#lineage ectoderm may be more accurate
+karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04449
 vendorName Coriell
 vendorId AG04449
@@ -268,9 +270,10 @@ term AG04450
 tag AG04450
 type Cell Line
 organism Human
-description Fetal lung fibroblast
+description fetal lung fibroblast
 tissue Lung
 lineage mesoderm
+karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04450
 vendorName Coriell
 vendorId AG04450
@@ -282,9 +285,10 @@ term AG09309
 tag AG09309
 type Cell Line
 organism Human
-description Adult human toe fibroblast
+description adult toe fibroblast from apparently healthy 21 year old
 tissue Skin
 lineage mesoderm
+karyotype "7% of the cells examined showing random chromosome loss/gain" -Coriell
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09309
 vendorName Coriell
 vendorId AG09309
@@ -296,9 +300,10 @@ term AG09319
 tag AG09319
 type Cell Line
 organism Human
-description Adult human gum tissue fibroblasts
+description gum tissue fibroblasts from apparently heathly 24 year old
 tissue Gingival
 lineage mesoderm
+karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09319
 vendorName Coriell
 vendorId AG09319
@@ -310,9 +315,10 @@ term AG10803
 tag AG10803
 type Cell Line
 organism Human
-description Adult human abdominal skin fibroblasts
+description abdominal skin fibroblasts from apparently heathly 22 year old
 tissue Skin
 lineage mesoderm
+karyotype "8% of the cells examined showing random chromosome loss, 2% showing random chromosome gain, and 2% showing 69,XYY" -Coriell
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG10803
 vendorName Coriell
 vendorId AG10803
@@ -324,8 +330,10 @@ term AoAF
 tag AOAF
 type Cell Line
 organism Human
-description Normal Human Aortic Adventitial Fibroblast Cells
+description aortic adventitial fibroblast cells
 tissue Heart
+lineage mesoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-7014, CC-7014T75
 orderUrl http://www.lonza.com/
@@ -341,6 +349,7 @@ type Cell Line
 organism Human
 description aortic smooth muscle cells
 tissue Heart
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2571
 orderUrl http://www.lonza.com/
@@ -354,7 +363,7 @@ term Astrocy
 tag Astrocy
 type Cell Line
 organism Human
-description Normal human astrocytes
+description astrocytes
 tissue Brain
 lineage ectoderm
 vendorName Lonza
@@ -372,10 +381,10 @@ tag BCBladder0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA Extract
+description urinary bladder, donor 01-11002, age 83, caucasian, DNA extract
 tissue Urinary Bladder
-lineage Urinary Bladder
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234010-05_B402059
@@ -389,10 +398,10 @@ tag BCColon0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description colon, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Colon
-lineage Colon
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234090-05_A903056; BioChain_CP-S10-R1234090-20_B402074
@@ -406,10 +415,10 @@ tag BCEsophagus0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description esophagus, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Esophagus
-lineage Esophagus
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234106-05_A803198; BioChain_CP-S10-R1234106-20_B402075
@@ -423,10 +432,10 @@ tag BCKidney0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description kidney, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Kidney
-lineage Kidney
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234142-05_B402060; BioChain_CP-S10-R1234142-20_A808055
@@ -440,10 +449,10 @@ tag BCLiver0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description liver, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Liver
-lineage Liver
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234149-05_B209118; BioChain_CP-S10-R1234149-20_B304045
@@ -457,10 +466,10 @@ tag BCLung0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description lung, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Lung
-lineage Lung
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234152-05_A610240; BioChain_CP-S10-R1234152-20_A906114
@@ -474,10 +483,10 @@ tag BCSkeletalMuscle0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description skeletal muscle, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Skeletal muscle
-lineage Skeletal muscle
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234171-05_A610262; BioChain_CP-S10-R1234171-20_A808148
@@ -491,10 +500,10 @@ tag BCSkin0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA Extract
+description skin, donor 01-11002, age 83, caucasian, DNA extract
 tissue Skin
-lineage Skin
-karyotype Normal
+lineage ectoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234218-05_B402066
@@ -508,10 +517,10 @@ tag BCSmallIntestine0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description small intestine, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Small intestine
-lineage Small intestine
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234226-05_B402067; BioChain_CP-S10-R1234226-20_A612138
@@ -525,10 +534,10 @@ tag BCSpleen0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; RNA Extract
+description spleen, donor 01-11002, age 83, caucasian, RNA extract
 tissue Spleen
-lineage Spleen
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S10-R1234246-20_A612140
@@ -542,10 +551,10 @@ tag BCStomach0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA Extract
+description stomach, donor 01-11002, age 83, caucasian, DNA extract
 tissue Stomach
-lineage Stomach
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234248-05_A808008
@@ -559,10 +568,10 @@ tag BCColonH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description colon, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Colon
-lineage Colon
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234090-05_B111123; BioChain_CP-S10-R1234090-20_B111053
@@ -576,10 +585,10 @@ tag BCEsophagusH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA Extract
+description esophagus, donor H12817N, age 71, caucasian, DNA extract
 tissue Esophagus
-lineage Esophagus
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234106-05_B302113
@@ -593,10 +602,10 @@ tag BCKidneyH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description kidney, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Kidney
-lineage Kidney
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234142-05_B402061; BioChain_CP-S10-R1234142-20_B111054
@@ -610,10 +619,10 @@ tag BCLungH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description lung, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Lung
-lineage Lung
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234152-05_B402062; BioChain_CP-S10-R1234152-20_B207133
@@ -627,10 +636,10 @@ tag BCPancreasH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description pancreas, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Pancreas
-lineage Pancreas
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234188-05_B402063; BioChain_CP-S10-R1234188-20_B402076
@@ -644,10 +653,10 @@ tag BCPenisH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA Extract
+description penis, donor H12817N, age 71, caucasian, DNA extract
 tissue Penis
-lineage Penis
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234194-05_B402064
@@ -661,10 +670,10 @@ tag BCProstateGlandH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA Extract
+description prostate gland, donor H12817N, age 71, caucasian, DNA extract
 tissue Prostate gland
-lineage Prostate gland
-karyotype Normal
+#lineage Prostate gland
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-D1234201-05_B101058
@@ -678,10 +687,10 @@ tag BCSkeletalMuscleH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description skeletal muscle, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Skeletal muscle
-lineage Skeletal muscle
-karyotype Normal
+#lineage Skeletal muscle
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234171-05_B402065; BioChain_CP-S10-R1234230-20_A911037
@@ -695,10 +704,10 @@ tag BCJejunumH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description jejunum, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Jejunum
-lineage Jejunum
-karyotype Normal
+#lineage Jejunum
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234230-05_B402068; BioChain_CP-S10-R1234230-20_A911037
@@ -712,10 +721,10 @@ tag BCSpleenH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description spleen, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Spleen
-lineage Spleen
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234246-05_B402069; BioChain_CP-S10-R1234246-20_B304070
@@ -729,10 +738,10 @@ tag BCStomachH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description stomach, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Stomach
-lineage Stomach
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234248-05_B402070; BioChain_CP-S10-R1234248-20_B402077
@@ -746,10 +755,10 @@ tag BCAdiposeUHN00001
 type Cell Line
 tier 3
 organism Human
-description Donor UHN0001; Age 35; African American; DNA Extract
+description adipose tissue, donor UHN0001, age 35, African American, DNA extract
 tissue Adipose tissue
-lineage Adipose tissue
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D4234003_A701166
@@ -763,10 +772,10 @@ tag BCAdrenalGlandH12803N
 type Cell Line
 tier 3
 organism Human
-description Donor H12803N; Age 88; Caucasian; DNA Extract
+description adrenal gland, donor H12803N, age 88, caucasian, DNA extract
 tissue Adrenal gland
-lineage Adrenal gland
-karyotype Normal
+#lineage adrenal gland
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D1234004_B103117
@@ -780,10 +789,10 @@ tag BCBrainH11058N
 type Cell Line
 tier 3
 organism Human
-description Donor H11058N; Age 66; Asian; DNA Extract
+description brain, donor H11058N, age 66, Asian, DNA extract
 tissue Brain
-lineage Brain
-karyotype Normal
+lineage ectoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_D4234035_A810101
@@ -797,10 +806,10 @@ tag BCBreast0203015
 type Cell Line
 tier 3
 organism Human
-description Donor 02-03015; Age 21; Caucasian; DNA Extract
+description breast, donor 02-03015, age 21, caucasian, DNA extract
 tissue Breast
-lineage Breast
-karyotype Normal
+lineage mesoderm 
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D4234086_A710031
@@ -814,10 +823,10 @@ tag BCPericardiumH12529N
 type Cell Line
 tier 3
 organism Human
-description Donor H12529N; Age 70; Caucasian; DNA Extract
+description pericardium, donor H12529N, age 70, caucasian, DNA extract
 tissue Pericardium
-lineage Pericardium
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D1234133_A712271
@@ -831,10 +840,10 @@ tag BCLeftVentricleN41
 type Cell Line
 tier 3
 organism Human
-description Donor N41; Age 26; Asian; DNA Extract
+description left ventrible, donor N41, age 26, Asian, DNA extract
 tissue Left ventrible
-lineage Left ventrible
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_D1234138_A705026
@@ -848,10 +857,10 @@ tag BCLeukocyteUHN00204
 type Cell Line
 tier 3
 organism Human
-description Donor UHN00204; Age 54; Caucasian; DNA Extract
+description peripheral blood mononuclear cell, donor UHN00204, age 54, caucasian, DNA extract
 tissue Peripheral blood mononuclear cell
-lineage Peripheral blood mononuclear cell
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_D4234148_A612197
@@ -865,10 +874,10 @@ tag BCPlacentaUHN00189
 type Cell Line
 tier 3
 organism Human
-description Donor UHN00189; Age 29; Native Indian; DNA Extract
+description placenta, donor UHN00189, age 29, Native Indian, DNA extract
 tissue Placenta
-lineage Placenta
-karyotype Normal
+#lineage Placenta
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D4234200_A603104
@@ -882,10 +891,10 @@ tag BCRectumN29
 type Cell Line
 tier 3
 organism Human
-description Donor N29; Age 29; Asian; DNA Extract
+description rectum, donor N29, age 29, Asian, DNA extract
 tissue Rectum
-lineage Rectum
-karyotype Normal
+#lineage Rectum
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_D4234206_A712205
@@ -899,10 +908,10 @@ tag BCTestisN30
 type Cell Line
 tier 3
 organism Human
-description Donor N30; Age 41; Asian; DNA Extract
+description testis, donor N30, age 41, Asian, DNA extract
 tissue Testis
-lineage Testis
-karyotype Normal
+#lineage Testis
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_D4234260_A711169
@@ -916,10 +925,10 @@ tag BCCervixBN0773
 type Cell Line
 tier 3
 organism Human
-description Donor BN0773; Age 44; Asian; DNA Extract
+description uterine cervix, donor BN0773, age 44, Asian, DNA extract
 tissue Uterine cervix
-lineage Uterine cervix
-karyotype Normal
+#lineage Uterine cervix
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D4234275_A511454
@@ -933,10 +942,10 @@ tag BCUterusBN0765
 type Cell Line
 tier 3
 organism Human
-description Donor BN0765; Age 44; Asian; DNA Extract
+description uterus, donor BN0765, age 44, Asian, DNA extract
 tissue Uterus
-lineage Uterus
-karyotype Normal
+#lineage Uterus
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D4234274_A810099
@@ -950,7 +959,7 @@ term BE2_C
 tag BE2C
 type Cell Line
 organism Human
-description Human neuroblastoma
+description neuroblastoma
 tissue Brain
 lineage ectoderm
 vendorName ATCC
@@ -966,10 +975,10 @@ term BG02ES
 tag BG02ES
 type Cell Line
 organism Human
-description human Embryonic Stem Cell (hESC) Treatment: H9 Conditioned Medium
+description human Embryonic Stem Cell (hESC), BG02, treatment: H9 Conditioned Medium
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) BG02
+lineage embryonic
 karyotype normal
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
@@ -981,10 +990,10 @@ term BG02ES-EBD
 tag BG02ESEBD
 type Cell Line
 organism Human
-description  human Embryonic Stem Cell (hESC) BG02 Embryoid Body-Derived
+description  human Embryonic Stem Cell (hESC), BG02, Embryoid Body-Derived
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) BG02
+lineage embryonic
 karyotype normal
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
@@ -996,12 +1005,12 @@ term BJ
 tag BJ
 type Cell Line
 organism Human
-description Skin fibroblast "The line was established from skin taken from normal foreskin." - ATCC.  (PMID: 9916803)
+description skin fibroblast, "The line was established from skin taken from normal foreskin." - ATCC.  (PMID: 9916803)
 tissue Skin
 vendorName ATCC
 vendorId CRL-2522
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2522&Template=cellBiology
-lineage mesoderm
+lineage ectoderm
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
@@ -1018,7 +1027,7 @@ tissue Skin
 vendorName ATCC
 vendorId CRL-4001
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-4001&Template=cellBiology
-lineage mesoderm
+lineage ectoderm
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
@@ -1035,7 +1044,7 @@ tissue Skin
 vendorName Struhl laboratory
 vendorId BJ-HRas
 orderUrl https://struhl.med.harvard.edu/
-lineage mesoderm
+lineage ectoderm
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
@@ -1053,7 +1062,7 @@ tissue Skin
 vendorName Struhl laboratory
 vendorId BJ-T
 orderUrl https://struhl.med.harvard.edu/
-lineage mesoderm
+lineage ectoderm
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
@@ -1065,9 +1074,9 @@ term CLL
 tag CLL
 type Cell Line
 organism Human
-description chronic lymphocytic leukemia cell
+description chronic lymphocytic leukemia cell, T-cell lymphocyte
 tier 3
-lineage T-cell lymphocyte
+lineage mesoderm
 karyotype cancer
 sex F
 tissue lymphocyte
@@ -1087,7 +1096,7 @@ tissue Colon
 vendorName ATCC
 vendorId HTB-37
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-37&Template=cellBiology
-lineage
+lineage endoderm
 karyotype cancer
 termId BTO:0000195
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000195
@@ -1103,7 +1112,7 @@ description chorion cells (outermost of two fetal membranes), fetal membranes we
 tissue FetalMembrane
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
-lineage chorion
+#lineage chorion
 karyotype unknown
 termId BTO:0000252
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000252
@@ -1115,8 +1124,9 @@ term CMK
 tag CMK
 type Cell Line
 organism Human
-description human acute megakaryocytic leukemia cells, "established from the peripheral blood of a 10-month-old boy with Down's syndrome and acute megakaryocytic leukemia (AML M7) at relapse in 1985" - DSMZ. (PMID: 3016165)
+description acute megakaryocytic leukemia cells, "established from the peripheral blood of a 10-month-old boy with Down's syndrome and acute megakaryocytic leukemia (AML M7) at relapse in 1985" - DSMZ. (PMID: 3016165)
 tissue Blood
+lineage mesoderm
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=392&from=cell_line_index&select=search_for_term&term=CMK&preselect=human;hamster;mouse;rat;insect;other&firstload=0
 vendorName DSMZ
 vendorId ACC-392
@@ -1132,7 +1142,7 @@ description decidua cells (part of the mucous membrane lining uterus), Fetal mem
 tissue Cervix
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
-lineage decidua
+#lineage decidua
 karyotype unknown
 termId BTO:0001360
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001360
@@ -1195,7 +1205,7 @@ term Fibrobl
 tag Fibrobl
 type Cell Line
 organism Human
-description Normal child fibroblast; donor sex: female
+description Normal child fibroblast, donor sex: female
 tissue Skin
 lineage mesoderm
 vendorName Coriell
@@ -1750,7 +1760,7 @@ tier 3
 organism human
 description Human Astrocytes-cerebellar
 lineage Astrocytic
-karyotype Normal
+karyotype normal
 sex U
 tissue cerebellar
 vendorName ScienCell
@@ -1780,7 +1790,7 @@ tier 3
 organism human
 description Human Astrocytes-hippocampal
 lineage Astrocytic
-karyotype Normal
+karyotype normal
 sex U
 tissue brain hippocampus
 vendorName ScienCell
@@ -1814,7 +1824,7 @@ tissue Spinal cord
 vendorName ScienCell
 vendorId 1820
 orderUrl http://www.sciencellonline.com/site/products/1820.php
-karyotype Normal
+karyotype normal
 lineage Astrocytic
 termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099
@@ -1996,7 +2006,7 @@ tier 3
 organism human
 description Human Foreskin Fibroblast
 lineage Fibroblast
-karyotype Normal
+karyotype normal
 sex M
 tissue foreskin
 vendorName Dr. Torok-Storb, FHCRC
@@ -2013,7 +2023,7 @@ tier 3
 organism human
 description Human Foreskin Fibroblast Cells Expressing Canine cMyc
 lineage Fibroblast
-karyotype Normal (cMyc)
+karyotype normal (cMyc)
 sex M
 tissue foreskin
 vendorName Dr. Torok-Storb, FHCRC
@@ -2358,7 +2368,7 @@ tier 3
 organism human
 description Human Renal Glomerular Endothelial Cells
 lineage Endothelial
-karyotype Normal
+karyotype normal
 sex U
 tissue kidney
 vendorName ScienCell
@@ -2569,7 +2579,7 @@ tag LHCNM2
 type Cell Line
 tier 3
 organism human
-description skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old Caucasian heart transplant donor, immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN"), Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
+description skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old caucasian heart transplant donor, immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN"), Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
 lineage
 karyotype
 sex M
@@ -2602,7 +2612,7 @@ term LNCaP
 tag LNCaP
 type Cell Line
 organism Human
-description prostate adenocarcinoma, "LNCaP clone FGC was isolated in 1977 by J.S. Horoszewicz, et al., from a needle aspiration biopsy of the left supraclavicular lymph node of a 50-year-old Caucasian male (blood type B+) with confirmed diagnosis of metastatic prostate carcinoma." - ATCC. (Horoszewicz et al. LNCaP Model of Human Prostatic Carcinoma. Cancer Research 43, 1809-1818, April 1983.)
+description prostate adenocarcinoma, "LNCaP clone FGC was isolated in 1977 by J.S. Horoszewicz, et al., from a needle aspiration biopsy of the left supraclavicular lymph node of a 50-year-old caucasian male (blood type B+) with confirmed diagnosis of metastatic prostate carcinoma." - ATCC. (Horoszewicz et al. LNCaP Model of Human Prostatic Carcinoma. Cancer Research 43, 1809-1818, April 1983.)
 tissue Prostate
 vendorName ATCC
 vendorId CRL-1740
@@ -2739,7 +2749,7 @@ tier 3
 organism human
 description Monocytes-CD14+ are CD14-positive cells from human leukapheresis product
 lineage Monocytic
-karyotype Normal
+karyotype normal
 sex F
 tissue monocytes
 vendorName S. Heimfeld Laboratory, FHCRC
@@ -3031,7 +3041,7 @@ vendorName Lonza
 VendorId CC-2555
 orderUrl http://www.lonza.com/
 lineage Epithelial
-karyotype Normal
+karyotype normal
 termId BTO:0002398
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002398
 sex U
@@ -3350,7 +3360,7 @@ term U87
 tag U87
 type Cell Line
 organism Human
-description human glioblastoma; astrocytoma. (PMID: 4332744)
+description human glioblastoma, astrocytoma. (PMID: 4332744)
 tissue Brain
 lineage ectoderm
 vendorName ATCC
@@ -3406,7 +3416,7 @@ tier 3
 organism human
 description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct
 lineage Fibroblast
-karyotype Normal (RAF)
+karyotype normal (RAF)
 sex F
 tissue embryonic lung
 vendorName Dr. Carl Mann, SBIGeM
@@ -3619,7 +3629,7 @@ type Cell Line
 organism Mouse
 tissue
 category primaryCells
-description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov;7(11):2071-84.)
+description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov,7(11):2071-84.)
 age E0
 strain 129
 vendorName Uw lab
@@ -7752,37 +7762,37 @@ description 2009-01-01 rel2 January freeze
 term hg18
 tag hg18
 type species
-description The reference genome: Homo sapiens; March 2006 release
+description The reference genome: Homo sapiens, March 2006 release
 
 term panTro2
 tag panTro2
 type species
-description Chimpanzee: Pan troglodytes; March 2006 release
+description Chimpanzee: Pan troglodytes, March 2006 release
 
 term rheMac2
 tag rheMac2
 type species
-description Monkey: Rhesus macaque; January 2006 release
+description Monkey: Rhesus macaque, January 2006 release
 
 term mm9
 tag mm9
 type species
-description Mouse: Mus musculus; July 2007 release
+description Mouse: Mus musculus, July 2007 release
 
 term rn4
 tag rn4
 type species
-description Rat: Rattus norvegicus; November 2004 release
+description Rat: Rattus norvegicus, November 2004 release
 
 term canFam2
 tag canFam2
 type species
-description Dog: Canis lupus familiaris; May 2005 release
+description Dog: Canis lupus familiaris, May 2005 release
 
 term bosTau4
 tag bosTau4
 type species
-description Cow: Bos Taurus; October 2007 release
+description Cow: Bos Taurus, October 2007 release
 
 ##### Control Terms
 term Control
@@ -8088,7 +8098,7 @@ type treatment
 
 term pravastatin
 tag PRAVAST
-description For sterol deprivation, cells were cultured with pravastatin (2 uM; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
+description For sterol deprivation, cells were cultured with pravastatin (2 uM, Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
 type treatment
 
 term Prednisolone_100nM

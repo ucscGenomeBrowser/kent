@@ -9485,7 +9485,7 @@ if (url != NULL && url[0] != 0)
 		printf("<B>RefSeq Gene(s): </B>");
 	    else
 		printf(", ");
-    	    printf("<A HREF=\"%s%s&o=%s&t=%s\" target=_blank>", "../cgi-bin/hgc?g=refGene&i=", row[0], chromStart, chromEnd);
+    	    printf("<A HREF=\"%s%s&o=%s&t=%s\">", "../cgi-bin/hgc?g=refGene&i=", row[0], chromStart, chromEnd);
     	    printf("%s</A></B>", row[0]);
 	    printedCnt++;
 	    }
@@ -9508,7 +9508,7 @@ if (url != NULL && url[0] != 0)
 		printf("<B>Related UCSC Gene(s): </B>");
 	    else
 		printf(", ");
-    	    printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>", "../cgi-bin/hgGene?hgg_gene=", row[0]);
+    	    printf("<A HREF=\"%s%s&hgg_chrom=none\">", "../cgi-bin/hgGene?hgg_gene=", row[0]);
     	    printf("%s</A></B>", row[0]);
 	    printedCnt++;
 	    }

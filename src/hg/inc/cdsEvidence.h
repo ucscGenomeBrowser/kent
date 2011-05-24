@@ -70,7 +70,8 @@ void cdsEvidenceOutput(struct cdsEvidence *el, FILE *f, char sep, char lastSep);
 struct hash *cdsEvidenceReadAllIntoHash(char *fileName);
 /* Return hash full of cdsEvidence keyed by transcript name. */
 
-void cdsEvidenceSetBedThick(struct cdsEvidence *cds, struct bed *bed);
+void cdsEvidenceSetBedThick(struct cdsEvidence *cds, struct bed *bed, 
+			    const boolean freeOfCdsErrors);
 /* Set thickStart/thickEnd on bed from cdsEvidence. */
 
 int cdsEvidenceCmpScore(const void *va, const void *vb);
