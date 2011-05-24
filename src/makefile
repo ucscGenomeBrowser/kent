@@ -57,7 +57,7 @@ blatSuite: topLibs
 #	of DESTDIR and BINDIR
 
 UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
-        bigBedInfo bigBedSummary bigBedToBed \
+        bigBedInfo bigBedSummary bigBedToBed bigWigAverageOverBed  \
 	bigWigInfo bigWigSummary bigWigToBedGraph bigWigToWig\
 	faCount faFrag faOneRecord faPolyASizes faRandomize faSize \
 	faSomeRecords faToNib \
