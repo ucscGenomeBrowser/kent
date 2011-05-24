@@ -3691,6 +3691,11 @@ if (!psOutput)
         hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/seq/gbrowse/briggsae?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
             skipChr(chromName), winStart+1, winEnd, "WormBase");
         }
+    if (sameString(database, "ce10"))
+        {
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/gb2/gbrowse/c_elegans?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        }
     if (sameString(database, "ce4"))
         {
         hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://ws170.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
