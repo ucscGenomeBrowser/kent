@@ -2963,8 +2963,8 @@ organism Human
 description human pancreatic islets
 tissue Pancreas
 vendorName Refer to protocol documents for differing sources
-vendorId
-orderUrl
+vendorId ;
+orderUrl ;
 termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex M
@@ -2980,7 +2980,7 @@ tissue Blood
 vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 vendorId N/A
 vendorName Farnham lab
-vendorUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
+orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
 termId BTO:0000574 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000574
 sex M
@@ -2994,6 +2994,8 @@ organism Human
 description Peripheral blood mononuclear cells
 tissue Blood
 vendorName PBMC cells provided by E. Bresnick, UW Madison
+vendorId N/A
+ordrUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
 sex M
