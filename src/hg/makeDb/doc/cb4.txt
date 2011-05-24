@@ -1,0 +1,165 @@
+# for emacs: -*- mode: sh; -*-
+
+# Caenorhabditis briggsae
+#	Washington University School of Medicine GSC and Sanger Institute
+#
+
+###########################################################################
+## Download sequence (DONE - 2011-05-24 - Hiram)
+    mkdir /hive/data/genomes/cb4
+    cd /hive/data/genomes/cb4
+    mkdir ws220
+    cd ws220
+    wget --no-parent --timestamping -m -nH --cut-dirs=5 \
+        ftp://ftp.sanger.ac.uk/pub/wormbase/WS220/genomes/c_briggsae/
+
+    # an AGP, but it doesn't match to this sequence:
+    wget --timestamping \
+ftp://ftp.sanger.ac.uk/pub2/wormbase/assemblies/c_briggsae/cb4/cbriggsae.agp
+
+    hgFakeAgp -minContigGap=1 \
+/hive/data/genomes/cb4/ws220/sequences/dna/c_briggsae.WS220.dna.fa.gz \
+	fake.ws220.agp
+
+###########################################################################
+## Initial sequence (DONE - 2011-05-24 - Hiram)
+    cd /hive/data/genomes/cb4
+    cat << '_EOF_' > cb4.config.ra
+# Config parameters for makeGenomeDb.pl:
+db cb4
+# clade worm
+# genomeCladePriority 10
+scientificName Caenorhabditis briggsae
+commonName C. briggsae
+assemblyDate Oct. 2010
+assemblyShortLabel WS220
+assemblyLabel Washington University School of Medicine GSC and Sanger Institute cb4
+orderKey 867
+# used to be: AC186293 == 95102164
+mitoAcc NC_009885.1
+fastaFiles /hive/data/genomes/cb4/ws220/sequences/dna/c_briggsae.WS220.dna.fa.gz
+agpFiles /cluster/data/cb4/ws220/fake.ws220.agp
+# qualFiles /dev/null
+dbDbSpeciesDir worm
+taxId 6238
+'_EOF_'
+    # << happy emacs
+
+    mkdir jkStuff
+    #	run just to AGP to make sure things are sane first
+    time nice -n +19 makeGenomeDb.pl cb4.config.ra -stop=agp \
+      > jkStuff/makeGenomeDb.agp.log 2>&1
+    #	real    0m21.703s
+    #	check that log to verify it has no errors
+    #	now, continuing to make the Db and all
+    time nice -n +19 makeGenomeDb.pl cb4.config.ra -continue=db \
+      > jkStuff/makeGenomeDb.db.log 2>&1
+    #	real    1m3.490s
+
+    #	take the trackDb business there and check it into the source tree
+    #	fixup the description, gap and gold html page descriptions
+
+###########################################################################
+## RepeatMasker (DONE - 2011-05-24 - Hiram)
+    mkdir /hive/data/genomes/cb4/bed/repeatMasker
+    cd /hive/data/genomes/cb4/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=swarm \
+	-buildDir=`pwd` cb4 > do.log 2>&1 &
+    #	real    24m19.647s
+
+    #	from the do.log:
+# RepeatMasker version development-$Id: RepeatMasker,v
+#	1.25 2010/09/08 21:32:26 angie Exp $
+#	CC   RELEASE 20090604; 
+
+    cat faSize.rmsk.txt
+# 108492946 bases (3041279 N's 105451667 real 84319486 upper 21132181 lower)
+#	in 13 sequences in 1 files
+# %19.48 masked total, %20.04 masked real
+
+###########################################################################
+## Simple Repeats (DONE - 2011-05-24 - Hiram)
+    mkdir /cluster/data/cb4/bed/simpleRepeat
+    cd /cluster/data/cb4/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl -smallClusterHub=memk \
+	-workhorse=hgwdev -buildDir=`pwd` cb4 > do.log 2>&1 &
+    #	real    12m38.324s
+    cat fb.simpleRepeat 
+    #	4521955 bases of 105451667 (4.288%) in intersection
+
+###########################################################################
+## WindowMasker (DONE - 2011-05-24 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/cb4/bed/windowMasker
+    cd /hive/data/genomes/cb4/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -verbose=2 -buildDir=`pwd` \
+	-workhorse=hgwdev cb4 > do.log 2>&1 &
+    #	real  3m39.332s
+    twoBitToFa cb4.wmsk.sdust.2bit stdout | faSize stdin
+# 108492946 bases (3041279 N's 105451667 real 67024528 upper 38427139 lower)
+#	in 13 sequences in 1 files
+#	%35.42 masked total, %36.44 masked real
+
+    #	load this initial data to get ready to clean it
+    cd /hive/data/genomes/cb4/bed/windowMasker
+    hgLoadBed cb4 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 820145 elements of size 3
+    featureBits -countGaps cb4 windowmaskerSdust
+    #	41466710 bases of 108492946 (38.221%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits cb4 -not gap -bed=notGap.bed
+    #	105451667 bases of 105451667 (100.000%) in intersection
+    time nice -n +19 featureBits cb4 windowmaskerSdust notGap.bed \
+	-bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	38427139 bases of 105451667 (36.441%) in intersection
+    #	reload track to get it clean
+    hgLoadBed cb4 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 820859 elements of size 4
+    featureBits -countGaps cb4 windowmaskerSdust
+    #	38427139 bases of 108492946 (35.419%) in intersection
+
+    #	mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../cb4.unmasked.2bit stdin \
+	    -type=.bed cb4.cleanWMSdust.2bit
+    twoBitToFa cb4.cleanWMSdust.2bit stdout | faSize stdin \
+        > cb4.cleanWMSdust.faSize.txt
+    cat cb4.cleanWMSdust.faSize.txt
+# 108492946 bases (3041279 N's 105451667 real 67024528 upper 38427139 lower)
+#	in 13 sequences in 1 files
+# %35.42 masked total, %36.44 masked real
+
+########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-24 - Hiram)
+    cd /hive/data/genomes/cb4
+    twoBitMask -add bed/windowMasker/cb4.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed cb4.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa cb4.2bit stdout | faSize stdin > faSize.cb4.txt
+    cat faSize.cb4.txt
+# 108492946 bases (3041279 N's 105451667 real 66936145 upper 38515522 lower)
+#	in 13 sequences in 1 files
+# %35.50 masked total, %36.52 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/cb4/cb4.2bit
+    ln -s `pwd`/cb4.2bit /gbdb/cb4/cb4.2bit
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-24 - Hiram)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # C. briggsae size is ~3.4% of human judging by gapless cb4 vs. hg18 
+    # genome sizes from featureBits. So we would use 34, but that yields a
+    # very high number of tiles to ignore, especially for a small more compact 
+    # genome.  Bump that up a bit to be more conservative.
+    cd /cluster/data/cb4
+    blat cb4.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/cb4.11.ooc -repMatch=100
+    #	Wrote 8058 overused 11-mers to jkStuff/cb4.11.ooc
+    mkdir /hive/data/staging/data/cb4
+    cp -p chrom.sizes cb4.2bit jkStuff/cb4.11.ooc /hive/data/staging/data/cb4
+
+#########################################################################
+
