@@ -310,33 +310,24 @@ else
     return shadesOfGray[5];
 }
 
-INLINE Color colorFromRefAlt(struct vcfGenotype *gt, int hapIx, boolean grayUnphasedHet,
-			     boolean isCenter)
+INLINE Color colorFromRefAlt(struct vcfGenotype *gt, int hapIx, boolean grayUnphasedHet)
 /* Color allele red for alternate allele, blue for reference allele -- 
  * except for special center variant, make it yellow/green for contrast. */
 {
 if (grayUnphasedHet && !gt->isPhased && gt->hapIxA != gt->hapIxB)
     return shadesOfGray[5];
 int alIx = hapIx ? gt->hapIxB : gt->hapIxA;
-if (isCenter)
-    return alIx ? MG_YELLOW : MG_GREEN;
 return alIx ? MG_RED : MG_BLUE;
 }
 
 
 INLINE int drawOneHap(struct vcfGenotype *gt, int hapIx,
 		      char *ref, char *altAlleles[], int altCount,
-		      struct hvGfx *hvg, int x1, int y, int w, int itemHeight, int lineHeight,
-		      boolean isCenter)
+		      struct hvGfx *hvg, int x1, int y, int w, int itemHeight, int lineHeight)
 /* Draw a base-colored box for genotype[hapIx].  Return the new y offset. */
 {
-Color color = colorHapByRefAlt ? colorFromRefAlt(gt, hapIx, TRUE, isCenter) :
+Color color = colorHapByRefAlt ? colorFromRefAlt(gt, hapIx, TRUE) :
 				 colorFromGt(gt, hapIx, ref, altAlleles, altCount, TRUE);
-if (w == 1)
-    {
-    x1--;
-    w = 3;
-    }
 hvGfxBox(hvg, x1, y, w, itemHeight+1, color);
 y += itemHeight+1;
 return y;
@@ -381,9 +372,17 @@ if (gtOtherCount > 0)
 return dy->string;
 }
 
-static void drawOneRec(struct vcfRecord *rec, boolean isCenter,
-		       unsigned short *gtHapOrder, int gtHapEnd,
-		       struct track *tg, struct hvGfx *hvg, int xOff, int yOff, int width)
+static char *centerPosCartVarName(struct trackDb *tdb)
+// Return track.centerVariantPos setting (may be NULL)
+{
+static char cartVar[512];
+safef(cartVar, sizeof(cartVar), "%s.centerVariantPos", tdb->track);
+return cartVar;
+}
+
+static void drawOneRec(struct vcfRecord *rec, unsigned short *gtHapOrder, int gtHapEnd,
+		       struct track *tg, struct hvGfx *hvg, int xOff, int yOff, int width,
+		       boolean isCenter)
 /* Draw a stack of genotype bars for this record */
 {
 static struct dyString *tmp = NULL;
@@ -397,8 +396,11 @@ const double scale = scaleForPixels(width);
 int x1 = round((double)(rec->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)(rec->chromEnd-winStart)*scale) + xOff;
 int w = x2-x1;
-if (w < 1)
-    w = 1;
+if (w <= 1)
+    {
+    x1--;
+    w = 3;
+    }
 int y = yOff;
 dyStringClear(tmp);
 dyStringAppend(tmp, rec->alt);
@@ -411,11 +413,67 @@ for (gtHapOrderIx = 0;  gtHapOrderIx < gtHapEnd;  gtHapOrderIx++)
     int gtIx = gtHapIx >>1;
     struct vcfGenotype *gt = &(rec->genotypes[gtIx]);
     y = drawOneHap(gt, hapIx, rec->ref, altAlleles, altCount,
-		   hvg, x1, y, w, itemHeight, lineHeight, isCenter);
+		   hvg, x1, y, w, itemHeight, lineHeight);
+    }
+char *mouseoverText = gtSummaryString(rec, altAlleles, altCount);
+if (isCenter)
+    {
+    // Thick black lines to distinguish this variant:
+    int yBot = yOff + tg->height - 2;
+    hvGfxBox(hvg, x1-3, yOff, 3, tg->height, MG_BLACK);
+    hvGfxBox(hvg, x2+1, yOff, 3, tg->height, MG_BLACK);
+    hvGfxLine(hvg, x1-2, yOff, x2+2, yOff, MG_BLACK);
+    hvGfxLine(hvg, x1-2, yBot, x2+2, yBot, MG_BLACK);
+    // Special mouseover instructions:
+    static struct dyString *dy = NULL;
+    if (dy == NULL)
+	dy = dyStringNew(0);
+    dyStringPrintf(dy, "%s   Haplotypes sorted on ", mouseoverText);
+    char *cartVar = centerPosCartVarName(tg->tdb);
+    char *centerPos = cartOptionalString(cart, cartVar);
+    if (centerPos == NULL)
+	dyStringAppend(dy, "middle variant by default. ");
+    else
+	dyStringAppend(dy, "this variant. ");
+    dyStringAppend(dy, "To anchor sorting to a different variant, click on that variant and "
+		   "then click on the link below the variant name.");
+    mouseoverText = dy->string;
     }
 mapBoxHgcOrHgGene(hvg, rec->chromStart, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
-		  rec->name, gtSummaryString(rec, altAlleles, altCount),
-		  NULL, TRUE, NULL);
+		  rec->name, mouseoverText, NULL, TRUE, NULL);
+}
+
+static int getCenterVariantIx(struct track *tg, int seqStart, int seqEnd,
+			      struct vcfRecord *records)
+// If the user hasn't specified a local variant/position to use as center,
+// just use the median variant in window.
+{
+int defaultIx = (slCount(records)-1) / 2;
+char *cartVar = centerPosCartVarName(tg->tdb);
+char *centerPos = cartOptionalString(cart, cartVar);
+if (centerPos != NULL)
+    {
+    char *words[3];
+    int wordCount = chopByChar(cloneString(centerPos), ':', words, sizeof(words));
+    if (wordCount != 2)
+	errAbort("Cart variable %s format error: expected 'chrom:pos', got %s",
+		 cartVar, centerPos);
+    if (sameString(chromName, words[0]))
+	{
+	int pos = sqlUnsigned(words[1]);
+	int winSize = seqEnd - seqStart;
+	if (pos > (seqStart - winSize) && pos < (seqEnd + winSize))
+	    {
+	    int i;
+	    struct vcfRecord *rec;
+	    for (rec = records, i = 0;  rec != NULL;  rec = rec->next, i++)
+		if (rec->chromStart >= pos)
+		    return i;
+	    return i-1;
+	    }
+	}
+    }
+return defaultIx;
 }
 
 static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
@@ -428,28 +486,18 @@ const struct vcfFile *vcff = tg->extraUiData;
 if (vcff->records == NULL)
     return;
 unsigned short gtHapEnd = 0;
-// Use the median variant in the window as the center; would be even nicer to allow
-// the user to choose a variant (or position) to use as center:
-int ix, centerIx = (slCount(vcff->records)-1) / 2;
+int ix, centerIx = getCenterVariantIx(tg, seqStart, seqEnd, vcff->records);
 unsigned short *gtHapOrder = clusterChroms(vcff, centerIx, &gtHapEnd);
 struct vcfRecord *rec, *centerRec = NULL;
 for (rec = vcff->records, ix=0;  rec != NULL;  rec = rec->next, ix++)
     {
-    boolean isCenter = (ix == centerIx);
-    drawOneRec(rec, isCenter, gtHapOrder, gtHapEnd, tg, hvg, xOff, yOff, width);
-    if (isCenter)
+    if (ix == centerIx)
 	centerRec = rec;
+    else
+	drawOneRec(rec, gtHapOrder, gtHapEnd, tg, hvg, xOff, yOff, width, FALSE);
     }
 // Draw the center rec on top, outlined with black lines, to make sure it is very visible:
-drawOneRec(centerRec, TRUE, gtHapOrder, gtHapEnd, tg, hvg, xOff, yOff, width);
-const double scale = scaleForPixels(width);
-int x1 = round((double)(centerRec->chromStart-winStart)*scale) + xOff;
-int x2 = round((double)(centerRec->chromEnd-winStart)*scale) + xOff;
-int yBot = yOff + tg->height - 2;
-hvGfxLine(hvg, x1-2, yOff, x1-2, yBot, MG_BLACK);
-hvGfxLine(hvg, x1-2, yOff, x2+2, yOff, MG_BLACK);
-hvGfxLine(hvg, x2+2, yOff, x2+2, yBot, MG_BLACK);
-hvGfxLine(hvg, x1-2, yBot, x2+2, yBot, MG_BLACK);
+drawOneRec(centerRec, gtHapOrder, gtHapEnd, tg, hvg, xOff, yOff, width, TRUE);
 }
 
 static int vcfHapClusterTotalHeight(struct track *tg, enum trackVisibility vis)

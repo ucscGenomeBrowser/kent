@@ -31428,3 +31428,21 @@ checkAll >j.check
 ln -s /hive/data/genomes/gs.19/build36/bed/evofold/doEvoFold/evoFold  /gbdb/hg18/evoFold 
 ln -s /gbdb/hg18/evoFold /usr/local/apache/htdocs/evoFold/hg18
 #############################################################################
+# BUILD evoCpg TRACK (DONE, Fan, 5/23/11)
+ssh hgwdev
+cd /hive/data/genomes/gs.19/build36/bed
+mkdir evoCpg
+cd evoCpg
+# put data file, weizmann_evo_cgi.bed, here.
+
+cat weizmann_evo_cgi.bed|grep -v track >evoCpg.bed
+hgLoadBed hg18 evoCpg evoCpg.bed
+
+# create kent/src/hg/makeDb/trackDb/human/hg18/evoCpg.html.
+
+# add pushQue record
+#############################################################################
+
+
+
+#############################################################################

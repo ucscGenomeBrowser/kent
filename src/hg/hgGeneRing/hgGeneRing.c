@@ -81,7 +81,7 @@ if (sameString(position, "genome") || sameString(position, "hgBatch"))
 puts(
 "<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
 "<CENTER>"
-"<TABLE BGCOLOR='#FFFEF3' BORDERCOLOR='#CCCC99' BORDER=0 CELLPADDING=1>\n"
+"<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
 "<TR><TD style='text-align:center; font-size:small;'>\n"
 "The UCSC Genome Browser was created by the \n"
 "<A HREF=\"/staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
@@ -96,7 +96,7 @@ puts(
 "<CENTER>\n"
 "<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"
-"<table BGCOLOR='#FEFDEF' BORDERCOLOR='#CCCC99' BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"
+"<table CELLPADDING=0 CELLSPACING=0 style='background-color:#FEFDEF; border-style:none;'>\n"
 "<tr><td>\n"
 "<table bgcolor='#FFFEF3' border=0>\n"
 "<tr>\n"
@@ -385,7 +385,7 @@ if (!sameString(errMsg,""))
 puts(
 "<FORM ACTION=\"/cgi-bin/hgGeneRing\" NAME=\"mainForm\" METHOD=\"GET\">\n"
 "<CENTER>"
-"<TABLE BGCOLOR='#FFFEF3' BORDERCOLOR='#CCCC99' BORDER=0 CELLPADDING=1>\n"
+"<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
 "<TR><TD style='text-align:center; font-size:x-small;'>\n"
 "Enter gene list for gene network ring.\n"
 "</TD></TR></TABLE></CENTER>\n"

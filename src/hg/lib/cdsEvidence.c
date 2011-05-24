@@ -219,10 +219,11 @@ lineFileClose(&lf);
 return hash;
 }
 
-void cdsEvidenceSetBedThick(struct cdsEvidence *cds, struct bed *bed)
+void cdsEvidenceSetBedThick(struct cdsEvidence *cds, struct bed *bed,
+			    const boolean freeOfCdsErrors)
 /* Set thickStart/thickEnd on bed from cdsEvidence. */
 {
-if (cds == NULL)
+if (cds == NULL || !freeOfCdsErrors)
     {
     bed->thickStart = bed->thickEnd = bed->chromStart;
     return;
