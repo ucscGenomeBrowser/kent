@@ -393,8 +393,7 @@ cd ..
 #
 # testing suggestion: uncomment below
 # mkdir -p $testingDir
-# compareModifiedFileSizes.csh $testingDir \
-#       new.edges.wc.txt $oldGeneDir  old.edges.wc.txt
+# compareModifiedFileSizes.csh $oldGeneDir .
 # cut -f-3,5,6,8 txOrtho/uniqEdges/chr22.edges >$testingDir/chr22.subset.edges.new
 # cut -f-3,5,6,8 $oldGeneDir/txOrtho/uniqEdges/chr22.edges \
 #    >$testingDir/chr22.subset.edges.old
@@ -430,7 +429,7 @@ end
 
 #
 # special testing suggestion: uncomment below
-# compareModifiedFileSizes.csh . $oldGeneDir 
+# compareModifiedFileSizes.csh $oldGeneDir .
 # cut -f1-3,5 graphWithEvidence/chr22.txg > $testingDir/chr22.graph.bounds.new
 # cut -f1-3,5 $oldGeneDir/graphWithEvidence/chr22.txg > $testingDir/chr22.graph.bounds.old
 # checkRandomLinesExist.py -s $testingDir/chr22.graph.bounds.old \
@@ -482,7 +481,7 @@ faSplit sequence txWalk.fa 200 txFaSplit/
 # compare the line count for files just built in the current version
 # and the previous version
 #
-# compareModifiedFileSizes.csh . $oldGeneDir
+# compareModifiedFileSizes.csh $oldGeneDir .
 # # Check that most of the old alt events are still there
 # checkRandomLinesExist.py -d $oldGeneDir/altSplice.bed -s ./altSplice.bed
 # # check that most of the old txWalk bed entries overlap some new entry
@@ -663,9 +662,6 @@ cat mrna/*.psl refSeq/*.psl rfam/*psl trna.psl \
 # Cluster purely based on CDS (in same frame). Takes 1 second
 txCdsCluster pick.bed pick.cluster
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
 
 
 # Flag suspicious CDS regions, and add this to info file. Weed out bad CDS.
@@ -797,6 +793,9 @@ txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
 
 
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
 
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
@@ -868,7 +867,7 @@ hgLoadSqlTab $tempDb kgProtAlias ~/kent/src/hg/lib/kgProtAlias.sql ucscGenes.pro
 # Load up kgProtMap2 table that says where exons are in terms of CDS
 hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 
-compareModifiedFileSizes.csh . $oldGeneDir
+compareModifiedFileSizes.csh $oldGeneDir .
 # move this exit statement to the end of the section to be done next
 exit $status # BRACKET
 
