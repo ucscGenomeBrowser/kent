@@ -202,10 +202,18 @@ if (hTableExists(database, "knownGene"))
     }
 }
 
-static void vcfRecordDetails(struct vcfRecord *rec)
-/* Display the contents of a single line of VCF. */
+static void vcfRecordDetails(struct trackDb *tdb, struct vcfRecord *rec)
+/* Display the contents of a single line of VCF, assumed to be from seqName
+ * (using seqName instead of rec->chrom because rec->chrom might lack "chr"). */
 {
 printf("<B>Name:</B> %s<BR>\n", rec->name);
+if (rec->file->genotypeCount > 0)
+    {
+    char cartVar[512];
+    safef(cartVar, sizeof(cartVar), "%s.centerVariantPos", tdb->track);
+    printf("<A HREF=\"%s&%s=%s:%d\">View haplotypes sorted by variants at this position</A><BR>\n",
+	   hgTracksPathAndSettings(), cartVar, seqName, rec->chromStart);
+    }
 printPosOnChrom(seqName, rec->chromStart, rec->chromEnd, NULL, FALSE, rec->name);
 printf("<B>Reference allele:</B> %s<BR>\n", rec->ref);
 vcfAltAlleleDetails(rec);
@@ -251,7 +259,7 @@ if (vcff != NULL)
     struct vcfRecord *rec;
     for (rec = vcff->records;  rec != NULL;  rec = rec->next)
 	if (rec->chromStart == start && rec->chromEnd == end) // in pgSnp mode, don't get name
-	    vcfRecordDetails(rec);
+	    vcfRecordDetails(tdb, rec);
     }
 }
 

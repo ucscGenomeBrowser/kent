@@ -79,6 +79,19 @@ visibility hide
     color 120,0,0
     priority 5
 
+track knownGeneOld4
+shortLabel Old UCSC Genes
+longLabel Previous Version of UCSC Genes
+group genes
+priority 34.1
+visibility hide
+color 82,82,160
+type genePred
+hgsid on
+oldToNew kg4ToKg5
+baseColorUseCds given
+baseColorDefault genomicCodons
+
 track pseudoYale60
 shortLabel Yale Pseudo60
 longLabel Yale Pseudogenes based on Ensembl Release 60
@@ -101,6 +114,59 @@ searchTable pseudoYale60
 searchType genePred
 termRegex PGOMOU[0-9]+
 searchPriority 50
+
+track ucscRetroAli1
+shortLabel Retroposed Genes
+longLabel Retroposed GenesV1, Including Pseudogenes - November 2010 
+group genes
+type psl
+priority 37.5
+color 20,0,250
+visibility hide
+nextItemButton on
+ucscRetroInfo ucscRetroInfo1
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds
+baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+searchName ucscRetroInfoRefSeq1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes - November 2010
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo1
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo1.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo1
+xrefQuery select ucscRetroInfo1.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo1
+xrefQuery select ucscRetroInfo1.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
 
 track tRNAs
 shortLabel tRNA Genes
@@ -866,4 +932,10 @@ type wig -5.45 4.93
 spanList 60
 viewLimits -1.5:1.5
 html laminB1Mm9
+
+track forelimbH3k27ac
+type bed 3
+color 0,0,150
+group x
+visibility hide
 

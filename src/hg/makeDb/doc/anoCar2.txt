@@ -169,8 +169,6 @@ taxId 28377
 	anoCar2 > do.log 2>&1 &
     #	real    23m18.960s
 
-XXX - READY - Tue Apr 12 16:21:42 PDT 2011
-
     #	real    198m33.953s
     cat fb.simpleRepeat 
     #	66211508 bases of 2752505800 (2.405%) in intersection
@@ -857,7 +855,7 @@ TMPDIR=/scratch/tmp
     #	75402821 bases of 1842236818 (4.093%) in intersection
 
 #######################################################################
-## 7-Way Multiz (DONE - 2011-03-18,03-21 - Hiram)
+## 7-Way Multiz (DONE - 2011-05-13 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/anoCar2/bed/multiz7way
     cd /hive/data/genomes/anoCar2/bed/multiz7way
@@ -915,7 +913,7 @@ anoCar2.7way.nh > anoCar2.commonNames.7way.nh
 #  3  1.199 - human hg19          (%  5.19) (%  3.55)       5000     loose
 #  4  1.411 - mouse mm9           (%  4.98) (%  3.36)       5000     loose
 #  5  1.622 - X.tropicalis xenTro2(%  5.05) (%  6.76)       5000     loose
-#  6  1.927 - stickleback gasAcu1 (%  3.14) (% 12.54)       3000     medium
+#  6  1.927 - stickleback gasAcu1 (%  3.14) (% 12.54)       5000     loose
 
 # None of this concern for distances matters in building the first step, the
 # maf files.
@@ -1040,25 +1038,851 @@ done >> multiz7way.maf
     #	Indexing and tabulating /gbdb/anoCar2/multiz7way/multiz7way.maf
     #	Loaded 2182259 mafs in 1 files from /gbdb/anoCar2/multiz7way
     #	real    0m48.824s
-XXX - done to here - Fri May 13 16:19:42 PDT 2011
-
-
-    #	Indexing and tabulating /gbdb/anoCar2/multiz7way/multiz7way.maf
-    #	Loaded 15113841 mafs in 1 files from /gbdb/anoCar2/multiz7way
-    #	real    9m38.121s
 
     time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 anoCar2 multiz7waySummary \
 	/gbdb/anoCar2/multiz7way/multiz7way.maf
-    #	Created 1828535 summary blocks from 85036569 components
-    #	and 15113841 mafs from /gbdb/anoCar2/multiz7way/multiz7way.maf
-    #	real    8m51.192s
+    #	Created 623115 summary blocks from 4606157 components and 2182259 mafs
+    #	from /gbdb/anoCar2/multiz7way/multiz7way.maf
+    #	real    0m38.445s
 
     wc -l multiz7way*.tab
-    #	15113841 multiz7way.tab
-    #	1828535 multiz7waySummary.tab
-    #	16942376 total
+    #	2182259 multiz7way.tab
+    #	623115 multiz7waySummary.tab
+    #	2805374 total
 
     rm multiz7way*.tab
 
 ############################################################################
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2011-05-16 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.
+    mkdir /hive/data/genomes/anoCar2/bed/multiz7way/anno/mafSplit
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/anno/mafSplit
+    time mafSplit -byTarget -useFullSequenceName \
+	/dev/null . ../../multiz7way.maf
+    #	real    0m49.816s
+    ls | wc
+    #	4423    4423   94331
+
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/anno
+
+    # only one of these does not yet have an N.bed file
+    cd /hive/data/genomes/danRer7
+    twoBitInfo -nBed danRer7.2bit danRer7.N.bed
+for DB in `sed -e "s/anoCar2 //" ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    ssh swarm
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/anno
+    mkdir result
+    cat << '_EOF_' > template
+#LOOP
+mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/anoCar2/anoCar2.2bit result/$(file1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls mafSplit/*.maf > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs to one per node with the ram=8g requirement
+    para -ram=8g create jobList
+    para try ... check ... push ...
+# Completed: 4423 of 4423 jobs
+# CPU time in finished jobs:       2692s      44.87m     0.75h    0.03d  0.000 y
+# IO & Wait Time:                 11343s     189.04m     3.15h    0.13d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:             700s      11.67m     0.19h    0.01d
+# Submission to last job:           702s      11.70m     0.20h    0.01d
+
+    # verify all result files have some content, look for 0 size files:
+    find . -type f -size 0
+    # should see none
+
+    # combine into one file
+    head -q -n 1 result/chr1.maf > anoCar2.7way.maf
+    for F in result/*.maf
+do
+    grep -h -v "^#" ${F}
+done >> anoCar2.7way.maf
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/chr1.maf >> anoCar2.7way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> anoCar2.7way.maf
+
+    # Load into database
+    rm /gbdb/anoCar2/multiz7way/multiz7way.maf   # remove old symlink
+    ln -s `pwd`/anoCar2.7way.maf /gbdb/anoCar2/multiz7way/multiz7way.maf
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf anoCar2 multiz7way
+    #	Loaded 2552410 mafs in 1 files from /gbdb/anoCar2/multiz7way
+    #	real    1m18.221s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 anoCar2 multiz7waySummary \
+	/gbdb/anoCar2/multiz7way/multiz7way.maf
+    #	Created 623115 summary blocks from 4606157 components
+    #	and 2552410 mafs from /gbdb/anoCar2/multiz7way/multiz7way.maf
+    #	real    1m36.715s
+
+    wc -l multiz7way*.tab
+    #	2552410 multiz7way.tab
+    #	623115 multiz7waySummary.tab
+    #	3175525 total
+
+    rm multiz7way*.tab
+
+#########################################################################
+# MULTIZ7WAY MAF FRAMES (DONE - 2011-05-16 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/anoCar2/bed/multiz7way/frames
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/frames
+    mkdir genes
+
+    #	we get more annotations using the ensGene on mm9 and hg19
+    #	instead of knownGene, so, using ensGene for hg19 and mm9
+
+# hg19 knownGene
+# mm9 knownGene
+
+# anoCar2 ensGene
+# galGal3 ensGene
+# ornAna1 ensGene
+# xenTro2	ensGene
+# gasAcu1	ensGene
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using ensGene for:
+for qDB in hg19 mm9 anoCar2 galGal3 ornAna1 xenTro2 gasAcu1
+do
+  echo hgsql -N -e \"'select * from 'ensGene\;\" ${qDB}
+      hgsql -N -e "select * from ensGene" ${qDB} | cut -f 2-11 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+done
+
+    # if you were using knownGene for mm9 hg19
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    for qDB in mm9 hg19
+    do
+      echo hgsql -N -e \"'select * from 'knownGene\;\" ${qDB}
+      hgsql -N -e "select * from knownGene" ${qDB} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+    done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+
+# genes/anoCar2.gp.gz: 17757
+# genes/galGal3.gp.gz: 16491
+# genes/gasAcu1.gp.gz: 20631
+# genes/hg19.gp.gz: 21254
+# genes/mm9.gp.gz: 22739
+# genes/ornAna1.gp.gz: 17728
+# genes/xenTro2.gp.gz: 17888
+
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/frames
+    cat ../anno/anoCar2.7way.maf \
+	| nice -n +19 genePredToMafFrames anoCar2 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+		| gzip > multiz7way.mafFrames.gz
+    #	real    12m47.652s
+    # verify there are frames on everything:
+    zcat multiz7way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
+    #	171338 anoCar2
+    #	231157 galGal3
+    #	249046 gasAcu1
+    #	299896 hg19
+    #	291605 mm9
+    #	229117 ornAna1
+    #	218682 xenTro2
+
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/frames
+    time hgLoadMafFrames anoCar2 multiz7wayFrames multiz7way.mafFrames.gz
+    #	real    0m16.366s
+
+#########################################################################
+# Phylogenetic tree from 7-way (DONE - 2011-05-17 - Hiram)
+
+    mkdir /hive/data/genomes/anoCar2/bed/multiz7way/4d
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/4d
+
+    # the split annotated maf's are in:
+    ../anno/result/*.maf
+
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/4d
+
+    # using ensGene for anoCar2, only transcribed genes and nothing
+    #	from the randoms and other misc.
+    hgsql anoCar2 -Ne \
+    "select * from ensGene WHERE cdsEnd > cdsStart;" | cut -f 2-20 | egrep -E -v "chrM|random|chrUn" \
+	> ensGene.gp
+    #	verify chromosome selection, should just be the ordinary chroms:
+    cut -f2 ensGene.gp | sort | uniq -c
+    wc -l *.gp
+    #	9440 ensGene.gp
+
+    genePredSingleCover ensGene.gp stdout | sort > ensGeneNR.gp
+    wc -l ensGeneNR.gp
+    #	8830 ensGeneNR.gp
+
+    ssh encodek
+    mkdir /hive/data/genomes/anoCar2/bed/multiz7way/4d/run
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/anoCar2/bed/multiz7way"
+set c = $1
+set infile = $r/anno/result/$2
+set outfile = $3
+cd /scratch/tmp
+# 'clean' maf
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+awk -v C=$c '$2 == C {print}' $r/4d/ensGeneNR.gp | sed -e "s/\t$c\t/\tanoCar2.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
+else
+    echo "" > $r/4d/run/$outfile
+endif
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    ls -1S /hive/data/genomes/anoCar2/bed/multiz7way/anno/result/*.maf | \
+	egrep -E -v "chrM|random|chrUn" \
+	| sed -e "s#.*multiz7way/anno/result/##" \
+	> maf.list
+    # check that list, should be a small number of ordinary chroms
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template stdout | tac > jobList
+    para create jobList
+    para try ... check
+    para -maxJob=5 push
+    para time
+# Completed: 13 of 13 jobs
+# CPU time in finished jobs:        275s       4.59m     0.08h    0.00d  0.000 y
+# IO & Wait Time:                    35s       0.58m     0.01h    0.00d  0.000 y
+# Average job time:                  24s       0.40m     0.01h    0.00d
+# Longest finished job:              68s       1.13m     0.02h    0.00d
+# Submission to last job:            88s       1.47m     0.02h    0.00d
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/4d
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+    #	>anoCar2
+    #	>galGal3
+    #	>hg19
+    #	>mm9
+    #	>ornAna1
+    #	>xenTro2
+    #	>gasAcu1
+
+    # tree-commas.nh:
+    #	((((anoCar2,galGal3), ((hg19,mm9),ornAna1)), xenTro2),gasAcu1)
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree ../tree-commas.nh 4d.all.mfa
+    #	real    0m27.414s
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+    #	((((anoCar2:0.460438,galGal3:0.356919):0.110793,((hg19:0.156181,mm9:0.285682):0.241872,ornAna1:0.489289):0.118758):0.152026,xenTro2:0.761473):0.567782,gasAcu1:0.567782);
+
+#########################################################################
+# phastCons 7-way (DONE - 2011-05-17 - Hiram)
+
+    # split 7way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh encodek
+    mkdir -p /hive/data/genomes/anoCar2/bed/multiz7way/cons/SS
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/cons/SS
+    mkdir result
+
+    cat << '_EOF_' > mkSS.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/anoCar2/bed/multiz7way/anno/result/$c.maf
+set WINDOWS = /hive/data/genomes/anoCar2/bed/multiz7way/cons/SS/result/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'_EOF_'
+    # << happy emacs
+    chmod +x mkSS.csh
+
+    cat << '_EOF_' > template
+#LOOP
+mkSS.csh $(root1) {check out line+ done/$(root1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    ls -1S -r ../../anno/result | sed -e "s/.maf//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para -ram=8g create jobList
+    para try ... check ... etc
+# Completed: 4423 of 4423 jobs
+# CPU time in finished jobs:        725s      12.09m     0.20h    0.01d  0.000 y
+# IO & Wait Time:                 11488s     191.46m     3.19h    0.13d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:             111s       1.85m     0.03h    0.00d
+# Submission to last job:           716s      11.93m     0.20h    0.01d
+
+    find . -type f | grep ".ss$" | wc
+    #	3291    3291  175134
+
+    # they do not all produce .ss files because of:
+    #	./mkSS.csh chrUn_AAWZ02040655 done/chrUn_AAWZ02040655
+    #	Reading alignment from /hive/data/genomes/anoCar2/bed/multiz7way/anno/result/chrUn_AAWZ02040655.maf...
+    #	Creating partition 1 (column 1 to column 84)...
+    #	WARNING: skipping partition 1; insufficient informative sites.
+    #	Done.
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh encodek
+    mkdir -p /hive/data/genomes/anoCar2/bed/multiz7way/cons/run.cons
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/cons/run.cons
+
+    #	there are going to be only one phastCons run using
+    #	this same script.  It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is:
+    #	all 
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set cX = $1:r
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/anoCar2/bed/multiz7way/cons
+set tmp = $cons/tmp/$f
+mkdir -p $tmp
+set ssSrc = $cons
+set useGrp = "$grp.mod"
+ln -s $ssSrc/SS/result/$c/$f.ss $tmp
+ln -s $cons/$grp/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p pp/$c bed/$c
+sleep 4
+touch pp/$c bed/$c
+rm -f pp/$c/$f.pp
+rm -f bed/$c/$f.bed
+mv $tmp/$f.pp pp/$c
+mv $tmp/$f.bed bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../SS -type f | grep ".ss$" | sed -e 's/.ss$//' > ss.list
+    wc -l ss.list
+    #	3291 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/cons
+    mkdir -p all
+    cd all
+    #	Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList
+    para try ... check ...
+    para -maxJob=64 push
+# Completed: 3291 of 3291 jobs
+# PU time in finished jobs:       2799s      46.65m     0.78h    0.03d  0.000 y
+# IO & Wait Time:                 21580s     359.66m     5.99h    0.25d  0.001 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest finished job:              25s       0.42m     0.01h    0.00d
+# Submission to last job:          1251s      20.85m     0.35h    0.01d
+
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/cons/all
+
+    find ./bed -type f | grep ".bed$" | xargs cat | sort -k1,1 -k2,2n \
+	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+	    > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    time nice -n +19 hgLoadBed anoCar2 phastConsElements7way mostConserved.bed
+    #	Loaded 773199 elements of size 5
+    #	real    0m4.937s
+
+    # on human we often try for 5% overall cov, and 70% CDS cov 
+    featureBits anoCar2 -enrichment ensGene:cds phastConsElements7way
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    #	ensGene:cds 1.608%, phastConsElements7way 6.427%, both 1.252%,
+    #	cover 77.83%, enrich 12.11x
+
+    # hg19 for comparison
+    #	refGene:cds 1.196%, phastConsElements46way 5.065%,
+    #	both 0.888%, cover 74.22%, enrich 14.65x
+    #	ensGene:cds 1.278%, phastConsElements46way 5.065%,
+    #	both 0.910%, cover 71.23%, enrich 14.06x
+    #	knownGene:cds 1.252%, phastConsElements46way 5.065%,
+    #	both 0.905%, cover 72.29%, enrich 14.27x
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/cons/all
+    mkdir downloads
+
+    find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phastCons7way.wigFix.gz
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phastCons7way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/anoCar2/chrom.sizes \
+	    phastCons7way.bw) > bigWig.log 2>&1 &
+    tail bigWig.log
+    # pid=6511: VmPeak:      2291152 kB
+    #	real    2m46.514s
+
+    bigWigInfo phastCons7way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 511,293,834
+# primaryIndexSize: 14,137,804
+# zoomLevels: 10
+# chromCount: 3186
+# basesCovered: 209,259,312
+# mean: 0.540605
+# min: 0.000000
+# max: 1.000000
+# std: 0.399259
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phastCons7way.wigFix.gz \
+	| wigEncode stdin phastCons7way.wig phastCons7way.wib)
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    0m58.876s
+    du -hsc *.wi?
+    #	200M    phastCons7way.wib
+    #	44M     phastCons7way.wig
+    #	244M    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons7way.wib /gbdb/anoCar2/multiz7way/phastCons7way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/anoCar2/multiz7way \
+	anoCar2 phastCons7way phastCons7way.wig
+    #	real    0m5.254s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh anoCar2 phastCons7way
+# db.table      min max mean count sumData stdDev viewLimits
+#anoCar2.phastCons7way   0 1 0.540605 209259312 1.13127e+08 0.399259 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=anoCar2 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons7way > histogram.data 2>&1
+    #	real    0m23.586s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Lizard anoCar2 Histogram phastCons7way track"
+set xlabel " phastCons7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# phyloP for 7-way (DONE - 2011-05-17 - Hiram)
+    # run phyloP with score=LRT 
+    ssh encodek
+    mkdir /cluster/data/anoCar2/bed/multiz7way/consPhyloP
+    cd /cluster/data/anoCar2/bed/multiz7way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.510
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/all/all.mod 0.510 > all.mod
+
+    #	following the pattern from panTro3 with grp: "all" (no other grp)
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set file1 = $f:t
+set out = $2
+set cName = $f:t:r
+set n = $f:r:e
+set grp = $cwd:t
+set cons = /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+rm -fr $tmp
+mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/anoCar2/bed/multiz7way/cons/SS/result/$f"
+set useGrp = "$grp.mod"
+ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+mkdir -p $out:h
+sleep 4
+mv $tmp/$file1.wigFix $out
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$cName
+rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+rmdir --ignore-fail-on-non-empty $cons/tmp
+'_EOF_'
+    # << happy emacs
+
+    # Create list of chunks
+    find ../../cons/SS/result -type f | grep ".ss$" \
+	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	3291 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/all
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    # the -ram=8g will allow only one job per node to slow this down since
+    #	it would run too fast otherwise
+    para -ram=8g create jobList
+    para try ... check ... etc ...
+    para -maxJob=64 push
+    para time > run.time
+# Completed: 3291 of 3291 jobs
+# CPU time in finished jobs:       3580s      59.66m     0.99h    0.04d  0.000 y
+# IO & Wait Time:                 21571s     359.52m     5.99h    0.25d  0.001 y
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest finished job:              31s       0.52m     0.01h    0.00d
+# Submission to last job:          1286s      21.43m     0.36h    0.01d
+
+    # make downloads
+    mkdir downloads
+
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP7way.wigFix.gz) &
+    #	real    4m11.100s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phyloP7way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/anoCar2/chrom.sizes \
+	phyloP7way.bw) > bigWig.log 2>&1 &
+    egrep "real|VmPeak" bigWig.log
+    # pid=1977: VmPeak:      2291148 kB
+    #	real    2m47.897s
+
+    bigWigInfo phyloP7way.bw 
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 348,394,293
+# primaryIndexSize: 14,137,804
+# zoomLevels: 10
+# chromCount: 3186
+# basesCovered: 209,259,312
+# mean: 0.433542
+# min: -1.565000
+# max: 2.266000
+# std: 0.726042
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phyloP7way.wigFix.gz \
+	| wigEncode stdin phyloP7way.wig phyloP7way.wib) &
+    #	Converted stdin, upper limit 2.27, lower limit -1.56
+    #	real    1m3.017s
+
+    du -hsc *.wi?
+    #	200M    phyloP7way.wib
+    #	44M     phyloP7way.wig
+    #	244M    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP7way.wib /gbdb/anoCar2/multiz7way/phyloP7way.wib
+    nice hgLoadWiggle -pathPrefix=/gbdb/anoCar2/multiz7way anoCar2 \
+	phyloP7way phyloP7way.wig
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh anoCar2 phyloP7way
+# db.table      min max mean count sumData stdDev viewLimits
+# anoCar2.phyloP7way      -1.565 2.266 0.433542 209259312 9.07227e+07 0.726042
+# viewLimits=-1.565:2.266
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=anoCar2 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phyloP7way > histogram.data 2>&1
+    #	real    0m19.396s
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000233
+# median 0.000518
+# Q3 0.000759
+# average 0.001003
+# min 0.000000
+# max 0.110084
+# count 997
+# total 1.000009
+# standard deviation 0.004194
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Lizard anoCar2 Histogram phyloP7way track"
+set xlabel " phyloP7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.007]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# download data for 7-way (DONE - 2011-01-19 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/anoCar2/phastCons7way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/anoCar2/phastCons7way
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/cons/all/downloads/phastCons7way.wigFix.gz \
+	./phastCons7way.wigFix.gz
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/cons/all/phastCons7way.bw \
+	./phastCons7way.bw
+
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/cons/all/all.mod \
+	./vertebrate.mod
+    # use a README from a recent multiz like this, this one is from panTro3
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/cons/README.txt .
+    md5sum * > /hive/data/genomes/anoCar2/bed/multiz7way/cons/md5sum.txt
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/cons/md5sum.txt .
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/anoCar2/phyloP7way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/anoCar2/phyloP7way
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/all/downloads/phyloP7way.wigFix.gz \
+	./phyloP7way.wigFix.gz
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/all/phyloP7way.bw \
+	./phyloP7way.bw
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/run.phyloP/primate.mod \
+	./primate.mod
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/run.phyloP/all.mod \
+	./vertebrate.mod
+    # use a README from a recent multiz like this, this one is from panTro3
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/README.txt .
+    md5sum * > /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/md5sum.txt
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/md5sum.txt .
+
+    mkdir /hive/data/genomes/anoCar2/bed/multiz7way/downloads
+    cd /hive/data/genomes/anoCar2/bed/multiz7way/downloads
+    # this was already done elsewhere:
+    grep TREE ../cons/all/all.mod | sed -e "s/TREE: //" > 7way.nh
+    /cluster/bin/phast/tree_doctor --rename \
+"anoCar2->Lizard; hg19->Human; xenTro2->X_tropicalis; galGal3->Chicken; ornAna1->Platypus; mm9->Mouse; gasAcu1->Stickleback;" \
+	t.nh > anoCar2.commonNames.7way.nh
+    rm t.nh
+
+    time cp -p ../anno/anoCar2.7way.maf ./multiz7way.maf
+    #	real    1m13.847s
+    time gzip multiz7way.maf
+    #	real    9m46.886s
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/anoCar2/multiz7way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/anoCar2/multiz7way
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/downloads/7way.nh .
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/downloads/anoCar2.commonNames.7way.nh .
+    ln -s \
+/hive/data/genomes/anoCar2/bed/multiz7way/downloads/multiz7way.maf.gz .
+
+    # use a README from a recent multiz like this, this one is from danRer7
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/downloads/README.txt .
+
+    md5sum *.nh *.gz *.txt \
+	> /hive/data/genomes/anoCar2/bed/multiz7way/downloads/md5sum.txt
+    ln -s /hive/data/genomes/anoCar2/bed/multiz7way/downloads/md5sum.txt .
+
+#############################################################################
+# hgPal downloads (DONE 2011-05-18 braney)
+#   FASTA from 7way for ensGene
+
+    ssh hgwdev
+    screen
+    bash
+    rm -rf /cluster/data/anoCar2/bed/multiz7way/pal
+    mkdir /cluster/data/anoCar2/bed/multiz7way/pal
+    cd /cluster/data/anoCar2/bed/multiz7way/pal
+    for i in `cat ../species.list`; do echo $i; done > order.lst
+
+    mz=multiz7way
+    gp=ensGene
+    db=anoCar2
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+# real    21m50.852s
+# user    4m50.684s
+# sys     3m10.510s
+
+
+    mz=multiz7way
+    gp=ensGene
+    db=anoCar2
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc &
+
+    # we're only distributing exons at the moment
+    mz=multiz7way
+    gp=ensGene
+    db=anoCar2
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+

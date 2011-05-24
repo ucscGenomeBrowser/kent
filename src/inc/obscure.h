@@ -169,4 +169,6 @@ void rangeFromMinMaxMeanStd(double minVal, double maxVal, double mean, double st
 void printVmPeak();
 /* print to stderr peak Vm memory usage (if /proc/ business exists) */
 
+boolean nameInCommaList(char *name, char *commaList);
+/* Return TRUE if name is in comma separated list. */
 #endif /* OBSCURE_H */
