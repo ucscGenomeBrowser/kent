@@ -163,8 +163,6 @@ taxId 6239
     ln -s /hive/data/genomes/ce10/ce10.2bit .
 
 #########################################################################
-
-#########################################################################
 # MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-23 - Hiram)
     # Use -repMatch=100 (based on size -- for human we use 1024, and 
     # worm size is ~3.4% of human judging by gapless ce4 vs. hg18 genome 
@@ -182,3 +180,74 @@ taxId 6239
     #	request rsync to cluster nodes
 
 #########################################################################
+# GENBANK AUTO UPDATE (DONE - 2010-09-09 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add ce10 just before ce6
+
+# ce10 (C. elegans)
+ce10.serverGenome = /hive/data/genomes/ce10/ce10.2bit
+ce10.clusterGenome = /scratch/data/ce10/ce10.2bit
+ce10.ooc = /scratch/data/ce10/ce10.11.ooc
+ce10.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+ce10.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+ce10.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+ce10.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+ce10.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+ce10.maxIntron = 100000
+ce10.lift = no
+ce10.genbank.mrna.xeno.load = yes
+ce10.refseq.mrna.xeno.load = yes
+ce10.downloadDir = ce10
+# ce10.upstreamGeneTbl = refGene
+# ce10.upstreamMaf = multiz6way /hive/data/genomes/ce10/bed/multiz6way/species.lst
+
+    git commit -m "Added ce10 C. elegans WS220" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial ce10 &
+    #	logFile:  var/build/logs/2011.05.24-09:14:56.ce10.initalign.log
+XXX - running 
+    #	real    118m26.190s
+    # this had a temporary failure:
+# Cannot allocate memory
+# can't fork
+# command failed: gbAlignInstall  -noMigrate -workdir=work/initial.ce10/align -orgCats=native genbank.179.0 daily.0826 mrna ce10 at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272. at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272.
+# command failed: gbAlignFinish -workdir=work/initial.ce10/align  -noMigrate ce10 at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272. at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272.
+    # continuing
+    time ./etc/align-genbank -finish -workdir work/initial.ce10/align
+    #	var/build/logs/2010.09.09-15:09:26.align.log
+    #	real    0m47.281s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ce10
+    #	logFile: var/dbload/hgwdev/logs/2010.09.09-15:11:20.dbload.log
+    #	real    24m52.293s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add ce10 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added ce10 - C. elegans WS210" \
+	etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+###############################################################################
+# reset default position, same as ce4/ce6/ce9 on the ZC101 / unc-52 locus
+#	(DONE - 2011-05-24 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrII:14646301-14667800"
+	where name="ce10";' hgcentraltest
+
+############################################################################
