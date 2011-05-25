@@ -97,7 +97,7 @@ if (!cartVarExists(cart, "tool_id"))
     cgiMakeHiddenVar("tool_id", "ucsc_table_direct1");
 else
     cgiMakeHiddenVar("tool_id", cartString(cart, "tool_id"));
-safef(selfUrl, sizeof(selfUrl), "http://%s%s", cgiServerName(), cgiScriptName());
+safef(selfUrl, sizeof(selfUrl), "http://%s%s", cgiServerNamePort(), cgiScriptName());
 cgiMakeHiddenVar("URL", selfUrl);
 hPrintf("\n");
 /* forward user parameters */

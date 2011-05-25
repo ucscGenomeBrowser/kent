@@ -12002,7 +12002,6 @@ hgsql mm9 -e 'drop table if exists allMm9RS_BW; \
 # create corresponding trackDb.ra section and html description page.
 
 
-
 ############################################################################
 # Nuclear Lamina (DONE 2011-04-04 - Chin)
 #
@@ -12024,7 +12023,8 @@ hgsql mm9 -e 'drop table if exists allMm9RS_BW; \
     # Download data
     mkdir /hive/data/outside/vansteensel
     cd /hive/data/outside/vansteensel
-    # Raw GEO data
+    # Raw GEO data which we did not use at this time,
+    # get them any way to keep data in sync for the future
     wget --timestamping \
       ftp://ftp.ncbi.nih.gov/pub/geo/DATA/supplementary/series/GSE17051/GSE17051_RAW.tar
     # SOFT formatted family file(s)
@@ -12163,6 +12163,15 @@ done
          /gbdb/mm9/wib/
     done
 
+    # Create the laminB1 supertrack definitions in mm9/trackDb.ra 
+    # copy the descrition html to right place
+    cp /hive/data/outside/vansteensel/2011-05-11/mouse_laminB1_DamID.html \
+    /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/mouse/mm9/laminB1Mm9.html
+    cp /hive/data/outside/vansteensel/2011-05-11/MolCell2010_cartoon.png \
+     /cluster/home/chinhli/kent/src/hg/htdocs/images/laminB1Mm9.png
+    # edit/rescale the html and png files
+    # add the new html and image files to git
+    
     # collect wiggle stats for track definition:
     for WIG in AC EF ES NP
     do
@@ -12237,11 +12246,11 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/bosTau6/bed/blastz.mm9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         /hive/data/genomes/mm9/bed/lastzBosTau6.2011-05-17/DEF \
-        -swap \
+        -swap -syntenicNet  \
         -noLoadChainSplit \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
-    #   real     40m23.455s
+    #   real     53m5.237s
     cat fb.bosTau6.chainMm9Link.txt
     # 688894115 bases of 2649682029 (25.999%) in intersection
     cd /hive/data/genomes/bosTau6/bed

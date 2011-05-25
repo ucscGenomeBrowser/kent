@@ -2,7 +2,9 @@
 
 # create tableList show tables cache for all assemblies (redmine #3780)
 
-# skip first "database" (which is information_schema)
-for db in `hgsql information_schema -e "show databases" | tail -n +3` ; do
-    ./makeTableList $db
+for db in `hgsql information_schema -e "show databases" | tail -n +2` ; do
+    if [ "$db" != "information_schema" ]
+        then
+        ./makeTableList $db
+    fi
 done

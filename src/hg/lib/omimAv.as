@@ -9,4 +9,5 @@ table omimAv
     string repl1;		"part 1 of AA replacement"
     string repl2;		"part 2 of AA replacement"
     string dbSnpId;		"dbSNP ID if available"
+    string description;		"description"
 )
