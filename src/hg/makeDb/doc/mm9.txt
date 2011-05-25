@@ -12237,11 +12237,11 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/bosTau6/bed/blastz.mm9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         /hive/data/genomes/mm9/bed/lastzBosTau6.2011-05-17/DEF \
-        -swap \
+        -swap -syntenicNet  \
         -noLoadChainSplit \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
-    #   real     40m23.455s
+    #   real     53m5.237s
     cat fb.bosTau6.chainMm9Link.txt
     # 688894115 bases of 2649682029 (25.999%) in intersection
     cd /hive/data/genomes/bosTau6/bed
