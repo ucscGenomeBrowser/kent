@@ -1081,8 +1081,8 @@ karyotype cancer
 sex F
 tissue lymphocyte
 vendorName Dr. Jennifer Brown, Department of Medicine, Harvard Medical School.
-vendorId
-orderUrl
+vendorId N/A
+orderUrl http://www.dfhcc.harvard.edu/membership/profile/member/669/0/
 termId BTO:0001546
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001546
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:CLL_Crawford_protocol.pdf
@@ -1154,7 +1154,7 @@ term Dnd41
 tag Dnd41
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human T cell leukemia with Notch mutation
 lineage
 karyotype
@@ -1188,7 +1188,7 @@ term FetalPBDE
 tag FetalPBDE
 type Cell Line
 tier 3
-organism human
+organism Human
 description Peripheral blood-derived erythroblasts from 16-19 week human fetal liver
 lineage 
 karyotype normal
@@ -1408,6 +1408,8 @@ organism Human
 description lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
 tissue Blood
 vendorName Hunt Willard at Duke University
+vendorId N/A
+orderUrl http://www.genome.duke.edu/people/faculty/willard/
 karyotype unknown
 lineage mesoderm
 termId BTO:0002026 (non-specific)
@@ -1423,6 +1425,8 @@ organism Human
 description lymphoblastoid, cloned for paternal X inactivation, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
 tissue Blood
 vendorName Hunt Willard at Duke University
+vendorId N/A
+orderUrl http://www.genome.duke.edu/people/faculty/willard/
 karyotype unknown
 lineage mesoderm
 termId BTO:0002026 (non-specific)
@@ -1757,7 +1761,7 @@ term HAc
 tag HAc
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Astrocytes-cerebellar
 lineage Astrocytic
 karyotype normal
@@ -1787,7 +1791,7 @@ term HA-h
 tag HAh
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Astrocytes-hippocampal
 lineage Astrocytic
 karyotype normal
@@ -1818,7 +1822,7 @@ protocol HudsonAlpha:HAL_Myers_protocol.pdf
 term HA-sp
 tag HA-sp
 type Cell Line
-organism human
+organism Human
 description Human astrocytes spinal cord
 tissue Spinal cord
 vendorName ScienCell
@@ -1986,14 +1990,13 @@ tag  Hepatocytes
 type Cell Line
 tier 3
 organism Human
-target  Hepatocytes
 description Primary Human Hepatocytes, liver perfused by enzymes to generate single cell suspension
 lineage endoderm
 karyotype  normal
 sex B
 tissue  Liver
 vendorName  zen-bio
-vendorId
+vendorId 
 orderUrl http://www.zen-bio.com/
 termId BTO:0000575
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000575
@@ -2003,7 +2006,7 @@ term HFF
 tag HFF
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Foreskin Fibroblast
 lineage Fibroblast
 karyotype normal
@@ -2020,7 +2023,7 @@ term HFF-Myc
 tag HFFMyc
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Foreskin Fibroblast Cells Expressing Canine cMyc
 lineage Fibroblast
 karyotype normal (cMyc)
@@ -2041,6 +2044,9 @@ tissue Liver
 description Human Fetal Liver 11 weeks, consented fetal liver samples were isolated from legally aborted fetuses at 11 weeks gestation
 tier 3
 lineage endoderm
+vendorName Unknown
+vendorId N/A
+orderUrl N/A
 color 189,0,157
 sex U
 protocol HFL11W_and_HFL24W_Myers_protocols.pdf
@@ -2052,6 +2058,9 @@ organism Human
 tissue Liver
 description Human Fetal Liver 24 weeks, consented fetal liver samples were isolated from legally aborted fetuses at 24 weeks gestation
 tier 3
+vendorName Unknown
+vendorId N/A
+orderUrl N/A
 lineage endoderm
 color 189,0,157
 sex U
@@ -2288,15 +2297,14 @@ tag HPDE6E6E7
 type Cell Line
 tier 3
 organism Human
-target HPDE6-E6E7
 description normal human pancreatic duct cells immortalized with E6E7 gene of HPV
 lineage endoderm
 karyotype  Unknown
-sex  F
+sex F
 tissue  Pancreatic Duct
 vendorName  Dr. Ming-Sound Tsao, Ontario Cancer Institute
 vendorId
-orderUrl
+orderUrl http://www.uhnresearch.ca/researchers/profile.php?lookup=6118
 termId BTO:0002362
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002362
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:HPDE6-E6E7_Crawford_protocol.pdf
@@ -2365,7 +2373,7 @@ term HRGEC
 tag HRGEC
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human Renal Glomerular Endothelial Cells
 lineage Endothelial
 karyotype normal
@@ -2482,11 +2490,10 @@ tag  Huh7
 type Cell Line
 tier 3
 organism Human
-target  Huh-7
 description  Hepatocellular carcinoma
 lineage  Hepatocyte derived carcinoma taken from a liver tumor
 karyotype  Unknown
-sex  M
+sex M
 tissue  Liver
 vendorName  Ravi Jhaveri, Duke University
 vendorId
@@ -2500,11 +2507,10 @@ tag  Huh7.5
 type Cell Line
 tier 3
 organism Human
-target  Huh-7.5
 description  Hepatocellular carcinoma
 lineage  Hepatocyte derived carcinoma taken from a liver tumor and selected for high levels of hepatitis C replication
 karyotype  Unknown
-sex  M
+sex M
 tissue  Liver
 vendorName  Ravi Jhaveri, Duke University
 vendorId
@@ -2544,11 +2550,10 @@ tag  iPS
 type Cell Line
 tier 3
 organism Human
-target  iPS
 description  induced pluripotent stem cell
 lineage  induced pluripotent stem cell derived from skin fibroblast
 karyotype  Unknown
-sex  B
+sex B
 tissue  iPS stem cell derived from skin fibroblast
 vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId
@@ -2578,7 +2583,7 @@ term LHCN-M2
 tag LHCNM2
 type Cell Line
 tier 3
-organism human
+organism Human
 description skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old caucasian heart transplant donor, immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN"), Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
 lineage
 karyotype
@@ -2630,7 +2635,7 @@ term Loucy
 tag Loucy
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human T cell leukemia
 lineage 
 karyotype 
@@ -2746,7 +2751,7 @@ term Monocytes-CD14+
 tag MonoCD14
 type Cell Line
 tier 3
-organism human
+organism Human
 description Monocytes-CD14+ are CD14-positive cells from human leukapheresis product
 lineage Monocytic
 karyotype normal
@@ -2782,8 +2787,8 @@ lineage mesoderm
 description acute promyelocytic leukemia cell line. (PMID: 1995093)
 vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
 #put universities in for Stam and Snyder
-vendorId
-orderUrl
+vendorId (see protocol documents)
+orderUrl N/A
 lineage
 karyotype cancer
 termId BTO:0002489
@@ -2943,8 +2948,8 @@ organism Human
 description Dedifferentiated human pancreatic islets
 tissue Pancreas
 vendorName National Disease Research Interchange (NDRI).
-vendorId
-orderUrlhttp://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
+vendorId N/A 
+orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
 termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex B
@@ -2958,8 +2963,8 @@ organism Human
 description human pancreatic islets
 tissue Pancreas
 vendorName Refer to protocol documents for differing sources
-vendorId
-orderUrl
+vendorId ;
+orderUrl ;
 termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex M
@@ -2969,17 +2974,15 @@ protocol Duke/UNC/UTA/EBI_Open_Chromatin:PanIslets_Crawford_protocol.pdf Duke/UN
 term PBDE
 tag PBDE
 type Cell Line
-organism human
+organism Human
 description Human peripheral blood-derived erythroblasts
 tissue Blood
 vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
-#vendorId (the ID of the cell type in the vendor's catalog)
-#orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html)
-#karyotype (optional human-readable karyotype, for .html page)
-#lineage (optional human-readable source of cell lines, e.g. 18 year old male)
+vendorId N/A
+vendorName Farnham lab
+orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
 termId BTO:0000574 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000574
-#color (specifies color code for track data of this cell type, rgb values)
 sex M
 tier 3
 protocol SYDH_TFBS(Farnham):PBDE_Farnham_protocol.pdf
@@ -2987,10 +2990,12 @@ protocol SYDH_TFBS(Farnham):PBDE_Farnham_protocol.pdf
 term PBMC
 tag PBMC
 type Cell Line
-organism human
+organism Human
 description Peripheral blood mononuclear cells
 tissue Blood
 vendorName PBMC cells provided by E. Bresnick, UW Madison
+vendorId N/A
+orderUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
 sex M
@@ -3038,7 +3043,7 @@ tier 3
 description Human Prostate Epithelial Cell line
 tissue Prostate
 vendorName Lonza
-VendorId CC-2555
+vendorId CC-2555
 orderUrl http://www.lonza.com/
 lineage Epithelial
 karyotype normal
@@ -3224,11 +3229,10 @@ tag  Stellate
 type Cell Line
 tier 3
 organism Human
-target  Stellate
 description  Human Hepatic Stellate Cells
 lineage  Liver that was perfused with collagenase and sellected for hepatic stellate cells by density gradient
 karyotype  normal
-sex  F
+sex F
 tissue  Liver
 vendorName  Steve Choi, Duke University
 vendorId
@@ -3241,7 +3245,7 @@ term T-REx-HEK293
 tag tHEK293
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor
 lineage Human embryonic kidney, ATCC number CRL-1573
 karyotype cancer, hypotriploid, XXX
@@ -3295,9 +3299,9 @@ organism Human
 tissue Blood
 lineage mesoderm
 description primary human Th1 T cells
-vendorName
+vendorName Stam lab
 vendorId None (primary pheresis of single normal subject)
-orderUrl
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 karyotype unknown
 termId BTO:0001678
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001678
@@ -3312,9 +3316,9 @@ organism Human
 description Primary human Th2 T cells
 tissue Blood
 lineage mesoderm
-vendorName
+vendorName Stam lab
 vendorId None (primary pheresis of single normal subject)
-orderUrl
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 karyotype unknown
 termId BTO:0001679
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001679
@@ -3405,7 +3409,7 @@ lineage
 karyotype
 termId BTO:0001178 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001178
-sex  M
+sex M
 tier 3
 protocol UW_Stam:WERI-Rb-1_Stam_protocol.pdf
 
@@ -3413,7 +3417,7 @@ term WI-38
 tag WI38
 type Cell Line
 tier 3
-organism human
+organism Human
 description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct
 lineage Fibroblast
 karyotype normal (RAF)
@@ -4124,7 +4128,7 @@ tag ZHBTC4
 type Cell Line
 organism Mouse
 tissue
-category primaryCell
+category primaryCells
 age E0
 strain 129/Ola
 description Undifferentiated mouse embryonic stem cells
@@ -4218,7 +4222,7 @@ targetDescription Activating transcription factor 3. A bZIP transcription factor
 orderUrl http://www.scbt.com/datasheet-188-atf-3-c-19-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-188
-lab Struhl, Myers
+lab Myers
 targetId GeneCard:ATF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF3
 validation ATF3(Immunoblot):human_ATF3_validation_Myers.pdf
@@ -4327,7 +4331,7 @@ type Antibody
 target BHLHE40
 antibodyDescription Dec-1(S-8) is a mouse monoclonal IgG2b antibody raised against recombinant DEC1 of human origin. Recommended for detection of DEC1 of m and h origin by WB, IP and ELISA.
 targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differe
-vendorName Santa Cruz Biotech
+vendorName Santa Cruz Biotech,
 vendorId sc-101023
 orderUrl http://www.scbt.com/datasheet-101023-dec1-s-8-antibody.html
 lab Myers
@@ -4513,7 +4517,7 @@ targetDescription CTCF zinc finger transcription factor. A sequence specific DNA
 orderUrl http://www.millipore.com/catalogue/item/07-729
 vendorName Millipore
 vendorId 07-729
-lab Bernstein, Iyer
+lab Hardison
 lots 1350637, DAM1472197
 targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
@@ -4644,8 +4648,8 @@ targetDescription  This gene encodes a member of the E2F transcription factor pr
 vendorName Santa Cruz Biotech
 vendorId sc-22823
 orderUrl http://www.scbt.com/datasheet-22823-e2f-6-h-50-antibody.html
-lab  Myers
-lots  D1206
+lab Myers
+lots D1206
 targetId E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
 validation E2F6_(SC-22823)(Immunoblot,MassSpec):human_E2F6_SC-22823_validation_Myers.pdf
@@ -4660,8 +4664,8 @@ targetDescription  Early B-cell factor 1.  Transcriptional activator which recog
 vendorName Santa Cruz Biotech
 vendorId sc-137065
 orderUrl http://www.scbt.com/datasheet-137065-ebf-c-8-antibody.html
-lab  Myers
-lots  J0505
+lab Myers
+lots J0505
 targetId EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation EBF1_(SC-137065)(Immunoprecipitation-WesternBlotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
@@ -4765,8 +4769,8 @@ targetDescription  This gene encodes an E26 transformation-specific related tran
 vendorName Santa Cruz Biotech
 vendorId sc-631
 orderUrl http://www.scbt.com/datasheet-631-elf-1-c-20-antibody.html
-lab  Myers
-lots  L2707
+lab Myers
+lots L2707
 targetId GeneCards:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
 validation ELF1_(SC-631)(Immunoprecipitation-WesternBlot,MassSpec):human_ELF1_SC-631_validation_Myers.pdf
@@ -4837,6 +4841,8 @@ targetDescription epitope corresponding to amino acids 81-160 mapping near the N
 orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-66882
+targetId GeneCard:ESRRA
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESRRA
 lab Snyder
 validation missing
 
@@ -4850,6 +4856,8 @@ targetDescription ETS transcriptions factors, such as ETS1, regulate numerous ge
 vendorName Santa Cruz Biotech
 vendorId sc-350
 orderUrl http://www.scbt.com/datasheet-350-ets-1-c-20-antibody.html
+targetId GeneCard:ETS1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ETS1
 lab Myers
 validation ETS1(Immunoprecipitation-WesternBlot,MassSpec):human_ETS1_validation_Myers.pdf
 
@@ -4862,7 +4870,7 @@ targetDescription  The Fos gene family consists of 4 members: FOS, FOSB, FOSL1, 
 vendorName Santa Cruz Biotech
 vendorId sc-183
 orderUrl http://www.scbt.com/datasheet-183-fra-1-n-17-antibody.html
-lab  Myers
+lab Myers
 lots  I0809
 targetId GeneCard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
@@ -4907,7 +4915,7 @@ targetDescription  This gene encodes a member of the forkhead class of DNA-bindi
 vendorName Santa Cruz Biotech
 vendorId sc-101058
 orderUrl http://www.scbt.com/datasheet-101058-hnf-3alpha-q-6-antibody.html
-lab  Myers
+lab Myers
 lots  A2706
 targetId GeneCards:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
@@ -4951,9 +4959,9 @@ antibodyDescription Mouse monoclonal, GABPa(G-1), IgG1
 vendorName Santa Cruz Biotech
 vendorId sc-28312
 orderUrl http://www.scbt.com/product.php?datasheet=28312
-targetId
-targetUrl
-lab Myers / Wold
+targetId GeneCard:GABPB1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPB1
+lab Myers
 lots F1804
 validation GABP(Immunoprecipitation-WesternBlot,MassSpec):human_GABP_validation_Myers.pdf
 
@@ -4994,7 +5002,7 @@ targetDescription  GATA1 is erythroid-specific and is responsible for the regula
 vendorName Santa Cruz Biotech
 vendorId sc-266
 orderUrl http://www.scbt.com/datasheet-266-gata-1-n1-antibody.html
-lab  Snyder
+lab Snyder
 lots
 targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
@@ -5009,7 +5017,7 @@ targetDescription GATA binding protein 2
 antibodyDescription Rabbit polyclonal
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
 vendorId   ;
-orderUrl
+orderUrl http://molpharm.wisc.edu/people/faculty/bresnick/bresnick.html
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Farnham
@@ -5038,7 +5046,7 @@ targetDescription  This gene encodes a protein which belongs to the GATA family 
 vendorName Santa Cruz Biotech
 vendorId sc-268
 orderUrl http://www.scbt.com/datasheet-268-gata-3-hg3-31-antibody.html
-lab  Myers
+lab Myers
 lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
@@ -5084,8 +5092,8 @@ orderUrl http://www.scbt.com/datasheet-1002-gr-p-20-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-1002
 lab Snyder
-targetId
-targetUrl
+targetId GeneCard:NR3C1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C1
 validation missing
 
 term GTF2B
@@ -5196,7 +5204,7 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me3(Dot_blot):human_H3K4me3_validation_Bernstein.pdf
 
-##This does not appear in metaDb
+##This does not appear in metaDb 5/23/11
 term H3K4me3B
 tag H3K04ME3b
 type Antibody
@@ -5292,14 +5300,9 @@ validation H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf
 term H3K9me3_(9754)
 tag H3K09ME3n
 type Antibody
-antibodyDescription Rabbit polyclonal antibody was produced by immunizing animals with a synthetic\
- peptide corresponding to the amino terminus of histone H3 in which Lys9 is tri-methylated. Antibo\
-dy was purified by protein A and peptide affinity chromatography.
+antibodyDescription Rabbit polyclonal antibody was produced by immunizing animals with a synthetic peptide corresponding to the amino terminus of histone H3 in which Lys9 is tri-methylated. Antibody was purified by protein A and peptide affinity chromatography.
 target H3K9me3
-targetDescription Tri-Methyl-Histone H3 (Lys9) Antibody detects endogenous levels of histone H3 on\
-ly when tri-methylated on Lys9. The antibody does not cross-react with non-methylated, mono-methyl\
-ated, or di-methylated Lys9. In addition, the antibody does not cross-react with non-methylated, m\
-ono-methylated, di-methylated or tri-methylated histone H3 Lys4, Lys27, Lys36 or histone H4 Lys20.
+targetDescription Tri-Methyl-Histone H3 (Lys9) Antibody detects endogenous levels of histone H3 only when tri-methylated on Lys9. The antibody does not cross-react with non-methylated, mono-methylated, or di-methylated Lys9. In addition, the antibody does not cross-react with non-methylated, mono-methylated, di-methylated or tri-methylated histone H3 Lys4, Lys27, Lys36 or histone H4 Lys20.
 vendorName Cell Signaling
 vendorId 9754
 orderUrl http://www.cellsignal.com/products/9754.html
@@ -5422,6 +5425,7 @@ tag HAE2F1
 type Antibody
 target HA-E2F1
 targetDescription The HA-E2F1 protein is a derivative of E2F1, a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses. The E2F proteins contain several evolutionary conserved domains found in most members of the family. These domains include a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain. This version of E2F1 includes an N terminal HA tag and a modified ER ligand binding domain to allow regulated translocation to the nucleus.antibodyDescription Mouse monoclonal - HA.11 clone 16B12 is a mouse monoclonal antibody raised against the twelve amino acids peptide CYPYDVPDYASL. The HA.11 antibody recognizes HA epitopes located in the middle of protein sequences as well as at the N- or C-terminus.
+antibodyDescription Monoclonal antibody HA.11 was raised against the twelve amino acid peptide CYPYDVPDYASL. This second-generation HA antibody is an excellent substitute for the 12CA5 monoclonal antibody. The HA.11 antibody recognizes the influenza hemagglutinin epitope (YPYDVPDYA) which has been used extensively as a general epitope tag in expression vectors. The extreme specificity of the antibody allows unambiguous identification and quantitative analysis of the tagged protein. The HA.11 antibody recognizes HA epitopes located in the middle of protein sequences as well as at the N- or C-terminus.
 orderUrl https://store.crpinc.com/datasheet.aspx?catalogno=MMS-101P
 vendorName Covance
 vendorId MMS-101P
@@ -5439,7 +5443,7 @@ targetDescription  This gene product belongs to the histone deacetylase family. 
 vendorName Santa Cruz Biotech
 vendorId sc-6296
 orderUrl http://www.scbt.com/datasheet-6296-hdac2-c-19-antibody.html
-lab  Myers
+lab Myers
 lots  G0307
 targetId GeneCards:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
@@ -5464,8 +5468,7 @@ tag HMGN3
 type Antibody
 target HMGN3
 antibodyDescription Rabbit polyclonal. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry.
-targetDescription HMGN3 is a high-mobility group protein. These proteins are small, 8 top 11 kDa, ubiquitous proteins believed to play a role in chromatin structure. HMGNs bind to nucleosomes between the histone core and DNA and reduce chromatin compaction. As a r
-esult HMGNs, HMGN3 included, are believed to increase access to DNA for DNA replication, repair and transcription. HMGN3 has specifically been implicated in the action of Thyroid horomone receptors.
+targetDescription HMGN3 is a high-mobility group protein. These proteins are small, 8 top 11 kDa, ubiquitous proteins believed to play a role in chromatin structure. HMGNs bind to nucleosomes between the histone core and DNA and reduce chromatin compaction. As a result HMGNs, HMGN3 included, are believed to increase access to DNA for DNA replication, repair and transcription. HMGN3 has specifically been implicated in the action of Thyroid horomone receptors.
 orderUrl http://www.acris-antibodies.com/NB100-61076.htm
 vendorName Acris Antibodies
 vendorId NB100-61076
@@ -5537,8 +5540,7 @@ tag INI1
 type Antibody
 target INI1
 antibodyDescription Ini1 (BAF47, SMARCB1) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex.
-targetDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus
-of Ini1 of human origin.
+targetDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin.
 orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-17796
@@ -5585,7 +5587,7 @@ targetDescription  The protein encoded by this gene belongs to the IRF (interfer
 vendorName Santa Cruz Biotech
 vendorId sc-6059
 orderUrl http://www.scbt.com/datasheet-6059-irf-4-m-17-antibody.html
-lab  Myers
+lab Myers
 lots  IO1O6
 targetId IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
@@ -5687,7 +5689,7 @@ targetDescription  The protein encoded by this gene is a member of the basic hel
 vendorName Santa Cruz Biotech
 vendorId sc-197
 orderUrl http://www.scbt.com/datasheet-197-max-c-17-antibody.html
-lab  Myers, Snyder
+lab Myers
 lots  J0809
 targetId GeneCards:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
@@ -5850,8 +5852,8 @@ orderUrl http://www.scbt.com/datasheet-22810-gabp-alpha-h-180-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-22810
 lab Snyder
-targetId
-targetUrl
+targetId GeneCard:GABPA
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPA
 validation missing
 
 term NRSF
@@ -5865,8 +5867,8 @@ vendorId  (Made by Protein Expression Center: pec@caltech.edu)
 orderUrl http://www.cns.caltech.edu/people/faculty/anderson.html
 lab Myers / Wold
 lots 20070905JV
-targetId
-targetUrl
+targetId GeneCard:REST
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
 validation missing
 
 
@@ -5973,8 +5975,7 @@ tag PGC1A
 type Antibody
 target PGC1A
 antibodyDescription rabbit polyclonal IgG
-targetDescription The protein encoded by this gene is a transcriptional coactivator that regulates the genes involved in energy metabolism. This protein interacts with PPARgamma, which permits the interaction of this protein with multiple transcription factors. This protein can interact with, and regulate the activities of, cAMP response element binding protein (CREB) and nuclear respiratory f
-actors (NRFs).
+targetDescription The protein encoded by this gene is a transcriptional coactivator that regulates the genes involved in energy metabolism. This protein interacts with PPARgamma, which permits the interaction of this protein with multiple transcription factors. This protein can interact with, and regulate the activities of, cAMP response element binding protein (CREB) and nuclear respiratory factors (NRFs).
 orderUrl http://www.scbt.com/datasheet-13067-pgc-1-h-300-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-13067
@@ -6009,8 +6010,8 @@ vendorId MMS-126R
 orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
 lab Farnham, Iyer, Snyder
 lots 14861301, 14922701
-targetId
-targetUrl
+targetId GeneCard:POL2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 validation Pol2(Immunoblot):human_Pol2_validation_Synder.pdf
 
 term Pol2(b)
@@ -6033,8 +6034,7 @@ tag POL24H8
 type Antibody
 target POL24H8
 antibodyDescription Mouse monoclonal to RNA polymerase II CTD repeat YSPTSPS antibody (4H8) - ChIP Grade
-targetDescription This gene encodes the largest subunit of RNA polymerase II, the polymerase responsible for synthesizing messenger
-RNA in eukaryotes
+targetDescription This gene encodes the largest subunit of RNA polymerase II, the polymerase responsible for synthesizing messenger RNA in eukaryotes
 vendorName Abcam
 vendorId ab5408
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-ChIP-Grade-ab5408.html
@@ -6067,8 +6067,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-21754
 orderUrl http://www.scbt.com/product.php?datasheet=21754
 lab Snyder
-targetId
-targetUrl
+targetId GeneCard:POLR3G
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
 validation missing
 
 term POU5F1_(SC-9081)
@@ -6208,7 +6208,7 @@ targetDescription  SETDB1 is a H3K9-selective histone methyltransferase, methyla
 vendorName Santa Cruz Biotech
 vendorId sc-66884
 orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
-lab  Farnham
+lab Farnham
 lots
 targetId Genecards:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Setdb1
@@ -6309,7 +6309,7 @@ targetDescription  Binds to GT and GC boxes promoters elements. Probable transcr
 vendorName Santa Cruz Biotech
 vendorId sc-645
 orderUrl http://www.scbt.com/datasheet-645-sp4-v-20-antibody.html
-lab  Myers
+lab Myers
 lots  F2609
 targetId SP4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP4
@@ -6455,7 +6455,7 @@ targetDescription  The intronless gene for this transcription coactivator is loc
 vendorName Santa Cruz Biotech
 vendorId sc-101167
 orderUrl http://www.scbt.com/datasheet-101167-taf-ii-p55-sq-8-antibody.html
-lab  Myers
+lab Myers
 lots  J1509
 targetId TAF7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
@@ -6655,7 +6655,7 @@ targetDescription  This gene encodes a member of the basic helix-loop-helix leuc
 vendorName Santa Cruz Biotech
 vendorId sc-8983
 orderUrl http://www.scbt.com/datasheet-8983-usf-1-h-86-antibody.html
-lab  Myers
+lab Myers
 lots  E2810
 targetId GeneCards:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
@@ -6684,7 +6684,7 @@ targetDescription  This gene encodes a member of the basic helix-loop-helix leuc
 vendorName Santa Cruz Biotech
 vendorId sc-862
 orderUrl http://www.scbt.com/datasheet-862-usf-2-c-20-antibody.html
-lab  Myers
+lab Myers
 lots  J0908
 targetId GeneCard:USF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
@@ -6770,7 +6770,7 @@ targetDescription  Plays a key role in the instruction of early lymphoid progeni
 vendorName Santa Cruz Biotech
 vendorId sc-34508
 orderUrl http://www.scbt.com/datasheet-34508-lrf-c-18-antibody.html
-lab  Myers
+lab Myers
 lots  H2406
 targetId GeneCards:ZBTB7A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB7A
@@ -8889,14 +8889,14 @@ description Unknown
 
 
 ## Organisms
-term human
-tag human
+term Human
+tag HUMAN
 type organism
 description human
 
-term mouse
-tag mouse
-type mouse
+term Mouse
+tag MOUSE
+type organism
 description mouse
 
 ## Tiers (used by cell types)
@@ -9035,7 +9035,7 @@ labInst BioChain
 labPi Myers
 labPiFull
 grantPi
-organism human
+organism Human
 
 term Broad
 tag Broad
@@ -9046,7 +9046,7 @@ labInst Broad Institute
 labPi Bernstein
 labPiFull Bradley Bernstein
 grantPi Bernstein
-organism human
+organism Human
 
 term BU
 tag BU
@@ -9057,7 +9057,7 @@ labInst Boston University
 labPi Tullius
 labPiFull Thomas Tullius
 grantPi Tullius
-organism human
+organism Human
 
 term CRG-Guigo
 tag CRG
@@ -9068,7 +9068,7 @@ labInst Genome Center for Genomic Regulation, Barcelona
 labPi Guigo
 labPiFull Roderic Guigo
 grantPi Guigo
-organism human
+organism Human
 
 term GIS-Ruan
 tag GisRuan
@@ -9079,7 +9079,7 @@ labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Ruan
-organism human
+organism Human
 
 term Sanger
 tag gencode
@@ -9090,7 +9090,7 @@ labInst Gencode
 labPi Hubbard
 labPiFull Tim Hubbard
 grantPi Hubbard
-organism human
+organism Human
 
 term SunyAlbany
 tag SUNY
@@ -9101,7 +9101,7 @@ labInst State University of New York at Albany
 labPi Tenenbaum
 labPiFull Scott Tenebaum
 grantPi Tenenbaum
-organism human
+organism Human
 
 term UCSC
 tag UCSC
@@ -9112,7 +9112,7 @@ labInst University of California at Santa Cruz
 labPi Kent
 labPiFull Jim Kent
 grantPi Kent
-organism human
+organism Human
 
 term UW
 tag UW
@@ -9123,7 +9123,7 @@ labInst University of Washington
 labPi Stam
 labPiFull John Stamatoyannopoulous
 grantPi Stam
-organism human
+organism Human
 
 
 ### Duke Labs
@@ -9138,7 +9138,7 @@ labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
 grantPi Crawford
-organism human
+organism Human
 
 term UT-A
 tag UT-A
@@ -9149,7 +9149,7 @@ labInst University of Texas at Austin
 labPi Iyer
 labPiFull Tara Iyer
 grantPi Crawford
-organism human
+organism Human
 
 term UNC
 tag UNC
@@ -9160,7 +9160,7 @@ labInst Univeristy of North Carolina
 labPi Lieb
 labPiFull Jason Lieb
 grantPi Crawford
-organism human
+organism Human
 
 ### HAIB Project Labs
 ### Caltech and HudsonAlpha
@@ -9174,7 +9174,7 @@ grantInst California Institute of Technology (Wold Lab)
 labPi Wold
 labPiFull Barbara Wold
 grantPi Myers
-organism human
+organism Human
 
 term HudsonAlpha
 tag HAIB
@@ -9185,7 +9185,7 @@ labInst Hudson Alpha Institute for Biotechnology
 labPi Myers
 labPiFull Richard Myers
 grantPi Myers
-organism human
+organism Human
 
 ### NHGRI Labs
 ###
@@ -9199,7 +9199,7 @@ labInst National Human Genome Research Institute
 labPi Elnitski
 labPiFull Laura Elnitski
 grantPi Elnitski
-organism human
+organism Human
 
 term NHGRI-Margulies
 tag NHGRI-Marigulies
@@ -9210,7 +9210,7 @@ labInst National Human Genome Research Institute
 labPi Margulies
 labPiFull Elliott Margulies
 grantPi Margulies
-organism human
+organism Human
 
 
 ### Transcriptome Project Labs
@@ -9219,14 +9219,14 @@ organism human
 term CSHL
 tag CSHL
 type lab
-project Transcriptome
+#project Transcriptome (should this be projectName?)
 label Gingeras - Cold Spring Harbor Laboratory
 description Gingeras - Cold Spring Harbor Laboratory
 labInst Cold Spring Harbor Laboratory
 labPi Gingeras
-labpiFull Thomas Gingeras
+labPiFull Thomas Gingeras
 grantPi Gingeras
-organism human
+organism Human
 
 term GIS
 tag  GIS
@@ -9237,7 +9237,7 @@ labInst Genome Institute of Singapore
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Gingeras
-organism human
+organism Human
 
 term Helicos
 tag Helicos
@@ -9248,7 +9248,7 @@ labInst Helicos BioScience Corporation
 labPi Kapranov
 labPiFull Philipp Kapranov
 grantPi Gingeras
-organism human
+organism Human
 
 term Affy
 tag  Affy
@@ -9259,7 +9259,7 @@ labInst Affymetrix
 labPi Gingeras
 labPiFull Thomas Gingeras
 grantPi Gingeras
-organism human
+organism Human
 
 term RIKEN
 tag  Riken
@@ -9270,7 +9270,7 @@ labName Riken
 labPi Carninci
 labPiFull Piero Carninci
 grantPi Gingeras
-organism human
+organism Human
 
 
 ### UMass Labs
@@ -9285,7 +9285,7 @@ labInst UMass
 labPi Dekker
 labPiFull Job Dekker
 grantPi Dekker
-organism human
+organism Human
 
 term UMass-Weng
 tag UMass-Weng
@@ -9296,7 +9296,7 @@ labInst UMass
 labPi Weng
 labPiFull Zhiping Weng
 grantPi Weng
-organism human
+organism Human
 
 
 #### The SYDH Project
@@ -9311,7 +9311,7 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism human
+organism Human
 
 term Yale
 tag  Yale
@@ -9322,7 +9322,7 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism human
+organism Human
 
 term Yale-Weissman
 tag  YaleWeis
@@ -9333,7 +9333,7 @@ labInst Yale
 labPi Weissman
 labPiFull Sherman Weissman
 grantPi Snyder
-organism human
+organism Human
 
 term Harvard
 tag  Harvard
@@ -9344,7 +9344,7 @@ labInst Harvard
 labPi Struhl
 labPiFull Kevin Struhl
 grantPi Snyder
-organism human
+organism Human
 
 term UCD
 tag UCD
@@ -9355,7 +9355,7 @@ labName UCD
 labPi Farnham
 labPiFull Peggy Farnham
 grantPi Snyder
-organism human
+organism Human
 
 
 ### ARRA human labs
@@ -9369,7 +9369,7 @@ labInst University of North Carolina / Boise State University
 labPi Giddings
 labPiFull Morgan Giddings
 grantPi Giddings
-organism human
+organism Human
 
 term UChicago
 tag UChicago
@@ -9380,7 +9380,7 @@ labInst University of Chicago
 labPi White
 labPiFull Kevin White
 grantPi White
-organism human
+organism Human
 
 
 
@@ -9396,7 +9396,7 @@ labInst Ludwig Institue for Cancer Research
 labPi Ren
 labPiFull Bing Ren
 grantPi Ren
-organism mouse
+organism Mouse
 
 term Caltech-m
 tag Caltech
@@ -9407,7 +9407,7 @@ labInst Caltech
 labPi Wold
 labPiFull Barbara Wold
 grantPi Hardison
-organism mouse
+organism Mouse
 
 term UMass-m
 tag  UMass
@@ -9418,7 +9418,7 @@ labInst University of Massachusettes
 labPi Dekker
 labPiFull Job Dekker
 grantPi Hardison
-organism mouse
+organism Mouse
 
 term Duke-m
 tag Duke
@@ -9429,7 +9429,7 @@ labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
 grantPi Hardison
-organism mouse
+organism Mouse
 
 term PSU-m
 tag PSU
@@ -9440,7 +9440,7 @@ labInst PSU
 labPi Hardison
 labPiFull Ross Hardison
 grantPi Hardison
-organism mouse
+organism Mouse
 
 
 term UW-m
@@ -9450,9 +9450,9 @@ label Stamatoyannopoulous - University of Washington
 description Stamatoyannopoulous - University of Washington
 labInst University of Washington
 labPi Stam
-labpiFull George Stamatoyannopoulous
+labPiFull George Stamatoyannopoulous
 grantPi Stam
-organism mouse
+organism Mouse
 
 term Stanford-m
 tag  Stanford
@@ -9463,7 +9463,7 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism mouse
+organism Mouse
 
 term Yale-m
 tag  Yale
@@ -9474,7 +9474,7 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism mouse
+organism Mouse
 
 ### AWG (DAC) Labs
 
@@ -9487,7 +9487,7 @@ labInst Stanford
 labPi Birney
 labPiFull Ewan Birney
 grantPi Birney
-organism human
+organism Human
 
 
 
