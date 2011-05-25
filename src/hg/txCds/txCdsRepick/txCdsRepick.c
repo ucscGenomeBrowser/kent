@@ -159,7 +159,7 @@ else
 	{
 	if (ev->cdsCount == 1)
 	    {
-	    cdsEvidenceSetBedThick(ev, bed);
+	    cdsEvidenceSetBedThick(ev, bed, TRUE);
 	    if (bedCompatibleWithList(bed, protRefList))
 		{
 		cdsEvidenceTabOut(ev, f);
