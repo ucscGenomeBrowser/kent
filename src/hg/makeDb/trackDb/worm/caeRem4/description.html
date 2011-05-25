@@ -1,24 +1,28 @@
 <!-- Display image in righthand corner -->
-<TABLE ALIGN=RIGHT BORDER=0 WIDTH=185>
+<TABLE ALIGN=RIGHT BORDER=0 WIDTH=310>
   <TR><TD ALIGN=RIGHT>
-    <A HREF="*** link to sequencing center's project page"
+    <A HREF="http://genome.wustl.edu/genomes/view/caenorhabditis_remanei/"
     TARGET=_blank>
-    <IMG SRC="/images/Caenorhabditis_remanei.jpg" WIDTH=*** HEIGHT=*** ALT="C. remanei"></A>
+    <IMG SRC="/images/Caenorhabditis_remanei.jpg" WIDTH=295 HEIGHT=400 ALT="C. remanei"></A>
   </TD></TR>
   <TR><TD ALIGN=RIGHT> 
     <FONT SIZE=-1><em>Caenorhabditis remanei</em><BR> 
     </FONT>
     <FONT SIZE=-2> 
-      Photo courtesy of ***
-      (<A HREF="*** link to source" 
-      TARGET=_blank>***source</A>)
+      Photo courtesy of
+      <A HREF="http://www.life.umd.edu/biology/faculty/haag/Haag_Lab_Members_Page.html" 
+      TARGET=_blank>Eric Haag,</A> All Rights Reserved.
     </FONT>
   </TD></TR>
 </TABLE>
 
 <P>
-The Jul. 2007 <em>Caenorhabditis remanei</em> draft assembly 
-(Washington University School of Medicine GSC C. remanei 15.0.1) was produced by the *** sequencing center.
+The May 2007 <em>Caenorhabditis remanei</em> draft assembly was
+produced by the
+<A HREF="http://genome.wustl.edu/genomes/view/caenorhabditis_remanei/"
+TARGET=_blank>Washington University in St. Louis</A> (WUSTL) School of Medicine 
+Genome Sequencing Center. The UCSC caeRem4 version corresponds to WUSTL version
+15.0.1, WormBase release WS220.</P>
 
 <H3>Sample position queries</H3>
 <P>
@@ -26,7 +30,7 @@ A genome position can be specified by the accession number of a
 sequenced genomic region, an mRNA or EST, a chromosomal coordinate
 range, or keywords from the GenBank description of an mRNA. The
 following list shows examples of valid position queries for the
-C. remanei genome.  See the
+<em>C. remanei</em> genome.  See the
 <A HREF="../goldenPath/help/hgTracksHelp.html"
     TARGET=_blank>User's Guide</A> for more information.
 <P>
@@ -35,33 +39,29 @@ C. remanei genome.  See the
         <TH WIDTH=14>&nbsp;</TH>
        	<TH ALIGN=LEFT>Genome Browser Response:</TH></TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD VALIGN=Top>chrZ</TD>
+    <TR><TD VALIGN=Top>chrUn:1-1000000</TD>
         <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays all of chromosome Z</TD>
+       	<TD VALIGN=Top>Displays first million bases of chrUn</TD>
     </TR>
-    <TR><TD VALIGN=Top>chr3:1-1000000</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays first million bases of chr 3</TD>
-    </TR>
-    <TR><TD VALIGN=Top NOWRAP>chr3:1000000+2000</TD>
+    <TR><TD VALIGN=Top NOWRAP>chrUn:1000000+2000</TD>
        	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays a region of chr 3 that spans 2000 bases, starting with position 1000000 </TD>
+       	<TD VALIGN=Top>Displays a region of chrUn that spans 2000 bases, starting with position 1000000 </TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>BX950328</TD>
+    <TR><TD VALIGN=Top>EU183219</TD>
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Displays region of mRNA with GenBank accession
-		number BX950328</TD>
+		number EU183219</TD>
     </TR>
-    <TR><TD VALIGN=Top>BU335953</TD>
+    <TR><TD VALIGN=Top>DR775696</TD>
         <TD WIDTH=14>&nbsp;</TD>
       	<TD VALIGN=Top>Displays region of EST with GenBank accession
-		BU335953 on chr Z</TD>
+		DR775696</TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>pseudogene mRNA</TD>
+    <TR><TD VALIGN=Top>kin-1</TD>
         <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists transcribed pseudogenes, but not cDNAs</TD>
+       	<TD VALIGN=Top>Displays regions with kin-1 mRNA </TD>
     </TR>
     <TR><TD VALIGN=Top>homeobox caudal</TD>
         <TD WIDTH=14>&nbsp;</TD>
@@ -75,55 +75,55 @@ C. remanei genome.  See the
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD>
     </TR>
-    <TR><TD VALIGN=Top>zhang</TD>
+    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
+    <TR><TD VALIGN=Top>nemeroff</TD>
         <TD WIDTH=14>&nbsp;</TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zhang</TD>
+	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Nemeroff</TD>
     </TR>
-    <TR><TD VALIGN=Top>Taguchi,T.</TD>
+    <TR><TD VALIGN=Top>Hamilton,K.</TD>
         <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs deposited by co-author T. Taguchi</TD>
+       	<TD VALIGN=Top>Lists mRNAs deposited by co-author K. Hamilton</TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
     <TR><TD COLSPAN="3"> Use this last format for author queries. Although
-	GenBank requires the search format <em>Taguchi T</em>, internally it
-	uses the format <em>Taguchi,T.</em>.</TD>
+	GenBank requires the search format <em>Hamilton K</em>, internally it
+	uses the format <em>Hamilton,K.</em>.</TD>
     </TR>
 </TABLE>
 
 <HR>
 <H3>Assembly details</H3>
 <P>
-The genome has been sequenced to ***X coverage.
-Approximately 88% of the sequence has been anchored to chromosomes, 
-which include autosomes 1-24, 26-28, and 32, and sex chromosomes W and Z. 
-(In contrast to mammals, the female chicken is heterogametic (ZW) and the 
-male is homogametic (ZZ).) 
-The remaining unanchored contigs that could be localized to a chromosome 
-have been concatenated into the virtual 
-chromosomes &quot;chr*_random&quot;, separated by gaps of 10,000 bp. 
-Unanchored contigs that could not be localized to a chromosome 
-have been concatenated into the virtual 
-chromosome &quot;chrUn&quot;, separated by gaps of 1,000 bp in order 
-to reduce the total size of chrUn. 
-The chicken 
-mitochondrial sequence is also available as the virtual chromosome 
-&quot;chrM&quot;. 
-</P>
-
-
+This assembly was sequenced to a depth of 9.2X using
+using plasmid and fosmid libraries made from DNA extracted from a
+mixed population of females and males from all developmental stages.
+Coverage was based on an expected genome size of 130 Mb. The whole-genome
+shotgun plasmid and fosmid paired end reads were assembled using PCAP
+(<em>Genome Res.</em> 13(9):2164-70 2003). </P>
+<P>
+The UCSC Genome browser displays the 3,670 supercontigs from the WS220 release.
+There are 138,406,203 base pairs of sequence with 10,705,348 Ns in gaps.
+For more information on this assembly, see the WUSTL 
+<em>C. remanei</em>
+<A HREF="http://genome.wustl.edu/genomes/view/caenorhabditis_remanei/"
+TARGET=_blank>project page</A> and 
+<A HREF="http://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_remanei/assembly/Caenorhabditis_remanei-15.0.1/ASSEMBLY"
+TARGET=_blank>assembly notes</A>.</P>
 <P>
 Bulk downloads of the sequence and annotation data are available via 
-the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/caeRem4/">FTP
-server</A> or the <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#c_remanei">Downloads</A> page. 
-
-  *** Developer -- remove this if no conditions for use:
-These data have
-<A HREF="../goldenPath/credits.html#c_remanei_use">specific 
-conditions for use</A>. 
-
-The C. remanei browser annotation tracks were generated by UCSC and 
+the Genome Browser 
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/caeRem4/">FTP
+server</A> or 
+<A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#caeRem">Downloads</A> 
+page. The sequence can also be downloaded from the 
+<A HREF="ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_remanei/assembly/Caenorhabditis_remanei-15.0.1/output" 
+TARGET=_blank>WUSTL ftp site</A>. These data have 
+<A HREF="http://genome.wustl.edu/data/data_use_policy"
+TARGET=_blank>specific conditions for use</A>. </P>
+<P>
+The <em>C. remanei</em> browser annotation tracks were generated by UCSC and 
 collaborators worldwide. See the 
-<A HREF="/goldenPath/credits.html#c_remanei_credits">Credits</A> 
+<A HREF="../goldenPath/credits.html#worm_credits">Credits</A> 
 page for a detailed list of the organizations and individuals who contributed 
-to the success of this release. 
+to this release. 
 </P>
