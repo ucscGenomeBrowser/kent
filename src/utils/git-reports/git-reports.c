@@ -48,6 +48,7 @@ struct commit
     struct commit *next;
     int commitNumber;    // used for sorting fileviews
     char *commitId;
+    char *merge;  
     char *author;
     char *date;
     char *comment;
@@ -98,6 +99,8 @@ if (exitCode != 0)
     errAbort("system command [%s] failed with exitCode %d", cmd, exitCode);
 }
 
+void makeDiffAndSplit(struct commit *c, char *u, boolean full);  // FOREWARD REFERENCE
+
 struct commit* getCommits()
 /* Get all commits from startTag to endTag */
 {
@@ -114,7 +117,6 @@ struct files *files = NULL, *f = NULL;
 char *sep = "";
 while (lineFileNext(lf, &line, &lineSize))
     {
-    boolean isMerge = FALSE;
     char *w = nextWord(&line);
     AllocVar(commit);
     if (!sameString("commit", w))
@@ -126,7 +128,7 @@ while (lineFileNext(lf, &line, &lineSize))
     w = nextWord(&line);
     if (sameString("Merge:", w))
 	{
-	isMerge = TRUE;
+	commit->merge = cloneString(line);
 	lineFileNext(lf, &line, &lineSize);
 	w = nextWord(&line);
 	}
@@ -172,7 +174,11 @@ while (lineFileNext(lf, &line, &lineSize))
     commit->comment = cloneString(dy->string);
     freeDyString(&dy);
 
-    if (!isMerge)
+    if (commit->merge)
+	{
+	makeDiffAndSplit(commit, "getFileNamesForMergeCommit", FALSE);  // special tricks to get this list (status field will not be applicable).
+	}
+    else
 	{
 	/* collect the files-list */
 	while (lineFileNext(lf, &line, &lineSize))
@@ -186,9 +192,9 @@ while (lineFileNext(lf, &line, &lineSize))
 	    slAddHead(&files, f);
 	    }
 	slReverse(&files);
-	}
 
-    commit->files = files;
+	commit->files = files;
+	}
 
     
     if (!startsWith("Merge branch 'master' of", commit->comment) &&
@@ -245,6 +251,7 @@ boolean inBlock = TRUE;
 int blockP = 0, blockN = 0;
 fprintf(h, "<html>\n<head>\n<title>%s %s</title>\n</head>\n</body>\n<pre>\n", path, commitId);
 boolean hasMore = TRUE;
+boolean combinedDiff = FALSE;
 while (hasMore)
     {
     boolean checkEob = FALSE;
@@ -253,7 +260,7 @@ while (hasMore)
 	{
 	char *color = NULL;
 	xline = htmlEncode(line);	
-	if (line[0] == '-')
+	if ((line[0] == '-') || (combinedDiff && (line[1] == '-')))
 	    {
 	    color = "#FF9999";  /* deleted text light red */
 	    if (inBody)
@@ -262,7 +269,7 @@ while (hasMore)
 		++blockN;
 		}
 	    }
-	else if (line[0] == '+')
+	else if ((line[0] == '+') || (combinedDiff && (line[1] == '+')))
 	    {
 	    color = "#99FF99";  /* added text light green */
 	    if (inBody)
@@ -274,7 +281,11 @@ while (hasMore)
 	else
 	    {
 	    if (line[0] == '@')
+		{
 		color = "#FFFF99";  /* diff control text light yellow (red+green) */
+		if (!combinedDiff && startsWith("@@@", line))
+		    combinedDiff = TRUE;
+		}
 	    checkEob = TRUE;
 	    }
 	if (color)
@@ -320,66 +331,100 @@ void makeDiffAndSplit(struct commit *c, char *u, boolean full)
  * in working repo dir.  However leaving off the path produces
  * a diff with everything we want, we just have to split it up. */
 {
-safef(gitCmd,sizeof(gitCmd), 
-    "git diff -b -w --no-prefix --unified=%d %s^! > %s"  
-    , full ? 1000000 : contextSize
-    , c->commitId, tempMakeDiffName);
-//git shorthand: x^! is equiv to range x^ x, 
-//  i.e. just the one commit and nothing more.
 
-// hack until better fix - this is the case where there is no previous commit
-if (sameString(c->commitId, "dc78303b079985b5a146d093bbb8a5d06489562d"))
+if (c->merge)
     {
     safef(gitCmd,sizeof(gitCmd), 
-	"git show -b -w --no-prefix --unified=%d %s > %s"  
+	"git diff-tree --cc -b -w --no-prefix --unified=%d %s > %s"  // -b -w currently ignored for combined-diff
     , full ? 1000000 : contextSize
-	, c->commitId, tempMakeDiffName);
+    , c->commitId, tempMakeDiffName);
     }
+else
+    {
 
+    safef(gitCmd,sizeof(gitCmd), 
+	"git diff -b -w --no-prefix --unified=%d %s^! > %s"  
+	, full ? 1000000 : contextSize
+	, c->commitId, tempMakeDiffName);
+    //git shorthand: x^! is equiv to range x^ x, 
+    //  i.e. just the one commit and nothing more.
+
+    // hack until better fix - this is the case where there is no previous commit
+    if (sameString(c->commitId, "dc78303b079985b5a146d093bbb8a5d06489562d"))
+	{
+	safef(gitCmd,sizeof(gitCmd), 
+	    "git show -b -w --no-prefix --unified=%d %s > %s" // -b -w probably get ignored 
+	, full ? 1000000 : contextSize
+	, c->commitId, tempMakeDiffName);
+	}
+    }
 runShell(gitCmd);
 
 
 // now parse it and split it into separate files with the right path.
+boolean getNamesOnly = c->merge && sameString(u,"getFileNamesForMergeCommit");
 struct lineFile *lf = lineFileOpen(tempMakeDiffName, TRUE);
 int lineSize;
 char *line;
 FILE *h = NULL;
+char *section = "@@";
+if (c->merge)
+    section = "@@@";
 while (lineFileNext(lf, &line, &lineSize))
     {
-    if (startsWith("diff --git ", line))
+    char *pattern = "diff --git ";
+    if (c->merge)
+	pattern = "diff --cc ";
+    if (startsWith(pattern, line))
 	{
 	if (h)
 	    {
 	    fclose(h);
 	    h = NULL;
 	    }
-	char *fpath = line + strlen("diff --git ");
-	fpath = strchr(fpath, ' ');
-	++fpath;   // now we should be pointing to the world
-
-	char path[1024];
-	char *r = strrchr(fpath, '/');
-	if (r)
+	char *fpath = line + strlen(pattern);
+	if (getNamesOnly) // too bad we had not choice but to get the merge names this way.
 	    {
-	    *r = 0;
-	    /* make internal levels of subdirs */
-	    safef(path, sizeof(path), "mkdir -p %s/%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, full ? "full" : "context", fpath);
-	    runShell(path);
-	    *r = '/';
+	    /* collect the files-list */
+	    struct files *f = NULL;
+	    AllocVar(f);
+	    f->path = cloneString(fpath);
+	    slAddHead(&c->files, f);
 	    }
-	safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s%s.diff"
-	    , outDir, outPrefix, "user", u, full ? "full" : "context", fpath, c->commitId);
+	else
+	    {
+	    if (!c->merge)
+		{
+		fpath = strchr(fpath, ' ');
+		++fpath;   // now we should be pointing to the world
+		}
 
-	h = mustOpen(path, "w");
-	fprintf(h, "%s\n", c->commitId);
-	fprintf(h, "%s\n", c->author);
-	fprintf(h, "%s\n", c->date);
-	fprintf(h, "%s\n", c->comment);
+	    char path[1024];
+	    char *r = strrchr(fpath, '/');
+	    if (r)
+		{
+		*r = 0;
+		/* make internal levels of subdirs */
+		safef(path, sizeof(path), "mkdir -p %s/%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, full ? "full" : "context", fpath);
+		runShell(path);
+		*r = '/';
+		}
+	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s%s.diff"
+		, outDir, outPrefix, "user", u, full ? "full" : "context", fpath, c->commitId);
+
+	    h = mustOpen(path, "w");
+	    fprintf(h, "%s\n", c->commitId);
+	    if (c->merge)
+		fprintf(h, "Merge parents %s\n", c->merge);
+	    fprintf(h, "%s\n", c->author);
+	    fprintf(h, "%s\n", c->date);
+	    fprintf(h, "%s\n", c->comment);
+	    }
 	}
-    else if (startsWith("@@", line))
+    else if (startsWith(section, line))
 	{
-	char *end = strchr(line+2, '@');
-	*(end+2) = 0;  // chop the weird unwanted context string from here following e.g. 
+	char *end = strchr(line+strlen(section), '@');
+	*(end+strlen(section)) = 0;  // chop the weird unwanted context string from here following e.g. 
         //@@ -99,7 +99,9 @@ weird unwanted context string here
         // converts to
         //@@ -99,7 +99,9 @@
@@ -394,6 +439,8 @@ if (h)
     h = NULL;
     }
 lineFileClose(&lf);
+if (getNamesOnly) // too bad we had not choice but to get the merge names this way.
+    slReverse(&c->files);
 }
 
 

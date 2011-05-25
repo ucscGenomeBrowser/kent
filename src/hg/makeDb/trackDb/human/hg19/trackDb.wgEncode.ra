@@ -10,7 +10,7 @@ include wgEncodeGencodeV5.ra alpha
 include wgEncodeUncBsuProt.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.ra alpha,beta
+include wgEncodeReg.ra
 #include wgEncodeRegNorm.ra alpha
 
 # Nucleosome (wrangler: venkat)
@@ -84,7 +84,7 @@ include wgEncodeUwDgf.ra beta,public
 
 # Riken CAGE (wrangler: cricket)
 include wgEncodeRikenCage.ra beta,public
-#include wgEncodeRikenCage.new.ra alpha
+include wgEncodeRikenCage.new.ra alpha
 
 # CSHL Small RNA (wrangler: cricket)
 include wgEncodeCshlShortRnaSeq.ra beta,public
@@ -143,7 +143,8 @@ include wgEncodeUwHistone.new.ra alpha
 include wgEncodeUwHistone.ra beta,public
 
 # SYDH Histone (wrangler: Venkat)
-include wgEncodeSydhHistone.ra
+include wgEncodeSydhHistone.ra beta,public
+include wgEncodeSydhHistone.new.ra alpha
 
 
 # ENCODE TFBS -------------------------------------------
@@ -163,7 +164,7 @@ include wgEncodeHaibTfbs.ra alpha
 include wgEncodeSydhTfbs.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
-include wgEncodeUchicagoTfbs.ra alpha
+include wgEncodeUchicagoTfbs.ra 
 
 
 # SUNY RBP -----------------------------------------

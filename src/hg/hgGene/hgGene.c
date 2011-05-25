@@ -398,7 +398,7 @@ addGoodSection(localizationSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(transRegCodeMotifSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(pathwaysSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(mrnaDescriptionsSection(conn, sectionRa), conn, &sectionList);
-addGoodSection(pseudoGeneSection(conn, sectionRa), conn, &sectionList);
+//addGoodSection(pseudoGeneSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(synonymSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
 

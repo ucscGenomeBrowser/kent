@@ -40,13 +40,13 @@ term GM12878
 tag GM12878
 type Cell Line
 organism Human
-description lymphoblastoid
+description lymphoblastoid, International HapMap Project - CEPH/Utah - European Caucasion, Epstein-Barr Virus
 tissue Blood
 vendorName Coriell
 vendorId GM12878
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&PgId=166
-karyotype relatively normal
-lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus
+karyotype normal
+lineage mesoderm
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 color 153,38,0
@@ -58,13 +58,13 @@ term K562
 tag K562
 type Cell Line
 organism Human
-description leukemia
+description leukemia, "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 tissue Blood
 vendorName ATCC
 vendorId CCL-243
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
 karyotype cancer
-lineage "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
+lineage mesoderm
 termId BTO:0000664
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
 color 46,0,184
@@ -77,12 +77,12 @@ tag K562b
 type Cell Line
 organism Human
 tissue Blood
-description leukemia (UCDavis alternate)
+description leukemia (UCDavis alternate), "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 vendorName ATCC
 vendorId CCL-243
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
 karyotype cancer
-lineage "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
+lineage mesoderm
 termId BTO:0000664
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
 color 46,0,184
@@ -165,7 +165,7 @@ term HUVEC
 tag HUVEC
 type Cell Line
 organism Human
-description Human Umbilical Vein Endothelial Cell
+description umbilical vein endothelial cells
 tissue Endothelium
 vendorName Lonza
 vendorId CC-2517
@@ -183,7 +183,7 @@ term NHEK
 tag NHEK
 type Cell Line
 organism Human
-description Normal Human Epidermal Keratinocytes
+description epidermal keratinocytes
 tissue Skin
 vendorName Lonza
 vendorId CC-2501
@@ -201,7 +201,7 @@ term H1-hESC
 tag H1hESC
 type Cell Line
 organism Human
-description Human Embryonic Stem Cells
+description embryonic stem cells
 tissue EmbryonicStemCell
 vendorName Cellular Dynamics
 vendorId
@@ -220,14 +220,14 @@ term 8988T
 tag 8988T
 type Cell Line
 organism Human
-description human pancreas adenocarcinoma (PA-TU-8988T)
+description human pancreas adenocarcinoma (PA-TU-8988T), "established in 1985 from the liver metastasis of a primary pancreatic adenocarcinoma from a 64-year-old woman" - DSMZ
 tier 3
-lineage pancreatic adenocarcinoma
+lineage endoderm
 karyotype cancer
 sex F
-tissue liver
+tissue liver 
 vendorName DSMZ
-vendorId 162
+vendorId ACC 162
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=162&term=162&highlight=
 termId BTO:0001521 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001521
@@ -237,7 +237,7 @@ term A549
 tag A549
 type Cell Line
 organism Human
-description epithelial cell line "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old Caucasian male." - ATCC, derived from a lung carcinoma tissue. (PMID: 175022)
+description epithelial cell line derived from a lung carcinoma tissue. (PMID: 175022), "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old caucasian male." - ATCC
 tissue Epithelium
 vendorName ATCC
 vendorId CCl-185
@@ -254,9 +254,11 @@ term AG04449
 tag AG04449
 type Cell Line
 organism Human
-description Fetal buttock/thigh fibroblast
+description fetal buttock/thigh fibroblast
 tissue Skin
-lineage mesoderm
+#lineage mesoderm
+#lineage ectoderm may be more accurate
+karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04449
 vendorName Coriell
 vendorId AG04449
@@ -268,9 +270,10 @@ term AG04450
 tag AG04450
 type Cell Line
 organism Human
-description Fetal lung fibroblast
+description fetal lung fibroblast
 tissue Lung
 lineage mesoderm
+karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04450
 vendorName Coriell
 vendorId AG04450
@@ -282,9 +285,10 @@ term AG09309
 tag AG09309
 type Cell Line
 organism Human
-description Adult human toe fibroblast
+description adult toe fibroblast from apparently healthy 21 year old
 tissue Skin
 lineage mesoderm
+karyotype "7% of the cells examined showing random chromosome loss/gain" -Coriell
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09309
 vendorName Coriell
 vendorId AG09309
@@ -296,9 +300,10 @@ term AG09319
 tag AG09319
 type Cell Line
 organism Human
-description Adult human gum tissue fibroblasts
+description gum tissue fibroblasts from apparently heathly 24 year old
 tissue Gingival
 lineage mesoderm
+karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09319
 vendorName Coriell
 vendorId AG09319
@@ -310,9 +315,10 @@ term AG10803
 tag AG10803
 type Cell Line
 organism Human
-description Adult human abdominal skin fibroblasts
+description abdominal skin fibroblasts from apparently heathly 22 year old
 tissue Skin
 lineage mesoderm
+karyotype "8% of the cells examined showing random chromosome loss, 2% showing random chromosome gain, and 2% showing 69,XYY" -Coriell
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG10803
 vendorName Coriell
 vendorId AG10803
@@ -324,8 +330,10 @@ term AoAF
 tag AOAF
 type Cell Line
 organism Human
-description Normal Human Aortic Adventitial Fibroblast Cells
+description aortic adventitial fibroblast cells
 tissue Heart
+lineage mesoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-7014, CC-7014T75
 orderUrl http://www.lonza.com/
@@ -341,6 +349,7 @@ type Cell Line
 organism Human
 description aortic smooth muscle cells
 tissue Heart
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2571
 orderUrl http://www.lonza.com/
@@ -354,7 +363,7 @@ term Astrocy
 tag Astrocy
 type Cell Line
 organism Human
-description Normal human astrocytes
+description astrocytes
 tissue Brain
 lineage ectoderm
 vendorName Lonza
@@ -372,10 +381,10 @@ tag BCBladder0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA Extract
+description urinary bladder, donor 01-11002, age 83, caucasian, DNA extract
 tissue Urinary Bladder
-lineage Urinary Bladder
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234010-05_B402059
@@ -389,10 +398,10 @@ tag BCColon0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description colon, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Colon
-lineage Colon
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234090-05_A903056; BioChain_CP-S10-R1234090-20_B402074
@@ -406,10 +415,10 @@ tag BCEsophagus0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description esophagus, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Esophagus
-lineage Esophagus
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234106-05_A803198; BioChain_CP-S10-R1234106-20_B402075
@@ -423,10 +432,10 @@ tag BCKidney0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description kidney, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Kidney
-lineage Kidney
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234142-05_B402060; BioChain_CP-S10-R1234142-20_A808055
@@ -440,10 +449,10 @@ tag BCLiver0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description liver, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Liver
-lineage Liver
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234149-05_B209118; BioChain_CP-S10-R1234149-20_B304045
@@ -457,10 +466,10 @@ tag BCLung0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description lung, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Lung
-lineage Lung
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234152-05_A610240; BioChain_CP-S10-R1234152-20_A906114
@@ -474,10 +483,10 @@ tag BCSkeletalMuscle0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description skeletal muscle, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Skeletal muscle
-lineage Skeletal muscle
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234171-05_A610262; BioChain_CP-S10-R1234171-20_A808148
@@ -491,10 +500,10 @@ tag BCSkin0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA Extract
+description skin, donor 01-11002, age 83, caucasian, DNA extract
 tissue Skin
-lineage Skin
-karyotype Normal
+lineage ectoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234218-05_B402066
@@ -508,10 +517,10 @@ tag BCSmallIntestine0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+description small intestine, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue Small intestine
-lineage Small intestine
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234226-05_B402067; BioChain_CP-S10-R1234226-20_A612138
@@ -525,10 +534,10 @@ tag BCSpleen0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; RNA Extract
+description spleen, donor 01-11002, age 83, caucasian, RNA extract
 tissue Spleen
-lineage Spleen
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S10-R1234246-20_A612140
@@ -542,10 +551,10 @@ tag BCStomach0111002
 type Cell Line
 tier 3
 organism Human
-description Donor 01-11002; Age 83; Caucasian; DNA Extract
+description stomach, donor 01-11002, age 83, caucasian, DNA extract
 tissue Stomach
-lineage Stomach
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234248-05_A808008
@@ -559,10 +568,10 @@ tag BCColonH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description colon, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Colon
-lineage Colon
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234090-05_B111123; BioChain_CP-S10-R1234090-20_B111053
@@ -576,10 +585,10 @@ tag BCEsophagusH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA Extract
+description esophagus, donor H12817N, age 71, caucasian, DNA extract
 tissue Esophagus
-lineage Esophagus
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234106-05_B302113
@@ -593,10 +602,10 @@ tag BCKidneyH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description kidney, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Kidney
-lineage Kidney
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234142-05_B402061; BioChain_CP-S10-R1234142-20_B111054
@@ -610,10 +619,10 @@ tag BCLungH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description lung, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Lung
-lineage Lung
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234152-05_B402062; BioChain_CP-S10-R1234152-20_B207133
@@ -627,10 +636,10 @@ tag BCPancreasH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description pancreas, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Pancreas
-lineage Pancreas
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234188-05_B402063; BioChain_CP-S10-R1234188-20_B402076
@@ -644,10 +653,10 @@ tag BCPenisH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA Extract
+description penis, donor H12817N, age 71, caucasian, DNA extract
 tissue Penis
-lineage Penis
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234194-05_B402064
@@ -661,10 +670,10 @@ tag BCProstateGlandH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA Extract
+description prostate gland, donor H12817N, age 71, caucasian, DNA extract
 tissue Prostate gland
-lineage Prostate gland
-karyotype Normal
+#lineage Prostate gland
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-D1234201-05_B101058
@@ -678,10 +687,10 @@ tag BCSkeletalMuscleH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description skeletal muscle, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Skeletal muscle
-lineage Skeletal muscle
-karyotype Normal
+#lineage Skeletal muscle
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234171-05_B402065; BioChain_CP-S10-R1234230-20_A911037
@@ -695,10 +704,10 @@ tag BCJejunumH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description jejunum, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Jejunum
-lineage Jejunum
-karyotype Normal
+#lineage Jejunum
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234230-05_B402068; BioChain_CP-S10-R1234230-20_A911037
@@ -712,10 +721,10 @@ tag BCSpleenH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description spleen, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Spleen
-lineage Spleen
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234246-05_B402069; BioChain_CP-S10-R1234246-20_B304070
@@ -729,10 +738,10 @@ tag BCStomachH12817N
 type Cell Line
 tier 3
 organism Human
-description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+description stomach, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Stomach
-lineage Stomach
-karyotype Normal
+lineage endoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234248-05_B402070; BioChain_CP-S10-R1234248-20_B402077
@@ -746,10 +755,10 @@ tag BCAdiposeUHN00001
 type Cell Line
 tier 3
 organism Human
-description Donor UHN0001; Age 35; African American; DNA Extract
+description adipose tissue, donor UHN0001, age 35, African American, DNA extract
 tissue Adipose tissue
-lineage Adipose tissue
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D4234003_A701166
@@ -763,10 +772,10 @@ tag BCAdrenalGlandH12803N
 type Cell Line
 tier 3
 organism Human
-description Donor H12803N; Age 88; Caucasian; DNA Extract
+description adrenal gland, donor H12803N, age 88, caucasian, DNA extract
 tissue Adrenal gland
-lineage Adrenal gland
-karyotype Normal
+#lineage adrenal gland
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D1234004_B103117
@@ -780,10 +789,10 @@ tag BCBrainH11058N
 type Cell Line
 tier 3
 organism Human
-description Donor H11058N; Age 66; Asian; DNA Extract
+description brain, donor H11058N, age 66, Asian, DNA extract
 tissue Brain
-lineage Brain
-karyotype Normal
+lineage ectoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_D4234035_A810101
@@ -797,10 +806,10 @@ tag BCBreast0203015
 type Cell Line
 tier 3
 organism Human
-description Donor 02-03015; Age 21; Caucasian; DNA Extract
+description breast, donor 02-03015, age 21, caucasian, DNA extract
 tissue Breast
-lineage Breast
-karyotype Normal
+lineage mesoderm 
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D4234086_A710031
@@ -814,10 +823,10 @@ tag BCPericardiumH12529N
 type Cell Line
 tier 3
 organism Human
-description Donor H12529N; Age 70; Caucasian; DNA Extract
+description pericardium, donor H12529N, age 70, caucasian, DNA extract
 tissue Pericardium
-lineage Pericardium
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D1234133_A712271
@@ -831,10 +840,10 @@ tag BCLeftVentricleN41
 type Cell Line
 tier 3
 organism Human
-description Donor N41; Age 26; Asian; DNA Extract
+description left ventrible, donor N41, age 26, Asian, DNA extract
 tissue Left ventrible
-lineage Left ventrible
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_D1234138_A705026
@@ -848,10 +857,10 @@ tag BCLeukocyteUHN00204
 type Cell Line
 tier 3
 organism Human
-description Donor UHN00204; Age 54; Caucasian; DNA Extract
+description peripheral blood mononuclear cell, donor UHN00204, age 54, caucasian, DNA extract
 tissue Peripheral blood mononuclear cell
-lineage Peripheral blood mononuclear cell
-karyotype Normal
+lineage mesoderm
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_D4234148_A612197
@@ -865,10 +874,10 @@ tag BCPlacentaUHN00189
 type Cell Line
 tier 3
 organism Human
-description Donor UHN00189; Age 29; Native Indian; DNA Extract
+description placenta, donor UHN00189, age 29, Native Indian, DNA extract
 tissue Placenta
-lineage Placenta
-karyotype Normal
+#lineage Placenta
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D4234200_A603104
@@ -882,10 +891,10 @@ tag BCRectumN29
 type Cell Line
 tier 3
 organism Human
-description Donor N29; Age 29; Asian; DNA Extract
+description rectum, donor N29, age 29, Asian, DNA extract
 tissue Rectum
-lineage Rectum
-karyotype Normal
+#lineage Rectum
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_D4234206_A712205
@@ -899,10 +908,10 @@ tag BCTestisN30
 type Cell Line
 tier 3
 organism Human
-description Donor N30; Age 41; Asian; DNA Extract
+description testis, donor N30, age 41, Asian, DNA extract
 tissue Testis
-lineage Testis
-karyotype Normal
+#lineage Testis
+karyotype normal
 sex M
 vendorName BioChain
 vendorId BioChain_D4234260_A711169
@@ -916,10 +925,10 @@ tag BCCervixBN0773
 type Cell Line
 tier 3
 organism Human
-description Donor BN0773; Age 44; Asian; DNA Extract
+description uterine cervix, donor BN0773, age 44, Asian, DNA extract
 tissue Uterine cervix
-lineage Uterine cervix
-karyotype Normal
+#lineage Uterine cervix
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D4234275_A511454
@@ -933,10 +942,10 @@ tag BCUterusBN0765
 type Cell Line
 tier 3
 organism Human
-description Donor BN0765; Age 44; Asian; DNA Extract
+description uterus, donor BN0765, age 44, Asian, DNA extract
 tissue Uterus
-lineage Uterus
-karyotype Normal
+#lineage Uterus
+karyotype normal
 sex F
 vendorName BioChain
 vendorId BioChain_D4234274_A810099
@@ -950,7 +959,7 @@ term BE2_C
 tag BE2C
 type Cell Line
 organism Human
-description Human neuroblastoma
+description neuroblastoma
 tissue Brain
 lineage ectoderm
 vendorName ATCC
@@ -966,11 +975,11 @@ term BG02ES
 tag BG02ES
 type Cell Line
 organism Human
-description human Embryonic Stem Cell (hESC) Treatment: H9 Conditioned Medium
+description human Embryonic Stem Cell (hESC), BG02, treatment: H9 Conditioned Medium
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) BG02
-karyotype normal 
+lineage embryonic
+karyotype normal
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
@@ -981,10 +990,10 @@ term BG02ES-EBD
 tag BG02ESEBD
 type Cell Line
 organism Human
-description  human Embryonic Stem Cell (hESC) BG02 Embryoid Body-Derived
+description  human Embryonic Stem Cell (hESC), BG02, Embryoid Body-Derived
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) BG02
+lineage embryonic
 karyotype normal
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
@@ -996,12 +1005,12 @@ term BJ
 tag BJ
 type Cell Line
 organism Human
-description Skin fibroblast "The line was established from skin taken from normal foreskin." - ATCC.  (PMID: 9916803)
+description skin fibroblast, "The line was established from skin taken from normal foreskin." - ATCC.  (PMID: 9916803)
 tissue Skin
 vendorName ATCC
 vendorId CRL-2522
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2522&Template=cellBiology
-lineage mesoderm
+lineage ectoderm
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
@@ -1018,7 +1027,7 @@ tissue Skin
 vendorName ATCC
 vendorId CRL-4001
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-4001&Template=cellBiology
-lineage mesoderm
+lineage ectoderm
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
@@ -1035,7 +1044,7 @@ tissue Skin
 vendorName Struhl laboratory
 vendorId BJ-HRas
 orderUrl https://struhl.med.harvard.edu/
-lineage mesoderm
+lineage ectoderm
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
@@ -1048,12 +1057,12 @@ term BJ-T
 tag BJT
 type Cell Line
 organism Human
-description foreskin fibroblast 
+description foreskin fibroblast
 tissue Skin
 vendorName Struhl laboratory
 vendorId BJ-T
 orderUrl https://struhl.med.harvard.edu/
-lineage mesoderm
+lineage ectoderm
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
@@ -1065,15 +1074,15 @@ term CLL
 tag CLL
 type Cell Line
 organism Human
-description chronic lymphocytic leukemia cell
+description chronic lymphocytic leukemia cell, T-cell lymphocyte
 tier 3
-lineage T-cell lymphocyte
+lineage mesoderm
 karyotype cancer
 sex F
 tissue lymphocyte
 vendorName Dr. Jennifer Brown, Department of Medicine, Harvard Medical School.
-vendorId
-orderUrl
+vendorId N/A
+orderUrl http://www.dfhcc.harvard.edu/membership/profile/member/669/0/
 termId BTO:0001546
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001546
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:CLL_Crawford_protocol.pdf
@@ -1087,7 +1096,7 @@ tissue Colon
 vendorName ATCC
 vendorId HTB-37
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-37&Template=cellBiology
-lineage
+lineage endoderm
 karyotype cancer
 termId BTO:0000195
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000195
@@ -1103,7 +1112,7 @@ description chorion cells (outermost of two fetal membranes), fetal membranes we
 tissue FetalMembrane
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
-lineage chorion
+#lineage chorion
 karyotype unknown
 termId BTO:0000252
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000252
@@ -1115,8 +1124,9 @@ term CMK
 tag CMK
 type Cell Line
 organism Human
-description human acute megakaryocytic leukemia cells, "established from the peripheral blood of a 10-month-old boy with Down's syndrome and acute megakaryocytic leukemia (AML M7) at relapse in 1985" - DSMZ. (PMID: 3016165)
+description acute megakaryocytic leukemia cells, "established from the peripheral blood of a 10-month-old boy with Down's syndrome and acute megakaryocytic leukemia (AML M7) at relapse in 1985" - DSMZ. (PMID: 3016165)
 tissue Blood
+lineage mesoderm
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=392&from=cell_line_index&select=search_for_term&term=CMK&preselect=human;hamster;mouse;rat;insect;other&firstload=0
 vendorName DSMZ
 vendorId ACC-392
@@ -1132,8 +1142,7 @@ description decidua cells (part of the mucous membrane lining uterus), Fetal mem
 tissue Cervix
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
-tissue Cervix
-lineage decidua
+#lineage decidua
 karyotype unknown
 termId BTO:0001360
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001360
@@ -1145,13 +1154,13 @@ term Dnd41
 tag Dnd41
 type Cell Line
 tier 3
-organism human
+organism Human
 description Human T cell leukemia with Notch mutation
-lineage 
-karyotype 
+lineage
+karyotype
 sex M
 tissue Blood
-vendorName DSMZ
+vendorName DSMZ 
 vendorId N/A
 orderUrl http://www.dsmz.de/index.htm
 termId BTO:0002104
@@ -1162,7 +1171,7 @@ term ECC-1
 tag ECC1
 type Cell Line
 organism Human
-description ECC-1 is a human epithelial cell line derived from an endometrium adenocarcinoma, fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes 
+description ECC-1 is a human epithelial cell line derived from an endometrium adenocarcinoma, fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes
 tissue luminal epithelium
 vendorName ATCC
 vendorId CRL-2923
@@ -1181,7 +1190,7 @@ type Cell Line
 tier 3
 organism Human
 description Peripheral blood-derived erythroblasts from 16-19 week human fetal liver
-lineage
+lineage 
 karyotype normal
 sex U
 tissue Liver
@@ -1196,7 +1205,7 @@ term Fibrobl
 tag Fibrobl
 type Cell Line
 organism Human
-description Normal child fibroblast; donor sex: female
+description Normal child fibroblast, donor sex: female
 tissue Skin
 lineage mesoderm
 vendorName Coriell
@@ -1250,7 +1259,7 @@ vendorName Coriell
 vendorId GM06990
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM06990&PgId=166
 lineage mesoderm
-karyotype normal 
+karyotype normal
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
@@ -1282,8 +1291,125 @@ tissue Blood
 vendorName Coriell
 vendorId GM12801
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12801&PgId=166
+lineage mesoderm
+karyotype unknown
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
+sex M
+tier 3
+protocol UW_Stam:GM12801_Stam_protocol.pdf
+
+term GM12864
+tag GM12864
+type Cell Line
+organism Human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed
+tissue Blood
+lineage mesoderm
+karyotype unknown
+vendorName Coriell
+vendorId GM12864
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12864&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+sex M
+tier 3
+protocol UW_Stam:GM12864_Stam_protocol.pdf
+
+term GM12865
+tag GM12865
+type Cell Line
+organism Human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed
+tissue Blood
+lineage mesoderm
+karyotype unknown
+vendorName Coriell
+vendorId GM12865
+orderUrl http://ccr.coriell.org/sections/Search/Sample_Detail.aspx?Ref=GM12865&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+sex F
+tier 3
+protocol UW_Stam:GM12865_Stam_protocol.pdf
+
+term GM12872
+tag GM12872
+type Cell Line
+organism Human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed
+tissue Blood
+lineage mesoderm
+karyotype unknown
+vendorName Coriell
+vendorId GM12872
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12872&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
+sex M
+tier 3
+protocol UW_Stam:GM12872_Stam_protocol.pdf
+
+term GM12873
+tag GM12873
+type Cell Line
+organism Human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed
+tissue Blood
+lineage mesoderm
+karyotype unknown
+vendorName Coriell
+vendorId GM12873
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12873&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
+sex F
+tier 3
+protocol UW_Stam:GM12873_Stam_protocol.pdf
+
+term GM12874
+tag GM12874
+type Cell Line
+organism Human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed
+tissue Blood
+lineage mesoderm
+karyotype unknown
+vendorName Coriell
+vendorId GM12874
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12874&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
+sex M
+tier 3
+protocol UW_Stam:GM12874_Stam_protocol.pdf
+
+term GM12875
+tag GM12875
+type Cell Line
+organism Human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, Treatment: Epstein-Barr Virus transformed
+tissue Blood
+lineage mesoderm
+karyotype unknown
+vendorName Coriell
+vendorId GM12875
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12875&PgId=166
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
+sex F
+tier 3
+protocol UW_Stam:GM12875_Stam_protocol.pdf
+
+term GM12878-XiMat
+tag GM12878XiMat
+type Cell Line
+organism Human
+description lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
 tissue Blood
 vendorName Hunt Willard at Duke University
+vendorId N/A
+orderUrl http://www.genome.duke.edu/people/faculty/willard/
 karyotype unknown
 lineage mesoderm
 termId BTO:0002026 (non-specific)
@@ -1299,6 +1425,8 @@ organism Human
 description lymphoblastoid, cloned for paternal X inactivation, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
 tissue Blood
 vendorName Hunt Willard at Duke University
+vendorId N/A
+orderUrl http://www.genome.duke.edu/people/faculty/willard/
 karyotype unknown
 lineage mesoderm
 termId BTO:0002026 (non-specific)
@@ -1636,7 +1764,7 @@ tier 3
 organism Human
 description Human Astrocytes-cerebellar
 lineage Astrocytic
-karyotype Normal
+karyotype normal
 sex U
 tissue cerebellar
 vendorName ScienCell
@@ -1666,7 +1794,7 @@ tier 3
 organism Human
 description Human Astrocytes-hippocampal
 lineage Astrocytic
-karyotype Normal
+karyotype normal
 sex U
 tissue brain hippocampus
 vendorName ScienCell
@@ -1700,7 +1828,7 @@ tissue Spinal cord
 vendorName ScienCell
 vendorId 1820
 orderUrl http://www.sciencellonline.com/site/products/1820.php
-karyotype Normal
+karyotype normal
 lineage Astrocytic
 termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099
@@ -1782,7 +1910,6 @@ type Cell Line
 organism Human
 description Human Choroid Plexus Epithelial Cells
 tissue Epithelium
-lineage ectoderm
 vendorName ScienCell
 vendorId 1310
 orderUrl http://www.sciencellonline.com/site/products/1310.php
@@ -1863,14 +1990,13 @@ tag  Hepatocytes
 type Cell Line
 tier 3
 organism Human
-target  Hepatocytes
 description Primary Human Hepatocytes, liver perfused by enzymes to generate single cell suspension
 lineage endoderm
 karyotype  normal
 sex B
 tissue  Liver
 vendorName  zen-bio
-vendorId
+vendorId 
 orderUrl http://www.zen-bio.com/
 termId BTO:0000575
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000575
@@ -1883,7 +2009,7 @@ tier 3
 organism Human
 description Human Foreskin Fibroblast
 lineage Fibroblast
-karyotype Normal
+karyotype normal
 sex M
 tissue foreskin
 vendorName Dr. Torok-Storb, FHCRC
@@ -1900,7 +2026,7 @@ tier 3
 organism Human
 description Human Foreskin Fibroblast Cells Expressing Canine cMyc
 lineage Fibroblast
-karyotype Normal (cMyc)
+karyotype normal (cMyc)
 sex M
 tissue foreskin
 vendorName Dr. Torok-Storb, FHCRC
@@ -1918,6 +2044,9 @@ tissue Liver
 description Human Fetal Liver 11 weeks, consented fetal liver samples were isolated from legally aborted fetuses at 11 weeks gestation
 tier 3
 lineage endoderm
+vendorName Unknown
+vendorId N/A
+orderUrl N/A
 color 189,0,157
 sex U
 protocol HFL11W_and_HFL24W_Myers_protocols.pdf
@@ -1929,6 +2058,9 @@ organism Human
 tissue Liver
 description Human Fetal Liver 24 weeks, consented fetal liver samples were isolated from legally aborted fetuses at 24 weeks gestation
 tier 3
+vendorName Unknown
+vendorId N/A
+orderUrl N/A
 lineage endoderm
 color 189,0,157
 sex U
@@ -2165,15 +2297,14 @@ tag HPDE6E6E7
 type Cell Line
 tier 3
 organism Human
-target HPDE6-E6E7
 description normal human pancreatic duct cells immortalized with E6E7 gene of HPV
 lineage endoderm
 karyotype  Unknown
-sex  F
+sex F
 tissue  Pancreatic Duct
 vendorName  Dr. Ming-Sound Tsao, Ontario Cancer Institute
 vendorId
-orderUrl
+orderUrl http://www.uhnresearch.ca/researchers/profile.php?lookup=6118
 termId BTO:0002362
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002362
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:HPDE6-E6E7_Crawford_protocol.pdf
@@ -2184,10 +2315,10 @@ type Cell Line
 organism Human
 description Normal Human Periodontal Ligament Fibroblasts
 tissue Epithelium
-vendorName Lonza 
+vendorName Lonza
 vendorId CC-7049
 orderUrl http://www.lonza.com/
-sex M 
+sex M
 tier 3
 protocol UW_Stam:HPdLF_Stam_protocol.pdf
 
@@ -2212,7 +2343,6 @@ description Human Renal Cortical Epithelial cells (normal)
 tissue Epithelium
 vendorName Lonza
 vendorId CC-2554
-orderUrl http://www.lonza.com/
 lineage mesoderm
 karyotype normal
 orderUrl http://www.lonza.com/
@@ -2246,7 +2376,7 @@ tier 3
 organism Human
 description Human Renal Glomerular Endothelial Cells
 lineage Endothelial
-karyotype Normal
+karyotype normal
 sex U
 tissue kidney
 vendorName ScienCell
@@ -2360,11 +2490,10 @@ tag  Huh7
 type Cell Line
 tier 3
 organism Human
-target  Huh-7
 description  Hepatocellular carcinoma
 lineage  Hepatocyte derived carcinoma taken from a liver tumor
 karyotype  Unknown
-sex  M
+sex M
 tissue  Liver
 vendorName  Ravi Jhaveri, Duke University
 vendorId
@@ -2378,11 +2507,10 @@ tag  Huh7.5
 type Cell Line
 tier 3
 organism Human
-target  Huh-7.5
 description  Hepatocellular carcinoma
 lineage  Hepatocyte derived carcinoma taken from a liver tumor and selected for high levels of hepatitis C replication
 karyotype  Unknown
-sex  M
+sex M
 tissue  Liver
 vendorName  Ravi Jhaveri, Duke University
 vendorId
@@ -2422,11 +2550,10 @@ tag  iPS
 type Cell Line
 tier 3
 organism Human
-target  iPS
 description  induced pluripotent stem cell
 lineage  induced pluripotent stem cell derived from skin fibroblast
 karyotype  Unknown
-sex  B
+sex B
 tissue  iPS stem cell derived from skin fibroblast
 vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId
@@ -2456,9 +2583,9 @@ term LHCN-M2
 tag LHCNM2
 type Cell Line
 tier 3
-organism human
-description skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old Caucasian heart transplant donor, immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN"), Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
-lineage 
+organism Human
+description skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old caucasian heart transplant donor, immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN"), Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
+lineage
 karyotype
 sex M
 tissue Skeletal muscle myoblast
@@ -2490,7 +2617,7 @@ term LNCaP
 tag LNCaP
 type Cell Line
 organism Human
-description prostate adenocarcinoma, "LNCaP clone FGC was isolated in 1977 by J.S. Horoszewicz, et al., from a needle aspiration biopsy of the left supraclavicular lymph node of a 50-year-old Caucasian male (blood type B+) with confirmed diagnosis of metastatic prostate carcinoma." - ATCC. (Horoszewicz et al. LNCaP Model of Human Prostatic Carcinoma. Cancer Research 43, 1809-1818, April 1983.)
+description prostate adenocarcinoma, "LNCaP clone FGC was isolated in 1977 by J.S. Horoszewicz, et al., from a needle aspiration biopsy of the left supraclavicular lymph node of a 50-year-old caucasian male (blood type B+) with confirmed diagnosis of metastatic prostate carcinoma." - ATCC. (Horoszewicz et al. LNCaP Model of Human Prostatic Carcinoma. Cancer Research 43, 1809-1818, April 1983.)
 tissue Prostate
 vendorName ATCC
 vendorId CRL-1740
@@ -2510,8 +2637,8 @@ type Cell Line
 tier 3
 organism Human
 description Human T cell leukemia
-lineage
-karyotype
+lineage 
+karyotype 
 sex F
 tissue Blood
 vendorName DSMZ
@@ -2627,7 +2754,7 @@ tier 3
 organism Human
 description Monocytes-CD14+ are CD14-positive cells from human leukapheresis product
 lineage Monocytic
-karyotype Normal
+karyotype normal
 sex F
 tissue monocytes
 vendorName S. Heimfeld Laboratory, FHCRC
@@ -2659,8 +2786,9 @@ tissue Blood
 lineage mesoderm
 description acute promyelocytic leukemia cell line. (PMID: 1995093)
 vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
-vendorId
-orderUrl
+#put universities in for Stam and Snyder
+vendorId (see protocol documents)
+orderUrl N/A
 lineage
 karyotype cancer
 termId BTO:0002489
@@ -2820,8 +2948,8 @@ organism Human
 description Dedifferentiated human pancreatic islets
 tissue Pancreas
 vendorName National Disease Research Interchange (NDRI).
-vendorId
-orderUrlhttp://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
+vendorId N/A 
+orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
 termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex B
@@ -2835,8 +2963,8 @@ organism Human
 description human pancreatic islets
 tissue Pancreas
 vendorName Refer to protocol documents for differing sources
-vendorId
-orderUrl
+vendorId ;
+orderUrl ;
 termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex M
@@ -2850,8 +2978,9 @@ organism Human
 description Human peripheral blood-derived erythroblasts
 tissue Blood
 vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
-vendorId 
-orderUrl 
+vendorId N/A
+vendorName Farnham lab
+orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
 termId BTO:0000574 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000574
 sex M
@@ -2865,8 +2994,8 @@ organism Human
 description Peripheral blood mononuclear cells
 tissue Blood
 vendorName PBMC cells provided by E. Bresnick, UW Madison
-vendorId
-orderUrl
+vendorId N/A
+orderUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
 sex M
@@ -2914,10 +3043,10 @@ tier 3
 description Human Prostate Epithelial Cell line
 tissue Prostate
 vendorName Lonza
-VendorId CC-2555
+vendorId CC-2555
 orderUrl http://www.lonza.com/
 lineage Epithelial
-karyotype Normal
+karyotype normal
 termId BTO:0002398
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002398
 sex U
@@ -3042,22 +3171,24 @@ tier 3
 protocol HudsonAlpha:SK-N-MC_protocol.pdf
 
 # In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
-term SK-N-SH_RA
-tag SKNSHRA
-type Cell Line
-organism Human
-description neuroblastoma cell line, treatment: differentiated with retinoic acid. (Biedler, et al. Morphology and Growth, Tumorigenicity, and Cytogenetics of Human Neuroblastoma Cells in Continuous Culture. Cancer Research 33, 2643-2652, November 1973.)
-tissue Brain
-vendorName ATCC
-vendorId HTB-11
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
-lineage ectoderm
-karyotype cancer
-termId BTO:0002372 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
-sex F
-tier 3
-protocol UW_Stam:Stam_15_protocols.pdf
+# This term has been removed from all instances of trackDb and metaDb, and is
+# now officially obsolete and should be deleted soon (5/20/11)
+#term SK-N-SH_RA
+#tag SKNSHRA
+#type Cell Line
+#organism Human
+#description neuroblastoma cell line, treatment: differentiated with retinoic acid. (Biedler, et al. Morphology and Growth, Tumorigenicity, and Cytogenetics of Human Neuroblastoma Cells in Continuous Culture. Cancer Research 33, 2643-2652, November 1973.)
+#tissue Brain
+#vendorName ATCC
+#vendorId HTB-11
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
+#lineage ectoderm
+#karyotype cancer
+#termId BTO:0002372 (non-specific)
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
+#sex F
+#tier 3
+#protocol UW_Stam:Stam_15_protocols.pdf
 
 term SK-SY5Y
 tag SKSY5Y
@@ -3098,11 +3229,10 @@ tag  Stellate
 type Cell Line
 tier 3
 organism Human
-target  Stellate
 description  Human Hepatic Stellate Cells
 lineage  Liver that was perfused with collagenase and sellected for hepatic stellate cells by density gradient
 karyotype  normal
-sex  F
+sex F
 tissue  Liver
 vendorName  Steve Choi, Duke University
 vendorId
@@ -3169,9 +3299,9 @@ organism Human
 tissue Blood
 lineage mesoderm
 description primary human Th1 T cells
-vendorName
+vendorName Stam lab
 vendorId None (primary pheresis of single normal subject)
-orderUrl
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 karyotype unknown
 termId BTO:0001678
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001678
@@ -3186,9 +3316,9 @@ organism Human
 description Primary human Th2 T cells
 tissue Blood
 lineage mesoderm
-vendorName
+vendorName Stam lab
 vendorId None (primary pheresis of single normal subject)
-orderUrl
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 karyotype unknown
 termId BTO:0001679
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001679
@@ -3234,7 +3364,7 @@ term U87
 tag U87
 type Cell Line
 organism Human
-description human glioblastoma; astrocytoma. (PMID: 4332744)
+description human glioblastoma, astrocytoma. (PMID: 4332744)
 tissue Brain
 lineage ectoderm
 vendorName ATCC
@@ -3279,7 +3409,7 @@ lineage
 karyotype
 termId BTO:0001178 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001178
-sex  M
+sex M
 tier 3
 protocol UW_Stam:WERI-Rb-1_Stam_protocol.pdf
 
@@ -3290,7 +3420,7 @@ tier 3
 organism Human
 description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct
 lineage Fibroblast
-karyotype Normal (RAF)
+karyotype normal (RAF)
 sex F
 tissue embryonic lung
 vendorName Dr. Carl Mann, SBIGeM
@@ -3389,8 +3519,6 @@ description Pituitary tumor LAF1
 age immortalized
 strain Unknown
 vendorName ATCC
-vendorId 
-orderUrl
 termId 7087
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
 color 153,38,0
@@ -3404,7 +3532,7 @@ organism Mouse
 tissue Blood
 category primaryCells
 description B Cell , CD19+
-age adult-8wks
+age immortalized
 strain C57BL/6
 vendorName Stam lab
 vendorId N/A
@@ -3421,7 +3549,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category primaryCells
-description mouse spleen B cells, CD43-,CD11b- 
+description mouse spleen B cells, CD43-,CD11b-
 age adult-8wks
 strain C57BL/6
 vendorName M. Bender (FHCRC)
@@ -3439,8 +3567,6 @@ type Cell Line
 organism Mouse
 tissue Bone
 category Tissue
-age ageUnknown
-strain unknown
 description Bone Marrow
 vendorName LICR lab
 vendorId N/A
@@ -3457,14 +3583,12 @@ type Cell Line
 organism Mouse
 tissue Cerebellum
 category Tissue
-age ageUnknown
-strain unknown
 description Cerebellum
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
 termId 7012
-1termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 153,38,0
 sex U
 protocol LICR(Ren):Cerebellum_Ren_protocol.pdf UW(Stam):Tissue_Stam_protocol.pdf
@@ -3509,7 +3633,7 @@ type Cell Line
 organism Mouse
 tissue
 category primaryCells
-description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov;7(11):2071-84.)
+description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov,7(11):2071-84.)
 age E0
 strain 129
 vendorName Uw lab
@@ -3529,8 +3653,6 @@ organism Mouse
 tissue Colon
 category Tissue
 description Colon
-age ageUnknown
-strain unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
@@ -3547,8 +3669,6 @@ organism Mouse
 tissue Cortex
 category Tissue
 description Cortex
-age ageUnknown
-strain unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
@@ -3568,7 +3688,7 @@ age E0
 strain C57BL/6
 vendorName University of California, San Diego Transgenic Core and Embryonic Stem Cell
 vendorId N/A
-orderUrl 
+orderUrl
 termId
 termUrl
 color 153,38,0
@@ -3583,8 +3703,6 @@ organism Mouse
 tissue Adipose
 category Tissue
 description Adipose tissue
-age ageUnknown
-strain unknown
 vendorName UW lab
 vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -3601,8 +3719,6 @@ organism Mouse
 tissue Lung
 category Tissue
 description Fibroblast
-age ageUnknown
-strain unknown
 vendorName UW lab
 vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -3653,8 +3769,6 @@ organism Mouse
 tissue Heart
 category Tissue
 description Heart
-age ageUnknown
-strain unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
@@ -3671,8 +3785,6 @@ organism Mouse
 tissue Kidney
 category Tissue
 description Kidney
-age ageUnknown
-strain unknown
 vendorName UW lab
 vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -3706,8 +3818,6 @@ organism Mouse
 tissue Liver
 category Tissue
 description Liver
-age ageUnknown
-strain unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -3724,8 +3834,6 @@ organism Mouse
 tissue Lung
 category Tissue
 description Lung
-age ageUnknown
-strain unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
@@ -3743,8 +3851,6 @@ organism Mouse
 tissue MEF
 category primaryCells
 description Mouse Embryonic Fibroblast
-age ageUnknown
-strain unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
@@ -3762,8 +3868,6 @@ organism Mouse
 tissue Blood
 category primaryCells
 description Megakaryocyte
-age ageUnknown
-strain unknown
 vendorName Mitch Weiss lab
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7054
@@ -3795,8 +3899,6 @@ organism Mouse
 tissue Blood
 category cellLine
 description Myocyte
-age ageUnknown
-strain unknown
 vendorName
 orderUrl
 color 153,38,0
@@ -3812,8 +3914,6 @@ organism Mouse
 tissue Blood
 category Tissue
 description Muscle
-age ageUnknown
-strain unknown
 vendorName
 orderUrl
 termId 7054
@@ -3849,8 +3949,6 @@ organism Mouse
 tissue OlfactoryBulb
 category Tissue
 description Olfactory Bulb
-age ageUnknown
-strain unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
@@ -3867,8 +3965,6 @@ organism Mouse
 tissue Pancreas
 category Tissue
 description Pancreas
-age ageUnknown
-strain unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
@@ -3903,8 +3999,6 @@ organism Mouse
 tissue Placenta
 category Tissue
 description Placenta
-age ageUnknown
-strain unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
@@ -3923,8 +4017,6 @@ organism Mouse
 tissue SmallIntestine
 category Tissue
 description Small Intestine
-age ageUnknown
-strain unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
@@ -3941,8 +4033,6 @@ organism Mouse
 tissue Spleen
 category Tissue
 description Spleen
-age ageUnknown
-strain unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
@@ -3959,8 +4049,6 @@ organism Mouse
 tissue Testis
 category Tissue
 description Testis
-age ageUnknown
-strain unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
@@ -3977,8 +4065,6 @@ organism Mouse
 tissue Thymus
 category Tissue
 description Thymus
-age ageUnknown
-strain unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
@@ -3995,8 +4081,6 @@ organism Mouse
 tissue Blood
 category primaryCells
 description Naive T cells: CD4+, CD25-
-age ageUnknown
-strain unknown
 vendorName UW lab
 vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -4013,12 +4097,11 @@ organism Mouse
 tissue Blood
 category primaryCells
 description Regulatory T cells CD4+,CD25+
-age ageUnknown
-strain unknown
 vendorName UW lab
 vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7060
+termId
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 153,38,0
 sex U
@@ -4031,8 +4114,6 @@ organism Mouse
 tissue Brain
 category Tissue
 description Whole Brain
-age ageUnknown
-strain unknown
 vendorName UW lab
 vendorId N/A
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -4047,7 +4128,7 @@ tag ZHBTC4
 type Cell Line
 organism Mouse
 tissue
-category primaryCell
+category primaryCells
 age E0
 strain 129/Ola
 description Undifferentiated mouse embryonic stem cells
@@ -4105,7 +4186,7 @@ description pseudogene
 # lots (optional lot numbers)
 
 term AP-2alpha
-tag AP2alpha
+tag AP2ALPHA
 type Antibody
 target AP-2alpha
 antibodyDescription Rabbit polyclonal - AP-2alpha (H-79) is a rabbit polyclonal antibody raised against amino acids 130-209 mapping within an internal region of AP-2alpha of human origin.
@@ -4119,7 +4200,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2A
 validation AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
 
 term AP-2gamma
-tag AP2gamma
+tag AP2GAMMA
 type Antibody
 target AP-2gamma
 antibodyDescription Rabbit polyclonal - AP-2Y (H-77) is a rabbit polyclonal antibody raised against amino acids 145-221 mapping with in an internal region of AP-2Y of human origin.
@@ -4141,7 +4222,7 @@ targetDescription Activating transcription factor 3. A bZIP transcription factor
 orderUrl http://www.scbt.com/datasheet-188-atf-3-c-19-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-188
-lab Struhl, Myers
+lab Myers
 targetId GeneCard:ATF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF3
 validation ATF3(Immunoblot):human_ATF3_validation_Myers.pdf
@@ -4217,7 +4298,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL3
 validation BCL3(Immunoblot):human_BCl3_C-14_validation_Myers.pdf
 
 term BCLAF1_(SC-101388)
-tag BCLAF101388
+tag BCLAF1
 type Antibody
 target BCLAF1
 antibodyDescription Mouse monoclonal IgG, raised against a synthetic peptide corresponding to a.a. 900-909 of BCLAF1 of human origin.
@@ -4250,7 +4331,7 @@ type Antibody
 target BHLHE40
 antibodyDescription Dec-1(S-8) is a mouse monoclonal IgG2b antibody raised against recombinant DEC1 of human origin. Recommended for detection of DEC1 of m and h origin by WB, IP and ELISA.
 targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differe
-vendorName Santa Cruz Biotech
+vendorName Santa Cruz Biotech,
 vendorId sc-101023
 orderUrl http://www.scbt.com/datasheet-101023-dec1-s-8-antibody.html
 lab Myers
@@ -4259,7 +4340,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
 validation BHLEH40(Immunoblot):human_BHLEHE40_S-8_validation_Myers.pdf
 
 term BHLHE40_(NB100-1800)
-tag BHLHE40NB100
+tag BHLHE40c
 type Antibody
 target BHLHE40
 antibodyDescription Rabbit polyclonal, maps to a region between residues 350 and the C-terminus (residue 412)
@@ -4274,7 +4355,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
 validation missing
 
 term BRCA1_(A300-000A)
-tag BRCA1A300
+tag BRCA1
 type Antibody
 target BRCA1
 antibodyDescription Rabbit polyclonal recognizing a region between residue 1800 and the C-terminus (residue 1863) of human Breast Cancer Gene 1
@@ -4330,7 +4411,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA4
 validation missing
 
 term c-Fos
-tag cFOS
+tag CFOS
 type Antibody
 target c-Fos
 antibodyDescription Rabbit polyclonal to amino acids 210-335 mapping at the C-terminus of c-Fos of human origin
@@ -4344,7 +4425,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
 validation missing
 
 term c-Jun
-tag cJUN
+tag CJUN
 type Antibody
 target c-Jun
 antibodyDescription Rabbit polyclonal to amino acids 1-79 mapping at the N-terminus of c-Jun p39 of human origin
@@ -4358,7 +4439,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUN
 validation missing
 
 term c-Myb_(SC-7874)
-tag cMYBSC7874
+tag CMYB
 type Antibody
 target c-Myb
 antibodyDescription Rabbit polyclonal IgG, Epitope corresponding to amino acids 500-640 mapping at the C-terminus of c-Myb of human origin
@@ -4372,7 +4453,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYB
 validation missing
 
 term c-Myc
-tag cMYC
+tag CMYC
 type Antibody
 target c-Myc
 antibodyDescription rabbit polyclonal to amino acids 1-262 of c-Myc human origin
@@ -4414,7 +4495,7 @@ lab Snyder
 validation missing
 
 term CHD2_(AB68301)
-tag CHD2AB68301
+tag CHD2
 type Antibody
 target CHD2
 antibodyDescription Rabbit polyclonal to CHD2 Synthetic peptide derived from within residues 1250 - 1350 of Human CHD2.
@@ -4436,14 +4517,14 @@ targetDescription CTCF zinc finger transcription factor. A sequence specific DNA
 orderUrl http://www.millipore.com/catalogue/item/07-729
 vendorName Millipore
 vendorId 07-729
-lab Bernstein, Iyer
+lab Hardison
 lots 1350637, DAM1472197
 targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
 
 term CTCF_(SC-15914)
-tag CTCFSC15914
+tag CTCFc
 type Antibody
 target CTCF
 antibodyDescription Goat polyclonal, epitope mapping near the C-terminus of CTCF of human origin
@@ -4457,7 +4538,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation missing
 
 term CTCF_(SC-5916)
-tag CTCFSC5916
+tag CTCFn
 type Antibody
 target CTCF
 antibodyDescription Goat polyclonal IgG, epitope mapping at the N-terminus of CTCF of human origin.
@@ -4472,7 +4553,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation missing
 
 term CTCFL_(SC-98982)
-tag CTCFLSC98982
+tag CTCFL
 type Antibody
 target CTCFL
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 91-210 mapping within an internal region of BORIS(CTCFL) of human origin.
@@ -4559,7 +4640,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
 validation E2F6(Western_blot,siRNA-ChIP):human_E2F6_validation_Farnham.pdf
 
 term  E2F6_(SC-22823)
-tag  E2F6SC22823
+tag  E2F6b
 type Antibody
 target  E2F6
 antibodyDescription  Rabbit polyclonal IgG, epitope corresponding to a.a. 232-281 mapping at the C-terminus of E2F-6 of human origin.
@@ -4567,15 +4648,15 @@ targetDescription  This gene encodes a member of the E2F transcription factor pr
 vendorName Santa Cruz Biotech
 vendorId sc-22823
 orderUrl http://www.scbt.com/datasheet-22823-e2f-6-h-50-antibody.html
-lab  Myers
-lots  D1206
+lab Myers
+lots D1206
 targetId E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
 validation E2F6_(SC-22823)(Immunoblot,MassSpec):human_E2F6_SC-22823_validation_Myers.pdf
 
 
 term  EBF1_(SC-137065)
-tag  EBF1SC137065
+tag  EBF1
 type Antibody
 target  EBF1
 antibodyDescription  Mouse monoclonal IgG, raised against a.a. 1-300 mapping at the N-terminus of EBF of human origin.
@@ -4583,14 +4664,14 @@ targetDescription  Early B-cell factor 1.  Transcriptional activator which recog
 vendorName Santa Cruz Biotech
 vendorId sc-137065
 orderUrl http://www.scbt.com/datasheet-137065-ebf-c-8-antibody.html
-lab  Myers
-lots  J0505
+lab Myers
+lots J0505
 targetId EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation EBF1_(SC-137065)(Immunoprecipitation-WesternBlotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
 
 term eGFP-FOS
-tag eFOS
+tag FOSe
 type Antibody
 target eGFP-FOS
 antibodyDescription Goat polyclonal
@@ -4605,7 +4686,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
 validation eGFP-FOS:human_validation_White.pdf
 
 term eGFP-GATA2
-tag eGATA2
+tag GATA2e
 type Antibody
 target eGFP-GATA2
 antibodyDescription Goat polyclonal
@@ -4620,7 +4701,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 validation eGFP-GATA2:human_validation_White.pdf
 
 term eGFP-HDAC8
-tag eHDAC8
+tag HDAC8e
 type Antibody
 target eGFP-HDAC8
 antibodyDescription Goat polyclonal
@@ -4635,7 +4716,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
 validation eGFP-HDAC8:human_validation_White.pdf
 
 term eGFP-JunB
-tag eJunB
+tag JUNBe
 type Antibody
 target eGFP-JunB
 antibodyDescription Goat polyclonal
@@ -4650,7 +4731,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
 validation eGFP-JunB:human_validation_White.pdf
 
 term eGFP-JunD
-tag eJunD
+tag JUNDe
 type Antibody
 target eGFP-JunD
 antibodyDescription Goat polyclonal
@@ -4665,7 +4746,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation eGFP-JunD:human_validation_White.pdf
 
 term eGFP-NR4A1
-tag eNR4A1
+tag NR4A1e
 type Antibody
 target eGFP-NR4A1
 antibodyDescription Goat polyclonal
@@ -4680,7 +4761,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
 validation eGFP-NR4A1:human_validation_White.pdf
 
 term  ELF1_(SC-631)
-tag  ELF1SC631
+tag  ELF1
 type Antibody
 target  ELF1
 antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Elf-1 of human origin.
@@ -4688,8 +4769,8 @@ targetDescription  This gene encodes an E26 transformation-specific related tran
 vendorName Santa Cruz Biotech
 vendorId sc-631
 orderUrl http://www.scbt.com/datasheet-631-elf-1-c-20-antibody.html
-lab  Myers
-lots  L2707
+lab Myers
+lots L2707
 targetId GeneCards:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
 validation ELF1_(SC-631)(Immunoprecipitation-WesternBlot,MassSpec):human_ELF1_SC-631_validation_Myers.pdf
@@ -4709,7 +4790,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK4
 validation missing
 
 term ERalpha_a
-tag ERalpha(a)
+tag ERAA
 type Antibody
 target ERalpha_a
 antibodyDescription Rabbit affinity purified polyclonal antibody. Epitope is the C-terminus of human estrogen receptor alpha (ESR1). Recommended for detection of estrogen receptor  of m, r and h origin by WB, IP, IF, IHC(P) and ELISA
@@ -4724,7 +4805,7 @@ validation ERalpha_a(Immunoprecipitation-WesternBlot,MassSpect):human_ERalpha_a_
 
 ##This does not appear in metaDb
 term ERalpha_b
-tag ERalpha(b)
+tag ERAB
 type Antibody
 target ERalpha_b
 antibodyDescription Monoclonal antibody raised in mouse against the NH2 terminus of the human ER (estrogen receptor alpha), using a KLH-conjugated synthetic peptide (Q19-K32).
@@ -4760,6 +4841,8 @@ targetDescription epitope corresponding to amino acids 81-160 mapping near the N
 orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-66882
+targetId GeneCard:ESRRA
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESRRA
 lab Snyder
 validation missing
 
@@ -4773,11 +4856,13 @@ targetDescription ETS transcriptions factors, such as ETS1, regulate numerous ge
 vendorName Santa Cruz Biotech
 vendorId sc-350
 orderUrl http://www.scbt.com/datasheet-350-ets-1-c-20-antibody.html
+targetId GeneCard:ETS1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ETS1
 lab Myers
 validation ETS1(Immunoprecipitation-WesternBlot,MassSpec):human_ETS1_validation_Myers.pdf
 
 term  FOSL1_(SC-183)
-tag  FOSL1SC183
+tag  FOSL1
 type Antibody
 target  FOSL1
 antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the N-terminus of FOSL1 of human origin.
@@ -4785,7 +4870,7 @@ targetDescription  The Fos gene family consists of 4 members: FOS, FOSB, FOSL1, 
 vendorName Santa Cruz Biotech
 vendorId sc-183
 orderUrl http://www.scbt.com/datasheet-183-fra-1-n-17-antibody.html
-lab  Myers
+lab Myers
 lots  I0809
 targetId GeneCard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
@@ -4808,7 +4893,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL2
 validation FOSL2(Immunoblot):human_FOSL2_Q-20_validation_Myers.pdf
 
 term FOXA1_(SC-6553)
-tag FOXA1SC6553
+tag FOXA1c
 type Antibody
 target FOXA1
 targetDescription This gene encodes a member of the forehead class of DNA-binding proteins. These hepatocyte nuclear factors are transcriptional activators for liver-specific transcripts such as albumin and transthyretin, and they also interact with chromatin. Similar family members in mice have roles in the regulation of metabolism and in the differentiation of the pancreas and liver (RefSeq).
@@ -4822,7 +4907,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
 validation FOXA1(Immunoprecipitation-WesternBlot,MassSpec):human_FOXA1_SC-6553_validation_Myers.pdf
 
 term  FOXA1_(SC-101058)
-tag  FOXA1SC101058
+tag  FOXA1
 type Antibody
 target  FOXA1
 antibodyDescription  Mouse monoclonal IgG, raised against recombinant HNF-3a of human origin.
@@ -4830,14 +4915,14 @@ targetDescription  This gene encodes a member of the forkhead class of DNA-bindi
 vendorName Santa Cruz Biotech
 vendorId sc-101058
 orderUrl http://www.scbt.com/datasheet-101058-hnf-3alpha-q-6-antibody.html
-lab  Myers
+lab Myers
 lots  A2706
 targetId GeneCards:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
 validation FOXA1_(SC-101058)(Immunoprecipitation-WesternBlot,MassSpec):human_FOXA1_SC-101058_validation_Myers.pdf
 
 term FOXA2_(SC-6554)
-tag FOXA2SC6554
+tag FOXA2
 type Antibody
 target FOXA2
 antibodyDescription Goat polyclonal IgG, epitope mapping at the N-terminus of FOXA2 of human origin.
@@ -4874,9 +4959,9 @@ antibodyDescription Mouse monoclonal, GABPa(G-1), IgG1
 vendorName Santa Cruz Biotech
 vendorId sc-28312
 orderUrl http://www.scbt.com/product.php?datasheet=28312
-targetId
-targetUrl
-lab Myers / Wold
+targetId GeneCard:GABPB1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPB1
+lab Myers
 lots F1804
 validation GABP(Immunoprecipitation-WesternBlot,MassSpec):human_GABP_validation_Myers.pdf
 
@@ -4895,7 +4980,7 @@ lab Farnham
 validation GATA-1_(WesternBlot,ChIP):human_GATA-1_validation_Farnham.pdf
 
 term GATA1_(SC-265)
-tag GATA1SC265
+tag GATA1a
 type Antibody
 target GATA1
 targetDescription GATA1 is erythroid-specific and is responsible for the regulated transcription of erythroid genes.
@@ -4909,7 +4994,7 @@ lab Hardison
 validation GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
 
 term  GATA1_(SC-266)
-tag  GATA1SC266
+tag  GATA1b
 type Antibody
 target  GATA1
 antibodyDescription  Rat monoclonal raised against bacterially expressed murine GATA-1
@@ -4917,7 +5002,7 @@ targetDescription  GATA1 is erythroid-specific and is responsible for the regula
 vendorName Santa Cruz Biotech
 vendorId sc-266
 orderUrl http://www.scbt.com/datasheet-266-gata-1-n1-antibody.html
-lab  Snyder
+lab Snyder
 lots
 targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
@@ -4932,14 +5017,14 @@ targetDescription GATA binding protein 2
 antibodyDescription Rabbit polyclonal
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
 vendorId   ;
-orderUrl
+orderUrl http://molpharm.wisc.edu/people/faculty/bresnick/bresnick.html
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Farnham
 validation GATA-2(Western_blot,siRNA):human_GATA-2_validation_Farnham.pdf
 
 term GATA2_(SC-267)
-tag GATA2SC267
+tag GATA2m
 type Antibody
 target GATA2
 targetDescription This gene encodes a member of the GATA family of zinc-finger transcription factors that are named for the consensus nucleotide sequence they bind in the promoter regions of target genes. The encoded program plays an essential role in regulation transcription of genes involved in the development and proliferation of hematopoietic and endocrine cell lineages (RefSeq).
@@ -4953,7 +5038,7 @@ lab Myers
 validation GATA2_(SC-267)(Immunoprecipitation-WesternBlot,MassSpec):human_GATA2_SC-267_validation_Myers.pdf
 
 term  GATA3_(SC-268)
-tag  GATA3SC268
+tag  GATA3
 type Antibody
 target  GATA3
 antibodyDescription  Mouse monoclonal IgG raised against human recombinant GATA-3.
@@ -4961,7 +5046,7 @@ targetDescription  This gene encodes a protein which belongs to the GATA family 
 vendorName Santa Cruz Biotech
 vendorId sc-268
 orderUrl http://www.scbt.com/datasheet-268-gata-3-hg3-31-antibody.html
-lab  Myers
+lab Myers
 lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
@@ -5007,8 +5092,8 @@ orderUrl http://www.scbt.com/datasheet-1002-gr-p-20-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-1002
 lab Snyder
-targetId
-targetUrl
+targetId GeneCard:NR3C1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C1
 validation missing
 
 term GTF2B
@@ -5026,7 +5111,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 validation missing
 
 term GTF2F1_(AB28179)
-tag GTF2F1ab28179
+tag GTF2F1
 type Antibody
 target GTF2F1
 antibodyDescription Rabbit polyclonal to TFIIF - Recombinant full length protein - RAP 74 subunit of TF11F
@@ -5057,7 +5142,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=H2AFZ
 validation missing
 
 term H3K4me1
-tag H3K4me1
+tag H3K04ME1
 type Antibody
 target H3K4me1
 antibodyDescription rabbit polyclonal
@@ -5072,7 +5157,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf
 
 term H3K4me1_(pAb-037-050)
-tag H3K4me1pAb037050
+tag H3K04ME1b
 type Antibody
 antibodyDescription Polyclonal antibody raised in rabbit against histone H3 containing the monomethylated lysine 4 (H3K4me1), using a KLH-conjugated synthetic peptide.
 target H3K4me1
@@ -5087,7 +5172,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me1_(pAb-037-050)(WesternBlot,DotBlot):human_H3K4me1_pAb-037-050_validation_Farnham.pdf
 
 term H3K4me2
-tag H3K4me2
+tag H3K04ME2
 type Antibody
 target H3K4me2
 antibodyDescription rabbit polyclonal
@@ -5102,7 +5187,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me2(Dot_blot):human_H3K4me2_validation_Bernstein.pdf
 
 term H3K4me3
-tag H3K4me3
+tag H3K04ME3
 type Antibody
 target H3K4me3
 antibodyDescription rabbit polyclonal
@@ -5119,9 +5204,9 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me3(Dot_blot):human_H3K4me3_validation_Bernstein.pdf
 
-##This does not appear in metaDb
+##This does not appear in metaDb 5/23/11
 term H3K4me3B
-tag H3K4me3B
+tag H3K04ME3b
 type Antibody
 target H3K4me3
 displayName H3K4me3
@@ -5137,11 +5222,12 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me3B(Western_blot,Competitor_peptides):human_H3K4me3B_validation_Farnham.pdf
 
 term H3K9ac
-tag H3K9ac
+tag H3K09AC
 type Antibody
 target H3K9ac
 antibodyDescription rabbit polyclonal
-targetDescription Histone H3 (acetyl K9). As with H3K27ac, associated with transcriptional initiation and open chromatin structure. It remains unknown whether acetylation has can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.
+targetDescription Histone H3 (acetyl K9). As with H3K27ac, associated with transcriptional initiation and open chromatin structure.
+It remains unknown whether acetylation has can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.
 orderUrl http://www.abcam.com/index.html?datasheet=4441
 vendorName Abcam
 vendorId ab4441
@@ -5152,7 +5238,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
 
 term H3K9acB
-tag H3K9acB
+tag H3K09ACb
 displayName H3K9ac
 type Antibody
 target H3K9ac
@@ -5168,7 +5254,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
 
 term H3K9Ac_(9649)
-tag H3K9Ac9649
+tag H3K09ACn
 type Antibody
 antibodyDescription Monoclonal antibody was produced by immunizing rabbits with a synthetic peptide corresponding to the amino terminus of histone H3 in which Lys9 is acetylated.
 target H3K9Ac
@@ -5183,7 +5269,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K9Ac_(9649)(WesternBlot,DotBlot):human_H3K9Ac_9649_validation_Farnham.pdf
 
 term H3K9me1
-tag H3K9me1
+tag H3K09ME1
 type Antibody
 target H3K9me1
 antibodyDescription rabbit polyclonal
@@ -5198,7 +5284,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
 
 term H3K9me3
-tag H3K9me3
+tag H3K09ME3
 type Antibody
 target H3K9me3
 antibodyDescription rabbit polyclonal, ChIP grade
@@ -5212,16 +5298,11 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf
 
 term H3K9me3_(9754)
-tag H3K9me39754
+tag H3K09ME3n
 type Antibody
-antibodyDescription Rabbit polyclonal antibody was produced by immunizing animals with a synthetic\
- peptide corresponding to the amino terminus of histone H3 in which Lys9 is tri-methylated. Antibo\
-dy was purified by protein A and peptide affinity chromatography.
+antibodyDescription Rabbit polyclonal antibody was produced by immunizing animals with a synthetic peptide corresponding to the amino terminus of histone H3 in which Lys9 is tri-methylated. Antibody was purified by protein A and peptide affinity chromatography.
 target H3K9me3
-targetDescription Tri-Methyl-Histone H3 (Lys9) Antibody detects endogenous levels of histone H3 on\
-ly when tri-methylated on Lys9. The antibody does not cross-react with non-methylated, mono-methyl\
-ated, or di-methylated Lys9. In addition, the antibody does not cross-react with non-methylated, m\
-ono-methylated, di-methylated or tri-methylated histone H3 Lys4, Lys27, Lys36 or histone H4 Lys20.
+targetDescription Tri-Methyl-Histone H3 (Lys9) Antibody detects endogenous levels of histone H3 only when tri-methylated on Lys9. The antibody does not cross-react with non-methylated, mono-methylated, or di-methylated Lys9. In addition, the antibody does not cross-react with non-methylated, mono-methylated, di-methylated or tri-methylated histone H3 Lys4, Lys27, Lys36 or histone H4 Lys20.
 vendorName Cell Signaling
 vendorId 9754
 orderUrl http://www.cellsignal.com/products/9754.html
@@ -5232,7 +5313,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K9me3_(9754)(WesternBlot,PeptideELISA):human_H3K9me3_9754_validation_Farnham.pdf
 
 term H3K27ac
-tag H3K27ac
+tag H3K27AC
 type Antibody
 target H3K27ac
 antibodyDescription rabbit polyclonal
@@ -5247,7 +5328,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K27ac(Dot_blot):human_H3K27ac_validation_Bernstein.pdf
 
 term H3K27me3
-tag H3K27me3
+tag H3K27ME3
 type Antibody
 target H3K27me3
 antibodyDescription rabbit polyclonal
@@ -5263,7 +5344,7 @@ validation H3K27me3(Dot_blot):human_H3K27me3_validation_Bernstein.pdf
 
 ##This does not appear in metaDb
 term H3K27me3B
-tag H3K27me3B
+tag H3K27ME3b
 type Antibody
 target H3K27me3
 displayName H3K27me3
@@ -5279,7 +5360,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K27me3B(Western_blot,Peptide_ELISA):human_H3K27me3B_validation_Farnham.pdf
 
 term H3K36me3
-tag H3K36me3
+tag H3K36ME3
 type Antibody
 target H3K36me3
 antibodyDescription rabbit polyclonal
@@ -5294,7 +5375,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf
 
 term H3K36me3B
-tag H3K36me3B
+tag H3K36ME3b
 displayName H3K36me3
 type Antibody
 target H3K36me3
@@ -5310,7 +5391,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K36me3B(Western_blot,Peptide_ELISA):human_H3K36me3B_validation_Farnham.pdf
 
 term H3K79me2
-tag H3K79me2
+tag H3K79ME2
 type Antibody
 target H3K79me2
 antibodyDescription Rabbit polyclonal antibody raised against a peptide containing K79 di-methylation
@@ -5325,7 +5406,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K79me2(Dot_blot):human_H3K79me2_validation_Bernstein.pdf
 
 term H4K20me1
-tag H4K20me1
+tag H4K20ME1
 type Antibody
 target H4K20me1
 antibodyDescription rabbit polyclonal
@@ -5344,6 +5425,7 @@ tag HAE2F1
 type Antibody
 target HA-E2F1
 targetDescription The HA-E2F1 protein is a derivative of E2F1, a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses. The E2F proteins contain several evolutionary conserved domains found in most members of the family. These domains include a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain. This version of E2F1 includes an N terminal HA tag and a modified ER ligand binding domain to allow regulated translocation to the nucleus.antibodyDescription Mouse monoclonal - HA.11 clone 16B12 is a mouse monoclonal antibody raised against the twelve amino acids peptide CYPYDVPDYASL. The HA.11 antibody recognizes HA epitopes located in the middle of protein sequences as well as at the N- or C-terminus.
+antibodyDescription Monoclonal antibody HA.11 was raised against the twelve amino acid peptide CYPYDVPDYASL. This second-generation HA antibody is an excellent substitute for the 12CA5 monoclonal antibody. The HA.11 antibody recognizes the influenza hemagglutinin epitope (YPYDVPDYA) which has been used extensively as a general epitope tag in expression vectors. The extreme specificity of the antibody allows unambiguous identification and quantitative analysis of the tagged protein. The HA.11 antibody recognizes HA epitopes located in the middle of protein sequences as well as at the N- or C-terminus.
 orderUrl https://store.crpinc.com/datasheet.aspx?catalogno=MMS-101P
 vendorName Covance
 vendorId MMS-101P
@@ -5353,7 +5435,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
 validation HA-E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
 
 term  HDAC2_(SC-6296)
-tag  HDAC2SC6296
+tag  HDAC2
 type Antibody
 target  HDAC2
 antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of HDAC2 of human origin.
@@ -5361,7 +5443,7 @@ targetDescription  This gene product belongs to the histone deacetylase family. 
 vendorName Santa Cruz Biotech
 vendorId sc-6296
 orderUrl http://www.scbt.com/datasheet-6296-hdac2-c-19-antibody.html
-lab  Myers
+lab Myers
 lots  G0307
 targetId GeneCards:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
@@ -5386,8 +5468,7 @@ tag HMGN3
 type Antibody
 target HMGN3
 antibodyDescription Rabbit polyclonal. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry.
-targetDescription HMGN3 is a high-mobility group protein. These proteins are small, 8 top 11 kDa, ubiquitous proteins believed to play a role in chromatin structure. HMGNs bind to nucleosomes between the histone core and DNA and reduce chromatin compaction. As a r
-esult HMGNs, HMGN3 included, are believed to increase access to DNA for DNA replication, repair and transcription. HMGN3 has specifically been implicated in the action of Thyroid horomone receptors.
+targetDescription HMGN3 is a high-mobility group protein. These proteins are small, 8 top 11 kDa, ubiquitous proteins believed to play a role in chromatin structure. HMGNs bind to nucleosomes between the histone core and DNA and reduce chromatin compaction. As a result HMGNs, HMGN3 included, are believed to increase access to DNA for DNA replication, repair and transcription. HMGN3 has specifically been implicated in the action of Thyroid horomone receptors.
 orderUrl http://www.acris-antibodies.com/NB100-61076.htm
 vendorName Acris Antibodies
 vendorId NB100-61076
@@ -5412,7 +5493,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
 validation missing
 
 term HNF4A_(SC-8987)
-tag HNF4ASC8987
+tag HNF4Ab
 type Antibody
 target HNF4A
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to a.a. 295-465 mapping at the C-terminus of HNF4A of human origin.
@@ -5426,7 +5507,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
 validation HNF4A_(SC-8987)(Immunoprecipitation-WesternBlot,MassSpec):human_HNF4a_SC-8987_validation_Myers.pdf
 
 term HNF4G_(SC-6558)
-tag HNF4GSC6558
+tag HNF4G
 type Antibody
 target HNF4G
 antibodyDescription Goat polyclonal IgG, epitope mapping at the C-terminus of HNF4G of human origin.
@@ -5459,8 +5540,7 @@ tag INI1
 type Antibody
 target INI1
 antibodyDescription Ini1 (BAF47, SMARCB1) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex.
-targetDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus
-of Ini1 of human origin.
+targetDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin.
 orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-17796
@@ -5499,7 +5579,7 @@ validation IRF3(Immunoblot):human_IRF3_validation_Snyder.pdf
 
 
 term  IRF4_(SC-6059)
-tag  IRF4SC6059
+tag  IRF4
 type Antibody
 target  IRF4
 antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of IRF-4 of mouse origin.
@@ -5507,7 +5587,7 @@ targetDescription  The protein encoded by this gene belongs to the IRF (interfer
 vendorName Santa Cruz Biotech
 vendorId sc-6059
 orderUrl http://www.scbt.com/datasheet-6059-irf-4-m-17-antibody.html
-lab  Myers
+lab Myers
 lots  IO1O6
 targetId IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
@@ -5542,7 +5622,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
 validation KAP1(Western_blot,Immunoprecipitation-Western_blot):human_KAP1_validation_Farnham.pdf
 
 term LEF1_(SC-8592)
-tag LEF1SC8592
+tag LEF1
 type Antibody
 target LEF1
 antibodyDescription 	 Goat polyclonal IgG, epitope mapping near the C-terminus of LEF1 of human origin
@@ -5556,7 +5636,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
 validation LEF1_(SC-8592)(Immunoprecipitation-WesternBlot,MassSpec):human_LEF1_SC-8592_validation_Myers.pdf
 
 term MafF_(M8194)
-tag MafFM8194
+tag MAFF
 type Antibody
 target MafF
 antibodyDescription Rabbit polyclonal. Raised against synthetic peptide corresponding to amino acids 147-163 of human MAFF. The immunizing peptide does not cross-react with other members of the family.
@@ -5571,7 +5651,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFF
 validation missing
 
 term MafK_(ab50322)
-tag MafKab50322
+tag MAFKn
 type Antibody
 target MafK
 antibodyDescription Rabbit polyclonal. Raised against synthetic peptide: TTNPKPNKALKVKKEA conjugated to KLH by a C-terminal Cysteine residue linker, corresponding to amino acids 2-17 of Human MAFK
@@ -5586,7 +5666,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
 validation missing
 
 term MafK_(SC-477)
-tag MafKsc477
+tag MAFKc
 type Antibody
 target MafK
 antibodyDescription Rabbit polyclonal raised against epitope mapping at the C-terminus of NF-E2 p18 of mouse origin; recommended for detection of NF-E2 p18 (MafK) of mouse, rat and human origin
@@ -5609,7 +5689,7 @@ targetDescription  The protein encoded by this gene is a member of the basic hel
 vendorName Santa Cruz Biotech
 vendorId sc-197
 orderUrl http://www.scbt.com/datasheet-197-max-c-17-antibody.html
-lab  Myers, Snyder
+lab Myers
 lots  J0809
 targetId GeneCards:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
@@ -5647,7 +5727,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2C
 validation missing
 
 term NANOG_(SC-33759)
-tag NANOGSC33759
+tag NANOG
 type Antibody
 target NANOG
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 151-305 mapping at the C-terminus of Nanog of human origin.
@@ -5693,7 +5773,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2
 validation missing
 
 term NF-E2_(SC-22827)
-tag NFE2SC22827
+tag NFE2n
 type Antibody
 target NF-E2
 antibodyDescription Rabbit Polyclonal, epitope: 1-230 mapping at the N-terminus of NF-E2 of human origin
@@ -5772,8 +5852,8 @@ orderUrl http://www.scbt.com/datasheet-22810-gabp-alpha-h-180-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-22810
 lab Snyder
-targetId
-targetUrl
+targetId GeneCard:GABPA
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPA
 validation missing
 
 term NRSF
@@ -5787,8 +5867,8 @@ vendorId  (Made by Protein Expression Center: pec@caltech.edu)
 orderUrl http://www.cns.caltech.edu/people/faculty/anderson.html
 lab Myers / Wold
 lots 20070905JV
-targetId
-targetUrl
+targetId GeneCard:REST
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
 validation missing
 
 
@@ -5807,7 +5887,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation missing
 
 term p300_(SC-584)
-tag P300SC582
+tag P300n
 type Antibody
 target P300
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein
@@ -5821,7 +5901,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation missing
 
 term p300_(SC-48343)
-tag P300SC48343
+tag P300i
 type Antibody
 target P300
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein.
@@ -5895,8 +5975,7 @@ tag PGC1A
 type Antibody
 target PGC1A
 antibodyDescription rabbit polyclonal IgG
-targetDescription The protein encoded by this gene is a transcriptional coactivator that regulates the genes involved in energy metabolism. This protein interacts with PPARgamma, which permits the interaction of this protein with multiple transcription factors. This protein can interact with, and regulate the activities of, cAMP response element binding protein (CREB) and nuclear respiratory f
-actors (NRFs).
+targetDescription The protein encoded by this gene is a transcriptional coactivator that regulates the genes involved in energy metabolism. This protein interacts with PPARgamma, which permits the interaction of this protein with multiple transcription factors. This protein can interact with, and regulate the activities of, cAMP response element binding protein (CREB) and nuclear respiratory factors (NRFs).
 orderUrl http://www.scbt.com/datasheet-13067-pgc-1-h-300-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-13067
@@ -5906,7 +5985,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PPARGC1A
 validation missing
 
 term PITX1_(SC-81979)
-tag PITX1SC81979
+tag PITX1
 type Antibody
 target PITX1
 antibodyDescription Mouse monoclonal IgG, raised against recombinant Pitx1 of human origin.
@@ -5931,12 +6010,12 @@ vendorId MMS-126R
 orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
 lab Farnham, Iyer, Snyder
 lots 14861301, 14922701
-targetId
-targetUrl
+targetId GeneCard:POL2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 validation Pol2(Immunoblot):human_Pol2_validation_Synder.pdf
 
 term Pol2(b)
-tag POL2B
+tag POL2b
 type Antibody
 target POL2B
 antibodyDescription mouse monoclonal, clone CTD4H8
@@ -5955,8 +6034,7 @@ tag POL24H8
 type Antibody
 target POL24H8
 antibodyDescription Mouse monoclonal to RNA polymerase II CTD repeat YSPTSPS antibody (4H8) - ChIP Grade
-targetDescription This gene encodes the largest subunit of RNA polymerase II, the polymerase responsible for synthesizing messenger
-RNA in eukaryotes
+targetDescription This gene encodes the largest subunit of RNA polymerase II, the polymerase responsible for synthesizing messenger RNA in eukaryotes
 vendorName Abcam
 vendorId ab5408
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-ChIP-Grade-ab5408.html
@@ -5989,12 +6067,12 @@ vendorName Santa Cruz Biotech
 vendorId sc-21754
 orderUrl http://www.scbt.com/product.php?datasheet=21754
 lab Snyder
-targetId
-targetUrl
+targetId GeneCard:POLR3G
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
 validation missing
 
 term POU5F1_(SC-9081)
-tag POU5F1SC9081
+tag POU5F1
 type Antibody
 target POU5F1
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 1-134 of Oct3/4 of human origin.
@@ -6023,7 +6101,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
 validation POU2F2(Immunoprecipitation-WesternBlot,MassSpec):human_POU2F2_validation_Myers.pdf
 
 term PRDM1_(9115)
-tag PRDM19115
+tag PRDM1
 type Antibody
 target PRDM1
 antibodyDescription Rabbit Monoclonal antibody against a synthetic peptide corresponding to residues surrounding Val90 of human PRDI-BF1.
@@ -6080,7 +6158,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
 validation missing
 
 term RFX5_(200-401-194)
-tag RFX5200401194
+tag RFX5
 type Antibody
 target RFX5
 targetDescription Activates transcription from class II MHC promoters. Recognizes X-boxes. Mediates cooperative binding betweenRFX and NF-Y. RFX binds the X1 box of MHC-II promoters
@@ -6122,7 +6200,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
 validation missing
 
 term  SETDB1_(SC-66884)
-tag  SETDB1SC66884
+tag  SETDB1n
 type Antibody
 target  SETDB1
 antibodyDescription  SETDB1 (H-300) is an affinity purified rabbit polyclonal antibody raised against an epitope corresponding to amino acids 1-300 mapping at the N-terminus of the human SETDB1 protein. Recommended for detection of SETDB1 of m, r and h origin by WB, IP, IF and ELISA; also reactive with additional mammalian species, including cow and dog.
@@ -6130,7 +6208,7 @@ targetDescription  SETDB1 is a H3K9-selective histone methyltransferase, methyla
 vendorName Santa Cruz Biotech
 vendorId sc-66884
 orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
-lab  Farnham
+lab Farnham
 lots
 targetId Genecards:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Setdb1
@@ -6179,7 +6257,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIX5
 validation SIX5(ChIP,MassSpec):human_SIX5_validation_Myers.pdf
 
 term SMC3_(ab9263)
-tag SMC3ab9263
+tag SMC3
 type Antibody
 target SMC3
 antibodyDescription Rabbit polyclonal raised against synthetic peptide representing a portion within the last 100 amino acids of the human Structural Maintenance of Chromosomes-3 conjugated to KLH
@@ -6208,7 +6286,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP1
 validation SP1(Immunoprecipitation-WesternBlot,MassSpec):human_SP1_validation_Myers.pdf
 
 term SP2_(SC-643)
-tag SP2SC643
+tag SP2
 type Antibody
 target SP2
 antibodyDescription Rabbit polyclonal IgG, epitope mapping near the N-terminus of SP2 of human origin.
@@ -6231,7 +6309,7 @@ targetDescription  Binds to GT and GC boxes promoters elements. Probable transcr
 vendorName Santa Cruz Biotech
 vendorId sc-645
 orderUrl http://www.scbt.com/datasheet-645-sp4-v-20-antibody.html
-lab  Myers
+lab Myers
 lots  F2609
 targetId SP4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP4
@@ -6368,7 +6446,7 @@ validation TAF1(ChIP,MassSpec):human_TAF1_validation_Myers.pdf
 
 
 term  TAF7_(SC-101167)
-tag  TAF7SC101167
+tag  TAF7
 type Antibody
 target  TAF7
 antibodyDescription  Mouse monoclonal IgG, raised against recombinant TAF II p55 (TAF7) of human origin.
@@ -6377,14 +6455,14 @@ targetDescription  The intronless gene for this transcription coactivator is loc
 vendorName Santa Cruz Biotech
 vendorId sc-101167
 orderUrl http://www.scbt.com/datasheet-101167-taf-ii-p55-sq-8-antibody.html
-lab  Myers
+lab Myers
 lots  J1509
 targetId TAF7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
 validation TAF7_(SC-101167)(Immunoprecipitation-WesternBlot,MassSpec):human_TAF7_SC-101167_validation_Myers.pdf
 
 term TAL1_(SC-12984)
-tag TAL1SC12984
+tag TAL1
 type Antibody
 antibodyDescription goat polyclonal antibody; epitope mapping at the C-terminus of TAL1 of human origin, recommended for detection of TAL1 of mouse, rat and human origin
 vendorName Santa Cruz Biotech
@@ -6511,7 +6589,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 validation missing
 
 term THAP1_(SC-98174)
-tag THAP1SC98174
+tag THAP1
 type Antibody
 target THAP1
 antibodyDescription Goat polyclonal IgG, epitope mapping near the C-terminus of THAP1 of human origin.
@@ -6540,7 +6618,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
 validation TR4_(WesternBlot,ChIP):mouse_TR4_validation_Farnham.pdf
 
 term TRIM37_(SC-49548)
-tag TRIM37SC49548
+tag TRIM37
 type Antibody
 target TRIM37
 antibodyDescription Goat polyclonal IgG raised against  a peptide mapping at the C-terminus of TRIM37 of human origin.
@@ -6569,7 +6647,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
 validation USF-1(Immunoprecipitation-WesternBlot,MassSpec):human_USF1_validation_Myers.pdf
 
 term  USF1_(SC-8983)
-tag  USF1SC8983
+tag  USF1i
 type Antibody
 target  USF1
 antibodyDescription  Rabbit polyclonal IgG, epitope corresponding to a.a. 75-160 mapping within internal region of USF1 of human origin.
@@ -6577,7 +6655,7 @@ targetDescription  This gene encodes a member of the basic helix-loop-helix leuc
 vendorName Santa Cruz Biotech
 vendorId sc-8983
 orderUrl http://www.scbt.com/datasheet-8983-usf-1-h-86-antibody.html
-lab  Myers
+lab Myers
 lots  E2810
 targetId GeneCards:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
@@ -6606,7 +6684,7 @@ targetDescription  This gene encodes a member of the basic helix-loop-helix leuc
 vendorName Santa Cruz Biotech
 vendorId sc-862
 orderUrl http://www.scbt.com/datasheet-862-usf-2-c-20-antibody.html
-lab  Myers
+lab Myers
 lots  J0908
 targetId GeneCard:USF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
@@ -6655,7 +6733,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
 validation missing
 
 term YY1_(SC-281)
-tag YY1SC281
+tag YY1c
 type Antibody
 target YY1
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of YY1 of human origin
@@ -6684,7 +6762,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB33
 validation ZBTB33(Immunoblot):human_ZBTB33_6F8_validation_Myers.pdf
 
 term  ZBTB7A_(SC-34508)
-tag  ZBTB7ASC34508
+tag  ZBTB7A
 type Antibody
 target  ZBTB7A
 antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of LRF of human origin.
@@ -6692,14 +6770,14 @@ targetDescription  Plays a key role in the instruction of early lymphoid progeni
 vendorName Santa Cruz Biotech
 vendorId sc-34508
 orderUrl http://www.scbt.com/datasheet-34508-lrf-c-18-antibody.html
-lab  Myers
+lab Myers
 lots  H2406
 targetId GeneCards:ZBTB7A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB7A
 validation ZBTB7A_SC-34508(Immunoprecipitation-WesternBlot,MassSpec):human_ZBTB7A_SC-34508_validation_Myers.pdf
 
 term ZEB1_(SC-25388)
-tag ZEB1SC25388
+tag ZEB1
 type Antibody
 target ZEB1
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 39-140 mapping near the N-terminus of ZEB1 of human origin.
@@ -6714,7 +6792,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZEB1
 validation ZEB1_(SC-25388)(Immunoprecipitation-WesternBlot,MassSpec):human_ZEB1_SC-25388_validation_Myers.pdf
 
 term Znf143_(16618-1-AP)
-tag Znf143166181AP
+tag ZNF143
 type Antibody
 target Znf143
 antibodyDescription Rabbit polyclonal against human ZNF143 (amino acids 283-626)-6his fusion protein
@@ -6906,7 +6984,7 @@ validation
 
 ##This does not appear in metaDb
 term Hexim1
-tag Hexim1
+tag HEXIM1
 type Antibody
 target Hexim1
 targetDescription Hexamethylene bis-acetamide inducible 1
@@ -6938,7 +7016,7 @@ validation
 
 ##This does not appear in metaDb
 term hnRNPM
-tag hnRNPM
+tag HNRNPM
 type Antibody
 target hnRNPM
 targetDescription Heterogeneous nuclear ribonucleoprotein MantibodyDescription Mouse monoclonal. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB.
@@ -6969,7 +7047,7 @@ validation
 
 
 term Mxi1_(AF4185)
-tag Mxi1AF4185
+tag MXI1
 type Antibody
 target Mxi1
 targetDescription  Transcriptional repressor. Binds with MAX to form recognize the core sequence 5'-CAC[GA]TG-3', antagonizes MYC transcriptional activity by competing for MAX
@@ -7096,7 +7174,7 @@ targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
 validation
 
 term T7Tag
-tag T7Tag
+tag T7tag
 type Antibody
 target T7Tag
 targetDescription  Negative Control Ab (T7 Tag Mouse Monoclonal).
@@ -7684,37 +7762,37 @@ description 2009-01-01 rel2 January freeze
 term hg18
 tag hg18
 type species
-description The reference genome: Homo sapiens; March 2006 release
+description The reference genome: Homo sapiens, March 2006 release
 
 term panTro2
 tag panTro2
 type species
-description Chimpanzee: Pan troglodytes; March 2006 release
+description Chimpanzee: Pan troglodytes, March 2006 release
 
 term rheMac2
 tag rheMac2
 type species
-description Monkey: Rhesus macaque; January 2006 release
+description Monkey: Rhesus macaque, January 2006 release
 
 term mm9
 tag mm9
 type species
-description Mouse: Mus musculus; July 2007 release
+description Mouse: Mus musculus, July 2007 release
 
 term rn4
 tag rn4
 type species
-description Rat: Rattus norvegicus; November 2004 release
+description Rat: Rattus norvegicus, November 2004 release
 
 term canFam2
 tag canFam2
 type species
-description Dog: Canis lupus familiaris; May 2005 release
+description Dog: Canis lupus familiaris, May 2005 release
 
 term bosTau4
 tag bosTau4
 type species
-description Cow: Bos Taurus; October 2007 release
+description Cow: Bos Taurus, October 2007 release
 
 ##### Control Terms
 term Control
@@ -7894,8 +7972,8 @@ description 4 hr with DMSO (Myers)
 type treatment
 
 term DIFF_7d
-tag DIFF7d
-description Grown for 7 days in differentiation medium (Wold)
+tag DIFF7d 
+description PROVISIONAL Grown for 7 days in differentiation medium (Wold)
 type treatment
 
 term Estradiol_10nM
@@ -8020,7 +8098,7 @@ type treatment
 
 term pravastatin
 tag PRAVAST
-description For sterol deprivation, cells were cultured with pravastatin (2 uM; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
+description For sterol deprivation, cells were cultured with pravastatin (2 uM, Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
 type treatment
 
 term Prednisolone_100nM
@@ -8673,13 +8751,7 @@ tag 129Ola
 type strain
 description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice.
 
-term Spretus.BL6-Xist
-tag SPBL6
-type strain
-description: M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X.
-
-
-term unknown
+term Unknown
 tag UKN
 type strain
 description Unknown strain origin
@@ -8733,7 +8805,7 @@ description Embryonic day 18
 term adult-8wks
 tag adult8wks
 type age
-stage Adult
+Stage Adult
 description Adult 8 weeks
 
 term immortalized
@@ -8742,40 +8814,34 @@ type age
 stage Cell Line
 description Immortal cells
 
-term ageUnknown
-tag ageUnknwn
-type age
-stage stageUnknown
-description the age when the real age is unknown
-
-
-### Attic
+### Age
 # Expected fields:
 # ----------------
 # term (human-readable name)
-# tag (short machine-readable name, no special characters)
-# type (informs pipeline code of stanza type.  Should always be attic)
-# description (human-readable description)
+# tag (machine-readable name, no special characters)
+# type (informs pipeline code of stanza type.  Should always be age)
+# description (human-readable description.  Can't say where/how it's used)
+
 
 term supplemental
 tag sup
 type attic
-description Files supplemental at composite level
+description Files supplemental at composite level (Provisional)
 
-term auxSup
-tag auxsup
+term auxUnValid
+term auxUV
 type attic
-description Unverified files supplemental at experiment level
+description Unvalidated files supplemental at experimental level (Provisional)
 
 term auxValid
-tag auxval
+tag auxV
 type attic
-description Validated files supplemental to experiments 
+description Validated files supplemental to experiments
 
 term auxExp
-tag auxexp
+tag auxE
 type attic
-description Supplemental experiments 
+description Supplemental experiments
 
 # Expected fields:
 # ----------------
@@ -8824,12 +8890,12 @@ description Unknown
 
 ## Organisms
 term Human
-tag human
+tag HUMAN
 type organism
 description human
 
 term Mouse
-tag mouse
+tag MOUSE
 type organism
 description mouse
 
@@ -8854,7 +8920,7 @@ description tier 3
 term Both
 tag Both
 type tissueSourceType
-description Tissue analyzed using replicate samples obtained from and individual and by pooling. 
+description Tissue analyzed using replicate samples obtained from and individual and by pooling.
 
 term Individual
 tag Indiv
@@ -9153,12 +9219,12 @@ organism Human
 term CSHL
 tag CSHL
 type lab
-project Transcriptome
+#project Transcriptome (should this be projectName?)
 label Gingeras - Cold Spring Harbor Laboratory
 description Gingeras - Cold Spring Harbor Laboratory
 labInst Cold Spring Harbor Laboratory
 labPi Gingeras
-labpiFull Thomas Gingeras
+labPiFull Thomas Gingeras
 grantPi Gingeras
 organism Human
 
@@ -9384,7 +9450,7 @@ label Stamatoyannopoulous - University of Washington
 description Stamatoyannopoulous - University of Washington
 labInst University of Washington
 labPi Stam
-labpiFull George Stamatoyannopoulous
+labPiFull George Stamatoyannopoulous
 grantPi Stam
 organism Mouse
 
@@ -9441,7 +9507,7 @@ term Birney
 tag birney
 type grant
 description Birney
-grantInst ENCODE Data Analysis Center (DAC)
+grantInst (PROVISIONAL) ENCODE Data Analysis Center (DAC)
 projectName DAC
 
 term Tullius
@@ -10299,7 +10365,7 @@ priority 470
 term uniqueness
 type typeOfTerm
 label Mapability Distinctions
-description Degree of region uniqueness or mapability distinctions
+description (PRIVISIONAL) Degree of region uniqueness or mapability disctinctions
 searchable no
 cvDefined no
 validate none

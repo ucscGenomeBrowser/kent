@@ -75,19 +75,37 @@ return getenv("SCRIPT_NAME");
 }
 
 char *cgiServerName()
-/* Return name of server */
+/* Return name of server, better to use cgiServerNamePort() for
+   actual URL construction */
 {
 return getenv("SERVER_NAME");
 }
 
 char *cgiServerPort()
-/* Return port number of server */
+/* Return port number of server, default 80 if not found */
 {
 char *port = getenv("SERVER_PORT");
 if (port)
     return port;
 else
     return "80";
+}
+
+char *cgiServerNamePort()
+/* Return name of server with port if different than 80 */
+{
+char *port = cgiServerPort();
+char *namePort = cgiServerName();
+struct dyString *result = newDyString(256);
+if (namePort)
+    {
+    dyStringPrintf(result,"%s",namePort);
+    if (differentString(port, "80"))
+	dyStringPrintf(result,":%s",port);
+    return dyStringCannibalize(&result);
+    }
+else
+    return NULL;
 }
 
 char *cgiRemoteAddr()

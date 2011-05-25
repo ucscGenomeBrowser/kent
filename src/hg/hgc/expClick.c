@@ -456,16 +456,20 @@ else
     {
     struct microarrayGroups *groupings = NULL;
     struct maGrouping *combineGroup;
+    struct maGrouping *subset = NULL;
+    int subsetOffset = -1;
     struct hash *erHash = newHash(6);
     int i;
     if (!ct)
 	{
 	groupings = maGetTrackGroupings(database, tdb);
 	combineGroup = maCombineGroupingFromCart(groupings, cart, tdb->track);
+	subset = maSubsetGroupingFromCart(groupings, cart, tdb->track);
+	subsetOffset = maSubsetOffsetFromCart(subset, cart, tdb->track);
 	}
     else
 	combineGroup = maGetGroupingFromCt(ct);
-    maBedClumpGivenGrouping(bedList, combineGroup);
+    maBedClumpGivenGrouping(bedList, combineGroup, subset, subsetOffset);
     for (i = 0; i < combineGroup->numGroups; i++)
 	{
 	/* make stupid exprecord hash.perhaps eventually this won't be needed */
