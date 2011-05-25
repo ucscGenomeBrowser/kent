@@ -493,11 +493,15 @@ dyStringAppend(dy, npu->protocol);
 dyStringAppend(dy, "://");
 if (npu->user[0] != 0)
     {
-    dyStringAppend(dy, npu->user);
+    char *encUser = cgiEncode(npu->user);
+    dyStringAppend(dy, encUser);
+    freeMem(encUser);
     if (npu->password[0] != 0)
 	{
 	dyStringAppend(dy, ":");
-	dyStringAppend(dy, npu->password);
+	char *encPassword = cgiEncode(npu->password);
+	dyStringAppend(dy, encPassword);
+	freeMem(encPassword);
 	}
     dyStringAppend(dy, "@");
     }
