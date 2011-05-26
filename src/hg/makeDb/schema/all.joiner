@@ -592,7 +592,7 @@ identifier ucscRetroInfo dependency
 identifier ucscRetroOrtho dependency
 "Link together Ucsc Retrogenes and ucsc retro orthlogy"
     $ucscRetroDb.ucscRetroAli.qName unique
-    $ucscRetroDb.ucscRetroOrtho.name dupeOk
+    $ucscRetroDb.ucscRetroOrtho.name
 
 identifier encodePseudogeneUcsc2 dependency
 "Link together Ucsc Pseudogenes and class"

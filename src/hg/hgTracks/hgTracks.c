@@ -3694,7 +3694,7 @@ if (!psOutput)
     if (sameString(database, "cb4"))
         {
         hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/gb2/gbrowse/c_briggsae?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-            skipChr(chromName), winStart+1, winEnd, "WormBase");
+            chromName, winStart+1, winEnd, "WormBase");
         }
     if (sameString(database, "ce10"))
         {
