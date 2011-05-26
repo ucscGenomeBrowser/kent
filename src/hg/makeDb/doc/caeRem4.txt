@@ -151,3 +151,79 @@ taxId 31234
     ln -s `pwd`/caeRem4.2bit /gbdb/caeRem4/caeRem4.2bit
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-25 - Hiram)
+    # numerator is caeRem4 gapless bases "real" as reported by faSize 
+    # denominator is hg19 gapless bases "real" as reported by faSize
+    # 1024 is threshold used for human -repMatch:
+    calc \( 138406203 / 2897310462 \) \* 1024
+    #	( 138406203 / 2897310462 ) * 1024 = 48.917075
+
+    # Round up to use -repMatch=100 since 50 would result in too many
+    cd /hive/data/genomes/caeRem4
+    blat caeRem4.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/caeRem4.11.ooc -repMatch=100
+    #	Wrote 10105 overused 11-mers to jkStuff/caeRem4.11.ooc
+    # there are no non-bridged gaps here to make a lift file from
+    # cd jkStuff
+    # gapToLift -verbose=2 caeRem4 caeRem4.nonBridged.lift -bedFile=caeRem4.nonBridged.bed
+
+    mkdir /hive/data/staging/data/caeRem4
+    cp -p chrom.sizes caeRem4.2bit jkStuff/caeRem4.11.ooc \
+	/hive/data/staging/data/caeRem4
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2011-05-26 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add caeRem4 just before caeRem3
+
+# caeRem4 (C. remanei)
+caeRem4.serverGenome = /hive/data/genomes/caeRem4/caeRem4.2bit
+caeRem4.clusterGenome = /scratch/data/caeRem4/caeRem4.2bit
+caeRem4.ooc = /scratch/data/caeRem4/caeRem4.11.ooc
+caeRem4.lift = no
+caeRem4.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+caeRem4.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+caeRem4.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+caeRem4.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+caeRem4.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+caeRem4.refseq.mrna.native.load = no
+caeRem4.refseq.mrna.xeno.load  = yes
+caeRem4.refseq.mrna.xeno.loadDesc = yes
+caeRem4.genbank.mrna.xeno.load = yes
+caeRem4.genbank.est.native.load = yes
+caeRem4.genbank.est.native.loadDesc = no
+caeRem4.downloadDir = caeRem4
+caeRem4.perChromTables = no
+
+    git commit -m "Added caeRem4 C. remanei WS220" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial caeRem4 &
+    #	logFile:  var/build/logs/2011.05.26-09:19:08.caeRem4.initalign.log
+XXX - running - Thu May 26 09:19:30 PDT 2011
+    #	real    291m13.960s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeRem4
+    #	logFile: var/dbload/hgwdev/logs/2011.05.25-15:46:59.dbload.log
+    #	real    22m27.349s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add caeRem4 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
