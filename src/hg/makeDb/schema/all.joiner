@@ -3566,6 +3566,11 @@ tablesIgnored $mm
     rikenCageCtssPlus
     rikenCageTc
     broadStemChip%
+    laminB1_AC
+    laminB1_EF
+    laminB1_ES
+    laminB1_NP
+
 
 tablesIgnored $panTro
     humanDels
