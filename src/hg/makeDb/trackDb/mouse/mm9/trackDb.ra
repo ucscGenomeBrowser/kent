@@ -869,7 +869,7 @@ longLabel NKI LaminB1 (DamID of LaminB1 in mouse Embryonic Stem cells, log2-rati
 group regulation
 priority 310
 visibility hide
-color 255, 125, 0
+color 255, 165, 0
 maxHeightPixels 100:40:11
 autoScale Off
 windowingFunction mean
@@ -923,7 +923,7 @@ longLabel NKI LaminB1 (DamID of LaminB1 in mouse Embryonic Fibroblasts, log2-rat
 group regulation
 priority 340
 visibility hide
-color 51,102,0
+color 0,100,0
 maxHeightPixels 100:40:11
 autoScale Off
 windowingFunction mean
