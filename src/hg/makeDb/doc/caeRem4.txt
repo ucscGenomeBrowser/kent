@@ -1,0 +1,61 @@
+# for emacs: -*- mode: sh; -*-
+
+# Caenorhabditis briggsae
+#	Washington University School of Medicine GSC and Sanger Institute
+#
+
+###########################################################################
+## Download sequence (DONE - 2011-05-25 - Hiram)
+    mkdir /hive/data/genomes/caeRem4
+    cd /hive/data/genomes/caeRem4
+    mkdir ws220
+    cd ws220
+    wget --no-parent --timestamping -m -nH --cut-dirs=5 \
+	ftp://ftp.sanger.ac.uk/pub/wormbase/WS220/genomes/c_remanei/
+
+    # no AGP, make one from the fasta file
+    hgFakeAgp -minContigGap=1 sequences/dna/c_remanei.WS220.dna.fa.gz \
+	caeRem4.ws220.fake.agp
+
+    faSize sequences/dna/c_remanei.WS220.dna.fa.gz
+# 145442736 bases (7036533 N's 138406203 real 0 upper 138406203 lower)
+#	in 3670 sequences in 1 files
+# %95.16 masked total, %100.00 masked real
+
+###########################################################################
+## Initial sequence (DONE - 2011-05-24 - Hiram)
+    cd /hive/data/genomes/caeRem4
+    cat << '_EOF_' > caeRem4.config.ra
+# Config parameters for makeGenomeDb.pl:
+db caeRem4
+# clade worm
+# genomeCladePriority 10
+scientificName Caenorhabditis remanei
+commonName C. remanei
+assemblyDate Jul. 2007
+assemblyLabel Washington University School of Medicine GSC C. remanei 15.0.1
+assemblyShortLabel WS220
+orderKey 877
+mitoAcc none
+fastaFiles /hive/data/genomes/caeRem4/ws220/sequences/dna/c_remanei.WS220.dna.fa.gz
+agpFiles /hive/data/genomes/caeRem4/ws220/caeRem4.ws220.fake.agp
+# qualFiles none
+taxId 31234
+'_EOF_'
+    # << happy emacs
+
+    mkdir jkStuff
+    #	run just to AGP to make sure things are sane first
+    time nice -n +19 makeGenomeDb.pl caeRem4.config.ra -stop=agp \
+      > jkStuff/makeGenomeDb.agp.log 2>&1
+    #	real    0m22.470s
+    #	check that log to verify it has no errors
+    #	now, continuing to make the Db and all
+    time nice -n +19 makeGenomeDb.pl caeRem4.config.ra -continue=db \
+      > jkStuff/makeGenomeDb.db.log 2>&1
+    #	real    1m22.079s
+
+    #	take the trackDb business there and check it into the source tree
+    #	fixup the description, gap and gold html page descriptions
+
+###########################################################################
