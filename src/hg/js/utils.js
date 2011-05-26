@@ -615,7 +615,6 @@ function varHashToQueryString(varHash)
             retVal += "&";
         }
         var val = varHash[aVar];
-        // XXXX encode var=val ?
         if (typeof(val) == 'string'
         && val.length >= 2
         && val.indexOf('[') == 0
@@ -624,10 +623,11 @@ function varHashToQueryString(varHash)
             $(vals).each(function (ix) {
                 if (ix > 0)
                     retVal += "&";
-                retVal += aVar + "=" + this;
+                retVal += aVar + "=" + encodeURIComponent(this);
             });
-        } else
-            retVal += aVar + "=" + val;
+        } else {
+            retVal += aVar + "=" + encodeURIComponent(val);
+        }
     }
     return retVal;
 }

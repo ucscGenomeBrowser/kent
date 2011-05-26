@@ -176,8 +176,72 @@ taxId 6238
     cd /cluster/data/cb4
     blat cb4.2bit /dev/null /dev/null -tileSize=11 \
       -makeOoc=jkStuff/cb4.11.ooc -repMatch=100
+    cd jkStuff
+    gapToLift -verbose=2 cb4 cb4.nonBridged.lift -bedFile=cb4.nonBridged.bed
+#       chrom count: 13
+#       found 626 gaps of size >= 0
+#       bed output requested to cb4.nonBridged.bed
+#       no gaps on chrom: chrX_random, size: 28673
+#       no gaps on chrom: chrIV_random, size: 25117
+#       no gaps on chrom: chrV_random, size: 85292
+#       no gaps on chrom: chrM, size: 14420
+    cd ..
+
     #	Wrote 8141 overused 11-mers to jkStuff/cb4.11.ooc
     mkdir /hive/data/staging/data/cb4
-    cp -p chrom.sizes cb4.2bit jkStuff/cb4.11.ooc /hive/data/staging/data/cb4
+    cp -p chrom.sizes cb4.2bit jkStuff/cb4.11.ooc jkStuff.cb4.nonBridged.lift \
+	/hive/data/staging/data/cb4
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2011-05-24,25 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add cb4 just before ce6
+
+# cb4 (C. briggsae)
+cb4.serverGenome = /hive/data/genomes/cb4/cb4.2bit
+cb4.clusterGenome = /scratch/data/cb4/cb4.2bit
+cb4.ooc = /scratch/data/cb4/cb4.11.ooc
+cb4.lift = /hive/data/genomes/cb4/jkStuff/cb4.nonBridged.lift
+cb4.align.unplacedChroms = chrUn,chr*_random
+cb4.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+cb4.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+cb4.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+cb4.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+cb4.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+cb4.refseq.mrna.native.load = no
+cb4.refseq.mrna.xeno.load  = yes
+cb4.genbank.mrna.xeno.load = yes
+cb4.downloadDir = cb4
+
+    git commit -m "Added cb4 C. elegans WS225" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial cb4 &
+    #	logFile:  var/build/logs/2011.05.25-10:55:02.cb4.initalign.log
+    #	real    291m13.960s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad cb4
+    #	logFile: var/dbload/hgwdev/logs/2011.05.25-15:46:59.dbload.log
+    #	real    22m27.349s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add cb4 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added cb4 - C. briggsae WS220" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
 
 #########################################################################

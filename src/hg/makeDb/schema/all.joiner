@@ -2285,6 +2285,7 @@ identifier locusLinkId external=LocusLink
     $gbd.keggPathway.locusID minCheck=0.98
     $kgDb,!hg16,!mm8.knownToLocusLink.value minCheck=0.98
     hg16,mm8.knownToLocusLink.value minCheck=0.96
+    $hg.mim2gene.geneId minCheck=0.90
 
 identifier omimLocationId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) Location ID"
@@ -2301,6 +2302,7 @@ identifier omimId external=OMIM
     $hg.omimGene2.name minCheck=0.90
     $hg.omimPhenotype.omimId minCheck=0.75
     $hg.omimGeneMap.omimId minCheck=0.85
+    $hg.mim2gene.omimId minCheck=0.70
 
 identifier omimAvId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) AV ID"
@@ -2324,6 +2326,7 @@ identifier omimGene2Id
     $hg.omimAvRepl.omimId minCheck=0.90
     $hg.omimPhenotype.omimId minCheck=0.75
     $hg.refLink.omimId exclude=0 minCheck=0.98
+    $hg.mim2gene.omimId minCheck=0.70
 
 identifier omimPhenotypeId
 "OMIM Phenotype ID"
