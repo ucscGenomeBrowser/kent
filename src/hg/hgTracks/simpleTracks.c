@@ -11125,6 +11125,7 @@ void omimLocationMethods (struct track *tg)
 {
 tg->loadItems     = omimLocationLoad;
 tg->itemColor     = omimLocationColor;
+tg->itemNameColor = omimGene2Color;
 tg->drawItemAt    = bedPlusLabelDrawAt;
 tg->mapItem       = bedPlusLabelMapItem;
 tg->nextPrevExon  = simpleBedNextPrevEdge;
