@@ -6,7 +6,7 @@
 #	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEG02
 
 ###########################################################################
-## Download sequence (DONE - 2011-05-26 - Hiram)
+## Download sequence (DONE - 2011-05-27 - Hiram)
     mkdir /hive/data/genomes/caeSp71
     cd /hive/data/genomes/caeSp71
     mkdir genbank
@@ -91,7 +91,7 @@ close (FA);
     #	All AGP and FASTA entries agree - both files are valid
 
 ###########################################################################
-## Initial sequence (DONE - 2011-05-26 - Hiram)
+## Initial sequence (DONE - 2011-05-27 - Hiram)
     cd /hive/data/genomes/caeSp71
     cat << '_EOF_' > caeSp71.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -128,7 +128,7 @@ taxId 870436
     #	fixup the description, gap and gold html page descriptions
 
 ###########################################################################
-## RepeatMasker (DONE - 2011-05-26 - Hiram)
+## RepeatMasker (DONE - 2011-05-27 - Hiram)
     mkdir /hive/data/genomes/caeSp71/bed/repeatMasker
     cd /hive/data/genomes/caeSp71/bed/repeatMasker
     # need the -species option since RM doesn't recognize this one
@@ -148,7 +148,7 @@ XXX - running - Fri May 27 14:44:27 PDT 2011
 # %1.22 masked total, %1.36 masked real
 
 ###########################################################################
-## Simple Repeats (DONE - 2011-05-26 - Hiram)
+## Simple Repeats (DONE - 2011-05-27 - Hiram)
     mkdir /cluster/data/caeSp71/bed/simpleRepeat
     cd /cluster/data/caeSp71/bed/simpleRepeat
     time nice -n +19 doSimpleRepeat.pl -smallClusterHub=memk \
@@ -159,7 +159,7 @@ XXX - running - Fri May 27 14:53:50 PDT 2011
     #	5049667 bases of 170097428 (2.969%) in intersection
 
 ###########################################################################
-## WindowMasker (DONE - 2011-05-26 - Hiram)
+## WindowMasker (DONE - 2011-05-27 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/caeSp71/bed/windowMasker
     cd /hive/data/genomes/caeSp71/bed/windowMasker
@@ -204,7 +204,7 @@ XXX - running - Fri May 27 14:53:50 PDT 2011
 # %28.44 masked total, %31.45 masked real
 
 ########################################################################
-# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-26 - Hiram)
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-27 - Hiram)
     cd /hive/data/genomes/caeSp71
     twoBitMask -add bed/windowMasker/caeSp71.cleanWMSdust.2bit \
 	bed/simpleRepeat/trfMask.bed caeSp71.2bit
@@ -221,7 +221,7 @@ XXX - running - Fri May 27 14:53:50 PDT 2011
     ln -s `pwd`/caeSp71.2bit /gbdb/caeSp71/caeSp71.2bit
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-26 - Hiram)
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-27 - Hiram)
     # numerator is caeSp71 gapless bases "real" as reported by faSize 
     # denominator is hg19 gapless bases "real" as reported by faSize
     # 1024 is threshold used for human -repMatch:
@@ -242,7 +242,7 @@ XXX - running - Fri May 27 14:53:50 PDT 2011
 	/hive/data/staging/data/caeSp71
 
 #########################################################################
-# GENBANK AUTO UPDATE (DONE - 2011-05-26,27 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2011-05-27 - Hiram)
     # align with latest genbank process.
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
