@@ -225,7 +225,7 @@ tier 3
 lineage endoderm
 karyotype cancer
 sex F
-tissue liver 
+tissue liver
 vendorName DSMZ
 vendorId ACC 162
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=162&term=162&highlight=
@@ -808,7 +808,7 @@ tier 3
 organism Human
 description breast, donor 02-03015, age 21, caucasian, DNA extract
 tissue Breast
-lineage mesoderm 
+lineage mesoderm
 karyotype normal
 sex F
 vendorName BioChain
@@ -1160,7 +1160,7 @@ lineage
 karyotype
 sex M
 tissue Blood
-vendorName DSMZ 
+vendorName DSMZ
 vendorId N/A
 orderUrl http://www.dsmz.de/index.htm
 termId BTO:0002104
@@ -1190,7 +1190,7 @@ type Cell Line
 tier 3
 organism Human
 description Peripheral blood-derived erythroblasts from 16-19 week human fetal liver
-lineage 
+lineage
 karyotype normal
 sex U
 tissue Liver
@@ -1996,7 +1996,7 @@ karyotype  normal
 sex B
 tissue  Liver
 vendorName  zen-bio
-vendorId 
+vendorId
 orderUrl http://www.zen-bio.com/
 termId BTO:0000575
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000575
@@ -2637,8 +2637,8 @@ type Cell Line
 tier 3
 organism Human
 description Human T cell leukemia
-lineage 
-karyotype 
+lineage
+karyotype
 sex F
 tissue Blood
 vendorName DSMZ
@@ -2948,7 +2948,7 @@ organism Human
 description Dedifferentiated human pancreatic islets
 tissue Pancreas
 vendorName National Disease Research Interchange (NDRI).
-vendorId N/A 
+vendorId N/A
 orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
 termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
@@ -3171,24 +3171,22 @@ tier 3
 protocol HudsonAlpha:SK-N-MC_protocol.pdf
 
 # In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
-# This term has been removed from all instances of trackDb and metaDb, and is
-# now officially obsolete and should be deleted soon (5/20/11)
-#term SK-N-SH_RA
-#tag SKNSHRA
-#type Cell Line
-#organism Human
-#description neuroblastoma cell line, treatment: differentiated with retinoic acid. (Biedler, et al. Morphology and Growth, Tumorigenicity, and Cytogenetics of Human Neuroblastoma Cells in Continuous Culture. Cancer Research 33, 2643-2652, November 1973.)
-#tissue Brain
-#vendorName ATCC
-#vendorId HTB-11
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
-#lineage ectoderm
-#karyotype cancer
-#termId BTO:0002372 (non-specific)
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
-#sex F
-#tier 3
-#protocol UW_Stam:Stam_15_protocols.pdf
+term SK-N-SH_RA
+tag SKNSHRA
+type Cell Line
+organism Human
+description neuroblastoma cell line, treatment: differentiated with retinoic acid. (Biedler, et al. Morphology and Growth, Tumorigenicity, and Cytogenetics of Human Neuroblastoma Cells in Continuous Culture. Cancer Research 33, 2643-2652, November 1973.)
+tissue Brain
+vendorName ATCC
+vendorId HTB-11
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
+lineage ectoderm
+karyotype cancer
+termId BTO:0002372 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
+sex F
+tier 3
+protocol UW_Stam:Stam_15_protocols.pdf
 
 term SK-SY5Y
 tag SKSY5Y
@@ -7972,7 +7970,7 @@ description 4 hr with DMSO (Myers)
 type treatment
 
 term DIFF_7d
-tag DIFF7d 
+tag DIFF7d
 description PROVISIONAL Grown for 7 days in differentiation medium (Wold)
 type treatment
 
@@ -8219,25 +8217,25 @@ type restrictionEnzyme
 ### label: This will be used for human display
 
 term Alignability
-tag Alignabi
+tag ALIGNABI
 type view
 label Alignability
 description Alignability
 
 term Alignments
-tag Alignmen
+tag ALN
 type view
 label Alignments
-description Alignments
+description (PROVISIONAL) Aligned sequence tags
 
 term Base_Overlap_Signal
-tag  baOvrlpSig
+tag  SIGBO
 type view
 label Base_Overlap_Signal
-description Base_Overlap_Signal
+description (PROVISIONAL) Base Overlap Signal
 
 term Clusters
-tag Clusters
+tag CLUSTERS
 type view
 label Clusters
 description Clusters
@@ -8246,190 +8244,190 @@ term CNV
 tag CNV
 type view
 label CNV
-description CNV
+description (PROVISIONAL) Copy Number Variation
 
 term Contigs
-tag Contigs
+tag CONTIGS
 type view
 label Contigs
 description Contigs
 
 term ExonsGencV3c
-tag ExonsGencV3c
+tag EXONGENCV3C
 type view
 label Exons Gencode V3c
 description ExonsGencV3c
 
 term Fasta3p
-tag Fasta3p
+tag FASTA3P
 type view
 label Fasta3p
 description Fasta3p
 
 term Fasta5p
-tag Fasta5p
+tag FASTA5P
 type view
 label Fasta5p
 description Fasta5p
 
 term FastaRd1
-tag FastaRd1
+tag FASTARD1
 type view
 label FastaRd1
 description FastaRd1
 
 term FastaRd2
-tag FastaRd2
+tag FASTARD2
 type view
 label FastaRd2
 description FastaRd2
 
 term Fastq
-tag Fastq
+tag FASTQ
 type view
 label Fastq
 description Fastq
 
 term FastqRd1
-tag FastqRd1
+tag FASTQRD1
 type view
 label FastqRd1
 description FastqRd1
 
 term FastqRd2
-tag FastqRd2
+tag FASTQRD2
 type view
 label FastqRd2
 description FastqRd2
 
 term FiltTransfrags
-tag FiltTransfrags
+tag FILTTRANSFRAGS
 type view
 label Filtered Transfrags
 description FiltTransfrags
 
 term GeneDeNovo
-tag GeneDeNo
+tag GENEDENO
 type view
 label Genes DeNovo
 description GeneDeNovo
 
 term GeneGencV3c
-tag GeneGencV3c
+tag GENEGENCV3C
 type view
 label Genes Gencode V3c
-description GeneGencV3c
+description (PROVISIONAL) Gencode release V3c
 
 term HMM
 tag HMM
 type view
 label HMM
-description HMM
+description (PROVISIONAL) Hidden Markov Model
 
 term Hotspots
-tag Hotspots
+tag HOTSPOTS
 type view
 label Hotspots
 description Hotspots
 
 term Interactions
-tag Interactions
+tag INTERACTIONS
 type view
 label Interactions
 description Interactions
 
 term Junctions
-tag Junctions
+tag JUNCTIONS
 type view
 label Junctions
 description Junctions
 
 term Matrix
-tag Matrix
+tag MATRIX
 type view
 label Matrix
 description Matrix
 
 term MinusRawSignal
-tag MinusRawSig
+tag MUNUSRAWSIG
 type view
 label Minus Raw Signal
-description MinusRawSignal
+description Minus Raw Signal
 
 term Peaks
-tag Peaks
+tag PKS
 type view
 label Peaks
-description Peaks
+description (PROVISIONAL) Peaks called
 
 term PeptideMapping
-tag PeptideMap
+tag PEPTIDEMAP
 type view
 label Peptide Mapping
 description PeptideMapping
 
 term PlusRawSignal
-tag PlusRawSig
+tag PLUSRAWSIG
 type view
 label Plus Raw Signal
-description PlusRawSignal
+description Plus Raw Signal
 
 term Qual3p
-tag Qual3p
+tag QUAL3P
 type view
-label Qual3p
+label QUAL3P
 description Qual3p
 
 term Qual5p
-tag Qual5p
+tag QUAL5P
 type view
 label Qual5p
 description Qual5p
 
 term RawData
-tag RawData
+tag RAW
 type view
-label RawData
-description RawData
+label Raw_Data
+description Raw Data
 
 term RawData2
-tag RawData2
+tag RAW2
 type view
-label Raw Data2
-description Raw Data2
+label Raw Data 2
+description Raw Data 2
 
 term RawSignal
-tag RawSig
+tag RAWSIG
 type view
 label Raw Signal
-description RawSignal
+description Raw Signal
 
 term RbpAssocRna
-tag RbpAssocRna
+tag RBPASSOCRNA
 type view
 label Rbp Associated RNA
-description RbpAssocRna
+description Rbp Associated RNA
 
 term Regions
-tag Regions
+tag REGIONS
 type view
 label Regions
 description Regions
 
 term Signal
-tag Signal
+tag SIG
 type view
 label Signal
 description Signal
 
 term SimpleSignal
-tag SimpleSig
+tag SIGSIMPLE
 type view
-label SimpleSignal
-description SimpleSignal
+label Simple Signal
+description Simple Signal
 
 term Sites
-tag Sites
+tag SITES
 type view
 label Sites
 description Sites
@@ -8438,28 +8436,28 @@ term SNP
 tag SNP
 type view
 label SNP
-description SNP
+description (PROVISIONAL) Single Nucleotide Polymorphism
 
 term Splices
-tag Splices
+tag SPLICES
 type view
 label Splices
 description Splices
 
 term TranscriptDeNovo
-tag TranscriptDeNovo
+tag TRANSDENOVO
 type view
 label TranscriptDeNovo
 description TranscriptDeNovo
 
 term TranscriptGencV3c
-tag TranscriptGencV3c
+tag TRANSGENCV3C
 type view
 label Transcript Gencode V3c
-description TranscriptGencV3c
+description (PROVISIONAL) Transcript Gencode V3c
 
 term Transfrags
-tag Transfrags
+tag TRANSFRAGS
 type view
 label Transfrags
 description Transfrags
@@ -8471,7 +8469,7 @@ label TSS
 description TSS
 
 term Validation
-tag Validation
+tag VALIDATION
 type view
 label Validation
 description Validation
@@ -10378,7 +10376,7 @@ type typeOfTerm
 label View - Peaks or Signals
 description Different track formats often allow different views of the data of a single experiment.  These views sometimes represent different stages of processing, such as experimental 'signal' resulting directly from high-throughput sequencing and called 'peaks' which result from further analysis.
 searchable multiSelect
-cvDefined no
+cvDefined yes
 validate none  # When this is cv defined it then change to cv
 priority 035
 #This should be CV defined (11/3/10)
