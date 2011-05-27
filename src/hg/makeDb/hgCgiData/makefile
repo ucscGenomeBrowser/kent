@@ -1,8 +1,9 @@
 include ../../../inc/common.mk
 
 my::
-	rm -fr ${CGI_BIN}/hgCgiData
+	rm -fr ${CGI_BIN}-${USER}/hgCgiData
 	rsync -ar --exclude=CVS/ --exclude=.svn/ --exclude=makefile --delete ../hgCgiData ${CGI_BIN}-${USER}/
+	chmod -R g+w ${CGI_BIN}-${USER}/hgCgiData
 	chmod -R a+rX ${CGI_BIN}-${USER}/hgCgiData
 
 alpha::
