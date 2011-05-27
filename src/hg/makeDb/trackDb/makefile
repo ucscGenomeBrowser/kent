@@ -95,6 +95,8 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	cb1 cb2 cb3 cb4 \
 	caeRem1 caeRem2 caeRem3 caeRem4 \
 	caeSp71 \
+	caeSp91 \
+	caeSp111 \
 	caeJap1 caeJap2 caeJap3 caeJap4 \
 	priPac1 priPac2 \
 	caePb1 caePb2 \
