@@ -1748,6 +1748,20 @@ if(mdbVar == NULL)
 return mdbVar->val;
 }
 
+struct slName *mdbObjsFindAllVals(struct mdbObj *mdbObjs, char *var)
+// Returns a list of all vals in mdbObjs for a requested var
+{
+struct slName *vals = NULL;
+struct mdbObj *mdbObj = mdbObjs;
+for (;mdbObj != NULL;mdbObj = mdbObj->next)
+    {
+    char *val = mdbObjFindValue(mdbObj,var);
+    if (val != NULL)
+        slNameStore(&vals, val);
+    }
+return vals;
+}
+
 boolean mdbObjContains(struct mdbObj *mdbObj, char *var, char *val)
 // Returns TRUE if object contains var, val or both
 {
