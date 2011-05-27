@@ -174,12 +174,12 @@ taxId 135651
 	/hive/data/staging/data/caePb3
 
 #########################################################################
-# GENBANK AUTO UPDATE (DONE - 2011-05-26 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2011-05-26,27 - Hiram)
     # align with latest genbank process.
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
-    # edit etc/genbank.conf to add caePb3 just before caeRem3
+    # edit etc/genbank.conf to add caePb3 just before caePb2
 
 # caePb3 (C. brenneri)
 caePb3.serverGenome = /hive/data/genomes/caePb3/caePb3.2bit
@@ -200,6 +200,7 @@ caePb3.genbank.est.native.loadDesc = no
 caePb3.downloadDir = caePb3
 caePb3.perChromTables = no
 
+
     git commit -m "Added caePb3 C. brenneri WS220" etc/genbank.conf
     git push
     # update /cluster/data/genbank/:
@@ -208,15 +209,15 @@ caePb3.perChromTables = no
     screen		#	use a screen to manage this job
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial caePb3 &
-    #	logFile:  var/build/logs/2011.05.26-09:19:08.caePb3.initalign.log
-    #	real    291m13.960s
+    #	logFile:  var/build/logs/2011.05.26-16:08:08.caePb3.initalign.log
+    #	real    642m20.841s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caePb3
-    #	logFile: var/dbload/hgwdev/logs/2011.05.25-15:46:59.dbload.log
-    #	real    22m27.349s
+    #	logFile: var/dbload/hgwdev/logs/2011.05.27-09:45:02.dbload.log
+    #	real    23m5.504s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -224,6 +225,8 @@ caePb3.perChromTables = no
     # add caePb3 to:
         etc/align.dbs
         etc/hgwdev.dbs
+    git commit -m "adding caePb3 C. brenneri WS220" etc/align.dbs etc/hgwdev.dbs
+
     git push
     make etc-update
 
