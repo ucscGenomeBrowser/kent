@@ -12,6 +12,14 @@
 #		       - Hotspots = pack
 #		       - Peaks = pack
 #		       - Signal = full
+#	   - Deafult Cells are replicate 1
+#			   - 3134
+#			   - B-cell_(CD19+)
+#			   - Cerebellum
+#			   - Cerebrum
+#			   - ES-CJ7
+#			   - MEL
+#			   - Whole Brain
 #	   - Short Labels: 
 #		       Template:[cell [Age] [view] [Rep #]
 #			   - cell: Abbreviation
@@ -46,9 +54,7 @@ subGroup4 sex Sex M=M
 subGroup5 age Age adult8wks=adult-8wks E0=E0 E14half=E14.5 immortal=immortalized
 subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6 rep7=7 rep8=8 rep9=9 rep10=10
 dimensions dimensionX=cellType dimensionY=age dimensionA=rep
-#dimesions dimensionX=cellType dimensionY=age dimensionA=rep dimensionB=strain
 dimensionAchecked rep1
-#dimensionBchecked C57BL6,S129,UKN
 sortOrder cellType=+ strain=+ age=+ sex=+ rep=+ view=+
 fileSortOrder cell=Cell_Line strain=Strain sex=Sex age=Age replicate=Replicate view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain age=age sex=sex
@@ -96,7 +102,7 @@ wgEncode 1
 		# subId=2000 dateSubmitted=2010-07-23
 
 		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep2
-		parent wgEncodeUwDnaseViewHotspots 
+		parent wgEncodeUwDnaseViewHotspots off 
 		shortLabel B CD19+ Hspt 2
 		longLabel B-cell (CD19+) Adult 8-weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep2
@@ -355,7 +361,7 @@ wgEncode 1
 		# subId=1999 dateSubmitted=2010-07-23
 
 		track wgEncodeUwDnase3134RiiiMImmortalHotspotsRep1
-		parent wgEncodeUwDnaseViewHotspots off
+		parent wgEncodeUwDnaseViewHotspots
 		shortLabel 3134 Hspt 1
 		longLabel 3134 DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=immortal cellType=3134 sex=M strain=RIII rep=rep1
@@ -381,7 +387,7 @@ wgEncode 1
 		# subId=3906 dateSubmitted=2011-04-19
 
 		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep1
-		parent wgEncodeUwDnaseViewHotspots off
+		parent wgEncodeUwDnaseViewHotspots
 		shortLabel B CD19+ Hspt 1
 		longLabel B-cell (CD19+) Adult 8-weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep1
@@ -631,7 +637,7 @@ wgEncode 1
 		# subId=2000 dateSubmitted=2010-07-23
 
 		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep2
-		parent wgEncodeUwDnaseViewPeaks 
+		parent wgEncodeUwDnaseViewPeaks off 
 		shortLabel B CD19+ Pk 2
 		longLabel B-cell (CD19+) Adult 8-weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep2
@@ -890,7 +896,7 @@ wgEncode 1
 		# subId=1999 dateSubmitted=2010-07-23
 
 		track wgEncodeUwDnase3134RiiiMImmortalPkRep1
-		parent wgEncodeUwDnaseViewPeaks off
+		parent wgEncodeUwDnaseViewPeaks
 		shortLabel 3134 Pk 1
 		longLabel 3134 DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=immortal cellType=3134 sex=M strain=RIII rep=rep1
@@ -916,7 +922,7 @@ wgEncode 1
 		# subId=3906 dateSubmitted=2011-04-19
 
 		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep1
-		parent wgEncodeUwDnaseViewPeaks off
+		parent wgEncodeUwDnaseViewPeaks
 		shortLabel B CD19+ Pk 1
 		longLabel B-cell (CD19+) Adult 8-weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep1
@@ -1138,7 +1144,7 @@ wgEncode 1
 	maxLimit 127303.00
 	autoScale off
 	maxHeightPixels 100:32:16
-	windowingFunction maximum
+	windowingFunction mean+whiskers
 
 		track wgEncodeUwDnaseCerebellumC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal
@@ -1169,7 +1175,7 @@ wgEncode 1
 		# subId=2000 dateSubmitted=2010-07-23
 
 		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksSigRep2
-		parent wgEncodeUwDnaseViewRawSignal 
+		parent wgEncodeUwDnaseViewRawSignal off 
 		shortLabel B CD19+ Sg 2
 		longLabel B-cell (CD19+) Adult 8-weeks DNaseI HS Signal Rep 2 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep2
@@ -1455,7 +1461,7 @@ wgEncode 1
 		# was wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:25 2011
 
 		track wgEncodeUwDnase3134RiiiMImmortalRawRep1
-		parent wgEncodeUwDnaseViewRawSignal off
+		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel 3134 Sg 1
 		longLabel 3134 DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=immortal cellType=3134 sex=M strain=RIII rep=rep1
@@ -1483,7 +1489,7 @@ wgEncode 1
 		# was wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:27 2011
 
 		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksSigRep1
-		parent wgEncodeUwDnaseViewRawSignal off
+		parent wgEncodeUwDnaseViewRawSignal
 		shortLabel B CD19+ Sg 1
 		longLabel B-cell (CD19+) Adult 8-weeks DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep1
