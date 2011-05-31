@@ -3116,7 +3116,7 @@ TMPDIR=/scratch/tmp
 # maximum M allowed with lastz is only 254
 BLASTZ_M=254
 
-# TARGET: Mouse canFam2
+# TARGET: Dog canFam2
 SEQ1_DIR=/scratch/data/canFam2/nib
 SEQ1_LEN=/scratch/data/canFam2/chrom.sizes
 SEQ1_CHUNK=10000000
