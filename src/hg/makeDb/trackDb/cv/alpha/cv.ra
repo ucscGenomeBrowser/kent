@@ -8109,7 +8109,7 @@ tag SERUMFREE
 description grown in serum free media (Crawford)
 type treatment
 
-term 40HTAM_1uM_36hr
+term 4OHTAM_1uM_36hr
 tag OHTAM1
 description (Provisional To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
 type treatment
