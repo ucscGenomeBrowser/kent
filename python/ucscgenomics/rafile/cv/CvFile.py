@@ -151,6 +151,25 @@ class CvStanza(RaStanza):
 		if p == 0:
 			ra.handler(NonmatchKeyError(self.name, key, other))
 			
+	def checkListRelational(self, ra, key, other):
+		"""check that the value at key matches the value at other"""
+		
+		
+		if key not in self:
+			return
+		
+		for val in self[key].split(','):
+			val = val.strip()
+			p = 0
+		
+			for entry in ra.itervalues():
+				if 'type' in entry and other in entry:
+
+					if entry['type'] == key and val == entry[other]:
+						p = 1
+						break
+			if p == 0:
+				ra.handler(NonmatchKeyError(self.name, key, other))
 
 class CvError(Exception):
 	"""base error class for the cv."""
@@ -434,7 +453,7 @@ class AntibodyStanza(CvStanza):
 
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary | optional)
-		self.checkRelational(ra, 'lab', 'labPi')
+		self.checkListRelational(ra, 'lab', 'labPi')
 
 
 class ViewStanza(CvStanza):
