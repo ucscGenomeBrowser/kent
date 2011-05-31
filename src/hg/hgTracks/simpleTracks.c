@@ -10901,7 +10901,9 @@ class2Clr = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
 class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
 //class4Clr = hvGfxFindColorIx(hvg, 153,0, 204);		// purple
 class4Clr = hvGfxFindColorIx(hvg, 56,  11, 97);
-classOtherClr = hvGfxFindColorIx(hvg, 200, 200, 200);	// light gray
+//classOtherClr = hvGfxFindColorIx(hvg, 200, 200, 200);	// light gray
+classOtherClr = MG_RED;
+//hvGfxFindColorIx(hvg, 200, 200, 200);	// light gray
 
 safef(query, sizeof(query),
       "select omimId, phenotypeClass from omimPhenotype where omimId=%s", el->name);
@@ -10939,11 +10941,17 @@ else
 	sqlFreeResult(&sr);
 	return class1Clr;
     	}
-    else
+    else if (sameWord(phenClass, "4"))
 	{
-	// set to purplish color for phenClass 4
+	// set to the color for phenClass 4
         sqlFreeResult(&sr);
 	return class4Clr; 
+	}
+    else
+	{
+	// set to the color for Others
+        sqlFreeResult(&sr);
+	return classOtherClr; 
 	}
     }
 }
@@ -11107,12 +11115,18 @@ else
 	    	sqlFreeResult(&sr);
 	    	return class1Clr;
     	    	}
-	    else
-	    	{
-	    	// set to purplish color for phenClass 4
-            	sqlFreeResult(&sr);
-	    	return class4Clr; 
-            	}
+    	    else if (sameWord(phenClass, "4"))
+		{	
+		// set to the color for phenClass 4
+        	sqlFreeResult(&sr);
+		return class4Clr; 
+		}	
+    	    else
+		{
+		// set to the color for Others
+        	sqlFreeResult(&sr);
+		return classOtherClr; 
+		}
 	    }
 	}
     }
