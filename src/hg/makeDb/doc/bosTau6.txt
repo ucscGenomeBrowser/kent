@@ -262,11 +262,10 @@ close (FH);
 
 
 ########################################################################
-# Create kluster run files (working - 2011-05-10 - Chin)
+# Create kluster run files (DONE - 2011-05-10 - Chin)
     # numerator is bosTau6 gapless bases "real" as reported by: 
     featureBits -noRandom -noHap bosTau6 gap
     # 20740230 bases of 2640182513 (0.786%) in intersection
-    # XX    1600136831 bases of 1184628269 (135.075%) in intersection
 
     # denominator is hg19 gapless bases as reported by:
     #	featureBits -noRandom -noHap hg19 gap
@@ -427,200 +426,15 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     # prepare the src/hg/makeDb/trackDb/cow/bosTau6/ctgPos2.html 
 
 
-
 ############################################################################
-# bosTau6 Cow BLASTZ/CHAIN/NET (working 2011-02-04 - Chin)
-
-#  request to copy /hive/data/staging.bosTau6 over to /scratch/data/bosTau6
-    screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/bosTau4/bed/lastzBosTau6.2010-04-16
-    cd /hive/data/genomes/bosTau4/bed/lastzBosTau6.2010-04-16
-
-    cat << '_EOF_' > DEF
-# Cow vs. Cow
-BLASTZ_M=50
-
-# TARGET: Cow BosTau4
-SEQ1_DIR=/scratch/data/bosTau4/bosTau4.2bit
-SEQ1_LEN=/scratch/data/bosTau4/chrom.sizes
-SEQ1_CHUNK=20000000
-SEQ1_LAP=10000
-SEQ1_LIMIT=50
-
-# QUERY: Cow BosTau6
-SEQ2_DIR=/scratch/data/bosTau6/bosTau6.2bit
-SEQ2_LEN=/scratch/data/bosTau6/chrom.sizes
-SEQ2_CHUNK=10000000
-SEQ2_LIMIT=100
-SEQ2_LAP=0
-
-BASE=/hive/data/genomes/bosTau4/bed/lastzBosTau6.2010-04-16
-TMPDIR=/scratch/tmp
-'_EOF_'
-    # << this line keeps emacs coloring happy
-
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	`pwd`/DEF \
-	-noLoadChainSplit -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    #   real    1651m36.829s
-
-    #	failed during the netChainSubset | chainStitchId out of memory
-    #	finish that manually with ulimits to allow more memory on hgwdev:
-    cd /hive/data/genomes/bosTau4/bed/lastzBosTau6.2010-04-16/axtChain
-    export sizeG=188743680
-    ulimit -d $sizeG
-    ulimit -v $sizeG
-
-    netChainSubset -verbose=0 noClass.net bosTau4.bosTau6.all.chain.gz stdout \
-       |  chainStitchId stdin stdout | gzip -c > bosTau4.bosTau6.over.chain.gz
-
-    #	and, finish the rest of netChains.csh manually, the netToAxt step
-    #	and the axtToMaf step, log is in axtChain/finiChains.log
-
-    #  about 4 hours
-    #	after done with netChains - continuing with load:
-    cd /hive/data/genomes/bosTau4/bed/lastzBosTau6.2010-04-16
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	`pwd`/DEF \
-	-continue=load -noLoadChainSplit -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > load.log 2>&1 &
-    #	this didn't work either due to memory limits with hgLoadChain
-    #	add the following to loadUp.csh
-# limit at 160 Gb
-limit datasize 163840m
-limit vmemoryuse 163840m
-    #	and finish it manually
-     ./loadUp.csh > loadUp.log 2>&1 &
- ulimit -d  163840000
- ulimit -v 163840000
-    cat fb.bosTau4.chainBosTau6Link.txt 
-    #   1319167970 bases of 2731830700 (48.289%) in intersection
-    #	then continuing:
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	`pwd`/DEF \
-	-continue=download -noLoadChainSplit -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > download.part3.log 2>&1 &
-    # failed again with 
-    #    needLargeMem: Out of memory - request size 1073741824 bytes, errno: 12
-    #   add the following to netSynteny.csh
-# limit at 160 Gb
-limit datasize 163840m
-limit vmemoryuse 163840m
-    #   and finish it manually
-
-     tcsh
-     cd /hive/data/genomes/bosTau4/bed/lastzBosTau6.2010-04-16/axtChain
-     ./netSynteny.csh > & netSynteny_tcsh.log 
-
-   #   and the swap (working 2011-02-04)
-    mkdir /hive/data/genomes/bosTau6/bed/blastz.bosTau4.swap
-    cd /hive/data/genomes/bosTau6/bed/blastz.bosTau4.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/bosTau4/bed/lastzBosTau6.2010-04-16/DEF \
-        -swap -noLoadChainSplit -syntenicNet \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    # real    309m19.204s
-    cat fb.bosTau6.chainBosTau4Link.txt
-    # 1164717810 bases of 1201271277 (96.957%) in intersection
-
-#########################################################################
-#  SWAP mm9 lastz (working - 2010-04-12 - Chin)
-    #	original alignment
-    cd	/hive/data/genomes/mm9/bed/lastzBosTau6.2010-04-16
-    cat fb.mm9.chainBosTau6Link.txt 
-    #   406407377 bases of 2620346127 (15.510%) in intersection
-
-    #	and the swap
-    mkdir /hive/data/genomes/bosTau6/bed/blastz.mm9.swap
-    cd /hive/data/genomes/bosTau6/bed/blastz.mm9.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/mm9/bed/lastzBosTau6.2010-04-16/DEF \
-        -swap -noLoadChainSplit -syntenicNet \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real    35m25.217s
-
-    cat fb.bosTau6.chainMm9Link.txt
-    #   383753361 bases of 1201271277 (31.946%) in intersection
-
-
-############################################################################
-#  SWAP hg19 lastz (working 2010-04-12 - Chin)
-    #	original alignment
-    cd /hive/data/genomes/hg19/bed/lastzBosTau6.2010-04-16
-    cat fb.hg19.chainBosTau6Link.txt 
-    #   878545517 bases of 2897316137 (30.323%) in intersection
-
-    #	and the swap
-    mkdir /hive/data/genomes/bosTau6/bed/blastz.hg19.swap
-    cd /hive/data/genomes/bosTau6/bed/blastz.hg19.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/hg19/bed/lastzBosTau6.2010-04-16/DEF \
-        -swap -noLoadChainSplit -syntenicNet \
-        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real    72m47.780s
-
-    cat fb.bosTau6.chainHg19Link.txt
-    #   824310420 bases of 1201271277 (68.620%) in intersection
-
-#########################################################################
-#  SWAP monDom5 lastz (working 2010-04-12 Chin)
-    #	original alignment
-    cd /hive/data/genomes/monDom5/bed/lastzBosTau6.2010-04-16
-    cat fb.monDom5.chainBosTau6Link.txt
-    #   133534458 bases of 3501660299 (3.813%) in intersection
-    cd /hive/data/genomes/monDom5/bed/
-    ln -s lastzFelCatV17e.2010-03-22 lastz.bosTau6
-
-    #	and the swap
-    mkdir /hive/data/genomes/bosTau6/bed/blastz.monDom5.swap
-    cd /hive/data/genomes/bosTau6/bed/blastz.monDom5.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/monDom5/bed/lastzBosTau6.2010-04-16/DEF \
-        -swap -noLoadChainSplit -syntenicNet \
-        -workhorse=hgwdev -smallClusterHub=memn -bigClusterHub=pk \
-        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #   real    39m13.430s
-
-    cat fb.bosTau6.chainMonDom5Link.txt
-    #   117493519 bases of 1201271277 (9.781%) in intersection
-
-#########################################################################
-#  SWAP equCap2 lastz (working 2010-04-12 Chin)
-    #   original alignment
-    cd /hive/data/genomes/equCab2/bed/lastzBosTau6.2010-04-16
-    cat fb.equCab2.chainBosTau6Link.txt
-    #   1012763540 bases of 2428790173 (41.698%) in intersection 
-
-
-    #   and the swap
-    mkdir /hive/data/genomes/bosTau6/bed/blastz.equCab2.swap
-    cd /hive/data/genomes/bosTau6/bed/blastz.equCab2.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/equCab2/bed/lastzBosTau6.2010-04-16/DEF \
-        -swap -noLoadChainSplit -syntenicNet \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real    103m0.724s
-
-    cat fb.bosTau6.chainEquCab2Link.txt
-    #   940763026 bases of 1201271277 (78.314%) in intersection
-
-############################################################################
-# running cpgIsland business (working -2010-04-29 - Chin)
+# running cpgIsland business (DONE -2011-05-16 - Chin)
     mkdir /hive/data/genomes/bosTau6/bed/cpgIsland
     cd /hive/data/genomes/bosTau6/bed/cpgIsland
     cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
     cd hg3rdParty/cpgIslands
-    #	needed to fixup this source, adding include to readseq.c:
+    #   needed to fixup this source, adding include to readseq.c:
 #include "string.h"
-    #	and to cpg_lh.c:
+    #   and to cpg_lh.c:
 #include "unistd.h"
 #include "stdlib.h"
     # and fixing a declaration in cpg_lh.c
@@ -634,11 +448,11 @@ limit vmemoryuse 163840m
 do
     echo ${C}
     twoBitToFa ../../bosTau6.2bit:$C stdout \
-	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+        | maskOutFa stdin hard hardMaskedFa/${C}.fa
 done
 
-    ssh swarm
-    cd /hive/data/genomes/bosTau6/bed/cpgIsland
+    ssh swarm 
+    cd /hive/data/genomes/bosTau6/bed/cpgIsland 
     mkdir results
     cut -f1 ../../chrom.sizes > chr.list
     cat << '_EOF_' > template
@@ -648,9 +462,9 @@ done
 '_EOF_'
     # << happy emacs
 
-    #	the faCount business is to make sure there is enough sequence to
-    #	work with in the fasta.  cpglh.exe does not like files with too many
-    #	N's - it gets stuck
+    #   the faCount business is to make sure there is enough sequence to
+    #   work with in the fasta.  cpglh.exe does not like files with too many
+    #   N's - it gets stuck
     cat << '_EOF_' > runOne
 #!/bin/csh -fe
 set C = `faCount hardMaskedFa/$1.fa | grep ^chr | awk '{print  $2 - $7 }'`
@@ -663,7 +477,8 @@ endif
 '_EOF_'
     # << happy emacs
 
-    chmod 775 runOne 
+
+    chmod 775 runOne
     gensub2 chr.list single template jobList
     para create jobList
     para try
@@ -674,17 +489,13 @@ endif
     # then, kick it with para push
     # check it with plb
     # when all are done, para time shows:
-   #   para time
-    #  1218 jobs in batch
-    #  319 jobs (including everybody's) in Parasol queue or running.
     #  Checking finished jobs
-    #  Completed: 1218 of 1218 jobs
-    #  CPU time in finished jobs:        201s       3.36m     0.06h    0.00d  0.000 y
-    #  IO & Wait Time:                  3099s      51.64m     0.86h    0.04d  0.000 y
-    #  Average job time:                   3s       0.05m     0.00h    0.00d
-    #  Longest finished job:              25s       0.42m     0.01h    0.00d
-    #  Submission to last job:            90s       1.50m     0.03h    0.00d
-    #  Estimated complete:                 0s       0.00m     0.00h    0.00d
+    # Completed: 3317 of 3317 jobs
+    # CPU time in finished jobs:   197s       3.29m     0.05h    0.00d  0.000 y
+    # IO & Wait Time:             9373s     156.21m     2.60h    0.11d  0.000 y
+    # Average job time:              3s       0.05m     0.00h    0.00d
+    # Longest finished job:         18s       0.30m     0.01h    0.00d
+    # Submission to last job:      677s      11.28m     0.19h    0.01d
 
     # Transform cpglh output to bed +
     catDir results | awk '{
@@ -699,15 +510,137 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     cd /hive/data/genomes/bosTau6/bed/cpgIsland
     hgLoadBed bosTau6 cpgIslandExt -tab \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
-    # Loaded 25384 elements of size 10
+    # Loaded 37638 elements of size 10
     # Sorted
     # Creating table definition for cpgIslandExt
     # Saving bed.tab
     # Loading bosTau6
 
-
-    #	cleanup
+    #   cleanup
     rm -fr hardMaskedFa
+
+
+
+############################################################################
+# bosTau6 Cow BLASTZ/CHAIN/NET (working 2011-05-?? - Chin)
+
+#####################################################################
+# susScr2 Pig BLASTZ/CHAIN/NET (DONE - 2011-05-24 - Chin)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24
+    cd /hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24
+    
+    cat << '_EOF_' > DEF
+# Pig vs. Cow
+BLASTZ_M=50
+
+# TARGET: Cow BosTau6
+SEQ1_DIR=/scratch/data/bosTau6/bosTau6.2bit
+SEQ1_LEN=/scratch/data/bosTau6/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Pig SusScr2
+SEQ2_DIR=/scratch/data/susScr2/susScr2.2bit
+SEQ2_LEN=/scratch/data/susScr2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #   real    2198m44.401s
+    cat fb.bosTau6.chainSusScr2Link.txt
+    #   1306738899 bases of 2649682029 (49.317%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s lastzSusScr2.2011-05-24 lastz.susScr2
+
+    # then swap
+    mkdir /hive/data/genomes/susScr2/bed/blastz.bosTau6.swap
+    cd /hive/data/genomes/susScr2/bed/blastz.bosTau6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #  real    380m53.612s
+
+    cat fb.susScr2.chainBosTau6Link.txt
+    # 1475323050 bases of 2231298548 (66.119%) in intersection
+
+
+
+#########################################################################
+#  SWAP mm9 lastz (DONE - 2010-05-17 - Chin)
+    #	original alignment done at mm9.txt
+    cd /hive/data/genomes/mm9/bed/lastzBosTau6.2011-05-17
+    cat fb.mm9.chainBosTau6Link.txt
+    # 699351036 bases of 2620346127 (26.689%) in intersection
+    # Create link
+    cd /hive/data/genomes/mm9/bed
+    ln -s  lastzBosTau6.2011-05-17 lastz.bosTau6
+
+    #   and the swap 
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.mm9.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzBosTau6.2011-05-17/DEF \
+        -swap -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #   real     53m5.237s
+    cat fb.bosTau6.chainMm9Link.txt
+    # 688894115 bases of 2649682029 (25.999%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.mm9.swap lastz.mm9
+
+############################################################################
+#  SWAP hg19 lastz (DONE 2011-05-16 - Chin)
+    #	original alignment
+    cd /hive/data/genomes/hg19/bed/lastzBosTau6.2011-05-16
+    cat fb.hg19.chainBosTau6Link.txt
+    # 1370696434 bases of 2897316137 (47.309%) in intersection
+
+    #   and the swap
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.hg19.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzBosTau6.2011-05-16/DEF \
+        -swap -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #   real     72m57.889s
+    cat fb.bosTau6.chainHg19Link.txt
+    #   1336966333 bases of 2649682029 (50.458%) in intersection
+
+############################################################################
+#  SWAP canFam2 lastz (DONE 2011-05-25 - Chin)
+    #   original alignment
+    cd /hive/data/genomes/canFam2/bed/lastzBosTau6.2011-05-25
+    cat fb.canFam2.chainBosTau6Link.txt
+    # 1389712912 bases of 2384996543 (58.269%) in intersection
+
+    #   and the swap 
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.canFam2.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.canFam2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/canFam2/bed/lastzBosTau6.2011-05-25/DEF \
+        -swap -syntenicNet  \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #   real     88m38.555s
+    cat fb.bosTau6.chainCanFam2Link.txt
+    # 1404315725 bases of 2649682029 (52.999%) in intersection
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (working 2011-02-07 - Chin)

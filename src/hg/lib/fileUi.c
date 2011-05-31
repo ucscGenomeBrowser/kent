@@ -407,44 +407,43 @@ if (sortOrder != NULL)
         {
         char *var = sortOrder->column[sIx];
         enum cvSearchable searchBy = cvSearchMethod(var);
-        //if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange) // dates and numbers probably not good for filtering. FIXME: Should cvsNotSearchable be filterable??
         if (searchBy != cvSearchBySingleSelect && searchBy != cvSearchByMultiSelect)
             continue; // Only single selects and multi-select make good candidates for filtering
 
-        struct sqlConnection *conn = hAllocConn(db);
-        struct slPair *valsAndLabels = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, FALSE, TRUE); // not tags, not tables, just files
-        hFreeConn(&conn);
-        // Need to verify that each val exists in an object for these files
-        struct slPair *relevantVals = NULL;
-        while(valsAndLabels != NULL)
+        // get all vals for var, then convert to tag/label pairs for filterBys
+        struct slName *vals = mdbObjsFindAllVals(mdbObjs, var);
+        struct slPair *tagLabelPairs = NULL;
+        while(vals != NULL)
             {
-            struct slPair *oneVal = slPopHead(&valsAndLabels);
-            if(mdbObjsContainAltleastOneMatchingVar(mdbObjs,var,mdbPairVal(oneVal)))
-                {
-                eraseNonAlphaNum(mdbPairVal(oneVal));   // Have to squeeze out uglies from val to ensure filter by class works
-                slAddHead(&relevantVals,oneVal);
-                }
-            else
-                slPairFreeValsAndList(&oneVal);
+            struct slName *term = slPopHead(&vals);
+            char *tag = (char *)cvTag(var,term->name);
+            if (tag == NULL)
+                tag = term->name;
+            slPairAdd(&tagLabelPairs,tag,cloneString((char *)cvLabel(term->name)));
+            slNameFree(&term);
             }
-        if (slCount(relevantVals) > 1)
+
+        // If there is more than one val for this var then create filterBy box for it
+        if (slCount(tagLabelPairs) > 1)
             {
-            slReverse(&relevantVals);
+            slPairValSortCase(&tagLabelPairs); // should have a list sorted on the label
             char extraClasses[256];
             safef(extraClasses,sizeof extraClasses,"filterTable %s",var);
-            char *dropDownHtml = cgiMakeMultiSelectDropList(var,relevantVals,NULL,"All",extraClasses,"onchange='filterTable();' onclick='filterTableExclude(this);'");
+            char *dropDownHtml = cgiMakeMultiSelectDropList(var,tagLabelPairs,NULL,"All",extraClasses,"onchange='filterTable();' onclick='filterTableExclude(this);'");
             // Note filterBox has classes: filterBy & {var}
             if (dropDownHtml)
                 {
                 dyStringPrintf(dyFilters,"<td align='left'>\n<B>%s</B>:<BR>\n%s</td><td width=10>&nbsp;</td>\n",
-                               labelWithVocabLink(var,sortOrder->title[sIx],relevantVals,TRUE),dropDownHtml);  // TRUE were sending tags, not values
+                               labelWithVocabLink(var,sortOrder->title[sIx],tagLabelPairs,TRUE),dropDownHtml);  // TRUE were sending tags, not values
                 freeMem(dropDownHtml);
                 count++;
                 }
             }
-        if (slCount(relevantVals) > 0)
-            slPairFreeValsAndList(&relevantVals);
+        if (slCount(tagLabelPairs) > 0)
+            slPairFreeValsAndList(&tagLabelPairs);
         }
+
+    // Finally ready to print the filterBys out
     if (count)
         {
         webIncludeResourceFile("ui.dropdownchecklist.css");
@@ -611,8 +610,15 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                     enum cvSearchable searchBy = cvSearchMethod(sortOrder->column[ix]);
                     if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)
                         {
-                        char *cleanClass = cloneString(isFieldEmpty?"None":field);
-                        eraseNonAlphaNum(cleanClass);
+                        char *cleanClass = NULL;
+                        if (isFieldEmpty)
+                            cleanClass = "None";
+                        else
+                            {
+                            cleanClass = (char *)cvTag(sortOrder->column[ix],field); // class should be tag
+                            if (cleanClass == NULL)
+                                cleanClass = field;
+                            }
                         safef(class,sizeof class," class='%s %s'",sortOrder->column[ix],cleanClass);
                         }
                     }

@@ -77,10 +77,14 @@ char *cgiScriptName();
 /* Return name of script so libs can do context-sensitive stuff. */
 
 char *cgiServerName();
-/* Return name of server */
+/* Return name of server, better to use cgiServerNamePort() for
+   actual URL construction */
 
 char *cgiServerPort();
 /* Return port number of server */
+
+char *cgiServerNamePort();
+/* Return name of server with port if different than 80 */
 
 char *cgiRemoteAddr();
 /* Return IP address of client (or "unknown"). */

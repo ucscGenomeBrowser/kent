@@ -223,7 +223,7 @@ if (tdb->subtracks != NULL)
     {
     boolean isSuper = FALSE;
     char *superTrack = trackDbSetting(tdb, "superTrack");
-    if ((superTrack != NULL) && sameString(superTrack, "on"))
+    if ((superTrack != NULL) && startsWith("on", superTrack))
 	isSuper = TRUE;
 
     if (!(trackDbSetting(tdb, "compositeTrack") ||
@@ -240,6 +240,7 @@ else
     char *type = requiredSetting(hub, genome, tdb, "type");
     if (!(startsWithWord("bigWig", type) ||
           startsWithWord("bigBed", type) ||
+          startsWithWord("vcfTabix", type) ||
           startsWithWord("bam", type)))
 	{
 	errAbort("Unsupported type %s in hub %s genome %s track %s", type,
@@ -270,7 +271,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     if (parentLine == NULL)
 	{
 	parentLine = trackDbLocalSetting(tdb, "superTrack");
-	if ((parentLine != NULL) && sameString(parentLine, "on"))
+	if ((parentLine != NULL) && startsWith("on", parentLine))
 	    parentLine = NULL;
 	}
 

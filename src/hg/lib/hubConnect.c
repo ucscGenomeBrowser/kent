@@ -381,7 +381,7 @@ errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
     gotWarning = TRUE;
-    warn(errCatch->message->string);
+    warn("%s", errCatch->message->string);
     }
 errCatchFree(&errCatch);
 

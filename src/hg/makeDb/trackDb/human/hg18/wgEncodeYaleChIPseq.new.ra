@@ -1054,7 +1054,7 @@ html wgEncodeYaleChIPseq.new
     minLimit 0
     maxLimit 20910
     autoScale off
-    windowingFunction mean
+    windowingFunction mean+whiskers
     maxHeightPixels 100:32:16
 
         track wgEncodeYaleChIPseqRel2SignalGm12878Jund

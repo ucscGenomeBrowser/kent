@@ -1713,7 +1713,7 @@ done
     #	149620 ornAna1
 
     ssh hgwdev
-    cd /hive/data/genomes/panTro3/bed/multiz12way/frames
+    cd /hive/data/genomes/ornAna1/bed/multiz6way/frames
     time hgLoadMafFrames ornAna1 multiz6wayFrames ornAna1.mafFrames.gz
     #	real    0m15.994s
 ############################################################################

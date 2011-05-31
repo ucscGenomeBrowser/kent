@@ -76,6 +76,10 @@ const struct hash *cvTermHash(char *term);
 // returns a hash of hashes of a term which should be defined in cv.ra
 // NOTE: in static memory: DO NOT FREE
 
+const struct hash *cvOneTermHash(char *type,char *term);
+// returns a hash for a single term of a given type
+// NOTE: in static memory: DO NOT FREE
+
 const struct hash *cvTermTypeHash();
 // returns a hash of hashes of mdb and controlled vocabulary (cv) term types
 // Those terms should contain label,descrition,searchable,cvDefined,hidden
@@ -100,6 +104,9 @@ enum cvSearchable cvSearchMethod(char *term);
 
 const char *cvLabel(char *term);
 // returns cv label if term found or else just term
+
+const char *cvTag(char *type,char *term);
+// returns cv Tag if term found or else NULL
 
 boolean cvTermIsHidden(char *term);
 // returns TRUE if term is defined as hidden in cv.ra
