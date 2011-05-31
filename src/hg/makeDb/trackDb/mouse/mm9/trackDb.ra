@@ -880,9 +880,3 @@ spanList 60
 viewLimits -1.5:1.5
 html laminB1Mm9
 
-track forelimbH3k27ac
-type bed 3
-color 0,0,150
-group x
-visibility hide
-
