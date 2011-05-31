@@ -9628,6 +9628,10 @@ if (url != NULL && url[0] != 0)
                     printf(" (phenotype <A HREF=\"%s%s\" target=_blank>", url, phenotypeId);
                     printf("%s</A></B>)", phenotypeId);
 		    }
+		if (!sameWord(phenotypeClass, "-1"))
+		    {
+                    printf(" (%s)", phenotypeClass);
+		    }
 		}
 	    printf("<BR>\n");
 	    }
