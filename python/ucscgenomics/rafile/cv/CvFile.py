@@ -151,6 +151,25 @@ class CvStanza(RaStanza):
 		if p == 0:
 			ra.handler(NonmatchKeyError(self.name, key, other))
 			
+	def checkListRelational(self, ra, key, other):
+		"""check that the value at key matches the value at other"""
+		
+		
+		if key not in self:
+			return
+		
+		for val in self[key].split(','):
+			val = val.strip()
+			p = 0
+		
+			for entry in ra.itervalues():
+				if 'type' in entry and other in entry:
+
+					if entry['type'] == key and val == entry[other]:
+						p = 1
+						break
+			if p == 0:
+				ra.handler(NonmatchKeyError(self.name, key, other))
 
 class CvError(Exception):
 	"""base error class for the cv."""
@@ -346,7 +365,7 @@ class CellLineStanza(CvStanza):
 
 	def validate(self, ra):
 		necessary = {'term', 'tag', 'type', 'description', 'organism', 'vendorName', 'orderUrl', 'sex', 'tier'}
-		optional = {'tissue', 'vendorId', 'karyotype', 'lineage', 'termId', 'termUrl', 'color', 'protocol', 'category'}
+		optional = {'tissue', 'vendorId', 'karyotype', 'lineage', 'termId', 'termUrl', 'color', 'protocol', 'category', 'lots'}
 
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary | optional)
@@ -434,7 +453,7 @@ class AntibodyStanza(CvStanza):
 
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary | optional)
-		self.checkRelational(ra, 'lab', 'labPi')
+		self.checkListRelational(ra, 'lab', 'labPi')
 
 
 class ViewStanza(CvStanza):
@@ -510,7 +529,7 @@ class MouseStanza(CvStanza):
 
 	def validate(self, ra):
 		necessary = {'term', 'tag', 'type', 'description', 'organism', 'vendorName', 'orderUrl', 'age', 'strain', 'sex'}
-		optional = {'tissue', 'termId', 'termUrl', 'color', 'protocol', 'category', 'vendorId'}
+		optional = {'tissue', 'termId', 'termUrl', 'color', 'protocol', 'category', 'vendorId', 'lots'}
 		
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary | optional)
