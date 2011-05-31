@@ -3699,7 +3699,7 @@ age E0
 strain C57BL/6
 vendorName University of California, San Diego Transgenic Core and Embryonic Stem Cell
 vendorId N/A
-orderUrl
+orderUrl http://cancer.ucsd.edu/research-training/shared-resources/transgenic-core/Pages/default.aspx
 termId
 termUrl
 color 153,38,0
@@ -3916,6 +3916,9 @@ description Leukemia (K562 analog)
 age immortalized
 strain Unknown
 tissue Blood
+vendorName Weissman lab
+vendorId N/A
+orderUrl http://info.med.yale.edu/bcmm/SMW/sherm.html
 color 46,0,184
 sex M
 protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf UW(Stam):MEL_Stam_protocol.pdf
@@ -3930,8 +3933,8 @@ age ageUnknown
 strain Unknown
 category cellLine
 description Myocyte
-vendorName
-orderUrl
+vendorName Hardison
+orderUrl http://bmb.psu.edu/directory/rch8
 color 153,38,0
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
@@ -3947,8 +3950,8 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Muscle
-vendorName
-orderUrl
+vendorName Hardison lab
+orderUrl http://bmb.psu.edu/directory/rch8
 termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 153,38,0
@@ -4034,8 +4037,10 @@ tag Placenta
 type Cell Line
 organism mouse
 tissue Placenta
-category Tissue
 description Placenta
+category Tissue
+age ageUnknown
+strain Unknown
 vendorName LICR lab
 vendorId N/A
 orderUrl http://www.bio.upenn.edu/faculty/ren/
@@ -4541,6 +4546,8 @@ targetDescription epitope mapping at the C-terminus of C/EBP-beta of rat origin
 orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-150
+targetId GeneCard:CEBPB
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 lab Snyder
 validation missing
 
@@ -5857,7 +5864,7 @@ targetDescription NF-YA is the alpha subunit of the trimeric NFY transcription f
 antibodyDescription Affinity purified rabbit polyclonal raised against amino acids 139-347 of recombinant human NF-YA
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
 vendorId  ;
-orderUrl
+orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYA
@@ -5871,7 +5878,7 @@ targetDescription NF-YB is the beta subunit of the trimeric NFY transcription fa
 antibodyDescription Affinity purified rabbit polyclonal raised against recombinant full length human NF-YB
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
 vendorId  ;
-orderUrl
+orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
@@ -6173,7 +6180,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-22805
 orderUrl  http://www.scbt.com/product.php?datasheet=22805
 lab Myers
-targetId
+targetId GeneCard:SPI1
+orderUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
 targetUrl
 validation PU.1(Immunoprecipitation-WesternBlot,MassSpec):human_PU.1_validation_Myers.pdf
 
@@ -6273,8 +6281,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-994
 orderUrl http://www.scbt.com/product.php?datasheet=994
 lab Myers
-targetId
-targetUrl
+targetId GeneCard:SIN3A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIN3A
 validation Sin3Ak-20(Immunoprecipitation-WesternBlot,MassSpec):human_Sin3A_K-20_validation_Myers.pdf
 
 term SIRT6
@@ -6323,7 +6331,7 @@ validation missing
 term SP1
 tag SP1
 type Antibody
-target
+target SP1
 antibodyDescription Sp1(E-3) is a mouse monoclonal antibody raised against amino acids 121-345 mapping near the N-terminus of Sp1 ofhuman origin. Recommended for detection of Sp1 of m, r and h origin by WB, IP, IF and ELISA.
 targetDescription SP1 is a transcription factor that binds to GC box promoters elements and selectively activates mRNA synthesis from genes that contain functional recognition sites. It can interact with G/C-rich motifs from the serotonin receptor promoter.
 vendorName Santa Cruz Biotech
@@ -6389,8 +6397,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-8984
 orderUrl http://www.scbt.com/product.php?datasheet=8984
 lab Snyder
-targetId
-targetUrl
+targetId GeneCards:SREBF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SREBF1
 validation missing
 
 term SREBP2
@@ -6403,8 +6411,8 @@ vendorName Cayman Chemical
 vendorId 10007663
 orderUrl http://www.caymanchem.com/app/template/Product.vm/catalog/10007663
 lab Snyder
-targetId
-targetUrl
+targetId GeneCards:SREBF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SREBF1
 validation missing
 
 term SRF
@@ -6416,7 +6424,7 @@ antibodyDescription Rabbit polyclonal
 vendorName Santa Cruz Biotech
 vendorId sc-335
 orderUrl http://www.scbt.com/product.php?datasheet=335
-lab Myers / Wold
+lab Myers, Wold
 lots F3006 L2005 H2604
 targetId GeneCard:SRF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SRF
@@ -6473,7 +6481,7 @@ targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, 
 antibodyDescription rabbit polyclonal
 vendorName Antibody made by Farnham lab
 vendorId   ;
-orderUrl
+orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
 lab Farnham
 targetId GeneCard:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
@@ -6488,8 +6496,9 @@ antibodyDescription Mouse monoclonal (p250)
 vendorName Santa Cruz Biotech
 vendorId sc-735
 orderUrl http://www.scbt.com/product.php?datasheet=735
-geneId 6872
-lab Myers / Wold
+targetId GeneCards:TAF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF1
+lab Myers, Wold
 lots K0905 F2706
 validation TAF1(ChIP,MassSpec):human_TAF1_validation_Myers.pdf
 
@@ -6500,7 +6509,6 @@ type Antibody
 target  TAF7
 antibodyDescription  Mouse monoclonal IgG, raised against recombinant TAF II p55 (TAF7) of human origin.
 targetDescription  The intronless gene for this transcription coactivator is located between the protocadherin beta and gamma gene clusters on chromosome 5. The protein encoded by this gene is a component of the TFIID protein complex, a complex which binds to the TATA box in class II promoters and recruits RNA polymerase II and other factors. This particular subunit interacts with the largest TFIID subunit, as well as multiple transcription activators. The protein is required for transcription by promoters targeted by RNA polymerase II (RefSeq).
-228
 vendorName Santa Cruz Biotech
 vendorId sc-101167
 orderUrl http://www.scbt.com/datasheet-101167-taf-ii-p55-sq-8-antibody.html
@@ -6799,8 +6807,7 @@ term ZBTB33
 tag ZBTB33
 type Antibody
 target ZBTB33
-antibodyDescription Kaiso (6F8) Mouse monoclonal IgG1; 200 ?g/ml. Raised against amino acids 1-504 representing full length Kaiso of
-human origin. Recommended for detection of Kaiso of m, r, h, canine and chicken origin by WB, IP, IF and ELISA
+antibodyDescription Kaiso (6F8) Mouse monoclonal IgG1; 200 ?g/ml. Raised against amino acids 1-504 representing full length Kaiso of human origin. Recommended for detection of Kaiso of m, r, h, canine and chicken origin by WB, IP, IF and ELISA
 targetDescription KAISO is a transcriptional regulator that binds, via its zinc fingers, to DNA sequences containing methylated CGCG or to the consensus KAISO-binding site (KBS) TCCTGCNA
 vendorName Santa Cruz Biotech
 vendorId sc-23871
@@ -6916,8 +6923,8 @@ vendorId 05-689
 orderUrl http://www.millipore.com/catalogue/item/05-689
 lab Tenenbaum
 lots
-targetId
-targetUrl http://www.ncbi.nlm.nih.gov/gene/12419
+targetId GeneCards:CBX5
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX5
 validation
 
 
@@ -6929,11 +6936,11 @@ targetDescription Embryo deadenylation element-binding protein homolog (Homo sap
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP,IC, EMSA.
 vendorName Millipore
 vendorId 05621
-orderUrl
+orderUrl http://www.millipore.com/
 lab Tenenbaum
 lots
-targetId
-targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
+targetId GeneCards:CELF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
 validation
 
 ##This does not appear in metaDb
@@ -6948,8 +6955,8 @@ vendorId 04-047
 orderUrl http://www.millipore.com/catalogue/item/04-047
 lab Tenenbaum
 lots
-targetId
-targetUrl http://www.ncbi.nlm.nih.gov/gene/14007
+targetId GeneCards:CELF2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
 validation
 
 ##This does not appear in metaDb
@@ -6964,7 +6971,7 @@ vendorId 05-235
 orderUrl http://www.millipore.com/catalogue/item/05-235
 lab Tenenbaum
 lots
-targetId
+targetId Gene:1915
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
 validation
 
@@ -6980,7 +6987,7 @@ vendorId 04-1058
 orderUrl http://www.millipore.com/catalogue/item/04-1058
 lab Tenenbaum
 lots
-targetId
+targetId Gene:45525
 targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
 validation
 
@@ -6996,7 +7003,7 @@ vendorId 04-1010
 orderUrl http://www.millipore.com/catalogue/item/04-1010
 lab Tenenbaum
 lots
-targetId
+targetId Gene:1978
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
 validation
 
@@ -7011,7 +7018,7 @@ vendorId SC-5261; Mil ab5831
 orderUrl http://www.santacruzbiotech.com ; http://www.millipore.com/catalogue/item/ab5831
 lab Tenenbaum
 lots 1) B2508(Nov2008)
-targetId
+targetId Gene:1994
 targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
 validation
 
@@ -7027,7 +7034,7 @@ vendorId 05-1529
 orderUrl http://www.millipore.com/catalogue/item/05-1529
 lab Tenenbaum
 lots
-targetId
+targetId Gene:8087
 targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
 validation
 
@@ -7043,7 +7050,7 @@ vendorId 07-955
 orderUrl http://www.millipore.com/catalogue/item/07-955
 lab Tenenbaum
 lots
-targetId
+targetId Gene:10614
 targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
 validation
 
@@ -7059,7 +7066,7 @@ vendorId 07-260
 orderUrl http://www.millipore.com/catalogue/item/07-260
 lab Tenenbaum
 lots
-targetId
+targetId Gene:3184
 targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
 validation
 
@@ -7074,7 +7081,7 @@ vendorId 05-620
 orderUrl http://www.millipore.com/catalogue/item/05-620
 lab Tenenbaum
 lots
-targetId
+targetId Gene:76936
 targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
 validation
 
@@ -7090,7 +7097,7 @@ vendorId SC-21027
 orderUrl http://www.scbt.com/datasheet-21027-imp-1-c-20-antibody.html
 lab Tenenbaum
 lots I0607(Nov2008)
-targetId
+targetId Gene:10642
 targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
 validation
 
@@ -7139,9 +7146,9 @@ vendorId 04-1467
 orderUrl http://www.millipore.com/catalogue/item/04-1467
 lab Tenenbaum
 lots
-targetId 37070
+targetId Gene:37070
 targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
-Validation
+validation
 
 term PABPC1
 tag PABPC1
@@ -7198,13 +7205,13 @@ type Antibody
 target ripInput
 targetDescription  Total input for comparison for RIP experiments
 antibodyDescription
-vendorName
-vendorId
-orderUrl
+vendorName N/A
+vendorId ; 
+orderUrl http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml
 lab Tenenbaum
 lots
-targetId
-targetUrl
+targetId N/A
+targetUrl ;
 validation
 
 term SLBP
@@ -7230,10 +7237,10 @@ targetDescription  Negative Control Ab (T7 Tag Mouse Monoclonal).
 antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal)
 vendorName 1)Millipore; 2)Novagen
 vendorId AB3790; Nov_69522
-orderUrl
+orderUrl http://www.millipore.com/
 lab Tenenbaum
 lots
-targetId
+targetId N/A
 targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
 validation
 
@@ -8653,6 +8660,7 @@ description Methyl Bead Array
 term MethylSeq
 tag methylseq
 type dataType
+label Methyl-Seq
 description MethylSeq
 
 term MethylRrbs
@@ -8665,11 +8673,13 @@ description Methyl RRBS
 term NRE
 tag NRE
 type dataType
+label Negative Regulatory Elements
 description Negative Regulatory Elements
 
 term Nucleosome
 tag nucleosome
 type dataType
+label Nucleosome positioning
 description Nucleosome positioning data
 
 term Proteogenomics
@@ -8786,6 +8796,11 @@ tag C57BL6
 type strain
 description C57 black 6, the most common inbred strain of laboratory mouse
 
+term C57BL/6J
+tag C57BL6J
+type strain
+description C57 black 6, the most common inbred strain of laboratory mouse
+
 term NIH/Swiss
 tag NIHS
 type strain
@@ -8809,7 +8824,7 @@ description The mice have yellow coats and late onset severe vacuolation in brai
 term Spretus.BL6-Xist
 tag SPBL6
 type strain
-description: M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X.
+description M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X.
 
 term Unknown
 tag UKN
@@ -8865,7 +8880,7 @@ description Embryonic day 18
 term adult-8wks
 tag adult8wks
 type age
-Stage Adult
+stage Adult
 description Adult 8 weeks
 
 term immortalized
@@ -8896,7 +8911,7 @@ type attic
 description Files supplemental at composite level (Provisional)
 
 term auxUnValid
-term auxUV
+tag auxUV
 type attic
 description Unvalidated files supplemental at experimental level (Provisional)
 
