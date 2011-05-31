@@ -4,7 +4,7 @@ shortLabel Stan/Yale RNA-seq
 longLabel RNA-seq from ENCODE/Stanford/Yale
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments
-subGroup2 cellType Cell_Line MEL=MEL
+subGroup2 cellType Cell_Line CH12=CH12 MEL=MEL
 subGroup3 treatment Treatment DMSO20=DMSO_2.0pct None=None
 subGroup4 rnaExtract RnaExtract polyA=polyA+
 subGroup5 rep Replicate rep1=1 
@@ -49,6 +49,16 @@ noInherit on
         color 46,0,184
         # subId=3764 dateSubmitted=2011-03-16
 
+        track wgEncodeSydhRnaSeqCh12PolyaSigRep1
+        parent wgEncodeSydhRnaSeqViewSignal off
+        shortLabel CH12 Sig 1
+        longLabel ENCODE Stanford/Yale RNA-seq Signal Replicate 1 (in CH12 cells)
+        subGroups view=Signal cellType=CH12 rnaExtract=polyA treatment=None rep=rep1
+        type bigWig 1.000000 201875.000000
+        origAssembly mm9
+        color 153,38,0
+        # subId=3817 dateSubmitted=2011-04-20
+
 	track wgEncodeSydhRnaSeqViewAlignments
 	shortLabel Alignments
 	view Alignments
@@ -87,6 +97,16 @@ noInherit on
         origAssembly mm9
         color 46,0,184
         # subId=3764 dateSubmitted=2011-03-16
+
+        track wgEncodeSydhRnaSeqCh12PolyaAlnRep1
+        parent wgEncodeSydhRnaSeqViewAlignments off
+        shortLabel CH12 Aln 1
+        longLabel ENCODE Stanford/Yale RNA-seq Alignments Replicate 1 (in CH12 cells)
+        subGroups view=Alignments cellType=CH12 rnaExtract=polyA treatment=None rep=rep1
+        type bam
+        origAssembly mm9
+        color 153,38,0
+        # subId=3817 dateSubmitted=2011-04-20
 
 
 

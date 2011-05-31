@@ -577,22 +577,22 @@ identifier encodePseudogeneUcsc dependency
 identifier refGeneRetro dependency
 "Link refGene to ucscRetroInfo"
     $ucscRetroDb.refGene.name dupeOk
-    $ucscRetroDb.ucscRetroInfo.refSeq minCheck=0.96 exclude=noRefSeq
+    $ucscRetroDb.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
 
 identifier knownGeneRetro dependency
 "Link knownGene to ucscRetroInfo"
     $ucscRetroDb.knownGene.name dupeOk chopAfter=.
-    $ucscRetroDb.ucscRetroInfo.kgName minCheck=0.96 exclude=noKg chopAfter=.
+    $ucscRetroDb.ucscRetroInfo1.kgName minCheck=0.96 exclude=noKg chopAfter=.
 
 identifier ucscRetroInfo dependency
 "Link together Ucsc Retrogenes and ucsc retroGene alignments"
-    $ucscRetroDb.ucscRetroInfo.name unique
-    $ucscRetroDb.ucscRetroAli.qName unique
+    $ucscRetroDb.ucscRetroInfo1.name unique
+    $ucscRetroDb.ucscRetroAli1.qName 
 
 identifier ucscRetroOrtho dependency
 "Link together Ucsc Retrogenes and ucsc retro orthlogy"
-    $ucscRetroDb.ucscRetroAli.qName unique
-    $ucscRetroDb.ucscRetroOrtho.name dupeOk
+    $ucscRetroDb.ucscRetroAli1.qName dupeOk
+    $ucscRetroDb.ucscRetroOrtho1.name
 
 identifier encodePseudogeneUcsc2 dependency
 "Link together Ucsc Pseudogenes and class"
@@ -2285,6 +2285,7 @@ identifier locusLinkId external=LocusLink
     $gbd.keggPathway.locusID minCheck=0.98
     $kgDb,!hg16,!mm8.knownToLocusLink.value minCheck=0.98
     hg16,mm8.knownToLocusLink.value minCheck=0.96
+    $hg.mim2gene.geneId minCheck=0.90
 
 identifier omimLocationId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) Location ID"
@@ -2301,6 +2302,7 @@ identifier omimId external=OMIM
     $hg.omimGene2.name minCheck=0.90
     $hg.omimPhenotype.omimId minCheck=0.75
     $hg.omimGeneMap.omimId minCheck=0.85
+    $hg.mim2gene.omimId minCheck=0.70
 
 identifier omimAvId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) AV ID"
@@ -2324,6 +2326,7 @@ identifier omimGene2Id
     $hg.omimAvRepl.omimId minCheck=0.90
     $hg.omimPhenotype.omimId minCheck=0.75
     $hg.refLink.omimId exclude=0 minCheck=0.98
+    $hg.mim2gene.omimId minCheck=0.70
 
 identifier omimPhenotypeId
 "OMIM Phenotype ID"
@@ -3563,6 +3566,11 @@ tablesIgnored $mm
     rikenCageCtssPlus
     rikenCageTc
     broadStemChip%
+    laminB1_AC
+    laminB1_EF
+    laminB1_ES
+    laminB1_NP
+
 
 tablesIgnored $panTro
     humanDels

@@ -123,6 +123,16 @@ if (cvHashForTerm == NULL)
 return cvHashForTerm;
 }
 
+const struct hash *cvOneTermHash(char *type,char *term)
+// returns a hash for a single term of a given type
+// NOTE: in static memory: DO NOT FREE
+{
+const struct hash *typeHash = cvTermHash(type);
+if (typeHash != NULL)
+    return hashFindVal((struct hash *)typeHash,term);
+return NULL;
+}
+
 const struct hash *cvTermTypeHash()
 // returns a hash of hashes of mdb and controlled vocabulary (cv) term types
 // Those terms should contain label,description,searchable,cvDefined,hidden
@@ -265,6 +275,43 @@ if (termHash != NULL)
     }
 return term;
 }
+
+const char *cvTag(char *type,char *term)
+// returns cv Tag if term found or else NULL
+{
+const struct hash *termHash = cvOneTermHash(type,term);
+if (termHash != NULL)
+    return hashFindVal((struct hash *)termHash,CV_TAG);
+return NULL;
+}
+
+#ifdef OMIT
+// may want this someday
+const char *cvTerm(char *tag)
+// returns the cv Term if tag found or else NULL
+{
+// Get the list of term types from thew cv
+struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
+struct hashCookie hcTOT = hashFirst(termTypeHash);
+struct hashEl *helType;
+while ((helType = hashNext(&hcTOT)) != NULL) // Walk through each type
+    {
+    struct hash *typeHash = cvTermHash(helType->name);
+    struct hashCookie hcType = hashFirst(typeHash);
+    struct hashEl *helTerm;
+    while ((helTerm = hashNext(&hcType)) != NULL) // Walk through each term in this type
+        {
+        struct hash *termHash = (struct hash *)helTerm->val;
+        char *foundTag = hashFindVal(termHash,CV_TAG);
+        if (foundTag != NULL && sameString(tag,foundTag))
+            {
+            return helTerm->name;
+            }
+        }
+    }
+return NULL;
+}
+#endif///def OMIT
 
 boolean cvTermIsHidden(char *term)
 // returns TRUE if term is defined as hidden in cv.ra
