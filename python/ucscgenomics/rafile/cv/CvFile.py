@@ -430,7 +430,7 @@ class AntibodyStanza(CvStanza):
 
 	def validate(self, ra):
 		necessary = {'term', 'tag', 'type', 'target', 'antibodyDescription', 'targetDescription', 'vendorName', 'vendorId', 'orderUrl', 'lab', 'targetId'}
-		optional = {'validation', 'targetUrl', 'lots'}
+		optional = {'validation', 'targetUrl', 'lots', 'displayName'}
 
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary | optional)
@@ -510,7 +510,7 @@ class MouseStanza(CvStanza):
 
 	def validate(self, ra):
 		necessary = {'term', 'tag', 'type', 'description', 'organism', 'vendorName', 'orderUrl', 'age', 'strain', 'sex'}
-		optional = {'tissue', 'termId', 'termUrl', 'color', 'protocol', 'category'}
+		optional = {'tissue', 'termId', 'termUrl', 'color', 'protocol', 'category', 'vendorId'}
 		
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary | optional)
