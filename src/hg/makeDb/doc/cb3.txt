@@ -1139,3 +1139,20 @@ TMPDIR=/scratch/tmp
     #	6286306 bases of 133634773 (4.704%) in intersection
 
 ############################################################################
+# LIFTOVER TO cb4 (DONE - 2011-05-24 - Hiram )
+    mkdir /hive/data/genomes/cb3/bed/blat.cb4.2011-05-24
+    cd /hive/data/genomes/cb3/bed/blat.cb4.2011-05-24
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/cb3/jkStuff/11.ooc -debug cb3 cb4
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/cb3/jkStuff/11.ooc cb3 cb4 > do.log 2>&1
+    #	real    3m47.271s
+    # verify it works on genome-test
+
+#############################################################################

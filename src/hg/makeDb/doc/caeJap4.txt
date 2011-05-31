@@ -1,0 +1,231 @@
+# for emacs: -*- mode: sh; -*-
+
+# Caenorhabditis japonica
+#	Washington University School of Medicine GSC and Sanger Institute
+#
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABLE03
+
+###########################################################################
+## Download sequence (DONE - 2011-05-26 - Hiram)
+    mkdir /hive/data/genomes/caeJap4
+    cd /hive/data/genomes/caeJap4
+    mkdir ws220
+    cd ws220
+    wget --no-parent --timestamping -m -nH --cut-dirs=5 \
+        ftp://ftp.sanger.ac.uk/pub/wormbase/WS220/genomes/c_japonica/
+
+    # no AGP, make one from the fasta file, the sed changes type D to type W
+    # the seeming blanks in the sed are tabs via ctrl-V I
+    hgFakeAgp -minContigGap=1 \
+/hive/data/genomes/caeJap4/ws220/sequences/dna/c_japonica.WS220.dna.fa.gz \
+	stdout | sed -e "s/	D	/	W	/" \
+	> caejap4.ws220.fake.agp
+
+    faSize sequences/dna/c_japonica.WS220.dna.fa.gz
+# 145442736 bases (7036533 N's 138406203 real 0 upper 138406203 lower)
+#	in 3670 sequences in 1 files
+# %95.16 masked total, %100.00 masked real
+
+###########################################################################
+## Initial sequence (DONE - 2011-05-26 - Hiram)
+    cd /hive/data/genomes/caeJap4
+    cat << '_EOF_' > caeJap4.config.ra
+# Config parameters for makeGenomeDb.pl:
+db caeJap4
+# clade worm
+# genomeCladePriority 70
+scientificName Caenorhabditis japonica
+commonName C. japonica
+assemblyDate Sep. 2010
+assemblyLabel Washington University School of Medicine GSC C. japonica 7.0.1
+assemblyShortLabel WS220
+orderKey 879
+mitoAcc none
+fastaFiles /hive/data/genomes/caeJap4/ws220/sequences/dna/c_japonica.WS220.dna.fa.gz
+agpFiles /hive/data/genomes/caeJap4/ws220/caejap4.ws220.fake.agp
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 281687
+'_EOF_'
+    # << happy emacs
+
+    mkdir jkStuff
+    #	run just to AGP to make sure things are sane first
+    time nice -n +19 makeGenomeDb.pl caeJap4.config.ra -stop=agp \
+      > jkStuff/makeGenomeDb.agp.log 2>&1
+    #	real    0m27.323s
+    #	check that log to verify it has no errors
+    #	now, continuing to make the Db and all
+    time nice -n +19 makeGenomeDb.pl caeJap4.config.ra -continue=db \
+      > jkStuff/makeGenomeDb.db.log 2>&1
+    #	real    1m24.650s
+    #	check that log to verify it has no errors
+
+    #	take the trackDb business there and check it into the source tree
+    #	fixup the description, gap and gold html page descriptions
+
+###########################################################################
+## RepeatMasker (DONE - 2011-05-26 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/repeatMasker
+    cd /hive/data/genomes/caeJap4/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=swarm \
+	-buildDir=`pwd` caeJap4 > do.log 2>&1 &
+    #	real    17m2.223s
+
+    #	from the do.log:
+# RepeatMasker version development-$Id: RepeatMasker,v
+#	1.25 2010/09/08 21:32:26 angie Exp $
+#	CC   RELEASE 20090604; 
+
+    cat faSize.rmsk.txt
+# 163161801 bases (33840170 N's 129321631 real 126774098 upper 2547533 lower)
+#	in 7552 sequences in 1 files
+# %1.56 masked total, %1.97 masked real
+
+###########################################################################
+## Simple Repeats (DONE - 2011-05-26 - Hiram)
+    mkdir /cluster/data/caeJap4/bed/simpleRepeat
+    cd /cluster/data/caeJap4/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl -smallClusterHub=memk \
+	-workhorse=hgwdev -buildDir=`pwd` caeJap4 > do.log 2>&1 &
+    #	real    17m40.049s
+    cat fb.simpleRepeat 
+    #	6735924 bases of 129321631 (5.209%) in intersection
+
+###########################################################################
+## WindowMasker (DONE - 2011-05-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/caeJap4/bed/windowMasker
+    cd /hive/data/genomes/caeJap4/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -verbose=2 -buildDir=`pwd` \
+	-workhorse=hgwdev caeJap4 > do.log 2>&1 &
+    #	real    11m1.684s
+
+    twoBitToFa caeJap4.wmsk.sdust.2bit stdout | faSize stdin
+# 163161801 bases (33840170 N's 129321631 real 71887540 upper 57434091 lower)
+#	in 7552 sequences in 1 files
+# %35.20 masked total, %44.41 masked real
+
+    #	load this initial data to get ready to clean it
+    cd /hive/data/genomes/caeJap4/bed/windowMasker
+    hgLoadBed caeJap4 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 864115 elements of size 3
+    featureBits -countGaps caeJap4 windowmaskerSdust
+    #	91273866 bases of 163161801 (55.941%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits caeJap4 -not gap -bed=notGap.bed
+    #	129321631 bases of 129321631 (100.000%) in intersection
+    time nice -n +19 featureBits caeJap4 windowmaskerSdust notGap.bed \
+	-bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	57434091 bases of 129321631 (44.412%) in intersection
+    #	reload track to get it clean
+    hgLoadBed caeJap4 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 871785 elements of size 4
+    featureBits -countGaps caeJap4 windowmaskerSdust
+    #	57434091 bases of 163161801 (35.201%) in intersection
+
+    #	mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../caeJap4.unmasked.2bit stdin \
+	    -type=.bed caeJap4.cleanWMSdust.2bit
+    twoBitToFa caeJap4.cleanWMSdust.2bit stdout | faSize stdin \
+        > caeJap4.cleanWMSdust.faSize.txt
+    cat caeJap4.cleanWMSdust.faSize.txt
+# 163161801 bases (33840170 N's 129321631 real 71887540 upper 57434091 lower)
+#	in 7552 sequences in 1 files
+# %35.20 masked total, %44.41 masked real
+
+########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-26 - Hiram)
+    cd /hive/data/genomes/caeJap4
+    twoBitMask -add bed/windowMasker/caeJap4.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed caeJap4.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa caeJap4.2bit stdout | faSize stdin > faSize.caeJap4.txt
+    cat faSize.caeJap4.txt
+# 163161801 bases (33840170 N's 129321631 real 71771049 upper 57550582 lower) in 7552 sequences in 1 files
+# %35.27 masked total, %44.50 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/caeJap4/caeJap4.2bit
+    ln -s `pwd`/caeJap4.2bit /gbdb/caeJap4/caeJap4.2bit
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-26 - Hiram)
+    # numerator is caeJap4 gapless bases "real" as reported by faSize 
+    # denominator is hg19 gapless bases "real" as reported by faSize
+    # 1024 is threshold used for human -repMatch:
+    calc \( 129321631 / 2897310462 \) \* 1024
+    #	( 129321631 / 2897310462 ) * 1024 = 45.706303
+
+    # Round up to use -repMatch=100 since 50 would result in too many
+    cd /hive/data/genomes/caeJap4
+    blat caeJap4.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/caeJap4.11.ooc -repMatch=100
+    #	Wrote 10105 overused 11-mers to jkStuff/caeJap4.11.ooc
+    # there are no non-bridged gaps here to make a lift file from
+    # cd jkStuff
+    # gapToLift -verbose=2 caeJap4 caeJap4.nonBridged.lift -bedFile=caeJap4.nonBridged.bed
+
+    mkdir /hive/data/staging/data/caeJap4
+    cp -p chrom.sizes caeJap4.2bit jkStuff/caeJap4.11.ooc \
+	/hive/data/staging/data/caeJap4
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2011-05-26 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add caeJap4 just before caeRem3
+
+# caeJap4 (C. japonica)
+caeJap4.serverGenome = /hive/data/genomes/caeJap4/caeJap4.2bit
+caeJap4.clusterGenome = /scratch/data/caeJap4/caeJap4.2bit
+caeJap4.ooc = /scratch/data/caeJap4/caeJap4.11.ooc
+caeJap4.lift = no
+caeJap4.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+caeJap4.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+caeJap4.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+caeJap4.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+caeJap4.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+caeJap4.refseq.mrna.native.load = no
+caeJap4.refseq.mrna.xeno.load  = yes
+caeJap4.refseq.mrna.xeno.loadDesc = yes
+caeJap4.genbank.mrna.xeno.load = yes
+caeJap4.genbank.est.native.load = yes
+caeJap4.genbank.est.native.loadDesc = no
+caeJap4.downloadDir = caeJap4
+caeJap4.perChromTables = no
+
+    git commit -m "Added caeJap4 C. japonica WS220" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial caeJap4 &
+    #	logFile:  var/build/logs/2011.05.26-09:19:08.caeJap4.initalign.log
+    #	real    291m13.960s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeJap4
+    #	logFile: var/dbload/hgwdev/logs/2011.05.25-15:46:59.dbload.log
+    #	real    22m27.349s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add caeJap4 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+

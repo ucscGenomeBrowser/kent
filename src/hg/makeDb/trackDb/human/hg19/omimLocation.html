@@ -39,21 +39,23 @@ in Man (MIM).
 <H2>Display Conventions and Configuration</H2>
 
 <P>Cytogenetic locations of OMIM entries are displayed as solid
-blocks.  The entries are colored according to following classification:
-<UL>
-<LI><B><FONT COLOR="#C800C8">Purple</FONT></B> for Class 1 OMIM records 
-- Reasonable guess at <B><FONT COLOR="#C800C8">association of phenotype 
-with gene</FONT></B>, e.g., enzyme deficiencies.  Mapping not definitively 
-established.
-<LI><B><FONT COLOR=green>Green</FONT></B> for Class 2 OMIM records 
-- Phenotype <B><FONT COLOR=green>mapped to region</FONT></B>, but not to gene.
-<LI><B><FONT COLOR="#DC0000">Red</FONT></B> for Class 3 OMIM records 
-- Mutants in <B><FONT COLOR="#DC0000">gene known to cause disease</FONT></B>.
-<LI><B><FONT COLOR="#DC6464">Orange</FONT></B> for Class 4 OMIM records 
-- <B><FONT COLOR="#DC6464"> Contiguous gene syndromes</FONT></B>. 
-<LI><B><FONT COLOR="#C8C8C8">Gray</FONT></B> for 
-<B><FONT COLOR="#C8C8C8">other entries</FONT></B>, mapped to chromosome-band resolution.
+blocks.  The entries are colored according to the OMIM phenotype class of associated disorders:
 
+<UL>
+<LI><B><FONT COLOR="#AACBAA">Lighter Green</FONT></B> for Class 1 OMIM records
+-  the disorder is placed on the map based on its association with
+a gene, but the underlying defect is not known.
+<LI><B><FONT COLOR="#66A266">Light Green</FONT></B> for Class 2 OMIM records
+- the disorder has been placed on the map by linkage; no mutation has
+been found.
+<LI><B><FONT COLOR="#006400">Dark Green</FONT></B> for Class 3 OMIM records
+- the molecular basis for the disorder is known; a mutation has been
+found in the gene.
+<LI><B><FONT COLOR="#9900CC">Purple</FONT></B> for Class 4 OMIM records
+- a contiguous gene deletion or duplication syndrome, multiple genes
+are deleted or duplicated causing the phenotype.
+<LI><B><FONT COLOR="#C8C8C8">Light Gray</FONT></B> for Others
+- no associated OMIM phenotype class info available.
 </UL>
 <P> Gene symbol and disease information, when available, are displayed on the details page for an item. 
 </P>
@@ -72,7 +74,7 @@ These genomic positions, together with the corresponding OMIM IDs, are saved int
 <H2>Credits</H2>
 <P>
 Thanks to OMIM and NCBI for the use of their data. This track was
-constructed by Fan Hsu and Robert Kuhn of the UCSC Genome Bioinformatics Group.</P> 
+constructed by Fan Hsu, Robert Kuhn, and Brooke Rhead of the UCSC Genome Bioinformatics Group.</P> 
 
 <H2>References</H2>
 <P>
