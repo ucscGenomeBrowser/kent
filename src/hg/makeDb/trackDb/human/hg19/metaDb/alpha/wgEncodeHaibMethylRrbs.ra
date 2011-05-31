@@ -6316,7 +6316,7 @@ obtainedBy Stanford
 project wgEncode
 replicate 1
 subId 3821
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordRawDataRep2
@@ -6337,7 +6337,7 @@ obtainedBy Stanford
 project wgEncode
 replicate 2
 subId 3821
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordRawDataRep3
@@ -6359,7 +6359,7 @@ obtainedBy Stanford
 project wgEncode
 replicate 3
 subId 3819
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep1
@@ -6383,7 +6383,7 @@ project wgEncode
 replicate 1
 subId 2395
 tableName wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep1
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep2
@@ -6407,7 +6407,7 @@ project wgEncode
 replicate 2
 subId 2395
 tableName wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep2
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3
@@ -6431,7 +6431,7 @@ project wgEncode
 replicate 3
 subId 3190
 tableName wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7DukeRawDataRep1
