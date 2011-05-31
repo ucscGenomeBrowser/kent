@@ -346,7 +346,7 @@ class CellLineStanza(CvStanza):
 
 	def validate(self, ra):
 		necessary = {'term', 'tag', 'type', 'description', 'organism', 'vendorName', 'orderUrl', 'sex', 'tier'}
-		optional = {'tissue', 'vendorId', 'karyotype', 'lineage', 'termId', 'termUrl', 'color', 'protocol', 'category'}
+		optional = {'tissue', 'vendorId', 'karyotype', 'lineage', 'termId', 'termUrl', 'color', 'protocol', 'category', 'lots'}
 
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary | optional)
@@ -510,7 +510,7 @@ class MouseStanza(CvStanza):
 
 	def validate(self, ra):
 		necessary = {'term', 'tag', 'type', 'description', 'organism', 'vendorName', 'orderUrl', 'age', 'strain', 'sex'}
-		optional = {'tissue', 'termId', 'termUrl', 'color', 'protocol', 'category', 'vendorId'}
+		optional = {'tissue', 'termId', 'termUrl', 'color', 'protocol', 'category', 'vendorId', 'lots'}
 		
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary | optional)
