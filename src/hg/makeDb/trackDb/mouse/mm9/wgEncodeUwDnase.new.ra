@@ -1266,7 +1266,7 @@ wgEncode 1
 		#display no
 		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep3 cricket Fri May 13 13:56:40 2011
 
-		track wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep2
+		track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Liver Sg 2
 		longLabel Liver Adult 8-weeks DNaseI HS Signal Rep 2 from ENCODE/UW
@@ -1274,6 +1274,7 @@ wgEncode 1
 		type bigWig 1.000000 29008.000000
 		color 230,159,0
 		# subId=2012 dateSubmitted=2010-07-24
+		# was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:56:40 2011
 
 		track wgEncodeUwDnaseKidneyC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal off
