@@ -107,6 +107,9 @@ jQuery.tableDnD = {
                 serializeRegexp: /[^\-]*$/, // The regular expression to use to trim row IDs
                 serializeParamName: null, // If you want to specify another parameter name instead of the table ID
                 dragHandle: null, // If you give the name of a class here, then only Cells with this class will be draggable
+                dragObjects: [],   // UCSC: Allows setting multiple rows to be dragged at one time
+                downOffset: 0,     // UCSC: Dragging set, then offset Y to bottom of set
+                upOffset: 0,       // UCSC: Dragging set, then offset Y to bottom of set
                 dragStartIndex : 0
             }, options || {});
             // Now make the rows draggable
@@ -142,7 +145,22 @@ jQuery.tableDnD = {
                     config.dragStartIndex = $(jQuery.tableDnD.dragObject).attr('rowIndex');
                     if (config.onDragStart) {
                         // Call the onDrop method if there is one
-                        config.onDragStart(ev, table, this);
+                        config.onDragStart(ev, table, this.parentNode);
+
+                        /////// UCSC
+                        config.downOffset = 0;
+                        config.upOffset = 0;
+                        if (config.dragObjects.length > 1) {
+                            for(var ix = 0; ix < config.dragObjects.length; ix++) {
+                                var row = config.dragObjects[ix];
+                                var rowIx = $(row).attr('rowIndex');
+                                if (rowIx < config.dragStartIndex)
+                                    config.upOffset -= $(row).height();
+                                else if (rowIx > config.dragStartIndex)
+                                    config.downOffset += $(row).height();
+                            }
+                        }
+                        /////// UCSC
                     }
                     return false;
                 });
@@ -277,23 +295,61 @@ jQuery.tableDnD = {
             // work out if we're going up or down...
             var movingDown = y > jQuery.tableDnD.oldY;
             // update the old value
-            jQuery.tableDnD.oldY = y;
+            ////// UCSC  jQuery.tableDnD.oldY = y;  // Do this below, only when rows have moved.
             // update the style to show we're dragging
             if (config.onDragClass) {
+                ////// UCSC
+                if (config.dragObjects.length > 1)
+                    config.dragObjects.addClass(config.onDragClass);
+                else ////// UCSC
                     dragObj.addClass(config.onDragClass);
             } else {
-                dragObj.css(config.onDragStyle);
+                ////// UCSC
+                if (config.dragObjects.length > 1)
+                    config.css(config.onDragStyle);
+                else ////// UCSC
+                    dragObj.css(config.onDragStyle);
             }
             // If we're over a row then move the dragged row to there so that the user sees the
             // effect dynamically
             var currentRow = jQuery.tableDnD.findDropTargetRow(dragObj, y);
+            ////// UCSC
+            if (config.dragObjects.length > 1) {
+                if (movingDown)
+                    currentRow = jQuery.tableDnD.findDropTargetRow(config.dragObjects[config.dragObjects.length - 1], y + config.downOffset);
+                else
+                    currentRow = jQuery.tableDnD.findDropTargetRow(config.dragObjects[0], y + config.upOffset);
+            } ////// UCSC
+
             if (currentRow) {
-                // TODO worry about what happens when there are multiple TBODIES
-                if (movingDown && jQuery.tableDnD.dragObject != currentRow) {
-                    jQuery.tableDnD.dragObject.parentNode.insertBefore(jQuery.tableDnD.dragObject, currentRow.nextSibling);
-                } else if (! movingDown && jQuery.tableDnD.dragObject != currentRow) {
-                    jQuery.tableDnD.dragObject.parentNode.insertBefore(jQuery.tableDnD.dragObject, currentRow);
-                }
+                ////// UCSC
+                if (config.dragObjects.length > 1) {
+                        if (movingDown && config.dragObjects[config.dragObjects.length - 1] != currentRow) {
+                            try { // use try/catch because sometimes rows go missing when moving down
+                                $( currentRow ).insertBefore( $( config.dragObjects[0] ) );
+                                jQuery.tableDnD.oldY = y;
+                            }
+                            catch (err) { // just put them all back
+                                for(var ix=0;ix < config.dragObjects.length; ix++) {
+                                    $(config.dragObjects[ix]).insertBefore( currentRow );
+                                }
+                            }
+                        } else if (!movingDown && config.dragObjects[0] != currentRow) {
+                            $(config.dragObjects).insertBefore( currentRow );
+                            jQuery.tableDnD.oldY = y;
+                        }
+                } else {  ////// UCSC
+
+                    // TODO worry about what happens when there are multiple TBODIES
+                    if (movingDown && jQuery.tableDnD.dragObject != currentRow) {
+                        jQuery.tableDnD.dragObject.parentNode.insertBefore(jQuery.tableDnD.dragObject, currentRow.nextSibling);
+                        jQuery.tableDnD.oldY = y;
+                    } else if (! movingDown && jQuery.tableDnD.dragObject != currentRow) {
+                        jQuery.tableDnD.dragObject.parentNode.insertBefore(jQuery.tableDnD.dragObject, currentRow);
+                        jQuery.tableDnD.oldY = y;
+                    }
+
+                }   ////// UCSC
             }
         }
 
@@ -313,7 +369,7 @@ jQuery.tableDnD = {
             }
             // Because we always have to insert before, we need to offset the height a bit
             //////////if ((y > rowY - rowHeight) && (y < (rowY + rowHeight))) {
-            if ((y > rowY) && (y < (rowY + rowHeight))) { ////////// This was modified by tim because of tall tracks
+            if ((y > rowY) && (y < (rowY + rowHeight))) { ////////// UCSC This was modified by tim because of tall tracks
                 // that's the row we're over
                 // If it's the same as the current row, ignore it
                 if (row == draggedRow) {return null;}
@@ -352,9 +408,17 @@ jQuery.tableDnD = {
             // If we have a dragObject, then we need to release it,
             // The row will already have been moved to the right place so we just reset stuff
             if (config.onDragClass) {
-                jQuery(droppedRow).removeClass(config.onDragClass);
+                ////// UCSC
+                if (config.dragObjects.length > 1)
+                    config.dragObjects.removeClass(config.onDragClass);
+                else ////// UCSC
+                    jQuery(droppedRow).removeClass(config.onDragClass);
             } else {
-                jQuery(droppedRow).css(config.onDropStyle);
+                ////// UCSC
+                if (config.dragObjects.length > 1)
+                    config.dragObjects.css(config.onDropStyle);
+                else ////// UCSC
+                    jQuery(droppedRow).css(config.onDropStyle);
             }
             jQuery.tableDnD.dragObject   = null;
             if (config.onDrop) {
@@ -362,6 +426,7 @@ jQuery.tableDnD = {
                 config.onDrop(jQuery.tableDnD.currentTable, droppedRow, config.dragStartIndex);
             }
             jQuery.tableDnD.currentTable = null; // let go of the table too
+            config.dragObjects = [];  ////// UCSC
         }
     },
 
