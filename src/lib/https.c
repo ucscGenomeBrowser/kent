@@ -123,38 +123,80 @@ if (pid == 0)
 
     /* Could examine ssl here to get connection info */
 
+    /* we need to wait on both the user's socket and the BIO SSL socket 
+     * to see if we need to ferry data from one to the other */
+
+    /* Get underlying file descriptor, needed for select call */
+    fd = BIO_get_fd(sbio, NULL);
+    if (fd == -1) 
+	{
+	errAbort("BIO doesn't seem to be initialized in https, unable to get descriptor.");
+	return(-1);
+        }
+
+    fd_set readfds;
+    fd_set writefds;
+    boolean done;
+    int err;
+
+
     char buf[32768];
-    int rd = 0;
-
-    while((rd = read(sv[1], buf, 32768)) > 0) 
+    done = FALSE;
+    while (!done) 
 	{
-	if(BIO_write(sbio, buf, rd) <= 0) 
+
+	FD_ZERO(&readfds);
+	FD_ZERO(&writefds);
+	FD_SET(fd, &readfds);
+	FD_SET(sv[1], &readfds);
+
+	err = select(max(fd,sv[1]) + 1, &readfds, &writefds, NULL, NULL);
+
+	/* Evaluate select() return code */
+	if (err < 0) 
 	    {
-	    ERR_print_errors_fp(stderr);
-	    errAbort("Error writing SSL connection\n");
-	    return -1;
+	    errAbort("error during select()");
+	    return(-1);
+	    }
+	if (err == 0) 
+	    {
+	    return(-1);     /* Timeout (not currently in use) */
 	    }
 
-        // TODO may someday need to readywait on both connections
-        break;   // for now, just get input once and move on
-        
-	}
-    if (rd == -1)
-	errnoAbort("error reading https socket");
-
-    for(;;) 
-	{
-	len = BIO_read(sbio, buf, 32768);
-	if(len < 0) 
+	if (FD_ISSET(sv[1], &readfds))
 	    {
-	    ERR_print_errors_fp(stderr);
-	    errAbort("Error reading SSL connection\n");
-	    return -1;
+	    int rd = 0;
+
+	    rd = read(sv[1], buf, 32768);
+	    if (rd == -1)
+		errnoAbort("error reading https socket");
+	    if (rd > 0)
+		{
+		if (BIO_write(sbio, buf, rd) <= 0) 
+		    {
+		    ERR_print_errors_fp(stderr);
+		    errAbort("Error writing SSL connection\n");
+		    return -1;
+		    }
+		}
+	    else 
+		break;
 	    }
-	if(len == 0) break;
-	int wt = write(sv[1], buf, len);
-	if (wt == -1)
-	    errnoAbort("error writing https socket");
+
+	if (FD_ISSET(fd, &readfds))
+	    {
+	    len = BIO_read(sbio, buf, 32768);
+	    if(len < 0) 
+		{
+		ERR_print_errors_fp(stderr);
+		errAbort("Error reading SSL connection\n");
+		return -1;
+		}
+	    if(len == 0) break;
+	    int wt = write(sv[1], buf, len);
+	    if (wt == -1)
+		errnoAbort("error writing https socket");
+	    }
 	}
 
     BIO_free_all(sbio);
