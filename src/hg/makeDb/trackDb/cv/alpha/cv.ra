@@ -8901,7 +8901,7 @@ description the age when the real age is unknown
 # ----------------
 # term (human-readable name)
 # tag (machine-readable name, no special characters)
-# type (informs pipeline code of stanza type.  Should always be age)
+# type (informs pipeline code of stanza type.  Should always be attic)
 # description (human-readable description.  Can't say where/how it's used)
 
 
