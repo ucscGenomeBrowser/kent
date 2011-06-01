@@ -396,6 +396,15 @@ wgEncode 1
 		color 86,180,233
 		# subId=3891 dateSubmitted=2011-04-19
 
+		track wgEncodeUwDnaseHeartC57bl6MAdult8wksHotspotsRep1
+		parent wgEncodeUwDnaseViewHotspots off
+		shortLabel Heart Hspt 1
+		longLabel Heart Adult 8-weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+		subGroups view=Hotspots age=adult8wks cellType=Heart sex=M strain=C57BL6 rep=rep1
+		type broadPeak
+		color 153,38,0
+		# subId=3912 dateSubmitted=2011-04-19
+
 		track wgEncodeUwDnaseKidneyC57bl6MAdult8wksHotspotsRep2
 		parent wgEncodeUwDnaseViewHotspots off
 		shortLabel Kidney Hspt 2
@@ -467,6 +476,15 @@ wgEncode 1
 		type broadPeak
 		color 189,0,157
 		# subId=3909 dateSubmitted=2011-05-02
+
+		track wgEncodeUwDnaseTregC57bl6MAdult8wksHotspotsRep1
+		parent wgEncodeUwDnaseViewHotspots off
+		shortLabel TReg Hspt 1
+		longLabel TReg Adult 8-weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+		subGroups view=Hotspots age=adult8wks cellType=TReg sex=M strain=C57BL6 rep=rep1
+		type broadPeak
+		color 86,180,233
+		# subId=3911 dateSubmitted=2011-05-02
 
 		track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksHotspotsRep1
 		parent wgEncodeUwDnaseViewHotspots off
@@ -913,6 +931,15 @@ wgEncode 1
 		color 86,180,233
 		# subId=3891 dateSubmitted=2011-04-19
 
+		track wgEncodeUwDnaseHeartC57bl6MAdult8wksPkRep1
+		parent wgEncodeUwDnaseViewPeaks off
+		shortLabel Heart Pk 1
+		longLabel Heart Adult 8-weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+		subGroups view=Peaks age=adult8wks cellType=Heart sex=M strain=C57BL6 rep=rep1
+		type narrowPeak
+		color 153,38,0
+		# subId=3912 dateSubmitted=2011-04-19
+
 		track wgEncodeUwDnaseKidneyC57bl6MAdult8wksPkRep2
 		parent wgEncodeUwDnaseViewPeaks off
 		shortLabel Kidney Pk 2
@@ -984,6 +1011,15 @@ wgEncode 1
 		type narrowPeak
 		color 189,0,157
 		# subId=3909 dateSubmitted=2011-05-02
+
+		track wgEncodeUwDnaseTregC57bl6MAdult8wksPkRep1
+		parent wgEncodeUwDnaseViewPeaks off
+		shortLabel TReg Pk 1
+		longLabel TReg Adult 8-weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+		subGroups view=Peaks age=adult8wks cellType=TReg sex=M strain=C57BL6 rep=rep1
+		type narrowPeak
+		color 86,180,233
+		# subId=3911 dateSubmitted=2011-05-02
 
 		track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksPkRep1
 		parent wgEncodeUwDnaseViewPeaks off
@@ -1464,6 +1500,16 @@ wgEncode 1
 		# subId=3891 dateSubmitted=2011-04-19
 		# was wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:49:11 2011
 
+		track wgEncodeUwDnaseHeartC57bl6MAdult8wksSigRep1
+		parent wgEncodeUwDnaseViewRawSignal off
+		shortLabel Heart Sg 1
+		longLabel Heart Adult 8-weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+		subGroups view=Signal age=adult8wks cellType=Heart sex=M strain=C57BL6 rep=rep1
+		type bigWig 1.000000 35686.000000
+		color 153,38,0
+		# subId=3912 dateSubmitted=2011-04-19
+		# was wgEncodeUwDnaseHeartC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:26 2011
+
 		track wgEncodeUwDnaseKidneyC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Kidney Sg 2
@@ -1541,6 +1587,16 @@ wgEncode 1
 		color 189,0,157
 		# subId=3909 dateSubmitted=2011-05-02
 		# was wgEncodeUwDnaseFatC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:26 2011
+
+		track wgEncodeUwDnaseTregC57bl6MAdult8wksSigRep1
+		parent wgEncodeUwDnaseViewRawSignal off
+		shortLabel TReg Sg 1
+		longLabel TReg Adult 8-weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+		subGroups view=Signal age=adult8wks cellType=TReg sex=M strain=C57BL6 rep=rep1
+		type bigWig 1.000000 36553.000000
+		color 86,180,233
+		# subId=3911 dateSubmitted=2011-05-02
+		# was wgEncodeUwDnaseTregC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:27 2011
 
 		track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal off
