@@ -1118,10 +1118,13 @@ if (differentWord(genome, hGenome(retDb)))
 return retDb;
 }
 
+unsigned long expireSeconds = 0;
 /* phoneHome business */
 static void cgiApoptosis(int status)
 /* signal handler for SIGALRM for phoneHome function and CGI expiration */
 {
+if (expireSeconds > 0)
+    errAbort("cgiApoptosis: %lu seconds\n", expireSeconds);
 exit(0);
 }
 
@@ -1134,7 +1137,7 @@ beenHere = TRUE;
 
 char *expireTime = cfgOptionDefault("browser.cgiExpireMinutes", "20");
 unsigned expireMinutes = sqlUnsigned(expireTime);
-unsigned long expireSeconds = expireMinutes * 60;
+expireSeconds = expireMinutes * 60;
 
 char trashFile[PATH_LEN];
 safef(trashFile, sizeof(trashFile), "%s/registration.txt", trashDir());
@@ -1183,6 +1186,7 @@ if (scriptName && ip)  /* will not be true from command line execution */
 	if (0 == pid0)	/* in child */
 	    {
 	    close(STDOUT_FILENO); /* do not hang up Apache finish for parent */
+	    expireSeconds = 0;	/* no error message from this exit */
 	    (void) signal(SIGALRM, cgiApoptosis);
 	    (void) alarm(6);	/* timeout here in 6 seconds */
 #include "versionInfo.h"
