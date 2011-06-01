@@ -326,7 +326,16 @@ jQuery.tableDnD = {
                 if (config.dragObjects.length > 1) {
                         if (movingDown && config.dragObjects[config.dragObjects.length - 1] != currentRow) {
                             try { // use try/catch because sometimes rows go missing when moving down
-                                $( currentRow ).insertBefore( $( config.dragObjects[0] ) );
+                                // can't just insert currentRow above, because there may be more than one row that needs to move up
+                                //$( currentRow ).insertBefore( $( config.dragObjects[0] ) );
+                                var curRowIx = $( currentRow ).attr('rowIndex');
+                                if (curRowIx == (jQuery.tableDnD.currentTable.rows.length - 1)) {
+                                    // Even though this is method is bad on fast drags,
+                                    // getting to the end seems to only work on slow moves anyway.
+                                    // plus numerous other strateges failed to get this to work at all.
+                                    $( currentRow ).insertBefore( $( config.dragObjects[0] ) );
+                                } else
+                                    $(config.dragObjects).insertBefore( $(currentRow).next() );
                                 jQuery.tableDnD.oldY = y;
                             }
                             catch (err) { // just put them all back
