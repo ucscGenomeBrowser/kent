@@ -578,7 +578,7 @@ TMPDIR=/scratch/tmp
 
 
 #########################################################################
-#  SWAP mm9 lastz (DONE - 2010-05-17 - Chin)
+#  SWAP mm9 LASTZ (DONE - 2010-05-17 - Chin)
     #	original alignment done at mm9.txt
     cd /hive/data/genomes/mm9/bed/lastzBosTau6.2011-05-17
     cat fb.mm9.chainBosTau6Link.txt
@@ -603,7 +603,7 @@ TMPDIR=/scratch/tmp
     ln -s blastz.mm9.swap lastz.mm9
 
 ############################################################################
-#  SWAP hg19 lastz (DONE 2011-05-16 - Chin)
+#  SWAP hg19 LASTZ (DONE 2011-05-16 - Chin)
     #	original alignment
     cd /hive/data/genomes/hg19/bed/lastzBosTau6.2011-05-16
     cat fb.hg19.chainBosTau6Link.txt
@@ -621,9 +621,12 @@ TMPDIR=/scratch/tmp
     #   real     72m57.889s
     cat fb.bosTau6.chainHg19Link.txt
     #   1336966333 bases of 2649682029 (50.458%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
 
 ############################################################################
-#  SWAP canFam2 lastz (DONE 2011-05-25 - Chin)
+#  SWAP canFam2 LASTZ (DONE 2011-05-25 - Chin)
     #   original alignment
     cd /hive/data/genomes/canFam2/bed/lastzBosTau6.2011-05-25
     cat fb.canFam2.chainBosTau6Link.txt
@@ -641,6 +644,51 @@ TMPDIR=/scratch/tmp
     #   real     88m38.555s
     cat fb.bosTau6.chainCanFam2Link.txt
     # 1404315725 bases of 2649682029 (52.999%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.canFam2.swap lastz.canFam2
+
+############################################################################
+#  SWAP rn4 LASTZ (DONE 2011-05-31 - Chin)
+    cd /hive/data/genomes/rn4/bed/blastzBosTau6.2011-05-31
+    cat fb.rn4.chainBosTau6Link.txt
+    # 660647959 bases of 2571531505 (25.691%) in intersection
+
+    #   and the swap
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.rn4.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.rn4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rn4/bed/blastzBosTau6.2011-05-31/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    49m43.881
+
+    cat fb.bosTau6.chainRn4Link.txt
+    # 648232024 bases of 2649682029 (24.465%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.rn4.swap lastz.rn4
+
+############################################################################
+#  SWAP monDom5 LASTZ (DONE 2011-05-31 - Chin)
+    cd /hive/data/genomes/monDom5/bed/lastzBosTau6.2011-05-31
+    cat fb.monDom5.chainBosTau6Link.txt
+    #   207703303 bases of 3501660299 (5.932%) in intersection
+
+    # and the swap
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzBosTau6.2011-05-31/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    52m10.229s
+
+    cat fb.bosTau6.chainMonDom5Link.txt
+    #   199980646 bases of 2649682029 (7.547%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (working 2011-02-07 - Chin)

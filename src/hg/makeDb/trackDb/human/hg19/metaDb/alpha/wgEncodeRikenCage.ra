@@ -7997,6 +7997,28 @@ subId 3990
 tableName wgEncodeRikenCageNhekCytosolPapClusters
 view Clusters
 
+metaObject wgEncodeRikenCageNhekCytosolPapMinusRawRep4
+objType table
+bioRep 028C
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-31
+dateUnrestricted 2012-03-02
+fileName wgEncodeRikenCageNhekCytosolPapMinusRawRep4.bigWig
+grant Gingeras
+lab RIKEN
+labExpId K20
+labProtocolId 028C+cage
+localization cytosol
+project wgEncode
+replicate 4
+rnaExtract longPolyA
+subId 4166
+tableName wgEncodeRikenCageNhekCytosolPapMinusRawRep4
+view MinusRawSignal
+
 metaObject wgEncodeRikenCageNhekCytosolPapMinusSignalRep3
 objType table
 bioRep 027C
@@ -8021,6 +8043,28 @@ rnaExtract longPolyA
 subId 2373
 tableName wgEncodeRikenCageNhekCytosolPapMinusSignalRep3
 view MinusRawSignal
+
+metaObject wgEncodeRikenCageNhekCytosolPapPlusRawRep4
+objType table
+bioRep 028C
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-31
+dateUnrestricted 2012-03-02
+fileName wgEncodeRikenCageNhekCytosolPapPlusRawRep4.bigWig
+grant Gingeras
+lab RIKEN
+labExpId K20
+labProtocolId 028C+cage
+localization cytosol
+project wgEncode
+replicate 4
+rnaExtract longPolyA
+subId 4166
+tableName wgEncodeRikenCageNhekCytosolPapPlusRawRep4
+view PlusRawSignal
 
 metaObject wgEncodeRikenCageNhekCytosolPapPlusSignalRep3
 objType table
@@ -8656,6 +8700,28 @@ subId 3979
 tableName wgEncodeRikenCageSknshraCellPapClusters
 view Clusters
 
+metaObject wgEncodeRikenCageSknshraCellPapMinusRawRep1
+objType table
+bioRep 019WC
+cell SK-N-SH_RA
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-31
+dateUnrestricted 2012-03-02
+fileName wgEncodeRikenCageSknshraCellPapMinusRawRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId K14
+labProtocolId 019WC+cage
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 4167
+tableName wgEncodeRikenCageSknshraCellPapMinusRawRep1
+view MinusRawSignal
+
 metaObject wgEncodeRikenCageSknshraCellPapMinusSignalRep2
 objType table
 attic auxExp
@@ -8681,6 +8747,28 @@ rnaExtract longPolyA
 subId 3339
 tableName wgEncodeRikenCageSknshraCellPapMinusSignalRep2
 view MinusRawSignal
+
+metaObject wgEncodeRikenCageSknshraCellPapPlusRawRep1
+objType table
+bioRep 019WC
+cell SK-N-SH_RA
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-31
+dateUnrestricted 2012-03-02
+fileName wgEncodeRikenCageSknshraCellPapPlusRawRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId K14
+labProtocolId 019WC+cage
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 4167
+tableName wgEncodeRikenCageSknshraCellPapPlusRawRep1
+view PlusRawSignal
 
 metaObject wgEncodeRikenCageSknshraCellPapPlusSignalRep2
 objType table
@@ -8778,4 +8866,4 @@ rnaExtract longPolyA
 subId 3804
 view TSS
 
-# MAGIC: -1342042834
+# MAGIC: 1160764860
