@@ -1,0 +1,233 @@
+# for emacs: -*- mode: sh; -*-
+
+# Caenorhabditis brenneri
+#	Washington University School of Medicine GSC and Sanger Institute
+#
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEG02
+
+###########################################################################
+## Download sequence (DONE - 2011-05-26 - Hiram)
+    mkdir /hive/data/genomes/caePb3
+    cd /hive/data/genomes/caePb3
+    mkdir ws220
+    cd ws220
+    wget --no-parent --timestamping -m -nH --cut-dirs=5 \
+        ftp://ftp.sanger.ac.uk/pub/wormbase/WS220/genomes/c_brenneri/
+
+    # no AGP, make one from the fasta file, the sed changes type D to type W
+    # the seeming blanks in the sed are tabs via ctrl-V I
+    hgFakeAgp -minContigGap=1 \
+/hive/data/genomes/caePb3/ws220/sequences/dna/c_brenneri.WS220.dna.fa.gz \
+	stdout | sed -e "s/	D	/	W	/" \
+	> caePb3.ws220.fake.agp
+
+    faSize sequences/dna/c_brenneri.WS220.dna.fa.gz
+# 190374847 bases (20277419 N's 170097428 real 0 upper 170097428 lower)
+#	in 3307 sequences in 1 files
+# %89.35 masked total, %100.00 masked real
+
+###########################################################################
+## Initial sequence (DONE - 2011-05-26 - Hiram)
+    cd /hive/data/genomes/caePb3
+    cat << '_EOF_' > caePb3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db caePb3
+# clade worm
+# genomeCladePriority 66
+scientificName Caenorhabditis brenneri
+commonName C. brenneri
+assemblyDate Nov. 2010
+assemblyShortLabel WS220
+assemblyLabel Washington University School of Medicine GSC Caenorhabditis brenneri(PB2801) 6.0.1b
+orderKey 838
+mitoAcc none
+fastaFiles /hive/data/genomes/caePb3/ws220/sequences/dna/c_brenneri.WS220.dna.fa.gz
+agpFiles /hive/data/genomes/caePb3/ws220/caePb3.ws220.fake.agp
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 135651
+    # << happy emacs
+
+    mkdir jkStuff
+    #	run just to AGP to make sure things are sane first
+    time nice -n +19 makeGenomeDb.pl caePb3.config.ra -stop=agp \
+      > jkStuff/makeGenomeDb.agp.log 2>&1
+    #	real    0m25.144s
+    #	check that log to verify it has no errors
+    #	now, continuing to make the Db and all
+    time nice -n +19 makeGenomeDb.pl caePb3.config.ra -continue=db \
+      > jkStuff/makeGenomeDb.db.log 2>&1
+    #	real    1m36.277s
+    #	check that log to verify it has no errors
+
+    #	take the trackDb business there and check it into the source tree
+    #	fixup the description, gap and gold html page descriptions
+
+###########################################################################
+## RepeatMasker (DONE - 2011-05-26 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/repeatMasker
+    cd /hive/data/genomes/caePb3/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=swarm \
+	-buildDir=`pwd` caePb3 > do.log 2>&1 &
+    #	real    14m59.518s
+
+    #	from the do.log:
+# RepeatMasker version development-$Id: RepeatMasker,v
+#	1.25 2010/09/08 21:32:26 angie Exp $
+#	CC   RELEASE 20090604; 
+
+    cat faSize.rmsk.txt
+# 190374847 bases (20277419 N's 170097428 real 167780413 upper 2317015 lower)
+#	in 3307 sequences in 1 files
+# %1.22 masked total, %1.36 masked real
+
+###########################################################################
+## Simple Repeats (DONE - 2011-05-26 - Hiram)
+    mkdir /cluster/data/caePb3/bed/simpleRepeat
+    cd /cluster/data/caePb3/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl -smallClusterHub=memk \
+	-workhorse=hgwdev -buildDir=`pwd` caePb3 > do.log 2>&1 &
+    #	real    13m21.481s
+    cat fb.simpleRepeat 
+    #	5049667 bases of 170097428 (2.969%) in intersection
+
+###########################################################################
+## WindowMasker (DONE - 2011-05-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/caePb3/bed/windowMasker
+    cd /hive/data/genomes/caePb3/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -verbose=2 -buildDir=`pwd` \
+	-workhorse=hgwdev caePb3 > do.log 2>&1 &
+    #	real    9m20.767s
+
+    twoBitToFa caePb3.wmsk.sdust.2bit stdout | faSize stdin
+# 190374847 bases (20277419 N's 170097428 real 120358123 upper 49739305 lower)
+#	in 3307 sequences in 1 files
+# %26.13 masked total, %29.24 masked real
+
+    #	load this initial data to get ready to clean it
+    cd /hive/data/genomes/caePb3/bed/windowMasker
+    hgLoadBed caePb3 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 1354976 elements of size 3
+    featureBits -countGaps caePb3 windowmaskerSdust
+    #	70016710 bases of 190374847 (36.778%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits caePb3 -not gap -bed=notGap.bed
+    #	170097428 bases of 170097428 (100.000%) in intersection
+    time nice -n +19 featureBits caePb3 windowmaskerSdust notGap.bed \
+	-bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	49739305 bases of 170097428 (29.242%) in intersection
+    #	reload track to get it clean
+    hgLoadBed caePb3 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 1353272 elements of size 4
+    featureBits -countGaps caePb3 windowmaskerSdust
+    #	49739305 bases of 190374847 (26.127%) in intersection
+
+    #	mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../caePb3.unmasked.2bit stdin \
+	    -type=.bed caePb3.cleanWMSdust.2bit
+    twoBitToFa caePb3.cleanWMSdust.2bit stdout | faSize stdin \
+        > caePb3.cleanWMSdust.faSize.txt
+    cat caePb3.cleanWMSdust.faSize.txt
+# 190374847 bases (20277419 N's 170097428 real 120358123 upper 49739305 lower)
+#	in 3307 sequences in 1 files
+# %26.13 masked total, %29.24 masked real
+
+########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-26 - Hiram)
+    cd /hive/data/genomes/caePb3
+    twoBitMask -add bed/windowMasker/caePb3.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed caePb3.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa caePb3.2bit stdout | faSize stdin > faSize.caePb3.txt
+    cat faSize.caePb3.txt
+# 190374847 bases (20277419 N's 170097428 real 120262496 upper 49834932 lower)
+#	in 3307 sequences in 1 files
+# %26.18 masked total, %29.30 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/caePb3/caePb3.2bit
+    ln -s `pwd`/caePb3.2bit /gbdb/caePb3/caePb3.2bit
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-26 - Hiram)
+    # numerator is caePb3 gapless bases "real" as reported by faSize 
+    # denominator is hg19 gapless bases "real" as reported by faSize
+    # 1024 is threshold used for human -repMatch:
+    calc \( 170097428  / 2897310462 \) \* 1024
+    #	( 170097428 / 2897310462 ) * 1024 = 60.117743
+
+    # Round up to use -repMatch=100 since 60 would result in too many
+    cd /hive/data/genomes/caePb3
+    blat caePb3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/caePb3.11.ooc -repMatch=100
+    #	Wrote 12775 overused 11-mers to jkStuff/caePb3.11.ooc
+    # there are no non-bridged gaps here to make a lift file from
+    # cd jkStuff
+    # gapToLift -verbose=2 caePb3 caePb3.nonBridged.lift -bedFile=caePb3.nonBridged.bed
+
+    mkdir /hive/data/staging/data/caePb3
+    cp -p chrom.sizes caePb3.2bit jkStuff/caePb3.11.ooc \
+	/hive/data/staging/data/caePb3
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2011-05-26,27 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add caePb3 just before caePb2
+
+# caePb3 (C. brenneri)
+caePb3.serverGenome = /hive/data/genomes/caePb3/caePb3.2bit
+caePb3.clusterGenome = /scratch/data/caePb3/caePb3.2bit
+caePb3.ooc = /scratch/data/caePb3/caePb3.11.ooc
+caePb3.lift = no
+caePb3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+caePb3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+caePb3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+caePb3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+caePb3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+caePb3.refseq.mrna.native.load = no
+caePb3.refseq.mrna.xeno.load  = yes
+caePb3.refseq.mrna.xeno.loadDesc = yes
+caePb3.genbank.mrna.xeno.load = yes
+caePb3.genbank.est.native.load = yes
+caePb3.genbank.est.native.loadDesc = no
+caePb3.downloadDir = caePb3
+caePb3.perChromTables = no
+
+
+    git commit -m "Added caePb3 C. brenneri WS220" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial caePb3 &
+    #	logFile:  var/build/logs/2011.05.26-16:08:08.caePb3.initalign.log
+    #	real    642m20.841s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caePb3
+    #	logFile: var/dbload/hgwdev/logs/2011.05.27-09:45:02.dbload.log
+    #	real    23m5.504s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add caePb3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "adding caePb3 C. brenneri WS220" etc/align.dbs etc/hgwdev.dbs
+
+    git push
+    make etc-update
+
+#########################################################################

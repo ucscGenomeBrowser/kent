@@ -10758,25 +10758,28 @@ hFreeConn(&conn);
 return(dy->string);
 }
 
-char *getDisorderClass(char *omimId)
+boolean hasOmimPhenotypeClass(char *omimId, int targetClass)
 /* Look up phenotypeClass for omimId, for filtering items.  Don't free result! */
 {
-static char answer[256];
+boolean result;
+char answer[255];
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 safef(query,sizeof(query),
-      "select phenotypeClass from omimPhenotype where omimId =%s", omimId);
+      "select phenotypeClass from omimPhenotype where omimId =%s and phenotypeClass=%d", omimId, 
+      targetClass);
 char *ret = sqlQuickQuery(conn, query, answer, sizeof(answer));
 if (ret == NULL)
-    safecpy(answer, sizeof(answer), "0");
+    result = FALSE;
+else
+    result = TRUE;
 hFreeConn(&conn);
-return(answer);
+return(result);
 }
 
 boolean doThisOmimEntry(struct track *tg, char *omimId)
 /* check if the specific class of this OMIM entry is selected by the user */
 {
-char *disorderClass = NULL;
 boolean doIt;
 
 char labelName[255];
@@ -10819,14 +10822,13 @@ for (label = omimLocationLabels; label != NULL; label = label->next)
 	}
     }
 
-disorderClass = getDisorderClass(omimId);
-
 doIt = FALSE;
-doIt = doIt || (doClass1 && sameWord(disorderClass, "1")) ;
-doIt = doIt || (doClass2 && sameWord(disorderClass, "2")) ;
-doIt = doIt || (doClass3 && sameWord(disorderClass, "3")) ;
-doIt = doIt || (doClass4 && sameWord(disorderClass, "4")) ;
-doIt = doIt || (doOthers && sameWord(disorderClass, "0")) ;
+
+doIt = doIt || (doClass1 && hasOmimPhenotypeClass(omimId, 1));
+doIt = doIt || (doClass2 && hasOmimPhenotypeClass(omimId, 2));
+doIt = doIt || (doClass3 && hasOmimPhenotypeClass(omimId, 3));
+doIt = doIt || (doClass4 && hasOmimPhenotypeClass(omimId, 4));
+doIt = doIt || (doOthers && hasOmimPhenotypeClass(omimId, 0));
 
 return(doIt);
 }
@@ -10863,7 +10865,45 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 
+struct rgbColor *normal = &(tg->color);
+struct rgbColor lighter;
+struct rgbColor lightest;
+
+Color class1Clr, class2Clr, class3Clr, class4Clr, classOtherClr;
+
+/* color scheme:
+    
+    Lighter Green:
+    	for Class 1 OMIM records 
+    Light Green:
+    	for Class 2 OMIM records
+    Dark Green:
+    	for Class 3 OMIM records
+    Purple:
+    	for Class 4 OMIM records
+    Light Gray:
+    	for Others
+*/
+
+lighter.r = (6*normal->r + 4*255) / 10;
+lighter.g = (6*normal->g + 4*255) / 10;
+lighter.b = (6*normal->b + 4*255) / 10;
+
+lightest.r = (1*normal->r + 2*255) / 3;
+lightest.g = (1*normal->g + 2*255) / 3;
+lightest.b = (1*normal->b + 2*255) / 3;
+
+
 struct sqlConnection *conn = hAllocConn(database);
+
+class1Clr = hvGfxFindColorIx(hvg, lightest.r, lightest.g, lightest.b);
+class2Clr = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
+class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
+//class4Clr = hvGfxFindColorIx(hvg, 153,0, 204);		// purple
+class4Clr = hvGfxFindColorIx(hvg, 56,  11, 97);
+//classOtherClr = hvGfxFindColorIx(hvg, 200, 200, 200);	// light gray
+classOtherClr = MG_RED;
+//hvGfxFindColorIx(hvg, 200, 200, 200);	// light gray
 
 safef(query, sizeof(query),
       "select omimId, phenotypeClass from omimPhenotype where omimId=%s", el->name);
@@ -10876,7 +10916,7 @@ if (row == NULL)
     {
     // set to gray if this entry does not have any disorder info
     sqlFreeResult(&sr);
-    return hvGfxFindColorIx(hvg, 200, 200, 200);
+    return classOtherClr;
     }
 else
     {
@@ -10885,27 +10925,33 @@ else
 
     if (sameWord(phenClass, "3"))
     	{
-	// set to dark red, the same color as omimGene2 track
+	// set to dark green, the same color as omimGene2 track
 	sqlFreeResult(&sr);
-	return hvGfxFindColorIx(hvg, 220, 0, 0);
+	return class3Clr;
     	}
     else if (sameWord(phenClass, "2"))
     	{
-	// set to green for class 2
+	// set to light green for class 2
 	sqlFreeResult(&sr);
-	return hvGfxFindColorIx(hvg, 0, 255, 0);
+	return class2Clr;
     	}
     else if (sameWord(phenClass, "1"))
     	{
-	// set to orange for class 1
+	// set to lighter green for class 1
 	sqlFreeResult(&sr);
-	return hvGfxFindColorIx(hvg, 200, 0, 200);
+	return class1Clr;
     	}
+    else if (sameWord(phenClass, "4"))
+	{
+	// set to the color for phenClass 4
+        sqlFreeResult(&sr);
+	return class4Clr; 
+	}
     else
 	{
-	// set to purplish color for phenClass 4
+	// set to the color for Others
         sqlFreeResult(&sr);
-	return hvGfxFindColorIx(hvg, 200, 100, 100);
+	return classOtherClr; 
 	}
     }
 }
@@ -10920,7 +10966,6 @@ tg->drawItemAt    = bedPlusLabelDrawAt;
 tg->mapItem       = bedPlusLabelMapItem;
 tg->nextPrevExon = simpleBedNextPrevEdge;
 }
-
 
 static char *omimAvSnpAaReplacement(char *name)
 /* Return replacement string associated with a OMIM AV (Allelic Variant) entry */
@@ -10992,6 +11037,42 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 
+struct rgbColor *normal = &(tg->color);
+struct rgbColor lighter;
+struct rgbColor lightest;
+
+Color class1Clr, class2Clr, class3Clr, class4Clr, classOtherClr;
+
+/* color scheme:
+    
+    Lighter Green:
+    	for Class 1 OMIM records 
+    Light Green:
+    	for Class 2 OMIM records
+    Dark Green:
+    	for Class 3 OMIM records
+    Purple:
+    	for Class 4 OMIM records
+    Light Gray:
+    	for Others
+*/
+
+lighter.r = (6*normal->r + 4*255) / 10;
+lighter.g = (6*normal->g + 4*255) / 10;
+lighter.b = (6*normal->b + 4*255) / 10;
+
+lightest.r = (1*normal->r + 2*255) / 3;
+lightest.g = (1*normal->g + 2*255) / 3;
+lightest.b = (1*normal->b + 2*255) / 3;
+
+class1Clr = hvGfxFindColorIx(hvg, lightest.r, lightest.g, lightest.b);
+class2Clr = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
+class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
+//class4Clr = hvGfxFindColorIx(hvg, 153,0, 204);		// purple
+class4Clr = hvGfxFindColorIx(hvg, 56,  11, 97);
+//class4Clr = hvGfxFindColorIx(hvg, 97, 11, 94);
+classOtherClr = hvGfxFindColorIx(hvg, 200, 200, 200);	// light gray
+
 struct sqlConnection *conn = hAllocConn(database);
 
 safef(query, sizeof(query),
@@ -11005,7 +11086,7 @@ if (row == NULL)
     {
     // set to gray if this entry does not have any disorder info
     sqlFreeResult(&sr);
-    return hvGfxFindColorIx(hvg, 200, 200, 200);
+    return classOtherClr;
     }
 else
     {
@@ -11014,34 +11095,39 @@ else
 
     if (sameWord(phenClass, "3"))
     	{
-	// set to dark red, the same color as omimGene2 track
+	// set to dark green, the same color as omimGene2 track
 	sqlFreeResult(&sr);
-	return hvGfxFindColorIx(hvg, 220, 0, 0);
+	return class3Clr;
     	}
     else
     	{
     	if (sameWord(phenClass, "2"))
     	    {
-	    // set to green for class 2
+	    // set to light green for class 2
 	    sqlFreeResult(&sr);
-	    return hvGfxFindColorIx(hvg, 0, 255, 0);
+	    return class2Clr; 
     	    }
 	else
 	    {
     	    if (sameWord(phenClass, "1"))
     	    	{
-		// set to orange for class 1
+		// set to lighter green for class 1
 	    	sqlFreeResult(&sr);
-	    	return hvGfxFindColorIx(hvg, 200, 0, 200);
+	    	return class1Clr;
     	    	}
-	    else
-	    	{
-	    	// set to purplish color for phenClass 4
-            	sqlFreeResult(&sr);
-	    	return hvGfxFindColorIx(hvg, 200, 100, 100);
-            	}
+    	    else if (sameWord(phenClass, "4"))
+		{	
+		// set to the color for phenClass 4
+        	sqlFreeResult(&sr);
+		return class4Clr; 
+		}	
+    	    else
+		{
+		// set to the color for Others
+        	sqlFreeResult(&sr);
+		return classOtherClr; 
+		}
 	    }
-
 	}
     }
 }
@@ -11058,9 +11144,10 @@ void omimLocationMethods (struct track *tg)
 {
 tg->loadItems     = omimLocationLoad;
 tg->itemColor     = omimLocationColor;
+tg->itemNameColor = omimLocationColor;
 tg->drawItemAt    = bedPlusLabelDrawAt;
 tg->mapItem       = bedPlusLabelMapItem;
-tg->nextPrevExon = simpleBedNextPrevEdge;
+tg->nextPrevExon  = simpleBedNextPrevEdge;
 }
 
 char *omimGeneName(struct track *tg, void *item)

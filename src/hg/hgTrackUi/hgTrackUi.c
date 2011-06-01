@@ -1433,15 +1433,15 @@ geneLabel = cartUsualString(cart, varName, "OMIM ID");
 printf("<BR><B>Include Entries of:</B> ");
 printf("<UL>\n");
 printf("<LI>");
-labelMakeCheckBox(tdb, "class1", "class 1: disorder positioned by mapping of the wildtype gene", TRUE);
+labelMakeCheckBox(tdb, "class1", "Class 1: the disorder is placed on the map based on its association with a gene, but the underlying defect is not known.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class2", "class 2: disease phenotype mapped", TRUE);
+labelMakeCheckBox(tdb, "class2", "Class 2: the disorder has been placed on the map by linkage; no mutation has been found.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class3", "class 3: molecular basis of the disorder is known", TRUE);
+labelMakeCheckBox(tdb, "class3", "Class 3: the molecular basis for the disorder is known; a mutation has been found in the gene.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class4", "class 4: chromosome deletion or duplication syndrome", TRUE);
+labelMakeCheckBox(tdb, "class4", "Class 4: a contiguous gene deletion or duplication syndrome; multiple genes are deleted or duplicated causing the phenotype.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "others", "others", TRUE);
+labelMakeCheckBox(tdb, "others", "Others: no associated OMIM phenotype class info available.", TRUE);
 printf("</UL>");
 }
 
@@ -1455,15 +1455,15 @@ geneLabel = cartUsualString(cart, varName, "OMIM ID");
 printf("<BR><B>Include Entries of:</B> ");
 printf("<UL>\n");
 printf("<LI>");
-labelMakeCheckBox(tdb, "class1", "class 1: disorder positioned by mapping of the wildtype gene", TRUE);
+labelMakeCheckBox(tdb, "class1", "Class 1: the disorder is placed on the map based on its association with a gene, but the underlying defect is not known.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class2", "class 2: disease phenotype mapped", TRUE);
+labelMakeCheckBox(tdb, "class2", "Class 2: the disorder has been placed on the map by linkage; no mutation has been found.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class3", "class 3: molecular basis of the disorder is known", TRUE);
+labelMakeCheckBox(tdb, "class3", "Class 3: the molecular basis for the disorder is known; a mutation has been found in the gene.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class4", "class 4: chromosome deletion or duplication syndrome", TRUE);
+labelMakeCheckBox(tdb, "class4", "Class 4: a contiguous gene deletion or duplication syndrome; multiple genes are deleted or duplicated causing the phenotype.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "others", "others", TRUE);
+labelMakeCheckBox(tdb, "others", "Others: no associated OMIM phenotype class info available.", TRUE);
 printf("</UL>");
 }
 

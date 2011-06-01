@@ -27,9 +27,9 @@ class CvFile(RaFile):
 		if type == 'Antibody':
 			entry = AntibodyStanza()
 		elif type == 'Cell Line':
-			if e['organism'] == 'Human':
+			if e['organism'] == 'human':
 				entry = CellLineStanza()
-			elif e['organism'] == 'Mouse':
+			elif e['organism'] == 'mouse':
 				entry = MouseStanza()
 			else:
 				self.handler(NonmatchKeyError(e.name, e['organism'], 'organism'))
@@ -117,7 +117,6 @@ class CvStanza(RaStanza):
 
 	def validate(self, ra):
 		"""default validation for a generic cv stanza."""
-		#print 'CvStanza.validate(' + self.name + ')'
 
 		necessary = {'term', 'tag', 'type', 'description'}
 		self.checkMandatory(ra, necessary)
@@ -140,27 +139,37 @@ class CvStanza(RaStanza):
 		"""check that the value at key matches the value at other"""
 		p = 0
 		
-		#if (self['term'] == "CH12"):
-		#	print "checkrelational CH12";
-		
 		if key not in self:
 			return
 		
 		for entry in ra.itervalues():
 			if 'type' in entry and other in entry:
-				
-				#if (self['term'] == "CH12"):
-				#	print self['term'] + ': entrytype: ' + entry['type'] + ' ?= key: ' + key + ' and selfkey: ' + self[key] + ' ?= entryother: ' + entry[other]
-				
+
 				if entry['type'] == key and self[key] == entry[other]:
-					
-					#if (self['term'] == "CH12"):
-					#	print 'passed'
 					p = 1
 					break
 		if p == 0:
 			ra.handler(NonmatchKeyError(self.name, key, other))
+			
+	def checkListRelational(self, ra, key, other):
+		"""check that the value at key matches the value at other"""
+		
+		
+		if key not in self:
+			return
+		
+		for val in self[key].split(','):
+			val = val.strip()
+			p = 0
+		
+			for entry in ra.itervalues():
+				if 'type' in entry and other in entry:
 
+					if entry['type'] == key and val == entry[other]:
+						p = 1
+						break
+			if p == 0:
+				ra.handler(NonmatchKeyError(self.name, key, other))
 
 class CvError(Exception):
 	"""base error class for the cv."""
@@ -219,7 +228,6 @@ class GrantStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
 
 
 class RestrictionEnzymeStanza(CvStanza):
@@ -229,7 +237,6 @@ class RestrictionEnzymeStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
 
 
 class VersionStanza(CvStanza):
@@ -239,7 +246,6 @@ class VersionStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
 
 
 class TreatmentStanza(CvStanza):
@@ -249,7 +255,6 @@ class TreatmentStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
 
 
 class SexStanza(CvStanza):
@@ -259,7 +264,6 @@ class SexStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
 
 
 class FragSizeStanza(CvStanza):
@@ -269,7 +273,6 @@ class FragSizeStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
 
 
 class LocalizationStanza(CvStanza):
@@ -279,7 +282,6 @@ class LocalizationStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
 
 
 class OrganismStanza(CvStanza):
@@ -289,7 +291,6 @@ class OrganismStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
 
 
 class GeneTypeStanza(CvStanza):
@@ -299,8 +300,7 @@ class GeneTypeStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
-
+		
 
 class LabStanza(CvStanza):
 	
@@ -308,8 +308,6 @@ class LabStanza(CvStanza):
 		CvStanza.__init__(self)
 
 	def validate(self, ra):
-		#print 'LabStanza.validate(' + self.name + ')'
-
 		necessary = {'term', 'tag', 'type', 'description', 'organism', 'labPi'}
 		optional = {'label', 'labInst', 'labPiFull', 'grantPi'}
 
@@ -325,8 +323,7 @@ class PhaseStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
-
+		
 
 class AgeStanza(CvStanza):
 	
@@ -334,8 +331,6 @@ class AgeStanza(CvStanza):
 		CvStanza.__init__(self)
 
 	def validate(self, ra):
-		#print 'AgeStanza.validate(' + self.name + ')'
-
 		necessary = {'term', 'tag', 'type', 'description', 'stage'}
 
 		self.checkMandatory(ra, necessary)
@@ -348,8 +343,6 @@ class DataTypeStanza(CvStanza):
 		CvStanza.__init__(self)
 
 	def validate(self, ra):
-		#print 'ViewStanza.validate(' + self.name + ')'
-
 		necessary = {'term', 'tag', 'type', 'description', 'label'}
 
 		self.checkMandatory(ra, necessary)
@@ -363,8 +356,7 @@ class RegionStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
-
+		
 
 class CellLineStanza(CvStanza):
 
@@ -372,13 +364,8 @@ class CellLineStanza(CvStanza):
 		CvStanza.__init__(self)
 
 	def validate(self, ra):
-		#print 'CellLineStanza.validate(' + self.name + ')'
-
-		#if (self['term'] == 'GM12878'):
-		#	print 'GM12878 Validate'
-		
 		necessary = {'term', 'tag', 'type', 'description', 'organism', 'vendorName', 'orderUrl', 'sex', 'tier'}
-		optional = {'tissue', 'vendorId', 'karyotype', 'lineage', 'termId', 'termUrl', 'color', 'protocol', 'category'}
+		optional = {'tissue', 'vendorId', 'karyotype', 'lineage', 'termId', 'termUrl', 'color', 'protocol', 'category', 'lots'}
 
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary | optional)
@@ -395,8 +382,7 @@ class ReadTypeStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
-
+		
 
 class MapAlgorithmStanza(CvStanza):
 	
@@ -405,8 +391,7 @@ class MapAlgorithmStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
-
+		
 
 class PromoterStanza(CvStanza):
 	
@@ -415,8 +400,7 @@ class PromoterStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
-
+		
 
 class TierStanza(CvStanza):
 	
@@ -425,7 +409,6 @@ class TierStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
 
 
 class RnaExtractStanza(CvStanza):
@@ -435,8 +418,7 @@ class RnaExtractStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
-
+		
 
 class TissueSourceTypeStanza(CvStanza):
 	
@@ -445,8 +427,7 @@ class TissueSourceTypeStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
-
+		
 
 class SeqPlatformStanza(CvStanza):
 	
@@ -454,8 +435,6 @@ class SeqPlatformStanza(CvStanza):
 		CvStanza.__init__(self)
 
 	def validate(self, ra):
-		#print 'SeqPlatformStanza.validate(' + self.name + ')'
-
 		necessary = {'term', 'tag', 'type', 'description'}
 		optional = {'geo'}
 
@@ -469,14 +448,12 @@ class AntibodyStanza(CvStanza):
 		CvStanza.__init__(self)
 
 	def validate(self, ra):
-		#print 'AntibodyStanza.validate(' + self.name + ')'
-
 		necessary = {'term', 'tag', 'type', 'target', 'antibodyDescription', 'targetDescription', 'vendorName', 'vendorId', 'orderUrl', 'lab', 'targetId'}
-		optional = {'validation', 'targetUrl', 'lots'}
+		optional = {'validation', 'targetUrl', 'lots', 'displayName'}
 
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary | optional)
-		self.checkRelational(ra, 'lab', 'labPi')
+		self.checkListRelational(ra, 'lab', 'labPi')
 
 
 class ViewStanza(CvStanza):
@@ -485,8 +462,6 @@ class ViewStanza(CvStanza):
 		CvStanza.__init__(self)
 
 	def validate(self, ra):
-		#print 'ViewStanza.validate(' + self.name + ')'
-
 		necessary = {'term', 'tag', 'type', 'description', 'label'}
 
 		self.checkMandatory(ra, necessary)
@@ -500,8 +475,7 @@ class ControlStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
-
+		
 
 class TypeOfTermStanza(CvStanza):
 	
@@ -510,8 +484,7 @@ class TypeOfTermStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
-
+		
 
 class ProtocolStanza(CvStanza):
 	
@@ -520,7 +493,6 @@ class ProtocolStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
 
 
 class FreezeDateStanza(CvStanza):
@@ -530,8 +502,7 @@ class FreezeDateStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
-
+		
 
 class StrainStanza(CvStanza):
 	
@@ -540,8 +511,7 @@ class StrainStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
-
+		
 
 class InsertLengthStanza(CvStanza):
 	
@@ -550,8 +520,7 @@ class InsertLengthStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
-
+		
 
 class MouseStanza(CvStanza):
 	
@@ -559,10 +528,8 @@ class MouseStanza(CvStanza):
 		CvStanza.__init__(self)
 
 	def validate(self, ra):
-		#print 'MouseStanza.validate(' + self.name + ')'
-
 		necessary = {'term', 'tag', 'type', 'description', 'organism', 'vendorName', 'orderUrl', 'age', 'strain', 'sex'}
-		optional = {'tissue', 'termId', 'termUrl', 'color', 'protocol', 'category'}
+		optional = {'tissue', 'termId', 'termUrl', 'color', 'protocol', 'category', 'vendorId', 'lots'}
 		
 		self.checkMandatory(ra, necessary)
 		self.checkExtraneous(ra, necessary | optional)
@@ -573,7 +540,6 @@ class MouseStanza(CvStanza):
 		self.checkRelational(ra, 'strain', 'term')
 
 
-
 class SpeciesStanza(CvStanza):
 	
 	def __init__(self):
@@ -581,7 +547,6 @@ class SpeciesStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
 
 		
 class CategoryStanza(CvStanza):
@@ -591,7 +556,6 @@ class CategoryStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
 		
 		
 class AtticStanza(CvStanza):
@@ -601,4 +565,4 @@ class AtticStanza(CvStanza):
 
 	def validate(self, ra):
 		CvStanza.validate(self, ra)
-		#print 'validate(' + self.name + ')'
+		

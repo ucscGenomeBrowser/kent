@@ -577,22 +577,22 @@ identifier encodePseudogeneUcsc dependency
 identifier refGeneRetro dependency
 "Link refGene to ucscRetroInfo"
     $ucscRetroDb.refGene.name dupeOk
-    $ucscRetroDb.ucscRetroInfo.refSeq minCheck=0.96 exclude=noRefSeq
+    $ucscRetroDb.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
 
 identifier knownGeneRetro dependency
 "Link knownGene to ucscRetroInfo"
     $ucscRetroDb.knownGene.name dupeOk chopAfter=.
-    $ucscRetroDb.ucscRetroInfo.kgName minCheck=0.96 exclude=noKg chopAfter=.
+    $ucscRetroDb.ucscRetroInfo1.kgName minCheck=0.96 exclude=noKg chopAfter=.
 
 identifier ucscRetroInfo dependency
 "Link together Ucsc Retrogenes and ucsc retroGene alignments"
-    $ucscRetroDb.ucscRetroInfo.name unique
-    $ucscRetroDb.ucscRetroAli.qName unique
+    $ucscRetroDb.ucscRetroInfo1.name unique
+    $ucscRetroDb.ucscRetroAli1.qName 
 
 identifier ucscRetroOrtho dependency
 "Link together Ucsc Retrogenes and ucsc retro orthlogy"
-    $ucscRetroDb.ucscRetroAli.qName unique
-    $ucscRetroDb.ucscRetroOrtho.name
+    $ucscRetroDb.ucscRetroAli1.qName dupeOk
+    $ucscRetroDb.ucscRetroOrtho1.name
 
 identifier encodePseudogeneUcsc2 dependency
 "Link together Ucsc Pseudogenes and class"
@@ -3566,6 +3566,11 @@ tablesIgnored $mm
     rikenCageCtssPlus
     rikenCageTc
     broadStemChip%
+    laminB1_AC
+    laminB1_EF
+    laminB1_ES
+    laminB1_NP
+
 
 tablesIgnored $panTro
     humanDels

@@ -33320,7 +33320,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2548
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Alignments
 
 metaObject wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep2
@@ -33342,7 +33342,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2548
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Alignments
 
 metaObject wgEncodeSydhTfbsMcf10aesPol2TamStdPk
@@ -33364,7 +33364,7 @@ project wgEncode
 setType exp
 subId 2548
 tableName wgEncodeSydhTfbsMcf10aesPol2TamStdPk
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Peaks
 
 metaObject wgEncodeSydhTfbsMcf10aesPol2TamStdRawDataRep1
@@ -33386,7 +33386,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2548
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view RawData
 
 metaObject wgEncodeSydhTfbsMcf10aesPol2TamStdRawDataRep2
@@ -33408,7 +33408,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2548
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view RawData
 
 metaObject wgEncodeSydhTfbsMcf10aesPol2TamStdSig
@@ -33430,7 +33430,7 @@ project wgEncode
 setType exp
 subId 2548
 tableName wgEncodeSydhTfbsMcf10aesPol2TamStdSig
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Signal
 
 metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1
@@ -33840,7 +33840,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2547
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Alignments
 
 metaObject wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep2
@@ -33862,7 +33862,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2547
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Alignments
 
 metaObject wgEncodeSydhTfbsMcf10aesStat3TamStdPk
@@ -33884,7 +33884,7 @@ project wgEncode
 setType exp
 subId 2547
 tableName wgEncodeSydhTfbsMcf10aesStat3TamStdPk
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Peaks
 
 metaObject wgEncodeSydhTfbsMcf10aesStat3TamStdRawDataRep1
@@ -33906,7 +33906,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2547
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view RawData
 
 metaObject wgEncodeSydhTfbsMcf10aesStat3TamStdRawDataRep2
@@ -33928,7 +33928,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2547
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view RawData
 
 metaObject wgEncodeSydhTfbsMcf10aesStat3TamStdSig
@@ -33950,7 +33950,7 @@ project wgEncode
 setType exp
 subId 2547
 tableName wgEncodeSydhTfbsMcf10aesStat3TamStdSig
-treatment TAM_1uM_36hr
+treatment 4OHTAM_1uM_36hr
 view Signal
 
 metaObject wgEncodeSydhTfbsMcf7Hae2f1RawDataRep1

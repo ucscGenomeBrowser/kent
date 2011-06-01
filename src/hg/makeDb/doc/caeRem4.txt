@@ -207,15 +207,14 @@ caeRem4.perChromTables = no
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial caeRem4 &
     #	logFile:  var/build/logs/2011.05.26-09:19:08.caeRem4.initalign.log
-XXX - running - Thu May 26 09:19:30 PDT 2011
-    #	real    291m13.960s
+    #	real	320m18.548s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeRem4
-    #	logFile: var/dbload/hgwdev/logs/2011.05.25-15:46:59.dbload.log
-    #	real    22m27.349s
+    #	logFile: var/dbload/hgwdev/logs/2011.05.26-14:41:33.dbload.log
+    #	real    21m49.269s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -223,6 +222,7 @@ XXX - running - Thu May 26 09:19:30 PDT 2011
     # add caeRem4 to:
         etc/align.dbs
         etc/hgwdev.dbs
+    git commit -m "Added caeRem4 C. remanei WS220" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
