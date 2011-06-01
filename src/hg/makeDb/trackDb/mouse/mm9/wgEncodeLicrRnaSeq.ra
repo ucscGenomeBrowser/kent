@@ -60,7 +60,7 @@ noInherit on
         longLabel Bone Marrow RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=BMarrow localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bigWig 0.000000 65487.000000
-        color 153,38,0
+        color 86,180,233
         # subId=4094 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep2
@@ -69,7 +69,7 @@ noInherit on
         longLabel Bone Marrow RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=BMarrow localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bigWig 0.000000 65510.000000
-        color 153,38,0
+        color 86,180,233
         # subId=4094 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep1
@@ -78,7 +78,7 @@ noInherit on
         longLabel Cerebellum RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Cbellum localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bigWig 3.000000 65524.000000
-        color 153,38,0
+        color 105,105,105
         # subId=4095 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep2
@@ -87,7 +87,7 @@ noInherit on
         longLabel Cerebellum RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Cbellum localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bigWig 3.000000 65534.000000
-        color 153,38,0
+        color 105,105,105
         # subId=4095 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep1
@@ -96,7 +96,7 @@ noInherit on
         longLabel Cortex RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Cortex localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bigWig 4.000000 65424.000000
-        color 153,38,0
+        color 105,105,105
         # subId=4096 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep2
@@ -105,7 +105,7 @@ noInherit on
         longLabel Cortex RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Cortex localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bigWig 4.000000 65517.000000
-        color 153,38,0
+        color 105,105,105
         # subId=4096 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep1
@@ -132,7 +132,7 @@ noInherit on
         longLabel Kidney RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Kidney localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bigWig 4.000000 65533.000000
-        color 153,38,0
+        color 204,121,167
         # subId=4098 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep2
@@ -141,7 +141,7 @@ noInherit on
         longLabel Kidney RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Kidney localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bigWig 4.000000 65345.000000
-        color 153,38,0
+        color 204,121,167
         # subId=4098 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep1
@@ -150,7 +150,7 @@ noInherit on
         longLabel Liver RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Liver localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bigWig 3.000000 65508.000000
-        color 153,38,0
+        color 230,159,0
         # subId=4099 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep2
@@ -159,7 +159,7 @@ noInherit on
         longLabel Liver RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Liver localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bigWig 3.000000 65498.000000
-        color 153,38,0
+        color 230,159,0
         # subId=4099 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep1
@@ -168,7 +168,6 @@ noInherit on
         longLabel Lung RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Lung localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bigWig 4.000000 65435.000000
-        color 153,38,0
         # subId=4100 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep2
@@ -177,7 +176,6 @@ noInherit on
         longLabel Lung RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Lung localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bigWig 4.000000 65503.000000
-        color 153,38,0
         # subId=4100 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep1
@@ -186,7 +184,7 @@ noInherit on
         longLabel MEF RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=MEF localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bigWig 4.000000 65454.000000
-        color 153,38,0
+        color 65,105,225
         # subId=4101 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep2
@@ -195,7 +193,7 @@ noInherit on
         longLabel MEF RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=MEF localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bigWig 4.000000 65533.000000
-        color 153,38,0
+        color 65,105,225
         # subId=4101 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep1
@@ -204,7 +202,7 @@ noInherit on
         longLabel ES-Bruce4 RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=E0 cellType=ESB4 localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bigWig 0.000000 65475.000000
-        color 153,38,0
+        color 65,105,225
         # subId=4102 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep2
@@ -213,7 +211,7 @@ noInherit on
         longLabel ES-Bruce4 RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=E0 cellType=ESB4 localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bigWig 0.000000 65447.000000
-        color 153,38,0
+        color 65,105,225
         # subId=4102 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep1
@@ -222,7 +220,7 @@ noInherit on
         longLabel Spleen RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Spleen localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bigWig 4.000000 65511.000000
-        color 153,38,0
+        color 86,180,233
         # subId=4103 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep2
@@ -231,7 +229,7 @@ noInherit on
         longLabel Spleen RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Spleen localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bigWig 4.000000 65521.000000
-        color 153,38,0
+        color 86,180,233
         # subId=4103 dateSubmitted=2011-05-11
 
 	track wgEncodeLicrRnaSeqViewAlignments
@@ -259,7 +257,7 @@ noInherit on
         longLabel Bone Marrow RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=BMarrow localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bam
-        color 153,38,0
+        color 86,180,233
         # subId=4094 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep2
@@ -268,7 +266,7 @@ noInherit on
         longLabel Bone Marrow RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=BMarrow localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bam
-        color 153,38,0
+        color 86,180,233
         # subId=4094 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep1
@@ -277,7 +275,7 @@ noInherit on
         longLabel Cerebellum RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Cbellum localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bam
-        color 153,38,0
+        color 105,105,105
         # subId=4095 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep2
@@ -286,7 +284,7 @@ noInherit on
         longLabel Cerebellum RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Cbellum localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bam
-        color 153,38,0
+        color 105,105,105
         # subId=4095 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep1
@@ -295,7 +293,7 @@ noInherit on
         longLabel Cortex RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Cortex localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bam
-        color 153,38,0
+        color 105,105,105
         # subId=4096 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep2
@@ -304,7 +302,7 @@ noInherit on
         longLabel Cortex RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Cortex localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bam
-        color 153,38,0
+        color 105,105,105
         # subId=4096 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep1
@@ -331,7 +329,7 @@ noInherit on
         longLabel Kidney RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Kidney localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bam
-        color 153,38,0
+        color 204,121,167
         # subId=4098 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep2
@@ -340,7 +338,7 @@ noInherit on
         longLabel Kidney RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Kidney localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bam
-        color 153,38,0
+        color 204,121,167
         # subId=4098 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep1
@@ -349,7 +347,7 @@ noInherit on
         longLabel Liver RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Liver localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bam
-        color 153,38,0
+        color 230,159,0
         # subId=4099 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep2
@@ -358,7 +356,7 @@ noInherit on
         longLabel Liver RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Liver localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bam
-        color 153,38,0
+        color 230,159,0
         # subId=4099 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep1
@@ -367,7 +365,6 @@ noInherit on
         longLabel Lung RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Lung localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bam
-        color 153,38,0
         # subId=4100 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep2
@@ -376,7 +373,6 @@ noInherit on
         longLabel Lung RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Lung localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bam
-        color 153,38,0
         # subId=4100 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep1
@@ -385,7 +381,7 @@ noInherit on
         longLabel MEF RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=MEF localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bam
-        color 153,38,0
+        color 65,105,225
         # subId=4101 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep2
@@ -394,7 +390,7 @@ noInherit on
         longLabel MEF RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=MEF localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bam
-        color 153,38,0
+        color 65,105,225
         # subId=4101 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep1
@@ -403,7 +399,7 @@ noInherit on
         longLabel ES-Bruce4 RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=E0 cellType=ESB4 localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bam
-        color 153,38,0
+        color 65,105,225
         # subId=4102 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep2
@@ -412,7 +408,7 @@ noInherit on
         longLabel ES-Bruce4 RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=E0 cellType=ESB4 localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bam
-        color 153,38,0
+        color 65,105,225
         # subId=4102 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep1
@@ -421,7 +417,7 @@ noInherit on
         longLabel Spleen RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Spleen localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bam
-        color 153,38,0
+        color 86,180,233
         # subId=4103 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep2
@@ -430,6 +426,6 @@ noInherit on
         longLabel Spleen RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Spleen localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bam
-        color 153,38,0
+        color 86,180,233
         # subId=4103 dateSubmitted=2011-05-11
 
