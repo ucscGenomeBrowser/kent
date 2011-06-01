@@ -182,6 +182,14 @@ listDbs:
 	    fi \
 	done
 
+userApps:
+	rm -f ${DESTDIR}${BINDIR}/initTableList
+	cp -p initTableList ${DESTDIR}${BINDIR}
+	chmod +x ${DESTDIR}${BINDIR}/initTableList
+	rm -f ${DESTDIR}${BINDIR}/makeTableList
+	cp -p makeTableList ${DESTDIR}${BINDIR}
+	chmod +x ${DESTDIR}${BINDIR}/makeTableList
+
 # Get rid of symbolic links (created by lower-level makefiles):
 clean:
 	find . -type l -exec rm {} \;
