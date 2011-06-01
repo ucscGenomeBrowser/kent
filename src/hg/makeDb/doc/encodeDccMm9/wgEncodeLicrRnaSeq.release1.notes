@@ -1,0 +1,224 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release1 of the "ENCODE wgEncodeLicrRnaSeq"
+The composite track is wgEncodeLicrRnaSeq
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release1 (new+untouched):
+    Tables: 40
+    Files: 83
+    Gbdbs: 60
+
+A) Untouched Tables (0):
+
+A') Untouched Files (0 downloadables, 0 gbdbs):
+
+B) Deprecated tables (0):
+
+B') Deprecated files (0 downloadables, 0 gbdbs):
+
+C) New tables (40):
+wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1
+wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep2
+wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep1
+wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep2
+wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep1
+wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep2
+wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep1
+wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep2
+wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep1
+wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep2
+wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep1
+wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep2
+wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep1
+wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep2
+wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep1
+wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep2
+wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep1
+wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep2
+wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep1
+wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep2
+wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep1
+wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep2
+wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep1
+wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep2
+wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep1
+wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep2
+wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep1
+wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep2
+wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep1
+wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep2
+wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep1
+wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep2
+wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep1
+wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep2
+wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep1
+wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep2
+wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep1
+wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep2
+wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep1
+wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep2
+
+C') New files (80 downloadables, 60 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep2.bigWig
+
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep2.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep2.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep1.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep2.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep2.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep1.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep2.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep2.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep1.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep1.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep2.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep2.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep2.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep1.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep2.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep2.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep1.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep2.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep2.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep1.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep2.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep2.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep1.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep2.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep2.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep1.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep2.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep2.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep1.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep1.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep2.bam
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6AlnRep2.bam.bai
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep2.bigWig
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrRnaSeq/release1/md5sum.txt
