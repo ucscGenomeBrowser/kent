@@ -7,6 +7,8 @@
 #       - Short Labels: 
 #               Template: [cell] [factor] [view] 
 #       		- Cell: Abbreviations for cells
+#                       - Cerebellum = Crbellum
+#                       - Bone Marrow = BM
 #       		- Factor: Abbreviations for factor
 #               - Views: For consistency sake view will be two letters (Optional if there is room.)
 #                       - Peaks = Pk
@@ -60,7 +62,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk
 		parent wgEncodeLicrTfbsViewPeaks 
-		shortLabel Bone Marrow CTCF
+		shortLabel BM CTCF
         longLabel Bone Marrow CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
 		subGroups view=Peaks age=adult8wks factor=CTCF cellType=BMarrow control=std sex=M strain=C57BL6
 		type broadPeak
@@ -70,7 +72,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdPk
 		parent wgEncodeLicrTfbsViewPeaks
-		shortLabel Bone Marrow Pol2
+		shortLabel BM Pol2
         longLabel Bone Marrow Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
 		subGroups view=Peaks age=adult8wks factor=POL2 cellType=BMarrow control=std sex=M strain=C57BL6
 		type broadPeak
@@ -79,7 +81,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdPk
 		parent wgEncodeLicrTfbsViewPeaks 
-		shortLabel Cerebellum CTCF
+		shortLabel Crbellum CTCF
         longLabel Cerebellum CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
 		subGroups view=Peaks age=adult8wks factor=CTCF cellType=Cbellum control=std sex=M strain=C57BL6
 		type broadPeak
@@ -107,7 +109,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdPk
 		parent wgEncodeLicrTfbsViewPeaks 
-		shortLabel Cerebellum Pol2
+		shortLabel Crbellum Pol2
         longLabel Cerebellum Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
 		subGroups view=Peaks age=adult8wks factor=POL2 cellType=Cbellum control=std sex=M strain=C57BL6
 		type broadPeak
@@ -271,7 +273,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Bone Marrow CTCF
+		shortLabel BM CTCF
         longLabel Bone Marrow CTCF TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=CTCF cellType=BMarrow control=std sex=M strain=C57BL6
 		type bigWig 0.150000 40.070000
@@ -282,7 +284,7 @@ noInherit on
 
         track wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Cerebellum Input
+        shortLabel Crbellum Input
         longLabel Cerebellum Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Cbellum control=std sex=M strain=C57BL6
         type bigWig 0.140000 41.009998
@@ -291,7 +293,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal
-		shortLabel Bone Marrow Pol2
+		shortLabel BM Pol2
         longLabel Bone Marrow Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=POL2 cellType=BMarrow control=std sex=M strain=C57BL6
 		type bigWig 0.120000 46.389999
@@ -301,7 +303,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Cerebellum CTCF
+		shortLabel Crbellum CTCF
         longLabel Cerebellum CTCF TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=CTCF cellType=Cbellum control=std sex=M strain=C57BL6
 		type bigWig 0.110000 29.299999
@@ -341,7 +343,7 @@ noInherit on
 
 		track wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Cerebellum Pol2
+		shortLabel Crbellum Pol2
         longLabel Cerebellum Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=POL2 cellType=Cbellum control=std sex=M strain=C57BL6
 		type bigWig 0.150000 52.380001
@@ -410,7 +412,7 @@ noInherit on
 
         track wgEncodeLicrTfbsBmarrowInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Bone Marrow Input
+        shortLabel BM Input
         longLabel Bone Marrow Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=BMarrow control=std sex=M strain=C57BL6
         type bigWig 0.150000 34.869999

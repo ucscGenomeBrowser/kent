@@ -7,6 +7,8 @@
 #       - Short Labels: 
 #               Template: [cell] [view] [rep #] 
 #               - Cell: Abbreviations for cells
+#                       - Cerebellum = Crbellum
+#                       - Bone Marrow = BM
 #               - Factor: Abbreviations for factor
 #               - Views: For consistency sake view will be two letters (Optional if there is room.)
 #                       - Signal = Sg
@@ -56,7 +58,7 @@ noInherit on
 
         track wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep1
         parent wgEncodeLicrRnaSeqViewSignal 
-        shortLabel Bone Marrow Sg 1
+        shortLabel BM Sg 1
         longLabel Bone Marrow RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=BMarrow localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bigWig 0.000000 65487.000000
@@ -65,7 +67,7 @@ noInherit on
 
         track wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep2
         parent wgEncodeLicrRnaSeqViewSignal 
-        shortLabel Bone Marrow Sg 2
+        shortLabel BM Sg 2
         longLabel Bone Marrow RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=BMarrow localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bigWig 0.000000 65510.000000
@@ -74,7 +76,7 @@ noInherit on
 
         track wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep1
         parent wgEncodeLicrRnaSeqViewSignal 
-        shortLabel Cerebellum Sg 1
+        shortLabel Crbellum Sg 1
         longLabel Cerebellum RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Cbellum localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bigWig 3.000000 65524.000000
@@ -83,7 +85,7 @@ noInherit on
 
         track wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep2
         parent wgEncodeLicrRnaSeqViewSignal 
-        shortLabel Cerebellum Sg 2
+        shortLabel Crbellum Sg 2
         longLabel Cerebellum RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=adult8wks cellType=Cbellum localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bigWig 3.000000 65534.000000
@@ -253,7 +255,7 @@ noInherit on
 
         track wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1
         parent wgEncodeLicrRnaSeqViewAlignments 
-        shortLabel Bone Marrow Aln 1
+        shortLabel BM Aln 1
         longLabel Bone Marrow RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=BMarrow localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bam
@@ -262,7 +264,7 @@ noInherit on
 
         track wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep2
         parent wgEncodeLicrRnaSeqViewAlignments 
-        shortLabel Bone Marrow Aln 2
+        shortLabel BM Aln 2
         longLabel Bone Marrow RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=BMarrow localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bam
@@ -271,7 +273,7 @@ noInherit on
 
         track wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep1
         parent wgEncodeLicrRnaSeqViewAlignments 
-        shortLabel Cerebellum Aln 1
+        shortLabel Crbellum Aln 1
         longLabel Cerebellum RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Cbellum localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep1
         type bam
@@ -280,7 +282,7 @@ noInherit on
 
         track wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6AlnRep2
         parent wgEncodeLicrRnaSeqViewAlignments 
-        shortLabel Cerebellum Aln 2
+        shortLabel Crbellum Aln 2
         longLabel Cerebellum RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=adult8wks cellType=Cbellum localization=cell rnaExtract=pAP sex=M strain=C57BL6 rep=rep2
         type bam

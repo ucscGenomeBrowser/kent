@@ -7,6 +7,8 @@
 #       - Short Labels: 
 #               Template: [cell] [factor] [view] 
 #       		- Cell: Abbreviations for cells
+#						- Cerebellum = Crbellum
+#						- Bone Marrow = BM
 #       		- Factor: Abbreviations for factor
 #               - Views: For consistency sake view will be two letters (Optional if there is room.)
 #                       - Peaks = Pk
@@ -61,7 +63,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdPk
 		parent wgEncodeLicrHistoneViewPeaks 
-		shortLabel Bone Marrow H3K4me1
+		shortLabel BM H3K4me1
         longLabel Bone Marrow H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 		subGroups view=Peaks age=adult8wks factor=H3K4me1 cellType=BMarrow control=std sex=M strain=C57BL6
 		type broadPeak
@@ -71,7 +73,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdPk
 		parent wgEncodeLicrHistoneViewPeaks 
-		shortLabel Bone Marrow H3K4me3
+		shortLabel BM H3K4me3
         longLabel Bone Marrow H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 		subGroups view=Peaks age=adult8wks factor=H3K4me3 cellType=BMarrow control=std sex=M strain=C57BL6
 		type broadPeak
@@ -81,7 +83,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdPk
 		parent wgEncodeLicrHistoneViewPeaks 
-		shortLabel Cerebellum H3K4me3
+		shortLabel Crbellum H3K4me3
         longLabel Cerebellum H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 		subGroups view=Peaks age=adult8wks factor=H3K4me3 cellType=Cbellum control=std sex=M strain=C57BL6
 		type broadPeak
@@ -108,7 +110,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdPk
 		parent wgEncodeLicrHistoneViewPeaks
-		shortLabel Cerebellum H3K4me1
+		shortLabel Crbellum H3K4me1
         longLabel Cerebellum H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 		subGroups view=Peaks age=adult8wks factor=H3K4me1 cellType=Cbellum control=std sex=M strain=C57BL6
 		type broadPeak
@@ -254,7 +256,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal
-		shortLabel Bone Marrow H3K4me1
+		shortLabel BM H3K4me1
         longLabel Bone Marrow H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=BMarrow control=std sex=M strain=C57BL6
 		type bigWig 0.120000 20.459999
@@ -264,7 +266,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal
-		shortLabel Bone Marrow H3K4me3
+		shortLabel BM H3K4me3
         longLabel Bone Marrow H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=BMarrow control=std sex=M strain=C57BL6
 		type bigWig 0.120000 50.509998
@@ -274,7 +276,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal 
-		shortLabel Cerebellum H3K4me3
+		shortLabel Crbellum H3K4me3
         longLabel Cerebellum H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me3 cellType=Cbellum control=std sex=M strain=C57BL6
 		type bigWig 0.140000 49.660000
@@ -304,7 +306,7 @@ noInherit on
 
 		track wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdSig
 		parent wgEncodeLicrHistoneViewSignal
-		shortLabel Cerebellum H3K4me1
+		shortLabel Crbellum H3K4me1
         longLabel Cerebellum H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=adult8wks factor=H3K4me1 cellType=Cbellum control=std sex=M strain=C57BL6
 		type bigWig 0.120000 18.879999
@@ -392,7 +394,7 @@ noInherit on
 
         track wgEncodeLicrHistoneBmarrowInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Bone Marrow Input
+        shortLabel BM Input
         longLabel Bone Marrow Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=BMarrow control=std sex=M strain=C57BL6
         type bigWig 0.150000 34.869999
@@ -401,7 +403,7 @@ noInherit on
 
         track wgEncodeLicrHistoneCbellumInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Cerebellum Input
+        shortLabel Crbellum Input
         longLabel Cerebellum Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=adult8wks factor=Input cellType=Cbellum control=std sex=M strain=C57BL6
         type bigWig 0.140000 41.009998
