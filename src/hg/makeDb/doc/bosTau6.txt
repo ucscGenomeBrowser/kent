@@ -524,6 +524,58 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 ############################################################################
 # bosTau6 Cow BLASTZ/CHAIN/NET (working 2011-05-?? - Chin)
 
+#####################################################################
+# susScr2 Pig BLASTZ/CHAIN/NET (DONE - 2011-05-24 - Chin)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24
+    cd /hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24
+    
+    cat << '_EOF_' > DEF
+# Pig vs. Cow
+BLASTZ_M=50
+
+# TARGET: Cow BosTau6
+SEQ1_DIR=/scratch/data/bosTau6/bosTau6.2bit
+SEQ1_LEN=/scratch/data/bosTau6/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Pig SusScr2
+SEQ2_DIR=/scratch/data/susScr2/susScr2.2bit
+SEQ2_LEN=/scratch/data/susScr2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #   real    2198m44.401s
+    cat fb.bosTau6.chainSusScr2Link.txt
+    #   1306738899 bases of 2649682029 (49.317%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s lastzSusScr2.2011-05-24 lastz.susScr2
+
+    # then swap
+    mkdir /hive/data/genomes/susScr2/bed/blastz.bosTau6.swap
+    cd /hive/data/genomes/susScr2/bed/blastz.bosTau6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #  real    380m53.612s
+
+    cat fb.susScr2.chainBosTau6Link.txt
+    # 1475323050 bases of 2231298548 (66.119%) in intersection
+
+
 
 #########################################################################
 #  SWAP mm9 lastz (DONE - 2010-05-17 - Chin)
