@@ -1124,7 +1124,12 @@ static void cgiApoptosis(int status)
 /* signal handler for SIGALRM for phoneHome function and CGI expiration */
 {
 if (expireSeconds > 0)
-    errAbort("cgiApoptosis: %lu seconds\n", expireSeconds);
+    {
+    /* want to see this error message in the apache error_log also */
+    fprintf(stderr, "cgiApoptosis: %lu seconds\n", expireSeconds);
+    /* most of our CGIs post a polite non-fatal message with this errAbort */
+    errAbort("procedures have exceeded timeout: %lu seconds, function has ended.\n", expireSeconds);
+    }
 exit(0);
 }
 
