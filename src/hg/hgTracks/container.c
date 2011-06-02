@@ -16,7 +16,10 @@ void containerLoadItems(struct track *track)
 {
 struct track *subtrack;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    subtrack->loadItems(subtrack);
+    {
+    if (isSubtrackVisible(subtrack))
+	subtrack->loadItems(subtrack);
+    }
 }
 
 static void containerFree(struct track *track)
@@ -102,10 +105,6 @@ char *containerType = trackDbSetting(tdb, "container");
 if (sameString(containerType, "multiWig"))
     {
     multiWigContainerMethods(track);
-    }
-else if (sameString(containerType, "folder"))
-    {
-    /* Folder's just use the default methods. */
     }
 else
     errAbort("unknown container type %s in trackDb for %s", containerType, tdb->track);

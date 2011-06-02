@@ -1,4 +1,4 @@
-# Data Agreement File for Yale ChipSeq project  $Revision: 1.1 $
+# Data Agreement File for Yale ChipSeq project  $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -14,7 +14,6 @@ group             regulation
 variables         cell, antibody, treatment, input
 assembly          hg19
 
-medianFragmentLength 200
 validationSettings validateFiles.tagAlign:mmCheckOneInN=1000,mismatches=3,nMatch,matchFirst=32;validateFiles.fastq:quick=1000
 
 # Track/view definition

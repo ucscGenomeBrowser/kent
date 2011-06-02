@@ -6,6 +6,7 @@ geoSeriesAccession GSE27221
 
 metaObject wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1
 objType table
+bioRep gen0106C
 cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -13,11 +14,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-fileIndex wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam.bai
+dccAccession wgEncodeEH000269
+expId 269
 fileName wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam
 geoSampleAccession GSM672834
 grant Gingeras
 lab GIS
+labExpId crg-9
+labProtocolId gen0106C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -29,6 +33,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaSeqGm12878CytosolPapMinusRawRep1
 objType table
+bioRep gen0106C
 cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -36,10 +41,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
+expId 269
 fileName wgEncodeGisRnaSeqGm12878CytosolPapMinusRawRep1.bigWig
 geoSampleAccession GSM672834
 grant Gingeras
 lab GIS
+labExpId crg-9
+labProtocolId gen0106C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -51,6 +60,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaSeqGm12878CytosolPapPlusRawRep1
 objType table
+bioRep gen0106C
 cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -58,10 +68,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
+expId 269
 fileName wgEncodeGisRnaSeqGm12878CytosolPapPlusRawRep1.bigWig
 geoSampleAccession GSM672834
 grant Gingeras
 lab GIS
+labExpId crg-9
+labProtocolId gen0106C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -73,6 +87,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaSeqGm12878CytosolPapRawData2Rep1
 objType file
+bioRep gen0106C
 cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -80,10 +95,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
+expId 269
 fileName wgEncodeGisRnaSeqGm12878CytosolPapRawData2Rep1.csqual.gz
 geoSampleAccession GSM672834
 grant Gingeras
 lab GIS
+labExpId crg-9
+labProtocolId gen0106C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -94,6 +113,7 @@ view RawData
 
 metaObject wgEncodeGisRnaSeqGm12878CytosolPapRawDataRep1
 objType file
+bioRep gen0106C
 cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -101,10 +121,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000269
+expId 269
 fileName wgEncodeGisRnaSeqGm12878CytosolPapRawDataRep1.csfasta.gz
 geoSampleAccession GSM672834
 grant Gingeras
 lab GIS
+labExpId crg-9
+labProtocolId gen0106C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -115,6 +139,7 @@ view RawData
 
 metaObject wgEncodeGisRnaSeqH1hescCellPapAlnRep1
 objType table
+bioRep gen0115WC
 cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -122,11 +147,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-fileIndex wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam.bai
+dccAccession wgEncodeEH000270
+expId 270
 fileName wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam
 geoSampleAccession GSM672836
 grant Gingeras
 lab GIS
+labExpId crg-16
+labProtocolId gen0115WC+
 localization cell
 origAssembly hg18
 project wgEncode
@@ -138,6 +166,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaSeqH1hescCellPapMinusRawRep1
 objType table
+bioRep gen0115WC
 cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -145,10 +174,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000270
+expId 270
 fileName wgEncodeGisRnaSeqH1hescCellPapMinusRawRep1.bigWig
 geoSampleAccession GSM672836
 grant Gingeras
 lab GIS
+labExpId crg-16
+labProtocolId gen0115WC+
 localization cell
 origAssembly hg18
 project wgEncode
@@ -160,6 +193,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaSeqH1hescCellPapPlusRawRep1
 objType table
+bioRep gen0115WC
 cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -167,10 +201,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000270
+expId 270
 fileName wgEncodeGisRnaSeqH1hescCellPapPlusRawRep1.bigWig
 geoSampleAccession GSM672836
 grant Gingeras
 lab GIS
+labExpId crg-16
+labProtocolId gen0115WC+
 localization cell
 origAssembly hg18
 project wgEncode
@@ -182,6 +220,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaSeqH1hescCellPapRawData3Rep1
 objType file
+bioRep gen0115WC
 cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -189,10 +228,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000270
+expId 270
 fileName wgEncodeGisRnaSeqH1hescCellPapRawData3Rep1.fastq.gz
 geoSampleAccession GSM672836
 grant Gingeras
 lab GIS
+labExpId crg-16
+labProtocolId gen0115WC+
 localization cell
 origAssembly hg18
 project wgEncode
@@ -203,6 +246,7 @@ view RawData
 
 metaObject wgEncodeGisRnaSeqK562CytosolPapAlnRep1
 objType table
+bioRep gen0139C
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -210,11 +254,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-fileIndex wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam.bai
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam
 geoSampleAccession GSM672833
 grant Gingeras
 lab GIS
+labExpId crg-48
+labProtocolId gen0139C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -226,6 +273,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaSeqK562CytosolPapAlnRep2
 objType table
+bioRep gen0141C
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -233,11 +281,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
-fileIndex wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam.bai
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam
 geoSampleAccession GSM672835
 grant Gingeras
 lab GIS
+labExpId crg-55
+labProtocolId gen0141C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -249,6 +300,7 @@ view Alignments
 
 metaObject wgEncodeGisRnaSeqK562CytosolPapMinusRawRep1
 objType table
+bioRep gen0139C
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -256,10 +308,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapMinusRawRep1.bigWig
 geoSampleAccession GSM672833
 grant Gingeras
 lab GIS
+labExpId crg-48
+labProtocolId gen0139C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -271,6 +327,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaSeqK562CytosolPapMinusRawRep2
 objType table
+bioRep gen0141C
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -278,10 +335,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapMinusRawRep2.bigWig
 geoSampleAccession GSM672835
 grant Gingeras
 lab GIS
+labExpId crg-55
+labProtocolId gen0141C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -293,6 +354,7 @@ view MinusRawSignal
 
 metaObject wgEncodeGisRnaSeqK562CytosolPapPlusRawRep1
 objType table
+bioRep gen0139C
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -300,10 +362,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapPlusRawRep1.bigWig
 geoSampleAccession GSM672833
 grant Gingeras
 lab GIS
+labExpId crg-48
+labProtocolId gen0139C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -315,6 +381,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaSeqK562CytosolPapPlusRawRep2
 objType table
+bioRep gen0141C
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -322,10 +389,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapPlusRawRep2.bigWig
 geoSampleAccession GSM672835
 grant Gingeras
 lab GIS
+labExpId crg-55
+labProtocolId gen0141C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -337,6 +408,7 @@ view PlusRawSignal
 
 metaObject wgEncodeGisRnaSeqK562CytosolPapRawData2Rep2
 objType file
+bioRep gen0141C
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -344,10 +416,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapRawData2Rep2.csqual.gz
 geoSampleAccession GSM672835
 grant Gingeras
 lab GIS
+labExpId crg-55
+labProtocolId gen0141C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -358,6 +434,7 @@ view RawData
 
 metaObject wgEncodeGisRnaSeqK562CytosolPapRawData3Rep1
 objType file
+bioRep gen0139C
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -365,10 +442,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapRawData3Rep1.fastq.gz
 geoSampleAccession GSM672833
 grant Gingeras
 lab GIS
+labExpId crg-48
+labProtocolId gen0139C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -379,6 +460,7 @@ view RawData
 
 metaObject wgEncodeGisRnaSeqK562CytosolPapRawDataRep2
 objType file
+bioRep gen0141C
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
@@ -386,10 +468,14 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+dccAccession wgEncodeEH000271
+expId 271
 fileName wgEncodeGisRnaSeqK562CytosolPapRawDataRep2.csfasta.gz
 geoSampleAccession GSM672835
 grant Gingeras
 lab GIS
+labExpId crg-55
+labProtocolId gen0141C+
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -398,4 +484,4 @@ rnaExtract longPolyA
 subId 2323
 view RawData
 
-# MAGIC: -2025591104
+# MAGIC: -2085151267

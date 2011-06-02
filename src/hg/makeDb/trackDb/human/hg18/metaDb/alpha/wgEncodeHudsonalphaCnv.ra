@@ -1,63 +1,72 @@
-metaObject wgEncodeHudsonalphaCnvRegionsGM12878
+metaObject wgEncodeHudsonalphaCnv
+objType composite
+composite wgEncodeHudsonalphaCnv
+expVars lab,dataType,cell
+
+metaObject wgEncodeHudsonalphaCnvRegionsGM12878V2
 objType table
 cell GM12878
 composite wgEncodeHudsonalphaCnv
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-07-24
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaCnvRegionsGM12878.bed.gz
+expId 273
+fileName wgEncodeHudsonalphaCnvRegionsGM12878V2.bed.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
 subId 449
-tableName wgEncodeHudsonalphaCnvRegionsGM12878
+tableName wgEncodeHudsonalphaCnvRegionsGM12878V2
 view Regions
 
-metaObject wgEncodeHudsonalphaCnvRegionsHepG2
+metaObject wgEncodeHudsonalphaCnvRegionsHepG2V2
 objType table
 cell HepG2
 composite wgEncodeHudsonalphaCnv
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-07-24
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaCnvRegionsHepG2.bed.gz
+expId 274
+fileName wgEncodeHudsonalphaCnvRegionsHepG2V2.bed.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
 subId 449
-tableName wgEncodeHudsonalphaCnvRegionsHepG2
+tableName wgEncodeHudsonalphaCnvRegionsHepG2V2
 view Regions
 
-metaObject wgEncodeHudsonalphaCnvRegionsK562
+metaObject wgEncodeHudsonalphaCnvRegionsK562V2
 objType table
 cell K562
 composite wgEncodeHudsonalphaCnv
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-07-24
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaCnvRegionsK562.bed.gz
+expId 275
+fileName wgEncodeHudsonalphaCnvRegionsK562V2.bed.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
 subId 449
-tableName wgEncodeHudsonalphaCnvRegionsK562
+tableName wgEncodeHudsonalphaCnvRegionsK562V2
 view Regions
 
 metaObject wgEncodeHudsonalphaCnvSignalGM12878
 objType table
 cell GM12878
 composite wgEncodeHudsonalphaCnv
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-07-24
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
+expId 273
 fileName wgEncodeHudsonalphaCnvSignalGM12878.bedGraph4.gz
 grant Myers
 lab HudsonAlpha
@@ -70,11 +79,12 @@ metaObject wgEncodeHudsonalphaCnvSignalHepG2
 objType table
 cell HepG2
 composite wgEncodeHudsonalphaCnv
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-07-24
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
+expId 274
 fileName wgEncodeHudsonalphaCnvSignalHepG2.bedGraph4.gz
 grant Myers
 lab HudsonAlpha
@@ -87,11 +97,12 @@ metaObject wgEncodeHudsonalphaCnvSignalK562
 objType table
 cell K562
 composite wgEncodeHudsonalphaCnv
-dataType Cnv
+dataType Genotype
 dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-07-24
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
+expId 275
 fileName wgEncodeHudsonalphaCnvSignalK562.bedGraph4.gz
 grant Myers
 lab HudsonAlpha
@@ -100,4 +111,4 @@ subId 449
 tableName wgEncodeHudsonalphaCnvSignalK562
 view Signal
 
-# MAGIC: -1473470755
+# MAGIC: -1023283142

@@ -288,6 +288,9 @@ struct ffAli *leftAli;
 struct ffAli *startAli;
 struct ffAli *rightAli;
 
+if (ali == NULL)
+    return NULL;
+
 /* Figure out left most non-empty ali. */
 while (ali->left)
     ali = ali->left;
@@ -303,6 +306,10 @@ while (ali)
     else
         break;
     }
+
+if (ali == NULL)
+    return NULL;
+
 ali->left = NULL;
 
 /* Get rid of empty middle alis. */

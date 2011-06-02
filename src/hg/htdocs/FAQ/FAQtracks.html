@@ -135,11 +135,16 @@
 			Unfortunately, it does create some confusion when the internal 
 			representation is exposed or when we forget to add 1 before 
 			displaying a start coordinate. However, it saves us from much trickier 
-			bugs.  
-			<P>
-			In summary, if you use a database dump file but would prefer to 
+			bugs. If you use a database dump file but would prefer to 
 			see the one-based start coordinates, you will always need to add 1 
-			to each start coordinate.  
+			to each start coordinate.
+			<P>
+			If you submit data to the browser in position format (chr#:##-##), the browser assumes 
+			this information is 1-based. If you submit data in any other format (BED (chr# ## ##) or 
+			otherwise), the browser will assume it is 0-based. You can see this both in our liftOver 
+			utility and in our search bar, by entering the same numbers in position or BED format 
+			and observing the results. Similarly, any data returned by the browser in 
+			position format is 1-based, while data returned in BED, wiggle, etc is 0-based.  
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>

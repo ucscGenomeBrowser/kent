@@ -528,53 +528,13 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
         VALUES ("melGal1", "blat13", "17829", "0", "1");' \
             hgcentraltest
     #   test it with some sequence
-
-#######################################################################
-# melGal1 Turkey BLASTZ/CHAIN/NET (DONE - 2011-03-24 - Chin)
-# use a screen to manage this multi-day job
-
-    mkdir /hive/data/genomes/galGal3/bed/lastzMelGal1.2011-03-24
-    cd /hive/data/genomes/galGal3/bed/lastzMelGal1.2011-03-24
-
-    cat << '_EOF_' > DEF
-# Chicken vs. Turkey
-BLASTZ_M=50
-
-# TARGET: Chicken GalGal3
-SEQ1_DIR=/scratch/data/galGal3/galGal3.2bit
-SEQ1_LEN=/scratch/data/galGal3/chrom.sizes
-SEQ1_CHUNK=20000000
-SEQ1_LAP=10000
-SEQ1_LIMIT=50
-
-# QUERY: Turkey MelGal1
-SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
-SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
-SEQ2_CHUNK=10000000
-SEQ2_LIMIT=100
-SEQ2_LAP=0
-
-BASE=/hive/data/genomes/galGal3/bed/lastzMelGal1.2011-03-24
-TMPDIR=/scratch/tmp
-'_EOF_'
-    # << this line keeps emacs coloring happy
-    # screen
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        `pwd`/DEF \
-        -noLoadChainSplit -syntenicNet \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    # real    120m58.775s
-    #  *** All done !  Elapsed time: 120m59s
-    #  *** Make sure that goldenPath/galGal3/vsMelGal1/README.txt is accurate.
-    #  *** Add {chain,net}MelGal1 tracks to trackDb.ra if necessary.
-
+#########################################################################
+#  SWAP melGal1 lastz (DONE - 2011-03-24 - Chin)
+    #   original alignment
     cat fb.galGal3.chainMelGal1Link.txt
     # 924755061 bases of 1042591351 (88.698%) in intersection
-    cd /hive/data/genomes/galGal3/bed
-    ln -s lastzMelGal1.2011-03-24 lastz.melGal3
 
-    #   and then swap 
+    #   and the swap
     mkdir /hive/data/genomes/melGal1/bed/blastz.galGal3.swap
     cd /hive/data/genomes/melGal1/bed/blastz.galGal3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -586,9 +546,8 @@ TMPDIR=/scratch/tmp
     cat fb.melGal1.chainGalGal3Link.txt
     # 874579772 bases of 935922386 (93.446%) in intersection
 
-
 #########################################################################
-# LASTZ Turkey TaeGut1 (DONE - 2011-03-28 - Chin)
+# BLASTZ/CHAIN/NET  Turkey vs Zebra Fish taeGut1 (DONE - 2011-03-28 - Chin)
     mkdir /hive/data/genomes/melGal1/bed/lastzTaeGut1.2011-03-28
     cd /hive/data/genomes/melGal1/bed/lastzTaeGut1.2011-03-28
 
@@ -601,7 +560,7 @@ SEQ1_LEN=/scratch/data/melGal1/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
-# QUERY: Turkey taeGut1 - single chunk big enough to run entire chrom
+# QUERY: Zebra Finch  taeGut1 - single chunk big enough to run entire chrom
 SEQ2_DIR=/scratch/data/taeGut1/taeGut1.2bit
 SEQ2_LEN=/scratch/data/taeGut1/chrom.sizes
 SEQ2_CHUNK=10000000
@@ -621,6 +580,8 @@ TMPDIR=/scratch/tmp
     # Elapsed time: 400m22s
     cat fb.melGal1.chainTaeGut1Link.txt
     # 671105409 bases of 935922386 (71.705%) in intersection
+    cd  /hive/data/genomes/melGal1/bed
+    ln -s lastzTaeGut1.2011-03-28 lastz.taeGut1
 
     #   running the swap 
     mkdir /hive/data/genomes/taeGut1/bed/blastz.melGal1.swap
@@ -634,6 +595,8 @@ TMPDIR=/scratch/tmp
     #   real   36m7.017s 
     cat fb.taeGut1.chainMelGal1Link.txt
     #   795001886 bases of 1222864691 (65.011%) in intersection
+    cd /hive/data/genomes/taeGut1/bed
+    ln -s blastz.melGal1.swap lastz.melGal1
 
 #########################################################################
 #  SWAP hg19 lastz (DONE - 201i1-03-28 - Chin)
@@ -653,5 +616,305 @@ TMPDIR=/scratch/tmp
     #   real    6m51.280s
     cat fb.melGal1.chainHg19Link.txt
     #   62120143 bases of 935922386 (6.637%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+#  SWAP mm9 lastz (DONE - 201i1-03-28 - Chin)
+    #   original alignment
+    cat fb.mm9.chainMelGal1Link.txt
+    #   62597891 bases of 2620346127 (2.389%) in intersection
+
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzMelGal1.2011-03-30/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    6m49.871s
+    cat fb.melGal1.chainMm9Link.txt
+    #   50649368 bases of 935922386 (5.412%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.mm9.swap lastz.mm9
+
+#########################################################################
+#  SWAP monDom5  lastz (DONE -  2011-03-30 - Chin)
+    #   original alignment
+    cat fb.monDom5.chainMelGal1Link.txt
+    #   79077534 bases of 3501660299 (2.258%) in intersection
+
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzMelGal1.2011-03-30/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   Elapsed time: 10m15s
+    cat fb.melGal1.chainMonDom5Link.txt
+    #   64933013 bases of 935922386 (6.938%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s lastz.monDom5.swap lastz.monDom5
+
+#########################################################################
+# BLASTZ/CHAIN/NET  Turkey vs Xenopus xenTro2 (DONE - 2011-04-02 - Chin)
+    mkdir /hive/data/genomes/melGal1/bed/lastzXenTro2.2011-04-02
+    cd /hive/data/genomes/melGal1/bed/lastzXenTro2.2011-04-02
+
+    cat << '_EOF_' > DEF
+# Xenopus vs Turkey
+
+# TARGET: Turkey melGal1
+SEQ1_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ1_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Xenopus  xenTro2 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/xenTro2/xenTro2.2bit
+SEQ2_LEN=/scratch/data/xenTro2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/melGal1/bed/lastzXenTro2.2011-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs 
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+    # real    288m3.884s
+    cat fb.melGal1.chainXenTro2Link.txt
+    # 36288270 bases of 935922386 (3.877%) in intersection
+    cd  /hive/data/genomes/melGal1/bed
+    ln -s lastzXenTro2.2011-04-02 lastz.xenTro2
+    
+    #   running the swap 
+    mkdir /hive/data/genomes/xenTro2/bed/blastz.melGal1.swap
+    cd /hive/data/genomes/xenTro2/bed/blastz.melGal1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/melGal1/bed/lastzXenTro2.2011-04-02/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    3m40.138s
+    cat fb.xenTro2.chainMelGal1Link.txt
+    #   41967849 bases of 1359412157 (3.087%) in intersection
+    cd /hive/data/genomes/xenTro2/bed
+    ln -s blastz.melGal1.swap lastz.melGal1
+
+#######################################################################
+# lastz swap from danRer7 (DONE - 2011-04-02 - Chin)
+    # original alignment to danRer7
+    cd /hive/data/genomes/danRer7/bed/lastzMelGal1.2011-04-01
+    cat fb.danRer7.chainMelGal1Link.txt
+    #   35772051 bases of 1409770109 (2.537%) in intersection
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/danRer7/bed/lastzMelGal1.2011-04-01/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    3m28.672s
+    cat fb.melGal1.chainDanRer7Link.txt
+    #   25141503 bases of 935922386 (2.686%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.danRer7.swap lastz.danRer7
+
+#######################################################################
+# lastz swap from rn4 (DONE - 2011-04-04 - Chin)
+    # original alignment to rn4
+    cd /hive/data/genomes/rn4/bed/lastzMelGal1.2011-04-04
+    cat fb.rn4.chainMelGal1Link.txt
+    #   60383476 bases of 2571531505 (2.348%) in intersection
+    #   running the swap 
+    mkdir /hive/data/genomes/melGal1/bed/blastz.rn4.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.rn4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rn4/bed/lastzMelGal1.2011-04-04/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    6m49.871s
+    cat fb.melGal1.chainRn4Link.txt
+    #   48636842 bases of 935922386 (5.197%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.rn4.swap lastz.rn4
 
 ############################################################################
+# HUMAN (hg18) PROTEINS TRACK (DONE 2011-04-26 braney)
+    # bash  if not using bash shell already
+    cd /cluster/data/melGal1
+    mkdir /cluster/data/melGal1/blastDb
+
+    awk '{if ($2 > 1000000) print $1}' chrom.sizes > 1meg.lst
+    twoBitToFa -seqList=1meg.lst  melGal1.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+#  1140 pieces of 1140 written
+    rm temp.fa 1meg.lst
+
+    awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
+    twoBitToFa -seqList=less1meg.lst  melGal1.2bit temp.fa
+    faSplit about temp.fa 1000000 blastDb/y 
+    rm temp.fa less1meg.lst
+
+    cd blastDb
+    for i in *.fa
+    do
+	/hive/data/outside/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+    ls *.nsq | wc -l
+# 1163
+
+    mkdir -p /cluster/data/melGal1/bed/tblastn.hg18KG
+    cd /cluster/data/melGal1/bed/tblastn.hg18KG
+    echo  ../../blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 1163 query.lst
+
+   # we want around 250000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(250000/`wc query.lst | awk '{print $1}'`\)
+# 36727/(250000/1163) = 170.854004
+
+   mkdir -p kgfa
+   split -l 171 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+   done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   wc kg.lst
+# 215  215 2795 kg.lst
+
+   mkdir -p blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/melGal1/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/hive/data/outside/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /hive/data/outside/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/melGal1/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
+        if pslCheck -prot $3.tmp
+        then                  
+            mv $3.tmp $3     
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0               
+    fi                      
+fi                         
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    exit 
+    
+    ssh swarm
+    cd /cluster/data/melGal1/bed/tblastn.hg18KG
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+
+# Completed: 250045 of 250045 jobs
+# CPU time in finished jobs:    5922436s   98707.26m  1645.12h   68.55d  0.188 y
+# IO & Wait Time:               1789013s   29816.89m   496.95h   20.71d  0.057 y
+# Average job time:                  31s       0.51m     0.01h    0.00d
+# Longest finished job:             330s       5.50m     0.09h    0.00d
+# Submission to last job:         12017s     200.28m     3.34h    0.14d
+
+    ssh swarm
+    cd /cluster/data/melGal1/bed/tblastn.hg18KG
+    mkdir chainRun
+    cd chainRun
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS ../blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    para create chainSpec
+    para try, check, push, check etc.
+
+# Completed: 215 of 215 jobs
+# CPU time in finished jobs:       1662s      27.70m     0.46h    0.02d  0.000 y
+# IO & Wait Time:                 85567s    1426.12m    23.77h    0.99d  0.003 y
+# Average job time:                 406s       6.76m     0.11h    0.00d
+# Longest finished job:             510s       8.50m     0.14h    0.01d
+# Submission to last job:           537s       8.95m     0.15h    0.01d
+
+    cd /cluster/data/melGal1/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort u.*.psl m60* | uniq | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > ../blastHg18KG.psl
+    cd ..
+    pslCheck blastHg18KG.psl
+# checked: 35263 failed: 0 errors: 0
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/melGal1/bed/tblastn.hg18KG
+    hgLoadPsl melGal1 blastHg18KG.psl
+
+    # check coverage
+    featureBits melGal1 blastHg18KG 
+# 18362443 bases of 935922386 (1.962%) in intersection
+
+    featureBits melGal1 blastHg18KG ensGene  -enrichment
+# blastHg18KG 1.962%, ensGene 2.680%, both 1.787%, cover 91.07%, enrich 33.99x
+
+    rm -rf blastOut
+#end tblastn

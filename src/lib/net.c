@@ -61,14 +61,14 @@ if ((sd = netStreamSocket()) < 0)
 // Set non-blocking
 if ((fcntlFlags = fcntl(sd, F_GETFL, NULL)) < 0) 
     {
-    warn("Error fcntl(..., F_GETFL) (%s)\n", strerror(errno));
+    warn("Error fcntl(..., F_GETFL) (%s)", strerror(errno));
     close(sd);
     return -1;
     }
 fcntlFlags |= O_NONBLOCK;
 if (fcntl(sd, F_SETFL, fcntlFlags) < 0) 
     {
-    warn("Error fcntl(..., F_SETFL) (%s)\n", strerror(errno));
+    warn("Error fcntl(..., F_SETFL) (%s)", strerror(errno));
     close(sd);
     return -1;
     }
@@ -90,7 +90,7 @@ if (res < 0)
 		{
 		if (errno != EINTR) 
 		    {
-		    warn("Error in select() during TCP non-blocking connect %d - %s\n", errno, strerror(errno));
+		    warn("Error in select() during TCP non-blocking connect %d - %s", errno, strerror(errno));
 		    close(sd);
 		    return -1;
 		    }
@@ -98,19 +98,28 @@ if (res < 0)
 	    else if (res > 0)
 		{
 		// Socket selected for write when it is ready
-		// We simply re-do the connect call and get the result
-		res = connect(sd, (struct sockaddr*) &sai, sizeof(sai));
-		if (res < 0)
-		    {
-		    warn("Error in TCP non-blocking connect() %d - %s\n", errno, strerror(errno));
-		    close(sd);
-		    return -1;
-		    }
+		int valOpt;
+		socklen_t lon;
+                // But check the socket for any errors
+                lon = sizeof(valOpt);
+                if (getsockopt(sd, SOL_SOCKET, SO_ERROR, (void*) (&valOpt), &lon) < 0)
+                    {
+                    warn("Error in getsockopt() %d - %s", errno, strerror(errno));
+                    close(sd);
+                    return -1;
+                    }
+                // Check the value returned...
+                if (valOpt)
+                    {
+                    warn("Error in TCP non-blocking connect() %d - %s", valOpt, strerror(valOpt));
+                    close(sd);
+                    return -1;
+                    }
 		break;
 		}
 	    else
 		{
-		warn("TCP non-blocking connect() timed-out in select() after %ld milliseconds - Cancelling!\n", msTimeout);
+		warn("TCP non-blocking connect() timed-out in select() after %ld milliseconds - Cancelling!", msTimeout);
 		close(sd);
 		return -1;
 		}
@@ -118,7 +127,7 @@ if (res < 0)
 	}
     else
 	{
-	warn("TCP non-blocking connect() error %d - %s\n", errno, strerror(errno));
+	warn("TCP non-blocking connect() error %d - %s", errno, strerror(errno));
 	close(sd);
 	return -1;
 	}
@@ -127,14 +136,14 @@ if (res < 0)
 // Set to blocking mode again
 if ((fcntlFlags = fcntl(sd, F_GETFL, NULL)) < 0)
     {
-    warn("Error fcntl(..., F_GETFL) (%s)\n", strerror(errno));
+    warn("Error fcntl(..., F_GETFL) (%s)", strerror(errno));
     close(sd);
     return -1;
     }
 fcntlFlags &= (~O_NONBLOCK);
 if (fcntl(sd, F_SETFL, fcntlFlags) < 0)
     {
-    warn("Error fcntl(..., F_SETFL) (%s)\n", strerror(errno));
+    warn("Error fcntl(..., F_SETFL) (%s)", strerror(errno));
     close(sd);
     return -1;
     }
@@ -303,7 +312,7 @@ static void notGoodSubnet(char *sns)
 /* Complain about subnet format. */
 {
 errAbort("'%s' is not a properly formatted subnet.  Subnets must consist of\n"
-         "one to three dot-separated numbers between 0 and 255\n", sns);
+         "one to three dot-separated numbers between 0 and 255", sns);
 }
 
 void netParseSubnet(char *in, unsigned char out[4])
@@ -334,6 +343,36 @@ if (in != NULL)
     }
 }
 
+static void parseByteRange(char *url, ssize_t *rangeStart, ssize_t *rangeEnd, boolean terminateAtByteRange)
+/* parse the byte range information from url */
+{
+char *x;
+/* default to no byte range specified */
+*rangeStart = -1;
+*rangeEnd = -1;
+x = strrchr(url, ';');
+if (x)
+    {
+    if (startsWith(";byterange=", x))
+	{
+	char *y=strchr(x, '=');
+	++y;
+	char *z=strchr(y, '-');
+	if (z)
+	    {
+	    ++z;
+	    if (terminateAtByteRange)
+		*x = 0;
+	    // TODO: use something better than atoll() ?
+	    *rangeStart = atoll(y); 
+	    if (z[0] != '\0')
+		*rangeEnd = atoll(z);
+	    }    
+	}
+    }
+
+}
+
 void netParseUrl(char *url, struct netParsedUrl *parsed)
 /* Parse a URL into components.   A full URL is made up as so:
  *   http://user:password@hostName:port/file;byterange=0-499
@@ -341,7 +380,7 @@ void netParseUrl(char *url, struct netParsedUrl *parsed)
  * This is set up so that the http:// and the port are optional. 
  */
 {
-char *s, *t, *u, *v, *w, *x;
+char *s, *t, *u, *v, *w;
 char buf[1024];
 
 /* Make local copy of URL. */
@@ -374,25 +413,7 @@ if (u == NULL)
     strcpy(parsed->file, "/");
 else
     {
-    x = strrchr(u, ';');
-    if (x)
-	{
-	if (startsWith(";byterange=", x))
-	    {
-	    char *y=strchr(x, '=');
-	    ++y;
-	    char *z=strchr(y, '-');
-	    if (z)
-		{
-    		++z;
-		*x = 0;
-		// TODO: use something better than atol() ?
-		parsed->byteRangeStart = atoll(y); 
-		if (z[0] != '\0')
-		    parsed->byteRangeEnd = atoll(z);
-	    	}    
-	    }
-	}
+    parseByteRange(u, &parsed->byteRangeStart, &parsed->byteRangeEnd, TRUE);
 
     /* need to encode spaces, but not ! other characters */
     char *t=replaceChars(u," ","%20");
@@ -463,6 +484,49 @@ else
 safecpy(parsed->host, sizeof(parsed->host), s);
 }
 
+char *urlFromNetParsedUrl(struct netParsedUrl *npu)
+/* Build URL from netParsedUrl structure */
+{
+struct dyString *dy = newDyString(512);
+
+dyStringAppend(dy, npu->protocol);
+dyStringAppend(dy, "://");
+if (npu->user[0] != 0)
+    {
+    char *encUser = cgiEncode(npu->user);
+    dyStringAppend(dy, encUser);
+    freeMem(encUser);
+    if (npu->password[0] != 0)
+	{
+	dyStringAppend(dy, ":");
+	char *encPassword = cgiEncode(npu->password);
+	dyStringAppend(dy, encPassword);
+	freeMem(encPassword);
+	}
+    dyStringAppend(dy, "@");
+    }
+dyStringAppend(dy, npu->host);
+/* do not include port if it is the default */
+if (!(
+ (sameString(npu->protocol, "ftp"  ) && sameString("21", npu->port)) ||
+ (sameString(npu->protocol, "http" ) && sameString("80", npu->port)) ||
+ (sameString(npu->protocol, "https") && sameString("443",npu->port))
+    ))
+    {
+    dyStringAppend(dy, ":");
+    dyStringAppend(dy, npu->port);
+    }
+dyStringAppend(dy, npu->file);
+if (npu->byteRangeStart != -1)
+    {
+    dyStringPrintf(dy, ";byterange=%lld-", (long long)npu->byteRangeStart);
+    if (npu->byteRangeEnd != -1)
+	dyStringPrintf(dy, "%lld", (long long)npu->byteRangeEnd);
+    }
+
+/* Clean up and return handle. */
+return dyStringCannibalize(&dy);
+}
 
 /* this was cloned from rudp.c - move it later for sharing */
 static boolean readReadyWait(int sd, int microseconds)
@@ -510,7 +574,7 @@ mustWriteFd(sd, cmd, strlen(cmd));
 
 #define NET_FTP_TIMEOUT 1000000
 
-static boolean receiveFtpReply(int sd, char *cmd, struct dyString **retReply)
+static boolean receiveFtpReply(int sd, char *cmd, struct dyString **retReply, int *retCode)
 /* send command to ftp server and check resulting reply code, 
  * warn and return FALSE if not desired reply.  If retReply is non-NULL, store reply text there. */
 {
@@ -560,7 +624,7 @@ while (1)
 int reply = atoi(startLastLine);
 if ((reply < 200) || (reply > 399))
     {
-    warn("ftp server error on cmd=[%s] response=[%s]\n",cmd,rs->string);
+    warn("ftp server error on cmd=[%s] response=[%s]",cmd,rs->string);
     return FALSE;
     }
     
@@ -568,15 +632,17 @@ if (retReply)
     *retReply = rs;
 else
     dyStringFree(&rs);
+if (retCode)
+    *retCode = reply;
 return TRUE;
 }
 
-static boolean sendFtpCommand(int sd, char *cmd, struct dyString **retReply)
+static boolean sendFtpCommand(int sd, char *cmd, struct dyString **retReply, int *retCode)
 /* send command to ftp server and check resulting reply code, 
  * warn and return FALSE if not desired reply.  If retReply is non-NULL, store reply text there. */
 {   
 sendFtpCommandOnly(sd, cmd);
-return receiveFtpReply(sd, cmd, retReply);
+return receiveFtpReply(sd, cmd, retReply, retCode);
 }
 
 static int parsePasvPort(char *rs)
@@ -671,24 +737,28 @@ if (sd < 0)
 
 /* First read the welcome msg */
 if (readReadyWait(sd, NET_FTP_TIMEOUT))
-    sendFtpCommand(sd, "", NULL);
+    sendFtpCommand(sd, "", NULL, NULL);
 
 char cmd[256];
+int retCode = 0;
 safef(cmd,sizeof(cmd),"USER %s\r\n", user);
-if (!sendFtpCommand(sd, cmd, NULL))
+if (!sendFtpCommand(sd, cmd, NULL, &retCode))
     {
     close(sd);
     return -1;
     }
 
-safef(cmd,sizeof(cmd),"PASS %s\r\n", password);
-if (!sendFtpCommand(sd, cmd, NULL))
+if (retCode == 331)
     {
-    close(sd);
-    return -1;
+    safef(cmd,sizeof(cmd),"PASS %s\r\n", password);
+    if (!sendFtpCommand(sd, cmd, NULL, NULL))
+	{
+	close(sd);
+	return -1;
+	}
     }
 
-if (!sendFtpCommand(sd, "TYPE I\r\n", NULL))
+if (!sendFtpCommand(sd, "TYPE I\r\n", NULL, NULL))
     {
     close(sd);
     return -1;
@@ -721,7 +791,7 @@ if (sd < 0)
 char cmd[256];
 safef(cmd,sizeof(cmd),"SIZE %s\r\n", npu.file);
 struct dyString *rs = NULL;
-if (!sendFtpCommand(sd, cmd, &rs))
+if (!sendFtpCommand(sd, cmd, &rs, NULL))
     {
     close(sd);
     return FALSE;
@@ -731,7 +801,7 @@ if (!sendFtpCommand(sd, cmd, &rs))
 dyStringFree(&rs);
 
 safef(cmd,sizeof(cmd),"MDTM %s\r\n", npu.file);
-if (!sendFtpCommand(sd, cmd, &rs))
+if (!sendFtpCommand(sd, cmd, &rs, NULL))
     {
     close(sd);
     return FALSE;
@@ -807,7 +877,7 @@ if (sd == -1)
     return -1;
 
 struct dyString *rs = NULL;
-if (!sendFtpCommand(sd, "PASV\r\n", &rs))
+if (!sendFtpCommand(sd, "PASV\r\n", &rs, NULL))
     {
     close(sd);
     return -1;
@@ -817,7 +887,7 @@ if (!sendFtpCommand(sd, "PASV\r\n", &rs))
 if (npu.byteRangeStart != -1)
     {
     safef(cmd,sizeof(cmd),"REST %lld\r\n", (long long) npu.byteRangeStart);
-    if (!sendFtpCommand(sd, cmd, NULL))
+    if (!sendFtpCommand(sd, cmd, NULL, NULL))
 	{
 	close(sd);
 	return -1;
@@ -841,7 +911,7 @@ while (TRUE)
     {
     if (secondsWaited >= 10)
 	{
-	warn("ftp server error on cmd=[%s] timed-out waiting for data or error\n", cmd);
+	warn("ftp server error on cmd=[%s] timed-out waiting for data or error", cmd);
 	close(sd);
 	close(sdata);
 	return -1;
@@ -851,7 +921,7 @@ while (TRUE)
     if (readReadyWait(sd, 0)) /* wait in microsec */
 	{
 	// this can see an error like bad filename
-	if (!receiveFtpReply(sd, cmd, NULL))
+	if (!receiveFtpReply(sd, cmd, NULL, NULL))
 	    {
 	    close(sd);
 	    close(sdata);
@@ -978,7 +1048,8 @@ dyStringPrintf(dy, "%s %s %s\r\n", method, proxyUrl ? urlForProxy : npu.file, pr
 freeMem(urlForProxy);
 dyStringPrintf(dy, "User-Agent: %s\r\n", agent);
 /* do not need the 80 since it is the default */
-if (sameString("80",npu.port))
+if ((sameString(npu.protocol, "http" ) && sameString("80", npu.port)) ||
+    (sameString(npu.protocol, "https") && sameString("443",npu.port)))
     dyStringPrintf(dy, "Host: %s\r\n", npu.host);
 else
     dyStringPrintf(dy, "Host: %s:%s\r\n", npu.host, npu.port);
@@ -1157,6 +1228,31 @@ close(sd);
 return dy;
 }
 
+static void parseContentRange(char *x, ssize_t *rangeStart, ssize_t *rangeEnd)
+/* parse the content range information from response header value 
+	"bytes 763400000-763400112/763400113"
+ */
+{
+/* default to no byte range specified */
+*rangeStart = -1;
+*rangeEnd = -1;
+if (startsWith("bytes ", x))
+    {
+    char *y=strchr(x, ' ');
+    ++y;
+    char *z=strchr(y, '-');
+    if (z)
+	{
+	++z;
+	// TODO: use something better than atoll() ?
+	*rangeStart = atoll(y); 
+	if (z[0] != '\0')
+	    *rangeEnd = atoll(z);
+	}    
+    }
+
+}
+
 
 boolean netSkipHttpHeaderLinesWithRedirect(int sd, char *url, char **redirectedUrl)
 /* Skip http header lines. Return FALSE if there's a problem.
@@ -1178,10 +1274,20 @@ char *headerName = NULL;
 char *headerVal = NULL;
 boolean redirect = FALSE;
 boolean byteRangeUsed = (strstr(url,";byterange=") != NULL);
+ssize_t byteRangeStart = -1;
+ssize_t byteRangeEnd = -1;
+boolean foundContentRange = FALSE;
+ssize_t contentRangeStart = -1;
+ssize_t contentRangeEnd = -1;
 
 boolean mustUseProxy = FALSE;  /* User must use proxy 305 error*/
 char *proxyLocation = NULL;
 boolean mustUseProxyAuth = FALSE;  /* User must use proxy authentication 407 error*/
+
+if (byteRangeUsed)
+    {
+    parseByteRange(url, &byteRangeStart, &byteRangeEnd, FALSE);
+    }
 
 while(TRUE)
     {
@@ -1192,11 +1298,11 @@ while(TRUE)
 	if (nread != 1)
 	    {
 	    if (nread == -1)
-    		warn("Error (%s) reading http header on %s\n", strerror(errno), url);
+    		warn("Error (%s) reading http header on %s", strerror(errno), url);
 	    else if (nread == 0)
-    		warn("Error unexpected end of input reading http header on %s\n", url);
+    		warn("Error unexpected end of input reading http header on %s", url);
 	    else
-    		warn("Error reading http header on %s\n", url);
+    		warn("Error reading http header on %s", url);
 	    return FALSE;  /* err reading descriptor */
 	    }
 	if (c == 10)
@@ -1222,7 +1328,7 @@ while(TRUE)
 	code = nextWord(&line);
 	if (code == NULL)
 	    {
-	    warn("Strange http header on %s\n", url);
+	    warn("Strange http header on %s", url);
 	    return FALSE;
 	    }
 	if (startsWith("30", code) && isdigit(code[2])
@@ -1244,13 +1350,13 @@ while(TRUE)
 		{
 		if (sameString(code, "200"))
 		    warn("Byte-range request was ignored by server. ");
-		warn("Expected Partial Content 206. %s: %s %s\n", url, code, line);
+		warn("Expected Partial Content 206. %s: %s %s", url, code, line);
 		return FALSE;
 		}
 	    }
 	else if (!sameString(code, "200"))
 	    {
-	    warn("Expected 200 %s: %s %s\n", url, code, line);
+	    warn("Expected 200 %s: %s %s", url, code, line);
 	    return FALSE;
 	    }
 	line = buf;  /* restore it */
@@ -1273,15 +1379,44 @@ while(TRUE)
 	if (mustUseProxy)
 	    proxyLocation = cloneString(headerVal);
 	}
+    if (sameWord(headerName,"Content-Range"))
+	{
+	if (byteRangeUsed)
+	    {
+	    foundContentRange = TRUE;
+	    parseContentRange(headerVal, &contentRangeStart, &contentRangeEnd);	
+    	    if ((contentRangeStart != byteRangeStart) ||
+		(byteRangeEnd != -1 && (contentRangeEnd != byteRangeEnd)))
+		{
+		char bre[256];
+		safef(bre, sizeof bre, "%lld", (long long)byteRangeEnd);
+		if (byteRangeEnd == -1)
+		    bre[0] = 0;
+		warn("Found Content-Range: %s. Expected bytes %lld-%s. Improper caching of 206 reponse byte-ranges?",
+		    headerVal, (long long) byteRangeStart, bre);
+    		return FALSE;
+		}
+	    }
+	}
     }
 if (mustUseProxy ||  mustUseProxyAuth)
     {
-    warn("%s: %s error. Use Proxy%s. Location = %s\n", url, 
+    warn("%s: %s error. Use Proxy%s. Location = %s", url, 
 	mustUseProxy ? "" : " Authentication", 
 	mustUseProxy ? "305" : "407", 
 	proxyLocation ? proxyLocation : "not given");
     return FALSE;
     }
+if (byteRangeUsed && !foundContentRange)
+    {
+    char bre[256];
+    safef(bre, sizeof bre, "%lld", (long long)byteRangeEnd);
+    if (byteRangeEnd == -1)
+	bre[0] = 0;
+    warn("Expected response header Content-Range: %lld-%s", (long long) byteRangeStart, bre);
+    return FALSE;
+    }
+
 return TRUE;
 }
 
@@ -1344,6 +1479,29 @@ while (TRUE)
 	    }
 	else 
 	    {
+	    struct netParsedUrl npu, newNpu;
+	    /* Parse the old URL to make parts available for graft onto the redirected url. */
+	    /* This makes redirection work with byterange urls and user:password@ */
+	    netParseUrl(url, &npu);
+	    netParseUrl(newUrl, &newNpu);
+	    boolean updated = FALSE;
+	    if (npu.byteRangeStart != -1)
+		{
+		newNpu.byteRangeStart = npu.byteRangeStart;
+		newNpu.byteRangeEnd = npu.byteRangeEnd;
+		updated = TRUE;
+		}
+	    if ((npu.user[0] != 0) && (newNpu.user[0] == 0))
+		{
+		safecpy(newNpu.user,     sizeof newNpu.user,     npu.user);
+		safecpy(newNpu.password, sizeof newNpu.password, npu.password);
+		updated = TRUE;
+		}
+	    if (updated)
+		{
+		freeMem(newUrl);
+		newUrl = urlFromNetParsedUrl(&newNpu);
+		}
 	    sd = netUrlOpen(newUrl);
 	    if (sd < 0)
 		{
@@ -1860,9 +2018,6 @@ while (TRUE)
 			{
 			/*  Update sd with newSd, replace it with newUrl, etc. */
 			pc->sd = newSd;
-			warn("Redirects not supported at this time: %s re-directed to: %s", url, newUrl);
-			freeMem(newUrl);  /* redirects with byterange do not work anyway */
-			return FALSE;
 			}
 		    }
 		++connOpen;

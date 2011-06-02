@@ -1,5 +1,4 @@
 track wgEncodeHelicosRnaSeq
-release beta,public
 compositeTrack on
 shortLabel Helicos RNA-seq
 longLabel ENCODE Helicos RNA-seq
@@ -22,12 +21,10 @@ wgEncode 1
     shortLabel Alignments
     view Alignments
     visibility pack
-    release beta,public
     subTrack wgEncodeHelicosRnaSeq
     scoreFilterByRange on
 
         track wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya
-        release beta,public
         subTrack wgEncodeHelicosRnaSeqViewAlignments off
         shortLabel K562cyto pA+ Tag
         longLabel ENCODE Helicos RNA-seq Tags (PolyA+ RNA in K562 cytosol)
@@ -41,17 +38,14 @@ wgEncode 1
         showDiffBasesMaxZoom 10000.0
         color 46,0,184
         configurable on
-        metadata project=wgEncode grant=Gingeras lab=Helicos dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=249 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeHelicosRnaSeq tableName=wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya fileName=wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya.tagAlign.gz
 
     track wgEncodeHelicosRnaSeqViewyRawSignal
     shortLabel Raw Signal
     view yRawSignal
     visibility full
-    release beta,public
     subTrack wgEncodeHelicosRnaSeq
 
         track wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya
-        release beta,public
         subTrack wgEncodeHelicosRnaSeqViewyRawSignal
         shortLabel K562cyto pA+ Sig
         longLabel ENCODE Helicos RNA-seq Raw Signal (PolyA+ RNA in K562 cytosol)
@@ -64,6 +58,3 @@ wgEncode 1
         maxHeightPixels 100:16:16
         color 46,0,184
         configurable on
-        metadata project=wgEncode grant=Gingeras lab=Helicos dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=249 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeHelicosRnaSeq tableName=wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya fileName=wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya.wig.gz
-
-

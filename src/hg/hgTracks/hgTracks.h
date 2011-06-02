@@ -153,9 +153,13 @@ struct track
     int subType;     /* Variable to say what subtype this is for similar tracks
 	              * to share code. */
 
+    /* Stuff for the various wig incarnations - sample, wig, bigWig */
     float minRange, maxRange;	  /*min and max range for sample tracks 0.0 to 1000.0*/
     float scaleRange;             /* What to scale samples by to get logical 0-1 */
     double graphUpperLimit, graphLowerLimit;	/* Limits of actual data in window for wigs. */
+    struct preDrawContainer *preDrawContainer;  /* Numbers to graph in wig, one per pixel */
+    struct preDrawContainer *(*loadPreDraw)(struct track *tg, int seqStart, int seqEnd, int width);  
+    /* Do bits that load the predraw buffer.  Called to set preDrawContainer */
 
     struct bbiFile *bbiFile;	/* Associated bbiFile for bigWig or bigBed. */
 
@@ -629,6 +633,12 @@ void bedLoadItemByQuery(struct track *tg, char *table,
 
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader);
 /* Generic tg->item loader. */
+
+void simpleBedNextPrevEdge(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w,
+			   int h, boolean next);
+/* Like linkedFeaturesNextPrevItem, but for simple bed which has no block structure so
+ * this simply zaps us to the right/left edge of the feature.  Arrows have already been
+ * drawn; here we figure out coords and draw a mapBox. */
 
 void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader)(char **row),
 				   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
@@ -1170,7 +1180,7 @@ void linkedFeaturesSeriesDrawAt(struct track *tg, void *item,
 	MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a linked features series item at position. */
 
-#define NEXT_ITEM_ARROW_BUFFER 5
+#define NEXT_ITEM_ARROW_BUFFER 1
 /* Space around "next item" arrow (in pixels). */
 
 void addWikiTrack(struct track **pGroupList);

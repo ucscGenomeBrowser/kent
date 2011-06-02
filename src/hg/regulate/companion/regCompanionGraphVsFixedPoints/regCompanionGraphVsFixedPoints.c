@@ -54,17 +54,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct bed *nextChromDifferent(struct bed *bedList)
-/* Return next bed in list that is from a different chrom than the start of the list. */
-{
-char *firstChrom = bedList->chrom;
-struct bed *bed;
-for (bed = bedList->next; bed != NULL; bed = bed->next)
-    if (!sameString(firstChrom, bed->chrom))
-        break;
-return bed;
-}
-
 struct rcgInputInfo
 /* Input list to regCompanionGraphVsFixedPoints */
     {
@@ -149,7 +138,7 @@ for (inTab = inTabList; inTab != NULL; inTab = inTab->next, ++inIx)
     for (startChrom = bedList; startChrom != NULL; startChrom = endChrom)
 	{
 	/* Figure out end condition. */
-	endChrom = nextChromDifferent(startChrom);
+	endChrom = bedListNextDifferentChrom(startChrom);
 	char *chrom = startChrom->chrom;
 
 	if (bigWigValsOnChromFetchData(chromVals, chrom, bbi))

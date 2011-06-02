@@ -100,7 +100,7 @@ export AUTH_USER="yourUserName"
 #	Note the explicit arguments for mirroring in an attempt to work-around
 #	the UCSC permissions on directories and files which are not
 #	consistent for 'group' rwx permissions.
-export RSYNC="rsync -rltgoDz"
+export RSYNC="rsync -rltgoD"
 #	rsync location at UCSC to fetch files
 export HGDOWNLOAD="rsync://hgdownload.cse.ucsc.edu"
 #

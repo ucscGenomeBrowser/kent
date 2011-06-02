@@ -1,0 +1,439 @@
+metaObject wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya
+objType table
+cell GM12878
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya.tagAlign.gz
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya
+view Alignments
+
+metaObject wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya
+objType table
+cell H1-hESC
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya.tagAlign.gz
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya
+view Alignments
+
+metaObject wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya
+objType table
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya.tagAlign.gz
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya
+view Alignments
+
+metaObject wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya
+objType table
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya.tagAlign.gz
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya
+view Alignments
+
+metaObject wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
+objType table
+cell GM12878
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
+view AllRawSignal
+
+metaObject wgEncodeGisRnaSeqAllRawSignalRep1H1hescCellLongpolya
+objType table
+cell H1-hESC
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqAllRawSignalRep1H1hescCellLongpolya
+view AllRawSignal
+
+metaObject wgEncodeGisRnaSeqAllRawSignalRep1K562CytosolLongpolya
+objType table
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqAllRawSignalRep1K562CytosolLongpolya
+view AllRawSignal
+
+metaObject wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
+objType table
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
+view AllRawSignal
+
+metaObject wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
+objType table
+cell GM12878
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
+view MinusRawSignal
+
+metaObject wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCellLongpolya
+objType table
+cell H1-hESC
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCellLongpolya
+view MinusRawSignal
+
+metaObject wgEncodeGisRnaSeqMinusRawSignalRep1K562CytosolLongpolya
+objType table
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqMinusRawSignalRep1K562CytosolLongpolya
+view MinusRawSignal
+
+metaObject wgEncodeGisRnaSeqMinusRawSignalRep2K562CytosolLongpolya
+objType table
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqMinusRawSignalRep2K562CytosolLongpolya
+view MinusRawSignal
+
+metaObject wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
+objType table
+cell GM12878
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
+view PlusRawSignal
+
+metaObject wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCellLongpolya
+objType table
+cell H1-hESC
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCellLongpolya
+view PlusRawSignal
+
+metaObject wgEncodeGisRnaSeqPlusRawSignalRep1K562CytosolLongpolya
+objType table
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqPlusRawSignalRep1K562CytosolLongpolya
+view PlusRawSignal
+
+metaObject wgEncodeGisRnaSeqPlusRawSignalRep2K562CytosolLongpolya
+objType table
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqPlusRawSignalRep2K562CytosolLongpolya
+view PlusRawSignal
+
+metaObject wgEncodeGisRnaSeqRawData2Rep1Gm12878CytosolLongpolya
+objType file
+cell GM12878
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqRawData2Rep1Gm12878CytosolLongpolya.csqual.gz
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+view RawData2
+
+metaObject wgEncodeGisRnaSeqRawData2Rep2K562CytosolLongpolya
+objType file
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqRawData2Rep2K562CytosolLongpolya.csqual.gz
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 758
+view RawData2
+
+metaObject wgEncodeGisRnaSeqRawData3Rep1H1hescCellLongpolya
+objType file
+cell H1-hESC
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqRawData3Rep1H1hescCellLongpolya.fastq.gz
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+view RawData3
+
+metaObject wgEncodeGisRnaSeqRawData3Rep1K562CytosolLongpolya
+objType file
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqRawData3Rep1K562CytosolLongpolya.fastq.gz
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+view RawData3
+
+metaObject wgEncodeGisRnaSeqRawDataRep1Gm12878CytosolLongpolya
+objType file
+cell GM12878
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqRawDataRep1Gm12878CytosolLongpolya.csfasta.gz
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+view RawData
+
+metaObject wgEncodeGisRnaSeqRawDataRep2K562CytosolLongpolya
+objType file
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqRawDataRep2K562CytosolLongpolya.csfasta.gz
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 758
+view RawData
+
+metaObject wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya
+objType table
+cell H1-hESC
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya.pairedTagAlign.gz
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya
+view SplitAlign
+
+metaObject wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya
+objType table
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya.pairedTagAlign.gz
+grant Gingeras
+lab GIS
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 758
+tableName wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya
+view SplitAlign
+
+# MAGIC: 1080846082

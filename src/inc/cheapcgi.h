@@ -17,25 +17,27 @@
 #include "hash.h"
 #endif
 
-#define COLOR_BG_DEFAULT        "#FFFEE8"
-#define COLOR_BG_ALTDEFAULT     "#FFF9D2"
-#define COLOR_BG_DEFAULT_DARKER "#FCECC0"
-#define COLOR_BG_GHOST          "#EEEEEE"
-#define COLOR_BG_PALE           "#F8F8F8"
-#define COLOR_BG_HEADER_LTBLUE  "#D9E4F8"
-#define COLOR_DARKGREEN         "#008800"
-#define COLOR_LTGREEN           "#CCFFCC"
-#define COLOR_DARKBLUE          "#000088"
-#define COLOR_BLUE_BUTTON       "#91B3E6"
-#define COLOR_DARKGREY          "#666666"
-#define COLOR_LTGREY            "#CCCCCC"
-#define COLOR_YELLOW            "#FFFF00"
-#define COLOR_LTYELLOW          "#FFF380"
-#define COLOR_WHITE             "#FFFFFF"
-#define COLOR_RED               "#AA0000"
-#define COLOR_TRACKLIST_LEVEL1  COLOR_BG_DEFAULT
-#define COLOR_TRACKLIST_LEVEL2  COLOR_BG_ALTDEFAULT
-#define COLOR_TRACKLIST_LEVEL3  COLOR_BG_DEFAULT_DARKER
+#define COLOR_BG_DEFAULT         "#FFFEE8"
+#define COLOR_BG_ALTDEFAULT      "#FFF9D2"
+#define COLOR_BG_DEFAULT_DARKER  "#FCECC0"
+#define COLOR_BG_DEFAULT_DARKEST "#EED5B7"
+#define COLOR_BG_GHOST           "#EEEEEE"
+#define COLOR_BG_PALE            "#F8F8F8"
+#define COLOR_BG_HEADER_LTBLUE   "#D9E4F8"
+#define COLOR_DARKGREEN          "#008800"
+#define COLOR_LTGREEN            "#CCFFCC"
+#define COLOR_DARKBLUE           "#000088"
+#define COLOR_BLUE_BUTTON        "#91B3E6"
+#define COLOR_DARKGREY           "#666666"
+#define COLOR_LTGREY             "#CCCCCC"
+#define COLOR_YELLOW             "#FFFF00"
+#define COLOR_LTYELLOW           "#FFF380"
+#define COLOR_WHITE              "#FFFFFF"
+#define COLOR_RED                "#AA0000"
+#define COLOR_TRACKLIST_LEVEL1   COLOR_BG_DEFAULT
+#define COLOR_TRACKLIST_LEVEL2   COLOR_BG_ALTDEFAULT
+#define COLOR_TRACKLIST_LEVEL3   COLOR_BG_DEFAULT_DARKER
+#define COLOR_TRACKLIST_LEVEL4   COLOR_BG_DEFAULT_DARKEST
 
 void initSigHandlers(boolean dumpStack);
 /* set handler for various terminal signals for logging purposes.
@@ -75,10 +77,14 @@ char *cgiScriptName();
 /* Return name of script so libs can do context-sensitive stuff. */
 
 char *cgiServerName();
-/* Return name of server */
+/* Return name of server, better to use cgiServerNamePort() for
+   actual URL construction */
 
 char *cgiServerPort();
 /* Return port number of server */
+
+char *cgiServerNamePort();
+/* Return name of server with port if different than 80 */
 
 char *cgiRemoteAddr();
 /* Return IP address of client (or "unknown"). */
@@ -465,6 +471,9 @@ void logCgiToStderr();
 void cgiResetState();
 /* This is for reloading CGI settings multiple times in the same program
  * execution.  No effect if state has not yet been initialized. */
+
+void cgiDown(float lines);
+// Drop down a certain number of lines (may be fractional)
 
 char *commonCssStyles();
 /* Returns a string of common CSS styles */

@@ -19,6 +19,13 @@ wgEncodeUwTfbs.ra \
 wgEncodeOpenChromChip.ra \
 wgEncodeOpenChromFaire.ra \
 wgEncodeSunyAlbanyGeneSt.ra \
+wgEncodeOpenChromDnase.ra\
+wgEncodeBuOrchid.ra \
+wgEncodeOpenChromSynth.ra \
+wgEncodeReg.ra \
+wgEncodeSydhHistone.ra \
+wgEncodeUchicagoTfbs.ra \
+
 
 include ../../../../makefile.metaDb
 

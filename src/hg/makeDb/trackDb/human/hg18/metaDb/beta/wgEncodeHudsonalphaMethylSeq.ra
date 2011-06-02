@@ -1,0 +1,1612 @@
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Gm12878Hpa
+objType file
+cell GM12878
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1Gm12878Hpa.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Gm12878Hpa
+project wgEncode
+replicate 1
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 387
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Gm12878Msp
+objType file
+cell GM12878
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1Gm12878Msp.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Gm12878Msp
+project wgEncode
+replicate 1
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 387
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Gm12891Hpa
+objType file
+cell GM12891
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-25
+dateUnrestricted 2010-08-25
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1Gm12891Hpa.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Gm12891Hpa
+project wgEncode
+replicate 1
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 794
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Gm12891Msp
+objType file
+cell GM12891
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-25
+dateUnrestricted 2010-08-25
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1Gm12891Msp.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Gm12891Msp
+project wgEncode
+replicate 1
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 794
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Gm12892Hpa
+objType file
+cell GM12892
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-30
+dateUnrestricted 2010-08-29
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1Gm12892Hpa.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Gm12892Hpa
+project wgEncode
+replicate 1
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 796
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Gm12892Msp
+objType file
+cell GM12892
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-30
+dateUnrestricted 2010-08-29
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1Gm12892Msp.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Gm12892Msp
+project wgEncode
+replicate 1
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 796
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1H1hescHpa
+objType file
+cell H1-hESC
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1H1hescHpa.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1H1hescHpa
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+softwareVersion SL605
+subId 887
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1H1hescMsp
+objType file
+cell H1-hESC
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1H1hescMsp.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1H1hescMsp
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme msp
+softwareVersion SL605
+subId 887
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Helas3HpaPcr2x
+objType file
+cell HeLa-S3
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1Helas3HpaPcr2x.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL577
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Helas3HpaPcr2x
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 905
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Helas3MspPcr2x
+objType file
+cell HeLa-S3
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1Helas3MspPcr2x.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL574
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Helas3MspPcr2x
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme msp
+subId 905
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Hepg2HpaPcr2x
+objType file
+cell HepG2
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1Hepg2HpaPcr2x.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL578
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Hepg2HpaPcr2x
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 905
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Hepg2MspPcr2x
+objType file
+cell HepG2
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1Hepg2MspPcr2x.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL575
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Hepg2MspPcr2x
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme msp
+subId 905
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1K562Hpa
+objType file
+cell K562
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1K562Hpa.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1K562Hpa
+project wgEncode
+replicate 1
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 387
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1K562Msp
+objType file
+cell K562
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep1K562Msp.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1K562Msp
+project wgEncode
+replicate 1
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 387
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Gm12878Hpa
+objType file
+cell GM12878
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2Gm12878Hpa.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Gm12878Hpa
+project wgEncode
+replicate 2
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 387
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Gm12878Msp
+objType file
+cell GM12878
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2Gm12878Msp.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Gm12878Msp
+project wgEncode
+replicate 2
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 387
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Gm12891Hpa
+objType file
+cell GM12891
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-25
+dateUnrestricted 2010-08-25
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2Gm12891Hpa.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Gm12891Hpa
+project wgEncode
+replicate 2
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 794
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Gm12891Msp
+objType file
+cell GM12891
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-25
+dateUnrestricted 2010-08-25
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2Gm12891Msp.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Gm12891Msp
+project wgEncode
+replicate 2
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 794
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Gm12892Hpa
+objType file
+cell GM12892
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-30
+dateUnrestricted 2010-08-29
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2Gm12892Hpa.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Gm12892Hpa
+project wgEncode
+replicate 2
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 796
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Gm12892Msp
+objType file
+cell GM12892
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-30
+dateUnrestricted 2010-08-29
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2Gm12892Msp.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Gm12892Msp
+project wgEncode
+replicate 2
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 796
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2H1hescHpa
+objType file
+cell H1-hESC
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2H1hescHpa.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2H1hescHpa
+project wgEncode
+protocol PCR1x
+replicate 2
+restrictionEnzyme hpa
+softwareVersion SL659
+subId 887
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2H1hescMsp
+objType file
+cell H1-hESC
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2H1hescMsp.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2H1hescMsp
+project wgEncode
+protocol PCR1x
+replicate 2
+restrictionEnzyme msp
+softwareVersion SL659
+subId 887
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Helas3HpaPcr2x
+objType file
+cell HeLa-S3
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2Helas3HpaPcr2x.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL603
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Helas3HpaPcr2x
+project wgEncode
+protocol PCR2x
+replicate 2
+restrictionEnzyme hpa
+subId 905
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Helas3MspPcr2x
+objType file
+cell HeLa-S3
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2Helas3MspPcr2x.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL602
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Helas3MspPcr2x
+project wgEncode
+protocol PCR2x
+replicate 2
+restrictionEnzyme msp
+subId 905
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Hepg2HpaPcr2x
+objType file
+cell HepG2
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2Hepg2HpaPcr2x.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL579
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Hepg2HpaPcr2x
+project wgEncode
+protocol PCR2x
+replicate 2
+restrictionEnzyme hpa
+subId 905
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Hepg2MspPcr2x
+objType file
+cell HepG2
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2Hepg2MspPcr2x.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL576
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Hepg2MspPcr2x
+project wgEncode
+protocol PCR2x
+replicate 2
+restrictionEnzyme msp
+subId 905
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2K562Hpa
+objType file
+cell K562
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2K562Hpa.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2K562Hpa
+project wgEncode
+replicate 2
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 387
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2K562Msp
+objType file
+cell K562
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqAlignmentsRep2K562Msp.tagAlign.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2K562Msp
+project wgEncode
+replicate 2
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 387
+view Alignments
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Gm12878Hpa
+objType file
+cell GM12878
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1Gm12878Hpa.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Gm12878Hpa
+project wgEncode
+replicate 1
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 387
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Gm12878Msp
+objType file
+cell GM12878
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1Gm12878Msp.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Gm12878Msp
+project wgEncode
+replicate 1
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 387
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Gm12891Hpa
+objType file
+cell GM12891
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-25
+dateUnrestricted 2010-08-25
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1Gm12891Hpa.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Gm12891Hpa
+project wgEncode
+replicate 1
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 794
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Gm12891Msp
+objType file
+cell GM12891
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-25
+dateUnrestricted 2010-08-25
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1Gm12891Msp.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Gm12891Msp
+project wgEncode
+replicate 1
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 794
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Gm12892Hpa
+objType file
+cell GM12892
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-30
+dateUnrestricted 2010-08-29
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1Gm12892Hpa.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Gm12892Hpa
+project wgEncode
+replicate 1
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 796
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Gm12892Msp
+objType file
+cell GM12892
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-30
+dateUnrestricted 2010-08-29
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1Gm12892Msp.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Gm12892Msp
+project wgEncode
+replicate 1
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 796
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1H1hescHpa
+objType file
+cell H1-hESC
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1H1hescHpa.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1H1hescHpa
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+softwareVersion SL605
+subId 887
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1H1hescMsp
+objType file
+cell H1-hESC
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1H1hescMsp.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1H1hescMsp
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme msp
+softwareVersion SL605
+subId 887
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Helas3HpaPcr2x
+objType file
+cell HeLa-S3
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1Helas3HpaPcr2x.fastq.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL577
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Helas3HpaPcr2x
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 905
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Helas3MspPcr2x
+objType file
+cell HeLa-S3
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1Helas3MspPcr2x.fastq.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL574
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Helas3MspPcr2x
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme msp
+subId 905
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Hepg2HpaPcr2x
+objType file
+cell HepG2
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1Hepg2HpaPcr2x.fastq.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL578
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Hepg2HpaPcr2x
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 905
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Hepg2MspPcr2x
+objType file
+cell HepG2
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1Hepg2MspPcr2x.fastq.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL575
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1Hepg2MspPcr2x
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme msp
+subId 905
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1K562Hpa
+objType file
+cell K562
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1K562Hpa.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1K562Hpa
+project wgEncode
+replicate 1
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 387
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1K562Msp
+objType file
+cell K562
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep1K562Msp.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep1K562Msp
+project wgEncode
+replicate 1
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 387
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Gm12878Hpa
+objType file
+cell GM12878
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2Gm12878Hpa.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Gm12878Hpa
+project wgEncode
+replicate 2
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 387
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Gm12878Msp
+objType file
+cell GM12878
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2Gm12878Msp.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Gm12878Msp
+project wgEncode
+replicate 2
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 387
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Gm12891Hpa
+objType file
+cell GM12891
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-25
+dateUnrestricted 2010-08-25
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2Gm12891Hpa.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Gm12891Hpa
+project wgEncode
+replicate 2
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 794
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Gm12891Msp
+objType file
+cell GM12891
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-25
+dateUnrestricted 2010-08-25
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2Gm12891Msp.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Gm12891Msp
+project wgEncode
+replicate 2
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 794
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Gm12892Hpa
+objType file
+cell GM12892
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-30
+dateUnrestricted 2010-08-29
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2Gm12892Hpa.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Gm12892Hpa
+project wgEncode
+replicate 2
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 796
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Gm12892Msp
+objType file
+cell GM12892
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-30
+dateUnrestricted 2010-08-29
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2Gm12892Msp.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Gm12892Msp
+project wgEncode
+replicate 2
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 796
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2H1hescHpa
+objType file
+cell H1-hESC
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2H1hescHpa.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2H1hescHpa
+project wgEncode
+protocol PCR1x
+replicate 2
+restrictionEnzyme hpa
+softwareVersion SL659
+subId 887
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2H1hescMsp
+objType file
+cell H1-hESC
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2H1hescMsp.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2H1hescMsp
+project wgEncode
+protocol PCR1x
+replicate 2
+restrictionEnzyme msp
+softwareVersion SL659
+subId 887
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Helas3HpaPcr2x
+objType file
+cell HeLa-S3
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2Helas3HpaPcr2x.fastq.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL603
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Helas3HpaPcr2x
+project wgEncode
+protocol PCR2x
+replicate 2
+restrictionEnzyme hpa
+subId 905
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Helas3MspPcr2x
+objType file
+cell HeLa-S3
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2Helas3MspPcr2x.fastq.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL602
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Helas3MspPcr2x
+project wgEncode
+protocol PCR2x
+replicate 2
+restrictionEnzyme msp
+subId 905
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Hepg2HpaPcr2x
+objType file
+cell HepG2
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2Hepg2HpaPcr2x.fastq.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL579
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Hepg2HpaPcr2x
+project wgEncode
+protocol PCR2x
+replicate 2
+restrictionEnzyme hpa
+subId 905
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Hepg2MspPcr2x
+objType file
+cell HepG2
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2Hepg2MspPcr2x.fastq.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL576
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2Hepg2MspPcr2x
+project wgEncode
+protocol PCR2x
+replicate 2
+restrictionEnzyme msp
+subId 905
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2K562Hpa
+objType file
+cell K562
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2K562Hpa.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2K562Hpa
+project wgEncode
+replicate 2
+restrictionEnzyme hpa
+softwareVersion myerslab
+subId 387
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2K562Msp
+objType file
+cell K562
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqRawDataRep2K562Msp.fastq.gz
+grant Myers
+lab HudsonAlpha
+parentTable wgEncodeHudsonalphaMethylSeqRawSignalRep2K562Msp
+project wgEncode
+replicate 2
+restrictionEnzyme msp
+softwareVersion myerslab
+subId 387
+view RawData
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02es
+objType table
+cell BG02ES
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02es.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02es
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd
+objType table
+cell BG02ES-EBD
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878
+objType table
+cell GM12878
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+softwareVersion myerslab
+subId 387
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12891
+objType table
+cell GM12891
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-25
+dateUnrestricted 2010-08-25
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12891.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+softwareVersion myerslab
+subId 794
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12891
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12892
+objType table
+cell GM12892
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-30
+dateUnrestricted 2010-08-29
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12892.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+softwareVersion myerslab
+subId 796
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12892
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc
+objType table
+cell H1-hESC
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR1x
+replicate 1
+restrictionEnzyme None
+softwareVersion SL605
+subId 887
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9es
+objType table
+cell H9ES
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9es.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9es
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg
+objType table
+cell H9ES-AFP-
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos
+objType table
+cell H9ES-AFP+
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm
+objType table
+cell H9ES-CM
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese
+objType table
+cell H9ES-E
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb
+objType table
+cell H9ES-EB
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd
+objType table
+cell H9ES-EBD
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Hal
+objType table
+cell HAL
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Hal.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Hal
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116
+objType table
+cell HCT-116
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x
+objType table
+cell HeLa-S3
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x.bed9.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL577
+project wgEncode
+protocol PCR1x
+replicate 1
+restrictionEnzyme None
+softwareVersion MACS
+subId 905
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x
+objType table
+cell HepG2
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x.bed9.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL578
+project wgEncode
+protocol PCR1x
+replicate 1
+restrictionEnzyme None
+softwareVersion MACS
+subId 905
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w
+objType table
+cell HFL11W
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w
+objType table
+cell HFL24W
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1K562
+objType table
+cell K562
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1K562.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+softwareVersion myerslab
+subId 387
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1K562
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2Bg02esebd
+objType table
+cell BG02ES-EBD
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep2Bg02esebd.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 2
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep2Bg02esebd
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12878
+objType table
+cell GM12878
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12878.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 2
+softwareVersion myerslab
+subId 387
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12878
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12891
+objType table
+cell GM12891
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-25
+dateUnrestricted 2010-08-25
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12891.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 2
+softwareVersion myerslab
+subId 794
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12891
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12892
+objType table
+cell GM12892
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-30
+dateUnrestricted 2010-08-29
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12892.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 2
+softwareVersion myerslab
+subId 796
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12892
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2H1hesc
+objType table
+cell H1-hESC
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep2H1hesc.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR1x
+replicate 2
+restrictionEnzyme None
+softwareVersion SL659
+subId 887
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep2H1hesc
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116
+objType table
+cell HCT-116
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 2
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x
+objType table
+cell HeLa-S3
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x.bed9.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL603
+project wgEncode
+protocol PCR1x
+replicate 2
+restrictionEnzyme None
+softwareVersion MACS
+subId 905
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x
+objType table
+cell HepG2
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x.bed9.gz
+grant Myers
+lab HudsonAlpha
+labVersion SL579
+project wgEncode
+protocol PCR1x
+replicate 2
+restrictionEnzyme None
+softwareVersion MACS
+subId 905
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2K562
+objType table
+cell K562
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-15
+dateUnrestricted 2010-04-15
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep2K562.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 2
+softwareVersion myerslab
+subId 387
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep2K562
+view Regions
+
+# MAGIC: 1841333711

@@ -386,6 +386,59 @@ longLabel Tajima's D (from Human May 2004 assembly)
     track tajdXd override
     longLabel  Tajima's D from Chinese Descent (from Human May 2004 assembly)
 
+track ucscRetroAli1
+shortLabel Retroposed Genes
+longLabel Retroposed GenesV1, Including Pseudogenes - November 2010 
+group genes
+type psl
+priority 37.5
+color 20,0,250
+visibility hide
+nextItemButton on
+ucscRetroInfo ucscRetroInfo1
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds
+baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+searchName ucscRetroInfoRefSeq1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes - November 2010
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo1
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo1.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo1
+xrefQuery select ucscRetroInfo1.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo1
+xrefQuery select ucscRetroInfo1.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
 track knownGeneOld3
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
@@ -1424,23 +1477,37 @@ type wig 0 1000
     longLabel Affymetrix HepG2 Minus Strand Short RNA (Whole Cell) Signal
     priority 4
 
-track ceuBcellRNASeqBW
-shortLabel BCell Coverage
-longLabel B Cell Transcriptome (RNA-Seq)
+track ceuBcellComposite
+compositeTrack on
+shortLabel B-Cell Transcriptome
+longLabel B-Cell Transcriptome (RNA-Seq)
 group expression
+visibility hide
+noInherit on
 priority 301
-visibility hide
-type bigWig 0 716249
 autoScale on
-maxHeightPixels 100:50:20
+html ceuBcellRNASeq
+type bed 3
 
-track ceuBcellRNASeq
-shortLabel BCell Junctions
-longLabel B Cell Junctions
-group expression
-priority 301.1
-visibility hide
-type bed 12
+    track ceuBcellRNASeqBW
+    parent ceuBcellComposite
+    shortLabel B-Cell Coverage
+    longLabel B-Cell RNA-Seq Coverage
+    priority 1
+    type bigWig 0 716249
+    configurable on
+    autoScale on
+    html ceuBcellRNASeq
+    maxHeightPixels 200:100:20
+
+    track ceuBcellRNASeq
+    parent ceuBcellComposite
+    shortLabel B-Cell Junctions
+    longLabel B-Cell RNA-Seq Junctions
+    configurable on
+    html ceuBcellRNASeq
+    priority 2
+    type bed 12
 
 track stanfordNRSFSites
 shortLabel Stanf NRSF Sites
@@ -3834,6 +3901,17 @@ scoreFilterByRange on
 itemRgb on
 color 0,0,0
 priority 26
+
+track evoCpg
+shortLabel Evo Cpg
+longLabel Weizmann Evolutionary CpG Islands
+visibility hide
+group compGeno
+type bed 9 .
+scoreFilterByRange on
+itemRgb on
+color 0,0,0
+priority 111
 
 track testChainHg19Overlap500
 shortLabel hg19 liftOver 500

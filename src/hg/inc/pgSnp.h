@@ -7,11 +7,10 @@
 
 #include "jksql.h"
 #include "trackDb.h"
-#define PGSNP_NUM_COLS 8
-
-#ifndef BED_H
 #include "bed.h"
-#endif
+#include "vcf.h"
+
+#define PGSNP_NUM_COLS 8
 
 struct pgSnp
 /* personal genome SNP */
@@ -123,6 +122,10 @@ struct pgSnp *pgSnpLoadNoBin (char **row);
 struct pgSnp *pgSnpLineFileLoad(char **row, struct lineFile *lf);
 /* Load pgSnp from a lineFile line, with error checking. */
 /* Requires comma separated zeroes for frequency and scores. */
+
+struct pgSnp *pgSnpFromVcfRecord(struct vcfRecord *rec);
+/* Convert VCF rec to pgSnp; don't free rec->file (vcfFile) until
+ * you're done with pgSnp because pgSnp points to rec->chrom. */
 
 #endif /* PGSNP_H */
 

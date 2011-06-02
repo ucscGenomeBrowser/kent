@@ -15,7 +15,6 @@ dimensions dimensionX=cellType dimensionY=rep
 sortOrder cellType=+ view=+ rep=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subtracks
-release alpha
 priority 0
 type bed 3
 noInherit on
@@ -25,7 +24,6 @@ wgEncode 1
     shortLabel Plus Raw Signal
     view 1-PlusRawSignal
     visibility dense
-    release alpha
     subTrack wgEncodeGisRnaSeq
     maxHeightPixels 100:24:16
     windowingFunction maximum
@@ -34,7 +32,6 @@ wgEncode 1
     viewLimits 0:200
 
         track wgEncodeGisRnaSeqPlusRawSignalRep1K562CytosolLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal on
         longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ +S1
@@ -47,7 +44,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeGisRnaSeqPlusRawSignalRep2K562CytosolLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal off
         longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ +S2
@@ -60,7 +56,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal on
         longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
         shortLabel GM12 cyto A+ +S1
@@ -73,7 +68,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCellLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal on
         longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cell)
         shortLabel hESC cell A+ +S1
@@ -89,7 +83,6 @@ wgEncode 1
     shortLabel Minus Raw Signal
     view 2-MinusRawSignal
     visibility dense
-    release alpha
         subTrack wgEncodeGisRnaSeq
     maxHeightPixels 100:24:16
     windowingFunction maximum
@@ -98,7 +91,6 @@ wgEncode 1
     viewLimits 0:200
 
         track wgEncodeGisRnaSeqMinusRawSignalRep1K562CytosolLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal on
         longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ -S1
@@ -111,7 +103,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeGisRnaSeqMinusRawSignalRep2K562CytosolLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal off
         longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ -S2
@@ -124,7 +115,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal on
         longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
         shortLabel GM12 cyto A+ -S1
@@ -137,7 +127,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCellLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal on
         longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cell)
         shortLabel hESC cell A+ -S1
@@ -153,7 +142,6 @@ wgEncode 1
     shortLabel All Raw Signal
     view 3-AllRawSignal
     visibility hide
-    release alpha
         subTrack wgEncodeGisRnaSeq
     maxHeightPixels 100:24:16
     windowingFunction maximum
@@ -162,7 +150,6 @@ wgEncode 1
     viewLimits 0:200
 
         track wgEncodeGisRnaSeqAllRawSignalRep1K562CytosolLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
         longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ AS1
@@ -175,7 +162,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
         longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ AS2
@@ -188,7 +174,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
         longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
         shortLabel GM12 cyto A+ AS1
@@ -201,7 +186,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeGisRnaSeqAllRawSignalRep1H1hescCellLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
         longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cell)
         shortLabel hESC cell A+ AS1
@@ -217,11 +201,9 @@ wgEncode 1
     shortLabel Alignments
     view 4-Alignments
     visibility hide
-    release alpha
         subTrack wgEncodeGisRnaSeq
 
         track wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel K562 cyto A+ AL1
         longLabel ENCODE GIS RNA-seq Alignments Rep 1 (PolyA+ RNA in K562 cytosol)
@@ -236,7 +218,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel K562 cyto A+ AL2
         longLabel ENCODE GIS RNA-seq Alignments Rep 2 (PolyA+ RNA in K562 cytosol)
@@ -251,7 +232,6 @@ wgEncode 1
         showDiffBasesMaxZoom 10000.0
 
         track wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel GM12 cyto A+ AL1
         longLabel ENCODE GIS RNA-seq Alignments Rep 1 (PolyA+ RNA in GM12878 cytosol)
@@ -266,7 +246,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel hESC cell A+ AL1
         longLabel ENCODE GIS RNA-seq Alignments Rep 1 (PolyA+ RNA in H1-hESC cell)
@@ -284,11 +263,9 @@ wgEncode 1
     shortLabel Split Alignments
     view 5-SplitAlign
     visibility hide
-    release alpha
         subTrack wgEncodeGisRnaSeq
 
         track wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView5-SplitAlign off
         shortLabel K562 cyto A+ SA1
         longLabel ENCODE GIS RNA-seq Split Alignments Rep 1 (PolyA+ RNA in K562 cytosol)
@@ -305,7 +282,6 @@ wgEncode 1
         type bed 6
 
         track wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya
-        release alpha
         subTrack wgEncodeGisRnaSeqView5-SplitAlign off
         shortLabel hESC cell A+ SA1
         longLabel ENCODE GIS RNA-seq Split Alignments Rep 1 (PolyA+ RNA in H1-hESC cell)

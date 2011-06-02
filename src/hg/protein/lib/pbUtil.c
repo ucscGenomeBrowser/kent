@@ -43,7 +43,7 @@ char query[56];
 struct sqlResult *sr;
 char **row;
 
-for (i=0; i<256; i++) 
+for (i=0; i<256; i++)
     {
     aa_attrib[i] = 0;
     aa_hydro[i] = 0;
@@ -111,7 +111,7 @@ safef(query, sizeof(query), "select * from %s.pbResAvgStd", database);
 iaCnt = 0;
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-    
+
 while (row != NULL)
     {
     for (j=0; j<20; j++)
@@ -149,28 +149,28 @@ char *protDbDate;
 
 conn= hAllocConn(database);
 
-/* Figure out which is the appropriate DB to use, 
+/* Figure out which is the appropriate DB to use,
    either spXXXXXX (for PB supported GB) so that we can handle TrEMBL-NEW entries
-   or swissProt (to support global proteome 
+   or swissProt (to support global proteome
 
    The following convention needs to be followed when building protein DBs:
-   
+
        spXXXXXX ---> proteinsXXXXXX
 
        swissProt points to the latest spXXXXXX
        proteins  points to the latest proteinsXXXXXX
-       
+
 */
 
-if (strstr(protDbName, "proteins") == NULL) 
+if (strstr(protDbName, "proteins") == NULL)
     {
-    safef(query, sizeof(query), "select val from %s.protein where acc='%s';", 
+    safef(query, sizeof(query), "select val from %s.protein where acc='%s';",
     	  UNIPROT_DB_NAME, pepAccession);
     }
 else
     {
     protDbDate = strstr(protDbName, "proteins") + strlen("proteins");
-    safef(query, sizeof(query), 
+    safef(query, sizeof(query),
     "select val from sp%s.protein where acc='%s';", protDbDate, pepAccession);
     }
 
@@ -193,7 +193,7 @@ else
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-	  
+
 return(seq);
 }
 
@@ -272,7 +272,7 @@ row = sqlNextRow(sr);
 
 if (row == NULL)
     {
-    errAbort("<BLOCKQUOTE>Sorry, cannot display Proteome Browser for %s. <BR>No entry is found in kgProtMap table for this protein.</BLOCKQUOTE>", 
+    errAbort("<BLOCKQUOTE>Sorry, cannot display Proteome Browser for %s. <BR>No entry is found in kgProtMap table for this protein.</BLOCKQUOTE>",
 	     proteinID);
     }
 
@@ -302,7 +302,7 @@ while (row != NULL)
     tStartsStr      = cloneString(row[11]);
     strand          = cloneString(row[12]);
 
-    if (!((strand[0] == '+') || (strand[0] == '-')) || (strand[1] != '\0') ) 
+    if (!((strand[0] == '+') || (strand[0] == '-')) || (strand[1] != '\0') )
    	errAbort("wrong strand '%s' data encountered in getExonInfo(), aborting ...", strand);
 
     alignDiff = abs(atoi(tStartStr) - hggStart) + abs(atoi(tEndStr) - prevGBEndPos);
@@ -390,7 +390,7 @@ void printFASTA(char *proteinID, char *aa)
 {
 int i, l;
 char *chp;
-	
+
 l =strlen(aa);
 
 hPrintf("<B>Total amino acids:</B> %d\n", strlen(aa));
@@ -406,7 +406,7 @@ chp = aa;
 for (i=0; i<l; i++)
     {
     if ((i%50) == 0) hPrintf("\n");
-	
+
     hPrintf("%c", *chp);
     chp++;
     }
@@ -424,7 +424,7 @@ int il;
 int istart, iend;
 int ilast;
 char *chp;
-	
+
 l =strlen(aa);
 
 ilast = 0;
@@ -439,7 +439,7 @@ if (exonNum == -1)
     for (i=0; i<l; i++)
 	{
 	if ((i%50) == 0) hPrintf("\n");
-	
+
 	hPrintf("%c", *chp);
 	chp++;
 	}
@@ -451,7 +451,7 @@ il = 0;
 if (exonNum == -1)
     {
     hPrintf("Total amino acids: %d\n", strlen(aa));
-   
+
     istart = 0;
     iend   = l-1;
     j = 0;
@@ -462,7 +462,7 @@ else
     hPrintf("AA End position:  %4d\n",  	   aaEnd[exonNum-1]+1);
     hPrintf("AA Length:        %4d<br>\n",  aaEnd[exonNum-1]-aaStart[exonNum-1]+1);
 
-    istart = aaStart[exonNum-1]; 
+    istart = aaStart[exonNum-1];
     iend   = aaEnd[exonNum-1];
     j      = exonNum-1;
     }
@@ -471,7 +471,7 @@ for (i=istart; i<=iend; i++)
     if (((i%50) == 0) && (exonNum == -1))
 	{
 	hPrintf("\n");
-	hPrintf("<font color=black>");
+	hPrintf("<span style='color:black;'>");
 	for (jj=0; jj<5; jj++)
 	    {
 	    if ((i+(jj+1)*10) <= (iend+1))
@@ -480,7 +480,7 @@ for (i=istart; i<=iend; i++)
 		}
 	    }
 	hPrintf("<br>");
-	hPrintf("</font>");
+	hPrintf("</span>");
 	ilast = ilast + 50;
 	}
 
@@ -488,7 +488,7 @@ for (i=istart; i<=iend; i++)
 	{
 	j++;
 	k=j%2;
-	if (k) 
+	if (k)
 	    {
 	    hPrintf("<font color = blue>");
 	    }
@@ -501,7 +501,7 @@ for (i=istart; i<=iend; i++)
     hPrintf("%c", aa[i]);
     if (i == aaEnd[j-1]) hPrintf("</font>");
     il++;
-    if (il == 50) 
+    if (il == 50)
 	{
 	il = 0;
 	}
@@ -533,13 +533,13 @@ hPrintf("\n<LI>Gene Sorter - ");
 if (mrnaID != NULL)
     {
     /* hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&hgsid=%s\"", mrnaID, hgsid); */
-    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&db=%s&org=%s%s\"", 
+    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&db=%s&org=%s%s\"",
     	    mrnaID, database, organism, hgsidStr);
     hPrintf(" TARGET=_BLANK>%s</A>&nbsp</LI>\n", mrnaID);
     }
 else
     {
-    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&db=%s&org=%s%s\"", 
+    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&db=%s&org=%s%s\"",
     	    spAcc, database, organism, hgsidStr);
     hPrintf(" TARGET=_BLANK>%s</A>&nbsp</LI>\n", spAcc);
     }
@@ -562,7 +562,7 @@ hggEnd   = sqlGetField(database, "knownGene", "txEnd", cond_str);
 if (mrnaID != NULL)
     {
     hPrintf("\n<LI>Gene Details Page - ");
-    hPrintf("<A HREF=\"../cgi-bin/hgGene?db=%s&hgg_gene=%s&hgg_prot=%s&hgg_chrom=%s&hgg_start=%s&hgg_end=%s\"", 
+    hPrintf("<A HREF=\"../cgi-bin/hgGene?db=%s&hgg_gene=%s&hgg_prot=%s&hgg_chrom=%s&hgg_start=%s&hgg_end=%s\"",
     	    database, mrnaID, displayId, hggChrom, hggStart, hggEnd);
     hPrintf(" TARGET=_BLANK>%s</A></LI>\n", mrnaID);
     }
@@ -648,7 +648,7 @@ if (sqlTableExists(conn, "cgapBiocPathway"))
 /* Process KEGG Pathway link data */
 if (sqlTableExists(conn, "keggPathway"))
     {
-    safef(query, sizeof(query), 
+    safef(query, sizeof(query),
 	  "select * from %s.keggPathway where kgID = '%s'", database, mrnaName);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -728,13 +728,13 @@ res = strdup(sqlQuickQuery(connCentral, query, buf, sizeof(buf)));
 hDisconnectCentral(&connCentral);
 return res;
 }
-	
+
 int searchProteinsInSupportedGenomes(char *queryID, char **database)
-/* search existing genome databases to see if they contain the protein 
+/* search existing genome databases to see if they contain the protein
    Input: queryID
-   return: number of proteins found in existing genome databases 
+   return: number of proteins found in existing genome databases
    output: the last genome database is stored at *database
-*/   
+*/
 {
 int  pbProteinCnt = {0};
 char *gDatabase;
@@ -752,7 +752,7 @@ char *answer;
 
 /* get all genome DBs that support PB */
 connCentral = hConnectCentral();
-safef(queryCentral, sizeof(queryCentral), 
+safef(queryCentral, sizeof(queryCentral),
       "select defaultDb.name, dbDb.organism from dbDb,defaultDb where hgPbOk=1 and defaultDb.name=dbDb.name");
 srCentral = sqlMustGetResult(connCentral, queryCentral);
 row3 = sqlNextRow(srCentral);
@@ -763,15 +763,15 @@ while (row3 != NULL)
     gDatabase = row3[0];
     org       = row3[1];
     conn = sqlConnect(gDatabase);
-    safef(cond_str, sizeof(cond_str), 
+    safef(cond_str, sizeof(cond_str),
     	  "alias='%s'", queryID);
     answer = sqlGetField(gDatabase, "kgSpAlias", "count(distinct spID)", cond_str);
-    sqlDisconnect(&conn); 
+    sqlDisconnect(&conn);
 
     if ((answer != NULL) && (!sameWord(answer, "0")))
     	{
-	/* increase the count only by one, because new addition of splice variants to kgSpAlias 
-	   would give a count of 2 for both the parent and the variant, which caused the 
+	/* increase the count only by one, because new addition of splice variants to kgSpAlias
+	   would give a count of 2 for both the parent and the variant, which caused the
 	   problem when rescale button is pressed */
 	if (atoi(answer) > 0) pbProteinCnt++;
 	*database = strdup(gDatabase);
@@ -780,7 +780,7 @@ while (row3 != NULL)
     }
 sqlFreeResult(&srCentral);
 hDisconnectCentral(&connCentral);
-return(pbProteinCnt);	
+return(pbProteinCnt);
 }
 
 void presentProteinSelections(char *queryID, int protCntInSwissByGene, int protCntInSupportedGenomeDb)
@@ -809,10 +809,10 @@ int  i, maxPbOrg;
 int  otherCnt;
 connCentral = hConnectCentral();
 
-hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\"");    
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\"");
 hPrintf("CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", wrapWhiteFont("Home"));
-hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>",
+hPrintf("<TD style='text-align:center; color:#FFFFFF; font-size:medium;'>%s</TD>",
         "UCSC Proteome Browser");
 if (proteinInSupportedGenome)
     {
@@ -825,7 +825,7 @@ else
 
 hPrintf("TARGET=_blank>%s</A></TD>", wrapWhiteFont("Help"));
 hPrintf("</TR></TABLE>");
-  
+
 hPrintf("<FONT SIZE=4><BR><B>Please select one of the following proteins:<BR><BR></B></FONT>\n");
 
 
@@ -853,7 +853,7 @@ while (row3 != NULL)
     gDatabase = row3[0];
     org       = row3[1];
     orgSciName= row3[2];
-    
+
     protDbName = hPdbFromGdb(gDatabase);
     proteinsConn = sqlConnect(protDbName);
 
@@ -868,15 +868,15 @@ while (row3 != NULL)
            cgiEncode(orgSciName), orgSciName);
 	hPrintf(" (%s):</B></FONT>\n", org);
 	hPrintf("<UL>");
-    	    
-       	safef(query, sizeof(query), 
+
+       	safef(query, sizeof(query),
               "select distinct spID from %s.kgSpAlias where alias='%s' "
 	      "and spID != ''",
 	      gDatabase, queryID);
 
     	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
-	      
+
     	while (row != NULL)
 	    {
    	    spID = row[0];
@@ -889,7 +889,7 @@ while (row3 != NULL)
 	    hPrintf(
 		"<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s&db=%s\">",
 		displayID, gDatabase);
-	    if (sameWord(spID, displayID) || (strstr(displayID, spID) != NULL)) 
+	    if (sameWord(spID, displayID) || (strstr(displayID, spID) != NULL))
 		{
 		hPrintf("%s</A> %s\n", spID, desc);
 		}
@@ -898,10 +898,10 @@ while (row3 != NULL)
 	    	hPrintf("%s</A> (aka %s) %s\n", spID, displayID, desc);
 		}
 
-	    /* remember the fact that a protein is shown under this PB supported genome */	
-	    for (i=0; i<maxPbOrg; i++) 
+	    /* remember the fact that a protein is shown under this PB supported genome */
+	    for (i=0; i<maxPbOrg; i++)
 	        {
-	    	if (sameWord(orgSciName, pbOrgSciName[i])) 
+	    	if (sameWord(orgSciName, pbOrgSciName[i]))
 		    {
 		    pbOrgPresented[i] = TRUE;
 		    }
@@ -930,16 +930,16 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
     else
         {
     	hPrintf("<UL>");
-        }	
-    
+        }
+
     oldOrg = strdup("");
     conn3 = sqlConnect(UNIPROT_DB_NAME);
-    safef(query3, sizeof(query3), 
-     "select taxon.id, gene.acc, displayId.val, binomial, description.val from gene, displayId, accToTaxon,taxon, description where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc and description.acc=gene.acc order by binomial", 
+    safef(query3, sizeof(query3),
+     "select taxon.id, gene.acc, displayId.val, binomial, description.val from gene, displayId, accToTaxon,taxon, description where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc and description.acc=gene.acc order by binomial",
      queryID);
     sr3  = sqlMustGetResult(conn3, query3);
     row3 = sqlNextRow(sr3);
-   
+
    /* go through each protein */
     while (row3 != NULL)
     	{
@@ -948,7 +948,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
         protDisp = row3[2];
         protOrg  = row3[3];
         protDesc = row3[4];
-	
+
 	/* decide if this entry should be skipped */
 	skipIt = FALSE;
 	for (i=0; i<maxPbOrg; i++)
@@ -966,7 +966,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 	        {
 	        hPrintf("</UL>\n");
 		}
-	    if (!skipIt) 
+	    if (!skipIt)
 	    	{
     		safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", taxonId);
     		answer = sqlGetField(PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
@@ -981,7 +981,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 		}
             hPrintf("<UL>\n");
 	    }
-		
+
 	/* print protein entry, if it is not already displayed in the PB supported genome list */
 	if (!skipIt)
 	    {
@@ -994,7 +994,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 	    else
 		{
 		hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">", protAcc);
-		if (strstr(protDisp, protAcc) != NULL) 
+		if (strstr(protDisp, protAcc) != NULL)
 		    {
 		    hPrintf("%s</A> %s\n", protAcc, protDesc);
 		    }
@@ -1007,17 +1007,17 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 	oldOrg = strdup(protOrg);
 	row3 = sqlNextRow(sr3);
 	}
-    if (otherCnt == 0) hPrintf("</UL>None");fflush(stdout);	
+    if (otherCnt == 0) hPrintf("</UL>None");fflush(stdout);
     sqlFreeResult(&sr3);
     sqlDisconnect(&conn3);
     }
 }
 
 int searchProteinsInSwissProtByGene(char *queryGeneID)
-/* search Swiss-Prot database to see if it contains the protein 
+/* search Swiss-Prot database to see if it contains the protein
    Input: queryGeneID
    return: number of proteins found in Swiss-Prot
-*/   
+*/
 {
 int  proteinCnt;
 struct sqlConnection *conn;
@@ -1026,10 +1026,10 @@ struct sqlResult *sr;
 char **row;
 
 conn = sqlConnect(UNIPROT_DB_NAME);
-safef(query, sizeof(query), 
-     "select count(*) from gene, displayId, accToTaxon,taxon where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc order by taxon.id", 
+safef(query, sizeof(query),
+     "select count(*) from gene, displayId, accToTaxon,taxon where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc order by taxon.id",
      queryGeneID);
- 
+
 sr  = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -1039,7 +1039,7 @@ if (row == NULL)
     }
 
 proteinCnt = atoi(row[0]);
-	
+
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 return(proteinCnt);

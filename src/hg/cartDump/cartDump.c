@@ -99,7 +99,7 @@ if (!asTable)
     printf("</FORM>\n");
     }
 printf("<P><em>Cookies passed to</em> %s:<BR>\n%s\n</P>\n",
-       cgiServerName(), getenv("HTTP_COOKIE"));
+       cgiServerNamePort(), getenv("HTTP_COOKIE"));
 }
 
 char *excludeVars[] = { "submit", "Submit", "noDisplay", MATCH_VAR, NULL };

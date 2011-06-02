@@ -1,3 +1,8 @@
+metaObject wgEncodeUwDGF
+objType composite
+composite wgEncodeUwDGF
+expVars lab,dataType,cell
+
 metaObject wgEncodeUwDGFAlignmentsGm06990
 objType file
 cell GM06990
@@ -6,6 +11,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+expId 479
 fileName wgEncodeUwDGFAlignmentsGm06990.tagAlign.gz
 grant Stam
 lab UW
@@ -22,6 +28,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+expId 476
 fileName wgEncodeUwDGFAlignmentsHepg2.tagAlign.gz
 grant Stam
 lab UW
@@ -38,6 +45,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+expId 480
 fileName wgEncodeUwDGFAlignmentsK562.tagAlign.gz
 grant Stam
 lab UW
@@ -54,6 +62,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+expId 477
 fileName wgEncodeUwDGFAlignmentsSknshra.tagAlign.gz
 grant Stam
 lab UW
@@ -70,6 +79,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
+expId 478
 fileName wgEncodeUwDGFAlignmentsTh1.tagAlign.gz
 grant Stam
 lab UW
@@ -86,6 +96,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+expId 479
 fileName wgEncodeUwDGFHotspotsGm06990.broadPeak.gz
 grant Stam
 lab UW
@@ -103,6 +114,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+expId 476
 fileName wgEncodeUwDGFHotspotsHepg2.broadPeak.gz
 grant Stam
 lab UW
@@ -120,6 +132,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+expId 480
 fileName wgEncodeUwDGFHotspotsK562.broadPeak.gz
 grant Stam
 lab UW
@@ -137,6 +150,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+expId 477
 fileName wgEncodeUwDGFHotspotsSknshra.broadPeak.gz
 grant Stam
 lab UW
@@ -154,6 +168,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
+expId 478
 fileName wgEncodeUwDGFHotspotsTh1.broadPeak.gz
 grant Stam
 lab UW
@@ -171,6 +186,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+expId 479
 fileName wgEncodeUwDGFPeaksGm06990.narrowPeak.gz
 grant Stam
 lab UW
@@ -188,6 +204,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+expId 476
 fileName wgEncodeUwDGFPeaksHepg2.narrowPeak.gz
 grant Stam
 lab UW
@@ -205,6 +222,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+expId 480
 fileName wgEncodeUwDGFPeaksK562.narrowPeak.gz
 grant Stam
 lab UW
@@ -222,6 +240,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+expId 477
 fileName wgEncodeUwDGFPeaksSknshra.narrowPeak.gz
 grant Stam
 lab UW
@@ -239,6 +258,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
+expId 478
 fileName wgEncodeUwDGFPeaksTh1.narrowPeak.gz
 grant Stam
 lab UW
@@ -256,6 +276,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+expId 476
 fileName wgEncodeUwDGFRawDataHepg2.fastq.gz
 grant Stam
 lab UW
@@ -271,6 +292,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+expId 477
 fileName wgEncodeUwDGFRawDataSknshra.fastq.gz
 grant Stam
 lab UW
@@ -286,6 +308,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
+expId 478
 fileName wgEncodeUwDGFRawDataTh1.fastq.gz
 grant Stam
 lab UW
@@ -301,6 +324,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+expId 479
 fileName wgEncodeUwDGFRawSignalGm06990.wig.gz
 grant Stam
 lab UW
@@ -318,6 +342,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+expId 476
 fileName wgEncodeUwDGFRawSignalHepg2.wig.gz
 grant Stam
 lab UW
@@ -335,6 +360,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+expId 480
 fileName wgEncodeUwDGFRawSignalK562.wig.gz
 grant Stam
 lab UW
@@ -352,6 +378,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+expId 477
 fileName wgEncodeUwDGFRawSignalSknshra.wig.gz
 grant Stam
 lab UW
@@ -369,6 +396,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
+expId 478
 fileName wgEncodeUwDGFRawSignalTh1.wig.gz
 grant Stam
 lab UW
@@ -386,6 +414,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+expId 479
 fileName wgEncodeUwDGFSignalGm06990.bedGraph4.gz
 grant Stam
 lab UW
@@ -402,6 +431,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+expId 476
 fileName wgEncodeUwDGFSignalHepg2.bedGraph4.gz
 grant Stam
 lab UW
@@ -418,6 +448,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+expId 480
 fileName wgEncodeUwDGFSignalK562.bedGraph4.gz
 grant Stam
 lab UW
@@ -434,6 +465,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+expId 477
 fileName wgEncodeUwDGFSignalSknshra.bedGraph4.gz
 grant Stam
 lab UW
@@ -450,6 +482,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
+expId 478
 fileName wgEncodeUwDGFSignalTh1.bedGraph4.gz
 grant Stam
 lab UW
@@ -458,4 +491,4 @@ subId 637
 tableName wgEncodeUwDGFSignalTh1
 view Signal
 
-# MAGIC: -1088892641
+# MAGIC: -1067843527

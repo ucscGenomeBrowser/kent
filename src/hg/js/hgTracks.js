@@ -750,6 +750,42 @@ function imgTblTrackShowCenterLabel(tr, show)
     }
 }
 
+function imgTblContiguousRowSet(row)
+{ // Returns the set of rows that are of the same class and contiguous
+    var btn = $( row ).find("p.btn");
+    if( btn.length == 0)
+        return null;
+    var classList = $( btn ).attr("class").split(" ");
+    var matchClass = classList[0];
+    var table = $(row).parents('table#imgTbl')[0];
+    var rows = $(table).find('tr');
+
+    // Find start index
+    var startIndex = $(row).attr('rowIndex');
+    var endIndex = startIndex;
+    for(var ix=startIndex-1;ix>=0;ix--) {
+        btn = $( rows[ix] ).find("p.btn");
+        if( btn.length == 0)
+            break;
+        classList = $( btn ).attr("class").split(" ");
+        if (classList[0] != matchClass)
+            break;
+        startIndex = ix;
+    }
+
+    // Find end index
+    for(var ix=endIndex;ix<rows.length;ix++) {
+        btn = $( rows[ix] ).find("p.btn");
+        if( btn.length == 0)
+            break;
+        classList = $( btn ).attr("class").split(" ");
+        if (classList[0] != matchClass)
+            break;
+        endIndex = ix;
+    }
+    return rows.slice(startIndex,endIndex+1); // endIndex is 1 based!
+}
+
 function imgTblZipButtons(table)
 {
 // Goes through the image and binds composite track buttons when adjacent
@@ -868,6 +904,10 @@ function imgTblButtonMouseOver()
         var btns = $( "p." + classList[0] );
         $( btns ).removeClass('btnGrey');
         $( btns ).addClass('btnBlue');
+        if (jQuery.tableDnD != undefined) {
+            var rows = imgTblContiguousRowSet($(this).parents('tr.trDraggable')[0])
+            $( rows ).addClass("trDrag");
+        }
     }
 }
 
@@ -878,6 +918,10 @@ function imgTblButtonMouseOut()
     var btns = $( "p." + classList[0] );
     $( btns ).removeClass('btnBlue');
     $( btns ).addClass('btnGrey');
+    if (jQuery.tableDnD != undefined) {
+        var rows = imgTblContiguousRowSet($(this).parents('tr.trDraggable')[0])
+        $( rows ).removeClass("trDrag");
+    }
 }
 
 
@@ -927,7 +971,6 @@ this.each(function(){
         pan.mousedown(function(e){
             if(mouseIsDown == false) {
                 mouseIsDown = true;
-
                 mouseDownX = e.clientX;
                 atEdge = (!beyondImage && (prevX >= leftLimit || prevX <= rightLimit));
                 $(document).bind('mousemove',panner);
@@ -1207,6 +1250,7 @@ $(document).ready(function()
                                                 source: ajaxGet(function () {return db;}, new Object, true),
                                                 select: function (event, ui) {
                                                         setPosition(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
+                                                        makeSureSuggestTrackIsVisible();
                                                         // jQuery('body').css('cursor', 'wait');
                                                         // document.TrackHeaderForm.submit();
                                                     }
@@ -1219,6 +1263,7 @@ $(document).ready(function()
                                                 ajax_get: ajaxGet(function () {return db;}, new Object, false),
                                                 callback: function (obj) {
                                                     setPosition(obj.id, commify(getSizeFromCoordinates(obj.id)));
+                                                    makeSureSuggestTrackIsVisible();
                                                     // jQuery('body').css('cursor', 'wait');
                                                     // document.TrackHeaderForm.submit();
                                                 }
@@ -1272,9 +1317,18 @@ $(document).ready(function()
                 onDragStart: function(ev, table, row) {
                     saveMouseOffset(ev);
                     $(document).bind('mousemove',blockTheMapOnMouseMove);
+
+                    // Can drag a contiguous set of rows if dragging blue button
+                    table.tableDnDConfig.dragObjects = [ row ]; // defaults to just the one
+                    var btn = $( row ).find('p.btnBlue');  // btnBlue means cursor over left button
+                    if (btn.length == 1) {
+                        table.tableDnDConfig.dragObjects = imgTblContiguousRowSet(row);
+                    }
                 },
                 onDrop: function(table, row, dragStartIndex) {
                     if($(row).attr('rowIndex') != dragStartIndex) {
+                        // NOTE Even if dragging a contiguous set of rows,
+                        // still only need to check the one under the cursor.
                         if(imgTblSetOrder) {
                             imgTblSetOrder(table);
                         }
@@ -2160,7 +2214,7 @@ function handleTrackUi(response, status)
 
         // -- popup.ready() -- Here is the place to do things that might otherwise go into a $('#pop').ready() routine!
         $('#hgTrackUiDialog').find('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
-            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy') });
+            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy'), maxDropHeight: filterByMaxHeight(this) });
         });
     }
     $('#hgTrackUiDialog').dialog({
@@ -2423,6 +2477,31 @@ function updateVisibility(track, visibility)
         rec.localVisibility = visibility;
     }
     return selectUpdated;
+}
+
+function getVisibility(track)
+{
+// return current visibility for given track
+    var rec = trackDbJson[track];
+    if(rec) {
+        if(rec.localVisibility) {
+            return rec.localVisibility;
+        } else {
+            return visibilityStrsOrder[rec.visibility];
+        }
+    } else {
+        return null;
+    }
+}
+
+function makeSureSuggestTrackIsVisible()
+{
+// make sure to show knownGene/refGene track is in at least pack (redmine #3484).
+    var track = $("#suggestTrack").val();
+    if(track != null && getVisibility(track) != "full") {
+        updateVisibility(track, 'pack');
+        $("<input type='hidden' name='" + track + "'value='pack'>").appendTo($(document.TrackHeaderForm));
+    }
 }
 
 function reloadFloatingItem()

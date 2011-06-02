@@ -6,6 +6,8 @@
 #include "cart.h"
 #include "trackDb.h"
 #include "customTrack.h"
+#include "wiggle.h"
+
 struct lineFile;
 
 void setUdcCacheDir();
@@ -480,6 +482,7 @@ enum wiggleSmoothingEnum {
    wiggleSmoothing14 = 13,
    wiggleSmoothing15 = 14,
    wiggleSmoothing16 = 15,
+   wiggleSmoothingMax = MAX_SMOOTHING,	/* Not an option, but lets us keep track of memory to use */
 };
 
 enum wiggleSmoothingEnum wiggleSmoothingStringToEnum(char *string);
@@ -1065,6 +1068,10 @@ void bamCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, b
 /* BAM: short-read-oriented alignment file format. */
 
 boolean tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
+/* Updates the tdb->priority from cart then sorts the list anew.
+   Returns TRUE if priorities obtained from cart */
+
+boolean tdbRefSortPrioritiesFromCart(struct cart *cart, struct slRef **tdbRefList);
 /* Updates the tdb->priority from cart then sorts the list anew.
    Returns TRUE if priorities obtained from cart */
 

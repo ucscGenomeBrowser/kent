@@ -9,7 +9,7 @@ group regulation
 subGroup1 cellType Cell_Line GM12878=GM12878 H1=H1-hESC HEPG2=HepG2 HMEC=HMEC HSMM=HSMM HUVEC=HUVEC K562=K562 NHEK=NHEK NHLF=NHLF
 dimensions dimensionX=cellType
 sortOrder cellType=+
-fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell
 priority 0

@@ -1,5 +1,5 @@
-/* seqOut - stuff to output sequences and alignments in web 
- * or ascii viewable form. 
+/* seqOut - stuff to output sequences and alignments in web
+ * or ascii viewable form.
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
@@ -14,7 +14,7 @@
 
 static char const rcsid[] = "$Id: seqOut.c,v 1.28 2009/08/21 18:39:59 angie Exp $";
 
-struct cfm *cfmNew(int wordLen, int lineLen, 
+struct cfm *cfmNew(int wordLen, int lineLen,
 	boolean lineNumbers, boolean countDown, FILE *out, int numOff)
 /* Set up colored sequence formatting for html. */
 {
@@ -36,9 +36,9 @@ static void cfmPopFormat(struct cfm *cfm)
 /* Restore format to default. */
 {
 if (cfm->color != 0)
-   fprintf(cfm->out, "</FONT>");
+   fprintf(cfm->out, "</span>");
 if (cfm->underline)
-  fprintf(cfm->out, "</U>");
+  fprintf(cfm->out, "</span>");
 if (cfm->bold)
   fprintf(cfm->out, "</B>");
 if (cfm->italic)
@@ -53,9 +53,9 @@ if (cfm->italic)
 if (cfm->bold)
   fprintf(cfm->out, "<B>");
 if (cfm->underline)
-  fprintf(cfm->out, "<U>");
+  fprintf(cfm->out, "<span style='text-decoration:underline;'>");
 if (cfm->color != 0)
-  fprintf(cfm->out, "<FONT COLOR=\"#%06X\">", cfm->color);
+  fprintf(cfm->out, "<span style='color:#%06X;'>", cfm->color);
 }
 
 void cfmOutExt(struct cfm *cfm, char c, int color, boolean underline, boolean bold, boolean italic)
@@ -123,7 +123,7 @@ if (cfm != NULL)
     }
 }
 
-int seqOutColorLookup[] = 
+int seqOutColorLookup[] =
     {
     0x000000,
     0x3300FF,
@@ -136,7 +136,7 @@ int seqOutColorLookup[] =
 
 
 void bafInit(struct baf *baf, DNA *needle, int nNumOff,  boolean nCountDown,
-	DNA *haystack, int hNumOff, boolean hCountDown, FILE *out, 
+	DNA *haystack, int hNumOff, boolean hCountDown, FILE *out,
 	int lineSize, boolean isTrans )
 /* Initialize block alignment formatter. */
 {
@@ -252,7 +252,7 @@ for (i=0; i<count; ++i)
 		{
 		int color;
 
-		if (c == 0) 
+		if (c == 0)
 		    c = 'X';
 		if (ss->matrix[(int)toupper(n)][(int)c] > 0)
 		    color = 5;
@@ -267,7 +267,7 @@ for (i=0; i<count; ++i)
 	    fputc(c, baf->out);
 	    }
 	}
-    else 
+    else
         {
 	if (toupper(n) == toupper(h))
 	     c = '|';

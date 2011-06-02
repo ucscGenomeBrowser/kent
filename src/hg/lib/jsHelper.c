@@ -458,25 +458,26 @@ return advancedJsEnabled;
 
 void jsBeginCollapsibleSection(struct cart *cart, char *track, char *section, char *sectionTitle,
 			       boolean isOpenDefault)
-/* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's 
+/* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's
  * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. */
 {
 char collapseGroupVar[512];
 safef(collapseGroupVar, sizeof(collapseGroupVar), "%s.section_%s_close", track, section);
 boolean isOpen = !cartUsualBoolean(cart, collapseGroupVar, !isOpenDefault);
 
-printf("<TR><TD width='20'><input type='hidden' name=\"%s\" id=\"%s\" value=\"%s\">\n",
+// Both plus button and title are now in same <TD>
+// but still colspan=2 because we are lib code and callers own the table.
+printf("<TR><TD colspan=2 style='text-align:left;'>\n");
+printf("<input type='hidden' name='%s' id='%s' value='%s'>\n",
        collapseGroupVar, collapseGroupVar, isOpen ? "0" : "1");
-printf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'>\n",
-       cgiScriptName(), cartSidUrlString(cart), collapseGroupVar, (isOpen ? "1" : "0"), section);
 char *buttonImage = (isOpen ? "../images/remove_sm.gif" : "../images/add_sm.gif");
 printf("<IMG height='18' width='18' "
        "onclick=\"return setTableRowVisibility(this, '%s', '%s.section', 'section', true);\" "
-       "id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this section' class='bigBlue'>"
-       "</A></TD>\n",
+       "id='%s_button' src='%s' alt='%s' title='%s this section' class='bigBlue'"
+       " style='cursor:pointer;'>\n",
        section, track,
        section, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
-printf("<TD class='bigBlue'><FONT SIZE=4><B>&nbsp;%s</B></FONT></TD></TR>\n", sectionTitle);
+printf("<B style='font-size:larger;'>&nbsp;%s</B></TD></TR>\n", sectionTitle);
 printf("<TR %sid='%s-%d'><TD colspan=2>", isOpen ? "" : "style='display: none' ", section, 1);
 }
 

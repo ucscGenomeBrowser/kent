@@ -79,6 +79,19 @@ visibility hide
     color 120,0,0
     priority 5
 
+track knownGeneOld4
+shortLabel Old UCSC Genes
+longLabel Previous Version of UCSC Genes
+group genes
+priority 34.1
+visibility hide
+color 82,82,160
+type genePred
+hgsid on
+oldToNew kg4ToKg5
+baseColorUseCds given
+baseColorDefault genomicCodons
+
 track pseudoYale60
 shortLabel Yale Pseudo60
 longLabel Yale Pseudogenes based on Ensembl Release 60
@@ -101,6 +114,59 @@ searchTable pseudoYale60
 searchType genePred
 termRegex PGOMOU[0-9]+
 searchPriority 50
+
+track ucscRetroAli1
+shortLabel Retroposed Genes
+longLabel Retroposed GenesV1, Including Pseudogenes - November 2010 
+group genes
+type psl
+priority 37.5
+color 20,0,250
+visibility hide
+nextItemButton on
+ucscRetroInfo ucscRetroInfo1
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds
+baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+searchName ucscRetroInfoRefSeq1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes - November 2010
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo1
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo1.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo1
+xrefQuery select ucscRetroInfo1.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene1
+searchTable ucscRetroAli1
+searchDescription Retroposed GenesV1, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo1
+xrefQuery select ucscRetroInfo1.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
 
 track tRNAs
 shortLabel tRNA Genes
@@ -772,4 +838,104 @@ scoreFilterMax 100
 type bed 6 .
 urlLabel TargetScan link:
 url http://www.targetscan.org/cgi-bin/targetscan/mmu_50/view_gene.cgi?gs=$P&taxid=10090&members=$p&showcnc=1
+
+track allMm9RS_BW
+shortLabel GERP
+longLabel GERP scores for mammalian alignments
+group compGeno
+visibility hide
+priority 105
+type bigWig -10 5
+autoScale on
+maxHeightPixels 128:64:20
+
+
+
+# laminB1 supertrack
+
+        track laminB1Super
+        superTrack on
+        shortLabel NKI Nuc Lamina
+        longLabel NKI Nuclear Lamina Associated Domains (LaminB1 DamID)
+        group regulation
+        priority 300
+	html laminB1Mm9
+
+#ES
+track laminB1_ES
+superTrack laminB1Super full
+shortLabel mouse LaminB1 ESC
+longLabel NKI LaminB1 (DamID of LaminB1 in mouse Embryonic Stem cells, log2-ratio)
+group regulation
+priority 310
+visibility hide
+color 255, 165, 0
+maxHeightPixels 100:40:11
+autoScale Off
+windowingFunction mean
+smoothingWindow 2
+type wig -5.58 4.62
+spanList 60
+viewLimits -1.5:1.5
+html laminB1Mm9
+
+#NP
+track laminB1_NP
+superTrack laminB1Super full
+shortLabel mouse LaminB1 NPC
+longLabel NKI LaminB1 (DamID of LaminB1 in mouse Neural Progenitor cells, log2-ratio)
+group regulation
+priority 320
+visibility hide
+color 0,0,255
+maxHeightPixels 100:40:11
+autoScale Off
+windowingFunction mean
+smoothingWindow 2
+type wig -6.00 4.30 
+spanList 60
+viewLimits -1.5:1.5
+html laminB1Mm9
+
+#AC
+track laminB1_AC
+superTrack laminB1Super full
+shortLabel mouse LaminB1 AC
+longLabel NKI LaminB1 (DamID of LaminB1 in mouse Astrocytes, log2-ratio)
+group regulation
+priority 330
+visibility hide
+color 255,0,255
+maxHeightPixels 100:40:11
+autoScale Off
+windowingFunction mean
+smoothingWindow 2
+type wig -5.75 4.30
+spanList 60
+viewLimits -1.5:1.5 
+html laminB1Mm9
+
+#EF
+track laminB1_EF
+superTrack laminB1Super full
+shortLabel mouse LaminB1 MEF
+longLabel NKI LaminB1 (DamID of LaminB1 in mouse Embryonic Fibroblasts, log2-ratio)
+group regulation
+priority 340
+visibility hide
+color 0,100,0
+maxHeightPixels 100:40:11
+autoScale Off
+windowingFunction mean
+smoothingWindow 2
+type wig -5.45 4.93
+spanList 60
+viewLimits -1.5:1.5
+html laminB1Mm9
+
+track forelimbH3k27ac
+type bed 3
+color 0,0,150
+group x
+visibility hide
 

@@ -153,7 +153,7 @@ for (i=0; i<length; ++i)
 /** List managing routines. */
 
 /* Count up elements in list. */
-int slCount(void *list)
+int slCount(const void *list)
 {
 struct slList *pt = (struct slList *)list;
 int len = 0;
@@ -762,15 +762,20 @@ while (text != NULL)
     if (respectQuotes)
         {
         word = nextWordRespectingQuotes(&text);
-        if (word[0] == '"')
-            stripChar(word, '"');
-        else if (word[0] == '\'')
-            stripChar(word, '\'');
+        if (word != NULL)
+            {
+            if (word[0] == '"')
+                stripChar(word, '"');
+            else if (word[0] == '\'')
+                stripChar(word, '\'');
+            }
         }
     else
         word = nextWord(&text);
     if (word)
         slNameStore(&list, word);
+    else
+        break;
     }
 
 slReverse(&list);
@@ -988,64 +993,103 @@ struct slPair *slPairListFromString(char *str,boolean respectQuotes)
 //    resulting pair strips quotes: {name1}={val 1},{name 2}={val2}
 // Returns NULL if parse error.  Free this up with slPairFreeValsAndList.
 {
-if (isEmpty(str))
+char *s = skipLeadingSpaces(str);  // Would like to remove this and tighten up the standard someday.
+if (isEmpty(s))
     return NULL;
-int count = countChars(str, '=') + 1; // Should have 1 more token than '=': {"name 1"},{val1 name2},{"val 2"}
-if (count < 2)
-    {
-    warn("slPairListFromString() No pairs found in string meant to contain name=value pairs [%s]\n", str);
-    return NULL;
-    }
-char *strClone = cloneString(str);
-char **tokens = needMem(sizeof(char *) * count);
-count = chopByChar(strClone, '=',tokens,count);
 
-int ix;
 struct slPair *list = NULL;
-for (ix=1; ix < count;ix++) // starting at 1 and looking back to 0
+char name[1024];
+char val[1024];
+char buf[1024];
+bool inQuote = FALSE;
+char *b = buf;
+char sep = '=';
+char c = ' ';
+int mode = 0;
+while(1)
     {
-    // name comes from prev token!
-    char *name = tokens[ix -1];
-    char *val = tokens[ix];
-
-    // Parse of val and set up ptr for next name
-    char *next = NULL;
-    if (respectQuotes && val[0] == '"')
-        next = skipBeyondDelimit(tokens[ix] + 1,'"');
-    else
-        next = skipToSpaces(tokens[ix]);
-    if (next != NULL)
-        {
-        *next++ = '\0';
-        tokens[ix] = next; // set up for next round.
-        }
-    else if (ix + 1 != count) // Last token should have no 'next'.
-        {
-        warn("slPairListFromString() Error parsing string meant to contain name=value pairs: [%s]\n", str);
-        break;
-        }
-
-    if (respectQuotes && name[0] == '"')
-        stripEnclosingDoubleQuotes(name);
-    else if (hasWhiteSpace(name))
-        {
-        warn("slPairListFromString() Unexpected white space in name=value pair: [%s]=[%s] in string=[%s]\n", name, val, str);
-        break;
-        }
-    if (respectQuotes && val[0] == '"')
-        stripEnclosingDoubleQuotes(val);
-    else if (hasWhiteSpace(val))
-        {
-        warn("slPairListFromString() Unexpected white space in name=value pair: [%s]=[%s] in string=[%s]\n", name, val, str);
-        break;
-        }
-    slPairAdd(&list, name, cloneString(val));
-    }
-freez(&strClone);
-if (ix != count) // error detected.
-    {
-    slPairFreeValsAndList(&list);
-    return NULL;
+    c = *s++;
+    if (mode == 0 || mode == 2) // reading name or val
+	{
+	boolean term = FALSE;
+	if (respectQuotes && b == buf && !inQuote && c == '"')
+	    inQuote = TRUE;
+	else if (inQuote && c == '"')
+	    term = TRUE;
+	else if ((c == sep || c == 0) && !inQuote)
+	    {
+	    term = TRUE;
+	    --s;  // rewind
+	    }
+	else if (c == ' ' && !inQuote)
+	    {
+	    warn("slPairListFromString: Unexpected whitespace in %s", str);
+	    return NULL;
+	    }
+	else if (c == 0 && inQuote)
+	    {
+	    warn("slPairListFromString: Unterminated quote in %s", str);
+	    return NULL;
+	    }
+	else
+	    {
+	    *b++ = c;
+	    if ((b - buf) > sizeof buf)
+		{
+		warn("slPairListFromString: pair name or value too long in %s", str);
+		return NULL;
+		}
+	    }
+	if (term)
+	    {
+	    inQuote = FALSE;
+	    *b = 0;
+	    if (mode == 0)
+		{
+		safecpy(name, sizeof name, buf);
+		if (strlen(name)<1)
+		    {
+		    warn("slPairListFromString: Pair name cannot be empty in %s", str);
+		    return NULL;
+		    }
+		// Shall we check for name being alphanumeric, at least for the respectQuotes=FALSE case?
+		}
+	    else // mode == 2
+		{
+		safecpy(val, sizeof val, buf);
+		if (!respectQuotes && (hasWhiteSpace(name) || hasWhiteSpace(val))) // should never happen
+		    {
+		    warn("slPairListFromString() Unexpected white space in name=value pair: [%s]=[%s] in string=[%s]\n", name, val, str);
+		    break;
+		    }
+		slPairAdd(&list, name, cloneString(val));
+		}
+	    ++mode;
+	    }
+	}
+    else if (mode == 1) // read required "=" sign
+	{
+	if (c != '=')
+	    {
+	    warn("slPairListFromString: Expected character = after name in %s", str);
+	    return NULL;
+	    }
+	++mode;
+	sep = ' ';
+	b = buf;
+	}
+    else // (mode == 3) reading optional separating space
+	{
+	if (c == 0)
+	    break;
+	if (c != ' ')
+	    {
+	    mode = 0;
+	    --s;
+	    b = buf;
+	    sep = '=';
+	    }
+	}
     }
 slReverse(&list);
 return list;
@@ -1294,7 +1338,10 @@ boolean startsWithWordByDelimiter(char *firstWord,char delimit, char *line)
 {
 if(delimit == ' ')
     return startsWithWord(firstWord,line);
-return (startsWith(firstWord,line) && line[strlen(firstWord)] == delimit);
+if (!startsWith(firstWord,line))
+    return FALSE;
+char c = line[strlen(firstWord)];
+return (c == '\0' || c == delimit);
 }
 
 char * findWordByDelimiter(char *word,char delimit, char *line)
@@ -1380,6 +1427,21 @@ char lastChar(char *s)
 if (s == NULL || s[0] == 0)
     return 0;
 return s[strlen(s)-1];
+}
+
+char *lastNonwhitespaceChar(char *s)
+// Return pointer to last character in string that is not whitespace.
+{
+if (s == NULL || s[0] == 0)
+    return NULL;
+
+char *sPos = s + (strlen(s) - 1);
+for (;sPos >= s;sPos--)
+    {
+    if (!isspace(*sPos))
+        return sPos;
+    }
+return NULL;
 }
 
 char *matchingCharBeforeInLimits(char *limit, char *s, char c)

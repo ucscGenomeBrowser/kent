@@ -1,5 +1,4 @@
 track wgEncodeAffyRnaChip
-release alpha
 compositeTrack on
 shortLabel Affy RNA Loc
 longLabel ENCODE Affymetrix/CSHL Subcellular RNA Localization by Tiling Array
@@ -23,7 +22,6 @@ wgEncode 1
     shortLabel Filtered Transfrags
     view FiltTransfrags
     visibility pack
-    release alpha
     subTrack wgEncodeAffyRnaChip
     scoreFilter 0
     scoreFilterLimits 100:1000
@@ -31,7 +29,6 @@ wgEncode 1
     minGrayLevel 4
 
         track wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel pros cell pA- FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in prostate whole cell)
@@ -40,7 +37,6 @@ wgEncode 1
         color 0,102,136
 
         track wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel pros cell pA+ FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in prostate whole cell)
@@ -49,7 +45,6 @@ wgEncode 1
         color 0,102,136
 
         track wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 nucl pA- FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in K562 nucleus)
@@ -58,7 +53,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltTransfragsK562CellTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 cell tot FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 whole cell)
@@ -67,7 +61,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 nucl pA+ FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in K562 nucleus)
@@ -76,7 +69,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 cyto pA- FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in K562 cytosol)
@@ -85,7 +77,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 cyto pA+ FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in K562 cytosol)
@@ -94,7 +85,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 psom pA- FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in K562 polysome)
@@ -103,7 +93,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel GM12 nucl pA- FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in GM12878 nucleus)
@@ -112,7 +101,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel GM12 cyto pA+ FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA GM12878 cytosol)
@@ -121,7 +109,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel GM12 cyto pA- FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in GM12878 cytosol)
@@ -130,7 +117,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 chrm tot FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 chromatin)
@@ -140,7 +126,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 nlos tot FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 nucleolus)
@@ -149,7 +134,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel GM12 nucl pA+ FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in GM12878 nucleus)
@@ -159,7 +143,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel GM12 cell tot FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in GM12878 whole cell)
@@ -169,7 +152,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 nplm tot FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 nucleoplasm)
@@ -179,7 +161,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel HepG cyto pA- FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in HepG2 cytosol)
@@ -189,7 +170,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel HepG cyto pA+ FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in HepG2 cytosol)
@@ -199,7 +179,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel NHEK cyto pA- FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in NHEK cytosol)
@@ -209,7 +188,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel NHEK cyto pA+ FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in NHEK cytosol)
@@ -219,7 +197,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel NHEK nucl pA- FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in NHEK nucleus )
@@ -228,7 +205,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel NHEK nucl pA+ FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in NHEK nucleus )
@@ -238,7 +214,6 @@ wgEncode 1
 
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel HepG nucl pA- FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in HepG2 nucleus)
@@ -247,7 +222,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel HepG nucl pA+ FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in HepG2 nucleus)
@@ -256,7 +230,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel HepG nlos tot FT
         color 189,0,157
@@ -265,7 +238,6 @@ wgEncode 1
         type broadPeak
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags on
         shortLabel GM12 nlos tot FT
         color 153,38,0
@@ -277,7 +249,6 @@ wgEncode 1
     shortLabel Raw Transfrags
     view Transfrags
     visibility hide
-    release alpha
         subTrack wgEncodeAffyRnaChip
     scoreFilter 100
     scoreFilterLimits 100:1000
@@ -285,7 +256,6 @@ wgEncode 1
     minGrayLevel 4
 
         track wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel pros cell pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in prostate whole cell)
@@ -294,7 +264,6 @@ wgEncode 1
         color 0,102,136
 
         track wgEncodeAffyRnaChipTransfragsProstateCellLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel pros cell pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in prostate whole cell)
@@ -303,7 +272,6 @@ wgEncode 1
         color 0,102,136
 
         track wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel K562 nucl pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 nucleus)
@@ -312,7 +280,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsK562CellTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel K562 cell tot RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 whole cell)
@@ -321,7 +288,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel K562 nucl pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in K562 nucleus)
@@ -330,7 +296,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel K562 cyto pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 cytosol)
@@ -339,7 +304,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel K562 cyto pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in K562 cytosol)
@@ -348,7 +312,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel K562 psom pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 polysome)
@@ -357,7 +320,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel GM12 nucl pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in GM12878 nucleus)
@@ -366,7 +328,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel GM12 cyto pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in GM12878 cytosol)
@@ -375,7 +336,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel GM12 cyto pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in GM12878 cytosol)
@@ -384,7 +344,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipTransfragsK562ChromatinTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel K562 chrm tot RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 chromatin)
@@ -395,7 +354,6 @@ wgEncode 1
 
 
         track wgEncodeAffyRnaChipTransfragsK562NucleolusTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel K562 nlos tot RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 nucleolus)
@@ -405,7 +363,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel K562 nplm tot RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 nucleoplasm)
@@ -415,7 +372,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel GM12 nucl pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in GM12878 in nucleus)
@@ -425,7 +381,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipTransfragsGm12878CellTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags
         shortLabel GM12 cell tot RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in GM12878 whole cell)
@@ -435,7 +390,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel HepG cyto pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in HepG2 cytosol)
@@ -445,7 +399,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel HepG cyto pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in HepG2 cytosol)
@@ -455,7 +408,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel NHEK cyto pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in NHEK cytosol)
@@ -465,7 +417,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel NHEK cyto pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in NHEK cytosol)
@@ -475,7 +426,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel NHEK nucl pA- RT
         longLabel ENCODE Affy/CSHL Transfrags (PolyA- RNA in NHEK nucleus )
@@ -484,7 +434,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel NHEK nucl pA+ RT
         longLabel ENCODE Affy/CSHL Transfrags (PolyA+ RNA in NHEK nucleus )
@@ -493,7 +442,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel HepG nucl pA- RT
         longLabel ENCODE Affy/CSHL Transfrags (PolyA- RNA in HepG2 nucleus)
@@ -502,7 +450,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel HepG nucl pA+ RT
         longLabel ENCODE Affy/CSHL Transfrags (PolyA+ RNA in HepG2 nucleus)
@@ -511,7 +458,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel HepG nlos tot RT
         color 189,0,157
@@ -520,7 +466,6 @@ wgEncode 1
         type broadPeak
 
         track wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewTransfrags on
         shortLabel GM12 nlos tot RT
         color 153,38,0
@@ -532,7 +477,6 @@ wgEncode 1
     shortLabel Filtered Signal
     view FiltRawSignal
     visibility full
-    release alpha
         subTrack wgEncodeAffyRnaChip
     viewLimits 0:1000
     autoScale off
@@ -540,7 +484,6 @@ wgEncode 1
     maxHeightPixels 100:32:16
 
         track wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
         shortLabel pros cell pA- FS
         longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in prostate whole cell)
@@ -550,7 +493,6 @@ wgEncode 1
         color 0,102,136
 
         track wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
         shortLabel pros cell pA+ FS
         longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in prostate whole cell)
@@ -560,7 +502,6 @@ wgEncode 1
         color 0,102,136
 
         track wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel K562 nucl pA- FS
         longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in K562 nucleus)
@@ -570,7 +511,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltRawSignalK562CellTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel K562 cell tot FS
         longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 whole cell)
@@ -580,7 +520,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel K562 nucl pA+ FS
         longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in K562 nucleus)
@@ -590,7 +529,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel K562 cyto pA- FS
         longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in K562 cytosol)
@@ -600,7 +538,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel K562 cyto pA+ FS
         longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in K562 cytosol)
@@ -610,7 +547,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel K562 psom pA- FS
         longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in K562 polysome)
@@ -620,7 +556,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel GM12 nucl pA- FS
         longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in GM12878 nucleus)
@@ -630,7 +565,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel GM12 cyto pA+ FS
         longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in GM12878 cytosol)
@@ -640,7 +574,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel GM12 cyto pA- FS
         longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in GM12878 cytosol)
@@ -650,7 +583,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel K562 chrm tot FS
         longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 chromatin)
@@ -663,7 +595,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel K562 nlos tot FS
         longLabel ENCODE Affy/CSHL Filtered Raw Signal (Total RNA in K562 nucleolus)
@@ -672,7 +603,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel GM12 nucl pA+ FS
         longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in GM12878 nucleus)
@@ -685,7 +615,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel GM12 cell tot FS
         longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in GM12878 whole cell)
@@ -698,7 +627,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel K562 nplm tot FS
         longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 nucleoplasm)
@@ -711,7 +639,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
         shortLabel HepG cyto pA- FS
         longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- RNA in HepG2 cytosol)
@@ -724,7 +651,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
         shortLabel HepG cyto pA+ FS
         longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA+ RNA in HepG2 cytosol)
@@ -737,7 +663,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
         shortLabel NHEK cyto pA- FS
         longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- RNA in NHEK cytosol)
@@ -750,7 +675,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
         shortLabel NHEK cyto pA+ FS
         longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA+ RNA in NHEK cytosol)
@@ -763,7 +687,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
         shortLabel NHEK nucl pA- FS
         longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- RNA in NHEK nucleus )
@@ -772,7 +695,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
         shortLabel NHEK nucl pA+ FS
         longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in NHEK nucleus )
@@ -781,7 +703,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
         shortLabel HepG nucl pA- FS
         longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- RNA in HepG2 nucleus)
@@ -790,7 +711,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
         shortLabel HepG nucl pA+ FS
         longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA+ RNA in HepG2 nucleus)
@@ -799,7 +719,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
         shortLabel HepG nlos tot FS
         color 189,0,157
@@ -808,7 +727,6 @@ wgEncode 1
         type wig -57857.00 57814.00
 
         track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal on
         shortLabel GM12 nlos tot FS
         color 153,38,0
@@ -820,7 +738,6 @@ wgEncode 1
     shortLabel Raw Signal
     view RawSignal
     visibility hide
-    release alpha
         subTrack wgEncodeAffyRnaChip
     viewLimits 0:1000
     autoScale off
@@ -828,7 +745,6 @@ wgEncode 1
     maxHeightPixels 100:16:16
 
         track wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal off
         shortLabel pros cell pA- RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in prostate whole cell)
@@ -838,7 +754,6 @@ wgEncode 1
         color 0,102,136
 
         track wgEncodeAffyRnaChipRawSignalProstateCellLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal off
         shortLabel pros cell pA+ RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in prostate whole cell)
@@ -848,7 +763,6 @@ wgEncode 1
         color 0,102,136
 
         track wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel K562 nucl pA- RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in K562 nucleus)
@@ -858,7 +772,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipRawSignalK562CellTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel K562 cell tot RS
         longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 whole cell)
@@ -868,7 +781,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel K562 nucl pA+ RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in K562 nucleus)
@@ -878,7 +790,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel K562 cyto pA- RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in K562 cytosol)
@@ -888,7 +799,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel K562 cyto pA+ RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in K562 cytosol)
@@ -898,7 +808,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel K562 psom pA- RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in K562 polysome)
@@ -908,7 +817,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel GM12 nucl pA- RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in GM12878 nucleus)
@@ -918,7 +826,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel GM12 cyto pA+ RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in GM12878 cytosol)
@@ -928,7 +835,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel GM12 cyto pA- RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in GM12878 cytosol)
@@ -938,7 +844,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipRawSignalK562ChromatinTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel K562 chrm tot RS
         longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 chromatin)
@@ -951,7 +856,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipRawSignalK562NucleolusTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel K562 nlos tot RS
         longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 nucleolus)
@@ -964,7 +868,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel K562 nplm tot RS
         longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 nucleoplasm)
@@ -977,7 +880,6 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel GM12 nucl pA+ RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in GM12878 nucleus)
@@ -990,7 +892,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipRawSignalGm12878CellTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel GM12 cell tot RS
         longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in GM12878 whole cell)
@@ -1003,7 +904,6 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal off
         shortLabel HepG cyto pA- RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in HepG2 cytosol)
@@ -1016,7 +916,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal off
         shortLabel HepG cyto pA+ RS
         longLabel ENCODE Affy/CSHL Raw Transfrags(PolyA+ RNA in HepG2 cytosol)
@@ -1029,7 +928,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal off
         shortLabel NHEK cyto pA- RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in NHEK cytosol)
@@ -1042,7 +940,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal off
         shortLabel NHEK cyto pA+ RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in NHEK cytosol)
@@ -1055,7 +952,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal off
         shortLabel NHEK nucl pA- RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in NHEK nucleus )
@@ -1064,7 +960,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal off
         shortLabel NHEK nucl pA+ RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in NHEK nucleus )
@@ -1073,7 +968,6 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal off
         shortLabel HepG nucl pA- RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in HepG2 nucleus)
@@ -1082,7 +976,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipRawSignalHepg2NucleusLongpolya
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal off
         shortLabel HepG nucl pA+ RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in HepG2 nucleus)
@@ -1091,7 +984,6 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal off
         shortLabel HepG nlos tot RS
         color 189,0,157
@@ -1100,7 +992,6 @@ wgEncode 1
         type wig -57857.00 57814.00
 
         track wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal
-        release alpha
         subTrack wgEncodeAffyRnaChipViewRawSignal on
         shortLabel GM12 nlos tot RS
         color 153,38,0

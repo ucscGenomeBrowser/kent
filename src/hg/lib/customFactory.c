@@ -1661,6 +1661,24 @@ if (span == 0)
 *retSpan = span;
 }
 
+#ifdef PROGRESS_METER
+static void progressWrite(char *label, FILE *progressFH, off_t seekTo,
+    long msStart, unsigned long long bytesWritten,
+    unsigned long long expectedBytes)
+/* write to given file the current progress situation */
+{
+if (seekTo)
+    fseeko(progressFH, seekTo, SEEK_SET);
+long msNow = clock1000();
+int percentDone = 0;
+if (expectedBytes > 0)
+    percentDone = (100 * bytesWritten) / expectedBytes;
+fprintf(progressFH, "%s:\t%llu\t%llu\t%ld\t%% %d\n", label, bytesWritten,
+    (unsigned long long)expectedBytes, msNow - msStart, percentDone);
+fflush(progressFH);
+}
+#endif
+
 /*  HACK ALERT - The table browser needs to be able to encode its wiggle
  *	data.  This function is temporarily global until a proper method
  *	is used to work this business into the table browser custom
@@ -1689,10 +1707,43 @@ if (dbRequested)
     int c;  /* fgetc and fputc work with int. char type cannot represent EOF properly. */
     int fputcErr = 0;
 
+#ifdef PROGRESS_METER
+/* don't forget: http://www.redips.net/javascript/ajax-progress-bar/ */
+    struct stat localStat;
+    ZeroVar(&localStat);
+    off_t wigAsciiSize = 0;
+    if (stat(wigAscii,&localStat)==0)
+	wigAsciiSize = localStat.st_size;
+    FILE *progress = 0;
+    long msStart = clock1000();
+    unsigned long long bytesWritten = 0;
+    off_t progressSeek = 0;
+    if (track->progressFile)
+	{
+	ZeroVar(&localStat);
+	if (stat(track->progressFile,&localStat)==0)
+	    progressSeek = localStat.st_size;
+	progress = mustOpen(track->progressFile, "r+");
+	fseeko(progress, progressSeek, SEEK_SET);
+	}
+#endif
     unlink(wigAscii);/* stays open, disappears when close or pipe fail */
     while ((c = fgetc(in)) != EOF && fputcErr != EOF)
+	{
 	fputcErr = fputc(c, out);
+#ifdef PROGRESS_METER
+	++bytesWritten;
+	if (0 == (bytesWritten % 100000))
+	    {
+	    progressWrite("encoding", progress, progressSeek, msStart, bytesWritten, wigAsciiSize);
+	    }
+#endif
+	}
     carefulClose(&in);
+#ifdef PROGRESS_METER
+    progressWrite("encoding_done", progress, (off_t)0, msStart, bytesWritten, wigAsciiSize);
+    carefulClose(&progress);
+#endif
     fflush(out);		/* help see error from loader failure */
 #if 0  // enable this for help debugging
     fprintf(stderr, "%s\n", pipelineDesc(dataPipe));
@@ -1753,6 +1804,9 @@ struct hash *settings = track->tdb->settingsHash;
 
 track->dbTrackType = cloneString(fac->name);
 track->wiggle = TRUE;
+#ifdef PROGRESS_METER
+track->progressFile = 0;
+#endif
 
 /* If wibFile setting already exists, then we are reloading, not loading.
  * Just make sure files still exist. */
@@ -1788,11 +1842,47 @@ else
     chopSuffix(wigAscii);
     strcat(wigAscii, ".wia");
 
+#ifdef PROGRESS_METER
+    /* Don't add progressFile to settings - not needed. */
+    trashDirFile(&tn, "progress", "wig", ".txt");
+    track->progressFile = cloneString(tn.forCgi);
+fprintf(stderr, "DBG: setting progressFile: '%s'\n", track->progressFile);
+FILE *progress = mustOpen(track->progressFile, "w");
+fprintf(progress, "progressFile: %s\n", track->progressFile);
+fprintf(progress, "shortLabel: %s\n", track->tdb->shortLabel);
+fprintf(progress, "forHtml: %s\n", tn.forHtml);
+fprintf(progress, "remote size: %llu\n", (unsigned long long)cpp->remoteFileSize);
+    fflush(progress);
+    off_t remoteSize = cpp->remoteFileSize;
+//    off_t progressSeek = ftello(progress);
+    unsigned long long bytesWritten = 0;
+    unsigned long long linesRead = 0;
+    unsigned long long nextInterval = bytesWritten + 100000;
+    long msStart = clock1000();
+#endif
+
     /* Actually create wigAscii file. */
     f = mustOpen(wigAscii, "w");
     while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
+	{
+#ifdef PROGRESS_METER
+	linesRead++;
+	bytesWritten += strlen(line);
+	if (bytesWritten > nextInterval)
+	    {
+	    progressWrite("incoming", progress, (off_t)0, msStart, bytesWritten, remoteSize);
+    	    nextInterval = bytesWritten + 100000;
+	    }
+#endif
 	fprintf(f, "%s\n", line);
+	}
     carefulClose(&f);
+#ifdef PROGRESS_METER
+    progressWrite("incoming_done", progress, (off_t)0, msStart, bytesWritten, remoteSize);
+fprintf(progress, "lines_read: %llu\n", linesRead);
+fflush(progress);
+    carefulClose(&progress);
+#endif
 
     wigLoaderEncoding(track, wigAscii, dbRequested);
     }
@@ -2318,6 +2408,9 @@ if (NULL == tdb->type)
 track->genomeDb = cloneString(genomeDb);
 track->dbTrackType = hashFindVal(hash, "dbTrackType");
 track->dbTableName = hashFindVal(hash, "dbTableName");
+#ifdef PROGRESS_METER
+track->progressFile = 0;
+#endif
 if (track->dbTableName)
     {
     track->dbDataLoad = TRUE;
@@ -2955,9 +3048,17 @@ if (!fileExists(fileName))
     }
 
 struct lineFile *lf = customLineFile(fileName, TRUE);
+#ifdef PROGRESS_METER
+off_t remoteSize = 0;
+if (stringIn("://", fileName))
+    remoteSize = remoteFileSize(fileName);
+#endif
 
 /* wrap a customPp object around it. */
 struct customPp *cpp = customPpNew(lf);
+#ifdef PROGRESS_METER
+cpp->remoteFileSize = remoteSize;
+#endif
 lf = NULL;
 
 if (dbTrack)

@@ -178,7 +178,7 @@ if (ci == NULL || ci->socket <= 0)
 	int newSd = 0;
 	if (!netSkipHttpHeaderLinesHandlingRedirect(sd, rangeUrl, &newSd, &newUrl))
 	    return -1;
-	if (newUrl)  // not sure redirection will work with byte ranges as it is now
+	if (newUrl)
 	    {
 	    freeMem(newUrl); 
 	    sd = newSd;
@@ -802,17 +802,21 @@ struct udcProtocol *prot;
 prot = udcProtocolNew(protocol);
 
 /* Figure out if anything exists. */
-boolean useCacheInfo = (udcCacheAge(url, cacheDir) < udcCacheTimeout());
+boolean useCacheInfo = FALSE;
 struct udcRemoteFileInfo info;
 ZeroVar(&info);
-if (!isTransparent && !useCacheInfo)
+if (!isTransparent)
     {
-    if (!prot->fetchInfo(url, &info))
+    useCacheInfo = (udcCacheAge(url, cacheDir) < udcCacheTimeout());
+    if (!useCacheInfo)
 	{
-	udcProtocolFree(&prot);
-	freeMem(protocol);
-	freeMem(afterProtocol);
-	return NULL;
+	if (!prot->fetchInfo(url, &info))
+	    {
+	    udcProtocolFree(&prot);
+	    freeMem(protocol);
+	    freeMem(afterProtocol);
+	    return NULL;
+	    }
 	}
     }
 
@@ -1473,3 +1477,25 @@ if (sameString("transparent", udc->protocol))
     }
 return udc->updateTime;
 }
+
+#ifdef PROGRESS_METER
+off_t remoteFileSize(char *url)
+/* fetch remote file size from given URL */
+{
+off_t answer = 0;
+struct udcRemoteFileInfo info;
+
+if (startsWith("http://",url) || startsWith("https://",url))
+    {
+    if (udcInfoViaHttp(url, &info))
+	answer = info.size;
+    }
+else if (startsWith("ftp://",url))
+    {
+    if (udcInfoViaFtp(url, &info))
+	answer = info.size;
+    }
+
+return answer;
+}
+#endif

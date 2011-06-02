@@ -31,17 +31,20 @@ struct markInfo
     char *name;		/* Human readable name */
     char *blurb;	/* Short description */
     char *vis;		/* Visibility */
+    int yMax;		/* Top before clipping */
     };
 
 
 struct markInfo marks[] = {
-    { "H3k4me1", "H3K4Me1", "Often Found Near Regulatory Elements", "full", },
-    { "H3k4me3", "H3K4Me3", "Often Found Near Promoters", "full", },
-    { "H3k27ac", "H3K27Ac", "Often Found Near Regulatory Elements", "hide", },
-    { "H3k27me3", "H3K27Me3", "Polycomb silenced", "hide", },
-    { "H4k20me1", "H3K30Me1", "Associated with Active Accessible Regions", "hide", },
-    { "Ctcf", "CTCF", "Insulator/DNA Looping", "hide", },
-    { "Control", "Input Control", "Input Control - used to filter peaks", "hide", },
+    { "H3k4me1", "H3K4Me1", "Often Found Near Regulatory Elements", "full", 150},
+    { "H3k4me3", "H3K4Me3", "Often Found Near Promoters", "full", 250},
+    { "H3k9ac", "H3K9Ac", "Often Found Near Regulatory Elements", "hide", 200},
+    { "H3k27ac", "H3K27Ac", "Often Found Near Regulatory Elements", "hide", 200},
+    { "H3k27me3", "H3K27Me3", "Polycomb silenced", "hide", 150},
+    { "H3k36me3", "H3K36Me3", "Marks Areas of RNA PolII Elongation", "hide", 100},
+    { "H4k20me1", "H3K30Me1", "Associated with Active Accessible Regions", "hide", 150},
+    { "Ctcf", "CTCF", "Insulator/DNA Looping", "hide", 300},
+    { "Control", "Input Control", "Input Control - used to filter peaks", "hide", 150},
 };
 
 struct cellInfo
@@ -77,13 +80,12 @@ for (i=0; i<ArraySize(marks); ++i)
     printf("    superTrack wgEncodeReg full\n");
     printf("    shortLabel Normaliz %s\n", mark->name);
     printf("    longLabel %s Normalized (%s) on 7 cell lines from ENCODE\n", mark->name, mark->blurb);
-   //  printf("    configurable on\n");
     printf("    visibility %s\n", mark->vis);
-    printf("    viewLimits 0:50\n");
-    printf("    maxHeightPixels 100:30:11\n");
+    printf("    viewLimits 0:%d\n", mark->yMax);
+    printf("    maxHeightPixels 100:50:11\n");
     printf("    aggregate transparentOverlay\n");
     printf("    showSubtrackColorOnUi on\n");
-    printf("    priority 1.%d\n", i+2);
+    printf("    priority 2.%d\n", i+2);
     printf("    dragAndDrop subtracks\n");
     printf("\n");
 

@@ -119,6 +119,9 @@ void netParseUrl(char *url, struct netParsedUrl *parsed);
  * This is set up so that the http:// and the port are optional. 
  */
 
+char *urlFromNetParsedUrl(struct netParsedUrl *npu);
+/* Build URL from netParsedUrl structure */
+
 int netUrlOpen(char *url);
 /* Return socket descriptor (low-level file handle) for read()ing url data,
  * or -1 if error.  Just close(result) when done. */

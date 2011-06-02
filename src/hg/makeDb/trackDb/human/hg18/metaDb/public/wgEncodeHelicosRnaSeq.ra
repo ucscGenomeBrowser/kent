@@ -1,0 +1,54 @@
+metaObject wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya
+objType table
+cell K562
+composite wgEncodeHelicosRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-04-03
+dateUnrestricted 2010-01-03
+fileName wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya.tagAlign.gz
+grant Gingeras
+lab Helicos
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+subId 249
+tableName wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya
+view Alignments
+
+metaObject wgEncodeHelicosRnaSeqRawDataK562CytosolLongpolya
+objType file
+cell K562
+composite wgEncodeHelicosRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-04-03
+dateUnrestricted 2010-01-03
+fileName wgEncodeHelicosRnaSeqRawDataK562CytosolLongpolya.fasta.gz
+grant Gingeras
+lab Helicos
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+subId 249
+view RawData
+
+metaObject wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya
+objType table
+cell K562
+composite wgEncodeHelicosRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-04-03
+dateUnrestricted 2010-01-03
+fileName wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya.wig.gz
+grant Gingeras
+lab Helicos
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+subId 249
+tableName wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya
+view RawSignal
+
+# MAGIC: 234845390

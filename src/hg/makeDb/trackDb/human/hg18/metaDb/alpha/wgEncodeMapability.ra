@@ -3,6 +3,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE July 2009 Freeze
+expId 316
 fileName wgEncodeBroadMapabilityAlign36mer.wig.gz
 grant Bernstein
 lab Broad
@@ -18,6 +19,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE January 2010 Freeze
+expId 317
 fileName wgEncodeCrgMapabilityAlign100mer.bw.gz
 grant Gingeras
 lab CRG-Guigo
@@ -32,6 +34,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE January 2010 Freeze
+expId 318
 fileName wgEncodeCrgMapabilityAlign36mer.bw.gz
 grant Gingeras
 lab CRG-Guigo
@@ -46,6 +49,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE January 2010 Freeze
+expId 319
 fileName wgEncodeCrgMapabilityAlign40mer.bw.gz
 grant Gingeras
 lab CRG-Guigo
@@ -60,6 +64,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE January 2010 Freeze
+expId 320
 fileName wgEncodeCrgMapabilityAlign50mer.bw.gz
 grant Gingeras
 lab CRG-Guigo
@@ -74,6 +79,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE January 2010 Freeze
+expId 321
 fileName wgEncodeCrgMapabilityAlign75mer.bw.gz
 grant Gingeras
 lab CRG-Guigo
@@ -88,6 +94,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE Nov 2008 Freeze
+expId 322
 fileName wgEncodeDukeRegionsExcluded.bed6.gz
 grant Crawford
 lab Duke
@@ -102,6 +109,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE Nov 2008 Freeze
+expId 323
 fileName wgEncodeDukeUniqueness20bp.wig.gz
 grant Crawford
 lab Duke
@@ -118,6 +126,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE Nov 2008 Freeze
+expId 324
 fileName wgEncodeDukeUniqueness24bp.wig.gz
 grant Crawford
 lab Duke
@@ -134,6 +143,7 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE Nov 2008 Freeze
+expId 325
 fileName wgEncodeDukeUniqueness35bp.wig.gz
 grant Crawford
 lab Duke
@@ -145,11 +155,17 @@ tableName wgEncodeDukeUniqueness35bp
 uniqueness 1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more
 view Uniqueness
 
+metaObject wgEncodeMapability
+objType composite
+composite wgEncodeMapability
+expVars lab,dataType,view,size
+
 metaObject wgEncodeUmassMapabilityUniq15
 objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion ENCODE July 2009 Freeze
+expId 326
 fileName wgEncodeUmassMapabilityUniq15.wig.gz
 grant Dekker
 lab UMass-Dekker
@@ -159,4 +175,4 @@ subId 345
 tableName wgEncodeUmassMapabilityUniq15
 view Uniqueness
 
-# MAGIC: -711268818
+# MAGIC: 1265492559

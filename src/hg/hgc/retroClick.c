@@ -13,7 +13,8 @@
 #include "common.h"
 #include "hgc.h"
 #include "retroClick.h"
-#include "retroMrnaInfo.h"
+#include "ucscRetroInfo.h"
+#include "ucscRetroOrtho.h"
 #include "genbank.h"
 #include "hui.h"
 /* combine blocks separated by gaps less than this number */
@@ -28,7 +29,7 @@ struct mappingInfo
 {
     char tblPre[64];           /* table prefix */
     char geneSet[6];           /* source gene set abbrv used in table name */
-    struct retroMrnaInfo *pg;  /* general info for retro gene */
+    struct ucscRetroInfo *pg;  /* general info for retro gene */
     boolean indirect;          /* an indirect mapping */
     char gbAcc[ID_BUFSZ];      /* src accession */
     short gbVer;               /* version from gbId */
@@ -149,12 +150,12 @@ else if (startsWith("retro", tbl))
 else
     strcpy(mi->geneSet, "Retro");
 if (suffix != NULL && strlen(suffix) > 0)
-    mi->pg = sqlQueryObjs(conn, (sqlLoadFunc)retroMrnaInfoLoad, sqlQueryMust|sqlQuerySingle,
+    mi->pg = sqlQueryObjs(conn, (sqlLoadFunc)ucscRetroInfoLoad, sqlQueryMust|sqlQuerySingle,
                       "select * from %s%sInfo%s where name='%s'", mi->tblPre, mi->geneSet, suffix,
                        mappedId);
 else
     {
-    mi->pg = sqlQueryObjs(conn, (sqlLoadFunc)retroMrnaInfoLoad, sqlQueryMust|sqlQuerySingle,
+    mi->pg = sqlQueryObjs(conn, (sqlLoadFunc)ucscRetroInfoLoad, sqlQueryMust|sqlQuerySingle,
                       "select * from %s%sInfo where name='%s'", mi->tblPre, mi->geneSet,
                        mappedId);
     }
@@ -169,7 +170,7 @@ static void mappingInfoFree(struct mappingInfo **mip)
 struct mappingInfo *mi = *mip;
 if (mi != NULL)
     {
-    retroMrnaInfoFree(&mi->pg);
+    ucscRetroInfoFree(&mi->pg);
     freeMem(mi->sym);
     freeMem(mi->desc);
     }
@@ -205,26 +206,37 @@ printf("</TBODY></TABLE>\n");
 static void displayRetroDetails(struct sqlConnection *conn, struct mappingInfo *mi)
 /* display information from a retroXXXInfo table */
 {
-struct retroMrnaInfo *pg = mi->pg;
+struct ucscRetroInfo *pg = mi->pg;
+char query[256];
+char orthoTable[128];
+if (mi->suffix != NULL && strlen(mi->suffix) > 0)
+    safef(orthoTable, sizeof(orthoTable), "%s%sOrtho%s", 
+            mi->tblPre, mi->geneSet, mi->suffix);
+else
+    safef(orthoTable, sizeof(orthoTable), "%s%sOrtho", 
+            mi->tblPre, mi->geneSet);
+
 printf("<TABLE class=\"transMap\">\n");
 printf("<THEAD>\n");
 printf("<TR><TH>Orthology (net) Break<TH>Coverage %%</TR>\n");
 printf("</THEAD><TBODY>\n");
-if (sameString(organism,"Human"))
-    printf("<TR><TH>Mouse ");
+if (hTableExists(database, orthoTable))
+    {
+    struct sqlResult *sr;
+    char **row;
+    safef(query, sizeof(query), "select * from %s where name = '%s' ", 
+            orthoTable, pg->name);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct ucscRetroOrtho *puro = ucscRetroOrthoLoad(row);
+        printf("<TR><TH>%s ", puro->db);
+        printf("<TD>%d</TR>\n", puro->overlap);
+        }
+    sqlFreeResult(&sr);
+    }
 else
-    printf("<TR><TH>Dog ");
-printf("<TD>%d</TR>\n", pg->overlapMouse);
-if (sameString(organism,"Human"))
-    printf("<TR><TH>Dog ");
-else
-    printf("<TR><TH>Rat ");
-printf("<TD>%d</TR>\n", pg->overlapDog);
-if (sameString(organism,"Human"))
-    printf("<TR><TH>Rhesus ");
-else
-    printf("<TR><TH>Human ");
-printf("<TD>%d</TR>\n", pg->overlapRhesus);
+    printf("<TR><TH>table %s not found </TR>", orthoTable);
 printf("</TBODY></TABLE>\n");
 }
 
@@ -397,7 +409,7 @@ return psl;
 
 struct psl *getParentAligns(struct sqlConnection *conn, struct mappingInfo *mi, char **table)
 {
-struct retroMrnaInfo *pg = mi->pg;
+struct ucscRetroInfo *pg = mi->pg;
 struct psl *pslList = NULL;
 char query[512];
 if (startsWith("August",mi->geneSet))
@@ -452,7 +464,7 @@ return pslList;
 
 static void displayParentAligns(struct mappingInfo *mi, struct psl *pslList, char *table)
 {
-struct retroMrnaInfo *pg = mi->pg;
+struct ucscRetroInfo *pg = mi->pg;
 if (pslList != NULL && *table )
     {
     printf("<H3>Parent Locus/Parent mRNA Alignments </H3>");
@@ -481,19 +493,25 @@ return count;
 static void displayMappingInfo(struct sqlConnection *conn, struct mappingInfo *mi)
 /* display information from a transMap table */
 {
-struct retroMrnaInfo *pg = mi->pg;
-int overlapOrtholog = max(pg->overlapMouse, pg->overlapDog);
+struct ucscRetroInfo *pg = mi->pg;
 double  wt[12];     /* weights on score function*/
 char query[512];
 char *name;
 char alignTbl[128];
+char scoreSql[128];
 struct psl *psl;
 float coverFactor = 0;
-float maxOverlap = 0, rawScore = 0;
+float maxOverlap = 0;
 if (mi->suffix == NULL)
+    {
     safef(alignTbl, sizeof(alignTbl), "%s%sAli", mi->tblPre, mi->geneSet);
+    safef(scoreSql, sizeof(scoreSql), "select max(score) from %s%sInfo", mi->tblPre, mi->geneSet);
+    }
 else
+    {
     safef(alignTbl, sizeof(alignTbl), "%s%sAli%s", mi->tblPre, mi->geneSet, mi->suffix);
+    safef(scoreSql, sizeof(scoreSql), "select max(score) from %s%sInfo%s", mi->tblPre, mi->geneSet, mi->suffix);
+    }
 printf("<TABLE class=\"transMap\">\n");
 printf("<CAPTION>Retrogene stats</CAPTION>\n");
 printf("<THEAD>\n");
@@ -505,7 +523,7 @@ else
     printf("<TR><TH>Expression of Retrocopy<TD>%s</TR>\n",pg->type);
 printf("<TR><TH>Score <TD>%d (range from 0 - %d)</TR>\n",  
         pg->score,
-        sqlQuickNum(conn, "select max(score) from ucscRetroInfo") );
+        sqlQuickNum(conn, scoreSql) );
 printf("<TR><TH>Alignment Coverage of parent gene (Bases&nbsp;matching Parent) <TD>%d %% &nbsp;(%d bp) </TR>\n", pg->coverage, pg->matches);
 printf("<TR><TH>Introns Procesed Out <TD>%d out of %d (%d exons covered)\n", pg->processedIntrons, (pg->parentSpliceCount/2), pg->exonCover);
 printf("<TR><TH>Possible Introns (or gaps) in Retro<TD>%d + %d\n", pg->intronCount, pg->oldIntronCount);
@@ -523,17 +541,6 @@ else
     }
 wt[0] = 0; wt[1] = 0.85; wt[2] = 0.2; wt[3] = 0.3; wt[4] = 0.8; 
 wt[5] = 1; wt[6] = 1  ; wt[7] = 0.5; wt[8] = 0.5; wt[9] = 1; wt[10] = 1;
-rawScore = wt[0]*pg->milliBad+
-                wt[1]*(log(pg->exonCover+1)/log(2))*200 + 
-                wt[2]*(((log(pg->axtScore>0?pg->axtScore:1)/log(2))*170)-1000)+
-                wt[3]*(log(pg->polyAlen+2)*200) +
-                wt[4]*overlapOrtholog*10 + 
-                wt[5]*(((log(pg->processedIntrons > 0 ? pg->processedIntrons : 1))/log(2))*600) +
-                (float)wt[6]*pow(pg->intronCount,0.5)*750 +
-                (float)wt[7]*(maxOverlap*300)+
-                wt[8]*((pg->coverage/100.0)*(1.0-coverFactor)*300.0)+
-                wt[9]*(pg->tReps*10)+ 
-                wt[10]*pg->oldIntronCount;
 #ifdef debug
 char table[512];
 struct psl *pslList = getParentAligns(conn, mi, &table);
@@ -581,7 +588,7 @@ printf("<TR><TH>score function<TD>1:xon %d %4.1f conSS %d 2: ax %4.1f 3: pA %4.1
                 wt[9]*(pg->tReps*10), 
                 pg->oldIntronCount,
                 wt[10]*pg->oldIntronCount);
-printf("<TR><TH>score function<TD>%4.1f+ %4.1f+ %4.1f+ %4.1f+ %4.1f - %4.1f - %4.1f+ %4.1f - %4.1f - %4.1f=%4.1f %4.1f</td></TR>\n",
+printf("<TR><TH>score function<TD>%4.1f+ %4.1f+ %4.1f+ %4.1f+ %4.1f - %4.1f - %4.1f+ %4.1f - %4.1f - %4.1f</td></TR>\n",
                 wt[1]*(log(pg->exonCover+1)/log(2))*200 , 
                 wt[2]*(((log(pg->axtScore>0?pg->axtScore:1)/log(2))*170)-1000),
                 wt[3]*(log(pg->polyAlen+2)*200) ,
@@ -591,7 +598,7 @@ printf("<TR><TH>score function<TD>%4.1f+ %4.1f+ %4.1f+ %4.1f+ %4.1f - %4.1f - %4
                 (float)wt[7]*(maxOverlap*300),
                 wt[8]*((pg->coverage/100.0)*(1.0-coverFactor)*300.0),
                 wt[9]*(pg->tReps*10), 
-                wt[10]*pg->oldIntronCount, rawScore , rawScore/3.0);
+                wt[10]*pg->oldIntronCount);
 if (pg->kaku > 0 && pg->kaku < 1000000)
     printf("<TR><TH>KA/KU mutation rate in non-syn sites vs utr with repect to parent gene<TD>%4.2f</TR>\n",  pg->kaku);
 #endif

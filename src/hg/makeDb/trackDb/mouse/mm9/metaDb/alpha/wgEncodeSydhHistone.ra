@@ -1,3 +1,8 @@
+metaObject wgEncodeSydhHist
+objType composite
+composite wgEncodeSydhHist
+expVars lab,dataType,cell,antibody,treatment
+
 metaObject wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1
 objType file
 age immortalized
@@ -10,7 +15,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileIndex wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1.bam.bai
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1.bam
 grant Snyder
 lab Yale-m
@@ -35,7 +39,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileIndex wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2.bam.bai
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2.bam
 grant Snyder
 lab Yale-m
@@ -158,7 +161,6 @@ dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileIndex wgEncodeSydhHistCh12InputIggyaleAln.bam.bai
 fileName wgEncodeSydhHistCh12InputIggyaleAln.bam
 grant Snyder
 lab Yale-m
@@ -435,4 +437,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: -377783445
+# MAGIC: -1003114865

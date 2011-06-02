@@ -58,14 +58,13 @@
 			    to actually transferring the data.  For instance, to find
 			    the size of the /gbdb directory, run:<br>
 <PRE>
-rsync -navzP rsync://hgdownload.cse.ucsc.edu/gbdb/
+rsync -navP rsync://hgdownload.cse.ucsc.edu/gbdb/
 </PRE>
 The rsync options used in this command are:
 <PRE>
 -n, --dry-run         show what would have been transferred
 -a, --archive         archive mode, equivalent to -rlptgoD
 -v, --verbose         increase verbosity
--z, --compress        compress file data
 -P                    equivalent to --partial --progress
 </PRE>
 			    <P>
@@ -136,7 +135,7 @@ databases </A>&nbsp;
 We will not provide consulting on the operation or configuration
 of Apache or MySQL. If you are not familiar with the setup of
 Apache or MySQL, you will have to find someone at your site that
-is. We use a reference platform of Redhat 9 for all the steps
+is. We use a reference platform of CentOS 5.5 for all the steps
 described here.
 <BR>
 <LI>
@@ -149,7 +148,7 @@ Apache to be configured with the XbitHack option enabled.
 XBitHack on
 </PRE>
 <LI>
-Find the location of your web pages. For example, on a Redhat Linux
+Find the location of your web pages. For example, on a CentOS Linux
 system using a stock apache RPM, the web pages are stored in
 <em>/var/www/html</em>. We will refer to this directory as
 WEBROOT in this document and you should substitute your real
@@ -165,14 +164,13 @@ THE WEBROOT WILL OVERWRITE ANY EXISTING DATA IN THAT AREA.</B>
 <LI>
 Find the location of your <em>cgi-bin</em> directory. It should be under
 the parent directory of the WEBROOT directory. For example, on
-a Redhat Linux system using a stock apache RPM, the path of
+a CentOS Linux system using a stock apache RPM, the path of
 the <em>cgi-bin</em> directory is <em>/var/www/cgi-bin</em>. We will refer to
 this directory as CGI_BIN in this document and you should substitute your
 real path for CGI_BIN whenever you see that.
 <BR>
 <LI>
-Next, find the location of your MySQL data. For example, on a
-Redhat Linux system using stock RPM's, this is located in
+Next, find the location of your MySQL data. For example, on CentOS Linux system using stock RPM's, this is located in
 <em>/var/lib/mysql</em>. We will refer to this directory as
 MYSQLDATA in this document and you should substitute
 your real path for MYSQLDATA whenever you see that.
@@ -191,7 +189,7 @@ installed on your system, obtain it from
 <LI> Test the rsync connection:
 <BR>
 <PRE>
-rsync -navz --progress rsync://hgdownload.cse.ucsc.edu
+rsync -nav --progress rsync://hgdownload.cse.ucsc.edu
 </PRE>
 This should respond with:
 <PRE>
@@ -207,7 +205,7 @@ mysql           UCSC Human Genome Raw Mysql Tables
 <LI>Determine the destination of the copy ($WEBROOT) and fire off the production copy (270 Mb)<BR>
 <em>The trailing slash is important!</em><BR>
 <PRE>
-rsync -avzP rsync://hgdownload.cse.ucsc.edu/htdocs/ $WEBROOT/
+rsync -avP rsync://hgdownload.cse.ucsc.edu/htdocs/ $WEBROOT/
 </PRE>
 </OL>
 <P>
@@ -225,7 +223,7 @@ Human March 2006 full data set, do:
 <P>
 <PRE>
 mkdir -p $WEBROOT/goldenPath/hg18/database/
-rsync -avzP --delete --max-delete=20 \
+rsync -avP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hg18/database/ \
   $WEBROOT/goldenPath/hg18/database/
 </PRE>
@@ -239,7 +237,7 @@ rsync -avzP --delete --max-delete=20 \
 <LI>You will need the portions of /gbdb used by the browser:
 <BR>
 <PRE>
-rsync -avzP --delete --max-delete=20 \
+rsync -avP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/gbdb/ /gbdb/
 </PRE>
 </OL>
@@ -359,14 +357,14 @@ database is restricted to read-only.
 <h4><a NAME="step6"></A>6. Get executable files</h4>
 <OL type="a">
 
-<LI>Pre-compiled Red-Hat (2.6.12-1.1381_FC3smp) AMD Opteron x86_64 64-bit
+<LI>Pre-compiled (by gcc 4.1.2 (Red Hat 4.1.2-50)) x86_64 64-bit
 binaries can be fetched with the rsync command:<BR><BR>
-<TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ $CGI_BIN/ </TT><BR><BR>
+<TT> rsync -avP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ $CGI_BIN/ </TT><BR><BR>
 There are a number of data files that are also used in this directory.
 This rsync will fetch them all.  If you need i386 (x86) 32-bit binaries, please
 use the following rsync in addition to and after the above rsync,
 to replace the 64 bit binaries:<BR><BR>
-<TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin-i386/ $CGI_BIN/ </TT>
+<TT> rsync -avP rsync://hgdownload.cse.ucsc.edu/cgi-bin-i386/ $CGI_BIN/ </TT>
 <BR><BR>
 
 <LI>In the CGI_BIN directory, make an 
@@ -531,7 +529,7 @@ that runs the web server write access to it.
 <OL type="a">
 <LI>Download a copy of the dumped hgFixed tables.
 <PRE>
-rsync -avzP --delete --max-delete=20 \
+rsync -avP --delete --max-delete=20 \
    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hgFixed/ \
    $WEBROOT/goldenPath/hgFixed/
 </PRE>
@@ -548,7 +546,7 @@ mysql&gt; create database hgFixed
 <OL type="a">
 <LI>Download a copy of the dumped protein tables.
 <PRE>
-rsync -avzP --delete --max-delete=20 \
+rsync -avP --delete --max-delete=20 \
     rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteinDB/ \
     $WEBROOT/goldenPath/proteinDB/
 </PRE>
@@ -578,7 +576,7 @@ and so on
 
 <LI>Download a copy of the dumped UniProt tables.
 <PRE>
-rsync -avzP --delete --max-delete=20 \
+rsync -avP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/uniProt/ \
   $WEBROOT/goldenPath/uniProt/
 </PRE>
@@ -605,7 +603,7 @@ and so on
 <OL type="a">
 <LI>Download a copy of the dumped visiGene tables.
 <PRE>
-rsync -avzP --delete --max-delete=20 \
+rsync -avP --delete --max-delete=20 \
    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/visiGene/ \
    $WEBROOT/goldenPath/visiGene/
 </PRE>

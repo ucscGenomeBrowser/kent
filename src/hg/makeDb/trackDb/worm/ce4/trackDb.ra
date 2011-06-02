@@ -25,6 +25,7 @@ visibility hide
 color 0,0,200
 type genePred
 url http://ws170.wormbase.org/db/gene/gene?name=$$;class=Gene
+autoTranslate 0
 
 track sangerPseudoGene
 shortLabel WormBase PseudoGenes

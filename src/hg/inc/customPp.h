@@ -20,6 +20,9 @@ struct customPp
     struct slName *inReuse;	 /* Line in process of being reused. */
     boolean ignoreBrowserLines;  /* Flag to suppress removal of browser lines */
                                  /*   so preprocessor can be used with docs */
+#ifdef PROGRESS_METER
+    off_t remoteFileSize;	/* reported size from URL */
+#endif
     };
 
 struct customPp *customPpNew(struct lineFile *lf);

@@ -399,26 +399,6 @@ searchType genePred
 termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?
 searchPriority 50
 
-track ucscRetroAli
-shortLabel Retroposed Genes
-longLabel Retroposed Genes, Including Pseudogenes November 2009 [ucscRetroAli]
-group genes
-type psl
-priority 37.14
-color 20,0,250
-visibility hide
-nextItemButton on
-retroMrnaInfo ucscRetroInfo
-baseColorDefault diffCodons
-baseColorUseCds table ucscRetroCds
-baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-
 track rgdEst
 shortLabel RGD EST
 longLabel RGD EST
@@ -1588,9 +1568,9 @@ defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
 
-track snp132Patient
-shortLabel Patient SNPs(132)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 132) Observed in a Clinical Setting
+track snp132Flagged
+shortLabel Flagged SNPs(132)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 132) Flagged by dbSNP as Clinically Assoc
 group varRep
 priority 99.0922
 visibility hide
@@ -1601,7 +1581,7 @@ snpExceptionDesc snp132ExceptionDesc
 defaultGeneTracks knownGene
 type bed 6 +
 
-track snp132NonUnique
+track snp132Mult
 shortLabel Mult. SNPs(132)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 132) That Map to Multiple Genomic Loci
 group varRep
@@ -1633,7 +1613,7 @@ shortLabel SNPs (131)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 131)
 group varRep
 priority 99.093
-visibility dense 
+visibility hide 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 defaultGeneTracks knownGene
@@ -2625,7 +2605,7 @@ termRegex rs[0-9]+
 searchPriority 12.9901
 padding 250
 
-searchTable snp132Patient
+searchTable snp132Flagged
 searchMethod exact
 searchType bed
 semiShortCircuit 1
@@ -2633,7 +2613,7 @@ termRegex rs[0-9]+
 searchPriority 12.9902
 padding 250
 
-searchTable snp132NonUnique
+searchTable snp132Mult
 searchMethod exact
 searchType bed
 semiShortCircuit 1
@@ -2723,39 +2703,6 @@ searchTable xenoRefGene
 searchType refGene
 searchPriority 2.1
 grepIndex refLinkGrep/refLink.mrnaAccProduct
-
-searchName ucscRetroInfoRefSeq
-searchTable ucscRetroAli
-searchDescription Retroposed Genes, Including Pseudogenes [ucscRetroAli]
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo
-dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
-searchPriority 3.52
-
-searchName ucscRetroInfoMrna
-searchTable ucscRetroAli
-searchDescription Retroposed Genes, Including Pseudogenes [ucscRetroAli]
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-searchPriority 3.55
-
-searchName ucscRetroUniProt
-searchTable ucscRetroAli
-searchDescription Retroposed Genes, Including Pseudogenes [ucscRetroAli]
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo
-xrefQuery select ucscRetroInfo.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
-searchPriority 3.54
-
-searchName ucscRetroKnownGene
-searchTable ucscRetroAli
-searchDescription Retroposed Genes, Including Pseudogenes [ucscRetroAli]
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo
-xrefQuery select ucscRetroInfo.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
-searchPriority 3.53
 
 searchTable pseudoYaleEncode
 searchType genePred

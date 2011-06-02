@@ -8,16 +8,25 @@
 
 #ifndef RA_H
 
-struct hash *raNextRecord(struct lineFile *lf);
-/* Return a hash containing next record.
- * Returns NULL at end of file.  freeHash this
- * when done.  Note this will free the hash
- * keys and values as well, so you'll have to
- * cloneMem them if you want them for later. */
+struct hash *raNextStanza(struct lineFile *lf);
+// Return a hash containing next record.
+// Will ignore '#' comments and joins continued lines (ending in '\').
+// Returns NULL at end of file.  freeHash this when done.
+// Note this will free the hash keys and values as well,
+// so you'll have to cloneMem them if you want them for later.
+#define raNextRecord(lf)  raNextStanza(lf)
 
-struct slPair *raNextRecordAsSlPairList(struct lineFile *lf);
-/* Return ra record as a slPair list instead of a hash.  Handy if you want to preserve the order.
- * Do a slPairFreeValsAndList on result when done. */
+struct slPair *raNextStanzAsPairs(struct lineFile *lf);
+// Return ra stanza as an slPair list instead of a hash.  Handy to preserve the
+// order.  Will ignore '#' comments and joins continued lines (ending in '\').
+#define raNextRecordAsSlPairList(lf)  raNextStanzAsPairs(lf)
+
+struct slPair *raNextStanzaLinesAndUntouched(struct lineFile *lf);
+// Return list of lines starting from current position, up through last line of next stanza.
+// May return a few blank/comment lines at end with no real stanza.
+// Will join continuation lines, allocating memory as needed.
+// returns pairs with name=joined line and if joined,
+// val will contain raw lines '\'s and linefeeds, else val will be NULL.
 
 boolean raSkipLeadingEmptyLines(struct lineFile *lf, struct dyString *dy);
 /* Skip leading empty lines and comments.  Returns FALSE at end of file.
@@ -25,9 +34,10 @@ boolean raSkipLeadingEmptyLines(struct lineFile *lf, struct dyString *dy);
  * If dy parameter is non-null, then the text parsed gets placed into dy. */
 
 boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal, struct dyString  *dy);
-/* Read next line.  Return FALSE at end of file or blank line.  Otherwise
- * fill in *retTag and *retVal and return TRUE.
- * If dy parameter is non-null, then the text parsed gets appended to dy. */
+// Read next line.  Return FALSE at end of file or blank line.  Otherwise fill in
+// *retTag and *retVal and return TRUE.  If dy parameter is non-null, then the text parsed
+// gets appended to dy. Continuation lines in RA file will be joined to produce tag and val,
+// but dy will be filled with the unedited multiple lines containing the continuation chars.
 
 struct hash *raFromString(char *string);
 /* Return hash of key/value pairs from string.
@@ -57,6 +67,9 @@ struct hash *raReadWithFilter(char *fileName, char *keyField,char *filterKey,cha
 /* Return hash that contains all filtered ra records in file keyed by given field, which must exist.
  * The values of the hash are themselves hashes.  The filter is a key/value pair that must exist.
  * Example raReadWithFilter(file,"term","type","antibody"): returns hash of hashes of every term with type=antibody */
+
+struct hash *raTagVals(char *fileName, char *tag);
+/* Return a hash of all values of given tag seen in any stanza of ra file. */
 
 #endif /* RA_H */
 

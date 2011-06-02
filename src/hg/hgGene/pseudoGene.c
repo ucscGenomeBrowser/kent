@@ -6,6 +6,7 @@
 #include "dystring.h"
 #include "spDb.h"
 #include "hdb.h"
+#include "web.h"
 #include "genePred.h"
 #include "bed.h"
 #include "hgGene.h"
@@ -19,13 +20,13 @@ static boolean pseudoGeneExists(struct section *section,
 boolean result;
 
 result = FALSE;
-if (hTableExists(sqlGetDatabase(conn), "pseudoGeneLink"))
+if (hTableExists(sqlGetDatabase(conn), "ucscRetroInfo"))
     {
     struct sqlResult *sr;
     char **row;
     char query[255];
     safef(query, sizeof(query),
-          "select name from pseudoGeneLink where name='%s' or kgName='%s' or refseq='%s'",
+          "select name from ucscRetroInfo where name='%s' or kgName='%s' or refseq='%s'",
 	  geneId, geneId, geneId);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL) 
@@ -48,11 +49,19 @@ char condStr[255];
 char *descID, *desc;    
 char *emptyStr;
 char query[255];
-char *name, *chrom, *chromStart, *chromEnd, *refseq;
+char *name, *chrom, *chromStart, *chromEnd, *refseq, *rtype;
+int  score;
 
+webPrintLinkTableStart();
+webPrintLabelCell("Retro Id");
+webPrintLabelCell("Type");
+webPrintLabelCell("Score ");
+webPrintLabelCell("Genome Location");
+webPrintLabelCell("Description");
+hPrintf("</TR>\n<TR>");
 emptyStr = cloneString("");
 safef(query, sizeof(query),
-      "select distinct name, chrom, chromStart, chromEnd, refseq from pseudoGeneLink where name='%s' or kgName='%s' or refseq='%s'",
+      "select distinct name, chrom, chromStart, chromEnd, refseq, type, score from ucscRetroInfo where name='%s' or kgName='%s' or refseq='%s'",
       geneId, geneId, geneId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL) 
@@ -62,9 +71,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     chromStart  = row[2];
     chromEnd	= row[3];
     refseq	= row[4];
+    rtype	= row[5];
+    score	= sqlUnsigned(row[6]);
    
     desc = emptyStr;
-    safef(condStr, sizeof(condStr), "acc='%s'", name);
+    safef(condStr, sizeof(condStr), "acc='%s'", refseq);
     descID= sqlGetField(database, "gbCdnaInfo", "description", condStr);
     if (descID != NULL)
     	{
@@ -73,8 +84,23 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (desc == NULL) desc = emptyStr;
 	}
    	
-    hPrintf("<br><A HREF=\"hgTracks?position=%s:%s-%s&pseudoGeneLink=pack&hgFind.matches=%s,\">%s at %s:%s-%s</A> %s\n",
-           chrom, chromStart, chromEnd, name, name, chrom, chromStart, chromEnd, desc);
+    webPrintLinkCellStart();
+    hPrintf("<A HREF=\"hgc?g=ucscRetroAli&i=%s\">%s</A>", name, name);
+    webPrintLinkCellEnd();
+    webPrintLinkCellStart();
+    hPrintf("%s ", rtype);
+    webPrintLinkCellEnd();
+    webPrintLinkCellStart();
+    hPrintf("%d ", score);
+    webPrintLinkCellEnd();
+    webPrintLinkCellStart();
+    hPrintf("<A HREF=\"hgTracks?position=%s:%s-%s&ucscRetroAli=pack&hgFind.matches=%s,\">%s:%s-%s</A>",
+           chrom, chromStart, chromEnd, name, chrom, chromStart, chromEnd);
+    webPrintLinkCellEnd();
+    webPrintLinkCellStart();
+    hPrintf("%s\n", desc);
+    webPrintLinkCellEnd();
+    hPrintf("</TR>\n<TR>");
     }
 sqlFreeResult(&sr);
 }

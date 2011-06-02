@@ -3430,3 +3430,52 @@ cvs ci -m "Fixed labVersions with leading blank that were screwing up MAGIC" mdb
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 1127 reviewing 
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 1127 released 
 
+
+2011-04-20 Experimentify
+========================
+cd trackDb/human/hg18/metaDb/alpha
+mdbPrint hg18 -composite=%ChromatinMap -experimentify > tmp.txt
+Using hgFixed.encodeExp
+Using table named 'hg18.metaDb_tdreszer'.
+objects:534  vars:9169
+
+mdbUpdate hg18 -composite=%ChromatinMap -encodeExp=std -test    
+Using hgFixed.encodeExp
+Using table named 'hg18.metaDb_tdreszer'.
+Composite 'wgEncodeChromatinMap' has 79 recognizable experiments with 79 missing an expId.
+   objects/experiment: min:2  max:10  mean:6.746835.
+Found 533 of 534 object(s) would have their experiment ID updated.
+Command would affected 533 row(s) in hg18.metaDb_tdreszer
+
+mdbUpdate hg18 -composite=%ChromatinMap -encodeExp=std      
+Using hgFixed.encodeExp
+Using table named 'hg18.metaDb_tdreszer'.
+Composite 'wgEncodeChromatinMap' has 79 recognizable experiments with 79 missing an expId.
+   objects/experiment: min:2  max:10  mean:6.746835.
+Affected 533 row(s) in hg18.metaDb_tdreszer
+
+mdbUpdate hg18 -composite=%ChromatinMap -encodeExp=std -accession -test
+Using hgFixed.encodeExp
+Using table named 'hg18.metaDb_tdreszer'.
+Composite 'wgEncodeChromatinMap' has 79 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:2  max:10  mean:6.746835.
+Found 533 of 534 object(s) would have their experiment ID updated.
+Command would affected 533 row(s) in hg18.metaDb_tdreszer
+
+mdbUpdate hg18 -composite=%ChromatinMap -encodeExp=std -accession      
+Using hgFixed.encodeExp
+Using table named 'hg18.metaDb_tdreszer'.
+Composite 'wgEncodeChromatinMap' has 79 recognizable experiments with 0 missing an expId.
+   objects/experiment: min:2  max:10  mean:6.746835.
+Affected 533 row(s) in hg18.metaDb_tdreszer
+
+mdbPrint hg18 -composite=wgEncodeChromatinMap > wgEncodeChromatinMap.ra
+Using table named 'hg18.metaDb_tdreszer'.
+objects:534  vars:10235
+
+gold wgEncodeChromatinMap.ra
+
+gold, gadd, gci, gup,gpush
+
+cd {downloads}/wgEncodeChromatinMap
+encodeDownloadsPage.pl -db=hg18 index.html

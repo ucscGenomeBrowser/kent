@@ -1649,3 +1649,46 @@ see doc/builds.txt for specific details.
     #	89862892 bases of 1359412157 (6.610%) in intersection
 
 #######################################################################
+# lastz swap from melGal1 (DONE - 2011-04-02 - Chin)
+    # original alignment to melGal1
+    cd /hive/data/genomes/melGal1/bed/lastzXenTro2.2011-04-02
+    cat fb.melGal1.chainXenTro2Link.txt
+    # 36288270 bases of 935922386 (3.877%) in intersection
+
+    #   running the swap 
+    mkdir /hive/data/genomes/xenTro2/bed/blastz.melGal1.swap
+    cd /hive/data/genomes/xenTro2/bed/blastz.melGal1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/melGal1/bed/lastzXenTro2.2011-04-02/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    3m40.138s
+    cat fb.xenTro2.chainMelGal1Link.txt
+    #   41967849 bases of 1359412157 (3.087%) in intersection
+    cd /hive/data/genomes/xenTro2/bed
+    ln -s blastz.melGal1.swap lastz.melGal1
+
+
+#######################################################################
+# lastz swap from anoCar2 (DONE - 2011-04-26 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/anoCar2/bed/lastzXenTro2.2011-04-25
+    cat fb.anoCar2.chainXenTro2Link.txt 
+    #	85962319 bases of 1701353770 (5.053%) in intersection
+
+    #	running the swap - DONE - 2011-04-26
+    mkdir /hive/data/genomes/xenTro2/bed/blastz.anoCar2.swap
+    cd /hive/data/genomes/xenTro2/bed/blastz.anoCar2.swap
+    time nice -n +25 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/anoCar2/bed/lastzXenTro2.2011-04-25/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-syntenicNet -swap -qRepeats=windowmaskerSdust \
+	-tRepeats=windowmaskerSdust > swap.log 2>&1 &
+    #	real    29m36.856s
+    cat fb.xenTro2.chainAnoCar2Link.txt 
+    #	91934327 bases of 1359412157 (6.763%) in intersection
+
+##############################################################################

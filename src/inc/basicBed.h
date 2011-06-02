@@ -214,6 +214,9 @@ struct bed *cloneBed(struct bed *bed);
 struct bed *cloneBedList(struct bed *bed);
 /* Make an all-newly-allocated list copied from bed. */
 
+struct bed *bedListNextDifferentChrom(struct bed *bedList);
+/* Return next bed in list that is from a different chrom than the start of the list. */
+
 struct bed *lmCloneBed(struct bed *bed, struct lm *lm);
 /* Make a copy of bed in local memory. */
 

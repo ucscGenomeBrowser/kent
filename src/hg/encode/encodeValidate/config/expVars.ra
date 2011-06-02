@@ -1,6 +1,11 @@
 # This file lists what controlled vocabulary terms defined an "experiment".
 # This is given on a composite track basis.
 
+composite wgEncodeAffyRnaChip
+expVar1 cell
+expVar2 localization
+expVar3 rnaExtract
+
 composite wgEncodeBuOrchid
 expVar1 replicate
 
@@ -31,7 +36,7 @@ expVar4 replicate
 composite wgEncodeDukeAffyExon
 expVar1 cell
 expVar2 treatment
-expvar3 replicate
+expVar3 replicate
 
 composite wgEncodeGisDnaPet
 expVar1 cell
@@ -91,7 +96,6 @@ expVar3 replicate
 composite wgEncodeSunyAlbanyTiling
 expVar1 cell
 expVar2 antibody
-expVar3 replicate
 
 composite wgEncodeSunyRipSeq
 expVar1 cell
@@ -101,7 +105,6 @@ expVar3 replicate
 composite wgEncodeSunySwitchgear
 expVar1 cell
 expVar2 antibody
-expVar3 replicate
 
 composite wgEncodeUncBsuProt
 expVar1 cell

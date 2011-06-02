@@ -164,46 +164,6 @@ color 30,130,210
 type genePred
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
-track retroMrnaInfo
-shortLabel Retroposed Genes 2.0c
-longLabel Retroposed Genes, Including Pseudogenes [retroMrnaInfo]
-group genes
-priority 37.12
-visibility hide
-nextItemButton on
-spectrum on
-type bed 12 .
-
-track ucscRetroInfo3
-shortLabel Retroposed Genes 2.0d
-longLabel Retroposed Genes, Including Pseudogenes August 2008 [ucscRetroInfo3]
-group genes
-priority 37.13
-visibility hide
-nextItemButton on
-spectrum on
-type bed 12 .
-
-track ucscRetroAli3
-shortLabel Retroposed Genes 3.0
-longLabel Retroposed Genes, Including Pseudogenes August 2008 [ucscRetroAli3]
-group genes
-type psl
-priority 37.14
-color 20,0,250
-visibility hide
-retroMrnaInfo ucscRetroInfo3
-#transMapTypeDesc UCSC retrocopies
-baseColorDefault diffCodons
-baseColorUseCds table retroCds
-baseColorUseSequence extFile retroSeq retroExtFile
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-
 track sanger20
 shortLabel Sanger 20
 longLabel Sanger Institute Chromosome 20 Genes
@@ -306,6 +266,29 @@ spectrum on
 type genePred
 autoTranslate 0
 url http://www.pseudogene.org/cgi-bin/display-by-acc.cgi?id=$$
+
+track pseudoYale60
+shortLabel Yale Pseudo60
+longLabel Yale Pseudogenes based on Ensembl Release 60
+group genes
+priority 53
+visibility hide
+spectrum on
+type genePred
+autoTranslate 0
+geneClasses Processed Duplicated Ambiguous
+gClass_Processed 180,0,0
+gClass_Duplicated 100,50,0
+gClass_Ambiguous 100,91,191
+itemClassTbl pseudoYale60Class
+dataVersion December 2010
+urlLabel Yale pseudogene.org link:
+url http://tables.pseudogene.org/human55/$$
+
+searchTable pseudoYale60
+searchType genePred
+termRegex PGOHUM[0-9]+
+searchPriority 50
 
 track luNega
 shortLabel UCSC Pseudo
@@ -2982,7 +2965,7 @@ longLabel OMIM Non-Gene Entry Cytogenetic Locations
 group phenDis
 priority 29.75
 visibility hide
-color 0, 100, 100
+color 0, 100, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
@@ -2993,7 +2976,7 @@ longLabel OMIM Genes
 group phenDis
 priority 29.73
 visibility hide
-color 220, 0, 0
+color 0, 100, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
@@ -3004,7 +2987,7 @@ longLabel OMIM Allelic Variant SNPs
 group phenDis
 priority 29.71
 visibility hide
-color 220,0,0
+color 0, 100, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
@@ -4101,7 +4084,7 @@ type bed 4 .
 
 track iscaRetrospective
 shortLabel ISCA Retro
-longLabel International Standard Cytogenetic Array Consortium - Retrospective variants
+longLabel International Standards for Cytogenetic Arrays Consortium - Retrospective variants
 group varRep
 priority 110
 visibility hide
@@ -4159,3 +4142,9 @@ termRegex rs[0-9]+
 searchPriority 12.991
 padding 250
 
+searchTable iscaRetrospective
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex [ne]ss?v[0-9]+
+searchPriority 20

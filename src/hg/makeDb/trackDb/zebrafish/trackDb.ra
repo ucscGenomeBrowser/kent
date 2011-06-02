@@ -41,7 +41,7 @@ type psl
 priority 39
 color 20,0,250
 visibility hide
-retroMrnaInfo ucscRetroInfo1
+ucscRetroInfo ucscRetroInfo1
 #transMapTypeDesc UCSC retrocopies
 baseColorDefault diffCodons
 baseColorUseCds table retroCds

@@ -621,7 +621,7 @@ wgEncode 1
 #        metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Excludable labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
 
         track wgEncodeDukeRegionsExcluded
-        subTrack wgEncodeMapabilityViewXR
+        parent wgEncodeMapabilityViewXR
         shortLabel Excluded Regions
         longLabel REPLACED Mapability - ENCODE Duke Excluded Regions
         subGroups view=XR win=zNA

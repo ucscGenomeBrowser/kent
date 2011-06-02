@@ -39,6 +39,8 @@
 #include "dgv.h"
 #include "transMapStuff.h"
 #include "bbiFile.h"
+#include "ensFace.h"
+#include "microarray.h"
 
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
@@ -172,7 +174,7 @@ if (genePredTables != NULL)
     slSort(&geneTdbList, trackDbCmp);
     jsBeginCollapsibleSection(cart, tdb->track, "geneTracks",
 			      "Use Gene Tracks for Functional Annotation", FALSE);
-    printf("<BR><B>On details page, show function and coding differences relative to: </B> ");
+    printf("<BR><B>On details page, show function and coding differences relative to: </B>\n");
     char cartVar[256];
     safef(cartVar, sizeof(cartVar), "%s_geneTrack", tdb->track);
     jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
@@ -1079,36 +1081,34 @@ cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
 }
 
-void expRatioCombineDropDown(char *trackName, char *groupSettings, struct hash *allGroupings)
+void expRatioCombineDropDown(struct trackDb *tdb, struct microarrayGroups *groups)
 /* Make a drop-down of all the main combinations. */
 {
+struct maGrouping *comb;
 int size = 0;
 int i;
 char **menuArray;
 char **valArray;
-char dropDownName[512];
-struct hash *groupGroup = hashMustFindVal(allGroupings, groupSettings);
-char *combineList = hashFindVal(groupGroup, "combine");
-char *allSetting = hashMustFindVal(groupGroup, "all");
-char *defaultSetting = hashFindVal(groupGroup, "combine.default");
+char *dropDownName = expRatioCombineDLName(tdb->track);
+char *defaultSelection = NULL;
 char *cartSetting = NULL;
-struct slName *combineNames = slNameListFromComma(combineList);
-struct slName *aName;
-safef(dropDownName, sizeof(dropDownName), "%s.combine", trackName);
-size = slCount(combineNames) + 1;
+if (!groups->allArrays)
+    errAbort("The \'all\' stanza must be set in the microarrayGroup settings for track %s", tdb->track);
+if (groups->defaultCombine)
+    defaultSelection = groups->defaultCombine->name;
+else
+    defaultSelection = groups->allArrays->name;
+size = groups->numCombinations + 1;
 AllocArray(menuArray, size);
 AllocArray(valArray, size);
-slNameAddHead(&combineNames, allSetting);
-for (i = 0, aName = combineNames; i < size && aName != NULL; i++, aName = aName->next)
+menuArray[0] = groups->allArrays->description;
+valArray[0] = groups->allArrays->name;
+for (i = 1, comb = groups->combineSettings; (i < size) && (comb != NULL); i++, comb = comb->next)
     {
-    struct hash *oneGroupSetting = hashMustFindVal(allGroupings, aName->name);
-    char *descrip = hashMustFindVal(oneGroupSetting, "description");
-    menuArray[i] = descrip;
-    valArray[i] = aName->name;
+    menuArray[i] = cloneString(comb->description);
+    valArray[i] = cloneString(comb->name);
     }
-if (defaultSetting == NULL)
-    defaultSetting = allSetting;
-cartSetting = cartUsualString(cart, dropDownName, defaultSetting);
+cartSetting = cartUsualString(cart, dropDownName, defaultSelection);
 printf(" <b>Combine arrays</b>: ");
 cgiMakeDropListWithVals(dropDownName, menuArray, valArray,
                          size, cartSetting);
@@ -1150,18 +1150,59 @@ cgiMakeRadioButton(radioName, "redBlueOnYellow", sameString(colorSetting, "redBl
 puts("red/blue on yellow background<BR>");
 }
 
+void expRatioSubsetDropDown(struct maGrouping *ss, char *varName, char *offset)
+/* because setting up the droplist is a bit involved... this is just called */
+/* from expRatioSubsetOptions() */
+{
+char **menu;
+char **values;
+int i;
+AllocArray(menu, ss->numGroups);
+AllocArray(values, ss->numGroups);
+for (i = 0; i < ss->numGroups; i++)
+    {
+    char num[4];
+    safef(num, sizeof(num), "%d", i);
+    menu[i] = cloneString(ss->names[i]);
+    values[i] = cloneString(num);
+    }
+cgiMakeDropListWithVals(varName, menu, values, ss->numGroups, offset);
+}
+
+void expRatioSubsetOptions(struct trackDb *tdb, struct microarrayGroups *groups)
+/* subsetting options for a microarray track */
+{
+char *radioVarName = expRatioSubsetRadioName(tdb->track, groups);
+char *subSetting = NULL;
+struct maGrouping *subsets = groups->subsetSettings;
+struct maGrouping *ss;
+subSetting = cartUsualString(cart, radioVarName, NULL);
+puts("<BR><B>Subset:</B><BR>");
+cgiMakeRadioButton(radioVarName, "none", (subSetting == NULL) || sameString(subSetting, "none"));
+puts("no subset<BR>\n");
+for (ss = subsets; ss != NULL; ss = ss->next)
+    {
+    char *dropVarName = expRatioSubsetDLName(tdb->track, ss);
+    char *offS = NULL;
+    offS = cartUsualString(cart, dropVarName, "-1");
+    cgiMakeRadioButton(radioVarName, ss->name, (subSetting) && sameString(ss->name, subSetting));
+    printf("%s \n", ss->description);
+    expRatioSubsetDropDown(ss, dropVarName, offS);
+    printf("<BR>\n");
+    }
+}
+
 void expRatioUi(struct trackDb *tdb)
 /* UI options for the expRatio tracks. */
 {
-char *groupings = trackDbRequiredSetting(tdb, "groupings");
-struct hash *gHashOfHashes = NULL;
-struct hash *ret =
-    hgReadRa(hGenome(database), database, "hgCgiData",
-	     "microarrayGroups.ra", &gHashOfHashes);
-if ((ret == NULL) && (gHashOfHashes == NULL))
+struct microarrayGroups *groups = maGetTrackGroupings(database, tdb);
+if (groups == NULL)
     errAbort("Could not get group settings for track.");
 expRatioDrawExonOption(tdb);
-expRatioCombineDropDown(tdb->track, groupings, gHashOfHashes);
+if (groups->numCombinations > 0)
+    expRatioCombineDropDown(tdb, groups);
+if (groups->numSubsets > 0)
+    expRatioSubsetOptions(tdb, groups);
 expRatioColorOption(tdb);
 }
 
@@ -1392,15 +1433,15 @@ geneLabel = cartUsualString(cart, varName, "OMIM ID");
 printf("<BR><B>Include Entries of:</B> ");
 printf("<UL>\n");
 printf("<LI>");
-labelMakeCheckBox(tdb, "class1", "class 1: disorder positioned by mapping of the wildtype gene", TRUE);
+labelMakeCheckBox(tdb, "class1", "Class 1: the disorder is placed on the map based on its association with a gene, but the underlying defect is not known.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class2", "class 2: disease phenotype mapped", TRUE);
+labelMakeCheckBox(tdb, "class2", "Class 2: the disorder has been placed on the map by linkage; no mutation has been found.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class3", "class 3: molecular basis of the disorder is known", TRUE);
+labelMakeCheckBox(tdb, "class3", "Class 3: the molecular basis for the disorder is known; a mutation has been found in the gene.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class4", "class 4: chromosome deletion or duplication syndrome", TRUE);
+labelMakeCheckBox(tdb, "class4", "Class 4: a contiguous gene deletion or duplication syndrome; multiple genes are deleted or duplicated causing the phenotype.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "others", "others", TRUE);
+labelMakeCheckBox(tdb, "others", "Others: no associated OMIM phenotype class info available.", TRUE);
 printf("</UL>");
 }
 
@@ -1414,15 +1455,15 @@ geneLabel = cartUsualString(cart, varName, "OMIM ID");
 printf("<BR><B>Include Entries of:</B> ");
 printf("<UL>\n");
 printf("<LI>");
-labelMakeCheckBox(tdb, "class1", "class 1: disorder positioned by mapping of the wildtype gene", TRUE);
+labelMakeCheckBox(tdb, "class1", "Class 1: the disorder is placed on the map based on its association with a gene, but the underlying defect is not known.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class2", "class 2: disease phenotype mapped", TRUE);
+labelMakeCheckBox(tdb, "class2", "Class 2: the disorder has been placed on the map by linkage; no mutation has been found.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class3", "class 3: molecular basis of the disorder is known", TRUE);
+labelMakeCheckBox(tdb, "class3", "Class 3: the molecular basis for the disorder is known; a mutation has been found in the gene.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class4", "class 4: chromosome deletion or duplication syndrome", TRUE);
+labelMakeCheckBox(tdb, "class4", "Class 4: a contiguous gene deletion or duplication syndrome; multiple genes are deleted or duplicated causing the phenotype.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "others", "others", TRUE);
+labelMakeCheckBox(tdb, "others", "Others: no associated OMIM phenotype class info available.", TRUE);
 printf("</UL>");
 }
 
@@ -1590,7 +1631,10 @@ indelShowOptions(cart, tdb);
 void retroGeneUI(struct trackDb *tdb)
 /* Put up retroGene-specific controls */
 {
-geneIdConfig(tdb);
+printf("<B>Label:</B> ");
+labelMakeCheckBox(tdb, "gene", "gene", FALSE);
+labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+
 baseColorDrawOptDropDown(cart, tdb);
 }
 
@@ -1969,8 +2013,8 @@ tnfgVis = hTvFromString(visString);
 printf("<b>Transfrags Display Mode: </b>");
 hTvDropDown("hgt.affyPhase2.tnfg", tnfgVis, TRUE);
 
-wigCfgUi(cart,tdb,tdb->track,"<u>Graph Plotting options:</u>",FALSE);
-printf("<p><b><u>View/Hide individual cell lines:</u></b>");
+wigCfgUi(cart,tdb,tdb->track,"<span style='text-decoration:underline;'>Graph Plotting options:</span>",FALSE);
+printf("<p><b><span style='text-decoration:underline;'>View/Hide individual cell lines:</span></b>");
 }
 
 void humMusUi(struct trackDb *tdb, int optionNum )
@@ -2310,19 +2354,27 @@ cgiMakeCheckboxGroupWithVals(cartVarName, labelArr, valueArr, refCount, checked,
 hFreeConn(&conn);
 }
 
-void superTrackUi(struct trackDb *superTdb)
-/* List tracks in this collection, with visibility controls and UI links */
+#ifdef UNUSED
+static boolean isInTrackList(struct trackDb *tdbList, struct trackDb *target)
+/* Return TRUE if target is in tdbList. */
 {
 struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    if (tdb == target)
+        return TRUE;
+return FALSE;
+}
+#endif /* UNUSED */
+
+void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
+/* List tracks in this collection, with visibility controls and UI links */
+{
 printf("<P><TABLE CELLPADDING=2>");
-tdbSortPrioritiesFromCart(cart, &superTdb->subtracks);
-for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
+tdbRefSortPrioritiesFromCart(cart, &superTdb->children);
+struct slRef *childRef;
+for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     {
-    if (!hTableOrSplitExists(database, tdb->table)
-    && tdb->subtracks != NULL && trackDbLocalSetting(tdb, "compositeTrack") == NULL
-    && !tdbIsDownloadsOnly(tdb))
-	// NOTE: tdb if composite, is not yet populated with it's own subtracks!
-        continue;
+    struct trackDb *tdb = childRef->val;
     printf("<TR><TD NOWRAP>");
     if (tdbIsDownloadsOnly(tdb))
         printf("%s&nbsp;",tdb->shortLabel);
@@ -2349,14 +2401,14 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     printf("<TD>%s", tdb->longLabel);
     char *dataVersion = trackDbSetting(tdb, "dataVersion");
     if (dataVersion)
-        printf("&nbsp&nbsp;<EM><FONT COLOR=#666666 SIZE=-1>%s</FONT></EM>", dataVersion);
+        printf("&nbsp&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
     printf("</TD></TR>");
     }
 printf("</TABLE>");
 }
 
-void specificUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
-	/* Draw track specific parts of UI. */
+void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
+/* Draw track specific parts of UI. */
 {
 char *track = tdb->track;
 
@@ -2410,7 +2462,7 @@ else if (sameString(track, "omimGene"))
         omimGeneUI(tdb);
 else if (sameString(track, "hg17Kg"))
         hg17KgUI(tdb);
-else if (sameString(track, "pseudoGeneLink") || startsWith("retroMrnaInfo", track))
+else if (startsWith("ucscRetro", track) || startsWith("retroMrnaInfo", track))
         retroGeneUI(tdb);
 else if (sameString(track, "ensGeneNonCoding"))
         ensemblNonCodingUI(tdb);
@@ -2595,7 +2647,7 @@ else if (tdb->type != NULL)
     }
 if (tdbIsSuperTrack(tdb))
     {
-    superTrackUi(tdb);
+    superTrackUi(tdb, tdbList);
     }
 else if (tdbIsComposite(tdb))  // for the moment generalizing this to include other containers...
     {
@@ -2605,8 +2657,24 @@ if (!ajax)
     extraUiLinks(database,tdb, trackHash);
 }
 
+#ifdef UNUSED
+static void findSuperChildrenAndSettings(struct trackDb *tdbList, struct trackDb *super)
+/* Find the tracks that have super as a parent and stuff references to them on
+ * super's children list. Also do some visibility and parentName futzing. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (tdb->parent == super)
+        {
+	trackDbSuperMemberSettings(tdb);  /* This adds tdb to tdb->parent->children. */
+	}
+    }
+}
+#endif /* UNUSED */
 
-void trackUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
+
+void trackUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
 /* Put up track-specific user interface. */
 {
 if (!ajax)
@@ -2662,6 +2730,26 @@ if(tdbIsContainer(tdb))
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
+if (sameWord(tdb->track,"ensGene"))
+    {
+    char ensVersionString[256];
+    char ensDateReference[256];
+    char longLabel[256];
+    ensGeneTrackVersion(database, ensVersionString, ensDateReference,
+        sizeof(ensVersionString));
+    if (ensVersionString[0])
+        {
+        if (ensDateReference[0] && differentWord("current", ensDateReference))
+            safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - archive %s - %s", ensVersionString, ensDateReference);
+        else
+            safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - %s", ensVersionString);
+        }
+    else
+        safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
+
+    printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+    }
+else
 printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
 /* Print link for parent track */
@@ -2708,10 +2796,6 @@ if (!tdbIsDownloadsOnly(tdb))
             printf("<B>Display&nbsp;mode:&nbsp;</B>");
         if (tdbIsSuper(tdb))
             {
-            /* This is a supertrack -- load its members and show hide/show dropdown */
-	    // hub tracks already have their subtracks loaded
-	    if (!isHubTrack(tdb->track))
-		hTrackDbLoadSuper(database, tdb);
             superTrackDropDown(cart, tdb, 1);
             }
         else
@@ -2779,12 +2863,13 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb))
         printf("&nbsp;</span>");
         }
     }
-printf("<BR>\n");
+if (!tdbIsSuperTrack(tdb) && !tdbIsComposite(tdb))
+    puts("<BR>");
 
 if (tdbIsDownloadsOnly(tdb))
     filesDownloadUi(database,cart,tdb);  // Composites without tracks but with files to download are tdb->type: downloadsOnly
 else
-    specificUi(tdb, ct, ajax);
+    specificUi(tdb, tdbList, ct, ajax);
 puts("</FORM>");
 
 if (ajax)
@@ -2811,7 +2896,10 @@ if (!ct)
     /* Print data version trackDB setting, if any */
     char *version = trackDbSetting(tdb, "dataVersion");
     if (version)
-        printf("<B>Data version:</B> %s<BR>\n", version);
+        {
+        cgiDown(0.7);
+        printf("<B>Data version:</B> %s\n", version);
+        }
 
    /* Print lift information from trackDb, if any */
    trackDbPrintOrigAssembly(tdb, database);
@@ -2821,18 +2909,23 @@ if (!ct)
 
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
-    htmlHorizontalLine();
-    // include anchor for Description link
-    puts("<A NAME=TRACK_HTML></A>");
-    printf("<table class='windowSize'><tr valign='top'><td>");
+    char *browserVersion;
+    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
+        htmlHorizontalLine();
+    else // Move line down, since <H2>Description (in ->html) is proceded by too much space
+        printf("<HR ALIGN='bottom' style='position:relative; top:1em;'>");
+
+    printf("<table class='windowSize'><tr valign='top'><td rowspan=2>");
+    puts("<A NAME='TRACK_HTML'></A>");    // include anchor for Description link
 
     // Add pennantIcon
     printPennantIconNote(tdb);
 
     puts(tdb->html);
-    printf("</td><td>");
+    printf("</td><td nowrap>");
+    cgiDown(0.7); // positions top link below line
     makeTopLink(tdb);
-    printf("&nbsp</td></tr><tr valign='bottom'><td colspan=2>");
+    printf("&nbsp</td></tr><tr valign='bottom'><td nowrap>");
     makeTopLink(tdb);
     printf("&nbsp</td></tr></table>");
     }
@@ -2919,7 +3012,7 @@ else if (isCustomTrack(track))
     }
 else if (isHubTrack(track))
     {
-    tdb = hubConnectAddHubForTrackAndFindTdb(database, track, &tdbList, trackHash);
+    tdb = hubConnectAddHubForTrackAndFindTdb(cart, database, track, &tdbList, trackHash);
     }
 else if (sameString(track, "hgPcrResult"))
     tdb = pcrResultFakeTdb();
@@ -2929,8 +3022,6 @@ else
     }
 if (tdb == NULL)
    {
-   uglyAbort("Can't find %s in track database %s chromosome %s.  TrackHash has %d els",
-	    track, database, chromosome, trackHash->elCount);
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);
    }
@@ -2950,13 +3041,13 @@ char *title = (tdbIsSuper(tdb) ? "Super-track Settings" :
 if(cartOptionalString(cart, "ajax"))
     {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html
-    trackUi(tdb, ct, TRUE);
+    trackUi(tdb, tdbList, ct, TRUE);
     cartRemove(cart,"ajax");
     }
 else
     {
     cartWebStart(cart, database, "%s %s", tdb->shortLabel, title);
-    trackUi(tdb, ct, FALSE);
+    trackUi(tdb, tdbList, ct, FALSE);
     printf("<BR>\n");
     webEnd();
     }

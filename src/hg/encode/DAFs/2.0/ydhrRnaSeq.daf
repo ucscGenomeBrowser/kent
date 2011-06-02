@@ -1,4 +1,4 @@
-# Data Agreement File for Yale RNAseq PolyA as part of their TFBS project  $Revision: 1.1 $
+# Data Agreement File for Yale RNAseq PolyA as part of their TFBS project  $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -23,7 +23,6 @@
  assembly          hg19
  dafVersion        2.0
  dataVersion       1
- medianFragmentLength 0
  validationSettings validateFiles.bam:mismatches=3,nMatch,matchFirst=25
 
  # Track/view definition

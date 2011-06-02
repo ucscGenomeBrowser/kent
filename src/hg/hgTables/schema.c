@@ -191,15 +191,15 @@ static void explainCoordSystem()
 {
 if (!hIsGsidServer())
     {
-    puts("<P><I>Note: all start coordinates in our database are 0-based, not \n"
+    puts("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
      "1-based.  See explanation \n"
      "<A HREF=\"http://genome.ucsc.edu/FAQ/FAQtracks#tracks1\">"
-     "here</A>.</I></P>");
+     "here</A>.</I>");
     }
 else
     {
-    puts("<P><I>Note: all start coordinates in our database are 0-based, not \n"
-     "1-based.\n</I></P>");
+    puts("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
+     "1-based.\n</I>");
     }
 }
 
@@ -339,7 +339,11 @@ static void printTrackHtml(struct trackDb *tdb)
 if (tdb != NULL && isNotEmpty(tdb->html))
     {
     webNewSection("%s (%s) Track Description", tdb->shortLabel, tdb->track);
-    puts(tdb->html);
+    char *browserVersion;
+    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
+        puts(tdb->html);
+    else
+    printf("<span style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</span>",tdb->html);
     }
 }
 

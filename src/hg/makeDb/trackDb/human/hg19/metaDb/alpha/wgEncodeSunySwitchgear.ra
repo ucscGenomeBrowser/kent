@@ -5,12 +5,15 @@ expVars lab,dataType,cell,antibody
 
 metaObject wgEncodeSunySwitchgearHt1080Elavl1RbpAssocRna
 objType table
+antibody ELAVL1
 cell HT-1080
 composite wgEncodeSunySwitchgear
 dataType Switchgear
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
+dccAccession wgEncodeEH000609
+expId 609
 fileName wgEncodeSunySwitchgearHt1080Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -22,12 +25,15 @@ view RbpAssocRna
 
 metaObject wgEncodeSunySwitchgearHt1080Igf2bp1RbpAssocRna
 objType table
+antibody IGF2BP1
 cell HT-1080
 composite wgEncodeSunySwitchgear
 dataType Switchgear
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
+dccAccession wgEncodeEH000610
+expId 610
 fileName wgEncodeSunySwitchgearHt1080Igf2bp1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -37,4 +43,4 @@ subId 3086
 tableName wgEncodeSunySwitchgearHt1080Igf2bp1RbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 1391846988
+# MAGIC: 1022710344

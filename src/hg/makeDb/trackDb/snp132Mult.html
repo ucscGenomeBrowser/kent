@@ -1,0 +1,25 @@
+<H2>Description</H2>
+
+<P>
+This track contains information about a subset of the 
+single nucleotide polymorphisms
+and small insertions and deletions (indels) &mdash; collectively Simple
+Nucleotide Polymorphisms &mdash; from
+<A HREF="http://www.ncbi.nlm.nih.gov/SNP/" target=_blank>dbSNP</A>
+build 132, available from
+<A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms" target=_blank>ftp.ncbi.nih.gov/snp</A>.
+Only SNPs that have been mapped to multiple locations in the reference
+genome assembly are included in this subset.  When a SNP's flanking sequences 
+map to multiple locations in the reference genome, it calls into question 
+whether there is true variation at those sites, or whether the sequences
+at those sites are merely highly similar but not identical.
+</P>
+<P>
+The default maximum <A HREF="#Weight">weight</A> for this track is 3,
+unlike the other dbSNP build 132 tracks which have a maximum weight of 1.  
+That enables these multiply-mapped SNPs to appear in the display, while 
+by default they will not appear in the All SNPs(132) track because of its 
+maximum weight filter.
+</P>
+
+<!--#insert file="snp132.shared.html"-->

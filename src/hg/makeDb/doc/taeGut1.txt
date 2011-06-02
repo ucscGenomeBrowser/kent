@@ -748,6 +748,7 @@ see doc/builds.txt for specific details.
     #   real   36m7.017s 
     cat fb.taeGut1.chainMelGal1Link.txt
     #   795001886 bases of 1222864691 (65.011%) in intersection
-
+    cd /hive/data/genomes/taeGut1/bed
+    ln -s blastz.melGal1.swap lastz.melgal1
 
 ############################################################################

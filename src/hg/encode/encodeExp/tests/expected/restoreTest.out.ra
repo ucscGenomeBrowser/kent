@@ -1,0 +1,44 @@
+ix 1
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars Antibody=Pol2
+accession DELETED
+
+ix 2
+organism mouse
+lab Stanford-m
+dataType ChipSeq
+cellType CH12
+expVars Antibody=Pol2
+accession Stanford-m
+
+ix 3
+organism human
+lab Duke
+dataType DnaseSeq
+cellType K562
+accession Duke
+
+ix 4
+organism human
+lab Duke
+dataType DnaseSeq
+cellType K562
+accession DELETED
+
+ix 5
+organism human
+lab Duke
+dataType DnaseSeq
+cellType K562
+accession DELETED
+
+ix 6
+organism human
+lab Duke
+dataType DnaseSeq
+cellType K562
+accession Duke
+

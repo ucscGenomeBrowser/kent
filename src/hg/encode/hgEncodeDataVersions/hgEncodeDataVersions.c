@@ -107,7 +107,7 @@ for (group = groups; group != NULL; group = group->next)
         continue;
     hTableStart();
     puts("<TR>");
-    puts("<TH align=LEFT colspan=3 BGCOLOR=#536ED3>");
+    puts("<TH align=LEFT colspan=3 BGCOLOR='#536ED3'>");
     printf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
     printf("&nbsp;&nbsp;&nbsp; ");
     puts("</TH>\n");
@@ -126,7 +126,7 @@ for (group = groups; group != NULL; group = group->next)
 	puts("</TD></TR>");
 	}
     /*
-        printf("\t%s\t%s\t%s\n", version, 
+        printf("\t%s\t%s\t%s\n", version,
                 tr->track->shortLabel, tr->track->longLabel);
                 */
     hTableEnd();

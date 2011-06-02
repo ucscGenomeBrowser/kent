@@ -54,7 +54,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 #include "suggest.h"
-#include "searchTracks.h"
+#include "search.h"
 #include "errCatch.h"
 
 static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
@@ -382,12 +382,6 @@ else
     safef(buf, sizeof(buf), "%s?%s=%u&c=%s&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chromName, encodedMapName);
 freeMem(encodedMapName);
 return(cloneString(buf));
-}
-
-void smallBreak()
-/* Draw small horizontal break */
-{
-hPrintf("<FONT SIZE=1><BR></FONT>\n");
 }
 
 #ifdef REMOTE_TRACK_AJAX_CALLBACK
@@ -3356,21 +3350,28 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         if (errCatchStart(errCatch))
 	    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
         errCatchEnd(errCatch);
+	struct sqlConnection *conn = hConnectCentral();
+	char query[256];
         if (errCatch->gotError)
 	    {
-	    struct sqlConnection *conn = hConnectCentral();
-	    char query[256];
 	    safef(query, sizeof(query),
 		"update %s set errorMessage=\"%s\", lastNotOkTime=now() where id=%d"
-		, hubConnectTableName
+		, hubStatusTableName
 		, errCatch->message->string
 		, hub->id
 		);
-	    sqlUpdate(conn, query);
-	    hDisconnectCentral(&conn);
 	    }
+	else
+	    {
+	    safef(query, sizeof(query),
+		"update %s set errorMessage=\"\", lastOkTime=now() where id=%d"
+		, hubStatusTableName
+		, hub->id
+		);
+	    }
+	sqlUpdate(conn, query);
+	hDisconnectCentral(&conn);
         errCatchFree(&errCatch);
-
 	}
     }
 hubConnectStatusFreeList(&hubList);
@@ -3524,30 +3525,10 @@ if (!psOutput)
         }
     }
 
-/* see if hgFixed.trackVersion exists */
-boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
 char ensVersionString[256];
 char ensDateReference[256];
-ensVersionString[0] = 0;
-ensDateReference[0] = 0;
-if (trackVersionExists)
-    {
-    struct sqlConnection *conn = hAllocConn("hgFixed");
-    char query[256];
-    safef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' order by updateTime DESC limit 1", database);
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row;
-
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        safef(ensVersionString, sizeof(ensVersionString), "Ensembl %s",
-                row[0]);
-        safef(ensDateReference, sizeof(ensDateReference), "%s",
-                row[1]);
-        }
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    }
+ensGeneTrackVersion(database, ensVersionString, ensDateReference,
+    sizeof(ensVersionString));
 
 if (!psOutput)
     {
@@ -3567,18 +3548,22 @@ if (!psOutput)
             printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd);
             hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
             }
+        else if (sameWord(database,"oryCun2") || sameWord(database,"anoCar2") || sameWord(database,"calJac3"))
+            {
+            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
+            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
+            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+            }
         else if (ensVersionString[0])
             {
             char *archive = NULL;
             if (ensDateReference[0] && differentWord("current", ensDateReference))
                 archive = cloneString(ensDateReference);
             /*  Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
-            if (sameWord(database,"oryCun2") || isUnknownChrom(database, chromName))
+            if (isUnknownChrom(database, chromName))
                 {
                 //	which table to check
                 char *ctgPos = "ctgPos";
-                if (sameWord(database,"oryCun2"))
-                    ctgPos = "ctgPos2";
 
                 if (sameWord(database,"fr2"))
                     fr2ScaffoldEnsemblLink(archive);
@@ -3704,6 +3689,16 @@ if (!psOutput)
     if (sameString(database, "cb3"))
         {
         hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/seq/gbrowse/briggsae?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        }
+    if (sameString(database, "cb4"))
+        {
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/gb2/gbrowse/c_briggsae?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+            chromName, winStart+1, winEnd, "WormBase");
+        }
+    if (sameString(database, "ce10"))
+        {
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/gb2/gbrowse/c_elegans?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
             skipChr(chromName), winStart+1, winEnd, "WormBase");
         }
     if (sameString(database, "ce4"))
@@ -4536,7 +4531,7 @@ if (!hideControls)
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
     freezeName = "Unknown";
-    hPrintf("<FONT SIZE=5><B>");
+    hPrintf("<span style='font-size:x-large;'><B>");
     if (startsWith("zoo",database) )
 	{
 	hPrintf("%s %s on %s June 2002 Assembly %s target1",
@@ -4559,7 +4554,7 @@ if (!hideControls)
 			organization, browserName, organism, freezeName, database);
 	    }
 	}
-    hPrintf("</B></FONT><BR>\n");
+    hPrintf("</B></span><BR>\n");
 
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
     hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
@@ -4582,7 +4577,7 @@ if (!hideControls)
     topButton("hgt.out1", ZOOM_1PT5X);
     topButton("hgt.out2", ZOOM_3X);
     topButton("hgt.out3", ZOOM_10X);
-    hWrites("<BR>\n");
+    hWrites("<div style='height:1em;'></div>\n");
 #endif//ndef USE_NAVIGATION_LINKS
 
     if (showTrackControls)
@@ -4629,16 +4624,18 @@ if (!hideControls)
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	if(dragZooming && assemblySupportsGeneSuggest(database))
-            hWrites(" <a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a> <input type='text' size='8' name='hgt.suggest' id='suggest'>\n");
+            hPrintf(" <a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a> "
+                    "<input type='text' size='8' name='hgt.suggest' id='suggest'>\n"
+                    "<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database)
+                    );
 	hWrites(" ");
 	hButtonWithOnClick("hgt.jump", "jump", NULL, "jumpButtonOnClick()");
 	hOnClickButton(clearButtonJavascript,"clear");
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
 	hWrites(" ");
 	hButton("hgTracksConfigPage", "configure");
-        //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</B></EM></A></FONT>\n");
 	if (survey && differentWord(survey, "off"))
-	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"%s\" TARGET=_BLANK><EM><B>%s</B></EM></A></FONT>\n", survey, surveyLabel ? surveyLabel : "Take survey");
+            hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'><A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
 	// info for drag selection javascript
 	hPrintf("<input type='hidden' id='hgt.winStart' name='winStart' value='%d'>\n", winStart);
 	hPrintf("<input type='hidden' id='hgt.winEnd' name='winEnd' value='%d'>\n", winEnd);
@@ -4727,7 +4724,6 @@ if (!hideControls)
     hPrintf("</TD>");
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TR></TABLE>\n");
-    // smallBreak();
 
     /* Display bottom control panel. */
 
@@ -4819,27 +4815,18 @@ if (!hideControls)
 	    hPrintf("<TR>");
 	    cg->rowOpen = TRUE;
 	    if (!hIsGsidServer())
-		{
-		hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>",
-		    MAX_CONTROL_COLUMNS);
-		}
+                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
 	    else
-		{
-		hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>",
-		    MAX_CONTROL_COLUMNS-1);
-		}
-	    hPrintf("<table width='100%%'><tr><td align='left'>");
-	    hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-	    hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'><IMG height='18' width='18' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue' title='%s this group'></A>&nbsp;&nbsp;",
-		    hgTracksName(), cartSidUrlString(cart),
-		    collapseGroupVar(group->name),
-		    otherState, group->name,
-		    group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
-	    hPrintf("</td><td align='center' width='100%%'>\n");
-	    hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
-	    hPrintf("</td><td align='right'>\n");
-	    hPrintf("<input type='submit' name='hgt.refresh' value='refresh' title='Update image with your changes'>\n");
-	    hPrintf("</td></tr></table></th>\n");
+                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS-1);
+
+            hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
+            hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
+            hPrintf("<IMG class='toggleButton' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
+                    group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+            hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
+            hPrintf("</td><td style='text-align:right;'>\n");
+            hPrintf("<input type='submit' name='hgt.refresh' value='refresh' title='Update image with your changes'>\n");
+            hPrintf("</td></tr></table></th>\n");
 	    controlGridEndRow(cg);
 
 	    /* First track group that is not custom track group gets ruler,
@@ -5517,6 +5504,7 @@ else
     chromInfoRowsNonChrom(1000);
 
 hTableEnd();
+cgiDown(0.9);
 
 hgPositionsHelpHtml(organism, database);
 puts("</FORM>");
@@ -5537,6 +5525,12 @@ struct cart *oldCart = cartNew(userId, sessionId, NULL, NULL);
 cartRemoveExcept(oldCart, except);
 cartCheckout(&oldCart);
 cgiVarExcludeExcept(except);
+}
+
+static void addDataHubs(struct cart *cart)
+{
+hubCheckForNew(database, cart);
+cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 }
 
 void doMiddle(struct cart *theCart)
@@ -5635,6 +5629,13 @@ hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
 // XXXX stole this and '.hidden' from bioInt.css - needs work
 hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
     }
+
+/* check for new data hub */
+if (cartVarExists(cart, hgHubDataText))
+    {
+    addDataHubs(cart);
+    }
+
 if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");
@@ -5706,12 +5707,3 @@ else
     tracksDisplay();
     }
 }
-
-void doDown(struct cart *cart)
-{
-printf("<H2>The Browser is Being Updated</H2>\n");
-printf("The browser is currently unavailable.  We are in the process of\n");
-printf("updating the database and the display software with a number of\n");
-printf("new tracks, including some gene predictions.  Please try again tomorrow.\n");
-}
-

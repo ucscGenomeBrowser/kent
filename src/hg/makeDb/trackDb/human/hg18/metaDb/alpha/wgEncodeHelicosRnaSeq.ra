@@ -1,3 +1,8 @@
+metaObject wgEncodeHelicosRnaSeq
+objType composite
+composite wgEncodeHelicosRnaSeq
+expVars lab,dataType,cell,localization,rnaExtract
+
 metaObject wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya
 objType table
 cell K562
@@ -6,6 +11,7 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
+expId 272
 fileName wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya.tagAlign.gz
 grant Gingeras
 lab Helicos
@@ -24,6 +30,7 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
+expId 272
 fileName wgEncodeHelicosRnaSeqRawDataK562CytosolLongpolya.fasta.gz
 grant Gingeras
 lab Helicos
@@ -41,6 +48,7 @@ dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
+expId 272
 fileName wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya.wig.gz
 grant Gingeras
 lab Helicos
@@ -51,4 +59,4 @@ subId 249
 tableName wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya
 view RawSignal
 
-# MAGIC: 234845390
+# MAGIC: 19277694

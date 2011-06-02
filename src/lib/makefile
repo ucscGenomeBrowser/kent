@@ -21,7 +21,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     fuzzyShow.o \
     gapCalc.o gdf.o gemfont.o genomeRangeTree.o \
     gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o \
-    hash.o histogram.o hmmPfamParse.o hmmstats.o htmlPage.o htmshell.o \
+    hacTree.o hash.o histogram.o hmmPfamParse.o hmmstats.o htmlPage.o htmshell.o \
     https.o intExp.o intValTree.o internet.o itsa.o \
     jointalign.o jpegSize.o keys.o knetUdc.o kxTok.o linefile.o localmem.o log.o \
     maf.o mafFromAxt.o mafScore.o md5.o memalloc.o memgfx.o metaWig.o mgCircle.o \

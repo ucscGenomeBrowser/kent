@@ -274,10 +274,11 @@ hPrintf(" ");
 cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
 			   setClearAllVar(hgtaDoClearAllFieldPrefix,db,table),
 			   "clear all");
+cgiDown(0.7); // Extra spacing below the buttons
 }
 
-static void showTableFieldsOnList(char *db, char *rootTable, 
-	struct asObject *asObj, struct slName *fieldList, 
+static void showTableFieldsOnList(char *db, char *rootTable,
+	struct asObject *asObj, struct slName *fieldList,
 	boolean showItemRgb, boolean withGetButton)
 /* Put up html table with check box, name, description, etc for each field. */
 {
@@ -451,6 +452,7 @@ showLinkedTables(joiner, dtList, selFieldLinkedTablePrefix(),
 
 /* clean up. */
 hPrintf("</FORM>");
+cgiDown(0.9);
 htmlClose();
 joinerFree(&joiner);
 }
@@ -848,7 +850,7 @@ if (logOp == NULL)
 hPrintf("<TD>%s</TD></TR>\n", logOp);
 }
 
-static void printSqlFieldListAsControlTable(struct sqlFieldType *ftList, char *db, 
+static void printSqlFieldListAsControlTable(struct sqlFieldType *ftList, char *db,
 	char *rootTable, struct trackDb *tdb, boolean isBedGr)
 /* Print out table of controls for fields. */
 {
@@ -984,7 +986,10 @@ if (!(isWig||isBedGr||isBam))
 		cartUsualString(cart, name, logOpMenu[0]));
     hPrintf(" Free-form query: ");
     name = filterFieldVarName(db, rootTable, "", filterRawQueryVar);
-    cgiMakeTextVar(name, cartUsualString(cart, name, ""), 50);
+    char *val = cartUsualString(cart, name, "");
+    // escape double quotes to avoid HTML parse trouble in the text input.
+    val = htmlEncodeText(val, FALSE);
+    cgiMakeTextVar(name, val, 50);
     hPrintf("</TD></TR></TABLE>\n");
     }
 
@@ -1121,6 +1126,7 @@ if (isCustomTrack(rootTable))
     filterControlsForTableCt(db, rootTable);
 else
     filterControlsForTableDb(db, rootTable);
+cgiDown(0.7); // Extra spacing below the buttons
 }
 
 static void showLinkedFilters(struct dbTable *dtList)
@@ -1170,6 +1176,7 @@ showLinkedTables(joiner, dtList, filterLinkedTablePrefix,
 	hgtaDoFilterMore, "Allow Filtering Using Fields in Checked Tables");
 
 hPrintf("</FORM>\n");
+cgiDown(0.9);
 htmlClose();
 }
 

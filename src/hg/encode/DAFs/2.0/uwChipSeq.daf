@@ -1,16 +1,15 @@
-# Data Agreement File for ChIP-seq project  $Revision: 1.4 $
+# Data Agreement File for ChIP-seq project  $Revision: 1.5 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the associated DDF should look like this:
-#files	view	cell	antibody	fragLength	replicate	rank	control	origAssembly	seqPlatform	labVersion
+#files	view	cell	antibody	replicate	rank	control	origAssembly	seqPlatform	labVersion
 
 #Explanation of DDF terms
 #files: The name of the files to be associated with this data
 #view: The type of view that these files are. The options are listed in this DAF
 #cell: The cell name. The cell registered vocbulary is found at: http://hgwdev.cse.ucsc.edu/ENCODE/cellTypes.html
-#fragLength:
 #antibody: The antibody used for a specific target.The antibody registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Antibodies
 #rank: The Rank number. The rank of a given experiment.
 #control: The input used as control for ChIP-seq data. The control registerd vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Controls
