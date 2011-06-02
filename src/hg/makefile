@@ -12,7 +12,7 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
 	makeDb/hgCgiData js htdocs/style
 
 ifdef LOWELAB
-    BROWSER_BINS += archaeStuff/tooltip archaeStuff/chooseorg 
+    BROWSER_BINS += $(HOME)/lowelab/src/browser/tooltip $(HOME)/lowelab/src/browser/chooseorg 
 endif
 
 BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf

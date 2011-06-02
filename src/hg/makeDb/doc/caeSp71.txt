@@ -134,8 +134,7 @@ taxId 870436
     # need the -species option since RM doesn't recognize this one
     time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=swarm \
 	-species "caenorhabditis" -buildDir=`pwd` caeSp71 > do.log 2>&1 &
-XXX - running - Fri May 27 14:44:27 PDT 2011
-    #	real    14m59.518s
+    #	real     284m22.416s
 
     #	from the do.log:
 # RepeatMasker version development-$Id: RepeatMasker,v
@@ -143,9 +142,8 @@ XXX - running - Fri May 27 14:44:27 PDT 2011
 #	CC   RELEASE 20090604; 
 
     cat faSize.rmsk.txt
-# 190374847 bases (20277419 N's 170097428 real 167780413 upper 2317015 lower)
-#	in 3307 sequences in 1 files
-# %1.22 masked total, %1.36 masked real
+# 196410749 bases (18804958 N's 177605791 real 156289768 upper 21316023 lower) in 52546 sequences in 1 files
+# %10.85 masked total, %12.00 masked real
 
 ###########################################################################
 ## Simple Repeats (DONE - 2011-05-27 - Hiram)
@@ -203,16 +201,16 @@ XXX - running - Fri May 27 14:44:27 PDT 2011
 # %28.44 masked total, %31.45 masked real
 
 ########################################################################
-# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-27 - Hiram)
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-31 - Hiram)
     cd /hive/data/genomes/caeSp71
     twoBitMask -add bed/windowMasker/caeSp71.cleanWMSdust.2bit \
 	bed/simpleRepeat/trfMask.bed caeSp71.2bit
     #	safe to ignore the warnings about BED file with >=13 fields
     twoBitToFa caeSp71.2bit stdout | faSize stdin > faSize.caeSp71.txt
     cat faSize.caeSp71.txt
-# 190374847 bases (20277419 N's 170097428 real 120262496 upper 49834932 lower)
-#	in 3307 sequences in 1 files
-# %26.18 masked total, %29.30 masked real
+# 196410749 bases (18804958 N's 177605791 real 121612464 upper 55993327 lower)
+#	in 52546 sequences in 1 files
+# %28.51 masked total, %31.53 masked real
 
     #	create symlink to gbdb
     ssh hgwdev
@@ -220,18 +218,18 @@ XXX - running - Fri May 27 14:44:27 PDT 2011
     ln -s `pwd`/caeSp71.2bit /gbdb/caeSp71/caeSp71.2bit
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-27 - Hiram)
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-31 - Hiram)
     # numerator is caeSp71 gapless bases "real" as reported by faSize 
     # denominator is hg19 gapless bases "real" as reported by faSize
     # 1024 is threshold used for human -repMatch:
-    calc \( 170097428  / 2897310462 \) \* 1024
-    #	( 170097428 / 2897310462 ) * 1024 = 60.117743
+    calc \( 177605791  / 2897310462 \) \* 1024
+    #	( 177605791 / 2897310462 ) * 1024 = 62.771433
 
     # Round up to use -repMatch=100 since 60 would result in too many
     cd /hive/data/genomes/caeSp71
     blat caeSp71.2bit /dev/null /dev/null -tileSize=11 \
       -makeOoc=jkStuff/caeSp71.11.ooc -repMatch=100
-    #	Wrote 12775 overused 11-mers to jkStuff/caeSp71.11.ooc
+    #	Wrote 14211 overused 11-mers to jkStuff/caeSp71.11.ooc
     # there are no non-bridged gaps here to make a lift file from
     # cd jkStuff
     # gapToLift -verbose=2 caeSp71 caeSp71.nonBridged.lift -bedFile=caeSp71.nonBridged.bed

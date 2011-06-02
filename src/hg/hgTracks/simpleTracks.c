@@ -10758,10 +10758,41 @@ hFreeConn(&conn);
 return(dy->string);
 }
 
-boolean hasOmimPhenotypeClass(char *omimId, int targetClass)
-/* Look up phenotypeClass for omimId, for filtering items.  Don't free result! */
+boolean isOmimOtherClass(char *omimId)
+/* check if this omimId belongs to the "Others" phenotype class */
+
+/* NOTE: The definition of Others class is kind of tricky.
+
+   The Other class is defined as:
+
+	2. does not have class 1 or 2 or 3, or 4; some may have class '-1'.
+	3. for an entry of omimId that the omimPhenotype table does not even have a row with omimId
+*/
 {
 boolean result;
+char answer[255];
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+safef(query,sizeof(query),
+      "select phenotypeClass from omimPhenotype where omimId =%s and (phenotypeClass=1 or phenotypeClass=2 or phenotypeClass=3 or phenotypeClass=4)", omimId);
+char *ret = sqlQuickQuery(conn, query, answer, sizeof(answer));
+
+if (ret == NULL)
+    {
+    result = TRUE;
+    }
+else
+    {
+    result = FALSE;
+    }
+hFreeConn(&conn);
+return(result);
+}
+
+int hasOmimPhenotypeClass(char *omimId, int targetClass)
+/* Look up phenotypeClass for omimId, for filtering items.  Don't free result! */
+{
+int result;
 char answer[255];
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
@@ -10769,10 +10800,20 @@ safef(query,sizeof(query),
       "select phenotypeClass from omimPhenotype where omimId =%s and phenotypeClass=%d", omimId, 
       targetClass);
 char *ret = sqlQuickQuery(conn, query, answer, sizeof(answer));
+
 if (ret == NULL)
-    result = FALSE;
+    {
+    if (targetClass == -1)
+    	{
+	result = -1;
+	}
+    else
+    	{
+    	result = 0;
+	}
+    }
 else
-    result = TRUE;
+    result = targetClass;
 hFreeConn(&conn);
 return(result);
 }
@@ -10794,6 +10835,7 @@ struct hashEl *label;
 
 safef(labelName, sizeof(labelName), "%s.label", tg->table);
 omimLocationLabels = cartFindPrefix(cart, labelName);
+
 /* if user has not made selection(s) from the filter, enable every item */
 if (omimLocationLabels == NULL) return(TRUE);
 
@@ -10824,11 +10866,17 @@ for (label = omimLocationLabels; label != NULL; label = label->next)
 
 doIt = FALSE;
 
-doIt = doIt || (doClass1 && hasOmimPhenotypeClass(omimId, 1));
-doIt = doIt || (doClass2 && hasOmimPhenotypeClass(omimId, 2));
-doIt = doIt || (doClass3 && hasOmimPhenotypeClass(omimId, 3));
-doIt = doIt || (doClass4 && hasOmimPhenotypeClass(omimId, 4));
-doIt = doIt || (doOthers && hasOmimPhenotypeClass(omimId, 0));
+/* process regular class 1-4 first */
+doIt = doIt || (doClass1 && (hasOmimPhenotypeClass(omimId, 1) == 1));
+doIt = doIt || (doClass2 && (hasOmimPhenotypeClass(omimId, 2) == 2));
+doIt = doIt || (doClass3 && (hasOmimPhenotypeClass(omimId, 3) == 3));
+doIt = doIt || (doClass4 && (hasOmimPhenotypeClass(omimId, 4) == 4));
+
+// if this is a regular (1-4) class and the result is to do it, return TRUE now
+if (doIt) return(doIt);
+
+/* process the tricky "Other" class here */
+doIt = doOthers && isOmimOtherClass(omimId);
 
 return(doIt);
 }
@@ -10899,12 +10947,21 @@ struct sqlConnection *conn = hAllocConn(database);
 class1Clr = hvGfxFindColorIx(hvg, lightest.r, lightest.g, lightest.b);
 class2Clr = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
 class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
-//class4Clr = hvGfxFindColorIx(hvg, 153,0, 204);		// purple
 class4Clr = hvGfxFindColorIx(hvg, 56,  11, 97);
-classOtherClr = hvGfxFindColorIx(hvg, 200, 200, 200);	// light gray
+class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
+classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);	// light gray
+
+/* last try of Brooke's suggestion, the class 1 and 2 are too bright */
+/*
+class1Clr = hvGfxFindColorIx(hvg, 125,225,115);
+class2Clr = hvGfxFindColorIx(hvg, 35,155,10);
+class3Clr = hvGfxFindColorIx(hvg, 10,60,0);
+class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
+classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);	// light gray
+*/
 
 safef(query, sizeof(query),
-      "select omimId, phenotypeClass from omimPhenotype where omimId=%s", el->name);
+      "select omimId, phenotypeClass from omimPhenotype where omimId=%s order by phenotypeClass desc", el->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -10939,11 +10996,17 @@ else
 	sqlFreeResult(&sr);
 	return class1Clr;
     	}
-    else
+    else if (sameWord(phenClass, "4"))
 	{
-	// set to purplish color for phenClass 4
+	// set to the color for phenClass 4
         sqlFreeResult(&sr);
 	return class4Clr; 
+	}
+    else
+	{
+	// set to the color for Others
+        sqlFreeResult(&sr);
+	return classOtherClr; 
 	}
     }
 }
@@ -11060,10 +11123,18 @@ lightest.b = (1*normal->b + 2*255) / 3;
 class1Clr = hvGfxFindColorIx(hvg, lightest.r, lightest.g, lightest.b);
 class2Clr = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
 class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
-//class4Clr = hvGfxFindColorIx(hvg, 153,0, 204);		// purple
 class4Clr = hvGfxFindColorIx(hvg, 56,  11, 97);
-//class4Clr = hvGfxFindColorIx(hvg, 97, 11, 94);
-classOtherClr = hvGfxFindColorIx(hvg, 200, 200, 200);	// light gray
+class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
+classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
+
+/* last try of Brooke's suggestion, the class 1 and 2 are too bright */
+/*
+class1Clr = hvGfxFindColorIx(hvg, 125,225,115);
+class2Clr = hvGfxFindColorIx(hvg, 35,155,10);
+class3Clr = hvGfxFindColorIx(hvg, 10,60,0);
+class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
+classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
+*/
 
 struct sqlConnection *conn = hAllocConn(database);
 
@@ -11107,12 +11178,18 @@ else
 	    	sqlFreeResult(&sr);
 	    	return class1Clr;
     	    	}
-	    else
-	    	{
-	    	// set to purplish color for phenClass 4
-            	sqlFreeResult(&sr);
-	    	return class4Clr; 
-            	}
+    	    else if (sameWord(phenClass, "4"))
+		{	
+		// set to the color for phenClass 4
+        	sqlFreeResult(&sr);
+		return class4Clr; 
+		}	
+    	    else
+		{
+		// set to the color for Others
+        	sqlFreeResult(&sr);
+		return classOtherClr; 
+		}
 	    }
 	}
     }
