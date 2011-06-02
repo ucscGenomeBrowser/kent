@@ -1013,7 +1013,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=2783 dateSubmitted=2010-10-29
         # was wgEncodeRikenCageHelas3NucleolusTotalPlusClusters cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageK562NucleolusTotalPlusSignalRep1
+        track wgEncodeRikenCageK562NucleolusTotalPlusSignal
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel K562 nlos tot + 1
         longLabel K562 nucleolus total CAGE Plus strand start sites Rep 1 from ENCODE/RIKEN
@@ -1023,6 +1023,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
         # was wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1 cricket Wed May  4 14:37:31 2011
+        # was wgEncodeRikenCageK562NucleolusTotalPlusSignalRep1 cricket Thu Jun  2 12:12:06 2011
 
         track wgEncodeRikenCageSknshraCellPapPlusSignalRep2
         subTrack wgEncodeRikenCageViewPlusSignal off
@@ -1747,7 +1748,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=2783 dateSubmitted=2010-10-29
         # was wgEncodeRikenCageHelas3NucleolusTotalMinusClusters cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageK562NucleolusTotalMinusSignalRep1
+        track wgEncodeRikenCageK562NucleolusTotalMinusSignal
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel K562 nlos tot - 1
         longLabel K562 nucleolus total CAGE Minus strand start sites Rep 1 from ENCODE/RIKEN
@@ -1757,6 +1758,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
         # was wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1 cricket Wed May  4 14:37:27 2011
+        # was wgEncodeRikenCageK562NucleolusTotalMinusSignalRep1 cricket Thu Jun  2 12:11:53 2011
 
         track wgEncodeRikenCageSknshraCellPapMinusSignalRep2
         subTrack wgEncodeRikenCageViewMinusSignal off
@@ -2458,7 +2460,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=2783 dateSubmitted=2010-10-29
 
-        track wgEncodeRikenCageK562NucleolusTotalAlnRep1
+        track wgEncodeRikenCageK562NucleolusTotalAln
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 nlos tot A 1
         longLabel K562 nucleolus total CAGE Alignments Rep 1 from ENCODE/RIKEN
@@ -2467,6 +2469,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
+        # was wgEncodeRikenCageK562NucleolusTotalAlnRep1 cricket Thu Jun  2 12:11:23 2011
 
         track wgEncodeRikenCageBjCellPapAlnRep1
         subTrack wgEncodeRikenCageViewAlignments off
