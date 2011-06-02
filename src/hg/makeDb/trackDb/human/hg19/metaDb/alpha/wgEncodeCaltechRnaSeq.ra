@@ -4555,7 +4555,7 @@ subId 3583
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
 
-metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep1V2
+metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep1
 objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
@@ -4565,7 +4565,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep1V2.fastq.gz
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -4578,7 +4578,7 @@ subId 3474
 submittedDataVersion V2 - A better mapping technique.
 view FastqRd1
 
-metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep2V2
+metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep2
 objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
@@ -4588,7 +4588,7 @@ dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep2V2.fastq.gz
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -4601,7 +4601,7 @@ subId 3475
 submittedDataVersion V2 - A better mapping technique.
 view FastqRd1
 
-metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep1V2
+metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep1
 objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
@@ -4611,7 +4611,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep1V2.fastq.gz
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -4624,7 +4624,7 @@ subId 3474
 submittedDataVersion V2 - A better mapping technique.
 view FastqRd2
 
-metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep2V2
+metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep2
 objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
@@ -4634,7 +4634,7 @@ dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep2V2.fastq.gz
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
@@ -9454,7 +9454,7 @@ subId 3594
 submittedDataVersion V3 - New Elements Formats
 view ExonsGencV3c
 
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd1Rep1V2
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd1Rep1
 objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
@@ -9464,7 +9464,7 @@ dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
 expId 1669
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd1Rep1V2.fastq.tgz
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
@@ -9477,7 +9477,7 @@ subId 3476
 submittedDataVersion V2 - A better mapping technique.
 view FastqRd1
 
-metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd2Rep1V2
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd2Rep1
 objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
@@ -9487,7 +9487,7 @@ dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
 expId 1669
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd2Rep1V2.fastq.tgz
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
@@ -9921,7 +9921,7 @@ rnaExtract longPolyA
 subId 1904
 view FastqRd1
 
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep3V2
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep3
 objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
@@ -9931,7 +9931,7 @@ dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep3V2.fastq.tgz
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep3.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
@@ -9990,7 +9990,7 @@ rnaExtract longPolyA
 subId 1904
 view FastqRd2
 
-metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep3V2
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep3
 objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
@@ -10000,7 +10000,7 @@ dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep3V2.fastq.tgz
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep3.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
@@ -11939,4 +11939,4 @@ subId 3574
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
-# MAGIC: 1346286611
+# MAGIC: 1446080625
