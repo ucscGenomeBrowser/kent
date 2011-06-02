@@ -520,9 +520,73 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     rm -fr hardMaskedFa
 
 
+###########################################################################
+# ornAna1 Platypus LASTZ/CHAIN/NET (DONE - 2011-05-20 - Chin)
+    screen # use screen to control this job
+    mkdir /cluster/data/bosTau6/bed/blastzOrnAna1.2011-05-20
+    cd /cluster/data/bosTau6/bed/blastzOrnAna1.2011-05-20
 
-############################################################################
-# bosTau6 Cow BLASTZ/CHAIN/NET (working 2011-05-?? - Chin)
+    cat << '_EOF_' > DEF
+# Cow vs. Platypus
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_M=50
+
+# TARGET: Cow bosTau6
+SEQ1_DIR=/scratch/data/bosTau6/bosTau6.2bit
+SEQ1_LEN=/cluster/data/bosTau6/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+SEQ1_LIMIT=300
+SEQ1_CHUNK=20000000
+SEQ1_LAP=0
+
+# QUERY: Platypus ornAna1
+SEQ2_DIR=/scratch/data/ornAna1/ornAna1.2bit
+SEQ2_LEN=/cluster/data/ornAna1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/cluster/data/bosTau6/bed/blastzOrnAna1.2011-05-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+    
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
+        -syntenicNet -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -verbose=2 -chainLinearGap=loose > do.log 2>&1 &
+    #   real     329m59.325s
+
+    # filter with doRecipBest.pl 
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        bosTau6 ornAna1 > rbest.log 2>&1
+    # real    15m15.120s
+    cat fb.bosTau6.chainOrnAna1Link.txt
+    #   195910907 bases of 2649682029 (7.394%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastzOrnAna1.2011-05-20 lastz.ornAna1
+
+
+    mkdir /cluster/data/ornAna1/bed/blastz.bosTau6.swap
+    cd /cluster/data/ornAna1/bed/blastz.bosTau6.swap
+    time nice -n +19 doBlastzChainNet.pl \
+        /cluster/data/bosTau6/bed/blastzOrnAna1.2011-05-20/DEF \
+        -chainMinScore=5000 -verbose=2 -smallClusterHub=memk \
+        -swap -syntenicNet \
+          -chainLinearGap=loose -bigClusterHub=swarm > swap.log 2>&1 &
+    #   real       59m45.336
+    cat fb.ornAna1.chainBosTau6Link.txt
+    #   190401000 bases of 1842236818 (10.335%) in intersection
+# TBD for all chain/net:
+ *** All done !  Elapsed time: 59m18s
+ *** Make sure that goldenPath/ornAna1/vsBosTau6/README.txt is accurate.
+ *** Add {chain,net}BosTau6 tracks to trackDb.ra if necessary.
+
+    cd /cluster/data/ornAna1/bed
+    ln -s blastz.bosTau6.swap lastz.bosTau6
 
 #####################################################################
 # susScr2 Pig BLASTZ/CHAIN/NET (DONE - 2011-05-24 - Chin)

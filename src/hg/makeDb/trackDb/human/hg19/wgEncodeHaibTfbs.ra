@@ -3102,6 +3102,22 @@ noInherit on
         type broadPeak
         # subId=4104 dateSubmitted=2011-05-20
 
+        track wgEncodeHaibTfbsSknmcFoxp2Pcr2xPkRep1
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel SK-N-MC FOXP2 Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (FOXP2 in SK-N-MC cells)
+        subGroups view=Peaks factor=FOXP2 cellType=SKNMC protocol=PCR2x treatment=None rep=rep1
+        type broadPeak
+        # subId=4163 dateSubmitted=2011-06-02
+
+        track wgEncodeHaibTfbsPfsk1Foxp2Pcr2xPkRep1
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel PFSK-1 FOXP2 Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (FOXP2 in PFSK-1 cells)
+        subGroups view=Peaks factor=FOXP2 cellType=PFSK1 protocol=PCR2x treatment=None rep=rep1
+        type broadPeak
+        # subId=4163 dateSubmitted=2011-06-02
+
 
 
     #Raw Signal Track HAIB TFBS#
@@ -6689,3 +6705,11 @@ noInherit on
         subGroups view=RawSignal factor=zControl cellType=U87 protocol=V0416101 treatment=None rep=rep2
         type bigWig 0.110506 242.147003
         # subId=4160 dateSubmitted=2011-05-23
+
+        track wgEncodeHaibTfbsSknmcControlPcr2xRawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel SK-N-MC Control Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Control in SK-N-MC cells)
+        subGroups view=RawSignal factor=zControl cellType=SKNMC protocol=PCR2x treatment=None rep=rep1
+        type bigWig 0.494867 124.830002
+        # subId=4163 dateSubmitted=2011-06-02
