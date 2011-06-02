@@ -110,18 +110,18 @@ jQuery.tableDnD = {
                 dragObjects: [],   // UCSC: Allows setting multiple rows to be dragged at one time
                 downOffset: 0,     // UCSC: Dragging set, then offset Y to bottom of set
                 upOffset: 0,       // UCSC: Dragging set, then offset Y to bottom of set
-                mouseMoving: false,// UCSC: Prevent overlapping calls to mouse move
                 dragStartIndex : 0
             }, options || {});
             // Now make the rows draggable
             jQuery.tableDnD.makeDraggable(this);
         });
 
-        // Now we need to capture the mouse up and mouse move event
-        // We can use bind so that we don't interfere with other event handlers
-        jQuery(document)
-            .bind('mousemove', jQuery.tableDnD.mousemove)
-            .bind('mouseup', jQuery.tableDnD.mouseup);
+        /////// UCSC  Move the binding so that it is only done on dragStart
+        /////// UCSC  // Now we need to capture the mouse up and mouse move event
+        /////// UCSC  // We can use bind so that we don't interfere with other event handlers
+        /////// UCSC  jQuery(document)
+        /////// UCSC      .bind('mousemove', jQuery.tableDnD.mousemove)
+        /////// UCSC      .bind('mouseup', jQuery.tableDnD.mouseup);
 
         // Don't break the chain
         return this;
@@ -149,6 +149,14 @@ jQuery.tableDnD = {
                         config.onDragStart(ev, table, this.parentNode);
 
                         /////// UCSC
+                        // Initialize oldY to avoid movingDown as first action
+                        jQuery.tableDnD.oldY = jQuery.tableDnD.mouseCoords(ev).y - jQuery.tableDnD.mouseOffset.y;
+
+                        // Capture the mouse move events only if dragStart
+                        jQuery(document)
+                            .bind('mousemove', jQuery.tableDnD.mousemove)
+                            .bind('mouseup', jQuery.tableDnD.mouseup);
+
                         config.downOffset = 0;
                         config.upOffset = 0;
                         if (config.dragObjects.length > 1) {
@@ -252,31 +260,21 @@ jQuery.tableDnD = {
     },
 
     mousemove: function(ev) {
-        if(jQuery.tableDnD == undefined) {
+        if(jQuery.tableDnD == undefined
+        || jQuery.tableDnD.dragObject == null) {  //// UCSC Binding should occur at dragStart
             jQuery(document)
                 .unbind('mousemove')//, jQuery.tableDnD.mousemove);
                 .unbind('mouseup');//, jQuery.tableDnD.mouseup);
             return;
         }
-        if (jQuery.tableDnD.dragObject == null) {
-            return;
-        }
-        ////////// UCSC
-        if (jQuery.tableDnD.currentTable.mouseMoving == true)
-            return;
-        jQuery.tableDnD.currentTable.mouseMoving = true;
-        ////////// UCSC
+        ///// UCSC if (jQuery.tableDnD.dragObject == null) {
+        ///// UCSC     return;
+        ///// UCSC }
 
         var dragObj = jQuery(jQuery.tableDnD.dragObject);
         var config = jQuery.tableDnD.currentTable.tableDnDConfig;
         var mousePos = jQuery.tableDnD.mouseCoords(ev);
         var y = mousePos.y - jQuery.tableDnD.mouseOffset.y;
-        ////////// UCSC added truncation and ignoring old zero
-        y = y.toPrecision();
-        if (jQuery.tableDnD.oldY == 0) {
-            jQuery.tableDnD.oldY = y;
-        }
-        ////////// UCSC
 
         //auto scroll the window
         var yOffset = window.pageYOffset;
@@ -303,12 +301,11 @@ jQuery.tableDnD = {
             }
         }
 
-        ///// UCSC if (y != jQuery.tableDnD.oldY) {
-        if (Math.abs(y - jQuery.tableDnD.oldY) > 8) { //// UCSC some minimal move before handling
+        if (y != jQuery.tableDnD.oldY) {
             // work out if we're going up or down...
             var movingDown = y > jQuery.tableDnD.oldY;
             // update the old value
-            ////// UCSC  jQuery.tableDnD.oldY = y;  // Do this below, only when rows have moved.
+            jQuery.tableDnD.oldY = y;
             // update the style to show we're dragging
             if (config.onDragClass) {
                 ////// UCSC
@@ -325,9 +322,9 @@ jQuery.tableDnD = {
             }
             // If we're over a row then move the dragged row to there so that the user sees the
             // effect dynamically
-            var currentRow = jQuery.tableDnD.findDropTargetRow(dragObj, y);
 
             ////// UCSC
+            var currentRow = null;
             // While dragObjects is the set, the order could vary from table order.  Therefore us rowIndexes.
             var rows = jQuery.tableDnD.currentTable.rows;
             var firstDragRowIx = 9999; // Discover indexes
@@ -345,7 +342,9 @@ jQuery.tableDnD = {
                     currentRow = jQuery.tableDnD.findDropTargetRow(rows[lastDragRowIx], y + config.downOffset);
                 else
                     currentRow = jQuery.tableDnD.findDropTargetRow(rows[firstDragRowIx], y + config.upOffset);
-            } ////// UCSC
+            } else  ////// UCSC
+                currentRow = jQuery.tableDnD.findDropTargetRow(dragObj, y);
+
 
             if (currentRow) {
 
@@ -361,36 +360,22 @@ jQuery.tableDnD = {
                             &&  lastDragRowIx < targetRowIx) {
                                 var plusIx=0;
                                 for(var ix=lastDragRowIx+1; ix <= targetRowIx; ix++) {
-                                    //try { // use try/catch because sometimes rows go missing when moving
-                                        $( rows[ix] ).insertBefore( $( rows[firstDragRowIx + plusIx] ) );
-                                        plusIx++;
-                                    //} catch (err) {
-                                    //    warn('movingDown: lastDragRowIx:'+lastDragRowIx+' targetRowIx:'+targetRowIx+' y:'+y+' oldY:'+jQuery.tableDnD.oldY+'<BR>' + err);
-                                    //}
+                                    $( rows[ix] ).insertBefore( $( rows[firstDragRowIx + plusIx] ) );
+                                    plusIx++;
                                 }
-                                jQuery.tableDnD.oldY = y;
-                            } //else
-                              //  warn('down blocked: targetRowIx:'+targetRowIx+' dragRows:'+firstDragRowIx+'-'+lastDragRowIx+'  y:'+y+' oldY:'+jQuery.tableDnD.oldY);
-
+                            }
                         } else if (!movingDown) { // && config.dragObjects[0] != currentRow) {
                             if ((lastDragRowIx - firstDragRowIx) == (config.dragObjects.length - 1)
                             &&  firstDragRowIx >= 0
                             &&  firstDragRowIx > targetRowIx) {
                                 var plusIx=0;
                                 for(var ix=firstDragRowIx; ix <= lastDragRowIx; ix++) {
-                                    //try { // use try/catch because sometimes rows go missing when moving
-                                        $(rows[ix]).insertBefore( rows[targetRowIx + plusIx] );
-                                        plusIx++;
-                                    //} catch (err) { // just put them all back
-                                    //    warn('movingUp: targetRowIx:'+targetRowIx+' dragRows:'+firstDragRowIx+'-'+lastDragRowIx+'  y:'+y+' oldY:'+jQuery.tableDnD.oldY+'<BR>' + err);
-                                    //}
+                                    $(rows[ix]).insertBefore( rows[targetRowIx + plusIx] );
+                                    plusIx++;
                                 }
-                                jQuery.tableDnD.oldY = y;
-                            } //else
-                              //  warn('up blocked: targetRowIx:'+targetRowIx+' dragRows:'+firstDragRowIx+'-'+lastDragRowIx+'  y:'+y+' oldY:'+jQuery.tableDnD.oldY);
+                            }
                         }
-                    } else
-                        warn('blocked: targetRowIx:'+targetRowIx+' dragRows:'+firstDragRowIx+'-'+lastDragRowIx+'  y:'+y+' oldY:'+jQuery.tableDnD.oldY);
+                    }
                 } else {  ////// UCSC
 
                     // TODO worry about what happens when there are multiple TBODIES
@@ -399,12 +384,10 @@ jQuery.tableDnD = {
                     } else if (! movingDown && jQuery.tableDnD.dragObject != currentRow) {
                         jQuery.tableDnD.dragObject.parentNode.insertBefore(jQuery.tableDnD.dragObject, currentRow);
                     }
-                    jQuery.tableDnD.oldY = y;
 
                 }   ////// UCSC
             }
         }
-        jQuery.tableDnD.currentTable.mouseMoving = false;  ////////// UCSC
 
         return false;
     },
