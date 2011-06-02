@@ -1118,10 +1118,13 @@ if (differentWord(genome, hGenome(retDb)))
 return retDb;
 }
 
+unsigned long expireSeconds = 0;
 /* phoneHome business */
-static void alarmExit(int status)
-/* signal handler for SIGALRM for phoneHome function */
+static void cgiApoptosis(int status)
+/* signal handler for SIGALRM for phoneHome function and CGI expiration */
 {
+if (expireSeconds > 0)
+    errAbort("cgiApoptosis: %lu seconds\n", expireSeconds);
 exit(0);
 }
 
@@ -1132,8 +1135,14 @@ if (beenHere)  /* one at a time please */
     return;
 beenHere = TRUE;
 
+char *expireTime = cfgOptionDefault("browser.cgiExpireMinutes", "20");
+unsigned expireMinutes = sqlUnsigned(expireTime);
+expireSeconds = expireMinutes * 60;
+
 char trashFile[PATH_LEN];
 safef(trashFile, sizeof(trashFile), "%s/registration.txt", trashDir());
+
+/* trashFile does not exist during command line execution */
 if(fileExists(trashFile))	/* update access time for trashFile */
     {
     struct utimbuf ut;
@@ -1149,6 +1158,11 @@ if(fileExists(trashFile))	/* update access time for trashFile */
 	ut.actime = ut.modtime = clock1();
 	}
     (void) utime(trashFile, &ut);
+    if (expireSeconds > 0)
+	{
+	(void) signal(SIGALRM, cgiApoptosis);
+	(void) alarm(expireSeconds);	/* CGI timeout */
+	}
     return;
     }
 
@@ -1172,7 +1186,8 @@ if (scriptName && ip)  /* will not be true from command line execution */
 	if (0 == pid0)	/* in child */
 	    {
 	    close(STDOUT_FILENO); /* do not hang up Apache finish for parent */
-	    (void) signal(SIGALRM, alarmExit);
+	    expireSeconds = 0;	/* no error message from this exit */
+	    (void) signal(SIGALRM, cgiApoptosis);
 	    (void) alarm(6);	/* timeout here in 6 seconds */
 #include "versionInfo.h"
 	    char url[1024];
@@ -1186,6 +1201,11 @@ if (scriptName && ip)  /* will not be true from command line execution */
 	    exit(0);
 	    }	/* child of fork has done exit(0) normally or via alarm */
 	}		/* trash file open OK */
+    if (expireSeconds > 0)
+	{
+	(void) signal(SIGALRM, cgiApoptosis);
+	(void) alarm(expireSeconds);	/* CGI timeout */
+	}
     }			/* an actual CGI binary */
 }			/* phoneHome()	*/
 /* phoneHome business */
