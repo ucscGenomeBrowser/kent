@@ -217,6 +217,10 @@ div.sliceDiv { overflow:hidden; }
 .trDrag { background-color: #CCFFCC; }
 .dragHandle { cursor: n-resize; }
 
+/* These are duplicates of btnBlue and trDrag but allow useful highlighting to persist after hover */
+.blueButtons { background-color:#91B3E6; }
+.greenRows { background-color: #CCFFCC; }
+
 /* The are for sortable tables */
 table.subtracks { overflow: visible; white-space: nowrap; border: 1px solid #FFFEE8; }
 tr.sortable { background-color: #FCECC0; }
