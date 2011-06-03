@@ -6,7 +6,7 @@ shortLabel HAIB TFBS
 longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
 group regulation
 subGroup1 view Views Peaks=Peaks  RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line 1H1hESC=H1-hESC&nbsp;(Tier_1) 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 BE2C=BE2_C ECC1=ECC-1 GM12891=GM12891 GM12892=GM12892 HCT116=HCT-116 HTB11=HTB-11 PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87
+subGroup2 cellType Cell_Line 1H1hESC=H1-hESC&nbsp;(Tier_1) 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 BE2C=BE2_C ECC1=ECC-1 GM12891=GM12891 GM12892=GM12892 HCT116=HCT-116 PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87
 subGroup3 factor Factor ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF101388=BCLAF1_(SC-101388) BHLHE40=BHLHE40 CTCF=CTCF CTCFSC5916=CTCF_(SC-5916) CTCFLSC98982=CTCFL_(SC-98982) E2F6SC22823=E2F6_(SC-22823) EBF1SC137065=EBF1_(SC-137065) EGR1=Egr-1 ELF1SC631=ELF1_(SC-631) ERaa=ERalpha_a ETS1=ETS1 FOSL1SC183=FOSL1_(SC-183) FOSL2=FOSL2 FOXA1SC6553=FOXA1_(SC-6553) FOXA1SC101058=FOXA1_(SC-101058) FOXA2SC6554=FOXA2_(SC-6554) FOXP2=FOXP2 GABP=GABP GATA2=GATA2 GATA2SC267=GATA2_(SC-267) GATA3SC268=GATA3_(SC-268) GR=GR HDAC2SC6296=HDAC2_(SC-6296) HEY1=HEY1 HNF4ASC8987=HNF4A_(SC-8987) HNF4GSC6558=HNF4G_(SC-6558) IRF4SC6059=IRF4_(SC-6059) JUND=JunD LEF1SC8592=LEF1_(SC-8592) MAX=Max MEF2A=MEF2A MEF2CSC13268=MEF2C_(SC-13268) NANOGSC33759=NANOG_(SC-33759) NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 POU5F1SC9081=POU5F1_(SC-9081) PU1=PU.1 RAD21=RAD21 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SP2SC643=SP2_(SC-643) SRF=SRF TAF1=TAF1 TAF7SC101167=TAF7_(SC-101167) TCF12=TCF12 THAP1SC98174=THAP1_(SC-98174) USF1=USF-1 USF1SC8983=USF1_(SC-8983) YY1=YY1 YY1SC281=YY1_(SC-281) ZBTB33=ZBTB33 ZBTB7ASC34508=ZBTB7A_(SC-34508) ZEB1SC25388=ZEB1_(SC-25388)  zControl=Input(control)
 subGroup4 protocol Protocol PCR1x=PCR1x PCR2x=PCR2x V0416101=v041610.1 V0416102=v041610.2
 subGroup5 treatment Treatment DEXa=DEX_100nM DEXb=DEX_50nM DEXc=DEX_5nM DEX100nM=DEX_100nM DEXd=DEX_500pM DMSO2=DMSO_0.02pct ESTRADIa1h=Estradiol_10nM ETOH02=EtOH_0.02pct GEN1h=Genistein_100nM None=None
@@ -1071,13 +1071,14 @@ noInherit on
             type broadPeak
         # subId=1585 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsHtb11NrsfPcr2xPkRep2
+            track wgEncodeHaibTfbsSknshNrsfPcr2xPkRep2
             subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel HTB NRSF PCR2 2
-            longLabel HTB-11 NRSF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=NRSF cellType=HTB11 protocol=PCR2x treatment=None rep=rep2
+            shortLabel SKN NRSF PCR2 2
+            longLabel SKNSH NRSF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+            subGroups view=Peaks factor=NRSF cellType=SKNSH protocol=PCR2x treatment=None rep=rep2
             type broadPeak
         # subId=1585 dateSubmitted=2010-06-21
+            # was wgEncodeHaibTfbsHtb11NrsfPcr2xPkRep2 wong Fri Jun  3 11:47:45 2011
 
             track wgEncodeHaibTfbsPanc1NrsfPcr2xPkRep1
             subTrack wgEncodeHaibTfbsViewPeaks off
@@ -1186,13 +1187,14 @@ noInherit on
         type broadPeak
         # subId=1848 dateSubmitted=2010-08-06
 
-        track wgEncodeHaibTfbsHtb11NrsfPcr2xPkRep1
+        track wgEncodeHaibTfbsSknshNrsfPcr2xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HTB NRSF PCR2 1
-        longLabel HTB-11 NRSF PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=NRSF cellType=HTB11 protocol=PCR2x treatment=None rep=rep1
+        shortLabel SKN NRSF PCR2 1
+        longLabel SKNSH NRSF PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=NRSF cellType=SKNSH protocol=PCR2x treatment=None rep=rep1
         type broadPeak
         # subId=1848 dateSubmitted=2010-08-06
+        # was wgEncodeHaibTfbsHtb11NrsfPcr2xPkRep1 wong Fri Jun  3 11:47:44 2011
 
         track wgEncodeHaibTfbsGm12878NrsfPcr2xPkRep1
         parent wgEncodeHaibTfbsViewPeaks
@@ -3806,13 +3808,14 @@ noInherit on
         type bigWig 0.268720 169.091995
         # subId=3026 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsHtb11ControlPcr2xRawRep1
+        track wgEncodeHaibTfbsSknshControlPcr2xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HTB Cont PCR2 1
-        longLabel HTB-11 zControl PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zControl cellType=HTB11 protocol=PCR2x treatment=None rep=rep1
+        shortLabel SKN Cont PCR2 1
+        longLabel SKNSH zControl PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal factor=zControl cellType=SKNSH protocol=PCR2x treatment=None rep=rep1
         type bigWig 0.254775 82.865700
         # subId=3026 dateSubmitted=2011-01-21
+        # was wgEncodeHaibTfbsHtb11ControlPcr2xRawRep1 wong Fri Jun  3 11:47:43 2011
 
         track wgEncodeHaibTfbsPfsk1ControlPcr2xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4625,13 +4628,14 @@ noInherit on
         color 153,38,0
         # subId=3037 dateSubmitted=2010-12-01
 
-        track wgEncodeHaibTfbsHtb11NrsfPcr2xRawRep1
+        track wgEncodeHaibTfbsSknshNrsfPcr2xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HTB NRSF PCR2 1
-        longLabel HTB-11 NRSF PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=NRSF cellType=HTB11 protocol=PCR2x treatment=None rep=rep1
+        shortLabel SKN NRSF PCR2 1
+        longLabel SKNSH NRSF PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal factor=NRSF cellType=SKNSH protocol=PCR2x treatment=None rep=rep1
         type bigWig 0.210706 74.168404
         # subId=3037 dateSubmitted=2010-12-01
+        # was wgEncodeHaibTfbsHtb11NrsfPcr2xRawRep1 wong Fri Jun  3 11:47:45 2011
 
         track wgEncodeHaibTfbsU87NrsfPcr2xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -5916,13 +5920,14 @@ noInherit on
         type bigWig 0.190329 386.987000
         # subId=3035 dateSubmitted=2011-01-20
 
-        track wgEncodeHaibTfbsHtb11NrsfPcr2xRawRep2
+        track wgEncodeHaibTfbsSknshNrsfPcr2xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HTB NRSF PCR2 2
-        longLabel HTB-11 NRSF PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=NRSF cellType=HTB11 protocol=PCR2x treatment=None rep=rep2
+        shortLabel SKN NRSF PCR2 2
+        longLabel SKNSH NRSF PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal factor=NRSF cellType=SKNSH protocol=PCR2x treatment=None rep=rep2
         type bigWig 0.153816 196.076996
         # subId=3035 dateSubmitted=2011-01-20
+        # was wgEncodeHaibTfbsHtb11NrsfPcr2xRawRep2 wong Fri Jun  3 11:47:45 2011
 
         track wgEncodeHaibTfbsHepg2Pol2Pcr2xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -6000,13 +6005,14 @@ noInherit on
         type bigWig 0.107553 131.511002
         # subId=3035 dateSubmitted=2011-01-20
 
-        track wgEncodeHaibTfbsHtb11ControlPcr2xRawRep2
+        track wgEncodeHaibTfbsSknshControlPcr2xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HTB Cont PCR2 2
-        longLabel HTB-11 zControl PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zControl cellType=HTB11 protocol=PCR2x treatment=None rep=rep2
+        shortLabel SKN Cont PCR2 2
+        longLabel SKNSH zControl PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal factor=zControl cellType=SKNSH protocol=PCR2x treatment=None rep=rep2
         type bigWig 0.162516 577.216003
         # subId=3035 dateSubmitted=2011-01-20
+        # was wgEncodeHaibTfbsHtb11ControlPcr2xRawRep2 wong Fri Jun  3 11:47:44 2011
 
         track wgEncodeHaibTfbsGm12878Yy1sc281Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
