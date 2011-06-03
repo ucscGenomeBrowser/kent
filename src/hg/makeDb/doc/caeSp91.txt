@@ -1,9 +1,9 @@
 # for emacs: -*- mode: sh; -*-
 
-# Caenorhabditis brenneri
-#	Washington University School of Medicine GSC and Sanger Institute
+# Caenorhabditis sp9. JU1422
+#	Washington University School of Medicine GSC
 #
-#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEG02
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AENM01
 
 ###########################################################################
 ## Download sequence (DONE - 2011-05-27 - Hiram)
