@@ -1,9 +1,9 @@
 # for emacs: -*- mode: sh; -*-
 
-# Caenorhabditis brenneri
-#	Washington University School of Medicine GSC and Sanger Institute
+# Caenorhabditis sp. 11 JU1373
+#	Washington University School of Medicine GSC
 #
-#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEG02
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AEKS01
 
 ###########################################################################
 ## Download sequence (DONE - 2011-05-27 - Hiram)
@@ -132,8 +132,7 @@ taxId 886184
     # need the -species option since RM doesn't recognize this one
     time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=swarm \
 	-species "caenorhabditis" -buildDir=`pwd` caeSp111 > do.log 2>&1 &
-XXX - running Tue May 31 10:05:53 PDT 2011
-    #	real    48m20.177s
+    #	real    48m15.660s
 
     #	from the do.log:
 # RepeatMasker version development-$Id: RepeatMasker,v
