@@ -1118,7 +1118,7 @@ if (differentWord(genome, hGenome(retDb)))
 return retDb;
 }
 
-unsigned long expireSeconds = 0;
+static unsigned long expireSeconds = 0;
 /* phoneHome business */
 static void cgiApoptosis(int status)
 /* signal handler for SIGALRM for phoneHome function and CGI expiration */
