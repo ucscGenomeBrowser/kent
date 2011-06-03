@@ -2048,7 +2048,7 @@ tier 3
 lineage endoderm
 vendorName Unknown
 vendorId N/A
-orderUrl N/A
+orderUrl http://www.hudsonalpha.org/myers-lab
 color 189,0,157
 sex U
 protocol HFL11W_and_HFL24W_Myers_protocols.pdf
@@ -2062,7 +2062,7 @@ description Human Fetal Liver 24 weeks, consented fetal liver samples were isola
 tier 3
 vendorName Unknown
 vendorId N/A
-orderUrl N/A
+orderUrl http://www.hudsonalpha.org/myers-lab
 lineage endoderm
 color 189,0,157
 sex U
@@ -4408,7 +4408,7 @@ type Antibody
 target BHLHE40
 antibodyDescription Dec-1(S-8) is a mouse monoclonal IgG2b antibody raised against recombinant DEC1 of human origin. Recommended for detection of DEC1 of m and h origin by WB, IP and ELISA.
 targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differe
-vendorName Santa Cruz Biotech,
+vendorName Santa Cruz Biotech
 vendorId sc-101023
 orderUrl http://www.scbt.com/datasheet-101023-dec1-s-8-antibody.html
 lab Myers
