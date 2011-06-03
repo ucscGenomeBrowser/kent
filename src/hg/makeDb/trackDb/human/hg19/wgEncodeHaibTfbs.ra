@@ -63,7 +63,7 @@ noInherit on
 	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=TCF12 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=1 labVersion=SL1158 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1130 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep1 fileName=wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep1.broadPeak.gz
 
 	    track wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep2
-	    subTrack wgEncodeHaibTfbsViewPeaks off
+	    subTrack wgEncodeHaibTfbsViewPeaks on
 	    shortLabel HESC USF1 PCR1 2
 	    longLabel H1-hESC USF1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
 	    subGroups view=Peaks factor=USF1 cellType=1H1hESC protocol=PCR1x treatment=None rep=rep2
@@ -73,7 +73,7 @@ noInherit on
 
 
 	    track wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep1
-	    subTrack wgEncodeHaibTfbsViewPeaks off
+	    subTrack wgEncodeHaibTfbsViewPeaks on
 	    shortLabel HESC USF1 PCR1 1
 	    longLabel H1-hESC USF1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
 	    subGroups view=Peaks factor=USF1 cellType=1H1hESC protocol=PCR1x treatment=None rep=rep1
@@ -101,7 +101,7 @@ noInherit on
     	metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=Sin3Ak-20 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=1 labVersion=SL1157 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1150 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep1 fileName=wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep1.broadPeak.gz
 
 	    track wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep2
-	    subTrack wgEncodeHaibTfbsViewPeaks  off
+	    subTrack wgEncodeHaibTfbsViewPeaks off
 	    shortLabel HESC SP1 PCR1 2
 	    longLabel H1-hESC SP1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
 	    subGroups view=Peaks factor=SP1 cellType=1H1hESC protocol=PCR1x treatment=None rep=rep2
@@ -111,7 +111,7 @@ noInherit on
 
 
 		track wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep1
-	    subTrack wgEncodeHaibTfbsViewPeaks  off
+	    subTrack wgEncodeHaibTfbsViewPeaks off
 	    shortLabel HESC SP1 PCR1 1
 	    longLabel H1-hESC SP1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
 	    subGroups view=Peaks factor=SP1 cellType=1H1hESC protocol=PCR1x treatment=None rep=rep1
@@ -130,7 +130,7 @@ noInherit on
 
 	    #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
 	    track wgEncodeHaibTfbsH1hescSix5Pcr1xPkRep1
-	    subTrack wgEncodeHaibTfbsViewPeaks on
+	    subTrack wgEncodeHaibTfbsViewPeaks off
 	    shortLabel HESC SIX5 PCR1 1
 	    longLabel H1-hESC SIX5 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
 	    subGroups view=Peaks factor=SIX5 cellType=1H1hESC protocol=PCR1x treatment=None rep=rep1
@@ -158,7 +158,7 @@ noInherit on
 	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=H1-hESC antibody=SRF protocol=PCR1x treatment=None setType=exp inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=1 labVersion=SL1483 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1180 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSrfPcr1xPkRep1 fileName=wgEncodeHaibTfbsH1hescSrfPcr1xPkRep1.broadPeak.gz
 
 	    track wgEncodeHaibTfbsH1hescGabpPcr1xPkRep2
-	    subTrack wgEncodeHaibTfbsViewPeaks off
+	    subTrack wgEncodeHaibTfbsViewPeaks on
 	    shortLabel HESC GABP PCR1 2
 	    longLabel H1-hESC GABP PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
 	    subGroups view=Peaks factor=GABP cellType=1H1hESC protocol=PCR1x treatment=None rep=rep2
@@ -168,7 +168,7 @@ noInherit on
 
 
 	    track wgEncodeHaibTfbsH1hescGabpPcr1xPkRep1
-	    subTrack wgEncodeHaibTfbsViewPeaks off
+	    subTrack wgEncodeHaibTfbsViewPeaks on
 	    shortLabel HESC GABP PCR1 1
 	    longLabel H1-hESC GABP PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
 	    subGroups view=Peaks factor=GABP cellType=1H1hESC protocol=PCR1x treatment=None rep=rep1
@@ -605,7 +605,7 @@ noInherit on
 
 		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xPkRep1
-        subTrack wgEncodeHaibTfbsViewPeaks
+        subTrack wgEncodeHaibTfbsViewPeaks on
         shortLabel GM78 POL24 PCR1 1
         longLabel GM12878 POL24H8 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=1GM12878 protocol=PCR1x treatment=None rep=rep1
@@ -641,7 +641,7 @@ noInherit on
     # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xPkRep2
-        subTrack wgEncodeHaibTfbsViewPeaks off
+        subTrack wgEncodeHaibTfbsViewPeaks on
         shortLabel GM78 POL24 PCR1 2
         longLabel GM12878 POL24H8 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=1GM12878 protocol=PCR1x treatment=None rep=rep2
@@ -717,7 +717,7 @@ noInherit on
 
         #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsGm12878Six5Pcr1xPkRep1
-        subTrack wgEncodeHaibTfbsViewPeaks
+        subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel GM78 SIX5 PCR1 1
         longLabel GM12878 SIX5 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=SIX5 cellType=1GM12878 protocol=PCR1x treatment=None rep=rep1
@@ -832,7 +832,7 @@ noInherit on
 
 		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsK562Six5Pcr1xPkRep1
-        subTrack wgEncodeHaibTfbsViewPeaks on
+        subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 SIX5 PCR1 1
         longLabel K562 SIX5 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=SIX5 cellType=1K562 protocol=PCR1x treatment=None rep=rep1
@@ -964,7 +964,7 @@ noInherit on
         # subId=1583 dateSubmitted=2010-06-21
 
             track wgEncodeHaibTfbsGm12878Usf1Pcr2xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
+            subTrack wgEncodeHaibTfbsViewPeaks on
             shortLabel GM78 USF1 PCR2 2
             longLabel GM12878 USF1 PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
             subGroups view=Peaks factor=USF1 cellType=1GM12878 protocol=PCR2x treatment=None rep=rep2
@@ -973,7 +973,7 @@ noInherit on
         # subId=1582 dateSubmitted=2010-06-21
 
             track wgEncodeHaibTfbsGm12878Usf1Pcr2xPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks off
+            subTrack wgEncodeHaibTfbsViewPeaks on
             shortLabel GM78 USF1 PCR2 1
             longLabel GM12878 USF1 PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
             subGroups view=Peaks factor=USF1 cellType=1GM12878 protocol=PCR2x treatment=None rep=rep1
@@ -1001,7 +1001,7 @@ noInherit on
 
 			#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
             track wgEncodeHaibTfbsGm12878Pol2Pcr2xPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks on
+            subTrack wgEncodeHaibTfbsViewPeaks off
             shortLabel GM78 POL2 PCR2 1
             longLabel GM12878 POL2 PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
             subGroups view=Peaks factor=POL2 cellType=1GM12878 protocol=PCR2x treatment=None rep=rep1
@@ -1019,7 +1019,7 @@ noInherit on
         # subId=1796 dateSubmitted=2010-06-21
 
             track wgEncodeHaibTfbsGm12878GabpPcr2xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
+            subTrack wgEncodeHaibTfbsViewPeaks on
             shortLabel GM78 GABP PCR2 2
             longLabel GM12878 GABP PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
             subGroups view=Peaks factor=GABP cellType=1GM12878 protocol=PCR2x treatment=None rep=rep2
@@ -1037,7 +1037,7 @@ noInherit on
         # subId=1796 dateSubmitted=2010-06-21
 
             track wgEncodeHaibTfbsGm12878GabpPcr2xPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks off
+            subTrack wgEncodeHaibTfbsViewPeaks on
             shortLabel GM78 GABP PCR2 1
             longLabel GM12878 GABP PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
             subGroups view=Peaks factor=GABP cellType=1GM12878 protocol=PCR2x treatment=None rep=rep1
@@ -1197,7 +1197,7 @@ noInherit on
         # was wgEncodeHaibTfbsHtb11NrsfPcr2xPkRep1 wong Fri Jun  3 11:47:44 2011
 
         track wgEncodeHaibTfbsGm12878NrsfPcr2xPkRep1
-        parent wgEncodeHaibTfbsViewPeaks
+        parent wgEncodeHaibTfbsViewPeaks off
         shortLabel GM78 NRSF PCR2 1
         longLabel GM12878 NRSF PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=NRSF cellType=1GM12878 protocol=PCR2x treatment=None rep=rep1
@@ -1584,7 +1584,7 @@ noInherit on
         # subId=2591 dateSubmitted=2010-10-22
 
         track wgEncodeHaibTfbsK562Usf1V0416101PkRep2
-        parent wgEncodeHaibTfbsViewPeaks off
+        parent wgEncodeHaibTfbsViewPeaks on
         shortLabel K562 USF1 V101 2
         longLabel K562 USF1 V0416101 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=USF1 cellType=1K562 protocol=V0416101 treatment=None rep=rep2
@@ -1593,7 +1593,7 @@ noInherit on
         # subId=2715 dateSubmitted=2010-10-25
 
         track wgEncodeHaibTfbsK562Usf1V0416101PkRep1
-        parent wgEncodeHaibTfbsViewPeaks off
+        parent wgEncodeHaibTfbsViewPeaks on
         shortLabel K562 USF1 V101 1
         longLabel K562 USF1 V0416101 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=USF1 cellType=1K562 protocol=V0416101 treatment=None rep=rep1
@@ -1620,7 +1620,7 @@ noInherit on
         # subId=2716 dateSubmitted=2010-10-28
 
         track wgEncodeHaibTfbsK562Pol24h8V0416101PkRep2
-        parent wgEncodeHaibTfbsViewPeaks off
+        parent wgEncodeHaibTfbsViewPeaks on
         shortLabel K562 POL24 V101 2
         longLabel K562 POL24H8 V0416101 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=1K562 protocol=V0416101 treatment=None rep=rep2
@@ -1629,7 +1629,7 @@ noInherit on
         # subId=2718 dateSubmitted=2010-10-25
 
         track wgEncodeHaibTfbsK562Pol24h8V0416101PkRep1
-        parent wgEncodeHaibTfbsViewPeaks
+        parent wgEncodeHaibTfbsViewPeaks on
         shortLabel K562 POL24 V101 1
         longLabel K562 POL24H8 V0416101 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=1K562 protocol=V0416101 treatment=None rep=rep1
@@ -1665,7 +1665,7 @@ noInherit on
         # subId=2720 dateSubmitted=2010-10-25
 
         track wgEncodeHaibTfbsK562Taf1V0416101PkRep1
-        parent wgEncodeHaibTfbsViewPeaks
+        parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 TAF1 V101 1
         longLabel K562 TAF1 V0416101 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=TAF1 cellType=1K562 protocol=V0416101 treatment=None rep=rep1
@@ -2641,7 +2641,7 @@ noInherit on
         # subId=3750 dateSubmitted=2011-03-02
 
         track wgEncodeHaibTfbsK562GabpV0416101PkRep1
-        parent wgEncodeHaibTfbsViewPeaks off
+        parent wgEncodeHaibTfbsViewPeaks on
         shortLabel K562 GABP V101 1
         longLabel K562 GABP V0416101 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=GABP cellType=1K562 protocol=V0416101 treatment=None rep=rep1
@@ -2668,7 +2668,7 @@ noInherit on
         # subId=3753 dateSubmitted=2011-03-04
 
         track wgEncodeHaibTfbsK562GabpV0416101PkRep2
-        parent wgEncodeHaibTfbsViewPeaks off
+        parent wgEncodeHaibTfbsViewPeaks on
         shortLabel K562 GABP V101 2
         longLabel K562 GABP V0416101 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=GABP cellType=1K562 protocol=V0416101 treatment=None rep=rep2
@@ -2795,7 +2795,7 @@ noInherit on
         # subId=3749 dateSubmitted=2011-03-22
 
         track wgEncodeHaibTfbsH1hescPol24h8V0416102PkRep2
-        parent wgEncodeHaibTfbsViewPeaks off
+        parent wgEncodeHaibTfbsViewPeaks on
         shortLabel HESC POL24 V102 2
         longLabel H1-hESC POL24H8 V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=1H1hESC protocol=V0416102 treatment=None rep=rep2
@@ -2820,7 +2820,7 @@ noInherit on
         # subId=3749 dateSubmitted=2011-03-22
 
         track wgEncodeHaibTfbsH1hescPol24h8V0416102PkRep1
-        parent wgEncodeHaibTfbsViewPeaks off
+        parent wgEncodeHaibTfbsViewPeaks on
         shortLabel HESC POL24 V102 1
         longLabel H1-hESC POL24H8 V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=1H1hESC protocol=V0416102 treatment=None rep=rep1
@@ -3314,7 +3314,7 @@ noInherit on
         # was wgEncodeHaibTfbsHepg2Foxa1c20V0416101RawRep2 cricket Tue Apr 19 10:32:43 2011
 
         track wgEncodeHaibTfbsH1hescGabpPcr1xRawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel HESC GABP PCR1 2
         longLabel H1-hESC GABP PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=GABP cellType=1H1hESC protocol=PCR1x treatment=None rep=rep2
@@ -3323,7 +3323,7 @@ noInherit on
         # subId=3021 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsGm12878GabpPcr2xRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel GM78 GABP PCR2 1
         longLabel GM12878 GABP PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=GABP cellType=1GM12878 protocol=PCR2x treatment=None rep=rep1
@@ -3332,7 +3332,7 @@ noInherit on
         # subId=3021 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsGm12878GabpPcr2xRawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel GM78 GABP PCR2 2
         longLabel GM12878 GABP PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=GABP cellType=1GM12878 protocol=PCR2x treatment=None rep=rep2
@@ -3402,7 +3402,7 @@ noInherit on
         # subId=3021 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsGm12878NrsfPcr2xRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal
+        parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM78 NRSF PCR2 1
         longLabel GM12878 NRSF PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=NRSF cellType=1GM12878 protocol=PCR2x treatment=None rep=rep1
@@ -3463,7 +3463,7 @@ noInherit on
         # subId=3021 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsGm12878Pol2Pcr2xRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal
+        parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM78 POL2 PCR2 1
         longLabel GM12878 POL2 PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL2 cellType=1GM12878 protocol=PCR2x treatment=None rep=rep1
@@ -3489,7 +3489,7 @@ noInherit on
         # subId=3021 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsH1hescPol24h8V0416102RawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel HESC POL24 V102 2
         longLabel H1-hESC POL24H8 V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=1H1hESC protocol=V0416102 treatment=None rep=rep2
@@ -3517,7 +3517,7 @@ noInherit on
 
 
         track wgEncodeHaibTfbsH1hescSix5Pcr1xRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal
+        parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HESC SIX5 PCR1 1
         longLabel H1-hESC SIX5 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIX5 cellType=1H1hESC protocol=PCR1x treatment=None rep=rep1
@@ -3736,7 +3736,7 @@ noInherit on
 
 
 	track wgEncodeHaibTfbsH1hescUsf1Pcr1xRawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel HESC USF1 PCR1 2
         longLabel H1-hESC USF1 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=USF1 cellType=1H1hESC protocol=PCR1x treatment=None rep=rep2
@@ -3783,7 +3783,7 @@ noInherit on
         # subId=3026 dateSubmitted=2011-01-21
 
         track wgEncodeHaibTfbsH1hescUsf1Pcr1xRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel HESC USF1 PCR1 1
         longLabel H1-hESC USF1 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=USF1 cellType=1H1hESC protocol=PCR1x treatment=None rep=rep1
@@ -4165,7 +4165,7 @@ noInherit on
         # subId=3028 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsK562Pol24h8V0416101RawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel K562 POL24 V101 2
         longLabel K562 POL24H8 V0416101 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=1K562 protocol=V0416101 treatment=None rep=rep2
@@ -4174,7 +4174,7 @@ noInherit on
         # subId=3028 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsK562Pol24h8V0416101RawRep1
-        parent wgEncodeHaibTfbsViewRawSignal
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel K562 POL24 V101 1
         longLabel K562 POL24H8 V0416101 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=1K562 protocol=V0416101 treatment=None rep=rep1
@@ -4228,7 +4228,7 @@ noInherit on
         # subId=3028 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsK562Taf1V0416101RawRep1
-        parent wgEncodeHaibTfbsViewRawSignal
+        parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 TAF1 V101 1
         longLabel K562 TAF1 V0416101 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=TAF1 cellType=1K562 protocol=V0416101 treatment=None rep=rep1
@@ -4367,7 +4367,7 @@ noInherit on
         # subId=3029 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsK562Usf1V0416101RawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel K562 USF1 V101 2
         longLabel K562 USF1 V0416101 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=USF1 cellType=1K562 protocol=V0416101 treatment=None rep=rep2
@@ -4376,7 +4376,7 @@ noInherit on
         # subId=3029 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsK562Usf1V0416101RawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel K562 USF1 V101 1
         longLabel K562 USF1 V0416101 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=USF1 cellType=1K562 protocol=V0416101 treatment=None rep=rep1
@@ -4611,7 +4611,7 @@ noInherit on
         # subId=3037 dateSubmitted=2010-12-01
 
         track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel GM78 POL24 PCR1 1
         longLabel GM12878 POL24H8 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=1GM12878 protocol=PCR1x treatment=None rep=rep1
@@ -4729,7 +4729,7 @@ noInherit on
         # subId=3038 dateSubmitted=2010-11-30
 
         track wgEncodeHaibTfbsH1hescPol24h8V0416102RawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel HESC POL24 V102 1
         longLabel H1-hESC POL24H8 V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=1H1hESC protocol=V0416102 treatment=None rep=rep1
@@ -5887,7 +5887,7 @@ noInherit on
         # subId=3035 dateSubmitted=2011-01-20
 
         track wgEncodeHaibTfbsGm12878Usf1Pcr2xRawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel GM78 USF1 PCR2 2
         longLabel GM12878 USF1 PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=USF1 cellType=1GM12878 protocol=PCR2x treatment=None rep=rep2
@@ -5896,7 +5896,7 @@ noInherit on
         # subId=3035 dateSubmitted=2011-01-20
 
         track wgEncodeHaibTfbsGm12878Usf1Pcr2xRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel GM78 USF1 PCR2 1
         longLabel GM12878 USF1 PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=USF1 cellType=1GM12878 protocol=PCR2x treatment=None rep=rep1
@@ -6087,7 +6087,7 @@ noInherit on
         # subId=3810 dateSubmitted=2011-03-08
 
         track wgEncodeHaibTfbsH1hescGabpPcr1xRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel HESC GABP PCR1 1
         longLabel H1-hESC GABP PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=GABP cellType=1H1hESC protocol=PCR1x treatment=None rep=rep1
@@ -6145,7 +6145,7 @@ noInherit on
         # subId=3753 dateSubmitted=2011-03-04
 
         track wgEncodeHaibTfbsK562GabpV0416101RawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel K562 GABP V101 1
         longLabel K562 GABP V0416101 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=GABP cellType=1K562 protocol=V0416101 treatment=None rep=rep1
@@ -6172,7 +6172,7 @@ noInherit on
         # subId=3753 dateSubmitted=2011-03-04
 
         track wgEncodeHaibTfbsK562GabpV0416101RawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel K562 GABP V101 2
         longLabel K562 GABP V0416101 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=GABP cellType=1K562 protocol=V0416101 treatment=None rep=rep2
@@ -6549,7 +6549,7 @@ noInherit on
         # subId=3815 dateSubmitted=2011-03-21
 
         track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xRawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel GM78 POL24 PCR1 2
         longLabel GM12878 POL24H8 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=1GM12878 protocol=PCR1x treatment=None rep=rep2
