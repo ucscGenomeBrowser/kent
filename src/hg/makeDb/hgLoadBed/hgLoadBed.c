@@ -10,6 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 #include "portable.h"
+#include <signal.h>
 
 static char const rcsid[] = "$Id: hgLoadBed.c,v 1.69 2009/04/24 22:14:48 larrym Exp $";
 
@@ -114,11 +115,30 @@ errAbort(
   "   -allowNegativeScores  - sql definition of score column is int, not unsigned\n"
   "   -customTrackLoader  - turns on: -noNameIx, -noHistory, -ignoreEmpty,\n"
   "                         -allowStartEqualEnd, -allowNegativeScores, -verbose=0\n"
+  "                         Plus, this turns on a 20 minute time-out exit.\n"
   "   -fillInScore=colName - if every score value is zero, then use column 'colName' to fill in the score column (from minScore-1000)\n"
   "   -minScore=N - minimum value for score field for -fillInScore option (default 100)\n"
   "   -verbose=N - verbose level for extra information to STDERR\n"
   "   -dotIsNull=N - if the specified field is a '.' the replace it with NULL\n"
   );
+}
+
+/* if this Apoptosis function becomes more popular, it can go into the libs
+ * there is a similar function in hg/lib/web.c cgiApoptosis()
+ */
+static unsigned long expireSeconds = 0;
+/* to avoid long running processes on the RR */
+static void selfApoptosis(int status)
+/* signal handler for SIGALRM expiration */
+{
+if (expireSeconds > 0)
+    {
+    /* want to see this error message in the apache error_log also */
+    fprintf(stderr, "hgLoadBed selfApoptosis: %lu seconds\n", expireSeconds);
+    /* this message may show up somewhere */
+    errAbort("procedures have exceeded timeout: %lu seconds, function has ended.\n", expireSeconds);
+    }
+exit(0);
 }
 
 int findBedSize(char *fileName, struct lineFile **retLf)
@@ -633,6 +653,9 @@ if (customTrackLoader)
     allowStartEqualEnd = TRUE;
     allowNegativeScores = TRUE;
     verboseSetLevel(0);
+    expireSeconds = 1200;	/* 20 minutes */
+    (void) signal(SIGALRM, selfApoptosis);
+    (void) alarm(expireSeconds);	/* CGI timeout */
     }
 fillInScoreColumn = optionVal("fillInScore", NULL);
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
