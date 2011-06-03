@@ -237,17 +237,18 @@ term A549
 tag A549
 type Cell Line
 organism human
-description epithelial cell line derived from a lung carcinoma tissue. (PMID: 175022), "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old caucasian male." - ATCC
+description epithelial cell line derived from a lung carcinoma tissue. (PMID: 175022), "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old caucasian male." - ATCC, newly promoted to tier 2: not in 2011 analysis
 tissue Epithelium
 vendorName ATCC
 vendorId CCl-185
+lots 58483235
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-185&Template=cellBiology
 lineage endoderm
 karyotype cancer
 termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 sex M
-tier 3
+tier 2
 protocol HudsonAlpha:A549_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:A549_Crawford_protocol.pdf UW_Stam:A549_Stam_protocol.pdf
 
 term AG04449
@@ -2047,7 +2048,7 @@ tier 3
 lineage endoderm
 vendorName Unknown
 vendorId N/A
-orderUrl N/A
+orderUrl http://www.hudsonalpha.org/myers-lab
 color 189,0,157
 sex U
 protocol HFL11W_and_HFL24W_Myers_protocols.pdf
@@ -2061,7 +2062,7 @@ description Human Fetal Liver 24 weeks, consented fetal liver samples were isola
 tier 3
 vendorName Unknown
 vendorId N/A
-orderUrl N/A
+orderUrl http://www.hudsonalpha.org/myers-lab
 lineage endoderm
 color 189,0,157
 sex U
@@ -2452,22 +2453,23 @@ sex M
 tier 3
 protocol HudsonAlpha:HT1080_Myers_protocol.pdf
 
-term HTB-11
-tag HTB11
-type Cell Line
-organism human
-description Human neuroblastoma
-tissue Brain
-lineage ectoderm
-vendorName ATCC
-vendorId HTB-11
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
-karyotype cancer
-termId BTO:0000932 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
-sex F
-tier 3
-protocol HudsonAlpha:HTB-11_Myers_protocol.pdf
+#This cell line has been superceded by SK-N-SH, HTB-11 was the venderId.
+#term HTB-11
+#tag HTB11
+#type Cell Line
+#organism human
+#description Human neuroblastoma
+#tissue Brain
+#lineage ectoderm
+#vendorName ATCC
+#vendorId HTB-11
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
+#karyotype cancer
+#termId BTO:0000932 (non-specific)
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
+#sex F
+#tier 3
+#protocol HudsonAlpha:HTB-11_Myers_protocol.pdf
 
 term HTR8svn
 tag HTR8
@@ -2537,13 +2539,14 @@ term IMR90
 tag IMR90
 type Cell Line
 organism human
-description Normal Human Lung Fibroblasts
+description Normal Human Lung Fibroblasts, newly promoted to tier 2: not in 2011 analysis
 tissue Lung
 vendorName ATCC
 vendorId CCL-186
+lots 58607680
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-186&Template=cellBiology
 sex U
-tier 3
+tier 2
 protocol UW_Stam:IMR90_Stam_protocol.pdf
 
 term iPS
@@ -2653,17 +2656,18 @@ term MCF-7
 tag MCF7
 type Cell Line
 organism human
-description mammary gland, adenocarcinoma. (PMID: 4357757)
+description mammary gland, adenocarcinoma. (PMID: 4357757), newly promoted to tier 2: not in 2011 analysis
 tissue Breast
 vendorName ATCC
 vendorId HTB-22
+lots 59401285
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-22&Template=cellBiology
 lineage
 karyotype cancer
 termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093
 sex F
-tier 3
+tier 2
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFBS(Farnham):MCF-7_Farnham_protocol.pdf UW_Stam:Stam_15_protocols.pdf
 
 #term MCF-10A
@@ -2751,9 +2755,9 @@ protocol Duke/UNC/UTA/EBI_Open_Chromatin:Melano_Crawford_protocol.pdf
 term Monocytes-CD14+
 tag MONOCD14
 type Cell Line
-tier 3
+tier 2
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis product
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis product, newly promoted to tier 2: not in 2011 analysis
 lineage Monocytic
 karyotype normal
 sex F
@@ -3170,6 +3174,24 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol HudsonAlpha:SK-N-MC_protocol.pdf
+
+term SK-N-SH
+tag SKNSH
+type Cell Line
+organism human
+description Human neuroblastoma, newly promoted to tier 2: not in 2011 analysis
+tissue Brain
+lineage ectoderm
+vendorName ATCC
+vendorId HTB-11
+lots 59257297
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
+karyotype cancer
+termId BTO:0000932 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
+sex F
+tier 2
+protocol HudsonAlpha:SK-N-SH_Myers_protocol.pdf
 
 # In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
 term SK-N-SH_RA
@@ -4386,7 +4408,7 @@ type Antibody
 target BHLHE40
 antibodyDescription Dec-1(S-8) is a mouse monoclonal IgG2b antibody raised against recombinant DEC1 of human origin. Recommended for detection of DEC1 of m and h origin by WB, IP and ELISA.
 targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differe
-vendorName Santa Cruz Biotech,
+vendorName Santa Cruz Biotech
 vendorId sc-101023
 orderUrl http://www.scbt.com/datasheet-101023-dec1-s-8-antibody.html
 lab Myers
