@@ -15794,6 +15794,11 @@ hgsql hg19 < ~/kent/src/hg/lib/omimAvRepl.sql
 hgsql hg19 -e 'load data local infile "omimAvRepl.tab" into table omimAvRepl'
 
 rm j1.2  j1 j2 j3  j4  j4-2  j4.1  j4.2  j5
+
+hgsql hg19 -N -e 'select chrom, chromStart, chromEnd, avId from omimAvRepl r,
+snp132 s where s.name = dbSnpId order by avId' >omimAvSnp.tab
+
+hgLoadBed -allowStartEqualEnd  hg19 omimAvSnp omimAvSnp.tab
 ##############################################################
 # build the omimLocation track
 
