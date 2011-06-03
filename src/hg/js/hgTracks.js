@@ -1909,40 +1909,42 @@ function loadContextMenu(img)
                 }
                 var id = selectedMenuItem.id;
                 var rec = trackDbJson[id];
-                var offerHideSet       = false;
+                var offerHideSubset    = false;
                 var offerHideComposite = false;
                 var row = $( 'tr#tr_' + id );
                 if (row) {
                     var btn = $(row).find('p.btnBlue');  // btnBlue means cursor over left button
                     if (btn.length == 1) {
-                        var contiguousSet = imgTblContiguousRowSet(row);
-                        if (contiguousSet && contiguousSet.length > 1) {// There is a contiguous set
-                            offerHideSet = true;
-                            $( contiguousSet ).addClass("greenRows"); // green persists
-                        }
                         var compositeSet = imgTblCompositeSet(row);
                         if (compositeSet && compositeSet.length > 0) {  // There is a composite set
                             offerHideComposite = true;
                             $( compositeSet ).find('p.btn').addClass('blueButtons');  // blue persists
-                            if (contiguousSet && contiguousSet.length == compositeSet.length)
-                                offerHideSet = false; // no need to offer both
+
+                            var subSet = imgTblContiguousRowSet(row);
+                            if (subSet && subSet.length > 1 && subSet.length < compositeSet.length) {
+                                offerHideSubset = true;
+                                $( subSet ).addClass("greenRows"); // green persists
+                            }
                         }
                     }
                 }
 
                 // First option is hide whole set
-                if (offerHideSet) {
-                    var o = new Object();
-                    o[blankImg + " hide highlighted (green) set"] = {onclick: makeContextMenuHitCallback('hideSet')};
-                    menu.push(o);
-                }
                 if (offerHideComposite) {
+                    if (offerHideSubset) {
+                        var o = new Object();
+                        o[blankImg + " hide track subset (green)"] = {onclick: makeContextMenuHitCallback('hideSet')};
+                        menu.push(o);
+                    }
+
                     var o = new Object();
-                    o[blankImg + " hide track (blue) set"] = {onclick: makeContextMenuHitCallback('hideComposite')};
+                    var str = blankImg + " hide track set";
+                    if (offerHideSubset)
+                        str += " (blue)";
+                    o[str] = {onclick: makeContextMenuHitCallback('hideComposite')};
                     menu.push(o);
-                }
-                if (offerHideSet || offerHideComposite)
                     menu.push($.contextMenu.separator);
+                }
 
                 // XXXX what if select is not available (b/c trackControlsOnMain is off)?
                 // Move functionality to a hidden variable?
