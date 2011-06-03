@@ -70,74 +70,26 @@ Yale Poly-A tracks (coming soon).
 
 <H2>Release Notes</H2>
 <P>
-This is Release 3 (March 2010) of this track, which includes 64 additional
-experiments and 26 extra input/control datasets since the previous release.
-There are 154 additional tables and 732 new downloadable files.
+This is Release 4 (June 2011) of this track, which includes 2 additional
+experiments and 2 experiments, K562/NF-YA and K562/NF-YB that were present 
+in earlier releases have been removed.
 </P>
 <P>
 A number of previously released datasets have been replaced by updated versions.
-The affected database tables and files include 'V2' (or alternatively, 'Rel2')
-in the name, and metadata is marked with "submittedDataVersion=V2",
-followed by the reason for replacement.
-Specific changes are:
-<TABLE>
-<tr><th align='left' valign='top' nowrap> <i>Peaks</i></th>
-<td>
-The previously released "Peaks" datasets had an off-by-one start location error and did not include
-pValues and point peaks. All Peaks data now have these problems corrected.
-</td></tr>
+The affected database tables and files include 'V3' 
+in the name, and metadata is marked with "submittedDataVersion=V3",
+followed by the specific reason. The specific reason is:
+Includes previously missing sequence data.
 
-<tr><th align='left' valign='top' nowrap ><i>Signal</i></th>
-<td>
-The majority of the previously released "Signal" datasets contained a
-sparse representation of the signal. These have been corrected to be the continuous signal intended.
-</td></tr>
-
-<tr><th align='left' valign='top' nowrap ><i>Alignments</i></th>
-<td>
-A number of early datasets had tag alignment files that had locations that were off by one.
-Now all tags are properly aligned to their intended locations.
-</td></tr>
-
-<tr><th align='left' valign='top' nowrap ><i>Raw Signal</i></th>
-<td>
-The previously-available "Raw Signal" view of the data is no longer provided as
-the 'Signals' view provides a better measure of enrichment, and algorithms for the Raw Signal are in flux.
-</td></tr>
-</TABLE>
 Previous versions of files are available for download from the
 <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/"
  TARGET=_BLANK>FTP site</A>
-<TABLE>
-<P>
-This track contains experiments and data from several labs.  During review, it
-was noticed that the some cell cultures were different enough between the labs
-that they should be analyzed separately&mdash;using Input specific for the lab.
-Specifically:
-
-<TABLE>
-<tr><th align='left' valign='top' nowrap><i>K562 vs. K562b</i></th>
-<td>
-The Farnham lab (UC Davis) K562 cell line variant differs from the
-Snyder (Yale) and Struhl (Harvard) labs and is now labeled: K562b. Experiments on K562b
-should be contrasted with Input (<i>UCDavis</i>).
-The K562 Input previously released has been replaced by two versions
-marked K562 and K562b. The K562 version used by the Snyder and Struhl groups
-directly replaces the previous version, and is versioned at V2. The K562b used by the Farnham group
-is now provided as K562b.
-</td></tr>
-
-<tr><th align='left' valign='top' nowrap><i>HepG2 vs. HepG2b</i></th>
-<td>
-The Farnham lab  HepG2 cell line is now labeled HepG2b.
-Experiments on HepG2b should be contrasted with Input (<i>UCDavis</i>).
-</td></tr>
-</TABLE>
+</P>
 
 <H2> Credits </H2>
 <P>These data were generated and analyzed by the labs of
-<A HREF="http://www.yale.edu/snyder/"
-  class="external text" title="http://www.yale.edu/snyder/"
+<A HREF="http://snyderlab.stanford.edu/"
+  class="external text" title="http://snyderlab.stanford.edu/"
   rel="nofollow" TARGET = _BLANK>Michael Snyder</a>,
 <A HREF="http://bioinfo.mbb.yale.edu/"
   class="external text"
