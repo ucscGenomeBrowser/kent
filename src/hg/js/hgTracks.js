@@ -1340,9 +1340,15 @@ $(document).ready(function()
                     var btn = $( row ).find('p.btnBlue');  // btnBlue means cursor over left button
                     if (btn.length == 1) {
                         table.tableDnDConfig.dragObjects = imgTblContiguousRowSet(row);
+                        var compositeSet = imgTblCompositeSet(row);
+                        if (compositeSet.length > 0)
+                            $( compositeSet ).find('p.btn').addClass('blueButtons');  // blue persists
                     }
                 },
                 onDrop: function(table, row, dragStartIndex) {
+                    var compositeSet = imgTblCompositeSet(row);
+                    if (compositeSet.length > 0)
+                        $( compositeSet ).find('p.btn').removeClass('blueButtons');  // blue persists
                     if($(row).attr('rowIndex') != dragStartIndex) {
                         // NOTE Even if dragging a contiguous set of rows,
                         // still only need to check the one under the cursor.
