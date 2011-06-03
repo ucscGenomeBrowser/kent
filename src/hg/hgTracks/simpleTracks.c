@@ -3992,7 +3992,7 @@ hvGfxBox(hvg, x1, y, w, heightPer, color);
 if (vis == tvFull)
     {
     int textWidth = mgFontStringWidth(font, bpl->label);
-    hvGfxTextRight(hvg, x1-textWidth-2, y, textWidth, heightPer, MG_BLACK, font, bpl->label);
+    hvGfxTextRight(hvg, x1-textWidth-2, y, textWidth, heightPer, color, font, bpl->label);
     }
 }
 
