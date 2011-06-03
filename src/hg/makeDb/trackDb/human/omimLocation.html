@@ -1,24 +1,6 @@
 <H2>Description</H2>
 
-<TABLE BORDER = 1 CELLPADDING = 4><TR><TD>
-<P><FONT COLOR = RED><B>NOTE</FONT>: OMIM is intended for use
- primarily by physicians and other
-professionals concerned with genetic disorders, by genetics researchers, and
-by advanced students in science and medicine. While the OMIM database is
-open to the public, users seeking information about a personal medical or
-genetic condition are urged to consult with a qualified physician for
-diagnosis and for answers to personal questions.
-</P>
-<P>Because the UCSC Genes mappings are based on associations from RefSeq and
-UniProt, they are dependent on any interpretations from those sources.
-Furthermore, because many OMIM records refer to multiple gene names,
-or syndromes not tightly mapped to individual genes, the associations
-in this track should be treated with skepticism and any conclusions
-based on them should be carefully scrutinized using independent
-resources. </B> 
-</TD></TR>
-</TABLE>
-</P> 
+<!--#insert file="omimDescriptionText.html"-->
 
 <P>
 This track shows the cytogenetic locations of all enries
@@ -27,34 +9,25 @@ in the Online Mendelian Inheritance in Man
 TARGET=_blank>OMIM</A>) database.
 </P>
 
-<P>OMIM is a compendium of human genes and genetic phenotypes. The full-text, 
-referenced overviews in OMIM contain information on all known Mendelian 
-disorders and over 12,000 genes. OMIM is authored and edited at the 
-McKusick-Nathans Institute of Genetic Medicine, Johns Hopkins University 
-School of Medicine, under the direction of Dr. Ada Hamosh.  This database 
-was initiated in the early 1960s by Dr. Victor A. McKusick as a catalog 
-of Mendelian traits and disorders, entitled Mendelian Inheritance
-in Man (MIM). 
-</P> 
 <H2>Display Conventions and Configuration</H2>
 
 <P>Cytogenetic locations of OMIM entries are displayed as solid
 blocks.  The entries are colored according to the OMIM phenotype class of associated disorders:
 
 <UL>
-<LI><B><FONT COLOR="#AACBAA">Lighter Green</FONT></B> for Class 1 OMIM records
+<LI><B><FONT COLOR="#AAC4AA">Lighter Green</FONT></B> for Class 1 OMIM records
 -  the disorder is placed on the map based on its association with
 a gene, but the underlying defect is not known.
-<LI><B><FONT COLOR="#66A266">Light Green</FONT></B> for Class 2 OMIM records
+<LI><B><FONT COLOR="#669666">Light Green</FONT></B> for Class 2 OMIM records
 - the disorder has been placed on the map by linkage; no mutation has
 been found.
-<LI><B><FONT COLOR="#006400">Dark Green</FONT></B> for Class 3 OMIM records
+<LI><B><FONT COLOR="#005000">Dark Green</FONT></B> for Class 3 OMIM records
 - the molecular basis for the disorder is known; a mutation has been
 found in the gene.
-<LI><B><FONT COLOR="#9900CC">Purple</FONT></B> for Class 4 OMIM records
+<LI><B><FONT COLOR="#69329B">Purple</FONT></B> for Class 4 OMIM records
 - a contiguous gene deletion or duplication syndrome, multiple genes
 are deleted or duplicated causing the phenotype.
-<LI><B><FONT COLOR="#C8C8C8">Light Gray</FONT></B> for Others
+<LI><B><FONT COLOR="#BEBEBE">Light Gray</FONT></B> for Others
 - no associated OMIM phenotype class info available.
 </UL>
 <P> Gene symbol and disease information, when available, are displayed on the details page for an
