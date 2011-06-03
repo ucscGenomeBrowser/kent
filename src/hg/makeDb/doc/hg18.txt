@@ -31442,7 +31442,100 @@ hgLoadBed hg18 evoCpg evoCpg.bed
 
 # add pushQue record
 #############################################################################
+# BUILD HG18 OMIM RELATED TRACKS (DONE, 6/3/11, Fan)
+
+ssh hgwdev
+cd /hive/data/genomes/hg18/bed
+mkdir -p omim/05172011
+cd omim/05172011
+
+# obtain the following files from OMIM and place them at this subdirectory
+
+       genemap.txt  
+       mim2gene.txt  
+       mimAV.txt
+       script1.pl  
+       script2.pl
+
+cat genemap.txt|sed -e 's/|/\t/g' > genemap.tab
+
+hgLoadSqlTab -warn hg18 omimGeneMap ~/kent/src/hg/lib/omimGeneMap.sql genemap.tab
+
+# Load mim2gene table
+
+hgsql hg18 -e 'drop table mim2gene'
+hgsql hg18 < ~/kent/src/hg/lib/mim2gene.sql
+hgsql hg18 -e 'load data local infile "mim2gene.txt" into table mim2gene ignore 1 lines'
+
+# build omimGeneSymbol table
+
+doOmimGeneSymbols hg18 j.out
+cat j.out |sort -u >omimGeneSymbol.tab
+hgLoadSqlTab -warn hg18 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab 
+
+perl ./script1.pl --gene-map-file=genemap.txt >omimPhenotype.tab
+hgLoadSqlTab -warn hg18 omimPhenotype ~/kent/src/hg/lib/omimPhenotype.sql omimPhenotype.tab 
+
+doOmimGene2 hg18 j.tmp
+cat j.tmp |sort -u > omimGene2.tab
+
+hgLoadBed hg18 omimGene2 omimGene2.tab
+
+rm j.tmp
+##############################################################
+# build the omimAvSnp track
+
+cd /hive/data/genomes/hg18/bed/omim/05172011
+mkdir av
+cd av
+
+# get the mimAV.txt data file from OMIM
+
+cut -f 1 mimAV.txt >j1
+cut -f 2 mimAV.txt >j2
+cut -f 3  mimAV.txt >j3
+cut -f 4  mimAV.txt >j4
+cut -f 5  mimAV.txt >j5
+
+cat j1 |sed -e 's/\./\t/' >j1.2
+
+cat j4 |sed -e 's/,/\t/' >j4-2
+cut -f 1 j4-2 >j4.1
+cut -f 2 j4-2 >j4.2
+
+paste j1 j1.2 j3 j4 j4.1 j4.2 j5 j2 >omimAv.tab
+
+hgsql hg18 -e 'drop table omimAv'
+hgsql hg18 < ~/src/hg/lib/omimAv.sql
+hgsql hg18 -e 'load data local infile "omimAv.tab" into table omimAv ignore 1 lines'
+hgsql hg18 -e 'update omimAv set repl2 = rtrim(ltrim(repl2))'
+
+doOmimAv hg18 omimAvRepl.tab  2>j.err
+
+hgsql hg18 -e "drop table omimAvRepl"
+hgsql hg18 < ~/kent/src/hg/lib/omimAvRepl.sql
+hgsql hg18 -e 'load data local infile "omimAvRepl.tab" into table omimAvRepl'
+
+rm j1.2  j1 j2 j3  j4  j4-2  j4.1  j4.2  j5
+
+hgsql hg18 -N -e 'select chrom, chromStart, chromEnd, avId from omimAvRepl r, snp130 s where s.name = dbSnpId order by avId' >omimAvSnp.tab
+
+hgLoadBed -allowStartEqualEnd  hg18 omimAvSnp omimAvSnp.tab
+##############################################################
+# build the omimLocation track
+
+cd /hive/data/genomes/hg18/bed/omim/05172011
+mkdir location
+cd location
+
+doOmimLocation hg18 omimLocation.bed 2>j.err
+hgLoadBed hg18 omimLocation omimLocation.bed
+
+# Remove all gene entries in omimGene2 from omimLocation table
+
+hgsql hg18 -N -e \
+'delete from omimLocation where name  in (select name from omimGene2) '
+
+##############################################################
 
 
-
-#############################################################################

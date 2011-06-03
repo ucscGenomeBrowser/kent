@@ -10483,7 +10483,6 @@ label View - Peaks or Signals
 description Different track formats often allow different views of the data of a single experiment.  These views sometimes represent different stages of processing, such as experimental 'signal' resulting directly from high-throughput sequencing and called 'peaks' which result from further analysis.
 searchable multiSelect
 cvDefined yes
-validate none  # When this is cv defined it then change to cv
+validate cv
 priority 035
-#This should be CV defined (11/3/10)
 
