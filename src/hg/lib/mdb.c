@@ -2974,8 +2974,7 @@ while(mdbObjs != NULL)
                 {
                 mdbObjSetVarInt(obj,MDB_VAR_ENCODE_EXP_ID,expId);
                 struct mdbObj *newObj = mdbObjCreate(obj->obj,MDB_VAR_ENCODE_EXP_ID, experimentId);
-                assert(exp != NULL);
-                if (exp->accession != NULL && updateAccession)
+                if (updateAccession && exp != NULL && exp->accession != NULL)
                     mdbObjSetVar(newObj,MDB_VAR_DCC_ACCESSION,exp->accession);
                 slAddHead(&mdbUpdateObjs,newObj);
                 }
