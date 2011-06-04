@@ -3,6 +3,9 @@
 # Caenorhabditis briggsae
 #	Washington University School of Medicine GSC and Sanger Institute
 #
+# It isn't clear which strain this sequence belongs to:
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=CAAC02
+#
 
 ###########################################################################
 ## Download sequence (DONE - 2011-05-24 - Hiram)

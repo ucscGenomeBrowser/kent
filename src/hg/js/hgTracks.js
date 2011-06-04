@@ -752,6 +752,8 @@ function imgTblTrackShowCenterLabel(tr, show)
 
 function imgTblContiguousRowSet(row)
 { // Returns the set of rows that are of the same class and contiguous
+    if(row == null)
+        return null;
     var btn = $( row ).find("p.btn");
     if( btn.length == 0)
         return null;
@@ -784,6 +786,19 @@ function imgTblContiguousRowSet(row)
         endIndex = ix;
     }
     return rows.slice(startIndex,endIndex+1); // endIndex is 1 based!
+}
+
+function imgTblCompositeSet(row)
+{ // Returns the set of rows that are of the same class and contiguous
+    if(row == null)
+        return null;
+    var rowId = $(row).attr('id').substring('tr_'.length);
+    var rec = trackDbJson[rowId];
+    if (tdbIsSubtrack(rec) == false)
+        return null;
+
+    var rows = $('tr.trDraggable:has(p.' + rec.parentTrack+')');
+    return rows;
 }
 
 function imgTblZipButtons(table)
@@ -886,14 +901,14 @@ function imgTblDragHandleMouseOver()
         return;
     }
     if (jQuery.tableDnD.dragObject == null) {
-        $( this ).parents("tr").addClass("trDrag");
+        $( this ).parents("tr.trDraggable").addClass("trDrag");
     }
 }
 
 function imgTblDragHandleMouseOut()
 {
 // Ends row highlighting by mouse over
-    $( this ).parents("tr").removeClass("trDrag");
+    $( this ).parents("tr.trDraggable").removeClass("trDrag");
 }
 
 function imgTblButtonMouseOver()
@@ -905,8 +920,9 @@ function imgTblButtonMouseOver()
         $( btns ).removeClass('btnGrey');
         $( btns ).addClass('btnBlue');
         if (jQuery.tableDnD != undefined) {
-            var rows = imgTblContiguousRowSet($(this).parents('tr.trDraggable')[0])
-            $( rows ).addClass("trDrag");
+            var rows = imgTblContiguousRowSet($(this).parents('tr.trDraggable')[0]);
+            if (rows)
+                $( rows ).addClass("trDrag");
         }
     }
 }
@@ -919,8 +935,9 @@ function imgTblButtonMouseOut()
     $( btns ).removeClass('btnBlue');
     $( btns ).addClass('btnGrey');
     if (jQuery.tableDnD != undefined) {
-        var rows = imgTblContiguousRowSet($(this).parents('tr.trDraggable')[0])
-        $( rows ).removeClass("trDrag");
+        var rows = imgTblContiguousRowSet($(this).parents('tr.trDraggable')[0]);
+        if (rows)
+           $( rows ).removeClass("trDrag");
     }
 }
 
@@ -1323,9 +1340,15 @@ $(document).ready(function()
                     var btn = $( row ).find('p.btnBlue');  // btnBlue means cursor over left button
                     if (btn.length == 1) {
                         table.tableDnDConfig.dragObjects = imgTblContiguousRowSet(row);
+                        var compositeSet = imgTblCompositeSet(row);
+                        if (compositeSet.length > 0)
+                            $( compositeSet ).find('p.btn').addClass('blueButtons');  // blue persists
                     }
                 },
                 onDrop: function(table, row, dragStartIndex) {
+                    var compositeSet = imgTblCompositeSet(row);
+                    if (compositeSet.length > 0)
+                        $( compositeSet ).find('p.btn').removeClass('blueButtons');  // blue persists
                     if($(row).attr('rowIndex') != dragStartIndex) {
                         // NOTE Even if dragging a contiguous set of rows,
                         // still only need to check the one under the cursor.
@@ -1754,6 +1777,43 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
             reloadFloatingItem();
             updateTrackImg(id, "hgt.transparentImage=0", "");
         }
+    } else if (cmd == 'hideSet') {
+        var row = $( 'tr#tr_' + id );
+        var rows = imgTblContiguousRowSet(row);
+        if (rows && rows.length > 0) {
+            var vars = new Array();
+            var vals = new Array();
+            for (var ix=rows.length - 1; ix >= 0; ix--) { // from bottom, just in case remove screws with us
+                var rowId = $(rows[ix]).attr('id').substring('tr_'.length);
+                //if (tdbIsSubtrack(trackDbJson[rowId]) == false)
+                //    warn('What went wrong?');
+
+                vars.push(rowId, rowId+'_sel'); // Remove subtrack level vis and explicitly uncheck.
+                vals.push('[]', 0);
+                $(rows[ix]).remove();
+            }
+            if (vars.length > 0) {
+                setCartVars( vars, vals );
+                initImgTblButtons();
+                loadImgAreaSelect(false);
+            }
+        }
+    } else if (cmd == 'hideComposite') {
+        var rec = trackDbJson[id];
+        if (tdbIsSubtrack(rec)) {
+            var row = $( 'tr#tr_' + id );
+            var rows = imgTblCompositeSet(row);
+            if (rows && rows.length > 0) {
+                for (var ix=rows.length - 1; ix >= 0; ix--) { // from bottom, just in case remove screws with us
+                    $(rows[ix]).remove();
+                }
+            setCartVar(rec.parentTrack, 'hide' );
+            initImgTblButtons();
+            loadImgAreaSelect(false);
+            }
+        }
+        //else
+        //    warn('What went wrong?');
     } else {   // if( cmd in 'hide','dense','squish','pack','full','show' )
         // Change visibility settings:
         //
@@ -1849,6 +1909,43 @@ function loadContextMenu(img)
                 }
                 var id = selectedMenuItem.id;
                 var rec = trackDbJson[id];
+                var offerHideSubset    = false;
+                var offerHideComposite = false;
+                var row = $( 'tr#tr_' + id );
+                if (row) {
+                    var btn = $(row).find('p.btnBlue');  // btnBlue means cursor over left button
+                    if (btn.length == 1) {
+                        var compositeSet = imgTblCompositeSet(row);
+                        if (compositeSet && compositeSet.length > 0) {  // There is a composite set
+                            offerHideComposite = true;
+                            $( compositeSet ).find('p.btn').addClass('blueButtons');  // blue persists
+
+                            var subSet = imgTblContiguousRowSet(row);
+                            if (subSet && subSet.length > 1 && subSet.length < compositeSet.length) {
+                                offerHideSubset = true;
+                                $( subSet ).addClass("greenRows"); // green persists
+                            }
+                        }
+                    }
+                }
+
+                // First option is hide whole set
+                if (offerHideComposite) {
+                    if (offerHideSubset) {
+                        var o = new Object();
+                        o[blankImg + " hide track subset (green)"] = {onclick: makeContextMenuHitCallback('hideSet')};
+                        menu.push(o);
+                    }
+
+                    var o = new Object();
+                    var str = blankImg + " hide track set";
+                    if (offerHideSubset)
+                        str += " (blue)";
+                    o[str] = {onclick: makeContextMenuHitCallback('hideComposite')};
+                    menu.push(o);
+                    menu.push($.contextMenu.separator);
+                }
+
                 // XXXX what if select is not available (b/c trackControlsOnMain is off)?
                 // Move functionality to a hidden variable?
                 var select = $("select[name=" + id + "]");
@@ -2019,10 +2116,13 @@ function loadContextMenu(img)
                 // console.log(mapItems[selectedMenuItem]);
                 selectedMenuItem = findMapItem(e);
                 // XXXX? blockUseMap = true;
+                return true;
             },
+            hideTransition:'hide', // hideCallback fails if these are not defined.
+            hideSpeed:10,
             hideCallback: function() {
-                // this doesn't work
-                warn("hideCallback");
+                $('p.btn.blueButtons').removeClass('blueButtons');
+                $('tr.trDraggable.greenRows').removeClass('greenRows');
             }
         });
     return;

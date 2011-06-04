@@ -209,7 +209,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3960 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageGm12878CellPapClusters
-        subTrack wgEncodeRikenCageViewClusters on 
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel GM78 cell pA+
         longLabel GM12878 whole cell polyA+ CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1GM12878 localization=cell rnaExtract=pAP
@@ -227,7 +227,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3952 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageGm12878NucleusPapClusters
-        subTrack wgEncodeRikenCageViewClusters on 
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel GM78 nucl pA+
         longLabel GM12878 nucleus polyA+ CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1GM12878 localization=nucleus rnaExtract=pAP
@@ -236,7 +236,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3993 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageK562CytosolPamClusters
-        subTrack wgEncodeRikenCageViewClusters on 
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel K562 cyto pA-
         longLabel K562 cytosol polyA- CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1K562 localization=cytosol rnaExtract=pAM
@@ -245,7 +245,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3958 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageK562NucleusPamClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel K562 nucl pA-
         longLabel K562 nucleus polyA- CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1K562 localization=nucleus rnaExtract=pAM
@@ -272,7 +272,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3989 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageK562CellPapClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel K562 cell pA+
         longLabel K562 whole cell polyA+ CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1K562 localization=cell rnaExtract=pAP
@@ -281,7 +281,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3987 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageK562NucleusPapClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel K562 nucl pA+
         longLabel K562 nucleus polyA+ CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1K562 localization=nucleus rnaExtract=pAP
@@ -290,7 +290,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3986 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageH1hescCellPamClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel H1ES cell pA-
         longLabel H1-hESC whole cell polyA- CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1H1hESC localization=cell rnaExtract=pAM
@@ -299,7 +299,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3984 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageH1hescCellPapClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel H1ES cell pA+
         longLabel H1-hESC whole cell polyA+ CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1H1hESC localization=cell rnaExtract=pAP
@@ -308,7 +308,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3982 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageGm12878CytosolPamClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel GM78 cyto pA-
         longLabel GM12878 cytosol polyA- CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1GM12878 localization=cytosol rnaExtract=pAM
@@ -326,7 +326,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3977 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageK562NucleoplasmTotalClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel K562 nplm tot
         longLabel K562 nucleoplasm total CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1K562 localization=nucleoplasm rnaExtract=total
@@ -335,7 +335,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3980 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageH1hescCytosolPapClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel H1ES cyto pA+
         longLabel H1-hESC cytosol polyA+ CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1H1hESC localization=cytosol rnaExtract=pAP
@@ -353,7 +353,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3969 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageK562PolysomePamClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel K562 poly pA-
         longLabel K562 polysome polyA- CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1K562 localization=polysome rnaExtract=pAM
@@ -362,7 +362,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3967 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageK562ChromatinTotalClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel K562 chrm tot
         longLabel K562 chromatin total CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1K562 localization=chromatin rnaExtract=total
@@ -380,7 +380,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3966 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageGm12878NucleusPamClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel GM78 nucl pA-
         longLabel GM12878 nucleus polyA- CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1GM12878 localization=nucleus rnaExtract=pAM
@@ -389,7 +389,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3965 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageGm12878CytosolPapClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel GM78 cyto pA+
         longLabel GM12878 cytosol polyA+ CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1GM12878 localization=cytosol rnaExtract=pAP
@@ -398,7 +398,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3962 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageH1hescNucleusPapClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel H1ES nucl pA+
         longLabel H1-hESC nucleus polyA+ CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1H1hESC localization=nucleus rnaExtract=pAP
@@ -407,7 +407,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3961 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageGm12878NucleolusTotalClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel GM78 nlos tot
         longLabel GM12878 nucleolus total CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1GM12878 localization=nucleolus rnaExtract=total
@@ -424,7 +424,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3957 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageK562NucleolusTotalClusters
-        subTrack wgEncodeRikenCageViewClusters off
+        subTrack wgEncodeRikenCageViewClusters on
         shortLabel K562 nlos tot
         longLabel K562 nucleolus total CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=1K562 localization=nucleolus rnaExtract=total
@@ -466,7 +466,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageNhekCytosolLongnonpolyaPlusClusters cricket Wed May  4 14:37:32 2011
 
         track wgEncodeRikenCageGm12878CytosolPamPlusSignal
-        subTrack wgEncodeRikenCageViewPlusSignal off
+        subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel GM12 cyto pA- + 0
         longLabel GM12878 cytosol polyA- CAGE Plus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1GM12878 localization=cytosol rnaExtract=pAM rep=rep1
@@ -562,7 +562,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageHepg2CellPapPlusClustersRep1 cricket Wed May  4 14:37:29 2011
 
         track wgEncodeRikenCageH1hescCellPapPlusSignalRep1
-        subTrack wgEncodeRikenCageViewPlusSignal off
+        subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel H1ES cell pA+ + 1
         longLabel H1-hESC whole cell polyA+ CAGE Plus strand start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1H1hESC localization=cell rnaExtract=pAP rep=rep1
@@ -890,7 +890,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters cricket Wed May  4 14:37:32 2011
 
         track wgEncodeRikenCageK562CytosolPamPlusSignal
-        subTrack wgEncodeRikenCageViewPlusSignal off
+        subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel K562 cyto pA- + 0
         longLabel K562 cytosol polyA- CAGE Plus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAM rep=rep1
@@ -901,7 +901,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters cricket Wed May  4 14:37:31 2011
 
         track wgEncodeRikenCageH1hescCellPamPlusSignal
-        subTrack wgEncodeRikenCageViewPlusSignal off
+        subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel H1ES cell pA- + 0
         longLabel H1-hESC whole cell polyA- CAGE Plus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1H1hESC localization=cell rnaExtract=pAM rep=rep1
@@ -912,7 +912,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters cricket Wed May  4 14:37:28 2011
 
         track wgEncodeRikenCageK562ChromatinTotalPlusSignal
-        subTrack wgEncodeRikenCageViewPlusSignal off
+        subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel K562 chrm tot + 0
         longLabel K562 chromatin total CAGE Plus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1K562 localization=chromatin rnaExtract=total rep=rep1
@@ -923,7 +923,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         #ATTIC
         #track wgEncodeRikenCageK562CytosolPapPlusClusters
-        #subTrack wgEncodeRikenCageViewPlusSignal off
+        #subTrack wgEncodeRikenCageViewPlusSignal on
         #shortLabel K562 cyto pA+ + 0
         #longLabel K562 cytosol polyA+ CAGE Plus strand start sites Generation 0 from ENCODE/RIKEN
         #subGroups view=PlusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep1
@@ -932,7 +932,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=1806 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562NucleoplasmTotalPlusSignal
-        subTrack wgEncodeRikenCageViewPlusSignal off
+        subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel K562 nplm tot + 0
         longLabel K562 nucleoplasm total CAGE Plus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1K562 localization=nucleoplasm rnaExtract=total rep=rep1
@@ -942,7 +942,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageK562NucleoplasmTotalPlusClusters cricket Wed May  4 14:37:31 2011
 
         track wgEncodeRikenCageK562PolysomePamPlusSignal
-        subTrack wgEncodeRikenCageViewPlusSignal off
+        subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel K562 psom pA- + 0
         longLabel K562 polysome polyA- CAGE Plus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1K562 localization=polysome rnaExtract=pAM rep=rep1
@@ -962,7 +962,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageNhekNucleusLongnonpolyaPlusClusters cricket Wed May  4 14:37:32 2011
 
         track wgEncodeRikenCageK562NucleusPamPlusSignal
-        subTrack wgEncodeRikenCageViewPlusSignal off
+        subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel K562 nucl pA- + 0
         longLabel K562 nucleus polyA- CAGE Plus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1K562 localization=nucleus rnaExtract=pAM rep=rep1
@@ -982,7 +982,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageHepg2NucleolusTotalPlusClusters cricket Wed May  4 14:37:30 2011
 
         track wgEncodeRikenCageGm12878NucleolusTotalPlusSignal
-        subTrack wgEncodeRikenCageViewPlusSignal off
+        subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel GM12 nlos tot + 0
         longLabel GM12878 nucleolus total CAGE Plus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1GM12878 localization=nucleolus rnaExtract=total rep=rep1
@@ -1013,7 +1013,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=2783 dateSubmitted=2010-10-29
         # was wgEncodeRikenCageHelas3NucleolusTotalPlusClusters cricket Wed May  4 14:37:29 2011
 
-        track wgEncodeRikenCageK562NucleolusTotalPlusSignalRep1
+        track wgEncodeRikenCageK562NucleolusTotalPlusSignal
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel K562 nlos tot + 1
         longLabel K562 nucleolus total CAGE Plus strand start sites Rep 1 from ENCODE/RIKEN
@@ -1023,6 +1023,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
         # was wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1 cricket Wed May  4 14:37:31 2011
+        # was wgEncodeRikenCageK562NucleolusTotalPlusSignalRep1 cricket Thu Jun  2 12:12:06 2011
 
         track wgEncodeRikenCageSknshraCellPapPlusSignalRep2
         subTrack wgEncodeRikenCageViewPlusSignal off
@@ -1127,7 +1128,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageGm12878NucleusPapPlusRawRep1 cricket Wed May  4 14:47:04 2011
 
         track wgEncodeRikenCageGm12878NucleusPapPlusSignalRep2
-        subTrack wgEncodeRikenCageViewPlusSignal on
+        subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel GM78 nucl pA+ + 2
         longLabel GM12878 nucleus polyA+ CAGE Plus strand start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1GM12878 localization=nucleus rnaExtract=pAP rep=rep2
@@ -1137,7 +1138,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageGm12878NucleusPapPlusRawRep2 cricket Wed May  4 14:47:04 2011
 
         track wgEncodeRikenCageGm12878CellPapPlusSignalRep2
-        subTrack wgEncodeRikenCageViewPlusSignal on 
+        subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel GM78 cell pA+ + 2
         longLabel GM12878 whole cell polyA+ CAGE Plus strand start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1GM12878 localization=cell rnaExtract=pAP rep=rep2
@@ -1199,7 +1200,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageNhekCytosolLongnonpolyaMinusClusters cricket Wed May  4 14:37:27 2011
 
         track wgEncodeRikenCageGm12878CytosolPamMinusSignal
-        subTrack wgEncodeRikenCageViewMinusSignal off
+        subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel GM12 cyto pA- - 0
         longLabel GM12878 cytosol polyA- CAGE Minus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1GM12878 localization=cytosol rnaExtract=pAM rep=rep1
@@ -1241,7 +1242,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
 
         track wgEncodeRikenCageK562ChromatinTotalMinusSignal
-        subTrack wgEncodeRikenCageViewMinusSignal off
+        subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel K562 chrm tot - 0
         longLabel K562 chromatin total CAGE Minus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1K562 localization=chromatin rnaExtract=total rep=rep1
@@ -1252,7 +1253,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         #ATTIC
         #track wgEncodeRikenCageK562CytosolPapMinusClusters
-        #subTrack wgEncodeRikenCageViewMinusSignal off
+        #subTrack wgEncodeRikenCageViewMinusSignal on
         #shortLabel K562 cyto pA+ - 0
         #longLabel K562 cytosol polyA+ CAGE Minus strand start sites Generation 0 from ENCODE/RIKEN
         #subGroups view=MinusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep1
@@ -1261,7 +1262,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=1806 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562NucleoplasmTotalMinusSignal
-        subTrack wgEncodeRikenCageViewMinusSignal off
+        subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel K562 nplm tot - 0
         longLabel K562 nucleoplasm total CAGE Minus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1K562 localization=nucleoplasm rnaExtract=total rep=rep1
@@ -1271,7 +1272,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageK562NucleoplasmTotalMinusClusters cricket Wed May  4 14:37:27 2011
 
         track wgEncodeRikenCageK562PolysomePamMinusSignal
-        subTrack wgEncodeRikenCageViewMinusSignal off
+        subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel K562 psom pA- - 0
         longLabel K562 polysome polyA- CAGE Minus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1K562 localization=polysome rnaExtract=pAM rep=rep1
@@ -1291,7 +1292,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageNhekNucleusLongnonpolyaMinusClusters cricket Wed May  4 14:37:28 2011
 
         track wgEncodeRikenCageK562NucleusPamMinusSignal
-        subTrack wgEncodeRikenCageViewMinusSignal off
+        subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel K562 nucl pA- - 0
         longLabel K562 nucleus polyA- CAGE Minus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1K562 localization=nucleus rnaExtract=pAM rep=rep1
@@ -1311,7 +1312,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageHepg2NucleolusTotalMinusClusters cricket Wed May  4 14:37:25 2011
 
         track wgEncodeRikenCageGm12878NucleolusTotalMinusSignal
-        subTrack wgEncodeRikenCageViewMinusSignal off
+        subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel GM12 nlos tot - 0
         longLabel GM12878 nucleolus total CAGE Minus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1GM12878 localization=nucleolus rnaExtract=total rep=rep1
@@ -1376,7 +1377,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageHepg2CellPapMinusClustersRep1 cricket Wed May  4 14:37:25 2011
 
         track wgEncodeRikenCageH1hescCellPapMinusSignalRep1
-        subTrack wgEncodeRikenCageViewMinusSignal off
+        subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel H1ES cell pA+ - 1
         longLabel H1-hESC whole cell polyA+ CAGE Minus strand start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1H1hESC localization=cell rnaExtract=pAP rep=rep1
@@ -1704,7 +1705,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters cricket Wed May  4 14:37:28 2011
 
         track wgEncodeRikenCageK562CytosolPamMinusSignal
-        subTrack wgEncodeRikenCageViewMinusSignal off
+        subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel K562 cyto pA- - 0
         longLabel K562 cytosol polyA- CAGE Minus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAM rep=rep1
@@ -1715,7 +1716,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # was wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters cricket Wed May  4 14:37:26 2011
 
         track wgEncodeRikenCageH1hescCellPamMinusSignal
-        subTrack wgEncodeRikenCageViewMinusSignal off
+        subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel H1ES cell pA- - 0
         longLabel H1-hESC whole cell polyA- CAGE Minus strand start sites Generation 0 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1H1hESC localization=cell rnaExtract=pAM rep=rep1
@@ -1747,7 +1748,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=2783 dateSubmitted=2010-10-29
         # was wgEncodeRikenCageHelas3NucleolusTotalMinusClusters cricket Wed May  4 14:37:25 2011
 
-        track wgEncodeRikenCageK562NucleolusTotalMinusSignalRep1
+        track wgEncodeRikenCageK562NucleolusTotalMinusSignal
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel K562 nlos tot - 1
         longLabel K562 nucleolus total CAGE Minus strand start sites Rep 1 from ENCODE/RIKEN
@@ -1757,6 +1758,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
         # was wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1 cricket Wed May  4 14:37:27 2011
+        # was wgEncodeRikenCageK562NucleolusTotalMinusSignalRep1 cricket Thu Jun  2 12:11:53 2011
 
         track wgEncodeRikenCageSknshraCellPapMinusSignalRep2
         subTrack wgEncodeRikenCageViewMinusSignal off
@@ -2458,7 +2460,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=2783 dateSubmitted=2010-10-29
 
-        track wgEncodeRikenCageK562NucleolusTotalAlnRep1
+        track wgEncodeRikenCageK562NucleolusTotalAln
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 nlos tot A 1
         longLabel K562 nucleolus total CAGE Alignments Rep 1 from ENCODE/RIKEN
@@ -2467,6 +2469,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
+        # was wgEncodeRikenCageK562NucleolusTotalAlnRep1 cricket Thu Jun  2 12:11:23 2011
 
         track wgEncodeRikenCageBjCellPapAlnRep1
         subTrack wgEncodeRikenCageViewAlignments off

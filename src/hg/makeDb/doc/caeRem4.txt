@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-# Caenorhabditis briggsae
+# Caenorhabditis remanei
 #	Washington University School of Medicine GSC and Sanger Institute
 #
 
