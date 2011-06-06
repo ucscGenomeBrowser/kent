@@ -46,7 +46,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	rn3 rn4 \
 	speTri1 cavPor3 \
 	oryCun1 oryCun2 \
-	bosTau2 bosTau3 bosTau4 bosTau5 \
+	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 \
 	equCab1 \
 	equCab2 \
 	oviAri1 \
@@ -91,10 +91,14 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	strPur1 strPur2 \
     nemVec1 \
 	aplCal1 \
-	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 \
-	cb1 cb2 cb3 \
-	caeRem1 caeRem2 caeRem3 \
-	caeJap1 caeJap2 caeJap3 \
+	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 \
+	cb1 cb2 cb3 cb4 \
+	caeRem1 caeRem2 caeRem3 caeRem4 \
+	caeAng1 \
+	caeSp71 \
+	caeSp91 \
+	caeSp111 \
+	caeJap1 caeJap2 caeJap3 caeJap4 \
 	priPac1 priPac2 \
 	caePb1 caePb2 \
 	bruMal1 \
@@ -181,6 +185,14 @@ listDbs:
 		echo -e "$${D}\t$${C}"; \
 	    fi \
 	done
+
+userApps:
+	rm -f ${DESTDIR}${BINDIR}/initTableList
+	cp -p initTableList ${DESTDIR}${BINDIR}
+	chmod +x ${DESTDIR}${BINDIR}/initTableList
+	rm -f ${DESTDIR}${BINDIR}/makeTableList
+	cp -p makeTableList ${DESTDIR}${BINDIR}
+	chmod +x ${DESTDIR}${BINDIR}/makeTableList
 
 # Get rid of symbolic links (created by lower-level makefiles):
 clean:

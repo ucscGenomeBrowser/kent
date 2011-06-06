@@ -219,7 +219,7 @@ else
   cat Xout$$
 endif
 
-if ( $debug == true) then
+if ( $debug == false ) then
   rm -f Xgraph1$$
   rm -f Xgraph2$$
   rm -f Xgraph1b$$

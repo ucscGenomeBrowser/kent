@@ -1455,7 +1455,7 @@ for (region = regionList; region != NULL; region = region->next)
             {
             char *s, *script = hgTracksName();
             s = strstr(script, "cgi-bin");
-            hPrintf("<A HREF=\"http://%s/%s?db=%s", cgiServerName(), s, database);
+            hPrintf("<A HREF=\"http://%s/%s?db=%s", cgiServerNamePort(), s, database);
             }
         else
 	    hPrintf("<A HREF=\"%s?db=%s", hgTracksName(), database);

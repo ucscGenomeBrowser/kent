@@ -1,0 +1,60 @@
+# Data Agreement File for LICR RNA-seq experiments for mm9  
+
+#$Revision: 1.3 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+
+# The header for the associated DDF should look like this:
+#files   view    cell   sex     age     strain  replicate rnaExtract	localization    seqPlatform  tissueSourceType      softwareVersion labVersion
+
+
+#Explanation of DDF terms
+#files: The name of the files to be associated with this data
+#view: The type of view that these files are. The options are listed in this DAF
+#cell: The cell or tissue name. The cell registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_cell_types
+#antibody: The antibody used for a specific target.The antibody registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Antibodies
+#sex: The sex of the individual the tissue originated or cell sex type. The sex registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sex
+#age: The age of the sample used. The age registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_Metadata
+#strain: The strain that the sample originated from. the strain registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_Metadata
+#control: The input used as control for ChIP-seq data. The control registerd vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Controls
+#replicate: The Replicate number. The replication number of a given experiment.
+#rnaExtract:   The RNA extract.  http://hgwdev.cse.ucsc.edu/ENCODE/otherTerms.html#rnaExtract
+#localization   the cellular compartment (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#localization)
+#seqPlatform: The sequencing platform.The sequence platformregistered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sequence_Platforms
+#tissueSourceType: The collection srouce of the tissue, either Pooled or Individual mice
+#softwareVersion: Free text for the lab to keep track of software used in processed data
+#labVersion: Free text for the lab to keep track of any other data
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Ren
+lab               LICR-m
+#Alternative labs: lab Yale
+dataType          RnaSeq 
+compositeSuffix   LicrRnaSeq
+group             Expression
+variables         cell,localization,rnaExtract,sex,age,strain
+assembly          mm9
+
+validationSettings validateFiles.bam:mismatches=2,matchFirst=28,nMatch;validateFiles.fastq:quick=1000
+
+# Track/view definition
+view             Signal
+longLabelPrefix  LICR RNA-seq Signal
+type             bigWig
+hasReplicates    yes
+required         yes
+
+view             Alignments
+longLabelPrefix  LICR RNA-seq Alignments
+type             bam
+hasReplicates    yes
+required         yes
+
+view             RawData
+type             fastq
+hasReplicates    yes
+required         yes

@@ -64,8 +64,11 @@ INLINE void initNode(struct hacTree *node, const struct hacTree *left, const str
 {
 node->left = (struct hacTree *)left;
 node->right = (struct hacTree *)right;
-node->childDistance = distF(left->itemOrCluster, right->itemOrCluster, extraData);
-node->itemOrCluster = mergeF(left->itemOrCluster, right->itemOrCluster, extraData);
+if (left != NULL && right != NULL)
+    {
+    node->childDistance = distF(left->itemOrCluster, right->itemOrCluster, extraData);
+    node->itemOrCluster = mergeF(left->itemOrCluster, right->itemOrCluster, extraData);
+    }
 }
 
 INLINE struct hacTree preClusterNodes(const struct sortWrapper *leafWraps, int i, int runLength,
@@ -135,14 +138,20 @@ struct hacTree *leafNodes = leafNodesFromItems(itemList, itemCount, localMem);
 if (cmpF != NULL)
     leafNodes = sortAndPreCluster(leafNodes, &itemCount, localMem,
 				  distF, mergeF, cmpF, extraData);
-int pairCount = itemCount * (itemCount-1) / 2;
-struct hacTree *pairHeap = lmAlloc(localMem, pairCount * sizeof(struct hacTree));
-int i, j, pairIx;
-for (i=0, pairIx=0;  i < itemCount-1;  i++)
-    for (j=i+1;  j < itemCount;  j++, pairIx++)
-	initNode(&(pairHeap[pairIx]), &(leafNodes[i]), &(leafNodes[j]), distF, mergeF, extraData);
+int pairCount = (itemCount == 1) ? 1 : (itemCount * (itemCount-1) / 2);
+struct hacTree *pairPool = lmAlloc(localMem, pairCount * sizeof(struct hacTree));
+if (itemCount == 1)
+    initNode(pairPool, leafNodes, NULL, distF, mergeF, extraData);
+else
+    {
+    int i, j, pairIx;
+    for (i=0, pairIx=0;  i < itemCount-1;  i++)
+	for (j=i+1;  j < itemCount;  j++, pairIx++)
+	    initNode(&(pairPool[pairIx]), &(leafNodes[i]), &(leafNodes[j]), distF, mergeF,
+		     extraData);
+    }
 *retPairCount = pairCount;
-return pairHeap;
+return pairPool;
 }
 
 struct hacTree *hacTreeFromItems(const struct slList *itemList, struct lm *localMem,
@@ -151,6 +160,44 @@ struct hacTree *hacTreeFromItems(const struct slList *itemList, struct lm *local
 /* Using distF, mergeF, optionally cmpF and binary tree operations,
  * perform a hierarchical agglomerative (bottom-up) clustering of
  * items.  To free the resulting tree, lmCleanup(&localMem). */
+//
+// Implementation:
+//
+// Create a pool containing all pairs of items (N*(N-1)/2), and build
+// a hierarchical binary tree of items from the bottom up.  In each
+// iteration, first we find the closest pair and swap it into the head
+// of the pool; then we advance the head pointer, so the closest pair
+// now has a stable location in memory.  Next, for all pairs still in
+// the pool, we replace references to the elements of the closest pair
+// with the closest pair itself, but delete half of such pairs because
+// they would be duplicates.  Specifically, we keep pairs that had the
+// left element of the closest pair, and delete pairs that had the
+// right element of the closest pair.  We rescore the pairs that have
+// the closest pair swapped in for an element.  The code to do all
+// this is surprisingly simple -- in the second for loop below.  Note
+// that with each iteration, the pool will reduce in size, by N-2 the
+// first iteration, N-3 the second, and so forth.
+//
+// An example may help: say we start with items A, B, C and D.  Initially
+// the pool contains all pairs:
+//    (A, B)   (A, C)   (A, D)   (B, C)   (B, D)   (C, D)
+//
+// If (A, B) is the closest pair, we pop it from the pool and the pool
+// becomes
+//    (A, C)   (A, D)   (B, C)   (B, D)   (C, D)
+//
+// Now we substitute (A, B) for pool pairs containing A, and delete pool
+// pairs contining B because they would be duplicates of those containing
+// A.  [X] shows where a pair was deleted:
+//
+//    ((A, B), C)  ((A, B), D)  [X]   [X]  (C, D)
+//
+// Now say ((A, B), D) is the closest remaining pair, and is popped from
+// the head of the pool.  We substitute into pairs containing (A, B) and
+// delete pairs containing D.  After the replacement step, the pool is
+// down to a single element:
+//
+//    (((A, B), D), C)   [X]
 {
 if (itemList == NULL)
     return NULL;
@@ -159,45 +206,48 @@ int itemCount = slCount(itemList);
 int pairCount = 0;
 struct hacTree *leafPairs = pairUpItems(itemList, itemCount, &pairCount, localMem,
 					distF, mergeF, cmpF, extraData);
-struct hacTree *heapHead = leafPairs;
-int heapLength = pairCount;
-while (heapLength > 0)
+struct hacTree *poolHead = leafPairs;
+int poolLength = pairCount;
+while (poolLength > 0)
     {
-    // Scan heap for node with lowest childDistance; swap that node w/head
+    // Scan pool for node with lowest childDistance; swap that node w/head
     int i;
     int bestIx = 0;
-    double minScore = heapHead[0].childDistance;
-    for (i=1;  i < heapLength;  i++)
-	if (heapHead[i].childDistance < minScore)
+    double minScore = poolHead[0].childDistance;
+    for (i=1;  i < poolLength;  i++)
+	if (poolHead[i].childDistance < minScore)
 	    {
-	    minScore = heapHead[i].childDistance;
+	    minScore = poolHead[i].childDistance;
 	    bestIx = i;
 	    }
     if (bestIx != 0)
-	swapBytes((char *)&(heapHead[0]), (char *)&(heapHead[bestIx]), sizeof(struct hacTree));
-    // Pop the best (lowest-distance) node from heapHead, make it root (for now).
-    root = heapHead;
-    heapHead = &(heapHead[1]);
-    heapLength--;
-    // Where root->left is found in the heap, replace it with root.
+	swapBytes((char *)&(poolHead[0]), (char *)&(poolHead[bestIx]), sizeof(struct hacTree));
+    // Pop the best (lowest-distance) node from poolHead, make it root (for now).
+    root = poolHead;
+    poolHead = &(poolHead[1]);
+    poolLength--;
+    // Where root->left is found in the pool, replace it with root.
     // Where root->right is found, drop that node so it doesn't become
     // a duplicate of the replacement cases.
-    for (i=0;  i < heapLength;  i++)
+    for (i=0;  i < poolLength;  i++)
 	{
-	struct hacTree *node = &(heapHead[i]);
+	struct hacTree *node = &(poolHead[i]);
 	if (node->left == root->left)
+	    // found root->left; replace node->left with root (merge root with node->right):
 	    initNode(node, root, node->right, distF, mergeF, extraData);
 	else if (node->right == root->left)
+	    // found root->left; replace node->right with root (merge root with node->left):
 	    initNode(node, root, node->left, distF, mergeF, extraData);
 	else if (node->left == root->right || node->right == root->right)
 	    {
-	    if (i < heapLength-1)
-		memcpy(node, &(heapHead[i+1]), (heapLength-i-1)*sizeof(struct hacTree));
-	    heapLength--;
+	    // found root->right; drop this node:
+	    if (i < poolLength-1)
+		memcpy(node, &(poolHead[i+1]), (poolLength-i-1)*sizeof(struct hacTree));
+	    poolLength--;
 	    i--;
 	    }
 	}
-    // root now has a stable address, unlike nodes still in the heap, so set parents here:
+    // root now has a stable address, unlike nodes still in the pool, so set parents here:
     if (root->left != NULL)
 	root->left->parent = root;
     if (root->right != NULL)

@@ -3104,5 +3104,64 @@ TMPDIR=/scratch/tmp
     cat fb.felCat4.chainCanFam2Link.txt
     # 1467506008 bases of 1990635005 (73.720%) in intersection
 
+
+#########################################################################
+# LASTZ Cow BosTau6 (DONE - 2011-05-25 - Chin)
+    screen
+    mkdir /hive/data/genomes/canFam2/bed/lastzBosTau6.2011-05-25
+    cd /hive/data/genomes/canFam2/bed/lastzBosTau6.2011-05-25
+
+    cat << '_EOF_' > DEF
+# dog vs cow
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Dog canFam2
+SEQ1_DIR=/scratch/data/canFam2/nib
+SEQ1_LEN=/scratch/data/canFam2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau6 
+SEQ2_DIR=/scratch/data/bosTau6/bosTau6.2bit
+SEQ2_LEN=/scratch/data/bosTau6/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/canFam2/bed/lastzBosTau6.2011-05-25
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+    # real     261m49.574
+    cat fb.canFam2.chainBosTau6Link.txt
+    # 1389712912 bases of 2384996543 (58.269%) in intersection
+    # Create link
+    cd /hive/data/genomes/canFam2/bed
+    ln -s  lastzBosTau6.2011-05-25 lastz.bosTau6
+
+
+    #   and the swap 
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.canFam2.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.canFam2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/canFam2/bed/lastzBosTau6.2011-05-25/DEF \
+        -swap -syntenicNet  \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #   real     88m38.555s
+    cat fb.bosTau6.chainCanFam2Link.txt
+    # 1404315725 bases of 2649682029 (52.999%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.canFam2.swap lastz.canFam2
+
+
+
 #####################################################################
 

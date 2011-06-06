@@ -1039,7 +1039,6 @@ TMPDIR=/scratch/tmp
 
 #####################################################################
 ## 13-Way Multiz (DONE - 2010-02-23 - Hiram)
-##  (Redo mafSplit and all steps followed working 2010-05-23 - Chin)
 ## Re-work 13-Way Multiz: (DONE 2011-04-19 - Chin)
 ## See redmine track #162 for more detail
 
@@ -1327,7 +1326,7 @@ done
 # -rw-rw-r-- 1 30553880367 Apr 21 09:40 calJac3.13way.maf
 
     #split the /hive/data/genomes/calJac3/bed/multiz13way/run/calJac3.13way.maf 
-    # to other folder with fullName for phastCons (???? tbd???)
+    # to other folder with fullName for phastCons 
 
     # load into database
     ssh hgwdev
@@ -1364,12 +1363,29 @@ done
     rm  multiz13way*.tab
 
 ############################################################################
-# GAP ANNOTATE MULTIZ13WAY MAF AND LOAD TABLES (DONE  2011-04-21 - Chin)
-    # Gap Annotation (DONE 2010-05-12 - chin)
-    # prepare bed files with gap info
+# GAP ANNOTATE MULTIZ13WAY MAF AND LOAD TABLES (DONE  2011-05-04 - Chin)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #   function correctly when more than one reference sequence
+    #   are in a single file.
+
+    # use the /hive/data/genomes/calJac3/bed/multiz13way/run/calJac3.13way.maf
+    # to split
+
+    cd /hive/data/genomes/calJac3/bed/multiz13way/
+    mkdir mafSplit
+    cd mafSplit
+    mafSplit -byTarget -useFullSequenceName /dev/null . ../run/calJac3.13way.maf
+    # Splitting 1 files by target sequence -- ignoring first argument
+    # /dev/null
+    ls -lt | wc -l
+    # 10348
+    # got 10348 mafs named after their chrom/scaff .maf
+    # although there are over 14205 chroms and scaffolds (wc -l
+    # chrom.sizes),
+    # some are too small or have nothing aligning.
+
     mkdir /hive/data/genomes/calJac3/bed/multiz13way/anno
     cd /hive/data/genomes/calJac3/bed/multiz13way/anno
-    mkdir maf run
 
     #   most of these will already exist from previous multiple
     #   alignments
@@ -1387,9 +1403,7 @@ do
     fi
 done
 
-    cd run
-    # rm -f nBeds sizes
-    for DB in `sed -e "s/calJac3 //" ../../species.list`
+    for DB in `sed -e "s/calJac3 //" ../species.list`
 do
     echo "${DB} "
     ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
@@ -1401,141 +1415,61 @@ done
     # make sure they all are successful symLinks:
     ls -ogrtL
 
-    #   the annotation step requires large memory, run on memk nodes
-    ssh memk
-    cd /hive/data/genomes/calJac3/bed/multiz13way/anno/run
-    ls ../../run/maf | sed -e "s/.maf//" > chr.list
+    mkdir mafSplit
+    for F in ../mafSplit/*.maf
+do
+    B=`basename ${F}`
+    mafAddIRows -nBeds=nBeds ${F} /hive/data/genomes/calJac3/calJac3.2bit \
+        mafSplit/${B}
+    echo $B
+done
+    # about 5h 20m
 
-    cat << '_EOF_' > template
-#LOOP
-./anno.csh $(root1) {check out line+ ../maf/$(root1).maf}
-#ENDLOOP
-'_EOF_'
-    # << happy emacs
+    # combine into one file
+    head -q -n 1 mafSplit/chr1.maf > calJac3.13way.maf
+    for F in mafSplit/*.maf
+do
+    grep -h -v "^#" ${F}
+done >> calJac3.13way.maf
+    #   these maf files do not have the end marker, this does nothing:
+    #   tail -q -n 1 mafSplit/chr1.maf >> calJac3.13way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> calJac3.13way.maf
 
-    cat << '_EOF_' > anno.csh
-#!/bin/csh -fe
-
-set inMaf = ../../run/maf/$1.maf
-set outMaf = ../maf/$1.maf
-rm -f $outMaf
-mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/calJac3/calJac3.2bit $outMaf
-'_EOF_'
-    # << happy emacs
-    chmod +x anno.csh
-
-    gensub2 chr.list single template jobList
-    para -ram=30g create jobList
-    #   specify lots of ram to get one job per node
-    para -ram=30g push
-    #   
-    #  para check para time ...
-    # Completed: 256 of 256 jobs
-    # CPU time in finished jobs:   4318s      71.96m     1.20h    0.05d  0.000 y
-    # IO & Wait Time:              1365s      22.75m     0.38h    0.02d  0.000 y
-    # Average job time:              22s       0.37m     0.01h    0.00d
-    # Longest finished job:         361s       6.02m     0.10h    0.00d
-    # Submission to last job:       830s      13.83m     0.23h    0.01d
-
-
-    ssh hgwdev
-    rm -fr /gbdb/calJac3/multiz13way/maf
-    mkdir /gbdb/calJac3/multiz13way/maf
-    cd /hive/data/genomes/calJac3/bed/multiz13way/anno/maf
-    ln -s `pwd`/*.maf /gbdb/calJac3/multiz13way/maf/
-    #   by loading this into the table multiz13way, it will replace the
-    #   previously loaded table with the unannotated mafs
-    #   huge temp files are made, do them on local disk
-    cd /data/tmp
-    time nice -n +19 hgLoadMaf \
-        -pathPrefix=/gbdb/calJac3/multiz13way/maf calJac3 multiz13way
-    # Indexing and tabulating /gbdb/calJac3/multiz13way/maf/000.maf
-    #    .... .... ....
-    # Indexing and tabulating /gbdb/calJac3/multiz13way/maf/254.maf
-    # Indexing and tabulating /gbdb/calJac3/multiz13way/maf/255.maf
-    # Loading multiz13way into database
-    # Loaded 14063411 mafs in 256 files from /gbdb/calJac3/multiz13way/maf
-    # real    21m56.822s
-
-
-    time nice -n +19 cat /gbdb/calJac3/multiz13way/maf/*.maf \
-        | hgLoadMafSummary calJac3 -minSize=30000 -mergeGap=1500 \
-                 -maxSize=200000  multiz13waySummary stdin
-    # Indexing and tabulating stdin
-    # Created 2327841 summary blocks from 99934514 components 
-    # and 14063411 mafs from stdin
-    # Loading into calJac3 table multiz13waySummary...
-    # Loading complete
-    # real    28m34.395s
-
+    # Load into database
     #   by loading this into the table multiz13waySummary, it will
     #   replace
     #   the previously loaded table with the unannotated mafs
-    #   remove the multiz13way*.tab files in this /data/tmp directory
-    #   -rw-rw-r-- 1 727501509 May 11 16:48 multiz13way.tab
-    #   -rw-rw-r-- 1 113079736 May 12 08:57 multiz13waySummary.tab
-    wc -l multiz13way*.tab
-    #    14063411 multiz13way.tab
-    #     2327841 multiz13waySummary.tab
-    #    16391252 total
-    rm multiz13way*.tab
-
-    # re-do the multiz13way.maf (DONE 2011-02-23 - Chin)
-    ssh hgwdev
-    # rm -fr /gbdb/calJac3/multiz13way/maf extFiles got them already
-    # mkdir /gbdb/calJac3/multiz13way/maf  
-    cd /hive/data/genomes/calJac3/bed/multiz13way/anno
-    grep "^##maf version" maf/000.maf \
-        | sort -u > calJac3.anno.13way.maf
-    find ./maf -type f  -name "*.maf" | while read F
-do
-    grep -v -h "^#" "${F}"
-done >> calJac3.anno.13way.maf
-    echo "##eof maf" >> calJac3.anno.13way.maf
-
-    mkdir -p /gbdb/calJac3/multiz13way/anno
-    ln -s `pwd`/calJac3.anno.13way.maf \
-                /gbdb/calJac3/multiz13way/anno/multiz13way.maf
-    #   by loading this into the table multiz13way, it will replace the
-    #   previously loaded table with the unannotated mafs
-    #   huge temp files are made, do them on local disk
+    rm /gbdb/calJac3/multiz13way/multiz13way.maf   # remove old symlink
+    ln -s `pwd`/calJac3.13way.maf /gbdb/calJac3/multiz13way/multiz13way.maf
     cd /scratch/tmp
-    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/calJac3/multiz13way/anno \
-                calJac3 multiz13way
-    # Indexing and tabulating /gbdb/calJac3/multiz13way/anno/multiz13way.maf
+    time nice -n +19 hgLoadMaf calJac3 multiz13way
+    # Indexing and tabulating /gbdb/calJac3/multiz13way/multiz13way.maf
     # Loading multiz13way into database
-    # Loaded 14063411 mafs in 1 files from /gbdb/calJac3/multiz13way/anno
-    # 
-    # real    31m3.796s
+    # Loaded 14067989 mafs in 1 files from /gbdb/calJac3/multiz13way
 
-    hgLoadMafSummary calJac3 -minSize=30000 -mergeGap=1500 \
-        -maxSize=200000  multiz13waySummary \
-            /gbdb/calJac3/multiz13way/anno/multiz13way.maf
+    # real    17m32.053s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+        -mergeGap=1500 -maxSize=200000 calJac3 multiz13waySummary \
+        /gbdb/calJac3/multiz13way/multiz13way.maf
+    # Indexing and tabulating /gbdb/calJac3/multiz13way/multiz13way.maf
+    # Created 2327841 summary blocks from 99934514 components and 
+    #    14067989 mafs from /gbdb/calJac3/multiz13way/multiz13way.maf
     # Loading into calJac3 table multiz13waySummary...
     # Loading complete
+    # real    21m4.436s
+
+
+
 
     #   by loading this into the table multiz13waySummary, it will
     #   replace
     #   the previously loaded table with the unannotated mafs
     #   remove the multiz13way*.tab files in this /scratch/tmp directory
+    wc -l multiz13way*.tab
+    #    14067989 multiz13way.tab
     rm multiz13way*.tab
-    #   And, you can remove the previously loaded non-annotated maf file
-    #   link:
-    rm /gbdb/calJac3/multiz13way/maf/multiz13way.maf
-    rmdir /gbdb/calJac3/multiz13way/maf
-
-    # Clean up the extFile table 
-    # remove entries with path like:  /gbdb/calJac3/multiz13way/maf/255.maf 
-    # hgsql -e "delete from extFile  where path like
-    # '/gbdb/calJac3/multiz13way/maf/%';" calJac3
-   #  hgsql -e "select path from extFile;" calJac3
-    # +------------------------------------------------+
-    # | path                                           |
-    # +------------------------------------------------+
-    # | /gbdb/calJac3/multiz8way/multiz8way.maf        | 
-    # | /gbdb/calJac3/multiz13way/anno/multiz13way.maf | 
-    # +------------------------------------------------+
-
 
 
 #####################################################################
@@ -1660,7 +1594,7 @@ update dbDb set description="March 2009 (WUGSC 3.2/calJac3)" where name="calJac3
 ## Annotate 13-way multiple alignment with gene annotations
 ##       (DONE - 2010-05-17 - Chin)
 ##       use ensGene for calJac3 (DONE - 2010-07-22 - Chin)
-##  Re-work (DONE 2011-04-22 - Chin)
+##  Re-work (DONE 2011-05-05 - Chin)
     # Gene frames
     ## survey all genomes to see what type of gene track to use
     ssh hgwdev
@@ -1756,40 +1690,56 @@ do
     echo "${DB} done"
 done
 
-   sizeG=256743680
-   export sizeG
-   ulimit -d $sizeG
-   ulimit -v $sizeG
-
-
-   time (cat  ../run/maf/*.maf | nice -n +19 genePredToMafFrames calJac3 stdin stdout calJac3 genes/calJac3.gp.gz mm9 genes/mm9.gp.gz hg19 genes/hg19.gp.gz rheMac2 genes/rheMac2.gp.gz ponAbe2 genes/ponAbe2.gp.gz panTro2 genes/panTro2.gp.gz canFam2 genes/canFam2.gp.gz  monDom5 genes/monDom5.gp.gz tarSyr1 genes/tarSyr1.gp.gz micMur1 genes/micMur1.gp.gz otoGar1 genes/otoGar1.gp.gz papHam1 genes/papHam1.gp.gz gorGor2 genes/gorGor2.gp.gz | gzip > multiz13way.mafFrames.gz) > frames.log 2>&1
-    # real    13m24.975s 
-
-    zcat multiz13way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
-    # 157578 tarSyr1
-    # 197768 calJac3
-    # 200391 monDom5
-    # 202695 panTro2
-    # 202823 rheMac2
-    # 205084 micMur1
-    # 205185 ponAbe2
-    # 205490 hg19
-    # 212293 otoGar1
-    # 212325 papHam1
-    # 220393 gorGor2
-    # 229058 mm9
-    # 232951 canFam2
-
-    #   load the resulting file
+   # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+# genes/calJac3.gp.gz: 20843
+# genes/canFam2.gp.gz: 19245
+# genes/gorGor2.gp.gz: 22444
+# genes/hg19.gp.gz: 20597
+# genes/micMur1.gp.gz: 16240
+# genes/mm9.gp.gz: 20905
+# genes/monDom5.gp.gz: 19188
+# genes/otoGar1.gp.gz: 15388
+# genes/panTro2.gp.gz: 19757
+# genes/papHam1.gp.gz: 26534
+# genes/ponAbe2.gp.gz: 19895
+# genes/rheMac2.gp.gz: 21049
+# genes/tarSyr1.gp.gz: 13617
     ssh hgwdev
-    cd /cluster/data/calJac3/bed/multiz13way/frames
-    time nice -n +19 hgLoadMafFrames calJac3 multiz13wayFrames \
-        multiz13way.mafFrames.gz
-    #   real    0m27.783s
+    cd /hive/data/genomes/calJac3/bed/multiz13way/frames
+    cat ../anno/calJac3.13way.maf \
+        | nice -n +19 genePredToMafFrames calJac3 stdin stdout \
+            `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+                | gzip > multiz13way.mafFrames.gz
+    # verify there are frames on everything:
+    zcat multiz13way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
+    #  200715 calJac3
+    #  232951 canFam2
+    #  220393 gorGor2
+    #  205490 hg19
+    #  205084 micMur1
+    #  229058 mm9
+    #  200391 monDom5
+    #  212293 otoGar1
+    #  202695 panTro2
+    #  212325 papHam1
+    #  205185 ponAbe2
+    #  202823 rheMac2
+    #  157578 tarSyr1
+
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/multiz13way/frames
+    time hgLoadMafFrames calJac3 multiz13wayFrames multiz13way.mafFrames.gz
+    # real    0m28.294s
+
     # check it:
     hgsql -N -e "select src from  multiz13wayFrames;" calJac3 \
       | sort | uniq -c | grep calJac3
-    # 197768 calJac3
+    # 200715 calJac3
 
     #   enable the trackDb entries:
 # frames multiz13wayFrames
@@ -2437,7 +2387,7 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
 
 #########################################################################
 # phyloP conservation for 13-way (Done 2010-08-31 - Chin)
-#   Re-Work ( working 2011-04-29 - Chin)
+#   Re-Work ( DONE 2011-04-29 - Chin)
 #
     # split SS files into 1M chunks, this business needs smaller files
     #   to complete
@@ -2866,3 +2816,147 @@ liftUp /hive/data/genomes/calJac3/jkStuff/ens.62.lft
     # 51944550 bases of 2752505800 (1.887%) in intersection
 
 ############################################################################
+# hgPal downloads (DONE 2011-05-20 braney)
+#   FASTA from 13way for refGene, ensGene, nscanGene
+
+    ssh hgwdev
+    screen
+    bash
+    rm -rf /cluster/data/calJac3/bed/multiz13way/pal
+    mkdir /cluster/data/calJac3/bed/multiz13way/pal
+    cd /cluster/data/calJac3/bed/multiz13way/pal
+    for i in `cat ../species.list`; do echo $i; done > order.lst
+
+    mz=multiz13way
+    gp=refGene
+    db=calJac3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+# real    5m40.876s
+# user    2m32.229s
+# sys     2m48.508s
+
+
+    mz=multiz13way
+    gp=refGene
+    db=calJac3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc 
+
+    # we're only distributing exons at the moment
+    mz=multiz13way
+    gp=refGene
+    db=calJac3
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    mz=multiz13way
+    gp=ensGene
+    db=calJac3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+# real    109m32.085s
+# user    11m13.926s
+# sys     7m8.591s
+
+    mz=multiz13way
+    gp=ensGene
+    db=calJac3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz13way
+    gp=ensGene
+    db=calJac3
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    mz=multiz13way
+    gp=nscanGene
+    db=calJac3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+# real    76m43.791s
+# user    6m21.521s
+# sys     6m46.179s
+
+    mz=multiz13way
+    gp=nscanGene
+    db=calJac3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz13way
+    gp=nscanGene
+    db=calJac3
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+

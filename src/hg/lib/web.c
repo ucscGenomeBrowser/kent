@@ -236,7 +236,7 @@ if (isGisaid)
     printf("<TD><A HREF='../cgi-bin/gisaidSample' class='topbar'>Sample View</A></TD>\n");          // Subject  View
     printf("<TD><A HREF='../cgi-bin/hgTracks%s' class='topbar'>Sequence View</A></TD>\n",uiState);  // Sequence View
     printf("<TD><A HREF='../cgi-bin/gisaidTable' class='topbar'>Table View</A></TD>\n");            // Table View
-    printf("<TD style='width:80%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
+    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
 
 #else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
@@ -290,7 +290,7 @@ else if (isGsid)
         printf("<TD><A HREF='/goldenPath/help/gsidTutorial.html#BLAT' TARGET=_blank class='topbar'>Help</A></TD>\n");   // Help
     else
         printf("<TD><A HREF='/goldenPath/help/sequenceViewHelp.html' TARGET=_blank class='topbar'>Help</A></TD>\n");    // Help
-    printf("<TD style='width:80%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
+    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
 
 #else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
@@ -420,7 +420,7 @@ else if (dbIsFound)
         printf(" class='topbar'>Help</A></TD>\n");
         }
     }
-    printf("<TD style='width:80%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
+    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
     puts("</TD></TR>\n");
 
 #else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
@@ -580,6 +580,23 @@ puts("</font></TD>" "\n"
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
     {
+#ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
+    puts(        // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
+         "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
+         "<TR><TD COLSPAN=3>\n"
+         "      <!--outer table is for border purposes-->\n"
+         "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
+         "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
+         "     <div class='subheadingBar'><div class='windowSize' id='sectTtl'>"
+         );
+    htmlTextOut(textOutBuf);
+
+    puts(
+         "     </div></div>\n"
+         "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>\n"
+         "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
+         );
+#else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     puts(
          "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
 	 "<TR><TD COLSPAN=3>	" "\n"
@@ -597,6 +614,7 @@ if(!skipSectionHeader)
 	 "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
 	 "	" "\n"
 	 );
+#endif///def TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
 
     };
 webPushErrHandlers();
@@ -696,6 +714,23 @@ va_start(args, format);
 
 webEndSection();
 puts("<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->");
+#ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
+puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
+    "<BR>\n\n"
+    "   <!--outer table is for border purposes-->\n"
+    "   <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
+    "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
+    "     <div class='subheadingBar' class='windowSize'>"
+);
+
+vprintf(format, args);
+
+puts(
+    "     </div>\n"
+    "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>\n"
+    "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
+);
+#else///ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
 puts(
     "<BR>" "\n"
     "" "\n"
@@ -714,6 +749,7 @@ puts(
     "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
     "" "\n"
 );
+#endif///def TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
 
 va_end(args);
 }
@@ -1082,10 +1118,18 @@ if (differentWord(genome, hGenome(retDb)))
 return retDb;
 }
 
+static unsigned long expireSeconds = 0;
 /* phoneHome business */
-static void alarmExit(int status)
-/* signal handler for SIGALRM for phoneHome function */
+static void cgiApoptosis(int status)
+/* signal handler for SIGALRM for phoneHome function and CGI expiration */
 {
+if (expireSeconds > 0)
+    {
+    /* want to see this error message in the apache error_log also */
+    fprintf(stderr, "cgiApoptosis: %lu seconds\n", expireSeconds);
+    /* most of our CGIs post a polite non-fatal message with this errAbort */
+    errAbort("procedures have exceeded timeout: %lu seconds, function has ended.\n", expireSeconds);
+    }
 exit(0);
 }
 
@@ -1096,8 +1140,14 @@ if (beenHere)  /* one at a time please */
     return;
 beenHere = TRUE;
 
+char *expireTime = cfgOptionDefault("browser.cgiExpireMinutes", "20");
+unsigned expireMinutes = sqlUnsigned(expireTime);
+expireSeconds = expireMinutes * 60;
+
 char trashFile[PATH_LEN];
 safef(trashFile, sizeof(trashFile), "%s/registration.txt", trashDir());
+
+/* trashFile does not exist during command line execution */
 if(fileExists(trashFile))	/* update access time for trashFile */
     {
     struct utimbuf ut;
@@ -1113,6 +1163,11 @@ if(fileExists(trashFile))	/* update access time for trashFile */
 	ut.actime = ut.modtime = clock1();
 	}
     (void) utime(trashFile, &ut);
+    if (expireSeconds > 0)
+	{
+	(void) signal(SIGALRM, cgiApoptosis);
+	(void) alarm(expireSeconds);	/* CGI timeout */
+	}
     return;
     }
 
@@ -1136,7 +1191,8 @@ if (scriptName && ip)  /* will not be true from command line execution */
 	if (0 == pid0)	/* in child */
 	    {
 	    close(STDOUT_FILENO); /* do not hang up Apache finish for parent */
-	    (void) signal(SIGALRM, alarmExit);
+	    expireSeconds = 0;	/* no error message from this exit */
+	    (void) signal(SIGALRM, cgiApoptosis);
 	    (void) alarm(6);	/* timeout here in 6 seconds */
 #include "versionInfo.h"
 	    char url[1024];
@@ -1150,6 +1206,11 @@ if (scriptName && ip)  /* will not be true from command line execution */
 	    exit(0);
 	    }	/* child of fork has done exit(0) normally or via alarm */
 	}		/* trash file open OK */
+    if (expireSeconds > 0)
+	{
+	(void) signal(SIGALRM, cgiApoptosis);
+	(void) alarm(expireSeconds);	/* CGI timeout */
+	}
     }			/* an actual CGI binary */
 }			/* phoneHome()	*/
 /* phoneHome business */
@@ -1299,7 +1360,7 @@ webIncludeFile(hHelpFile(fileRoot));
 void webPrintLinkTableStart()
 /* Print link table start in our colors. */
 {
-printf("<TABLE><TR><TD BGCOLOR=#888888>\n");
+printf("<TABLE><TR><TD BGCOLOR='#888888'>\n");
 printf("<TABLE CELLSPACING=1 CELLPADDING=3><TR>\n");
 }
 
@@ -1314,13 +1375,13 @@ void webPrintLinkOutCellStart()
 /* Print link cell that goes out of our site. End with
  * webPrintLinkTableEnd. */
 {
-printf("<TD BGCOLOR=\"#"HG_COL_LOCAL_TABLE"\">");
+printf("<TD BGCOLOR='#" HG_COL_LOCAL_TABLE "'>");
 }
 
 void webPrintWideCellStart(int colSpan, char *bgColorRgb)
 /* Print link multi-column cell start in our colors. */
 {
-printf("<TD BGCOLOR=\"#%s\"", bgColorRgb);
+printf("<TD BGCOLOR='#%s'", bgColorRgb);
 if (colSpan > 1)
     printf(" COLSPAN=%d", colSpan);
 printf(">");
@@ -1335,7 +1396,7 @@ webPrintWideCellStart(1, HG_COL_TABLE);
 void webPrintLinkCellRightStart()
 /* Print right-justified cell start in our colors. */
 {
-printf("<TD BGCOLOR=\"#"HG_COL_TABLE"\" ALIGN=\"right\">");
+printf("<TD BGCOLOR='#"HG_COL_TABLE"' ALIGN='right'>");
 }
 
 void webPrintLinkCellEnd()
@@ -1372,19 +1433,19 @@ webPrintLinkCellEnd();
 void webPrintWideLabelCell(char *label, int colSpan)
 /* Print label cell over multiple columns in our colors. */
 {
-printf("<TD BGCOLOR=\"#"HG_COL_TABLE_LABEL"\"");
+printf("<TD BGCOLOR='#"HG_COL_TABLE_LABEL"'");
 if (colSpan > 1)
     printf(" COLSPAN=%d", colSpan);
-printf("><FONT COLOR=\"#FFFFFF\"><B>%s</B></FONT></TD>", label);
+printf("><span style='color:#FFFFFF;'><B>%s</B></spanT></TD>", label);
 }
 
 void webPrintWideCenteredLabelCell(char *label, int colSpan)
 /* Print label cell over multiple columns in our colors and centered. */
 {
-printf("<TD BGCOLOR=\"#"HG_COL_TABLE_LABEL"\"");
+printf("<TD BGCOLOR='#" HG_COL_TABLE_LABEL "'");
 if (colSpan > 1)
     printf(" COLSPAN=%d", colSpan);
-printf("><CENTER><FONT COLOR=\"#FFFFFF\"><B>%s</B></FONT></CENTER></TD>", label);
+printf("><CENTER><span style='color:#FFFFFF;'><B>%s</B></span></CENTER></TD>", label);
 }
 
 void webPrintLabelCell(char *label)

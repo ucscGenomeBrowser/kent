@@ -178,7 +178,7 @@ if (!isUpdateForm)
 
 if (hIsGsidServer())
     {
-    printf("<font color=red>The Custom Track function and its documentation is currently under development ...<BR><BR></font>\n");
+    printf("<span style='color:red;'>The Custom Track function and its documentation is currently under development ...</span><BR><BR>\n");
     }
 
     puts("<TABLE BORDER=0>\n");
@@ -217,7 +217,7 @@ puts("<P>");
 
 /* row for error message */
 if (err)
-    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT COLOR='RED'>Error</I></FONT>&nbsp;%s</B><P>", err);
+    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:RED; font-style:italic;'>Error</span>&nbsp;%s</B><P>", err);
 
 cgiSimpleTableStart();
 
@@ -342,7 +342,7 @@ cgiTableRowEnd();
 
 /* extra space */
 cgiSimpleTableRowStart();
-puts("<TD style='height:.7em;'></TD>");
+cgiDown(0.7);
 cgiTableRowEnd();
 
 /* next row - label for description text entry */
@@ -420,19 +420,19 @@ else
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_add\" VALUE=\"1\">\n");
     }
 puts("</FORM>");
-puts("<div style='height:.9em;'></div>");
+cgiDown(0.9);
 }
 
 void tableHeaderFieldStart(int columns)
 {
 /* print table column header with white text on black background */
-printf("<TD COLSPAN=%d ALIGN='CENTER' BGCOLOR=#536ED3>", columns);
+printf("<TD COLSPAN=%d ALIGN='CENTER' BGCOLOR='#536ED3'>", columns);
 }
 
 void tableHeaderField(char *label, char *description)
 {
 /* print table column header with white text on black background */
-puts("<TD ALIGN='CENTER' BGCOLOR=#536ED3 ");
+puts("<TD ALIGN='CENTER' BGCOLOR='#536ED3' ");
 if (description)
     printf("TITLE='%s'", description);
 printf("><B>%s</B></TD> ", wrapWhiteFont(label));

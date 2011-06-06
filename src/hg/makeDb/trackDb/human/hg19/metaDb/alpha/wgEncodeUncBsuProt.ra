@@ -11,6 +11,8 @@ dataType Proteogenomics
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
+dccAccession wgEncodeEH001199
+expId 1199
 fileName wgEncodeUncBsuProtGm12878NucleusSig.peptideMapping.gz
 grant Giddings
 lab UNC/BSU
@@ -30,6 +32,8 @@ dataType Proteogenomics
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-12
 dateUnrestricted 2011-10-12
+dccAccession wgEncodeEH001200
+expId 1200
 fileName wgEncodeUncBsuProtK562MembranefractionSig.peptideMapping.gz
 grant Giddings
 lab UNC/BSU
@@ -41,4 +45,4 @@ subId 3238
 tableName wgEncodeUncBsuProtK562MembranefractionSig
 view Signal
 
-# MAGIC: 519215696
+# MAGIC: 145204390

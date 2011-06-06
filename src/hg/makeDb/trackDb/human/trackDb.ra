@@ -164,46 +164,6 @@ color 30,130,210
 type genePred
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
-track retroMrnaInfo
-shortLabel Retroposed Genes 2.0c
-longLabel Retroposed Genes, Including Pseudogenes [retroMrnaInfo]
-group genes
-priority 37.12
-visibility hide
-nextItemButton on
-spectrum on
-type bed 12 .
-
-track ucscRetroInfo3
-shortLabel Retroposed Genes 2.0d
-longLabel Retroposed Genes, Including Pseudogenes August 2008 [ucscRetroInfo3]
-group genes
-priority 37.13
-visibility hide
-nextItemButton on
-spectrum on
-type bed 12 .
-
-track ucscRetroAli3
-shortLabel Retroposed Genes 3.0
-longLabel Retroposed Genes, Including Pseudogenes August 2008 [ucscRetroAli3]
-group genes
-type psl
-priority 37.14
-color 20,0,250
-visibility hide
-retroMrnaInfo ucscRetroInfo3
-#transMapTypeDesc UCSC retrocopies
-baseColorDefault diffCodons
-baseColorUseCds table retroCds
-baseColorUseSequence extFile retroSeq retroExtFile
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-
 track sanger20
 shortLabel Sanger 20
 longLabel Sanger Institute Chromosome 20 Genes
@@ -3005,7 +2965,7 @@ longLabel OMIM Non-Gene Entry Cytogenetic Locations
 group phenDis
 priority 29.75
 visibility hide
-color 0, 100, 100
+color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
@@ -3016,7 +2976,7 @@ longLabel OMIM Genes
 group phenDis
 priority 29.73
 visibility hide
-color 220, 0, 0
+color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
@@ -3027,7 +2987,7 @@ longLabel OMIM Allelic Variant SNPs
 group phenDis
 priority 29.71
 visibility hide
-color 220,0,0
+color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/

@@ -14,12 +14,12 @@ char *doLine(char *lineType, char *lineIn)
     {
     char *result;
     char line[1000];
-	
+
     strcpy(line, lineIn);
     *(line+strlen(line) - 1) = '\0';
-	
+
     result = strstr(line, lineType);
-    if (result == NULL) 
+    if (result == NULL)
 	{
 	return(result);
 	}
@@ -37,12 +37,12 @@ char *doLine2(char *lineIn, char *lineType)
     char line[1000];
 
     strcpy(line, lineIn);
-	
+
     *(line+strlen(line) - 1) = '\0';
     chp  = strstr(line, ":");
 
     if (chp == NULL) return(strdup("???"));
-	
+
     *chp = '\0';
     chp ++;
     chp ++;
@@ -70,7 +70,7 @@ char *contact="";
 char *join;
 
 char *join1, *join2;
-char *spanner, 
+char *spanner,
  *variation,
  *variationEvidence,
  *comment,
@@ -80,7 +80,7 @@ char lineType[100];
 
 //int i,j;
 
-if (argc != 2) 
+if (argc != 2)
     {
     usage();
     }
@@ -91,12 +91,11 @@ else
     fprintf(stdout, "<HTML><HEAD><TITLE>Non-standard Join Certificates</TITLE>\n");
     fprintf(stdout, "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n");
     fprintf(stdout, "<META content=\"MSHTML 6.00.2800.1106\" name=GENERATOR></HEAD>\n");
-    fprintf(stdout, "<BODY><FONT face=Arial>\n");
+    fprintf(stdout, "<BODY><span style='font-family:Arial;'>\n");
 
-    fprintf(stdout, "<FONT face=Arial>\n");
     fprintf(stdout, "<TABLE cellspacing=3 cols=9 border cellPadding=2\n");
 
-    fprintf(stdout, "  <TR BGCOLOR=#fffee8><TH>Accession 1</TH>\n");
+    fprintf(stdout, "  <TR BGCOLOR='#FFFEE8'><TH>Accession 1</TH>\n");
     fprintf(stdout, "  <TH>Accession 2</TH>\n");
     fprintf(stdout, "  <TH>Spanner</TH>\n");
     fprintf(stdout, "  <TH>Variation</TH>\n");
@@ -110,7 +109,7 @@ else
     outf = fopen("cert.tab", "w");
 
     if ((inf = fopen(infileName, "r")) == NULL)
-	{		
+	{
 	fprintf(stderr, "Can't open file %s.\n", infileName);
 	exit(8);
 	}
@@ -126,7 +125,7 @@ else
 	    fgets(line, 1000, inf);
 	    }
 	join = doLine("JOIN: ", line);
-	if (join != NULL) 
+	if (join != NULL)
 	    {
 	    join1 = join;
 	    join2 = strstr(join, " ");
@@ -179,9 +178,9 @@ else
 	    {
 	    evaluation = content;
 	    }
-		
+
 	fgets(line, 1000, inf);
-	if (strlen(line) > 3) 
+	if (strlen(line) > 3)
 	    {
 	    goto again;
 	    }
@@ -195,15 +194,15 @@ else
 	    printf("<TD>%s</TD>", variation);
 	    printf("<TD>%s</TD>", variationEvidence);
 	    printf("<TD>%s</TD>", comment);
-			
+
 	    printf("<TD>%s</TD>", evaluation);
 	    printf("<TD>%s</TD>", remark);
-		
+
 	    printf("<TD><A HREF=\"mailto:%s\">%s</A></TD>", contact, contact);
 	    printf("</TR>\n");
-			
+
 	    fprintf(outf, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
-		    join1, join2, spanner, evaluation, variation, variationEvidence, 
+		    join1, join2, spanner, evaluation, variation, variationEvidence,
 		    contact, remark, comment);
 	    }
 	}
@@ -214,6 +213,7 @@ else
     return(1);
     }
 */
+fprintf(stdout, "</table</span>\n");
 fprintf(stdout, "</body></html>\n");
 fclose(outf);
 return(0);

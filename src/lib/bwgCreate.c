@@ -275,7 +275,7 @@ struct lm *lmLocal = lmInit(0);
  * adding values from single column to list. */
 char *words[2];
 char *line;
-struct bwgVariableStepItem *item, *itemList = NULL;
+struct bwgVariableStepItem *item, *nextItem, *itemList = NULL;
 int originalSectionSize = 0;
 while (lineFileNextReal(lf, &line))
     {
@@ -308,6 +308,20 @@ while (lineFileNextReal(lf, &line))
 	}
     }
 slSort(&itemList, bwgVariableStepItemCmp);
+
+/* Make sure no overlap between items. */
+if (itemList != NULL)
+    {
+    item = itemList;
+    for (nextItem = item->next; nextItem != NULL; nextItem = nextItem->next)
+        {
+	if (item->start + span > nextItem->start)
+	    errAbort("Overlap on %s between items starting at %d and %d.\n"
+	             "Please remove overlaps and try again",
+		    chrom, item->start, nextItem->start);
+	item = nextItem;
+	}
+    }
 
 /* Break up into sections of no more than items-per-slot size. */
 int sizeLeft = originalSectionSize;
@@ -515,9 +529,21 @@ while (lineFileNextReal(lf, &line))
     }
 slSort(&chromList, bedGraphChromCmpName);
 
+/* Loop through each chromosome and output the item list, broken into sections
+ * for that chrom. */
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     slSort(&chrom->itemList, bwgBedGraphItemCmp);
+
+    /* Check to make sure no overlap between items. */
+    struct bwgBedGraphItem *item = chrom->itemList, *nextItem;
+    for (nextItem = item->next; nextItem != NULL; nextItem = nextItem->next)
+        {
+	if (item->end > nextItem->start)
+	    errAbort("Overlap between %s %d %d and %s %d %d.\nPlease remove overlaps and try again",
+	        chrom->name, item->start, item->end, chrom->name, nextItem->start, nextItem->end);
+	item = nextItem;
+	}
 
     /* Break up into sections of no more than items-per-slot size. */
     struct bwgBedGraphItem *startItem, *endItem, *nextStartItem = chrom->itemList;
@@ -1040,7 +1066,7 @@ while (lineFileNextReal(lf, &line))
     }
 slSort(&sectionList, bwgSectionCmp);
 
-/* Check for overlap. */
+/* Check for overlap at section level. */
 struct bwgSection *section, *nextSection;
 for (section = sectionList; section != NULL; section = nextSection)
     {

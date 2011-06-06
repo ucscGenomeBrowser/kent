@@ -19,7 +19,6 @@
 #define CV_UGLY_TERM_ANTIBODY   "Antibody"
 
 // Type of Terms searchable defines
-#define CV_SEARCHABLE               "searchable"
 #define CV_SEARCHABLE_SINGLE_SELECT "select"
 #define CV_SEARCHABLE_MULTI_SELECT  "multiSelect"
 #define CV_SEARCHABLE_FREE_TEXT     "freeText"
@@ -70,17 +69,30 @@ char *cvLabDeNormalize(char *minimalTerm)
 }
 */
 
+static char *cvFileRequested = NULL;
 
-// TODO: decide to make this public or hide it away inside the one function so far that uses it.
-static char *cv_file()
+void cvFileDeclare(char *filePath)
+// Declare an altername cv.ra file to use
+// (The cv.ra file is normally discovered based upon CGI/Tool and envirnment)
+{
+cvFileRequested = cloneString(filePath);
+}
+
+static char *cvFile()
 // return default location of cv.ra
 {
 static char filePath[PATH_LEN];
-char *root = hCgiRoot();
-if (root == NULL || *root == 0)
-    root = "/usr/local/apache/cgi-bin/"; // Make this check out sandboxes?
-//    root = "/cluster/home/tdreszer/kent/src/hg/makeDb/trackDb/cv/alpha/"; // Make this check out sandboxes?
-safef(filePath, sizeof(filePath), "%s/encode/%s", root,CV_FILE_NAME);
+if (cvFileRequested != NULL)
+    {
+    safecpy(filePath, sizeof(filePath), cvFileRequested);
+    }
+else
+    {
+    char *root = hCgiRoot();
+    if (root == NULL || *root == 0)
+        root = "/usr/local/apache/cgi-bin/"; // Make this check out sandboxes?
+    safef(filePath, sizeof(filePath), "%s/encode/%s", root,CV_FILE_NAME);
+    }
 if(!fileExists(filePath))
     errAbort("Error: can't locate %s; %s doesn't exist\n", CV_FILE_NAME, filePath);
 return filePath;
@@ -103,12 +115,22 @@ struct hash *cvHashForTerm = hashFindVal(cvHashOfHashOfHashes,term);
 // Establish cv hash of Term Types if it doesn't already exist
 if (cvHashForTerm == NULL)
     {
-    cvHashForTerm = raReadWithFilter(cv_file(), CV_TERM,CV_TYPE,term);
+    cvHashForTerm = raReadWithFilter(cvFile(), CV_TERM,CV_TYPE,term);
     if (cvHashForTerm != NULL)
         hashAdd(cvHashOfHashOfHashes,term,cvHashForTerm);
     }
 
 return cvHashForTerm;
+}
+
+const struct hash *cvOneTermHash(char *type,char *term)
+// returns a hash for a single term of a given type
+// NOTE: in static memory: DO NOT FREE
+{
+const struct hash *typeHash = cvTermHash(type);
+if (typeHash != NULL)
+    return hashFindVal((struct hash *)typeHash,term);
+return NULL;
 }
 
 const struct hash *cvTermTypeHash()
@@ -121,7 +143,7 @@ static struct hash *cvHashOfTermTypes = NULL;
 // Establish cv hash of Term Types if it doesn't already exist
 if (cvHashOfTermTypes == NULL)
     {
-    cvHashOfTermTypes = raReadWithFilter(cv_file(), CV_TERM,CV_TYPE,CV_TOT);
+    cvHashOfTermTypes = raReadWithFilter(cvFile(), CV_TERM,CV_TYPE,CV_TOT);
     // Patch up an ugly inconsistency with 'cell'
     struct hash *cellHash = hashRemove(cvHashOfTermTypes,CV_UGLY_TOT_CELLTYPE);
     if (cellHash)
@@ -188,7 +210,7 @@ while ((hEl = hashNext(&hc)) != NULL)
         }
     if (searchTracks)
         {
-        setting = hashFindVal(typeHash,CV_SEARCHABLE);
+        setting = hashFindVal(typeHash,CV_TOT_SEARCHABLE);
         if (setting == NULL
         || (   differentWord(setting,CV_SEARCHABLE_SINGLE_SELECT)
             && differentWord(setting,CV_SEARCHABLE_MULTI_SELECT)
@@ -221,7 +243,7 @@ struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
 struct hash *termHash = hashFindVal(termTypeHash,term);
 if (termHash != NULL)
     {
-    char *searchable = hashFindVal(termHash,CV_SEARCHABLE);
+    char *searchable = hashFindVal(termHash,CV_TOT_SEARCHABLE);
     if (searchable != NULL)
         {
         if (sameWord(searchable,CV_SEARCHABLE_SINGLE_SELECT))
@@ -254,6 +276,43 @@ if (termHash != NULL)
 return term;
 }
 
+const char *cvTag(char *type,char *term)
+// returns cv Tag if term found or else NULL
+{
+const struct hash *termHash = cvOneTermHash(type,term);
+if (termHash != NULL)
+    return hashFindVal((struct hash *)termHash,CV_TAG);
+return NULL;
+}
+
+#ifdef OMIT
+// may want this someday
+const char *cvTerm(char *tag)
+// returns the cv Term if tag found or else NULL
+{
+// Get the list of term types from thew cv
+struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
+struct hashCookie hcTOT = hashFirst(termTypeHash);
+struct hashEl *helType;
+while ((helType = hashNext(&hcTOT)) != NULL) // Walk through each type
+    {
+    struct hash *typeHash = cvTermHash(helType->name);
+    struct hashCookie hcType = hashFirst(typeHash);
+    struct hashEl *helTerm;
+    while ((helTerm = hashNext(&hcType)) != NULL) // Walk through each term in this type
+        {
+        struct hash *termHash = (struct hash *)helTerm->val;
+        char *foundTag = hashFindVal(termHash,CV_TAG);
+        if (foundTag != NULL && sameString(tag,foundTag))
+            {
+            return helTerm->name;
+            }
+        }
+    }
+return NULL;
+}
+#endif///def OMIT
+
 boolean cvTermIsHidden(char *term)
 // returns TRUE if term is defined as hidden in cv.ra
 {
@@ -263,6 +322,27 @@ if (termHash != NULL)
     {
     char *setting = hashFindVal(termHash,CV_TOT_HIDDEN);
     return cvHiddenIsTrue(setting);
+    }
+return FALSE;
+}
+
+boolean cvTermIsEmpty(char *term,char *val)
+// returns TRUE if term has validation of "cv or None" and the val is None
+{
+if (val == NULL)
+    return TRUE; // Empty whether it is supposed to be or not
+
+struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
+struct hash *termHash = hashFindVal(termTypeHash,term);
+if (termHash != NULL)
+    {
+    char *validationRule = hashFindVal(termHash,CV_VALIDATE);
+    if (validationRule != NULL)
+        {           // Currently only supporting special case for "None"
+        if (sameString(validationRule,CV_VALIDATE_CV_OR_NONE)
+        && sameString(val,MDB_VAL_ENCODE_EDV_NONE))
+            return TRUE;
+        }
     }
 return FALSE;
 }

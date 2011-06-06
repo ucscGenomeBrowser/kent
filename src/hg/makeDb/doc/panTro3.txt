@@ -1823,6 +1823,54 @@ done
     time hgLoadMafFrames panTro3 multiz12wayFrames multiz12way.mafFrames.gz
     #	real    0m23.641s
 
+    # Adding automatic generation of upstream files (DONE - 2011-05-09 - Hiram)
+    # edit src/hg/makeDb/genbank/etc/genbank.conf to add:
+panTro3.upstreamGeneTbl = ensGene
+panTro3.upstreamMaf = multiz12way /hive/data/genomes/panTro3/bed/multiz12way/species.list
+
+    ###########################################################################
+    ## create upstream ensGene maf files
+    mkdir -p /hive/data/genomes/panTro3/bed/multiz12way/downloads/maf
+    cd /hive/data/genomes/panTro3/bed/multiz12way/downloads/maf
+    # bash script
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits panTro3 ensGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags panTro3 multiz12way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/panTro3/bed/multiz12way/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+
+    # take a look to see if the names are OK:
+    zcat upstream1000.maf.gz | grep "^s " | awk '{print $2}' \
+	| sort | uniq -c | sort -rn | head
+    #	16006 rn4
+    #	16006 rheMac2
+    #	16006 ponAbe2
+    #	16006 monDom5
+    #	16006 mm9
+    #	16006 hg19
+    #	16006 galGal3
+    #	16006 equCab2
+    #	16006 danRer7
+    #	16006 canFam2
+    #	16006 calJac3
+    #	1 ENSPTRT00000068163
+    #	1 ENSPTRT00000068158
+    #	... etc ...
+
+    zcat upstream1000.maf.gz | grep "^s " | awk '{print $2}' \
+	| sort | uniq -c | sort -rn | wc
+    #	16017   32034  432327
+    # check the other files too
+
+    md5sum up*.gz > md5sum.txt
+
 #########################################################################
 # Phylogenetic tree from 12-way (DONE - 2011-03-24,03-28 - Hiram)
 
@@ -2695,3 +2743,210 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
+# download data for 8-way (DONE - 2011-01-19 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/phastCons12way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/phastCons12way
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/cons/all/downloads/phastCons12way.wigFix.gz \
+	./vertebrate.phastCons12way.wigFix.gz
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/cons/primate/downloads/phastCons12wayPrimate.wigFix.gz \
+	./primate.phastCons12way.wigFix.gz
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/cons/all/phastCons12way.bw \
+	./vertebrate.phastCons12way.bw
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/cons/primate/phastCons12wayPrimate.bw \
+	./primate.phastCons12way.bw
+
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/cons/primate/primate.mod \
+	./primate.mod
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/cons/all/all.mod \
+	./vertebrate.mod
+    # use a README from a recent multiz like this, this one is from danRer7
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/cons/README.txt .
+    md5sum * > /hive/data/genomes/panTro3/bed/multiz12way/cons/md5sum.txt
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/cons/md5sum.txt .
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/phyloP12way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/phyloP12way
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/all/downloads/phyloP12way.wigFix.gz \
+	./vertebrate.phyloP12way.wigFix.gz
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/primate/downloads/phyloP12wayPrimate.wigFix.gz \
+	./primate.phyloP12way.wigFix.gz
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/primate/phyloP12wayPrimate.bw \
+	./primate.phyloP12way.bw
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/all/phyloP12way.bw \
+	./vertebrate.phyloP12way.bw
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/run.phyloP/primate.mod \
+	./primate.mod
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/run.phyloP/all.mod \
+	./vertebrate.mod
+    # use a README from a recent multiz like this, this one is from danRer7
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/README.txt .
+    md5sum * > /hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/md5sum.txt
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/consPhyloP/md5sum.txt .
+
+    cd /hive/data/genomes/panTro3/bed/multiz12way
+    # this was already done elsewhere:
+    /cluster/bin/phast/tree_doctor --rename \
+"panTro3->Chimp; hg19->Human; ponAbe2->Orangutan; rheMac2->Rhesus; calJac3->Marmoset; equCab2->Horse; mm9->Mouse; rn4->Rat; monDom5->Opossum; galGal3->Chicken; danRer7->Zebrafish; " \
+	panTro3.12way.nh > panTro3.commonNames.12way.nh
+
+    mkdir /hive/data/genomes/panTro3/bed/multiz12way/downloads
+    cd /hive/data/genomes/panTro3/bed/multiz12way/downloads
+    cp -p ../anno/panTro3.12way.maf ./multiz12way.maf
+    time gzip multiz12way.maf
+    #	real    54m14.149s
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/multiz12way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/multiz12way
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/12way.nh .
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/panTro3.commonNames.12way.nh .
+    ln -s \
+/hive/data/genomes/panTro3/bed/multiz12way/downloads/multiz12way.maf.gz .
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/multiz12way/maf
+
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/multiz12way/maf
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/downloads/maf/up*.gz .
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/downloads/maf/md5sum.txt .
+
+    # use a README from a recent multiz like this, this one is from danRer7
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/downloads/README.txt .
+
+    md5sum *.nh *.gz *.txt \
+	> /hive/data/genomes/panTro3/bed/multiz12way/downloads/md5sum.txt
+    ln -s /hive/data/genomes/panTro3/bed/multiz12way/downloads/md5sum.txt .
+
+#############################################################################
+# hgPal downloads (DONE 2011-05-18 braney)
+#   FASTA from 12way for refGene, ensGene
+
+    ssh hgwdev
+    screen
+    bash
+    rm -rf /cluster/data/panTro3/bed/multiz12way/pal
+    mkdir /cluster/data/panTro3/bed/multiz12way/pal
+    cd /cluster/data/panTro3/bed/multiz12way/pal
+    for i in `cat ../species.list`; do echo $i; done > order.lst
+
+    mz=multiz12way
+    gp=refGene
+    db=panTro3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+# real    350m10.116s
+# user    38m38.731s
+# sys     7m22.106s
+
+
+    mz=multiz12way
+    gp=refGene
+    db=panTro3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz12way
+    gp=refGene
+    db=panTro3
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    mz=multiz12way
+    gp=ensGene
+    db=panTro3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+# real    56m26.162s
+# user    10m18.260s
+# sys     7m32.302s
+
+
+    mz=multiz12way
+    gp=ensGene
+    db=panTro3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz12way
+    gp=ensGene
+    db=panTro3
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+############################################################################
+# LIFTOVER TO PanTro2 (DONE - 2011-06-02 - Chin ) 
+    mkdir /hive/data/genomes/panTro3/bed/blat.panTro2.2011-06-02
+    cd /hive/data/genomes/panTro3/bed/blat.panTro2.2011-06-02
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug -ooc /scratch/data/panTro3/panTro3.11.ooc \
+       panTro3 panTro2
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+         -ooc /scratch/data/panTro3/panTro3.11.ooc \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         panTro3 panTro2 > do.log 2>&1 &
+    # real    real    108m18.862s
+
+    # pushQ stuff
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/panTro3/liftOver/
+    md5sum panTro3ToPanTro2.over.chain.gz  >> md5sum.txt
+
+
+    # check /gbdb/panTro3/liftOver for new file there to panTro2
+    # verify convert functions on genome-test panTro3 to panTro2
+    # and file is present on htdocs-hgdownload/goldenPath/panTro3/liftOver
+
+############################################################################
+

@@ -59,8 +59,9 @@ poor sequence alignability.</P>
 that display individually on the browser. Instructions for configuring tracks
 with multiple subtracks are
 <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
-Sites in this track are categorized and
-color-coded for each cell type as follows:
+<P>To facilitate analyses, each region has been assigned an <em>Open Chromatin Code (OC Code)</em>,
+based on the assay(s) by which it was detected, and a color, based on its level of validation
+(which was determined by the combination of its OC Code and its statistical significance):
 <DL>
 <DT><B>Validated</B>, OC Code = 1:</DT>
 <DD><ul style="list-style-type:none;">
@@ -116,7 +117,10 @@ overlap annotated transcription start sites by the UCSC Genes track are consider
 </ul>
 </DL>
 </P>
-
+<P>All signal values, <code>-log<sub>10</sub></code>(p-values), and the OC Code is
+displayed on the detail page for each element and is available in the
+corresponding bed file.
+</P>
 
 <H2>Methods</H2>
 <P>For each site, the maximum F-Seq Density Signal value has been calculated
@@ -141,17 +145,10 @@ where <B><code style='font-size:1.2em;'>p<sub>i</sub></code></B> are the p-value
 and FAIRE.  <B><code style='font-size:1.2em;'>X<sup>2</sup></code></B> follows a chi-squared distribution,
 thus a combined p-value can be assigned to this test statistic.
 </P>
-<P>To facilitate analyses, an <em>Open Chromatin Code (OC Code)</em> has been
-assigned for each region as described in the <em>Display Conventions and Configuration</em> section above.
-</P>
-<P>All signal values, <code>-log<sub>10</sub></code>(p-values), and the OC Code is
-displayed on the detail description page for each element and is available in the
-corresponding bed file.
-</P>
 
 <h2>Release Notes</h2>
 <P>
-This is release 1 (March 2011) of this track and is based upon the first release on <B>GRCh37/hg19</B>
+This is release 1 (May 2011) of this track and is based upon the first release on <B>GRCh37/hg19</B>
 of the three Open Chromatin tracks:
 <A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</A>,
 <A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">UNC FAIRE</A>,
@@ -269,7 +266,7 @@ Li H, Ruan J, and Durbin R.
 <A HREF="http://genome.cshlp.org/content/early/2008/09/25/gr.078212.108.short"
 TARGET=_blank>Mapping short DNA sequencing reads and calling variants using
 mapping quality scores</A>. <EM>Genome Res.</EM> 2008 Nov;18(11):1851-8.
-
+</P><P>
 Song L and Crawfor GE.
 <A HREF="http://cshprotocols.cshlp.org/cgi/content/full/2010/2/pdb.prot5384"
 TARGET=_BLANK>DNase-seq: a high-resolution technique for mapping active

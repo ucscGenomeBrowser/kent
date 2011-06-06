@@ -314,6 +314,9 @@ struct mdbVar *mdbObjFind(struct mdbObj *mdbObj, char *var);
 char *mdbObjFindValue(struct mdbObj *mdbObj, char *var);
 // Finds the val associated with the var or retruns NULL
 
+struct slName *mdbObjsFindAllVals(struct mdbObj *mdbObjs, char *var);
+// Returns a list of all vals in mdbObjs for a requested var
+
 boolean mdbObjContains(struct mdbObj *mdbObj, char *var, char *val);
 // Returns TRUE if object contains var, val or both
 

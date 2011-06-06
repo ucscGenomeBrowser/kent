@@ -135,7 +135,7 @@ if (slCount(pgList) > 0)
     if (totalSamples > 0)
 	{
 	unbiasedHeterozygosity = 2 * alleleFrequency * (1.0 - alleleFrequency);
-	unbiasedHeterozygosity *= 
+	unbiasedHeterozygosity *=
 	    (double)(totalSamples << 1)/(double)((totalSamples << 1) - 1);
 	}
     else
@@ -186,13 +186,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Subfamily:</B>&nbsp;%s<BR>\n", loadItem->polySubfamily);
     printf("<B>Associated Disease:</B>&nbsp;%s<BR>\n", loadItem->disease);
     printf("<B>Sequence of L1 insertion and 400bp flanking on each side:</B>");
-    printf("(<font color=blue>5' flanking-</font><font color=green>");
-    printf("<u>TSD1</u>-</font><font color=red>REPEAT SEQUENCE</font>");
-    printf("<font color=green>-<u>TSD2</u>-</font><font color=blue>3'");
-    printf("flanking</font>)<br>(\"<font color=green><u>nnnnn</u></font>\"");
-    printf(" --&gt; unknown TSD; \"<font color=red>NNNNNNNNNN</font>\" --&gt;");
-    printf(" unknown Repeat Sequence):<BR>\n<PRE><font color=blue>%s", loadItem->polySeq);
-    printf("</font></PRE><BR>\n");
+    printf("(<span style='color:blue;'>5&#39; flanking-</span>"); // &#39; = '
+    printf("<span style='color:green;'><span style='text-decoration:underline;'>");
+    printf("TSD1</span>-</span><span style='color:red'>REPEAT SEQUENCE</span>");
+    printf("<span style='color:green;'>-<span style='text-decoration:underline;'>");
+    printf("TSD2</span>-</span><span style='color:blue;'>3&#39; flanking</span>)<br>"); // &#39; = '
+    printf("(\"<span style='color:green; text-decoration:underline;'>nnnnn</span>\"");
+    printf(" --&gt; unknown TSD; \"<span style='color:red;'>NNNNNNNNNN</span>\" --&gt;");
+    printf(" unknown Repeat Sequence):<BR>\n<PRE><span style='color:blue;'>%s", loadItem->polySeq);
+    printf("</span></PRE><BR>\n");
     printf("<B>Forward Primer:</B>&nbsp;%s<BR>\n", loadItem->forwardPrimer);
     printf("<B>Reverse Primer:</B>&nbsp;%s<BR>\n", loadItem->reversePrimer);
     if (loadItem->tm > 0.0)

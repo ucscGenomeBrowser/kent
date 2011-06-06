@@ -10,3 +10,5 @@ To compile hgVisiGene cgi with DEBUG flag, do this:
   make CFLAGS=-DDEBUG
 This turns on support for using bigImageTest.html in place of bigImage.html  
 
+bigImage.html was moved to hg/htdocs/
+dot_clear.gif was moved to hg/htdocs/images/

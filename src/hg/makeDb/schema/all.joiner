@@ -7,7 +7,7 @@ set anoCar anoCar1,anoCar2
 set anoGam anoGam1
 set apiMel apiMel1,apiMel2
 set aplCal aplCal1
-set bosTau bosTau2,bosTau3,bosTau4,bosTau5
+set bosTau bosTau2,bosTau3,bosTau4,bosTau5,bosTau6
 set braFlo braFlo1
 set bruMal bruMal1
 set caeJap caeJap1,caeJap3
@@ -96,8 +96,12 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 # transMapDb not public: dasNov1,echTel1,loxAfr1,oryCun1,otoGar1,loxAfr3
 set transMapDb anoCar1,anoCar2,bosTau4,calJac1,calJac3,canFam2,cavPor3,danRer5,danRer6,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,hg19,mm9,monDom4,monDom5,ornAna1,oryCun2,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2,loxAfr3
 
+# Define ucscRetro databases
+set ucscRetroDb hg18,hg19,mm9
+
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
+
 databasesChecked $gbd,$otherDb
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp090821,sp080707,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330,customTracks,customTrash,10Kgenomes,BRfoo,abc,andy,bioCyc070327,bioCyc090623,bioCyc100514,bosTau3Old,ccds,ccds20080404,ccdsNew,ccds_before,ctd,ctd021508,ctdOld,dark,elegansWS176,encpipeline_aamp,encpipeline_beta,encpipeline_galt,encpipeline_kate,encpipeline_prod,encpipeline_test,entrez,euaGli13,eutHer13,fakeDataE0,fanKgTemp,fanKgTemp2,fanTest,fanTest2,gencode,germlineVar_hg18,go040501,go041115,go050521,go050726,go060211,go061219,go080130,goJill,hg15test,hg18kg11,hg18snp130,hg18test,hg19Haps,hg19Patch2,hg19Patch2i,hg19snp131,hg19snp132,hgcentralgsid,hgcentralrhead,hgcentraltest2,hgcentraltestangie,hiv1,hivgne8,homIni13,homIni14,homIni20,homNea0,homPan20,influenza,information_schema,ismb2004,jkFoo,jorgetest,kgHg17FTemp,kgHg18ATemp,kgMm8ATemp,kgRn3DTemp,markd,markdCcds,markdMGC,membership,metaData_vsmalladi,metadata_krish,mikep,mm9Temp,mmtv,nonAfr13,oldChoHof1,panTro2snp127,pathway,petMar0,pongo,proteins080707,proteins090821,qa,rah,reactome,rn4UCGenes,rn4snp130,snpCompare,snpFixed,sp100331,sp101005,t18,testMePrivl,tmpBioCychg18,tmpFoo12,tmpUcscGeneshg19,treeFam,uf,ug,vega33,vega40,visiGeneOld,visiGeneXml
 
@@ -570,20 +574,25 @@ identifier encodePseudogeneUcsc dependency
     $hg.encodePseudogeneUcsc.name dupeOk
     $hg.encodePseudogeneClass.name minCheck=0.22 unique
 
-#identifier refGeneRetro dependency
-#"Link refGene to ucscRetroInfo"
-    #$hg,mm9.refGene.name dupeOk
-    #$hg,mm9.ucscRetroInfo.refSeq minCheck=0.96
+identifier refGeneRetro dependency
+"Link refGene to ucscRetroInfo"
+    $ucscRetroDb.refGene.name dupeOk
+    $ucscRetroDb.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
 
-#identifier retroRefGene dependency
-#"Link ucscRetroInfo to refGene"
-    #$hg,mm9.ucscRetroInfo.refSeq dupeOk
-    #$hg,mm9.refGene.name minCheck=0.11
+identifier knownGeneRetro dependency
+"Link knownGene to ucscRetroInfo"
+    $ucscRetroDb.knownGene.name dupeOk chopAfter=.
+    $ucscRetroDb.ucscRetroInfo1.kgName minCheck=0.96 exclude=noKg chopAfter=.
 
-#identifier ucscRetroInfo dependency
-#"Link together Ucsc Retrogenes and ucsc retroGene alignments"
-    #$hg,mm9.ucscRetroInfo.name unique
-    #$hg,mm9.ucscRetroAli.qName unique
+identifier ucscRetroInfo dependency
+"Link together Ucsc Retrogenes and ucsc retroGene alignments"
+    $ucscRetroDb.ucscRetroInfo1.name unique
+    $ucscRetroDb.ucscRetroAli1.qName 
+
+identifier ucscRetroOrtho dependency
+"Link together Ucsc Retrogenes and ucsc retro orthlogy"
+    $ucscRetroDb.ucscRetroAli1.qName dupeOk
+    $ucscRetroDb.ucscRetroOrtho1.name
 
 identifier encodePseudogeneUcsc2 dependency
 "Link together Ucsc Pseudogenes and class"
@@ -1384,8 +1393,6 @@ identifier knownGeneId dependency
     $kgDb.scBlastTab.query
     $kgDb,!rn3.dupSpMrna.mrnaID
     rn3.dupSpMrna.mrnaID minCheck=0.90
-#   $kgDb,!hg16,!hg17.pseudoGeneLink.kgName exclude=noKg
-#   hg16,hg17.pseudoGeneLink.kgName minCheck=0.18 exclude=noKg
     $kgDb.foldUtr3.name
     $kgDb.foldUtr5.name
     $hg.gnfU95Distance.query
@@ -1452,6 +1459,12 @@ identifier knownGeneId dependency
     $kgDb.kg3ToKg4.newId exclude=
     $kgDb.kgTargetAli.qName full
     hg19.kg4ToKg5.newId
+    mm9.kg4ToKg5.newId
+
+identifier knownGeneOld4Id dependency
+"Previous UCSC Gene build"
+    $kgDb.knownGeneOld4.name
+    $kgDb.kg4ToKg5.oldId full
 
 identifier knownGeneOld3Id dependency
 "Previous UCSC Gene build"
@@ -2272,10 +2285,30 @@ identifier locusLinkId external=LocusLink
     $gbd.keggPathway.locusID minCheck=0.98
     $kgDb,!hg16,!mm8.knownToLocusLink.value minCheck=0.98
     hg16,mm8.knownToLocusLink.value minCheck=0.96
+    $hg.mim2gene.geneId minCheck=0.90
+
+identifier omimLocationId external=OMIM
+"Online Mendelian Inheritance in Man (OMIM) Location ID"
+    $hg.omimLocation.name dupeOk exclude=0
+    $hg.omimGeneMap.omimId minCheck=0.10
+
+identifier omimAvSnpId external=OMIM
+"Online Mendelian Inheritance in Man (OMIM) AV SNP ID"
+    $hg.omimAvSnp.name dupeOk exclude=0
 
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
     $gbd.refLink.omimId dupeOk exclude=0
+    $hg.omimGene2.name minCheck=0.90
+    $hg.omimPhenotype.omimId minCheck=0.75
+    $hg.omimGeneMap.omimId minCheck=0.85
+    $hg.mim2gene.omimId minCheck=0.70
+
+identifier omimAvId external=OMIM
+"Online Mendelian Inheritance in Man (OMIM) AV ID"
+    $hg.omimAv.avId dupeOk exclude=0
+    $hg.omimAvRepl.avId minCheck=0.90
+    $hg.omimAvSnp.name minCheck=0.90
 
 identifier omimGeneId
 "omimGene ID"
@@ -2284,6 +2317,24 @@ identifier omimGeneId
     $hg.refLink.omimId exclude=0 minCheck=0.98
     $hg.omimMorbidMap.omimId minCheck=0.75
     $hg.omimToKnownCanonical.omimId
+
+identifier omimGene2Id
+"omimGene2 ID"
+    $hg.omimGene2.name dupeOk
+    $hg.omimGeneSymbol.omimId minCheck=0.90
+    $hg.omimAv.omimId minCheck=0.90
+    $hg.omimAvRepl.omimId minCheck=0.90
+    $hg.omimPhenotype.omimId minCheck=0.75
+    $hg.refLink.omimId exclude=0 minCheck=0.98
+    $hg.mim2gene.omimId minCheck=0.70
+
+identifier omimPhenotypeId
+"OMIM Phenotype ID"
+    $hg.omimPhenotype.phenotypeId dupeOk
+
+identifier evoCpgId
+"Evo Cpg ID"
+    $hg.evoCpg.name dupeOk
 
 identifier unigeneId fuzzy
 "NCBI UniGene Cluster ID"
@@ -3515,6 +3566,11 @@ tablesIgnored $mm
     rikenCageCtssPlus
     rikenCageTc
     broadStemChip%
+    laminB1_AC
+    laminB1_EF
+    laminB1_ES
+    laminB1_NP
+
 
 tablesIgnored $panTro
     humanDels

@@ -1,3 +1,74 @@
+metaObject wgEncodeSydhRnaSeqCh12PolyaAlnRep1
+objType table
+age immortalized
+cell CH12
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+fileName wgEncodeSydhRnaSeqCh12PolyaAlnRep1.bam
+grant Snyder
+lab Stanford
+origAssembly mm9
+project wgEncode
+replicate 1
+rnaExtract polyA
+seqPlatform Illumina_GA2x
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3817
+tableName wgEncodeSydhRnaSeqCh12PolyaAlnRep1
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhRnaSeqCh12PolyaRawDataRep1
+objType file
+age immortalized
+cell CH12
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+fileName wgEncodeSydhRnaSeqCh12PolyaRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+origAssembly mm9
+project wgEncode
+replicate 1
+rnaExtract polyA
+seqPlatform Illumina_GA2x
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3817
+treatment None
+view RawData
+
+metaObject wgEncodeSydhRnaSeqCh12PolyaSigRep1
+objType table
+age immortalized
+cell CH12
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-20
+dateUnrestricted 2012-01-20
+fileName wgEncodeSydhRnaSeqCh12PolyaSigRep1.bigWig
+grant Snyder
+lab Stanford
+origAssembly mm9
+project wgEncode
+replicate 1
+rnaExtract polyA
+seqPlatform Illumina_GA2x
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 3817
+tableName wgEncodeSydhRnaSeqCh12PolyaSigRep1
+treatment None
+view Signal
+
 metaObject wgEncodeSydhRnaSeqMelDmso20PolyaAlnRep1
 objType table
 cell MEL
@@ -122,4 +193,4 @@ tableName wgEncodeSydhRnaSeqMelPolyaSigRep1
 treatment None
 view Signal
 
-# MAGIC: -1897838266
+# MAGIC: -163359414

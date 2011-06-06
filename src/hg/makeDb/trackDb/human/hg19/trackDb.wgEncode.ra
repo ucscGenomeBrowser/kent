@@ -10,7 +10,7 @@ include wgEncodeGencodeV5.ra alpha
 include wgEncodeUncBsuProt.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.ra alpha,beta
+include wgEncodeReg.ra
 #include wgEncodeRegNorm.ra alpha
 
 # Nucleosome (wrangler: venkat)
@@ -27,7 +27,7 @@ include wgEncodeGisDnaPet.new.ra alpha
 include wgEncodeHaibGenotype.ra alpha
 
 # BU Orchid (wrangler: cricket)
-include wgEncodeBuOrchid.ra alpha,beta
+include wgEncodeBuOrchid.ra
 
 # Affy Rna Chip (wrangler: cricket)
 include wgEncodeAffyRnaChip.ra beta,public
@@ -67,11 +67,13 @@ include wgEncodeOpenChromDnase.new.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.ra 
+include wgEncodeUwDnase.new.ra alpha
+include wgEncodeUwDnase.ra beta,public
 
 
 #UW DNase DGF (wrangler: Venkat)
-include wgEncodeUwDgf.ra
+include wgEncodeUwDgf.new.ra alpha
+include wgEncodeUwDgf.ra beta,public
 
 ###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 
@@ -99,8 +101,9 @@ include wgEncodeCaltechRnaSeq.new.ra alpha
 # CSHL Long Rna Seq (wrangler: cricket)
 include wgEncodeCshlLongRnaSeq.ra alpha
 
-# Yale Rna Seq (wrangler: cricket)
-include wgEncodeYaleRnaSeq.ra
+# SYDH  Rna Seq (wrangler: cricket)
+# used to be yale
+include wgEncodeSydhRnaSeq.ra alpha
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra alpha
@@ -136,16 +139,19 @@ include wgEncodeBroadHistone.ra beta,public
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.ra
+include wgEncodeUwHistone.new.ra alpha
+include wgEncodeUwHistone.ra beta,public
 
 # SYDH Histone (wrangler: Venkat)
-include wgEncodeSydhHistone.ra alpha
+include wgEncodeSydhHistone.ra beta,public
+include wgEncodeSydhHistone.new.ra alpha
 
 
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.ra
+include wgEncodeUwTfbs.new.ra alpha
+include wgEncodeUwTfbs.ra beta,public
 
 #UTA TFBS (wrangler: Tim)
 include wgEncodeOpenChromChip.new.ra alpha
@@ -158,7 +164,7 @@ include wgEncodeHaibTfbs.ra alpha
 include wgEncodeSydhTfbs.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
-include wgEncodeUchicagoTfbs.ra
+include wgEncodeUchicagoTfbs.ra 
 
 
 # SUNY RBP -----------------------------------------

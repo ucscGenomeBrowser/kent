@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+# create tableList show tables cache for all assemblies (redmine #3780)
+
+for db in `hgsql information_schema -N -e "show databases"` ; do
+    if [ "$db" != "information_schema" ]
+        then
+        ./makeTableList $db
+    fi
+done

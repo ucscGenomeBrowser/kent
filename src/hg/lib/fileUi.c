@@ -83,9 +83,9 @@ if (foundFiles == NULL
         {
         // Works:         rsync -avn rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/
         if (hIsBetaHost())
-            safef(cmd,sizeof(cmd),"rsync -avn rsync://hgdownload-test.cse.ucsc.edu/goldenPath/%s/%s/%s/beta/",  db, dir, subDir); // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+            safef(cmd,sizeof(cmd),"rsync -n rsync://hgdownload-test.cse.ucsc.edu/goldenPath/%s/%s/%s/beta/",  db, dir, subDir); // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
         else
-            safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
+            safef(cmd,sizeof(cmd),"rsync -n rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
         }
     //warn("cmd: %s",cmd);
     scriptOutput = popen(cmd, "r");
@@ -407,49 +407,49 @@ if (sortOrder != NULL)
         {
         char *var = sortOrder->column[sIx];
         enum cvSearchable searchBy = cvSearchMethod(var);
-        //if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange) // dates and numbers probably not good for filtering. FIXME: Should cvsNotSearchable be filterable??
         if (searchBy != cvSearchBySingleSelect && searchBy != cvSearchByMultiSelect)
             continue; // Only single selects and multi-select make good candidates for filtering
 
-        struct sqlConnection *conn = hAllocConn(db);
-        struct slPair *valsAndLabels = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, FALSE, TRUE); // not tags, not tables, just files
-        hFreeConn(&conn);
-        // Need to verify that each val exists in an object for these files
-        struct slPair *relevantVals = NULL;
-        while(valsAndLabels != NULL)
+        // get all vals for var, then convert to tag/label pairs for filterBys
+        struct slName *vals = mdbObjsFindAllVals(mdbObjs, var);
+        struct slPair *tagLabelPairs = NULL;
+        while(vals != NULL)
             {
-            struct slPair *oneVal = slPopHead(&valsAndLabels);
-            if(mdbObjsContainAltleastOneMatchingVar(mdbObjs,var,mdbPairVal(oneVal)))
-                {
-                eraseNonAlphaNum(mdbPairVal(oneVal));   // Have to squeeze out uglies from val to ensure filter by class works
-                slAddHead(&relevantVals,oneVal);
-                }
-            else
-                slPairFreeValsAndList(&oneVal);
+            struct slName *term = slPopHead(&vals);
+            char *tag = (char *)cvTag(var,term->name);
+            if (tag == NULL)
+                tag = term->name;
+            slPairAdd(&tagLabelPairs,tag,cloneString((char *)cvLabel(term->name)));
+            slNameFree(&term);
             }
-        if (slCount(relevantVals) > 1)
+
+        // If there is more than one val for this var then create filterBy box for it
+        if (slCount(tagLabelPairs) > 1)
             {
-            slReverse(&relevantVals);
+            slPairValSortCase(&tagLabelPairs); // should have a list sorted on the label
             char extraClasses[256];
             safef(extraClasses,sizeof extraClasses,"filterTable %s",var);
-            char *dropDownHtml = cgiMakeMultiSelectDropList(var,relevantVals,NULL,"All",extraClasses,"onchange='filterTable();' onclick='filterTableExclude(this);'");
+            char *dropDownHtml = cgiMakeMultiSelectDropList(var,tagLabelPairs,NULL,"All",extraClasses,"onchange='filterTable();' onclick='filterTableExclude(this);'");
             // Note filterBox has classes: filterBy & {var}
             if (dropDownHtml)
                 {
                 dyStringPrintf(dyFilters,"<td align='left'>\n<B>%s</B>:<BR>\n%s</td><td width=10>&nbsp;</td>\n",
-                               labelWithVocabLink(var,sortOrder->title[sIx],relevantVals,TRUE),dropDownHtml);  // TRUE were sending tags, not values
+                               labelWithVocabLink(var,sortOrder->title[sIx],tagLabelPairs,TRUE),dropDownHtml);  // TRUE were sending tags, not values
                 freeMem(dropDownHtml);
                 count++;
                 }
             }
-        if (slCount(relevantVals) > 0)
-            slPairFreeValsAndList(&relevantVals);
+        if (slCount(tagLabelPairs) > 0)
+            slPairFreeValsAndList(&tagLabelPairs);
         }
+
+    // Finally ready to print the filterBys out
     if (count)
         {
         webIncludeResourceFile("ui.dropdownchecklist.css");
         jsIncludeFile("ui.dropdownchecklist.js",NULL);
         #define FILTERBY_HELP_LINK  "<A HREF=\"../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
+        cgiDown(0.9);
         printf("<B>Filter files by:</B> (select multiple %sitems - %s)\n<table><tr valign='bottom'>\n",
                (count >= 1 ? "categories and ":""),FILTERBY_HELP_LINK);
         printf("%s\n",dyStringContents(dyFilters));
@@ -467,8 +467,9 @@ static void filesDownloadsPreamble(char *db, struct trackDb *tdb)
 // 1) It isn't on the RR (yet)
 // 2) It will likely refer back to the composite for Description info which is included in this page
 // 3) The rsync-to-tmp-file hurdle isn't worth the effort.
-puts("<p><B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
-puts("in publication  until the restriction date noted for the given data file.</B></p>");
+cgiDown(0.7);
+puts("<B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
+puts("in publication  until the restriction date noted for the given data file.</B>");
 
 char *server = hDownloadsServer();
 char *subDir = "";
@@ -481,17 +482,16 @@ if (hIsBetaHost())
 struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
 if (oneFile != NULL)
     {
-    printf("<p>\n<B>Supplemental materials</b> may be found <A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>here</A>.</p>\n",
+    cgiDown(0.7);
+    printf("<B>Supplemental materials</b> may be found <A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>here</A>.\n",
           server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
     }
-puts("<p>\nThere are two files within this directory that contain information about the downloads:");
+cgiDown(0.7);
+puts("There are two files within this directory that contain information about the downloads:");
 printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A> which is a tab-separated file with the name and metadata for each download.</LI>\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A> which is a list of the md5sum output for each download.</LI>\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
-
-
-puts("<P>");
 }
 
 static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder,boolean filterable)
@@ -602,6 +602,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
             else
                 {
                 field = oneFile->sortFields[sortOrder->order[ix] - 1];
+                boolean isFieldEmpty = cvTermIsEmpty(sortOrder->column[ix],field);
                 char class[128];
                 class[0] = '\0';
                 if (filterable)
@@ -609,8 +610,15 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                     enum cvSearchable searchBy = cvSearchMethod(sortOrder->column[ix]);
                     if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)
                         {
-                        char *cleanClass = cloneString(field?field:"None");     // FIXME: Only none if none is a fliter choice.
-                        eraseNonAlphaNum(cleanClass);
+                        char *cleanClass = NULL;
+                        if (isFieldEmpty)
+                            cleanClass = "None";
+                        else
+                            {
+                            cleanClass = (char *)cvTag(sortOrder->column[ix],field); // class should be tag
+                            if (cleanClass == NULL)
+                                cleanClass = field;
+                            }
                         safef(class,sizeof class," class='%s %s'",sortOrder->column[ix],cleanClass);
                         }
                     }
@@ -618,7 +626,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                 if (sameString("dateUnrestricted",sortOrder->column[ix]) && field && dateIsOld(field,"%F"))
                     printf("<TD%s nowrap style='color: #BBBBBB;'%s>%s</td>",align,class,field);
                 else
-                    printf("<TD%s nowrap%s>%s</td>",align,class,field?field:" &nbsp;");
+                    printf("<TD%s nowrap%s>%s</td>",align,class,isFieldEmpty?" &nbsp;":field);
                 if (!sameString("fileType",sortOrder->column[ix]))
                     mdbObjRemoveVars(oneFile->mdb,sortOrder->column[ix]); // Remove this from mdb now so that it isn't displayed in "extras'
                 }
@@ -661,7 +669,7 @@ if (restrictedColumn > 1)
     printf("</TD><TH colspan=%d align='left'><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A>", columnCount,ENCODE_DATA_RELEASE_POLICY);
 
 printf("</TD></TR>\n");
-printf("</TFOOT></TABLE><BR>\n");
+printf("</TFOOT></TABLE>\n");
 
 if (parentTdb == NULL)
     printf("<script type='text/javascript'>{$(document).ready(function() {sortTableInitialize($('table.sortable')[0],true,true);});}</script>\n");
