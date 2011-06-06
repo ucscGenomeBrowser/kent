@@ -60,34 +60,12 @@ if (foundFiles == NULL
     char *server = hDownloadsServer();
 
     boolean useRsync = TRUE;
-//#define RSYNC_DONT_WORK_ON_HGWDEV
-#ifdef RSYNC_DONT_WORK_ON_HGWDEV
-    if (hIsPrivateHost() || hIsPreviewHost())
-        {
-        // For hgwdev (which is the same machine as "hgdownload-test.cse.ucsc.edu") rsync does not work
-        // Use ls -log --time=ctime --time-style=long-iso /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone
-        safef(cmd,sizeof(cmd),"ls -log --time-style=long-iso /usr/local/apache/htdocs-hgdownload/goldenPath/%s/%s/%s/", db,dir,subDir);
-        useRsync = FALSE;
-        }
-    else if (hIsBetaHost())
-        {
-        // For hgwbeta, the files are being looked for one test in a "beta/" subdir.  Have to rsync
-        //server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
-        //safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/beta/", server, db, dir, subDir);
-        // FIXME: Need cluster-admins help to get rsync solution
-        safef(cmd,sizeof(cmd),"ls -log --time-style=long-iso /hive/groups/encode/dcc/pipeline/downloads/%s/%s/beta/", db,subDir);
-        useRsync = FALSE;
-        }
-    else  // genome and hgwbeta can use rsync
-#endif///def RSYNC_DONT_WORK_ON_HGWDEV
-        {
-        // Works:         rsync -avn rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/
-        if (hIsBetaHost())
-            safef(cmd,sizeof(cmd),"rsync -n rsync://hgdownload-test.cse.ucsc.edu/goldenPath/%s/%s/%s/beta/",  db, dir, subDir); // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
-        else
-            safef(cmd,sizeof(cmd),"rsync -n rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
-        }
-    //warn("cmd: %s",cmd);
+    // Works:         rsync -avn rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/
+    if (hIsBetaHost())
+        safef(cmd,sizeof(cmd),"rsync -n rsync://hgdownload-test.cse.ucsc.edu/goldenPath/%s/%s/%s/beta/",  db, dir, subDir); // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+    else
+        safef(cmd,sizeof(cmd),"rsync -n rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
+
     scriptOutput = popen(cmd, "r");
     while(fgets(buf, sizeof(buf), scriptOutput))
         {
@@ -473,17 +451,18 @@ puts("in publication  until the restriction date noted for the given data file.<
 
 char *server = hDownloadsServer();
 char *subDir = "";
+if (hIsBetaHost())
+    {
+    server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+    subDir = "/beta";
+    }
+
 cgiDown(0.7);
 puts("Supporting documents:");
 printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> is a tab-separated file with the name and metadata for each download.</LI>\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A></B> is a list of the md5sum output for each download.</LI>\n",
                 server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
-if (hIsBetaHost())
-    {
-    server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
-    subDir = "/beta";
-    }
 
 struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
 if (oneFile != NULL)
@@ -513,14 +492,14 @@ if (filesCount > 5)
 printf("</TD>\n");
 columnCount++;
 
-/*#define SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
-#ifdef SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
+/*#define SHOW_FOLDER_FOR_COMPOSITE_DOWNLOADS
+#ifdef SHOW_FOLDER_FOR_COMPOSITE_DOWNLOADS
 if (parentTdb == NULL)
     {
     printf("<TD align='center' valign='center'>&nbsp;</TD>");
     columnCount++;
     }
-#endif///def SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
+#endif///def SHOW_FOLDER_FOR_COMPOSITE_DOWNLOADS
 */
 // Now the columns
 int curOrder = 0,ix=0;
