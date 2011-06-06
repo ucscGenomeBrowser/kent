@@ -12,6 +12,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEH001199
+dccNotes was subId 3160
 expId 1199
 fileName wgEncodeUncBsuProtGm12878NucleusSig.peptideMapping.gz
 grant Giddings
@@ -20,7 +21,7 @@ labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.2Da,msMsMassTo
 localization nucleus
 origAssembly hg19
 project wgEncode
-subId 3160
+subId 4177
 tableName wgEncodeUncBsuProtGm12878NucleusSig
 view Signal
 
@@ -33,6 +34,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-12
 dateUnrestricted 2011-10-12
 dccAccession wgEncodeEH001200
+dccNotes was subId 3238
 expId 1200
 fileName wgEncodeUncBsuProtK562MembranefractionSig.peptideMapping.gz
 grant Giddings
@@ -41,8 +43,8 @@ labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTol
 localization membraneFraction
 origAssembly hg19
 project wgEncode
-subId 3238
+subId 4174
 tableName wgEncodeUncBsuProtK562MembranefractionSig
 view Signal
 
-# MAGIC: 145204390
+# MAGIC: -987122684
