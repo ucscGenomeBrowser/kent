@@ -220,7 +220,7 @@ ce10.downloadDir = ce10
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ce10
     #	logFile: var/dbload/hgwdev/logs/2011.05.24-14:29:17.dbload.log
-    #	real    24m52.293s
+    #	real    27m56.533s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank

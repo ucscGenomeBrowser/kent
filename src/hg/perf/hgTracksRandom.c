@@ -11,6 +11,7 @@
 #include "jksql.h"
 #include "options.h"
 #include "portable.h"
+#include <signal.h>
 
 static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.16 2009/07/09 20:10:05 mikep Exp $";
 
@@ -43,6 +44,27 @@ errAbort(
   "options:\n"
   "   <machines> is a file listing the machines to test\n"
   "   -quiet - only outputs the timing numbers, no machine names\n");
+}
+
+/* this is the second instance of this, it needs to find its program
+ * name to become a generic function in the libs
+ */
+/* if this Apoptosis function becomes more popular, it can go into the libs
+ * there is a similar function in hg/lib/web.c cgiApoptosis()
+ */
+static unsigned long expireSeconds = 0;
+/* to avoid long running processes on the RR */
+static void selfApoptosis(int status)
+/* signal handler for SIGALRM expiration */
+{
+if (expireSeconds > 0)
+    {
+    /* want to see this error message in the apache error_log also */
+    fprintf(stderr, "hgTracksRandom selfApoptosis: %lu seconds\n", expireSeconds);
+    /* this message may show up somewhere */
+    errAbort("procedures have exceeded timeout: %lu seconds, function has ended.\n", expireSeconds);
+    }
+exit(0);
 }
 
 void getMachines(char *filename)
@@ -141,6 +163,10 @@ char testDate[100];
 long elapsedTime = 0;
 
 optionInit(&argc, argv, optionSpecs);
+
+expireSeconds = 300;	/* 5 minutes */
+(void) signal(SIGALRM, selfApoptosis);
+(void) alarm(expireSeconds);	/* CGI timeout */
 
 quiet = optionExists("quiet");
 now = time(NULL);

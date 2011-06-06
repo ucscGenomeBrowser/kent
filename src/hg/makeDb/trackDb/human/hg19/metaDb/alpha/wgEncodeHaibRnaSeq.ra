@@ -2261,196 +2261,6 @@ subId 2975
 treatment Genistein_100nM_4hr
 view TranscriptGencV3c
 
-metaObject wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep1
-objType table
-cell HTB-11
-composite wgEncodeHaibRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep1.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL526
-labVersion cufflinks_v_0.9
-mapAlgorithm bow125
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 1
-rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep1
-treatment None
-view Alignments
-
-metaObject wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep2
-objType table
-cell HTB-11
-composite wgEncodeHaibRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep2.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL527
-labVersion cufflinks_v_0.9
-mapAlgorithm bow125
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 2
-rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep2
-treatment None
-view Alignments
-
-metaObject wgEncodeHaibRnaSeqHtb11ShortpolyaRawDataRep1
-objType file
-cell HTB-11
-composite wgEncodeHaibRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqHtb11ShortpolyaRawDataRep1.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL526
-labVersion cufflinks_v_0.9
-mapAlgorithm bow125
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 1
-rnaExtract longPolyA
-subId 3838
-treatment None
-view RawData
-
-metaObject wgEncodeHaibRnaSeqHtb11ShortpolyaRawDataRep2
-objType file
-cell HTB-11
-composite wgEncodeHaibRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqHtb11ShortpolyaRawDataRep2.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL527
-labVersion cufflinks_v_0.9
-mapAlgorithm bow125
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 2
-rnaExtract longPolyA
-subId 3838
-treatment None
-view RawData
-
-metaObject wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep1
-objType table
-cell HTB-11
-composite wgEncodeHaibRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep1.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL526
-labVersion cufflinks_v_0.9
-mapAlgorithm bow125
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 1
-rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep1
-treatment None
-view RawSignal
-
-metaObject wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep2
-objType table
-cell HTB-11
-composite wgEncodeHaibRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep2.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL527
-labVersion cufflinks_v_0.9
-mapAlgorithm bow125
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 2
-rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep2
-treatment None
-view RawSignal
-
-metaObject wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV3Rep1
-objType table
-cell HTB-11
-composite wgEncodeHaibRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV3Rep1.gtf.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL526
-labVersion cufflinks_v_0.9
-mapAlgorithm bow125
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 1
-rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV3Rep1
-treatment None
-view TranscriptGencV3
-
-metaObject wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV3Rep2
-objType table
-cell HTB-11
-composite wgEncodeHaibRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
-fileName wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV3Rep2.gtf.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL527
-labVersion cufflinks_v_0.9
-mapAlgorithm bow125
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 2
-rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV3Rep2
-treatment None
-view TranscriptGencV3
-
 metaObject wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep1
 objType table
 cell Jurkat
@@ -2994,6 +2804,196 @@ replicate 2
 rnaExtract longPolyA
 subId 3838
 tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep2
+treatment None
+view TranscriptGencV3
+
+metaObject wgEncodeHaibRnaSeqSknshShortpolyaAlnRep1
+objType table
+cell SK-N-SH
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-31
+dateUnrestricted 2011-12-31
+fileName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL526
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+origAssembly hg19
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longPolyA
+subId 3838
+tableName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep1
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibRnaSeqSknshShortpolyaAlnRep2
+objType table
+cell SK-N-SH
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-31
+dateUnrestricted 2011-12-31
+fileName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL527
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+origAssembly hg19
+project wgEncode
+readType 1x36
+replicate 2
+rnaExtract longPolyA
+subId 3838
+tableName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep2
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibRnaSeqSknshShortpolyaRawDataRep1
+objType file
+cell SK-N-SH
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-31
+dateUnrestricted 2011-12-31
+fileName wgEncodeHaibRnaSeqSknshShortpolyaRawDataRep1.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL526
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+origAssembly hg19
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longPolyA
+subId 3838
+treatment None
+view RawData
+
+metaObject wgEncodeHaibRnaSeqSknshShortpolyaRawDataRep2
+objType file
+cell SK-N-SH
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-31
+dateUnrestricted 2011-12-31
+fileName wgEncodeHaibRnaSeqSknshShortpolyaRawDataRep2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL527
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+origAssembly hg19
+project wgEncode
+readType 1x36
+replicate 2
+rnaExtract longPolyA
+subId 3838
+treatment None
+view RawData
+
+metaObject wgEncodeHaibRnaSeqSknshShortpolyaRawRep1
+objType table
+cell SK-N-SH
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-31
+dateUnrestricted 2011-12-31
+fileName wgEncodeHaibRnaSeqSknshShortpolyaRawRep1.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL526
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+origAssembly hg19
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longPolyA
+subId 3838
+tableName wgEncodeHaibRnaSeqSknshShortpolyaRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeHaibRnaSeqSknshShortpolyaRawRep2
+objType table
+cell SK-N-SH
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-31
+dateUnrestricted 2011-12-31
+fileName wgEncodeHaibRnaSeqSknshShortpolyaRawRep2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL527
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+origAssembly hg19
+project wgEncode
+readType 1x36
+replicate 2
+rnaExtract longPolyA
+subId 3838
+tableName wgEncodeHaibRnaSeqSknshShortpolyaRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep1
+objType table
+cell SK-N-SH
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-31
+dateUnrestricted 2011-12-31
+fileName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep1.gtf.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL526
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+origAssembly hg19
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longPolyA
+subId 3838
+tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep1
+treatment None
+view TranscriptGencV3
+
+metaObject wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep2
+objType table
+cell SK-N-SH
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-31
+dateUnrestricted 2011-12-31
+fileName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep2.gtf.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL527
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+origAssembly hg19
+project wgEncode
+readType 1x36
+replicate 2
+rnaExtract longPolyA
+subId 3838
+tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep2
 treatment None
 view TranscriptGencV3
 
@@ -3939,4 +3939,4 @@ tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep2
 treatment None
 view TranscriptGencV3
 
-# MAGIC: 1895227387
+# MAGIC: 1897903149
