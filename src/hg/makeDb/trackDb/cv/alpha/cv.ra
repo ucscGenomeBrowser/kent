@@ -206,7 +206,7 @@ tissue EmbryonicStemCell
 vendorName Cellular Dynamics
 vendorId
 orderUrl http://www.cellulardynamics.com/
-lineage embryonic stem cells
+lineage inner cell mass
 karyotype normal
 termId CL:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL0000007&termName=early%20embryonic%20cell
@@ -980,7 +980,7 @@ organism human
 description human Embryonic Stem Cell (hESC), BG02, treatment: H9 Conditioned Medium
 tissue EmbryonicStemCell
 tier 3
-lineage embryonic
+lineage inner cell mass
 karyotype normal
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
@@ -995,7 +995,7 @@ organism human
 description  human Embryonic Stem Cell (hESC), BG02, Embryoid Body-Derived
 tissue EmbryonicStemCell
 tier 3
-lineage embryonic
+lineage inner cell mass
 karyotype normal
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
@@ -1114,7 +1114,7 @@ description chorion cells (outermost of two fetal membranes), fetal membranes we
 tissue FetalMembrane
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
-#lineage chorion
+lineage chorion
 karyotype unknown
 termId BTO:0000252
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000252
@@ -1129,6 +1129,7 @@ organism human
 description acute megakaryocytic leukemia cells, "established from the peripheral blood of a 10-month-old boy with Down's syndrome and acute megakaryocytic leukemia (AML M7) at relapse in 1985" - DSMZ. (PMID: 3016165)
 tissue Blood
 lineage mesoderm
+karyotype cancer
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=392&from=cell_line_index&select=search_for_term&term=CMK&preselect=human;hamster;mouse;rat;insect;other&firstload=0
 vendorName DSMZ
 vendorId ACC-392
@@ -1144,7 +1145,7 @@ description decidua cells (part of the mucous membrane lining uterus), Fetal mem
 tissue Cervix
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
-#lineage decidua
+lineage decidua
 karyotype unknown
 termId BTO:0001360
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001360
@@ -1158,8 +1159,8 @@ type Cell Line
 tier 3
 organism human
 description Human T cell leukemia with Notch mutation
-lineage
-karyotype
+lineage mesoderm
+karyotype cancer
 sex M
 tissue Blood
 vendorName DSMZ
@@ -1192,7 +1193,7 @@ type Cell Line
 tier 3
 organism human
 description Peripheral blood-derived erythroblasts from 16-19 week human fetal liver
-lineage
+lineage 
 karyotype normal
 sex U
 tissue Liver
@@ -1209,7 +1210,6 @@ type Cell Line
 organism human
 description Normal child fibroblast, donor sex: female
 tissue Skin
-lineage mesoderm
 vendorName Coriell
 vendorId AG08470
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08470&PgId=166
@@ -1647,7 +1647,8 @@ type Cell Line
 organism human
 description Undifferentiated human embryonic stem cells
 karyotype unknown
-vendorName WiCell
+lineage inner cell mass
+endorName WiCell
 vendorId WA07 (H7)
 orderUrl http://www.wicell.org/index.php
 sex U
@@ -1661,7 +1662,7 @@ organism human
 description human embryonic stem cell (hESC) H9
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1676,7 +1677,7 @@ organism human
 description human embryonic stem cell (hESC) H9, endoderm
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1691,7 +1692,7 @@ organism human
 description human embryonic stem cell (hESC), H9-derived, Treatment: H9 AFP+
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1706,7 +1707,7 @@ organism human
 description human embryonic stem cell (hESC), H9-derived, Treatment: H9 AFP-
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1721,7 +1722,7 @@ organism human
 description human embryonic stem cell (hESC) H9, embryoid bodies
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1736,7 +1737,7 @@ organism human
 description human embryonic stem cell (hESC) H9, embryoid body-derived
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1751,7 +1752,7 @@ organism human
 description human embryonic stem cell (hESC) H9, Treatment: H9 conditioned medium
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1765,7 +1766,7 @@ type Cell Line
 tier 3
 organism human
 description Human Astrocytes-cerebellar
-lineage Astrocytic
+lineage ectoderm
 karyotype normal
 sex U
 tissue cerebellar
@@ -1795,7 +1796,7 @@ type Cell Line
 tier 3
 organism human
 description Human Astrocytes-hippocampal
-lineage Astrocytic
+lineage ectoderm
 karyotype normal
 sex U
 tissue brain hippocampus
@@ -1831,7 +1832,7 @@ vendorName ScienCell
 vendorId 1820
 orderUrl http://www.sciencellonline.com/site/products/1820.php
 karyotype normal
-lineage Astrocytic
+lineage ectoderm
 termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099
 sex U
@@ -1845,7 +1846,7 @@ organism human
 description Human Brain Microvascular Endothelial Cells
 tissue Brain
 tier 3
-lineage
+lineage ectoderm
 vendorName ScienCell
 vendorId 1000
 orderUrl http://www.sciencellonline.com/site/products/1000.php
@@ -1858,6 +1859,7 @@ type Cell Line
 organism human
 description Human Cardiac Fibroblasts-Adult Atrial
 tissue Heart
+lineage mesoderm
 vendorName ScienCell
 vendorId 6320
 orderUrl http://www.sciencellonline.com/site/products/6320.php
@@ -1884,7 +1886,8 @@ tag HCONF
 type Cell Line
 organism human
 description Human Conjunctival Fibroblast
-tissue Eyet
+tissue Eye
+lineage ectoderm
 vendorName ScienCell
 vendorId 6570
 orderUrl http://www.sciencellonline.com/site/products/6570.php
@@ -1926,7 +1929,6 @@ type Cell Line
 organism human
 description colorectal carcinoma (PMID: 7214343)
 tissue Colon
-lineage endoderm
 vendorName ATCC
 vendorId CCL-247
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-247&Template=cellBiology
@@ -1958,7 +1960,6 @@ type Cell Line
 organism human
 description embryonic kidney. (PMID: 11967234)
 tissue Kidney
-lineage endoderm
 vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
@@ -1976,7 +1977,6 @@ type Cell Line
 organism human
 description embryonic kidney (alternate protocol). (PMID: 11967234)
 tissue Kidney
-lineage endoderm
 vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
@@ -2075,7 +2075,6 @@ type Cell Line
 organism human
 description Human Gingival Fibroblasts
 tissue Gingiva
-lineage mesoderm
 vendorName ScienCell
 vendorId 2620
 orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_42&products_id=83 ScienCell
@@ -2093,6 +2092,7 @@ type Cell Line
 organism human
 description Human Hepatic Sinusoidal Endothelial Cells
 tissue Liver
+lineage endoderm
 vendorName ScienCell
 vendorId 5000
 orderUrl http://www.sciencellonline.com/site/products/5000.php
@@ -2125,7 +2125,6 @@ lineage mesoderm
 vendorName ATCC
 vendorId CCL-240
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-240&Template=cellBiology
-lineage
 termId BTO:0000738
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000738
 karyotype cancer
@@ -2139,11 +2138,9 @@ type Cell Line
 organism human
 description Human Mammary Epithelial Cells
 tissue Breast
-lineage ectoderm
 vendorName Lonza
 vendorId CC-2551
 orderUrl http://www.lonza.com/
-lineage
 karyotype
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
@@ -2801,7 +2798,6 @@ vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche
 #put universities in for Stam and Snyder
 vendorId (see protocol documents)
 orderUrl N/A
-lineage
 karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489
@@ -2876,7 +2872,6 @@ description Normal Human Lung Fibroblasts
 vendorName Lonza
 vendorId CC-2512
 orderUrl http://www.lonza.com/
-lineage
 karyotype
 termId BTO:0000161 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000161
@@ -2911,7 +2906,6 @@ lineage mesoderm
 vendorName Lonza
 vendorId CC-2538
 orderUrl http://www.lonza.com/
-lineage
 karyotype normal
 termId BTO:0001593
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001593
@@ -3020,7 +3014,6 @@ type Cell Line
 organism human
 description neuroectodermal cell line derived from a human cerebral brain tumor. (PMID: 1316433)
 tissue Brain
-lineage ectoderm
 vendorName ATCC
 vendorId CRL-2060
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2060&Template=cellBiology
@@ -3092,7 +3085,6 @@ lineage endoderm
 vendorName ATCC
 vendorId
 orderUrl http://www.atcc.org/
-lineage
 karyotype
 termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
@@ -3140,7 +3132,6 @@ lineage endoderm
 vendorName Lonza
 vendorId CC-2547
 orderUrl http://www.lonza.com/
-lineage
 karyotype normal
 termId BTO:0002022 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022
@@ -3435,7 +3426,6 @@ lineage ectoderm
 vendorName ATCC
 vendorId HTB-169
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-169&Template=cellBiology
-lineage
 karyotype
 termId BTO:0001178 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001178
