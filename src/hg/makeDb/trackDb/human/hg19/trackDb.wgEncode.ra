@@ -53,7 +53,7 @@ include wgEncodeUw5C.ra alpha
 include wgEncodeUwAffyExonArray.ra
 
 # Duke Affy Exon (wrangler: cricket)
-include wgEncodeDukeAffyExon.ra alpha
+include wgEncodeDukeAffyExon.ra 
 
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
