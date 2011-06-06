@@ -135,7 +135,7 @@ tissue Cervix
 vendorName ATCC
 vendorId CCL-2.2
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
-lineage ectoderm
+#lineage ectoderm
 karyotype cancer
 termId BTO:0000568
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
@@ -206,7 +206,7 @@ tissue EmbryonicStemCell
 vendorName Cellular Dynamics
 vendorId
 orderUrl http://www.cellulardynamics.com/
-lineage embryonic stem cells
+lineage inner cell mass
 karyotype normal
 termId CL:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL0000007&termName=early%20embryonic%20cell
@@ -237,7 +237,8 @@ term A549
 tag A549
 type Cell Line
 organism human
-description epithelial cell line derived from a lung carcinoma tissue. (PMID: 175022), "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old caucasian male." - ATCC, newly promoted to tier 2: not in 2011 analysis
+description epithelial cell line derived from a lung carcinoma tissue. (PMID: 175022), "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old caucasian male." - ATCC
+#, newly promoted to tier 2: not in 2011 analysis
 tissue Epithelium
 vendorName ATCC
 vendorId CCl-185
@@ -248,7 +249,8 @@ karyotype cancer
 termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 sex M
-tier 2
+#tier 2
+tier 3
 protocol HudsonAlpha:A549_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:A549_Crawford_protocol.pdf UW_Stam:A549_Stam_protocol.pdf
 
 term AG04449
@@ -257,8 +259,6 @@ type Cell Line
 organism human
 description fetal buttock/thigh fibroblast
 tissue Skin
-#lineage mesoderm
-#lineage ectoderm may be more accurate
 karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04449
 vendorName Coriell
@@ -273,7 +273,7 @@ type Cell Line
 organism human
 description fetal lung fibroblast
 tissue Lung
-lineage mesoderm
+lineage endoderm 
 karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04450
 vendorName Coriell
@@ -288,7 +288,6 @@ type Cell Line
 organism human
 description adult toe fibroblast from apparently healthy 21 year old
 tissue Skin
-lineage mesoderm
 karyotype "7% of the cells examined showing random chromosome loss/gain" -Coriell
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09309
 vendorName Coriell
@@ -303,7 +302,7 @@ type Cell Line
 organism human
 description gum tissue fibroblasts from apparently heathly 24 year old
 tissue Gingival
-lineage mesoderm
+#lineage mesoderm
 karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09319
 vendorName Coriell
@@ -318,7 +317,6 @@ type Cell Line
 organism human
 description abdominal skin fibroblasts from apparently heathly 22 year old
 tissue Skin
-lineage mesoderm
 karyotype "8% of the cells examined showing random chromosome loss, 2% showing random chromosome gain, and 2% showing 69,XYY" -Coriell
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG10803
 vendorName Coriell
@@ -384,7 +382,7 @@ tier 3
 organism human
 description adipose tissue, donor UHN0001, age 35, African American, DNA extract
 tissue Adipose tissue
-lineage mesoderm
+#lineage mesoderm
 karyotype normal
 sex F
 vendorName BioChain
@@ -401,7 +399,7 @@ tier 3
 organism human
 description adrenal gland, donor H12803N, age 88, caucasian, DNA extract
 tissue Adrenal gland
-#lineage adrenal gland
+lineage adrenal gland
 karyotype normal
 sex F
 vendorName BioChain
@@ -452,7 +450,7 @@ tier 3
 organism human
 description breast, donor 02-03015, age 21, caucasian, DNA extract
 tissue Breast
-lineage mesoderm
+lineage ectoderm
 karyotype normal
 sex F
 vendorName BioChain
@@ -469,7 +467,7 @@ tier 3
 organism human
 description uterine cervix, donor BN0773, age 44, Asian, DNA extract
 tissue Uterine cervix
-#lineage Uterine cervix
+lineage Uterine cervix
 karyotype normal
 sex F
 vendorName BioChain
@@ -554,7 +552,7 @@ tier 3
 organism human
 description jejunum, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Jejunum
-#lineage Jejunum
+lineage Jejunum
 karyotype normal
 sex M
 vendorName BioChain
@@ -741,7 +739,7 @@ tier 3
 organism human
 description placenta, donor UHN00189, age 29, Native Indian, DNA extract
 tissue Placenta
-#lineage Placenta
+lineage Placenta
 karyotype normal
 sex F
 vendorName BioChain
@@ -758,7 +756,7 @@ tier 3
 organism human
 description prostate gland, donor H12817N, age 71, caucasian, DNA extract
 tissue Prostate gland
-#lineage Prostate gland
+lineage Prostate gland
 karyotype normal
 sex M
 vendorName BioChain
@@ -775,7 +773,7 @@ tier 3
 organism human
 description rectum, donor N29, age 29, Asian, DNA extract
 tissue Rectum
-#lineage Rectum
+lineage Rectum
 karyotype normal
 sex M
 vendorName BioChain
@@ -809,7 +807,7 @@ tier 3
 organism human
 description skeletal muscle, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue Skeletal muscle
-#lineage Skeletal muscle
+lineage mesoderm
 karyotype normal
 sex M
 vendorName BioChain
@@ -826,7 +824,6 @@ tier 3
 organism human
 description skin, donor 01-11002, age 83, caucasian, DNA extract
 tissue Skin
-lineage ectoderm
 karyotype normal
 sex F
 vendorName BioChain
@@ -928,7 +925,7 @@ tier 3
 organism human
 description testis, donor N30, age 41, Asian, DNA extract
 tissue Testis
-#lineage Testis
+lineage mesoderm 
 karyotype normal
 sex M
 vendorName BioChain
@@ -945,7 +942,7 @@ tier 3
 organism human
 description uterus, donor BN0765, age 44, Asian, DNA extract
 tissue Uterus
-#lineage Uterus
+lineage Uterus
 karyotype normal
 sex F
 vendorName BioChain
@@ -979,7 +976,7 @@ organism human
 description human Embryonic Stem Cell (hESC), BG02, treatment: H9 Conditioned Medium
 tissue EmbryonicStemCell
 tier 3
-lineage embryonic
+lineage inner cell mass
 karyotype normal
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
@@ -994,7 +991,7 @@ organism human
 description  human Embryonic Stem Cell (hESC), BG02, Embryoid Body-Derived
 tissue EmbryonicStemCell
 tier 3
-lineage embryonic
+lineage inner cell mass
 karyotype normal
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
@@ -1011,7 +1008,6 @@ tissue Skin
 vendorName ATCC
 vendorId CRL-2522
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2522&Template=cellBiology
-lineage ectoderm
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
@@ -1028,7 +1024,6 @@ tissue Skin
 vendorName ATCC
 vendorId CRL-4001
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-4001&Template=cellBiology
-lineage ectoderm
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
@@ -1045,7 +1040,6 @@ tissue Skin
 vendorName Struhl laboratory
 vendorId BJ-HRas
 orderUrl https://struhl.med.harvard.edu/
-lineage ectoderm
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
@@ -1063,7 +1057,6 @@ tissue Skin
 vendorName Struhl laboratory
 vendorId BJ-T
 orderUrl https://struhl.med.harvard.edu/
-lineage ectoderm
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
@@ -1113,7 +1106,7 @@ description chorion cells (outermost of two fetal membranes), fetal membranes we
 tissue FetalMembrane
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
-#lineage chorion
+lineage chorion
 karyotype unknown
 termId BTO:0000252
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000252
@@ -1128,6 +1121,7 @@ organism human
 description acute megakaryocytic leukemia cells, "established from the peripheral blood of a 10-month-old boy with Down's syndrome and acute megakaryocytic leukemia (AML M7) at relapse in 1985" - DSMZ. (PMID: 3016165)
 tissue Blood
 lineage mesoderm
+karyotype cancer
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=392&from=cell_line_index&select=search_for_term&term=CMK&preselect=human;hamster;mouse;rat;insect;other&firstload=0
 vendorName DSMZ
 vendorId ACC-392
@@ -1143,7 +1137,7 @@ description decidua cells (part of the mucous membrane lining uterus), Fetal mem
 tissue Cervix
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
-#lineage decidua
+lineage decidua
 karyotype unknown
 termId BTO:0001360
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001360
@@ -1157,8 +1151,8 @@ type Cell Line
 tier 3
 organism human
 description Human T cell leukemia with Notch mutation
-lineage
-karyotype
+lineage mesoderm
+karyotype cancer
 sex M
 tissue Blood
 vendorName DSMZ
@@ -1178,7 +1172,7 @@ vendorName ATCC
 vendorId CRL-2923
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2923&Template=cellBiology
 lineage epithelial
-karyotype unknown
+karyotype cancer
 termId BTO:0000194
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000194
 sex F
@@ -1191,7 +1185,7 @@ type Cell Line
 tier 3
 organism human
 description Peripheral blood-derived erythroblasts from 16-19 week human fetal liver
-lineage
+lineage mesoderm
 karyotype normal
 sex U
 tissue Liver
@@ -1208,11 +1202,9 @@ type Cell Line
 organism human
 description Normal child fibroblast, donor sex: female
 tissue Skin
-lineage mesoderm
 vendorName Coriell
 vendorId AG08470
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08470&PgId=166
-lineage
 karyotype normal
 termId BTO:0000452
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
@@ -1242,6 +1234,7 @@ organism human
 description glioblastoma, these cells (aka H54 and D54) come from a surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). (PMID: 7252524)
 tissue Brain
 lineage ectoderm
+karyotype cancer
 vendorName Duke University Medical Center, requests for D54 cells should be directed to Darrell Bigner
 orderUrl http://www.cancer.duke.edu/btc/modules/facultystaff1/index.php?id=85
 termId BTO:0000527
@@ -1646,7 +1639,8 @@ type Cell Line
 organism human
 description Undifferentiated human embryonic stem cells
 karyotype unknown
-vendorName WiCell
+lineage inner cell mass
+endorName WiCell
 vendorId WA07 (H7)
 orderUrl http://www.wicell.org/index.php
 sex U
@@ -1660,7 +1654,7 @@ organism human
 description human embryonic stem cell (hESC) H9
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1675,7 +1669,7 @@ organism human
 description human embryonic stem cell (hESC) H9, endoderm
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1690,7 +1684,7 @@ organism human
 description human embryonic stem cell (hESC), H9-derived, Treatment: H9 AFP+
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1705,7 +1699,7 @@ organism human
 description human embryonic stem cell (hESC), H9-derived, Treatment: H9 AFP-
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1720,7 +1714,7 @@ organism human
 description human embryonic stem cell (hESC) H9, embryoid bodies
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1735,7 +1729,7 @@ organism human
 description human embryonic stem cell (hESC) H9, embryoid body-derived
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1750,7 +1744,7 @@ organism human
 description human embryonic stem cell (hESC) H9, Treatment: H9 conditioned medium
 tissue EmbryonicStemCell
 tier 3
-lineage human Embryonic Stem Cell (hESC) H9
+lineage inner cell mass
 karyotype unknown
 vendorName WiCell
 vendorId WA09 (H9)
@@ -1764,7 +1758,7 @@ type Cell Line
 tier 3
 organism human
 description Human Astrocytes-cerebellar
-lineage Astrocytic
+lineage ectoderm
 karyotype normal
 sex U
 tissue cerebellar
@@ -1794,7 +1788,7 @@ type Cell Line
 tier 3
 organism human
 description Human Astrocytes-hippocampal
-lineage Astrocytic
+lineage ectoderm
 karyotype normal
 sex U
 tissue brain hippocampus
@@ -1830,7 +1824,7 @@ vendorName ScienCell
 vendorId 1820
 orderUrl http://www.sciencellonline.com/site/products/1820.php
 karyotype normal
-lineage Astrocytic
+lineage ectoderm
 termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099
 sex U
@@ -1844,7 +1838,7 @@ organism human
 description Human Brain Microvascular Endothelial Cells
 tissue Brain
 tier 3
-lineage
+lineage ectoderm
 vendorName ScienCell
 vendorId 1000
 orderUrl http://www.sciencellonline.com/site/products/1000.php
@@ -1857,6 +1851,7 @@ type Cell Line
 organism human
 description Human Cardiac Fibroblasts-Adult Atrial
 tissue Heart
+lineage mesoderm
 vendorName ScienCell
 vendorId 6320
 orderUrl http://www.sciencellonline.com/site/products/6320.php
@@ -1883,7 +1878,8 @@ tag HCONF
 type Cell Line
 organism human
 description Human Conjunctival Fibroblast
-tissue Eyet
+tissue Eye
+lineage ectoderm
 vendorName ScienCell
 vendorId 6570
 orderUrl http://www.sciencellonline.com/site/products/6570.php
@@ -1925,7 +1921,6 @@ type Cell Line
 organism human
 description colorectal carcinoma (PMID: 7214343)
 tissue Colon
-lineage endoderm
 vendorName ATCC
 vendorId CCL-247
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-247&Template=cellBiology
@@ -1957,11 +1952,10 @@ type Cell Line
 organism human
 description embryonic kidney. (PMID: 11967234)
 tissue Kidney
-lineage endoderm
 vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
-lineage endoderm
+lineage mesoderm 
 karyotype cancer
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
@@ -1975,11 +1969,10 @@ type Cell Line
 organism human
 description embryonic kidney (alternate protocol). (PMID: 11967234)
 tissue Kidney
-lineage endoderm
 vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
-lineage endoderm
+lineage mesoderm
 karyotype cancer
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
@@ -2074,7 +2067,6 @@ type Cell Line
 organism human
 description Human Gingival Fibroblasts
 tissue Gingiva
-lineage mesoderm
 vendorName ScienCell
 vendorId 2620
 orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_42&products_id=83 ScienCell
@@ -2092,6 +2084,7 @@ type Cell Line
 organism human
 description Human Hepatic Sinusoidal Endothelial Cells
 tissue Liver
+lineage endoderm
 vendorName ScienCell
 vendorId 5000
 orderUrl http://www.sciencellonline.com/site/products/5000.php
@@ -2124,7 +2117,6 @@ lineage mesoderm
 vendorName ATCC
 vendorId CCL-240
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-240&Template=cellBiology
-lineage
 termId BTO:0000738
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000738
 karyotype cancer
@@ -2138,11 +2130,10 @@ type Cell Line
 organism human
 description Human Mammary Epithelial Cells
 tissue Breast
-lineage ectoderm
+lineage ectoderm 
 vendorName Lonza
 vendorId CC-2551
 orderUrl http://www.lonza.com/
-lineage
 karyotype
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
@@ -2170,6 +2161,7 @@ type Cell Line
 organism human
 description Normal Human Lymphatic Microvascular Endothelial Cells, Lung-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2814, CC-2814T25
 orderUrl http://www.lonza.com/
@@ -2183,6 +2175,7 @@ type Cell Line
 organism human
 description Normal Adult Human Blood Microvascular Endothelial Cells, Dermal-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2811, CC-2811T75
 orderUrl http://www.lonza.com/
@@ -2196,6 +2189,7 @@ type Cell Line
 organism human
 description Normal Neonatal Human Blood Microvascular Endothelial Cells, Dermal-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2813, CC-2813T75
 orderUrl http://www.lonza.com/
@@ -2209,6 +2203,7 @@ type Cell Line
 organism human
 description Normal Adult Human Blood Microvascular Endothelial Cells, Dermal-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2810, CC-2810T75
 orderUrl http://www.lonza.com/
@@ -2222,6 +2217,7 @@ type Cell Line
 organism human
 description Normal Neonatal Human Lymphatic Microvascular Endothelial Cells, Dermal-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2812, CC-2812T25
 orderUrl http://www.lonza.com/
@@ -2235,6 +2231,7 @@ type Cell Line
 organism human
 description Normal Neonatal Human Microvascular Endothelial Cells (single Donnor), Dermal-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2505, CC-2505T225
 orderUrl http://www.lonza.com/
@@ -2248,6 +2245,7 @@ type Cell Line
 organism human
 description Normal Human Blood Microvascular Endothelial Cells, Lung-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2815, CC-2815T75
 orderUrl http://www.lonza.com/
@@ -2272,7 +2270,7 @@ term HPAEpiC
 tag HPAE
 type Cell Line
 organism human
-description Human Pulmonay Alevolar Epithelial Cells
+description Human Pulmonary Alevolar Epithelial Cells
 tissue Epithelium
 vendorName ScienCell
 vendorId 3200
@@ -2287,6 +2285,7 @@ type Cell Line
 organism human
 description Human Pulmonary Artery Fibroblasts
 tissue Blood
+lineage mesoderm
 vendorName ScienCell
 vendorId 3120
 orderUrl http://www.sciencellonline.com/site/products/3120.php
@@ -2377,7 +2376,7 @@ type Cell Line
 tier 3
 organism human
 description Human Renal Glomerular Endothelial Cells
-lineage Endothelial
+lineage mesoderm 
 karyotype normal
 sex U
 tissue kidney
@@ -2443,7 +2442,7 @@ organism human
 description epithelial cell line derived from a fibrosarcoma. (PMID: 4132053)
 tissue Epithelium
 lineage mesoderm
-karyotype pseudo-diploid male with a modal chromosome number of 46. There are numerous chromosome abnormalities.
+karyotype cancer, pseudo-diploid male with a modal chromosome number of 46. There are numerous chromosome abnormalities.
 vendorName ATCC
 vendorId CCL-121
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-121&Template=cellBiology
@@ -2493,9 +2492,9 @@ tag  HUH7
 type Cell Line
 tier 3
 organism human
-description  Hepatocellular carcinoma
-lineage  Hepatocyte derived carcinoma taken from a liver tumor
-karyotype  Unknown
+description  Hepatocellular carcinoma 
+lineage  endoderm
+karyotype cancer 
 sex M
 tissue  Liver
 vendorName  Ravi Jhaveri, Duke University
@@ -2510,9 +2509,9 @@ tag  HUH7.5
 type Cell Line
 tier 3
 organism human
-description  Hepatocellular carcinoma
-lineage  Hepatocyte derived carcinoma taken from a liver tumor and selected for high levels of hepatitis C replication
-karyotype  Unknown
+description  Hepatocellular carcinoma, hepatocytes selected for high levels of hepatitis C replication 
+lineage endoderm
+karyotype cancer 
 sex M
 tissue  Liver
 vendorName  Ravi Jhaveri, Duke University
@@ -2539,14 +2538,17 @@ term IMR90
 tag IMR90
 type Cell Line
 organism human
-description Normal Human Lung Fibroblasts, newly promoted to tier 2: not in 2011 analysis
+description Normal Human Lung Fibroblasts
+#, newly promoted to tier 2: not in 2011 analysis
 tissue Lung
+lineage endoderm
 vendorName ATCC
 vendorId CCL-186
 lots 58607680
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-186&Template=cellBiology
 sex U
-tier 2
+#tier 2
+tier 3
 protocol UW_Stam:IMR90_Stam_protocol.pdf
 
 term iPS
@@ -2589,7 +2591,7 @@ type Cell Line
 tier 3
 organism human
 description skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old caucasian heart transplant donor, immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN"), Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
-lineage
+lineage mesoderm
 karyotype
 sex M
 tissue Skeletal muscle myoblast
@@ -2641,8 +2643,8 @@ type Cell Line
 tier 3
 organism human
 description Human T cell leukemia
-lineage
-karyotype
+lineage mesoderm
+karyotype cancer
 sex F
 tissue Blood
 vendorName DSMZ
@@ -2656,18 +2658,20 @@ term MCF-7
 tag MCF7
 type Cell Line
 organism human
-description mammary gland, adenocarcinoma. (PMID: 4357757), newly promoted to tier 2: not in 2011 analysis
+description mammary gland, adenocarcinoma. (PMID: 4357757)
+#, newly promoted to tier 2: not in 2011 analysis
 tissue Breast
 vendorName ATCC
 vendorId HTB-22
 lots 59401285
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-22&Template=cellBiology
-lineage
+lineage ectoderm
 karyotype cancer
 termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093
 sex F
-tier 2
+#tier 2
+tier 3
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFBS(Farnham):MCF-7_Farnham_protocol.pdf UW_Stam:Stam_15_protocols.pdf
 
 #term MCF-10A
@@ -2729,6 +2733,7 @@ organism human
 description Medulloblastoma (aka D721), surgical resection from a patient with medulloblastoma as described by Darrell Bigner (1997)
 tissue Brain
 lineage ectoderm
+karyotype cancer
 vendorName Darrell Bigner, Duke University Medical Center
 orderUrl http://cmb.duke.edu/faculty/bigner.html
 termId BTO:0001359
@@ -2743,6 +2748,8 @@ type Cell Line
 organism human
 description epidermal melanocytes
 tissue Skin
+lineage ectoderm
+karyotype
 vendorName ScienCell
 vendorId 2200
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2200
@@ -2755,10 +2762,12 @@ protocol Duke/UNC/UTA/EBI_Open_Chromatin:Melano_Crawford_protocol.pdf
 term Monocytes-CD14+
 tag MONOCD14
 type Cell Line
-tier 2
+#tier 2
+tier 3
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis product, newly promoted to tier 2: not in 2011 analysis
-lineage Monocytic
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production
+#, newly promoted to tier 2: not in 2011 analysis
+lineage mesoderm
 karyotype normal
 sex F
 tissue monocytes
@@ -2794,7 +2803,6 @@ vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche
 #put universities in for Stam and Snyder
 vendorId (see protocol documents)
 orderUrl N/A
-lineage
 karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489
@@ -2807,6 +2815,8 @@ tag NHA
 type Cell Line
 organism human
 tissue Nervous
+lineage ectoderm
+karyotype normal
 description normal human astrocytes
 vendorName Lonza
 vendorId CC-2565
@@ -2823,6 +2833,7 @@ type Cell Line
 organism human
 tissue Epithelium
 description normal human bronchial epithelial cells
+lineage endoderm
 vendorName Lonza
 vendorId CC-2541
 orderUrl http://www.lonza.com/
@@ -2837,6 +2848,7 @@ tag NHDFAD
 type Cell Line
 organism human
 tissue Skin
+lineage mesoderm
 description Adult Normal Human Dermal Fibroblasts
 vendorName Lonza
 vendorId CC-2511, CC-2511T225
@@ -2864,12 +2876,11 @@ tag NHLF
 type Cell Line
 organism human
 tissue Lung
-lineage mesoderm
+lineage endoderm 
 description Normal Human Lung Fibroblasts
 vendorName Lonza
 vendorId CC-2512
 orderUrl http://www.lonza.com/
-lineage
 karyotype
 termId BTO:0000161 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000161
@@ -2886,7 +2897,7 @@ description malignant pluripotent embryonal carcinoma (Ntera2), "The NTERA-2 cl.
 vendorName ATCC
 vendorId CRL-1973
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1973&Template=cellBiology
-lineage human embryonic stem cell
+lineage inner cell mass 
 karyotype cancer
 termId BTO:0000946
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000946
@@ -2904,7 +2915,6 @@ lineage mesoderm
 vendorName Lonza
 vendorId CC-2538
 orderUrl http://www.lonza.com/
-lineage
 karyotype normal
 termId BTO:0001593
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001593
@@ -2938,7 +2948,7 @@ tissue Pancreas
 vendorName ATCC
 vendorId CRL-1469
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1469&Template=cellBiology
-lineage
+lineage endoderm
 karyotype cancer
 termId BTO:0000304
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000304
@@ -2952,6 +2962,7 @@ type Cell Line
 organism human
 description Dedifferentiated human pancreatic islets
 tissue Pancreas
+lineage endoderm
 vendorName National Disease Research Interchange (NDRI).
 vendorId N/A
 orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
@@ -2967,9 +2978,10 @@ type Cell Line
 organism human
 description human pancreatic islets
 tissue Pancreas
+lineage endoderm
 vendorName Refer to protocol documents for differing sources
-vendorId ;
-orderUrl ;
+vendorId
+orderUrl
 termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex M
@@ -2982,7 +2994,8 @@ type Cell Line
 organism human
 description Human peripheral blood-derived erythroblasts
 tissue Blood
-vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
+lineage mesoderm
+endorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 vendorId N/A
 vendorName Farnham lab
 orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
@@ -2998,6 +3011,7 @@ type Cell Line
 organism human
 description Peripheral blood mononuclear cells
 tissue Blood
+lineage mesoderm
 vendorName PBMC cells provided by E. Bresnick, UW Madison
 vendorId N/A
 orderUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
@@ -3013,7 +3027,6 @@ type Cell Line
 organism human
 description neuroectodermal cell line derived from a human cerebral brain tumor. (PMID: 1316433)
 tissue Brain
-lineage ectoderm
 vendorName ATCC
 vendorId CRL-2060
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2060&Template=cellBiology
@@ -3085,7 +3098,6 @@ lineage endoderm
 vendorName ATCC
 vendorId
 orderUrl http://www.atcc.org/
-lineage
 karyotype
 termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
@@ -3133,7 +3145,6 @@ lineage endoderm
 vendorName Lonza
 vendorId CC-2547
 orderUrl http://www.lonza.com/
-lineage
 karyotype normal
 termId BTO:0002022 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022
@@ -3145,12 +3156,12 @@ term SH-SY5Y
 tag SHSY5Y
 type Cell Line
 organism human
-description neuroblastoma
+description neuroblastoma clonal subline of the neuroepithelioma cell line SK-N-SH that had been established in 1970 from the bone marrow biopsy of a 4-year-old girl with metastatic neuroblastoma 
 tissue brain
 vendorName ATCC
 vendorId CC-2266
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2266&Template=cellBiology
-lineage Human neuroblastoma clonal subline of the neuroepithelioma cell line SK-N-SH that had been established in 1970 from the bone marrow biopsy of a 4-year-old girl with metastatic neuroblastoma
+lineage ectoderm
 karyotype cancer, trisomy of 1q
 termId BTO:0000793
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0000793
@@ -3179,7 +3190,8 @@ term SK-N-SH
 tag SKNSH
 type Cell Line
 organism human
-description Human neuroblastoma, newly promoted to tier 2: not in 2011 analysis
+description Human neuroblastoma
+#, newly promoted to tier 2: not in 2011 analysis
 tissue Brain
 lineage ectoderm
 vendorName ATCC
@@ -3190,7 +3202,8 @@ karyotype cancer
 termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
 sex F
-tier 2
+#tier 2
+tier 3
 protocol HudsonAlpha:SK-N-SH_Myers_protocol.pdf
 
 # In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
@@ -3215,12 +3228,12 @@ term SK-SY5Y
 tag SKSY5Y
 type Cell Line
 organism human
-description neuroblastoma
+description neuroblastoma, parental cell line: SK-N-SH 
 tissue bone marrow
 vendorName ATCC
 vendorId bone marrow
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2266&Template=cellBiology
-lineage Parental Cell Line: HTB-11
+lineage ectoderm 
 karyotype The cells possess a unique marker comprised of a chromosome 1 with a complex insertion of an additional copy of a 1q segment into the long arm, resulting in trisomy of 1q
 termId BTO:0000793
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
@@ -3250,8 +3263,8 @@ tag STELLATE
 type Cell Line
 tier 3
 organism human
-description  Human Hepatic Stellate Cells
-lineage  Liver that was perfused with collagenase and sellected for hepatic stellate cells by density gradient
+description  Human Hepatic Stellate Cells, Liver that was perfused with collagenase and sellected for hepatic stellate cells by density gradient 
+lineage endoderm 
 karyotype  normal
 sex F
 tissue  Liver
@@ -3267,14 +3280,14 @@ tag THEK293
 type Cell Line
 tier 3
 organism human
-description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor
-lineage Human embryonic kidney, ATCC number CRL-1573
+description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, ATCC number CRL-1573 
+lineage mesoderm
 karyotype cancer, hypotriploid, XXX
 sex F
 tissue Kidney
 vendorName Invitrogen
 vendorId r71007
-orderUrl http://products.invitrogen.com/ivgn/product/R71007?ICID=search-r71007
+orderUrl http://products.invitrogen.com/ivgn/product/R71007
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
 protocol Farnham:T-REx-HEK293_Farnham_protocol.pdf
@@ -3286,7 +3299,7 @@ organism human
 description fibroblast cell line derived from a glioblastoma multiforme. (PMID: 222778)
 karyotype cancer
 tissue Brain
-lineage mesoderm
+lineage ectoderm
 vendorName ATCC
 vendorId CRL-1690
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
@@ -3303,8 +3316,7 @@ organism human
 description Trachea and bronchial epithelial cells, passage 2 primary, non-immortalized, human trachea and bronchial epithelial cells, donor was 21 years old
 vendorName National Disease Research Interchange-provided fresh lung tissue, designated DD009C in-house.
 tissue Epithelium
-#vendorId TIB-152
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
+#TIB-152 is a lymphocytic cell line with no relation to TBEC
 lineage endoderm
 karyotype unknown
 termId BTO:0001389 (non-specific)
@@ -3368,9 +3380,9 @@ term Urothelia
 tag UROTHEL
 type Cell Line
 organism human
-description A primary culture of urothelial cells derived from a 12 year-old girl and immortalized by transfection with a temperature-sensitive SV-40 large T antigen gene.
+description A primary culture of urothelial cells derived from a 12 year-old girl and immortalized by transfection with a temperature-sensitive SV-40 large T antigen gene, normal human ureter cells 
 tier 3
-lineage normal human ureter cells
+lineage
 karyotype normal
 sex F
 tissue urothelium
@@ -3426,8 +3438,7 @@ lineage ectoderm
 vendorName ATCC
 vendorId HTB-169
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-169&Template=cellBiology
-lineage
-karyotype
+karyotype cancer
 termId BTO:0001178 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001178
 sex M
@@ -3440,7 +3451,7 @@ type Cell Line
 tier 3
 organism human
 description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct
-lineage Fibroblast
+lineage endoderm
 karyotype normal (RAF)
 sex F
 tissue embryonic lung
