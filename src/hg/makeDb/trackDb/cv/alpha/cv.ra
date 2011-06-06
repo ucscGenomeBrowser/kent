@@ -2763,7 +2763,7 @@ type Cell Line
 #tier 2
 tier 3
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis producti
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production
 #, newly promoted to tier 2: not in 2011 analysis
 lineage Monocytic
 karyotype normal
