@@ -159,12 +159,12 @@ superTrack wgEncodeExonArraySuper dense
         type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonFibropSimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel FibroP 3
-        #longLabel FibroP Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=FIBROP treatment=None rep=rep3
-        #type broadPeak
+        track wgEncodeDukeAffyExonFibropSimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel FibroP 3
+        longLabel FibroP Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=FIBROP treatment=None rep=rep3
+        type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
 
         track wgEncodeDukeAffyExonGlioblaSimpleSignalRep1
@@ -185,21 +185,21 @@ superTrack wgEncodeExonArraySuper dense
         origAssembly hg18
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonGlioblaSimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel Gliobla 3
-        #longLabel Gliobla Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=Gliobla treatment=None rep=rep3
-        #type broadPeak
+        track wgEncodeDukeAffyExonGlioblaSimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Gliobla 3
+        longLabel Gliobla Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=Gliobla treatment=None rep=rep3
+        type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonGlioblaSimpleSignalRep4
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel Gliobla 4
-        #longLabel Gliobla Exon array Signal Replicate 4 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=Gliobla treatment=None rep=rep4
-        #type broadPeak
-        #origAssembly hg18
+        track wgEncodeDukeAffyExonGlioblaSimpleSignalRep4
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Gliobla 4
+        longLabel Gliobla Exon array Signal Replicate 4 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=Gliobla treatment=None rep=rep4
+        type broadPeak
+        origAssembly hg18
         # subId=3081 dateSubmitted=2010-12-09
 
         track wgEncodeDukeAffyExonGm12878SimpleSignalRep1
@@ -222,14 +222,14 @@ superTrack wgEncodeExonArraySuper dense
         origAssembly hg18
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonGm12878SimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel GM12878 3
-        #longLabel GM12878 Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=1GM12878 treatment=None rep=rep3
-        #type broadPeak
-        #color 153,38,0
-        #origAssembly hg18
+        track wgEncodeDukeAffyExonGm12878SimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM12878 3
+        longLabel GM12878 Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=1GM12878 treatment=None rep=rep3
+        type broadPeak
+        color 153,38,0
+        origAssembly hg18
         # subId=3081 dateSubmitted=2010-12-09
 
         track wgEncodeDukeAffyExonGm12891SimpleSignalRep1
@@ -286,13 +286,13 @@ superTrack wgEncodeExonArraySuper dense
         origAssembly hg18
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonGm18507SimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel GM18507 3
-        #longLabel GM18507 Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=GM18507 treatment=None rep=rep3
-        #type broadPeak
-        #origAssembly hg18
+        track wgEncodeDukeAffyExonGm18507SimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM18507 3
+        longLabel GM18507 Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=GM18507 treatment=None rep=rep3
+        type broadPeak
+        origAssembly hg18
         # subId=3081 dateSubmitted=2010-12-09
 
         track wgEncodeDukeAffyExonGm19238SimpleSignalRep1
@@ -367,22 +367,22 @@ superTrack wgEncodeExonArraySuper dense
         color 0,107,27
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonH1hescSimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel H1-hESC 3
-        #longLabel H1-hESC Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=1H1hESC treatment=None rep=rep3
-        #type broadPeak
-        #color 0,107,27
+        track wgEncodeDukeAffyExonH1hescSimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel H1-hESC 3
+        longLabel H1-hESC Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=1H1hESC treatment=None rep=rep3
+        type broadPeak
+        color 0,107,27
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonH1hescSimpleSignalRep4
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off 
-        #shortLabel H1-hESC 4
-        #longLabel H1-hESC Exon array Signal Replicate 4 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=1H1hESC treatment=None rep=rep4
-        #type broadPeak
-        #color 0,107,27
+        track wgEncodeDukeAffyExonH1hescSimpleSignalRep4
+        parent wgEncodeDukeAffyExonViewSimpleSignal off 
+        shortLabel H1-hESC 4
+        longLabel H1-hESC Exon array Signal Replicate 4 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=1H1hESC treatment=None rep=rep4
+        type broadPeak
+        color 0,107,27
         # subId=3081 dateSubmitted=2010-12-09
 
         track wgEncodeDukeAffyExonH9esSimpleSignalRep1
@@ -413,14 +413,14 @@ superTrack wgEncodeExonArraySuper dense
         origAssembly hg18
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonHelas3SimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel HeLa-S3 3
-        #longLabel HeLa-S3 Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=2HeLaS3 treatment=None rep=rep3
-        #type broadPeak
-        #color 0,119,158
-        #origAssembly hg18
+        track wgEncodeDukeAffyExonHelas3SimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HeLa-S3 3
+        longLabel HeLa-S3 Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=2HeLaS3 treatment=None rep=rep3
+        type broadPeak
+        color 0,119,158
+        origAssembly hg18
         # subId=3081 dateSubmitted=2010-12-09
 
         track wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep1
@@ -499,14 +499,14 @@ superTrack wgEncodeExonArraySuper dense
         origAssembly hg18
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonHepg2SimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel HepG2 3
-        #longLabel HepG2 Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=2HepG2 treatment=None rep=rep3
-        #type broadPeak
-        #color 189,0,157
-        #origAssembly hg18
+        track wgEncodeDukeAffyExonHepg2SimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HepG2 3
+        longLabel HepG2 Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=2HepG2 treatment=None rep=rep3
+        type broadPeak
+        color 189,0,157
+        origAssembly hg18
         # subId=3081 dateSubmitted=2010-12-09
 
         track wgEncodeDukeAffyExonHmecSimpleSignalRep1
@@ -559,12 +559,12 @@ superTrack wgEncodeExonArraySuper dense
         type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonHsmmSimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel HSMM 3
-        #longLabel HSMM Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=HSMM treatment=None rep=rep3
-        #type broadPeak
+        track wgEncodeDukeAffyExonHsmmSimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HSMM 3
+        longLabel HSMM Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=HSMM treatment=None rep=rep3
+        type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
 
         track wgEncodeDukeAffyExonHsmmtSimpleSignalRep1
@@ -583,12 +583,12 @@ superTrack wgEncodeExonArraySuper dense
         type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonHsmmtSimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel HSMMtube 3
-        #longLabel HSMMtube Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=HSMMt treatment=None rep=rep3
-        #type broadPeak
+        track wgEncodeDukeAffyExonHsmmtSimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HSMMtube 3
+        longLabel HSMMtube Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=HSMMt treatment=None rep=rep3
+        type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
 
         track wgEncodeDukeAffyExonHtr8SimpleSignalRep1
@@ -659,12 +659,12 @@ superTrack wgEncodeExonArraySuper dense
         type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonIpsSimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel iPS 3
-        #longLabel iPS Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=iPS treatment=None rep=rep3
-        #type broadPeak
+        track wgEncodeDukeAffyExonIpsSimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel iPS 3
+        longLabel iPS Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=iPS treatment=None rep=rep3
+        type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
 
         track wgEncodeDukeAffyExonK562SimpleSignalRep1
@@ -685,13 +685,13 @@ superTrack wgEncodeExonArraySuper dense
         color 46,0,184
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonK562SimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel K562 3
-        #longLabel K562 Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=1K562 treatment=None rep=rep3
-        #type broadPeak
-        #color 46,0,184
+        track wgEncodeDukeAffyExonK562SimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel K562 3
+        longLabel K562 Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=1K562 treatment=None rep=rep3
+        type broadPeak
+        color 46,0,184
         # subId=3081 dateSubmitted=2010-12-09
 
         track wgEncodeDukeAffyExonLncapAndroSimpleSignalRep1
@@ -796,12 +796,12 @@ superTrack wgEncodeExonArraySuper dense
         origAssembly hg18
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonMedulloSimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel Medullo 3
-        #longLabel Medullo Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=Medullo treatment=None rep=rep3
-        #type broadPeak
+        track wgEncodeDukeAffyExonMedulloSimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Medullo 3
+        longLabel Medullo Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=Medullo treatment=None rep=rep3
+        type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
 
         track wgEncodeDukeAffyExonMelanoSimpleSignalRep1
@@ -820,21 +820,22 @@ superTrack wgEncodeExonArraySuper dense
         type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonMelanoSimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel Melano 3
-        #longLabel Melano Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=MELANO treatment=None rep=rep3
-        #type broadPeak
+        track wgEncodeDukeAffyExonMelanoSimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Melano 3
+        longLabel Melano Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=MELANO treatment=None rep=rep3
+        type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonMelanoSimpleSignalRep4
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel Melano 4
-        #longLabel Melano Exon array Signal Replicate 4 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=MELANO treatment=None rep=rep4
-        #type broadPeak
+        track wgEncodeDukeAffyExonMelanoSimpleSignalRep4
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Melano 4
+        longLabel Melano Exon array Signal Replicate 4 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=MELANO treatment=None rep=rep4
+        type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
+
 
         track wgEncodeDukeAffyExonMyometrSimpleSignalRep1
         parent wgEncodeDukeAffyExonViewSimpleSignal off
@@ -890,12 +891,12 @@ superTrack wgEncodeExonArraySuper dense
         origAssembly hg18
         # subId=3081 dateSubmitted=2010-12-09
 
-        #track wgEncodeDukeAffyExonOsteoblSimpleSignalRep3
-        #parent wgEncodeDukeAffyExonViewSimpleSignal off
-        #shortLabel Osteobl 3
-        #longLabel Osteobl Exon array Signal Replicate 3 from ENCODE/Duke
-        #subGroups view=SimpleSignal cellType=Osteobl treatment=None rep=rep3
-        #type broadPeak
+        track wgEncodeDukeAffyExonOsteoblSimpleSignalRep3
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Osteobl 3
+        longLabel Osteobl Exon array Signal Replicate 3 from ENCODE/Duke
+        subGroups view=SimpleSignal cellType=Osteobl treatment=None rep=rep3
+        type broadPeak
         # subId=3081 dateSubmitted=2010-12-09
 
         track wgEncodeDukeAffyExon8988tSimpleSignalRep1
