@@ -16,7 +16,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeSydhTfbsFetalpbdeGata1UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -37,7 +37,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeSydhTfbsFetalpbdeGata1UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -58,7 +58,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeSydhTfbsFetalpbdeGata1UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -80,7 +80,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeSydhTfbsFetalpbdeGata1UcdRawDataRep1.fastq.tgz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -101,7 +101,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeSydhTfbsFetalpbdeGata1UcdRawDataRep2.fastq.tgz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -122,7 +122,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 fileName wgEncodeSydhTfbsFetalpbdeGata1UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -874,7 +874,7 @@ dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
 fileName wgEncodeSydhTfbsGm12878CfosRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -896,7 +896,7 @@ dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
 fileName wgEncodeSydhTfbsGm12878CfosRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -918,7 +918,7 @@ dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
 fileName wgEncodeSydhTfbsGm12878CfosRawDataRep3.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -1794,7 +1794,7 @@ dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
 fileName wgEncodeSydhTfbsGm12878InputRawData.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 setType input
@@ -1992,7 +1992,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsGm12878JundRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2014,7 +2014,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsGm12878JundRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2126,7 +2126,7 @@ dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
 fileName wgEncodeSydhTfbsGm12878MaxRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2148,7 +2148,7 @@ dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
 fileName wgEncodeSydhTfbsGm12878MaxRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2692,7 +2692,7 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-06-30
 fileName wgEncodeSydhTfbsGm12878NfkbTnfaRawDataRep4.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 4
@@ -3483,7 +3483,7 @@ dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
 fileName wgEncodeSydhTfbsGm12878Pol2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3505,7 +3505,7 @@ dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
 fileName wgEncodeSydhTfbsGm12878Pol2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3745,7 +3745,7 @@ dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
 fileName wgEncodeSydhTfbsGm12878Pol3RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Incomplete fastq due to Illumina pipeline version
 origAssembly hg18
 project wgEncode
@@ -3768,7 +3768,7 @@ dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
 fileName wgEncodeSydhTfbsGm12878Pol3RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Incomplete fastq due to Illumina pipeline version
 origAssembly hg18
 project wgEncode
@@ -4791,7 +4791,7 @@ dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
 fileName wgEncodeSydhTfbsGm12878Tr4RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 origAssembly hg18
 project wgEncode
@@ -4814,7 +4814,7 @@ dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
 fileName wgEncodeSydhTfbsGm12878Tr4RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 origAssembly hg18
 project wgEncode
@@ -4838,7 +4838,7 @@ dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
 fileName wgEncodeSydhTfbsGm12878Tr4StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 origAssembly hg18
 project wgEncode
@@ -4862,7 +4862,7 @@ dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
 fileName wgEncodeSydhTfbsGm12878Tr4StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 origAssembly hg18
 project wgEncode
@@ -4885,7 +4885,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsGm12878Tr4StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -4906,7 +4906,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsGm12878Tr4StdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3053
@@ -5188,7 +5188,7 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeSydhTfbsGm12878Yy1RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with Staph A,
 origAssembly hg18
 project wgEncode
@@ -5212,7 +5212,7 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeSydhTfbsGm12878Yy1RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with Staph A,
 origAssembly hg18
 project wgEncode
@@ -5237,7 +5237,7 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeSydhTfbsGm12878Yy1StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with Staph A, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -5261,7 +5261,7 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeSydhTfbsGm12878Yy1StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with Staph A, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -5284,7 +5284,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsGm12878Yy1StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -5305,7 +5305,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsGm12878Yy1StdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3053
@@ -5454,7 +5454,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsGm12878Znf274UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0.  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
 project wgEncode
 setType exp
@@ -5476,7 +5476,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 project wgEncode
 replicate 1
@@ -5498,7 +5498,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 project wgEncode
 replicate 2
@@ -5520,7 +5520,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsGm12878Znf274UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -11055,7 +11055,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep1
 project wgEncode
 replicate 1
@@ -11077,7 +11077,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep2
 project wgEncode
 replicate 2
@@ -11099,7 +11099,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -11121,7 +11121,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsH1hescCtbp2UcdRawSignalRep1
 project wgEncode
 replicate 1
@@ -11143,7 +11143,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsH1hescCtbp2UcdRawSignalRep2
 project wgEncode
 replicate 2
@@ -11165,7 +11165,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -11311,7 +11311,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescInputUcdAln.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 1176
@@ -11331,7 +11331,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescInputUcdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 1176
@@ -11351,7 +11351,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsH1hescInputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -11373,7 +11373,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsH1hescMaxUcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -11394,7 +11394,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsH1hescMaxUcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -11415,7 +11415,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsH1hescMaxUcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -11437,7 +11437,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsH1hescMaxUcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -11458,7 +11458,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsH1hescMaxUcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -11479,7 +11479,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsH1hescMaxUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -11885,7 +11885,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescSuz12UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -11906,7 +11906,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescSuz12UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -11927,7 +11927,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescSuz12UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -11949,7 +11949,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescSuz12UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A
 project wgEncode
 replicate 1
@@ -11971,7 +11971,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescSuz12UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A
 project wgEncode
 replicate 2
@@ -12271,7 +12271,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHct116InputRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 origAssembly hg18
 project wgEncode
 setType input
@@ -12293,7 +12293,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHct116InputUcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -12316,7 +12316,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHct116InputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 3053
@@ -12337,7 +12337,7 @@ dateSubmitted 2009-05-15
 dateUnrestricted 2010-02-15
 fileName wgEncodeSydhTfbsHct116Pol2RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -12360,7 +12360,7 @@ dateSubmitted 2009-05-15
 dateUnrestricted 2010-02-15
 fileName wgEncodeSydhTfbsHct116Pol2RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -12384,7 +12384,7 @@ dateSubmitted 2009-05-15
 dateUnrestricted 2010-02-15
 fileName wgEncodeSydhTfbsHct116Pol2UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -12408,7 +12408,7 @@ dateSubmitted 2009-05-15
 dateUnrestricted 2010-02-15
 fileName wgEncodeSydhTfbsHct116Pol2UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -12431,7 +12431,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHct116Pol2UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -12452,7 +12452,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHct116Pol2UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3053
@@ -12473,7 +12473,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHct116Tcf4RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 origAssembly hg18
 project wgEncode
@@ -12497,7 +12497,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHct116Tcf4RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 origAssembly hg18
 project wgEncode
@@ -12522,7 +12522,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -12546,7 +12546,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -12569,7 +12569,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHct116Tcf4UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -12590,7 +12590,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHct116Tcf4UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3053
@@ -12611,7 +12611,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHek293InputRawData.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 setType input
@@ -12632,7 +12632,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293InputUcdAln.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 3257
@@ -12652,7 +12652,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293InputUcdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 3257
@@ -12672,7 +12672,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293InputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -12694,7 +12694,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHek293Pol2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12716,7 +12716,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHek293Pol2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -12738,7 +12738,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHek293Pol2RawDataRep3.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -12760,7 +12760,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293bElk4UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -12781,7 +12781,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293bElk4UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -12802,7 +12802,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293bElk4UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12824,7 +12824,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293bElk4UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -12845,7 +12845,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293bElk4UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -12866,7 +12866,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293bElk4UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12933,7 +12933,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHek293bKap1UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -12954,7 +12954,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHek293bKap1UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -12975,7 +12975,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHek293bKap1UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0. KAP1 colocalizes with H3K9me3 marks and peak analysis should be performed using programs modified for spreading histone marks such as H3K9me3 and H3K27me3.
 project wgEncode
 setType exp
@@ -12997,7 +12997,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHek293bKap1UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -13018,7 +13018,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHek293bKap1UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -13039,7 +13039,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 fileName wgEncodeSydhTfbsHek293bKap1UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -13175,7 +13175,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
 fileName wgEncodeSydhTfbsHelas3Ap2alphaRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -13199,7 +13199,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
 fileName wgEncodeSydhTfbsHelas3Ap2alphaRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -13224,7 +13224,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -13248,7 +13248,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -13271,7 +13271,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -13292,7 +13292,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3053
@@ -13313,7 +13313,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
 fileName wgEncodeSydhTfbsHelas3Ap2gammaRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -13337,7 +13337,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
 fileName wgEncodeSydhTfbsHelas3Ap2gammaRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -13362,7 +13362,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -13386,7 +13386,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-23
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -13409,7 +13409,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -13430,7 +13430,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3053
@@ -13817,7 +13817,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Bdp1RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -13840,7 +13840,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Bdp1RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -13864,7 +13864,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Bdp1StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -13888,7 +13888,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Bdp1StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -13911,7 +13911,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHelas3Bdp1StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -13932,7 +13932,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHelas3Bdp1StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3053
@@ -14085,7 +14085,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Brf1RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14107,7 +14107,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Brf1RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14130,7 +14130,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Brf1StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -14154,7 +14154,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Brf1StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -14177,7 +14177,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHelas3Brf1StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -14198,7 +14198,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHelas3Brf1StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3053
@@ -14219,7 +14219,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Brf2RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14241,7 +14241,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Brf2RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14264,7 +14264,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Brf2StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -14288,7 +14288,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Brf2StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -14311,7 +14311,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHelas3Brf2StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -14332,7 +14332,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHelas3Brf2StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3053
@@ -14446,7 +14446,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeSydhTfbsHelas3Brg1IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -14469,7 +14469,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeSydhTfbsHelas3Brg1IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -14492,7 +14492,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeSydhTfbsHelas3Brg1IggmusRawDataRep3.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -14668,7 +14668,7 @@ dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
 fileName wgEncodeSydhTfbsHelas3CfosRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Contains incomplete fastq files
 origAssembly hg18
 project wgEncode
@@ -14691,7 +14691,7 @@ dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
 fileName wgEncodeSydhTfbsHelas3CfosRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Contains incomplete fastq files
 origAssembly hg18
 project wgEncode
@@ -14938,7 +14938,7 @@ dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
 fileName wgEncodeSydhTfbsHelas3CmycRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Contains incomplete fastq files
 origAssembly hg18
 project wgEncode
@@ -14961,7 +14961,7 @@ dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
 fileName wgEncodeSydhTfbsHelas3CmycRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Contains incomplete fastq files
 origAssembly hg18
 project wgEncode
@@ -15074,7 +15074,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 fileName wgEncodeSydhTfbsHelas3E2f1RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1,
 origAssembly hg18
 project wgEncode
@@ -15098,7 +15098,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 fileName wgEncodeSydhTfbsHelas3E2f1RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1,
 origAssembly hg18
 project wgEncode
@@ -15123,7 +15123,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 fileName wgEncodeSydhTfbsHelas3E2f1StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -15147,7 +15147,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 fileName wgEncodeSydhTfbsHelas3E2f1StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -15170,7 +15170,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHelas3E2f1StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -15191,7 +15191,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHelas3E2f1StdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3055
@@ -15212,7 +15212,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeSydhTfbsHelas3E2f4RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -15236,7 +15236,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeSydhTfbsHelas3E2f4RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -15261,7 +15261,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeSydhTfbsHelas3E2f4StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -15285,7 +15285,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeSydhTfbsHelas3E2f4StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -15308,7 +15308,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHelas3E2f4StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -15329,7 +15329,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHelas3E2f4StdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3055
@@ -15350,7 +15350,7 @@ dateSubmitted 2009-10-21
 dateUnrestricted 2010-07-20
 fileName wgEncodeSydhTfbsHelas3E2f6RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -15374,7 +15374,7 @@ dateSubmitted 2009-10-21
 dateUnrestricted 2010-07-20
 fileName wgEncodeSydhTfbsHelas3E2f6RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -15399,7 +15399,7 @@ dateSubmitted 2009-10-21
 dateUnrestricted 2010-07-20
 fileName wgEncodeSydhTfbsHelas3E2f6StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -15423,7 +15423,7 @@ dateSubmitted 2009-10-21
 dateUnrestricted 2010-07-20
 fileName wgEncodeSydhTfbsHelas3E2f6StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -15446,7 +15446,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHelas3E2f6StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -15488,7 +15488,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Elk4UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -15509,7 +15509,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Elk4UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -15530,7 +15530,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Elk4UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -15552,7 +15552,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Elk4UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -15573,7 +15573,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Elk4UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -15876,7 +15876,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeSydhTfbsHelas3HaRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 origAssembly hg18
 project wgEncode
@@ -15900,7 +15900,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeSydhTfbsHelas3HaRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 origAssembly hg18
 project wgEncode
@@ -15925,7 +15925,7 @@ dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -15949,7 +15949,7 @@ dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -15972,7 +15972,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -15993,7 +15993,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3055
@@ -16588,7 +16588,7 @@ dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 fileName wgEncodeSydhTfbsHelas3InputRawData.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 setType input
@@ -16654,7 +16654,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3InputUcdAln.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 1140
@@ -16674,7 +16674,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3InputUcdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 1140
@@ -16694,7 +16694,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHelas3InputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -16978,7 +16978,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHelas3LargefragmentRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17000,7 +17000,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHelas3LargefragmentRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17022,7 +17022,7 @@ dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
 fileName wgEncodeSydhTfbsHelas3MaxRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Contains incomplete fastq files
 origAssembly hg18
 project wgEncode
@@ -17045,7 +17045,7 @@ dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
 fileName wgEncodeSydhTfbsHelas3MaxRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Contains incomplete fastq files
 origAssembly hg18
 project wgEncode
@@ -17158,7 +17158,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHelas3MnaseRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17180,7 +17180,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHelas3MnaseRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17202,7 +17202,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHelas3MouseiggRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17224,7 +17224,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHelas3MouseiggRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17378,7 +17378,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHelas3NakeddnaRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17400,7 +17400,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHelas3NakeddnaRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17422,7 +17422,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsHelas3NakeddnaRawDataRep3.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -17713,7 +17713,7 @@ dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 fileName wgEncodeSydhTfbsHelas3Pol2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17736,7 +17736,7 @@ dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 fileName wgEncodeSydhTfbsHelas3Pol2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17759,7 +17759,7 @@ dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 fileName wgEncodeSydhTfbsHelas3Pol2RawDataRep3.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -18438,7 +18438,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Rpc155RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -18460,7 +18460,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Rpc155RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -18483,7 +18483,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Rpc155StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -18507,7 +18507,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Rpc155StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -18530,7 +18530,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHelas3Rpc155StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -18551,7 +18551,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHelas3Rpc155StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3055
@@ -19175,7 +19175,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Tf3c110StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -19199,7 +19199,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3Tf3c110StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -19222,7 +19222,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHelas3Tf3c110StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -19243,7 +19243,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHelas3Tf3c110StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3055
@@ -19264,7 +19264,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3TfiiicRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -19286,7 +19286,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsHelas3TfiiicRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -19308,7 +19308,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeSydhTfbsHelas3Tr4RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 origAssembly hg18
 project wgEncode
@@ -19332,7 +19332,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeSydhTfbsHelas3Tr4RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 origAssembly hg18
 project wgEncode
@@ -19357,7 +19357,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeSydhTfbsHelas3Tr4StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -19381,7 +19381,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeSydhTfbsHelas3Tr4StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -19404,7 +19404,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHelas3Tr4StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -19425,7 +19425,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHelas3Tr4StdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3055
@@ -19578,7 +19578,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -19599,7 +19599,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -19620,7 +19620,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -19642,7 +19642,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  StaphA
 project wgEncode
 replicate 1
@@ -19664,7 +19664,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  StaphA
 project wgEncode
 replicate 2
@@ -19686,7 +19686,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -19839,7 +19839,7 @@ dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 fileName wgEncodeSydhTfbsHelas3ifngInputRawData.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 setType input
@@ -19861,7 +19861,7 @@ dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 fileName wgEncodeSydhTfbsHelas3ifngStat1RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -19884,7 +19884,7 @@ dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 fileName wgEncodeSydhTfbsHelas3ifngStat1RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -21489,7 +21489,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsHepg2InputRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -21511,7 +21511,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsHepg2InputRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -21533,7 +21533,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsHepg2InputRawDataRep3.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -22965,7 +22965,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsHepg2Pol2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -22987,7 +22987,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsHepg2Pol2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -23009,7 +23009,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsHepg2Pol2RawDataRep3.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -23840,7 +23840,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -23862,7 +23862,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -23884,7 +23884,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep3.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -24020,7 +24020,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsHepg2Srebp2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -24042,7 +24042,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsHepg2Srebp2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -24064,7 +24064,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsHepg2Srebp2RawDataRep3.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -24214,7 +24214,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -24235,7 +24235,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -24256,7 +24256,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -24278,7 +24278,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -24299,7 +24299,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -24320,7 +24320,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -24470,7 +24470,7 @@ dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsHepg2bInputRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 origAssembly hg18
 project wgEncode
 setType input
@@ -24492,7 +24492,7 @@ dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsHepg2bInputUcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -24515,7 +24515,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHepg2bInputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 3055
@@ -24536,7 +24536,7 @@ dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsHepg2bTr4RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -24559,7 +24559,7 @@ dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsHepg2bTr4RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 origAssembly hg18
 project wgEncode
@@ -24584,7 +24584,7 @@ dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -24608,7 +24608,7 @@ dateSubmitted 2009-06-12
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -24631,7 +24631,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsHepg2bTr4UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -24652,7 +24652,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsHepg2bTr4UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3055
@@ -24673,7 +24673,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 fileName wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -24694,7 +24694,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 fileName wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -24715,7 +24715,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 fileName wgEncodeSydhTfbsHepg2bZnf274UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0.  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
 project wgEncode
 setType exp
@@ -24737,7 +24737,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 fileName wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 project wgEncode
 replicate 1
@@ -24759,7 +24759,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 fileName wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 project wgEncode
 replicate 2
@@ -24781,7 +24781,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHepg2bZnf274UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -24803,7 +24803,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHuvecCfosUcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -24824,7 +24824,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHuvecCfosUcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -24845,7 +24845,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHuvecCfosUcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -24867,7 +24867,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHuvecCfosUcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq (SIGMA)
 project wgEncode
 replicate 1
@@ -24889,7 +24889,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHuvecCfosUcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq (SIGMA)
 project wgEncode
 replicate 2
@@ -24911,7 +24911,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHuvecCfosUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -25067,7 +25067,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -25088,7 +25088,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -25109,7 +25109,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecGata2UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -25131,7 +25131,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecGata2UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 project wgEncode
 replicate 1
@@ -25153,7 +25153,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecGata2UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 project wgEncode
 replicate 2
@@ -25175,7 +25175,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHuvecGata2UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -25245,7 +25245,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeSydhTfbsHuvecInputStdRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -25267,7 +25267,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeSydhTfbsHuvecInputStdRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -25310,7 +25310,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecInputUcdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 1207
@@ -25330,7 +25330,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsHuvecInputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -25668,7 +25668,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeSydhTfbsK562Atf3RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -25690,7 +25690,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeSydhTfbsK562Atf3RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -25713,7 +25713,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeSydhTfbsK562Atf3StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -25737,7 +25737,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeSydhTfbsK562Atf3StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -25760,7 +25760,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562Atf3StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -25781,7 +25781,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562Atf3StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3055
@@ -25802,7 +25802,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Bdp1RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -25825,7 +25825,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Bdp1RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -25848,7 +25848,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Bdp1RawDataRep3.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -25872,7 +25872,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Bdp1StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -25896,7 +25896,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Bdp1StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -25920,7 +25920,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Bdp1StdAlnRep3.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -25943,7 +25943,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562Bdp1StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -25964,7 +25964,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562Bdp1StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3055
@@ -26113,7 +26113,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Brf1RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -26136,7 +26136,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Brf1RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -26159,7 +26159,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Brf1RawDataRep3.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -26183,7 +26183,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Brf1StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -26207,7 +26207,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Brf1StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -26231,7 +26231,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Brf1StdAlnRep3.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -26254,7 +26254,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562Brf1StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -26275,7 +26275,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562Brf1StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3055
@@ -26296,7 +26296,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562Brf2RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -26318,7 +26318,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562Brf2RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -26340,7 +26340,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562Brf2RawDataRep3.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -26363,7 +26363,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562Brf2StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -26387,7 +26387,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562Brf2StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -26411,7 +26411,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562Brf2StdAlnRep3.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -26434,7 +26434,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562Brf2StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -26455,7 +26455,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562Brf2StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3055
@@ -26872,7 +26872,7 @@ dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
 fileName wgEncodeSydhTfbsK562CfosRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -26894,7 +26894,7 @@ dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
 fileName wgEncodeSydhTfbsK562CfosRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -26916,7 +26916,7 @@ dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
 fileName wgEncodeSydhTfbsK562CfosRawDataRep3.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -27433,7 +27433,7 @@ dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
 fileName wgEncodeSydhTfbsK562CjunRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -27455,7 +27455,7 @@ dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
 fileName wgEncodeSydhTfbsK562CjunRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -27965,7 +27965,7 @@ dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
 fileName wgEncodeSydhTfbsK562CmycRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -27987,7 +27987,7 @@ dateSubmitted 2008-11-21
 dateUnrestricted 2009-08-21
 fileName wgEncodeSydhTfbsK562CmycRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -28541,7 +28541,7 @@ dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
 fileName wgEncodeSydhTfbsK562Ifna30CmycRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -28564,7 +28564,7 @@ dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
 fileName wgEncodeSydhTfbsK562Ifna30CmycRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -28586,7 +28586,7 @@ dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
 fileName wgEncodeSydhTfbsK562Ifna30InputRawData.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 setType input
@@ -28607,7 +28607,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna30Pol2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -28630,7 +28630,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna30Pol2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -28652,7 +28652,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna30Stat1RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -28675,7 +28675,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna30Stat1RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -28698,7 +28698,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna30Stat2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -28721,7 +28721,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna30Stat2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -28743,7 +28743,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna6hCjunRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -28765,7 +28765,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna6hCjunRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -28787,7 +28787,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna6hCmycRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -28810,7 +28810,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna6hCmycRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -28832,7 +28832,7 @@ dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
 fileName wgEncodeSydhTfbsK562Ifna6hInputRawData.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 setType input
@@ -28853,7 +28853,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna6hPol2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -28875,7 +28875,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna6hPol2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -28897,7 +28897,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna6hStat1RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -28919,7 +28919,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna6hStat1RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -28941,7 +28941,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna6hStat2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -28964,7 +28964,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifna6hStat2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -28986,7 +28986,7 @@ dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsK562Ifng30CjunRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -29008,7 +29008,7 @@ dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsK562Ifng30CjunRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -29030,7 +29030,7 @@ dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
 fileName wgEncodeSydhTfbsK562Ifng30InputRawData.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 setType input
@@ -29095,7 +29095,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifng6hCjunRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -29117,7 +29117,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifng6hCjunRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -29139,7 +29139,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifng6hCmycRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -29161,7 +29161,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifng6hCmycRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -29183,7 +29183,7 @@ dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
 fileName wgEncodeSydhTfbsK562Ifng6hInputRawData.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 setType input
@@ -29204,7 +29204,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifng6hPol2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -29226,7 +29226,7 @@ dateSubmitted 2009-06-09
 dateUnrestricted 2010-03-09
 fileName wgEncodeSydhTfbsK562Ifng6hPol2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -29811,7 +29811,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsK562InputV2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -29835,7 +29835,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsK562InputV2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -30117,7 +30117,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsK562JundRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -30139,7 +30139,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsK562JundRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -30379,7 +30379,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsK562MaxRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -30401,7 +30401,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsK562MaxRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -30645,7 +30645,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeSydhTfbsK562NelfeRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -30667,7 +30667,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeSydhTfbsK562NelfeRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -30690,7 +30690,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeSydhTfbsK562NelfeStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -30714,7 +30714,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeSydhTfbsK562NelfeStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -30737,7 +30737,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562NelfeStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -30758,7 +30758,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562NelfeStdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3056
@@ -30779,7 +30779,7 @@ dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
 fileName wgEncodeSydhTfbsK562Nfe2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -30801,7 +30801,7 @@ dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
 fileName wgEncodeSydhTfbsK562Nfe2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -31669,7 +31669,7 @@ dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 fileName wgEncodeSydhTfbsK562Pol2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -31691,7 +31691,7 @@ dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 fileName wgEncodeSydhTfbsK562Pol2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -32069,7 +32069,7 @@ dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
 fileName wgEncodeSydhTfbsK562Rad21RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Contains incomplete fastq files
 origAssembly hg18
 project wgEncode
@@ -32092,7 +32092,7 @@ dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
 fileName wgEncodeSydhTfbsK562Rad21RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Contains incomplete fastq files
 origAssembly hg18
 project wgEncode
@@ -32205,7 +32205,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Rpc155RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -32228,7 +32228,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Rpc155RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -32252,7 +32252,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Rpc155StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -32276,7 +32276,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Rpc155StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -32299,7 +32299,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562Rpc155StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -32320,7 +32320,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562Rpc155StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3056
@@ -32341,7 +32341,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Sirt6RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -32364,7 +32364,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Sirt6RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -32388,7 +32388,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Sirt6StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -32412,7 +32412,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562Sirt6StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
 project wgEncode
@@ -32435,7 +32435,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562Sirt6StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -32456,7 +32456,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562Sirt6StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3056
@@ -33499,7 +33499,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562Tf3c110StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -33523,7 +33523,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562Tf3c110StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -33547,7 +33547,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562Tf3c110StdAlnRep3.bam
 grant Snyder
-lab Yale
+lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -33570,7 +33570,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562Tf3c110StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 4165
@@ -33591,7 +33591,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562Tf3c110StdSig.bigWig
 grant Snyder
-lab Yale
+lab Harvard
 project wgEncode
 setType exp
 subId 3056
@@ -33612,7 +33612,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562TfiiicRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -33635,7 +33635,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562TfiiicRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -33658,7 +33658,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562TfiiicRawDataRep3.fastq.gz
 grant Snyder
-lab Yale
+lab Harvard
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -33809,7 +33809,7 @@ dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
 fileName wgEncodeSydhTfbsK562Xrcc4RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Contains incomplete fastq files
 origAssembly hg18
 project wgEncode
@@ -33832,7 +33832,7 @@ dateSubmitted 2009-05-05
 dateUnrestricted 2010-02-04
 fileName wgEncodeSydhTfbsK562Xrcc4RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 labVersion Contains incomplete fastq files
 origAssembly hg18
 project wgEncode
@@ -33945,7 +33945,7 @@ dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsK562bE2f4RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -33968,7 +33968,7 @@ dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsK562bE2f4RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -33992,7 +33992,7 @@ dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsK562bE2f4UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -34016,7 +34016,7 @@ dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsK562bE2f4UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -34039,7 +34039,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562bE2f4UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -34060,7 +34060,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562bE2f4UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3056
@@ -34081,7 +34081,7 @@ dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
 fileName wgEncodeSydhTfbsK562bE2f6RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001) Lane A is Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -34104,7 +34104,7 @@ dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
 fileName wgEncodeSydhTfbsK562bE2f6RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -34129,7 +34129,7 @@ dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
 fileName wgEncodeSydhTfbsK562bE2f6UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001) Lane A is Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -34153,7 +34153,7 @@ dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
 fileName wgEncodeSydhTfbsK562bE2f6UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -34176,7 +34176,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562bE2f6UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -34197,7 +34197,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562bE2f6UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3056
@@ -34218,7 +34218,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsK562bGata1RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 origAssembly hg18
 project wgEncode
@@ -34242,7 +34242,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsK562bGata1RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 origAssembly hg18
 project wgEncode
@@ -34267,7 +34267,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsK562bGata1UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -34291,7 +34291,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeSydhTfbsK562bGata1UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -34314,7 +34314,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562bGata1UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -34335,7 +34335,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562bGata1UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3056
@@ -34356,7 +34356,7 @@ dateSubmitted 2009-09-02
 dateUnrestricted 2010-06-02
 fileName wgEncodeSydhTfbsK562bGata2RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -34380,7 +34380,7 @@ dateSubmitted 2009-09-02
 dateUnrestricted 2010-06-02
 fileName wgEncodeSydhTfbsK562bGata2RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -34405,7 +34405,7 @@ dateSubmitted 2009-09-02
 dateUnrestricted 2010-06-02
 fileName wgEncodeSydhTfbsK562bGata2UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -34429,7 +34429,7 @@ dateSubmitted 2009-09-02
 dateUnrestricted 2010-06-02
 fileName wgEncodeSydhTfbsK562bGata2UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -34452,7 +34452,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562bGata2UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -34473,7 +34473,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562bGata2UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3056
@@ -34494,7 +34494,7 @@ dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsK562bInputRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -34517,7 +34517,7 @@ dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 fileName wgEncodeSydhTfbsK562bInputUcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 project wgEncode
@@ -34540,7 +34540,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562bInputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 3056
@@ -34561,7 +34561,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562bKap1UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -34582,7 +34582,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562bKap1UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -34603,7 +34603,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562bKap1UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -34625,7 +34625,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562bKap1UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
 project wgEncode
 replicate 1
@@ -34647,7 +34647,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562bKap1UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
 project wgEncode
 replicate 2
@@ -34669,7 +34669,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562bKap1UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -34691,7 +34691,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
 origAssembly hg18
 project wgEncode
@@ -34715,7 +34715,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
 origAssembly hg18
 project wgEncode
@@ -34740,7 +34740,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -34764,7 +34764,7 @@ dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -34787,7 +34787,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -34808,7 +34808,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3056
@@ -34829,7 +34829,7 @@ dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
 fileName wgEncodeSydhTfbsK562bSetdb1RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -34853,7 +34853,7 @@ dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
 fileName wgEncodeSydhTfbsK562bSetdb1RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -34878,7 +34878,7 @@ dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
 fileName wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -34902,7 +34902,7 @@ dateSubmitted 2009-06-15
 dateUnrestricted 2010-03-15
 fileName wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -34925,7 +34925,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562bSetdb1UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -34946,7 +34946,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562bSetdb1UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3056
@@ -34967,7 +34967,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562bTr4RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 origAssembly hg18
 project wgEncode
@@ -34991,7 +34991,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562bTr4RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
 origAssembly hg18
 project wgEncode
@@ -35016,7 +35016,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562bTr4UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -35040,7 +35040,7 @@ dateSubmitted 2009-06-22
 dateUnrestricted 2010-03-22
 fileName wgEncodeSydhTfbsK562bTr4UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -35063,7 +35063,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562bTr4UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -35084,7 +35084,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562bTr4UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3056
@@ -35105,7 +35105,7 @@ dateSubmitted 2009-09-03
 dateUnrestricted 2010-06-03
 fileName wgEncodeSydhTfbsK562bYy1RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 origAssembly hg18
 project wgEncode
@@ -35129,7 +35129,7 @@ dateSubmitted 2009-09-03
 dateUnrestricted 2010-06-03
 fileName wgEncodeSydhTfbsK562bYy1RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
 origAssembly hg18
 project wgEncode
@@ -35154,7 +35154,7 @@ dateSubmitted 2009-09-03
 dateUnrestricted 2010-06-03
 fileName wgEncodeSydhTfbsK562bYy1UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -35178,7 +35178,7 @@ dateSubmitted 2009-09-03
 dateUnrestricted 2010-06-03
 fileName wgEncodeSydhTfbsK562bYy1UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -35201,7 +35201,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562bYy1UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -35222,7 +35222,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562bYy1UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3056
@@ -35243,7 +35243,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsK562bZnf263RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -35267,7 +35267,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsK562bZnf263RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -35292,7 +35292,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsK562bZnf263UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -35316,7 +35316,7 @@ dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeSydhTfbsK562bZnf263UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -35339,7 +35339,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562bZnf263UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -35360,7 +35360,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562bZnf263UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3056
@@ -35381,7 +35381,7 @@ dateSubmitted 2010-01-05
 dateUnrestricted 2010-10-04
 fileName wgEncodeSydhTfbsK562bZnf274RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -35405,7 +35405,7 @@ dateSubmitted 2010-01-05
 dateUnrestricted 2010-10-04
 fileName wgEncodeSydhTfbsK562bZnf274RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -35430,7 +35430,7 @@ dateSubmitted 2010-01-05
 dateUnrestricted 2010-10-04
 fileName wgEncodeSydhTfbsK562bZnf274UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -35454,7 +35454,7 @@ dateSubmitted 2010-01-05
 dateUnrestricted 2010-10-04
 fileName wgEncodeSydhTfbsK562bZnf274UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -35477,7 +35477,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsK562bZnf274UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -35498,7 +35498,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsK562bZnf274UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3056
@@ -35643,7 +35643,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsMcf10aesInputUcdAln.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 3497
@@ -35663,7 +35663,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsMcf10aesInputUcdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 3497
@@ -35683,7 +35683,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsMcf10aesInputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -35705,7 +35705,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep1
 project wgEncode
 replicate 1
@@ -35727,7 +35727,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep2
 project wgEncode
 replicate 2
@@ -35749,7 +35749,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35771,7 +35771,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -35793,7 +35793,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -35815,7 +35815,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35837,7 +35837,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep1
 project wgEncode
 replicate 1
@@ -35859,7 +35859,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep2
 project wgEncode
 replicate 2
@@ -35881,7 +35881,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35903,7 +35903,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdRawSignalRep1
 project wgEncode
 replicate 1
@@ -35925,7 +35925,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesPol2TamStdRawSignalRep2
 project wgEncode
 replicate 2
@@ -35947,7 +35947,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35969,7 +35969,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1
 project wgEncode
 replicate 1
@@ -35991,7 +35991,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2
 project wgEncode
 replicate 2
@@ -36013,7 +36013,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -36035,7 +36035,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -36057,7 +36057,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -36079,7 +36079,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -36357,7 +36357,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep1
 project wgEncode
 replicate 1
@@ -36379,7 +36379,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep2
 project wgEncode
 replicate 2
@@ -36401,7 +36401,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -36423,7 +36423,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdRawSignalRep1
 project wgEncode
 replicate 1
@@ -36445,7 +36445,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsMcf10aesStat3TamStdRawSignalRep2
 project wgEncode
 replicate 2
@@ -36467,7 +36467,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -36489,7 +36489,7 @@ dateSubmitted 2009-10-28
 dateUnrestricted 2010-07-28
 fileName wgEncodeSydhTfbsMcf7Hae2f1RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 origAssembly hg18
 project wgEncode
@@ -36513,7 +36513,7 @@ dateSubmitted 2009-10-28
 dateUnrestricted 2010-07-28
 fileName wgEncodeSydhTfbsMcf7Hae2f1RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
 origAssembly hg18
 project wgEncode
@@ -36538,7 +36538,7 @@ dateSubmitted 2009-10-28
 dateUnrestricted 2010-07-28
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -36562,7 +36562,7 @@ dateSubmitted 2009-10-28
 dateUnrestricted 2010-07-28
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -36585,7 +36585,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -36606,7 +36606,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3056
@@ -36627,7 +36627,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsMcf7InputRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified,
 origAssembly hg18
 project wgEncode
@@ -36651,7 +36651,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsMcf7InputRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified,
 origAssembly hg18
 project wgEncode
@@ -36676,7 +36676,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsMcf7InputUcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -36700,7 +36700,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-15
 fileName wgEncodeSydhTfbsMcf7InputUcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -36723,7 +36723,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsMcf7InputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 3056
@@ -36872,7 +36872,7 @@ dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 fileName wgEncodeSydhTfbsNb4InputRawData.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 setType input
@@ -37068,7 +37068,7 @@ dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 fileName wgEncodeSydhTfbsNb4Pol2RawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -37090,7 +37090,7 @@ dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 fileName wgEncodeSydhTfbsNb4Pol2RawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -37112,7 +37112,7 @@ dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 fileName wgEncodeSydhTfbsNb4Pol2RawDataRep3.fastq.gz
 grant Snyder
-lab Stanford
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -37248,7 +37248,7 @@ dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
 fileName wgEncodeSydhTfbsNt2d1InputRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 origAssembly hg18
 project wgEncode
 setType input
@@ -37270,7 +37270,7 @@ dateSubmitted 2009-06-08
 dateUnrestricted 2010-03-08
 fileName wgEncodeSydhTfbsNt2d1InputUcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18
 origAssembly hg18
 project wgEncode
@@ -37293,7 +37293,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsNt2d1InputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 3056
@@ -37314,7 +37314,7 @@ dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
 fileName wgEncodeSydhTfbsNt2d1Suz12RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -37338,7 +37338,7 @@ dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
 fileName wgEncodeSydhTfbsNt2d1Suz12RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -37363,7 +37363,7 @@ dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -37387,7 +37387,7 @@ dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -37410,7 +37410,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -37431,7 +37431,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3056
@@ -37452,7 +37452,7 @@ dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
 fileName wgEncodeSydhTfbsNt2d1Yy1RawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -37476,7 +37476,7 @@ dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
 fileName wgEncodeSydhTfbsNt2d1Yy1RawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Fragmented using Bioruptor, precipitated with StaphA
 origAssembly hg18
 project wgEncode
@@ -37501,7 +37501,7 @@ dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -37525,7 +37525,7 @@ dateSubmitted 2009-06-05
 dateUnrestricted 2010-03-05
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 project wgEncode
@@ -37548,7 +37548,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 4165
@@ -37569,7 +37569,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType exp
 subId 3056
@@ -37590,7 +37590,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsNt2d1Znf274UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -37611,7 +37611,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsNt2d1Znf274UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -37632,7 +37632,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsNt2d1Znf274UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -37654,7 +37654,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsNt2d1Znf274UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G Magnetic Beads
 project wgEncode
 replicate 1
@@ -37676,7 +37676,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsNt2d1Znf274UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G Magnetic Beads
 project wgEncode
 replicate 2
@@ -37698,7 +37698,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsNt2d1Znf274UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -37720,7 +37720,7 @@ dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsPbdeGata1UcdAlnRep1
 project wgEncode
 replicate 1
@@ -37742,7 +37742,7 @@ dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsPbdeGata1UcdAlnRep2
 project wgEncode
 replicate 2
@@ -37764,7 +37764,7 @@ dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -37786,7 +37786,7 @@ dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsPbdeGata1UcdRawSignalRep1
 project wgEncode
@@ -37809,7 +37809,7 @@ dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsPbdeGata1UcdRawSignalRep2
 project wgEncode
@@ -37832,7 +37832,7 @@ dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -37854,7 +37854,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
 fileName wgEncodeSydhTfbsPbdeInputUcdAln.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 1956
@@ -37874,7 +37874,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
 fileName wgEncodeSydhTfbsPbdeInputUcdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 1956
@@ -37894,7 +37894,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
 fileName wgEncodeSydhTfbsPbdeInputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -37916,7 +37916,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsPbdePol2UcdAlnRep1
 project wgEncode
 replicate 1
@@ -37938,7 +37938,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsPbdePol2UcdAlnRep2
 project wgEncode
 replicate 2
@@ -37960,7 +37960,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -37982,7 +37982,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq
 parentTable wgEncodeSydhTfbsPbdePol2UcdRawSignalRep1
 project wgEncode
@@ -38005,7 +38005,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq
 parentTable wgEncodeSydhTfbsPbdePol2UcdRawSignalRep2
 project wgEncode
@@ -38028,7 +38028,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38050,7 +38050,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiInputUcdAln.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 1208
@@ -38070,7 +38070,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiInputUcdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 1208
@@ -38090,7 +38090,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsRajiInputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -38112,7 +38112,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiPol2UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -38133,7 +38133,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiPol2UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -38154,7 +38154,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiPol2UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38176,7 +38176,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiPol2UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -38197,7 +38197,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiPol2UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -38218,7 +38218,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsRajiPol2UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38240,7 +38240,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsShsy5yGata2UcdAlnRep1
 project wgEncode
 replicate 1
@@ -38262,7 +38262,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 parentTable wgEncodeSydhTfbsShsy5yGata2UcdAlnRep2
 project wgEncode
 replicate 2
@@ -38284,7 +38284,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38306,7 +38306,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq (SIGMA)
 parentTable wgEncodeSydhTfbsShsy5yGata2UcdRawSignalRep1
 project wgEncode
@@ -38329,7 +38329,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq (SIGMA)
 parentTable wgEncodeSydhTfbsShsy5yGata2UcdRawSignalRep2
 project wgEncode
@@ -38352,7 +38352,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38374,7 +38374,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsShsy5yInputUcdAln.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 3498
@@ -38394,7 +38394,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsShsy5yInputUcdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 3498
@@ -38414,7 +38414,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsShsy5yInputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -38436,7 +38436,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsThek293InputUcdAln.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 3499
@@ -38456,7 +38456,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsThek293InputUcdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 3499
@@ -38476,7 +38476,7 @@ dateSubmitted 2011-02-03
 dateUnrestricted 2011-11-03
 fileName wgEncodeSydhTfbsThek293InputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -38498,7 +38498,7 @@ dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
 fileName wgEncodeSydhTfbsTrexhek293Znf263UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -38519,7 +38519,7 @@ dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
 fileName wgEncodeSydhTfbsTrexhek293Znf263UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -38540,7 +38540,7 @@ dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
 fileName wgEncodeSydhTfbsTrexhek293Znf263UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38562,7 +38562,7 @@ dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
 fileName wgEncodeSydhTfbsTrexhek293Znf263UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 project wgEncode
 replicate 1
@@ -38584,7 +38584,7 @@ dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
 fileName wgEncodeSydhTfbsTrexhek293Znf263UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonciation.  Method of Immunoprecipitation:  StaphA
 project wgEncode
 replicate 2
@@ -38606,7 +38606,7 @@ dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
 fileName wgEncodeSydhTfbsTrexhek293Znf263UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38628,7 +38628,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osInputUcdAln.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 1355
@@ -38648,7 +38648,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osInputUcdRawData.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 setType input
 subId 1355
@@ -38668,7 +38668,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsU2osInputUcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -38690,7 +38690,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsU2osKap1UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -38711,7 +38711,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsU2osKap1UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -38732,7 +38732,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsU2osKap1UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38754,7 +38754,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsU2osKap1UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -38775,7 +38775,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsU2osKap1UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -38796,7 +38796,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsU2osKap1UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38818,7 +38818,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osSetdb1UcdAlnRep1.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -38839,7 +38839,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osSetdb1UcdAlnRep2.bam
 grant Snyder
-lab Yale
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -38860,7 +38860,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osSetdb1UcdPk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38882,7 +38882,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osSetdb1UcdRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A.
 project wgEncode
 replicate 1
@@ -38904,7 +38904,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osSetdb1UcdRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A.
 project wgEncode
 replicate 2
@@ -38926,7 +38926,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 fileName wgEncodeSydhTfbsU2osSetdb1UcdSig.bigWig
 grant Snyder
-lab Yale
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -38935,4 +38935,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1875588972
+# MAGIC: -2059163315
