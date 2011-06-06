@@ -7743,6 +7743,13 @@ description That fraction of cells, prepared by disruptive biochemical methods, 
 termId GO:0005624
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005624
 
+term mitochondria
+tag mito
+type localization
+description Provisional Mitochondria 
+termId GO:0005739
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005739
+
 ### RNA extracts
 term total
 tag total
