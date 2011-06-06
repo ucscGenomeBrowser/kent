@@ -27,6 +27,8 @@ char *outFn;
 char pqc;
 boolean has2Bands;
 
+char gapTableName[255];
+
 struct sqlConnection *conn,*conn2;
 char query[1024];
 char query2[1024];
@@ -133,6 +135,11 @@ while (row2 != NULL)
     
     // process band1 first 
     
+    strcpy(gapTableName, "gap");
+
+    if (sameWord(database, "hg18")) 
+    	safef(gapTableName, sizeof(gapTableName), "%s_gap", chrom);
+
     band1Success  = FALSE;
     chpTer = strstr(band1, "ter");
     if (chpTer != NULL)
@@ -144,7 +151,7 @@ while (row2 != NULL)
     if (band1HasTer == TRUE)
     	{
 	sprintf(query,
-                "select chromStart, chromEnd from gap where chrom = '%s' and type ='telomere' and chromStart = 0", chrom);
+                "select chromStart, chromEnd from %s where chrom = '%s' and type ='telomere' and chromStart = 0", gapTableName, chrom);
     	}
     else
         {
@@ -153,7 +160,7 @@ while (row2 != NULL)
     	    {
 	    band1HasCen  = TRUE;
 	    sprintf(query,
-                    "select chromStart, chromEnd from gap where chrom = '%s' and type ='centromere'", chrom);
+                    "select chromStart, chromEnd from %s where chrom = '%s' and type ='centromere'", gapTableName, chrom);
 	    }
 	else
 	    {
@@ -237,7 +244,7 @@ while (row2 != NULL)
 	    	{
 	    	band2HasCen = TRUE;
     		sprintf(query,
-            		"select chromStart, chromEnd from gap where chrom = '%s' and type = 'centromere'", chrom);
+            		"select chromStart, chromEnd from %s where chrom = '%s' and type = 'centromere'", gapTableName, chrom);
 	    	}
 	    else
 	    	{
