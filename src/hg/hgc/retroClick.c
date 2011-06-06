@@ -498,13 +498,20 @@ double  wt[12];     /* weights on score function*/
 char query[512];
 char *name;
 char alignTbl[128];
+char scoreSql[128];
 struct psl *psl;
 float coverFactor = 0;
 float maxOverlap = 0;
 if (mi->suffix == NULL)
+    {
     safef(alignTbl, sizeof(alignTbl), "%s%sAli", mi->tblPre, mi->geneSet);
+    safef(scoreSql, sizeof(scoreSql), "select max(score) from %s%sInfo", mi->tblPre, mi->geneSet);
+    }
 else
+    {
     safef(alignTbl, sizeof(alignTbl), "%s%sAli%s", mi->tblPre, mi->geneSet, mi->suffix);
+    safef(scoreSql, sizeof(scoreSql), "select max(score) from %s%sInfo%s", mi->tblPre, mi->geneSet, mi->suffix);
+    }
 printf("<TABLE class=\"transMap\">\n");
 printf("<CAPTION>Retrogene stats</CAPTION>\n");
 printf("<THEAD>\n");
@@ -516,7 +523,7 @@ else
     printf("<TR><TH>Expression of Retrocopy<TD>%s</TR>\n",pg->type);
 printf("<TR><TH>Score <TD>%d (range from 0 - %d)</TR>\n",  
         pg->score,
-        sqlQuickNum(conn, "select max(score) from ucscRetroInfo") );
+        sqlQuickNum(conn, scoreSql) );
 printf("<TR><TH>Alignment Coverage of parent gene (Bases&nbsp;matching Parent) <TD>%d %% &nbsp;(%d bp) </TR>\n", pg->coverage, pg->matches);
 printf("<TR><TH>Introns Procesed Out <TD>%d out of %d (%d exons covered)\n", pg->processedIntrons, (pg->parentSpliceCount/2), pg->exonCover);
 printf("<TR><TH>Possible Introns (or gaps) in Retro<TD>%d + %d\n", pg->intronCount, pg->oldIntronCount);

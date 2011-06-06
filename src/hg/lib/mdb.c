@@ -1748,6 +1748,20 @@ if(mdbVar == NULL)
 return mdbVar->val;
 }
 
+struct slName *mdbObjsFindAllVals(struct mdbObj *mdbObjs, char *var)
+// Returns a list of all vals in mdbObjs for a requested var
+{
+struct slName *vals = NULL;
+struct mdbObj *mdbObj = mdbObjs;
+for (;mdbObj != NULL;mdbObj = mdbObj->next)
+    {
+    char *val = mdbObjFindValue(mdbObj,var);
+    if (val != NULL)
+        slNameStore(&vals, val);
+    }
+return vals;
+}
+
 boolean mdbObjContains(struct mdbObj *mdbObj, char *var, char *val)
 // Returns TRUE if object contains var, val or both
 {
@@ -2960,8 +2974,7 @@ while(mdbObjs != NULL)
                 {
                 mdbObjSetVarInt(obj,MDB_VAR_ENCODE_EXP_ID,expId);
                 struct mdbObj *newObj = mdbObjCreate(obj->obj,MDB_VAR_ENCODE_EXP_ID, experimentId);
-                assert(exp != NULL);
-                if (exp->accession != NULL && updateAccession)
+                if (updateAccession && exp != NULL && exp->accession != NULL)
                     mdbObjSetVar(newObj,MDB_VAR_DCC_ACCESSION,exp->accession);
                 slAddHead(&mdbUpdateObjs,newObj);
                 }

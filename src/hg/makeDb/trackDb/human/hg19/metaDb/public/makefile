@@ -23,7 +23,7 @@ wgEncodeSunyAlbanyGeneSt.ra \
 wgEncodeBuOrchid.ra \
 wgEncodeSydhHistone.ra \
 wgEncodeReg.ra \
-
+wgEncodeUchicagoTfbs.ra \
 
 include ../../../../makefile.metaDb
 

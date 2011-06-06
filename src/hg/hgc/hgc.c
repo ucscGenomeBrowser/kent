@@ -9463,6 +9463,12 @@ if (url != NULL && url[0] != 0)
 		    if (!sameWord(phenotypeClass, "-1")) printf(" (%s)", phenotypeClass);
 		    printf(")");
 		    }
+		else
+		    {
+		    // show phenotype class if available, even phenotypeId is not available
+		    if (!sameWord(phenotypeClass, "-1")) printf(" (%s)", phenotypeClass);
+		    }
+
 		}
 	    printf("<BR>\n");
 	    }
@@ -9627,6 +9633,10 @@ if (url != NULL && url[0] != 0)
 		    {
                     printf(" (phenotype <A HREF=\"%s%s\" target=_blank>", url, phenotypeId);
                     printf("%s</A></B>)", phenotypeId);
+		    }
+		if (!sameWord(phenotypeClass, "-1"))
+		    {
+                    printf(" (%s)", phenotypeClass);
 		    }
 		}
 	    printf("<BR>\n");

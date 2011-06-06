@@ -5170,10 +5170,9 @@ withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 if (!cgiVarExists("hgt.imageV1"))
-    {
     withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
-    withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
-    }
+
+withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
 if (!hIsGsidServer())
     {
     revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
