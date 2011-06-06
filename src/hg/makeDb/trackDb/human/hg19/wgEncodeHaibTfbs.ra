@@ -3,7 +3,7 @@ track wgEncodeHaibTfbs
 compositeTrack on
 superTrack wgEncodeTfBindingSuper full
 shortLabel HAIB TFBS
-longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
+longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/HAIB
 group regulation
 subGroup1 view Views Peaks=Peaks  RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 BE2C=BE2_C ECC1=ECC-1 GM12891=GM12891 GM12892=GM12892 HCT116=HCT-116 PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87

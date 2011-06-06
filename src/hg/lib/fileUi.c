@@ -473,6 +473,12 @@ puts("in publication  until the restriction date noted for the given data file.<
 
 char *server = hDownloadsServer();
 char *subDir = "";
+cgiDown(0.7);
+puts("Supporting documents:");
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A></B> is a tab-separated file with the name and metadata for each download.</LI>\n",
+                server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
+printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A></B> is a list of the md5sum output for each download.</LI>\n",
+                server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 if (hIsBetaHost())
     {
     server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
@@ -482,16 +488,9 @@ if (hIsBetaHost())
 struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
 if (oneFile != NULL)
     {
-    cgiDown(0.7);
-    printf("<B>Supplemental materials</b> may be found <A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>here</A>.\n",
+    printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/supplemental/' TARGET=ucscDownloads>Supplemental materials</A></B> contains additional files provided by the laboratory related to these downloads.</LI>\n",
           server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
     }
-cgiDown(0.7);
-puts("There are two files within this directory that contain information about the downloads:");
-printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' TARGET=ucscDownloads>files.txt</A> which is a tab-separated file with the name and metadata for each download.</LI>\n",
-                server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
-printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A> which is a list of the md5sum output for each download.</LI>\n",
-                server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 }
 
 static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder,boolean filterable)
