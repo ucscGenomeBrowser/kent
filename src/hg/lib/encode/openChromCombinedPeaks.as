@@ -1,5 +1,5 @@
-table narrowPeak
-"peaks of signal enrichment based on pooled, normalized (interpreted) data. It is a BED6+4 format"
+table openChromCombinedPeaks
+"Loacationss of regions of open chromatin as determined by DNaseI HS and FAIRE experiments. It is a BED8+12 format"
 (
     string chrom;        "Name of the chromosome"
     uint   chromStart;   "Start position in chromosome"
