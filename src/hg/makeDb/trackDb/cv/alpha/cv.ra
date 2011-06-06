@@ -135,7 +135,7 @@ tissue Cervix
 vendorName ATCC
 vendorId CCL-2.2
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
-lineage ectoderm
+#lineage ectoderm
 karyotype cancer
 termId BTO:0000568
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
@@ -259,7 +259,7 @@ type Cell Line
 organism human
 description fetal buttock/thigh fibroblast
 tissue Skin
-lineage mesoderm
+#lineage mesoderm
 karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04449
 vendorName Coriell
@@ -274,7 +274,7 @@ type Cell Line
 organism human
 description fetal lung fibroblast
 tissue Lung
-lineage mesoderm
+lineage endoderm 
 karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04450
 vendorName Coriell
@@ -289,7 +289,7 @@ type Cell Line
 organism human
 description adult toe fibroblast from apparently healthy 21 year old
 tissue Skin
-lineage mesoderm
+lineage ectoderm
 karyotype "7% of the cells examined showing random chromosome loss/gain" -Coriell
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09309
 vendorName Coriell
@@ -304,7 +304,7 @@ type Cell Line
 organism human
 description gum tissue fibroblasts from apparently heathly 24 year old
 tissue Gingival
-lineage mesoderm
+#lineage mesoderm
 karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09319
 vendorName Coriell
@@ -319,7 +319,7 @@ type Cell Line
 organism human
 description abdominal skin fibroblasts from apparently heathly 22 year old
 tissue Skin
-lineage mesoderm
+lineage ectoderm 
 karyotype "8% of the cells examined showing random chromosome loss, 2% showing random chromosome gain, and 2% showing 69,XYY" -Coriell
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG10803
 vendorName Coriell
@@ -385,7 +385,7 @@ tier 3
 organism human
 description adipose tissue, donor UHN0001, age 35, African American, DNA extract
 tissue Adipose tissue
-lineage mesoderm
+#lineage mesoderm
 karyotype normal
 sex F
 vendorName BioChain
@@ -453,7 +453,7 @@ tier 3
 organism human
 description breast, donor 02-03015, age 21, caucasian, DNA extract
 tissue Breast
-lineage mesoderm
+lineage ectoderm
 karyotype normal
 sex F
 vendorName BioChain
@@ -1180,7 +1180,7 @@ vendorName ATCC
 vendorId CRL-2923
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2923&Template=cellBiology
 lineage epithelial
-karyotype unknown
+karyotype cancer
 termId BTO:0000194
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000194
 sex F
@@ -1193,7 +1193,7 @@ type Cell Line
 tier 3
 organism human
 description Peripheral blood-derived erythroblasts from 16-19 week human fetal liver
-lineage 
+lineage mesoderm
 karyotype normal
 sex U
 tissue Liver
@@ -1213,7 +1213,7 @@ tissue Skin
 vendorName Coriell
 vendorId AG08470
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08470&PgId=166
-lineage
+lineage ectoderm
 karyotype normal
 termId BTO:0000452
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
@@ -1227,6 +1227,7 @@ type Cell Line
 organism human
 description normal fibroblasts taken from individuals with Parkinson's disease
 tissue Skin
+lineage ectoderm
 vendorName Paul Tesar (Case Western)
 vendorId N/A
 orderUrl http://genetics.case.edu/page.php?page_id=5&LN=Tesar&FN=Paul
@@ -1963,7 +1964,7 @@ tissue Kidney
 vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
-lineage endoderm
+lineage mesoderm 
 karyotype cancer
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
@@ -1980,7 +1981,7 @@ tissue Kidney
 vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
-lineage endoderm
+lineage mesoderm
 karyotype cancer
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
@@ -2138,6 +2139,7 @@ type Cell Line
 organism human
 description Human Mammary Epithelial Cells
 tissue Breast
+lineage ectoderm 
 vendorName Lonza
 vendorId CC-2551
 orderUrl http://www.lonza.com/
@@ -2168,6 +2170,7 @@ type Cell Line
 organism human
 description Normal Human Lymphatic Microvascular Endothelial Cells, Lung-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2814, CC-2814T25
 orderUrl http://www.lonza.com/
@@ -2181,6 +2184,7 @@ type Cell Line
 organism human
 description Normal Adult Human Blood Microvascular Endothelial Cells, Dermal-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2811, CC-2811T75
 orderUrl http://www.lonza.com/
@@ -2194,6 +2198,7 @@ type Cell Line
 organism human
 description Normal Neonatal Human Blood Microvascular Endothelial Cells, Dermal-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2813, CC-2813T75
 orderUrl http://www.lonza.com/
@@ -2207,6 +2212,7 @@ type Cell Line
 organism human
 description Normal Adult Human Blood Microvascular Endothelial Cells, Dermal-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2810, CC-2810T75
 orderUrl http://www.lonza.com/
@@ -2220,6 +2226,7 @@ type Cell Line
 organism human
 description Normal Neonatal Human Lymphatic Microvascular Endothelial Cells, Dermal-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2812, CC-2812T25
 orderUrl http://www.lonza.com/
@@ -2233,6 +2240,7 @@ type Cell Line
 organism human
 description Normal Neonatal Human Microvascular Endothelial Cells (single Donnor), Dermal-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2505, CC-2505T225
 orderUrl http://www.lonza.com/
@@ -2246,6 +2254,7 @@ type Cell Line
 organism human
 description Normal Human Blood Microvascular Endothelial Cells, Lung-Derived
 tissue Blood
+lineage mesoderm
 vendorName Lonza
 vendorId CC-2815, CC-2815T75
 orderUrl http://www.lonza.com/
@@ -2285,6 +2294,7 @@ type Cell Line
 organism human
 description Human Pulmonary Artery Fibroblasts
 tissue Blood
+lineage mesoderm
 vendorName ScienCell
 vendorId 3120
 orderUrl http://www.sciencellonline.com/site/products/3120.php
@@ -2375,7 +2385,7 @@ type Cell Line
 tier 3
 organism human
 description Human Renal Glomerular Endothelial Cells
-lineage Endothelial
+lineage mesoderm 
 karyotype normal
 sex U
 tissue kidney
@@ -2441,7 +2451,7 @@ organism human
 description epithelial cell line derived from a fibrosarcoma. (PMID: 4132053)
 tissue Epithelium
 lineage mesoderm
-karyotype pseudo-diploid male with a modal chromosome number of 46. There are numerous chromosome abnormalities.
+karyotype cancer, pseudo-diploid male with a modal chromosome number of 46. There are numerous chromosome abnormalities.
 vendorName ATCC
 vendorId CCL-121
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-121&Template=cellBiology
@@ -2491,9 +2501,9 @@ tag  HUH7
 type Cell Line
 tier 3
 organism human
-description  Hepatocellular carcinoma
-lineage  Hepatocyte derived carcinoma taken from a liver tumor
-karyotype  Unknown
+description  Hepatocellular carcinoma 
+lineage  endoderm
+karyotype cancer 
 sex M
 tissue  Liver
 vendorName  Ravi Jhaveri, Duke University
@@ -2508,9 +2518,9 @@ tag  HUH7.5
 type Cell Line
 tier 3
 organism human
-description  Hepatocellular carcinoma
-lineage  Hepatocyte derived carcinoma taken from a liver tumor and selected for high levels of hepatitis C replication
-karyotype  Unknown
+description  Hepatocellular carcinoma, hepatocytes selected for high levels of hepatitis C replication 
+lineage endoderm
+karyotype cancer 
 sex M
 tissue  Liver
 vendorName  Ravi Jhaveri, Duke University
@@ -2540,6 +2550,7 @@ organism human
 description Normal Human Lung Fibroblasts
 #, newly promoted to tier 2: not in 2011 analysis
 tissue Lung
+lineage endoderm
 vendorName ATCC
 vendorId CCL-186
 lots 58607680
@@ -2589,7 +2600,7 @@ type Cell Line
 tier 3
 organism human
 description skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old caucasian heart transplant donor, immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN"), Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
-lineage
+lineage mesoderm
 karyotype
 sex M
 tissue Skeletal muscle myoblast
@@ -2641,8 +2652,8 @@ type Cell Line
 tier 3
 organism human
 description Human T cell leukemia
-lineage
-karyotype
+lineage mesoderm
+karyotype cancer
 sex F
 tissue Blood
 vendorName DSMZ
@@ -2663,7 +2674,7 @@ vendorName ATCC
 vendorId HTB-22
 lots 59401285
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-22&Template=cellBiology
-lineage
+lineage ectoderm
 karyotype cancer
 termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093
