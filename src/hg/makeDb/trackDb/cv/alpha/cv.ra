@@ -1234,6 +1234,7 @@ organism human
 description glioblastoma, these cells (aka H54 and D54) come from a surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). (PMID: 7252524)
 tissue Brain
 lineage ectoderm
+karyotype cancer
 vendorName Duke University Medical Center, requests for D54 cells should be directed to Darrell Bigner
 orderUrl http://www.cancer.duke.edu/btc/modules/facultystaff1/index.php?id=85
 termId BTO:0000527
@@ -2269,7 +2270,7 @@ term HPAEpiC
 tag HPAE
 type Cell Line
 organism human
-description Human Pulmonay Alevolar Epithelial Cells
+description Human Pulmonary Alevolar Epithelial Cells
 tissue Epithelium
 vendorName ScienCell
 vendorId 3200
