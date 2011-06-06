@@ -7757,7 +7757,7 @@ termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:000
 term mitochondria
 tag mito
 type localization
-description Provisional Mitochondria 
+description Mitochondria 
 termId GO:0005739
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005739
 
@@ -8069,7 +8069,7 @@ type treatment
 
 term DIFF_7d
 tag DIFF7d
-description PROVISIONAL Grown for 7 days in differentiation medium (Wold)
+description Grown for 7 days in differentiation medium (Wold)
 type treatment
 
 term Estradiol_10nM
@@ -8209,14 +8209,14 @@ type treatment
 
 term 4OHTAM_1uM_36hr
 tag OHTAM1
-description (Provisional To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
+description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
 type treatment
 
 term TAM_1uM_36hr
 tag TAM
-description (Provisional) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
+description 36 h with 1 uM 4-hydroxytamoxifen (Myers)
 type treatment
-#This should be retired.  It was registered with the wrong molecule.  For now i am changing the description.  But i am also registereing a replacement.
+#This should be retired.  It was registered with the wrong molecule.  For now i am changing the description.  But i am also registereing a replacement. 6/6/11
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
@@ -8330,13 +8330,13 @@ term Alignments
 tag ALN
 type view
 label Alignments
-description (PROVISIONAL) Aligned sequence tags
+description Aligned sequence tags
 
 term Base_Overlap_Signal
 tag  SIGBO
 type view
 label Base_Overlap_Signal
-description (PROVISIONAL) Base Overlap Signal
+description Base Overlap Signal
 
 term Clusters
 tag CLUSTERS
@@ -8348,7 +8348,7 @@ term CNV
 tag CNV
 type view
 label CNV
-description (PROVISIONAL) Copy Number Variation
+description Copy Number Variation
 
 term Contigs
 tag CONTIGS
@@ -8420,13 +8420,13 @@ term GeneGencV3c
 tag GENEGENCV3C
 type view
 label Genes Gencode V3c
-description (PROVISIONAL) Gencode release V3c
+description Gencode release V3c
 
 term HMM
 tag HMM
 type view
 label HMM
-description (PROVISIONAL) Hidden Markov Model
+description Hidden Markov Model
 
 term Hotspots
 tag HOTSPOTS
@@ -8462,7 +8462,7 @@ term Peaks
 tag PKS
 type view
 label Peaks
-description (PROVISIONAL) Peaks called
+description Peaks called
 
 term PeptideMapping
 tag PEPTIDEMAP
@@ -8540,7 +8540,7 @@ term SNP
 tag SNP
 type view
 label SNP
-description (PROVISIONAL) Single Nucleotide Polymorphism
+description Single Nucleotide Polymorphism
 
 term Splices
 tag SPLICES
@@ -8558,7 +8558,7 @@ term TranscriptGencV3c
 tag TRANSGENCV3C
 type view
 label Transcript Gencode V3c
-description (PROVISIONAL) Transcript Gencode V3c
+description Transcript Gencode V3c
 
 term Transfrags
 tag TRANSFRAGS
@@ -8948,12 +8948,12 @@ description the age when the real age is unknown
 term supplemental
 tag sup
 type attic
-description Files supplemental at composite level (Provisional)
+description Files supplemental at composite level 
 
 term auxUnValid
 tag auxUV
 type attic
-description Unvalidated files supplemental at experimental level (Provisional)
+description Unvalidated files supplemental at experimental level 
 
 term auxValid
 tag auxV
@@ -9629,7 +9629,7 @@ term Birney
 tag birney
 type grant
 description Birney
-grantInst (PROVISIONAL) ENCODE Data Analysis Center (DAC)
+grantInst ENCODE Data Analysis Center (DAC)
 projectName DAC
 
 term Tullius
