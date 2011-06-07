@@ -3,6 +3,24 @@ objType composite
 composite wgEncodeUncBsuProt
 expVars lab,dataType,cell,localization
 
+metaObject wgEncodeUncBsuProtGm12878NucleusRaw
+objType file
+cell GM12878
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-06
+dateUnrestricted 2012-03-06
+fileName wgEncodeUncBsuProtGm12878NucleusRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.2Da,msMsMassTolerance=0.5Da
+localization nucleus
+origAssembly hg19
+project wgEncode
+subId 4184
+view RawSignal
+
 metaObject wgEncodeUncBsuProtGm12878NucleusSig
 objType table
 cell GM12878
@@ -24,6 +42,61 @@ project wgEncode
 subId 4177
 tableName wgEncodeUncBsuProtGm12878NucleusSig
 view Signal
+
+metaObject wgEncodeUncBsuProtK562CytosolRaw
+objType file
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-06
+dateUnrestricted 2012-03-06
+fileName wgEncodeUncBsuProtK562CytosolRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization cytosol
+origAssembly hg19
+project wgEncode
+subId 4172
+view RawSignal
+
+metaObject wgEncodeUncBsuProtK562CytosolSig
+objType table
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-03
+dateUnrestricted 2012-03-03
+fileName wgEncodeUncBsuProtK562CytosolSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization cytosol
+origAssembly hg19
+project wgEncode
+subId 4171
+tableName wgEncodeUncBsuProtK562CytosolSig
+view Signal
+
+metaObject wgEncodeUncBsuProtK562MembranefractionRaw
+objType file
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-06
+dateUnrestricted 2012-03-06
+fileName wgEncodeUncBsuProtK562MembranefractionRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization membraneFraction
+origAssembly hg19
+project wgEncode
+subId 4182
+view RawSignal
 
 metaObject wgEncodeUncBsuProtK562MembranefractionSig
 objType table
@@ -47,4 +120,78 @@ subId 4174
 tableName wgEncodeUncBsuProtK562MembranefractionSig
 view Signal
 
-# MAGIC: -987122684
+metaObject wgEncodeUncBsuProtK562MitoRaw
+objType file
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-06
+dateUnrestricted 2012-03-06
+fileName wgEncodeUncBsuProtK562MitoRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization mitochondria
+origAssembly hg19
+project wgEncode
+subId 4180
+view RawSignal
+
+metaObject wgEncodeUncBsuProtK562MitoSig
+objType table
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-03
+dateUnrestricted 2012-03-03
+fileName wgEncodeUncBsuProtK562MitoSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization mitochondria
+origAssembly hg19
+project wgEncode
+subId 4178
+tableName wgEncodeUncBsuProtK562MitoSig
+view Signal
+
+metaObject wgEncodeUncBsuProtK562NucleusRaw
+objType file
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-06
+dateUnrestricted 2012-03-06
+fileName wgEncodeUncBsuProtK562NucleusRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization nucleus
+origAssembly hg19
+project wgEncode
+subId 4181
+view RawSignal
+
+metaObject wgEncodeUncBsuProtK562NucleusSig
+objType table
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-03
+dateUnrestricted 2012-03-03
+fileName wgEncodeUncBsuProtK562NucleusSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization nucleus
+origAssembly hg19
+project wgEncode
+subId 4176
+tableName wgEncodeUncBsuProtK562NucleusSig
+view Signal
+
+# MAGIC: 586222236

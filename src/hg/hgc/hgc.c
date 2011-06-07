@@ -213,6 +213,7 @@
 #include "retroClick.h"
 #include "mgcClick.h"
 #include "ccdsClick.h"
+#include "gencodeClick.h"
 #include "memalloc.h"
 #include "trashDir.h"
 #include "kg1ToKg2.h"
@@ -382,6 +383,12 @@ snprintf(buf, sizeof(buf), "%d", id);
 fprintf(f, entrezFormat, "OMIM", buf, "Detailed");
 }
 
+void printSwissProtAccUrl(FILE *f, char *accession)
+/* Print URL for Swiss-Prot protein accession. */
+{
+fprintf(f, uniprotFormat, accession);
+}
+
 static void printSwissProtProteinUrl(FILE *f, char *accession)
 /* Print URL for Swiss-Prot NiceProt on a protein. */
 {
@@ -390,7 +397,7 @@ char *spAcc;
 spAcc = uniProtFindPrimAcc(accession);
 if (spAcc != NULL)
     {
-    fprintf(f, uniprotFormat , spAcc);
+    printSwissProtAccUrl(f, accession);
     }
 else
     {
@@ -23508,6 +23515,91 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
 }
 
 
+void doNumtSHg19Mm9(struct trackDb *tdb, char *itemName)
+/* Put up page for NumtS. */
+{
+char *table = tdb->table;
+struct sqlConnection *conn = hAllocConn(database);
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+boolean firstTime = TRUE;
+int start = cartInt(cart, "o");
+int num = 6;
+/* message strings */
+char clickMsg[128];
+char *openMsg1 = "Click 'browser' link below to open Genome Browser at genomic position where";
+char *openMsg2 = "maps\n";
+char *openMsgM = "Click 'browser' link below to open Genome Browser at mitochondrial position where";
+
+genericHeader(tdb, itemName);
+genericBedClick(conn, tdb, itemName, start, num);
+
+safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s where name='%s'",
+      table, itemName);
+sr = sqlGetResult(conn, query);
+int sSize=0;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+        bed = bedLoad6(row);
+        sSize = bed->chromEnd - bed->chromStart;
+        /* printf("sSize is: %5d <BR>", sSize); */
+    }
+
+if (sameString("numtS", table))
+    {
+    safef(query, sizeof(query),
+        "select  chrom, chromStart, chromEnd, name, score, strand "
+        "from numtSMitochondrion where name = '%s'  ", itemName);
+    strcpy(clickMsg, openMsgM);
+    }
+else if (sameString("numtSAssembled", table))
+    {
+    safef(query, sizeof(query),
+        "select  chrom, chromStart, chromEnd, name, score, strand "
+        "from numtSMitochondrionChrPlacement where name = '%s' ", itemName);
+    strcpy(clickMsg, openMsgM);
+    }
+else if (sameString("numtSMitochondrion", table))
+    {
+    safef(query, sizeof(query),
+        "select  chrom, chromStart, chromEnd, name, score, strand "
+        "from numtS where (name = '%s'", itemName);
+    strcpy(clickMsg, openMsg1);
+    }
+    sr = sqlGetResult(conn, query);
+    firstTime = TRUE;
+
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<PRE><TT>");
+        if (firstTime)
+            {
+            firstTime = FALSE;
+        printf("<BR><H3>%s item '%s' %s</H3><BR>", clickMsg, itemName, openMsg2);
+
+            printf("BROWSER | NAME                CHROMOSOME      START        END     SIZE    SCORE  STRAND \n");
+            printf("--------|--------------------------------------------------------------------------------------------\n");
+
+            }
+        bed = bedLoad6(row);
+        printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
+               hgTracksPathAndSettings(), database,
+               bed->chrom, bed->chromStart+1, bed->chromEnd);
+
+        printf("%-20s %-10s %9d  %9d    %5d    %5d    %1s",
+            bed->name, bed->chrom, bed->chromStart+1, bed->chromEnd,
+            (bed->chromEnd - bed->chromStart),bed->score, bed->strand);
+
+        printf("</TT></PRE>");
+        }
+
+ printf("<BR>");
+ printTrackHtml(tdb);
+ hFreeConn(&conn);
+}
+
 
 void doMiddle()
 /* Generate body of HTML. */
@@ -23857,6 +23949,10 @@ else if (sameWord(table, "refGene"))
 else if (sameWord(table, "ccdsGene"))
     {
     doCcdsGene(tdb, item);
+    }
+else if (isNewGencodeGene(tdb))
+    {
+    doGencodeGene(tdb, item);
     }
 else if (sameWord(table, "mappedRefSeq"))
     /* human refseqs on chimp browser */
@@ -24708,13 +24804,19 @@ else if (tdb != NULL && startsWith("bedDetail", tdb->type))
     {
     doBedDetail(tdb, NULL, item);
     }
-else if (startsWith("numtS", table))
+else if (startsWith("numtS", table) && sameString("hg18", database))
        //  && (!sameString("numtSAssembled", table)))
     {
     //genericHeader(tdb, item);
     //genericClickHandler(tdb, item, NULL);
     doNumtS(tdb, item);
     }
+else if (startsWith("numtS", table) && 
+     (sameString("hg19", database) || sameString("mm9", database)))
+    {
+    doNumtSHg19Mm9(tdb, item);
+    }
+
 else if (tdb != NULL)
     {
     genericClickHandler(tdb, item, NULL);

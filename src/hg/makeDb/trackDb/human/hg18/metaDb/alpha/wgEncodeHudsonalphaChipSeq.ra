@@ -1680,52 +1680,6 @@ subId 832
 treatment None
 view Alignments
 
-metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1Htb11Control
-objType file
-antibody Input
-cell HTB-11
-composite wgEncodeHudsonalphaChipSeq
-controlId SL108
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-19
-dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Htb11Control.tagAlign.gz
-fragLength 225
-grant Myers
-lab HudsonAlpha
-labExpId SL108
-project wgEncode
-protocol PCR2x
-replicate 1
-setType input
-subId 438
-treatment None
-view Alignments
-
-metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1Htb11Nrsf
-objType file
-antibody NRSF
-cell HTB-11
-composite wgEncodeHudsonalphaChipSeq
-controlId SL108
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-19
-dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Htb11Nrsf.tagAlign.gz
-fragLength 225
-grant Myers
-lab HudsonAlpha
-labExpId SL83
-project wgEncode
-protocol PCR2x
-replicate 1
-setType exp
-subId 438
-treatment None
-view Alignments
-
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1JurkatControlPcr2x
 objType file
 antibody Input
@@ -2003,6 +1957,52 @@ protocol PCR2x
 replicate 1
 setType exp
 subId 7
+treatment None
+view Alignments
+
+metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1SknshControl
+objType file
+antibody Input
+cell HTB-11
+composite wgEncodeHudsonalphaChipSeq
+controlId SL108
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-19
+dateUnrestricted 2010-04-19
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1SknshControl.tagAlign.gz
+fragLength 225
+grant Myers
+lab HudsonAlpha
+labExpId SL108
+project wgEncode
+protocol PCR2x
+replicate 1
+setType input
+subId 438
+treatment None
+view Alignments
+
+metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep1SknshNrsf
+objType file
+antibody NRSF
+cell HTB-11
+composite wgEncodeHudsonalphaChipSeq
+controlId SL108
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-19
+dateUnrestricted 2010-04-19
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1SknshNrsf.tagAlign.gz
+fragLength 225
+grant Myers
+lab HudsonAlpha
+labExpId SL83
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+subId 438
 treatment None
 view Alignments
 
@@ -3451,52 +3451,6 @@ subId 832
 treatment None
 view Alignments
 
-metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2Htb11Control
-objType file
-antibody Input
-cell HTB-11
-composite wgEncodeHudsonalphaChipSeq
-controlId SL410
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-19
-dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Htb11Control.tagAlign.gz
-fragLength 225
-grant Myers
-lab HudsonAlpha
-labExpId SL410
-project wgEncode
-protocol PCR2x
-replicate 2
-setType input
-subId 438
-treatment None
-view Alignments
-
-metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2Htb11Nrsf
-objType file
-antibody NRSF
-cell HTB-11
-composite wgEncodeHudsonalphaChipSeq
-controlId SL410
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-19
-dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Htb11Nrsf.tagAlign.gz
-fragLength 225
-grant Myers
-lab HudsonAlpha
-labExpId SL409
-project wgEncode
-protocol PCR2x
-replicate 2
-setType exp
-subId 438
-treatment None
-view Alignments
-
 metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2JurkatPol2Pcr2x
 objType file
 antibody Pol2
@@ -3751,6 +3705,52 @@ protocol PCR2x
 replicate 2
 setType exp
 subId 7
+treatment None
+view Alignments
+
+metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2SknshControl
+objType file
+antibody Input
+cell HTB-11
+composite wgEncodeHudsonalphaChipSeq
+controlId SL410
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-19
+dateUnrestricted 2010-04-19
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2SknshControl.tagAlign.gz
+fragLength 225
+grant Myers
+lab HudsonAlpha
+labExpId SL410
+project wgEncode
+protocol PCR2x
+replicate 2
+setType input
+subId 438
+treatment None
+view Alignments
+
+metaObject wgEncodeHudsonalphaChipSeqAlignmentsRep2SknshNrsf
+objType file
+antibody NRSF
+cell HTB-11
+composite wgEncodeHudsonalphaChipSeq
+controlId SL410
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-19
+dateUnrestricted 2010-04-19
+fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2SknshNrsf.tagAlign.gz
+fragLength 225
+grant Myers
+lab HudsonAlpha
+labExpId SL409
+project wgEncode
+protocol PCR2x
+replicate 2
+setType exp
+subId 438
 treatment None
 view Alignments
 
@@ -5379,30 +5379,6 @@ tableName wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Zbtb33Pcr1x
 treatment None
 view Peaks
 
-metaObject wgEncodeHudsonalphaChipSeqPeaksRep1Htb11Nrsf
-objType table
-antibody NRSF
-cell HTB-11
-composite wgEncodeHudsonalphaChipSeq
-controlId SL108
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-19
-dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqPeaksRep1Htb11Nrsf.broadPeak.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL83
-project wgEncode
-protocol PCR2x
-replicate 1
-setType exp
-softwareVersion MACS
-subId 438
-tableName wgEncodeHudsonalphaChipSeqPeaksRep1Htb11Nrsf
-treatment None
-view Peaks
-
 metaObject wgEncodeHudsonalphaChipSeqPeaksRep1JurkatPol2Pcr2x
 objType table
 antibody Pol2
@@ -5568,6 +5544,30 @@ replicate 1
 setType exp
 subId 7
 tableName wgEncodeHudsonalphaChipSeqPeaksRep1SknmcFoxp2
+treatment None
+view Peaks
+
+metaObject wgEncodeHudsonalphaChipSeqPeaksRep1SknshNrsf
+objType table
+antibody NRSF
+cell HTB-11
+composite wgEncodeHudsonalphaChipSeq
+controlId SL108
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-19
+dateUnrestricted 2010-04-19
+fileName wgEncodeHudsonalphaChipSeqPeaksRep1SknshNrsf.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL83
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+softwareVersion MACS
+subId 438
+tableName wgEncodeHudsonalphaChipSeqPeaksRep1SknshNrsf
 treatment None
 view Peaks
 
@@ -6928,30 +6928,6 @@ tableName wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Zbtb33Pcr1x
 treatment None
 view Peaks
 
-metaObject wgEncodeHudsonalphaChipSeqPeaksRep2Htb11Nrsf
-objType table
-antibody NRSF
-cell HTB-11
-composite wgEncodeHudsonalphaChipSeq
-controlId SL410
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-19
-dateUnrestricted 2010-04-19
-fileName wgEncodeHudsonalphaChipSeqPeaksRep2Htb11Nrsf.broadPeak.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL409
-project wgEncode
-protocol PCR2x
-replicate 2
-setType exp
-softwareVersion MACS
-subId 438
-tableName wgEncodeHudsonalphaChipSeqPeaksRep2Htb11Nrsf
-treatment None
-view Peaks
-
 metaObject wgEncodeHudsonalphaChipSeqPeaksRep2JurkatPol2Pcr2x
 objType table
 antibody Pol2
@@ -7117,6 +7093,30 @@ replicate 2
 setType exp
 subId 7
 tableName wgEncodeHudsonalphaChipSeqPeaksRep2SknmcFoxp2
+treatment None
+view Peaks
+
+metaObject wgEncodeHudsonalphaChipSeqPeaksRep2SknshNrsf
+objType table
+antibody NRSF
+cell HTB-11
+composite wgEncodeHudsonalphaChipSeq
+controlId SL410
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-19
+dateUnrestricted 2010-04-19
+fileName wgEncodeHudsonalphaChipSeqPeaksRep2SknshNrsf.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL409
+project wgEncode
+protocol PCR2x
+replicate 2
+setType exp
+softwareVersion MACS
+subId 438
+tableName wgEncodeHudsonalphaChipSeqPeaksRep2SknshNrsf
 treatment None
 view Peaks
 
@@ -11458,52 +11458,6 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Zbtb33Pcr1x
 treatment None
 view RawSignal
 
-metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Htb11Control
-objType table
-antibody Input
-cell HTB-11
-composite wgEncodeHudsonalphaChipSeq
-controlId SL108
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-19
-dateUnrestricted 2010-04-19
-fragLength 225
-grant Myers
-lab HudsonAlpha
-labExpId SL108
-project wgEncode
-protocol PCR2x
-replicate 1
-setType input
-subId 438
-tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Htb11Control
-treatment None
-view RawSignal
-
-metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1Htb11Nrsf
-objType table
-antibody NRSF
-cell HTB-11
-composite wgEncodeHudsonalphaChipSeq
-controlId SL108
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-19
-dateUnrestricted 2010-04-19
-fragLength 225
-grant Myers
-lab HudsonAlpha
-labExpId SL83
-project wgEncode
-protocol PCR2x
-replicate 1
-setType exp
-subId 438
-tableName wgEncodeHudsonalphaChipSeqRawSignalRep1Htb11Nrsf
-treatment None
-view RawSignal
-
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatControlPcr2x
 objType table
 antibody Input
@@ -11782,6 +11736,52 @@ replicate 1
 setType exp
 subId 7
 tableName wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
+treatment None
+view RawSignal
+
+metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1SknshControl
+objType table
+antibody Input
+cell HTB-11
+composite wgEncodeHudsonalphaChipSeq
+controlId SL108
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-19
+dateUnrestricted 2010-04-19
+fragLength 225
+grant Myers
+lab HudsonAlpha
+labExpId SL108
+project wgEncode
+protocol PCR2x
+replicate 1
+setType input
+subId 438
+tableName wgEncodeHudsonalphaChipSeqRawSignalRep1SknshControl
+treatment None
+view RawSignal
+
+metaObject wgEncodeHudsonalphaChipSeqRawSignalRep1SknshNrsf
+objType table
+antibody NRSF
+cell HTB-11
+composite wgEncodeHudsonalphaChipSeq
+controlId SL108
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-19
+dateUnrestricted 2010-04-19
+fragLength 225
+grant Myers
+lab HudsonAlpha
+labExpId SL83
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+subId 438
+tableName wgEncodeHudsonalphaChipSeqRawSignalRep1SknshNrsf
 treatment None
 view RawSignal
 
@@ -13231,52 +13231,6 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Zbtb33Pcr1x
 treatment None
 view RawSignal
 
-metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Htb11Control
-objType table
-antibody Input
-cell HTB-11
-composite wgEncodeHudsonalphaChipSeq
-controlId SL410
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-19
-dateUnrestricted 2010-04-19
-fragLength 225
-grant Myers
-lab HudsonAlpha
-labExpId SL410
-project wgEncode
-protocol PCR2x
-replicate 2
-setType input
-subId 438
-tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Htb11Control
-treatment None
-view RawSignal
-
-metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Htb11Nrsf
-objType table
-antibody NRSF
-cell HTB-11
-composite wgEncodeHudsonalphaChipSeq
-controlId SL410
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-19
-dateUnrestricted 2010-04-19
-fragLength 225
-grant Myers
-lab HudsonAlpha
-labExpId SL409
-project wgEncode
-protocol PCR2x
-replicate 2
-setType exp
-subId 438
-tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Htb11Nrsf
-treatment None
-view RawSignal
-
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatPol2Pcr2x
 objType table
 antibody Pol2
@@ -13535,6 +13489,52 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalRep2SknmcFoxp2
 treatment None
 view RawSignal
 
+metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2SknshControl
+objType table
+antibody Input
+cell HTB-11
+composite wgEncodeHudsonalphaChipSeq
+controlId SL410
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-19
+dateUnrestricted 2010-04-19
+fragLength 225
+grant Myers
+lab HudsonAlpha
+labExpId SL410
+project wgEncode
+protocol PCR2x
+replicate 2
+setType input
+subId 438
+tableName wgEncodeHudsonalphaChipSeqRawSignalRep2SknshControl
+treatment None
+view RawSignal
+
+metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2SknshNrsf
+objType table
+antibody NRSF
+cell HTB-11
+composite wgEncodeHudsonalphaChipSeq
+controlId SL410
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-19
+dateUnrestricted 2010-04-19
+fragLength 225
+grant Myers
+lab HudsonAlpha
+labExpId SL409
+project wgEncode
+protocol PCR2x
+replicate 2
+setType exp
+subId 438
+tableName wgEncodeHudsonalphaChipSeqRawSignalRep2SknshNrsf
+treatment None
+view RawSignal
+
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2U87Control
 objType table
 antibody Input
@@ -13604,4 +13604,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: -880387069
+# MAGIC: -602907235

@@ -130,6 +130,14 @@ The format of the type fields:
    Optional fields to be defined elsewhere in the trackDb.ra record:
 	itemAttrTbl - table used to color individual items in a track,
                       selected by name and locations.
+        itemClassTbl - table use to associate a given genePred name with
+                       a arbitrary class name, use in picking a color.
+        itemClassNameColumn - name of column that is joined with the genePred
+                              name column, default is `name'.
+        itemClassClassColumn - name of column that contains the class, default
+                               is `class'.
+        geneClasses - white space separated list of valid gene classes.
+        gClass_XXX - color to use for items that map to class XXX.
 
 8. type maf
     A type of multiple alignment track, becoming obsolete,
@@ -714,6 +722,11 @@ This sets up 2 filter by category drop downs.  The first is on the table field '
 both 'Validated' and 'Manual', then an item must have a 1 or 2 in the level field in order to be seen.
 And if the user also selects 'coding' in the second filter, an item would have to have level 1 or 2 and
 class='coding'.
+
+For genePred tables, the itemClass table, as described with the genePred track
+type is used.
+
+It is not know if filterBy works on anything else.
 
 
 COMPOSITE TRACKS

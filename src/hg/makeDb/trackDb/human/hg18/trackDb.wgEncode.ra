@@ -1555,8 +1555,8 @@ include trackDb.wgEncodeYaleRnaSeq.ra
 include wgEncodeYaleChIPseq.ra
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
-include wgEncodeHudsonalphaChipSeq.ra
-
+include wgEncodeHudsonalphaChipSeq.ra beta,public
+include wgEncodeHudsonalphaChipSeq.new.ra alpha
 
 #  GENCODE genes (wrangler: braney )
 

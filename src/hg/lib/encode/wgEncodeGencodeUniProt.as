@@ -1,6 +1,8 @@
 table wgEncodeGencodeUniProt
-"Gencode metadata table of associated UniProt peptide IDs"
+"GENCODE transcript to UniProt peptide mapping"
    (
-    string transcriptId; "Transcript ID for Gencode gene"
-    string uniProtId; "UniProt/Swiss-Prot ID"
+    string transcriptId; "GENCODE transcript identifier"
+    string acc; "UniProt/Swiss-Prot accession"
+    string name; "UniProt/Swiss-Prot entry name"
+    enum("SwissProt", "TrEMBL") dataset; "UniProt dataset"
    )
