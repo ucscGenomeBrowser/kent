@@ -8073,22 +8073,22 @@ description Grown for 7 days in differentiation medium (Wold)
 type treatment
 
 term Estradiol_10nM
-tag EST10NM
+tag EST10nm1h
 description  1 h with 10 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_24hr
-tag ESTRADIa24hh
+tag EST10nm24h
 description  24 hr with 10 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_1nM
-tag ESTRADIb1h
+tag EST1nm1h
 description  1 h with 1 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_4hr
-tag ESTRADIa4h
+tag EST10nm4h
 description  4 h with 10 nM Estradiol (Myers)
 type treatment
 
