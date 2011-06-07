@@ -23415,7 +23415,7 @@ char itemNameDash[64]; /* itenName appended with a "_" */
 char itemNameTrimmed[64]; /* itemName trimed at last "_" */
 int sDiff = 30; /* acceptable difference of genomics size */
 /* message strings */
-char clickMsg[128];
+char *clickMsg = NULL;
 char *openMsg1 = "Click 'browser' link below to open Genome Browser at genomic position where";
 char *openMsg2 = "maps\n";
 char *openMsgM = "Click 'browser' link below to open Genome Browser at mitochondrial position where";
@@ -23450,7 +23450,7 @@ if (sameString("numtS", table))
         "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
         " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
     itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-    strcpy(clickMsg, openMsgM);
+    clickMsg = openMsgM;
     }
 else if (sameString("numtSAssembled", table))
     {
@@ -23460,7 +23460,7 @@ else if (sameString("numtSAssembled", table))
         "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
         " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
     itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-    strcpy(clickMsg, openMsgM);
+    clickMsg = openMsgM;
     }
 else if (sameString("numtSMitochondrion", table))
     {
@@ -23470,7 +23470,7 @@ else if (sameString("numtSMitochondrion", table))
         "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
         " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
     itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-    strcpy(clickMsg, openMsg1);
+    clickMsg = openMsg1;
     }
 else if (sameString("numtSMitochondrionChrPlacement", table))
     {
@@ -23480,7 +23480,7 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
         "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
         " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
     itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-    strcpy(clickMsg, openMsg1);
+    clickMsg = openMsg1;
     }
     sr = sqlGetResult(conn, query);
     firstTime = TRUE;
@@ -23528,7 +23528,7 @@ boolean firstTime = TRUE;
 int start = cartInt(cart, "o");
 int num = 6;
 /* message strings */
-char clickMsg[128];
+char *clickMsg = NULL;
 char *openMsg1 = "Click 'browser' link below to open Genome Browser at genomic position where";
 char *openMsg2 = "maps\n";
 char *openMsgM = "Click 'browser' link below to open Genome Browser at mitochondrial position where";
@@ -23547,26 +23547,19 @@ while ((row = sqlNextRow(sr)) != NULL)
         /* printf("sSize is: %5d <BR>", sSize); */
     }
 
-if (sameString("numtS", table))
+if (sameString("numtS", table) || sameString("numtSAssembled", table))
     {
     safef(query, sizeof(query),
         "select  chrom, chromStart, chromEnd, name, score, strand "
         "from numtSMitochondrion where name = '%s'  ", itemName);
-    strcpy(clickMsg, openMsgM);
-    }
-else if (sameString("numtSAssembled", table))
-    {
-    safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand "
-        "from numtSMitochondrionChrPlacement where name = '%s' ", itemName);
-    strcpy(clickMsg, openMsgM);
+    clickMsg = openMsgM;
     }
 else if (sameString("numtSMitochondrion", table))
     {
     safef(query, sizeof(query),
         "select  chrom, chromStart, chromEnd, name, score, strand "
         "from numtS where name = '%s'", itemName);
-    strcpy(clickMsg, openMsg1);
+    clickMsg = openMsg1;
     }
     sr = sqlGetResult(conn, query);
     firstTime = TRUE;
