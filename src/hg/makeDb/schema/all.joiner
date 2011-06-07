@@ -2515,6 +2515,7 @@ identifier blastHg18KGPep04Id
      danRer5.blastHg18KG.qName
      canFam2.blastHg18KG.qName
      felCat3.blastHg18KG.qName
+     felCat4.blastHg18KG.qName
      dm2.blastHg18KG.qName
      fr2.blastHg18KG.qName
      mm8.blastHg18KG.qName
@@ -2550,6 +2551,7 @@ identifier blastHg18KGRef04Id
      danRer5.blastHg18KG.qName
      canFam2.blastHg18KG.qName
      felCat3.blastHg18KG.qName
+     felCat4.blastHg18KG.qName
      dm2.blastHg18KG.qName
      fr2.blastHg18KG.qName
      mm8.blastHg18KG.qName
