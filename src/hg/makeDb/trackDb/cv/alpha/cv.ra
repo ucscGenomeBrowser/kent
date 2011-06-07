@@ -10411,13 +10411,13 @@ cvDefined no
 validate none
 priority 921
 
-term spikeInLib
+term spikeInPool
 type typeOfTerm
-label Spike-In library
-description (Provisional) The spike-in library that was used.
+label Spike-In Pool   
+description (Provisional) The spike-in pool that was used.
 searchable no
 cvDefined no
-validate integer
+validate none   
 priority 921
 
 term strain
