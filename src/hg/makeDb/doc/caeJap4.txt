@@ -97,13 +97,13 @@ db caeJap4
 # genomeCladePriority 70
 scientificName Caenorhabditis japonica
 commonName C. japonica
-assemblyDate Sep. 2010
-assemblyLabel Washington University School of Medicine GSC C. japonica 7.0.1
-assemblyShortLabel WS220
+assemblyDate Aug. 2010
+assemblyLabel Washington University School of Medicine GSC C. japonica 7.0.1 (GCA_000147155.1)
+assemblyShortLabel WUSTL 7.0.1
 orderKey 879
 mitoAcc none
-fastaFiles /hive/data/genomes/caeJap4/ws220/sequences/dna/c_japonica.WS220.dna.fa.gz
-agpFiles /hive/data/genomes/caeJap4/ws220/caeJap4.ws220.fake.agp
+fastaFiles /hive/data/genomes/caeJap4/genbank/caeJap4.scaf.fa.gz
+agpFiles /hive/data/genomes/caeJap4/genbank/caeJap4.scaf.agp.gz
 # qualFiles none
 dbDbSpeciesDir worm
 taxId 281687
@@ -238,7 +238,7 @@ taxId 281687
 	/hive/data/staging/data/caeJap4
 
 #########################################################################
-# GENBANK AUTO UPDATE (DONE - 2011-06-03 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2011-06-03,07 - Hiram)
     # align with latest genbank process.
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -256,7 +256,7 @@ caeJap4.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaF
 caeJap4.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
 caeJap4.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
 caeJap4.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
-caeJap4.refseq.mrna.native.load = no
+caeJap4.refseq.mrna.native.load = yes
 caeJap4.refseq.mrna.xeno.load  = yes
 caeJap4.refseq.mrna.xeno.loadDesc = yes
 caeJap4.genbank.mrna.xeno.load = yes
@@ -265,7 +265,7 @@ caeJap4.genbank.est.native.loadDesc = no
 caeJap4.downloadDir = caeJap4
 caeJap4.perChromTables = no
 
-    git commit -m "Added caeJap4 C. japonica WS220" etc/genbank.conf
+    git commit -m "Added caeJap4 C. japonica GCA_000147155.1" etc/genbank.conf
     git push
     # update /cluster/data/genbank/:
     make etc-update
@@ -273,15 +273,15 @@ caeJap4.perChromTables = no
     screen		#	use a screen to manage this job
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial caeJap4 &
-    #	logFile:  var/build/logs/2011.05.26-09:19:08.caeJap4.initalign.log
-    #	real    291m13.960s
+    #	logFile:  var/build/logs/2011.06.03-11:48:21.caeJap4.initalign.log
+    #	real    457m45.267s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeJap4
-    #	logFile: var/dbload/hgwdev/logs/2011.05.25-15:46:59.dbload.log
-    #	real    22m27.349s
+    #	logFile: var/dbload/hgwdev/logs/2011.06.07-13:36:39.dbload.log
+    #	real    21m36.966s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -293,4 +293,21 @@ caeJap4.perChromTables = no
     make etc-update
 
 #########################################################################
+# lastz swap ce10 to caeJap4 (DONE - 2011-06-07 - Hiram)
+    #	original alignment on ce10
+    cd /hive/data/genomes/ce10/bed/lastzCaeJap4.2011-06-07
+    cat fb.ce10.chainCaeJap4Link.txt 
+    #	27815993 bases of 100286070 (27.737%) in intersection
 
+    mkdir /hive/data/genomes/caeJap4/bed/blastz.ce10.swap
+    cd /hive/data/genomes/caeJap4/bed/blastz.ce10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce10/bed/lastzCaeJap4.2011-06-07/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    4m11.401s
+
+    cat fb.caeJap4.chainCe10Link.txt
+    #	30128569 bases of 154057934 (19.557%) in intersection
+
+#########################################################################
