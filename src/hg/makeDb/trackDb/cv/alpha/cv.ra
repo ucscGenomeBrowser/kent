@@ -145,7 +145,7 @@ tier 2
 protocol HeLa-S3:HeLa-S3_protocol.pdf HeLa-S3_IFN_Crawford:HeLa-S3_IFN_Crawford_protocol.pdf
 
 #term HeLa-S3_IFNg
-#tag HeLaS3IFNg
+#tag HELAS3IFNg
 #description cervical carcinoma (Interferon gamma treatment)
 #type Cell Line
 #organism human
@@ -257,7 +257,7 @@ type Cell Line
 organism human
 description fetal buttock/thigh fibroblast
 tissue Skin
-#lineage mesoderm
+lineage mesoderm
 #lineage ectoderm may be more accurate
 karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04449
@@ -369,7 +369,9 @@ tissue Brain
 lineage ectoderm
 vendorName Lonza
 vendorId CC-2565
-orderUrl http://www.lonza.com/
+(echo "track name=\"edmjay\" description=\"Most single-exon edmjay events\"" ;\
+ cat data/ffmm9eventinfo_coords_allevents_seq.txt |scripts/edMjayToBed.py \     
+ |grep -v random) > data/edmjay.mm9.bedorderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099
@@ -607,7 +609,7 @@ description left ventrible, donor N41, age 26, Asian, DNA extract
 tissue Left ventrible
 lineage mesoderm
 karyotype normal
-sex M
+Asex M
 vendorName BioChain
 vendorId BioChain_D1234138_A705026
 orderUrl http://www.biochain.com/biochain/homepage.htm
@@ -667,7 +669,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol HudsonAlpha:Myers_BioChain_protocol.pdf
 
 term BC_Lung_H12817N
-tag BCLUNG
+tag BCLUNGb
 type Cell Line
 tier 3
 organism human
@@ -718,7 +720,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol HudsonAlpha:Myers_BioChain_protocol.pdf
 
 term BC_Pericardium_H12529N
-tag BCPERICARDIUM
+tag BCPERI
 type Cell Line
 tier 3
 organism human
@@ -1212,7 +1214,6 @@ lineage mesoderm
 vendorName Coriell
 vendorId AG08470
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08470&PgId=166
-lineage
 karyotype normal
 termId BTO:0000452
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
@@ -1403,7 +1404,7 @@ tier 3
 protocol UW_Stam:GM12875_Stam_protocol.pdf
 
 term GM12878-XiMat
-tag GM12878Xb
+tag GM12878b
 type Cell Line
 organism human
 description lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
@@ -1929,7 +1930,6 @@ lineage endoderm
 vendorName ATCC
 vendorId CCL-247
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-247&Template=cellBiology
-lineage endoderm
 karyotype cancer
 termId BTO:0002254
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002254
@@ -1957,7 +1957,6 @@ type Cell Line
 organism human
 description embryonic kidney. (PMID: 11967234)
 tissue Kidney
-lineage endoderm
 vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
@@ -1975,7 +1974,6 @@ type Cell Line
 organism human
 description embryonic kidney (alternate protocol). (PMID: 11967234)
 tissue Kidney
-lineage endoderm
 vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
@@ -2078,7 +2076,6 @@ lineage mesoderm
 vendorName ScienCell
 vendorId 2620
 orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_42&products_id=83 ScienCell
-lineage
 karyotype normal
 termId BTO:0000519 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000519
@@ -2124,7 +2121,6 @@ lineage mesoderm
 vendorName ATCC
 vendorId CCL-240
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-240&Template=cellBiology
-lineage
 termId BTO:0000738
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000738
 karyotype cancer
@@ -2142,7 +2138,6 @@ lineage ectoderm
 vendorName Lonza
 vendorId CC-2551
 orderUrl http://www.lonza.com/
-lineage
 karyotype
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
@@ -2420,7 +2415,7 @@ tier 3
 protocol Broad_Histone:HSMM_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HSMMtube
-tag HSMMt
+tag HSMMT
 type Cell Line
 organism human
 description Normal Human Skeletal Muscle Myotubes
@@ -2506,7 +2501,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Huh-7_Crawford_protocol.pdf
 
 term  Huh-7.5
-tag  HUH7.5
+tag  HUH75
 type Cell Line
 tier 3
 organism human
@@ -2794,7 +2789,6 @@ vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche
 #put universities in for Stam and Snyder
 vendorId (see protocol documents)
 orderUrl N/A
-lineage
 karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489
@@ -2869,7 +2863,6 @@ description Normal Human Lung Fibroblasts
 vendorName Lonza
 vendorId CC-2512
 orderUrl http://www.lonza.com/
-lineage
 karyotype
 termId BTO:0000161 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000161
@@ -2904,7 +2897,6 @@ lineage mesoderm
 vendorName Lonza
 vendorId CC-2538
 orderUrl http://www.lonza.com/
-lineage
 karyotype normal
 termId BTO:0001593
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001593
@@ -2938,7 +2930,6 @@ tissue Pancreas
 vendorName ATCC
 vendorId CRL-1469
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1469&Template=cellBiology
-lineage
 karyotype cancer
 termId BTO:0000304
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000304
@@ -3017,7 +3008,6 @@ lineage ectoderm
 vendorName ATCC
 vendorId CRL-2060
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2060&Template=cellBiology
-lineage ectoderm
 karyotype cancer
 termId BTO:0000690 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000690
@@ -3085,7 +3075,6 @@ lineage endoderm
 vendorName ATCC
 vendorId
 orderUrl http://www.atcc.org/
-lineage
 karyotype
 termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
@@ -3133,7 +3122,6 @@ lineage endoderm
 vendorName Lonza
 vendorId CC-2547
 orderUrl http://www.lonza.com/
-lineage
 karyotype normal
 termId BTO:0002022 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022
@@ -3426,7 +3414,6 @@ lineage ectoderm
 vendorName ATCC
 vendorId HTB-169
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-169&Template=cellBiology
-lineage
 karyotype
 termId BTO:0001178 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001178
@@ -4249,7 +4236,8 @@ description pseudogene
 # template below
 # --------------------------
 # term (human-readable name)
-# tag (machine-readable name, no special characters)
+# tag (machine-readable name, no special characters, very short, uppercase except for suffix.  Usually
+#      the targetId, with a short suffix to differentiate different antibodies for the same target)
 # type (informs pipeline code of stanza type.  Should always be Antibody)
 # antibodyDescription (human-readable description.  Used in antibodies.html)
 # targetDescription (human-readable description of what the antibody targets.  Used in antibodies.html)
@@ -4417,7 +4405,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
 validation BHLEH40(Immunoblot):human_BHLEHE40_S-8_validation_Myers.pdf
 
 term BHLHE40_(NB100-1800)
-tag BHLHE40c
+tag BHLHE40b
 type Antibody
 target BHLHE40
 antibodyDescription Rabbit polyclonal, maps to a region between residues 350 and the C-terminus (residue 412)
@@ -4544,6 +4532,23 @@ targetId GeneCard:MYC
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYC
 validation missing
 
+
+##This does not appear in metaDb 5/21/11
+term CBX5
+tag CBX5
+type Antibody
+target CBX5
+targetDescription Chromobox homolog 5 (HP1 alpha homolog, Drosophila)
+antibodyDescription Mouse monoclonal. Raised against GST fusion protein corresponding to residues 2-191 of human HP1 protein. Recommended for detection of Hp1 (CBX5) of human, mouse, and vertebrates origin by Chromatin IP, IC, IH,IP,and WB.
+vendorName Millipore
+vendorId 05-689
+orderUrl http://www.millipore.com/catalogue/item/05-689
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/12419
+validation
+
 term CCNT2
 tag CCNT2
 type Antibody
@@ -4572,6 +4577,37 @@ targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 lab Snyder
 validation missing
+
+term CELF1
+tag CELF1
+type Antibody
+target CELF1
+targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens)
+antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP,IC, EMSA.
+vendorName Millipore
+vendorId 05621
+orderUrl
+lab Tenenbaum
+lots
+targetId
+targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
+validation
+
+##This does not appear in metaDb 5/21/11
+term CELF2
+tag CELF2
+type Antibody
+target CELF2
+targetDescription CUGBP, Elav-like family member 2
+antibodyDescription Mouse monoclonal. Raised against a synthetic peptide corresponding to amino acids 209-415 of human CuGBP2. Recommended for detection of CELF2 of human origin by WB.
+vendorName Millipore
+vendorId 04-047
+orderUrl http://www.millipore.com/catalogue/item/04-047
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/14007
+validation
 
 term CHD2_(AB68301)
 tag CHD2
@@ -4748,6 +4784,22 @@ lots J0505
 targetId EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation EBF1_(SC-137065)(Immunoprecipitation-WesternBlotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
+##This does not appear in metaDb 5/21/11
+term EEF1A1
+tag EEF1A1
+type Antibody
+target EEF1A1
+targetDescription Eukaryotic translation elongation factor 1 alpha 1
+antibodyDescription Mouse monoclonal. Raised against Crude calmodulin-binding proteins from Trypanosoma brucei isolated using calmodulin-affinity chromatography. Recommended for detection of EEF1A1 of bacterial, mammal, yeast (S. cerevisiae) origin by IP and WB.
+vendorName Millipore
+vendorId 05-235
+orderUrl http://www.millipore.com/catalogue/item/05-235
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
+validation
+
 
 term eGFP-FOS
 tag FOSe
@@ -4839,8 +4891,55 @@ targetId GeneCards:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
 validation eGFP-NR4A1:human_validation_White.pdf
 
-term ELF1_(SC-631)
-tag ELF1
+##This does not appear in metaDb 5/21/11
+term EIF4E
+tag EIF4E
+type Antibody
+target EIF4E
+targetDescription Eukaryotic initiation factor 4E
+antibodyDescription Rabbit monoclonal. Raised against Synthetic peptide corresponding to residues surrounding phosphorylated Ser209of human eIF4E. Recommended for detection of EIF4E of H, M, and R origin by WB, IH(P), IC, and IP.
+vendorName Millipore
+vendorId 04-1058
+orderUrl http://www.millipore.com/catalogue/item/04-1058
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
+validation
+
+##This does not appear in metaDb 5/21/11
+term EIF4EBP1
+tag EIF4EBP1
+type Antibody
+target EIF4EBP1
+targetDescription Eukaryotic translation initiation factor 4E binding protein 1
+antibodyDescription Rabbit monoclonal. Raised against Phospho-specific peptide corresponding to residues surrounding Thr45 of humanE IF4EBP1 . Recommended for detection of phospho-4E-BP1/2/3 of H and M origin by IC, IH(P), IP, and WB.
+vendorName Millipore
+vendorId 04-1010
+orderUrl http://www.millipore.com/catalogue/item/04-1010
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
+validation
+
+term ELAVL1
+tag ELAVL1
+type Antibody
+target ELAVL1
+targetDescription  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huantigen R) (Homo sapiens)
+antibodyDescription 1) Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin.
+vendorName 1) Santa Cruz Biotech; 2) Millipore
+vendorId SC-5261; Mil ab5831
+orderUrl http://www.santacruzbiotech.com ; http://www.millipore.com/catalogue/item/ab5831
+lab Tenenbaum
+lots 1) B2508(Nov2008)
+targetId
+targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
+validation
+
+term  ELF1_(SC-631)
+tag  ELF1
 type Antibody
 target  ELF1
 antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Elf-1 of human origin.
@@ -4972,7 +5071,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL2
 validation FOSL2(Immunoblot):human_FOSL2_Q-20_validation_Myers.pdf
 
 term FOXA1_(SC-6553)
-tag FOXA1b
+tag FOXA1a
 type Antibody
 target FOXA1
 targetDescription This gene encodes a member of the forehead class of DNA-binding proteins. These hepatocyte nuclear factors are transcriptional activators for liver-specific transcripts such as albumin and transthyretin, and they also interact with chromatin. Similar family members in mice have roles in the regulation of metabolism and in the differentiation of the pancreas and liver (RefSeq).
@@ -4986,7 +5085,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
 validation FOXA1(Immunoprecipitation-WesternBlot,MassSpec):human_FOXA1_SC-6553_validation_Myers.pdf
 
 term  FOXA1_(SC-101058)
-tag  FOXA1
+tag  FOXA1b
 type Antibody
 target  FOXA1
 antibodyDescription  Mouse monoclonal IgG, raised against recombinant HNF-3a of human origin.
@@ -5028,6 +5127,22 @@ lab Myers
 targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
 validation missing
+
+##This does not appear in metaDb 5/21/11
+term FXR1
+tag FXR1
+type Antibody
+target FXR1
+targetDescription Fragile X mental retardation, autosomal homolog 1
+antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
+vendorName Millipore
+vendorId 05-1529
+orderUrl http://www.millipore.com/catalogue/item/05-1529
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
+validation
 
 term GABP
 tag GABP
@@ -5527,6 +5642,22 @@ targetId GeneCards:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
 validation HDAC2_(SC-6296)(Immunoprecipitation-WesternBlot,MassSpec):human_HDAC2_SC-6296_validation_Myers.pdf
 
+##This does not appear in metaDb 5/21/11
+term Hexim1
+tag HEXIM1
+type Antibody
+target Hexim1
+targetDescription Hexamethylene bis-acetamide inducible 1
+antibodyDescription Rabbit Polyclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
+vendorName Millipore
+vendorId 07-955
+orderUrl http://www.millipore.com/catalogue/item/07-955
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
+validation
+
 term HEY1
 tag HEY1
 type Antibody
@@ -5599,6 +5730,37 @@ targetId GeneCards:HNF4G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
 validation HNF4G_(SC-6558)(ChIP,MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
 
+##This does not appear in metaDb 5/21/11
+term HNRNPD
+tag HNRNPD
+type Antibody
+target HNRNPD
+targetDescription Heterogeneous nuclear ribonucleoprotein D (AU-rich element RNA binding protein 1, 37kDa)
+antibodyDescription Rabbit polyclonal. Raised against purified Human AUF1. Recommended for detection of HNRNPD of m,r, h origin by WB and IP
+vendorName Millipore
+vendorId 07-260
+orderUrl http://www.millipore.com/catalogue/item/07-260
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
+validation
+
+##This does not appear in metaDb 5/21/11
+term hnRNPM
+tag HNRNPM
+type Antibody
+target hnRNPM
+targetDescription Heterogeneous nuclear ribonucleoprotein MantibodyDescription Mouse monoclonal. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB.
+vendorName Millipore
+vendorId 05-620
+orderUrl http://www.millipore.com/catalogue/item/05-620
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
+validation
+
 term HSF1
 tag HSF1
 type Antibody
@@ -5612,6 +5774,21 @@ lab Snyder
 targetId GeneCard:HSF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HSF1
 validation missing
+
+term IGF2BP1
+tag IGF2BP1
+type Antibody
+target IGF2BP1
+targetDescription  Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
+antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
+vendorName Santa Cruz Biotech
+vendorId SC-21027
+orderUrl http://www.scbt.com/datasheet-21027-imp-1-c-20-antibody.html
+lab Tenenbaum
+lots I0607(Nov2008)
+targetId
+targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
+validation
 
 term Ini1
 tag INI1
@@ -5774,7 +5951,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
 validation MAX(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_MAX_validation_Myers.pdf
 
 
-##This does not appear in metaDb
+##This does not appear in metaDb 5/21/11
 term MEF2A
 tag MEF2A
 type Antibody
@@ -5802,6 +5979,22 @@ lab Myers
 lots K2009
 targetId GeneCards:MEF2C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2C
+validation missing
+
+
+term Mxi1_(AF4185)
+tag MXI1
+type Antibody
+target Mxi1
+targetDescription  Transcriptional repressor. Binds with MAX to form recognize the core sequence 5'-CAC[GA]TG-3', antagonizes MYC transcriptional activity by competing for MAX
+antibodyDescription Goat IgG. Raised against E. coli-derived rhMxi1
+vendorName R&D Systems
+vendorId AF4185
+orderUrl http://www.rndsystems.com/
+lab Snyder
+lots ZIJ01
+targetId GeneCard:MXI1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
 validation missing
 
 term NANOG_(SC-33759)
@@ -5906,6 +6099,22 @@ targetId GeneCard:NFYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
 validation missing
 
+##This does not appear in metaDb 5/21/11
+term NONO
+tag NONO
+type Antibody
+target NONO
+targetDescription Non-POU domain containing, octamer-binding
+antibodyDescription Mouse monoclonal. Raised against KLH-conjugated, synthetic peptide corresponding to amino acids TVREAGPPAFYRPNS.Recommended for detection of NONO of H, R origin by IP, WB, IH.
+vendorName Millipore
+vendorId 05-950
+orderUrl http://www.millipore.com/catalogue/item/05-950
+lab Tenenbaum
+lots
+targetId GeneCard:NONO
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NONO
+validation
+
 term Nrf1
 tag NRF1
 type Antibody
@@ -5991,6 +6200,37 @@ lab Snyder
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation missing
+
+##This does not appear in metaDb 5/21/11
+term PABP
+tag PABP
+type Antibody
+target PABP
+targetDescription PolyA-binding protein
+antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein PABP. Recommended for detection of PABP of H, Rb, and Xenopus origin by IF, IP, and WB.
+vendorName Millipore
+vendorId 04-1467
+orderUrl http://www.millipore.com/catalogue/item/04-1467
+lab Tenenbaum
+lots
+targetId 37070
+targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
+Validation
+
+term PABPC1
+tag PABPC1
+type Antibody
+target PABPC1
+targetDescription  poly(A) binding protein, cytoplasmic 1 (Homo sapiens).
+antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin.
+vendorName Sigma Chemical Co.
+vendorId P6246
+orderUrl http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/P6246
+lab Tenenbaum
+lots 044K4810 (Nov 2008)
+targetId 26986
+targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
+validation
 
 term PAX5-C20
 tag PAX5
@@ -6207,6 +6447,22 @@ orderUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
 targetUrl
 validation PU.1(Immunoprecipitation-WesternBlot,MassSpec):human_PU.1_validation_Myers.pdf
 
+##This does not appear in metaDb 5/21/11
+term QKI
+tag QKI
+type Antibody
+target QKI
+targetDescription Quaking homolog, KH domain RNA binding (mouse)
+antibodyDescription Rabbit polyclonal. Raised against synthetic peptide from mouse QKI. Recommended for detection of QKI of H, M, and R origin by IP and WB.
+vendorName Millipore
+vendorId AB9904
+orderUrl http://www.millipore.com/catalogue/item/ab9904
+lab Tenenbaum
+lots
+targetId 9444
+targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
+validation
+
 term Rad21
 tag RAD21
 type Antibody
@@ -6249,6 +6505,37 @@ lab Snyder
 targetId GeneCard:RFX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RFX5
 validation RFX5_(200-401-194)(Western_blot,Immunoprecipitation):human_RFX5_200-401-194_validation_Snyder.pdf
+
+term ripInput
+tag RIPINPUT
+type Antibody
+target ripInput
+targetDescription  Total input for comparison for RIP experiments
+antibodyDescription
+vendorName
+vendorId
+orderUrl
+lab Tenenbaum
+lots
+targetId
+targetUrl
+validation
+
+##This does not appear in metaDb 5/21/11
+term RPS6KA1
+tag RPS6KA1
+type Antibody
+target RPS6KA1
+targetDescription Ribosomal protein S6 kinase, 90kDa, polypeptide 1
+antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide corresponding to the c-terminal sequence of human p90 RSK1(C-LAQRRVRKLPSTTL). Recommended for detection of RPS6KA1 of H, M, and R origin by WB, IP, and ELISA.
+vendorName Millipore
+vendorId 07-1477
+orderUrl http://www.millipore.com/catalogue/item/07-1477
+lab Tenenbaum
+lots
+targetId 6195
+targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
+validation
 
 term RXRA
 tag RXRA
@@ -6334,6 +6621,21 @@ lab Myers
 targetId GeneCard:SIX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIX5
 validation SIX5(ChIP,MassSpec):human_SIX5_validation_Myers.pdf
+
+term SLBP
+tag SLBP
+type Antibody
+target SLBP
+targetDescription  Stem-loop binding protein (Homo sapiens)
+antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal.
+vendorName 1)Millipore; 2)Santa Cruz Biotech; 3)Affinity Bioreagents
+vendorId 06-1376; 26522; MA156353
+orderUrl http://www.millipore.com/catalogue/item/06-1376 ; http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html ; http://www.bioreagents.com
+lab Tenenbaum
+lots 3) 7308-S2
+targetId 7884
+targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
+validation
 
 term SMC3_(ab9263)
 tag SMC3
@@ -6508,6 +6810,21 @@ lab Farnham
 targetId GeneCard:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
 validation missing
+
+term T7Tag
+tag T7tag
+type Antibody
+target T7Tag
+targetDescription  Negative Control Ab (T7 Tag Mouse Monoclonal).
+antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal)
+vendorName 1)Millipore; 2)Novagen
+vendorId AB3790; Nov_69522
+orderUrl
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
+validation
 
 term TAF1
 tag TAF1
@@ -7540,37 +7857,37 @@ type mapAlgorithm
 description No algorithm applicable
 
 term erng32a
-tag erng32a
+tag ERNG32A
 type mapAlgorithm
 description erange v3.2.0alpha
 
 term erng3
-tag erng3
+tag ERNG3
 type mapAlgorithm
 description erange v3.0
 
 term erng3b
-tag erng3b
+tag ERNG3b
 type mapAlgorithm
 description erange v3.0beta
 
 term blat34
-tag blat34
+tag BLAT34
 type mapAlgorithm
 description blat v34
 
 term bow098
-tag bow098
+tag BOW098
 type mapAlgorithm
 description bowtie v0.981
 
 term bow10
-tag bow10
+tag BOW10
 type mapAlgorithm
 description bowtie v0.10.0
 
 term bow125
-tag bow125
+tag BOW125
 type mapAlgorithm
 description bowtie v0.12.5
 
@@ -7595,37 +7912,37 @@ description TopHat v1.0.14
 # type (informs pipeline code of stanza type.  Should always be readType)
 # description (human-readable description of the read type, unclear where/if it's used)
 term 1x25
-tag r1x25
+tag R1X25
 type readType
 description Single 25 n.t. reads
 
 term 1x32
-tag r1x32
+tag R1X32
 type readType
 description Single 32 n.t. reads
 
 term 1x36
-tag r1x36
+tag R1X36
 type readType
 description Single 36 n.t. reads
 
 term 1x50
-tag r1x50
+tag R1X50
 type readType
 description Single 50 n.t. reads
 
 term 1x75
-tag r1x75
+tag R1X75
 type readType
 description Single 75 n.t. reads
 
 term 1x75D
-tag r1x75D
+tag R1X75D
 type readType
 description Single 75 n.t. directed reads
 
 term 2x75
-tag r2x75
+tag R2X75
 type readType
 description Paired 75 n.t. reads
 
@@ -7635,39 +7952,39 @@ description Paired 75 n.t. reads
 
 
 term 400
-tag il400
+tag IL400
 type insertLength
 description insert length of 400nt
 
 term 200
-tag il200
+tag IL200
 type insertLength
 description insert length of 200nt
 
 term ilNA
-tag ilNa
+tag ILNA
 type insertLength
 description insert length not applicable
 
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 term 1k
-tag f1k
+tag F1K
 type fragSize
 description 1 kb DNA fragments
 
 term 5k
-tag f5k
+tag F5K
 type fragSize
 description 5 kb DNA fragments
 
 term 10k
-tag f10k
+tag F10K
 type fragSize
 description 10 kb DNA fragments
 
 term 20k
-tag f20k
+tag F20K
 type fragSize
 description 20 kb DNA fragments
 
@@ -10469,7 +10786,7 @@ priority 470
 term uniqueness
 type typeOfTerm
 label Mapability Distinctions
-description (PRIVISIONAL) Degree of region uniqueness or mapability disctinctions
+description Degree of region uniqueness or mapability disctinctions
 searchable no
 cvDefined no
 validate none
