@@ -297,8 +297,8 @@ sub matchAutoSqlByFields {
     return $tASRef->{"lfs"};
   } elsif ($fields eq $tASRef->{"genericNameValue"}->{fields}) {
     return $tASRef->{"genericNameValue"};
-  } elsif ($fields eq $tASRef->{"openChromSynth"}->{fields}) {
-    return $tASRef->{"openChromSynth"};
+  } elsif ($fields eq $tASRef->{"openChromCombinedPeaks"}->{fields}) {
+    return $tASRef->{"openChromCombinedPeaks"};
   } else {
     for (my $n=12;  $n >= 3;  $n--) {
       if ($fields eq $tASRef->{"bed$n"}->{fields}) {
