@@ -793,8 +793,6 @@ txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
 
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 
 #####################################################################################
@@ -840,7 +838,6 @@ hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 
 
 
-
 # Make up kgXref table.  Takes about 3 minutes.
 txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
 hgLoadSqlTab $tempDb kgXref ~/kent/src/hg/lib/kgXref.sql ucscGenes.xref
@@ -867,14 +864,16 @@ hgLoadSqlTab $tempDb kgProtAlias ~/kent/src/hg/lib/kgProtAlias.sql ucscGenes.pro
 # Load up kgProtMap2 table that says where exons are in terms of CDS
 hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 
-compareModifiedFileSizes.csh $oldGeneDir .
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
 
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
 cd $dir
 hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl
-hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToRefSeq
+hgsql --skip-column-names \
+  -e "select kgID, refseq from kgXref where length(refseq) > 0" $tempDb \
+  > kgToRefseq.txt
+hgMapToGene $db -tempDb=$tempDb -lookup=kgToRefseq.txt refGene knownGene knownToRefSeq
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
 
@@ -883,7 +882,6 @@ hgMapToGene $db -tempDb=$tempDb allenBrainAli -type=psl knownGene knownToAllenBr
 
 hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
 
-#breakpoint
 
 # Create knownToTreefam table.  This is via a slow perl script that does remote queries of
 # the treefam database..  Takes ~5 hours.  Can and should run it in the background really.
@@ -904,7 +902,9 @@ if ($db =~ hg*) then
     knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
 endif
 
-#breakpoint
+compareModifiedFileSizes.csh $oldGeneDir .
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 if ($db =~ hg*) then
     time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \

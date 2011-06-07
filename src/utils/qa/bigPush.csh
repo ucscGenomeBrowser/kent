@@ -21,16 +21,24 @@ source `which qaConfig.csh`
 set db=""
 set tablelist=""
 
+set warningMessage="\nPushes tables in list to mysqlbeta and records size.\n\
+Requires sudo access to mypush to run.\n\
+\n\
+Do not redirect output or run in the background,\n\
+as it will require you to type your password in.\n\
+Program will ask you for your password again after\n\
+large tables. If you take too long to re-type in\n\
+the table the script stalled on might not get\n\
+pushed. Double-check that all tables have been\n\
+pushed!\n\
+\n\
+Will report total size of push and write two files:\n\
+db.tables.push -> output for all tables from mypush\n\
+db.tables.pushSize -> size of push\n"
+
+
 if ($2 == "") then
-  echo 
-  echo " pushes tables in list to beta and records size."
-  echo " do not redirect output ! "
-  echo " do not run in the background:"
-  echo " (will hang on long tables due to pasword prompt)."
-  echo " reports total size of push."
-  echo
-  echo "   usage:  database tablelist"
-  echo
+  echo $warningMessage
   exit
 else
   set db=$1
@@ -41,7 +49,9 @@ set trackName=`echo $2 | sed -e "s/Tables//"`
 # echo trackName = $trackName
 
 echo
-echo "will have to re-type Password after long tables (timeout)"
+echo "Will have to re-type password after large tables"
+echo "If you take too long to re-type your password, the table"
+echo "the script stalled on might not get pushed."
 echo
 rm -f $db.$trackName.push
 foreach table (`cat $tablelist`)

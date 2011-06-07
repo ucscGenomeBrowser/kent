@@ -1,6 +1,6 @@
 table wgEncodeGencodePdb
-"Gencode metadata table of associated Protein Data Bank (PDB) protein structuress"
+"GENCODE tracnscript to Protein Data Bank (PDB) protein structure mapping
    (
-    string transcriptId; "Transcript ID for Gencode gene"
-    string PdbId; "Protein Data Bank (PDB) ID"
+    string transcriptId; "GENCODE transcript identifier"
+    string pdbId; "Protein Data Bank (PDB) identifier"
    )

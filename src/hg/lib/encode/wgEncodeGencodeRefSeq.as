@@ -1,7 +1,7 @@
 table wgEncodeGencodeRefSeq
-"Gencode metadata table of associated RefSeq mRNA or non-coding RNA and peptide accessions"
+"GENCODE transcript to RefSeq mRNA or non-coding RNA and peptide accession mapping"
    (
-    string transcriptId; "Transcript ID for Gencode gene"
-    string refSeqRnaId; "RefSeq mRNA or non-coding RNA ID"
-    string refSeqPepId; "RefSeq peptide ID for coding transcripts"
+    string transcriptId; "GENCODE transcript identifier"
+    string rnaAcc; "RefSeq mRNA or non-coding RNA accession"
+    string pepAcc; "RefSeq peptide identifier for coding accession"
    )
