@@ -8944,24 +8944,23 @@ description the age when the real age is unknown
 # type (informs pipeline code of stanza type.  Should always be attic)
 # description (human-readable description.  Can't say where/how it's used)
 
-
 term supplemental
 tag sup
 type attic
 description Files supplemental at composite level 
 
-term auxUnValid
-tag auxUV
+term auxSup
+tag auxsup
 type attic
-description Unvalidated files supplemental at experimental level 
+description Unverified files supplemental at experiment level
 
 term auxValid
-tag auxV
+tag auxval
 type attic
 description Validated files supplemental to experiments
 
 term auxExp
-tag auxE
+tag auxexp
 type attic
 description Supplemental experiments
 
