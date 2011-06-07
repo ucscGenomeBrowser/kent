@@ -8560,6 +8560,12 @@ type view
 label Transcript Gencode V3c
 description Transcript Gencode V3c
 
+term ExonGencV3c
+tag EXONGENCV3C
+type view
+label Exons Gencode V3c
+description Provisional Exons Gencode V3c
+
 term Transfrags
 tag TRANSFRAGS
 type view
