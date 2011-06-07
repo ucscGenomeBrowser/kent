@@ -69,7 +69,7 @@ HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \
 	 pslCDnaFilter genePredToGtf pslPretty pslReps pslSort 
 
 
-HG_UTILS_APPLIST = bedExtendRanges gff3ToGenePred gtfToGenePred overlapSelect
+HG_UTILS_APPLIST = bedExtendRanges gff3ToGenePred gtfToGenePred overlapSelect makeTableList
 
 HG_HGWIGGLE_APP = hgWiggle
 

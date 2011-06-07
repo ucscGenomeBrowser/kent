@@ -2604,7 +2604,7 @@ dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeOpenChromChipHelas3CmycValidation.tgz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 setType exp
@@ -2795,7 +2795,7 @@ dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfValidation.tgz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 setType exp
@@ -3055,7 +3055,7 @@ dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2Validation.tgz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 setType exp
@@ -3294,7 +3294,7 @@ dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeOpenChromChipHepg2CmycValidation.tgz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 setType exp
@@ -3485,7 +3485,7 @@ dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfValidation.tgz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 setType exp
@@ -3792,7 +3792,7 @@ dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2Validation.tgz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 setType exp
@@ -4100,7 +4100,7 @@ dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfValidation.tgz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion 1% ENCODE array platform validation tests
 project wgEncode
 setType exp

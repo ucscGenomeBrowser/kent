@@ -3,6 +3,30 @@ objType composite
 composite wgEncodeHaibTfbs
 expVars lab,dataType,cell,treatment,antibody,protocol
 
+metaObject wgEncodeHaibTfbsA549ControlPcr1xDex100nmAlnRep1
+objType file
+antibody Input
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL474
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001643
+expId 1643
+fileName wgEncodeHaibTfbsA549ControlPcr1xDex100nmAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL474
+project wgEncode
+protocol PCR1x
+replicate 1
+setType input
+subId 3091
+treatment DEX_100nM
+view Alignments
+
 metaObject wgEncodeHaibTfbsA549ControlPcr1xDex100nmRawDataRep1
 objType file
 antibody Input
@@ -51,30 +75,6 @@ subId 3035
 tableName wgEncodeHaibTfbsA549ControlPcr1xDex100nmRawRep1
 treatment DEX_100nM
 view RawSignal
-
-metaObject wgEncodeHaibTfbsA549ControlPcr1xDexaAlnRep1
-objType file
-antibody Input
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL474
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccAccession wgEncodeEH001643
-expId 1643
-fileName wgEncodeHaibTfbsA549ControlPcr1xDexaAlnRep1.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL474
-project wgEncode
-protocol PCR1x
-replicate 1
-setType input
-subId 3091
-treatment DEX_100nM
-view Alignments
 
 metaObject wgEncodeHaibTfbsA549ControlPcr1xEtoh02AlnRep1
 objType file
@@ -201,7 +201,7 @@ subId 3019
 treatment DEX_100nM
 view RawData
 
-metaObject wgEncodeHaibTfbsA549ControlPcr2xDexaRawRep1
+metaObject wgEncodeHaibTfbsA549ControlPcr2xDex100nmRawRep1
 objType table
 antibody Input
 cell A549
@@ -213,7 +213,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001590
 expId 1590
-fileName wgEncodeHaibTfbsA549ControlPcr2xDexaRawRep1.bigWig
+fileName wgEncodeHaibTfbsA549ControlPcr2xDex100nmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL335
@@ -222,7 +222,7 @@ protocol PCR2x
 replicate 1
 setType input
 subId 3029
-tableName wgEncodeHaibTfbsA549ControlPcr2xDexaRawRep1
+tableName wgEncodeHaibTfbsA549ControlPcr2xDex100nmRawRep1
 treatment DEX_100nM
 view RawSignal
 
@@ -708,6 +708,116 @@ tableName wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xEtoh02RawRep2
 treatment EtOH_0.02pct
 view RawSignal
 
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex500pmAlnRep1
+objType file
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL878
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-12-20
+dateUnrestricted 2011-09-20
+dccAccession wgEncodeEH001490
+expId 1490
+fileIndex wgEncodeHaibTfbsA549GrPcr1xDex500pmAlnRep1.bam.bai
+fileName wgEncodeHaibTfbsA549GrPcr1xDex500pmAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL884
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 3090
+treatment DEX_500pM
+view Alignments
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex500pmAlnRep2
+objType file
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL879
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-12-20
+dateUnrestricted 2011-09-20
+dccAccession wgEncodeEH001490
+expId 1490
+fileIndex wgEncodeHaibTfbsA549GrPcr1xDex500pmAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsA549GrPcr1xDex500pmAlnRep2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL885
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 3090
+treatment DEX_500pM
+view Alignments
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex500pmPkRep1
+objType table
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL878
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2009-12-09
+dateUnrestricted 2010-09-09
+dccAccession wgEncodeEH001490
+expId 1490
+fileName wgEncodeHaibTfbsA549GrPcr1xDex500pmPkRep1.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL884
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+softwareVersion MACS
+subId 1258
+tableName wgEncodeHaibTfbsA549GrPcr1xDex500pmPkRep1
+treatment DEX_500pM
+view Peaks
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex500pmPkRep2
+objType table
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL879
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2009-12-09
+dateUnrestricted 2010-09-09
+dccAccession wgEncodeEH001490
+expId 1490
+fileName wgEncodeHaibTfbsA549GrPcr1xDex500pmPkRep2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL885
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+softwareVersion MACS
+subId 1258
+tableName wgEncodeHaibTfbsA549GrPcr1xDex500pmPkRep2
+treatment DEX_500pM
+view Peaks
+
 metaObject wgEncodeHaibTfbsA549GrPcr1xDex500pmRawDataRep1
 objType file
 antibody GR
@@ -759,6 +869,166 @@ setType exp
 subId 803
 treatment DEX_500pM
 view RawData
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex500pmRawRep1
+objType table
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL878
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-01
+dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH001490
+expId 1490
+fileName wgEncodeHaibTfbsA549GrPcr1xDex500pmRawRep1.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL884
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 3037
+tableName wgEncodeHaibTfbsA549GrPcr1xDex500pmRawRep1
+treatment DEX_500pM
+view RawSignal
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex500pmRawRep2
+objType table
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL879
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-01
+dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH001490
+expId 1490
+fileName wgEncodeHaibTfbsA549GrPcr1xDex500pmRawRep2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL885
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 3037
+tableName wgEncodeHaibTfbsA549GrPcr1xDex500pmRawRep2
+treatment DEX_500pM
+view RawSignal
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex50nmAlnRep1
+objType file
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL878
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-12-20
+dateUnrestricted 2011-09-20
+dccAccession wgEncodeEH001491
+expId 1491
+fileIndex wgEncodeHaibTfbsA549GrPcr1xDex50nmAlnRep1.bam.bai
+fileName wgEncodeHaibTfbsA549GrPcr1xDex50nmAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL882
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 3090
+treatment DEX_50nM
+view Alignments
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex50nmAlnRep2
+objType file
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL879
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-12-20
+dateUnrestricted 2011-09-20
+dccAccession wgEncodeEH001491
+expId 1491
+fileIndex wgEncodeHaibTfbsA549GrPcr1xDex50nmAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsA549GrPcr1xDex50nmAlnRep2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL883
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 3090
+treatment DEX_50nM
+view Alignments
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex50nmPkRep1
+objType table
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL878
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2009-12-09
+dateUnrestricted 2010-09-09
+dccAccession wgEncodeEH001491
+expId 1491
+fileName wgEncodeHaibTfbsA549GrPcr1xDex50nmPkRep1.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL882
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+softwareVersion MACS
+subId 1258
+tableName wgEncodeHaibTfbsA549GrPcr1xDex50nmPkRep1
+treatment DEX_50nM
+view Peaks
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex50nmPkRep2
+objType table
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL879
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2009-12-09
+dateUnrestricted 2010-09-09
+dccAccession wgEncodeEH001491
+expId 1491
+fileName wgEncodeHaibTfbsA549GrPcr1xDex50nmPkRep2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL883
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+softwareVersion MACS
+subId 1258
+tableName wgEncodeHaibTfbsA549GrPcr1xDex50nmPkRep2
+treatment DEX_50nM
+view Peaks
 
 metaObject wgEncodeHaibTfbsA549GrPcr1xDex50nmRawDataRep1
 objType file
@@ -812,6 +1082,166 @@ subId 802
 treatment DEX_50nM
 view RawData
 
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex50nmRawRep1
+objType table
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL878
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-01
+dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH001491
+expId 1491
+fileName wgEncodeHaibTfbsA549GrPcr1xDex50nmRawRep1.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL882
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 3037
+tableName wgEncodeHaibTfbsA549GrPcr1xDex50nmRawRep1
+treatment DEX_50nM
+view RawSignal
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex50nmRawRep2
+objType table
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL879
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-01
+dateUnrestricted 2011-09-01
+dccAccession wgEncodeEH001491
+expId 1491
+fileName wgEncodeHaibTfbsA549GrPcr1xDex50nmRawRep2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL883
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 3037
+tableName wgEncodeHaibTfbsA549GrPcr1xDex50nmRawRep2
+treatment DEX_50nM
+view RawSignal
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex5nmAlnRep1
+objType file
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL878
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-12-20
+dateUnrestricted 2011-09-20
+dccAccession wgEncodeEH001492
+expId 1492
+fileIndex wgEncodeHaibTfbsA549GrPcr1xDex5nmAlnRep1.bam.bai
+fileName wgEncodeHaibTfbsA549GrPcr1xDex5nmAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL880
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 3090
+treatment DEX_5nM
+view Alignments
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex5nmAlnRep2
+objType file
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL879
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-06-16
+dateSubmitted 2010-12-20
+dateUnrestricted 2011-09-20
+dccAccession wgEncodeEH001492
+expId 1492
+fileIndex wgEncodeHaibTfbsA549GrPcr1xDex5nmAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsA549GrPcr1xDex5nmAlnRep2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL881
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 3090
+treatment DEX_5nM
+view Alignments
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex5nmPkRep1
+objType table
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL878
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2009-12-09
+dateUnrestricted 2010-09-09
+dccAccession wgEncodeEH001492
+expId 1492
+fileName wgEncodeHaibTfbsA549GrPcr1xDex5nmPkRep1.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL880
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+softwareVersion MACS
+subId 1258
+tableName wgEncodeHaibTfbsA549GrPcr1xDex5nmPkRep1
+treatment DEX_5nM
+view Peaks
+
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex5nmPkRep2
+objType table
+antibody GR
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL879
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-16
+dateSubmitted 2009-12-09
+dateUnrestricted 2011-03-16
+dccAccession wgEncodeEH001492
+expId 1492
+fileName wgEncodeHaibTfbsA549GrPcr1xDex5nmPkRep2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL881
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+softwareVersion MACS
+subId 1452
+tableName wgEncodeHaibTfbsA549GrPcr1xDex5nmPkRep2
+treatment DEX_5nM
+view Peaks
+
 metaObject wgEncodeHaibTfbsA549GrPcr1xDex5nmRawDataRep1
 objType file
 antibody GR
@@ -864,277 +1294,7 @@ subId 801
 treatment DEX_5nM
 view RawData
 
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexbAlnRep1
-objType file
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL878
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-06-07
-dateSubmitted 2010-12-20
-dateUnrestricted 2011-09-20
-dccAccession wgEncodeEH001491
-expId 1491
-fileIndex wgEncodeHaibTfbsA549GrPcr1xDexbAlnRep1.bam.bai
-fileName wgEncodeHaibTfbsA549GrPcr1xDexbAlnRep1.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL882
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 1
-setType exp
-subId 3090
-treatment DEX_50nM
-view Alignments
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexbAlnRep2
-objType file
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL879
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-06-07
-dateSubmitted 2010-12-20
-dateUnrestricted 2011-09-20
-dccAccession wgEncodeEH001491
-expId 1491
-fileIndex wgEncodeHaibTfbsA549GrPcr1xDexbAlnRep2.bam.bai
-fileName wgEncodeHaibTfbsA549GrPcr1xDexbAlnRep2.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL883
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 2
-setType exp
-subId 3090
-treatment DEX_50nM
-view Alignments
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexbPkRep1
-objType table
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL878
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-07
-dateSubmitted 2009-12-09
-dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001491
-expId 1491
-fileName wgEncodeHaibTfbsA549GrPcr1xDexbPkRep1.broadPeak.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL882
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 1
-setType exp
-softwareVersion MACS
-subId 1258
-tableName wgEncodeHaibTfbsA549GrPcr1xDexbPkRep1
-treatment DEX_50nM
-view Peaks
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexbPkRep2
-objType table
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL879
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-07
-dateSubmitted 2009-12-09
-dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001491
-expId 1491
-fileName wgEncodeHaibTfbsA549GrPcr1xDexbPkRep2.broadPeak.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL883
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 2
-setType exp
-softwareVersion MACS
-subId 1258
-tableName wgEncodeHaibTfbsA549GrPcr1xDexbPkRep2
-treatment DEX_50nM
-view Peaks
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexbRawRep1
-objType table
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL878
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-01
-dateUnrestricted 2011-09-01
-dccAccession wgEncodeEH001491
-expId 1491
-fileName wgEncodeHaibTfbsA549GrPcr1xDexbRawRep1.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL882
-project wgEncode
-protocol PCR1x
-replicate 1
-setType exp
-subId 3037
-tableName wgEncodeHaibTfbsA549GrPcr1xDexbRawRep1
-treatment DEX_50nM
-view RawSignal
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexbRawRep2
-objType table
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL879
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-01
-dateUnrestricted 2011-09-01
-dccAccession wgEncodeEH001491
-expId 1491
-fileName wgEncodeHaibTfbsA549GrPcr1xDexbRawRep2.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL883
-project wgEncode
-protocol PCR1x
-replicate 2
-setType exp
-subId 3037
-tableName wgEncodeHaibTfbsA549GrPcr1xDexbRawRep2
-treatment DEX_50nM
-view RawSignal
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexcAlnRep1
-objType file
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL878
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-06-07
-dateSubmitted 2010-12-20
-dateUnrestricted 2011-09-20
-dccAccession wgEncodeEH001492
-expId 1492
-fileIndex wgEncodeHaibTfbsA549GrPcr1xDexcAlnRep1.bam.bai
-fileName wgEncodeHaibTfbsA549GrPcr1xDexcAlnRep1.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL880
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 1
-setType exp
-subId 3090
-treatment DEX_5nM
-view Alignments
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexcAlnRep2
-objType file
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL879
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-06-16
-dateSubmitted 2010-12-20
-dateUnrestricted 2011-09-20
-dccAccession wgEncodeEH001492
-expId 1492
-fileIndex wgEncodeHaibTfbsA549GrPcr1xDexcAlnRep2.bam.bai
-fileName wgEncodeHaibTfbsA549GrPcr1xDexcAlnRep2.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL881
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 2
-setType exp
-subId 3090
-treatment DEX_5nM
-view Alignments
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexcPkRep1
-objType table
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL878
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-07
-dateSubmitted 2009-12-09
-dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001492
-expId 1492
-fileName wgEncodeHaibTfbsA549GrPcr1xDexcPkRep1.broadPeak.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL880
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 1
-setType exp
-softwareVersion MACS
-subId 1258
-tableName wgEncodeHaibTfbsA549GrPcr1xDexcPkRep1
-treatment DEX_5nM
-view Peaks
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexcPkRep2
-objType table
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL879
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-16
-dateSubmitted 2009-12-09
-dateUnrestricted 2011-03-16
-dccAccession wgEncodeEH001492
-expId 1492
-fileName wgEncodeHaibTfbsA549GrPcr1xDexcPkRep2.broadPeak.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL881
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 2
-setType exp
-softwareVersion MACS
-subId 1452
-tableName wgEncodeHaibTfbsA549GrPcr1xDexcPkRep2
-treatment DEX_5nM
-view Peaks
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexcRawRep1
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex5nmRawRep1
 objType table
 antibody GR
 cell A549
@@ -1146,7 +1306,7 @@ dateSubmitted 2010-12-01
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH001492
 expId 1492
-fileName wgEncodeHaibTfbsA549GrPcr1xDexcRawRep1.bigWig
+fileName wgEncodeHaibTfbsA549GrPcr1xDex5nmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL880
@@ -1155,11 +1315,11 @@ protocol PCR1x
 replicate 1
 setType exp
 subId 3037
-tableName wgEncodeHaibTfbsA549GrPcr1xDexcRawRep1
+tableName wgEncodeHaibTfbsA549GrPcr1xDex5nmRawRep1
 treatment DEX_5nM
 view RawSignal
 
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexcRawRep2
+metaObject wgEncodeHaibTfbsA549GrPcr1xDex5nmRawRep2
 objType table
 antibody GR
 cell A549
@@ -1171,7 +1331,7 @@ dateSubmitted 2010-12-01
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH001492
 expId 1492
-fileName wgEncodeHaibTfbsA549GrPcr1xDexcRawRep2.bigWig
+fileName wgEncodeHaibTfbsA549GrPcr1xDex5nmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL881
@@ -1180,168 +1340,8 @@ protocol PCR1x
 replicate 2
 setType exp
 subId 3037
-tableName wgEncodeHaibTfbsA549GrPcr1xDexcRawRep2
+tableName wgEncodeHaibTfbsA549GrPcr1xDex5nmRawRep2
 treatment DEX_5nM
-view RawSignal
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexdAlnRep1
-objType file
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL878
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-06-07
-dateSubmitted 2010-12-20
-dateUnrestricted 2011-09-20
-dccAccession wgEncodeEH001490
-expId 1490
-fileIndex wgEncodeHaibTfbsA549GrPcr1xDexdAlnRep1.bam.bai
-fileName wgEncodeHaibTfbsA549GrPcr1xDexdAlnRep1.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL884
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 1
-setType exp
-subId 3090
-treatment DEX_500pM
-view Alignments
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexdAlnRep2
-objType file
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL879
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-06-07
-dateSubmitted 2010-12-20
-dateUnrestricted 2011-09-20
-dccAccession wgEncodeEH001490
-expId 1490
-fileIndex wgEncodeHaibTfbsA549GrPcr1xDexdAlnRep2.bam.bai
-fileName wgEncodeHaibTfbsA549GrPcr1xDexdAlnRep2.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL885
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 2
-setType exp
-subId 3090
-treatment DEX_500pM
-view Alignments
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexdPkRep1
-objType table
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL878
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-07
-dateSubmitted 2009-12-09
-dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001490
-expId 1490
-fileName wgEncodeHaibTfbsA549GrPcr1xDexdPkRep1.broadPeak.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL884
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 1
-setType exp
-softwareVersion MACS
-subId 1258
-tableName wgEncodeHaibTfbsA549GrPcr1xDexdPkRep1
-treatment DEX_500pM
-view Peaks
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexdPkRep2
-objType table
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL879
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-07
-dateSubmitted 2009-12-09
-dateUnrestricted 2010-09-09
-dccAccession wgEncodeEH001490
-expId 1490
-fileName wgEncodeHaibTfbsA549GrPcr1xDexdPkRep2.broadPeak.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL885
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 2
-setType exp
-softwareVersion MACS
-subId 1258
-tableName wgEncodeHaibTfbsA549GrPcr1xDexdPkRep2
-treatment DEX_500pM
-view Peaks
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexdRawRep1
-objType table
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL878
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-01
-dateUnrestricted 2011-09-01
-dccAccession wgEncodeEH001490
-expId 1490
-fileName wgEncodeHaibTfbsA549GrPcr1xDexdRawRep1.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL884
-project wgEncode
-protocol PCR1x
-replicate 1
-setType exp
-subId 3037
-tableName wgEncodeHaibTfbsA549GrPcr1xDexdRawRep1
-treatment DEX_500pM
-view RawSignal
-
-metaObject wgEncodeHaibTfbsA549GrPcr1xDexdRawRep2
-objType table
-antibody GR
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL879
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-01
-dateUnrestricted 2011-09-01
-dccAccession wgEncodeEH001490
-expId 1490
-fileName wgEncodeHaibTfbsA549GrPcr1xDexdRawRep2.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL885
-project wgEncode
-protocol PCR1x
-replicate 2
-setType exp
-subId 3037
-tableName wgEncodeHaibTfbsA549GrPcr1xDexdRawRep2
-treatment DEX_500pM
 view RawSignal
 
 metaObject wgEncodeHaibTfbsA549GrPcr1xEtoh02AlnRep1
@@ -1499,7 +1499,7 @@ tableName wgEncodeHaibTfbsA549GrPcr1xEtoh02RawRep2
 treatment EtOH_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep1
+metaObject wgEncodeHaibTfbsA549GrPcr2xDex100nmAlnRep1
 objType file
 antibody GR
 cell A549
@@ -1511,8 +1511,8 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001555
 expId 1555
-fileIndex wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep1.bam.bai
-fileName wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549GrPcr2xDex100nmAlnRep1.bam.bai
+fileName wgEncodeHaibTfbsA549GrPcr2xDex100nmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL246
@@ -1525,7 +1525,7 @@ subId 3090
 treatment DEX_100nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep2
+metaObject wgEncodeHaibTfbsA549GrPcr2xDex100nmAlnRep2
 objType file
 antibody GR
 cell A549
@@ -1537,8 +1537,8 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001555
 expId 1555
-fileIndex wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep2.bam.bai
-fileName wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549GrPcr2xDex100nmAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsA549GrPcr2xDex100nmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL304
@@ -1551,7 +1551,7 @@ subId 3090
 treatment DEX_100nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsA549GrPcr2xDexaPkRep1
+metaObject wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep1
 objType table
 antibody GR
 cell A549
@@ -1563,7 +1563,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 dccAccession wgEncodeEH001555
 expId 1555
-fileName wgEncodeHaibTfbsA549GrPcr2xDexaPkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL246
@@ -1574,11 +1574,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 1681
-tableName wgEncodeHaibTfbsA549GrPcr2xDexaPkRep1
+tableName wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep1
 treatment DEX_100nM
 view Peaks
 
-metaObject wgEncodeHaibTfbsA549GrPcr2xDexaPkRep2
+metaObject wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep2
 objType table
 antibody GR
 cell A549
@@ -1590,7 +1590,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 dccAccession wgEncodeEH001555
 expId 1555
-fileName wgEncodeHaibTfbsA549GrPcr2xDexaPkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL304
@@ -1601,11 +1601,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 1681
-tableName wgEncodeHaibTfbsA549GrPcr2xDexaPkRep2
+tableName wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep2
 treatment DEX_100nM
 view Peaks
 
-metaObject wgEncodeHaibTfbsA549GrPcr2xDexaRawDataRep1
+metaObject wgEncodeHaibTfbsA549GrPcr2xDex100nmRawDataRep1
 objType file
 antibody GR
 cell A549
@@ -1617,7 +1617,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001555
 expId 1555
-fileName wgEncodeHaibTfbsA549GrPcr2xDexaRawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsA549GrPcr2xDex100nmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL246
@@ -1629,7 +1629,7 @@ subId 3022
 treatment DEX_100nM
 view RawData
 
-metaObject wgEncodeHaibTfbsA549GrPcr2xDexaRawDataRep2
+metaObject wgEncodeHaibTfbsA549GrPcr2xDex100nmRawDataRep2
 objType file
 antibody GR
 cell A549
@@ -1641,7 +1641,7 @@ dateSubmitted 2010-12-08
 dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001555
 expId 1555
-fileName wgEncodeHaibTfbsA549GrPcr2xDexaRawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsA549GrPcr2xDex100nmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL304
@@ -1653,7 +1653,7 @@ subId 3022
 treatment DEX_100nM
 view RawData
 
-metaObject wgEncodeHaibTfbsA549GrPcr2xDexaRawRep1
+metaObject wgEncodeHaibTfbsA549GrPcr2xDex100nmRawRep1
 objType table
 antibody GR
 cell A549
@@ -1665,7 +1665,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001555
 expId 1555
-fileName wgEncodeHaibTfbsA549GrPcr2xDexaRawRep1.bigWig
+fileName wgEncodeHaibTfbsA549GrPcr2xDex100nmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL246
@@ -1674,11 +1674,11 @@ protocol PCR2x
 replicate 1
 setType exp
 subId 3028
-tableName wgEncodeHaibTfbsA549GrPcr2xDexaRawRep1
+tableName wgEncodeHaibTfbsA549GrPcr2xDex100nmRawRep1
 treatment DEX_100nM
 view RawSignal
 
-metaObject wgEncodeHaibTfbsA549GrPcr2xDexaRawRep2
+metaObject wgEncodeHaibTfbsA549GrPcr2xDex100nmRawRep2
 objType table
 antibody GR
 cell A549
@@ -1690,7 +1690,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001555
 expId 1555
-fileName wgEncodeHaibTfbsA549GrPcr2xDexaRawRep2.bigWig
+fileName wgEncodeHaibTfbsA549GrPcr2xDex100nmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL304
@@ -1699,7 +1699,7 @@ protocol PCR2x
 replicate 2
 setType exp
 subId 3029
-tableName wgEncodeHaibTfbsA549GrPcr2xDexaRawRep2
+tableName wgEncodeHaibTfbsA549GrPcr2xDex100nmRawRep2
 treatment DEX_100nM
 view RawSignal
 
@@ -1851,6 +1851,189 @@ tableName wgEncodeHaibTfbsA549GrPcr2xEtoh02RawRep2
 treatment EtOH_0.02pct
 view RawSignal
 
+metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmAlnRep1
+objType file
+antibody Pol2
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL335
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2010-12-20
+dateUnrestricted 2011-09-20
+dccAccession wgEncodeEH001494
+expId 1494
+fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmAlnRep1.bam.bai
+fileName wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL244
+origAssembly hg18
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+subId 3090
+treatment DEX_100nM
+view Alignments
+
+metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmAlnRep2
+objType file
+antibody Pol2
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL335
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2010-12-20
+dateUnrestricted 2011-09-20
+dccAccession wgEncodeEH001494
+expId 1494
+fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmAlnRep2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL306
+origAssembly hg18
+project wgEncode
+protocol PCR2x
+replicate 2
+setType exp
+subId 3090
+treatment DEX_100nM
+view Alignments
+
+metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmPkRep1
+objType table
+antibody Pol2
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL335
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2009-12-17
+dateUnrestricted 2011-03-22
+dccAccession wgEncodeEH001494
+expId 1494
+fileName wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmPkRep1.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL244
+origAssembly hg18
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+softwareVersion MACS
+subId 1681
+tableName wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmPkRep1
+treatment DEX_100nM
+view Peaks
+
+metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmPkRep2
+objType table
+antibody Pol2
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL335
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-22
+dateSubmitted 2009-12-17
+dateUnrestricted 2011-03-22
+dccAccession wgEncodeEH001494
+expId 1494
+fileName wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmPkRep2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL306
+origAssembly hg18
+project wgEncode
+protocol PCR2x
+replicate 2
+setType exp
+softwareVersion MACS
+subId 1681
+tableName wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmPkRep2
+treatment DEX_100nM
+view Peaks
+
+metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmRawDataRep1
+objType file
+antibody Pol2
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL335
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-08
+dateUnrestricted 2011-09-08
+dccAccession wgEncodeEH001494
+expId 1494
+fileName wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmRawDataRep1.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL244
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+subId 3022
+treatment DEX_100nM
+view RawData
+
+metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmRawDataRep2
+objType file
+antibody Pol2
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL335
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-08
+dateUnrestricted 2011-09-08
+dccAccession wgEncodeEH001494
+expId 1494
+fileName wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmRawDataRep2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL306
+project wgEncode
+protocol PCR2x
+replicate 2
+setType exp
+subId 3022
+treatment DEX_100nM
+view RawData
+
+metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmRawRep1
+objType table
+antibody Pol2
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL335
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-29
+dateUnrestricted 2011-08-28
+dccAccession wgEncodeEH001494
+expId 1494
+fileName wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmRawRep1.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL244
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+subId 3028
+tableName wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmRawRep1
+treatment DEX_100nM
+view RawSignal
+
 metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmRawRep2
 objType table
 antibody Pol2
@@ -1874,189 +2057,6 @@ replicate 2
 setType exp
 subId 3877
 tableName wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmRawRep2
-treatment DEX_100nM
-view RawSignal
-
-metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep1
-objType file
-antibody Pol2
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL335
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-06-22
-dateSubmitted 2010-12-20
-dateUnrestricted 2011-09-20
-dccAccession wgEncodeEH001494
-expId 1494
-fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep1.bam.bai
-fileName wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep1.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL244
-origAssembly hg18
-project wgEncode
-protocol PCR2x
-replicate 1
-setType exp
-subId 3090
-treatment DEX_100nM
-view Alignments
-
-metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep2
-objType file
-antibody Pol2
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL335
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-06-22
-dateSubmitted 2010-12-20
-dateUnrestricted 2011-09-20
-dccAccession wgEncodeEH001494
-expId 1494
-fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep2.bam.bai
-fileName wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep2.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL306
-origAssembly hg18
-project wgEncode
-protocol PCR2x
-replicate 2
-setType exp
-subId 3090
-treatment DEX_100nM
-view Alignments
-
-metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep1
-objType table
-antibody Pol2
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL335
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
-dateSubmitted 2009-12-17
-dateUnrestricted 2011-03-22
-dccAccession wgEncodeEH001494
-expId 1494
-fileName wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep1.broadPeak.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL244
-origAssembly hg18
-project wgEncode
-protocol PCR2x
-replicate 1
-setType exp
-softwareVersion MACS
-subId 1681
-tableName wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep1
-treatment DEX_100nM
-view Peaks
-
-metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep2
-objType table
-antibody Pol2
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL335
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-22
-dateSubmitted 2009-12-17
-dateUnrestricted 2011-03-22
-dccAccession wgEncodeEH001494
-expId 1494
-fileName wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep2.broadPeak.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL306
-origAssembly hg18
-project wgEncode
-protocol PCR2x
-replicate 2
-setType exp
-softwareVersion MACS
-subId 1681
-tableName wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep2
-treatment DEX_100nM
-view Peaks
-
-metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDexaRawDataRep1
-objType file
-antibody Pol2
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL335
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-08
-dateUnrestricted 2011-09-08
-dccAccession wgEncodeEH001494
-expId 1494
-fileName wgEncodeHaibTfbsA549Pol2Pcr2xDexaRawDataRep1.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL244
-project wgEncode
-protocol PCR2x
-replicate 1
-setType exp
-subId 3022
-treatment DEX_100nM
-view RawData
-
-metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDexaRawDataRep2
-objType file
-antibody Pol2
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL335
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-08
-dateUnrestricted 2011-09-08
-dccAccession wgEncodeEH001494
-expId 1494
-fileName wgEncodeHaibTfbsA549Pol2Pcr2xDexaRawDataRep2.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL306
-project wgEncode
-protocol PCR2x
-replicate 2
-setType exp
-subId 3022
-treatment DEX_100nM
-view RawData
-
-metaObject wgEncodeHaibTfbsA549Pol2Pcr2xDexaRawRep1
-objType table
-antibody Pol2
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL335
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-11-29
-dateUnrestricted 2011-08-28
-dccAccession wgEncodeEH001494
-expId 1494
-fileName wgEncodeHaibTfbsA549Pol2Pcr2xDexaRawRep1.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL244
-project wgEncode
-protocol PCR2x
-replicate 1
-setType exp
-subId 3028
-tableName wgEncodeHaibTfbsA549Pol2Pcr2xDexaRawRep1
 treatment DEX_100nM
 view RawSignal
 
@@ -2268,6 +2268,60 @@ tableName wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02RawRep2
 treatment EtOH_0.02pct
 view RawSignal
 
+metaObject wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmAlnRep1
+objType file
+antibody USF-1
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL474
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-12-20
+dateUnrestricted 2011-09-20
+dccAccession wgEncodeEH001509
+expId 1509
+fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmAlnRep1.bam.bai
+fileName wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL1079
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 3090
+treatment DEX_100nM
+view Alignments
+
+metaObject wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmAlnRep2
+objType file
+antibody USF-1
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL474
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-12-20
+dateUnrestricted 2011-09-20
+dccAccession wgEncodeEH001509
+expId 1509
+fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmAlnRep2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL1206
+origAssembly hg18
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 3090
+treatment DEX_100nM
+view Alignments
+
 metaObject wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmPkRep1
 objType table
 antibody USF-1
@@ -2421,60 +2475,6 @@ subId 3752
 tableName wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmRawRep2
 treatment DEX_100nM
 view RawSignal
-
-metaObject wgEncodeHaibTfbsA549Usf1Pcr1xDexaAlnRep1
-objType file
-antibody USF-1
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL474
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-06-18
-dateSubmitted 2010-12-20
-dateUnrestricted 2011-09-20
-dccAccession wgEncodeEH001509
-expId 1509
-fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xDexaAlnRep1.bam.bai
-fileName wgEncodeHaibTfbsA549Usf1Pcr1xDexaAlnRep1.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL1079
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 1
-setType exp
-subId 3090
-treatment DEX_100nM
-view Alignments
-
-metaObject wgEncodeHaibTfbsA549Usf1Pcr1xDexaAlnRep2
-objType file
-antibody USF-1
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL474
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-06-18
-dateSubmitted 2010-12-20
-dateUnrestricted 2011-09-20
-dccAccession wgEncodeEH001509
-expId 1509
-fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xDexaAlnRep2.bam.bai
-fileName wgEncodeHaibTfbsA549Usf1Pcr1xDexaAlnRep2.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL1206
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 2
-setType exp
-subId 3090
-treatment DEX_100nM
-view Alignments
 
 metaObject wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep1
 objType file
@@ -2910,7 +2910,7 @@ tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2RawRep2
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep1
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hAlnRep1
 objType file
 antibody ERalpha_a
 cell ECC-1
@@ -2922,8 +2922,8 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001536
 expId 1536
-fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep1.bam.bai
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep1.bam
+fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hAlnRep1.bam.bai
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1011
@@ -2936,7 +2936,7 @@ subId 3123
 treatment Estradiol_10nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep2
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hAlnRep2
 objType file
 antibody ERalpha_a
 cell ECC-1
@@ -2948,8 +2948,8 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001536
 expId 1536
-fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep2.bam.bai
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep2.bam
+fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1093
@@ -2962,7 +2962,7 @@ subId 3123
 treatment Estradiol_10nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep1
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hPkRep1
 objType table
 antibody ERalpha_a
 cell ECC-1
@@ -2974,7 +2974,7 @@ dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
 dccAccession wgEncodeEH001536
 expId 1536
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1011
@@ -2985,11 +2985,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 1216
-tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep1
+tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hPkRep1
 treatment Estradiol_10nM
 view Peaks
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep2
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hPkRep2
 objType table
 antibody ERalpha_a
 cell ECC-1
@@ -3001,7 +3001,7 @@ dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
 dccAccession wgEncodeEH001536
 expId 1536
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1093
@@ -3012,11 +3012,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 1216
-tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep2
+tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hPkRep2
 treatment Estradiol_10nM
 view Peaks
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hRawDataRep1
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hRawDataRep1
 objType file
 antibody ERalpha_a
 cell ECC-1
@@ -3028,7 +3028,7 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001536
 expId 1536
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hRawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1011
@@ -3040,7 +3040,7 @@ subId 3814
 treatment Estradiol_10nM
 view RawData
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hRawDataRep2
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hRawDataRep2
 objType file
 antibody ERalpha_a
 cell ECC-1
@@ -3052,7 +3052,7 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001536
 expId 1536
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hRawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1093
@@ -3064,7 +3064,7 @@ subId 3013
 treatment Estradiol_10nM
 view RawData
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hRawRep1
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hRawRep1
 objType table
 antibody ERalpha_a
 cell ECC-1
@@ -3076,7 +3076,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001536
 expId 1536
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hRawRep1.bigWig
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1011
@@ -3085,11 +3085,11 @@ protocol v041610.2
 replicate 1
 setType exp
 subId 3021
-tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hRawRep1
+tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hRawRep1
 treatment Estradiol_10nM
 view RawSignal
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hRawRep2
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hRawRep2
 objType table
 antibody ERalpha_a
 cell ECC-1
@@ -3101,7 +3101,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001536
 expId 1536
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hRawRep2.bigWig
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1093
@@ -3110,7 +3110,7 @@ protocol v041610.2
 replicate 2
 setType exp
 subId 3021
-tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hRawRep2
+tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hRawRep2
 treatment Estradiol_10nM
 view RawSignal
 
@@ -3510,7 +3510,7 @@ tableName wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dmso2RawRep2
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep1
+metaObject wgEncodeHaibTfbsEcc1GrV0416102Dex100nmAlnRep1
 objType file
 antibody GR
 cell ECC-1
@@ -3522,8 +3522,8 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001540
 expId 1540
-fileIndex wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep1.bam.bai
-fileName wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep1.bam
+fileIndex wgEncodeHaibTfbsEcc1GrV0416102Dex100nmAlnRep1.bam.bai
+fileName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1012
@@ -3536,7 +3536,7 @@ subId 3123
 treatment DEX_100nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep2
+metaObject wgEncodeHaibTfbsEcc1GrV0416102Dex100nmAlnRep2
 objType file
 antibody GR
 cell ECC-1
@@ -3548,8 +3548,8 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001540
 expId 1540
-fileIndex wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep2.bam.bai
-fileName wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep2.bam
+fileIndex wgEncodeHaibTfbsEcc1GrV0416102Dex100nmAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1088
@@ -3562,7 +3562,7 @@ subId 3123
 treatment DEX_100nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep1
+metaObject wgEncodeHaibTfbsEcc1GrV0416102Dex100nmPkRep1
 objType table
 antibody GR
 cell ECC-1
@@ -3574,7 +3574,7 @@ dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 dccAccession wgEncodeEH001540
 expId 1540
-fileName wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1012
@@ -3585,11 +3585,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 1254
-tableName wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep1
+tableName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmPkRep1
 treatment DEX_100nM
 view Peaks
 
-metaObject wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep2
+metaObject wgEncodeHaibTfbsEcc1GrV0416102Dex100nmPkRep2
 objType table
 antibody GR
 cell ECC-1
@@ -3601,7 +3601,7 @@ dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 dccAccession wgEncodeEH001540
 expId 1540
-fileName wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1088
@@ -3612,11 +3612,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 1254
-tableName wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep2
+tableName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmPkRep2
 treatment DEX_100nM
 view Peaks
 
-metaObject wgEncodeHaibTfbsEcc1GrV0416102DexaRawDataRep1
+metaObject wgEncodeHaibTfbsEcc1GrV0416102Dex100nmRawDataRep1
 objType file
 antibody GR
 cell ECC-1
@@ -3628,7 +3628,7 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001540
 expId 1540
-fileName wgEncodeHaibTfbsEcc1GrV0416102DexaRawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1012
@@ -3640,7 +3640,7 @@ subId 3013
 treatment DEX_100nM
 view RawData
 
-metaObject wgEncodeHaibTfbsEcc1GrV0416102DexaRawDataRep2
+metaObject wgEncodeHaibTfbsEcc1GrV0416102Dex100nmRawDataRep2
 objType file
 antibody GR
 cell ECC-1
@@ -3652,7 +3652,7 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001540
 expId 1540
-fileName wgEncodeHaibTfbsEcc1GrV0416102DexaRawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1088
@@ -3664,7 +3664,7 @@ subId 3013
 treatment DEX_100nM
 view RawData
 
-metaObject wgEncodeHaibTfbsEcc1GrV0416102DexaRawRep1
+metaObject wgEncodeHaibTfbsEcc1GrV0416102Dex100nmRawRep1
 objType table
 antibody GR
 cell ECC-1
@@ -3676,7 +3676,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001540
 expId 1540
-fileName wgEncodeHaibTfbsEcc1GrV0416102DexaRawRep1.bigWig
+fileName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1012
@@ -3685,11 +3685,11 @@ protocol v041610.2
 replicate 1
 setType exp
 subId 3021
-tableName wgEncodeHaibTfbsEcc1GrV0416102DexaRawRep1
+tableName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmRawRep1
 treatment DEX_100nM
 view RawSignal
 
-metaObject wgEncodeHaibTfbsEcc1GrV0416102DexaRawRep2
+metaObject wgEncodeHaibTfbsEcc1GrV0416102Dex100nmRawRep2
 objType table
 antibody GR
 cell ECC-1
@@ -3701,7 +3701,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001540
 expId 1540
-fileName wgEncodeHaibTfbsEcc1GrV0416102DexaRawRep2.bigWig
+fileName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1088
@@ -3710,7 +3710,7 @@ protocol v041610.2
 replicate 2
 setType exp
 subId 3021
-tableName wgEncodeHaibTfbsEcc1GrV0416102DexaRawRep2
+tableName wgEncodeHaibTfbsEcc1GrV0416102Dex100nmRawRep2
 treatment DEX_100nM
 view RawSignal
 
@@ -19965,6 +19965,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001671
+expId 1671
 fileName wgEncodeHaibTfbsHct116Yy1sc281V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -19987,6 +19989,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001671
+expId 1671
 fileName wgEncodeHaibTfbsHct116Yy1sc281V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -20009,6 +20013,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001671
+expId 1671
 fileName wgEncodeHaibTfbsHct116Yy1sc281V0416101PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -20033,6 +20039,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001671
+expId 1671
 fileName wgEncodeHaibTfbsHct116Yy1sc281V0416101PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -20057,6 +20065,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001671
+expId 1671
 fileName wgEncodeHaibTfbsHct116Yy1sc281V0416101RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -20079,6 +20089,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001671
+expId 1671
 fileName wgEncodeHaibTfbsHct116Yy1sc281V0416101RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -20101,6 +20113,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001671
+expId 1671
 fileName wgEncodeHaibTfbsHct116Yy1sc281V0416101RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -20124,6 +20138,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001671
+expId 1671
 fileName wgEncodeHaibTfbsHct116Yy1sc281V0416101RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -20147,6 +20163,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001672
+expId 1672
 fileName wgEncodeHaibTfbsHct116Zbtb33V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -20169,6 +20187,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001672
+expId 1672
 fileName wgEncodeHaibTfbsHct116Zbtb33V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -20191,6 +20211,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001672
+expId 1672
 fileName wgEncodeHaibTfbsHct116Zbtb33V0416101PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -20215,6 +20237,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001672
+expId 1672
 fileName wgEncodeHaibTfbsHct116Zbtb33V0416101PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -20239,6 +20263,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001672
+expId 1672
 fileName wgEncodeHaibTfbsHct116Zbtb33V0416101RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -20261,6 +20287,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001672
+expId 1672
 fileName wgEncodeHaibTfbsHct116Zbtb33V0416101RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -20283,6 +20311,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001672
+expId 1672
 fileName wgEncodeHaibTfbsHct116Zbtb33V0416101RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -20306,6 +20336,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001672
+expId 1672
 fileName wgEncodeHaibTfbsHct116Zbtb33V0416101RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -27499,50 +27531,54 @@ tableName wgEncodeHaibTfbsHepg2Zbtb33V0416101RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsHuvecControlPcr1xRawDataRep1
-objType file
-antibody Control
-cell HUVEC
-composite wgEncodeHaibTfbs
-controlId SL1106
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-23
-dateUnrestricted 2012-02-23
-fileName wgEncodeHaibTfbsHuvecControlPcr1xRawDataRep1.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL1106
-project wgEncode
-protocol PCR1x
-replicate 1
-setType input
-subId 4160
-treatment None
-view RawData
+#metaObject wgEncodeHaibTfbsHuvecControlPcr1xRawDataRep1
+#objType file
+#antibody Control
+#cell HUVEC
+#composite wgEncodeHaibTfbs
+#controlId SL1106
+#dataType ChipSeq
+#dataVersion post ENCODE Jan 2011 Freeze
+#dateSubmitted 2011-05-23
+#dateUnrestricted 2012-02-23
+#dccAccession wgEncodeEH001675
+#expId 1675
+#fileName wgEncodeHaibTfbsHuvecControlPcr1xRawDataRep1.fastq.gz
+#grant Myers
+#lab HudsonAlpha
+#labExpId SL1106
+#project wgEncode
+#protocol PCR1x
+#replicate 1
+#setType input
+#subId 4160
+#treatment None
+#view RawData
 
-metaObject wgEncodeHaibTfbsHuvecControlPcr1xRawRep1
-objType table
-antibody Control
-cell HUVEC
-composite wgEncodeHaibTfbs
-controlId SL1106
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-23
-dateUnrestricted 2012-02-23
-fileName wgEncodeHaibTfbsHuvecControlPcr1xRawRep1.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL1106
-project wgEncode
-protocol PCR1x
-replicate 1
-setType input
-subId 4160
-tableName wgEncodeHaibTfbsHuvecControlPcr1xRawRep1
-treatment None
-view RawSignal
+#metaObject wgEncodeHaibTfbsHuvecControlPcr1xRawRep1
+#objType table
+#antibody Control
+#cell HUVEC
+#composite wgEncodeHaibTfbs
+#controlId SL1106
+#dataType ChipSeq
+#dataVersion post ENCODE Jan 2011 Freeze
+#dateSubmitted 2011-05-23
+#dateUnrestricted 2012-02-23
+#dccAccession wgEncodeEH001675
+#expId 1675
+#fileName wgEncodeHaibTfbsHuvecControlPcr1xRawRep1.bigWig
+#grant Myers
+#lab HudsonAlpha
+#labExpId SL1106
+#project wgEncode
+#protocol PCR1x
+#replicate 1
+#setType input
+#subId 4160
+#tableName wgEncodeHaibTfbsHuvecControlPcr1xRawRep1
+#treatment None
+#view RawSignal
 
 metaObject wgEncodeHaibTfbsK562Atf3V0416101AlnRep1
 objType file
@@ -28069,7 +28105,7 @@ objType file
 antibody BCLAF1_(SC-101388)
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1398
+controlId SL2455
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-03-14
@@ -35209,6 +35245,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001673
+expId 1673
 fileName wgEncodeHaibTfbsPfsk1ControlPcr2xAlnRep3.bam
 grant Myers
 lab HudsonAlpha
@@ -35279,6 +35317,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001673
+expId 1673
 fileName wgEncodeHaibTfbsPfsk1ControlPcr2xRawDataRep3.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -35351,6 +35391,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001673
+expId 1673
 fileName wgEncodeHaibTfbsPfsk1ControlPcr2xRawRep3.bigWig
 grant Myers
 lab HudsonAlpha
@@ -35374,6 +35416,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001460
+expId 1460
 fileName wgEncodeHaibTfbsPfsk1Foxp2Pcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -35421,6 +35465,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-02
 dateUnrestricted 2012-03-02
+dccAccession wgEncodeEH001460
+expId 1460
 fileName wgEncodeHaibTfbsPfsk1Foxp2Pcr2xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -35470,6 +35516,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001460
+expId 1460
 fileName wgEncodeHaibTfbsPfsk1Foxp2Pcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -35492,6 +35540,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001460
+expId 1460
 fileName wgEncodeHaibTfbsPfsk1Foxp2Pcr2xRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -35765,6 +35815,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-02
 dateUnrestricted 2012-03-02
+dccAccession wgEncodeEH001677
+expId 1677
 fileName wgEncodeHaibTfbsSknmcControlPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -35787,6 +35839,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-02
 dateUnrestricted 2012-03-02
+dccAccession wgEncodeEH001677
+expId 1677
 fileName wgEncodeHaibTfbsSknmcControlPcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -35809,6 +35863,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-02
 dateUnrestricted 2012-03-02
+dccAccession wgEncodeEH001677
+expId 1677
 fileName wgEncodeHaibTfbsSknmcControlPcr2xRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -35907,6 +35963,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001461
+expId 1461
 fileName wgEncodeHaibTfbsSknmcFoxp2Pcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -35954,6 +36012,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-02
 dateUnrestricted 2012-03-02
+dccAccession wgEncodeEH001461
+expId 1461
 fileName wgEncodeHaibTfbsSknmcFoxp2Pcr2xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -36003,6 +36063,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001461
+expId 1461
 fileName wgEncodeHaibTfbsSknmcFoxp2Pcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -36025,6 +36087,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001461
+expId 1461
 fileName wgEncodeHaibTfbsSknmcFoxp2Pcr2xRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -38041,7 +38105,7 @@ tableName wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2RawRep2
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hAlnRep1
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hAlnRep1
 objType file
 antibody ERalpha_a
 cell T-47D
@@ -38053,7 +38117,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001577
 expId 1577
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hAlnRep1.bam
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1217
@@ -38065,7 +38129,7 @@ subId 3123
 treatment Estradiol_10nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hAlnRep2
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hAlnRep2
 objType file
 antibody ERalpha_a
 cell T-47D
@@ -38077,7 +38141,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001577
 expId 1577
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hAlnRep2.bam
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1491
@@ -38089,7 +38153,7 @@ subId 3123
 treatment Estradiol_10nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hPkRep1
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hPkRep1
 objType table
 antibody ERalpha_a
 cell T-47D
@@ -38101,7 +38165,7 @@ dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 dccAccession wgEncodeEH001577
 expId 1577
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hPkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1217
@@ -38111,11 +38175,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 2450
-tableName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hPkRep1
+tableName wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hPkRep1
 treatment Estradiol_10nM
 view Peaks
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hPkRep2
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hPkRep2
 objType table
 antibody ERalpha_a
 cell T-47D
@@ -38127,7 +38191,7 @@ dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 dccAccession wgEncodeEH001577
 expId 1577
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hPkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1491
@@ -38137,11 +38201,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 2450
-tableName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hPkRep2
+tableName wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hPkRep2
 treatment Estradiol_10nM
 view Peaks
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hRawDataRep1
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hRawDataRep1
 objType file
 antibody ERalpha_a
 cell T-47D
@@ -38153,7 +38217,7 @@ dateSubmitted 2010-12-20
 dateUnrestricted 2011-09-20
 dccAccession wgEncodeEH001577
 expId 1577
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hRawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1217
@@ -38165,7 +38229,7 @@ subId 3013
 treatment Estradiol_10nM
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hRawDataRep2
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hRawDataRep2
 objType file
 antibody ERalpha_a
 cell T-47D
@@ -38177,7 +38241,7 @@ dateSubmitted 2010-12-17
 dateUnrestricted 2011-09-17
 dccAccession wgEncodeEH001577
 expId 1577
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hRawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1491
@@ -38189,7 +38253,7 @@ subId 3106
 treatment Estradiol_10nM
 view RawData
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hRawRep1
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hRawRep1
 objType table
 antibody ERalpha_a
 cell T-47D
@@ -38201,7 +38265,7 @@ dateSubmitted 2010-11-29
 dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001577
 expId 1577
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hRawRep1.bigWig
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1217
@@ -38210,11 +38274,11 @@ protocol v041610.2
 replicate 1
 setType exp
 subId 3021
-tableName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hRawRep1
+tableName wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hRawRep1
 treatment Estradiol_10nM
 view RawSignal
 
-metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hRawRep2
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hRawRep2
 objType table
 antibody ERalpha_a
 cell T-47D
@@ -38226,7 +38290,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001577
 expId 1577
-fileName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hRawRep2.bigWig
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1491
@@ -38235,7 +38299,7 @@ protocol v041610.2
 replicate 2
 setType exp
 subId 3026
-tableName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hRawRep2
+tableName wgEncodeHaibTfbsT47dEralphaaV0416102Est10nm1hRawRep2
 treatment Estradiol_10nM
 view RawSignal
 
@@ -39089,6 +39153,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-23
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001676
+expId 1676
 fileName wgEncodeHaibTfbsU87ControlV0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -39111,6 +39177,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-23
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001676
+expId 1676
 fileName wgEncodeHaibTfbsU87ControlV0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -39133,6 +39201,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-23
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001676
+expId 1676
 fileName wgEncodeHaibTfbsU87ControlV0416101RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -39155,6 +39225,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-23
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001676
+expId 1676
 fileName wgEncodeHaibTfbsU87ControlV0416101RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -39177,6 +39249,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-23
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001676
+expId 1676
 fileName wgEncodeHaibTfbsU87ControlV0416101RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -39200,6 +39274,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-23
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001676
+expId 1676
 fileName wgEncodeHaibTfbsU87ControlV0416101RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -39423,6 +39499,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -39445,6 +39523,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -39467,6 +39547,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -39491,6 +39573,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -39515,6 +39599,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -39537,6 +39623,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -39559,6 +39647,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -39582,6 +39672,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -39595,4 +39687,4 @@ tableName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 1580927559
+# MAGIC: 285208591
