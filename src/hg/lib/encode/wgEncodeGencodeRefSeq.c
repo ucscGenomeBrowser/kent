@@ -6,7 +6,7 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "wgEncodeGencodeRefSeq.h"
+#include "encode/wgEncodeGencodeRefSeq.h"
 
 static char const rcsid[] = "$Id:$";
 
@@ -16,8 +16,8 @@ void wgEncodeGencodeRefSeqStaticLoad(char **row, struct wgEncodeGencodeRefSeq *r
 {
 
 ret->transcriptId = row[0];
-ret->refSeqRnaId = row[1];
-ret->refSeqPepId = row[2];
+ret->rnaAcc = row[1];
+ret->pepAcc = row[2];
 }
 
 struct wgEncodeGencodeRefSeq *wgEncodeGencodeRefSeqLoad(char **row)
@@ -28,8 +28,8 @@ struct wgEncodeGencodeRefSeq *ret;
 
 AllocVar(ret);
 ret->transcriptId = cloneString(row[0]);
-ret->refSeqRnaId = cloneString(row[1]);
-ret->refSeqPepId = cloneString(row[2]);
+ret->rnaAcc = cloneString(row[1]);
+ret->pepAcc = cloneString(row[2]);
 return ret;
 }
 
@@ -79,8 +79,8 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->transcriptId = sqlStringComma(&s);
-ret->refSeqRnaId = sqlStringComma(&s);
-ret->refSeqPepId = sqlStringComma(&s);
+ret->rnaAcc = sqlStringComma(&s);
+ret->pepAcc = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -93,8 +93,8 @@ struct wgEncodeGencodeRefSeq *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->transcriptId);
-freeMem(el->refSeqRnaId);
-freeMem(el->refSeqPepId);
+freeMem(el->rnaAcc);
+freeMem(el->pepAcc);
 freez(pEl);
 }
 
@@ -119,11 +119,11 @@ fprintf(f, "%s", el->transcriptId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->refSeqRnaId);
+fprintf(f, "%s", el->rnaAcc);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->refSeqPepId);
+fprintf(f, "%s", el->pepAcc);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

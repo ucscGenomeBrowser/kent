@@ -6,7 +6,7 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "wgEncodeGencodeExonSupport.h"
+#include "encode/wgEncodeGencodeExonSupport.h"
 
 static char const rcsid[] = "$Id:$";
 
@@ -16,7 +16,12 @@ void wgEncodeGencodeExonSupportStaticLoad(char **row, struct wgEncodeGencodeExon
 {
 
 ret->transcriptId = row[0];
-ret->id = row[1];
+ret->seqId = row[1];
+ret->seqSrc = row[2];
+ret->exonId = row[3];
+ret->chrom = row[4];
+ret->chromStart = sqlSigned(row[5]);
+ret->endStart = sqlSigned(row[6]);
 }
 
 struct wgEncodeGencodeExonSupport *wgEncodeGencodeExonSupportLoad(char **row)
@@ -27,7 +32,12 @@ struct wgEncodeGencodeExonSupport *ret;
 
 AllocVar(ret);
 ret->transcriptId = cloneString(row[0]);
-ret->id = cloneString(row[1]);
+ret->seqId = cloneString(row[1]);
+ret->seqSrc = cloneString(row[2]);
+ret->exonId = cloneString(row[3]);
+ret->chrom = cloneString(row[4]);
+ret->chromStart = sqlSigned(row[5]);
+ret->endStart = sqlSigned(row[6]);
 return ret;
 }
 
@@ -37,7 +47,7 @@ struct wgEncodeGencodeExonSupport *wgEncodeGencodeExonSupportLoadAll(char *fileN
 {
 struct wgEncodeGencodeExonSupport *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -55,7 +65,7 @@ struct wgEncodeGencodeExonSupport *wgEncodeGencodeExonSupportLoadAllByChar(char 
 {
 struct wgEncodeGencodeExonSupport *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -77,7 +87,12 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->transcriptId = sqlStringComma(&s);
-ret->id = sqlStringComma(&s);
+ret->seqId = sqlStringComma(&s);
+ret->seqSrc = sqlStringComma(&s);
+ret->exonId = sqlStringComma(&s);
+ret->chrom = sqlStringComma(&s);
+ret->chromStart = sqlSignedComma(&s);
+ret->endStart = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -90,7 +105,10 @@ struct wgEncodeGencodeExonSupport *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->transcriptId);
-freeMem(el->id);
+freeMem(el->seqId);
+freeMem(el->seqSrc);
+freeMem(el->exonId);
+freeMem(el->chrom);
 freez(pEl);
 }
 
@@ -115,8 +133,24 @@ fprintf(f, "%s", el->transcriptId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->id);
+fprintf(f, "%s", el->seqId);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->seqSrc);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->exonId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->chrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->chromStart);
+fputc(sep,f);
+fprintf(f, "%d", el->endStart);
 fputc(lastSep,f);
 }
 

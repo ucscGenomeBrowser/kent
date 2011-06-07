@@ -3,10 +3,11 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#Gencode metadata table of features supporting Gencode transcripts
+#GENCODE transcript support from other datasets
 CREATE TABLE wgEncodeGencodeTranscriptSupport (
-    transcriptId varchar(255) not null,	# Transcript ID for Gencode gene
-    id varchar(255) not null,	# ID of feature supporting transcript
+    transcriptId varchar(255) not null,	# GENCODE transcript identifier
+    seqId varchar(255) not null,	# Identifier of sequence supporting transcript
+    seqSrc varchar(255) not null,	# Source of supporting sequence
               #Indices
-    PRIMARY KEY(transcriptId)
+    index(transcriptId)
 );

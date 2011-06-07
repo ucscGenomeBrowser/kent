@@ -213,6 +213,7 @@
 #include "retroClick.h"
 #include "mgcClick.h"
 #include "ccdsClick.h"
+#include "gencodeClick.h"
 #include "memalloc.h"
 #include "trashDir.h"
 #include "kg1ToKg2.h"
@@ -382,6 +383,12 @@ snprintf(buf, sizeof(buf), "%d", id);
 fprintf(f, entrezFormat, "OMIM", buf, "Detailed");
 }
 
+void printSwissProtAccUrl(FILE *f, char *accession)
+/* Print URL for Swiss-Prot protein accession. */
+{
+fprintf(f, uniprotFormat, accession);
+}
+
 static void printSwissProtProteinUrl(FILE *f, char *accession)
 /* Print URL for Swiss-Prot NiceProt on a protein. */
 {
@@ -390,7 +397,7 @@ char *spAcc;
 spAcc = uniProtFindPrimAcc(accession);
 if (spAcc != NULL)
     {
-    fprintf(f, uniprotFormat , spAcc);
+    printSwissProtAccUrl(f, accession);
     }
 else
     {
@@ -23942,6 +23949,10 @@ else if (sameWord(table, "refGene"))
 else if (sameWord(table, "ccdsGene"))
     {
     doCcdsGene(tdb, item);
+    }
+else if (isNewGencodeGene(tdb))
+    {
+    doGencodeGene(tdb, item);
     }
 else if (sameWord(table, "mappedRefSeq"))
     /* human refseqs on chimp browser */
