@@ -8073,22 +8073,22 @@ description Grown for 7 days in differentiation medium (Wold)
 type treatment
 
 term Estradiol_10nM
-tag ESTRADIa1h
+tag EST10nm1h
 description  1 h with 10 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_24hr
-tag ESTRADIa24hh
+tag EST10nm24h
 description  24 hr with 10 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_1nM
-tag ESTRADIb1h
+tag EST1nm1h
 description  1 h with 1 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_4hr
-tag ESTRADIa4h
+tag EST10nm4h
 description  4 h with 10 nM Estradiol (Myers)
 type treatment
 
@@ -8560,6 +8560,12 @@ type view
 label Transcript Gencode V3c
 description Transcript Gencode V3c
 
+term ExonGencV3c
+tag EXONGENCV3C
+type view
+label Exons Gencode V3c
+description Provisional Exons Gencode V3c
+
 term Transfrags
 tag TRANSFRAGS
 type view
@@ -8944,24 +8950,23 @@ description the age when the real age is unknown
 # type (informs pipeline code of stanza type.  Should always be attic)
 # description (human-readable description.  Can't say where/how it's used)
 
-
 term supplemental
 tag sup
 type attic
 description Files supplemental at composite level 
 
-term auxUnValid
-tag auxUV
+term auxSup
+tag auxsup
 type attic
-description Unvalidated files supplemental at experimental level 
+description Unverified files supplemental at experiment level
 
 term auxValid
-tag auxV
+tag auxval
 type attic
 description Validated files supplemental to experiments
 
 term auxExp
-tag auxE
+tag auxexp
 type attic
 description Supplemental experiments
 
@@ -10348,7 +10353,7 @@ label Sequencing Run
 description Sequencing run
 searchable multiSelect
 cvDefined no
-validate integer
+validate regex: ^[0-9]*r[0-9]*$ 
 priority 500
 
 term seqPlatform
@@ -10404,6 +10409,15 @@ description Objects this object was built with.
 searchable no
 cvDefined no
 validate none
+priority 921
+
+term spikeInPool
+type typeOfTerm
+label Spike-In Pool   
+description (Provisional) The spike-in pool that was used.
+searchable no
+cvDefined no
+validate none   
 priority 921
 
 term strain
