@@ -77,12 +77,25 @@ LI {		line-height: 1.5;
 	}
 
 
-/* used by CCDS details page in hgc */
+/*** used by CCDS details page in hgc *** */
+    
+/* give the tables some breathing room and a consistent width */
+TABLE.hgcCcds {
+    margin-bottom: 30px;
+    width: 500px;
+}
+
 TABLE.hgcCcds, TABLE.hgcCcds TH, TABLE.hgcCcds TD {
-    border: 3px gray ridge;
+    border: 1px gray ridge;
     border-collapse: collapse;
     text-align: left;
     vertical-align: top;
+}
+TABLE.hgcCcds TH {
+    white-space: nowrap;
+}
+TABLE.hgcCcds TD {
+    height: 1em;
 }
 TABLE.hgcCcds THEAD {
     background-color: #2636D1;

@@ -103,6 +103,10 @@ filterComposite *
 filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
 firstItemPos customTracks
 frames wigMaf
+ensemblTranscriptIdUrl genePred
+ensemblGeneIdUrl genePred
+vegaTranscriptIdUrl genePred
+vegaGeneIdUrl genePred
 gClass_2way_consensus_pseudogene genePred
 gClass_2way_pseudogene genePred
 gClass_Ambiguous genePred
@@ -144,6 +148,10 @@ gClass_Validated_unprocessed_pseudogene genePred
 gClass_main genePred
 gClass_putative genePred
 gClass_cDNA_supported genePred
+gClass_coding genePred
+gClass_nonCoding genePred
+gClass_pseudo genePred
+gClass_problem genePred
 gainColor bed
 geneClasses bed genePred
 genome customTracks
@@ -178,6 +186,8 @@ irows wigMaf
 itemAttrTbl genePred
 itemBigImagePath bed
 itemClassTbl bed genePred
+itemClassNameColumn genePred
+itemClassClassColumn genePred
 itemCount customTracks
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
@@ -352,6 +362,17 @@ viewUi *
 visibility *
 visibilityViewDefaults *
 wgEncode *
+wgEncodeGencodeVersion genePred
+wgEncodeGencodeAttrs genePred
+wgEncodeGencodeExonSupport genePred
+wgEncodeGencodeGeneSource genePred
+wgEncodeGencodeTranscriptSource genePred
+wgEncodeGencodePdb genePred
+wgEncodeGencodePubMed genePred
+wgEncodeGencodeRefSeq genePred
+wgEncodeGencodeTag genePred
+wgEncodeGencodeTranscriptSupport genePred
+wgEncodeGencodeUniProt genePred
 wibFile customTracks
 wigColorBy wig
 wigFile customTracks
@@ -359,6 +380,7 @@ wiggle wigMaf
 windowingFunction *
 yalePseudoAssoc *
 yaleUrl *
+yalePseudoUrl *
 yLinOnOff wigMaf
 yLineMark *
 yLineOnOff *

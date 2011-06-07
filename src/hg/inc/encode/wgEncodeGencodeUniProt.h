@@ -5,14 +5,21 @@
 #ifndef WGENCODEGENCODEUNIPROT_H
 #define WGENCODEGENCODEUNIPROT_H
 
-#define WGENCODEGENCODEUNIPROT_NUM_COLS 2
+#define WGENCODEGENCODEUNIPROT_NUM_COLS 4
 
+enum wgEncodeGencodeUniProtDataset
+    {
+    wgEncodeGencodeUniProtSwissProt = 0,
+    wgEncodeGencodeUniProtTrEMBL = 1,
+    };
 struct wgEncodeGencodeUniProt
-/* Gencode metadata table of associated UniProt peptide IDs */
+/* GENCODE transcript to UniProt peptide mapping */
     {
     struct wgEncodeGencodeUniProt *next;  /* Next in singly linked list. */
-    char *transcriptId;	/* Transcript ID for Gencode gene */
-    char *uniProtId;	/* UniProt/Swiss-Prot ID */
+    char *transcriptId;	/* GENCODE transcript identifier */
+    char *acc;	/* UniProt/Swiss-Prot accession */
+    char *name;	/* UniProt/Swiss-Prot entry name */
+    enum wgEncodeGencodeUniProtDataset dataset;	/* UniProt dataset */
     };
 
 void wgEncodeGencodeUniProtStaticLoad(char **row, struct wgEncodeGencodeUniProt *ret);
