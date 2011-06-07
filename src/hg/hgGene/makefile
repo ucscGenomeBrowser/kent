@@ -19,7 +19,7 @@ my::
 	chmod -R a+rX ${CGI_BIN}-${USER}/hgGeneData
 
 install::
-	rm -fr ${CGI_BIN}/hgGeneData
+	rm -fr ${DESTDIR}${CGI_BIN}/hgGeneData
 	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgGeneData \
 		${DESTDIR}${CGI_BIN}/
 	chmod -R a+rX ${DESTDIR}${CGI_BIN}/hgGeneData
