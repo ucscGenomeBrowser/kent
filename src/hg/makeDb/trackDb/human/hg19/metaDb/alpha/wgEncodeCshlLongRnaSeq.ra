@@ -18184,6 +18184,29 @@ rnaExtract longNonPolyA
 subId 3650
 view Junctions
 
+metaObject wgEncodeCshlLongRnaSeqMcf7CellPamSpikeinsRep1
+objType file
+attic auxSup
+bioRep 015WC
+cell MCF-7
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-07
+dateUnrestricted 2012-02-07
+fileName wgEncodeCshlLongRnaSeqMcf7CellPamSpikeinsRep1.spikeins.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID8824
+labProtocolId 015WC-
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longNonPolyA
+spikeInPool 14
+subId 4056
+view Spikeins
+
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptDeNovo
 objType file
 bioRep 015WC,016WC
@@ -22668,4 +22691,4 @@ rnaExtract longPolyA
 subId 3663
 view TranscriptGencV3c
 
-# MAGIC: 1345928856
+# MAGIC: -1061987784
