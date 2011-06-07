@@ -433,12 +433,16 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
     }
     var tr = $(divit).parents('tr');
     if (tr.length > 0) {
-        if ($(tr).hasClass("bgLevel2")) {
-            $(divit).children('table').removeClass('bgLevel1');
-            $(divit).children('table').addClass('bgLevel2');
-        } else {
-            $(divit).children('table').removeClass('bgLevel2');
-            $(divit).children('table').addClass('bgLevel1');
+        tr = tr[0];
+        var bgClass = null;
+        var classes = $( tr ).attr("class").split(" ");
+        for (var ix=0;ix<classes.length;ix++) {
+            if (classes[ix].substring(0,'bgLevel'.length) == 'bgLevel')
+                bgClass = classes[ix];
+        }
+        if (bgClass) {
+            $(divit).children('table').removeClass('bgLevel1 bgLevel2 bgLevel3 bgLevel4');
+            $(divit).children('table').addClass(bgClass);
         }
     }
     $(divit).toggle();  // jQuery hide/show
