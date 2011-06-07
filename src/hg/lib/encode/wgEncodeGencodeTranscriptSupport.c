@@ -6,7 +6,7 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "wgEncodeGencodeTranscriptSupport.h"
+#include "encode/wgEncodeGencodeTranscriptSupport.h"
 
 static char const rcsid[] = "$Id:$";
 
@@ -16,7 +16,8 @@ void wgEncodeGencodeTranscriptSupportStaticLoad(char **row, struct wgEncodeGenco
 {
 
 ret->transcriptId = row[0];
-ret->id = row[1];
+ret->seqId = row[1];
+ret->seqSrc = row[2];
 }
 
 struct wgEncodeGencodeTranscriptSupport *wgEncodeGencodeTranscriptSupportLoad(char **row)
@@ -27,7 +28,8 @@ struct wgEncodeGencodeTranscriptSupport *ret;
 
 AllocVar(ret);
 ret->transcriptId = cloneString(row[0]);
-ret->id = cloneString(row[1]);
+ret->seqId = cloneString(row[1]);
+ret->seqSrc = cloneString(row[2]);
 return ret;
 }
 
@@ -37,7 +39,7 @@ struct wgEncodeGencodeTranscriptSupport *wgEncodeGencodeTranscriptSupportLoadAll
 {
 struct wgEncodeGencodeTranscriptSupport *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[3];
 
 while (lineFileRow(lf, row))
     {
@@ -55,7 +57,7 @@ struct wgEncodeGencodeTranscriptSupport *wgEncodeGencodeTranscriptSupportLoadAll
 {
 struct wgEncodeGencodeTranscriptSupport *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[3];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -77,7 +79,8 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->transcriptId = sqlStringComma(&s);
-ret->id = sqlStringComma(&s);
+ret->seqId = sqlStringComma(&s);
+ret->seqSrc = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -90,7 +93,8 @@ struct wgEncodeGencodeTranscriptSupport *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->transcriptId);
-freeMem(el->id);
+freeMem(el->seqId);
+freeMem(el->seqSrc);
 freez(pEl);
 }
 
@@ -115,7 +119,11 @@ fprintf(f, "%s", el->transcriptId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->id);
+fprintf(f, "%s", el->seqId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->seqSrc);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

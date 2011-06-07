@@ -8,11 +8,11 @@
 #define WGENCODEGENCODEPDB_NUM_COLS 2
 
 struct wgEncodeGencodePdb
-/* Gencode metadata table of associated Protein Data Bank (PDB) protein structuress */
+/* GENCODE tracnscript to Protein Data Bank (PDB) protein structure mapping */
     {
     struct wgEncodeGencodePdb *next;  /* Next in singly linked list. */
-    char *transcriptId;	/* Transcript ID for Gencode gene */
-    char *PdbId;	/* Protein Data Bank (PDB) ID */
+    char *transcriptId;	/* GENCODE transcript identifier */
+    char *pdbId;	/* Protein Data Bank (PDB) identifier */
     };
 
 void wgEncodeGencodePdbStaticLoad(char **row, struct wgEncodeGencodePdb *ret);

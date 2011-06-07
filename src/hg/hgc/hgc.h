@@ -109,6 +109,9 @@ void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
 void printEntrezPubMedUidUrl(FILE *f, int pmid);
 /* Print URL for Entrez browser on a PubMed search. */
 
+void printSwissProtAccUrl(FILE *f, char *accession);
+/* Print URL for Swiss-Prot protein accession. */
+
 boolean clipToChrom(int *pStart, int *pEnd);
 /* Clip start/end coordinates to fit in chromosome. */
 
