@@ -750,6 +750,57 @@ function imgTblTrackShowCenterLabel(tr, show)
     }
 }
 
+function imgTblContiguousRowSet(row)
+{ // Returns the set of rows that are of the same class and contiguous
+    if(row == null)
+        return null;
+    var btn = $( row ).find("p.btn");
+    if( btn.length == 0)
+        return null;
+    var classList = $( btn ).attr("class").split(" ");
+    var matchClass = classList[0];
+    var table = $(row).parents('table#imgTbl')[0];
+    var rows = $(table).find('tr');
+
+    // Find start index
+    var startIndex = $(row).attr('rowIndex');
+    var endIndex = startIndex;
+    for(var ix=startIndex-1;ix>=0;ix--) {
+        btn = $( rows[ix] ).find("p.btn");
+        if( btn.length == 0)
+            break;
+        classList = $( btn ).attr("class").split(" ");
+        if (classList[0] != matchClass)
+            break;
+        startIndex = ix;
+    }
+
+    // Find end index
+    for(var ix=endIndex;ix<rows.length;ix++) {
+        btn = $( rows[ix] ).find("p.btn");
+        if( btn.length == 0)
+            break;
+        classList = $( btn ).attr("class").split(" ");
+        if (classList[0] != matchClass)
+            break;
+        endIndex = ix;
+    }
+    return rows.slice(startIndex,endIndex+1); // endIndex is 1 based!
+}
+
+function imgTblCompositeSet(row)
+{ // Returns the set of rows that are of the same class and contiguous
+    if(row == null)
+        return null;
+    var rowId = $(row).attr('id').substring('tr_'.length);
+    var rec = trackDbJson[rowId];
+    if (tdbIsSubtrack(rec) == false)
+        return null;
+
+    var rows = $('tr.trDraggable:has(p.' + rec.parentTrack+')');
+    return rows;
+}
+
 function imgTblZipButtons(table)
 {
 // Goes through the image and binds composite track buttons when adjacent
@@ -850,14 +901,14 @@ function imgTblDragHandleMouseOver()
         return;
     }
     if (jQuery.tableDnD.dragObject == null) {
-        $( this ).parents("tr").addClass("trDrag");
+        $( this ).parents("tr.trDraggable").addClass("trDrag");
     }
 }
 
 function imgTblDragHandleMouseOut()
 {
 // Ends row highlighting by mouse over
-    $( this ).parents("tr").removeClass("trDrag");
+    $( this ).parents("tr.trDraggable").removeClass("trDrag");
 }
 
 function imgTblButtonMouseOver()
@@ -868,6 +919,11 @@ function imgTblButtonMouseOver()
         var btns = $( "p." + classList[0] );
         $( btns ).removeClass('btnGrey');
         $( btns ).addClass('btnBlue');
+        if (jQuery.tableDnD != undefined) {
+            var rows = imgTblContiguousRowSet($(this).parents('tr.trDraggable')[0]);
+            if (rows)
+                $( rows ).addClass("trDrag");
+        }
     }
 }
 
@@ -878,6 +934,11 @@ function imgTblButtonMouseOut()
     var btns = $( "p." + classList[0] );
     $( btns ).removeClass('btnBlue');
     $( btns ).addClass('btnGrey');
+    if (jQuery.tableDnD != undefined) {
+        var rows = imgTblContiguousRowSet($(this).parents('tr.trDraggable')[0]);
+        if (rows)
+           $( rows ).removeClass("trDrag");
+    }
 }
 
 
@@ -927,7 +988,6 @@ this.each(function(){
         pan.mousedown(function(e){
             if(mouseIsDown == false) {
                 mouseIsDown = true;
-
                 mouseDownX = e.clientX;
                 atEdge = (!beyondImage && (prevX >= leftLimit || prevX <= rightLimit));
                 $(document).bind('mousemove',panner);
@@ -1274,9 +1334,24 @@ $(document).ready(function()
                 onDragStart: function(ev, table, row) {
                     saveMouseOffset(ev);
                     $(document).bind('mousemove',blockTheMapOnMouseMove);
+
+                    // Can drag a contiguous set of rows if dragging blue button
+                    table.tableDnDConfig.dragObjects = [ row ]; // defaults to just the one
+                    var btn = $( row ).find('p.btnBlue');  // btnBlue means cursor over left button
+                    if (btn.length == 1) {
+                        table.tableDnDConfig.dragObjects = imgTblContiguousRowSet(row);
+                        var compositeSet = imgTblCompositeSet(row);
+                        if (compositeSet.length > 0)
+                            $( compositeSet ).find('p.btn').addClass('blueButtons');  // blue persists
+                    }
                 },
                 onDrop: function(table, row, dragStartIndex) {
+                    var compositeSet = imgTblCompositeSet(row);
+                    if (compositeSet.length > 0)
+                        $( compositeSet ).find('p.btn').removeClass('blueButtons');  // blue persists
                     if($(row).attr('rowIndex') != dragStartIndex) {
+                        // NOTE Even if dragging a contiguous set of rows,
+                        // still only need to check the one under the cursor.
                         if(imgTblSetOrder) {
                             imgTblSetOrder(table);
                         }
@@ -1702,6 +1777,43 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
             reloadFloatingItem();
             updateTrackImg(id, "hgt.transparentImage=0", "");
         }
+    } else if (cmd == 'hideSet') {
+        var row = $( 'tr#tr_' + id );
+        var rows = imgTblContiguousRowSet(row);
+        if (rows && rows.length > 0) {
+            var vars = new Array();
+            var vals = new Array();
+            for (var ix=rows.length - 1; ix >= 0; ix--) { // from bottom, just in case remove screws with us
+                var rowId = $(rows[ix]).attr('id').substring('tr_'.length);
+                //if (tdbIsSubtrack(trackDbJson[rowId]) == false)
+                //    warn('What went wrong?');
+
+                vars.push(rowId, rowId+'_sel'); // Remove subtrack level vis and explicitly uncheck.
+                vals.push('[]', 0);
+                $(rows[ix]).remove();
+            }
+            if (vars.length > 0) {
+                setCartVars( vars, vals );
+                initImgTblButtons();
+                loadImgAreaSelect(false);
+            }
+        }
+    } else if (cmd == 'hideComposite') {
+        var rec = trackDbJson[id];
+        if (tdbIsSubtrack(rec)) {
+            var row = $( 'tr#tr_' + id );
+            var rows = imgTblCompositeSet(row);
+            if (rows && rows.length > 0) {
+                for (var ix=rows.length - 1; ix >= 0; ix--) { // from bottom, just in case remove screws with us
+                    $(rows[ix]).remove();
+                }
+            setCartVar(rec.parentTrack, 'hide' );
+            initImgTblButtons();
+            loadImgAreaSelect(false);
+            }
+        }
+        //else
+        //    warn('What went wrong?');
     } else {   // if( cmd in 'hide','dense','squish','pack','full','show' )
         // Change visibility settings:
         //
@@ -1797,46 +1909,93 @@ function loadContextMenu(img)
                 }
                 var id = selectedMenuItem.id;
                 var rec = trackDbJson[id];
-                // XXXX what if select is not available (b/c trackControlsOnMain is off)?
-                // Move functionality to a hidden variable?
-                var select = $("select[name=" + id + "]");
-                if (select.length > 1)  // Not really needed if $('#hgTrackUiDialog').html(""); has worked
-                    select =  [ $(select)[0] ];
-                var cur = $(select).val();
-                if(cur) {
-                    $(select).children().each(function(index, o) {
-                                               var title = $(this).val();
-                                               var str = blankImg + " " + title;
-                                               if(title == cur)
-                                                   str = selectedImg + " " + title;
-                                               var o = new Object();
-                                               o[str] = {onclick: function (menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, title); return true;}};
-                                               menu.push(o);
-                                           });
-                    done = true;
-                } else {
-                    if(rec) {
-                        // XXXX check current state from a hidden variable.
-                        var visibilityStrs = new Array("hide", "dense", "squish", "pack", "full");
-                        for (i in visibilityStrs) {
-                            // XXXX use maxVisibility and change hgTracks so it can hide subtracks
-                            var o = new Object();
-                            var str = blankImg + " " + visibilityStrs[i];
-                            if(rec.canPack || (visibilityStrs[i] != "pack" && visibilityStrs[i] != "squish")) {
-                                if(rec.localVisibility) {
-                                    if(visibilityStrs[i] == rec.localVisibility) {
-                                        str = selectedImg + " " + visibilityStrs[i];
-                                    }
-                                } else if(visibilityStrs[i] == visibilityStrsOrder[rec.visibility]) {
-                                    str = selectedImg + " " + visibilityStrs[i];
+                var offerHideSubset    = false;
+                var offerHideComposite = false;
+                var offerSingles       = true;
+                var row = $( 'tr#tr_' + id );
+                if (row) {
+                    var btn = $(row).find('p.btnBlue');  // btnBlue means cursor over left button
+                    if (btn.length == 1) {
+                        var compositeSet = imgTblCompositeSet(row);
+                        if (compositeSet && compositeSet.length > 0) {  // There is a composite set
+                            offerHideComposite = true;
+                            $( compositeSet ).find('p.btn').addClass('blueButtons');  // blue persists
+
+                            var subSet = imgTblContiguousRowSet(row);
+                            if (subSet && subSet.length > 1) {
+                                offerSingles = false;
+                                if(subSet.length < compositeSet.length) {
+                                    offerHideSubset = true;
+                                    $( subSet ).addClass("greenRows"); // green persists
                                 }
-                                o[str] = {onclick: makeContextMenuHitCallback(visibilityStrs[i])};
-                                menu.push(o);
                             }
                         }
-                        done = true;
                     }
                 }
+
+                // First option is hide sets
+                if (offerHideComposite) {
+                    if (offerHideSubset) {
+                        var o = new Object();
+                        o[blankImg + " hide track subset (green)"] = {onclick: makeContextMenuHitCallback('hideSet')};
+                        menu.push(o);
+                    }
+
+                    var o = new Object();
+                    var str = blankImg + " hide track set";
+                    if (offerHideSubset)
+                        str += " (blue)";
+                    o[str] = {onclick: makeContextMenuHitCallback('hideComposite')};
+                    menu.push(o);
+                }
+
+                // Second set of options: visibility for single track
+                if (offerSingles) {
+                    if (offerHideComposite)
+                        menu.push($.contextMenu.separator);
+
+                    // XXXX what if select is not available (b/c trackControlsOnMain is off)?
+                    // Move functionality to a hidden variable?
+                    var select = $("select[name=" + id + "]");
+                    if (select.length > 1)  // Not really needed if $('#hgTrackUiDialog').html(""); has worked
+                        select =  [ $(select)[0] ];
+                    var cur = $(select).val();
+                    if(cur) {
+                        $(select).children().each(function(index, o) {
+                                                var title = $(this).val();
+                                                var str = blankImg + " " + title;
+                                                if(title == cur)
+                                                    str = selectedImg + " " + title;
+                                                var o = new Object();
+                                                o[str] = {onclick: function (menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, title); return true;}};
+                                                menu.push(o);
+                                            });
+                        done = true;
+                    } else {
+                        if(rec) {
+                            // XXXX check current state from a hidden variable.
+                            var visibilityStrs = new Array("hide", "dense", "squish", "pack", "full");
+                            for (i in visibilityStrs) {
+                                // XXXX use maxVisibility and change hgTracks so it can hide subtracks
+                                var o = new Object();
+                                var str = blankImg + " " + visibilityStrs[i];
+                                if(rec.canPack || (visibilityStrs[i] != "pack" && visibilityStrs[i] != "squish")) {
+                                    if(rec.localVisibility) {
+                                        if(visibilityStrs[i] == rec.localVisibility) {
+                                            str = selectedImg + " " + visibilityStrs[i];
+                                        }
+                                    } else if(visibilityStrs[i] == visibilityStrsOrder[rec.visibility]) {
+                                        str = selectedImg + " " + visibilityStrs[i];
+                                    }
+                                    o[str] = {onclick: makeContextMenuHitCallback(visibilityStrs[i])};
+                                    menu.push(o);
+                                }
+                            }
+                            done = true;
+                        }
+                    }
+                }
+
                 if(done) {
                     var o = new Object();
                     var any = false;
@@ -1967,10 +2126,13 @@ function loadContextMenu(img)
                 // console.log(mapItems[selectedMenuItem]);
                 selectedMenuItem = findMapItem(e);
                 // XXXX? blockUseMap = true;
+                return true;
             },
+            hideTransition:'hide', // hideCallback fails if these are not defined.
+            hideSpeed:10,
             hideCallback: function() {
-                // this doesn't work
-                warn("hideCallback");
+                $('p.btn.blueButtons').removeClass('blueButtons');
+                $('tr.trDraggable.greenRows').removeClass('greenRows');
             }
         });
     return;

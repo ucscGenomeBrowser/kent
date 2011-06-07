@@ -1,9 +1,9 @@
 # for emacs: -*- mode: sh; -*-
 
-# Caenorhabditis brenneri
-#	Washington University School of Medicine GSC and Sanger Institute
+# Caenorhabditis sp9. JU1422
+#	Washington University School of Medicine GSC
 #
-#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEG02
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AENM01
 
 ###########################################################################
 ## Download sequence (DONE - 2011-05-27 - Hiram)
@@ -187,9 +187,9 @@ taxId 870437
 
     #	reload track to get it clean
     hgLoadBed caeSp91 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 1379702 elements of size 4
+    #	Loaded 1422910 elements of size 4
     featureBits -countGaps caeSp91 windowmaskerSdust
-    #	55862690 bases of 196410749 (28.442%) in intersection
+    #	58929427 bases of 204396809 (28.831%) in intersection
 
     #	mask the sequence with this clean mask
     zcat cleanWMask.bed.gz \
@@ -198,20 +198,21 @@ taxId 870437
     twoBitToFa caeSp91.cleanWMSdust.2bit stdout | faSize stdin \
         > caeSp91.cleanWMSdust.faSize.txt
     cat caeSp91.cleanWMSdust.faSize.txt
-# 196410749 bases (18804958 N's 177605791 real 121743101 upper 55862690 lower) in 52546 sequences in 1 files
-# %28.44 masked total, %31.45 masked real
+# 204396809 bases (17856539 N's 186540270 real 127610843 upper 58929427 lower)
+#	in 7636 sequences in 1 files
+# %28.83 masked total, %31.59 masked real
 
 ########################################################################
-# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-27 - Hiram)
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-05-31 - Hiram)
     cd /hive/data/genomes/caeSp91
     twoBitMask -add bed/windowMasker/caeSp91.cleanWMSdust.2bit \
 	bed/simpleRepeat/trfMask.bed caeSp91.2bit
     #	safe to ignore the warnings about BED file with >=13 fields
     twoBitToFa caeSp91.2bit stdout | faSize stdin > faSize.caeSp91.txt
     cat faSize.caeSp91.txt
-# 190374847 bases (20277419 N's 170097428 real 120262496 upper 49834932 lower)
-#	in 3307 sequences in 1 files
-# %26.18 masked total, %29.30 masked real
+# 204396809 bases (17856539 N's 186540270 real 127471397 upper 59068873 lower)
+#	in 7636 sequences in 1 files
+# %28.90 masked total, %31.67 masked real
 
     #	create symlink to gbdb
     ssh hgwdev
@@ -219,18 +220,18 @@ taxId 870437
     ln -s `pwd`/caeSp91.2bit /gbdb/caeSp91/caeSp91.2bit
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-27 - Hiram)
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-05-31 - Hiram)
     # numerator is caeSp91 gapless bases "real" as reported by faSize 
     # denominator is hg19 gapless bases "real" as reported by faSize
     # 1024 is threshold used for human -repMatch:
-    calc \( 170097428  / 2897310462 \) \* 1024
-    #	( 170097428 / 2897310462 ) * 1024 = 60.117743
+    calc \( 186540270  / 2897310462 \) \* 1024
+    #	( 186540270 / 2897310462 ) * 1024 = 65.929157
 
     # Round up to use -repMatch=100 since 60 would result in too many
     cd /hive/data/genomes/caeSp91
     blat caeSp91.2bit /dev/null /dev/null -tileSize=11 \
       -makeOoc=jkStuff/caeSp91.11.ooc -repMatch=100
-    #	Wrote 12775 overused 11-mers to jkStuff/caeSp91.11.ooc
+    #	Wrote 15514 overused 11-mers to jkStuff/caeSp91.11.ooc
     # there are no non-bridged gaps here to make a lift file from
     # cd jkStuff
     # gapToLift -verbose=2 caeSp91 caeSp91.nonBridged.lift -bedFile=caeSp91.nonBridged.bed

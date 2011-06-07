@@ -39,4 +39,12 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 chainMinScore 1000
 chainLinearGap loose
 
+track chainNetBosTau6 override
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+priority 450.3
+chainMinScore 3000
+chainLinearGap medium
+shortLabel $o_db Chain/Net
+
 

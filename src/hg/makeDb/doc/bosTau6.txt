@@ -520,13 +520,129 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     rm -fr hardMaskedFa
 
 
+###########################################################################
+# ornAna1 Platypus LASTZ/CHAIN/NET (DONE - 2011-05-20 - Chin)
+    screen # use screen to control this job
+    mkdir /cluster/data/bosTau6/bed/blastzOrnAna1.2011-05-20
+    cd /cluster/data/bosTau6/bed/blastzOrnAna1.2011-05-20
 
-############################################################################
-# bosTau6 Cow BLASTZ/CHAIN/NET (working 2011-05-?? - Chin)
+    cat << '_EOF_' > DEF
+# Cow vs. Platypus
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_M=50
+
+# TARGET: Cow bosTau6
+SEQ1_DIR=/scratch/data/bosTau6/bosTau6.2bit
+SEQ1_LEN=/cluster/data/bosTau6/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+SEQ1_LIMIT=300
+SEQ1_CHUNK=20000000
+SEQ1_LAP=0
+
+# QUERY: Platypus ornAna1
+SEQ2_DIR=/scratch/data/ornAna1/ornAna1.2bit
+SEQ2_LEN=/cluster/data/ornAna1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/cluster/data/bosTau6/bed/blastzOrnAna1.2011-05-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+    
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
+        -syntenicNet -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -verbose=2 -chainLinearGap=loose > do.log 2>&1 &
+    #   real     329m59.325s
+
+    # filter with doRecipBest.pl 
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        bosTau6 ornAna1 > rbest.log 2>&1
+    # real    15m15.120s
+    cat fb.bosTau6.chainOrnAna1Link.txt
+    #   195910907 bases of 2649682029 (7.394%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastzOrnAna1.2011-05-20 lastz.ornAna1
+
+
+    mkdir /cluster/data/ornAna1/bed/blastz.bosTau6.swap
+    cd /cluster/data/ornAna1/bed/blastz.bosTau6.swap
+    time nice -n +19 doBlastzChainNet.pl \
+        /cluster/data/bosTau6/bed/blastzOrnAna1.2011-05-20/DEF \
+        -chainMinScore=5000 -verbose=2 -smallClusterHub=memk \
+        -swap -syntenicNet \
+          -chainLinearGap=loose -bigClusterHub=swarm > swap.log 2>&1 &
+    #   real       59m45.336
+    cat fb.ornAna1.chainBosTau6Link.txt
+    #   190401000 bases of 1842236818 (10.335%) in intersection
+# TBD for all chain/net:
+ *** All done !  Elapsed time: 59m18s
+ *** Make sure that goldenPath/ornAna1/vsBosTau6/README.txt is accurate.
+ *** Add {chain,net}BosTau6 tracks to trackDb.ra if necessary.
+
+    cd /cluster/data/ornAna1/bed
+    ln -s blastz.bosTau6.swap lastz.bosTau6
+
+#####################################################################
+# susScr2 Pig BLASTZ/CHAIN/NET (DONE - 2011-05-24 - Chin)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24
+    cd /hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24
+    
+    cat << '_EOF_' > DEF
+# Pig vs. Cow
+BLASTZ_M=50
+
+# TARGET: Cow BosTau6
+SEQ1_DIR=/scratch/data/bosTau6/bosTau6.2bit
+SEQ1_LEN=/scratch/data/bosTau6/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Pig SusScr2
+SEQ2_DIR=/scratch/data/susScr2/susScr2.2bit
+SEQ2_LEN=/scratch/data/susScr2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #   real    2198m44.401s
+    cat fb.bosTau6.chainSusScr2Link.txt
+    #   1306738899 bases of 2649682029 (49.317%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s lastzSusScr2.2011-05-24 lastz.susScr2
+
+    # then swap
+    mkdir /hive/data/genomes/susScr2/bed/blastz.bosTau6.swap
+    cd /hive/data/genomes/susScr2/bed/blastz.bosTau6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #  real    380m53.612s
+
+    cat fb.susScr2.chainBosTau6Link.txt
+    # 1475323050 bases of 2231298548 (66.119%) in intersection
+
 
 
 #########################################################################
-#  SWAP mm9 lastz (DONE - 2010-05-17 - Chin)
+#  SWAP mm9 LASTZ (DONE - 2010-05-17 - Chin)
     #	original alignment done at mm9.txt
     cd /hive/data/genomes/mm9/bed/lastzBosTau6.2011-05-17
     cat fb.mm9.chainBosTau6Link.txt
@@ -551,7 +667,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     ln -s blastz.mm9.swap lastz.mm9
 
 ############################################################################
-#  SWAP hg19 lastz (DONE 2011-05-16 - Chin)
+#  SWAP hg19 LASTZ (DONE 2011-05-16 - Chin)
     #	original alignment
     cd /hive/data/genomes/hg19/bed/lastzBosTau6.2011-05-16
     cat fb.hg19.chainBosTau6Link.txt
@@ -569,9 +685,12 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #   real     72m57.889s
     cat fb.bosTau6.chainHg19Link.txt
     #   1336966333 bases of 2649682029 (50.458%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
 
 ############################################################################
-#  SWAP canFam2 lastz (DONE 2011-05-25 - Chin)
+#  SWAP canFam2 LASTZ (DONE 2011-05-25 - Chin)
     #   original alignment
     cd /hive/data/genomes/canFam2/bed/lastzBosTau6.2011-05-25
     cat fb.canFam2.chainBosTau6Link.txt
@@ -589,6 +708,51 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #   real     88m38.555s
     cat fb.bosTau6.chainCanFam2Link.txt
     # 1404315725 bases of 2649682029 (52.999%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.canFam2.swap lastz.canFam2
+
+############################################################################
+#  SWAP rn4 LASTZ (DONE 2011-05-31 - Chin)
+    cd /hive/data/genomes/rn4/bed/blastzBosTau6.2011-05-31
+    cat fb.rn4.chainBosTau6Link.txt
+    # 660647959 bases of 2571531505 (25.691%) in intersection
+
+    #   and the swap
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.rn4.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.rn4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rn4/bed/blastzBosTau6.2011-05-31/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    49m43.881
+
+    cat fb.bosTau6.chainRn4Link.txt
+    # 648232024 bases of 2649682029 (24.465%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.rn4.swap lastz.rn4
+
+############################################################################
+#  SWAP monDom5 LASTZ (DONE 2011-05-31 - Chin)
+    cd /hive/data/genomes/monDom5/bed/lastzBosTau6.2011-05-31
+    cat fb.monDom5.chainBosTau6Link.txt
+    #   207703303 bases of 3501660299 (5.932%) in intersection
+
+    # and the swap
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzBosTau6.2011-05-31/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    52m10.229s
+
+    cat fb.bosTau6.chainMonDom5Link.txt
+    #   199980646 bases of 2649682029 (7.547%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (working 2011-02-07 - Chin)
