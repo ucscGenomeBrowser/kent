@@ -23558,7 +23558,7 @@ else if (sameString("numtSMitochondrion", table))
     {
     safef(query, sizeof(query),
         "select  chrom, chromStart, chromEnd, name, score, strand "
-        "from numtS where (name = '%s'", itemName);
+        "from numtS where name = '%s'", itemName);
     strcpy(clickMsg, openMsg1);
     }
     sr = sqlGetResult(conn, query);
