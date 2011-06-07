@@ -80,6 +80,24 @@ subId 4171
 tableName wgEncodeUncBsuProtK562CytosolSig
 view Signal
 
+metaObject wgEncodeUncBsuProtK562MembranefractionRaw
+objType file
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-06
+dateUnrestricted 2012-03-06
+fileName wgEncodeUncBsuProtK562MembranefractionRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization membraneFraction
+origAssembly hg19
+project wgEncode
+subId 4182
+view RawSignal
+
 metaObject wgEncodeUncBsuProtK562MembranefractionSig
 objType table
 cell K562
@@ -176,4 +194,4 @@ subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: -837813574
+# MAGIC: 586222236
