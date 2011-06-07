@@ -248,7 +248,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqA549CellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -258,7 +257,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3601
 tableName wgEncodeCshlLongRnaSeqA549CellPamContigs
@@ -273,7 +271,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqA549CellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -283,7 +280,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3601
 view ExonsGencV3c
@@ -297,7 +293,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqA549CellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -307,7 +302,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3601
 view GeneDeNovo
@@ -321,7 +315,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqA549CellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -331,7 +324,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3601
 view GeneGencV3c
@@ -345,7 +337,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqA549CellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -355,7 +346,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3601
 view Junctions
@@ -369,7 +359,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqA549CellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -379,7 +368,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3601
 view TranscriptDeNovo
@@ -393,7 +381,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqA549CellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -403,7 +390,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3601
 view TranscriptGencV3c
@@ -889,7 +875,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -899,7 +884,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3603
 tableName wgEncodeCshlLongRnaSeqAg04450CellPamContigs
@@ -914,7 +898,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -924,7 +907,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3603
 view ExonsGencV3c
@@ -938,7 +920,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -948,7 +929,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3603
 view GeneDeNovo
@@ -962,7 +942,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -972,7 +951,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3603
 view GeneGencV3c
@@ -986,7 +964,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -996,7 +973,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3603
 view Junctions
@@ -1010,7 +986,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1020,7 +995,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3603
 view TranscriptDeNovo
@@ -1034,7 +1008,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1044,7 +1017,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3603
 view TranscriptGencV3c
@@ -1106,7 +1078,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -1116,7 +1087,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3604
 tableName wgEncodeCshlLongRnaSeqAg04450CellPapContigs
@@ -1131,7 +1101,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1141,7 +1110,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3604
 view ExonsGencV3c
@@ -1247,7 +1215,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1257,7 +1224,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3604
 view GeneDeNovo
@@ -1271,7 +1237,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1281,7 +1246,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3604
 view GeneGencV3c
@@ -1295,7 +1259,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -1305,7 +1268,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3604
 view Junctions
@@ -1415,7 +1377,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1425,7 +1386,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3604
 view TranscriptDeNovo
@@ -1439,7 +1399,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1449,7 +1408,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3604
 view TranscriptGencV3c
@@ -1699,7 +1657,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -1709,7 +1666,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3605
 tableName wgEncodeCshlLongRnaSeqBjCellPamContigs
@@ -1724,7 +1680,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1734,7 +1689,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3605
 view ExonsGencV3c
@@ -1748,7 +1702,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1758,7 +1711,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3605
 view GeneDeNovo
@@ -1772,7 +1724,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1782,7 +1733,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3605
 view GeneGencV3c
@@ -1796,7 +1746,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -1806,7 +1755,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3605
 view Junctions
@@ -1820,7 +1768,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1830,7 +1777,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3605
 view TranscriptDeNovo
@@ -1844,7 +1790,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1854,7 +1799,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3605
 view TranscriptGencV3c
@@ -1916,7 +1860,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -1926,7 +1869,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3606
 tableName wgEncodeCshlLongRnaSeqBjCellPapContigs
@@ -1941,7 +1883,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1951,7 +1892,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3606
 view ExonsGencV3c
@@ -2057,7 +1997,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -2067,7 +2006,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3606
 view GeneDeNovo
@@ -2081,7 +2019,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -2091,7 +2028,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3606
 view GeneGencV3c
@@ -2105,7 +2041,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -2115,7 +2050,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3606
 view Junctions
@@ -2225,7 +2159,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -2235,7 +2168,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3606
 view TranscriptDeNovo
@@ -2249,7 +2181,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqBjCellPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -2259,7 +2190,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3606
 view TranscriptGencV3c
@@ -2509,7 +2439,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -2519,7 +2448,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3611
 tableName wgEncodeCshlLongRnaSeqGm12878CellPamContigs
@@ -2534,7 +2462,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -2544,7 +2471,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3611
 view ExonsGencV3c
@@ -2558,7 +2484,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -2568,7 +2493,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3611
 view GeneDeNovo
@@ -2582,7 +2506,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -2592,7 +2515,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3611
 view GeneGencV3c
@@ -2606,7 +2528,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -2616,7 +2537,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3611
 view Junctions
@@ -2630,7 +2550,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -2640,7 +2559,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3611
 view TranscriptDeNovo
@@ -2654,7 +2572,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -2664,7 +2581,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3611
 view TranscriptGencV3c
@@ -3323,7 +3239,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -3333,7 +3248,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3607
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPamContigs
@@ -3348,7 +3262,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3358,7 +3271,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3607
 view ExonsGencV3c
@@ -3372,7 +3284,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3382,7 +3293,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3607
 view GeneDeNovo
@@ -3396,7 +3306,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3406,7 +3315,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3607
 view GeneGencV3c
@@ -3420,7 +3328,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -3430,7 +3337,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3607
 view Junctions
@@ -3444,7 +3350,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3454,7 +3359,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3607
 view TranscriptDeNovo
@@ -3468,7 +3372,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3478,7 +3381,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3607
 view TranscriptGencV3c
@@ -3540,7 +3442,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -3550,7 +3451,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3608
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapContigs
@@ -3565,7 +3465,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3575,7 +3474,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3608
 view ExonsGencV3c
@@ -3681,7 +3579,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3691,7 +3588,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3608
 view GeneDeNovo
@@ -3705,7 +3601,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3715,7 +3610,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3608
 view GeneGencV3c
@@ -3729,7 +3623,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -3739,7 +3632,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3608
 view Junctions
@@ -3849,7 +3741,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3859,7 +3750,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3608
 view TranscriptDeNovo
@@ -3873,7 +3763,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3883,7 +3772,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3608
 view TranscriptGencV3c
@@ -4133,7 +4021,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -4143,7 +4030,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3609
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPamContigs
@@ -4158,7 +4044,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4168,7 +4053,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3609
 view ExonsGencV3c
@@ -4182,7 +4066,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4192,7 +4075,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3609
 view GeneDeNovo
@@ -4206,7 +4088,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4216,7 +4097,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3609
 view GeneGencV3c
@@ -4230,7 +4110,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -4240,7 +4119,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3609
 view Junctions
@@ -4254,7 +4132,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4264,7 +4141,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3609
 view TranscriptDeNovo
@@ -4278,7 +4154,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4288,7 +4163,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3609
 view TranscriptGencV3c
@@ -4350,7 +4224,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -4360,7 +4233,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3610
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapContigs
@@ -4375,7 +4247,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4385,7 +4256,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3610
 view ExonsGencV3c
@@ -4491,7 +4361,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4501,7 +4370,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3610
 view GeneDeNovo
@@ -4515,7 +4383,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4525,7 +4392,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3610
 view GeneGencV3c
@@ -4539,7 +4405,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -4549,7 +4414,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3610
 view Junctions
@@ -4659,7 +4523,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4669,7 +4532,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3610
 view TranscriptDeNovo
@@ -4683,7 +4545,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4693,7 +4554,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3610
 view TranscriptGencV3c
@@ -4943,7 +4803,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -4953,7 +4812,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3613
 tableName wgEncodeCshlLongRnaSeqH1hescCellPamContigs
@@ -4968,7 +4826,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4978,7 +4835,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3613
 view ExonsGencV3c
@@ -4992,7 +4848,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5002,7 +4857,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3613
 view GeneDeNovo
@@ -5016,7 +4870,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5026,7 +4879,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3613
 view GeneGencV3c
@@ -5040,7 +4892,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -5050,7 +4901,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3613
 view Junctions
@@ -5064,7 +4914,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5074,7 +4923,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3613
 view TranscriptDeNovo
@@ -5088,7 +4936,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5098,7 +4945,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3613
 view TranscriptGencV3c
@@ -5160,7 +5006,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -5170,7 +5015,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3614
 tableName wgEncodeCshlLongRnaSeqH1hescCellPapContigs
@@ -5185,7 +5029,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5195,7 +5038,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3614
 view ExonsGencV3c
@@ -5301,7 +5143,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5311,7 +5152,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3614
 view GeneDeNovo
@@ -5325,7 +5165,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5335,7 +5174,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3614
 view GeneGencV3c
@@ -5349,7 +5187,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -5359,7 +5196,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3614
 view Junctions
@@ -5469,7 +5305,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5479,7 +5314,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3614
 view TranscriptDeNovo
@@ -5493,7 +5327,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5503,7 +5336,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3614
 view TranscriptGencV3c
@@ -5635,7 +5467,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -5660,7 +5491,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5684,7 +5514,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5708,7 +5537,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5732,7 +5560,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -5756,7 +5583,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5780,7 +5606,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5828,7 +5653,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -5853,7 +5677,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5923,7 +5746,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5947,7 +5769,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5971,7 +5792,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -6043,7 +5863,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6067,7 +5886,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6209,7 +6027,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -6234,7 +6051,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6258,7 +6074,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6282,7 +6097,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6306,7 +6120,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -6330,7 +6143,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6354,7 +6166,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6402,7 +6213,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -6427,7 +6237,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6497,7 +6306,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6521,7 +6329,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6545,7 +6352,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -6617,7 +6423,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6641,7 +6446,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6901,7 +6705,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -6911,7 +6714,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3629
 tableName wgEncodeCshlLongRnaSeqHelas3CellPamContigs
@@ -6926,7 +6728,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6936,7 +6737,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3629
 view ExonsGencV3c
@@ -6950,7 +6750,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6960,7 +6759,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3629
 view GeneDeNovo
@@ -6974,7 +6772,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6984,7 +6781,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3629
 view GeneGencV3c
@@ -6998,7 +6794,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -7008,7 +6803,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3629
 view Junctions
@@ -7022,7 +6816,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7032,7 +6825,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3629
 view TranscriptDeNovo
@@ -7046,7 +6838,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7056,7 +6847,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3629
 view TranscriptGencV3c
@@ -7118,7 +6908,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -7128,7 +6917,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3630
 tableName wgEncodeCshlLongRnaSeqHelas3CellPapContigs
@@ -7143,7 +6931,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7153,7 +6940,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3630
 view ExonsGencV3c
@@ -7259,7 +7045,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7269,7 +7054,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3630
 view GeneDeNovo
@@ -7283,7 +7067,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7293,7 +7076,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3630
 view GeneGencV3c
@@ -7307,7 +7089,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -7317,7 +7098,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3630
 view Junctions
@@ -7427,7 +7207,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7437,7 +7216,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3630
 view TranscriptDeNovo
@@ -7451,7 +7229,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7461,7 +7238,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3630
 view TranscriptGencV3c
@@ -7593,7 +7369,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -7618,7 +7393,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7642,7 +7416,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7666,7 +7439,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7690,7 +7462,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -7714,7 +7485,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7738,7 +7508,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7810,7 +7579,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -7820,7 +7588,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3632
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapContigs
@@ -7835,7 +7602,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7845,7 +7611,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3632
 view ExonsGencV3c
@@ -7951,7 +7716,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7961,7 +7725,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3632
 view GeneDeNovo
@@ -7975,7 +7738,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7985,7 +7747,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3632
 view GeneGencV3c
@@ -7999,7 +7760,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -8009,7 +7769,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3632
 view Junctions
@@ -8119,7 +7878,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8129,7 +7887,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3632
 view TranscriptDeNovo
@@ -8143,7 +7900,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8153,7 +7909,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3632
 view TranscriptGencV3c
@@ -8403,7 +8158,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -8413,7 +8167,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3633
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPamContigs
@@ -8428,7 +8181,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8438,7 +8190,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3633
 view ExonsGencV3c
@@ -8452,7 +8203,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8462,7 +8212,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3633
 view GeneDeNovo
@@ -8476,7 +8225,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8486,7 +8234,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3633
 view GeneGencV3c
@@ -8500,7 +8247,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -8510,7 +8256,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3633
 view Junctions
@@ -8524,7 +8269,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8534,7 +8278,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3633
 view TranscriptDeNovo
@@ -8548,7 +8291,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8558,7 +8300,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3633
 view TranscriptGencV3c
@@ -8620,7 +8361,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -8630,7 +8370,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3634
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapContigs
@@ -8645,7 +8384,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8655,7 +8393,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3634
 view ExonsGencV3c
@@ -8761,7 +8498,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8771,7 +8507,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3634
 view GeneDeNovo
@@ -8785,7 +8520,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8795,7 +8529,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3634
 view GeneGencV3c
@@ -8809,7 +8542,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -8819,7 +8551,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3634
 view Junctions
@@ -8929,7 +8660,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8939,7 +8669,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3634
 view TranscriptDeNovo
@@ -8953,7 +8682,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8963,7 +8691,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3634
 view TranscriptGencV3c
@@ -9213,7 +8940,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -9223,7 +8949,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3639
 tableName wgEncodeCshlLongRnaSeqHepg2CellPamContigs
@@ -9238,7 +8963,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -9248,7 +8972,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3639
 view ExonsGencV3c
@@ -9262,7 +8985,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -9272,7 +8994,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3639
 view GeneDeNovo
@@ -9286,7 +9007,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -9296,7 +9016,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3639
 view GeneGencV3c
@@ -9310,7 +9029,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -9320,7 +9038,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3639
 view Junctions
@@ -9334,7 +9051,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -9344,7 +9060,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3639
 view TranscriptDeNovo
@@ -9358,7 +9073,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -9368,7 +9082,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3639
 view TranscriptGencV3c
@@ -9430,7 +9143,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -9440,7 +9152,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3640
 tableName wgEncodeCshlLongRnaSeqHepg2CellPapContigs
@@ -9455,7 +9166,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -9465,7 +9175,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3640
 view ExonsGencV3c
@@ -9571,7 +9280,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -9581,7 +9289,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3640
 view GeneDeNovo
@@ -9595,7 +9302,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -9605,7 +9311,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3640
 view GeneGencV3c
@@ -9619,7 +9324,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -9629,7 +9333,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3640
 view Junctions
@@ -9739,7 +9442,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -9749,7 +9451,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3640
 view TranscriptDeNovo
@@ -9763,7 +9464,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -9773,7 +9473,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3640
 view TranscriptGencV3c
@@ -10071,7 +9770,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -10081,7 +9779,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3636
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapContigs
@@ -10096,7 +9793,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -10106,7 +9802,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3636
 view ExonsGencV3c
@@ -10212,7 +9907,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -10222,7 +9916,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3636
 view GeneDeNovo
@@ -10236,7 +9929,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -10246,7 +9938,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3636
 view GeneGencV3c
@@ -10260,7 +9951,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -10270,7 +9960,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3636
 view Junctions
@@ -10380,7 +10069,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -10390,7 +10078,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3636
 view TranscriptDeNovo
@@ -10404,7 +10091,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -10414,7 +10100,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3636
 view TranscriptGencV3c
@@ -10664,7 +10349,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -10674,7 +10358,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3637
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPamContigs
@@ -10689,7 +10372,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -10699,7 +10381,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3637
 view ExonsGencV3c
@@ -10713,7 +10394,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -10723,7 +10403,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3637
 view GeneDeNovo
@@ -10737,7 +10416,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -10747,7 +10425,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3637
 view GeneGencV3c
@@ -10761,7 +10438,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -10771,7 +10447,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3637
 view Junctions
@@ -10785,7 +10460,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -10795,7 +10469,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3637
 view TranscriptDeNovo
@@ -10809,7 +10482,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -10819,7 +10491,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3637
 view TranscriptGencV3c
@@ -10881,7 +10552,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -10891,7 +10561,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3638
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapContigs
@@ -10906,7 +10575,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -10916,7 +10584,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3638
 view ExonsGencV3c
@@ -11022,7 +10689,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11032,7 +10698,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3638
 view GeneDeNovo
@@ -11046,7 +10711,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11056,7 +10720,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3638
 view GeneGencV3c
@@ -11070,7 +10733,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -11080,7 +10742,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3638
 view Junctions
@@ -11190,7 +10851,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11200,7 +10860,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3638
 view TranscriptDeNovo
@@ -11214,7 +10873,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11224,7 +10882,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3638
 view TranscriptGencV3c
@@ -11356,7 +11013,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -11381,7 +11037,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11405,7 +11060,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11429,7 +11083,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11453,7 +11106,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -11477,7 +11129,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11501,7 +11152,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11549,7 +11199,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -11574,7 +11223,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11644,7 +11292,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11668,7 +11315,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11692,7 +11338,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -11764,7 +11409,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11788,7 +11432,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHmecCellPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12048,7 +11691,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -12058,7 +11700,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3621
 tableName wgEncodeCshlLongRnaSeqHsmmCellPamContigs
@@ -12073,7 +11714,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12083,7 +11723,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3621
 view ExonsGencV3c
@@ -12097,7 +11736,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12107,7 +11745,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3621
 view GeneDeNovo
@@ -12121,7 +11758,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12131,7 +11767,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3621
 view GeneGencV3c
@@ -12145,7 +11780,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -12155,7 +11789,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3621
 view Junctions
@@ -12169,7 +11802,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12179,7 +11811,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3621
 view TranscriptDeNovo
@@ -12193,7 +11824,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12203,7 +11833,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3621
 view TranscriptGencV3c
@@ -12265,7 +11894,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -12275,7 +11903,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3622
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapContigs
@@ -12290,7 +11917,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12300,7 +11926,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3622
 view ExonsGencV3c
@@ -12406,7 +12031,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12416,7 +12040,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3622
 view GeneDeNovo
@@ -12430,7 +12053,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12440,7 +12062,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3622
 view GeneGencV3c
@@ -12454,7 +12075,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -12464,7 +12084,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3622
 view Junctions
@@ -12574,7 +12193,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12584,7 +12202,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3622
 view TranscriptDeNovo
@@ -12598,7 +12215,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12608,7 +12224,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3622
 view TranscriptGencV3c
@@ -12858,7 +12473,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -12868,7 +12482,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3627
 tableName wgEncodeCshlLongRnaSeqHuvecCellPamContigs
@@ -12883,7 +12496,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12893,7 +12505,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3627
 view ExonsGencV3c
@@ -12907,7 +12518,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12917,7 +12527,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3627
 view GeneDeNovo
@@ -12931,7 +12540,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12941,7 +12549,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3627
 view GeneGencV3c
@@ -12955,7 +12562,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -12965,7 +12571,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3627
 view Junctions
@@ -12979,7 +12584,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12989,7 +12593,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3627
 view TranscriptDeNovo
@@ -13003,7 +12606,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13013,7 +12615,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3627
 view TranscriptGencV3c
@@ -13075,7 +12676,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -13085,7 +12685,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3628
 tableName wgEncodeCshlLongRnaSeqHuvecCellPapContigs
@@ -13100,7 +12699,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13110,7 +12708,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3628
 view ExonsGencV3c
@@ -13216,7 +12813,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13226,7 +12822,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3628
 view GeneDeNovo
@@ -13240,7 +12835,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13250,7 +12844,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3628
 view GeneGencV3c
@@ -13264,7 +12857,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -13274,7 +12866,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3628
 view Junctions
@@ -13384,7 +12975,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13394,7 +12984,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3628
 view TranscriptDeNovo
@@ -13408,7 +12997,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13418,7 +13006,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3628
 view TranscriptGencV3c
@@ -13550,7 +13137,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -13560,7 +13146,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3623
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPamContigs
@@ -13575,7 +13160,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13585,7 +13169,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3623
 view ExonsGencV3c
@@ -13599,7 +13182,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13609,7 +13191,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3623
 view GeneDeNovo
@@ -13623,7 +13204,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13633,7 +13213,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3623
 view GeneGencV3c
@@ -13647,7 +13226,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -13657,7 +13235,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3623
 view Junctions
@@ -13671,7 +13248,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13681,7 +13257,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3623
 view TranscriptDeNovo
@@ -13695,7 +13270,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13705,7 +13279,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3623
 view TranscriptGencV3c
@@ -13767,7 +13340,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -13777,7 +13349,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3624
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapContigs
@@ -13792,7 +13363,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13802,7 +13372,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3624
 view ExonsGencV3c
@@ -13908,7 +13477,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13918,7 +13486,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3624
 view GeneDeNovo
@@ -13932,7 +13499,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13942,7 +13508,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3624
 view GeneGencV3c
@@ -13956,7 +13521,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -13966,7 +13530,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3624
 view Junctions
@@ -14076,7 +13639,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14086,7 +13648,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3624
 view TranscriptDeNovo
@@ -14100,7 +13661,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14110,7 +13670,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3624
 view TranscriptGencV3c
@@ -14360,7 +13919,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -14370,7 +13928,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3625
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPamContigs
@@ -14385,7 +13942,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14395,7 +13951,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3625
 view ExonsGencV3c
@@ -14409,7 +13964,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14419,7 +13973,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3625
 view GeneDeNovo
@@ -14433,7 +13986,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14443,7 +13995,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3625
 view GeneGencV3c
@@ -14457,7 +14008,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -14467,7 +14017,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3625
 view Junctions
@@ -14481,7 +14030,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14491,7 +14039,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3625
 view TranscriptDeNovo
@@ -14505,7 +14052,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14515,7 +14061,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3625
 view TranscriptGencV3c
@@ -14577,7 +14122,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -14587,7 +14131,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3626
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapContigs
@@ -14602,7 +14145,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14612,7 +14154,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3626
 view ExonsGencV3c
@@ -14718,7 +14259,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14728,7 +14268,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3626
 view GeneDeNovo
@@ -14742,7 +14281,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14752,7 +14290,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3626
 view GeneGencV3c
@@ -14766,7 +14303,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -14776,7 +14312,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3626
 view Junctions
@@ -14886,7 +14421,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14896,7 +14430,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3626
 view TranscriptDeNovo
@@ -14910,7 +14443,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14920,7 +14452,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3626
 view TranscriptGencV3c
@@ -15170,7 +14701,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -15180,7 +14710,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3648
 tableName wgEncodeCshlLongRnaSeqK562CellPamContigs
@@ -15195,7 +14724,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -15205,7 +14733,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3648
 view ExonsGencV3c
@@ -15219,7 +14746,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -15229,7 +14755,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3648
 view GeneDeNovo
@@ -15243,7 +14768,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -15253,7 +14777,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3648
 view GeneGencV3c
@@ -15267,7 +14790,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -15277,7 +14799,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3648
 view Junctions
@@ -15291,7 +14812,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -15301,7 +14821,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3648
 view TranscriptDeNovo
@@ -15315,7 +14834,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -15325,7 +14843,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3648
 view TranscriptGencV3c
@@ -15795,7 +15312,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -15805,7 +15321,6 @@ labVersion iIDR
 localization chromatin
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3641
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalContigs
@@ -15820,7 +15335,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -15830,7 +15344,6 @@ labVersion iIDR
 localization chromatin
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3641
 view ExonsGencV3c
@@ -15936,7 +15449,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -15946,7 +15458,6 @@ labVersion iIDR
 localization chromatin
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3641
 view GeneDeNovo
@@ -15960,7 +15471,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -15970,7 +15480,6 @@ labVersion iIDR
 localization chromatin
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3641
 view GeneGencV3c
@@ -15984,7 +15493,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -15994,7 +15502,6 @@ labVersion iIDR
 localization chromatin
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3641
 view Junctions
@@ -16104,7 +15611,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -16114,7 +15620,6 @@ labVersion iIDR
 localization chromatin
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3641
 view TranscriptDeNovo
@@ -16128,7 +15633,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -16138,7 +15642,6 @@ labVersion iIDR
 localization chromatin
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3641
 view TranscriptGencV3c
@@ -16379,26 +15882,6 @@ subId 3229
 tableName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep2
 view PlusRawSignal
 
-metaObject wgEncodeCshlLongRnaSeqK562CytosolLongpolyaFastqRep1V2
-objType file
-cell K562
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-06
-dateUnrestricted 2010-04-06
-dccRep 1
-fileName wgEncodeCshlLongRnaSeqK562CytosolLongpolyaFastqRep1V2.fastq.gz
-grant Gingeras
-lab CSHL
-localization cytosol
-origAssembly hg18
-project wgEncode
-replicate 1
-rnaExtract longPolyA
-subId 414
-view RawData
-
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep1
 objType table
 bioRep 001C
@@ -16456,7 +15939,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -16466,7 +15948,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3643
 tableName wgEncodeCshlLongRnaSeqK562CytosolPapContigs
@@ -16481,7 +15962,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -16491,7 +15971,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3643
 view ExonsGencV3c
@@ -16597,7 +16076,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -16607,7 +16085,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3643
 view GeneDeNovo
@@ -16621,7 +16098,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -16631,7 +16107,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3643
 view GeneGencV3c
@@ -16645,7 +16120,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -16655,7 +16129,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3643
 view Junctions
@@ -16765,7 +16238,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -16775,7 +16247,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3643
 view TranscriptDeNovo
@@ -16789,7 +16260,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -16799,7 +16269,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3643
 view TranscriptGencV3c
@@ -16861,7 +16330,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -16871,7 +16339,6 @@ labVersion iIDR
 localization nucleolus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3644
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalContigs
@@ -16886,7 +16353,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -16896,7 +16362,6 @@ labVersion iIDR
 localization nucleolus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3644
 view ExonsGencV3c
@@ -17002,7 +16467,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17012,7 +16476,6 @@ labVersion iIDR
 localization nucleolus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3644
 view GeneDeNovo
@@ -17026,7 +16489,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17036,7 +16498,6 @@ labVersion iIDR
 localization nucleolus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3644
 view GeneGencV3c
@@ -17050,7 +16511,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -17060,7 +16520,6 @@ labVersion iIDR
 localization nucleolus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3644
 view Junctions
@@ -17170,7 +16629,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17180,7 +16638,6 @@ labVersion iIDR
 localization nucleolus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3644
 view TranscriptDeNovo
@@ -17194,7 +16651,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17204,7 +16660,6 @@ labVersion iIDR
 localization nucleolus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3644
 view TranscriptGencV3c
@@ -17266,7 +16721,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -17276,7 +16730,6 @@ labVersion iIDR
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3645
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalContigs
@@ -17291,7 +16744,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17301,7 +16753,6 @@ labVersion iIDR
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3645
 view ExonsGencV3c
@@ -17407,7 +16858,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17417,7 +16867,6 @@ labVersion iIDR
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3645
 view GeneDeNovo
@@ -17431,7 +16880,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17441,7 +16889,6 @@ labVersion iIDR
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3645
 view GeneGencV3c
@@ -17455,7 +16902,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -17465,7 +16911,6 @@ labVersion iIDR
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3645
 view Junctions
@@ -17575,7 +17020,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17585,7 +17029,6 @@ labVersion iIDR
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3645
 view TranscriptDeNovo
@@ -17599,7 +17042,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17609,7 +17051,6 @@ labVersion iIDR
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract total
 subId 3645
 view TranscriptGencV3c
@@ -17859,7 +17300,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -17869,7 +17309,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3646
 tableName wgEncodeCshlLongRnaSeqK562NucleusPamContigs
@@ -17884,7 +17323,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17894,7 +17332,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3646
 view ExonsGencV3c
@@ -17908,7 +17345,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17918,7 +17354,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3646
 view GeneDeNovo
@@ -17932,7 +17367,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17942,7 +17376,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3646
 view GeneGencV3c
@@ -17956,7 +17389,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -17966,7 +17398,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3646
 view Junctions
@@ -17980,7 +17411,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17990,7 +17420,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3646
 view TranscriptDeNovo
@@ -18004,7 +17433,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -18014,7 +17442,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3646
 view TranscriptGencV3c
@@ -18076,7 +17503,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -18086,7 +17512,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3647
 tableName wgEncodeCshlLongRnaSeqK562NucleusPapContigs
@@ -18101,7 +17526,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -18111,7 +17535,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3647
 view ExonsGencV3c
@@ -18217,7 +17640,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -18227,7 +17649,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3647
 view GeneDeNovo
@@ -18241,7 +17662,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -18251,7 +17671,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3647
 view GeneGencV3c
@@ -18265,7 +17684,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -18275,7 +17693,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3647
 view Junctions
@@ -18385,7 +17802,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -18395,7 +17811,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3647
 view TranscriptDeNovo
@@ -18409,7 +17824,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -18419,7 +17833,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3647
 view TranscriptGencV3c
@@ -18669,7 +18082,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -18679,7 +18091,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3650
 tableName wgEncodeCshlLongRnaSeqMcf7CellPamContigs
@@ -18694,7 +18105,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -18704,7 +18114,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3650
 view ExonsGencV3c
@@ -18718,7 +18127,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -18728,7 +18136,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3650
 view GeneDeNovo
@@ -18742,7 +18149,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -18752,7 +18158,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3650
 view GeneGencV3c
@@ -18766,7 +18171,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -18776,7 +18180,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3650
 view Junctions
@@ -18790,7 +18193,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -18800,7 +18202,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3650
 view TranscriptDeNovo
@@ -18814,7 +18215,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -18824,7 +18224,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3650
 view TranscriptGencV3c
@@ -18886,7 +18285,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -18896,7 +18294,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3651
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapContigs
@@ -18911,7 +18308,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -18921,7 +18317,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3651
 view ExonsGencV3c
@@ -19027,7 +18422,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -19037,7 +18431,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3651
 view GeneDeNovo
@@ -19051,7 +18444,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -19061,7 +18453,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3651
 view GeneGencV3c
@@ -19075,7 +18466,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -19085,7 +18475,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3651
 view Junctions
@@ -19195,7 +18584,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -19205,7 +18593,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3651
 view TranscriptDeNovo
@@ -19219,7 +18606,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -19229,7 +18615,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3651
 view TranscriptGencV3c
@@ -19597,7 +18982,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -19622,7 +19006,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -19646,7 +19029,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -19670,7 +19052,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -19694,7 +19075,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -19718,7 +19098,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -19742,7 +19121,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -19838,7 +19216,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -19863,7 +19240,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20025,7 +19401,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20049,7 +19424,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20073,7 +19447,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -20241,7 +19614,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20265,7 +19637,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20407,7 +19778,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -20432,7 +19802,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20456,7 +19825,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20480,7 +19848,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20504,7 +19871,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -20528,7 +19894,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20552,7 +19917,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20624,7 +19988,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -20634,7 +19997,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3653
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapContigs
@@ -20649,7 +20011,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20659,7 +20020,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3653
 view ExonsGencV3c
@@ -20765,7 +20125,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20775,7 +20134,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3653
 view GeneDeNovo
@@ -20789,7 +20147,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20799,7 +20156,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3653
 view GeneGencV3c
@@ -20813,7 +20169,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -20823,7 +20178,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3653
 view Junctions
@@ -20933,7 +20287,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20943,7 +20296,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3653
 view TranscriptDeNovo
@@ -20957,7 +20309,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20967,7 +20318,6 @@ labVersion iIDR
 localization cytosol
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3653
 view TranscriptGencV3c
@@ -21217,7 +20567,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -21227,7 +20576,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3654
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPamContigs
@@ -21242,7 +20590,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -21252,7 +20599,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3654
 view ExonsGencV3c
@@ -21266,7 +20612,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -21276,7 +20621,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3654
 view GeneDeNovo
@@ -21290,7 +20634,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -21300,7 +20643,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3654
 view GeneGencV3c
@@ -21314,7 +20656,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -21324,7 +20665,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3654
 view Junctions
@@ -21338,7 +20678,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -21348,7 +20687,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3654
 view TranscriptDeNovo
@@ -21362,7 +20700,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -21372,7 +20709,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longNonPolyA
 subId 3654
 view TranscriptGencV3c
@@ -21434,7 +20770,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -21444,7 +20779,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3655
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapContigs
@@ -21459,7 +20793,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -21469,7 +20802,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3655
 view ExonsGencV3c
@@ -21575,7 +20907,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -21585,7 +20916,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3655
 view GeneDeNovo
@@ -21599,7 +20929,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -21609,7 +20938,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3655
 view GeneGencV3c
@@ -21623,7 +20951,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -21633,7 +20960,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3655
 view Junctions
@@ -21743,7 +21069,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -21753,7 +21078,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3655
 view TranscriptDeNovo
@@ -21767,7 +21091,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -21777,7 +21100,6 @@ labVersion iIDR
 localization nucleus
 origAssembly hg19
 project wgEncode
-replicate 3,4
 rnaExtract longPolyA
 subId 3655
 view TranscriptGencV3c
@@ -22027,7 +21349,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -22037,7 +21358,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3660
 tableName wgEncodeCshlLongRnaSeqNhlfCellPamContigs
@@ -22052,7 +21372,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22062,7 +21381,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3660
 view ExonsGencV3c
@@ -22076,7 +21394,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22086,7 +21403,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3660
 view GeneDeNovo
@@ -22100,7 +21416,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22110,7 +21425,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3660
 view GeneGencV3c
@@ -22124,7 +21438,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -22134,7 +21447,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3660
 view Junctions
@@ -22148,7 +21460,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22158,7 +21469,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3660
 view TranscriptDeNovo
@@ -22172,7 +21482,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22182,7 +21491,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3660
 view TranscriptGencV3c
@@ -22244,7 +21552,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -22254,7 +21561,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3661
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapContigs
@@ -22269,7 +21575,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22279,7 +21584,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3661
 view ExonsGencV3c
@@ -22385,7 +21689,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22395,7 +21698,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3661
 view GeneDeNovo
@@ -22409,7 +21711,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22419,7 +21720,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3661
 view GeneGencV3c
@@ -22433,7 +21733,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -22443,7 +21742,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3661
 view Junctions
@@ -22553,7 +21851,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22563,7 +21860,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3661
 view TranscriptDeNovo
@@ -22577,7 +21873,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22587,7 +21882,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3661
 view TranscriptGencV3c
@@ -22837,7 +22131,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -22847,7 +22140,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3662
 tableName wgEncodeCshlLongRnaSeqSknshraCellPamContigs
@@ -22862,7 +22154,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPamExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22872,7 +22163,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3662
 view ExonsGencV3c
@@ -22886,7 +22176,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPamGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22896,7 +22185,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3662
 view GeneDeNovo
@@ -22910,7 +22198,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPamGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22920,7 +22207,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3662
 view GeneGencV3c
@@ -22934,7 +22220,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -22944,7 +22229,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3662
 view Junctions
@@ -22958,7 +22242,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22968,7 +22251,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3662
 view TranscriptDeNovo
@@ -22982,7 +22264,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22992,7 +22273,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longNonPolyA
 subId 3662
 view TranscriptGencV3c
@@ -23054,7 +22334,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -23064,7 +22343,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3663
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapContigs
@@ -23079,7 +22357,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapExonGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -23089,7 +22366,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3663
 view ExonsGencV3c
@@ -23195,7 +22471,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -23205,7 +22480,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3663
 view GeneDeNovo
@@ -23219,7 +22493,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapGeneGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -23229,7 +22502,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3663
 view GeneGencV3c
@@ -23243,7 +22515,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -23253,7 +22524,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3663
 view Junctions
@@ -23363,7 +22633,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -23373,7 +22642,6 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3663
 view TranscriptDeNovo
@@ -23387,7 +22655,6 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
-dccRep Pooled
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV3c.gtf.gz
 grant Gingeras
 lab CSHL
@@ -23397,9 +22664,8 @@ labVersion iIDR
 localization cell
 origAssembly hg19
 project wgEncode
-replicate 1,2
 rnaExtract longPolyA
 subId 3663
 view TranscriptGencV3c
 
-# MAGIC: -147093001
+# MAGIC: 1345928856
