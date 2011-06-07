@@ -7843,17 +7843,6 @@ tag Ggamma
 type promoter
 description promoter for the G-gamma globulin genes
 
-# freezeDates for Sanger Gencode project
-term 2008-10-01
-tag d20081001
-type freezeDate
-description 2008-10-01 freeze
-
-term 2009-01-01
-tag d20090101
-type freezeDate
-description 2009-01-01 rel2 January freeze
-
 ### Species
 term hg18
 tag hg18
@@ -9798,7 +9787,7 @@ projectName UNC-Giddings
 #         expId:100  strain:110  cell:120  sex:130  age:140  rnaExtract:150  localization:160  phase:170  treatment:180  antibody:190
 #         protocol:200  restrictionEnzyme:220  control:230  replicate:240  submittedDataVersion:250
 #       DCC descriptive:
-#         origAssembly:305  dataVersion:310  dccAccession:312  dateSubmitted:315  dateResubmitted:320  dateUnrestricted:325  freezeDate:330
+#         origAssembly:305  dataVersion:310  dccAccession:312  dateSubmitted:315  dateResubmitted:320  dateUnrestricted:325  
 #         subId:335  geoSeries:340  geoSample:345  setType:350  controlId:355
 #       Lab descriptive:
 #         labExpId:410  labProtocolId:420  labVersion:430  softwareVersion:440  privacy:450  rank:460 tissueSourceType:470
@@ -10079,16 +10068,6 @@ cvDefined yes
 validate regex: ^[0-9]*k$
 priority 500
 # With more investigation, this could be collapsed in with fragLength (11/19/10)
-
-term freezeDate
-type typeOfTerm
-label Gencode freeze date
-description Date when GENCODE froze data in order to submit to UCSC.
-searchable no
-cvDefined yes
-validate cv
-priority 330
-# outdated, should not be used going forward. 11/3/10
 
 term geoSample
 type typeOfTerm

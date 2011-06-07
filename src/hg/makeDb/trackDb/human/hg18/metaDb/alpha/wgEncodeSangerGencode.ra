@@ -5,15 +5,14 @@ composite wgEncodeSangerGencode
 dataType Gencode
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
-dateUnrestricted 2010-07-27
 fileName wgEncodeGencodeAutoV3.gtf.gz
-freezeDate GENCODE October 2009 Freeze
 grant Hubbard
 lab Sanger
+labExpId V3c
 level 3
 project wgEncode
 subId 453
-submittedDataVersion V3c
+submittedDataVersion V3
 tableName wgEncodeGencodeAutoV3
 
 metaObject wgEncodeGencodeManualV3
@@ -23,15 +22,14 @@ composite wgEncodeSangerGencode
 dataType Gencode
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
-dateUnrestricted 2010-07-27
 fileName wgEncodeGencodeManualV3.gtf.gz
-freezeDate GENCODE October 2009 Freeze
 grant Hubbard
 lab Sanger
+labExpId V3c
 level 1-2
 project wgEncode
 subId 453
-submittedDataVersion V3c
+submittedDataVersion V3
 tableName wgEncodeGencodeManualV3
 
 metaObject wgEncodeGencodePolyaV3
@@ -41,20 +39,19 @@ composite wgEncodeSangerGencode
 dataType Gencode
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
-dateUnrestricted 2010-07-27
 fileName wgEncodeGencodePolyaV3.gtf.gz
-freezeDate GENCODE October 2009 Freeze
 grant Hubbard
 lab Sanger
+labExpId V3c
 level 3
 project wgEncode
 subId 453
-submittedDataVersion V3c
+submittedDataVersion V3
 tableName wgEncodeGencodePolyaV3
 
 metaObject wgEncodeSangerGencode
 objType composite
 composite wgEncodeSangerGencode
-expVars lab,dataType,annotation,level
+expVars lab,dataType,annotation,level,labExpId
 
-# MAGIC: 1776914776
+# MAGIC: 1851282666
