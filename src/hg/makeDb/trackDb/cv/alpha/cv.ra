@@ -8073,7 +8073,7 @@ description Grown for 7 days in differentiation medium (Wold)
 type treatment
 
 term Estradiol_10nM
-tag ESTRADIa1h
+tag EST10NM
 description  1 h with 10 nM Estradiol  (Myers)
 type treatment
 
@@ -10353,7 +10353,7 @@ label Sequencing Run
 description Sequencing run
 searchable multiSelect
 cvDefined no
-validate integer
+validate regex: ^[0-9]*r[0-9]*$ 
 priority 500
 
 term seqPlatform
@@ -10409,6 +10409,15 @@ description Objects this object was built with.
 searchable no
 cvDefined no
 validate none
+priority 921
+
+term spikeInLib
+type typeOfTerm
+label Spike-In library
+description (Provisional) The spike-in library that was used.
+searchable no
+cvDefined no
+validate integer
 priority 921
 
 term strain
