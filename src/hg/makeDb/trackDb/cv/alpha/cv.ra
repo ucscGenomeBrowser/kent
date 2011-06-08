@@ -1640,7 +1640,7 @@ organism human
 description Undifferentiated human embryonic stem cells
 karyotype unknown
 lineage inner cell mass
-endorName WiCell
+vendorName WiCell
 vendorId WA07 (H7)
 orderUrl http://www.wicell.org/index.php
 sex U
