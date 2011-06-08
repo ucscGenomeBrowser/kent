@@ -4,7 +4,6 @@ name rinnSexGroups
 type groupings
 all rinnSexAll
 combine rinnSexTissueMeans,rinnSexSexMeans,
-combine.default rinnSexTissueMeans
 
 name rinnSexAll
 type all
