@@ -246,3 +246,304 @@ ce10.downloadDir = ce10
 	hgcentraltest
 
 ##########################################################################
+## LASTZ cb4 (DONE - 2011-06-07 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce10/bed/lastzCb4.2011-06-07
+    cd /hive/data/genomes/ce10/bed/lastzCb4.2011-06-07
+
+    cat << '_EOF_' > DEF
+# ce10 vs cb4
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce10
+SEQ1_DIR=/scratch/data/ce10/ce10.2bit
+SEQ1_LEN=/scratch/data/ce10/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. briggsae cb4
+SEQ2_DIR=/scratch/data/cb4/cb4.2bit
+SEQ2_LEN=/scratch/data/cb4/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce10/bed/lastzCb4.2011-06-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek > do.log 2>&1 &
+    #	real    11m20.573s
+
+    cat fb.ce10.chainCb4Link.txt 
+    # 39499136 bases of 100286070 (39.386%) in intersection
+
+    #	swap, this is also in cb4.txt
+    mkdir /hive/data/genomes/cb4/bed/blastz.ce10.swap
+    cd /hive/data/genomes/cb4/bed/blastz.ce10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce10/bed/lastzCb4.2011-06-07/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    2m17.430s
+
+    cat fb.cb4.chainCe10Link.txt
+    #	39219709 bases of 108371485 (36.190%) in intersection
+
+############################################################################
+## LASTZ caeRem4 (DONE - 2011-06-07 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce10/bed/lastzCaeRem4.2011-06-07
+    cd /hive/data/genomes/ce10/bed/lastzCaeRem4.2011-06-07
+
+    cat << '_EOF_' > DEF
+# ce10 vs caeRem4
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce10
+SEQ1_DIR=/scratch/data/ce10/ce10.2bit
+SEQ1_LEN=/scratch/data/ce10/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. remanei caeRem4
+SEQ2_DIR=/scratch/data/caeRem4/caeRem4.2bit
+SEQ2_LEN=/scratch/data/caeRem4/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce10/bed/lastzCaeRem4.2011-06-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek > do.log 2>&1 &
+    #	real    20m25.017s
+
+    cat fb.ce10.chainCaeRem4Link.txt 
+    #	41841289 bases of 100286070 (41.722%) in intersection
+
+    #	swap, this is also in caeRem4.txt
+    mkdir /hive/data/genomes/caeRem4/bed/blastz.ce10.swap
+    cd /hive/data/genomes/caeRem4/bed/blastz.ce10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce10/bed/lastzCaeRem4.2011-06-07/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    3m52.350s
+
+    cat fb.caeRem4.chainCe10Link.txt
+    #	46320954 bases of 138406203 (33.467%) in intersection
+
+############################################################################
+## LASTZ caeJap4 (DONE - 2011-06-07 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce10/bed/lastzCaeJap4.2011-06-07
+    cd /hive/data/genomes/ce10/bed/lastzCaeJap4.2011-06-07
+
+    cat << '_EOF_' > DEF
+# ce10 vs caeJap4
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce10
+SEQ1_DIR=/scratch/data/ce10/ce10.2bit
+SEQ1_LEN=/scratch/data/ce10/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. japonica caeJap4
+SEQ2_DIR=/scratch/data/caeJap4/caeJap4.2bit
+SEQ2_LEN=/scratch/data/caeJap4/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce10/bed/lastzCaeJap4.2011-06-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek > do.log 2>&1 &
+    #	real        30m33.491s
+
+    cat fb.ce10.chainCaeJap4Link.txt 
+    #	27815993 bases of 100286070 (27.737%) in intersection
+
+    #	swap, this is also in caeJap4.txt
+    mkdir /hive/data/genomes/caeJap4/bed/blastz.ce10.swap
+    cd /hive/data/genomes/caeJap4/bed/blastz.ce10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce10/bed/lastzCaeJap4.2011-06-07/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    4m11.401s
+
+    cat fb.caeJap4.chainCe10Link.txt
+    #	30128569 bases of 154057934 (19.557%) in intersection
+
+############################################################################
+## LASTZ caeSp71 (DONE - 2011-06-07 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce10/bed/lastzCaeSp71.2011-06-07
+    cd /hive/data/genomes/ce10/bed/lastzCaeSp71.2011-06-07
+
+    cat << '_EOF_' > DEF
+# ce10 vs caeSp71
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce10
+SEQ1_DIR=/scratch/data/ce10/ce10.2bit
+SEQ1_LEN=/scratch/data/ce10/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. sp. 7 caeSp71
+SEQ2_DIR=/scratch/data/caeSp71/caeSp71.2bit
+SEQ2_LEN=/scratch/data/caeSp71/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce10/bed/lastzCaeSp71.2011-06-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek > do.log 2>&1 &
+    #	real    43m12.936s
+
+    cat fb.ce10.chainCaeSp71Link.txt 
+    #	40350663 bases of 100286070 (40.236%) in intersection
+
+    #	swap, this is also in caeSp71.txt
+    mkdir /hive/data/genomes/caeSp71/bed/blastz.ce10.swap
+    cd /hive/data/genomes/caeSp71/bed/blastz.ce10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce10/bed/lastzCaeSp71.2011-06-07/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+
+    #	real    6m26.129s
+    cat fb.caeSp71.chainCe10Link.txt
+    #	63012557 bases of 177605791 (35.479%) in intersection
+
+############################################################################
+## LASTZ caeSp91 (DONE - 2011-06-07 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce10/bed/lastzCaeSp91.2011-06-07
+    cd /hive/data/genomes/ce10/bed/lastzCaeSp91.2011-06-07
+
+    cat << '_EOF_' > DEF
+# ce10 vs caeSp91
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce10
+SEQ1_DIR=/scratch/data/ce10/ce10.2bit
+SEQ1_LEN=/scratch/data/ce10/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. sp. 9 caeSp91
+SEQ2_DIR=/scratch/data/caeSp91/caeSp91.2bit
+SEQ2_LEN=/scratch/data/caeSp91/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce10/bed/lastzCaeSp91.2011-06-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek > do.log 2>&1 &
+    #	real    29m32.600s
+
+    cat fb.ce10.chainCaeSp91Link.txt 
+    #	42289932 bases of 100286070 (42.169%) in intersection
+
+    #	swap, this is also in caeSp91.txt
+    mkdir /hive/data/genomes/caeSp91/bed/blastz.ce10.swap
+    cd /hive/data/genomes/caeSp91/bed/blastz.ce10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce10/bed/lastzCaeSp91.2011-06-07/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    6m27.559s
+
+    cat fb.caeSp91.chainCe10Link.txt
+    #	67679550 bases of 186540270 (36.281%) in intersection
+
+############################################################################
+## LASTZ caeSp111 (DONE - 2011-06-07 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce10/bed/lastzCaeSp111.2011-06-07
+    cd /hive/data/genomes/ce10/bed/lastzCaeSp111.2011-06-07
+
+    cat << '_EOF_' > DEF
+# ce10 vs caeSp111
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce10
+SEQ1_DIR=/scratch/data/ce10/ce10.2bit
+SEQ1_LEN=/scratch/data/ce10/chrom.sizes
+SEQ1_CHUNK=1000000
+
+SEQ1_LAP=10000
+
+# QUERY: C. sp. 11 caeSp111
+SEQ2_DIR=/scratch/data/caeSp111/caeSp111.2bit
+SEQ2_LEN=/scratch/data/caeSp111/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce10/bed/lastzCaeSp111.2011-06-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek > do.log 2>&1 &
+    #	real    12m37.487s
+
+    cat fb.ce10.chainCaeSp111Link.txt 
+    #	37984756 bases of 100286070 (37.876%) in intersection
+
+    #	swap, this is also in caeSp111.txt
+    mkdir /hive/data/genomes/caeSp111/bed/blastz.ce10.swap
+    cd /hive/data/genomes/caeSp111/bed/blastz.ce10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce10/bed/lastzCaeSp111.2011-06-07/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    2m3.304s
+
+    cat fb.caeSp111.chainCe10Link.txt 
+    #	36237719 bases of 76497192 (47.371%) in intersection
+
+############################################################################
