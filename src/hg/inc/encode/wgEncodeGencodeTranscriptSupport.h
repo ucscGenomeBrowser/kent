@@ -5,14 +5,15 @@
 #ifndef WGENCODEGENCODETRANSCRIPTSUPPORT_H
 #define WGENCODEGENCODETRANSCRIPTSUPPORT_H
 
-#define WGENCODEGENCODETRANSCRIPTSUPPORT_NUM_COLS 2
+#define WGENCODEGENCODETRANSCRIPTSUPPORT_NUM_COLS 3
 
 struct wgEncodeGencodeTranscriptSupport
-/* Gencode metadata table of features supporting Gencode transcripts */
+/* GENCODE transcript support from other datasets */
     {
     struct wgEncodeGencodeTranscriptSupport *next;  /* Next in singly linked list. */
-    char *transcriptId;	/* Transcript ID for Gencode gene */
-    char *id;	/* ID of feature supporting transcript */
+    char *transcriptId;	/* GENCODE transcript identifier */
+    char *seqId;	/* Identifier of sequence supporting transcript */
+    char *seqSrc;	/* Source of supporting sequence */
     };
 
 void wgEncodeGencodeTranscriptSupportStaticLoad(char **row, struct wgEncodeGencodeTranscriptSupport *ret);

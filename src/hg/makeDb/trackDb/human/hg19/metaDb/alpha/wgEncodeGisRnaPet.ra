@@ -24,7 +24,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1979
 tableName wgEncodeGisRnaPetGm12878CytosolPapAlnRep1
 view Alignments
@@ -51,7 +50,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4022
 tableName wgEncodeGisRnaPetGm12878CytosolPapAlnRep2
 view Alignments
@@ -77,7 +75,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1979
 tableName wgEncodeGisRnaPetGm12878CytosolPapClustersRep1
 view Clusters
@@ -104,7 +101,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4022
 tableName wgEncodeGisRnaPetGm12878CytosolPapClustersRep2
 view Clusters
@@ -129,7 +125,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd1
 
@@ -154,7 +149,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4022
 view FastqRd1
 
@@ -178,7 +172,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd2
 
@@ -203,7 +196,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4022
 view FastqRd2
 
@@ -228,7 +220,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4022
 tableName wgEncodeGisRnaPetGm12878CytosolPapMinusRawRep2
 view MinusRawSignal
@@ -254,7 +245,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1979
 tableName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1
 view MinusRawSignal
@@ -280,7 +270,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4022
 tableName wgEncodeGisRnaPetGm12878CytosolPapPlusRawRep2
 view PlusRawSignal
@@ -306,7 +295,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1979
 tableName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1
 view PlusRawSignal
@@ -332,7 +320,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1980
 tableName wgEncodeGisRnaPetGm12878NucleusPapAlnRep1
 view Alignments
@@ -358,7 +345,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1980
 tableName wgEncodeGisRnaPetGm12878NucleusPapClustersRep1
 view Clusters
@@ -383,7 +369,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd1
 
@@ -407,7 +392,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd2
 
@@ -432,7 +416,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1980
 tableName wgEncodeGisRnaPetGm12878NucleusPapMinusRawSigRep1
 view MinusRawSignal
@@ -458,7 +441,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1980
 tableName wgEncodeGisRnaPetGm12878NucleusPapPlusRawSigRep1
 view PlusRawSignal
@@ -483,7 +465,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4032
 tableName wgEncodeGisRnaPetH1hescCellPapAlnRep1
 view Alignments
@@ -508,7 +489,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4032
 tableName wgEncodeGisRnaPetH1hescCellPapClustersRep1
 view Clusters
@@ -533,7 +513,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4032
 view FastqRd1
 
@@ -557,7 +536,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4032
 view FastqRd2
 
@@ -581,7 +559,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4032
 tableName wgEncodeGisRnaPetH1hescCellPapMinusRawRep1
 view MinusRawSignal
@@ -606,7 +583,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4032
 tableName wgEncodeGisRnaPetH1hescCellPapPlusRawRep1
 view PlusRawSignal
@@ -631,7 +607,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4025
 tableName wgEncodeGisRnaPetHelas3CellPapAlnRep1
 view Alignments
@@ -656,7 +631,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4029
 tableName wgEncodeGisRnaPetHelas3CellPapAlnRep2
 view Alignments
@@ -681,7 +655,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4025
 tableName wgEncodeGisRnaPetHelas3CellPapClustersRep1
 view Clusters
@@ -706,7 +679,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4029
 tableName wgEncodeGisRnaPetHelas3CellPapClustersRep2
 view Clusters
@@ -731,7 +703,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4025
 view FastqRd1
 
@@ -755,7 +726,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4029
 view FastqRd1
 
@@ -779,7 +749,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4025
 view FastqRd2
 
@@ -803,7 +772,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4029
 view FastqRd2
 
@@ -827,7 +795,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4025
 tableName wgEncodeGisRnaPetHelas3CellPapMinusRawRep1
 view MinusRawSignal
@@ -852,7 +819,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4029
 tableName wgEncodeGisRnaPetHelas3CellPapMinusRawRep2
 view MinusRawSignal
@@ -877,7 +843,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4025
 tableName wgEncodeGisRnaPetHelas3CellPapPlusRawRep1
 view PlusRawSignal
@@ -902,7 +867,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4029
 tableName wgEncodeGisRnaPetHelas3CellPapPlusRawRep2
 view PlusRawSignal
@@ -927,7 +891,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4024
 tableName wgEncodeGisRnaPetHelas3CytosolPapAlnRep1
 view Alignments
@@ -952,7 +915,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4024
 tableName wgEncodeGisRnaPetHelas3CytosolPapClustersRep1
 view Clusters
@@ -977,7 +939,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4024
 view FastqRd1
 
@@ -1001,7 +962,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4024
 view FastqRd2
 
@@ -1025,7 +985,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4024
 tableName wgEncodeGisRnaPetHelas3CytosolPapMinusRawRep1
 view MinusRawSignal
@@ -1050,7 +1009,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4024
 tableName wgEncodeGisRnaPetHelas3CytosolPapPlusRawRep1
 view PlusRawSignal
@@ -1206,7 +1164,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 2116
 tableName wgEncodeGisRnaPetHepg2CytosolPapAlnRep1
 view Alignments
@@ -1232,7 +1189,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 2116
 tableName wgEncodeGisRnaPetHepg2CytosolPapClustersRep1
 view Clusters
@@ -1257,7 +1213,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd1
 
@@ -1281,7 +1236,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd2
 
@@ -1306,7 +1260,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 2116
 tableName wgEncodeGisRnaPetHepg2CytosolPapMinusRawSigRep1
 view MinusRawSignal
@@ -1332,7 +1285,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 2116
 tableName wgEncodeGisRnaPetHepg2CytosolPapPlusRawSigRep1
 view PlusRawSignal
@@ -1358,7 +1310,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 2117
 tableName wgEncodeGisRnaPetHepg2NucleusPapAlnRep1
 view Alignments
@@ -1384,7 +1335,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 2117
 tableName wgEncodeGisRnaPetHepg2NucleusPapClustersRep1
 view Clusters
@@ -1409,7 +1359,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd1
 
@@ -1433,7 +1382,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd2
 
@@ -1458,7 +1406,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 2117
 tableName wgEncodeGisRnaPetHepg2NucleusPapMinusRawSigRep1
 view MinusRawSignal
@@ -1484,7 +1431,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 2117
 tableName wgEncodeGisRnaPetHepg2NucleusPapPlusRawSigRep1
 view PlusRawSignal
@@ -1648,7 +1594,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4031
 tableName wgEncodeGisRnaPetHuvecNucleusPapAlnRep1
 view Alignments
@@ -1674,7 +1619,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4031
 tableName wgEncodeGisRnaPetHuvecNucleusPapClustersRep1
 view Clusters
@@ -1699,7 +1643,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4031
 view FastqRd1
 
@@ -1723,7 +1666,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4031
 view FastqRd2
 
@@ -1747,7 +1689,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4031
 tableName wgEncodeGisRnaPetHuvecNucleusPapMinusRawRep1
 view MinusRawSignal
@@ -1772,7 +1713,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4031
 tableName wgEncodeGisRnaPetHuvecNucleusPapPlusRawRep1
 view PlusRawSignal
@@ -1798,7 +1738,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 1986
 tableName wgEncodeGisRnaPetK562ChromatinTotalAlnRep1
 view Alignments
@@ -1824,7 +1763,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 1986
 tableName wgEncodeGisRnaPetK562ChromatinTotalClustersRep1
 view Clusters
@@ -1849,7 +1787,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 841
 view RawData
 
@@ -1874,7 +1811,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 1986
 tableName wgEncodeGisRnaPetK562ChromatinTotalMinusRawSigRep1
 view MinusRawSignal
@@ -1900,7 +1836,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 1986
 tableName wgEncodeGisRnaPetK562ChromatinTotalPlusRawSigRep1
 view PlusRawSignal
@@ -1926,7 +1861,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4023
 tableName wgEncodeGisRnaPetK562CytosolPapAlnRep1
 view Alignments
@@ -1952,7 +1886,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4023
 tableName wgEncodeGisRnaPetK562CytosolPapClustersRep1
 view Clusters
@@ -1977,7 +1910,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4023
 view FastqRd1
 
@@ -2001,7 +1933,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4023
 view FastqRd2
 
@@ -2025,7 +1956,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4023
 tableName wgEncodeGisRnaPetK562CytosolPapMinusRawRep1
 view MinusRawSignal
@@ -2050,7 +1980,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4023
 tableName wgEncodeGisRnaPetK562CytosolPapPlusRawRep1
 view PlusRawSignal
@@ -2076,7 +2005,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 1988
 tableName wgEncodeGisRnaPetK562NucleolusTotalAlnRep1
 view Alignments
@@ -2102,7 +2030,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 1988
 tableName wgEncodeGisRnaPetK562NucleolusTotalClustersRep1
 view Clusters
@@ -2127,7 +2054,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 841
 view FastqRd1
 
@@ -2151,7 +2077,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 841
 view FastqRd2
 
@@ -2176,7 +2101,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 1988
 tableName wgEncodeGisRnaPetK562NucleolusTotalMinusRawSigRep1
 view MinusRawSignal
@@ -2202,7 +2126,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 1988
 tableName wgEncodeGisRnaPetK562NucleolusTotalPlusRawSigRep1
 view PlusRawSignal
@@ -2228,7 +2151,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 1987
 tableName wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1
 view Alignments
@@ -2254,7 +2176,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 1987
 tableName wgEncodeGisRnaPetK562NucleoplasmTotalClustersRep1
 view Clusters
@@ -2279,7 +2200,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 841
 view RawData
 
@@ -2304,7 +2224,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 1987
 tableName wgEncodeGisRnaPetK562NucleoplasmTotalMinusRawSigRep1
 view MinusRawSignal
@@ -2330,7 +2249,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
-seqPlatform Solexa
 subId 1987
 tableName wgEncodeGisRnaPetK562NucleoplasmTotalPlusRawSigRep1
 view PlusRawSignal
@@ -2356,7 +2274,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1984
 tableName wgEncodeGisRnaPetK562NucleusPapAlnRep1
 view Alignments
@@ -2382,7 +2299,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1984
 tableName wgEncodeGisRnaPetK562NucleusPapClustersRep1
 view Clusters
@@ -2407,7 +2323,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd1
 
@@ -2431,7 +2346,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd2
 
@@ -2456,7 +2370,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1984
 tableName wgEncodeGisRnaPetK562NucleusPapMinusRawSigRep1
 view MinusRawSignal
@@ -2482,7 +2395,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1984
 tableName wgEncodeGisRnaPetK562NucleusPapPlusRawSigRep1
 view PlusRawSignal
@@ -2508,7 +2420,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1985
 tableName wgEncodeGisRnaPetK562PolysomePapAlnRep1
 view Alignments
@@ -2534,7 +2445,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1985
 tableName wgEncodeGisRnaPetK562PolysomePapClustersRep1
 view Clusters
@@ -2559,7 +2469,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd1
 
@@ -2583,7 +2492,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd2
 
@@ -2608,7 +2516,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1985
 tableName wgEncodeGisRnaPetK562PolysomePapMinusRawSigRep1
 view MinusRawSignal
@@ -2634,7 +2541,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1985
 tableName wgEncodeGisRnaPetK562PolysomePapPlusRawSigRep1
 view PlusRawSignal
@@ -2660,7 +2566,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4026
 tableName wgEncodeGisRnaPetNhekCytosolPapAlnRep1
 view Alignments
@@ -2686,7 +2591,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4026
 tableName wgEncodeGisRnaPetNhekCytosolPapClustersRep1
 view Clusters
@@ -2711,7 +2615,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4026
 view FastqRd1
 
@@ -2735,7 +2638,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4026
 view FastqRd2
 
@@ -2759,7 +2661,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4026
 tableName wgEncodeGisRnaPetNhekCytosolPapMinusRawRep1
 view MinusRawSignal
@@ -2784,7 +2685,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4026
 tableName wgEncodeGisRnaPetNhekCytosolPapPlusRawRep1
 view PlusRawSignal
@@ -2811,7 +2711,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4028
 tableName wgEncodeGisRnaPetNhekNucleusPapAlnRep1
 view Alignments
@@ -2838,7 +2737,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4028
 tableName wgEncodeGisRnaPetNhekNucleusPapClustersRep1
 view Clusters
@@ -2864,7 +2762,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4028
 view FastqRd1
 
@@ -2889,7 +2786,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4028
 view FastqRd2
 
@@ -2914,7 +2810,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4028
 tableName wgEncodeGisRnaPetNhekNucleusPapMinusRawRep1
 view MinusRawSignal
@@ -2940,7 +2835,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 4028
 tableName wgEncodeGisRnaPetNhekNucleusPapPlusRawRep1
 view PlusRawSignal
@@ -2966,7 +2860,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapAlnRep1
 view Alignments
@@ -2992,7 +2885,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapClustersRep1
 view Clusters
@@ -3017,7 +2909,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd1
 
@@ -3041,7 +2932,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 778
 view FastqRd2
 
@@ -3066,7 +2956,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1
 view MinusRawSignal
@@ -3092,9 +2981,8 @@ origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
-seqPlatform Solexa
 subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSignal
 
-# MAGIC: 193035953
+# MAGIC: -153261647

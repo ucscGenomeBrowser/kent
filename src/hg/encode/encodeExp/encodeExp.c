@@ -1,4 +1,4 @@
-/* encodeExp - manage ENCODE Experiment table (hgFixed:encodeExp) */
+/* encodeExp - manage ENCODE Experiment table (hgFixed.encodeExp) */
 
 #include "common.h"
 #include "linefile.h"
@@ -17,27 +17,31 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "encodeExp - manage ENCODE Experiments table (hgFixed:encodeExp)\n"
+  "encodeExp - manage ENCODE Experiments table (hgFixed.encodeExp)\n"
   "usage:\n"
   "   encodeExp <action> [arg]\n"
   "\n"
   "actions:\n"
   "   add <exp.ra>		add experiments to table from file\n"
   "   acc <id>		add accession to experiment (approve it)\n"
-  "   show <id>		print experiment to stdout\n"
   "   dump <exp.ra>	output experiment table to file\n"
-  "   history [<id>]	show changes to experiment entry\n"
   "   find <db> <exp.ra>	find unassigned experiments in metaDb and create .ra to file\n"
+  "   history [<id>]	show changes to experiment entry\n"
+  "   show <id>		print experiment to stdout\n"
+  /* This command isn't very usable -- recommend using SQL queries instead
   "   id human|mouse <lab> <dataType> <cellType> [<vars>]\n"
   "			return id for experiment (vars as 'var1:val1 var2:val2')\n"
-  "management actions: (default table \'%s\')\n"
+  */
+  "\nmanagement actions: (default table \'%s\')\n"
+  "   copy <newName>	copy table and add update triggers\n"
   "   create 		create table\n"
   "   drop 		drop table\n"
   "   rename <newName> 	rename table and update triggers\n"
   "   restore <exp.ra>	restore table from .ra file\n"
-  "   remove <id> <why>	remove experiment (deletes from table)\n"
-  "   copy <newName>	copy table and add update triggers\n"
-  "   deacc <id>		deaccession experiment (remove accession, leave in table)\n"
+  "\n"
+  "   deacc <id>			  deaccession experiment (remove accession, leave in table)\n"
+  "   modify <id> <var> <old> <new>  change experiment var (must remove accession first)\n"
+  "   remove <id> <why>		  remove experiment (delete from table)\n"
   "\n"
   "options:\n"
   "   -composite	limit to specified composite track (affects find)\n"
@@ -57,6 +61,7 @@ static struct optionSpec options[] = {
 struct sqlConnection *connExp = NULL;
 char *composite = NULL, *mdb = NULL, *table = NULL;
 char *organism = NULL, *lab = NULL, *dataType = NULL, *cellType = NULL, *expVars = NULL;
+char *var = NULL, *old = NULL, *new = NULL;
 char *newTable = NULL;
 char *why = NULL;
 
@@ -281,6 +286,7 @@ while ((meta = slPopHead(&metas)) != NULL)
         continue;
 
     key = encodeExpKey(exp);
+    verbose(3, "key: %s\n", key);
 
     if (hashLookup(newExps, key) == NULL &&
         hashLookup(oldExps, key) == NULL)
@@ -333,10 +339,18 @@ exps = encodeExpGetFromTable(organism, lab, dataType, cellType, varPairs, table)
 count = slCount(exps);
 verbose(2, "Results: %d\n", count);
 if (count == 0)
-    errAbort("Experiment not found");
+    errAbort("Experiment not found in table %s", table);
 if (count > 1)
     errAbort("Found more than 1 match for experiment");
 printf("%d\n", exps->ix);
+}
+
+void expModify(int id)
+/* Modify an experiment.  Changes value of one field or expVar for id specified. 
+ * Aborts if experiment has an accession (must deaccession first) */
+{
+encodeExpUpdate(connExp, table, id, var, new, old);
+verbose(1, "Modified id %d in table %s\n", id, table);
 }
 
 int encodeExp(char *command, char *file, char *assembly, int id)
@@ -377,6 +391,8 @@ else if (sameString(command, "find"))
     expFind(assembly, file);
 else if (sameString(command, "id"))
     expId();
+else if (sameString(command, "modify"))
+    expModify(id);
 else
     {
     errAbort("ERROR: Unknown command %s\n", command);
@@ -398,13 +414,14 @@ if (argc < 2)
     usage();
 
 char *command = argv[1];
-table = optionVal("table", (sameString(command, "create") || 
+table = optionVal("table", (sameString(command, "copy") ||
+                            sameString(command, "create") || 
                             sameString(command, "drop") ||
+                            sameString(command, "rename") ||
                             sameString(command, "restore") ||
-                            sameString(command, "remove") ||
                             sameString(command, "deacc") ||
-                            sameString(command, "copy") ||
-                            sameString(command, "rename")) ?
+                            sameString(command, "modify") ||
+                            sameString(command, "remove")) ?
                         encodeExpTableNew: ENCODE_EXP_TABLE);
 mdb = optionVal("mdb", MDB_DEFAULT_NAME);
 composite = optionVal("composite", NULL);
@@ -456,12 +473,12 @@ else if (sameString("id", command))
 else if ( sameString("acc", command) || 
         sameString("deacc", command) || 
         sameString("remove", command) || 
+        sameString("modify", command) ||
         sameString("show", command))
     {
     if (argc < 3)
         {
         errAbort("ERROR: Missing id\n");
-        usage();
         }
     else
         {
@@ -474,6 +491,14 @@ else if ( sameString("acc", command) ||
                 errAbort("ERROR: remove must include why");
             else
                 why = argv[3];
+            }
+        else if (sameString("modify", command))
+            {
+            if (argc < 6)
+                usage();
+            var = argv[3];
+            old = argv[4];
+            new = argv[5];
             }
         }
     }

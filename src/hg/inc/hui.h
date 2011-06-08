@@ -649,6 +649,14 @@ enum baseColorDrawOpt
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
+/* Settings for coloring and filtering genePred tables from an item class table. */
+#define GENEPRED_CLASS_VAR "geneClasses"
+#define GENEPRED_CLASS_PREFIX "gClass_"
+#define GENEPRED_CLASS_TBL "itemClassTbl"
+#define GENEPRED_CLASS_NAME_COLUMN "itemClassNameColumn"
+#define GENEPRED_CLASS_NAME_COLUMN_DEFAULT "name"
+#define GENEPRED_CLASS_CLASS_COLUMN "itemClassClassColumn"
+#define GENEPRED_CLASS_CLASS_COLUMN_DEFAULT "class"
 
 void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb);
 /* Make appropriately labeled drop down of options if any are applicable.*/
@@ -1153,6 +1161,9 @@ char *filterBySetClause(filterBy_t *filterBySet);
 
 void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet, boolean onOneLine);
 /* Does the UI for a list of filterBy structure */
+
+char *filterByClause(filterBy_t *filterBy);
+/* returns the SQL where clause for a single filterBy struct */
 
 struct dyString *dyAddFilterByClause(struct cart *cart, struct trackDb *tdb,
        struct dyString *extraWhere,char *column, boolean *and);

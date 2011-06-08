@@ -1,0 +1,128 @@
+
+track wgEncodeGencodeV6test
+compositeTrack on
+shortLabel Gencode Genes V6test
+longLabel ENCODE Gencode V6test Gene Annotations
+group genes
+visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
+dragAndDrop subTracks
+priority 34.3
+#visibility pack
+color 12,12,120
+#url http://tables.pseudogene.org/PGOHUMxxxxxxxxxxx
+yalePseudoAssoc wgEncodeGencodeYalePseudoV6test
+yaleUrl http://tables.pseudogene.org/
+ensemblTransIdUrl http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s
+ensemblGeneIdUrl http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s
+vegaTransIdUrl http://vega.sanger.ac.uk/Homo_sapiens/Transcript/Summary?db=core;t=%s
+vegaGeneIdUrl http://vega.sanger.ac.uk/Homo_sapiens/Gene/Summary?db=core;g=%s
+type genePred
+hgGene on
+hgsid on
+baseColorUseCds given
+baseColorDefault genomicCodons
+wgEncode 1
+cdsDrawDefault genomic\ codons
+itemClassTbl wgEncodeGencodeColorClassV6test
+geneClasses Validated_coding Validated_processed Validated_processed_pseudogene Validated_unprocessed_pseudogene Validated_pseudogene Havana_coding Havana_nonsense Havana_non_coding Havana_processed_pseudogene Havana_unprocessed_pseudogene Havana_pseudogene Havana_TEC Havana_polyA Ensembl_coding Ensembl_non_coding Ensembl_processed_pseudogene Ensembl_unprocessed_pseudogene Ensembl_pseudogene Ensembl_RNA
+gClass_Validated_coding 153,51,0
+gClass_Validated_processed 254,154,46
+gClass_Validated_pseudogene 255,51,255
+gClass_Validated_processed_pseudogene 153,0,102
+gClass_Validated_unprocessed_pseudogene 170,17,170
+gClass_Havana_coding 153,51,0
+gClass_Havana_non_coding 254,154,46
+gClass_Havana_nonsense 223,117,1
+gClass_Havana_polyA 0,0,0
+gClass_Havana_pseudogene 255,51,255
+gClass_Havana_processed_pseudogene 153,0,102
+gClass_Havana_unprocessed_pseudogene 170,17,170
+gClass_Havana_TEC 102,102,102
+gClass_Ensembl_coding 170,0,0
+gClass_Ensembl_non_coding 254,154,46
+gClass_Ensembl_pseudogene 255,51,255
+gClass_Ensembl_processed_pseudogene 153,0,102
+gClass_Ensembl_unprocessed_pseudogene 170,17,170
+gClass_Ensembl_RNA 255,153,153
+gClass_2way_pseudogene 85,34,170
+filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Class=Validated_coding,Validated_processed,Validated_processed_pseudogene,Validated_unprocessed_pseudogene,Validated_pseudogene,Havana_coding,Havana_non_coding,Havana_nonsense,Havana_polyA,Havana_processed_pseudogene,Havana_unprocessed_pseudogene,Havana_pseudogene,Havana_TEC,Ensembl_coding,Ensembl_non_coding,Ensembl_processed_pseudogene,Ensembl_unprocessed_pseudogene,Ensembl_pseudogene,Ensembl_RNA,2way_pseudogene transcriptType:Transcript_Type=ambiguous_orf,antisense,artifact,IG_C_gene,IG_D_gene,IG_J_gene,IG_pseudogene,IG_V_gene,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_rRNA,Mt_tRNA,Mt_tRNA_pseudogene,nonsense_mediated_decay,non_coding,polyA_signal,polyA_site,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,pseudo_polyA,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,tRNAscan,tRNA_pseudogene,TR_pseudogene,unitary_pseudogene,unprocessed_pseudogene
+
+    track wgEncodeGencodeManualV6test
+    subTrack wgEncodeGencodeV6test
+    shortLabel Gencode Manual
+    longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (December 2010)
+    type genePred
+    priority 1
+    url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
+    urlLabel Vega Transcript:
+    idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV6test where name="%s"
+
+    track wgEncodeGencodeAutoV6test
+    subTrack wgEncodeGencodeV6test
+    shortLabel Gencode Auto
+    longLabel ENCODE Gencode Automated Gene Annotations (level 3) (December 2010)
+    type genePred
+    priority 2
+
+    track wgEncodeGencodePolyaV6test
+    subTrack wgEncodeGencodeV6test off
+    shortLabel Gencode PolyA
+    longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (December 2010)
+    type genePred
+    priority 4
+
+    track wgEncodeGencode2wayConsPseudoV6test
+    subTrack wgEncodeGencodeV6test off
+    shortLabel Gencode Pseudo
+    longLabel ENCODE Gencode 2way Pseudogenes (level 3) (December 2010)
+    type genePred
+    priority 5
+
+searchName wgEncodeGencodeManualV6test
+searchTable wgEncodeGencodeManualV6test
+searchMethod exact
+searchType genePred
+termRegex ENST[0-9]+
+#termRegex OTTHUMT[0-9]+
+searchPriority 2.2
+
+searchName wgEncodeGencodeManualV6testOtter
+searchTable wgEncodeGencodeManualV6test
+searchMethod exact
+searchType genePred
+termRegex OTTHUMT[0-9]+
+searchPriority 2.2
+#query select t1.chrom, t1.txStart, t1.txEnd, t2.ottTranscriptId from %s t1,wgEncodeGencodeClassesV6test t2 where t1.name = t2.name and t2.ottTranscriptId like '%s'
+xrefTable wgEncodeGencodeClassesV6test
+xrefQuery select name,ottTranscriptId from %s where ottTranscriptId = '%s'
+
+searchName wgEncodeGencodeAutoV6test
+searchTable wgEncodeGencodeAutoV6test
+searchMethod exact
+searchType genePred
+termRegex ENST[0-9]+
+searchPriority 2.3
+
+searchName wgEncodeGencodeManualV6testGene
+searchTable wgEncodeGencodeManualV6test
+searchMethod exact
+searchType genePred
+#termRegex [a-z][a-z0-9][0-9]+
+searchPriority 2.4
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodeAutoV6testGene
+searchTable wgEncodeGencodeAutoV6test
+searchMethod exact
+searchType genePred
+#termRegex [a-z][a-z0-9][0-9]+
+searchPriority 2.5
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencode2wayConsPseudoV6test
+searchTable wgEncodeGencode2wayConsPseudoV6test
+searchMethod exact
+searchType genePred
+termRegex Overlap[0-9]+
+searchPriority 2.6
+

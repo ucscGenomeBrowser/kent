@@ -1341,13 +1341,13 @@ $(document).ready(function()
                     if (btn.length == 1) {
                         table.tableDnDConfig.dragObjects = imgTblContiguousRowSet(row);
                         var compositeSet = imgTblCompositeSet(row);
-                        if (compositeSet.length > 0)
+                        if (compositeSet && compositeSet.length > 0)
                             $( compositeSet ).find('p.btn').addClass('blueButtons');  // blue persists
                     }
                 },
                 onDrop: function(table, row, dragStartIndex) {
                     var compositeSet = imgTblCompositeSet(row);
-                    if (compositeSet.length > 0)
+                    if (compositeSet && compositeSet.length > 0)
                         $( compositeSet ).find('p.btn').removeClass('blueButtons');  // blue persists
                     if($(row).attr('rowIndex') != dragStartIndex) {
                         // NOTE Even if dragging a contiguous set of rows,
@@ -1911,6 +1911,7 @@ function loadContextMenu(img)
                 var rec = trackDbJson[id];
                 var offerHideSubset    = false;
                 var offerHideComposite = false;
+                var offerSingles       = true;
                 var row = $( 'tr#tr_' + id );
                 if (row) {
                     var btn = $(row).find('p.btnBlue');  // btnBlue means cursor over left button
@@ -1921,15 +1922,18 @@ function loadContextMenu(img)
                             $( compositeSet ).find('p.btn').addClass('blueButtons');  // blue persists
 
                             var subSet = imgTblContiguousRowSet(row);
-                            if (subSet && subSet.length > 1 && subSet.length < compositeSet.length) {
-                                offerHideSubset = true;
-                                $( subSet ).addClass("greenRows"); // green persists
+                            if (subSet && subSet.length > 1) {
+                                offerSingles = false;
+                                if(subSet.length < compositeSet.length) {
+                                    offerHideSubset = true;
+                                    $( subSet ).addClass("greenRows"); // green persists
+                                }
                             }
                         }
                     }
                 }
 
-                // First option is hide whole set
+                // First option is hide sets
                 if (offerHideComposite) {
                     if (offerHideSubset) {
                         var o = new Object();
@@ -1943,49 +1947,55 @@ function loadContextMenu(img)
                         str += " (blue)";
                     o[str] = {onclick: makeContextMenuHitCallback('hideComposite')};
                     menu.push(o);
-                    menu.push($.contextMenu.separator);
                 }
 
-                // XXXX what if select is not available (b/c trackControlsOnMain is off)?
-                // Move functionality to a hidden variable?
-                var select = $("select[name=" + id + "]");
-                if (select.length > 1)  // Not really needed if $('#hgTrackUiDialog').html(""); has worked
-                    select =  [ $(select)[0] ];
-                var cur = $(select).val();
-                if(cur) {
-                    $(select).children().each(function(index, o) {
-                                               var title = $(this).val();
-                                               var str = blankImg + " " + title;
-                                               if(title == cur)
-                                                   str = selectedImg + " " + title;
-                                               var o = new Object();
-                                               o[str] = {onclick: function (menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, title); return true;}};
-                                               menu.push(o);
-                                           });
-                    done = true;
-                } else {
-                    if(rec) {
-                        // XXXX check current state from a hidden variable.
-                        var visibilityStrs = new Array("hide", "dense", "squish", "pack", "full");
-                        for (i in visibilityStrs) {
-                            // XXXX use maxVisibility and change hgTracks so it can hide subtracks
-                            var o = new Object();
-                            var str = blankImg + " " + visibilityStrs[i];
-                            if(rec.canPack || (visibilityStrs[i] != "pack" && visibilityStrs[i] != "squish")) {
-                                if(rec.localVisibility) {
-                                    if(visibilityStrs[i] == rec.localVisibility) {
+                // Second set of options: visibility for single track
+                if (offerSingles) {
+                    if (offerHideComposite)
+                        menu.push($.contextMenu.separator);
+
+                    // XXXX what if select is not available (b/c trackControlsOnMain is off)?
+                    // Move functionality to a hidden variable?
+                    var select = $("select[name=" + id + "]");
+                    if (select.length > 1)  // Not really needed if $('#hgTrackUiDialog').html(""); has worked
+                        select =  [ $(select)[0] ];
+                    var cur = $(select).val();
+                    if(cur) {
+                        $(select).children().each(function(index, o) {
+                                                var title = $(this).val();
+                                                var str = blankImg + " " + title;
+                                                if(title == cur)
+                                                    str = selectedImg + " " + title;
+                                                var o = new Object();
+                                                o[str] = {onclick: function (menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, title); return true;}};
+                                                menu.push(o);
+                                            });
+                        done = true;
+                    } else {
+                        if(rec) {
+                            // XXXX check current state from a hidden variable.
+                            var visibilityStrs = new Array("hide", "dense", "squish", "pack", "full");
+                            for (i in visibilityStrs) {
+                                // XXXX use maxVisibility and change hgTracks so it can hide subtracks
+                                var o = new Object();
+                                var str = blankImg + " " + visibilityStrs[i];
+                                if(rec.canPack || (visibilityStrs[i] != "pack" && visibilityStrs[i] != "squish")) {
+                                    if(rec.localVisibility) {
+                                        if(visibilityStrs[i] == rec.localVisibility) {
+                                            str = selectedImg + " " + visibilityStrs[i];
+                                        }
+                                    } else if(visibilityStrs[i] == visibilityStrsOrder[rec.visibility]) {
                                         str = selectedImg + " " + visibilityStrs[i];
                                     }
-                                } else if(visibilityStrs[i] == visibilityStrsOrder[rec.visibility]) {
-                                    str = selectedImg + " " + visibilityStrs[i];
+                                    o[str] = {onclick: makeContextMenuHitCallback(visibilityStrs[i])};
+                                    menu.push(o);
                                 }
-                                o[str] = {onclick: makeContextMenuHitCallback(visibilityStrs[i])};
-                                menu.push(o);
                             }
+                            done = true;
                         }
-                        done = true;
                     }
                 }
+
                 if(done) {
                     var o = new Object();
                     var any = false;

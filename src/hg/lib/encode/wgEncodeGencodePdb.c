@@ -6,7 +6,7 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "wgEncodeGencodePdb.h"
+#include "encode/wgEncodeGencodePdb.h"
 
 static char const rcsid[] = "$Id:$";
 
@@ -16,7 +16,7 @@ void wgEncodeGencodePdbStaticLoad(char **row, struct wgEncodeGencodePdb *ret)
 {
 
 ret->transcriptId = row[0];
-ret->PdbId = row[1];
+ret->pdbId = row[1];
 }
 
 struct wgEncodeGencodePdb *wgEncodeGencodePdbLoad(char **row)
@@ -27,7 +27,7 @@ struct wgEncodeGencodePdb *ret;
 
 AllocVar(ret);
 ret->transcriptId = cloneString(row[0]);
-ret->PdbId = cloneString(row[1]);
+ret->pdbId = cloneString(row[1]);
 return ret;
 }
 
@@ -77,7 +77,7 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->transcriptId = sqlStringComma(&s);
-ret->PdbId = sqlStringComma(&s);
+ret->pdbId = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -90,7 +90,7 @@ struct wgEncodeGencodePdb *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->transcriptId);
-freeMem(el->PdbId);
+freeMem(el->pdbId);
 freez(pEl);
 }
 
@@ -115,7 +115,7 @@ fprintf(f, "%s", el->transcriptId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->PdbId);
+fprintf(f, "%s", el->pdbId);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

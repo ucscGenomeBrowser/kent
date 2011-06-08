@@ -74,7 +74,7 @@ required no
 #The spikeInPool associated for the bam file.
 field spikeInPool
 file ddf
-type string
+type int
 required no
 
 # This is replicate number as you would expect
@@ -372,6 +372,18 @@ required yes
 # This specifies if the view is download only
 # It is used by ????
 field downloadOnly
+file dafList
+type bool
+required no
+
+# This specifies if the view is going to be supplemental
+field supplemental
+file dafList
+type bool
+required no
+
+# This specifies if the view is going to be auxiliary
+field auxiliary
 file dafList
 type bool
 required no
