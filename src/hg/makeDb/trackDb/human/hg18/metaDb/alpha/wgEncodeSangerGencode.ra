@@ -12,7 +12,6 @@ labExpId V3c
 level 3
 project wgEncode
 subId 453
-submittedDataVersion V3
 tableName wgEncodeGencodeAutoV3
 
 metaObject wgEncodeGencodeManualV3
@@ -29,7 +28,6 @@ labExpId V3c
 level 1-2
 project wgEncode
 subId 453
-submittedDataVersion V3
 tableName wgEncodeGencodeManualV3
 
 metaObject wgEncodeGencodePolyaV3
@@ -46,7 +44,6 @@ labExpId V3c
 level 3
 project wgEncode
 subId 453
-submittedDataVersion V3
 tableName wgEncodeGencodePolyaV3
 
 metaObject wgEncodeSangerGencode
@@ -54,4 +51,4 @@ objType composite
 composite wgEncodeSangerGencode
 expVars lab,dataType,annotation,level,labExpId
 
-# MAGIC: 1851282666
+# MAGIC: -246361171

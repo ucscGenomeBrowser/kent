@@ -17,7 +17,6 @@ labExpId V4
 level 3
 project wgEncode
 subId 2094
-submittedDataVersion V4
 tableName wgEncodeGencode2wayConsPseudoV4
 
 metaObject wgEncodeGencodeAutoV4
@@ -34,7 +33,6 @@ labExpId V4
 level 3
 project wgEncode
 subId 2094
-submittedDataVersion V4
 tableName wgEncodeGencodeAutoV4
 
 metaObject wgEncodeGencodeClassesV4
@@ -49,7 +47,6 @@ lab Sanger
 labExpId V4
 project wgEncode
 subId 2094
-submittedDataVersion V4
 tableName wgEncodeGencodeClassesV4
 
 metaObject wgEncodeGencodeManualV4
@@ -66,7 +63,6 @@ labExpId V4
 level 1-2
 project wgEncode
 subId 2094
-submittedDataVersion V4
 tableName wgEncodeGencodeManualV4
 
 metaObject wgEncodeGencodePolyAV4
@@ -83,7 +79,6 @@ labExpId V4
 level 2
 project wgEncode
 subId 2094
-submittedDataVersion V4
 tableName wgEncodeGencodePolyAV4
 
 metaObject wgEncodeGencodeYalePseudoV4
@@ -98,7 +93,6 @@ lab Sanger
 labExpId V4
 project wgEncode
 subId 2094
-submittedDataVersion V4
 tableName wgEncodeGencodeYalePseudoV4
 
-# MAGIC: -1339821006
+# MAGIC: -1240141396
