@@ -183,6 +183,7 @@ term NHEK
 tag NHEK
 type Cell Line
 organism human
+category Tissue
 description epidermal keratinocytes
 tissue Skin
 vendorName Lonza
@@ -193,7 +194,7 @@ karyotype normal
 termId BTO:0000375
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
 color 179,0,134
-sex F
+sex U
 tier 3
 protocol Keratinocyte_protocol.pdf
 
