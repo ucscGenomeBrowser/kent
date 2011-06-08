@@ -4078,6 +4078,14 @@ noInherit on
         type bed 6
         # subId=3662 dateSubmitted=2011-02-18
 
+        track wgEncodeCshlLongRnaSeqSknshraCellPapContigs
+        parent wgEncodeCshlLongRnaSeqViewContigs off
+        shortLabel SK-N-SH_RA cell pA+ 
+        longLabel SK-N-SH_RA whole cell polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
+        subGroups view=Contigs rep=Pooled cellType=SKNSHRA localization=cell rnaExtract=pAP
+        type bed 6
+        # subId=3663 dateSubmitted=2011-02-18
+
     track wgEncodeCshlLongRnaSeqViewJunctions
     shortLabel Splice Junctions 
     view Junctions         
