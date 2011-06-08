@@ -41,7 +41,6 @@ errAbort(
   "\n"
   "   deacc <id>			  deaccession experiment (remove accession, leave in table)\n"
   "   modify <id> <var> <old> <new>  change experiment var (must remove accession first)\n"
-  "					NOTE: var is currently limited to lab, cellType, dataType\n"
   "   remove <id> <why>		  remove experiment (delete from table)\n"
   "\n"
   "options:\n"
@@ -287,6 +286,7 @@ while ((meta = slPopHead(&metas)) != NULL)
         continue;
 
     key = encodeExpKey(exp);
+    verbose(3, "key: %s\n", key);
 
     if (hashLookup(newExps, key) == NULL &&
         hashLookup(oldExps, key) == NULL)
@@ -346,26 +346,10 @@ printf("%d\n", exps->ix);
 }
 
 void expModify(int id)
-/* Modify an experiment.  Changes value of one field or expVar for id specified.
-   NOTE: Currently limited to changing cellType, dataType, lab */
+/* Modify an experiment.  Changes value of one field or expVar for id specified. 
+ * Aborts if experiment has an accession (must deaccession first) */
 {
-struct encodeExp *exp = encodeExpGetByIdFromTable(connExp, table, id);
-if (exp == NULL)
-    errAbort("Id %d not found in experiment table %s", id, table);
-if (exp->accession)
-    errAbort("Id %d in table %s has accession", id, table);
-struct hash *expRa = encodeExpToRa(exp);
-char *val = hashFindVal(expRa, var);
-if (val == NULL)
-    errAbort("Var %s not found in experiment id %d", var, id);
-if (differentString(val, old))
-    errAbort("Mismatch: id %d has %s=%s, not %s in table %s", id, var, val, old, table);
-char *type = cvTermNormalized(var);
-if (type == NULL)
-    errAbort("Unknown CV type %s", var);
-if (cvOneTermHash(type, new) == NULL)
-    errAbort("Unknown CV term %s of type %s", new, type);
-encodeExpUpdateField(connExp, table, id, var, new);
+encodeExpUpdate(connExp, table, id, var, new, old);
 verbose(1, "Modified id %d in table %s\n", id, table);
 }
 
