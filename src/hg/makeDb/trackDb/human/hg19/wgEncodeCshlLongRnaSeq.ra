@@ -2925,14 +2925,22 @@ noInherit on
 		origAssembly hg19
 		# subId=2459 dateSubmitted=2010-09-29
 
-		track wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep2
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
-		shortLabel HSMM cell pA+ A 2
-		longLabel HSMM whole cell polyA+ Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
-		subGroups view=Alignments cellType=HSMM localization=cell rnaExtract=pAP rep=rep2
-		type bam
-		origAssembly hg19
-		# subId=2460 dateSubmitted=2010-09-29
+#		track wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep2
+#		parent wgEncodeCshlLongRnaSeqViewAlignments off
+#		shortLabel HSMM cell pA+ A 2
+#		longLabel HSMM whole cell polyA+ Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
+#		subGroups view=Alignments cellType=HSMM localization=cell rnaExtract=pAP rep=rep2
+#		type bam
+#		origAssembly hg19
+#		# subId=2460 dateSubmitted=2010-09-29
+
+        track wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep2
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel HSMM cell longPolyA Aln 2
+        longLabel ENCODE CSHL Long RNA-seq Alignments Replicate 2 (longPolyA in HSMM cell)
+        subGroups view=Alignments cellType=HSMM localization=cell rnaExtract=pAP rep=rep2
+        type bam
+        # subId=4051 dateSubmitted=2011-05-06
 
 		track wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep3
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
@@ -2973,23 +2981,39 @@ noInherit on
 		color 179,0,134
 		# subId=2468 dateSubmitted=2010-09-29
 
-		track wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
-		shortLabel NHLF cell pA+ A 1
-		longLabel NHLF whole cell polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
-		subGroups view=Alignments cellType=NHLF localization=cell rnaExtract=pAP rep=rep1
-		type bam
-		origAssembly hg19
-		# subId=2469 dateSubmitted=2010-09-29
+#		track wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1
+#		parent wgEncodeCshlLongRnaSeqViewAlignments off
+#		shortLabel NHLF cell pA+ A 1
+#		longLabel NHLF whole cell polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
+#		subGroups view=Alignments cellType=NHLF localization=cell rnaExtract=pAP rep=rep1
+#		type bam
+#		origAssembly hg19
+#		# subId=2469 dateSubmitted=2010-09-29
 
-		track wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep2
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
-		shortLabel NHLF cell pA+ A 2
-		longLabel NHLF whole cell polyA+ Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
-		subGroups view=Alignments cellType=NHLF localization=cell rnaExtract=pAP rep=rep2
-		type bam
-		origAssembly hg19
-		# subId=2470 dateSubmitted=2010-09-29
+        track wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel NHLF cell longPolyA Aln 1
+        longLabel ENCODE CSHL Long RNA-seq Alignments Replicate 1 (longPolyA in NHLF cell)
+        subGroups view=Alignments cellType=NHLF localization=cell rnaExtract=pAP rep=rep1
+        type bam
+        # subId=4052 dateSubmitted=2011-05-06
+
+#		track wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep2
+#		parent wgEncodeCshlLongRnaSeqViewAlignments off
+#		shortLabel NHLF cell pA+ A 2
+#		longLabel NHLF whole cell polyA+ Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
+#		subGroups view=Alignments cellType=NHLF localization=cell rnaExtract=pAP rep=rep2
+#		type bam
+#		origAssembly hg19
+#		# subId=2470 dateSubmitted=2010-09-29
+
+        track wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep2
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel NHLF cell longPolyA Aln 2
+        longLabel ENCODE CSHL Long RNA-seq Alignments Replicate 2 (longPolyA in NHLF cell)
+        subGroups view=Alignments cellType=NHLF localization=cell rnaExtract=pAP rep=rep2
+        type bam
+        # subId=4054 dateSubmitted=2011-05-06
 
 		track wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
