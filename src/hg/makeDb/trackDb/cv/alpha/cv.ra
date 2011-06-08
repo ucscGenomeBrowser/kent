@@ -8364,6 +8364,12 @@ type view
 label Contigs
 description Contigs
 
+term Excludable
+tag EXCLU
+type view
+label Excludable
+description Excludable
+
 term ExonsGencV3c
 tag EXONGENCV3C
 type view
@@ -8550,6 +8556,12 @@ type view
 label SNP
 description Single Nucleotide Polymorphism
 
+term Spikeins
+tag SPKNS
+type view
+label Spikeins
+description Spikeins
+
 term Splices
 tag SPLICES
 type view
@@ -8585,6 +8597,12 @@ tag TSS
 type view
 label TSS
 description TSS
+
+term Uniqueness
+tag UNQ
+type view
+label Uniqueness
+description Uniqueness
 
 term Validation
 tag VALIDATION

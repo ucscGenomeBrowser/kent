@@ -1,5 +1,5 @@
 table openChromCombinedPeaks
-"Loacationss of regions of open chromatin as determined by DNaseI HS and FAIRE experiments. It is a BED8+12 format"
+"Locations of regions of open chromatin as determined by DNaseI HS and FAIRE experiments. It is a BED9+12 format"
 (
     string chrom;        "Name of the chromosome"
     uint   chromStart;   "Start position in chromosome"
