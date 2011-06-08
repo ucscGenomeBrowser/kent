@@ -2,7 +2,7 @@
 
 track wgEncodeOpenChromSynth
 compositeTrack on
-superTrack wgEncodeDNAseSuper pack
+superTrack wgEncodeDNAseSuper dense
 shortLabel Open Chrom Synth
 longLabel DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom(Duke/UNC/UTA)
 group regulation

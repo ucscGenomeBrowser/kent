@@ -690,7 +690,7 @@ printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
 /* printBand(chrom, (start + end)/2, 0, FALSE); */
 printBand(chrom, start, end, FALSE);
 printf("<B>Genomic Size:</B> %d<BR>\n", end - start);
-if (strand != NULL)
+if (strand != NULL && differentString(strand,"."))
     printf("<B>Strand:</B> %s<BR>\n", strand);
 else
     strand = "?";
@@ -9482,7 +9482,7 @@ if (url != NULL && url[0] != 0)
 	if (disorderShown) printf("</UL>\n");
     	sqlFreeResult(&sr);
 	}
-    
+
     // show RefSeq Gene link(s)
     safef(query, sizeof(query),
           "select distinct r.name from refLink l, mim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
