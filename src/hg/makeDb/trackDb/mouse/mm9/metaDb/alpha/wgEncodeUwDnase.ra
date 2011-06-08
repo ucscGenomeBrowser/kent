@@ -167,7 +167,7 @@ strain RIII
 subId 3895
 view RawData
 
-metaObject wgEncodeUwDnase3134RiiiMImmortalRawRep1
+metaObject wgEncodeUwDnase3134RiiiMImmortalSigRep1
 objType table
 age immortalized
 cell 3134
@@ -176,7 +176,7 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
-fileName wgEncodeUwDnase3134RiiiMImmortalRawRep1.bigWig
+fileName wgEncodeUwDnase3134RiiiMImmortalSigRep1.bigWig
 grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
@@ -185,10 +185,10 @@ replicate 1
 sex M
 strain RIII
 subId 2016
-tableName wgEncodeUwDnase3134RiiiMImmortalRawRep1
+tableName wgEncodeUwDnase3134RiiiMImmortalSigRep1
 view Signal
 
-metaObject wgEncodeUwDnase3134RiiiMImmortalRawRep2
+metaObject wgEncodeUwDnase3134RiiiMImmortalSigRep2
 objType table
 age immortalized
 cell 3134
@@ -197,7 +197,7 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-10
 dateUnrestricted 2012-02-10
-fileName wgEncodeUwDnase3134RiiiMImmortalRawRep2.bigWig
+fileName wgEncodeUwDnase3134RiiiMImmortalSigRep2.bigWig
 grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
@@ -206,7 +206,7 @@ replicate 2
 sex M
 strain RIII
 subId 3895
-tableName wgEncodeUwDnase3134RiiiMImmortalRawRep2
+tableName wgEncodeUwDnase3134RiiiMImmortalSigRep2
 view Signal
 
 metaObject wgEncodeUwDnase416bC57bl6MAdult8wksAlnRep1
@@ -373,7 +373,7 @@ strain B6D2F1/J
 subId 1997
 view RawData
 
-metaObject wgEncodeUwDnase416bC57bl6MAdult8wksRawRep1
+metaObject wgEncodeUwDnase416bC57bl6MAdult8wksSigRep1
 objType table
 age immortalized
 cell 416B
@@ -382,7 +382,7 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
-fileName wgEncodeUwDnase416bC57bl6MAdult8wksRawRep1.bigWig
+fileName wgEncodeUwDnase416bC57bl6MAdult8wksSigRep1.bigWig
 grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
@@ -391,10 +391,10 @@ replicate 1
 sex M
 strain B6D2F1/J
 subId 2000
-tableName wgEncodeUwDnase416bC57bl6MAdult8wksRawRep1
+tableName wgEncodeUwDnase416bC57bl6MAdult8wksSigRep1
 view Signal
 
-metaObject wgEncodeUwDnase416bC57bl6MAdult8wksRawRep2
+metaObject wgEncodeUwDnase416bC57bl6MAdult8wksSigRep2
 objType table
 age immortalized
 cell 416B
@@ -403,7 +403,7 @@ dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-22
 dateUnrestricted 2011-04-22
-fileName wgEncodeUwDnase416bC57bl6MAdult8wksRawRep2.bigWig
+fileName wgEncodeUwDnase416bC57bl6MAdult8wksSigRep2.bigWig
 grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
@@ -412,7 +412,7 @@ replicate 2
 sex M
 strain B6D2F1/J
 subId 1997
-tableName wgEncodeUwDnase416bC57bl6MAdult8wksRawRep2
+tableName wgEncodeUwDnase416bC57bl6MAdult8wksSigRep2
 view Signal
 
 metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksAlnRep1
@@ -587,7 +587,7 @@ subId 3893
 tissueSourceType None
 view RawData
 
-metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep1
+metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep1
 objType table
 age adult-8wks
 cell A20
@@ -596,7 +596,7 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-03
 dateUnrestricted 2012-02-03
-fileName wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep1.bigWig
+fileName wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep1.bigWig
 grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
@@ -605,11 +605,11 @@ replicate 1
 sex M
 strain BALB/cAnN
 subId 3892
-tableName wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep1
+tableName wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep1
 tissueSourceType None
 view Signal
 
-metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep2
+metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep2
 objType table
 age adult-8wks
 cell A20
@@ -618,7 +618,7 @@ dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-03
 dateUnrestricted 2012-02-03
-fileName wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep2.bigWig
+fileName wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep2.bigWig
 grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
@@ -627,7 +627,7 @@ replicate 2
 sex M
 strain BALB/cAnN
 subId 3893
-tableName wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep2
+tableName wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep2
 tissueSourceType None
 view Signal
 
@@ -6179,4 +6179,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: -421583984
+# MAGIC: 383820562

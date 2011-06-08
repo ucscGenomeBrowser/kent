@@ -1121,7 +1121,7 @@ wgEncode 1
 		# subId=1967 dateSubmitted=2010-07-21
 		# was wgEncodeUwDnaseCerebellumC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:25 2011
 
-		track wgEncodeUwDnase416bC57bl6MAdult8wksRawRep2
+		track wgEncodeUwDnase416bC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel 416B Sg 2
 		longLabel 416B DNaseI HS Signal Rep 2 from ENCODE/UW
@@ -1129,8 +1129,9 @@ wgEncode 1
 		type bigWig 1.000000 74554.000000
 		color 86,180,233
 		# subId=1997 dateSubmitted=2010-07-22
+		# was wgEncodeUwDnase416bC57bl6MAdult8wksRawRep2 vsmalladi Tue Jun  7 16:38:42 2011
 
-		track wgEncodeUwDnase416bC57bl6MAdult8wksRawRep1
+		track wgEncodeUwDnase416bC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel 416B Sg 1
 		longLabel 416B DNaseI HS Signal Rep 1 from ENCODE/UW
@@ -1138,6 +1139,7 @@ wgEncode 1
 		type bigWig 1.000000 109673.000000
 		color 86,180,233
 		# subId=2000 dateSubmitted=2010-07-23
+		# was wgEncodeUwDnase416bC57bl6MAdult8wksRawRep1 vsmalladi Tue Jun  7 16:38:12 2011
 
 		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off 
@@ -1426,7 +1428,7 @@ wgEncode 1
 		# subId=1999 dateSubmitted=2010-07-23
 		# was wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:25 2011
 
-		track wgEncodeUwDnase3134RiiiMImmortalRawRep1
+		track wgEncodeUwDnase3134RiiiMImmortalSigRep1
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel 3134 Sg 1
 		longLabel 3134 DNaseI HS Signal Rep 1 from ENCODE/UW
@@ -1434,6 +1436,7 @@ wgEncode 1
 		type bigWig 1.000000 53562.000000
 		color 0,158,115
 		# subId=2016 dateSubmitted=2010-07-24
+		# was wgEncodeUwDnase3134RiiiMImmortalRawRep1 vsmalladi Tue Jun  7 16:37:39 2011
 
 		track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal off
@@ -1484,7 +1487,7 @@ wgEncode 1
 		# subId=3910 dateSubmitted=2011-04-19
 		# was wgEncodeUwDnaseCbellumC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:25 2011
 
-		track wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep1
+		track wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel A20 Sg 1
 		longLabel A20 DNaseI HS Signal Rep 1 from ENCODE/UW
@@ -1492,8 +1495,9 @@ wgEncode 1
 		type bigWig 1.000000 93407.000000
 		color 86,180,233
 		# subId=3892 dateSubmitted=2011-05-03
+		# was wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep1 vsmalladi Tue Jun  7 16:38:22 2011
 
-		track wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep2
+		track wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel A20 Sg 2
 		longLabel A20 DNaseI HS Signal Rep 2 from ENCODE/UW
@@ -1501,6 +1505,7 @@ wgEncode 1
 		type bigWig 1.000000 162688.000000
 		color 86,180,233
 		# subId=3893 dateSubmitted=2011-05-03
+		# was wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep2 vsmalladi Tue Jun  7 16:39:04 2011
 
 		track wgEncodeUwDnaseZhbtc4129olaME0SigRep1
 		parent wgEncodeUwDnaseViewRawSignal off
@@ -1562,7 +1567,7 @@ wgEncode 1
 		# subId=3914 dateSubmitted=2011-05-06
 		# was wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:25 2011
 
-		track wgEncodeUwDnase3134RiiiMImmortalRawRep2
+		track wgEncodeUwDnase3134RiiiMImmortalSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel 3134 Sg 2
 		longLabel 3134 DNaseI HS Signal Rep 2 from ENCODE/UW
@@ -1570,6 +1575,7 @@ wgEncode 1
 		type bigWig 1.000000 42784.000000
 		color 0,158,115
 		# subId=3895 dateSubmitted=2011-05-10
+		# was wgEncodeUwDnase3134RiiiMImmortalRawRep2 vsmalladi Tue Jun  7 16:38:31 2011
 
 		track wgEncodeUwDnasePatskiSpbl6MImmortalSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
