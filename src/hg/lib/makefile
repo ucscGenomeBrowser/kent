@@ -120,10 +120,10 @@ clean:
 	rm -f ../../lib/$(MACHTYPE)/jkhgap.a;
 
 ctags:
-	ctags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
+	ctags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c ../inc/encode/*.h ../lib/encode/*.c
 
 tags:
-	etags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
+	etags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c ../inc/encode/*.h ../lib/encode/*.c
 
 test:
 	cd tests && ${MAKE} test
