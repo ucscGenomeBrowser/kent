@@ -184,6 +184,7 @@ tag NHEK
 type Cell Line
 organism human
 description epidermal keratinocytes
+category Tissue
 tissue Skin
 vendorName Lonza
 vendorId CC-2501
@@ -193,7 +194,7 @@ karyotype normal
 termId BTO:0000375
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
 color 179,0,134
-sex F
+sex U
 tier 3
 protocol Keratinocyte_protocol.pdf
 
@@ -8374,6 +8375,12 @@ type view
 label Contigs
 description Contigs
 
+term Excludable
+tag EXCLU
+type view
+label Excludable
+description Excludable
+
 term ExonsGencV3c
 tag EXONGENCV3C
 type view
@@ -8560,6 +8567,12 @@ type view
 label SNP
 description Single Nucleotide Polymorphism
 
+term Spikeins
+tag SPKNS
+type view
+label Spikeins
+description Spikeins
+
 term Splices
 tag SPLICES
 type view
@@ -8595,6 +8608,12 @@ tag TSS
 type view
 label TSS
 description TSS
+
+term Uniqueness
+tag UNQ
+type view
+label Uniqueness
+description Uniqueness
 
 term Validation
 tag VALIDATION
