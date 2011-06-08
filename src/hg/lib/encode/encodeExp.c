@@ -741,7 +741,8 @@ for (i = 0; i < ENCODEEXP_NUM_COLS; i++)
             fprintf(f, "%s %s\n", fp->name, val);
         }
     }
-fputs("\n", f);
+if (f != NULL)
+    fputs("\n", f);
 return ra;
 }
 
