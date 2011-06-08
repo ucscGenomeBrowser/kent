@@ -35,7 +35,7 @@ wgEncode 1
         	type peptideMapping
         	origAssembly hg19
         	color 153,38,0
-        	# subId=3160 dateSubmitted=2011-01-05
+        	# subId=4176 dateSubmitted=2011-01-05
 
         	track wgEncodeUncBsuProtK562CytosolSig
         	parent wgEncodeUncBsuProtSignal

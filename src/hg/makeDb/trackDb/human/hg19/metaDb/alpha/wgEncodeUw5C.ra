@@ -1,0 +1,613 @@
+metaObject wgEncodeUw5CBjUw5cgeneMatrixRep1
+objType file
+cell BJ
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CBjUw5cgeneMatrixRep1.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 1
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CBjUw5cgeneMatrixRep2
+objType file
+cell BJ
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CBjUw5cgeneMatrixRep2.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 2
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CBjUw5cgeneRawDataRep1
+objType file
+cell BJ
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CBjUw5cgeneRawDataRep1.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 1
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CBjUw5cgeneRawDataRep2
+objType file
+cell BJ
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CBjUw5cgeneRawDataRep2.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 2
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CCaco2Uw5cmycMatrixRep1
+objType file
+cell Caco-2
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CCaco2Uw5cmycMatrixRep1.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 1
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CCaco2Uw5cmycMatrixRep2
+objType file
+cell Caco-2
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CCaco2Uw5cmycMatrixRep2.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 2
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CCaco2Uw5cmycRawDataRep1
+objType file
+cell Caco-2
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CCaco2Uw5cmycRawDataRep1.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 1
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CCaco2Uw5cmycRawDataRep2
+objType file
+cell Caco-2
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CCaco2Uw5cmycRawDataRep2.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 2
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CGm06990Uw5cgeneMatrixRep1
+objType file
+cell GM06990
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CGm06990Uw5cgeneMatrixRep1.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 1
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CGm06990Uw5cgeneMatrixRep2
+objType file
+cell GM06990
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CGm06990Uw5cgeneMatrixRep2.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 2
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CGm06990Uw5cgeneRawDataRep1
+objType file
+cell GM06990
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CGm06990Uw5cgeneRawDataRep1.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 1
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CGm06990Uw5cgeneRawDataRep2
+objType file
+cell GM06990
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CGm06990Uw5cgeneRawDataRep2.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 2
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CGm12878Uw5cmycMatrixRep1
+objType file
+cell GM12878
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CGm12878Uw5cmycMatrixRep1.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 1
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CGm12878Uw5cmycMatrixRep2
+objType file
+cell GM12878
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CGm12878Uw5cmycMatrixRep2.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 2
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CGm12878Uw5cmycRawDataRep1
+objType file
+cell GM12878
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CGm12878Uw5cmycRawDataRep1.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 1
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CGm12878Uw5cmycRawDataRep2
+objType file
+cell GM12878
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CGm12878Uw5cmycRawDataRep2.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 2
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CHepg2Uw5cgeneMatrixRep1
+objType file
+cell HepG2
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CHepg2Uw5cgeneMatrixRep1.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 1
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CHepg2Uw5cgeneMatrixRep2
+objType file
+cell HepG2
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CHepg2Uw5cgeneMatrixRep2.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 2
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CHepg2Uw5cgeneRawDataRep1
+objType file
+cell HepG2
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CHepg2Uw5cgeneRawDataRep1.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 1
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CHepg2Uw5cgeneRawDataRep2
+objType file
+cell HepG2
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CHepg2Uw5cgeneRawDataRep2.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 2
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CK562Uw5cmycMatrixRep1
+objType file
+cell K562
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CK562Uw5cmycMatrixRep1.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 1
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CK562Uw5cmycMatrixRep2
+objType file
+cell K562
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CK562Uw5cmycMatrixRep2.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 2
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CK562Uw5cmycRawDataRep1
+objType file
+cell K562
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CK562Uw5cmycRawDataRep1.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 1
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CK562Uw5cmycRawDataRep2
+objType file
+cell K562
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CK562Uw5cmycRawDataRep2.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 2
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CLncapUw5cmycMatrixRep1
+objType file
+cell LNCaP
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CLncapUw5cmycMatrixRep1.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 1
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CLncapUw5cmycMatrixRep2
+objType file
+cell LNCaP
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CLncapUw5cmycMatrixRep2.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 2
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CLncapUw5cmycRawDataRep1
+objType file
+cell LNCaP
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CLncapUw5cmycRawDataRep1.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 1
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CLncapUw5cmycRawDataRep2
+objType file
+cell LNCaP
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CLncapUw5cmycRawDataRep2.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 2
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CMcf7Uw5cmycMatrixRep1
+objType file
+cell MCF-7
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CMcf7Uw5cmycMatrixRep1.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 1
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CMcf7Uw5cmycMatrixRep2
+objType file
+cell MCF-7
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CMcf7Uw5cmycMatrixRep2.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 2
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CMcf7Uw5cmycRawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CMcf7Uw5cmycRawDataRep1.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 1
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CMcf7Uw5cmycRawDataRep2
+objType file
+cell MCF-7
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CMcf7Uw5cmycRawDataRep2.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Myc-Region
+replicate 2
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CSknshraUw5cgeneMatrixRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CSknshraUw5cgeneMatrixRep1.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 1
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CSknshraUw5cgeneMatrixRep2
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CSknshraUw5cgeneMatrixRep2.download.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 2
+subId 3813
+view Matrix
+
+metaObject wgEncodeUw5CSknshraUw5cgeneRawDataRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CSknshraUw5cgeneRawDataRep1.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 1
+subId 3813
+view RawData
+
+metaObject wgEncodeUw5CSknshraUw5cgeneRawDataRep2
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUw5C
+dataType 5C
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-03-09
+dateUnrestricted 2011-12-08
+fileName wgEncodeUw5CSknshraUw5cgeneRawDataRep2.fastq.gz
+grant Stam
+lab UW
+project wgEncode
+region UW-5C-Gene-Regions
+replicate 2
+subId 3813
+view RawData
+
+# MAGIC: -1215518316
