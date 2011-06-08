@@ -86,7 +86,9 @@ modifyTest:
 	${PROG} modify 3 lab Duke UW -table=${TABLE}
 	${PROG} modify 3 cellType K562 GM12878 -table=${TABLE}
 	${PROG} modify 3 dataType DnaseSeq RnaSeq -table=${TABLE}
+	${PROG} modify 2 Antibody Pol2 CTCF -table=${TABLE}
 	${PROG} show 3 -table=${TABLE} >> output/$@.out.ra
+	${PROG} show 2 -table=${TABLE} >> output/$@.out.ra
 	@grep -v updateTime output/$@.out.ra | diff - expected/$@.out.ra
 
 clean:
