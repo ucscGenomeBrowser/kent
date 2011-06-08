@@ -472,7 +472,7 @@ else if (sameString("add", command) ||
     else
         file = argv[2];
     }
-else if (sameString("remove", command))
+else if (sameString("id", command))
     {
     if (argc < 6)
         usage();

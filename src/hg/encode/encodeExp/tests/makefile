@@ -4,11 +4,10 @@ PROG = ../encodeExp
 
 TABLE = encodeExpTest_${USER}
 
-test: copyTest addTest accTest showTest renameTest modifyTest
+test: copyTest addTest accTest showTest renameTest modifyTest removeTest idTest restoreTest
 	echo tested all
 	@#-rm -rf output
 
-badtest: removeTest idTest restoreTest
 
 # Add experiments from .ra file
 addTest:
