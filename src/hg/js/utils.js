@@ -423,6 +423,14 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
     var divit = $("#div_"+trackName+"_meta");
+    var img = $(divit).prev('a').find("img");
+    if (img != undefined && $(img).length == 1) {
+        img = $(img)[0];
+        if ($(divit).css('display') == 'none')
+            $(img).attr('src','../images/upBlue.png');
+        else
+            $(img).attr('src','../images/downBlue.png');
+    }
     if($(divit).css('display') == 'none') {
         $("#div_"+trackName+"_cfg").hide();  // Hide any configuration when opening metadata
 

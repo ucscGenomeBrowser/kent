@@ -261,8 +261,8 @@ const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
 if(safeObj == NULL || safeObj->vars == NULL)
 return FALSE;
 
-printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",%s,true);' title='Show metadata details...'>%s</A>",
-        (embeddedInText?"&nbsp;":"<P>"),tdb->track,tdb->track, showLongLabel?"true":"false", title);
+printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",%s,true);' title='Show metadata details...'>%s<img src='../images/downBlue.png'/></A>",
+        (embeddedInText?"&nbsp;":"<P>"),tdb->track,tdb->track, showLongLabel?"true":"false", (title?title:""));
 if (!sameString(tdb->table, tdb->track) && trackHash != NULL) // If trackHash is needed, then can't fill this in with ajax
     {
     printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->track,
@@ -3380,7 +3380,7 @@ else
 
 struct slName *slChoice = NULL;
 boolean first = TRUE;
-for (slChoice = filterBy->slChoices;slChoice != NULL;slChoice=slChoice->next)
+for(slChoice = filterBy->slChoices;slChoice != NULL;slChoice=slChoice->next)
     {
     if(!first)
         dyStringAppend(dyClause, ",");
@@ -3390,7 +3390,7 @@ for (slChoice = filterBy->slChoices;slChoice != NULL;slChoice=slChoice->next)
     else
         dyStringPrintf(dyClause, "\"%s\"",slChoice->name);
     }
-if (dyStringLen(dyClause) == 0)
+if(dyStringLen(dyClause) == 0)
     {
     dyStringFree(&dyClause);
     return NULL;
@@ -4114,7 +4114,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     printf ("<TD title='select to copy'>&nbsp;%s", subtrack->longLabel);
     if (trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
         printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
-    compositeMetadataToggle(db,subtrack,"...",TRUE,FALSE, trackHash);
+    compositeMetadataToggle(db,subtrack,NULL,TRUE,FALSE, trackHash);
     printf("&nbsp;");
 
 #ifndef SUBTRACK_CFG_POPUP
