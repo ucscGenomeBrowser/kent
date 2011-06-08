@@ -488,11 +488,11 @@ else
         jsonTdbSettingsBuild(&jsonTdbVars, track, FALSE); // FALSE: No configuration from track search
 
         if (tdbIsFolder(track->tdb)) // supertrack
-            hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL4);
+            hPrintf("<tr class='bgLevel4' valign='top' class='found'>\n");
         else if (tdbIsContainer(track->tdb))
-            hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL3);
+            hPrintf("<tr class='bgLevel3' valign='top' class='found'>\n");
         else
-            hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL2);
+            hPrintf("<tr class='bgLevel2' valign='top' class='found'>\n");
 
         hPrintf("<td align='center'>\n");
 

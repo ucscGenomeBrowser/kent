@@ -2135,7 +2135,7 @@ foreach my $ddfLine (@ddfLines) {
     $metadata .= " dateUnrestricted=$dateUnrestricted";
 
     # We should add attic terms to the mdb.txt.  At least those that we can recognize
-    if ($daf->{TRACKS}{$view}{auxilary} && $daf->{TRACKS}{$view}{auxilary} eq "yes") {
+    if ($daf->{TRACKS}{$view}{auxiliary} && $daf->{TRACKS}{$view}{auxiliary} eq "yes") {
         $metadata .= " attic=auxValid";
     } elsif ($ddfLine->{display} && $ddfLine->{display} eq "no") {
         $metadata .= " attic=auxExp";

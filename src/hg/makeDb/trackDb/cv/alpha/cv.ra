@@ -2802,7 +2802,7 @@ description acute promyelocytic leukemia cell line. (PMID: 1995093)
 vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
 #put universities in for Stam and Snyder
 vendorId (see protocol documents)
-orderUrl N/A
+orderUrl ;
 karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489
@@ -3316,6 +3316,8 @@ organism human
 description Trachea and bronchial epithelial cells, passage 2 primary, non-immortalized, human trachea and bronchial epithelial cells, donor was 21 years old
 vendorName National Disease Research Interchange-provided fresh lung tissue, designated DD009C in-house.
 tissue Epithelium
+vendorId ;
+orderUrl http://www.ndriresource.org/
 #TIB-152 is a lymphocytic cell line with no relation to TBEC
 lineage endoderm
 karyotype unknown
@@ -3540,7 +3542,6 @@ color 153,38,0
 sex M
 protocol UW(Stam):A20_Stam_protocol.pdf
 
-# Needs vendorId, orderUrl
 term AtT-20
 tag ATT20
 type Cell Line
@@ -3551,8 +3552,8 @@ description Pituitary tumor LAF1
 age immortalized
 strain Unknown
 vendorName ATCC
-vendorId N/A
-orderUrl N/A
+vendorId CCL-89
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-89
 termId 7087
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
 color 153,38,0
@@ -7754,6 +7755,13 @@ description That fraction of cells, prepared by disruptive biochemical methods, 
 termId GO:0005624
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005624
 
+term mitochondria
+tag mito
+type localization
+description Mitochondria 
+termId GO:0005739
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005739
+
 ### RNA extracts
 term total
 tag total
@@ -8040,6 +8048,24 @@ tag DEX500pM
 description 1 h with 500 pM DEX (Myers)
 type treatment
 
+#We need to change the DMSO's to be consistent. The proposal is to have both the
+#concentration and the time in both the tags and terms
+#I.E. DMSO_0.02pct > DMSO_0.02pct_1h
+#     DMSO2 > DM02p1h
+# -Matt
+
+#term DMSO_0.02pct_1h
+#tag DM02p1h
+#description 1 h with 0.02% DMSO (Myers) 
+#type treatment
+#
+#term DMSO_2.0pct_5d
+#tag DM2p5d
+#description 5 d with 2% DMSO (Weissman)
+#type treatment
+
+
+
 term DMSO_0.02pct
 tag DMSO2
 description 1 h with 0.02% DMSO (Myers)
@@ -8062,26 +8088,26 @@ type treatment
 
 term DIFF_7d
 tag DIFF7d
-description PROVISIONAL Grown for 7 days in differentiation medium (Wold)
+description Grown for 7 days in differentiation medium (Wold)
 type treatment
 
 term Estradiol_10nM
-tag ESTRADIa1h
+tag EST10nm1h
 description  1 h with 10 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_24hr
-tag ESTRADIa24hh
+tag EST10nm24h
 description  24 hr with 10 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_1nM
-tag ESTRADIb1h
+tag EST1nm1h
 description  1 h with 1 nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_10nM_4hr
-tag ESTRADIa4h
+tag EST10nm4h
 description  4 h with 10 nM Estradiol (Myers)
 type treatment
 
@@ -8202,14 +8228,14 @@ type treatment
 
 term 4OHTAM_1uM_36hr
 tag OHTAM1
-description (Provisional To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
+description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
 type treatment
 
 term TAM_1uM_36hr
 tag TAM
-description (Provisional) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
+description 36 h with 1 uM 4-hydroxytamoxifen (Myers)
 type treatment
-#This should be retired.  It was registered with the wrong molecule.  For now i am changing the description.  But i am also registereing a replacement.
+#This should be retired.  It was registered with the wrong molecule.  For now i am changing the description.  But i am also registereing a replacement. 6/6/11
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
@@ -8323,13 +8349,13 @@ term Alignments
 tag ALN
 type view
 label Alignments
-description (PROVISIONAL) Aligned sequence tags
+description Aligned sequence tags
 
 term Base_Overlap_Signal
 tag  SIGBO
 type view
 label Base_Overlap_Signal
-description (PROVISIONAL) Base Overlap Signal
+description Base Overlap Signal
 
 term Clusters
 tag CLUSTERS
@@ -8341,7 +8367,7 @@ term CNV
 tag CNV
 type view
 label CNV
-description (PROVISIONAL) Copy Number Variation
+description Copy Number Variation
 
 term Contigs
 tag CONTIGS
@@ -8413,13 +8439,13 @@ term GeneGencV3c
 tag GENEGENCV3C
 type view
 label Genes Gencode V3c
-description (PROVISIONAL) Gencode release V3c
+description Gencode release V3c
 
 term HMM
 tag HMM
 type view
 label HMM
-description (PROVISIONAL) Hidden Markov Model
+description Hidden Markov Model
 
 term Hotspots
 tag HOTSPOTS
@@ -8455,7 +8481,7 @@ term Peaks
 tag PKS
 type view
 label Peaks
-description (PROVISIONAL) Peaks called
+description Peaks called
 
 term PeptideMapping
 tag PEPTIDEMAP
@@ -8533,7 +8559,7 @@ term SNP
 tag SNP
 type view
 label SNP
-description (PROVISIONAL) Single Nucleotide Polymorphism
+description Single Nucleotide Polymorphism
 
 term Splices
 tag SPLICES
@@ -8551,7 +8577,13 @@ term TranscriptGencV3c
 tag TRANSGENCV3C
 type view
 label Transcript Gencode V3c
-description (PROVISIONAL) Transcript Gencode V3c
+description Transcript Gencode V3c
+
+term ExonGencV3c
+tag EXONGENCV3C
+type view
+label Exons Gencode V3c
+description Provisional Exons Gencode V3c
 
 term Transfrags
 tag TRANSFRAGS
@@ -8937,24 +8969,23 @@ description the age when the real age is unknown
 # type (informs pipeline code of stanza type.  Should always be attic)
 # description (human-readable description.  Can't say where/how it's used)
 
-
 term supplemental
 tag sup
 type attic
-description Files supplemental at composite level (Provisional)
+description Files supplemental at composite level 
 
-term auxUnValid
-tag auxUV
+term auxSup
+tag auxsup
 type attic
-description Unvalidated files supplemental at experimental level (Provisional)
+description Unverified files supplemental at experiment level
 
 term auxValid
-tag auxV
+tag auxval
 type attic
 description Validated files supplemental to experiments
 
 term auxExp
-tag auxE
+tag auxexp
 type attic
 description Supplemental experiments
 
@@ -9622,7 +9653,7 @@ term Birney
 tag birney
 type grant
 description Birney
-grantInst (PROVISIONAL) ENCODE Data Analysis Center (DAC)
+grantInst ENCODE Data Analysis Center (DAC)
 projectName DAC
 
 term Tullius
@@ -10341,7 +10372,7 @@ label Sequencing Run
 description Sequencing run
 searchable multiSelect
 cvDefined no
-validate integer
+validate regex: ^[0-9]*r[0-9]*$ 
 priority 500
 
 term seqPlatform
@@ -10397,6 +10428,15 @@ description Objects this object was built with.
 searchable no
 cvDefined no
 validate none
+priority 921
+
+term spikeInPool
+type typeOfTerm
+label Spike-In Pool   
+description (Provisional) The spike-in pool that was used.
+searchable no
+cvDefined no
+validate none   
 priority 921
 
 term strain

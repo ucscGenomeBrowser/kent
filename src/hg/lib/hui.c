@@ -3366,15 +3366,11 @@ if(filterBySet != NULL)
     }
 }
 
-static char *filterByClause(filterBy_t *filterBy)
-/* returns the "column in (...)" clause for a single filterBy struct */
+static char *filterByClauseStd(filterBy_t *filterBy)
+/* returns the SQL where clause for a single filterBy struct in
+ * the standard cases */
 {
 int count = slCount(filterBy->slChoices);
-if(count == 0)
-    return NULL;
-if(slNameInList(filterBy->slChoices,"All"))
-    return NULL;
-
 struct dyString *dyClause = newDyString(256);
 dyStringAppend(dyClause, filterBy->column);
 if(count == 1)
@@ -3383,18 +3379,18 @@ else
     dyStringPrintf(dyClause, " in (");
 
 struct slName *slChoice = NULL;
-boolean notFirst = FALSE;
-for(slChoice = filterBy->slChoices;slChoice != NULL;slChoice=slChoice->next)
+boolean first = TRUE;
+for (slChoice = filterBy->slChoices;slChoice != NULL;slChoice=slChoice->next)
     {
-    if(notFirst)
-        dyStringPrintf(dyClause, ",");
-    notFirst = TRUE;
+    if(!first)
+        dyStringAppend(dyClause, ",");
+    first = FALSE;
     if(filterBy->useIndex)
         dyStringAppend(dyClause, slChoice->name);
     else
         dyStringPrintf(dyClause, "\"%s\"",slChoice->name);
     }
-if(dyStringLen(dyClause) == 0)
+if (dyStringLen(dyClause) == 0)
     {
     dyStringFree(&dyClause);
     return NULL;
@@ -3403,6 +3399,15 @@ if(count > 1)
     dyStringPrintf(dyClause, ")");
 
 return dyStringCannibalize(&dyClause);
+}
+
+char *filterByClause(filterBy_t *filterBy)
+/* returns the SQL where clause for a single filterBy struct */
+{
+if ((filterBy->slChoices == NULL) || (slNameInList(filterBy->slChoices,"All")))
+    return NULL;
+else
+    return filterByClauseStd(filterBy);
 }
 
 struct dyString *dyAddFilterByClause(struct cart *cart, struct trackDb *tdb,
@@ -5290,7 +5295,7 @@ if (sameString(name, "acembly"))
     acemblyDropDown("acembly.type", acemblyClass);
     printf("  ");
     }
-else if(sameString("wgEncodeGencode", name)
+else if(startsWith("wgEncodeGencode", name)
      || sameString("wgEncodeSangerGencode", name)
      || (startsWith("encodeGencode", name) && !sameString("encodeGencodeRaceFrags", name)))
     {

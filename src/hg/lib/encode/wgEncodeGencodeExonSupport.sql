@@ -3,10 +3,15 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#Gencode metadata table of features supporting exons of Gencode transcripts
+#GENCODE exon support from other datasets
 CREATE TABLE wgEncodeGencodeExonSupport (
-    transcriptId varchar(255) not null,	# Transcript ID for Gencode gene
-    id varchar(255) not null,	# ID of feature supporting exon
+    transcriptId varchar(255) not null,	# GENCODE transcript identifier
+    seqId varchar(255) not null,	# Identifier of sequence supporting transcript
+    seqSrc varchar(255) not null,	# Source of supporting sequence
+    exonId varchar(255) not null,	# GENCODE exon identifier (not stable)
+    chrom varchar(255) not null,	# chromosome
+    chromStart int not null,	# start in chromosome
+    endStart int not null,	# end in chromosome
               #Indices
-    PRIMARY KEY(transcriptId)
+    index(transcriptId)
 );

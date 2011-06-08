@@ -1341,13 +1341,13 @@ $(document).ready(function()
                     if (btn.length == 1) {
                         table.tableDnDConfig.dragObjects = imgTblContiguousRowSet(row);
                         var compositeSet = imgTblCompositeSet(row);
-                        if (compositeSet.length > 0)
+                        if (compositeSet && compositeSet.length > 0)
                             $( compositeSet ).find('p.btn').addClass('blueButtons');  // blue persists
                     }
                 },
                 onDrop: function(table, row, dragStartIndex) {
                     var compositeSet = imgTblCompositeSet(row);
-                    if (compositeSet.length > 0)
+                    if (compositeSet && compositeSet.length > 0)
                         $( compositeSet ).find('p.btn').removeClass('blueButtons');  // blue persists
                     if($(row).attr('rowIndex') != dragStartIndex) {
                         // NOTE Even if dragging a contiguous set of rows,

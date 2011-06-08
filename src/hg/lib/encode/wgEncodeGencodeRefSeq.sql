@@ -3,11 +3,11 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#Gencode metadata table of associated RefSeq mRNA or non-coding RNA and peptide accessions
+#GENCODE transcript to RefSeq mRNA or non-coding RNA and peptide accession mapping
 CREATE TABLE wgEncodeGencodeRefSeq (
-    transcriptId varchar(255) not null,	# Transcript ID for Gencode gene
-    refSeqRnaId varchar(255) not null,	# RefSeq mRNA or non-coding RNA ID
-    refSeqPepId varchar(255) not null,	# RefSeq peptide ID for coding transcripts
+    transcriptId varchar(255) not null,	# GENCODE transcript identifier
+    rnaAcc varchar(255) not null,	# RefSeq mRNA or non-coding RNA accession
+    pepAcc varchar(255) not null,	# RefSeq peptide identifier for coding accession
               #Indices
-    PRIMARY KEY(transcriptId)
+    index(transcriptId)
 );

@@ -190,7 +190,7 @@ void outTwo(FILE *f, struct hash *lookupHash, char *key, char *val)
  * then lookup val through it before outputting. */
 {
 if (lookupHash != NULL)
-    val = hashFindVal(lookupHash, val);
+    val = hashFindVal(lookupHash, key);
 if (val != NULL)
     fprintf(f, "%s\t%s\n", key, val);
 }

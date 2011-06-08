@@ -1,0 +1,136 @@
+
+2011-05-25: import of GENCODE V7 (markd)
+    # Due to UCSC Genome Browser using the NC_001807 mitochondrial genome sequence
+    # (chrM) and GENCODE annotating the NC_012920 mitochondrial sequence, the
+    # GENCODE mitochondrial sequences are not loaded
+
+    # download files
+    mkdir -p /hive/groups/encode/dcc/data/gencodeV7/release
+    cd /hive/groups/encode/dcc/data/gencodeV7/release
+
+    wget ftp://ftp.sanger.ac.uk/pub/gencode/release_7/gencode.v7.2wayconspseudos.gtf.gz
+    wget ftp://ftp.sanger.ac.uk/pub/gencode/release_7/gencode.v7.annotation.gtf.gz
+    wget ftp://ftp.sanger.ac.uk/pub/gencode/release_7/gencode.v7.noncoding_RNAs.fa.gz
+    wget ftp://ftp.sanger.ac.uk/pub/gencode/release_7/gencode.v7.noncoding_RNAs.gtf.gz
+    wget ftp://ftp.sanger.ac.uk/pub/gencode/release_7/gencode.v7.pc_transcripts.fa.gz
+    wget ftp://ftp.sanger.ac.uk/pub/gencode/release_7/gencode.v7.pc_translations.fa.gz
+    wget ftp://ftp.sanger.ac.uk/pub/gencode/release_7/gencode.v7.polyAs.gtf.gz
+    wget ftp://ftp.sanger.ac.uk/pub/gencode/release_7/gencode.v7.tRNAs.gtf.gz
+    wget ftp://ftp.sanger.ac.uk/pub/gencode/release_7/gencode7_GRCh37.tgz
+
+    # silly sanity check:
+    for f in * ; do zcat $f >/dev/null ; done
+
+    # untar main distribution
+    tar -zxf gencode7_GRCh37.tgz
+    
+    # created Makefile to build and load all tables.  This is dependent
+    # on code in the CCDS subversion tree:
+    #   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
+    # and markd's python library (it will be moved to the hausslerlab
+    # repository soon)
+
+    cd /hive/groups/encode/dcc/data/gencodeV7/
+    (time nice make) >&build.out&
+    # took 48 minutes, log below
+
+------------------------------------------------------------------------------
+cat release/gencode_release_7/gencode.v7.annotation.level_1_2.gtf release/gencode_release_7/gencode.v7.annotation.level_3.gtf | gencodeGtfToGenePred /dev/stdin data/gencodeManAuto.gp.hgwdev.5943.tmp
+mv -f data/gencodeManAuto.gp.hgwdev.5943.tmp data/gencodeManAuto.gp
+cat release/gencode_release_7/gencode.v7.annotation.level_1_2.gtf release/gencode_release_7/gencode.v7.annotation.level_3.gtf | gencodeGtfToAttrs /dev/stdin data/gencodeManAuto.tsv.hgwdev.5943.tmp
+mv -f data/gencodeManAuto.tsv.hgwdev.5943.tmp data/gencodeManAuto.tsv
+gencodeMakeTracks --excludeChrom=chrM $(echo Basic | tr A-Z a-z) data/gencodeManAuto.gp data/gencodeManAuto.tsv tables/wgEncodeGencodeBasicV7.gp.hgwdev.5943.tmp
+mv -f tables/wgEncodeGencodeBasicV7.gp.hgwdev.5943.tmp tables/wgEncodeGencodeBasicV7.gp
+gencodeMakeTracks --excludeChrom=chrM $(echo Comp | tr A-Z a-z) data/gencodeManAuto.gp data/gencodeManAuto.tsv tables/wgEncodeGencodeCompV7.gp.hgwdev.5943.tmp
+mv -f tables/wgEncodeGencodeCompV7.gp.hgwdev.5943.tmp tables/wgEncodeGencodeCompV7.gp
+gencodeMakeTracks --excludeChrom=chrM $(echo PseudoGene | tr A-Z a-z) data/gencodeManAuto.gp data/gencodeManAuto.tsv tables/wgEncodeGencodePseudoGeneV7.gp.hgwdev.5943.tmp
+mv -f tables/wgEncodeGencodePseudoGeneV7.gp.hgwdev.5943.tmp tables/wgEncodeGencodePseudoGeneV7.gp
+gencodePolyaGtfToGenePred release/gencode_release_7/gencode.v7.polyAs.gtf tables/wgEncodeGencodePolyaV7.gp.hgwdev.5943.tmp
+mv -f tables/wgEncodeGencodePolyaV7.gp.hgwdev.5943.tmp tables/wgEncodeGencodePolyaV7.gp
+tawk '$3=="transcript"{$3 = "exon"} {print $0}' release/gencode_release_7/gencode.v7.2wayconspseudos.GRCh37.gtf | gtfToGenePred stdin tables/wgEncodeGencode2wayConsPseudoV7.gp.hgwdev.5943.tmp
+mv -f tables/wgEncodeGencode2wayConsPseudoV7.gp.hgwdev.5943.tmp tables/wgEncodeGencode2wayConsPseudoV7.gp
+gencodeMakeAttrs --excludeChrom=chrM data/gencodeManAuto.gp data/gencodeManAuto.tsv tables/wgEncodeGencodeAttrsV7.tab.hgwdev.5943.tmp tables/wgEncodeGencodeTagV7.tab
+mv -f tables/wgEncodeGencodeAttrsV7.tab.hgwdev.5943.tmp tables/wgEncodeGencodeAttrsV7.tab
+mkdir -p tables/
+cp release/gencode_release_7/metadata/gencode.v7.metadata.Gene_source tables/wgEncodeGencodeGeneSourceV7.tab.hgwdev.5943.tmp
+mv -f tables/wgEncodeGencodeGeneSourceV7.tab.hgwdev.5943.tmp tables/wgEncodeGencodeGeneSourceV7.tab
+mkdir -p tables/
+cp release/gencode_release_7/metadata/gencode.v7.metadata.Transcript_source tables/wgEncodeGencodeTranscriptSourceV7.tab.hgwdev.5943.tmp
+mv -f tables/wgEncodeGencodeTranscriptSourceV7.tab.hgwdev.5943.tmp tables/wgEncodeGencodeTranscriptSourceV7.tab
+mkdir -p tables/
+cp release/gencode_release_7/metadata/gencode.v7.metadata.Transcript_supporting_feature tables/wgEncodeGencodeTranscriptSupportV7.tab.hgwdev.5943.tmp
+mv -f tables/wgEncodeGencodeTranscriptSupportV7.tab.hgwdev.5943.tmp tables/wgEncodeGencodeTranscriptSupportV7.tab
+tawk '{split($5,coord,":|-"); print $1,$2,$3,$4,coord[1],coord[2]-1,coord[3]}' release/gencode_release_7/metadata/gencode.v7.metadata.Exon_supporting_feature | sort -k 1,1 -k 2,2 -k 5,5 -k 6,6n > tables/wgEncodeGencodeExonSupportV7.tab.hgwdev.5943.tmp
+mv -f tables/wgEncodeGencodeExonSupportV7.tab.hgwdev.5943.tmp tables/wgEncodeGencodeExonSupportV7.tab
+mkdir -p tables/
+cp release/gencode_release_7/metadata/gencode.v7.metadata.PDB tables/wgEncodeGencodePdbV7.tab.hgwdev.5943.tmp
+mv -f tables/wgEncodeGencodePdbV7.tab.hgwdev.5943.tmp tables/wgEncodeGencodePdbV7.tab
+mkdir -p tables/
+cp release/gencode_release_7/metadata/gencode.v7.metadata.Pubmed_id tables/wgEncodeGencodePubMedV7.tab.hgwdev.5943.tmp
+mv -f tables/wgEncodeGencodePubMedV7.tab.hgwdev.5943.tmp tables/wgEncodeGencodePubMedV7.tab
+mkdir -p tables/
+cp release/gencode_release_7/metadata/gencode.v7.metadata.RefSeq tables/wgEncodeGencodeRefSeqV7.tab.hgwdev.5943.tmp
+mv -f tables/wgEncodeGencodeRefSeqV7.tab.hgwdev.5943.tmp tables/wgEncodeGencodeRefSeqV7.tab
+(tawk '{print $0,"SwissProt"}' release/gencode_release_7/metadata/gencode.v7.metadata.SwissProt && tawk '{print $0,"TrEMBL"}' release/gencode_release_7/metadata/gencode.v7.metadata.TrEMBL) | sort -k 1,1 > tables/wgEncodeGencodeUniProtV7.tab.hgwdev.5943.tmp
+mv -f tables/wgEncodeGencodeUniProtV7.tab.hgwdev.5943.tmp tables/wgEncodeGencodeUniProtV7.tab
+hgLoadGenePred -genePredExt hg19 wgEncodeGencodeBasicV7 tables/wgEncodeGencodeBasicV7.gp
+touch loaded/wgEncodeGencodeBasicV7.genePredExt.loaded
+hgLoadGenePred -genePredExt hg19 wgEncodeGencodeCompV7 tables/wgEncodeGencodeCompV7.gp
+touch loaded/wgEncodeGencodeCompV7.genePredExt.loaded
+hgLoadGenePred -genePredExt hg19 wgEncodeGencodePseudoGeneV7 tables/wgEncodeGencodePseudoGeneV7.gp
+touch loaded/wgEncodeGencodePseudoGeneV7.genePredExt.loaded
+hgLoadGenePred -genePredExt hg19 wgEncodeGencodePolyaV7 tables/wgEncodeGencodePolyaV7.gp
+touch loaded/wgEncodeGencodePolyaV7.genePredExt.loaded
+hgLoadGenePred hg19 wgEncodeGencode2wayConsPseudoV7 tables/wgEncodeGencode2wayConsPseudoV7.gp
+touch loaded/wgEncodeGencode2wayConsPseudoV7.genePred.loaded
+mkdir -p loaded/
+hgLoadSqlTab hg19 wgEncodeGencodeAttrsV7 /cluster/home/markd/compbio/browser/gencode/kent/src/hg/lib/encode/wgEncodeGencodeAttrs.sql tables/wgEncodeGencodeAttrsV7.tab 
+Scanning through 1 files
+touch loaded/wgEncodeGencodeAttrsV7.tab.loaded
+mkdir -p loaded/
+hgLoadSqlTab hg19 wgEncodeGencodeTagV7 /cluster/home/markd/compbio/browser/gencode/kent/src/hg/lib/encode/wgEncodeGencodeTag.sql tables/wgEncodeGencodeTagV7.tab 
+Scanning through 1 files
+touch loaded/wgEncodeGencodeTagV7.tab.loaded
+mkdir -p loaded/
+hgLoadSqlTab hg19 wgEncodeGencodeGeneSourceV7 /cluster/home/markd/compbio/browser/gencode/kent/src/hg/lib/encode/wgEncodeGencodeGeneSource.sql tables/wgEncodeGencodeGeneSourceV7.tab 
+Scanning through 1 files
+touch loaded/wgEncodeGencodeGeneSourceV7.tab.loaded
+mkdir -p loaded/
+hgLoadSqlTab hg19 wgEncodeGencodeTranscriptSourceV7 /cluster/home/markd/compbio/browser/gencode/kent/src/hg/lib/encode/wgEncodeGencodeTranscriptSource.sql tables/wgEncodeGencodeTranscriptSourceV7.tab 
+Scanning through 1 files
+touch loaded/wgEncodeGencodeTranscriptSourceV7.tab.loaded
+mkdir -p loaded/
+hgLoadSqlTab hg19 wgEncodeGencodeTranscriptSupportV7 /cluster/home/markd/compbio/browser/gencode/kent/src/hg/lib/encode/wgEncodeGencodeTranscriptSupport.sql tables/wgEncodeGencodeTranscriptSupportV7.tab 
+Scanning through 1 files
+touch loaded/wgEncodeGencodeTranscriptSupportV7.tab.loaded
+mkdir -p loaded/
+hgLoadSqlTab hg19 wgEncodeGencodeExonSupportV7 /cluster/home/markd/compbio/browser/gencode/kent/src/hg/lib/encode/wgEncodeGencodeExonSupport.sql tables/wgEncodeGencodeExonSupportV7.tab 
+Scanning through 1 files
+touch loaded/wgEncodeGencodeExonSupportV7.tab.loaded
+mkdir -p loaded/
+hgLoadSqlTab hg19 wgEncodeGencodePdbV7 /cluster/home/markd/compbio/browser/gencode/kent/src/hg/lib/encode/wgEncodeGencodePdb.sql tables/wgEncodeGencodePdbV7.tab 
+Scanning through 1 files
+touch loaded/wgEncodeGencodePdbV7.tab.loaded
+mkdir -p loaded/
+hgLoadSqlTab hg19 wgEncodeGencodePubMedV7 /cluster/home/markd/compbio/browser/gencode/kent/src/hg/lib/encode/wgEncodeGencodePubMed.sql tables/wgEncodeGencodePubMedV7.tab 
+Scanning through 1 files
+touch loaded/wgEncodeGencodePubMedV7.tab.loaded
+mkdir -p loaded/
+hgLoadSqlTab hg19 wgEncodeGencodeRefSeqV7 /cluster/home/markd/compbio/browser/gencode/kent/src/hg/lib/encode/wgEncodeGencodeRefSeq.sql tables/wgEncodeGencodeRefSeqV7.tab 
+Scanning through 1 files
+touch loaded/wgEncodeGencodeRefSeqV7.tab.loaded
+mkdir -p loaded/
+hgLoadSqlTab hg19 wgEncodeGencodeUniProtV7 /cluster/home/markd/compbio/browser/gencode/kent/src/hg/lib/encode/wgEncodeGencodeUniProt.sql tables/wgEncodeGencodeUniProtV7.tab 
+Scanning through 1 files
+touch loaded/wgEncodeGencodeUniProtV7.tab.loaded
+mkdir -p check/
+hgsql -Ne 'select geneId from wgEncodeGencodeAttrsV7 where geneId not in (select geneId from wgEncodeGencodeGeneSourceV7)' hg19 | sort -u >check/wgEncodeGencodeGeneSourceV7.missing
+touch check/wgEncodeGencodeGeneSourceV7.checked
+mkdir -p check/
+hgsql -Ne 'select transcriptId from wgEncodeGencodeAttrsV7 where transcriptId not in (select transcriptId from wgEncodeGencodeTranscriptSourceV7)' hg19 | sort -u >check/wgEncodeGencodeTranscriptSourceV7.missing
+touch check/wgEncodeGencodeTranscriptSourceV7.checked
+
+real	48m0.763s
+user	45m38.405s
+sys	0m32.747s
+==============================================================================

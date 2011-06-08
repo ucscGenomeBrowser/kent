@@ -8,12 +8,12 @@
 #define WGENCODEGENCODEREFSEQ_NUM_COLS 3
 
 struct wgEncodeGencodeRefSeq
-/* Gencode metadata table of associated RefSeq mRNA or non-coding RNA and peptide accessions */
+/* GENCODE transcript to RefSeq mRNA or non-coding RNA and peptide accession mapping */
     {
     struct wgEncodeGencodeRefSeq *next;  /* Next in singly linked list. */
-    char *transcriptId;	/* Transcript ID for Gencode gene */
-    char *refSeqRnaId;	/* RefSeq mRNA or non-coding RNA ID */
-    char *refSeqPepId;	/* RefSeq peptide ID for coding transcripts */
+    char *transcriptId;	/* GENCODE transcript identifier */
+    char *rnaAcc;	/* RefSeq mRNA or non-coding RNA accession */
+    char *pepAcc;	/* RefSeq peptide identifier for coding accession */
     };
 
 void wgEncodeGencodeRefSeqStaticLoad(char **row, struct wgEncodeGencodeRefSeq *ret);

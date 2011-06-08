@@ -5,14 +5,19 @@
 #ifndef WGENCODEGENCODEEXONSUPPORT_H
 #define WGENCODEGENCODEEXONSUPPORT_H
 
-#define WGENCODEGENCODEEXONSUPPORT_NUM_COLS 2
+#define WGENCODEGENCODEEXONSUPPORT_NUM_COLS 7
 
 struct wgEncodeGencodeExonSupport
-/* Gencode metadata table of features supporting exons of Gencode transcripts */
+/* GENCODE exon support from other datasets */
     {
     struct wgEncodeGencodeExonSupport *next;  /* Next in singly linked list. */
-    char *transcriptId;	/* Transcript ID for Gencode gene */
-    char *id;	/* ID of feature supporting exon */
+    char *transcriptId;	/* GENCODE transcript identifier */
+    char *seqId;	/* Identifier of sequence supporting transcript */
+    char *seqSrc;	/* Source of supporting sequence */
+    char *exonId;	/* GENCODE exon identifier (not stable) */
+    char *chrom;	/* chromosome */
+    int chromStart;	/* start in chromosome */
+    int endStart;	/* end in chromosome */
     };
 
 void wgEncodeGencodeExonSupportStaticLoad(char **row, struct wgEncodeGencodeExonSupport *ret);

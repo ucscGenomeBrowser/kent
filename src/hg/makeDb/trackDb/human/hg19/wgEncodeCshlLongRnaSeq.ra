@@ -1067,16 +1067,6 @@ noInherit on
 		color 153,38,0
 		# subId=3130 dateSubmitted=2010-12-23
 
-		track wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaPlusRawSigRep4
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
-		shortLabel NHEK cyto pA- 4
-		longLabel SUSPECT DATA NHEK cytosol polyA- Long RNA-seq Plus strand signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHEK localization=cytosol rnaExtract=pAM rep=rep4
-		type bigWig 1.000000 15401620.000000
-		origAssembly hg19
-		color 179,0,134
-		# subId=3222 dateSubmitted=2011-01-11
-
 		track wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaPlusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HeLa cyto pA- 2
@@ -1087,16 +1077,6 @@ noInherit on
 		color 0,119,158
 		# subId=3223 dateSubmitted=2011-01-11
 
-		track wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
-		shortLabel HeLa cyto pA- 1
-		longLabel SUSPECT DATA HeLa-S3 cytosol polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=HeLaS3 localization=cytosol rnaExtract=pAM rep=rep1
-		type bigWig 1.000000 20625794.000000
-		origAssembly hg19
-		color 0,119,158
-		# subId=3226 dateSubmitted=2011-01-11
-
 		track wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaPlusRawSigRep3
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HUVEC cyto pA- 3
@@ -1106,16 +1086,6 @@ noInherit on
 		origAssembly hg19
 		color 224,75,0
 		# subId=3225 dateSubmitted=2011-01-11
-
-		track wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaPlusRawSigRep4
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
-		shortLabel HUVEC cyto pA- 4
-		longLabel SUSPECT DATA HUVEC cytosol polyA- Long RNA-seq Plus strand signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=HUVEC localization=cytosol rnaExtract=pAM rep=rep4
-		type bigWig 1.000000 17933112.000000
-		origAssembly hg19
-		color 224,75,0
-		# subId=3224 dateSubmitted=2011-01-11
 
 		track wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
@@ -2270,16 +2240,6 @@ noInherit on
 		color 153,38,0
 		# subId=3130 dateSubmitted=2010-12-23
 
-		track wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaMinusRawSigRep4
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
-		shortLabel NHEK cyto pA- 4
-		longLabel SUSPECT DATA NHEK cytosol polyA- Long RNA-seq Minus Strand Signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHEK localization=cytosol rnaExtract=pAM rep=rep4
-		type bigWig 1.000000 5582525.000000
-		origAssembly hg19
-		color 179,0,134
-		# subId=3222 dateSubmitted=2011-01-11
-
 		track wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaMinusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HeLa cyto pA- 2
@@ -2290,16 +2250,6 @@ noInherit on
 		color 0,119,158
 		# subId=3223 dateSubmitted=2011-01-11
 
-		track wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
-		shortLabel HeLa cyto pA- 1
-		longLabel SUSPECT DATA HeLa-S3 cytosol polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=HeLaS3 localization=cytosol rnaExtract=pAM rep=rep1
-		type bigWig 1.000000 4882695.000000
-		origAssembly hg19
-		color 0,119,158
-		# subId=3226 dateSubmitted=2011-01-11
-
 		track wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaMinusRawSigRep3
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HUVEC cyto pA- 3
@@ -2309,16 +2259,6 @@ noInherit on
 		origAssembly hg19
 		color 224,75,0
 		# subId=3225 dateSubmitted=2011-01-11
-
-		track wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaMinusRawSigRep4
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
-		shortLabel HUVEC cyto pA- 4
-		longLabel SUSPECT DATA HUVEC cytosol polyA- Long RNA-seq Minus Strand Signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=HUVEC localization=cytosol rnaExtract=pAM rep=rep4
-		type bigWig 1.000000 6548359.000000
-		origAssembly hg19
-		color 224,75,0
-		# subId=3224 dateSubmitted=2011-01-11
 
 		track wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaMinusRawSigRep2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
@@ -3474,16 +3414,6 @@ noInherit on
 		color 153,38,0
 		# subId=3130 dateSubmitted=2010-12-23
 
-		track wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep4
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
-		shortLabel NHEK cyto pA- A 4
-		longLabel SUSPECT DATA NHEK cytosol polyA- Long RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=Alignments cellType=NHEK localization=cytosol rnaExtract=pAM rep=rep4
-		type bam
-		origAssembly hg19
-		color 179,0,134
-		# subId=3222 dateSubmitted=2011-01-11
-
 		track wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAlnRep2
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel HeLa cyto pA- A 2
@@ -3494,16 +3424,6 @@ noInherit on
 		color 0,119,158
 		# subId=3223 dateSubmitted=2011-01-11
 
-		track wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
-		shortLabel HeLa cyto pA- A 1
-		longLabel SUSPECT DATA HeLa-S3 cytosol polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
-		subGroups view=Alignments cellType=HeLaS3 localization=cytosol rnaExtract=pAM rep=rep1
-		type bam
-		origAssembly hg19
-		color 0,119,158
-		# subId=3226 dateSubmitted=2011-01-11
-
 		track wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAlnRep3
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
 		shortLabel HUVEC cyto pA- A 3
@@ -3513,16 +3433,6 @@ noInherit on
 		origAssembly hg19
 		color 224,75,0
 		# subId=3225 dateSubmitted=2011-01-11
-
-		track wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAlnRep4
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
-		shortLabel HUVEC cyto pA- A 4
-		longLabel SUSPECT DATA HUVEC cytosol polyA- Long RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=Alignments cellType=HUVEC localization=cytosol rnaExtract=pAM rep=rep4
-		type bam
-		origAssembly hg19
-		color 224,75,0
-		# subId=3224 dateSubmitted=2011-01-11
 
 		track wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep2
 		parent wgEncodeCshlLongRnaSeqViewAlignments off
