@@ -298,4 +298,20 @@ caeSp91.perChromTables = no
     make etc-update
 
 #########################################################################
+# lastz ce10 to caeSp91 swap (DONE - 2011-06-07 - Hiram)
+    #	original alignment on ce10
+    cd /hive/data/genomes/ce10/bed/lastzCaeSp91.2011-06-07
+    cat fb.ce10.chainCaeSp91Link.txt 
+    #	42289932 bases of 100286070 (42.169%) in intersection
 
+    mkdir /hive/data/genomes/caeSp91/bed/blastz.ce10.swap
+    cd /hive/data/genomes/caeSp91/bed/blastz.ce10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce10/bed/lastzCaeSp91.2011-06-07/DEF \
+	-syntenicNet -workhorse=hgwdev -bigClusterHub=swarm \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    6m27.559s
+
+    cat fb.caeSp91.chainCe10Link.txt
+    #	67679550 bases of 186540270 (36.281%) in intersection
+############################################################################
