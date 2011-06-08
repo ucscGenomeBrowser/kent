@@ -4,7 +4,7 @@ include wgEncodeSuper.ra
 
 # GENCODE genes (wrangler: braney )
 include wgEncodeGencodeV3.ra
-include wgEncodeGencodeV4.ra 
+include wgEncodeGencodeV4.ra
 include wgEncodeGencodeV5.ra alpha
 include wgEncodeGencodeV7.ra alpha
 
@@ -43,7 +43,7 @@ include wgEncodeAffyRnaChip.new.ra alpha
 include wgEncodeGisChiaPet.ra alpha
 
 # UMass-Dekker 5C (wrangler: kate)
-#include wgEncodeUmassDekker5C.ra alpha
+include wgEncodeUmassDekker5C.ra alpha
 
 # UW 5C (wrangler: kate)
 include wgEncodeUw5C.ra alpha
