@@ -14,6 +14,20 @@ project wgEncode
 subId 453
 tableName wgEncodeGencodeAutoV3
 
+metaObject wgEncodeGencodeClassesV3
+objType table
+composite wgEncodeSangerGencode
+dataType Gencode
+dataVersion ENCODE September 2009 Freeze
+dateSubmitted 2009-09-03
+fileName wgEncodeGencodeClassesV3.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V3
+project wgEncode
+subId 453
+tableName wgEncodeGencodeClassesV3
+
 metaObject wgEncodeGencodeManualV3
 objType table
 annotation Manual
@@ -51,4 +65,4 @@ objType composite
 composite wgEncodeSangerGencode
 expVars lab,dataType,annotation,level,labExpId
 
-# MAGIC: -246361171
+# MAGIC: 917063282
