@@ -6,7 +6,7 @@
 #	   - View Long Labels: [cell] [age] DNaseI HS [view] Rep [rep #] from ENCODE/UW 
 #			  - age: only for tissues for differentiation. Not necessary for cell lines
 #					- adult8wks= Adult 8-weeks
-#					- E14.5 = Embryonic day 14.5
+#					- E14.5 = Embryo day 14.5
 #	   - cellType Order: Ordering is alphabetical
 #	   - Default View selections
 #		       - Hotspots = pack
@@ -28,7 +28,7 @@
 #					   - WholeBrain = Brain  	
 #                      - Cerebellum = Crbellum
 #			   - Age: Used to differentiate tissues Only if tissue has an Age
-#					   - adult8weeks = A8wk
+#					   - adult8weeks = 8wk
 #					   - E14.5 = 14.5
 #		       - Views: For consistency sake view will be
 #				       - Peaks = Pk
@@ -57,7 +57,7 @@ subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6 rep7=7 rep8=8 
 dimensions dimensionX=cellType dimensionY=age dimensionA=rep
 dimensionAchecked rep1
 sortOrder cellType=+ strain=+ age=+ sex=+ rep=+ view=+
-fileSortOrder cell=Cell_Line strain=Strain sex=Sex age=Age replicate=Replicate view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line strain=Strain sex=Sex age=Age replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain age=age sex=sex
 dragAndDrop subTracksi
 noInherit on
@@ -259,7 +259,7 @@ wgEncode 1
 
 		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep2
 		parent wgEncodeUwDnaseViewHotspots off
-		shortLabel Brain A8wk Hspt 2
+		shortLabel Brain 8wk Hspt 2
 		longLabel Whole Brain Adult 8-weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep2
 		type broadPeak
@@ -268,7 +268,7 @@ wgEncode 1
 
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep4
 		#parent wgEncodeUwDnaseViewHotspots off
-		#shortLabel Brain A8wk Hspt 4
+		#shortLabel Brain 8wk Hspt 4
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Hotspots Rep 4 from ENCODE/UW
 		#subGroups view=Hotspots age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep4
 		#type broadPeak
@@ -278,7 +278,7 @@ wgEncode 1
 
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep6
 		#parent wgEncodeUwDnaseViewHotspots off
-		#shortLabel Brain A8wk Hspt 6
+		#shortLabel Brain 8wk Hspt 6
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Hotspots Rep 6 from ENCODE/UW
 		#subGroups view=Hotspots age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep6
 		#type broadPeak
@@ -288,7 +288,7 @@ wgEncode 1
 
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep5
 		#parent wgEncodeUwDnaseViewHotspots off
-		#shortLabel Brain A8wk Hspt 5
+		#shortLabel Brain 8wk Hspt 5
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Hotspots Rep 5 from ENCODE/UW
 		#subGroups view=Hotspots age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep5
 		#type broadPeak
@@ -298,7 +298,7 @@ wgEncode 1
 	
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep3
 		#parent wgEncodeUwDnaseViewHotspots off
-		#shortLabel Brain A8wk Hspt 3
+		#shortLabel Brain 8wk Hspt 3
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Hotspots Rep 3 from ENCODE/UW
 		#subGroups view=Hotspots age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep3
 		#type broadPeak
@@ -308,7 +308,7 @@ wgEncode 1
 
 		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep1
 		parent wgEncodeUwDnaseViewHotspots 
-		shortLabel Brain A8wk Hspt 1
+		shortLabel Brain 8wk Hspt 1
 		longLabel Whole Brain Adult 8-weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
 		type broadPeak
@@ -318,7 +318,7 @@ wgEncode 1
 		track wgEncodeUwDnaseWholebrainC57bl6ME14halfHotspotsRep1
 		parent wgEncodeUwDnaseViewHotspots 
 		shortLabel Brain 14.5 Hspt 1
-		longLabel Whole Brain Embryonic day 14.5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+		longLabel Whole Brain Embryo day 14.5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
 		subGroups view=Hotspots age=E14half cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
 		type broadPeak
 		color 105,105,105
@@ -327,7 +327,7 @@ wgEncode 1
 		track wgEncodeUwDnaseWholebrainC57bl6ME14halfHotspotsRep2
 		parent wgEncodeUwDnaseViewHotspots off
 		shortLabel Brain 14.5 Hspt 2
-		longLabel Whole Brain Embryonic day 14.5 DNaseI HS Hotspots Rep 2 from ENCODE/UW
+		longLabel Whole Brain Embryo day 14.5 DNaseI HS Hotspots Rep 2 from ENCODE/UW
 		subGroups view=Hotspots age=E14half cellType=WholeBrain sex=M strain=C57BL6 rep=rep2
 		type broadPeak
 		color 105,105,105
@@ -525,7 +525,7 @@ wgEncode 1
 
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep7
 		#parent wgEncodeUwDnaseViewHotspots off
-		#shortLabel Brain A8wk Hspt 7
+		#shortLabel Brain 8wk Hspt 7
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Hotspots Rep 7 from ENCODE/UW
 		#subGroups view=Hotspots age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep7
 		#type broadPeak
@@ -776,7 +776,7 @@ wgEncode 1
 
 		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep2
 		parent wgEncodeUwDnaseViewPeaks off
-		shortLabel Brain A8wk Pk 2
+		shortLabel Brain 8wk Pk 2
 		longLabel Whole Brain Adult 8-weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep2
 		type narrowPeak
@@ -785,7 +785,7 @@ wgEncode 1
 
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep4
 		#parent wgEncodeUwDnaseViewPeaks off
-		#shortLabel Brain A8wk Pk 4
+		#shortLabel Brain 8wk Pk 4
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Peaks Rep 4 from ENCODE/UW
 		#subGroups view=Peaks age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep4
 		#type narrowPeak
@@ -795,7 +795,7 @@ wgEncode 1
 
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep6
 		#parent wgEncodeUwDnaseViewPeaks off
-		#shortLabel Brain A8wk Pk 6
+		#shortLabel Brain 8wk Pk 6
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Peaks Rep 6 from ENCODE/UW
 		#subGroups view=Peaks age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep6
 		#type narrowPeak
@@ -805,7 +805,7 @@ wgEncode 1
 
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep5
 		#parent wgEncodeUwDnaseViewPeaks off
-		#shortLabel Brain A8wk Pk 5
+		#shortLabel Brain 8wk Pk 5
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Peaks Rep 5 from ENCODE/UW
 		#subGroups view=Peaks age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep5
 		#type narrowPeak
@@ -815,7 +815,7 @@ wgEncode 1
 
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep3
 		#parent wgEncodeUwDnaseViewPeaks off
-		#shortLabel Brain A8wk Pk 3
+		#shortLabel Brain 8wk Pk 3
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Peaks Rep 3 from ENCODE/UW
 		#subGroups view=Peaks age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep3
 		#type narrowPeak
@@ -825,7 +825,7 @@ wgEncode 1
 
 		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep1
 		parent wgEncodeUwDnaseViewPeaks
-		shortLabel Brain A8wk Pk 1
+		shortLabel Brain 8wk Pk 1
 		longLabel Whole Brain Adult 8-weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
 		type narrowPeak
@@ -835,7 +835,7 @@ wgEncode 1
 		track wgEncodeUwDnaseWholebrainC57bl6ME14halfPkRep1
 		parent wgEncodeUwDnaseViewPeaks 
 		shortLabel Brain 14.5 Pk 1
-		longLabel Whole Brain Embryonic day 14.5 DNaseI HS Peaks Rep 1 from ENCODE/UW
+		longLabel Whole Brain Embryo day 14.5 DNaseI HS Peaks Rep 1 from ENCODE/UW
 		subGroups view=Peaks age=E14half cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
 		type narrowPeak
 		color 105,105,105
@@ -844,7 +844,7 @@ wgEncode 1
 		track wgEncodeUwDnaseWholebrainC57bl6ME14halfPkRep2
 		parent wgEncodeUwDnaseViewPeaks off
 		shortLabel Brain 14.5 Pk 2
-		longLabel Whole Brain Embryonic day 14.5 DNaseI HS Peaks Rep 2 from ENCODE/UW
+		longLabel Whole Brain Embryo day 14.5 DNaseI HS Peaks Rep 2 from ENCODE/UW
 		subGroups view=Peaks age=E14half cellType=WholeBrain sex=M strain=C57BL6 rep=rep2
 		type narrowPeak
 		color 105,105,105
@@ -1042,7 +1042,7 @@ wgEncode 1
 
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep7
 		#parent wgEncodeUwDnaseViewPeaks off
-		#shortLabel Brain A8wk Pk 7
+		#shortLabel Brain 8wk Pk 7
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Peaks Rep 7 from ENCODE/UW
 		#subGroups view=Peaks age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep7
 		#type narrowPeak
@@ -1121,7 +1121,7 @@ wgEncode 1
 		# subId=1967 dateSubmitted=2010-07-21
 		# was wgEncodeUwDnaseCerebellumC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:25 2011
 
-		track wgEncodeUwDnase416bC57bl6MAdult8wksRawRep2
+		track wgEncodeUwDnase416bC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel 416B Sg 2
 		longLabel 416B DNaseI HS Signal Rep 2 from ENCODE/UW
@@ -1129,8 +1129,9 @@ wgEncode 1
 		type bigWig 1.000000 74554.000000
 		color 86,180,233
 		# subId=1997 dateSubmitted=2010-07-22
+		# was wgEncodeUwDnase416bC57bl6MAdult8wksRawRep2 vsmalladi Tue Jun  7 16:38:42 2011
 
-		track wgEncodeUwDnase416bC57bl6MAdult8wksRawRep1
+		track wgEncodeUwDnase416bC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel 416B Sg 1
 		longLabel 416B DNaseI HS Signal Rep 1 from ENCODE/UW
@@ -1138,6 +1139,7 @@ wgEncode 1
 		type bigWig 1.000000 109673.000000
 		color 86,180,233
 		# subId=2000 dateSubmitted=2010-07-23
+		# was wgEncodeUwDnase416bC57bl6MAdult8wksRawRep1 vsmalladi Tue Jun  7 16:38:12 2011
 
 		track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off 
@@ -1313,7 +1315,7 @@ wgEncode 1
 
 		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
-		shortLabel Brain A8wk Sg 2
+		shortLabel Brain 8wk Sg 2
 		longLabel Whole Brain Adult 8-weeks DNaseI HS Signal Rep 2 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 52176.000000
@@ -1323,7 +1325,7 @@ wgEncode 1
 
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep4
 		#parent wgEncodeUwDnaseViewRawSignal off
-		#shortLabel Brain A8wk Sg 4
+		#shortLabel Brain 8wk Sg 4
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Signal Rep 4 from ENCODE/UW
 		#subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep4
 		#type bigWig 1.000000 37454.000000
@@ -1334,7 +1336,7 @@ wgEncode 1
 
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep6
 		#parent wgEncodeUwDnaseViewRawSignal off
-		#shortLabel Brain A8wk Sg 6
+		#shortLabel Brain 8wk Sg 6
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Signal Rep 6 from ENCODE/UW
 		#subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep6
 		#type bigWig 1.000000 39028.000000
@@ -1345,7 +1347,7 @@ wgEncode 1
 
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep5
 		#parent wgEncodeUwDnaseViewRawSignal off
-		#shortLabel Brain A8wk Sg 5
+		#shortLabel Brain 8wk Sg 5
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Signal Rep 5 from ENCODE/UW
 		#subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep5
 		#type bigWig 1.000000 77130.000000
@@ -1356,7 +1358,7 @@ wgEncode 1
 
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep3
 		#parent wgEncodeUwDnaseViewRawSignal off
-		#shortLabel Brain A8wk Sg 3
+		#shortLabel Brain 8wk Sg 3
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Signal Rep 3 from ENCODE/UW
 		#subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep3
 		#type bigWig 1.000000 39773.000000
@@ -1367,7 +1369,7 @@ wgEncode 1
 
 		track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal 
-		shortLabel Brain A8wk Sg 1
+		shortLabel Brain 8wk Sg 1
 		longLabel Whole Brain Adult 8-weeks DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 27364.000000
@@ -1378,7 +1380,7 @@ wgEncode 1
 		track wgEncodeUwDnaseWholebrainC57bl6ME14halfSigRep1
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel Brain 14.5 Sg 1
-		longLabel Whole Brain Embryonic day 14.5 DNaseI HS Signal Rep 1 from ENCODE/UW
+		longLabel Whole Brain Embryo day 14.5 DNaseI HS Signal Rep 1 from ENCODE/UW
 		subGroups view=Signal age=E14half cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
 		type bigWig 1.000000 32455.000000
 		color 105,105,105
@@ -1388,7 +1390,7 @@ wgEncode 1
 		track wgEncodeUwDnaseWholebrainC57bl6ME14halfSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel Brain 14.5 Sg 2
-		longLabel Whole Brain Embryonic day 14.5 DNaseI HS Signal Rep 2 from ENCODE/UW
+		longLabel Whole Brain Embryo day 14.5 DNaseI HS Signal Rep 2 from ENCODE/UW
 		subGroups view=Signal age=E14half cellType=WholeBrain sex=M strain=C57BL6 rep=rep2
 		type bigWig 1.000000 26788.000000
 		color 105,105,105
@@ -1426,7 +1428,7 @@ wgEncode 1
 		# subId=1999 dateSubmitted=2010-07-23
 		# was wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep1 cricket Fri May 13 13:52:25 2011
 
-		track wgEncodeUwDnase3134RiiiMImmortalRawRep1
+		track wgEncodeUwDnase3134RiiiMImmortalSigRep1
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel 3134 Sg 1
 		longLabel 3134 DNaseI HS Signal Rep 1 from ENCODE/UW
@@ -1434,6 +1436,7 @@ wgEncode 1
 		type bigWig 1.000000 53562.000000
 		color 0,158,115
 		# subId=2016 dateSubmitted=2010-07-24
+		# was wgEncodeUwDnase3134RiiiMImmortalRawRep1 vsmalladi Tue Jun  7 16:37:39 2011
 
 		track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal off
@@ -1484,7 +1487,7 @@ wgEncode 1
 		# subId=3910 dateSubmitted=2011-04-19
 		# was wgEncodeUwDnaseCbellumC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:25 2011
 
-		track wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep1
+		track wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep1
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel A20 Sg 1
 		longLabel A20 DNaseI HS Signal Rep 1 from ENCODE/UW
@@ -1492,8 +1495,9 @@ wgEncode 1
 		type bigWig 1.000000 93407.000000
 		color 86,180,233
 		# subId=3892 dateSubmitted=2011-05-03
+		# was wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep1 vsmalladi Tue Jun  7 16:38:22 2011
 
-		track wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep2
+		track wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel A20 Sg 2
 		longLabel A20 DNaseI HS Signal Rep 2 from ENCODE/UW
@@ -1501,6 +1505,7 @@ wgEncode 1
 		type bigWig 1.000000 162688.000000
 		color 86,180,233
 		# subId=3893 dateSubmitted=2011-05-03
+		# was wgEncodeUwDnaseA20BalbcannMAdult8wksRawRep2 vsmalladi Tue Jun  7 16:39:04 2011
 
 		track wgEncodeUwDnaseZhbtc4129olaME0SigRep1
 		parent wgEncodeUwDnaseViewRawSignal off
@@ -1562,7 +1567,7 @@ wgEncode 1
 		# subId=3914 dateSubmitted=2011-05-06
 		# was wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksRawRep2 cricket Fri May 13 13:52:25 2011
 
-		track wgEncodeUwDnase3134RiiiMImmortalRawRep2
+		track wgEncodeUwDnase3134RiiiMImmortalSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel 3134 Sg 2
 		longLabel 3134 DNaseI HS Signal Rep 2 from ENCODE/UW
@@ -1570,6 +1575,7 @@ wgEncode 1
 		type bigWig 1.000000 42784.000000
 		color 0,158,115
 		# subId=3895 dateSubmitted=2011-05-10
+		# was wgEncodeUwDnase3134RiiiMImmortalRawRep2 vsmalladi Tue Jun  7 16:38:31 2011
 
 		track wgEncodeUwDnasePatskiSpbl6MImmortalSigRep2
 		parent wgEncodeUwDnaseViewRawSignal off
@@ -1604,7 +1610,7 @@ wgEncode 1
 		
 		#track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksSigRep7
 		#parent wgEncodeUwDnaseViewRawSignal off
-		#shortLabel Brain A8wk Sg 7
+		#shortLabel Brain 8wk Sg 7
 		#longLabel Whole Brain Adult 8-weeks DNaseI HS Signal Rep 7 from ENCODE/UW
 		#subGroups view=Signal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep7
 		#type bigWig 1.000000 59323.000000

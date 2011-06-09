@@ -10,7 +10,7 @@ name omim
 shortLabel OMIM
 tables refLink kgXref
 idSql select refLink.omimId from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0
-url http://www.ncbi.nlm.nih.gov/omim/%s
+url http://omim.org/%s
 priority 10
 
 name huge

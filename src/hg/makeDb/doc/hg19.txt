@@ -15794,6 +15794,11 @@ hgsql hg19 < ~/kent/src/hg/lib/omimAvRepl.sql
 hgsql hg19 -e 'load data local infile "omimAvRepl.tab" into table omimAvRepl'
 
 rm j1.2  j1 j2 j3  j4  j4-2  j4.1  j4.2  j5
+
+hgsql hg19 -N -e 'select chrom, chromStart, chromEnd, avId from omimAvRepl r,
+snp132 s where s.name = dbSnpId order by avId' >omimAvSnp.tab
+
+hgLoadBed -allowStartEqualEnd  hg19 omimAvSnp omimAvSnp.tab
 ##############################################################
 # build the omimLocation track
 
@@ -15809,4 +15814,37 @@ hgLoadBed hg19 omimLocation omimLocation.bed
 hgsql hg19 -N -e \
 'delete from omimLocation where name  in (select name from omimGene2) '
 
-##############################################################
+############################################################################
+# NUMTS TRACK (DONE 2011-06-03 - Chin)
+
+    mkdir -p /hive/data/outside/Numts/hg19
+    cd /hive/data/outside/Numts/hg19
+    wget http://193.204.182.50/files/hg19/all_hg19_NumtS_tracks.txt
+    wget http://193.204.182.50/files/hg19/HSA_NumtS_hg19_details.html
+    wget http://193.204.182.50/files/bam/allNumtS.sorted.bam
+    wget http://193.204.182.50/files/bam/allNumtS.sorted.bam.bai
+
+    mkdir /cluster/data/hg19/bed/NumtS
+    cd  /cluster/data/hg19/bed/NumtS
+    cp /hive/data/outside/Numts/hg19/*.* .
+
+
+    # split the all_hg19_NumtS_tracks.txt into 3 bed files 
+    # numtSAssembled.bed, numtS.bed, an numtSMitochondrion.bed
+
+    cat all_hg19_NumtS_tracks.txt | awk ' /^track name/ {print $_}'  > tracks.list
+    cat all_hg19_NumtS_tracks.txt | awk ' /^track type/ {print $_}'  >> tracks.list
+
+    # load the 3 bed files to hg19
+    hgLoadBed hg19  numtSAssembled  numtSAssembled.bed
+    hgLoadBed hg19 numtS numtS.bed
+    hgLoadBed hg19 numtSMitochondrion numtSMitochondrion.bed
+    # Make /gbdb/ links and load bam
+    mkdir /gbdb/hg19/NumtS
+    ln -s `pwd`/allNumtS.sorted.bam{,.bai} /gbdb/hg19/NumtS/
+    hgBbiDbLink hg19 bamAllNumtSSorted /gbdb/hg19/NumtS/allNumtS.sorted.bam 
+
+    # setup trackDb for hg19
+
+############################################################################
+

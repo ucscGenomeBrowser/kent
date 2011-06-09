@@ -2960,8 +2960,8 @@ hgsid on
 url http://www.ncbi.nlm.nih.gov/omim/
 
 track omimLocation
-shortLabel OMIM Loci
-longLabel OMIM Non-Gene Entry Cytogenetic Locations
+shortLabel OMIM Pheno Loci
+longLabel OMIM Phenotypes - Gene Unknown
 group phenDis
 priority 29.75
 visibility hide
@@ -2972,7 +2972,7 @@ url http://www.omim.org/entry/
 
 track omimGene2
 shortLabel OMIM Genes
-longLabel OMIM Genes
+longLabel OMIM Genes - Dark Green Are Disease-causing
 group phenDis
 priority 29.73
 visibility hide
