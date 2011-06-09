@@ -24296,9 +24296,9 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-09-29
-dateUnrestricted 2011-06-29
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-09
+dateUnrestricted 2012-03-08
 dccRep 1
 fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5.bam
 grant Gingeras
@@ -24310,7 +24310,9 @@ origAssembly hg19
 project wgEncode
 replicate 5
 rnaExtract longPolyA
-subId 2467
+sex U
+spikeInPool 14
+subId 4055
 tableName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
 view Alignments
 
@@ -26216,9 +26218,9 @@ bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-09-29
-dateUnrestricted 2011-06-29
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-08
+dateUnrestricted 2012-03-08
 dccRep 2
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4.bam
 grant Gingeras
@@ -26230,7 +26232,9 @@ origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longPolyA
-subId 2468
+sex U
+spikeInPool 14
+subId 4053
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4
 view Alignments
 
@@ -28561,4 +28565,4 @@ rnaExtract longPolyA
 subId 3663
 view TranscriptGencV3c
 
-# MAGIC: 873415367
+# MAGIC: -1400609232
