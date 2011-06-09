@@ -8040,29 +8040,29 @@ type treatment
 
 
 term DMSO_0.02pct
-tag DMSO2
-#tag DM002p1h
+#tag DMSO2
+tag DM002p1h
 description 1 h with 0.02% DMSO (Myers) 
 type treatment
 
 
 term DMSO_0.02pct_24hr
-tag DMSO224h
-#tag DM002p24h
+#tag DMSO224h
+tag DM002p24h
 description 24 h with 0.02% DMSO (Myers)
 type treatment
 
 
 term DMSO_2.0pct
-tag DMSO20
-#tag DM2p5d
+#tag DMSO20
+tag DM2p5d
 description 5 d with 2% DMSO (Weissman)
 type treatment
 
 term DMSO_4hr
 #term DMSO_0.02pct_4hr  would like to change
-tag DMSO4hr
-#tag DM002p4h
+#tag DMSO4hr
+tag DM002p4h
 description 4 hr with 0.02% DMSO (Myers)
 type treatment
 
