@@ -3102,7 +3102,7 @@ noInherit on
 
         track wgEncodeHaibTfbsU87Pol24h8V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel U87POL24V101 2
+        shortLabel U87 POL24 V101 2
         longLabel U87 POL24H8 V0416101 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=U87 protocol=V0416101 treatment=None rep=rep2
         type broadPeak
@@ -3110,7 +3110,7 @@ noInherit on
 
         track wgEncodeHaibTfbsU87Pol24h8V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel U87POL24V101 1
+        shortLabel U87 POL24 V101 1
         longLabel U87 POL24H8 V0416101 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=U87 protocol=V0416101 treatment=None rep=rep1
         type broadPeak
@@ -6695,7 +6695,7 @@ noInherit on
 
         track wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel U87POL24V101 2
+        shortLabel U87 POL24 V101 2
         longLabel U87 POL24H8 V0416101 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=U87 protocol=V0416101 treatment=None rep=rep2
         type bigWig 0.137349 141.057007
@@ -6703,7 +6703,7 @@ noInherit on
 
         track wgEncodeHaibTfbsU87Pol24h8V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel U87POL24V101 2
+        shortLabel U87 POL24 V101 2
         longLabel U87 POL24H8 V0416101 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
 	subGroups view=RawSignal factor=POL24H8 cellType=U87 protocol=V0416101 treatment=None rep=rep1
         type bigWig 0.308652 131.408005
